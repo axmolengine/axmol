@@ -60,7 +60,7 @@ protected:
 
 struct ImGui_ImplAndroid_Data
 {
-    GLView*          Window{nullptr};
+    RenderView*      Window{nullptr};
     double           Time{0};
     bool             InstalledCallbacks{false};
 
@@ -92,7 +92,7 @@ static ax::Vec2 convertToUICoordinates(const Vec2& pos)
 }
 
 // Functions
-bool ImGui_ImplAndroid_InitForAxmol(GLView* window, bool install_callbacks)
+bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
 {
     ImGuiIO& io = ImGui::GetIO();
     IM_ASSERT(io.BackendPlatformUserData == nullptr && "Already initialized a platform backend!");
@@ -235,7 +235,7 @@ void ImGui_ImplAndroid_NewFrame()
 // Helper structure we store in the void* RenderUserData field of each ImGuiViewport to easily retrieve our backend data.
 struct ImGui_ImplAndroid_ViewportData
 {
-    GLView* Window;
+    RenderView* Window;
     bool        WindowOwned;
     int         IgnoreWindowPosEventFrame;
     int         IgnoreWindowSizeEventFrame;
@@ -244,7 +244,7 @@ struct ImGui_ImplAndroid_ViewportData
     ~ImGui_ImplAndroid_ViewportData() { IM_ASSERT(Window == nullptr); }
 };
 
-static void ImGui_ImplAndroid_WindowCloseCallback(GLView* window)
+static void ImGui_ImplAndroid_WindowCloseCallback(RenderView* window)
 {
     if (ImGuiViewport* viewport = ImGui::FindViewportByPlatformHandle(window))
         viewport->PlatformRequestClose = true;

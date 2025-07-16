@@ -14,7 +14,7 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-    virtual void initGLContextAttrs();
+    virtual void initGfxContextAttrs();
 
     /**
     @brief    Implement Director and Scene init code here.

@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "platform/android/Application-android.h"
-#include "platform/android/GLViewImpl-android.h"
+#include "platform/android/RenderViewImpl-android.h"
 #include "base/Director.h"
 #include "base/EventCustom.h"
 #include "base/EventType.h"
@@ -82,15 +82,15 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
 {
-    GLViewImpl::loadGLES2();
+    RenderViewImpl::loadGLES2();
 
     auto director = ax::Director::getInstance();
-    auto glView   = director->getGLView();
-    if (!glView)
+    auto renderView   = director->getRenderView();
+    if (!renderView)
     {
-        glView = ax::GLViewImpl::create("axmol2");
-        glView->setFrameSize(w, h);
-        director->setGLView(glView);
+        renderView = ax::RenderViewImpl::create("axmol2");
+        renderView->setFrameSize(w, h);
+        director->setRenderView(renderView);
 
         ax::Application::getInstance()->run();
     }
@@ -133,12 +133,12 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnContextLost(JNIE
 
 JNIEXPORT jintArray JNICALL Java_dev_axmol_lib_AxmolActivity_getGLContextAttrs(JNIEnv* env, jclass)
 {
-    ax::Application::getInstance()->initGLContextAttrs();
-    GLContextAttrs _glContextAttrs = GLView::getGLContextAttrs();
+    ax::Application::getInstance()->initGfxContextAttrs();
+    auto& _gfxContextAttrs = RenderView::getGfxContextAttrs();
 
-    int tmp[7] = {_glContextAttrs.redBits,           _glContextAttrs.greenBits, _glContextAttrs.blueBits,
-                  _glContextAttrs.alphaBits,         _glContextAttrs.depthBits, _glContextAttrs.stencilBits,
-                  _glContextAttrs.multisamplingCount};
+    int tmp[7] = {_gfxContextAttrs.redBits,           _gfxContextAttrs.greenBits, _gfxContextAttrs.blueBits,
+                  _gfxContextAttrs.alphaBits,         _gfxContextAttrs.depthBits, _gfxContextAttrs.stencilBits,
+                  _gfxContextAttrs.multisamplingCount};
 
     jintArray glContextAttrsJava = env->NewIntArray(7);
     env->SetIntArrayRegion(glContextAttrsJava, 0, 7, tmp);

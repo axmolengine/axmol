@@ -487,11 +487,9 @@ bool TextFieldEx::attachWithIME()
     if (ret)
     {
         // open keyboard
-        GLView* pGlView = _director->getGLView();
-        if (pGlView)
-        {
-            pGlView->setIMEKeyboardState(true);
-        }
+        RenderView* renderView = _director->getRenderView();
+        if (renderView)
+            renderView->setIMEKeyboardState(true);
     }
     return ret;
 }
@@ -502,11 +500,9 @@ bool TextFieldEx::detachWithIME()
     if (ret)
     {
         // close keyboard
-        GLView* glView = _director->getGLView();
-        if (glView)
-        {
-            glView->setIMEKeyboardState(false);
-        }
+        RenderView* renderView = _director->getRenderView();
+        if (renderView)
+            renderView->setIMEKeyboardState(false);
     }
     return ret;
 }

@@ -99,7 +99,7 @@ public class EditBoxHelper {
                 editBox.setBackgroundColor(Color.TRANSPARENT);
                 editBox.setTextColor(Color.WHITE);
                 editBox.setSingleLine();
-                editBox.setGLViewScaleX(scaleX);
+                editBox.setRenderViewScaleX(scaleX);
                 editBox.setPadding(getPadding(scaleX), 0, 0, 0);
 
 

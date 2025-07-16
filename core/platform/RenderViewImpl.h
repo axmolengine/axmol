@@ -24,12 +24,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-// Implement GLView based on GLFW for targets: win32,osx,web(wasm)
+// Implement RenderView based on GLFW for targets: win32,osx,web(wasm)
 #pragma once
 #include "platform/GL.h"
 #include "base/Object.h"
 #include "platform/Common.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 #include "GLFW/glfw3.h"
 #if defined(__EMSCRIPTEN__)
 #    include "base/axstd.h"
@@ -41,19 +41,19 @@ namespace ax
 {
 
 class GLFWEventHandler;
-class AX_DLL GLViewImpl : public GLView
+class AX_DLL RenderViewImpl : public RenderView
 {
     friend class GLFWEventHandler;
 
 public:
-    static GLViewImpl* create(std::string_view viewName);
-    static GLViewImpl* create(std::string_view viewName, bool resizable);
-    static GLViewImpl* createWithRect(std::string_view viewName,
+    static RenderViewImpl* create(std::string_view viewName);
+    static RenderViewImpl* create(std::string_view viewName, bool resizable);
+    static RenderViewImpl* createWithRect(std::string_view viewName,
                                       const Rect& rect,
                                       float frameZoomFactor = 1.0f,
                                       bool resizable        = false);
-    static GLViewImpl* createWithFullScreen(std::string_view viewName);
-    static GLViewImpl* createWithFullScreen(std::string_view viewName,
+    static RenderViewImpl* createWithFullScreen(std::string_view viewName);
+    static RenderViewImpl* createWithFullScreen(std::string_view viewName,
                                             const GLFWvidmode& videoMode,
                                             GLFWmonitor* monitor);
 
@@ -66,9 +66,9 @@ public:
     float getFrameZoomFactor() const override;
     // void centerWindow();
 
-    virtual void setViewPortInPoints(float x, float y, float w, float h) override;
-    virtual void setScissorInPoints(float x, float y, float w, float h) override;
-    virtual Rect getScissorRect() const override;
+    void setViewPortInPoints(float x, float y, float w, float h) override;
+    void setScissorInPoints(float x, float y, float w, float h) override;
+    Rect getScissorRect() const override;
 
     bool windowShouldClose() override;
     void pollEvents() override;
@@ -103,16 +103,16 @@ public:
     Vec2 getMonitorSize() const;
 
     /* override functions */
-    virtual bool isOpenGLReady() override;
-    virtual void end() override;
-    virtual void swapBuffers() override;
-    virtual void setFrameSize(float width, float height) override;
-    virtual void setIMEKeyboardState(bool bOpen) override;
+    bool isGfxContextReady() override;
+    void end() override;
+    void swapBuffers() override;
+    void setFrameSize(float width, float height) override;
+    void setIMEKeyboardState(bool bOpen) override;
 
 #if AX_ICON_SET_SUPPORT
-    virtual void setIcon(std::string_view filename) const override;
-    virtual void setIcon(const std::vector<std::string_view>& filelist) const override;
-    virtual void setDefaultIcon() const override;
+    void setIcon(std::string_view filename) const override;
+    void setIcon(const std::vector<std::string_view>& filelist) const override;
+    void setDefaultIcon() const override;
 #endif /* AX_ICON_SET_SUPPORT */
 
     /*
@@ -122,7 +122,7 @@ public:
     /**
      * Hide or Show the mouse cursor if there is one.
      */
-    virtual void setCursorVisible(bool isVisible) override;
+    void setCursorVisible(bool isVisible) override;
     /** Retina support is disabled by default
      *  @note This method is only available on Mac.
      */
@@ -152,8 +152,8 @@ public:
 #endif // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 protected:
-    GLViewImpl(bool initglfw = true);
-    virtual ~GLViewImpl();
+    RenderViewImpl(bool initglfw = true);
+    ~RenderViewImpl() override;
 
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable);
     bool initWithFullScreen(std::string_view viewName);
@@ -216,7 +216,11 @@ public:
     static const std::string EVENT_WINDOW_CLOSE;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
+    AX_DISALLOW_COPY_AND_ASSIGN(RenderViewImpl);
 };
 
-}  // end of namespace   cocos2d
+#ifndef AX_CORE_PROFILE
+AX_DEPRECATED(2.8) typedef RenderViewImpl GLViewImpl;
+#endif
+
+}  // end of namespace ax

@@ -74,8 +74,8 @@ LAppLive2DManager::LAppLive2DManager()
 
     CreateShader();
 
-    int width = static_cast<int>(ax::Director::getInstance()->getGLView()->getFrameSize().width);
-    int height = static_cast<int>(ax::Director::getInstance()->getGLView()->getFrameSize().height);
+    int width = static_cast<int>(ax::Director::getInstance()->getRenderView()->getFrameSize().width);
+    int height = static_cast<int>(ax::Director::getInstance()->getRenderView()->getFrameSize().height);
 
     // 画面全体を覆うサイズ
     _sprite = new LAppSprite(_program);
@@ -89,7 +89,7 @@ LAppLive2DManager::LAppLive2DManager()
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // Retina対策でこっちからとる
-        GLViewImpl *glimpl = (GLViewImpl *)Director::getInstance()->getGLView();
+        RenderViewImpl *glimpl = (RenderViewImpl *)Director::getInstance()->getRenderView();
         glfwGetFramebufferSize(glimpl->getWindow(), &width, &height);
 #endif
 

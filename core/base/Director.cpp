@@ -395,11 +395,11 @@ float Director::getDeltaTime() const
 {
     return _deltaTime;
 }
-void Director::setGLView(GLView* glView)
+void Director::setRenderView(RenderView* renderView)
 {
-    AXASSERT(glView, "opengl view should not be null");
+    AXASSERT(renderView, "opengl view should not be null");
 
-    if (_glView != glView)
+    if (_glView != renderView)
     {
         // Configuration. Gather GPU info
         Configuration* conf = Configuration::getInstance();
@@ -408,7 +408,7 @@ void Director::setGLView(GLView* glView)
 
         if (_glView)
             _glView->release();
-        _glView = glView;
+        _glView = renderView;
         _glView->retain();
 
         // set size
@@ -676,7 +676,7 @@ void Director::purgeCachedData()
     FontFNT::purgeCachedData();
     FontAtlasCache::purgeCachedData();
 
-    if (s_SharedDirector->getGLView())
+    if (s_SharedDirector->getRenderView())
     {
         SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
         _textureCache->removeUnusedTextures();

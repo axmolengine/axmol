@@ -104,22 +104,22 @@ static int64_t mLastTickInNanoSeconds = 0;
 
 static void renderFrame() {
     auto director = __director;
-    auto glview   = director->getGLView();
+    auto renderView   = director->getRenderView();
 
     director->mainLoop();
-    glview->pollEvents();
+    renderView->pollEvents();
 
-    if (glview->windowShouldClose())
+    if (renderView->windowShouldClose())
     {
         AXLOGI("shuting down axmol wasm app ...");
         emscripten_cancel_main_loop();  // Cancel current loop and set the cleanup one.
 
-        if (glview->isOpenGLReady())
+        if (renderView->isGfxContextReady())
         {
             director->end();
             director->mainLoop();
         }
-        glview->release();
+        renderView->release();
 
         axmol_wasm_app_exit();
     }
@@ -176,7 +176,7 @@ Application::~Application()
 
 int Application::run()
 {
-    initGLContextAttrs();
+    initGfxContextAttrs();
     // Initialize instance and cocos2d.
     if (!applicationDidFinishLaunching())
     {
@@ -186,7 +186,7 @@ int Application::run()
     __director = Director::getInstance();
 
     // Retain glview to avoid glview being released in the while loop
-    __director->getGLView()->retain();
+    __director->getRenderView()->retain();
 
     /*
     The JavaScript environment will call that function at a specified number

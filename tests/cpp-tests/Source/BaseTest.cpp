@@ -164,7 +164,7 @@ void TestList::runThisTest()
      * otherwise, the layout will incorrect
      */
 
-    GLViewImpl* glView = (GLViewImpl*)Director::getInstance()->getGLView();
+    RenderViewImpl* glView = (RenderViewImpl*)Director::getInstance()->getRenderView();
 #if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
     glView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif

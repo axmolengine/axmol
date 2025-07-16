@@ -12554,10 +12554,10 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_GLView_end(lua_State* tolua_S)
+int lua_ax_base_RenderView_end(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12566,15 +12566,15 @@ int lua_ax_base_GLView_end(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_end'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_end'", nullptr);
         return 0;
     }
 #endif
@@ -12584,27 +12584,27 @@ int lua_ax_base_GLView_end(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_end'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_end'", nullptr);
             return 0;
         }
         cobj->end();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:end",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:end",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_end'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_end'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_isOpenGLReady(lua_State* tolua_S)
+int lua_ax_base_RenderView_isGfxContextReady(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12613,15 +12613,15 @@ int lua_ax_base_GLView_isOpenGLReady(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_isOpenGLReady'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_isGfxContextReady'", nullptr);
         return 0;
     }
 #endif
@@ -12631,27 +12631,27 @@ int lua_ax_base_GLView_isOpenGLReady(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_isOpenGLReady'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_isGfxContextReady'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isOpenGLReady();
+        auto&& ret = cobj->isGfxContextReady();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:isOpenGLReady",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:isGfxContextReady",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_isOpenGLReady'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_isGfxContextReady'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_swapBuffers(lua_State* tolua_S)
+int lua_ax_base_RenderView_swapBuffers(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12660,15 +12660,15 @@ int lua_ax_base_GLView_swapBuffers(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_swapBuffers'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_swapBuffers'", nullptr);
         return 0;
     }
 #endif
@@ -12678,27 +12678,27 @@ int lua_ax_base_GLView_swapBuffers(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_swapBuffers'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_swapBuffers'", nullptr);
             return 0;
         }
         cobj->swapBuffers();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:swapBuffers",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:swapBuffers",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_swapBuffers'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_swapBuffers'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setIMEKeyboardState(lua_State* tolua_S)
+int lua_ax_base_RenderView_setIMEKeyboardState(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12707,15 +12707,15 @@ int lua_ax_base_GLView_setIMEKeyboardState(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setIMEKeyboardState'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setIMEKeyboardState'", nullptr);
         return 0;
     }
 #endif
@@ -12725,30 +12725,30 @@ int lua_ax_base_GLView_setIMEKeyboardState(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.GLView:setIMEKeyboardState");
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RenderView:setIMEKeyboardState");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setIMEKeyboardState'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setIMEKeyboardState'", nullptr);
             return 0;
         }
         cobj->setIMEKeyboardState(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setIMEKeyboardState",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setIMEKeyboardState",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setIMEKeyboardState'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setIMEKeyboardState'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_windowShouldClose(lua_State* tolua_S)
+int lua_ax_base_RenderView_windowShouldClose(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12757,15 +12757,15 @@ int lua_ax_base_GLView_windowShouldClose(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_windowShouldClose'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_windowShouldClose'", nullptr);
         return 0;
     }
 #endif
@@ -12775,27 +12775,27 @@ int lua_ax_base_GLView_windowShouldClose(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_windowShouldClose'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_windowShouldClose'", nullptr);
             return 0;
         }
         auto&& ret = cobj->windowShouldClose();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:windowShouldClose",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:windowShouldClose",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_windowShouldClose'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_windowShouldClose'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_pollEvents(lua_State* tolua_S)
+int lua_ax_base_RenderView_pollEvents(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12804,15 +12804,15 @@ int lua_ax_base_GLView_pollEvents(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_pollEvents'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_pollEvents'", nullptr);
         return 0;
     }
 #endif
@@ -12822,27 +12822,27 @@ int lua_ax_base_GLView_pollEvents(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_pollEvents'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_pollEvents'", nullptr);
             return 0;
         }
         cobj->pollEvents();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:pollEvents",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:pollEvents",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_pollEvents'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_pollEvents'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getFrameSize(lua_State* tolua_S)
+int lua_ax_base_RenderView_getFrameSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12851,15 +12851,15 @@ int lua_ax_base_GLView_getFrameSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getFrameSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getFrameSize'", nullptr);
         return 0;
     }
 #endif
@@ -12869,27 +12869,27 @@ int lua_ax_base_GLView_getFrameSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getFrameSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getFrameSize'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getFrameSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getFrameSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getFrameSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getFrameSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getFrameSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setFrameSize(lua_State* tolua_S)
+int lua_ax_base_RenderView_setFrameSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12898,15 +12898,15 @@ int lua_ax_base_GLView_setFrameSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setFrameSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setFrameSize'", nullptr);
         return 0;
     }
 #endif
@@ -12917,32 +12917,32 @@ int lua_ax_base_GLView_setFrameSize(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.GLView:setFrameSize");
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setFrameSize");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.GLView:setFrameSize");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderView:setFrameSize");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setFrameSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setFrameSize'", nullptr);
             return 0;
         }
         cobj->setFrameSize(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setFrameSize",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setFrameSize",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setFrameSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setFrameSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setFrameZoomFactor(lua_State* tolua_S)
+int lua_ax_base_RenderView_setFrameZoomFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12951,15 +12951,15 @@ int lua_ax_base_GLView_setFrameZoomFactor(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setFrameZoomFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setFrameZoomFactor'", nullptr);
         return 0;
     }
 #endif
@@ -12969,30 +12969,30 @@ int lua_ax_base_GLView_setFrameZoomFactor(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.GLView:setFrameZoomFactor");
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setFrameZoomFactor");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setFrameZoomFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setFrameZoomFactor'", nullptr);
             return 0;
         }
         cobj->setFrameZoomFactor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setFrameZoomFactor",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setFrameZoomFactor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setFrameZoomFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setFrameZoomFactor'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getFrameZoomFactor(lua_State* tolua_S)
+int lua_ax_base_RenderView_getFrameZoomFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13001,15 +13001,15 @@ int lua_ax_base_GLView_getFrameZoomFactor(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getFrameZoomFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getFrameZoomFactor'", nullptr);
         return 0;
     }
 #endif
@@ -13019,27 +13019,27 @@ int lua_ax_base_GLView_getFrameZoomFactor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getFrameZoomFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getFrameZoomFactor'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getFrameZoomFactor();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getFrameZoomFactor",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getFrameZoomFactor",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getFrameZoomFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getFrameZoomFactor'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setCursorVisible(lua_State* tolua_S)
+int lua_ax_base_RenderView_setCursorVisible(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13048,15 +13048,15 @@ int lua_ax_base_GLView_setCursorVisible(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setCursorVisible'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setCursorVisible'", nullptr);
         return 0;
     }
 #endif
@@ -13066,30 +13066,30 @@ int lua_ax_base_GLView_setCursorVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.GLView:setCursorVisible");
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RenderView:setCursorVisible");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setCursorVisible'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setCursorVisible'", nullptr);
             return 0;
         }
         cobj->setCursorVisible(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setCursorVisible",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setCursorVisible",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setCursorVisible'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setCursorVisible'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getRetinaFactor(lua_State* tolua_S)
+int lua_ax_base_RenderView_getRetinaFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13098,15 +13098,15 @@ int lua_ax_base_GLView_getRetinaFactor(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getRetinaFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getRetinaFactor'", nullptr);
         return 0;
     }
 #endif
@@ -13116,27 +13116,27 @@ int lua_ax_base_GLView_getRetinaFactor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getRetinaFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getRetinaFactor'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getRetinaFactor();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getRetinaFactor",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getRetinaFactor",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getRetinaFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getRetinaFactor'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setContentScaleFactor(lua_State* tolua_S)
+int lua_ax_base_RenderView_setContentScaleFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13145,15 +13145,15 @@ int lua_ax_base_GLView_setContentScaleFactor(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setContentScaleFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setContentScaleFactor'", nullptr);
         return 0;
     }
 #endif
@@ -13163,30 +13163,30 @@ int lua_ax_base_GLView_setContentScaleFactor(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.GLView:setContentScaleFactor");
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setContentScaleFactor");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setContentScaleFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setContentScaleFactor'", nullptr);
             return 0;
         }
         auto&& ret = cobj->setContentScaleFactor(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setContentScaleFactor",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setContentScaleFactor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setContentScaleFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setContentScaleFactor'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getContentScaleFactor(lua_State* tolua_S)
+int lua_ax_base_RenderView_getContentScaleFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13195,15 +13195,15 @@ int lua_ax_base_GLView_getContentScaleFactor(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getContentScaleFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getContentScaleFactor'", nullptr);
         return 0;
     }
 #endif
@@ -13213,27 +13213,27 @@ int lua_ax_base_GLView_getContentScaleFactor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getContentScaleFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getContentScaleFactor'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getContentScaleFactor();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getContentScaleFactor",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getContentScaleFactor",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getContentScaleFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getContentScaleFactor'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_isRetinaDisplay(lua_State* tolua_S)
+int lua_ax_base_RenderView_isRetinaDisplay(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13242,15 +13242,15 @@ int lua_ax_base_GLView_isRetinaDisplay(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_isRetinaDisplay'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_isRetinaDisplay'", nullptr);
         return 0;
     }
 #endif
@@ -13260,27 +13260,27 @@ int lua_ax_base_GLView_isRetinaDisplay(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_isRetinaDisplay'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_isRetinaDisplay'", nullptr);
             return 0;
         }
         auto&& ret = cobj->isRetinaDisplay();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:isRetinaDisplay",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:isRetinaDisplay",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_isRetinaDisplay'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_isRetinaDisplay'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getVisibleSize(lua_State* tolua_S)
+int lua_ax_base_RenderView_getVisibleSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13289,15 +13289,15 @@ int lua_ax_base_GLView_getVisibleSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getVisibleSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getVisibleSize'", nullptr);
         return 0;
     }
 #endif
@@ -13307,27 +13307,27 @@ int lua_ax_base_GLView_getVisibleSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getVisibleSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getVisibleSize'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getVisibleSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getVisibleSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getVisibleSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getVisibleSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getVisibleSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getVisibleOrigin(lua_State* tolua_S)
+int lua_ax_base_RenderView_getVisibleOrigin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13336,15 +13336,15 @@ int lua_ax_base_GLView_getVisibleOrigin(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getVisibleOrigin'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getVisibleOrigin'", nullptr);
         return 0;
     }
 #endif
@@ -13354,27 +13354,27 @@ int lua_ax_base_GLView_getVisibleOrigin(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getVisibleOrigin'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getVisibleOrigin'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getVisibleOrigin();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getVisibleOrigin",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getVisibleOrigin",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getVisibleOrigin'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getVisibleOrigin'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getVisibleRect(lua_State* tolua_S)
+int lua_ax_base_RenderView_getVisibleRect(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13383,15 +13383,15 @@ int lua_ax_base_GLView_getVisibleRect(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getVisibleRect'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getVisibleRect'", nullptr);
         return 0;
     }
 #endif
@@ -13401,27 +13401,27 @@ int lua_ax_base_GLView_getVisibleRect(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getVisibleRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getVisibleRect'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getVisibleRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getVisibleRect",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getVisibleRect",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getVisibleRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getVisibleRect'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getSafeAreaRect(lua_State* tolua_S)
+int lua_ax_base_RenderView_getSafeAreaRect(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13430,15 +13430,15 @@ int lua_ax_base_GLView_getSafeAreaRect(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getSafeAreaRect'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getSafeAreaRect'", nullptr);
         return 0;
     }
 #endif
@@ -13448,27 +13448,27 @@ int lua_ax_base_GLView_getSafeAreaRect(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getSafeAreaRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getSafeAreaRect'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getSafeAreaRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getSafeAreaRect",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getSafeAreaRect",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getSafeAreaRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getSafeAreaRect'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setDesignResolutionSize(lua_State* tolua_S)
+int lua_ax_base_RenderView_setDesignResolutionSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13477,15 +13477,15 @@ int lua_ax_base_GLView_setDesignResolutionSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setDesignResolutionSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setDesignResolutionSize'", nullptr);
         return 0;
     }
 #endif
@@ -13497,34 +13497,34 @@ int lua_ax_base_GLView_setDesignResolutionSize(lua_State* tolua_S)
         double arg1;
         ResolutionPolicy arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.GLView:setDesignResolutionSize");
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setDesignResolutionSize");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.GLView:setDesignResolutionSize");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderView:setDesignResolutionSize");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.GLView:setDesignResolutionSize");
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderView:setDesignResolutionSize");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setDesignResolutionSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setDesignResolutionSize'", nullptr);
             return 0;
         }
         cobj->setDesignResolutionSize(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setDesignResolutionSize",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setDesignResolutionSize",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setDesignResolutionSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setDesignResolutionSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getDesignResolutionSize(lua_State* tolua_S)
+int lua_ax_base_RenderView_getDesignResolutionSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13533,15 +13533,15 @@ int lua_ax_base_GLView_getDesignResolutionSize(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getDesignResolutionSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getDesignResolutionSize'", nullptr);
         return 0;
     }
 #endif
@@ -13551,27 +13551,27 @@ int lua_ax_base_GLView_getDesignResolutionSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getDesignResolutionSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getDesignResolutionSize'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getDesignResolutionSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getDesignResolutionSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getDesignResolutionSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getDesignResolutionSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getDesignResolutionSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setViewPortInPoints(lua_State* tolua_S)
+int lua_ax_base_RenderView_setViewPortInPoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13580,15 +13580,15 @@ int lua_ax_base_GLView_setViewPortInPoints(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setViewPortInPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setViewPortInPoints'", nullptr);
         return 0;
     }
 #endif
@@ -13601,36 +13601,36 @@ int lua_ax_base_GLView_setViewPortInPoints(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.GLView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setViewPortInPoints");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.GLView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderView:setViewPortInPoints");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.GLView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderView:setViewPortInPoints");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.GLView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.RenderView:setViewPortInPoints");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setViewPortInPoints'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setViewPortInPoints'", nullptr);
             return 0;
         }
         cobj->setViewPortInPoints(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setViewPortInPoints",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setViewPortInPoints",argc, 4);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setViewPortInPoints'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setViewPortInPoints'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setScissorInPoints(lua_State* tolua_S)
+int lua_ax_base_RenderView_setScissorInPoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13639,15 +13639,15 @@ int lua_ax_base_GLView_setScissorInPoints(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setScissorInPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setScissorInPoints'", nullptr);
         return 0;
     }
 #endif
@@ -13660,36 +13660,36 @@ int lua_ax_base_GLView_setScissorInPoints(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.GLView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.GLView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderView:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.GLView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderView:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.GLView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.RenderView:setScissorInPoints");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setScissorInPoints'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setScissorInPoints'", nullptr);
             return 0;
         }
         cobj->setScissorInPoints(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setScissorInPoints",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setScissorInPoints",argc, 4);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setScissorInPoints'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setScissorInPoints'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_isScissorEnabled(lua_State* tolua_S)
+int lua_ax_base_RenderView_isScissorEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13698,15 +13698,15 @@ int lua_ax_base_GLView_isScissorEnabled(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_isScissorEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_isScissorEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -13716,27 +13716,27 @@ int lua_ax_base_GLView_isScissorEnabled(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_isScissorEnabled'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_isScissorEnabled'", nullptr);
             return 0;
         }
         auto&& ret = cobj->isScissorEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:isScissorEnabled",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:isScissorEnabled",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_isScissorEnabled'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_isScissorEnabled'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getScissorRect(lua_State* tolua_S)
+int lua_ax_base_RenderView_getScissorRect(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13745,15 +13745,15 @@ int lua_ax_base_GLView_getScissorRect(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getScissorRect'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getScissorRect'", nullptr);
         return 0;
     }
 #endif
@@ -13763,27 +13763,27 @@ int lua_ax_base_GLView_getScissorRect(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getScissorRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getScissorRect'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getScissorRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getScissorRect",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getScissorRect",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getScissorRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getScissorRect'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setViewName(lua_State* tolua_S)
+int lua_ax_base_RenderView_setViewName(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13792,15 +13792,15 @@ int lua_ax_base_GLView_setViewName(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setViewName'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setViewName'", nullptr);
         return 0;
     }
 #endif
@@ -13810,30 +13810,30 @@ int lua_ax_base_GLView_setViewName(lua_State* tolua_S)
     {
         std::string_view arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLView:setViewName");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:setViewName");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setViewName'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setViewName'", nullptr);
             return 0;
         }
         cobj->setViewName(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setViewName",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setViewName",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setViewName'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setViewName'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getViewName(lua_State* tolua_S)
+int lua_ax_base_RenderView_getViewName(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13842,15 +13842,15 @@ int lua_ax_base_GLView_getViewName(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getViewName'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getViewName'", nullptr);
         return 0;
     }
 #endif
@@ -13860,40 +13860,40 @@ int lua_ax_base_GLView_getViewName(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getViewName'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getViewName'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getViewName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getViewName",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getViewName",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getViewName'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getViewName'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setIcon(lua_State* tolua_S)
+int lua_ax_base_RenderView_setIcon(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setIcon'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setIcon'", nullptr);
         return 0;
     }
 #endif
@@ -13901,7 +13901,7 @@ int lua_ax_base_GLView_setIcon(lua_State* tolua_S)
     do{
         if (argc == 1) {
             std::vector<std::string_view> arg0;
-            ok &= luaval_to_std_vector_string_view(tolua_S, 2, &arg0, "ax.GLView:setIcon");
+            ok &= luaval_to_std_vector_string_view(tolua_S, 2, &arg0, "ax.RenderView:setIcon");
 
             if (!ok) { break; }
             cobj->setIcon(arg0);
@@ -13913,7 +13913,7 @@ int lua_ax_base_GLView_setIcon(lua_State* tolua_S)
     do{
         if (argc == 1) {
             std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLView:setIcon");
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:setIcon");
 
             if (!ok) { break; }
             cobj->setIcon(arg0);
@@ -13922,20 +13922,20 @@ int lua_ax_base_GLView_setIcon(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.GLView:setIcon",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.RenderView:setIcon",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setIcon'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setIcon'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setDefaultIcon(lua_State* tolua_S)
+int lua_ax_base_RenderView_setDefaultIcon(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13944,15 +13944,15 @@ int lua_ax_base_GLView_setDefaultIcon(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setDefaultIcon'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setDefaultIcon'", nullptr);
         return 0;
     }
 #endif
@@ -13962,27 +13962,27 @@ int lua_ax_base_GLView_setDefaultIcon(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setDefaultIcon'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setDefaultIcon'", nullptr);
             return 0;
         }
         cobj->setDefaultIcon();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setDefaultIcon",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setDefaultIcon",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setDefaultIcon'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setDefaultIcon'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getViewPortRect(lua_State* tolua_S)
+int lua_ax_base_RenderView_getViewPortRect(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13991,15 +13991,15 @@ int lua_ax_base_GLView_getViewPortRect(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getViewPortRect'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getViewPortRect'", nullptr);
         return 0;
     }
 #endif
@@ -14009,27 +14009,27 @@ int lua_ax_base_GLView_getViewPortRect(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getViewPortRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getViewPortRect'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getViewPortRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getViewPortRect",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getViewPortRect",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getViewPortRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getViewPortRect'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getScaleX(lua_State* tolua_S)
+int lua_ax_base_RenderView_getScaleX(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14038,15 +14038,15 @@ int lua_ax_base_GLView_getScaleX(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getScaleX'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getScaleX'", nullptr);
         return 0;
     }
 #endif
@@ -14056,27 +14056,27 @@ int lua_ax_base_GLView_getScaleX(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getScaleX'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getScaleX'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getScaleX();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getScaleX",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getScaleX",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getScaleX'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getScaleX'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getScaleY(lua_State* tolua_S)
+int lua_ax_base_RenderView_getScaleY(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14085,15 +14085,15 @@ int lua_ax_base_GLView_getScaleY(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getScaleY'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getScaleY'", nullptr);
         return 0;
     }
 #endif
@@ -14103,27 +14103,27 @@ int lua_ax_base_GLView_getScaleY(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getScaleY'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getScaleY'", nullptr);
             return 0;
         }
         auto&& ret = cobj->getScaleY();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getScaleY",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getScaleY",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getScaleY'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getScaleY'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_getResolutionPolicy(lua_State* tolua_S)
+int lua_ax_base_RenderView_getResolutionPolicy(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14132,15 +14132,15 @@ int lua_ax_base_GLView_getResolutionPolicy(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_getResolutionPolicy'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getResolutionPolicy'", nullptr);
         return 0;
     }
 #endif
@@ -14150,27 +14150,27 @@ int lua_ax_base_GLView_getResolutionPolicy(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getResolutionPolicy'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getResolutionPolicy'", nullptr);
             return 0;
         }
         int ret = (int)cobj->getResolutionPolicy();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getResolutionPolicy",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getResolutionPolicy",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getResolutionPolicy'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getResolutionPolicy'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_renderScene(lua_State* tolua_S)
+int lua_ax_base_RenderView_renderScene(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14179,15 +14179,15 @@ int lua_ax_base_GLView_renderScene(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_renderScene'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_renderScene'", nullptr);
         return 0;
     }
 #endif
@@ -14198,32 +14198,32 @@ int lua_ax_base_GLView_renderScene(lua_State* tolua_S)
         ax::Scene* arg0;
         ax::Renderer* arg1;
 
-        ok &= luaval_to_object<ax::Scene>(tolua_S, 2, "ax.Scene",&arg0, "ax.GLView:renderScene");
+        ok &= luaval_to_object<ax::Scene>(tolua_S, 2, "ax.Scene",&arg0, "ax.RenderView:renderScene");
 
-        ok &= luaval_to_object<ax::Renderer>(tolua_S, 3, "ax.Renderer",&arg1, "ax.GLView:renderScene");
+        ok &= luaval_to_object<ax::Renderer>(tolua_S, 3, "ax.Renderer",&arg1, "ax.RenderView:renderScene");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_renderScene'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_renderScene'", nullptr);
             return 0;
         }
         cobj->renderScene(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:renderScene",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:renderScene",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_renderScene'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_renderScene'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setInteractive(lua_State* tolua_S)
+int lua_ax_base_RenderView_setInteractive(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14232,15 +14232,15 @@ int lua_ax_base_GLView_setInteractive(lua_State* tolua_S)
 
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_GLView_setInteractive'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setInteractive'", nullptr);
         return 0;
     }
 #endif
@@ -14250,27 +14250,27 @@ int lua_ax_base_GLView_setInteractive(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.GLView:setInteractive");
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RenderView:setInteractive");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setInteractive'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setInteractive'", nullptr);
             return 0;
         }
         cobj->setInteractive(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:setInteractive",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setInteractive",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setInteractive'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setInteractive'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_GLView_setGLContextAttrs(lua_State* tolua_S)
+int lua_ax_base_RenderView_setGfxContextAttrs(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -14280,34 +14280,34 @@ int lua_ax_base_GLView_setGLContextAttrs(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
 
     if (argc == 1)
     {
-        GLContextAttrs arg0;
-        #pragma warning NO CONVERSION TO NATIVE FOR GLContextAttrs
+        GfxContextAttrs arg0;
+        #pragma warning NO CONVERSION TO NATIVE FOR GfxContextAttrs
 		ok = false;
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_setGLContextAttrs'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setGfxContextAttrs'", nullptr);
             return 0;
         }
-        ax::GLView::setGLContextAttrs(arg0);
+        ax::RenderView::setGfxContextAttrs(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.GLView:setGLContextAttrs",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderView:setGfxContextAttrs",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_setGLContextAttrs'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setGfxContextAttrs'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_base_GLView_getGLContextAttrs(lua_State* tolua_S)
+int lua_ax_base_RenderView_getGfxContextAttrs(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -14317,7 +14317,7 @@ int lua_ax_base_GLView_getGLContextAttrs(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.GLView",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -14326,74 +14326,74 @@ int lua_ax_base_GLView_getGLContextAttrs(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLView_getGLContextAttrs'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getGfxContextAttrs'", nullptr);
             return 0;
         }
-        auto&& ret = ax::GLView::getGLContextAttrs();
-        #pragma warning NO CONVERSION FROM NATIVE FOR GLContextAttrs;
+        auto&& ret = ax::RenderView::getGfxContextAttrs();
+        #pragma warning NO CONVERSION FROM NATIVE FOR GfxContextAttrs;
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.GLView:getGLContextAttrs",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderView:getGfxContextAttrs",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLView_getGLContextAttrs'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getGfxContextAttrs'.",&tolua_err);
 #endif
     return 0;
 }
-static int lua_ax_base_GLView_finalize(lua_State* tolua_S)
+static int lua_ax_base_RenderView_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (GLView)");
+    AXLOGV("luabindings: finalizing LUA object (RenderView)");
     return 0;
 }
 
-int lua_register_ax_base_GLView(lua_State* tolua_S)
+int lua_register_ax_base_RenderView(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.GLView");
-    tolua_cclass(tolua_S,"GLView","ax.GLView","ax.Object",nullptr);
+    tolua_usertype(tolua_S,"ax.RenderView");
+    tolua_cclass(tolua_S,"RenderView","ax.RenderView","ax.Object",nullptr);
 
-    tolua_beginmodule(tolua_S,"GLView");
-        tolua_function(tolua_S,"endToLua",lua_ax_base_GLView_end);
-        tolua_function(tolua_S,"isOpenGLReady",lua_ax_base_GLView_isOpenGLReady);
-        tolua_function(tolua_S,"swapBuffers",lua_ax_base_GLView_swapBuffers);
-        tolua_function(tolua_S,"setIMEKeyboardState",lua_ax_base_GLView_setIMEKeyboardState);
-        tolua_function(tolua_S,"windowShouldClose",lua_ax_base_GLView_windowShouldClose);
-        tolua_function(tolua_S,"pollEvents",lua_ax_base_GLView_pollEvents);
-        tolua_function(tolua_S,"getFrameSize",lua_ax_base_GLView_getFrameSize);
-        tolua_function(tolua_S,"setFrameSize",lua_ax_base_GLView_setFrameSize);
-        tolua_function(tolua_S,"setFrameZoomFactor",lua_ax_base_GLView_setFrameZoomFactor);
-        tolua_function(tolua_S,"getFrameZoomFactor",lua_ax_base_GLView_getFrameZoomFactor);
-        tolua_function(tolua_S,"setCursorVisible",lua_ax_base_GLView_setCursorVisible);
-        tolua_function(tolua_S,"getRetinaFactor",lua_ax_base_GLView_getRetinaFactor);
-        tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_GLView_setContentScaleFactor);
-        tolua_function(tolua_S,"getContentScaleFactor",lua_ax_base_GLView_getContentScaleFactor);
-        tolua_function(tolua_S,"isRetinaDisplay",lua_ax_base_GLView_isRetinaDisplay);
-        tolua_function(tolua_S,"getVisibleSize",lua_ax_base_GLView_getVisibleSize);
-        tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_GLView_getVisibleOrigin);
-        tolua_function(tolua_S,"getVisibleRect",lua_ax_base_GLView_getVisibleRect);
-        tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_GLView_getSafeAreaRect);
-        tolua_function(tolua_S,"setDesignResolutionSize",lua_ax_base_GLView_setDesignResolutionSize);
-        tolua_function(tolua_S,"getDesignResolutionSize",lua_ax_base_GLView_getDesignResolutionSize);
-        tolua_function(tolua_S,"setViewPortInPoints",lua_ax_base_GLView_setViewPortInPoints);
-        tolua_function(tolua_S,"setScissorInPoints",lua_ax_base_GLView_setScissorInPoints);
-        tolua_function(tolua_S,"isScissorEnabled",lua_ax_base_GLView_isScissorEnabled);
-        tolua_function(tolua_S,"getScissorRect",lua_ax_base_GLView_getScissorRect);
-        tolua_function(tolua_S,"setViewName",lua_ax_base_GLView_setViewName);
-        tolua_function(tolua_S,"getViewName",lua_ax_base_GLView_getViewName);
-        tolua_function(tolua_S,"setIcon",lua_ax_base_GLView_setIcon);
-        tolua_function(tolua_S,"setDefaultIcon",lua_ax_base_GLView_setDefaultIcon);
-        tolua_function(tolua_S,"getViewPortRect",lua_ax_base_GLView_getViewPortRect);
-        tolua_function(tolua_S,"getScaleX",lua_ax_base_GLView_getScaleX);
-        tolua_function(tolua_S,"getScaleY",lua_ax_base_GLView_getScaleY);
-        tolua_function(tolua_S,"getResolutionPolicy",lua_ax_base_GLView_getResolutionPolicy);
-        tolua_function(tolua_S,"renderScene",lua_ax_base_GLView_renderScene);
-        tolua_function(tolua_S,"setInteractive",lua_ax_base_GLView_setInteractive);
-        tolua_function(tolua_S,"setGLContextAttrs", lua_ax_base_GLView_setGLContextAttrs);
-        tolua_function(tolua_S,"getGLContextAttrs", lua_ax_base_GLView_getGLContextAttrs);
+    tolua_beginmodule(tolua_S,"RenderView");
+        tolua_function(tolua_S,"endToLua",lua_ax_base_RenderView_end);
+        tolua_function(tolua_S,"isGfxContextReady",lua_ax_base_RenderView_isGfxContextReady);
+        tolua_function(tolua_S,"swapBuffers",lua_ax_base_RenderView_swapBuffers);
+        tolua_function(tolua_S,"setIMEKeyboardState",lua_ax_base_RenderView_setIMEKeyboardState);
+        tolua_function(tolua_S,"windowShouldClose",lua_ax_base_RenderView_windowShouldClose);
+        tolua_function(tolua_S,"pollEvents",lua_ax_base_RenderView_pollEvents);
+        tolua_function(tolua_S,"getFrameSize",lua_ax_base_RenderView_getFrameSize);
+        tolua_function(tolua_S,"setFrameSize",lua_ax_base_RenderView_setFrameSize);
+        tolua_function(tolua_S,"setFrameZoomFactor",lua_ax_base_RenderView_setFrameZoomFactor);
+        tolua_function(tolua_S,"getFrameZoomFactor",lua_ax_base_RenderView_getFrameZoomFactor);
+        tolua_function(tolua_S,"setCursorVisible",lua_ax_base_RenderView_setCursorVisible);
+        tolua_function(tolua_S,"getRetinaFactor",lua_ax_base_RenderView_getRetinaFactor);
+        tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_RenderView_setContentScaleFactor);
+        tolua_function(tolua_S,"getContentScaleFactor",lua_ax_base_RenderView_getContentScaleFactor);
+        tolua_function(tolua_S,"isRetinaDisplay",lua_ax_base_RenderView_isRetinaDisplay);
+        tolua_function(tolua_S,"getVisibleSize",lua_ax_base_RenderView_getVisibleSize);
+        tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_RenderView_getVisibleOrigin);
+        tolua_function(tolua_S,"getVisibleRect",lua_ax_base_RenderView_getVisibleRect);
+        tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_RenderView_getSafeAreaRect);
+        tolua_function(tolua_S,"setDesignResolutionSize",lua_ax_base_RenderView_setDesignResolutionSize);
+        tolua_function(tolua_S,"getDesignResolutionSize",lua_ax_base_RenderView_getDesignResolutionSize);
+        tolua_function(tolua_S,"setViewPortInPoints",lua_ax_base_RenderView_setViewPortInPoints);
+        tolua_function(tolua_S,"setScissorInPoints",lua_ax_base_RenderView_setScissorInPoints);
+        tolua_function(tolua_S,"isScissorEnabled",lua_ax_base_RenderView_isScissorEnabled);
+        tolua_function(tolua_S,"getScissorRect",lua_ax_base_RenderView_getScissorRect);
+        tolua_function(tolua_S,"setViewName",lua_ax_base_RenderView_setViewName);
+        tolua_function(tolua_S,"getViewName",lua_ax_base_RenderView_getViewName);
+        tolua_function(tolua_S,"setIcon",lua_ax_base_RenderView_setIcon);
+        tolua_function(tolua_S,"setDefaultIcon",lua_ax_base_RenderView_setDefaultIcon);
+        tolua_function(tolua_S,"getViewPortRect",lua_ax_base_RenderView_getViewPortRect);
+        tolua_function(tolua_S,"getScaleX",lua_ax_base_RenderView_getScaleX);
+        tolua_function(tolua_S,"getScaleY",lua_ax_base_RenderView_getScaleY);
+        tolua_function(tolua_S,"getResolutionPolicy",lua_ax_base_RenderView_getResolutionPolicy);
+        tolua_function(tolua_S,"renderScene",lua_ax_base_RenderView_renderScene);
+        tolua_function(tolua_S,"setInteractive",lua_ax_base_RenderView_setInteractive);
+        tolua_function(tolua_S,"setGfxContextAttrs", lua_ax_base_RenderView_setGfxContextAttrs);
+        tolua_function(tolua_S,"getGfxContextAttrs", lua_ax_base_RenderView_getGfxContextAttrs);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::GLView).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.GLView";
-    g_typeCast[typeName] = "ax.GLView";
+    auto typeName = typeid(ax::RenderView).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.RenderView";
+    g_typeCast[typeName] = "ax.RenderView";
     return 1;
 }
 
@@ -14840,7 +14840,7 @@ int lua_ax_base_Director_setStatsAnchor(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Director_getGLView(lua_State* tolua_S)
+int lua_ax_base_Director_getRenderView(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* cobj = nullptr;
@@ -14860,7 +14860,7 @@ int lua_ax_base_Director_getGLView(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getGLView'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getRenderView'", nullptr);
         return 0;
     }
 #endif
@@ -14870,24 +14870,24 @@ int lua_ax_base_Director_getGLView(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getGLView'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getRenderView'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getGLView();
-        object_to_luaval<ax::GLView>(tolua_S, "ax.GLView",(ax::GLView*)ret);
+        auto&& ret = cobj->getRenderView();
+        object_to_luaval<ax::RenderView>(tolua_S, "ax.RenderView",(ax::RenderView*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getGLView",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getRenderView",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getGLView'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getRenderView'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Director_setGLView(lua_State* tolua_S)
+int lua_ax_base_Director_setRenderView(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* cobj = nullptr;
@@ -14907,7 +14907,7 @@ int lua_ax_base_Director_setGLView(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setGLView'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setRenderView'", nullptr);
         return 0;
     }
 #endif
@@ -14915,24 +14915,24 @@ int lua_ax_base_Director_setGLView(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::GLView* arg0;
+        ax::RenderView* arg0;
 
-        ok &= luaval_to_object<ax::GLView>(tolua_S, 2, "ax.GLView",&arg0, "ax.Director:setGLView");
+        ok &= luaval_to_object<ax::RenderView>(tolua_S, 2, "ax.RenderView",&arg0, "ax.Director:setRenderView");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setGLView'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setRenderView'", nullptr);
             return 0;
         }
-        cobj->setGLView(arg0);
+        cobj->setRenderView(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:setGLView",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:setRenderView",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_setGLView'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_setRenderView'.",&tolua_err);
 #endif
 
     return 0;
@@ -17825,8 +17825,8 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"setStatsDisplay",lua_ax_base_Director_setStatsDisplay);
         tolua_function(tolua_S,"getSecondsPerFrame",lua_ax_base_Director_getSecondsPerFrame);
         tolua_function(tolua_S,"setStatsAnchor",lua_ax_base_Director_setStatsAnchor);
-        tolua_function(tolua_S,"getGLView",lua_ax_base_Director_getGLView);
-        tolua_function(tolua_S,"setGLView",lua_ax_base_Director_setGLView);
+        tolua_function(tolua_S,"getRenderView",lua_ax_base_Director_getRenderView);
+        tolua_function(tolua_S,"setRenderView",lua_ax_base_Director_setRenderView);
         tolua_function(tolua_S,"getTextureCache",lua_ax_base_Director_getTextureCache);
         tolua_function(tolua_S,"isNextDeltaTimeZero",lua_ax_base_Director_isNextDeltaTimeZero);
         tolua_function(tolua_S,"setNextDeltaTimeZero",lua_ax_base_Director_setNextDeltaTimeZero);
@@ -103535,7 +103535,7 @@ int lua_register_ax_base_Application(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_GLViewImpl_create(lua_State* tolua_S)
+int lua_ax_base_RenderViewImpl_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -103545,7 +103545,7 @@ int lua_ax_base_GLViewImpl_create(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.GLViewImpl",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderViewImpl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -103553,25 +103553,25 @@ int lua_ax_base_GLViewImpl_create(lua_State* tolua_S)
     if (argc == 1)
     {
         std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLViewImpl:create");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:create");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLViewImpl_create'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_create'", nullptr);
             return 0;
         }
-        auto&& ret = ax::GLViewImpl::create(arg0);
-        object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
+        auto&& ret = ax::RenderViewImpl::create(arg0);
+        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.GLViewImpl:create",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderViewImpl:create",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLViewImpl_create'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewImpl_create'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
+int lua_ax_base_RenderViewImpl_createWithRect(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -103581,7 +103581,7 @@ int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.GLViewImpl",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderViewImpl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -103590,15 +103590,15 @@ int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
     {
         std::string_view arg0;
         ax::Rect arg1;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLViewImpl:createWithRect");
-        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderViewImpl:createWithRect");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLViewImpl_createWithRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithRect'", nullptr);
             return 0;
         }
-        auto&& ret = ax::GLViewImpl::createWithRect(arg0, arg1);
-        object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
+        auto&& ret = ax::RenderViewImpl::createWithRect(arg0, arg1);
+        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
         return 1;
     }
     if (argc == 3)
@@ -103606,16 +103606,16 @@ int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
         std::string_view arg0;
         ax::Rect arg1;
         double arg2;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLViewImpl:createWithRect");
-        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.GLViewImpl:createWithRect");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderViewImpl:createWithRect");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLViewImpl_createWithRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithRect'", nullptr);
             return 0;
         }
-        auto&& ret = ax::GLViewImpl::createWithRect(arg0, arg1, arg2);
-        object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
+        auto&& ret = ax::RenderViewImpl::createWithRect(arg0, arg1, arg2);
+        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
         return 1;
     }
     if (argc == 4)
@@ -103624,28 +103624,28 @@ int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
         ax::Rect arg1;
         double arg2;
         bool arg3;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLViewImpl:createWithRect");
-        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.GLViewImpl:createWithRect");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.GLViewImpl:createWithRect");
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.RenderViewImpl:createWithRect");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLViewImpl_createWithRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithRect'", nullptr);
             return 0;
         }
-        auto&& ret = ax::GLViewImpl::createWithRect(arg0, arg1, arg2, arg3);
-        object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
+        auto&& ret = ax::RenderViewImpl::createWithRect(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.GLViewImpl:createWithRect",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderViewImpl:createWithRect",argc, 2);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLViewImpl_createWithRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewImpl_createWithRect'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_base_GLViewImpl_createWithFullScreen(lua_State* tolua_S)
+int lua_ax_base_RenderViewImpl_createWithFullScreen(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -103655,7 +103655,7 @@ int lua_ax_base_GLViewImpl_createWithFullScreen(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.GLViewImpl",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"ax.RenderViewImpl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -103663,43 +103663,43 @@ int lua_ax_base_GLViewImpl_createWithFullScreen(lua_State* tolua_S)
     if (argc == 1)
     {
         std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLViewImpl:createWithFullScreen");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithFullScreen");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLViewImpl_createWithFullScreen'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithFullScreen'", nullptr);
             return 0;
         }
-        auto&& ret = ax::GLViewImpl::createWithFullScreen(arg0);
-        object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
+        auto&& ret = ax::RenderViewImpl::createWithFullScreen(arg0);
+        object_to_luaval<ax::RenderViewImpl>(tolua_S, "ax.RenderViewImpl",(ax::RenderViewImpl*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.GLViewImpl:createWithFullScreen",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderViewImpl:createWithFullScreen",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLViewImpl_createWithFullScreen'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderViewImpl_createWithFullScreen'.",&tolua_err);
 #endif
     return 0;
 }
-static int lua_ax_base_GLViewImpl_finalize(lua_State* tolua_S)
+static int lua_ax_base_RenderViewImpl_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (GLViewImpl)");
+    AXLOGV("luabindings: finalizing LUA object (RenderViewImpl)");
     return 0;
 }
 
-int lua_register_ax_base_GLViewImpl(lua_State* tolua_S)
+int lua_register_ax_base_RenderViewImpl(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"ax.GLViewImpl");
-    tolua_cclass(tolua_S,"GLViewImpl","ax.GLViewImpl","ax.GLView",nullptr);
+    tolua_usertype(tolua_S,"ax.RenderViewImpl");
+    tolua_cclass(tolua_S,"RenderViewImpl","ax.RenderViewImpl","ax.RenderView",nullptr);
 
-    tolua_beginmodule(tolua_S,"GLViewImpl");
-        tolua_function(tolua_S,"create", lua_ax_base_GLViewImpl_create);
-        tolua_function(tolua_S,"createWithRect", lua_ax_base_GLViewImpl_createWithRect);
-        tolua_function(tolua_S,"createWithFullScreen", lua_ax_base_GLViewImpl_createWithFullScreen);
+    tolua_beginmodule(tolua_S,"RenderViewImpl");
+        tolua_function(tolua_S,"create", lua_ax_base_RenderViewImpl_create);
+        tolua_function(tolua_S,"createWithRect", lua_ax_base_RenderViewImpl_createWithRect);
+        tolua_function(tolua_S,"createWithFullScreen", lua_ax_base_RenderViewImpl_createWithFullScreen);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::GLViewImpl).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.GLViewImpl";
-    g_typeCast[typeName] = "ax.GLViewImpl";
+    auto typeName = typeid(ax::RenderViewImpl).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.RenderViewImpl";
+    g_typeCast[typeName] = "ax.RenderViewImpl";
     return 1;
 }
 
@@ -112952,7 +112952,7 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
 	lua_register_ax_base_Component(tolua_S);
 	lua_register_ax_base_Node(tolua_S);
 	lua_register_ax_base_Scene(tolua_S);
-	lua_register_ax_base_GLView(tolua_S);
+	lua_register_ax_base_RenderView(tolua_S);
 	lua_register_ax_base_Director(tolua_S);
 	lua_register_ax_base_Timer(tolua_S);
 	lua_register_ax_base_Scheduler(tolua_S);
@@ -113195,7 +113195,7 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
 	lua_register_ax_base_TextureCache(tolua_S);
 	lua_register_ax_base_Device(tolua_S);
 	lua_register_ax_base_Application(tolua_S);
-	lua_register_ax_base_GLViewImpl(tolua_S);
+	lua_register_ax_base_RenderViewImpl(tolua_S);
 	lua_register_ax_base_AnimationCache(tolua_S);
 	lua_register_ax_base_SpriteBatchNode(tolua_S);
 	lua_register_ax_base_ParallaxNode(tolua_S);

@@ -76,7 +76,7 @@ end
 function Helper.initWithLayer(layer)
     Helper.currentLayer = layer
 
-    local size = cc.Director:getInstance():getGLView():getVisibleRect()
+    local size = cc.Director:getInstance():getRenderView():getVisibleRect()
     Helper.titleLabel = cc.Label:createWithTTF("", s_arialPath, 28)
     Helper.titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
     layer:addChild(Helper.titleLabel, 1)
@@ -126,7 +126,7 @@ function CreateBackMenuItem()
     local MenuItem = cc.MenuItemLabel:create(label)
     MenuItem:registerScriptTapHandler(MainMenuCallback)
 
-    local s = cc.Director:getInstance():getGLView():getVisibleRect()
+    local s = cc.Director:getInstance():getRenderView():getVisibleRect()
     local Menu = cc.Menu:create()
     Menu:addChild(MenuItem)
     Menu:setPosition(0, 0)

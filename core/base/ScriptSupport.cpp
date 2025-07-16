@@ -59,7 +59,7 @@ ScriptHandlerEntry::~ScriptHandlerEntry()
     if (_handler != 0)
     {
         ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_handler);
-        AXLOGD("[LUA] Remove event handler: %d", _handler);
+        AXLOGD("[LUA] Remove event handler: {}", _handler);
         _handler = 0;
     }
 }

@@ -26,7 +26,7 @@
 
 #import "testsAppDelegate.h"
 
-#import "platform/ios/EAGLView-ios.h"
+#import "platform/ios/EARenderView-ios.h"
 #import "axmol.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
@@ -43,19 +43,19 @@ static AppDelegate s_sharedApplication;
 {
 
     ax::Application* app = ax::Application::getInstance();
-    app->initGLContextAttrs();
+    app->initGfxContextAttrs();
 
     // Override point for customization after application launch.
 
-    auto renderView = ax::GLViewImpl::createWithFullScreen("axmol2");
+    auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");
     
-    // Use RootViewController manage EAGLView and UIWindow
+    // Use RootViewController manage EARenderView and UIWindow
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
     
     renderView->showWindow(viewController);
 
-    // IMPORTANT: Setting the GLView should be done after creating the RootViewController
-    ax::Director::getInstance()->setGLView(renderView);
+    // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
+    ax::Director::getInstance()->setRenderView(renderView);
 
     app->run();
 

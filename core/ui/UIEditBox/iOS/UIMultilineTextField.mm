@@ -84,8 +84,8 @@ CGFloat const UI_PLACEHOLDER_TEXT_CHANGED_ANIMATION_DURATION = 0.25;
 {
     if (_placeHolderLabel == nil)
     {
-        auto glView   = ax::Director::getInstance()->getGLView();
-        float padding = AX_EDIT_BOX_PADDING * glView->getScaleX() / glView->getContentScaleFactor();
+        auto renderView   = ax::Director::getInstance()->getRenderView();
+        float padding = AX_EDIT_BOX_PADDING * renderView->getScaleX() / renderView->getContentScaleFactor();
 
         _placeHolderLabel =
             [[UILabel alloc] initWithFrame:CGRectMake(padding, padding, self.bounds.size.width - padding * 2, 0)];
@@ -106,9 +106,9 @@ CGFloat const UI_PLACEHOLDER_TEXT_CHANGED_ANIMATION_DURATION = 0.25;
 
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
-    auto glView = ax::Director::getInstance()->getGLView();
+    auto renderView = ax::Director::getInstance()->getRenderView();
 
-    float padding = AX_EDIT_BOX_PADDING * glView->getScaleX() / glView->getContentScaleFactor();
+    float padding = AX_EDIT_BOX_PADDING * renderView->getScaleX() / renderView->getContentScaleFactor();
     return CGRectInset(bounds, padding, padding);
 }
 

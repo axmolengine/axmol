@@ -186,47 +186,47 @@ THE SOFTWARE.
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    include "platform/ios/Application-ios.h"
-#    include "platform/ios/GLViewImpl-ios.h"
+#    include "platform/ios/RenderViewImpl-ios.h"
 #    include "platform/ios/StdC-ios.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include "platform/android/Application-android.h"
-#    include "platform/android/GLViewImpl-android.h"
+#    include "platform/android/RenderViewImpl-android.h"
 #    include "platform/android/GL-android.h"
 #    include "platform/android/StdC-android.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include "platform/win32/Application-win32.h"
-#    include "platform/GLViewImpl.h"
+#    include "platform/RenderViewImpl.h"
 #    include "platform/win32/GL-win32.h"
 #    include "platform/win32/StdC-win32.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 #    include "platform/winrt/Application-winrt.h"
-#    include "platform/winrt/GLViewImpl-winrt.h"
+#    include "platform/winrt/RenderViewImpl-winrt.h"
 #    include "platform/winrt/GL-winrt.h"
 #    include "platform/winrt/StdC-winrt.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    include "platform/GLViewImpl.h"
+#    include "platform/RenderViewImpl.h"
 #    include "platform/mac/Application-mac.h"
 #    include "platform/mac/StdC-mac.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    include "platform/linux/Application-linux.h"
-#    include "platform/GLViewImpl.h"
+#    include "platform/RenderViewImpl.h"
 #    include "platform/linux/GL-linux.h"
 #    include "platform/linux/StdC-linux.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
     #include "platform/wasm/Application-wasm.h"
-    #include "platform/GLViewImpl.h"
+    #include "platform/RenderViewImpl.h"
     #include "platform/wasm/GL-wasm.h"
     #include "platform/wasm/StdC-wasm.h"
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/EventKeyboard.h"
 #include "base/EventDispatcher.h"
-#include "platform/android/GLViewImpl-android.h"
+#include "platform/android/RenderViewImpl-android.h"
 
 #include <android/log.h>
 #include <jni.h>
@@ -37,14 +37,14 @@ JNIEXPORT void JNICALL
 Java_dev_axmol_lib_AxmolRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
-    ax::Director::getInstance()->getGLView()->handleTouchesBegin(1, &idlong, &x, &y);
+    ax::Director::getInstance()->getRenderView()->handleTouchesBegin(1, &idlong, &x, &y);
 }
 
 JNIEXPORT void JNICALL
 Java_dev_axmol_lib_AxmolRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
-    ax::Director::getInstance()->getGLView()->handleTouchesEnd(1, &idlong, &x, &y);
+    ax::Director::getInstance()->getRenderView()->handleTouchesEnd(1, &idlong, &x, &y);
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesMove(JNIEnv* env,
@@ -66,7 +66,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesMove(JNIEnv
     for (int i = 0; i < size; i++)
         idlong[i] = id[i];
 
-    ax::Director::getInstance()->getGLView()->handleTouchesMove(size, idlong, x, y);
+    ax::Director::getInstance()->getRenderView()->handleTouchesMove(size, idlong, x, y);
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesCancel(JNIEnv* env,
@@ -88,7 +88,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesCancel(JNIE
     for (int i = 0; i < size; i++)
         idlong[i] = id[i];
 
-    ax::Director::getInstance()->getGLView()->handleTouchesCancel(size, idlong, x, y);
+    ax::Director::getInstance()->getRenderView()->handleTouchesCancel(size, idlong, x, y);
 }
 
 #define KEYCODE_BACK 0x04

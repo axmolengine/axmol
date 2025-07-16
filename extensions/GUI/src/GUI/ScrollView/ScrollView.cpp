@@ -46,8 +46,8 @@ NS_AX_EXT_BEGIN
 
 static float convertDistanceFromPointToInch(float pointDis)
 {
-    auto glView  = Director::getInstance()->getGLView();
-    float factor = (glView->getScaleX() + glView->getScaleY()) / 2;
+    auto renderView = Director::getInstance()->getRenderView();
+    float factor    = (renderView->getScaleX() + renderView->getScaleY()) / 2;
     return pointDis * factor / Device::getDPI();
 }
 
@@ -583,24 +583,24 @@ void ScrollView::onBeforeDraw()
     {
         _scissorRestored = false;
         Rect frame = getViewRect();
-        auto glview = Director::getInstance()->getGLView();
+        auto renderView = Director::getInstance()->getRenderView();
 
-            if (glview->isScissorEnabled()) {
+            if (renderView->isScissorEnabled()) {
                 _scissorRestored = true;
-                _parentScissorRect = glview->getScissorRect();
+                _parentScissorRect = renderView->getScissorRect();
                 //set the intersection of _parentScissorRect and frame as the new scissor rect
                 if (frame.intersectsRect(_parentScissorRect)) {
                     float x = MAX(frame.origin.x, _parentScissorRect.origin.x);
                     float y = MAX(frame.origin.y, _parentScissorRect.origin.y);
                     float xx = MIN(frame.origin.x + frame.size.width, _parentScissorRect.origin.x + _parentScissorRect.size.width);
                     float yy = MIN(frame.origin.y + frame.size.height, _parentScissorRect.origin.y + _parentScissorRect.size.height);
-                    glview->setScissorInPoints(x, y, xx - x, yy - y);
+                    renderView->setScissorInPoints(x, y, xx - x, yy - y);
                 }
             }
             else {
 
                   Director::getInstance()->getRenderer()->setScissorTest(true);
-                glview->setScissorInPoints(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+                renderView->setScissorInPoints(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
             }
 
     }
@@ -622,10 +622,10 @@ void ScrollView::onAfterDraw()
 
     if (_clippingToBounds)
     {
-        auto glview = Director::getInstance()->getGLView();
+        auto renderView = Director::getInstance()->getRenderView();
         
         if (_scissorRestored) {//restore the parent's scissor rect
-            glview->setScissorInPoints(_parentScissorRect.origin.x, _parentScissorRect.origin.y, _parentScissorRect.size.width, _parentScissorRect.size.height);
+            renderView->setScissorInPoints(_parentScissorRect.origin.x, _parentScissorRect.origin.y, _parentScissorRect.size.width, _parentScissorRect.size.height);
         }
         else {
             Director::getInstance()->getRenderer()->setScissorTest(false);

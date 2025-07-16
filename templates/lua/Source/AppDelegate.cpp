@@ -40,14 +40,14 @@ AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate() {}
 
-// if you want a different context, modify the value of glContextAttrs
+// if you want a different context, modify the value of gfxContextAttrs
 // it will affect all platforms
-void AppDelegate::initGLContextAttrs()
+void AppDelegate::initGfxContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
-    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
-    // glContextAttrs.vsync = false
-    GLView::setGLContextAttrs(glContextAttrs);
+    GLContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+    // gfxContextAttrs.vsync = false
+    RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()

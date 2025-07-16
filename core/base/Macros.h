@@ -108,7 +108,7 @@ default gl blend src function. Compatible with premultiplied alpha images.
 
 /** @def AX_DIRECTOR_END
  Stops and removes the director from memory.
- Removes the GLView from its parent
+ Removes the RenderView from its parent
 
  @since v0.99.4
  */

@@ -27,32 +27,36 @@
 
 #include "base/Object.h"
 #include "platform/Common.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 
 namespace ax
 {
 
 /** Class that represent the OpenGL View
  */
-class AX_DLL GLViewImpl : public GLView
+class AX_DLL RenderViewImpl : public RenderView
 {
 public:
-    /** DEPRECATED creates a GLViewImpl with a objective-c CCEAGLViewImpl instance */
-    AX_DEPRECATED(2.8) static GLViewImpl* createWithEAGLView(void* eaGLView);
 
-    /** creates a GLViewImpl with a title name in fullscreen mode */
-    static GLViewImpl* create(std::string_view viewName);
+#ifndef AX_CORE_PROFILE
+    /** DEPRECATED creates a RenderViewImpl with a objective-c EARenderViewImpl instance */
+    AX_DEPRECATED(2.8) static RenderViewImpl* createWithEARenderView(void* viewHandle);
+#endif
 
-    /** creates a GLViewImpl with a title name, a rect and the zoom factor */
-    static GLViewImpl* createWithRect(std::string_view viewName,
+    /** creates a RenderViewImpl with a title name in fullscreen mode */
+    static RenderViewImpl* create(std::string_view viewName);
+
+    /** creates a RenderViewImpl with a title name, a rect and the zoom factor */
+    static RenderViewImpl* createWithRect(std::string_view viewName,
                                       const Rect& rect,
                                       float frameZoomFactor = 1.0f,
                                       bool resizable        = false);
 
-    /** creates a GLViewImpl with a name in fullscreen mode */
-    static GLViewImpl* createWithFullScreen(std::string_view viewName);
-
+    /** creates a RenderViewImpl with a name in fullscreen mode */
+    static RenderViewImpl* createWithFullScreen(std::string_view viewName);
+#ifndef AX_CORE_PROFILE
     AX_DEPRECATED(2.8) static void convertAttrs() { choosePixelFormats(); }
+#endif
     static void choosePixelFormats();
     static PixelFormat _pixelFormat;
     static PixelFormat _depthFormat;
@@ -64,41 +68,46 @@ public:
     void showWindow(void* viewController);
 
     /** sets the content scale factor */
-    virtual bool setContentScaleFactor(float contentScaleFactor) override;
+    bool setContentScaleFactor(float contentScaleFactor) override;
 
     /** returns the content scale factor */
-    virtual float getContentScaleFactor() const override;
+    float getContentScaleFactor() const override;
 
     /** returns whether or not the view is in Retina Display mode */
-    virtual bool isRetinaDisplay() const override { return getContentScaleFactor() == 2.0; }
+    bool isRetinaDisplay() const override { return getContentScaleFactor() == 2.0; }
 
-    /** returns the objective-c EAGLView instance */
-    virtual void* getEAGLView() const override { return _eaglView; }
-    
-    /** returns the objective-c UIWindow instance */
-    void* getUIWindow() const { return _uiWindow; }
+    /** @since axmol-2.8.0, returns the objective-c UIWindow instance */
+    void* getEAWindow() const override { return _eaWindowHandle; }
+
+    /** @since axmol-2.8.0, returns the objective-c EARenderView instance */
+    void* getEARenderView() const override { return _eaViewHandle; }
 
     // overrides
-    virtual bool isOpenGLReady() override;
-    virtual void end() override;
-    virtual void swapBuffers() override;
-    virtual void setIMEKeyboardState(bool bOpen) override;
+    bool isGfxContextReady() override;
+    void end() override;
+    void swapBuffers() override;
+    void setIMEKeyboardState(bool bOpen) override;
 
-    virtual Rect getSafeAreaRect() const override;
+    Rect getSafeAreaRect() const override;
 
     void queueOperation(void (*op)(void*), void* param) override;
 
 protected:
-    GLViewImpl();
-    virtual ~GLViewImpl();
-
-    bool initWithEAGLView(void* eaGLView);
+    RenderViewImpl();
+    ~RenderViewImpl() override;
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.8) bool initWithEARenderView(void* viewHandle);
+#endif
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
 
-    // the objective-c EAGLView instance
-    void* _eaglView;
-    void* _uiWindow;
+    // the objective-c instance handles
+    void* _eaViewHandle;
+    void* _eaWindowHandle;
 };
+
+#ifndef AX_CORE_PROFILE
+AX_DEPRECATED(2.8) typedef RenderViewImpl GLViewImpl;
+#endif
 
 }

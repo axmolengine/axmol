@@ -189,8 +189,8 @@ Rect Helper::restrictCapInsetRect(const ax::Rect& capInsets, const Vec2& texture
 Rect Helper::convertBoundingBoxToScreen(Node* node)
 {
     auto director  = Director::getInstance();
-    auto glView    = director->getGLView();
-    auto frameSize = glView->getFrameSize();
+    auto renderView    = director->getRenderView();
+    auto frameSize = renderView->getFrameSize();
 
     auto winSize    = director->getWinSize();
     auto leftBottom = node->convertToWorldSpace(Point::ZERO);
@@ -198,10 +198,10 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
     auto contentSize = node->getContentSize();
     auto rightTop    = node->convertToWorldSpace(Point(contentSize.width, contentSize.height));
 
-    auto uiLeft   = frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * glView->getScaleX();
-    auto uiTop    = frameSize.height / 2 - (rightTop.y - winSize.height / 2) * glView->getScaleY();
-    auto uiWidth  = (rightTop.x - leftBottom.x) * glView->getScaleX();
-    auto uiHeight = (rightTop.y - leftBottom.y) * glView->getScaleY();
+    auto uiLeft   = frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * renderView->getScaleX();
+    auto uiTop    = frameSize.height / 2 - (rightTop.y - winSize.height / 2) * renderView->getScaleY();
+    auto uiWidth  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
+    auto uiHeight = (rightTop.y - leftBottom.y) * renderView->getScaleY();
 
     return Rect(uiLeft, uiTop, uiWidth, uiHeight);
 }

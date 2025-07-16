@@ -1,4 +1,4 @@
-local visibleRect = cc.Director:getInstance():getGLView():getVisibleRect()
+local visibleRect = cc.Director:getInstance():getRenderView():getVisibleRect()
 local centerPos   = cc.p(visibleRect.x + visibleRect.width / 2,visibleRect.y + visibleRect.height /2)
 
 axui.VideoPlayer = axui.MediaPlayer

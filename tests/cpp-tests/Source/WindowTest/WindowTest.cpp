@@ -47,7 +47,7 @@ std::string WindowTest::title() const
 void WindowTestWindowed1::onEnter()
 {
     WindowTest::onEnter();
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
+    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
     view->setWindowed(480, 320);
 }
 
@@ -59,7 +59,7 @@ std::string WindowTestWindowed1::subtitle() const
 void WindowTestWindowed2::onEnter()
 {
     WindowTest::onEnter();
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
+    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
     view->setWindowed(960, 640);
 }
 
@@ -72,7 +72,7 @@ bool WindowTestFullscreen1::init()
 {
     // @remark: Set full screen before layout renderer elements to ensure VisibleRect is
     // correct with full screen window size
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
+    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
     view->setFullscreen();
     return WindowTest::init();
 }
@@ -84,7 +84,7 @@ std::string WindowTestFullscreen1::subtitle() const
 
 bool WindowTestFullscreen2::init()
 {
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
+    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
     view->setFullscreen(1);
     return WindowTest::init();
 }
@@ -96,7 +96,7 @@ std::string WindowTestFullscreen2::subtitle() const
 
 bool WindowTestFullscreen3::init()
 {
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
+    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
     view->setFullscreen(2);
     return WindowTest::init();
 }
@@ -111,7 +111,7 @@ void WindowTestResizedAndPositioned::onEnter()
     WindowTest::onEnter();
 
     auto s = _director->getWinSize();
-    auto glView = static_cast<GLViewImpl*>(_director->getGLView());
+    auto glView = static_cast<RenderViewImpl*>(_director->getRenderView());
 
     int x = 0;
     int y = 0;
@@ -129,18 +129,18 @@ void WindowTestResizedAndPositioned::onEnter()
     addChild(label2);
 
     _director->getEventDispatcher()->addCustomEventListener(
-        GLViewImpl::EVENT_WINDOW_POSITIONED,
+        RenderViewImpl::EVENT_WINDOW_POSITIONED,
         AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowPositioned, this));
     _director->getEventDispatcher()->addCustomEventListener(
-        GLViewImpl::EVENT_WINDOW_RESIZED,
+        RenderViewImpl::EVENT_WINDOW_RESIZED,
         AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowResized, this));
 }
 
 void WindowTestResizedAndPositioned::onExit()
 {
     WindowTest::onExit();
-    _director->getEventDispatcher()->removeCustomEventListeners(GLViewImpl::EVENT_WINDOW_POSITIONED);
-    _director->getEventDispatcher()->removeCustomEventListeners(GLViewImpl::EVENT_WINDOW_RESIZED);
+    _director->getEventDispatcher()->removeCustomEventListeners(RenderViewImpl::EVENT_WINDOW_POSITIONED);
+    _director->getEventDispatcher()->removeCustomEventListeners(RenderViewImpl::EVENT_WINDOW_RESIZED);
 }
 
 std::string WindowTestResizedAndPositioned::subtitle() const
@@ -172,14 +172,14 @@ void WindowTestClose::onEnter()
 
     label = nullptr;
 
-    _director->getEventDispatcher()->addCustomEventListener(GLViewImpl::EVENT_WINDOW_CLOSE,
+    _director->getEventDispatcher()->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_CLOSE,
                                                             AX_CALLBACK_1(WindowTestClose::onWindowClose, this));
 }
 
 void WindowTestClose::onExit()
 {
     WindowTest::onExit();
-    _director->getEventDispatcher()->removeCustomEventListeners(GLViewImpl::EVENT_WINDOW_CLOSE);
+    _director->getEventDispatcher()->removeCustomEventListeners(RenderViewImpl::EVENT_WINDOW_CLOSE);
 }
 
 std::string WindowTestClose::subtitle() const

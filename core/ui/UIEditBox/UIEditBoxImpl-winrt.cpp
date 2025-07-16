@@ -31,7 +31,7 @@
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 #include "ui/UIEditBox/UIEditBoxImpl-winrt.h"
 #include "platform/winrt/WinRTUtils.h"
-#include "platform/winrt/GLViewImpl-winrt.h"
+#include "platform/winrt/RenderViewImpl-winrt.h"
 #include "2d/FontFreeType.h"
 
 #include <winrt/Windows.UI.Xaml.Input.h>
@@ -77,8 +77,8 @@ EditBoxWinRT::EditBoxWinRT(
     , _multiline(false)
     , _maxLength(0 /* unlimited */)
 {
-    m_dispatcher = ax::GLViewImpl::sharedGLView()->getDispatcher();
-    m_panel      = ax::GLViewImpl::sharedGLView()->getPanel();
+    m_dispatcher = ax::RenderViewImpl::sharedRenderView()->getDispatcher();
+    m_panel      = ax::RenderViewImpl::sharedRenderView()->getPanel();
 }
 
 void EditBoxWinRT::closeKeyboard()
@@ -146,7 +146,7 @@ void EditBoxWinRT::onTextChanged(Windows::Foundation::IInspectable const& sender
         text = _textBox.as<TextBox>().Text();
     }
     std::shared_ptr<ax::InputEvent> inputEvent(new UIEditBoxEvent(*this, text, _changeHandler));
-    ax::GLViewImpl::sharedGLView()->QueueEvent(inputEvent);
+    ax::RenderViewImpl::sharedRenderView()->QueueEvent(inputEvent);
 }
 
 void EditBoxWinRT::onKeyDown(Windows::Foundation::IInspectable const& sender,
@@ -167,7 +167,7 @@ void EditBoxWinRT::onGotFocus(Windows::Foundation::IInspectable const& sender,
 {
     Concurrency::critical_section::scoped_lock lock(_critical_section);
     std::shared_ptr<ax::InputEvent> inputEvent(new UIEditBoxEvent(*this, winrt::hstring{}, _beginHandler));
-    ax::GLViewImpl::sharedGLView()->QueueEvent(inputEvent);
+    ax::RenderViewImpl::sharedRenderView()->QueueEvent(inputEvent);
     _isEditing = true;
 }
 
@@ -207,7 +207,7 @@ void EditBoxWinRT::onLostFocus(Windows::Foundation::IInspectable const& sender,
 
     std::shared_ptr<ax::InputEvent> inputEvent(
         new UIEditBoxEndEvent(*this, text, static_cast<int>(action), _endHandler));
-    ax::GLViewImpl::sharedGLView()->QueueEvent(inputEvent);
+    ax::RenderViewImpl::sharedRenderView()->QueueEvent(inputEvent);
 
     _textBox.LostFocus(_unfocusToken);
     _textBox.GotFocus(_focusToken);
@@ -340,7 +340,7 @@ void EditBoxWinRT::_setTexVerticalAlignment(Windows::UI::Xaml::Controls::Control
 
 void EditBoxWinRT::_setPadding(Windows::UI::Xaml::Controls::Control editBox)
 {
-    double padding = EDIT_BOX_PADDING * ax::Director::getInstance()->getGLView()->getScaleX();
+    double padding = EDIT_BOX_PADDING * ax::Director::getInstance()->getRenderView()->getScaleX();
     if (_multiline)
     {
         editBox.Padding(Thickness{padding, padding, 0.0, 0.0});
@@ -459,7 +459,7 @@ void UIEditBoxImplWinrt::setNativeFont(const char* pFontName, int fontSize)
     auto transform = _editBox->getNodeToWorldTransform();
     ax::Vec3 scale;
     transform.getScale(&scale);
-    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getGLView()->getScaleY() /** scale.y*/);
+    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getRenderView()->getScaleY() /** scale.y*/);
 
     // fontFamily
     auto font = ax::FontFreeType::create(pFontName, fontSize, ax::GlyphCollection::DYNAMIC, ""sv);
@@ -508,26 +508,26 @@ void UIEditBoxImplWinrt::nativeOpenKeyboard()
     // Update the text
     _system_control->setText(PlatformStringFromString(getText()));
     // Size
-    auto glView    = ax::Director::getInstance()->getGLView();
+    auto renderView    = ax::Director::getInstance()->getRenderView();
     auto transform = _editBox->getNodeToWorldTransform();
     ax::Vec3 scale;
     transform.getScale(&scale);
-    Windows::Foundation::Size xamlSize = {_editBox->getContentSize().width * glView->getScaleX() * scale.x,
-                                          _editBox->getContentSize().height * glView->getScaleY() * scale.y};
+    Windows::Foundation::Size xamlSize = {_editBox->getContentSize().width * renderView->getScaleX() * scale.x,
+                                          _editBox->getContentSize().height * renderView->getScaleY() * scale.y};
     _system_control->setSize(xamlSize);
-    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getGLView()->getScaleY() /** scale.y*/);
+    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getRenderView()->getScaleY() /** scale.y*/);
     // Position
     auto directorInstance = ax::Director::getInstance();
-    auto frameSize        = glView->getFrameSize();
+    auto frameSize        = renderView->getFrameSize();
     auto winSize          = directorInstance->getWinSize();
     auto leftBottom       = _editBox->convertToWorldSpace(ax::Point::ZERO);
     auto rightTop =
         _editBox->convertToWorldSpace(ax::Point(_editBox->getContentSize().width, _editBox->getContentSize().height));
     Windows::Foundation::Rect rect;
-    rect.X      = frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * glView->getScaleX();
-    rect.Y      = frameSize.height / 2 - (rightTop.y - winSize.height / 2) * glView->getScaleY();
-    rect.Width  = (rightTop.x - leftBottom.x) * glView->getScaleX();
-    rect.Height = (rightTop.y - leftBottom.y) * glView->getScaleY();
+    rect.X      = frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * renderView->getScaleX();
+    rect.Y      = frameSize.height / 2 - (rightTop.y - winSize.height / 2) * renderView->getScaleY();
+    rect.Width  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
+    rect.Height = (rightTop.y - leftBottom.y) * renderView->getScaleY();
     _system_control->setPosition(rect);
     // .. and open
     _system_control->openKeyboard();
@@ -545,10 +545,10 @@ void UIEditBoxImplWinrt::setNativeMaxLength(int maxLength)
 
 ax::Vec2 UIEditBoxImplWinrt::convertDesignCoordToXamlCoord(const ax::Vec2& designCoord)
 {
-    auto glView      = ax::Director::getInstance()->getGLView();
-    float viewH      = glView->getFrameSize().height;
-    Vec2 visiblePos  = Vec2(designCoord.x * glView->getScaleX(), designCoord.y * glView->getScaleY());
-    Vec2 screenGLPos = visiblePos + glView->getViewPortRect().origin;
+    auto renderView      = ax::Director::getInstance()->getRenderView();
+    float viewH      = renderView->getFrameSize().height;
+    Vec2 visiblePos  = Vec2(designCoord.x * renderView->getScaleX(), designCoord.y * renderView->getScaleY());
+    Vec2 screenGLPos = visiblePos + renderView->getViewPortRect().origin;
     Vec2 xamlPos(screenGLPos.x, viewH - screenGLPos.y);
     return xamlPos;
 }

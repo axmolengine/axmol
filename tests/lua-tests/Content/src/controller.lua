@@ -13,10 +13,10 @@ AX_USE_DEPRECATED_API = true
 require "axmol.init"
 
 local director = cc.Director:getInstance()
-local glView   = director:getGLView()
-if nil == glView then
-    glView = cc.GLViewImpl:createWithRect("Lua Tests", cc.rect(0,0,960,640), 1.0, true)
-    director:setGLView(glView)
+local renderView   = director:getRenderView()
+if nil == renderView then
+    renderView = ax.RenderViewImpl:createWithRect("Lua Tests", cc.rect(0,0,960,640), 1.0, true)
+    director:setRenderView(renderView)
 end
 
 --turn on display FPS
@@ -25,7 +25,7 @@ director:setDisplayStats(true)
 --set FPS. the default value is 1.0/60 if you don't call this
 director:setAnimationInterval(1.0 / 60)
 
-local screenSize = glView:getFrameSize()
+local screenSize = renderView:getFrameSize()
 
 local designSize = {width = 480, height = 320}
 
@@ -34,7 +34,7 @@ if screenSize.height > 320 then
     cc.Director:getInstance():setContentScaleFactor(resourceSize.height/designSize.height)
 end
 
-glView:setDesignResolutionSize(designSize.width, designSize.height, cc.ResolutionPolicy.SHOW_ALL)
+renderView:setDesignResolutionSize(designSize.width, designSize.height, cc.ResolutionPolicy.SHOW_ALL)
 
 local fileUtils = cc.FileUtils:getInstance()
 local function addSearchPath(resPrefix, height)

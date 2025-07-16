@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/GLViewImpl.h"
+#include "platform/RenderViewImpl.h"
 
 #include <cmath>
 #include <unordered_map>
@@ -167,7 +167,7 @@ public:
             _view->onGLFWWindowSizeCallback(window, width, height);
     }
 
-    static void setGLViewImpl(GLViewImpl* view) { _view = view; }
+    static void setRenderViewImpl(RenderViewImpl* view) { _view = view; }
 
     static void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified)
     {
@@ -194,15 +194,15 @@ public:
     }
 
 private:
-    static GLViewImpl* _view;
+    static RenderViewImpl* _view;
 };
-GLViewImpl* GLFWEventHandler::_view = nullptr;
+RenderViewImpl* GLFWEventHandler::_view = nullptr;
 
-const std::string GLViewImpl::EVENT_WINDOW_POSITIONED = "glview_window_positioned";
-const std::string GLViewImpl::EVENT_WINDOW_RESIZED    = "glview_window_resized";
-const std::string GLViewImpl::EVENT_WINDOW_FOCUSED    = "glview_window_focused";
-const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED  = "glview_window_unfocused";
-const std::string GLViewImpl::EVENT_WINDOW_CLOSE      = "glview_window_close";
+const std::string RenderViewImpl::EVENT_WINDOW_POSITIONED = "glview_window_positioned";
+const std::string RenderViewImpl::EVENT_WINDOW_RESIZED    = "glview_window_resized";
+const std::string RenderViewImpl::EVENT_WINDOW_FOCUSED    = "glview_window_focused";
+const std::string RenderViewImpl::EVENT_WINDOW_UNFOCUSED  = "glview_window_unfocused";
+const std::string RenderViewImpl::EVENT_WINDOW_CLOSE      = "glview_window_close";
 
 ////////////////////////////////////////////////////
 
@@ -344,7 +344,7 @@ static keyCodeItem g_keyCodeStructArray[] = {
     {GLFW_KEY_LAST, EventKeyboard::KeyCode::KEY_NONE}};
 
 //////////////////////////////////////////////////////////////////////////
-// implement GLViewImpl
+// implement RenderViewImpl
 //////////////////////////////////////////////////////////////////////////
 
 static EventMouse::MouseButton checkMouseButton(GLFWwindow* window)
@@ -365,7 +365,7 @@ static EventMouse::MouseButton checkMouseButton(GLFWwindow* window)
     return mouseButton;
 }
 
-GLViewImpl::GLViewImpl(bool initglfw)
+RenderViewImpl::RenderViewImpl(bool initglfw)
     : _captured(false)
     , _isInRetinaMonitor(false)
     , _isRetinaEnabled(false)
@@ -383,7 +383,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
         g_keyCodeMap[item.glfwKeyCode] = item.keyCode;
     }
 
-    GLFWEventHandler::setGLViewImpl(this);
+    GLFWEventHandler::setRenderViewImpl(this);
     if (initglfw)
     {
         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
@@ -391,60 +391,56 @@ GLViewImpl::GLViewImpl(bool initglfw)
     }
 }
 
-GLViewImpl::~GLViewImpl()
+RenderViewImpl::~RenderViewImpl()
 {
-    AXLOGD("deallocing GLViewImpl: {}", fmt::ptr(this));
-    GLFWEventHandler::setGLViewImpl(nullptr);
+    AXLOGD("deallocing RenderViewImpl: {}", fmt::ptr(this));
+    GLFWEventHandler::setRenderViewImpl(nullptr);
     glfwTerminate();
 }
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-HWND GLViewImpl::getWin32Window()
+HWND RenderViewImpl::getWin32Window()
 {
     return glfwGetWin32Window(_mainWindow);
 }
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-void* GLViewImpl::getCocoaWindow()
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+void* RenderViewImpl::getCocoaWindow()
 {
     return (void*)glfwGetCocoaWindow(_mainWindow);
 }
-void* GLViewImpl::getNSGLContext()
+void* RenderViewImpl::getNSGLContext()
 {
     return (void*)glfwGetNSGLContext(_mainWindow);
 }  // stevetranby: added
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-void* GLViewImpl::getX11Window()
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+void* RenderViewImpl::getX11Window()
 {
     return (void*)glfwGetX11Window(_mainWindow);
 }
-void* GLViewImpl::getX11Display()
+void* RenderViewImpl::getX11Display()
 {
     return (void*)glfwGetX11Display();
 }
 /* TODO: Implement AX_PLATFORM_LINUX_WAYLAND
-void* GLViewImpl::getWaylandWindow()
+void* RenderViewImpl::getWaylandWindow()
 {
     return (void*)glfwGetWaylandWindow(_mainWindow);
 }
-void* GLViewImpl::getWaylandDisplay()
+void* RenderViewImpl::getWaylandDisplay()
 {
     return (void*)glfwGetWaylandDisplay();
 }
 */
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
-GLViewImpl* GLViewImpl::create(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 {
-    return GLViewImpl::create(viewName, false);
+    return RenderViewImpl::create(viewName, false);
 }
 
-GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
+RenderViewImpl* RenderViewImpl::create(std::string_view viewName, bool resizable)
 {
-    auto ret = new GLViewImpl;
+    auto ret = new RenderViewImpl;
     if (ret->initWithRect(viewName, ax::Rect(0, 0, 960, 640), 1.0f, resizable))
     {
         ret->autorelease();
@@ -454,12 +450,12 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
+RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
                                        const ax::Rect& rect,
                                        float frameZoomFactor,
                                        bool resizable)
 {
-    auto ret = new GLViewImpl;
+    auto ret = new RenderViewImpl;
     if (ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
     {
         ret->autorelease();
@@ -469,9 +465,9 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
 {
-    auto ret = new GLViewImpl();
+    auto ret = new RenderViewImpl();
     if (ret->initWithFullScreen(viewName))
     {
         ret->autorelease();
@@ -481,11 +477,11 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName,
+RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName,
                                              const GLFWvidmode& videoMode,
                                              GLFWmonitor* monitor)
 {
-    auto ret = new GLViewImpl();
+    auto ret = new RenderViewImpl();
     if (ret->initWithFullscreen(viewName, videoMode, monitor))
     {
         ret->autorelease();
@@ -495,7 +491,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName,
     return nullptr;
 }
 
-bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, float frameZoomFactor, bool resizable)
+bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, float frameZoomFactor, bool resizable)
 {
     setViewName(viewName);
 
@@ -515,17 +511,17 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #endif
 
     glfwWindowHint(GLFW_RESIZABLE, resizable ? GL_TRUE : GL_FALSE);
-    glfwWindowHint(GLFW_RED_BITS, _glContextAttrs.redBits);
-    glfwWindowHint(GLFW_GREEN_BITS, _glContextAttrs.greenBits);
-    glfwWindowHint(GLFW_BLUE_BITS, _glContextAttrs.blueBits);
-    glfwWindowHint(GLFW_ALPHA_BITS, _glContextAttrs.alphaBits);
-    glfwWindowHint(GLFW_DEPTH_BITS, _glContextAttrs.depthBits);
-    glfwWindowHint(GLFW_STENCIL_BITS, _glContextAttrs.stencilBits);
+    glfwWindowHint(GLFW_RED_BITS, _gfxContextAttrs.redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, _gfxContextAttrs.greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, _gfxContextAttrs.blueBits);
+    glfwWindowHint(GLFW_ALPHA_BITS, _gfxContextAttrs.alphaBits);
+    glfwWindowHint(GLFW_DEPTH_BITS, _gfxContextAttrs.depthBits);
+    glfwWindowHint(GLFW_STENCIL_BITS, _gfxContextAttrs.stencilBits);
 
-    glfwWindowHint(GLFW_SAMPLES, _glContextAttrs.multisamplingCount);
+    glfwWindowHint(GLFW_SAMPLES, _gfxContextAttrs.multisamplingCount);
 
-    glfwWindowHint(GLFW_VISIBLE, _glContextAttrs.visible);
-    glfwWindowHint(GLFW_DECORATED, _glContextAttrs.decorated);
+    glfwWindowHint(GLFW_VISIBLE, _gfxContextAttrs.visible);
+    glfwWindowHint(GLFW_DECORATED, _gfxContextAttrs.decorated);
 
 #if defined(AX_USE_METAL)
     // Don't create gl context.
@@ -533,7 +529,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-    glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, _glContextAttrs.viewParent);
+    glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, _gfxContextAttrs.viewParent);
 #endif
 
     _mainWindow = glfwCreateWindow(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height),
@@ -592,7 +588,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     [layer setPixelFormat:MTLPixelFormatBGRA8Unorm];
     [layer setFramebufferOnly:YES];
     [layer setDrawableSize:size];
-    layer.displaySyncEnabled = _glContextAttrs.vsync;
+    layer.displaySyncEnabled = _gfxContextAttrs.vsync;
     [contentView setLayer:layer];
     backend::DriverMTL::setCAMetalLayer(layer);
 #endif
@@ -653,7 +649,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 
 #if defined(AX_USE_GL)
 #    if !defined(__EMSCRIPTEN__)
-    glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
+    glfwSwapInterval(_gfxContextAttrs.vsync ? 1 : 0);
 #    endif
     // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !AX_GLES_PROFILE
@@ -663,7 +659,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #        else
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
 #        endif
-    if (_glContextAttrs.multisamplingCount > 0)
+    if (_gfxContextAttrs.multisamplingCount > 0)
         glEnable(GL_MULTISAMPLE);
 #    endif
     CHECK_GL_ERROR_DEBUG();
@@ -674,7 +670,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     return true;
 }
 
-bool GLViewImpl::initWithFullScreen(std::string_view viewName)
+bool RenderViewImpl::initWithFullScreen(std::string_view viewName)
 {
     // Create fullscreen window on primary monitor at its current video mode.
     _monitor = glfwGetPrimaryMonitor();
@@ -694,7 +690,7 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
     return initWithRect(viewName, ax::Rect(0, 0, (float)videoMode->width, (float)videoMode->height), 1.0f, false);
 }
 
-bool GLViewImpl::initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor)
+bool RenderViewImpl::initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor)
 {
     // Create fullscreen on specified monitor at the specified video mode.
     _monitor = monitor;
@@ -712,23 +708,23 @@ bool GLViewImpl::initWithFullscreen(std::string_view viewname, const GLFWvidmode
     return initWithRect(viewname, ax::Rect(0, 0, (float)videoMode.width, (float)videoMode.height), 1.0f, false);
 }
 
-bool GLViewImpl::isOpenGLReady()
+bool RenderViewImpl::isGfxContextReady()
 {
     return nullptr != _mainWindow;
 }
 
-void GLViewImpl::end()
+void RenderViewImpl::end()
 {
     if (_mainWindow)
     {
         glfwSetWindowShouldClose(_mainWindow, 1);
         _mainWindow = nullptr;
     }
-    // Release self. Otherwise, GLViewImpl could not be freed.
+    // Release self. Otherwise, RenderViewImpl could not be freed.
     release();
 }
 
-void GLViewImpl::swapBuffers()
+void RenderViewImpl::swapBuffers()
 {
 #if defined(AX_USE_GL)
     if (_mainWindow)
@@ -736,7 +732,7 @@ void GLViewImpl::swapBuffers()
 #endif
 }
 
-bool GLViewImpl::windowShouldClose()
+bool RenderViewImpl::windowShouldClose()
 {
     if (_mainWindow)
         return glfwWindowShouldClose(_mainWindow) ? true : false;
@@ -744,12 +740,12 @@ bool GLViewImpl::windowShouldClose()
         return true;
 }
 
-void GLViewImpl::pollEvents()
+void RenderViewImpl::pollEvents()
 {
     glfwPollEvents();
 }
 
-void GLViewImpl::enableRetina(bool enabled)
+void RenderViewImpl::enableRetina(bool enabled)
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     _isRetinaEnabled = enabled;
@@ -757,15 +753,15 @@ void GLViewImpl::enableRetina(bool enabled)
 #endif
 }
 
-void GLViewImpl::setIMEKeyboardState(bool /*bOpen*/) {}
+void RenderViewImpl::setIMEKeyboardState(bool /*bOpen*/) {}
 
 #if AX_ICON_SET_SUPPORT
-void GLViewImpl::setIcon(std::string_view filename) const
+void RenderViewImpl::setIcon(std::string_view filename) const
 {
     this->setIcon(std::vector<std::string_view>{filename});
 }
 
-void GLViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
+void RenderViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
 {
     if (filelist.empty())
         return;
@@ -806,14 +802,14 @@ void GLViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
     }
 }
 
-void GLViewImpl::setDefaultIcon() const
+void RenderViewImpl::setDefaultIcon() const
 {
     GLFWwindow* window = this->getWindow();
     glfwSetWindowIcon(window, 0, nullptr);
 }
 #endif /* AX_ICON_SET_SUPPORT */
 
-void GLViewImpl::setCursorVisible(bool isVisible)
+void RenderViewImpl::setCursorVisible(bool isVisible)
 {
     if (_mainWindow == NULL)
         return;
@@ -824,7 +820,7 @@ void GLViewImpl::setCursorVisible(bool isVisible)
         glfwSetInputMode(_mainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
-void GLViewImpl::setFrameZoomFactor(float zoomFactor)
+void RenderViewImpl::setFrameZoomFactor(float zoomFactor)
 {
     AXASSERT(zoomFactor > 0.0f, "zoomFactor must be larger than 0");
 
@@ -837,22 +833,22 @@ void GLViewImpl::setFrameZoomFactor(float zoomFactor)
     updateFrameSize();
 }
 
-float GLViewImpl::getFrameZoomFactor() const
+float RenderViewImpl::getFrameZoomFactor() const
 {
     return _frameZoomFactor;
 }
 
-bool GLViewImpl::isFullscreen() const
+bool RenderViewImpl::isFullscreen() const
 {
     return (_monitor != nullptr);
 }
 
-void GLViewImpl::setFullscreen()
+void RenderViewImpl::setFullscreen()
 {
     setFullscreen(-1, -1, -1);
 }
 
-void GLViewImpl::setFullscreen(int w, int h, int refreshRate)
+void RenderViewImpl::setFullscreen(int w, int h, int refreshRate)
 {
     auto monitor = glfwGetPrimaryMonitor();
     if (nullptr == monitor || monitor == _monitor)
@@ -862,12 +858,12 @@ void GLViewImpl::setFullscreen(int w, int h, int refreshRate)
     this->setFullscreen(monitor, w, h, refreshRate);
 }
 
-void GLViewImpl::setFullscreen(int monitorIndex)
+void RenderViewImpl::setFullscreen(int monitorIndex)
 {
     setFullscreen(monitorIndex, -1, -1, -1);
 }
 
-void GLViewImpl::setFullscreen(int monitorIndex, int w, int h, int refreshRate)
+void RenderViewImpl::setFullscreen(int monitorIndex, int w, int h, int refreshRate)
 {
     int count              = 0;
     GLFWmonitor** monitors = glfwGetMonitors(&count);
@@ -883,7 +879,7 @@ void GLViewImpl::setFullscreen(int monitorIndex, int w, int h, int refreshRate)
     this->setFullscreen(monitor, w, h, refreshRate);
 }
 
-void GLViewImpl::setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRate)
+void RenderViewImpl::setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRate)
 {
     _monitor = monitor;
 
@@ -898,7 +894,7 @@ void GLViewImpl::setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRa
     glfwSetWindowMonitor(_mainWindow, _monitor, 0, 0, w, h, refreshRate);
 }
 
-void GLViewImpl::setWindowed(int width, int height, bool borderless)
+void RenderViewImpl::setWindowed(int width, int height, bool borderless)
 {
     if (!this->isFullscreen())
     {
@@ -927,7 +923,7 @@ void GLViewImpl::setWindowed(int width, int height, bool borderless)
     }
 }
 
-void GLViewImpl::getWindowPosition(int* xpos, int* ypos)
+void RenderViewImpl::getWindowPosition(int* xpos, int* ypos)
 {
     if (_mainWindow != nullptr)
     {
@@ -935,7 +931,7 @@ void GLViewImpl::getWindowPosition(int* xpos, int* ypos)
     }
 }
 
-void GLViewImpl::getWindowSize(int* width, int* height)
+void RenderViewImpl::getWindowSize(int* width, int* height)
 {
     if (_mainWindow != nullptr)
     {
@@ -943,14 +939,14 @@ void GLViewImpl::getWindowSize(int* width, int* height)
     }
 }
 
-int GLViewImpl::getMonitorCount() const
+int RenderViewImpl::getMonitorCount() const
 {
     int count = 0;
     glfwGetMonitors(&count);
     return count;
 }
 
-Vec2 GLViewImpl::getMonitorSize() const
+Vec2 RenderViewImpl::getMonitorSize() const
 {
     GLFWmonitor* monitor = _monitor;
     if (nullptr == monitor)
@@ -971,7 +967,7 @@ Vec2 GLViewImpl::getMonitorSize() const
     return Vec2::ZERO;
 }
 
-void GLViewImpl::handleWindowSize(int w, int h)
+void RenderViewImpl::handleWindowSize(int w, int h)
 {
     /*
     * x-studio spec, fix view size incorrect when window size changed
@@ -987,7 +983,7 @@ void GLViewImpl::handleWindowSize(int w, int h)
       @remark:
       1. glfwSetWindowMonitor will fire window size change event in full screen mode
     */
-    GLView::setFrameSize(w / _frameZoomFactor, h / _frameZoomFactor);
+    RenderView::setFrameSize(w / _frameZoomFactor, h / _frameZoomFactor);
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     // Fix #1787, update retina state when switch between fullscreen and windowed mode
     int fbWidth = 0, fbHeight = 0;
@@ -1001,7 +997,7 @@ void GLViewImpl::handleWindowSize(int w, int h)
     updateDesignResolutionSize();
 }
 
-void GLViewImpl::updateFrameSize()
+void RenderViewImpl::updateFrameSize()
 {
     if (_screenSize.width > 0 && _screenSize.height > 0)
     {
@@ -1027,13 +1023,13 @@ void GLViewImpl::updateFrameSize()
     }
 }
 
-void GLViewImpl::setFrameSize(float width, float height)
+void RenderViewImpl::setFrameSize(float width, float height)
 {
-    GLView::setFrameSize(width, height);
+    RenderView::setFrameSize(width, height);
     updateFrameSize();
 }
 
-void GLViewImpl::setViewPortInPoints(float x, float y, float w, float h)
+void RenderViewImpl::setViewPortInPoints(float x, float y, float w, float h)
 {
     Viewport vp;
     vp.x = (int)(x * _scaleX * _retinaFactor * _frameZoomFactor +
@@ -1045,7 +1041,7 @@ void GLViewImpl::setViewPortInPoints(float x, float y, float w, float h)
     Camera::setDefaultViewport(vp);
 }
 
-void GLViewImpl::setScissorInPoints(float x, float y, float w, float h)
+void RenderViewImpl::setScissorInPoints(float x, float y, float w, float h)
 {
     auto x1       = (int)(x * _scaleX * _retinaFactor * _frameZoomFactor +
                     _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor);
@@ -1057,7 +1053,7 @@ void GLViewImpl::setScissorInPoints(float x, float y, float w, float h)
     renderer->setScissorRect(x1, y1, width1, height1);
 }
 
-ax::Rect GLViewImpl::getScissorRect() const
+ax::Rect RenderViewImpl::getScissorRect() const
 {
     auto renderer = Director::getInstance()->getRenderer();
     auto& rect    = renderer->getScissorRect();
@@ -1071,7 +1067,7 @@ ax::Rect GLViewImpl::getScissorRect() const
     return ax::Rect(x, y, w, h);
 }
 
-void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
+void RenderViewImpl::onGLFWError(int errorID, const char* errorDesc)
 {
     if (_mainWindow)
     {
@@ -1084,7 +1080,7 @@ void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
     AXLOGE("{}", _glfwError);
 }
 
-void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int action, int /*modify*/)
+void RenderViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int action, int /*modify*/)
 {
     if (!_isTouchDevice)
     {
@@ -1129,7 +1125,7 @@ void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int act
     }
 }
 
-void GLViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
+void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
 {
     _mouseX = (float)x;
     _mouseY = (float)y;
@@ -1165,7 +1161,7 @@ void GLViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
 }
 
 #if defined(__EMSCRIPTEN__)
-void GLViewImpl::onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent)
+void RenderViewImpl::onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent)
 {
     float boundingX = EM_ASM_INT(return canvas.getBoundingClientRect().left);
     float boundingY = EM_ASM_INT(return canvas.getBoundingClientRect().top);
@@ -1211,7 +1207,7 @@ void GLViewImpl::onWebTouchCallback(int eventType, const EmscriptenTouchEvent* t
     }
 }
 
-void GLViewImpl::onWebClickCallback()
+void RenderViewImpl::onWebClickCallback()
 {
     if (!_isTouchDevice)
     {
@@ -1225,7 +1221,7 @@ void GLViewImpl::onWebClickCallback()
 }
 #endif
 
-void GLViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
+void RenderViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
 {
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
     float cursorX = transformInputX(_mouseX);
@@ -1235,7 +1231,7 @@ void GLViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double 
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void GLViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
+void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
 {
     // x-studio spec, for repeat press key support.
     EventKeyboard event(g_keyCodeMap[key], action);
@@ -1265,7 +1261,7 @@ void GLViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scanco
     }
 }
 
-void GLViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCode)
+void RenderViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCode)
 {
     std::string utf8String;
     StringUtils::UTF32ToUTF8(std::u32string_view{(char32_t*)&charCode, (size_t)1}, utf8String);
@@ -1288,15 +1284,15 @@ void GLViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCod
     }
 }
 
-void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int x, int y)
+void RenderViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int x, int y)
 {
     Director::getInstance()->setViewport();
 
     Vec2 pos(x, y);
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_POSITIONED, &pos);
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_POSITIONED, &pos);
 }
 
-void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
+void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
@@ -1310,11 +1306,11 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 #endif
 
         Size size(w, h);
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, &size);
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
     }
 }
 
-void GLViewImpl::onGLFWWindowIconifyCallback(GLFWwindow* /*window*/, int iconified)
+void RenderViewImpl::onGLFWWindowIconifyCallback(GLFWwindow* /*window*/, int iconified)
 {
     if (iconified == GL_TRUE)
     {
@@ -1326,22 +1322,22 @@ void GLViewImpl::onGLFWWindowIconifyCallback(GLFWwindow* /*window*/, int iconifi
     }
 }
 
-void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
+void RenderViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
 {
     if (focused == GL_TRUE)
     {
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_FOCUSED, nullptr);
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_FOCUSED, nullptr);
     }
     else
     {
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_UNFOCUSED, nullptr);
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_UNFOCUSED, nullptr);
     }
 }
 
-void GLViewImpl::onGLFWWindowCloseCallback(GLFWwindow* window)
+void RenderViewImpl::onGLFWWindowCloseCallback(GLFWwindow* window)
 {
     bool isClose = true;
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_CLOSE, &isClose);
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_CLOSE, &isClose);
     if (isClose == false)
     {
         glfwSetWindowShouldClose(window, 0);
@@ -1441,7 +1437,7 @@ static bool loadFboExtensions()
 }
 
 // helper
-bool GLViewImpl::loadGL()
+bool RenderViewImpl::loadGL()
 {
 #    if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 

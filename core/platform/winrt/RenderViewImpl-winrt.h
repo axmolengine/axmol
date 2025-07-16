@@ -25,13 +25,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_EGLVIEWIMPL_WINRT_H__
-#define __AX_EGLVIEWIMPL_WINRT_H__
+#ifndef __AX_RENDERVIEWIMPL_WINRT_H__
+#define __AX_RENDERVIEWIMPL_WINRT_H__
 
 #include "platform/winrt/StdC-winrt.h"
 #include "platform/Common.h"
 #include "platform/winrt/Keyboard-winrt.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 #include "base/EventKeyboard.h"
 #include "base/EventMouse.h"
 
@@ -47,25 +47,25 @@ using namespace winrt;
 namespace ax
 {
 
-class GLViewImpl;
+class RenderViewImpl;
 
-class AX_DLL GLViewImpl : public GLView
+class AX_DLL RenderViewImpl : public RenderView
 {
 public:
-    static GLViewImpl* create(std::string_view viewName);
-    static GLViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f, bool resizable = false);
-    static GLViewImpl* createWithFullScreen(std::string_view viewName);
+    static RenderViewImpl* create(std::string_view viewName);
+    static RenderViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f, bool resizable = false);
+    static RenderViewImpl* createWithFullScreen(std::string_view viewName);
 
     /* override functions */
-    virtual bool isOpenGLReady();
-    virtual void end();
-    virtual void swapBuffers();
+    bool isGfxContextReady() override;
+    void end() override;
+    void swapBuffers() override;
 
     Windows::Graphics::Display::DisplayOrientations getDeviceOrientation() { return m_orientation; };
     Size getRenerTargetSize() const { return Size(m_width, m_height); }
 
-    virtual void setIMEKeyboardState(bool bOpen) override;
-    virtual void setIMEKeyboardState(bool bOpen, std::string_view str);
+    void setIMEKeyboardState(bool bOpen) override;
+    void setIMEKeyboardState(bool bOpen, std::string_view str);
 
     /**
      * Hide or Show the mouse cursor if there is one.
@@ -133,7 +133,7 @@ public:
     /**
     @brief    get the shared main open gl window
     */
-    static GLViewImpl* sharedGLView();
+    static RenderViewImpl* sharedRenderView();
 
     void ProcessEvents();
 
@@ -142,8 +142,8 @@ public:
     void SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb);
 
 protected:
-    GLViewImpl();
-    virtual ~GLViewImpl();
+    RenderViewImpl();
+    ~RenderViewImpl() override;
 
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor);
     bool initWithFullScreen(std::string_view viewName);
@@ -161,7 +161,7 @@ protected:
     bool _isCursorVisible;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
+    AX_DISALLOW_COPY_AND_ASSIGN(RenderViewImpl);
 
     void OnRendering();
     void UpdateWindowSize();
@@ -200,6 +200,10 @@ private:
 
     ax::EventListenerKeyboard* m_backButtonListener;
 };
+
+#ifndef AX_CORE_PROFILE
+AX_DEPRECATED(2.8) typedef RenderViewImpl GLViewImpl;
+#endif
 
 }
 

@@ -24,7 +24,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/android/GLViewImpl-android.h"
+#include "platform/android/RenderViewImpl-android.h"
 #include "base/Director.h"
 #include "base/Macros.h"
 #include "platform/android/jni/JniHelper.h"
@@ -39,7 +39,7 @@ THE SOFTWARE.
 
 namespace ax
 {
-void GLViewImpl::loadGLES2()
+void RenderViewImpl::loadGLES2()
 {
     auto glesVer = gladLoaderLoadGLES2();
     if (glesVer)
@@ -48,9 +48,9 @@ void GLViewImpl::loadGLES2()
         throw std::runtime_error("Load GLES fail");
 }
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable)
+RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable)
 {
-    auto ret = new GLViewImpl;
+    auto ret = new RenderViewImpl;
     if (ret && ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
     {
         ret->autorelease();
@@ -60,9 +60,9 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, const Rect& re
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::create(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 {
-    auto ret = new GLViewImpl;
+    auto ret = new RenderViewImpl;
     if (ret && ret->initWithFullScreen(viewName))
     {
         ret->autorelease();
@@ -72,9 +72,9 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
 {
-    auto ret = new GLViewImpl();
+    auto ret = new RenderViewImpl();
     if (ret && ret->initWithFullScreen(viewName))
     {
         ret->autorelease();
@@ -84,36 +84,36 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
     return nullptr;
 }
 
-GLViewImpl::GLViewImpl()
+RenderViewImpl::RenderViewImpl()
 {
 }
 
-GLViewImpl::~GLViewImpl() {}
+RenderViewImpl::~RenderViewImpl() {}
 
-bool GLViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& /*rect*/, float /*frameZoomFactor*/, bool /*resizable*/)
-{
-    return true;
-}
-
-bool GLViewImpl::initWithFullScreen(std::string_view viewName)
+bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& /*rect*/, float /*frameZoomFactor*/, bool /*resizable*/)
 {
     return true;
 }
 
-bool GLViewImpl::isOpenGLReady()
+bool RenderViewImpl::initWithFullScreen(std::string_view viewName)
+{
+    return true;
+}
+
+bool RenderViewImpl::isGfxContextReady()
 {
     return (_screenSize.width != 0 && _screenSize.height != 0);
 }
 
-void GLViewImpl::end()
+void RenderViewImpl::end()
 {
     JniHelper::callStaticVoidMethod("dev.axmol.lib.AxmolEngine", "onExit");
     release();
 }
 
-void GLViewImpl::swapBuffers() {}
+void RenderViewImpl::swapBuffers() {}
 
-void GLViewImpl::setIMEKeyboardState(bool bOpen)
+void RenderViewImpl::setIMEKeyboardState(bool bOpen)
 {
     if (bOpen)
     {
@@ -125,9 +125,9 @@ void GLViewImpl::setIMEKeyboardState(bool bOpen)
     }
 }
 
-Rect GLViewImpl::getSafeAreaRect() const
+Rect RenderViewImpl::getSafeAreaRect() const
 {
-    Rect safeAreaRect       = GLView::getSafeAreaRect();
+    Rect safeAreaRect       = RenderView::getSafeAreaRect();
     float deviceAspectRatio = 0;
     if (safeAreaRect.size.height > safeAreaRect.size.width)
     {
@@ -267,7 +267,7 @@ Rect GLViewImpl::getSafeAreaRect() const
     return safeAreaRect;
 }
 
-void GLViewImpl::queueOperation(void (*op)(void*), void* param)
+void RenderViewImpl::queueOperation(void (*op)(void*), void* param)
 {
     JniHelper::callStaticVoidMethod("dev.axmol.lib.AxmolEngine", "queueOperation", (jlong)(uintptr_t)op,
                                     (jlong)(uintptr_t)param);

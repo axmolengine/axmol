@@ -20,7 +20,7 @@
 #include "OpenGLESPage.h"
 #include "OpenGLESPage.g.cpp"
 
-#include "platform/winrt/GLViewImpl-winrt.h"
+#include "platform/winrt/RenderViewImpl-winrt.h"
 #include "platform/Application.h"
 
 #include "yasio/wtimer_hres.hpp"
@@ -113,7 +113,7 @@ void OpenGLESPage::CreateInput()
         mCoreInput.PointerReleased({this, &OpenGLESPage::_OnPointerReleased});
         mCoreInput.PointerWheelChanged({this, &OpenGLESPage::_OnPointerWheelChanged});
 
-        if (GLViewImpl::sharedGLView() && !GLViewImpl::sharedGLView()->isCursorVisible())
+        if (RenderViewImpl::sharedRenderView() && !RenderViewImpl::sharedRenderView()->isCursorVisible())
         {
             mCoreInput.PointerCursor(nullptr);
         }
@@ -275,10 +275,10 @@ void OpenGLESPage::StartRenderLoop()
             mRenderer->Draw(panelWidth, panelHeight, mDpi, mOrientation);
 
             // Recreate input dispatch
-            if (GLViewImpl::sharedGLView() && mCursorVisible != GLViewImpl::sharedGLView()->isCursorVisible())
+            if (RenderViewImpl::sharedRenderView() && mCursorVisible != RenderViewImpl::sharedRenderView()->isCursorVisible())
             {
                 CreateInput();
-                mCursorVisible = GLViewImpl::sharedGLView()->isCursorVisible();
+                mCursorVisible = RenderViewImpl::sharedRenderView()->isCursorVisible();
             }
 
             if (mRenderer->AppShouldExit())

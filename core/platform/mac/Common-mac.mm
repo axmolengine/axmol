@@ -46,8 +46,8 @@ void messageBox(const char* msg, const char* title)
     [alert setInformativeText:tmpTitle];
     [alert setAlertStyle:NSAlertStyleWarning];
 
-    auto glView = Director::getInstance()->getGLView();
-    id window   = (id)glView->getCocoaWindow();
+    auto renderView = Director::getInstance()->getRenderView();
+    id window   = (id)renderView->getCocoaWindow();
     [alert beginSheetModalForWindow:window completionHandler:nil];
 }
 

@@ -54,7 +54,7 @@ Application::~Application()
 
 int Application::run()
 {
-    initGLContextAttrs();
+    initGfxContextAttrs();
     if (!applicationDidFinishLaunching())
     {
         return 1;
@@ -65,17 +65,17 @@ int Application::run()
     constexpr std::chrono::nanoseconds _1ms{1000000};
 
     auto director = Director::getInstance();
-    auto glView   = director->getGLView();
+    auto renderView   = director->getRenderView();
 
-    // Retain glView to avoid glView being released in the while loop
-    glView->retain();
+    // Retain renderView to avoid renderView being released in the while loop
+    renderView->retain();
 
-    while (!glView->windowShouldClose())
+    while (!renderView->windowShouldClose())
     {
         lastTime = std::chrono::steady_clock::now();
 
         director->mainLoop();
-        glView->pollEvents();
+        renderView->pollEvents();
 
         auto interval = std::chrono::steady_clock::now() - lastTime;
         auto waitDuration = _animationInterval - interval - _1ms;
@@ -90,13 +90,13 @@ int Application::run()
      *  when we want to close the window, we should call Director::end();
      *  then call Director::mainLoop to do release of internal resources
      */
-    if (glView->isOpenGLReady())
+    if (renderView->isGfxContextReady())
     {
         director->end();
         director->mainLoop();
     }
 
-    glView->release();
+    renderView->release();
 
     return 0;
 }

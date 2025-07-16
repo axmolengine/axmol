@@ -329,9 +329,9 @@ void ImGuiPresenter::init()
     }
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ImGui_ImplAndroid_InitForAxmol(Director::getInstance()->getGLView(), true);
+    ImGui_ImplAndroid_InitForAxmol(Director::getInstance()->getRenderView(), true);
 #else
-    auto window = static_cast<GLViewImpl*>(Director::getInstance()->getGLView())->getWindow();
+    auto window = static_cast<RenderViewImpl*>(Director::getInstance()->getRenderView())->getWindow();
     ImGui_ImplGlfw_InitForAxmol(window, true);
 #endif
     ImGui_ImplAxmol_Init();

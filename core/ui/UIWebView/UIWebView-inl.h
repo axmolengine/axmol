@@ -32,7 +32,7 @@
      AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 #include "ui/UIWebView/UIWebView.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 #include "base/Director.h"
 #include "platform/FileUtils.h"
 

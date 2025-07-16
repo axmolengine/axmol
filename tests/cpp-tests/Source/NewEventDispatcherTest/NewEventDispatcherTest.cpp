@@ -1667,13 +1667,13 @@ WindowEventsTest::WindowEventsTest()
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     auto dispatcher = Director::getInstance()->getEventDispatcher();
-    dispatcher->addCustomEventListener(GLViewImpl::EVENT_WINDOW_RESIZED, [](EventCustom* event) {
+    dispatcher->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_RESIZED, [](EventCustom* event) {
         // TODO: need to create resizeable window
         AXLOGD("<<< WINDOW RESIZED! >>> ");
     });
-    dispatcher->addCustomEventListener(GLViewImpl::EVENT_WINDOW_FOCUSED,
+    dispatcher->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_FOCUSED,
                                        [](EventCustom* event) { AXLOGD("<<< WINDOW FOCUSED! >>> "); });
-    dispatcher->addCustomEventListener(GLViewImpl::EVENT_WINDOW_UNFOCUSED,
+    dispatcher->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_UNFOCUSED,
                                        [](EventCustom* event) { AXLOGD("<<< WINDOW BLURRED! >>> "); });
 #endif
 }

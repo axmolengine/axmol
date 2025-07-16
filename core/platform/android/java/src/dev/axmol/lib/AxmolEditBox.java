@@ -160,11 +160,11 @@ public class AxmolEditBox extends EditText {
         this.setLayoutParams(layoutParams);
     }
 
-    public float getGLViewScaleX() {
+    public float getRenderViewScaleX() {
         return mScaleX;
     }
 
-    public void setGLViewScaleX(float mScaleX) {
+    public void setRenderViewScaleX(float mScaleX) {
         this.mScaleX = mScaleX;
     }
 

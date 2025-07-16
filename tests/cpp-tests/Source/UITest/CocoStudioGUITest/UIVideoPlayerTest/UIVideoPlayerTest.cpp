@@ -50,7 +50,7 @@ bool VideoPlayerTest::init()
         return false;
     }
 
-    _visibleRect = Director::getInstance()->getGLView()->getVisibleRect();
+    _visibleRect = Director::getInstance()->getRenderView()->getVisibleRect();
 
     MenuItemFont::setFontSize(16);
 
@@ -345,7 +345,7 @@ bool SimpleVideoPlayerTest::init()
         return false;
     }
 
-    _visibleRect = Director::getInstance()->getGLView()->getVisibleRect();
+    _visibleRect = Director::getInstance()->getRenderView()->getVisibleRect();
 
     MenuItemFont::setFontSize(16);
 

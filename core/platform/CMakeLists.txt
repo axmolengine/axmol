@@ -27,7 +27,7 @@ if(ANDROID)
   set(_AX_PLATFORM_SPECIFIC_SRC
     platform/android/Application-android.cpp
     platform/android/Common-android.cpp
-    platform/android/GLViewImpl-android.cpp
+    platform/android/RenderViewImpl-android.cpp
     platform/android/FileUtils-android.cpp
   )
 elseif(WINDOWS)
@@ -37,7 +37,7 @@ elseif(WINDOWS)
       platform/win32/GL-win32.h
       platform/win32/FileUtils-win32.h
       platform/win32/StdC-win32.h
-      platform/GLViewImpl.h
+      platform/RenderViewImpl.h
     )
     set(_AX_PLATFORM_SPECIFIC_SRC
       platform/win32/StdC-win32.cpp
@@ -45,7 +45,7 @@ elseif(WINDOWS)
       platform/win32/Common-win32.cpp
       platform/win32/Application-win32.cpp
       platform/win32/Device-win32.cpp
-      platform/GLViewImpl.cpp
+      platform/RenderViewImpl.cpp
     )
   else()
     file(GLOB _AX_PLATFORM_SPECIFIC_HEADER platform/winrt/*.h)
@@ -67,23 +67,23 @@ elseif(APPLE)
       ${_AX_PLATFORM_SPECIFIC_HEADER}
       platform/mac/StdC-mac.h
       platform/mac/Application-mac.h
-      platform/GLViewImpl.h
+      platform/RenderViewImpl.h
     )
     set(_AX_PLATFORM_SPECIFIC_SRC
       ${_AX_PLATFORM_SPECIFIC_SRC}
       platform/mac/Application-mac.mm
       platform/mac/Common-mac.mm
       platform/mac/Device-mac.mm
-      platform/GLViewImpl.cpp
+      platform/RenderViewImpl.cpp
     )
-    set_source_files_properties(platform/GLViewImpl.cpp PROPERTIES LANGUAGE OBJCXX)
+    set_source_files_properties(platform/RenderViewImpl.cpp PROPERTIES LANGUAGE OBJCXX)
   elseif(IOS)
     set(_AX_PLATFORM_SPECIFIC_HEADER
       ${_AX_PLATFORM_SPECIFIC_HEADER}
       platform/ios/Application-ios.h
       platform/ios/DirectorCaller-ios.h
-      platform/ios/EAGLView-ios.h
-      platform/ios/GLViewImpl-ios.h
+      platform/ios/EARenderView-ios.h
+      platform/ios/RenderViewImpl-ios.h
       platform/ios/StdC-ios.h
       platform/ios/InputView-ios.h
     )
@@ -93,8 +93,8 @@ elseif(APPLE)
       platform/ios/Common-ios.mm
       platform/ios/Device-ios.mm
       platform/ios/DirectorCaller-ios.mm
-      platform/ios/EAGLView-ios.mm
-      platform/ios/GLViewImpl-ios.mm
+      platform/ios/EARenderView-ios.mm
+      platform/ios/RenderViewImpl-ios.mm
       platform/ios/Image-ios.mm
       platform/ios/InputView-ios.mm
     )
@@ -128,14 +128,14 @@ elseif(LINUX)
     platform/linux/GL-linux.h
     platform/linux/StdC-linux.h
     platform/linux/FileUtils-linux.h
-    platform/GLViewImpl.h
+    platform/RenderViewImpl.h
   )
   set(_AX_PLATFORM_SPECIFIC_SRC
     platform/linux/FileUtils-linux.cpp
     platform/linux/Common-linux.cpp
     platform/linux/Application-linux.cpp
     platform/linux/Device-linux.cpp
-    platform/GLViewImpl.cpp
+    platform/RenderViewImpl.cpp
   )
 elseif(EMSCRIPTEN)
   include_directories(
@@ -147,14 +147,14 @@ elseif(EMSCRIPTEN)
     platform/wasm/GL-wasm.h
     platform/wasm/StdC-wasm.h
     platform/wasm/FileUtils-wasm.h
-    platform/GLViewImpl.h # wasm can share GLviewImpl-desktop based on GLFW
+    platform/RenderViewImpl.h # wasm can share GLviewImpl-desktop based on GLFW
   )
   set(_AX_PLATFORM_SPECIFIC_SRC
     platform/wasm/FileUtils-wasm.cpp
     platform/wasm/Common-wasm.cpp
     platform/wasm/Application-wasm.cpp
     platform/wasm/Device-wasm.cpp
-    platform/GLViewImpl.cpp
+    platform/RenderViewImpl.cpp
   )
 
   if(AX_WASM_ENABLE_DEVTOOLS)
@@ -170,7 +170,7 @@ set(_AX_PLATFORM_HEADER
   platform/Device.h
   platform/FileUtils.h
   platform/GL.h
-  platform/GLView.h
+  platform/RenderView.h
   platform/Image.h
   platform/PlatformConfig.h
   platform/PlatformDefine.h
@@ -184,7 +184,7 @@ set(_AX_PLATFORM_HEADER
 set(_AX_PLATFORM_SRC
   ${_AX_PLATFORM_SPECIFIC_SRC}
   platform/SAXParser.cpp
-  platform/GLView.cpp
+  platform/RenderView.cpp
   platform/FileUtils.cpp
   platform/Image.cpp
   platform/FileStream.cpp

@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AXGLVIEW_H__
-#define __AXGLVIEW_H__
+#ifndef __AXRENDERVIEW_H__
+#define __AXRENDERVIEW_H__
 
 #include "base/Types.h"
 #include "base/EventTouch.h"
@@ -77,7 +77,7 @@ enum class ResolutionPolicy
  *
  * There are six opengl Context Attrs.
  */
-struct GLContextAttrs
+struct GfxContextAttrs
 {
     int redBits;
     int greenBits;
@@ -94,6 +94,10 @@ struct GLContextAttrs
 #endif
 };
 
+#ifndef AX_CORE_PROFILE
+AX_DEPRECATED(2.8) typedef GfxContextAttrs GLContextAttrs;
+#endif
+
 namespace ax
 {
 
@@ -106,20 +110,20 @@ class Director;
  * @{
  */
 /**
- * @brief By GLView you can operate the frame information of EGL view through some function.
+ * @brief By RenderView you can operate the frame information of EGL view through some function.
  */
-class AX_DLL GLView : public Object
+class AX_DLL RenderView : public Object
 {
     friend class Director;
 
 public:
     /**
      */
-    GLView();
+    RenderView();
     /**
      * @lua NA
      */
-    virtual ~GLView();
+    virtual ~RenderView();
 
     /** Force destroying EGL view, subclass must implement this method.
      *
@@ -127,8 +131,11 @@ public:
      */
     virtual void end() = 0;
 
-    /** Get whether opengl render system is ready, subclass must implement this method. */
-    virtual bool isOpenGLReady() = 0;
+    /** Get whether graphics context is ready, subclass must implement this method. */
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.8) bool isOpenGLReady() { return isGfxContextReady(); }
+#endif
+    virtual bool isGfxContextReady() = 0;
 
     /** Exchanges the front and back buffers, subclass must implement this method. */
     virtual void swapBuffers() = 0;
@@ -148,18 +155,21 @@ public:
 
     /** Static method and member so that we can modify it on all platforms before create OpenGL context.
      *
-     * @param glContextAttrs The OpenGL context attrs.
+     * @param gfxContextAttrs The OpenGL context attrs.
      */
-    static void setGLContextAttrs(GLContextAttrs& glContextAttrs);
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.8) static void setGLContextAttrs(GfxContextAttrs& gfxContextAttrs)
+    {
+        setGfxContextAttrs(gfxContextAttrs);
+    }
+#endif
+    static void setGfxContextAttrs(GfxContextAttrs& gfxContextAttrs);
 
     /** Return the OpenGL context attrs.
      *
      * @return Return the OpenGL context attrs.
      */
-    static GLContextAttrs getGLContextAttrs();
-
-    /** The OpenGL context attrs. */
-    static GLContextAttrs _glContextAttrs;
+    static GfxContextAttrs& getGfxContextAttrs();
 
     /** Polls the events. */
     virtual void pollEvents();
@@ -218,10 +228,6 @@ public:
      * @return Returns whether or not the view is in Retina Display mode.
      */
     virtual bool isRetinaDisplay() const { return false; }
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-    virtual void* getEAGLView() const { return nullptr; }
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */
 
     /**
      * Get the visible area size of opengl viewport.
@@ -418,14 +424,13 @@ public:
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     virtual HWND getWin32Window() = 0;
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     virtual void* getCocoaWindow() = 0;
     virtual void* getNSGLContext() = 0;  // stevetranby: added
-#endif                                   /* (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) */
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+    virtual void* getEAWindow() const     = 0;  // @since axmol-2.8.0
+    virtual void* getEARenderView() const = 0;  // @since axmol-2.8.0
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
     virtual void* getX11Window()  = 0;
     virtual void* getX11Display() = 0;
     /* TODO: Implement AX_PLATFORM_LINUX_WAYLAND
@@ -460,6 +465,9 @@ protected:
 
     void handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num, intptr_t ids[], float xs[], float ys[]);
 
+    /** The graphics context attrs. */
+    static GfxContextAttrs _gfxContextAttrs;
+
     // real screen size
     Vec2 _screenSize;
     // resolution size, it is the size appropriate for the app resources.
@@ -478,6 +486,10 @@ private:
 
     bool _interactive;
 };
+
+#ifndef AX_CORE_PROFILE
+AX_DEPRECATED(2.8) typedef RenderView GLView;
+#endif
 
 // end of platform group
 /// @}

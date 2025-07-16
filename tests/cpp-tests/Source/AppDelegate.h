@@ -41,7 +41,7 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-    virtual void initGLContextAttrs();
+    virtual void initGfxContextAttrs();
 
     /**
     @brief    Implement Director and ax::Scene* init code here.

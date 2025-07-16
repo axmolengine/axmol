@@ -146,7 +146,7 @@ public:
     /**Destructor.*/
     ~Renderer();
 
-    // TODO: manage GLView inside Render itself
+    // TODO: manage RenderView inside Render itself
     void init();
 
     void addCallbackCommand(std::function<void()> func, float globalZOrder = 0.0f);
@@ -169,7 +169,7 @@ public:
     /** Creates a render queue and returns its Id */
     int createRenderQueue();
 
-    /** Renders into the GLView all the queued `RenderCommand` objects */
+    /** Renders into the RenderView all the queued `RenderCommand` objects */
     void render();
 
     /** Cleans all `RenderCommand`s in the queue */

@@ -77,7 +77,7 @@ int Application::run()
 
     QueryPerformanceCounter(&nLast);
 
-    initGLContextAttrs();
+    initGfxContextAttrs();
 
     // Initialize instance and cocos2d.
     if (!applicationDidFinishLaunching())
@@ -86,10 +86,10 @@ int Application::run()
     }
 
     auto director = Director::getInstance();
-    auto glView   = director->getGLView();
+    auto renderView   = director->getRenderView();
 
-    // Retain glView to avoid glView being released in the while loop
-    glView->retain();
+    // Retain renderView to avoid renderView being released in the while loop
+    renderView->retain();
 
     LONGLONG interval = 0LL;
     LONG waitMS       = 0L;
@@ -97,7 +97,7 @@ int Application::run()
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
 
-    while (!glView->windowShouldClose())
+    while (!renderView->windowShouldClose())
     {
         QueryPerformanceCounter(&nNow);
         interval = nNow.QuadPart - nLast.QuadPart;
@@ -105,7 +105,7 @@ int Application::run()
         {
             nLast.QuadPart = nNow.QuadPart;
             director->mainLoop();
-            glView->pollEvents();
+            renderView->pollEvents();
         }
         else
         {
@@ -121,13 +121,13 @@ int Application::run()
     }
 
     // Director should still do a cleanup if the window was closed manually.
-    if (glView->isOpenGLReady())
+    if (renderView->isGfxContextReady())
     {
         director->end();
         director->mainLoop();
         director = nullptr;
     }
-    glView->release();
+    renderView->release();
 
 
     return 0;

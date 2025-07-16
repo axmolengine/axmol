@@ -204,9 +204,9 @@ local function OpenGLTestMainLayer()
 
         local resolution = cc.p(256, 256)
         local director = cc.Director:getInstance()
-        local frameSize = director:getGLView():getFrameSize()
+        local frameSize = director:getRenderView():getFrameSize()
         local visibleSize = director:getVisibleSize()
-        local retinaFactor = director:getGLView():getRetinaFactor()
+        local retinaFactor = director:getRenderView():getRetinaFactor()
         local center = cc.p( size.width / 2 * frameSize.width / visibleSize.width * retinaFactor, size.height / 2 * frameSize.height / visibleSize.height * retinaFactor)
 
         local function initBuffers()

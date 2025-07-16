@@ -31,7 +31,7 @@
 #include "platform/android/jni/JniHelper.h"
 
 #include "ui/UIWebView/UIWebView.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 #include "base/Director.h"
 #include "platform/FileUtils.h"
 #include "ui/UIHelper.h"

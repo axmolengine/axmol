@@ -30,7 +30,7 @@
 #import "ui/UIEditBox/iOS/UISingleLineTextField.h"
 #import "ui/UIEditBox/iOS/UIMultilineTextField.h"
 
-#import "platform/ios/EAGLView-ios.h"
+#import "platform/ios/EARenderView-ios.h"
 #include "base/Director.h"
 
 #define getEditBoxImplIOS() ((ax::ui::EditBoxImplIOS*)_editBox)
@@ -319,8 +319,8 @@
 
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)distance
 {
-    auto view            = ax::Director::getInstance()->getGLView();
-    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
+    auto view            = ax::Director::getInstance()->getRenderView();
+    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
 
     [eaglView doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
 }
@@ -336,8 +336,8 @@
 
 - (void)openKeyboard
 {
-    auto view            = ax::Director::getInstance()->getGLView();
-    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
+    auto view            = ax::Director::getInstance()->getRenderView();
+    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
 
     [eaglView addSubview:self.textInput];
     [self.textInput becomeFirstResponder];
@@ -361,8 +361,8 @@
 
 - (void)animationSelector
 {
-    auto view            = ax::Director::getInstance()->getGLView();
-    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
+    auto view            = ax::Director::getInstance()->getRenderView();
+    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
 
     [eaglView doAnimationWhenAnotherEditBeClicked];
 }
@@ -375,8 +375,8 @@
     _editState     = YES;
     _returnPressed = NO;
 
-    auto view            = ax::Director::getInstance()->getGLView();
-    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
+    auto view            = ax::Director::getInstance()->getRenderView();
+    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
 
     if ([eaglView isKeyboardShown])
     {
@@ -468,8 +468,8 @@
     _editState     = YES;
     _returnPressed = NO;
 
-    auto view            = ax::Director::getInstance()->getGLView();
-    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
+    auto view            = ax::Director::getInstance()->getRenderView();
+    EARenderView* eaglView = (EARenderView*)view->getEARenderView();
 
     if ([eaglView isKeyboardShown])
     {

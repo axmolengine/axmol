@@ -55,7 +55,7 @@ HWND EditBoxImplWin::s_hwndCocos           = 0;
 
 void EditBoxImplWin::lazyInit()
 {
-    s_hwndCocos = ax::Director::getInstance()->getGLView()->getWin32Window();
+    s_hwndCocos = ax::Director::getInstance()->getRenderView()->getWin32Window();
     LONG style  = ::GetWindowLongW(s_hwndCocos, GWL_STYLE);
     ::SetWindowLongW(s_hwndCocos, GWL_STYLE, style | WS_CLIPCHILDREN);
     s_isInitialized    = true;
@@ -142,8 +142,8 @@ void EditBoxImplWin::createNativeControl(const Rect& frame)
 
 void EditBoxImplWin::setNativeFont(const char* pFontName, int fontSize)
 {
-    auto glView = Director::getInstance()->getGLView();
-    HFONT hFont = ::CreateFontW(static_cast<int>(fontSize * glView->getScaleX()), 0, 0, 0, FW_NORMAL, FALSE, FALSE,
+    auto renderView = Director::getInstance()->getRenderView();
+    HFONT hFont = ::CreateFontW(static_cast<int>(fontSize * renderView->getScaleX()), 0, 0, 0, FW_NORMAL, FALSE, FALSE,
                                 FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
                                 VARIABLE_PITCH, L"Arial");
 

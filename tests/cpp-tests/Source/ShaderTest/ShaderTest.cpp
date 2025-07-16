@@ -144,9 +144,9 @@ void ShaderNode::setPosition(const Vec2& newPosition)
 {
     Node::setPosition(newPosition);
     auto position     = getPosition();
-    auto frameSize    = Director::getInstance()->getGLView()->getFrameSize();
+    auto frameSize    = Director::getInstance()->getRenderView()->getFrameSize();
     auto visibleSize  = Director::getInstance()->getVisibleSize();
-    auto retinaFactor = Director::getInstance()->getGLView()->getRetinaFactor();
+    auto retinaFactor = Director::getInstance()->getRenderView()->getRetinaFactor();
     _center           = Vec2(position.x * frameSize.width / visibleSize.width * retinaFactor,
                              position.y * frameSize.height / visibleSize.height * retinaFactor);
 }
@@ -189,8 +189,8 @@ void ShaderNode::updateUniforms()
     _locCosTime    = _programState->getUniformLocation("u_CosTime");
     _locScreenSize = _programState->getUniformLocation("u_screenSize");
 
-    const Vec2& frameSize   = Director::getInstance()->getGLView()->getFrameSize();
-    float retinaFactor      = Director::getInstance()->getGLView()->getRetinaFactor();
+    const Vec2& frameSize   = Director::getInstance()->getRenderView()->getFrameSize();
+    float retinaFactor      = Director::getInstance()->getRenderView()->getRetinaFactor();
     auto screenSizeInPixels = frameSize * retinaFactor;
     _programState->setUniform(_locScreenSize, &screenSizeInPixels, sizeof(screenSizeInPixels));
 }
@@ -570,8 +570,8 @@ bool ShaderRetroEffect::init()
         auto p        = new backend::ProgramState(program);
         auto director = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
-        const auto& frameSize          = director->getGLView()->getFrameSize();
-        float retinaFactor             = director->getGLView()->getRetinaFactor();
+        const auto& frameSize          = director->getRenderView()->getFrameSize();
+        float retinaFactor             = director->getRenderView()->getRetinaFactor();
         auto screenSizeInPixels        = frameSize * retinaFactor;
         p->setUniform(screenSizeLocation, &screenSizeInPixels, sizeof(screenSizeInPixels));
 

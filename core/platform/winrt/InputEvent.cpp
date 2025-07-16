@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #include "platform/winrt/InputEvent.h"
 #include "platform/winrt/WinRTUtils.h"
-#include "platform/winrt/GLViewImpl-winrt.h"
+#include "platform/winrt/RenderViewImpl-winrt.h"
 #include "base/EventAcceleration.h"
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
@@ -59,25 +59,25 @@ void PointerEvent::execute()
     switch(m_type)
     {
     case PointerEventType::PointerPressed:
-        GLViewImpl::sharedGLView()->OnPointerPressed(m_args);
+        RenderViewImpl::sharedRenderView()->OnPointerPressed(m_args);
         break;
     case PointerEventType::PointerMoved:
-        GLViewImpl::sharedGLView()->OnPointerMoved(m_args);
+        RenderViewImpl::sharedRenderView()->OnPointerMoved(m_args);
         break;
     case PointerEventType::PointerReleased:
-        GLViewImpl::sharedGLView()->OnPointerReleased(m_args);
+        RenderViewImpl::sharedRenderView()->OnPointerReleased(m_args);
         break;
     case ax::MousePressed:
-        GLViewImpl::sharedGLView()->OnMousePressed(m_args);
+        RenderViewImpl::sharedRenderView()->OnMousePressed(m_args);
         break;
     case ax::MouseMoved:
-        GLViewImpl::sharedGLView()->OnMouseMoved(m_args);
+        RenderViewImpl::sharedRenderView()->OnMouseMoved(m_args);
         break;
     case ax::MouseReleased:
-        GLViewImpl::sharedGLView()->OnMouseReleased(m_args);
+        RenderViewImpl::sharedRenderView()->OnMouseReleased(m_args);
         break;
     case ax::MouseWheelChanged:
-        GLViewImpl::sharedGLView()->OnMouseWheelChanged(m_args);
+        RenderViewImpl::sharedRenderView()->OnMouseWheelChanged(m_args);
         break;
     }
 }
@@ -131,7 +131,7 @@ WinRTKeyboardEvent::WinRTKeyboardEvent(WinRTKeyboardEventType type, const Window
 
 void WinRTKeyboardEvent::execute()
 {
-	GLViewImpl::sharedGLView()->OnWinRTKeyboardEvent(m_type, m_key);
+	RenderViewImpl::sharedRenderView()->OnWinRTKeyboardEvent(m_type, m_key);
 }
 
 BackButtonEvent::BackButtonEvent()
@@ -141,7 +141,7 @@ BackButtonEvent::BackButtonEvent()
 
 void BackButtonEvent::execute()
 {
-    GLViewImpl::sharedGLView()->OnBackKeyPress();
+    RenderViewImpl::sharedRenderView()->OnBackKeyPress();
 }
 
 CustomInputEvent::CustomInputEvent(const std::function<void()>& fun)

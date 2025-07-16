@@ -28,21 +28,21 @@ THE SOFTWARE.
 
 #include "base/Object.h"
 #include "math/Math.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 
 namespace ax
 {
 
-class AX_DLL GLViewImpl : public GLView
+class AX_DLL RenderViewImpl : public RenderView
 {
 public:
     // static function
     static void loadGLES2();
-    static GLViewImpl* create(std::string_view viewname);
-    static GLViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f, bool resizable = false);
-    static GLViewImpl* createWithFullScreen(std::string_view viewName);
+    static RenderViewImpl* create(std::string_view viewname);
+    static RenderViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f, bool resizable = false);
+    static RenderViewImpl* createWithFullScreen(std::string_view viewName);
 
-    bool isOpenGLReady() override;
+    bool isGfxContextReady() override;
     void end() override;
     void swapBuffers() override;
     void setIMEKeyboardState(bool bOpen) override;
@@ -51,11 +51,15 @@ public:
     void queueOperation(void (*op)(void*), void* param) override;
 
 protected:
-    GLViewImpl();
-    virtual ~GLViewImpl();
+    RenderViewImpl();
+    virtual ~RenderViewImpl();
 
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
 };
+
+#ifndef AX_CORE_PROFILE
+AX_DEPRECATED(2.8) typedef RenderViewImpl GLViewImpl;
+#endif
 
 }

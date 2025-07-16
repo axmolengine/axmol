@@ -52,7 +52,7 @@ Application::~Application()
 
 int Application::run()
 {
-    initGLContextAttrs();
+    initGfxContextAttrs();
     // Initialize instance and cocos2d.
     if (!applicationDidFinishLaunching())
     {
@@ -62,17 +62,17 @@ int Application::run()
     std::chrono::steady_clock::time_point lastTime{};
 
     auto director = Director::getInstance();
-    auto glView   = director->getGLView();
+    auto renderView   = director->getRenderView();
 
-    // Retain glView to avoid glView being released in the while loop
-    glView->retain();
+    // Retain renderView to avoid renderView being released in the while loop
+    renderView->retain();
 
-    while (!glView->windowShouldClose())
+    while (!renderView->windowShouldClose())
     {
         lastTime = std::chrono::steady_clock::now();
 
         director->mainLoop();
-        glView->pollEvents();
+        renderView->pollEvents();
 
         auto interval = std::chrono::steady_clock::now() - lastTime;
         if (interval < _animationInterval)
@@ -90,13 +90,13 @@ int Application::run()
      *  when we want to close the window, we should call Director::end();
      *  then call Director::mainLoop to do release of internal resources
      */
-    if (glView->isOpenGLReady())
+    if (renderView->isGfxContextReady())
     {
         director->end();
         director->mainLoop();
         director = nullptr;
     }
-    glView->release();
+    renderView->release();
     return EXIT_SUCCESS;
 }
 

@@ -758,11 +758,11 @@ void LAppModel::MakeRenderingTarget()
     if (!_renderSprite && !_renderBuffer->IsValid())
     {
         float aspectFactor = 1.0f;
-        int frameW = Director::getInstance()->getGLView()->getFrameSize().width, frameH = Director::getInstance()->getGLView()->getFrameSize().height;
+        int frameW = Director::getInstance()->getRenderView()->getFrameSize().width, frameH = Director::getInstance()->getRenderView()->getFrameSize().height;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // Retina対策でこっちからとる
-        GLViewImpl *glimpl = (GLViewImpl *)Director::getInstance()->getGLView();
+        RenderViewImpl *glimpl = (RenderViewImpl *)Director::getInstance()->getRenderView();
         int renderW = frameW;
         int renderH = frameH;
         glfwGetFramebufferSize(glimpl->getWindow(), &frameW, &frameH);

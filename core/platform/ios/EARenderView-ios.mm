@@ -15,7 +15,7 @@ seeds.
 
 =====================
 
-File: EAGLView.m
+File: EARenderView.m
 Abstract: Convenience class that wraps the CAEAGLLayer from CoreAnimation into a
 UIView subclass.
 
@@ -60,7 +60,7 @@ APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 */
-#import "platform/ios/EAGLView-ios.h"
+#import "platform/ios/EARenderView-ios.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -74,7 +74,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #    import "renderer/backend/metal/DriverMTL.h"
 #    import "renderer/backend/metal/UtilsMTL.h"
 #else
-#    import "platform/ios/GLViewImpl-ios.h"
+#    import "platform/ios/RenderViewImpl-ios.h"
 #    import "platform/ios/ES3Renderer-ios.h"
 #    import "platform/ios/OpenGL_Internal-ios.h"
 #endif
@@ -83,14 +83,14 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #define IOS_MAX_TOUCHES_COUNT 10
 
-@interface EAGLView ()
+@interface EARenderView ()
 @property(nonatomic) TextInputView* textInputView;
 @property(nonatomic, readwrite, assign) BOOL isKeyboardShown;
 @property(nonatomic, copy) NSNotification* keyboardShowNotification;
 @property(nonatomic, assign) CGRect originalRect;
 @end
 
-@implementation EAGLView
+@implementation EARenderView
 
 @synthesize surfaceSize = size_;
 @synthesize pixelFormat = pixelformat_, depthFormat = depthFormat_;
@@ -412,7 +412,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 }
 #endif
 
-#pragma mark EAGLView - Point conversion
+#pragma mark EARenderView - Point conversion
 
 - (CGPoint)convertPointFromViewToSurface:(CGPoint)point
 {
@@ -439,7 +439,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 }
 
 // Pass the touches to the superview
-#pragma mark EAGLView - Touch Delegate
+#pragma mark EARenderView - Touch Delegate
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
     if (self.isKeyboardShown)
@@ -464,8 +464,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glView = ax::Director::getInstance()->getGLView();
-    glView->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    renderView->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
@@ -499,8 +499,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glView = ax::Director::getInstance()->getGLView();
-    glView->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    renderView->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
 }
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
@@ -524,8 +524,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glView = ax::Director::getInstance()->getGLView();
-    glView->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    renderView->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
 }
 
 - (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
@@ -549,8 +549,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glView = ax::Director::getInstance()->getGLView();
-    glView->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    renderView->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
 }
 
 - (void)showKeyboard
@@ -572,13 +572,13 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     [UIView setAnimationDuration:duration];
     [UIView setAnimationBeginsFromCurrentState:YES];
 
-    // NSLog(@"[animation] dis = %f, scale = %f \n", dis, ax::GLView::getInstance()->getScaleY());
+    // NSLog(@"[animation] dis = %f, scale = %f \n", dis, ax::RenderView::getInstance()->getScaleY());
 
     if (dis < 0.0f)
         dis = 0.0f;
 
-    auto glView = ax::Director::getInstance()->getGLView();
-    dis *= glView->getScaleY();
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    dis *= renderView->getScaleY();
 
     dis /= self.contentScaleFactor;
 
@@ -719,9 +719,9 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         break;
     }
 
-    auto glView  = ax::Director::getInstance()->getGLView();
-    float scaleX = glView->getScaleX();
-    float scaleY = glView->getScaleY();
+    auto renderView  = ax::Director::getInstance()->getRenderView();
+    float scaleX = renderView->getScaleX();
+    float scaleY = renderView->getScaleY();
 
     // Convert to pixel coordinate
     begin = CGRectApplyAffineTransform(
@@ -729,7 +729,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     end = CGRectApplyAffineTransform(
         end, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
 
-    float offestY = glView->getViewPortRect().origin.y;
+    float offestY = renderView->getViewPortRect().origin.y;
     if (offestY < 0.0f)
     {
         begin.origin.y += offestY;

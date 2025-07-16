@@ -41,7 +41,7 @@ bool Bug14327Layer::init()
 {
     if (BugsTestBase::init())
     {
-        auto glView        = Director::getInstance()->getGLView();
+        auto glView        = Director::getInstance()->getRenderView();
         auto visibleOrigin = glView->getVisibleOrigin();
         auto visibleSize   = glView->getVisibleSize();
 

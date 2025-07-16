@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/winrt/GLViewImpl-winrt.h"
+#include "platform/winrt/RenderViewImpl-winrt.h"
 #include "base/Macros.h"
 #include "base/Director.h"
 #include "base/Touch.h"
@@ -44,7 +44,7 @@ THE SOFTWARE.
 namespace ax
 {
 
-static GLViewImpl* s_pEglView = nullptr;
+static RenderViewImpl* s_pEglView = nullptr;
 
 static EventMouse::MouseButton checkMouseButton(Windows::UI::Core::PointerEventArgs const& args)
 {
@@ -63,9 +63,9 @@ static EventMouse::MouseButton checkMouseButton(Windows::UI::Core::PointerEventA
     return EventMouse::MouseButton::BUTTON_UNSET;
 }
 
-GLViewImpl* GLViewImpl::create(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 {
-    auto ret = new GLViewImpl;
+    auto ret = new RenderViewImpl;
     if (ret && ret->initWithFullScreen(viewName))
     {
         ret->autorelease();
@@ -75,10 +75,10 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
+RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
                                        const Rect& rect, float frameZoomFactor, bool /*resizable*/)
 {
-    auto ret = new GLViewImpl;
+    auto ret = new RenderViewImpl;
     if (ret && ret->initWithRect(viewName, rect, frameZoomFactor))
     {
         ret->autorelease();
@@ -88,9 +88,9 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
 {
-    auto ret = new GLViewImpl();
+    auto ret = new RenderViewImpl();
     if (ret->initWithFullScreen(viewName))
     {
         ret->autorelease();
@@ -100,7 +100,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
     return nullptr;
 }
 
-GLViewImpl::GLViewImpl()
+RenderViewImpl::RenderViewImpl()
     : _frameZoomFactor(1.0f)
     , _supportTouch(true)
     , _isRetina(false)
@@ -121,17 +121,17 @@ GLViewImpl::GLViewImpl()
     m_keyboard = KeyBoardWinRT();
 
     m_backButtonListener                = EventListenerKeyboard::create();
-    m_backButtonListener->onKeyReleased = AX_CALLBACK_2(GLViewImpl::BackButtonListener, this);
+    m_backButtonListener->onKeyReleased = AX_CALLBACK_2(RenderViewImpl::BackButtonListener, this);
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(m_backButtonListener, INT_MAX);
 }
 
-GLViewImpl::~GLViewImpl()
+RenderViewImpl::~RenderViewImpl()
 {
     AX_ASSERT(this == s_pEglView);
     s_pEglView = nullptr;
 }
 
-bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor)
+bool RenderViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor)
 {
     setViewName(viewName);
     setFrameSize(rect.size.width, rect.size.height);
@@ -140,33 +140,32 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float
     return true;
 }
 
-bool GLViewImpl::initWithFullScreen(std::string_view viewName)
+bool RenderViewImpl::initWithFullScreen(std::string_view viewName)
 {
     return initWithRect(viewName, Rect(0, 0, m_width, m_height), 1.0f);
 }
 
-void ax::GLViewImpl::setCursorVisible(bool isVisible)
+void ax::RenderViewImpl::setCursorVisible(bool isVisible)
 {
     _isCursorVisible = isVisible;
 }
 
-void GLViewImpl::setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispatcher> dispatcher)
+void RenderViewImpl::setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispatcher> dispatcher)
 {
     m_dispatcher = dispatcher;
 }
 
-void GLViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel)
+void RenderViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel)
 {
     m_panel = panel;
 }
 
-void GLViewImpl::setIMEKeyboardState(bool bOpen)
+void RenderViewImpl::setIMEKeyboardState(bool bOpen)
 {
-    std::string str;
-    setIMEKeyboardState(bOpen, str);
+    setIMEKeyboardState(bOpen, "");
 }
 
-bool GLViewImpl::ShowMessageBox(const winrt::hstring& title, const winrt::hstring& message)
+bool RenderViewImpl::ShowMessageBox(const winrt::hstring& title, const winrt::hstring& message)
 {
     if (m_dispatcher)
     {
@@ -184,7 +183,7 @@ bool GLViewImpl::ShowMessageBox(const winrt::hstring& title, const winrt::hstrin
     return false;
 }
 
-void GLViewImpl::setIMEKeyboardState(bool bOpen, std::string_view str)
+void RenderViewImpl::setIMEKeyboardState(bool bOpen, std::string_view str)
 {
     if (bOpen)
     {
@@ -196,39 +195,39 @@ void GLViewImpl::setIMEKeyboardState(bool bOpen, std::string_view str)
     }
 }
 
-void GLViewImpl::swapBuffers() {}
+void RenderViewImpl::swapBuffers() {}
 
-bool GLViewImpl::isOpenGLReady()
+bool RenderViewImpl::isGfxContextReady()
 {
     return true;
 }
 
-void GLViewImpl::end()
+void RenderViewImpl::end()
 {
     m_windowClosed  = true;
     m_appShouldExit = true;
 }
 
-void GLViewImpl::OnSuspending(Windows::Foundation::IInspectable const& sender,
+void RenderViewImpl::OnSuspending(Windows::Foundation::IInspectable const& sender,
                               Windows::ApplicationModel::SuspendingEventArgs const& args)
 {}
 
-void GLViewImpl::OnResuming(Windows::Foundation::IInspectable const& sender) {}
+void RenderViewImpl::OnResuming(Windows::Foundation::IInspectable const& sender) {}
 
 // user pressed the Back Key on the phone
-void GLViewImpl::OnBackKeyPress()
+void RenderViewImpl::OnBackKeyPress()
 {
     ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_ESCAPE;
     ax::EventKeyboard event(cocos2dKey, false);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void GLViewImpl::BackButtonListener(EventKeyboard::KeyCode keyCode, Event* event)
+void RenderViewImpl::BackButtonListener(EventKeyboard::KeyCode keyCode, Event* event)
 {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)
     {
         AXLOGD("*********************************************************************");
-        AXLOGD("GLViewImpl::BackButtonListener: Exiting application!");
+        AXLOGD("RenderViewImpl::BackButtonListener: Exiting application!");
         AXLOGD("");
         AXLOGD("If you want to listen for Windows Phone back button events,");
         AXLOGD("add a listener for EventKeyboard::KeyCode::KEY_ESCAPE");
@@ -258,25 +257,25 @@ void GLViewImpl::BackButtonListener(EventKeyboard::KeyCode keyCode, Event* event
     }
 }
 
-bool GLViewImpl::AppShouldExit()
+bool RenderViewImpl::AppShouldExit()
 {
     return m_appShouldExit;
 }
 
-void GLViewImpl::OnPointerPressed(Windows::UI::Core::CoreWindow const& sender,
+void RenderViewImpl::OnPointerPressed(Windows::UI::Core::CoreWindow const& sender,
                                   Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerPressed(args);
 }
 
-void GLViewImpl::OnPointerPressed(Windows::UI::Core::PointerEventArgs const& args)
+void RenderViewImpl::OnPointerPressed(Windows::UI::Core::PointerEventArgs const& args)
 {
     intptr_t id = args.CurrentPoint().PointerId();
     Vec2 pt     = GetPoint(args);
     handleTouchesBegin(1, &id, &pt.x, &pt.y);
 }
 
-void GLViewImpl::OnPointerWheelChanged(Windows::UI::Core::CoreWindow const& sender,
+void RenderViewImpl::OnPointerWheelChanged(Windows::UI::Core::CoreWindow const& sender,
                                        Windows::UI::Core::PointerEventArgs const& args)
 {
     float direction = (float)args.CurrentPoint().Properties().MouseWheelDelta();
@@ -288,25 +287,25 @@ void GLViewImpl::OnPointerWheelChanged(Windows::UI::Core::CoreWindow const& send
     handleTouchesEnd(1, &id, &p.x, &p.y);
 }
 
-void GLViewImpl::OnVisibilityChanged(Windows::UI::Core::CoreWindow const& sender,
+void RenderViewImpl::OnVisibilityChanged(Windows::UI::Core::CoreWindow const& sender,
                                      Windows::UI::Core::VisibilityChangedEventArgs const& args)
 {
     m_windowVisible = args.Visible();
 }
 
-void GLViewImpl::OnWindowClosed(Windows::UI::Core::CoreWindow const& sender,
+void RenderViewImpl::OnWindowClosed(Windows::UI::Core::CoreWindow const& sender,
                                 Windows::UI::Core::CoreWindowEventArgs const& args)
 {
     m_windowClosed = true;
 }
 
-void GLViewImpl::OnPointerMoved(Windows::UI::Core::CoreWindow const& sender,
+void RenderViewImpl::OnPointerMoved(Windows::UI::Core::CoreWindow const& sender,
                                 Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerMoved(args);
 }
 
-void GLViewImpl::OnPointerMoved(Windows::UI::Core::PointerEventArgs const& args)
+void RenderViewImpl::OnPointerMoved(Windows::UI::Core::PointerEventArgs const& args)
 {
     auto currentPoint = args.CurrentPoint();
     if (currentPoint.IsInContact())
@@ -326,20 +325,20 @@ void GLViewImpl::OnPointerMoved(Windows::UI::Core::PointerEventArgs const& args)
     }
 }
 
-void GLViewImpl::OnPointerReleased(Windows::UI::Core::CoreWindow const& sender,
+void RenderViewImpl::OnPointerReleased(Windows::UI::Core::CoreWindow const& sender,
                                    Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerReleased(args);
 }
 
-void GLViewImpl::OnPointerReleased(Windows::UI::Core::PointerEventArgs const& args)
+void RenderViewImpl::OnPointerReleased(Windows::UI::Core::PointerEventArgs const& args)
 {
     intptr_t id = args.CurrentPoint().PointerId();
     Vec2 pt     = GetPoint(args);
     handleTouchesEnd(1, &id, &pt.x, &pt.y);
 }
 
-void ax::GLViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs const& args)
+void ax::RenderViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 pt = GetPoint(args);
 
@@ -378,7 +377,7 @@ void ax::GLViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs const& a
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void ax::GLViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs const& args)
+void ax::RenderViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 pt = GetPoint(args);
 
@@ -395,7 +394,7 @@ void ax::GLViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs const& arg
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void ax::GLViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs const& args)
+void ax::RenderViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 pt = GetPoint(args);
 
@@ -414,7 +413,7 @@ void ax::GLViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs const& 
     _lastMouseButtonPressed = EventMouse::MouseButton::BUTTON_UNSET;
 }
 
-void ax::GLViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs const& args)
+void ax::RenderViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 pt = GetPoint(args);
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
@@ -432,43 +431,43 @@ void ax::GLViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs con
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void GLViewImpl::resize(int width, int height) {}
+void RenderViewImpl::resize(int width, int height) {}
 
-void GLViewImpl::setFrameZoomFactor(float fZoomFactor)
+void RenderViewImpl::setFrameZoomFactor(float fZoomFactor)
 {
     _frameZoomFactor = fZoomFactor;
     Director::getInstance()->setProjection(Director::getInstance()->getProjection());
     // resize(m_obScreenSize.width * fZoomFactor, m_obScreenSize.height * fZoomFactor);
 }
 
-float GLViewImpl::getFrameZoomFactor()
+float RenderViewImpl::getFrameZoomFactor()
 {
     return _frameZoomFactor;
 }
 
-void GLViewImpl::centerWindow()
+void RenderViewImpl::centerWindow()
 {
     // not implemented in WinRT. Window is always full screen
 }
 
-GLViewImpl* GLViewImpl::sharedGLView()
+RenderViewImpl* RenderViewImpl::sharedRenderView()
 {
     return s_pEglView;
 }
 
-int GLViewImpl::Run()
+int RenderViewImpl::Run()
 {
     // XAML version does not have a run loop
     m_running = true;
     return 0;
 };
 
-void GLViewImpl::Render()
+void RenderViewImpl::Render()
 {
     OnRendering();
 }
 
-void GLViewImpl::OnRendering()
+void RenderViewImpl::OnRendering()
 {
     if (m_running && m_initialized)
     {
@@ -477,7 +476,7 @@ void GLViewImpl::OnRendering()
 }
 
 // called by orientation change from WP8 XAML
-void GLViewImpl::UpdateOrientation(Windows::Graphics::Display::DisplayOrientations orientation)
+void RenderViewImpl::UpdateOrientation(Windows::Graphics::Display::DisplayOrientations orientation)
 {
     if (m_orientation != orientation)
     {
@@ -487,7 +486,7 @@ void GLViewImpl::UpdateOrientation(Windows::Graphics::Display::DisplayOrientatio
 }
 
 // called by size change from WP8 XAML
-void GLViewImpl::UpdateForWindowSizeChange(float width, float height)
+void RenderViewImpl::UpdateForWindowSizeChange(float width, float height)
 {
     if (width != m_width || height != m_height)
     {
@@ -497,7 +496,7 @@ void GLViewImpl::UpdateForWindowSizeChange(float width, float height)
     }
 }
 
-void GLViewImpl::UpdateWindowSize()
+void RenderViewImpl::UpdateWindowSize()
 {
     float width, height;
 
@@ -508,10 +507,10 @@ void GLViewImpl::UpdateWindowSize()
     if (!m_initialized)
     {
         m_initialized = true;
-        GLView::setFrameSize(width, height);
+        RenderView::setFrameSize(width, height);
     }
 
-    auto view = Director::getInstance()->getGLView();
+    auto view = Director::getInstance()->getRenderView();
     if (view && view->getResolutionPolicy() != ResolutionPolicy::UNKNOWN)
     {
         Size resSize               = view->getDesignResolutionSize();
@@ -524,7 +523,7 @@ void GLViewImpl::UpdateWindowSize()
     }
 }
 
-ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)
+ax::Vec2 RenderViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)
 {
     ax::Vec2 returnValue;
 
@@ -532,7 +531,7 @@ ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)
     float y     = p.Y;
     returnValue = Vec2(x, y);
 
-    float zoomFactor = GLViewImpl::sharedGLView()->getFrameZoomFactor();
+    float zoomFactor = RenderViewImpl::sharedRenderView()->getFrameZoomFactor();
     if (zoomFactor > 0.0f)
     {
         returnValue.x /= zoomFactor;
@@ -544,40 +543,40 @@ ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)
     return returnValue;
 }
 
-Vec2 GLViewImpl::GetPoint(Windows::UI::Core::PointerEventArgs const& args)
+Vec2 RenderViewImpl::GetPoint(Windows::UI::Core::PointerEventArgs const& args)
 {
     return TransformToOrientation(args.CurrentPoint().Position());
 }
 
-void GLViewImpl::QueueBackKeyPress()
+void RenderViewImpl::QueueBackKeyPress()
 {
     std::shared_ptr<BackButtonEvent> e(new BackButtonEvent());
     mInputEvents.push(e);
 }
 
-void GLViewImpl::QueuePointerEvent(PointerEventType type, Windows::UI::Core::PointerEventArgs const& args)
+void RenderViewImpl::QueuePointerEvent(PointerEventType type, Windows::UI::Core::PointerEventArgs const& args)
 {
     std::shared_ptr<PointerEvent> e(new PointerEvent(type, args));
     mInputEvents.push(e);
 }
 
-void GLViewImpl::QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
+void RenderViewImpl::QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
 {
     std::shared_ptr<WinRTKeyboardEvent> e(new WinRTKeyboardEvent(type, args));
     mInputEvents.push(e);
 }
 
-void GLViewImpl::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
+void RenderViewImpl::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
 {
     m_keyboard.OnWinRTKeyboardEvent(type, args);
 }
 
-void GLViewImpl::QueueEvent(std::shared_ptr<InputEvent>& event)
+void RenderViewImpl::QueueEvent(std::shared_ptr<InputEvent>& event)
 {
     mInputEvents.push(event);
 }
 
-void GLViewImpl::ProcessEvents()
+void RenderViewImpl::ProcessEvents()
 {
     std::shared_ptr<InputEvent> e;
     while (mInputEvents.try_pop(e))
@@ -586,12 +585,12 @@ void GLViewImpl::ProcessEvents()
     }
 }
 
-void GLViewImpl::SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb)
+void RenderViewImpl::SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb)
 {
     mQueueOperationCb = std::move(cb);
 }
 
-void GLViewImpl::queueOperation(AsyncOperation op, void* param)
+void RenderViewImpl::queueOperation(AsyncOperation op, void* param)
 {
     if (mQueueOperationCb)
         mQueueOperationCb(std::move(op), param);

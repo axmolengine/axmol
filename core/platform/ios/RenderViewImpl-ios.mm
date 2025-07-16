@@ -26,23 +26,23 @@
  ****************************************************************************/
 #import <UIKit/UIKit.h>
 
-#include "platform/ios/EAGLView-ios.h"
+#include "platform/ios/EARenderView-ios.h"
 #include "platform/ios/DirectorCaller-ios.h"
-#include "platform/ios/GLViewImpl-ios.h"
+#include "platform/ios/RenderViewImpl-ios.h"
 #include "base/Touch.h"
 #include "base/Director.h"
 
 namespace ax
 {
 
-PixelFormat GLViewImpl::_pixelFormat        = PixelFormat::RGB565;
-PixelFormat GLViewImpl::_depthFormat        = PixelFormat::D24S8;
-int GLViewImpl::_multisamplingCount = 0;
+PixelFormat RenderViewImpl::_pixelFormat        = PixelFormat::RGB565;
+PixelFormat RenderViewImpl::_depthFormat        = PixelFormat::D24S8;
+int RenderViewImpl::_multisamplingCount = 0;
 
-GLViewImpl* GLViewImpl::createWithEAGLView(void* eaglView)
+RenderViewImpl* RenderViewImpl::createWithEARenderView(void* viewHandle)
 {
-    auto ret = new GLViewImpl;
-    if (ret->initWithEAGLView(eaglView))
+    auto ret = new RenderViewImpl;
+    if (ret->initWithEARenderView(viewHandle))
     {
         ret->autorelease();
         return ret;
@@ -51,9 +51,9 @@ GLViewImpl* GLViewImpl::createWithEAGLView(void* eaglView)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::create(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 {
-    auto ret = new GLViewImpl;
+    auto ret = new RenderViewImpl;
     if (ret->initWithFullScreen(viewName))
     {
         ret->autorelease();
@@ -63,12 +63,12 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
+RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
                                        const ax::Rect& rect,
                                        float frameZoomFactor,
                                        bool resizable)
 {
-    auto ret = new GLViewImpl;
+    auto ret = new RenderViewImpl;
     if (ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
     {
         ret->autorelease();
@@ -78,9 +78,9 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
 {
-    auto ret = new GLViewImpl();
+    auto ret = new RenderViewImpl();
     if (ret->initWithFullScreen(viewName))
     {
         ret->autorelease();
@@ -90,15 +90,15 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
     return nullptr;
 }
 
-void GLViewImpl::choosePixelFormats()
+void RenderViewImpl::choosePixelFormats()
 {
-    if (_glContextAttrs.redBits == 8 && _glContextAttrs.greenBits == 8 && _glContextAttrs.blueBits == 8 &&
-        _glContextAttrs.alphaBits == 8)
+    if (_gfxContextAttrs.redBits == 8 && _gfxContextAttrs.greenBits == 8 && _gfxContextAttrs.blueBits == 8 &&
+        _gfxContextAttrs.alphaBits == 8)
     {
         _pixelFormat = PixelFormat::RGBA8;
     }
-    else if (_glContextAttrs.redBits == 5 && _glContextAttrs.greenBits == 6 && _glContextAttrs.blueBits == 5 &&
-             _glContextAttrs.alphaBits == 0)
+    else if (_gfxContextAttrs.redBits == 5 && _gfxContextAttrs.greenBits == 6 && _gfxContextAttrs.blueBits == 5 &&
+             _gfxContextAttrs.alphaBits == 0)
     {
         _pixelFormat = PixelFormat::RGB565;
     }
@@ -107,11 +107,11 @@ void GLViewImpl::choosePixelFormats()
         AXASSERT(0, "Unsupported render buffer pixel format. Using default");
     }
 
-    if (_glContextAttrs.depthBits == 24 && _glContextAttrs.stencilBits == 8)
+    if (_gfxContextAttrs.depthBits == 24 && _gfxContextAttrs.stencilBits == 8)
     {
         _depthFormat = PixelFormat::D24S8;
     }
-    else if (_glContextAttrs.depthBits == 0 && _glContextAttrs.stencilBits == 0)
+    else if (_gfxContextAttrs.depthBits == 0 && _gfxContextAttrs.stencilBits == 0)
     {
         _depthFormat = PixelFormat::NONE;
     }
@@ -120,41 +120,39 @@ void GLViewImpl::choosePixelFormats()
         AXASSERT(0, "Unsupported format for depth and stencil buffers. Using default");
     }
 
-    _multisamplingCount = _glContextAttrs.multisamplingCount;
+    _multisamplingCount = _gfxContextAttrs.multisamplingCount;
 }
 
-GLViewImpl::GLViewImpl() {}
+RenderViewImpl::RenderViewImpl() {}
 
-GLViewImpl::~GLViewImpl()
+RenderViewImpl::~RenderViewImpl()
 {
-    // EAGLView *glView = (EAGLView*) _eaglView;
-    //[glView release];
+    // auto eaView = (__bridge EARenderView*) _eaViewHandle;
+    //[eaView release];
 }
 
-bool GLViewImpl::initWithEAGLView(void* eaglView)
+bool RenderViewImpl::initWithEARenderView(void* viewHandle)
 {
-    _eaglView          = eaglView;
-    EAGLView* glView = (EAGLView*)_eaglView;
+    _eaViewHandle          = viewHandle;
+    EARenderView* eaView  = (__bridge EARenderView*)_eaViewHandle;
 
-    _screenSize.width = _designResolutionSize.width = [glView getWidth];
-    _screenSize.height = _designResolutionSize.height = [glView getHeight];
-    //    _scaleX = _scaleY = [glView contentScaleFactor];
+    _screenSize.width = _designResolutionSize.width = [eaView getWidth];
+    _screenSize.height = _designResolutionSize.height = [eaView getHeight];
+    //    _scaleX = _scaleY = [eaView contentScaleFactor];
 
     return true;
 }
 
-bool GLViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rect, float frameZoomFactor, bool /*resizable*/)
+bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rect, float frameZoomFactor, bool /*resizable*/)
 {
     CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     choosePixelFormats();
     
-    // UI Window
-    auto window = [[UIWindow alloc] initWithFrame:r];
+    // create platform window
+    _eaWindowHandle = [[UIWindow alloc] initWithFrame:r];
     
-    _uiWindow = window;
-    
-    // EAGLView, PlatformRenderView
-    EAGLView* eaglView = [EAGLView viewWithFrame:r
+    // create platform render view
+    EARenderView* eaView = [EARenderView viewWithFrame:r
                                          pixelFormat:(int)_pixelFormat
                                          depthFormat:(int)_depthFormat
                                   preserveBackbuffer:NO
@@ -164,19 +162,19 @@ bool GLViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rect, f
 
     // Not available on tvOS
 #if !defined(AX_TARGET_OS_TVOS)
-    [eaglView setMultipleTouchEnabled:YES];
+    [eaView setMultipleTouchEnabled:YES];
 #endif
 
-    _screenSize.width = _designResolutionSize.width = [eaglView getWidth];
-    _screenSize.height = _designResolutionSize.height = [eaglView getHeight];
-    //    _scaleX = _scaleY = [eaglView contentScaleFactor];
+    _screenSize.width = _designResolutionSize.width = [eaView getWidth];
+    _screenSize.height = _designResolutionSize.height = [eaView getHeight];
+    //    _scaleX = _scaleY = [eaView contentScaleFactor];
 
-    _eaglView = eaglView;
+    _eaViewHandle = eaView;
 
     return true;
 }
 
-bool GLViewImpl::initWithFullScreen(std::string_view viewName)
+bool RenderViewImpl::initWithFullScreen(std::string_view viewName)
 {
     CGRect rect = [[UIScreen mainScreen] bounds];
     Rect r;
@@ -188,24 +186,25 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
     return initWithRect(viewName, r, 1);
 }
 
-void GLViewImpl::setMultipleTouchEnabled(bool enabled)
+void RenderViewImpl::setMultipleTouchEnabled(bool enabled)
 {
 #if !defined(AX_TARGET_OS_TVOS)
-    [(EAGLView*)_eaglView setMultipleTouchEnabled:enabled];
+    [(__bridge EARenderView*)_eaViewHandle setMultipleTouchEnabled:enabled];
 #else
     AX_UNUSED_PARAM(enabled);
 #endif
 }
 
-void GLViewImpl::showWindow(void* viewController)
+void RenderViewImpl::showWindow(void* viewController)
 {
-    auto window = (UIWindow*)_uiWindow;
-    auto controller = (UIViewController*)viewController;
+    auto window = (__bridge UIWindow*)_eaWindowHandle;
+    auto controller = (__bridge UIViewController*)viewController;
 
 #if !defined(AX_TARGET_OS_TVOS)
     controller.extendedLayoutIncludesOpaqueBars = YES;
 #endif
-    controller.view = (EAGLView*)_eaglView;
+    auto view = (__bridge EARenderView*)_eaViewHandle;
+    controller.view = view;
     
     // Set RootViewController to window
     if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
@@ -232,68 +231,55 @@ void GLViewImpl::showWindow(void* viewController)
     }
 }
 
-bool GLViewImpl::isOpenGLReady()
+bool RenderViewImpl::isGfxContextReady()
 {
-    return _eaglView != nullptr;
+    return _eaViewHandle != nullptr;
 }
 
-bool GLViewImpl::setContentScaleFactor(float contentScaleFactor)
+bool RenderViewImpl::setContentScaleFactor(float contentScaleFactor)
 {
     AX_ASSERT(_resolutionPolicy == ResolutionPolicy::UNKNOWN);  // cannot enable retina mode
     _scaleX = _scaleY = contentScaleFactor;
 
-    EAGLView* eaglView = (EAGLView*)_eaglView;
-    [eaglView setNeedsLayout];
+    [(__bridge EARenderView*)_eaViewHandle setNeedsLayout];
 
     return true;
 }
 
-float GLViewImpl::getContentScaleFactor() const
+float RenderViewImpl::getContentScaleFactor() const
 {
-    EAGLView* eaglView = (EAGLView*)_eaglView;
-
-    float scaleFactor = [eaglView contentScaleFactor];
-
-    //    AXASSERT(scaleFactor == _scaleX == _scaleY, "Logic error in GLView::getContentScaleFactor");
-
-    return scaleFactor;
+    return [(__bridge EARenderView*)_eaViewHandle contentScaleFactor];
 }
 
-void GLViewImpl::end()
+void RenderViewImpl::end()
 {
     [CCDirectorCaller destroy];
 
-    // destroy EAGLView
-    EAGLView* eaglView = (EAGLView*)_eaglView;
-
-    [eaglView removeFromSuperview];
-    //[eaglView release];
+    [(__bridge EARenderView*)_eaViewHandle removeFromSuperview];
     release();
 }
 
-void GLViewImpl::swapBuffers()
+void RenderViewImpl::swapBuffers()
 {
-    EAGLView* eaglView = (EAGLView*)_eaglView;
-    [eaglView swapBuffers];
+    [(__bridge EARenderView*)_eaViewHandle swapBuffers];
 }
 
-void GLViewImpl::setIMEKeyboardState(bool open)
+void RenderViewImpl::setIMEKeyboardState(bool open)
 {
-    EAGLView* eaglView = (EAGLView*)_eaglView;
-
+    auto eaView = (__bridge EARenderView*)_eaViewHandle;
     if (open)
     {
-        [eaglView showKeyboard];
+        [eaView showKeyboard];
     }
     else
     {
-        [eaglView hideKeyboard];
+        [eaView hideKeyboard];
     }
 }
 
-Rect GLViewImpl::getSafeAreaRect() const
+Rect RenderViewImpl::getSafeAreaRect() const
 {
-    EAGLView* eaglView = (EAGLView*)_eaglView;
+    EARenderView* eaView = (__bridge EARenderView*)_eaViewHandle;
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
     float version = [[UIDevice currentDevice].systemVersion floatValue];
@@ -301,14 +287,14 @@ Rect GLViewImpl::getSafeAreaRect() const
     {
 #    pragma clang diagnostic push
 #    pragma clang diagnostic ignored "-Wpartial-availability"
-        UIEdgeInsets safeAreaInsets = eaglView.safeAreaInsets;
+        UIEdgeInsets safeAreaInsets = eaView.safeAreaInsets;
 #    pragma clang diagnostic pop
 
         // Multiply contentScaleFactor since safeAreaInsets return points.
-        safeAreaInsets.left *= eaglView.contentScaleFactor;
-        safeAreaInsets.right *= eaglView.contentScaleFactor;
-        safeAreaInsets.top *= eaglView.contentScaleFactor;
-        safeAreaInsets.bottom *= eaglView.contentScaleFactor;
+        safeAreaInsets.left *= eaView.contentScaleFactor;
+        safeAreaInsets.right *= eaView.contentScaleFactor;
+        safeAreaInsets.top *= eaView.contentScaleFactor;
+        safeAreaInsets.bottom *= eaView.contentScaleFactor;
 
         // Get leftBottom and rightTop point in UI coordinates
         Vec2 leftBottom = Vec2(safeAreaInsets.left, _screenSize.height - safeAreaInsets.bottom);
@@ -335,10 +321,10 @@ Rect GLViewImpl::getSafeAreaRect() const
 #endif
 
     // If running on iOS devices lower than 11.0, return visiable rect instead.
-    return GLView::getSafeAreaRect();
+    return RenderView::getSafeAreaRect();
 }
 
-void GLViewImpl::queueOperation(void (*op)(void*), void* param)
+void RenderViewImpl::queueOperation(void (*op)(void*), void* param)
 {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^(void){
         op(param);

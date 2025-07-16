@@ -61,7 +61,7 @@
 #include "platform/Application.h"
 #include "platform/Device.h"
 #include "platform/FileUtils.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 #include "renderer/TextureCache.h"
 #include "renderer/Shaders.h"
 
@@ -6457,10 +6457,10 @@ static void extendTextureCache(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
-int axlua_GLView_getAllTouches(lua_State* tolua_S)
+int axlua_RenderView_getAllTouches(lua_State* tolua_S)
 {
     int argc              = 0;
-    ax::GLView* cobj = nullptr;
+    ax::RenderView* cobj = nullptr;
     bool ok               = true;
 
 #if _AX_DEBUG >= 1
@@ -6468,16 +6468,16 @@ int axlua_GLView_getAllTouches(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S, 1, "ax.GLView", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.RenderView", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    cobj = (ax::GLView*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_GLView_getAllTouches'", nullptr);
+        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_RenderView_getAllTouches'", nullptr);
         return 0;
     }
 #endif
@@ -6509,25 +6509,25 @@ int axlua_GLView_getAllTouches(lua_State* tolua_S)
 
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GLView:getAllTouches", argc,
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getAllTouches", argc,
                0);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_GLView_getAllTouches'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'axlua_RenderView_getAllTouches'.", &tolua_err);
 #endif
 
     return 0;
 }
 
-static void extendGLView(lua_State* tolua_S)
+static void extendRenderView(lua_State* tolua_S)
 {
-    lua_pushstring(tolua_S, "ax.GLView");
+    lua_pushstring(tolua_S, "ax.RenderView");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-        tolua_function(tolua_S, "getAllTouches", axlua_GLView_getAllTouches);
+        tolua_function(tolua_S, "getAllTouches", axlua_RenderView_getAllTouches);
     }
     lua_pop(tolua_S, 1);
 }
@@ -7260,7 +7260,7 @@ int register_all_ax_manual(lua_State* tolua_S)
     extendFastTMXLayer(tolua_S);
     extendApplication(tolua_S);
     extendTextureCache(tolua_S);
-    extendGLView(tolua_S);
+    extendRenderView(tolua_S);
     extendCamera(tolua_S);
     extendProperties(tolua_S);
     extendAutoPolygon(tolua_S);

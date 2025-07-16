@@ -3,7 +3,7 @@
 #include "base/Director.h"
 #include "base/Data.h"
 #if !defined(__ANDROID__)
-#    include "platform/GLViewImpl.h"
+#    include "platform/RenderViewImpl.h"
 #endif
 #include "renderer/backend/Program.h"
 #include "renderer/backend/ProgramState.h"
@@ -512,7 +512,7 @@ static void ImGui_ImplAxmol_ShutdownMultiViewportSupport()
 IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height)
 {
     // Resize (expand) window
-    auto* view = (ax::GLViewImpl*)ax::Director::getInstance()->getGLView();
+    auto* view = (ax::RenderViewImpl*)ax::Director::getInstance()->getRenderView();
     view->setWindowed(width, height);
 }
 #endif

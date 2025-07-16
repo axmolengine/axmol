@@ -92,7 +92,7 @@ private:
     EventCode _eventCode;
     std::vector<Touch*> _touches;
 
-    friend class GLView;
+    friend class RenderView;
 };
 
 }

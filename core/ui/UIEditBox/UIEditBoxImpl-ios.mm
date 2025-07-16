@@ -34,7 +34,7 @@
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include "base/Director.h"
 #    include "2d/Label.h"
-#    import "platform/ios/EAGLView-ios.h"
+#    import "platform/ios/EARenderView-ios.h"
 
 #    import <Foundation/Foundation.h>
 #    import <UIKit/UIKit.h>
@@ -64,9 +64,9 @@ EditBoxImplIOS::~EditBoxImplIOS()
 
 void EditBoxImplIOS::createNativeControl(const Rect& frame)
 {
-    auto glView = ax::Director::getInstance()->getGLView();
+    auto renderView = ax::Director::getInstance()->getRenderView();
 
-    Rect rect(0, 0, frame.size.width * glView->getScaleX(), frame.size.height * glView->getScaleY());
+    Rect rect(0, 0, frame.size.width * renderView->getScaleX(), frame.size.height * renderView->getScaleY());
 
     float factor = ax::Director::getInstance()->getContentScaleFactor();
 
@@ -181,8 +181,8 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
-    auto glView          = ax::Director::getInstance()->getGLView();
-    EAGLView* eaglView = (EAGLView*)glView->getEAGLView();
+    auto renderView          = ax::Director::getInstance()->getRenderView();
+    EARenderView* eaglView = (EARenderView*)renderView->getEARenderView();
 
     float factor = eaglView.contentScaleFactor;
 
@@ -210,14 +210,14 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     AXASSERT(fontName != nullptr, "fontName can't be nullptr");
-    EAGLView* eaglView = static_cast<EAGLView*>(ax::Director::getInstance()->getGLView()->getEAGLView());
+    EARenderView* eaglView = static_cast<EARenderView*>(ax::Director::getInstance()->getRenderView()->getEARenderView());
     float retinaFactor   = eaglView.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
 
     fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
 
-    auto glView       = ax::Director::getInstance()->getGLView();
-    float scaleFactor = glView->getScaleX();
+    auto renderView       = ax::Director::getInstance()->getRenderView();
+    float scaleFactor = renderView->getScaleX();
 
     if (fontSize == -1)
     {

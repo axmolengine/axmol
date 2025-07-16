@@ -28,7 +28,7 @@
  ****************************************************************************/
 #include "2d/Camera.h"
 #include "2d/CameraBackgroundBrush.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 #include "2d/Scene.h"
 #include "renderer/Renderer.h"
 #include "renderer/QuadCommand.h"

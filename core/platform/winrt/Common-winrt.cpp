@@ -25,7 +25,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "platform/Common.h"
 #include "platform/StdC.h"
-#include "platform/winrt/GLViewImpl-winrt.h"
+#include "platform/winrt/RenderViewImpl-winrt.h"
 #include "platform/winrt/WinRTUtils.h"
 
 #if defined(VLD_DEBUG_MEMORY)
@@ -40,7 +40,7 @@ void messageBox(const char * pszMsg, const char * pszTitle)
     // Create the message dialog and set its content
     auto message = PlatformStringFromString(pszMsg);
     auto title = PlatformStringFromString(pszTitle);
-    GLViewImpl::sharedGLView()->ShowMessageBox(title, message);
+    RenderViewImpl::sharedRenderView()->ShowMessageBox(title, message);
 }
 
 }

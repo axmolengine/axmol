@@ -25,7 +25,7 @@ THE SOFTWARE.
 local display = {}
 
 local director = cc.Director:getInstance()
-local view = director:getGLView()
+local view = director:getRenderView()
 
 if not view then
     local width = 960
@@ -38,8 +38,8 @@ if not view then
             height = AX_DESIGN_RESOLUTION.height
         end
     end
-    view = cc.GLViewImpl:createWithRect("Axmol-Lua", cc.rect(0, 0, width, height))
-    director:setGLView(view)
+    view = cc.RenderViewImpl:createWithRect("Axmol-Lua", cc.rect(0, 0, width, height))
+    director:setRenderView(view)
 end
 
 local framesize = view:getFrameSize()

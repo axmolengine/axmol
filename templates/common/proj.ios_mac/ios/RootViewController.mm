@@ -27,7 +27,7 @@
 
 #import "RootViewController.h"
 #import "axmol.h"
-#import "platform/ios/EAGLView-ios.h"
+#import "platform/ios/EARenderView-ios.h"
 
 @implementation RootViewController
 
@@ -80,11 +80,11 @@ customization that is not appropriate for viewDidLoad.
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-    auto glView = ax::Director::getInstance()->getGLView();
+    auto glView = ax::Director::getInstance()->getRenderView();
 
     if (glView)
     {
-        EAGLView* eaglView = (__bridge EAGLView*)glView->getEAGLView();
+        EARenderView* eaglView = (__bridge EARenderView*)glView->getEARenderView();
 
         if (eaglView)
         {

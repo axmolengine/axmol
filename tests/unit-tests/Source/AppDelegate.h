@@ -35,7 +35,7 @@ class TestController;
 class AppDelegate : private ax::Application
 {
 public:
-    virtual void initGLContextAttrs();
+    virtual void initGfxContextAttrs();
 
     virtual bool applicationDidFinishLaunching();
     virtual void applicationDidEnterBackground();

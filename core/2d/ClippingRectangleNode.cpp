@@ -25,7 +25,7 @@
 #include "base/Director.h"
 #include "renderer/Renderer.h"
 #include "math/Vec2.h"
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 
 namespace ax
 {
@@ -79,8 +79,8 @@ void ClippingRectangleNode::onBeforeVisitScissor()
         }
 
         const Point pos = convertToWorldSpace(Point(_clippingRegion.origin.x, _clippingRegion.origin.y));
-        GLView* glView  = _director->getGLView();
-        glView->setScissorInPoints(pos.x, pos.y, _clippingRegion.size.width * scaleX,
+        RenderView* renderView  = _director->getRenderView();
+        renderView->setScissorInPoints(pos.x, pos.y, _clippingRegion.size.width * scaleX,
                                    _clippingRegion.size.height * scaleY);
     }
 }

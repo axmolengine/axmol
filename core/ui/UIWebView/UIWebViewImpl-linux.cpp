@@ -37,7 +37,7 @@
 #    include "UIWebView.h"
 #    include "base/Director.h"
 #    include "platform/FileUtils.h"
-#    include "platform/GLView.h"
+#    include "platform/RenderView.h"
 #    include "ui/UIHelper.h"
 #    include "UIWebViewCommon.h"
 
@@ -284,8 +284,8 @@ class GTKWebKit
 public:
     GTKWebKit() : isXwayland(webkit_dmabuf::is_wayland_display())
     {
-        m_X11Display      = static_cast<Display*>(ax::Director::getInstance()->getGLView()->getX11Display());
-        m_ParentX11Window = reinterpret_cast<Window>(ax::Director::getInstance()->getGLView()->getX11Window());
+        m_X11Display      = static_cast<Display*>(ax::Director::getInstance()->getRenderView()->getX11Display());
+        m_ParentX11Window = reinterpret_cast<Window>(ax::Director::getInstance()->getRenderView()->getX11Window());
 
         init_gtk_platform_with_display(m_X11Display);
 

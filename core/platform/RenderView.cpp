@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/GLView.h"
+#include "platform/RenderView.h"
 
 #include "base/Touch.h"
 #include "base/Director.h"
@@ -98,19 +98,19 @@ static void removeUsedIndexBit(int index)
 }  // namespace
 
 // default context attributions are set as follows
-GLContextAttrs GLView::_glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+GfxContextAttrs RenderView::_gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
-void GLView::setGLContextAttrs(GLContextAttrs& glContextAttrs)
+void RenderView::setGfxContextAttrs(GfxContextAttrs& gfxContextAttrs)
 {
-    _glContextAttrs = glContextAttrs;
+    _gfxContextAttrs = gfxContextAttrs;
 }
 
-GLContextAttrs GLView::getGLContextAttrs()
+GLContextAttrs& RenderView::getGfxContextAttrs()
 {
-    return _glContextAttrs;
+    return _gfxContextAttrs;
 }
 
-GLView::GLView()
+RenderView::RenderView()
     : _screenSize(0, 0)
     , _designResolutionSize(0, 0)
     , _scaleX(1.0f)
@@ -119,11 +119,11 @@ GLView::GLView()
     , _interactive(true)
 {}
 
-GLView::~GLView() {}
+RenderView::~RenderView() {}
 
-void GLView::pollEvents() {}
+void RenderView::pollEvents() {}
 
-void GLView::updateDesignResolutionSize()
+void RenderView::updateDesignResolutionSize()
 {
     if (_screenSize.width > 0 && _screenSize.height > 0 && _designResolutionSize.width > 0 &&
         _designResolutionSize.height > 0)
@@ -175,7 +175,7 @@ void GLView::updateDesignResolutionSize()
     }
 }
 
-void GLView::setDesignResolutionSize(float width, float height, ResolutionPolicy resolutionPolicy)
+void RenderView::setDesignResolutionSize(float width, float height, ResolutionPolicy resolutionPolicy)
 {
     AXASSERT(resolutionPolicy != ResolutionPolicy::UNKNOWN, "should set resolutionPolicy");
 
@@ -190,17 +190,17 @@ void GLView::setDesignResolutionSize(float width, float height, ResolutionPolicy
     updateDesignResolutionSize();
 }
 
-const Vec2& GLView::getDesignResolutionSize() const
+const Vec2& RenderView::getDesignResolutionSize() const
 {
     return _designResolutionSize;
 }
 
-Vec2 GLView::getFrameSize() const
+Vec2 RenderView::getFrameSize() const
 {
     return _screenSize;
 }
 
-void GLView::setFrameSize(float width, float height)
+void RenderView::setFrameSize(float width, float height)
 {
     _screenSize = Vec2(width, height);
 
@@ -210,7 +210,7 @@ void GLView::setFrameSize(float width, float height)
         _designResolutionSize = _screenSize;
 }
 
-Rect GLView::getVisibleRect() const
+Rect RenderView::getVisibleRect() const
 {
     Rect ret;
     ret.size   = getVisibleSize();
@@ -218,12 +218,12 @@ Rect GLView::getVisibleRect() const
     return ret;
 }
 
-Rect GLView::getSafeAreaRect() const
+Rect RenderView::getSafeAreaRect() const
 {
     return getVisibleRect();
 }
 
-Vec2 GLView::getVisibleSize() const
+Vec2 RenderView::getVisibleSize() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
@@ -235,7 +235,7 @@ Vec2 GLView::getVisibleSize() const
     }
 }
 
-Vec2 GLView::getVisibleOrigin() const
+Vec2 RenderView::getVisibleOrigin() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
@@ -248,7 +248,7 @@ Vec2 GLView::getVisibleOrigin() const
     }
 }
 
-void GLView::setViewPortInPoints(float x, float y, float w, float h)
+void RenderView::setViewPortInPoints(float x, float y, float w, float h)
 {
     Viewport vp;
     vp.x = (int)(x * _scaleX + _viewPortRect.origin.x);
@@ -258,20 +258,20 @@ void GLView::setViewPortInPoints(float x, float y, float w, float h)
     Camera::setDefaultViewport(vp);
 }
 
-void GLView::setScissorInPoints(float x, float y, float w, float h)
+void RenderView::setScissorInPoints(float x, float y, float w, float h)
 {
     auto renderer = Director::getInstance()->getRenderer();
     renderer->setScissorRect((int)(x * _scaleX + _viewPortRect.origin.x), (int)(y * _scaleY + _viewPortRect.origin.y),
                              (unsigned int)(w * _scaleX), (unsigned int)(h * _scaleY));
 }
 
-bool GLView::isScissorEnabled()
+bool RenderView::isScissorEnabled()
 {
     auto renderer = Director::getInstance()->getRenderer();
     return renderer->getScissorTest();
 }
 
-Rect GLView::getScissorRect() const
+Rect RenderView::getScissorRect() const
 {
     auto renderer = Director::getInstance()->getRenderer();
     auto& rect    = renderer->getScissorRect();
@@ -283,17 +283,17 @@ Rect GLView::getScissorRect() const
     return Rect(x, y, w, h);
 }
 
-void GLView::setViewName(std::string_view viewname)
+void RenderView::setViewName(std::string_view viewname)
 {
     _viewName = viewname;
 }
 
-std::string_view GLView::getViewName() const
+std::string_view RenderView::getViewName() const
 {
     return _viewName;
 }
 
-void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
+void RenderView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
 {
     if (!_interactive)
         return;
@@ -345,12 +345,12 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
     dispatcher->dispatchEvent(&touchEvent);
 }
 
-void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[])
+void RenderView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[])
 {
     handleTouchesMove(num, ids, xs, ys, nullptr, nullptr);
 }
 
-void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], float fs[], float ms[])
+void RenderView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], float fs[], float ms[])
 {
     if (!_interactive)
         return;
@@ -404,7 +404,7 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
     dispatcher->dispatchEvent(&touchEvent);
 }
 
-void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
+void RenderView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
                                         int num,
                                         intptr_t ids[],
                                         float xs[],
@@ -466,37 +466,37 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
     }
 }
 
-void GLView::handleTouchesEnd(int num, intptr_t ids[], float xs[], float ys[])
+void RenderView::handleTouchesEnd(int num, intptr_t ids[], float xs[], float ys[])
 {
     handleTouchesOfEndOrCancel(EventTouch::EventCode::ENDED, num, ids, xs, ys);
 }
 
-void GLView::handleTouchesCancel(int num, intptr_t ids[], float xs[], float ys[])
+void RenderView::handleTouchesCancel(int num, intptr_t ids[], float xs[], float ys[])
 {
     handleTouchesOfEndOrCancel(EventTouch::EventCode::CANCELLED, num, ids, xs, ys);
 }
 
-const Rect& GLView::getViewPortRect() const
+const Rect& RenderView::getViewPortRect() const
 {
     return _viewPortRect;
 }
 
-std::vector<Touch*> GLView::getAllTouches() const
+std::vector<Touch*> RenderView::getAllTouches() const
 {
     return getAllTouchesVector();
 }
 
-float GLView::getScaleX() const
+float RenderView::getScaleX() const
 {
     return _scaleX;
 }
 
-float GLView::getScaleY() const
+float RenderView::getScaleY() const
 {
     return _scaleY;
 }
 
-void GLView::renderScene(Scene* scene, Renderer* renderer)
+void RenderView::renderScene(Scene* scene, Renderer* renderer)
 {
     AXASSERT(scene, "Invalid Scene");
     AXASSERT(renderer, "Invalid Renderer");
@@ -504,11 +504,11 @@ void GLView::renderScene(Scene* scene, Renderer* renderer)
     scene->render(renderer, Mat4::IDENTITY, nullptr);
 }
 
-void GLView::queueOperation(AsyncOperation /*op*/, void* /*param*/)
+void RenderView::queueOperation(AsyncOperation /*op*/, void* /*param*/)
 {
 }
 
-void GLView::setInteractive(bool interactive)
+void RenderView::setInteractive(bool interactive)
 {
     if (_interactive && !interactive)
     {
@@ -518,7 +518,7 @@ void GLView::setInteractive(bool interactive)
     _interactive = interactive;
 }
 
-void GLView::cancelAllTouches()
+void RenderView::cancelAllTouches()
 {
     EventTouch touchEvent;
     touchEvent._touches = getAllTouchesVector();

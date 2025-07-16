@@ -97,8 +97,8 @@ EditBoxImplAndroid::~EditBoxImplAndroid()
 void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 {
     auto director  = ax::Director::getInstance();
-    auto glView    = director->getGLView();
-    auto frameSize = glView->getFrameSize();
+    auto renderView    = director->getRenderView();
+    auto frameSize = renderView->getFrameSize();
 
     auto winSize    = director->getWinSize();
     auto leftBottom = _editBox->convertToWorldSpace(Point::ZERO);
@@ -106,20 +106,20 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
     auto contentSize = frame.size;
     auto rightTop    = _editBox->convertToWorldSpace(Point(contentSize.width, contentSize.height));
 
-    auto uiLeft   = frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * glView->getScaleX();
-    auto uiTop    = frameSize.height / 2 - (rightTop.y - winSize.height / 2) * glView->getScaleY();
-    auto uiWidth  = (rightTop.x - leftBottom.x) * glView->getScaleX();
-    auto uiHeight = (rightTop.y - leftBottom.y) * glView->getScaleY();
-    LOGD("scaleX = %f", glView->getScaleX());
+    auto uiLeft   = frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * renderView->getScaleX();
+    auto uiTop    = frameSize.height / 2 - (rightTop.y - winSize.height / 2) * renderView->getScaleY();
+    auto uiWidth  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
+    auto uiHeight = (rightTop.y - leftBottom.y) * renderView->getScaleY();
+    LOGD("scaleX = %f", renderView->getScaleX());
     _editBoxIndex = JniHelper::callStaticIntMethod(editBoxClassName, "createEditBox", (int)uiLeft, (int)uiTop,
-                                                   (int)uiWidth, (int)uiHeight, (float)glView->getScaleX());
+                                                   (int)uiWidth, (int)uiHeight, (float)renderView->getScaleX());
     s_allEditBoxes[_editBoxIndex] = this;
 }
 
 void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
 {
     auto director            = ax::Director::getInstance();
-    auto glView              = director->getGLView();
+    auto renderView              = director->getRenderView();
     auto isFontFileExists    = ax::FileUtils::getInstance()->isFileExist(pFontName);
     std::string realFontPath = pFontName;
     if (isFontFileExists)
@@ -132,7 +132,7 @@ void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
         }
     }
     JniHelper::callStaticVoidMethod(editBoxClassName, "setFont", _editBoxIndex, realFontPath,
-                                    (float)fontSize * glView->getScaleX());
+                                    (float)fontSize * renderView->getScaleX());
 }
 
 void EditBoxImplAndroid::setNativeFontColor(const Color4B& color)

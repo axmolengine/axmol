@@ -98,12 +98,20 @@ public:
     /** Subclass override the function to set OpenGL context attribution instead of use default value.
      * And now can only set six attributions:redBits,greenBits,blueBits,alphaBits,depthBits,stencilBits.
      * Default value are(5,6,5,0,16,0), usually use as follows:
-     * void AppDelegate::initGLContextAttrs(){
-     *     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
-     *     GLView::setGLContextAttrs(glContextAttrs);
+     * void AppDelegate::initGfxContextAttrs(){
+     *     GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8};
+     *     RenderView::setGfxContextAttrs(gfxContextAttrs);
      * }
      */
-    virtual void initGLContextAttrs() {}
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.8) virtual void initGLContextAttrs() {}
+#endif
+    virtual void initGfxContextAttrs()
+    {
+#ifndef AX_CORE_PROFILE
+        initGLContextAttrs();
+#endif
+    }
 
     /**
     @brief Get current language config.

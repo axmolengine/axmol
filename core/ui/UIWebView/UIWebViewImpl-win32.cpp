@@ -32,7 +32,7 @@
 #    include "UIWebViewCommon.h"
 #    include "base/Director.h"
 #    include "platform/FileUtils.h"
-#    include "platform/GLView.h"
+#    include "platform/RenderView.h"
 #    include "ui/UIHelper.h"
 #    include "rapidjson/document.h"
 #    include "rapidjson/stringbuffer.h"
@@ -680,7 +680,7 @@ void Win32WebControl::lazyInit()
 {
 #    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     // reset the main windows style so that its drawing does not cover the webview sub window
-    auto hwnd        = ax::Director::getInstance()->getGLView()->getWin32Window();
+    auto hwnd        = ax::Director::getInstance()->getRenderView()->getWin32Window();
     const auto style = GetWindowLong(hwnd, GWL_STYLE);
     SetWindowLong(hwnd, GWL_STYLE, style | WS_CLIPCHILDREN);
 
@@ -705,7 +705,7 @@ bool Win32WebControl::createWebView(const std::function<bool(std::string_view)>&
 #    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     do
     {
-        HWND hwnd           = ax::Director::getInstance()->getGLView()->getWin32Window();
+        HWND hwnd           = ax::Director::getInstance()->getRenderView()->getWin32Window();
         HINSTANCE hInstance = GetModuleHandle(nullptr);
         WNDCLASSEX wc;
         ZeroMemory(&wc, sizeof(WNDCLASSEX));

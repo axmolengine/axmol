@@ -35,12 +35,12 @@ static Vec2 gWindowSize = Vec2(1024, 768);
 
 
 
-void AppDelegate::initGLContextAttrs()
+void AppDelegate::initGfxContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil
-    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+    GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
-    GLView::setGLContextAttrs(glContextAttrs);
+    RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
 
 
@@ -54,16 +54,16 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    auto glView   = director->getGLView();
+    auto glView   = director->getRenderView();
     if (!glView)
     {
         std::string title = "Unit Tests";
         #ifdef AX_PLATFORM_PC
-            glView = GLViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
+            glView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
         #else
-            glView = GLViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
+            glView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
         #endif
-        director->setGLView(glView);
+        director->setRenderView(glView);
     }
 
     director->setStatsDisplay(true);

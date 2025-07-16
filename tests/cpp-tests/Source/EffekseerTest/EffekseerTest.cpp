@@ -76,7 +76,7 @@ bool EffekseerTest::init()
         return false;
 
 
-    auto rsize = _director->getGLView()->getDesignResolutionSize();
+    auto rsize = _director->getRenderView()->getDesignResolutionSize();
 
 	//auto sprite = Sprite::create("HelloWorld.png");
 	//sprite->setPosition(Vec2(320, 200));

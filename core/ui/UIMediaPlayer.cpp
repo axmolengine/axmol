@@ -650,7 +650,7 @@ void BasicMediaController::createControls()
     }
 
     const auto& contentSize = getContentSize();
-    auto scale              = Director::getInstance()->getGLView()->getScaleY();
+    auto scale              = Director::getInstance()->getRenderView()->getScaleY();
 
     _mediaOverlay = Layout::create();
     _mediaOverlay->setBackGroundColor(Color3B::BLACK);
@@ -854,7 +854,7 @@ void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
     _mediaOverlay->setContentSize(contentSize);
     _controlPanel->setContentSize(contentSize);
 
-    auto scale = Director::getInstance()->getGLView()->getScaleY();
+    auto scale = Director::getInstance()->getRenderView()->getScaleY();
     _primaryButtonPanel->setScale(1 / scale);
     _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
     _timelineSelector->setContentSize(Size(_timelineBarHeight, _timelineBarHeight) * 1.5f / scale);
@@ -1216,7 +1216,7 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
         _fullScreenEnabled = enabled;
 
         auto pvd               = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-        const auto contentSize = enabled ? _director->getGLView()->getDesignResolutionSize() : pvd->_originalViewSize;
+        const auto contentSize = enabled ? _director->getRenderView()->getDesignResolutionSize() : pvd->_originalViewSize;
         Widget::setContentSize(contentSize);
 
         sendEvent((int)EventType::FULLSCREEN_SWITCH);

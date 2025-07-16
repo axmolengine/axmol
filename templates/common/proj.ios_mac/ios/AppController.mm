@@ -43,12 +43,12 @@ static AppDelegate s_sharedApplication;
 
     ax::Application* app = ax::Application::getInstance();
 
-    // Initialize the GLView attributes
-    app->initGLContextAttrs();
+    // Initialize the RenderView attributes
+    app->initGfxContextAttrs();
 
     // Override point for customization after application launch.
 
-    auto renderView = ax::GLViewImpl::createWithFullScreen("axmol2");
+    auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");
     _viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
 
     // uncumment if you want disable multiple touches
@@ -56,8 +56,8 @@ static AppDelegate s_sharedApplication;
 
     renderView->showWindow(_viewController);
 
-    // IMPORTANT: Setting the GLView should be done after creating the RootViewController
-    ax::Director::getInstance()->setGLView(renderView);
+    // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
+    ax::Director::getInstance()->setRenderView(renderView);
 
     // run the axmol game scene
     app->run();

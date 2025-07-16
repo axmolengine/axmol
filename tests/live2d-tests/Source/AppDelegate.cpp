@@ -47,14 +47,14 @@ AppDelegate::~AppDelegate()
 #endif
 }
 
-// if you want a different context, modify the value of glContextAttrs
+// if you want a different context, modify the value of gfxContextAttrs
 // it will affect all platforms
-void AppDelegate::initGLContextAttrs()
+void AppDelegate::initGfxContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
-    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+    GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
-    GLView::setGLContextAttrs(glContextAttrs);
+    RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
 
 // if you want to use the package manager to install more packages,
@@ -68,15 +68,15 @@ bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
     auto director = Director::getInstance();
-    auto glView = director->getGLView();
+    auto glView = director->getRenderView();
     if(!glView)
     {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-        glView = GLViewImpl::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glView = RenderViewImpl::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        glView = GLViewImpl::create("Demo");
+        glView = RenderViewImpl::create("Demo");
 #endif
-        director->setGLView(glView);
+        director->setRenderView(glView);
     }
 
     // turn on display FPS
