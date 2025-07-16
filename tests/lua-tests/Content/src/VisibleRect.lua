@@ -6,10 +6,6 @@ VisibleRect.s_visibleRect = cc.rect(0,0,0,0)
 
 function VisibleRect:lazyInit()
     if (self.s_visibleRect.width == 0.0 and self.s_visibleRect.height == 0.0) then
-        --[[
-        local pEGLView = cc.EGLView:getInstance()
-        local origin   = pEGLView:getVisibleOrigin()
-        ]]--
         local director = cc.Director:getInstance()
         local origin = director:getVisibleOrigin()
         local visibleSize = director:getVisibleSize()

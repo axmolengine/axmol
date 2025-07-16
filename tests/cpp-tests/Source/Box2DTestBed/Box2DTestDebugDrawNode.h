@@ -1,6 +1,6 @@
 #pragma once
 
-#include "platform/GLViewImpl.h"
+#include "platform/RenderViewImpl.h"
 #include "physics-nodes/PhysicsDebugNode.h"
 
 using namespace ax;
