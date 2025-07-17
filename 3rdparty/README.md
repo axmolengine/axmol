@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.13.0
+- Version: 8.15.0
 - License: Curl (MIT/X)
 
 ## doctest

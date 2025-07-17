@@ -62,7 +62,7 @@ gradle=8.14.3
 
 # The android gradle plugin, @setup.ps1
 # as stable as possible, match with build-tools,android-studio
-agp=8.11.0
+agp=8.11.1
 
 # The android build-tools, @axmol-cmdline @gradle
 # as stable as possible, match with agp,android-studio
