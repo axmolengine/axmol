@@ -55,6 +55,8 @@ public:
     /** purges the cache. It releases the retained instance. */
     static void destroyInstance();
 
+    static int chooseSpriteProgramType(backend::PixelFormat pixelFormat);
+
     /// get built-in program
     Program* getBuiltinProgram(uint32_t type);
 

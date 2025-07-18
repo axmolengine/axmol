@@ -195,7 +195,6 @@ protected:
     CustomCommand _customCommand;
 
     backend::UniformLocation _mvpMatrixLocaiton;
-    backend::UniformLocation _textureLocation;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(MotionStreak);
