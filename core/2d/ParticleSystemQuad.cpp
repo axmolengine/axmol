@@ -51,14 +51,6 @@ namespace ax
 
 ParticleSystemQuad::ParticleSystemQuad()
 {
-    auto& pipelinePS = _quadCommand.getPipelineDescriptor().programState;
-    auto* program    = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-
-    //!!! support etc1 with alpha?
-    pipelinePS = (new backend::ProgramState(program));
-
-    _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
-    _textureLocation   = pipelinePS->getUniformLocation("u_tex0");
 }
 
 ParticleSystemQuad::~ParticleSystemQuad()
@@ -68,8 +60,6 @@ ParticleSystemQuad::~ParticleSystemQuad()
         AX_SAFE_FREE(_quads);
         AX_SAFE_FREE(_indices);
     }
-
-    AX_SAFE_RELEASE_NULL(_quadCommand.getPipelineDescriptor().programState);
 }
 
 // implementation ParticleSystemQuad
@@ -219,13 +209,25 @@ void ParticleSystemQuad::updateTexCoords()
 
 void ParticleSystemQuad::setTextureWithRect(Texture2D* texture, const Rect& rect)
 {
+    bool needsUpdatePS =
+        ((!_programState || _programState->getProgram()->getProgramType() < backend::ProgramType::CUSTOM_PROGRAM) &&
+         (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags() ||
+          _texture->getPixelFormat() != texture->getPixelFormat()));
+
+    if (needsUpdatePS) {
+        auto programType = ax::ProgramManager::chooseSpriteProgramType(texture->getPixelFormat());
+        setProgramState(programType);
+        _quadCommand.getPipelineDescriptor().programState = _programState;
+
+        _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
+    }
+
     // Only update the texture if is different from the current one
     if (!_texture || texture->getBackendTexture() != _texture->getBackendTexture())
     {
         ParticleSystem::setTexture(texture);
 
-        auto programState = _quadCommand.getPipelineDescriptor().programState;
-        programState->setTexture(_texture->getBackendTexture());
+        _programState->setTexture(_texture->getBackendTexture());
     }
 
     this->initTexCoordsWithRect(rect);

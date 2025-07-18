@@ -266,7 +266,6 @@ protected:
     QuadCommand _quadCommand;
 
     backend::UniformLocation _mvpMatrixLocaiton;
-    backend::UniformLocation _textureLocation;
 
     // all descendants: children, grand children, etc...
     // There is not need to retain/release these objects, since they are already retained by _children

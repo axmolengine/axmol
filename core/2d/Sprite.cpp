@@ -407,7 +407,7 @@ bool Sprite::setProgramState(backend::ProgramState* programState, bool ownPS/* =
 void Sprite::setTexture(Texture2D* texture)
 {
     AXASSERT(!_batchNode || (texture && texture == _batchNode->getTexture()),
-             "CCSprite: Batched sprites should use the same texture as the batchnode");
+             "Sprite: Batched sprites should use the same texture as the batchnode");
     // accept texture==nil as argument
     AXASSERT(!texture || dynamic_cast<Texture2D*>(texture), "setTexture expects a Texture2D. Invalid argument");
 
@@ -420,7 +420,8 @@ void Sprite::setTexture(Texture2D* texture)
     bool needsUpdatePS =
         _autoUpdatePS &&
         ((!_programState || _programState->getProgram()->getProgramType() < backend::ProgramType::CUSTOM_PROGRAM) &&
-         (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags()));
+         (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags() ||
+          _texture->getPixelFormat() != texture->getPixelFormat()));
 
     if (_renderMode != RenderMode::QUAD_BATCHNODE)
     {
@@ -435,23 +436,8 @@ void Sprite::setTexture(Texture2D* texture)
 
     if (needsUpdatePS)
     {
-        const PixelFormat pixelFormat = _texture->getPixelFormat();
-
-        switch(pixelFormat)
-          {
-          case PixelFormat::R8:
-            setProgramState(backend::ProgramType::POSITION_TEXTURE_GRAY);
-            break;
-          case PixelFormat::RG8:
-            setProgramState(backend::ProgramType::POSITION_TEXTURE_GRAY_ALPHA);
-            break;
-          case PixelFormat::RGBA8:
-            setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
-            break;
-          default:
-            AXLOGW("Warning: Sprite::setTexture() unhandled pixel format {}", (int)pixelFormat);
-            setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
-          }
+        auto programType = ProgramManager::chooseSpriteProgramType(_texture->getPixelFormat());
+        setProgramState(programType);
     }
     else
         updateProgramStateTexture(_texture);
@@ -1144,7 +1130,7 @@ void Sprite::addChild(Node* child, int zOrder, int tag)
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
         Sprite* childSprite = dynamic_cast<Sprite*>(child);
-        AXASSERT(childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
+        AXASSERT(childSprite, "Sprite only supports Sprites as children when using SpriteBatchNode");
         AXASSERT(childSprite->getTexture() == _textureAtlas->getTexture(),
                  "childSprite's texture name should be equal to _textureAtlas's texture name!");
         // put it in descendants array of batch node
@@ -1168,7 +1154,7 @@ void Sprite::addChild(Node* child, int zOrder, std::string_view name)
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
         Sprite* childSprite = dynamic_cast<Sprite*>(child);
-        AXASSERT(childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
+        AXASSERT(childSprite, "Sprite only supports Sprites as children when using SpriteBatchNode");
         AXASSERT(childSprite->getTexture() == _textureAtlas->getTexture(),
                  "childSprite's texture name should be equal to _textureAtlas's texture name.");
         // put it in descendants array of batch node
@@ -1617,17 +1603,17 @@ void Sprite::setSpriteFrame(SpriteFrame* spriteFrame)
 
 void Sprite::setDisplayFrameWithAnimationName(std::string_view animationName, unsigned int frameIndex)
 {
-    AXASSERT(!animationName.empty(), "CCSprite#setDisplayFrameWithAnimationName. animationName must not be nullptr");
+    AXASSERT(!animationName.empty(), "Sprite#setDisplayFrameWithAnimationName. animationName must not be nullptr");
     if (animationName.empty())
         return;
 
     Animation* a = AnimationCache::getInstance()->getAnimation(animationName);
 
-    AXASSERT(a, "CCSprite#setDisplayFrameWithAnimationName: Frame not found");
+    AXASSERT(a, "Sprite#setDisplayFrameWithAnimationName: Frame not found");
 
     AnimationFrame* frame = a->getFrames().at(frameIndex);
 
-    AXASSERT(frame, "CCSprite#setDisplayFrame. Invalid frame");
+    AXASSERT(frame, "Sprite#setDisplayFrame. Invalid frame");
 
     setSpriteFrame(frame->getSpriteFrame());
 }
@@ -1692,7 +1678,7 @@ void Sprite::setBatchNode(SpriteBatchNode* spriteBatchNode)
 void Sprite::updateBlendFunc()
 {
     AXASSERT(_renderMode != RenderMode::QUAD_BATCHNODE,
-             "CCSprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
+             "Sprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
 
     // it is possible to have an untextured sprite
     backend::BlendDescriptor& blendDescriptor = _trianglesCommand.getPipelineDescriptor().blendDescriptor;

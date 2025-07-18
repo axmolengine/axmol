@@ -231,7 +231,6 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool own
         pipelineDescriptor.programState = _programState;
 
         _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
-        _textureLocation   = _programState->getUniformLocation("u_tex0");
 
         // setup custom vertex layout for V2F_T2F_C4B
         const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();

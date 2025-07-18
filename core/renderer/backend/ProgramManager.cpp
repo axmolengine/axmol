@@ -55,6 +55,22 @@ void ProgramManager::destroyInstance()
     AX_SAFE_DELETE(_sharedProgramManager);
 }
 
+int ProgramManager::chooseSpriteProgramType(backend::PixelFormat pixelFormat)
+{
+    switch (pixelFormat)
+    {
+    case PixelFormat::R8:
+        return backend::ProgramType::POSITION_TEXTURE_GRAY;
+    case PixelFormat::RG8:
+        return backend::ProgramType::POSITION_TEXTURE_GRAY_ALPHA;
+    case PixelFormat::RGBA8:
+        return backend::ProgramType::POSITION_TEXTURE_COLOR;
+    default:
+        AXLOGW("Warning: Sprite::chooseSpriteShader() unhandled pixel format {}", (int)pixelFormat);
+        return backend::ProgramType::POSITION_TEXTURE_COLOR;
+    }
+}
+
 ProgramManager::ProgramManager()
 {
     _programIdGen = XXH64_createState();
