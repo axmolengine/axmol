@@ -66,7 +66,7 @@ int ProgramManager::chooseSpriteProgramType(backend::PixelFormat pixelFormat)
     case PixelFormat::RGBA8:
         return backend::ProgramType::POSITION_TEXTURE_COLOR;
     default:
-        AXLOGW("Warning: Sprite::chooseSpriteShader() unhandled pixel format {}", (int)pixelFormat);
+        AXLOGW("Warning: chooseSpriteProgramType() unhandled pixel format {}", (int)pixelFormat);
         return backend::ProgramType::POSITION_TEXTURE_COLOR;
     }
 }
@@ -307,7 +307,6 @@ void ProgramManager::unloadUnusedPrograms()
         auto program = iter->second;
         if (program->getReferenceCount() == 1)
         {
-            // AXLOGD("TextureCache: removing unused program");
             program->release();
             iter = _cachedPrograms.erase(iter);
         }
