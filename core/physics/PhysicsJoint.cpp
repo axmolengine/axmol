@@ -32,6 +32,8 @@
 #    include "physics/PhysicsHelper.h"
 #    include "2d/Node.h"
 
+#    include <numbers>
+
 namespace ax
 {
 
@@ -118,6 +120,46 @@ public:
 
 #    define AX_PJOINT_CACHE_WRITE(field, method, arg) AX_PJOINT_CACHE_WRITE2(field, method, arg, arg)
 
+static void b2JointSetMaxForce(b2JointId joint, float force)
+{
+    if (!b2Joint_IsValid(joint))
+    {
+        AXLOGE("b2JointSetMaxForce: joint is invalid");
+        return;
+    }
+    auto jointType = b2Joint_GetType(joint);
+    switch (jointType)
+    {
+    case b2_distanceJoint:
+        b2DistanceJoint_SetMaxMotorForce(joint, force);
+        break;
+    case b2_filterJoint:
+        break;
+    case b2_motorJoint:
+        b2MotorJoint_SetMaxForce(joint, force);
+        break;
+    case b2_mouseJoint:
+        b2MouseJoint_SetMaxForce(joint, force);
+        break;
+    case b2_prismaticJoint:
+        b2PrismaticJoint_SetMaxMotorForce(joint, force);
+        break;
+    case b2_revoluteJoint:
+        break;
+    case b2_weldJoint:
+        break;
+    case b2_wheelJoint:
+        break;
+    }
+}
+
+static float b2Body_GetAngle(const b2BodyId& bodyId)
+{
+    b2Rot rot   = b2Body_GetRotation(bodyId);
+    float angle = b2Rot_GetAngle(rot);
+    return angle;
+}
+
 PhysicsJoint::PhysicsJoint()
     : _bodyA(nullptr)
     , _bodyB(nullptr)
@@ -141,7 +183,8 @@ void PhysicsJoint::deatchFromBody()
 {
     for (auto& joint : _b2Joints)
     {
-        b2DestroyJoint(joint);
+        if(b2Joint_IsValid(joint))
+            b2DestroyJoint(joint);
     }
     _b2Joints.clear();
 
@@ -168,24 +211,17 @@ bool PhysicsJoint::init(ax::PhysicsBody* a, ax::PhysicsBody* b)
 
 bool PhysicsJoint::initJoint()
 {
-    bool ret = !_initDirty;
-    while (_initDirty)
+    if (_initDirty)
     {
-        ret = createConstraints();
-        AX_BREAK_IF(!ret);
-
-        // TODO: can't do follow settings
-        for (auto&& joint : _b2Joints)
-        {
-            // cpConstraintSetMaxForce(subjoint, _maxForce);
-            // cpConstraintSetErrorBias(subjoint, cpfpow(1.0f - 0.15f, 60.0f));
-            // cpSpaceAddConstraint(_world->_cpSpace, subjoint);
+        auto ret = buildConstraints();
+        if (ret) {
+            for (auto&& joint : _b2Joints)
+                b2JointSetMaxForce(joint, _maxForce);
         }
         _initDirty = false;
-        ret        = true;
+        return ret;
     }
-
-    return ret;
+    return false;
 }
 
 void PhysicsJoint::flushDelayTasks()
@@ -240,23 +276,18 @@ void PhysicsJoint::setMaxForce(float force)
         delay([this, force]() {
             _maxForce = force;
             for (auto&& joint : _b2Joints)
-            {
-                // TODO:
-                // cpConstraintSetMaxForce(joint, force);
-            }
+                b2JointSetMaxForce(joint, force);
         });
     }
     else
     {
         _maxForce = force;
         for (auto&& joint : _b2Joints)
-        {
-            // cpConstraintSetMaxForce(joint, force);
-        }
+            b2JointSetMaxForce(joint, force);
     }
 }
 
-PhysicsJointFixed* PhysicsJointFixed::construct(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr)
+PhysicsJointFixed* PhysicsJointFixed::instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr)
 {
     auto joint = new PhysicsJointFixed();
 
@@ -270,7 +301,7 @@ PhysicsJointFixed* PhysicsJointFixed::construct(PhysicsBody* a, PhysicsBody* b, 
     return nullptr;
 }
 
-bool PhysicsJointFixed::createConstraints()
+bool PhysicsJointFixed::buildConstraints()
 {
     do
     {
@@ -278,7 +309,7 @@ bool PhysicsJointFixed::createConstraints()
         _bodyB->getNode()->setPosition(_anchr);
 
         //// add a pivot joint to fixed two body together
-        // auto joint = cpPivotJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), PhysicsHelper::vec22cpv(_anchr));
+        // auto joint = cpPivotJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), phlp::vec22cpv(_anchr));
         // AX_BREAK_IF(!b2Joint_IsValid(joint));
         //_b2Joints.emplace_back(joint);
 
@@ -287,17 +318,18 @@ bool PhysicsJointFixed::createConstraints()
         // AX_BREAK_IF(!b2Joint_IsValid(joint));
         //_b2Joints.emplace_back(joint);
 
-        b2RevoluteJointDef pivotJointDef = b2DefaultRevoluteJointDef();
-        pivotJointDef.bodyIdA            = _bodyA->getB2Body();
-        pivotJointDef.bodyIdB            = _bodyB->getB2Body();
-        pivotJointDef.localAnchorA       = PhysicsHelper::tob2Vec2(_anchr);  // Use your conversion function here
-        pivotJointDef.localAnchorB       = b2Body_GetLocalCenterOfMass(_bodyB->getB2Body());
-        auto pivotJoint = b2CreateRevoluteJoint(_bodyA->getWorld()->getB2World(), &pivotJointDef);  // FIXME:
-        AX_BREAK_IF(!b2Joint_IsValid(pivotJoint));
-        _b2Joints.emplace_back(pivotJoint);
-
-        // FIXME: The pulley and gear joints have been removed.I'm not satisfied with how they work in 2.4 and plan to
-        // implement improved versions in the future.
+        // FIXME: not 100% identical to cpPivotJointNew and cpGearJointNew
+        b2Vec2 a            = phlp::tob2Vec2(_anchr);
+        b2WeldJointDef wd   = b2DefaultWeldJointDef();
+        wd.bodyIdA          = _bodyA->getB2Body();
+        wd.bodyIdB          = _bodyB->getB2Body();
+        wd.localAnchorA     = b2Body_GetLocalPoint(wd.bodyIdA, a);
+        wd.localAnchorB     = b2Body_GetLocalPoint(wd.bodyIdB, a);
+        wd.referenceAngle   = b2Body_GetAngle(wd.bodyIdB) - b2Body_GetAngle(wd.bodyIdA);
+        wd.collideConnected = false;
+        auto weld           = b2CreateWeldJoint(_bodyA->getWorld()->getB2World(), &wd);
+        AX_BREAK_IF(!b2Joint_IsValid(weld));
+        _b2Joints.emplace_back(weld);
 
         _collisionEnable = false;
 
@@ -307,7 +339,7 @@ bool PhysicsJointFixed::createConstraints()
     return false;
 }
 
-PhysicsJointPin* PhysicsJointPin::construct(PhysicsBody* a, PhysicsBody* b, const Vec2& pivot)
+PhysicsJointPin* PhysicsJointPin::instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& pivot)
 {
     auto joint = new PhysicsJointPin();
 
@@ -322,7 +354,7 @@ PhysicsJointPin* PhysicsJointPin::construct(PhysicsBody* a, PhysicsBody* b, cons
     return nullptr;
 }
 
-PhysicsJointPin* PhysicsJointPin::construct(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2)
+PhysicsJointPin* PhysicsJointPin::instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2)
 {
     auto joint = new PhysicsJointPin();
 
@@ -339,24 +371,25 @@ PhysicsJointPin* PhysicsJointPin::construct(PhysicsBody* a, PhysicsBody* b, cons
     return nullptr;
 }
 
-bool PhysicsJointPin::createConstraints()
+bool PhysicsJointPin::buildConstraints()
 {
     do
     {
         b2RevoluteJointDef pivotJointDef = b2DefaultRevoluteJointDef();
         pivotJointDef.bodyIdA            = _bodyA->getB2Body();
         pivotJointDef.bodyIdB            = _bodyB->getB2Body();
-        pivotJointDef.localAnchorA       = PhysicsHelper::tob2Vec2(_anchr1);  // Use your conversion function here
+        pivotJointDef.collideConnected   = false;
+        pivotJointDef.localAnchorA       = b2Body_GetLocalPoint(_bodyA->getB2Body(), phlp::tob2Vec2(_anchr1));
         if (_useSpecificAnchr)
         {
-            pivotJointDef.localAnchorB = b2Body_GetLocalCenterOfMass(_bodyB->getB2Body());
+            pivotJointDef.localAnchorB = b2Body_GetLocalPoint(_bodyB->getB2Body(), phlp::tob2Vec2(_anchr2));
         }
         else
         {
-            pivotJointDef.localAnchorB = PhysicsHelper::tob2Vec2(_anchr2);  // Use your conversion function here
+            pivotJointDef.localAnchorB = b2Body_GetLocalPoint(_bodyB->getB2Body(), phlp::tob2Vec2(_anchr1));
         }
 
-        auto joint = b2CreateRevoluteJoint(_bodyA->getWorld()->getB2World(), &pivotJointDef);  // FIXME:
+        auto joint = b2CreateRevoluteJoint(_bodyA->getWorld()->getB2World(), &pivotJointDef);
 
         AX_BREAK_IF(!b2Joint_IsValid(joint));
         _b2Joints.emplace_back(joint);
@@ -367,7 +400,7 @@ bool PhysicsJointPin::createConstraints()
     return false;
 }
 
-PhysicsJointLimit* PhysicsJointLimit::construct(PhysicsBody* a,
+PhysicsJointLimit* PhysicsJointLimit::instantiate(PhysicsBody* a,
                                                 PhysicsBody* b,
                                                 const Vec2& anchr1,
                                                 const Vec2& anchr2,
@@ -390,26 +423,43 @@ PhysicsJointLimit* PhysicsJointLimit::construct(PhysicsBody* a,
     return nullptr;
 }
 
-PhysicsJointLimit* PhysicsJointLimit::construct(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2)
+PhysicsJointLimit* PhysicsJointLimit::instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2)
 {
-    return construct(a, b, anchr1, anchr2, 0, b->local2World(anchr1).getDistance(a->local2World(anchr2)));
+    return instantiate(a, b, anchr1, anchr2, 0, b->local2World(anchr1).getDistance(a->local2World(anchr2)));
 }
 
-bool PhysicsJointLimit::createConstraints()
+bool PhysicsJointLimit::buildConstraints()
 {
     do
     {
-        b2PrismaticJointDef def = b2DefaultPrismaticJointDef();
-        def.bodyIdA             = _bodyA->getB2Body();
-        def.bodyIdB             = _bodyB->getB2Body();
-        def.localAnchorA        = PhysicsHelper::tob2Vec2(_anchr1);
-        def.localAnchorB        = PhysicsHelper::tob2Vec2(_anchr2);
-        def.localAxisA          = b2Vec2{1.0f, 0.0f};  // Axis along which the bodies can slide
-        def.enableLimit         = true;
-        def.lowerTranslation    = _min;
-        def.upperTranslation    = _max;
+        // alternative implementation using b2PrismaticJointDef
+        // b2PrismaticJointDef def = b2DefaultPrismaticJointDef();
+        // def.bodyIdA             = _bodyA->getB2Body();
+        // def.bodyIdB             = _bodyB->getB2Body();
+        // def.localAnchorA        = phlp::tob2Vec2(_anchr1);
+        // def.localAnchorB        = phlp::tob2Vec2(_anchr2);
+        // def.localAxisA          = b2Vec2{1.0f, 0.0f};  // Axis along which the bodies can slide
+        // def.enableLimit         = true;
+        // def.lowerTranslation    = _min;
+        // def.upperTranslation    = _max;
+        //
+        // auto joint = b2CreatePrismaticJoint(_bodyA->getWorld()->getB2World(), &def);
 
-        auto joint = b2CreatePrismaticJoint(_bodyA->getWorld()->getB2World(), &def);  // FIXME:
+        b2DistanceJointDef jd = b2DefaultDistanceJointDef();
+
+        jd.bodyIdA = _bodyA->getB2Body();
+        jd.bodyIdB = _bodyB->getB2Body();
+
+        jd.localAnchorA = phlp::tob2Vec2(_anchr1);
+        jd.localAnchorB = phlp::tob2Vec2(_anchr2);
+
+        // !IMPORTANT: calculate the length based on the world position of the anchors
+        jd.length = _bodyB->local2World(_anchr1).getDistance(_bodyA->local2World(_anchr2));
+
+        jd.minLength = _min;
+        jd.maxLength = _max;
+
+        b2JointId joint = b2CreateDistanceJoint(_bodyA->getWorld()->getB2World(), &jd);
 
         AX_BREAK_IF(!b2Joint_IsValid(joint));
         _b2Joints.emplace_back(joint);
@@ -463,7 +513,7 @@ void PhysicsJointLimit::setAnchr2(const Vec2& anchr)
     // NOTE: NOT SUPPORT
 }
 
-PhysicsJointDistance* PhysicsJointDistance::construct(PhysicsBody* a,
+PhysicsJointDistance* PhysicsJointDistance::instantiate(PhysicsBody* a,
                                                       PhysicsBody* b,
                                                       const Vec2& anchr1,
                                                       const Vec2& anchr2)
@@ -482,19 +532,26 @@ PhysicsJointDistance* PhysicsJointDistance::construct(PhysicsBody* a,
     return nullptr;
 }
 
-bool PhysicsJointDistance::createConstraints()
+bool PhysicsJointDistance::buildConstraints()
 {
     do
     {
-        /*auto joint = cpPinJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), PhysicsHelper::vec22cpv(_anchr1),
-                                   PhysicsHelper::vec22cpv(_anchr2));*/
-        auto def         = b2DefaultDistanceJointDef();
-        def.bodyIdA      = _bodyA->getB2Body();
-        def.bodyIdB      = _bodyB->getB2Body();
-        def.localAnchorA = PhysicsHelper::tob2Vec2(_anchr1);
-        def.localAnchorB = PhysicsHelper::tob2Vec2(_anchr2);
+        b2DistanceJointDef def = b2DefaultDistanceJointDef();
 
-        auto joint = b2CreateDistanceJoint(_bodyA->getWorld()->getB2World(), &def);  // FIXME:
+        def.bodyIdA = _bodyA->getB2Body();
+        def.bodyIdB = _bodyB->getB2Body();
+
+        def.localAnchorA = phlp::tob2Vec2(_anchr1);
+        def.localAnchorB = phlp::tob2Vec2(_anchr2);
+
+        // !IMPORTANT
+        def.length = _bodyB->local2World(_anchr1).getDistance(_bodyA->local2World(_anchr2));
+
+        // Set both min and max to the same value for a fixed distance joint
+        def.minLength = def.length;
+        def.maxLength = def.length;
+
+        b2JointId joint = b2CreateDistanceJoint(_bodyA->getWorld()->getB2World(), &def);
 
         AX_BREAK_IF(!b2Joint_IsValid(joint));
         _b2Joints.emplace_back(joint);
@@ -516,7 +573,7 @@ void PhysicsJointDistance::setDistance(float distance)
     AX_PJOINT_CACHE_WRITE(_distance, b2DistanceJoint_SetLength, distance);
 }
 
-PhysicsJointSpring* PhysicsJointSpring::construct(PhysicsBody* a,
+PhysicsJointSpring* PhysicsJointSpring::instantiate(PhysicsBody* a,
                                                   PhysicsBody* b,
                                                   const Vec2& anchr1,
                                                   const Vec2& anchr2,
@@ -539,24 +596,30 @@ PhysicsJointSpring* PhysicsJointSpring::construct(PhysicsBody* a,
     return nullptr;
 }
 
-bool PhysicsJointSpring::createConstraints()
+bool PhysicsJointSpring::buildConstraints()
 {
     do
     {
-        /*auto joint = cpDampedSpringNew(_bodyA->getCPBody(), _bodyB->getCPBody(), PhysicsHelper::vec22cpv(_anchr1),
-                                       PhysicsHelper::vec22cpv(_anchr2),
-                                       _bodyB->local2World(_anchr1).getDistance(_bodyA->local2World(_anchr2)),
-                                       _stiffness, _damping);*/
         b2DistanceJointDef def = b2DefaultDistanceJointDef();
         def.bodyIdA            = _bodyA->getB2Body();
         def.bodyIdB            = _bodyB->getB2Body();
-        def.localAnchorA       = PhysicsHelper::tob2Vec2(_anchr1);
-        def.localAnchorB       = PhysicsHelper::tob2Vec2(_anchr2);
+        def.localAnchorA       = phlp::tob2Vec2(_anchr1);
+        def.localAnchorB       = phlp::tob2Vec2(_anchr2);
         def.length             = _bodyB->local2World(_anchr1).getDistance(_bodyA->local2World(_anchr2));
-        def.hertz              = _stiffness;  // The spring frequency in Hertz
-        def.dampingRatio       = _damping;    // The damping ratio
+        def.enableSpring       = true;
 
-        auto joint = b2CreateDistanceJoint(_bodyA->getWorld()->getB2World(), &def);  // FIXME:
+        // calculate effective mass
+        float m1   = _bodyA->getMass();
+        float m2   = _bodyB->getMass();
+        float mass = (m1 * m2) / (m1 + m2);
+
+        // calculate hertz
+        def.hertz = sqrtf(_stiffness / mass) / (2.0f * std::numbers::pi_v<float>);
+
+        // calculate damping ratio
+        def.dampingRatio = _damping / (2.0f * sqrtf(_stiffness * mass));
+
+        auto joint = b2CreateDistanceJoint(_bodyA->getWorld()->getB2World(), &def);
         AX_BREAK_IF(!b2Joint_IsValid(joint));
         _b2Joints.emplace_back(joint);
 
@@ -569,25 +632,25 @@ bool PhysicsJointSpring::createConstraints()
 Vec2 PhysicsJointSpring::getAnchr1() const
 {
     AX_PJOINT_CACHE_READ(_anchr1);
-    return PhysicsHelper::toVec2(b2Joint_GetLocalAnchorA(_b2Joints[0]));
+    return phlp::toVec2(b2Joint_GetLocalAnchorA(_b2Joints[0]));
 }
 
 void PhysicsJointSpring::setAnchr1(const Vec2& anchr)
 {
     // NOTE: NOT SUPPORT
-    // AX_PJOINT_CACHE_WRITE2(_anchr1, cpDampedSpringSetAnchorA, anchr, PhysicsHelper::vec22cpv(anchr));
+    // AX_PJOINT_CACHE_WRITE2(_anchr1, cpDampedSpringSetAnchorA, anchr, phlp::vec22cpv(anchr));
 }
 
 Vec2 PhysicsJointSpring::getAnchr2() const
 {
     AX_PJOINT_CACHE_READ(_anchr2);
-    return PhysicsHelper::toVec2(b2Joint_GetLocalAnchorB(_b2Joints[0]));
+    return phlp::toVec2(b2Joint_GetLocalAnchorB(_b2Joints[0]));
 }
 
 void PhysicsJointSpring::setAnchr2(const Vec2& anchr)
 {
     // NOTE: NOT SUPPORT
-    // AX_PJOINT_CACHE_WRITE2(_anchr2, cpDampedSpringSetAnchorB, anchr, PhysicsHelper::vec22cpv(anchr));
+    // AX_PJOINT_CACHE_WRITE2(_anchr2, cpDampedSpringSetAnchorB, anchr, phlp::vec22cpv(anchr));
 }
 
 float PhysicsJointSpring::getRestLength() const
@@ -624,7 +687,7 @@ void PhysicsJointSpring::setDamping(float damping)
     AX_PJOINT_CACHE_WRITE(_damping, b2DistanceJoint_SetSpringDampingRatio, damping);
 }
 
-PhysicsJointGroove* PhysicsJointGroove::construct(PhysicsBody* a,
+PhysicsJointGroove* PhysicsJointGroove::instantiate(PhysicsBody* a,
                                                   PhysicsBody* b,
                                                   const Vec2& grooveA,
                                                   const Vec2& grooveB,
@@ -645,23 +708,23 @@ PhysicsJointGroove* PhysicsJointGroove::construct(PhysicsBody* a,
     return nullptr;
 }
 
-bool PhysicsJointGroove::createConstraints()
+bool PhysicsJointGroove::buildConstraints()
 {
     do
     {
-        /*auto joint = cpGrooveJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), PhysicsHelper::vec22cpv(_grooveA),
-                                      PhysicsHelper::vec22cpv(_grooveB), PhysicsHelper::vec22cpv(_anchr2));*/
+        auto world = _bodyA->getWorld()->getB2World();
+
         b2PrismaticJointDef def = b2DefaultPrismaticJointDef();
         def.bodyIdA             = _bodyA->getB2Body();
         def.bodyIdB             = _bodyB->getB2Body();
-        def.localAnchorA        = PhysicsHelper::tob2Vec2(_grooveA);
-        def.localAnchorB        = PhysicsHelper::tob2Vec2(_anchr2);
-        def.localAxisA          = PhysicsHelper::tob2Vec2(_grooveB) - PhysicsHelper::tob2Vec2(_grooveA);
+        def.localAnchorA        = phlp::tob2Vec2(_grooveA);
+        def.localAnchorB        = phlp::tob2Vec2(_anchr2);
+        def.localAxisA          = phlp::tob2Vec2(_grooveB) - phlp::tob2Vec2(_grooveA);
         def.lowerTranslation    = 0.0f;
-        def.upperTranslation    = b2Distance(PhysicsHelper::tob2Vec2(_grooveA), PhysicsHelper::tob2Vec2(_grooveB));
+        def.upperTranslation    = b2Distance(phlp::tob2Vec2(_grooveA), phlp::tob2Vec2(_grooveB));
         def.enableLimit         = true;
 
-        auto joint = b2CreatePrismaticJoint(_bodyA->getWorld()->getB2World(), &def);  // FIXME:
+        b2JointId joint = b2CreatePrismaticJoint(world, &def);
         AX_BREAK_IF(!b2Joint_IsValid(joint));
         _b2Joints.emplace_back(joint);
 
@@ -674,13 +737,13 @@ bool PhysicsJointGroove::createConstraints()
 Vec2 PhysicsJointGroove::getGrooveA() const
 {
     AX_PJOINT_CACHE_READ(_grooveA);
-    return PhysicsHelper::toVec2(b2Joint_GetLocalAnchorA(_b2Joints.front()));
+    return phlp::toVec2(b2Joint_GetLocalAnchorA(_b2Joints.front()));
 }
 
 void PhysicsJointGroove::setGrooveA(const Vec2& grooveA)
 {
     // NOTE: NOT SUPPORT
-    // AX_PJOINT_CACHE_WRITE2(_grooveA, cpGrooveJointSetGrooveA, grooveA, PhysicsHelper::vec22cpv(grooveA));
+    // AX_PJOINT_CACHE_WRITE2(_grooveA, cpGrooveJointSetGrooveA, grooveA, phlp::vec22cpv(grooveA));
 }
 
 Vec2 PhysicsJointGroove::getGrooveB() const
@@ -688,27 +751,27 @@ Vec2 PhysicsJointGroove::getGrooveB() const
     AX_PJOINT_CACHE_READ(_grooveB);
 
     return _grooveB;
-    // return PhysicsHelper::cpv2vec2(cpGrooveJointGetGrooveB(_b2Joints.front()));
+    // return phlp::cpv2vec2(cpGrooveJointGetGrooveB(_b2Joints.front()));
 }
 
 void PhysicsJointGroove::setGrooveB(const Vec2& grooveB)
 {
     // NOTE: NOT SUPPORT
-    // AX_PJOINT_CACHE_WRITE2(_grooveB, cpGrooveJointSetGrooveB, grooveB, PhysicsHelper::vec22cpv(grooveB));
+    // AX_PJOINT_CACHE_WRITE2(_grooveB, cpGrooveJointSetGrooveB, grooveB, phlp::vec22cpv(grooveB));
 }
 
 Vec2 PhysicsJointGroove::getAnchr2() const
 {
     AX_PJOINT_CACHE_READ(_anchr2);
-    return PhysicsHelper::toVec2(b2Joint_GetLocalAnchorB(_b2Joints.front()));
+    return phlp::toVec2(b2Joint_GetLocalAnchorB(_b2Joints.front()));
 }
 
 void PhysicsJointGroove::setAnchr2(const Vec2& anchr2)
 {
-    // AX_PJOINT_CACHE_WRITE2(_anchr2, cpGrooveJointSetAnchorB, anchr2, PhysicsHelper::vec22cpv(anchr2));
+    // AX_PJOINT_CACHE_WRITE2(_anchr2, cpGrooveJointSetAnchorB, anchr2, phlp::vec22cpv(anchr2));
 }
 
-PhysicsJointRotarySpring* PhysicsJointRotarySpring::construct(PhysicsBody* a,
+PhysicsJointRotarySpring* PhysicsJointRotarySpring::instantiate(PhysicsBody* a,
                                                               PhysicsBody* b,
                                                               float stiffness,
                                                               float damping)
@@ -727,25 +790,25 @@ PhysicsJointRotarySpring* PhysicsJointRotarySpring::construct(PhysicsBody* a,
     return nullptr;
 }
 
-bool PhysicsJointRotarySpring::createConstraints()
+bool PhysicsJointRotarySpring::buildConstraints()
 {
     do
     {
+        auto world = _bodyA->getWorld()->getB2World();
+        // Note: not 100% indentical to cpDampedRotarySpringNew
         // auto joint = cpDampedRotarySpringNew(_bodyA->getCPBody(), _bodyB->getCPBody(),
         //                                      _bodyB->getRotation() - _bodyA->getRotation(), _stiffness, _damping);
+        b2MotorJointDef motorDef = b2DefaultMotorJointDef();
+        motorDef.bodyIdA         = _bodyA->getB2Body();
+        motorDef.bodyIdB         = _bodyB->getB2Body();
+        motorDef.angularOffset   = AX_DEGREES_TO_RADIANS(_bodyB->getRotation()) -
+                                 AX_DEGREES_TO_RADIANS(_bodyA->getRotation()); 
+        motorDef.maxTorque        = 10000.0f;
+        motorDef.correctionFactor = 1.0f;
+        auto offset               = _bodyA->getPosition() - _bodyB->getPosition();
+        motorDef.linearOffset     = phlp::tob2Vec2(offset);
+        auto joint                = b2CreateMotorJoint(world, &motorDef);
 
-        // Define the revolute joint (damped rotary spring equivalent in Box2D)
-        b2RevoluteJointDef def = b2DefaultRevoluteJointDef();
-        def.bodyIdA            = _bodyA->getB2Body();
-        def.bodyIdB            = _bodyB->getB2Body();
-        def.referenceAngle =
-            AX_DEGREES_TO_RADIANS(_bodyB->getRotation() - _bodyA->getRotation());  // Set the reference angle
-        def.enableMotor    = true;
-        def.maxMotorTorque = _stiffness;  // Set stiffness as max motor torque
-        def.motorSpeed     = 0.0f;        // Initial motor speed
-        def.enableLimit    = false;       // No limits
-
-        auto joint = b2CreateRevoluteJoint(_bodyA->getWorld()->getB2World(), &def);  // FIXME:
         AX_BREAK_IF(!b2Joint_IsValid(joint));
         _b2Joints.emplace_back(joint);
 
@@ -789,7 +852,7 @@ void PhysicsJointRotarySpring::setDamping(float damping)
     AX_PJOINT_CACHE_WRITE(_damping, b2RevoluteJoint_SetSpringDampingRatio, damping);
 }
 
-PhysicsJointRotaryLimit* PhysicsJointRotaryLimit::construct(PhysicsBody* a, PhysicsBody* b, float min, float max)
+PhysicsJointRotaryLimit* PhysicsJointRotaryLimit::instantiate(PhysicsBody* a, PhysicsBody* b, float min, float max)
 {
     auto joint = new PhysicsJointRotaryLimit();
 
@@ -805,21 +868,22 @@ PhysicsJointRotaryLimit* PhysicsJointRotaryLimit::construct(PhysicsBody* a, Phys
     return nullptr;
 }
 
-PhysicsJointRotaryLimit* PhysicsJointRotaryLimit::construct(PhysicsBody* a, PhysicsBody* b)
+PhysicsJointRotaryLimit* PhysicsJointRotaryLimit::instantiate(PhysicsBody* a, PhysicsBody* b)
 {
-    return construct(a, b, 0.0f, 0.0f);
+    return instantiate(a, b, 0.0f, 0.0f);
 }
 
-bool PhysicsJointRotaryLimit::createConstraints()
+bool PhysicsJointRotaryLimit::buildConstraints()
 {
     do
     {
         /*auto joint = cpRotaryLimitJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), _min, _max);*/
 
+        // Note: Not 100% indentical to cpRotaryLimitJointNew
         b2RevoluteJointDef def = b2DefaultRevoluteJointDef();
         def.bodyIdA            = _bodyA->getB2Body();
         def.bodyIdB            = _bodyB->getB2Body();
-        def.referenceAngle     = 0.0f;  // Set the reference angle
+
         def.enableLimit        = true;
         def.lowerAngle         = _min;  // Set the lower angle limit
         def.upperAngle         = _max;  // Set the upper angle limit
@@ -861,7 +925,7 @@ void PhysicsJointRotaryLimit::setMax(float max)
     b2RevoluteJoint_SetLimits(_b2Joints[0], _min, max);
 }
 
-PhysicsJointRatchet* PhysicsJointRatchet::construct(PhysicsBody* a, PhysicsBody* b, float phase, float ratchet)
+PhysicsJointRatchet* PhysicsJointRatchet::instantiate(PhysicsBody* a, PhysicsBody* b, float phase, float ratchet)
 {
     auto joint = new PhysicsJointRatchet();
 
@@ -877,13 +941,13 @@ PhysicsJointRatchet* PhysicsJointRatchet::construct(PhysicsBody* a, PhysicsBody*
     return nullptr;
 }
 
-bool PhysicsJointRatchet::createConstraints()
+bool PhysicsJointRatchet::buildConstraints()
 {
     do
     {
         /*auto joint =
             cpRatchetJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), _phase,
-           PhysicsHelper::cpfloat2float(_ratchet));*/
+           phlp::cpfloat2float(_ratchet));*/
 
         b2RevoluteJointDef def = b2DefaultRevoluteJointDef();
         def.bodyIdA            = _bodyA->getB2Body();
@@ -921,7 +985,7 @@ void PhysicsJointRatchet::setAngle(float angle)
 float PhysicsJointRatchet::getPhase() const
 {
     AX_PJOINT_CACHE_READ(_phase);
-    // return PhysicsHelper::cpfloat2float(cpRatchetJointGetPhase(_b2Joints.front()));
+    // return phlp::cpfloat2float(cpRatchetJointGetPhase(_b2Joints.front()));
     return _phase;
 }
 
@@ -943,7 +1007,7 @@ void PhysicsJointRatchet::setRatchet(float ratchet)
     b2RevoluteJoint_SetLimits(_b2Joints[0], 0, ratchet);
 }
 
-PhysicsJointGear* PhysicsJointGear::construct(PhysicsBody* a, PhysicsBody* b, float phase, float ratio)
+PhysicsJointGear* PhysicsJointGear::instantiate(PhysicsBody* a, PhysicsBody* b, float phase, float ratio)
 {
     auto joint = new PhysicsJointGear();
 
@@ -959,13 +1023,35 @@ PhysicsJointGear* PhysicsJointGear::construct(PhysicsBody* a, PhysicsBody* b, fl
     return nullptr;
 }
 
-bool PhysicsJointGear::createConstraints()
+bool PhysicsJointGear::buildConstraints()
 {
     do
     {
         // auto joint = cpGearJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), _phase, _ratio);
-        //  FIXME: The pulley and gear joints have been removed.I'm not satisfied with how they work in 2.4 and plan to
-        auto joint = b2_nullJointId;
+        // gear and pulley joint removed (temporarily) in box2d-3.x, see https://box2d.org/documentation/md_migration.html
+        auto world = _bodyA->getWorld()->getB2World();
+        auto bodyA = _bodyA->getB2Body();
+        auto bodyB = _bodyB->getB2Body();
+
+        // bodyA, bodyB, phase, ratio
+        b2MotorJointDef motorDef = b2DefaultMotorJointDef();
+        motorDef.bodyIdA = bodyA;
+        motorDef.bodyIdB = bodyB;
+
+        b2Vec2 posA           = b2Body_GetWorldCenterOfMass(bodyA);
+        b2Vec2 posB           = b2Body_GetWorldCenterOfMass(bodyB);
+        motorDef.linearOffset = posB - posA;
+
+        float angleA           = b2Body_GetAngle(bodyA);
+        float angleB           = b2Body_GetAngle(bodyB);
+        motorDef.angularOffset = _phase - (angleA + _ratio * angleB);
+
+        motorDef.maxForce         = 0.0f;
+        motorDef.maxTorque        = 10000.0f;
+        motorDef.correctionFactor = 1.0f;
+
+        b2JointId joint = b2CreateMotorJoint(world, &motorDef);
+
         AX_BREAK_IF(!b2Joint_IsValid(joint));
         _b2Joints.emplace_back(joint);
 
@@ -978,7 +1064,7 @@ bool PhysicsJointGear::createConstraints()
 float PhysicsJointGear::getPhase() const
 {
     AX_PJOINT_CACHE_READ(_phase);
-    // return PhysicsHelper::cpfloat2float(cpGearJointGetPhase(_b2Joints.front()));
+    // return phlp::cpfloat2float(cpGearJointGetPhase(_b2Joints.front()));
     return _phase;
 }
 
@@ -990,7 +1076,7 @@ void PhysicsJointGear::setPhase(float phase)
 float PhysicsJointGear::getRatio() const
 {
     AX_PJOINT_CACHE_READ(_ratio);
-    // return PhysicsHelper::cpfloat2float(cpGearJointGetRatio(_b2Joints.front()));
+    // return phlp::cpfloat2float(cpGearJointGetRatio(_b2Joints.front()));
     return _ratio;
 }
 
@@ -999,7 +1085,7 @@ void PhysicsJointGear::setRatio(float ratio)
     // AX_PJOINT_CACHE_WRITE(_ratio, cpGearJointSetRatio, ratio);
 }
 
-PhysicsJointMotor* PhysicsJointMotor::construct(PhysicsBody* a, PhysicsBody* b, float rate)
+PhysicsJointMotor* PhysicsJointMotor::instantiate(PhysicsBody* a, PhysicsBody* b, float rate)
 {
     auto joint = new PhysicsJointMotor();
 
@@ -1014,7 +1100,7 @@ PhysicsJointMotor* PhysicsJointMotor::construct(PhysicsBody* a, PhysicsBody* b, 
     return nullptr;
 }
 
-bool PhysicsJointMotor::createConstraints()
+bool PhysicsJointMotor::buildConstraints()
 {
     do
     {
@@ -1024,12 +1110,14 @@ bool PhysicsJointMotor::createConstraints()
         b2RevoluteJointDef def = b2DefaultRevoluteJointDef();
         def.bodyIdA            = _bodyA->getB2Body();
         def.bodyIdB            = _bodyB->getB2Body();
+
         def.localAnchorA       = b2Vec2_zero;  // Set the local anchor points as required
         def.localAnchorB       = b2Vec2_zero;  // Set the local anchor points as required
+
         def.referenceAngle     = 0.0f;         // Set the reference angle
         def.enableMotor        = true;
         def.motorSpeed         = _rate;    // Set the motor speed (rate)
-        def.maxMotorTorque     = 1000.0f;  // Set the maximum torque the motor can apply
+        def.maxMotorTorque     = 10000.0f;  // Set the maximum torque the motor can apply
 
         auto joint = b2CreateRevoluteJoint(_bodyA->getWorld()->getB2World(), &def);  // FIXME:
         setRate(_rate);
@@ -1045,7 +1133,7 @@ bool PhysicsJointMotor::createConstraints()
 float PhysicsJointMotor::getRate() const
 {
     AX_PJOINT_CACHE_READ(_rate);
-    // return PhysicsHelper::cpfloat2float(cpSimpleMotorGetRate(_b2Joints.front()));
+    // return phlp::cpfloat2float(cpSimpleMotorGetRate(_b2Joints.front()));
     return _rate;
 }
 

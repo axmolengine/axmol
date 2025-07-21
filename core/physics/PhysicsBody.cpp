@@ -27,7 +27,7 @@
 
  TODO:
 
- Check whether applyForce need invoke phl::pixelsToMeters
+ Check whether applyForce need invoke phlppixelsToMeters
 
  ****************************************************************************/
 #include "physics/PhysicsBody.h"
@@ -431,13 +431,13 @@ void PhysicsBody::setPosition(float positionX, float positionY)
     tt.x = (positionX + _positionOffset.x);
     tt.y = (positionY + _positionOffset.y);
 
-    b2Body_SetTransform(_b2Body, phl::tob2Vec2(tt), b2Body_GetRotation(_b2Body));
+    b2Body_SetTransform(_b2Body, phlp::tob2Vec2(tt), b2Body_GetRotation(_b2Body));
 }
 
 Vec2 PhysicsBody::getPosition() const
 {
     auto tt = b2Body_GetPosition(_b2Body);
-    return phl::toVec2(tt) - _positionOffset;
+    return phlp::toVec2(tt) - _positionOffset;
 }
 
 void PhysicsBody::setPositionOffset(const Vec2& position)
@@ -486,10 +486,10 @@ void PhysicsBody::applyForce(const Vec2& force, const Vec2& offset)
 {
     if (_dynamic && getMass() != PHYSICS_INFINITY)
     {
-        b2Vec2 worldPoint = b2Body_GetWorldPoint(_b2Body, phl::tob2Vec2(offset));
+        b2Vec2 worldPoint = b2Body_GetWorldPoint(_b2Body, phlp::tob2Vec2(offset));
 
         // Apply the force at the world point
-        b2Body_ApplyForce(_b2Body, phl::tob2Vec2(force), worldPoint, true);
+        b2Body_ApplyForce(_b2Body, phlp::tob2Vec2(force), worldPoint, true);
     }
 }
 
@@ -504,10 +504,10 @@ void PhysicsBody::resetForces()
 
 void PhysicsBody::applyImpulse(const Vec2& impulse, const Vec2& offset)
 {
-    b2Vec2 worldPoint = b2Body_GetWorldPoint(_b2Body, phl::tob2Vec2(offset));
+    b2Vec2 worldPoint = b2Body_GetWorldPoint(_b2Body, phlp::tob2Vec2(offset));
 
     // Apply the impulse at the world point
-    b2Body_ApplyLinearImpulse(_b2Body, phl::tob2Vec2(impulse), worldPoint, true);
+    b2Body_ApplyLinearImpulse(_b2Body, phlp::tob2Vec2(impulse), worldPoint, true);
 }
 
 void PhysicsBody::applyTorque(float torque)
@@ -800,14 +800,12 @@ void PhysicsBody::setRotationOffset(float rotation)
 
 Vec2 PhysicsBody::world2Local(const Vec2& point)
 {
-    // return PhysicsHelper::cpv2vec2(cpBodyWorldToLocal(_cpBody, PhysicsHelper::vec22cpv(point)));
-    return PhysicsHelper::toVec2(b2Body_GetLocalPoint(_b2Body, PhysicsHelper::tob2Vec2(point)));
+    return phlp::toVec2(b2Body_GetLocalPoint(_b2Body, phlp::tob2Vec2(point)));
 }
 
 Vec2 PhysicsBody::local2World(const Vec2& point)
 {
-    // return PhysicsHelper::cpv2vec2(cpBodyLocalToWorld(_cpBody, PhysicsHelper::vec22cpv(point)));
-    return PhysicsHelper::toVec2(b2Body_GetWorldPoint(_b2Body, PhysicsHelper::tob2Vec2(point)));
+    return phlp::toVec2(b2Body_GetWorldPoint(_b2Body, phlp::tob2Vec2(point)));
 }
 
 void PhysicsBody::beforeSimulation(const Mat4& parentToWorldTransform,

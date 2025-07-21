@@ -57,8 +57,9 @@ const PhysicsMaterial PHYSICSBODY_MATERIAL_DEFAULT(0.1f, 0.5f, 0.5f);
  * If you create body with createXXX, it will automatically compute mass and moment with density your specified(which is
  * PHYSICSBODY_MATERIAL_DEFAULT by default, and the density value is 0.1f), and it based on the formula: mass = density
  * * area. If you create body with createEdgeXXX, the mass and moment will be PHYSICS_INFINITY by default. And it's a
- * static body. You can change mass and moment with setMass() and setMoment(). And you can change the body to be dynamic
+ * static body. 
  * or static by use function setDynamic().
+ * Note: box2d not allow change mass and moment dynamic
  */
 class AX_DLL PhysicsBody : public Component
 {

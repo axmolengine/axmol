@@ -415,7 +415,7 @@ bool PhysicsColliderBox::init(const Vec2& size,
 
         b2ShapeDef shapeDef = b2DefaultShapeDef();
         // !!!remark: should div 2 with b2MakeOffsetBox, otherwise, size will be double
-        auto polygon = b2MakeOffsetBox(size.x / 2, size.y / 2, phl::tob2Vec2(offset), b2MakeRot(radius));
+        auto polygon = b2MakeOffsetBox(size.x / 2, size.y / 2, phlp::tob2Vec2(offset), b2MakeRot(radius));
         auto shape   = b2CreatePolygonShape(_body->getB2Body(), &shapeDef, &polygon);
         AX_BREAK_IF(!b2Shape_IsValid(shape));
 
@@ -436,7 +436,7 @@ Vec2 PhysicsColliderBox::getSize() const
     auto polygon = b2Shape_GetPolygon(_b2Shapes[0]);
     auto x       = b2Distance(polygon.vertices[1], polygon.vertices[2]);
     auto y       = b2Distance(polygon.vertices[0], polygon.vertices[1]);
-    return phl::toVec2(b2Vec2{x, y});
+    return phlp::toVec2(b2Vec2{x, y});
 }
 
 // PhysicsColliderPolygon
@@ -558,7 +558,7 @@ void PhysicsColliderPolygon::updateScale()
         }
     }
 
-    // FIXME: apply radius and offset 
+    // FIXME: apply radius and offset
     auto transform      = b2Transform_identity;
     auto hull           = b2ComputeHull(reinterpret_cast<const b2Vec2*>(polygon.vertices), count);
     auto polygon1        = b2MakePolygon(&hull, 0);
@@ -598,10 +598,10 @@ bool PhysicsColliderEdgeBox::init(const Vec2& size,
         // NOTE: box2d doesn't support border
 
         b2Vec2 vec[4] = {};
-        vec[0]        = phl::tob2Vec2(Vec2(-size.width / 2 + offset.x, -size.height / 2 + offset.y));
-        vec[1]        = phl::tob2Vec2(Vec2(+size.width / 2 + offset.x, -size.height / 2 + offset.y));
-        vec[2]        = phl::tob2Vec2(Vec2(+size.width / 2 + offset.x, +size.height / 2 + offset.y));
-        vec[3]        = phl::tob2Vec2(Vec2(-size.width / 2 + offset.x, +size.height / 2 + offset.y));
+        vec[0]        = phlp::tob2Vec2(Vec2(-size.width / 2 + offset.x, -size.height / 2 + offset.y));
+        vec[1]        = phlp::tob2Vec2(Vec2(+size.width / 2 + offset.x, -size.height / 2 + offset.y));
+        vec[2]        = phlp::tob2Vec2(Vec2(+size.width / 2 + offset.x, +size.height / 2 + offset.y));
+        vec[3]        = phlp::tob2Vec2(Vec2(-size.width / 2 + offset.x, +size.height / 2 + offset.y));
 
         int i               = 0;
         b2ShapeDef shapeDef = b2DefaultShapeDef();
@@ -651,7 +651,7 @@ bool PhysicsColliderEdgePolygon::init(const Vec2* points,
         _type = Type::EDGEPOLYGON;
 
         auto def = b2DefaultShapeDef();
-        
+
         int i    = 0;
         for (; i < count; ++i)
         {
