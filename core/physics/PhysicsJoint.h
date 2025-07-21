@@ -120,8 +120,8 @@ protected:
 
     void deatchFromBody();
 
-    /** Create constraints for this type joint */
-    virtual bool createConstraints() { return false; }
+    /** Build constraints for this type joint */
+    virtual bool buildConstraints() { return false; }
 
     std::vector<b2JointId> _b2Joints;
     std::vector<DelayTask> _delayTasks;
@@ -158,13 +158,10 @@ public:
      @param anchr It's the pivot position.
      @return A object pointer.
      */
-    static PhysicsJointFixed* construct(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr);
-
-    virtual bool createConstraints() override;
+    static PhysicsJointFixed* instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr);
 
 protected:
-    PhysicsJointFixed() {}
-    virtual ~PhysicsJointFixed() {}
+    bool buildConstraints() override;
 
     Vec2 _anchr;
 };
@@ -183,7 +180,7 @@ public:
      @param anchr2 Anchr2 is the anchor point on body b.
      @return A object pointer.
      */
-    static PhysicsJointLimit* construct(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2);
+    static PhysicsJointLimit* instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2);
 
     /** Create a limit joint.
 
@@ -195,7 +192,7 @@ public:
      @param max Define the allowed max distance of the anchor points.
      @return A object pointer.
      */
-    static PhysicsJointLimit* construct(PhysicsBody* a,
+    static PhysicsJointLimit* instantiate(PhysicsBody* a,
                                         PhysicsBody* b,
                                         const Vec2& anchr1,
                                         const Vec2& anchr2,
@@ -224,11 +221,8 @@ public:
     /** Set the max distance of the anchor points.*/
     void setMax(float max);
 
-    virtual bool createConstraints() override;
-
 protected:
-    PhysicsJointLimit() {}
-    virtual ~PhysicsJointLimit() {}
+    bool buildConstraints() override;
 
     Vec2 _anchr1;
     Vec2 _anchr2;
@@ -249,7 +243,7 @@ public:
      @param pivot It's the pivot position.
      @return A object pointer.
      */
-    static PhysicsJointPin* construct(PhysicsBody* a, PhysicsBody* b, const Vec2& pivot);
+    static PhysicsJointPin* instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& pivot);
 
     /** Create a pin joint.
 
@@ -259,13 +253,10 @@ public:
      @param anchr2 Anchr2 is the anchor point on body b.
      @return A object pointer.
      */
-    static PhysicsJointPin* construct(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2);
-
-    virtual bool createConstraints() override;
+    static PhysicsJointPin* instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2);
 
 protected:
-    PhysicsJointPin() {}
-    virtual ~PhysicsJointPin() {}
+    bool buildConstraints() override;
 
     bool _useSpecificAnchr;
     Vec2 _anchr1;
@@ -284,17 +275,15 @@ public:
      @param anchr2 Anchr2 is the anchor point on body b.
      @return A object pointer.
      */
-    static PhysicsJointDistance* construct(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2);
+    static PhysicsJointDistance* instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2);
 
     /** Get the distance of the anchor points.*/
     float getDistance() const;
     /** Set the distance of the anchor points.*/
     void setDistance(float distance);
-    virtual bool createConstraints() override;
 
 protected:
-    PhysicsJointDistance() {}
-    virtual ~PhysicsJointDistance() {}
+    bool buildConstraints() override;
 
     Vec2 _anchr1;
     Vec2 _anchr2;
@@ -304,7 +293,7 @@ protected:
 class AX_DLL PhysicsJointSpring : public PhysicsJoint
 {
 public:
-    /** Create a fixed distance joint.
+    /** Create a Spring joint.
 
      @param a A is the body to connect.
      @param b B is the body to connect.
@@ -314,7 +303,7 @@ public:
      @param damping It's how soft to make the damping of the spring.
      @return A object pointer.
      */
-    static PhysicsJointSpring* construct(PhysicsBody* a,
+    static PhysicsJointSpring* instantiate(PhysicsBody* a,
                                          PhysicsBody* b,
                                          const Vec2& anchr1,
                                          const Vec2& anchr2,
@@ -351,11 +340,8 @@ public:
     /** Set the spring soft constant.*/
     void setDamping(float damping);
 
-    virtual bool createConstraints() override;
-
 protected:
-    PhysicsJointSpring() {}
-    virtual ~PhysicsJointSpring() {}
+    bool buildConstraints() override;
 
     Vec2 _anchr1;
     Vec2 _anchr2;
@@ -376,7 +362,7 @@ public:
      @param anchr2 Anchr2 is the anchor point on body b.
      @return A object pointer.
      */
-    static PhysicsJointGroove* construct(PhysicsBody* a,
+    static PhysicsJointGroove* instantiate(PhysicsBody* a,
                                          PhysicsBody* b,
                                          const Vec2& grooveA,
                                          const Vec2& grooveB,
@@ -400,11 +386,8 @@ public:
     /** Set the anchor point on body b.*/
     void setAnchr2(const Vec2& anchr2);
 
-    virtual bool createConstraints() override;
-
 protected:
-    PhysicsJointGroove() {}
-    virtual ~PhysicsJointGroove() {}
+    bool buildConstraints() override;
 
     Vec2 _grooveA;
     Vec2 _grooveB;
@@ -423,7 +406,7 @@ public:
      @param damping It's how soft to make the damping of the spring.
      @return A object pointer.
      */
-    static PhysicsJointRotarySpring* construct(PhysicsBody* a, PhysicsBody* b, float stiffness, float damping);
+    static PhysicsJointRotarySpring* instantiate(PhysicsBody* a, PhysicsBody* b, float stiffness, float damping);
 
     /** Get the relative angle in radians from the body a to b.*/
     float getRestAngle() const;
@@ -443,11 +426,8 @@ public:
     /** Set the spring soft constant.*/
     void setDamping(float damping);
 
-    virtual bool createConstraints() override;
-
 protected:
-    PhysicsJointRotarySpring() {}
-    virtual ~PhysicsJointRotarySpring() {}
+    bool buildConstraints() override;
 
     float _stiffness;
     float _damping;
@@ -465,7 +445,7 @@ public:
      @param max It's max rotation limit in radians.
      @return A object pointer.
      */
-    static PhysicsJointRotaryLimit* construct(PhysicsBody* a, PhysicsBody* b, float min, float max);
+    static PhysicsJointRotaryLimit* instantiate(PhysicsBody* a, PhysicsBody* b, float min, float max);
 
     /** Create a limit rotary joint.
 
@@ -473,7 +453,7 @@ public:
      @param b B is the body to connect.
      @return A object pointer.
      */
-    static PhysicsJointRotaryLimit* construct(PhysicsBody* a, PhysicsBody* b);
+    static PhysicsJointRotaryLimit* instantiate(PhysicsBody* a, PhysicsBody* b);
 
     /** Get the min rotation limit.*/
     float getMin() const;
@@ -487,11 +467,8 @@ public:
     /** Set the max rotation limit.*/
     void setMax(float max);
 
-    virtual bool createConstraints() override;
-
 protected:
-    PhysicsJointRotaryLimit() {}
-    virtual ~PhysicsJointRotaryLimit() {}
+    bool buildConstraints() override;
 
     float _min;
     float _max;
@@ -509,7 +486,7 @@ public:
      @param ratchet Ratchet is the distance between "clicks".
      @return A object pointer.
      */
-    static PhysicsJointRatchet* construct(PhysicsBody* a, PhysicsBody* b, float phase, float ratchet);
+    static PhysicsJointRatchet* instantiate(PhysicsBody* a, PhysicsBody* b, float phase, float ratchet);
 
     /** Get the ratchet angle.*/
     float getAngle() const;
@@ -528,11 +505,9 @@ public:
 
     /** Set the distance between "clicks".*/
     void setRatchet(float ratchet);
-    virtual bool createConstraints() override;
 
 protected:
-    PhysicsJointRatchet() {}
-    virtual ~PhysicsJointRatchet() {}
+    bool buildConstraints() override;
 
     float _phase;
     float _ratchet;
@@ -550,7 +525,7 @@ public:
      @param ratio Ratio is always measured in absolute terms.
      @return A object pointer.
      */
-    static PhysicsJointGear* construct(PhysicsBody* a, PhysicsBody* b, float phase, float ratio);
+    static PhysicsJointGear* instantiate(PhysicsBody* a, PhysicsBody* b, float phase, float ratio);
 
     /** Get the angular offset of the two bodies.*/
     float getPhase() const;
@@ -564,11 +539,8 @@ public:
     /** Set the ratio.*/
     void setRatio(float ratchet);
 
-    virtual bool createConstraints() override;
-
 protected:
-    PhysicsJointGear() {}
-    virtual ~PhysicsJointGear() {}
+    bool buildConstraints() override;
 
     float _phase;
     float _ratio;
@@ -585,18 +557,16 @@ public:
      @param rate Rate is the desired relative angular velocity.
      @return A object pointer.
      */
-    static PhysicsJointMotor* construct(PhysicsBody* a, PhysicsBody* b, float rate);
+    static PhysicsJointMotor* instantiate(PhysicsBody* a, PhysicsBody* b, float rate);
 
     /** Get the relative angular velocity.*/
     float getRate() const;
 
     /** Set the relative angular velocity.*/
     void setRate(float rate);
-    virtual bool createConstraints() override;
 
 protected:
-    PhysicsJointMotor() {}
-    virtual ~PhysicsJointMotor() {}
+    bool buildConstraints() override;
 
     float _rate;
 };

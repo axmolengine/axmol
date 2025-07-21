@@ -32,6 +32,6 @@ struct PhysicsHelper
     }
 };
 
-using phl = PhysicsHelper;
+using phlp = PhysicsHelper;
 
 }  // namespace ax

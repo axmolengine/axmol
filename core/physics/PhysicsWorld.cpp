@@ -43,7 +43,8 @@
 
 namespace ax
 {
-const float PHYSICS_INFINITY = FLT_MAX;
+// box2d not support FLT_MAX as infinity, oterwise will trigger NAN in world step, so we use a large value instead
+const float PHYSICS_INFINITY = 10e6;
 extern const char* PHYSICSCONTACT_EVENT_NAME;
 
 const int PhysicsWorld::DEBUGDRAW_NONE    = 0x00;
@@ -149,7 +150,7 @@ struct PhysicsWorldCallback
         PhysicsCollider* collider = static_cast<PhysicsCollider*>(b2Shape_GetUserData(shapeId));
         AX_ASSERT(collider != nullptr);
 
-        PhysicsRayCastInfo callbackInfo = {collider, info->p1, info->p2, phl::toVec2(point), phl::toVec2(normal),
+        PhysicsRayCastInfo callbackInfo = {collider, info->p1, info->p2, phlp::toVec2(point), phlp::toVec2(normal),
                                            fraction};
 
         continues = info->func(*info->world, callbackInfo, info->data);
@@ -193,11 +194,7 @@ struct PhysicsWorldCallback
         auto info = static_cast<ShapeQueryCallbackInfo*>(context);
         if (b2Shape_TestPoint(shape, info->p))
         {
-            b2Vec2 position = b2Body_GetPosition(collider->getBody()->getB2Body());
-            if (b2Distance(info->p, position) <= 1e-6)
-            {
-                info->colliders.pushBack(collider);
-            }
+            info->colliders.pushBack(collider);
         }
         return true;
     }
@@ -333,15 +330,15 @@ void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, 
 
         auto translation = point2 - point1;
         PhysicsWorldCallback::continues = true;
-        b2World_CastRay(_b2World, phl::tob2Vec2(point1), phl::tob2Vec2(translation), b2DefaultQueryFilter(),
+        b2World_CastRay(_b2World, phlp::tob2Vec2(point1), phlp::tob2Vec2(translation), b2DefaultQueryFilter(),
                         PhysicsWorldCallback::rayCastCallbackFunc, &info);
 
         #if 0
-        auto result = b2World_CastRayClosest(_b2World, phl::tob2Vec2(point1), phl::tob2Vec2(translation), b2DefaultQueryFilter());
+        auto result = b2World_CastRayClosest(_b2World, phlp::tob2Vec2(point1), phlp::tob2Vec2(translation), b2DefaultQueryFilter());
         if (b2Shape_IsValid(result.shapeId))
         {
             auto collider = static_cast<PhysicsCollider*>(b2Shape_GetUserData(result.shapeId));
-            PhysicsRayCastInfo rayCastInfo{collider, info.p1, info.p2, phl::toVec2(result.point), phl::toVec2(result.normal),
+            PhysicsRayCastInfo rayCastInfo{collider, info.p1, info.p2, phlp::toVec2(result.point), phlp::toVec2(result.normal),
                                            result.fraction};
             func(*this, rayCastInfo, data);
         }
@@ -362,7 +359,7 @@ void PhysicsWorld::queryRect(PhysicsQueryRectCallbackFunc func, const Rect& rect
         RectQueryCallbackInfo info = {this, func, data};
 
         auto filter = b2DefaultQueryFilter();
-        b2World_OverlapAABB(_b2World, phl::tob2AABB(rect), b2DefaultQueryFilter(),
+        b2World_OverlapAABB(_b2World, phlp::tob2AABB(rect), b2DefaultQueryFilter(),
                             PhysicsWorldCallback::queryRectCallbackFunc, &info);
     }
 }
@@ -378,7 +375,7 @@ void PhysicsWorld::queryPoint(PhysicsQueryPointCallbackFunc func, const Vec2& po
             updateBodies();
         }
 
-        PointQueryCallbackInfo info = {this, func, phl::tob2Vec2(point), data};
+        PointQueryCallbackInfo info = {this, func, phlp::tob2Vec2(point), data};
 
         b2AABB aabb;
         aabb.lowerBound = info.p;
@@ -393,7 +390,7 @@ Vector<PhysicsCollider*> PhysicsWorld::getShapes(const Vec2& point) const
 {
     Vector<PhysicsCollider*> arr;
 
-    ShapeQueryCallbackInfo info = {arr, phl::tob2Vec2(point)};
+    ShapeQueryCallbackInfo info = {arr, phlp::tob2Vec2(point)};
 
     b2AABB aabb;
     aabb.lowerBound = info.p;
@@ -408,7 +405,7 @@ PhysicsCollider* PhysicsWorld::getShape(const Vec2& point) const
 {
     // TODO: use b2World_OverlapCircle
     // cpShape* shape =
-    //     cpSpacePointQueryNearest(_cpSpace, phl::vec22cpv(point), 0, CP_SHAPE_FILTER_ALL, nullptr);
+    //     cpSpacePointQueryNearest(_cpSpace, phlpvec22cpv(point), 0, CP_SHAPE_FILTER_ALL, nullptr);
     // return shape == nullptr ? nullptr : static_cast<PhysicsCollider*>(cpShapeGetUserData(shape));
     return nullptr;
 }
@@ -435,7 +432,7 @@ bool PhysicsWorld::init()
 
         auto def = b2DefaultWorldDef();
         // Realistic gravity is achieved by multiplying gravity by the length unit.
-        def.gravity = phl::tob2Vec2(_gravity * _PTMRatio);
+        def.gravity = phlp::tob2Vec2(_gravity * _PTMRatio);
 
         _b2World = b2CreateWorld(&def);
 
@@ -742,7 +739,7 @@ PhysicsBody* PhysicsWorld::getBody(int tag) const
 void PhysicsWorld::setGravity(const Vec2& gravity)
 {
     _gravity = gravity;
-    b2World_SetGravity(_b2World, phl::tob2Vec2(_gravity * _PTMRatio));
+    b2World_SetGravity(_b2World, phlp::tob2Vec2(_gravity * _PTMRatio));
 }
 
 void PhysicsWorld::setSlopBias(float slop, float bias)
