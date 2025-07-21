@@ -4086,6 +4086,42 @@ int lua_ax_backend_ProgramManager_destroyInstance(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_backend_ProgramManager_chooseSpriteProgramType(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axb.ProgramManager",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::backend::PixelFormat arg0;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.ProgramManager:chooseSpriteProgramType");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramManager_chooseSpriteProgramType'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::backend::ProgramManager::chooseSpriteProgramType(arg0);
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axb.ProgramManager:chooseSpriteProgramType",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramManager_chooseSpriteProgramType'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_backend_ProgramManager_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (ProgramManager)");
@@ -4106,6 +4142,7 @@ int lua_register_ax_backend_ProgramManager(lua_State* tolua_S)
         tolua_function(tolua_S,"unloadAllPrograms",lua_ax_backend_ProgramManager_unloadAllPrograms);
         tolua_function(tolua_S,"getInstance", lua_ax_backend_ProgramManager_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_backend_ProgramManager_destroyInstance);
+        tolua_function(tolua_S,"chooseSpriteProgramType", lua_ax_backend_ProgramManager_chooseSpriteProgramType);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::backend::ProgramManager).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axb.ProgramManager";

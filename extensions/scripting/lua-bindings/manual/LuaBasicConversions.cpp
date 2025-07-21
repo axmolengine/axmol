@@ -506,7 +506,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
     return ok;
 }
 
-#if defined(AX_ENABLE_PHYSICS) && 0
+#if defined(AX_ENABLE_PHYSICS)
 bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
