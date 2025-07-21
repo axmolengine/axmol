@@ -7967,54 +7967,7 @@ int lua_register_ax_physics_PhysicsJoint(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_physics_PhysicsJointFixed_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointFixed* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointFixed",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointFixed*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointFixed_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointFixed_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointFixed:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointFixed_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointFixed_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointFixed_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -8034,23 +7987,23 @@ int lua_ax_physics_PhysicsJointFixed_construct(lua_State* tolua_S)
         ax::PhysicsBody* arg0;
         ax::PhysicsBody* arg1;
         ax::Vec2 arg2;
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointFixed:construct");
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointFixed:construct");
-        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointFixed:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointFixed:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointFixed:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointFixed:instantiate");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointFixed_construct'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointFixed_instantiate'", nullptr);
             return 0;
         }
-        auto&& ret = ax::PhysicsJointFixed::construct(arg0, arg1, arg2);
+        auto&& ret = ax::PhysicsJointFixed::instantiate(arg0, arg1, arg2);
         object_to_luaval<ax::PhysicsJointFixed>(tolua_S, "ax.PhysicsJointFixed",(ax::PhysicsJointFixed*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointFixed:construct",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointFixed:instantiate",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointFixed_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointFixed_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -8066,8 +8019,7 @@ int lua_register_ax_physics_PhysicsJointFixed(lua_State* tolua_S)
     tolua_cclass(tolua_S,"PhysicsJointFixed","ax.PhysicsJointFixed","ax.PhysicsJoint",nullptr);
 
     tolua_beginmodule(tolua_S,"PhysicsJointFixed");
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointFixed_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointFixed_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointFixed_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointFixed).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointFixed";
@@ -8463,54 +8415,7 @@ int lua_ax_physics_PhysicsJointLimit_setMax(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointLimit_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointLimit:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointLimit_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointLimit_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointLimit_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -8529,24 +8434,24 @@ int lua_ax_physics_PhysicsJointLimit_construct(lua_State* tolua_S)
         if (argc == 6)
         {
             ax::PhysicsBody* arg0;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
             ax::PhysicsBody* arg1;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
             ax::Vec2 arg2;
-            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
             ax::Vec2 arg3;
-            ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
             double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
-            ax::PhysicsJointLimit* ret = ax::PhysicsJointLimit::construct(arg0, arg1, arg2, arg3, arg4, arg5);
+            ax::PhysicsJointLimit* ret = ax::PhysicsJointLimit::instantiate(arg0, arg1, arg2, arg3, arg4, arg5);
             object_to_luaval<ax::PhysicsJointLimit>(tolua_S, "ax.PhysicsJointLimit",(ax::PhysicsJointLimit*)ret);
             return 1;
         }
@@ -8557,28 +8462,28 @@ int lua_ax_physics_PhysicsJointLimit_construct(lua_State* tolua_S)
         if (argc == 4)
         {
             ax::PhysicsBody* arg0;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
             ax::PhysicsBody* arg1;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
             ax::Vec2 arg2;
-            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
             ax::Vec2 arg3;
-            ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointLimit:construct");
+            ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointLimit:instantiate");
             if (!ok) { break; }
-            ax::PhysicsJointLimit* ret = ax::PhysicsJointLimit::construct(arg0, arg1, arg2, arg3);
+            ax::PhysicsJointLimit* ret = ax::PhysicsJointLimit::instantiate(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::PhysicsJointLimit>(tolua_S, "ax.PhysicsJointLimit",(ax::PhysicsJointLimit*)ret);
             return 1;
         }
     } while (0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.PhysicsJointLimit:construct",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.PhysicsJointLimit:instantiate",argc, 4);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointLimit_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointLimit_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -8602,8 +8507,7 @@ int lua_register_ax_physics_PhysicsJointLimit(lua_State* tolua_S)
         tolua_function(tolua_S,"setMin",lua_ax_physics_PhysicsJointLimit_setMin);
         tolua_function(tolua_S,"getMax",lua_ax_physics_PhysicsJointLimit_getMax);
         tolua_function(tolua_S,"setMax",lua_ax_physics_PhysicsJointLimit_setMax);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointLimit_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointLimit_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointLimit_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointLimit).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointLimit";
@@ -8611,54 +8515,7 @@ int lua_register_ax_physics_PhysicsJointLimit(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_physics_PhysicsJointPin_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointPin* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointPin",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointPin*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointPin_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointPin_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointPin:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointPin_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointPin_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointPin_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -8677,18 +8534,18 @@ int lua_ax_physics_PhysicsJointPin_construct(lua_State* tolua_S)
         if (argc == 4)
         {
             ax::PhysicsBody* arg0;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointPin:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointPin:instantiate");
             if (!ok) { break; }
             ax::PhysicsBody* arg1;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointPin:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointPin:instantiate");
             if (!ok) { break; }
             ax::Vec2 arg2;
-            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointPin:construct");
+            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointPin:instantiate");
             if (!ok) { break; }
             ax::Vec2 arg3;
-            ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointPin:construct");
+            ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointPin:instantiate");
             if (!ok) { break; }
-            ax::PhysicsJointPin* ret = ax::PhysicsJointPin::construct(arg0, arg1, arg2, arg3);
+            ax::PhysicsJointPin* ret = ax::PhysicsJointPin::instantiate(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::PhysicsJointPin>(tolua_S, "ax.PhysicsJointPin",(ax::PhysicsJointPin*)ret);
             return 1;
         }
@@ -8699,25 +8556,25 @@ int lua_ax_physics_PhysicsJointPin_construct(lua_State* tolua_S)
         if (argc == 3)
         {
             ax::PhysicsBody* arg0;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointPin:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointPin:instantiate");
             if (!ok) { break; }
             ax::PhysicsBody* arg1;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointPin:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointPin:instantiate");
             if (!ok) { break; }
             ax::Vec2 arg2;
-            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointPin:construct");
+            ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointPin:instantiate");
             if (!ok) { break; }
-            ax::PhysicsJointPin* ret = ax::PhysicsJointPin::construct(arg0, arg1, arg2);
+            ax::PhysicsJointPin* ret = ax::PhysicsJointPin::instantiate(arg0, arg1, arg2);
             object_to_luaval<ax::PhysicsJointPin>(tolua_S, "ax.PhysicsJointPin",(ax::PhysicsJointPin*)ret);
             return 1;
         }
     } while (0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.PhysicsJointPin:construct",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.PhysicsJointPin:instantiate",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointPin_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointPin_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -8733,8 +8590,7 @@ int lua_register_ax_physics_PhysicsJointPin(lua_State* tolua_S)
     tolua_cclass(tolua_S,"PhysicsJointPin","ax.PhysicsJointPin","ax.PhysicsJoint",nullptr);
 
     tolua_beginmodule(tolua_S,"PhysicsJointPin");
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointPin_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointPin_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointPin_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointPin).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointPin";
@@ -8839,54 +8695,7 @@ int lua_ax_physics_PhysicsJointDistance_setDistance(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointDistance_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointDistance* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointDistance",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointDistance_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointDistance_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointDistance:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointDistance_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointDistance_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointDistance_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -8907,24 +8716,24 @@ int lua_ax_physics_PhysicsJointDistance_construct(lua_State* tolua_S)
         ax::PhysicsBody* arg1;
         ax::Vec2 arg2;
         ax::Vec2 arg3;
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointDistance:construct");
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointDistance:construct");
-        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointDistance:construct");
-        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointDistance:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointDistance:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointDistance:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointDistance:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointDistance:instantiate");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointDistance_construct'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointDistance_instantiate'", nullptr);
             return 0;
         }
-        auto&& ret = ax::PhysicsJointDistance::construct(arg0, arg1, arg2, arg3);
+        auto&& ret = ax::PhysicsJointDistance::instantiate(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::PhysicsJointDistance>(tolua_S, "ax.PhysicsJointDistance",(ax::PhysicsJointDistance*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointDistance:construct",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointDistance:instantiate",argc, 4);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointDistance_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointDistance_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -8942,8 +8751,7 @@ int lua_register_ax_physics_PhysicsJointDistance(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PhysicsJointDistance");
         tolua_function(tolua_S,"getDistance",lua_ax_physics_PhysicsJointDistance_getDistance);
         tolua_function(tolua_S,"setDistance",lua_ax_physics_PhysicsJointDistance_setDistance);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointDistance_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointDistance_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointDistance_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointDistance).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointDistance";
@@ -9436,54 +9244,7 @@ int lua_ax_physics_PhysicsJointSpring_setDamping(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointSpring_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointSpring:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointSpring_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointSpring_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointSpring_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -9506,26 +9267,26 @@ int lua_ax_physics_PhysicsJointSpring_construct(lua_State* tolua_S)
         ax::Vec2 arg3;
         double arg4;
         double arg5;
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointSpring:construct");
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointSpring:construct");
-        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointSpring:construct");
-        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointSpring:construct");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.PhysicsJointSpring:construct");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.PhysicsJointSpring:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointSpring:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointSpring:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointSpring:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointSpring:instantiate");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.PhysicsJointSpring:instantiate");
+        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.PhysicsJointSpring:instantiate");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_construct'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_instantiate'", nullptr);
             return 0;
         }
-        auto&& ret = ax::PhysicsJointSpring::construct(arg0, arg1, arg2, arg3, arg4, arg5);
+        auto&& ret = ax::PhysicsJointSpring::instantiate(arg0, arg1, arg2, arg3, arg4, arg5);
         object_to_luaval<ax::PhysicsJointSpring>(tolua_S, "ax.PhysicsJointSpring",(ax::PhysicsJointSpring*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointSpring:construct",argc, 6);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointSpring:instantiate",argc, 6);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointSpring_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointSpring_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -9551,8 +9312,7 @@ int lua_register_ax_physics_PhysicsJointSpring(lua_State* tolua_S)
         tolua_function(tolua_S,"setStiffness",lua_ax_physics_PhysicsJointSpring_setStiffness);
         tolua_function(tolua_S,"getDamping",lua_ax_physics_PhysicsJointSpring_getDamping);
         tolua_function(tolua_S,"setDamping",lua_ax_physics_PhysicsJointSpring_setDamping);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointSpring_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointSpring_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointSpring_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointSpring).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointSpring";
@@ -9851,54 +9611,7 @@ int lua_ax_physics_PhysicsJointGroove_setAnchr2(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointGroove_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointGroove* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGroove_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointGroove:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointGroove_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointGroove_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointGroove_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -9920,25 +9633,25 @@ int lua_ax_physics_PhysicsJointGroove_construct(lua_State* tolua_S)
         ax::Vec2 arg2;
         ax::Vec2 arg3;
         ax::Vec2 arg4;
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointGroove:construct");
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointGroove:construct");
-        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointGroove:construct");
-        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointGroove:construct");
-        ok &= luaval_to_vec2(tolua_S, 6, &arg4, "ax.PhysicsJointGroove:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointGroove:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointGroove:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointGroove:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointGroove:instantiate");
+        ok &= luaval_to_vec2(tolua_S, 6, &arg4, "ax.PhysicsJointGroove:instantiate");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_construct'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_instantiate'", nullptr);
             return 0;
         }
-        auto&& ret = ax::PhysicsJointGroove::construct(arg0, arg1, arg2, arg3, arg4);
+        auto&& ret = ax::PhysicsJointGroove::instantiate(arg0, arg1, arg2, arg3, arg4);
         object_to_luaval<ax::PhysicsJointGroove>(tolua_S, "ax.PhysicsJointGroove",(ax::PhysicsJointGroove*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointGroove:construct",argc, 5);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointGroove:instantiate",argc, 5);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointGroove_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointGroove_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -9960,8 +9673,7 @@ int lua_register_ax_physics_PhysicsJointGroove(lua_State* tolua_S)
         tolua_function(tolua_S,"setGrooveB",lua_ax_physics_PhysicsJointGroove_setGrooveB);
         tolua_function(tolua_S,"getAnchr2",lua_ax_physics_PhysicsJointGroove_getAnchr2);
         tolua_function(tolua_S,"setAnchr2",lua_ax_physics_PhysicsJointGroove_setAnchr2);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointGroove_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointGroove_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointGroove_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointGroove).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointGroove";
@@ -10260,54 +9972,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_setDamping(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointRotarySpring_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointRotarySpring* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotarySpring_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointRotarySpring:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRotarySpring_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointRotarySpring_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointRotarySpring_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -10328,24 +9993,24 @@ int lua_ax_physics_PhysicsJointRotarySpring_construct(lua_State* tolua_S)
         ax::PhysicsBody* arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotarySpring:construct");
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotarySpring:construct");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRotarySpring:construct");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRotarySpring:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotarySpring:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotarySpring:instantiate");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRotarySpring:instantiate");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRotarySpring:instantiate");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_construct'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_instantiate'", nullptr);
             return 0;
         }
-        auto&& ret = ax::PhysicsJointRotarySpring::construct(arg0, arg1, arg2, arg3);
+        auto&& ret = ax::PhysicsJointRotarySpring::instantiate(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::PhysicsJointRotarySpring>(tolua_S, "ax.PhysicsJointRotarySpring",(ax::PhysicsJointRotarySpring*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointRotarySpring:construct",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointRotarySpring:instantiate",argc, 4);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRotarySpring_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRotarySpring_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -10367,8 +10032,7 @@ int lua_register_ax_physics_PhysicsJointRotarySpring(lua_State* tolua_S)
         tolua_function(tolua_S,"setStiffness",lua_ax_physics_PhysicsJointRotarySpring_setStiffness);
         tolua_function(tolua_S,"getDamping",lua_ax_physics_PhysicsJointRotarySpring_getDamping);
         tolua_function(tolua_S,"setDamping",lua_ax_physics_PhysicsJointRotarySpring_setDamping);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointRotarySpring_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointRotarySpring_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointRotarySpring_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointRotarySpring).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointRotarySpring";
@@ -10570,54 +10234,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_setMax(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointRotaryLimit_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointRotaryLimit* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotaryLimit_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointRotaryLimit:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRotaryLimit_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointRotaryLimit_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointRotaryLimit_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -10636,12 +10253,12 @@ int lua_ax_physics_PhysicsJointRotaryLimit_construct(lua_State* tolua_S)
         if (argc == 2)
         {
             ax::PhysicsBody* arg0;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotaryLimit:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotaryLimit:instantiate");
             if (!ok) { break; }
             ax::PhysicsBody* arg1;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotaryLimit:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotaryLimit:instantiate");
             if (!ok) { break; }
-            ax::PhysicsJointRotaryLimit* ret = ax::PhysicsJointRotaryLimit::construct(arg0, arg1);
+            ax::PhysicsJointRotaryLimit* ret = ax::PhysicsJointRotaryLimit::instantiate(arg0, arg1);
             object_to_luaval<ax::PhysicsJointRotaryLimit>(tolua_S, "ax.PhysicsJointRotaryLimit",(ax::PhysicsJointRotaryLimit*)ret);
             return 1;
         }
@@ -10652,28 +10269,28 @@ int lua_ax_physics_PhysicsJointRotaryLimit_construct(lua_State* tolua_S)
         if (argc == 4)
         {
             ax::PhysicsBody* arg0;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotaryLimit:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotaryLimit:instantiate");
             if (!ok) { break; }
             ax::PhysicsBody* arg1;
-            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotaryLimit:construct");
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotaryLimit:instantiate");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRotaryLimit:construct");
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRotaryLimit:instantiate");
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRotaryLimit:construct");
+            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRotaryLimit:instantiate");
             if (!ok) { break; }
-            ax::PhysicsJointRotaryLimit* ret = ax::PhysicsJointRotaryLimit::construct(arg0, arg1, arg2, arg3);
+            ax::PhysicsJointRotaryLimit* ret = ax::PhysicsJointRotaryLimit::instantiate(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::PhysicsJointRotaryLimit>(tolua_S, "ax.PhysicsJointRotaryLimit",(ax::PhysicsJointRotaryLimit*)ret);
             return 1;
         }
     } while (0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.PhysicsJointRotaryLimit:construct",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.PhysicsJointRotaryLimit:instantiate",argc, 4);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRotaryLimit_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRotaryLimit_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -10693,8 +10310,7 @@ int lua_register_ax_physics_PhysicsJointRotaryLimit(lua_State* tolua_S)
         tolua_function(tolua_S,"setMin",lua_ax_physics_PhysicsJointRotaryLimit_setMin);
         tolua_function(tolua_S,"getMax",lua_ax_physics_PhysicsJointRotaryLimit_getMax);
         tolua_function(tolua_S,"setMax",lua_ax_physics_PhysicsJointRotaryLimit_setMax);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointRotaryLimit_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointRotaryLimit_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointRotaryLimit_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointRotaryLimit).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointRotaryLimit";
@@ -10993,54 +10609,7 @@ int lua_ax_physics_PhysicsJointRatchet_setRatchet(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointRatchet_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointRatchet* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRatchet_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointRatchet:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRatchet_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointRatchet_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointRatchet_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -11061,24 +10630,24 @@ int lua_ax_physics_PhysicsJointRatchet_construct(lua_State* tolua_S)
         ax::PhysicsBody* arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRatchet:construct");
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRatchet:construct");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRatchet:construct");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRatchet:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRatchet:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRatchet:instantiate");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRatchet:instantiate");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRatchet:instantiate");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_construct'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_instantiate'", nullptr);
             return 0;
         }
-        auto&& ret = ax::PhysicsJointRatchet::construct(arg0, arg1, arg2, arg3);
+        auto&& ret = ax::PhysicsJointRatchet::instantiate(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::PhysicsJointRatchet>(tolua_S, "ax.PhysicsJointRatchet",(ax::PhysicsJointRatchet*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointRatchet:construct",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointRatchet:instantiate",argc, 4);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRatchet_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointRatchet_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -11100,8 +10669,7 @@ int lua_register_ax_physics_PhysicsJointRatchet(lua_State* tolua_S)
         tolua_function(tolua_S,"setPhase",lua_ax_physics_PhysicsJointRatchet_setPhase);
         tolua_function(tolua_S,"getRatchet",lua_ax_physics_PhysicsJointRatchet_getRatchet);
         tolua_function(tolua_S,"setRatchet",lua_ax_physics_PhysicsJointRatchet_setRatchet);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointRatchet_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointRatchet_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointRatchet_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointRatchet).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointRatchet";
@@ -11303,54 +10871,7 @@ int lua_ax_physics_PhysicsJointGear_setRatio(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointGear_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointGear* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGear_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGear_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointGear:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointGear_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointGear_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointGear_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -11371,24 +10892,24 @@ int lua_ax_physics_PhysicsJointGear_construct(lua_State* tolua_S)
         ax::PhysicsBody* arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointGear:construct");
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointGear:construct");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointGear:construct");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointGear:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointGear:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointGear:instantiate");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointGear:instantiate");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointGear:instantiate");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGear_construct'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGear_instantiate'", nullptr);
             return 0;
         }
-        auto&& ret = ax::PhysicsJointGear::construct(arg0, arg1, arg2, arg3);
+        auto&& ret = ax::PhysicsJointGear::instantiate(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::PhysicsJointGear>(tolua_S, "ax.PhysicsJointGear",(ax::PhysicsJointGear*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointGear:construct",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointGear:instantiate",argc, 4);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointGear_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointGear_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -11408,8 +10929,7 @@ int lua_register_ax_physics_PhysicsJointGear(lua_State* tolua_S)
         tolua_function(tolua_S,"setPhase",lua_ax_physics_PhysicsJointGear_setPhase);
         tolua_function(tolua_S,"getRatio",lua_ax_physics_PhysicsJointGear_getRatio);
         tolua_function(tolua_S,"setRatio",lua_ax_physics_PhysicsJointGear_setRatio);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointGear_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointGear_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointGear_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointGear).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointGear";
@@ -11514,54 +11034,7 @@ int lua_ax_physics_PhysicsJointMotor_setRate(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_physics_PhysicsJointMotor_createConstraints(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::PhysicsJointMotor* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointMotor",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointMotor_createConstraints'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointMotor_createConstraints'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->createConstraints();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJointMotor:createConstraints",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointMotor_createConstraints'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_physics_PhysicsJointMotor_construct(lua_State* tolua_S)
+int lua_ax_physics_PhysicsJointMotor_instantiate(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -11581,23 +11054,23 @@ int lua_ax_physics_PhysicsJointMotor_construct(lua_State* tolua_S)
         ax::PhysicsBody* arg0;
         ax::PhysicsBody* arg1;
         double arg2;
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointMotor:construct");
-        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointMotor:construct");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointMotor:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointMotor:instantiate");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointMotor:instantiate");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointMotor:instantiate");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointMotor_construct'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointMotor_instantiate'", nullptr);
             return 0;
         }
-        auto&& ret = ax::PhysicsJointMotor::construct(arg0, arg1, arg2);
+        auto&& ret = ax::PhysicsJointMotor::instantiate(arg0, arg1, arg2);
         object_to_luaval<ax::PhysicsJointMotor>(tolua_S, "ax.PhysicsJointMotor",(ax::PhysicsJointMotor*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointMotor:construct",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointMotor:instantiate",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointMotor_construct'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_physics_PhysicsJointMotor_instantiate'.",&tolua_err);
 #endif
     return 0;
 }
@@ -11615,8 +11088,7 @@ int lua_register_ax_physics_PhysicsJointMotor(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PhysicsJointMotor");
         tolua_function(tolua_S,"getRate",lua_ax_physics_PhysicsJointMotor_getRate);
         tolua_function(tolua_S,"setRate",lua_ax_physics_PhysicsJointMotor_setRate);
-        tolua_function(tolua_S,"createConstraints",lua_ax_physics_PhysicsJointMotor_createConstraints);
-        tolua_function(tolua_S,"construct", lua_ax_physics_PhysicsJointMotor_construct);
+        tolua_function(tolua_S,"instantiate", lua_ax_physics_PhysicsJointMotor_instantiate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PhysicsJointMotor).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointMotor";

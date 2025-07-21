@@ -78,7 +78,7 @@ local function onTouchBegan(touch, event)
         physicsBody:setDynamic(false)
         mouse:setPosition(location)
         curLayer:addChild(mouse)
-        local joint = cc.PhysicsJointPin:construct(physicsBody, body, location)
+        local joint = cc.PhysicsJointPin:instantiate(physicsBody, body, location)
         joint:setMaxForce(5000.0 * body:getMass())
         cc.Director:getInstance():getRunningScene():getPhysicsWorld():addJoint(joint)
         touch.mouse = mouse
@@ -253,7 +253,7 @@ local function PhysicsDemoLogoSmash()
        end
 
        cc.Director:getInstance():getRunningScene():getPhysicsWorld():setGravity(cc.p(0, 0))
-       cc.Director:getInstance():getRunningScene():getPhysicsWorld():setUpdateRate(5.0)
+       cc.Director:getInstance():getRunningScene():getPhysicsWorld():setUpdateRate(1)
        
        layer.ball = cc.SpriteBatchNode:create("Images/ball.png", #logo_image)
        layer:addChild(layer.ball)
@@ -269,9 +269,6 @@ local function PhysicsDemoLogoSmash()
                                         0.95, 
                                         cc.PhysicsMaterial(0.01, 0.0, 0.0))
                   local physicsBody = ball:getPhysicsBody()
-                  physicsBody:setMass(1.0)
-                  physicsBody:setMoment(PHYSICS_INFINITY)
-
                   layer.ball:addChild(ball)
 	              end
 	          end
@@ -280,7 +277,7 @@ local function PhysicsDemoLogoSmash()
        local bullet = makeBall(layer, cc.p(400, 0), 10, cc.PhysicsMaterial(PHYSICS_INFINITY, 0, 0))
 
        bullet:getPhysicsBody():setVelocity(cc.p(200, 0))
-       bullet:setPosition(cc.p(-500, VisibleRect:getVisibleRect().height/2))
+       bullet:setPosition(cc.p(5, VisibleRect:getVisibleRect().height/2))
        layer.ball:addChild(bullet)
     end
 
@@ -333,7 +330,7 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                local joint = cc.PhysicsJointPin:construct(sp1PhysicsBody, sp2PhysicsBody, offset)
+                local joint = cc.PhysicsJointPin:instantiate(sp1PhysicsBody, sp2PhysicsBody, offset)
                 cc.Director:getInstance():getRunningScene():getPhysicsWorld():addJoint(joint)
                     
                 layer:addChild(sp1)
@@ -347,7 +344,7 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                local joint = cc.PhysicsJointFixed:construct(sp1PhysicsBody, sp2PhysicsBody, offset)
+                local joint = cc.PhysicsJointFixed:instantiate(sp1PhysicsBody, sp2PhysicsBody, offset)
                 scene:getPhysicsWorld():addJoint(joint)
                     
                 layer:addChild(sp1)
@@ -361,7 +358,7 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                local joint = cc.PhysicsJointDistance:construct(sp1PhysicsBody, 
+                local joint = cc.PhysicsJointDistance:instantiate(sp1PhysicsBody, 
                                                                 sp2PhysicsBody, 
                                                                 cc.p(0, 0), 
                                                                 cc.p(0, 0))
@@ -378,7 +375,7 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                local joint = cc.PhysicsJointLimit:construct(sp1PhysicsBody, 
+                local joint = cc.PhysicsJointLimit:instantiate(sp1PhysicsBody, 
                                                              sp2PhysicsBody, 
                                                              cc.p(0, 0), 
                                                              cc.p(0, 0), 
@@ -397,7 +394,7 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                local joint = cc.PhysicsJointSpring:construct(sp1PhysicsBody, 
+                local joint = cc.PhysicsJointSpring:instantiate(sp1PhysicsBody, 
                                                               sp2PhysicsBody, 
                                                               cc.p(0, 0), 
                                                               cc.p(0, 0), 
@@ -416,7 +413,7 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                local joint = cc.PhysicsJointGroove:construct(sp1PhysicsBody, 
+                local joint = cc.PhysicsJointGroove:instantiate(sp1PhysicsBody, 
                                                               sp2PhysicsBody, 
                                                               cc.p(30, 15), 
                                                               cc.p(30, -15), 
@@ -434,13 +431,13 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
 
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp1PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp1PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp1:getPosition())))
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp2PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp2PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp2:getPosition())))
-                local joint = cc.PhysicsJointRotarySpring:construct(sp1PhysicsBody, 
+                local joint = cc.PhysicsJointRotarySpring:instantiate(sp1PhysicsBody, 
                                                                     sp2PhysicsBody, 
                                                                     3000.0, 
                                                                     60.0)
@@ -457,13 +454,13 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp1PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp1PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp1:getPosition())))
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp2PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp2PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp2:getPosition())))
-                local joint = cc.PhysicsJointRotaryLimit:construct(sp1PhysicsBody, 
+                local joint = cc.PhysicsJointRotaryLimit:instantiate(sp1PhysicsBody, 
                                                                    sp2PhysicsBody, 
                                                                    0.0, 
                                                                    math.pi/2)
@@ -480,13 +477,13 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp1PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp1PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp1:getPosition())))
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp2PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp2PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp2:getPosition())))
-                local joint = cc.PhysicsJointRatchet:construct(sp1PhysicsBody, 
+                local joint = cc.PhysicsJointRatchet:instantiate(sp1PhysicsBody, 
                                                                sp2PhysicsBody, 
                                                                0.0, 
                                                                math.pi/2)
@@ -503,13 +500,13 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp1PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp1PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp1:getPosition())))
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp2PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp2PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp2:getPosition())))
-                local joint = cc.PhysicsJointGear:construct(sp1PhysicsBody, sp2PhysicsBody, 0.0, 2.0)
+                local joint = cc.PhysicsJointGear:instantiate(sp1PhysicsBody, sp2PhysicsBody, 0.0, 2.0)
                 scene:getPhysicsWorld():addJoint(joint)
                     
                 layer:addChild(sp1)
@@ -523,13 +520,13 @@ local function PhysicsDemoJoints()
                 local sp2PhysicsBody = sp2:getPhysicsBody()
                 sp2PhysicsBody:setTag(DRAG_BODYS_TAG)
                     
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp1PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp1PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp1:getPosition())))
-                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:construct(sp2PhysicsBody, 
+                scene:getPhysicsWorld():addJoint(cc.PhysicsJointPin:instantiate(sp2PhysicsBody, 
                                                                               box, 
                                                                               cc.p(sp2:getPosition())))
-                local joint = cc.PhysicsJointMotor:construct(sp1PhysicsBody, sp2PhysicsBody, math.pi/2)
+                local joint = cc.PhysicsJointMotor:instantiate(sp1PhysicsBody, sp2PhysicsBody, math.pi/2)
                 scene:getPhysicsWorld():addJoint(joint)
                     
                 layer:addChild(sp1)
@@ -746,7 +743,6 @@ local function PhysicsDemoOneWayPlatform()
       local ballPhysicsBody = ball:getPhysicsBody()
       ballPhysicsBody:setVelocity(cc.p(0, 150))
       ballPhysicsBody:setTag(DRAG_BODYS_TAG)
-      ballPhysicsBody:setMass(1.0)
       ballPhysicsBody:setContactTestBitmask(0xFFFFFFFF)
       layer:addChild(ball)
 
@@ -942,7 +938,7 @@ local function PhysicsDemoPump()
     sgearB:setCategoryBitmask(4)
     sgearB:setCollisionBitmask(4)
     sgearB:setTag(1)
-    world:addJoint(cc.PhysicsJointPin:construct(body, sgearB, cc.p(sgear:getPosition())))
+    world:addJoint(cc.PhysicsJointPin:instantiate(body, sgearB, cc.p(sgear:getPosition())))
     
     
     -- big gear
@@ -952,7 +948,7 @@ local function PhysicsDemoPump()
     bgear:setPosition(cc.p(VisibleRect:leftBottom().x + 275, VisibleRect:leftBottom().y))
     layer:addChild(bgear)
     bgearB:setCategoryBitmask(4)
-    world:addJoint(cc.PhysicsJointPin:construct(body, bgearB, cc.p(bgear:getPosition())))
+    world:addJoint(cc.PhysicsJointPin:instantiate(body, bgearB, cc.p(bgear:getPosition())))
     
     
     -- pump
@@ -966,7 +962,7 @@ local function PhysicsDemoPump()
     layer:addChild(pump)
     pumpB:setCategoryBitmask(2)
     pumpB:setGravityEnable(false)
-    world:addJoint(cc.PhysicsJointDistance:construct(pumpB, sgearB, cc.p(0, 0), cc.p(0, -44)))
+    world:addJoint(cc.PhysicsJointDistance:instantiate(pumpB, sgearB, cc.p(0, 0), cc.p(0, -44)))
     
     -- plugger
     local seg = {cc.p(VisibleRect:leftTop().x + 75, VisibleRect:leftTop().y-120), 
@@ -980,18 +976,16 @@ local function PhysicsDemoPump()
                                                       cc.PhysicsMaterial(0.01, 0.0, 0.5), 
                                                       20)
     pluggerB:setDynamic(true)
-    pluggerB:setMass(30)
-    pluggerB:setMoment(100000)
     plugger:setPhysicsBody(pluggerB)
     plugger:setPosition(segCenter)
     layer:addChild(plugger)
     pluggerB:setCategoryBitmask(2)
     sgearB:setCollisionBitmask(5)
-    world:addJoint(cc.PhysicsJointPin:construct(body, 
+    world:addJoint(cc.PhysicsJointPin:instantiate(body, 
                                                 pluggerB, 
                                                 cc.p(VisibleRect:leftBottom().x + 75, 
                                                      VisibleRect:leftBottom().y-90)))
-    world:addJoint(cc.PhysicsJointDistance:construct(pluggerB, 
+    world:addJoint(cc.PhysicsJointDistance:instantiate(pluggerB, 
                                                      sgearB, 
                                                      pluggerB:world2Local(cc.p(0,0)), 
                                                      cc.p(44, 0)))
@@ -1482,7 +1476,6 @@ local function PhysicsSetGravityEnableTest()
 
     local box = makeBox(cc.p(200, 100), cc.size(50, 50), 2)
     local boxBody = box:getPhysicsBody()
-    boxBody:setMass(20)
     boxBody:setTag(DRAG_BODYS_TAG)
     boxBody:setGravityEnable(false)
     layer:addChild(box)
@@ -1492,13 +1485,11 @@ local function PhysicsSetGravityEnableTest()
     local ballBody = ball:getPhysicsBody()
     ballBody:setTag(DRAG_BODYS_TAG)
     ballBody:setGravityEnable(false)
-    ballBody:setMass(50)
     layer:addChild(ball)
 
     local function onScheduleOnce()
       cclog("onScheduleOnce")
       local ball = layer:getChildByTag(2)
-      ball:getPhysicsBody():setMass(200)
       cc.Director:getInstance():getRunningScene():getPhysicsWorld():setGravity(cc.p(0, 98))
     end
     --layer:scheduleOnce(onScheduleOnce,1.0)
@@ -1584,7 +1575,7 @@ end
 local function PhysicsFixedUpdate()
   local layer = cc.Layer:create()
   local function onEnter()
-    cc.Director:getInstance():getRunningScene():getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
+    -- cc.Director:getInstance():getRunningScene():getPhysicsWorld():setDebugDrawMask(cc.PhysicsWorld.DEBUGDRAW_ALL)
     cc.Director:getInstance():getRunningScene():getPhysicsWorld():setGravity(cc.p(0, 0))
 
     local function addBall()
