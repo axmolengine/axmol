@@ -2208,10 +2208,10 @@ void FadeTo::update(float time)
 //
 // TintTo
 //
-TintTo* TintTo::create(float duration, uint8_t red, uint8_t green, uint8_t blue)
+TintTo* TintTo::create(float duration, const Color32& color)
 {
     TintTo* tintTo = new TintTo();
-    if (tintTo->initWithDuration(duration, red, green, blue))
+    if (tintTo->initWithDuration(duration, color))
     {
         tintTo->autorelease();
         return tintTo;
@@ -2221,16 +2221,11 @@ TintTo* TintTo::create(float duration, uint8_t red, uint8_t green, uint8_t blue)
     return nullptr;
 }
 
-TintTo* TintTo::create(float duration, const Color3B& color)
-{
-    return create(duration, color.r, color.g, color.b);
-}
-
-bool TintTo::initWithDuration(float duration, uint8_t red, uint8_t green, uint8_t blue)
+bool TintTo::initWithDuration(float duration, const Color32& color)
 {
     if (ActionInterval::initWithDuration(duration))
     {
-        _to = Color3B(red, green, blue);
+        _to = color;
         return true;
     }
 
@@ -2240,7 +2235,7 @@ bool TintTo::initWithDuration(float duration, uint8_t red, uint8_t green, uint8_
 TintTo* TintTo::clone() const
 {
     // no copy constructor
-    return TintTo::create(_duration, _to.r, _to.g, _to.b);
+    return TintTo::create(_duration, _to);
 }
 
 TintTo* TintTo::reverse() const
@@ -2262,9 +2257,11 @@ void TintTo::update(float time)
 {
     if (_target)
     {
-        _target->setColor(Color3B(uint8_t(_from.r + (_to.r - _from.r) * time),
+        // FIXME: should we need introduce opacity tint support in axmol-v3?
+        auto opacity = _target->getColor().a;
+        _target->setColor(Color32{uint8_t(_from.r + (_to.r - _from.r) * time),
                                   (uint8_t)(_from.g + (_to.g - _from.g) * time),
-                                  (uint8_t)(_from.b + (_to.b - _from.b) * time)));
+                                  (uint8_t)(_from.b + (_to.b - _from.b) * time), opacity});
     }
 }
 
@@ -2311,7 +2308,7 @@ void TintBy::startWithTarget(Node* target)
 
     if (target)
     {
-        Color3B color = target->getColor();
+        auto color = target->getColor();
         _fromR        = color.r;
         _fromG        = color.g;
         _fromB        = color.b;
@@ -2322,8 +2319,10 @@ void TintBy::update(float time)
 {
     if (_target)
     {
-        _target->setColor(Color3B((uint8_t)(_fromR + _deltaR * time), (uint8_t)(_fromG + _deltaG * time),
-                                  (uint8_t)(_fromB + _deltaB * time)));
+        // FIXME: do we should introduce opacity tint support in axmol-v3?
+        auto opacity = _target->getColor().a;
+        _target->setColor(Color32((uint8_t)(_fromR + _deltaR * time), (uint8_t)(_fromG + _deltaG * time),
+                                  (uint8_t)(_fromB + _deltaB * time), opacity));
     }
 }
 

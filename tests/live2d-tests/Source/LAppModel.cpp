@@ -802,7 +802,8 @@ void LAppModel::SetSpriteColor(float r, float g, float b, float a)
 {
     if (_renderSprite != NULL)
     {
-        _renderSprite->getSprite()->setColor(Color3B(static_cast<unsigned char>(255.0f * r), static_cast<unsigned char>(255.0f * g), static_cast<unsigned char>(255.0f * b)));
-        _renderSprite->getSprite()->setOpacity(static_cast<unsigned char>(255.0f * a));
+        _renderSprite->getSprite()->setColor(
+            Color32(static_cast<unsigned char>(255.0f * r), static_cast<unsigned char>(255.0f * g),
+                    static_cast<unsigned char>(255.0f * b), static_cast<unsigned char>(255.0f * a)));
     }
 }

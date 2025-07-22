@@ -247,10 +247,10 @@ void Bone::setBlendFunc(const BlendFunc& blendFunc)
     }
 }
 
-void Bone::updateDisplayedColor(const Color3B& parentColor)
+void Bone::updateDisplayedColor(const Color32& parentColor)
 {
 #ifdef AX_STUDIO_ENABLED_VIEW
-    _realColor = Color3B(255, 255, 255);
+    _realColor = Color32::WHITE;
 #endif  // AX_STUDIO_ENABLED_VIEW
     Node::updateDisplayedColor(parentColor);
 }
@@ -258,7 +258,7 @@ void Bone::updateDisplayedColor(const Color3B& parentColor)
 void Bone::updateDisplayedOpacity(uint8_t parentOpacity)
 {
 #ifdef AX_STUDIO_ENABLED_VIEW
-    _realOpacity = 255;
+    _realColor.a = 255;
 #endif  // AX_STUDIO_ENABLED_VIEW
     Node::updateDisplayedOpacity(parentOpacity);
 }
@@ -268,9 +268,8 @@ void Bone::updateColor()
     Node* display = _displayManager->getDisplayRenderNode();
     if (display != nullptr)
     {
-        display->setColor(Color3B(_displayedColor.r * _tweenData->r / 255, _displayedColor.g * _tweenData->g / 255,
-                                  _displayedColor.b * _tweenData->b / 255));
-        display->setOpacity(_displayedOpacity * _tweenData->a / 255);
+        display->setColor(Color32(_displayedColor.r * _tweenData->r / 255, _displayedColor.g * _tweenData->g / 255,
+                                  _displayedColor.b * _tweenData->b / 255, _displayedColor.a * _tweenData->a / 255));
     }
 }
 

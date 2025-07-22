@@ -20,12 +20,12 @@ end
 
 function Event:bind(target)
     self:init_()
-    cc.setmethods(target, self, EXPORTED_METHODS)
+    ax.setmethods(target, self, EXPORTED_METHODS)
     self.target_ = target
 end
 
 function Event:unbind(target)
-    cc.unsetmethods(target, EXPORTED_METHODS)
+    ax.unsetmethods(target, EXPORTED_METHODS)
     self:init_()
 end
 

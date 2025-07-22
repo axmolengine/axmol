@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 ]]
 
-local Sprite = cc.Sprite
+local Sprite = ax.Sprite
 
 function Sprite:playAnimationOnce(animation, args)
     local actions = {}
@@ -30,28 +30,28 @@ function Sprite:playAnimationOnce(animation, args)
     local showDelay = args.showDelay
     if showDelay then
         self:setVisible(false)
-        actions[#actions + 1] = cc.DelayTime:create(showDelay)
-        actions[#actions + 1] = cc.Show:create()
+        actions[#actions + 1] = ax.DelayTime:create(showDelay)
+        actions[#actions + 1] = ax.Show:create()
     end
 
     local delay = args.delay or 0
     if delay > 0 then
-        actions[#actions + 1] = cc.DelayTime:create(delay)
+        actions[#actions + 1] = ax.DelayTime:create(delay)
     end
 
-    actions[#actions + 1] = cc.Animate:create(animation)
+    actions[#actions + 1] = ax.Animate:create(animation)
 
     if args.removeSelf then
-        actions[#actions + 1] = cc.RemoveSelf:create()
+        actions[#actions + 1] = ax.RemoveSelf:create()
     end
 
     if args.onComplete then
-        actions[#actions + 1] = cc.CallFunc:create(args.onComplete)
+        actions[#actions + 1] = ax.CallFunc:create(args.onComplete)
     end
 
     local action
     if #actions > 1 then
-        action = cc.Sequence:create(actions)
+        action = ax.Sequence:create(actions)
     else
         action = actions[1]
     end
@@ -60,8 +60,8 @@ function Sprite:playAnimationOnce(animation, args)
 end
 
 function Sprite:playAnimationForever(animation)
-    local animate = cc.Animate:create(animation)
-    local action = cc.RepeatForever:create(animate)
+    local animate = ax.Animate:create(animation)
+    local action = ax.RepeatForever:create(animate)
     self:runAction(action)
     return action
 end

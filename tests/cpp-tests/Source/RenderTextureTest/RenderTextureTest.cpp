@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -190,7 +190,7 @@ void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event
         for (int i = 0; i < d; ++i)
         {
             Sprite* sprite = Sprite::create("Images/fire.png");
-            sprite->setColor(Color3B::RED);
+            sprite->setColor(Color32::RED);
             sprite->setOpacity(20);
             _brushs.pushBack(sprite);
         }
@@ -203,9 +203,9 @@ void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event
             _brushs.at(i)->setRotation(rand() % 360);
             float r = (float)(rand() % 50 / 50.f) + 0.25f;
             _brushs.at(i)->setScale(r);
-            /*_brush->setColor(Color3B(AXRANDOM_0_1() * 127 + 128, 255, 255));*/
+            /*_brush->setColor(Color32(AXRANDOM_0_1() * 127 + 128, 255, 255));*/
             // Use AXRANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
-            _brushs.at(i)->setColor(Color3B(rand() % 127 + 128, 255, 255));
+            _brushs.at(i)->setColor(Color32(rand() % 127 + 128, 255, 255));
             // Call visit to draw the brush, don't call draw..
             _brushs.at(i)->visit();
         }
@@ -345,7 +345,7 @@ RenderTextureZbuffer::RenderTextureZbuffer()
     sp9->setPositionZ(-400);
 
     sp9->setScale(2);
-    sp9->setColor(Color3B::YELLOW);
+    sp9->setColor(Color32::YELLOW);
 }
 
 std::string RenderTextureZbuffer::title() const
@@ -422,7 +422,7 @@ void RenderTextureZbuffer::renderScreenShot()
     sprite->setOpacity(182);
     sprite->setFlippedY(1);
     this->addChild(sprite, 999999);
-    sprite->setColor(Color3B::GREEN);
+    sprite->setColor(Color32::GREEN);
 
     sprite->runAction(Sequence::create(FadeTo::create(2, 0), RemoveSelf::create(), nullptr));
 }

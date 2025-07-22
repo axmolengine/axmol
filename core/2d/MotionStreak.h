@@ -3,6 +3,7 @@ Copyright (c) 2011      ForzeField Studios S.L.
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -29,6 +30,7 @@ THE SOFTWARE.
 #include "base/Protocols.h"
 #include "2d/Node.h"
 #include "renderer/CustomCommand.h"
+#include "base/axstd.h"
 
 namespace ax
 {
@@ -59,7 +61,7 @@ public:
     static MotionStreak* create(float timeToFade,
                                 float minSeg,
                                 float strokeWidth,
-                                const Color3B& strokeColor,
+                                const Color32& strokeColor,
                                 std::string_view imagePath);
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture.
      *
@@ -73,7 +75,7 @@ public:
     static MotionStreak* create(float timeToFade,
                                 float minSeg,
                                 float strokeWidth,
-                                const Color3B& strokeColor,
+                                const Color32& strokeColor,
                                 Texture2D* texture);
 
     // Overrides
@@ -113,7 +115,7 @@ public:
      *
      * @param colors The color used for the tint.
      */
-    void tintWithColor(const Color3B& colors);
+    void tintWithColor(const Color32& colors);
 
     /** Remove all living segments of the ribbon.
      */
@@ -161,10 +163,10 @@ public:
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename
      */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color32& color, std::string_view path);
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture);
 
 protected:
     bool _fastMode                    = false;
@@ -187,10 +189,7 @@ protected:
     Vec2* _pointVertexes = nullptr;
     float* _pointState   = nullptr;
 
-    Vec2* _vertices           = nullptr;
-    uint8_t* _colorPointer    = nullptr;
-    Tex2F* _texCoords         = nullptr;
-    unsigned int _vertexCount = 0;
+    axstd::pod_vector<V2F_T2F_C4B> _vertices;
 
     CustomCommand _customCommand;
 

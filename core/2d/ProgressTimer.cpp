@@ -232,19 +232,19 @@ void ProgressTimer::updateDisplayedOpacity(uint8_t parentOpacity)
 {
     Node::updateDisplayedOpacity(parentOpacity);
 
-    _displayedOpacity = _realOpacity * parentOpacity / 0xFF;
+    _displayedColor.a = _realColor.a * parentOpacity / 0xFF;
 
-    _sprite->setOpacity(_displayedOpacity);
+    _sprite->setOpacity(_displayedColor.a);
     updateColor();
     updateProgress();
 
     if (_cascadeOpacityEnabled)
     {
-        _sprite->updateDisplayedOpacity(_displayedOpacity);
+        _sprite->updateDisplayedOpacity(_displayedColor.a);
 
         for(const auto& child : _children)
         {
-            child->updateDisplayedOpacity(_displayedOpacity);
+            child->updateDisplayedOpacity(_displayedColor.a);
         }
     }
 }
@@ -293,22 +293,22 @@ Vec2 ProgressTimer::getMidpoint() const
     return _midpoint;
 }
 
-void ProgressTimer::setColor(const Color3B& color)
+void ProgressTimer::setColor(const Color32& color)
 {
     _sprite->setColor(color);
     updateColor();
 }
 
-const Color3B& ProgressTimer::getColor() const
+const Color32& ProgressTimer::getColor() const
 {
     return _sprite->getColor();
 }
 
 void ProgressTimer::setOpacity(uint8_t opacity)
 {
-    _displayedOpacity = _realOpacity = opacity;
+    _displayedColor.a = _realColor.a = opacity;
 
-    _sprite->setOpacity(_displayedOpacity);
+    _sprite->setOpacity(opacity);
     updateColor();
 
     updateCascadeOpacity();

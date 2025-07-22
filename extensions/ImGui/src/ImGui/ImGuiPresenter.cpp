@@ -804,8 +804,7 @@ void ImGuiPresenter::setNodeColor(Node* node, const ImVec4& col)
 {
     if (node)
     {
-        node->setColor({uint8_t(col.x * 255), uint8_t(col.y * 255), uint8_t(col.z * 255)});
-        node->setOpacity(uint8_t(col.w * 255));
+        node->setColor({uint8_t(col.x * 255), uint8_t(col.y * 255), uint8_t(col.z * 255), uint8_t(col.w * 255)});
     }
 }
 

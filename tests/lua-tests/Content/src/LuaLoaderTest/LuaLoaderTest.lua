@@ -11,13 +11,13 @@ local function TestNode()
     local function title()
         return "LuaLoaderTest"
     end
-    local node = cc.Node:create()
+    local node = ax.Node:create()
 
     local function onEnter()
-        local titleLabel = cc.Label:createWithTTF(title(), "fonts/arial.ttf", 32)
+        local titleLabel = ax.Label:createWithTTF(title(), "fonts/arial.ttf", 32)
         node:addChild(titleLabel, 1)
-        titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
-        titleLabel:setPosition( cc.p(VisibleRect:center().x, VisibleRect:top().y - 50) )
+        titleLabel:setAnchorPoint(ax.p(0.5, 0.5))
+        titleLabel:setPosition( ax.p(VisibleRect:center().x, VisibleRect:top().y - 50) )
         local oldPath = package.path
         local result = {}
         for _,tab in ipairs(testPatches) do
@@ -26,9 +26,9 @@ local function TestNode()
             result[#result+1] = 'Loading by path "'..tab[1]..'", filename "'..tab[2]..'": '..(ok and 'success' or 'failure')
             package.path = oldPath
         end
-        local label = cc.Label:createWithTTF(table.concat(result, '\n'), "fonts/Marker Felt.ttf", 10)
+        local label = ax.Label:createWithTTF(table.concat(result, '\n'), "fonts/Marker Felt.ttf", 10)
         node:addChild(label, 1)
-        label:setAnchorPoint(cc.p(0.5, 0.5))
+        label:setAnchorPoint(ax.p(0.5, 0.5))
         label:setPosition(VisibleRect:center())
     end
 
@@ -39,13 +39,13 @@ local function TestNode()
     end
 
     node:registerScriptHandler(onNodeEvent)
-    
+
     return node
 end
 
 function LuaLoaderMain()
     cclog("LuaLoaderMain")
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     scene:addChild(TestNode())
     scene:addChild(CreateBackMenuItem())
     return scene

@@ -26,29 +26,29 @@ local unpack = table.unpack
 local transition = {}
 
 local ACTION_EASING = {}
-ACTION_EASING["BACKIN"]           = {cc.EaseBackIn, 1}
-ACTION_EASING["BACKINOUT"]        = {cc.EaseBackInOut, 1}
-ACTION_EASING["BACKOUT"]          = {cc.EaseBackOut, 1}
-ACTION_EASING["BOUNCE"]           = {cc.EaseBounce, 1}
-ACTION_EASING["BOUNCEIN"]         = {cc.EaseBounceIn, 1}
-ACTION_EASING["BOUNCEINOUT"]      = {cc.EaseBounceInOut, 1}
-ACTION_EASING["BOUNCEOUT"]        = {cc.EaseBounceOut, 1}
-ACTION_EASING["ELASTIC"]          = {cc.EaseElastic, 2, 0.3}
-ACTION_EASING["ELASTICIN"]        = {cc.EaseElasticIn, 2, 0.3}
-ACTION_EASING["ELASTICINOUT"]     = {cc.EaseElasticInOut, 2, 0.3}
-ACTION_EASING["ELASTICOUT"]       = {cc.EaseElasticOut, 2, 0.3}
-ACTION_EASING["EXPONENTIALIN"]    = {cc.EaseExponentialIn, 1}
-ACTION_EASING["EXPONENTIALINOUT"] = {cc.EaseExponentialInOut, 1}
-ACTION_EASING["EXPONENTIALOUT"]   = {cc.EaseExponentialOut, 1}
-ACTION_EASING["IN"]               = {cc.EaseIn, 2, 1}
-ACTION_EASING["INOUT"]            = {cc.EaseInOut, 2, 1}
-ACTION_EASING["OUT"]              = {cc.EaseOut, 2, 1}
-ACTION_EASING["RATEACTION"]       = {cc.EaseRateAction, 2, 1}
-ACTION_EASING["SINEIN"]           = {cc.EaseSineIn, 1}
-ACTION_EASING["SINEINOUT"]        = {cc.EaseSineInOut, 1}
-ACTION_EASING["SINEOUT"]          = {cc.EaseSineOut, 1}
+ACTION_EASING["BACKIN"]           = {ax.EaseBackIn, 1}
+ACTION_EASING["BACKINOUT"]        = {ax.EaseBackInOut, 1}
+ACTION_EASING["BACKOUT"]          = {ax.EaseBackOut, 1}
+ACTION_EASING["BOUNCE"]           = {ax.EaseBounce, 1}
+ACTION_EASING["BOUNCEIN"]         = {ax.EaseBounceIn, 1}
+ACTION_EASING["BOUNCEINOUT"]      = {ax.EaseBounceInOut, 1}
+ACTION_EASING["BOUNCEOUT"]        = {ax.EaseBounceOut, 1}
+ACTION_EASING["ELASTIC"]          = {ax.EaseElastic, 2, 0.3}
+ACTION_EASING["ELASTICIN"]        = {ax.EaseElasticIn, 2, 0.3}
+ACTION_EASING["ELASTICINOUT"]     = {ax.EaseElasticInOut, 2, 0.3}
+ACTION_EASING["ELASTICOUT"]       = {ax.EaseElasticOut, 2, 0.3}
+ACTION_EASING["EXPONENTIALIN"]    = {ax.EaseExponentialIn, 1}
+ACTION_EASING["EXPONENTIALINOUT"] = {ax.EaseExponentialInOut, 1}
+ACTION_EASING["EXPONENTIALOUT"]   = {ax.EaseExponentialOut, 1}
+ACTION_EASING["IN"]               = {ax.EaseIn, 2, 1}
+ACTION_EASING["INOUT"]            = {ax.EaseInOut, 2, 1}
+ACTION_EASING["OUT"]              = {ax.EaseOut, 2, 1}
+ACTION_EASING["RATEACTION"]       = {ax.EaseRateAction, 2, 1}
+ACTION_EASING["SINEIN"]           = {ax.EaseSineIn, 1}
+ACTION_EASING["SINEINOUT"]        = {ax.EaseSineInOut, 1}
+ACTION_EASING["SINEOUT"]          = {ax.EaseSineOut, 1}
 
-local actionManager = cc.Director:getInstance():getActionManager()
+local actionManager = ax.Director:getInstance():getActionManager()
 
 function transition.newEasing(action, easingName, more)
     local key = string.upper(tostring(easingName))
@@ -77,18 +77,18 @@ function transition.create(action, args)
     local actions = {}
     local delay = checknumber(args.delay)
     if delay > 0 then
-        actions[#actions + 1] = cc.DelayTime:create(delay)
+        actions[#actions + 1] = ax.DelayTime:create(delay)
     end
     actions[#actions + 1] = action
 
     local onComplete = args.onComplete
     if type(onComplete) ~= "function" then onComplete = nil end
     if onComplete then
-        actions[#actions + 1] = cc.CallFunc:create(onComplete)
+        actions[#actions + 1] = ax.CallFunc:create(onComplete)
     end
 
     if args.removeSelf then
-        actions[#actions + 1] = cc.RemoveSelf:create()
+        actions[#actions + 1] = ax.RemoveSelf:create()
     end
 
     if #actions > 1 then
@@ -99,57 +99,57 @@ function transition.create(action, args)
 end
 
 function transition.execute(target, action, args)
-    assert(not tolua.isnull(target), "transition.execute() - target is not cc.Node")
+    assert(not tolua.isnull(target), "transition.execute() - target is not ax.Node")
     local action = transition.create(action, args)
     target:runAction(action)
     return action
 end
 
 function transition.moveTo(target, args)
-    assert(not tolua.isnull(target), "transition.moveTo() - target is not cc.Node")
+    assert(not tolua.isnull(target), "transition.moveTo() - target is not ax.Node")
     local x = args.x or target:getPositionX()
     local y = args.y or target:getPositionY()
-    local action = cc.MoveTo:create(args.time, cc.p(x, y))
+    local action = ax.MoveTo:create(args.time, ax.p(x, y))
     return transition.execute(target, action, args)
 end
 
 function transition.moveBy(target, args)
-    assert(not tolua.isnull(target), "transition.moveBy() - target is not cc.Node")
+    assert(not tolua.isnull(target), "transition.moveBy() - target is not ax.Node")
     local x = args.x or 0
     local y = args.y or 0
-    local action = cc.MoveBy:create(args.time, cc.p(x, y))
+    local action = ax.MoveBy:create(args.time, ax.p(x, y))
     return transition.execute(target, action, args)
 end
 
 function transition.fadeIn(target, args)
-    assert(not tolua.isnull(target), "transition.fadeIn() - target is not cc.Node")
-    local action = cc.FadeIn:create(args.time)
+    assert(not tolua.isnull(target), "transition.fadeIn() - target is not ax.Node")
+    local action = ax.FadeIn:create(args.time)
     return transition.execute(target, action, args)
 end
 
 function transition.fadeOut(target, args)
-    assert(not tolua.isnull(target), "transition.fadeOut() - target is not cc.Node")
-    local action = cc.FadeOut:create(args.time)
+    assert(not tolua.isnull(target), "transition.fadeOut() - target is not ax.Node")
+    local action = ax.FadeOut:create(args.time)
     return transition.execute(target, action, args)
 end
 
 function transition.fadeTo(target, args)
-    assert(not tolua.isnull(target), "transition.fadeTo() - target is not cc.Node")
+    assert(not tolua.isnull(target), "transition.fadeTo() - target is not ax.Node")
     local opacity = checkint(args.opacity)
     if opacity < 0 then
         opacity = 0
     elseif opacity > 255 then
         opacity = 255
     end
-    local action = cc.FadeTo:create(args.time, opacity)
+    local action = ax.FadeTo:create(args.time, opacity)
     return transition.execute(target, action, args)
 end
 
 function transition.scaleTo(target, args)
-    assert(not tolua.isnull(target), "transition.scaleTo() - target is not cc.Node")
+    assert(not tolua.isnull(target), "transition.scaleTo() - target is not ax.Node")
     local action
     if args.scale then
-        action = cc.ScaleTo:create(checknumber(args.time), checknumber(args.scale))
+        action = ax.ScaleTo:create(checknumber(args.time), checknumber(args.scale))
     elseif args.scaleX or args.scaleY then
         local scaleX, scaleY
         if args.scaleX then
@@ -162,29 +162,29 @@ function transition.scaleTo(target, args)
         else
             scaleY = target:getScaleY()
         end
-        action = cc.ScaleTo:create(checknumber(args.time), scaleX, scaleY)
+        action = ax.ScaleTo:create(checknumber(args.time), scaleX, scaleY)
     end
     return transition.execute(target, action, args)
 end
 
 function transition.rotateTo(target, args)
-    assert(not tolua.isnull(target), "transition.rotateTo() - target is not cc.Node")
+    assert(not tolua.isnull(target), "transition.rotateTo() - target is not ax.Node")
     local rotation = args.rotation or target:getRotation()
-    local action = cc.RotateTo:create(args.time, rotation)
+    local action = ax.RotateTo:create(args.time, rotation)
     return transition.execute(target, action, args)
 end
 
 function transition.rotateBy(target, args)
-    assert(not tolua.isnull(target), "transition.rotateTo() - target is not cc.Node")
+    assert(not tolua.isnull(target), "transition.rotateTo() - target is not ax.Node")
     local rotation = args.rotation or 0
-    local action = cc.RotateBy:create(args.time, rotation)
+    local action = ax.RotateBy:create(args.time, rotation)
     return transition.execute(target, action, args)
 end
 
 function transition.sequence(actions)
     if #actions < 1 then return end
     if #actions < 2 then return actions[1] end
-    return cc.Sequence:create(actions)
+    return ax.Sequence:create(actions)
 end
 
 function transition.removeAction(action)

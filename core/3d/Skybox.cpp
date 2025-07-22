@@ -149,7 +149,8 @@ void Skybox::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     // prescale the matrix to account for the camera fov
     cameraModelMat.scale(1 / projectionMat.m[0], 1 / projectionMat.m[5], 1.0);
 
-    Color color(_displayedColor, 1.f);
+    Color color(_displayedColor);
+    color.a = 1.0f; // FIXME: should we ignore opacity for compatibile with previous versions
     _programState->setUniform(_uniformColorLoc, &color, sizeof(color));
     _programState->setUniform(_uniformCameraRotLoc, cameraModelMat.m, sizeof(cameraModelMat.m));
 

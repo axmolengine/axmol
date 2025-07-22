@@ -173,23 +173,23 @@ public:
      *
      * @param startColor The start color.
      */
-    void setStartColor(const Color3B& startColor);
+    void setStartColor(const Color32& startColor);
     /** Returns the start color of the gradient.
      *
      * @return The start color.
      */
-    const Color3B& getStartColor() const;
+    const Color32& getStartColor() const;
 
     /** Sets the end color of the gradient.
      *
      * @param endColor The end color.
      */
-    void setEndColor(const Color3B& endColor);
+    void setEndColor(const Color32& endColor);
     /** Returns the end color of the gradient.
      *
      * @return The end color.
      */
-    const Color3B& getEndColor() const;
+    const Color32& getEndColor() const;
 
     /** Returns the start opacity of the gradient.
      *
@@ -244,10 +244,8 @@ public:
 protected:
     virtual void updateColor() override;
 
-    Color3B _startColor           = Color3B::BLACK;
-    Color3B _endColor             = Color3B::BLACK;
-    uint8_t _startOpacity         = 255;
-    uint8_t _endOpacity           = 255;
+    Color32 _startColor           = Color32::BLACK;
+    Color32 _endColor             = Color32::BLACK;
     Vec2 _alongVector             = {0.0f, -1.0f};
     bool _compressedInterpolation = true;
 };
@@ -295,15 +293,11 @@ public:
     void setExpand(float expand);
     float getExpand() const;
 
-    void setStartColor(const Color3B& color);
     void setStartColor(const Color32& color);
     Color32 getStartColor() const;
-    Color3B getStartColor3B() const;
 
-    void setEndColor(const Color3B& color);
     void setEndColor(const Color32& color);
     Color32 getEndColor() const;
-    Color3B getEndColor3B() const;
 
     void setBlendFunc(const BlendFunc& blendFunc) override;
     const BlendFunc& getBlendFunc() const override;

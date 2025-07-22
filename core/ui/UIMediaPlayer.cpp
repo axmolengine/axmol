@@ -653,7 +653,7 @@ void BasicMediaController::createControls()
     auto scale              = Director::getInstance()->getRenderView()->getScaleY();
 
     _mediaOverlay = Layout::create();
-    _mediaOverlay->setBackGroundColor(Color3B::BLACK);
+    _mediaOverlay->setBackGroundColor(Color32::BLACK);
     _mediaOverlay->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
     _mediaOverlay->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     _mediaOverlay->setPositionNormalized(Vec2(0.5f, 0.5f));
@@ -760,7 +760,7 @@ void BasicMediaController::createControls()
     _timelineTotal->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
     _timelineTotal->setStretchEnabled(true);
     _timelineTotal->setPositionNormalized(Vec2(0.5f, 0.1f));
-    _timelineTotal->setColor(Color3B::GRAY);
+    _timelineTotal->setColor(Color32::GRAY);
     _timelineTotal->setVisible(false);
     _timelineTotal->setCascadeOpacityEnabled(true);
     _timelineTotal->setContentSize(Size(contentSize.width - 40, _timelineBarHeight / scale));
@@ -770,7 +770,7 @@ void BasicMediaController::createControls()
     _timelinePlayed->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
     _timelinePlayed->setStretchEnabled(true);
     _timelinePlayed->setPositionNormalized(Vec2(0.0f, 0.5f));
-    _timelinePlayed->setColor(Color3B::WHITE);
+    _timelinePlayed->setColor(Color32::WHITE);
     _timelinePlayed->setCascadeOpacityEnabled(true);
     _timelineTotal->addChild(_timelinePlayed, 5);
 

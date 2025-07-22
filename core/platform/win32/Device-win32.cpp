@@ -460,7 +460,7 @@ Data Device::getTextureDataForText(std::string_view text,
         COLORREF textColor = (textDefinition._fontFillColor.b << 16 | textDefinition._fontFillColor.g << 8 |
                               textDefinition._fontFillColor.r) &
                              0x00ffffff;
-        float alpha      = textDefinition._fontAlpha / 255.0f;
+        float alpha      = textDefinition._fontFillColor.a / 255.0f;
         COLORREF* pPixel = nullptr;
         for (int y = 0; y < height; ++y)
         {

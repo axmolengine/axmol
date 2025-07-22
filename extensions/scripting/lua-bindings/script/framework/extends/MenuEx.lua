@@ -22,8 +22,8 @@ THE SOFTWARE.
 
 ]]
 
-local Menu = cc.Menu
-local MenuItem = cc.MenuItem
+local Menu = ax.Menu
+local MenuItem = ax.MenuItem
 
 function MenuItem:onClicked(callback)
     self:registerScriptTapHandler(callback)

@@ -408,9 +408,6 @@ void Sprite::setTexture(Texture2D* texture)
 {
     AXASSERT(!_batchNode || (texture && texture == _batchNode->getTexture()),
              "Sprite: Batched sprites should use the same texture as the batchnode");
-    // accept texture==nil as argument
-    AXASSERT(!texture || dynamic_cast<Texture2D*>(texture), "setTexture expects a Texture2D. Invalid argument");
-
     if (texture == nullptr)
     {
         // Gets the texture by key firstly.
@@ -1503,7 +1500,7 @@ void Sprite::flipY()
 
 void Sprite::updateColor()
 {
-    Color color(_displayedColor, _displayedOpacity / 255.0f);
+    Color color(_displayedColor);
 
     // special opacity for premultiplied textures
     if (_opacityModifyRGB)

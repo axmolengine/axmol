@@ -853,7 +853,7 @@ Offset<flatbuffers::ColorFrame> FlatBuffersSerialize::createColorFrame(pugi::xml
 {
     int frameIndex = 0;
     bool tween     = true;
-    Color3B color;
+    Color32 color;
 
     auto attribute = objectData.first_attribute();
     while (attribute)

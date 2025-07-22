@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 ]]
 
-local Node = cc.Node
+local Node = ax.Node
 
 function Node:add(child, zorder, tag)
     if tag then

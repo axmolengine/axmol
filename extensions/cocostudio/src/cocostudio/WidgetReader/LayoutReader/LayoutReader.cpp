@@ -129,15 +129,11 @@ void LayoutReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
         else if (key == P_LayoutType) { layoutType = (Layout::Type)valueToInt(value); }
     }
 
-    panel->setBackGroundColor(Color3B(scr, scg, scb), Color3B(ecr, ecg, ecb));
-    panel->setBackGroundColor(Color3B(cr, cg, cb));
+    panel->setBackGroundColor(Color32(scr, scg, scb, 255), Color32(ecr, ecg, ecb, 255));
+    panel->setBackGroundColor(Color32(cr, cg, cb, bgColorOpacity));
     panel->setBackGroundColorVector(Vec2(bgcv1, bgcv2));
 
-    panel->setBackGroundColorOpacity(bgColorOpacity);
-
-    panel->setBackGroundImageColor(Color3B(_color.r, _color.g, _color.b));
-
-    panel->setBackGroundImageOpacity(_opacity);
+    panel->setBackGroundImageColor(_color);
 
     if (panel->isBackGroundImageScale9Enabled())
     {
@@ -261,9 +257,8 @@ void LayoutReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
     int colorType = DICTOOL->getIntValue_json(options, P_ColorType, 1);
     panel->setBackGroundColorType(Layout::BackGroundColorType(colorType));
 
-    panel->setBackGroundColor(Color3B(scr, scg, scb), Color3B(ecr, ecg, ecb));
-    panel->setBackGroundColor(Color3B(cr, cg, cb));
-    panel->setBackGroundColorOpacity(co);
+    panel->setBackGroundColor(Color32(scr, scg, scb, 255), Color32(ecr, ecg, ecb, 255));
+    panel->setBackGroundColor(Color32(cr, cg, cb, co));
 
     const rapidjson::Value& imageFileNameDic = DICTOOL->getSubDictionary_json(options, P_BackGroundImageData);
     int imageFileNameType                    = DICTOOL->getIntValue_json(imageFileNameDic, P_ResourceType);
@@ -289,10 +284,8 @@ void LayoutReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
     int bgimgcr = DICTOOL->getIntValue_json(options, P_ColorR, 255);
     int bgimgcg = DICTOOL->getIntValue_json(options, P_ColorG, 255);
     int bgimgcb = DICTOOL->getIntValue_json(options, P_ColorB, 255);
-    panel->setBackGroundImageColor(Color3B(bgimgcr, bgimgcg, bgimgcb));
-
     int bgimgopacity = DICTOOL->getIntValue_json(options, P_Opacity, 255);
-    panel->setBackGroundImageOpacity(bgimgopacity);
+    panel->setBackGroundImageColor(Color32(bgimgcr, bgimgcg, bgimgcb, bgimgopacity));
 
     WidgetReader::setColorPropsFromJsonDictionary(widget, options);
 }
@@ -308,11 +301,10 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     int resourceType = 0;
 
     bool clipEnabled = false;
-    Color3B bgColor;
-    Color3B bgStartColor;
-    Color3B bgEndColor;
+    Color32 bgColor = Color32::WHITE;
+    Color32 bgStartColor = Color32::WHITE;
+    Color32 bgEndColor = Color32::WHITE;
     int colorType          = 0;
-    uint8_t bgColorOpacity = 255;
     Vec2 colorVector(0.0f, -0.5f);
     Rect capInsets;
     Size scale9Size;
@@ -335,7 +327,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
         }
         else if (name == "BackColorAlpha")
         {
-            bgColorOpacity = atoi(value.data());
+            bgColor.a = atoi(value.data());
         }
         else if (name == "Scale9Enable")
         {
@@ -535,7 +527,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     auto options = CreatePanelOptions(
         *builder, widgetOptions,
         CreateResourceData(*builder, builder->CreateString(path), builder->CreateString(plistFile), resourceType),
-        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColorOpacity, &f_colorVector,
+        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColor.a, &f_colorVector,
         &f_capInsets, &f_scale9Size, backGroundScale9Enabled);
 
     return *(Offset<Table>*)(&options);
@@ -552,25 +544,26 @@ void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     bool backGroundScale9Enabled = options->backGroundScale9Enabled() != 0;
     panel->setBackGroundImageScale9Enabled(backGroundScale9Enabled);
 
+    int bgColorOpacity = options->bgColorOpacity(); // FIXME: redundant field, use f_bgColor->a()
+
     auto f_bgColor = options->bgColor();
-    Color3B bgColor(f_bgColor->r(), f_bgColor->g(), f_bgColor->b());
+    Color32 bgColor(f_bgColor->r(), f_bgColor->g(), f_bgColor->b(), bgColorOpacity);
     auto f_bgStartColor = options->bgStartColor();
-    Color3B bgStartColor(f_bgStartColor->r(), f_bgStartColor->g(), f_bgStartColor->b());
+    Color32 bgStartColor(f_bgStartColor->r(), f_bgStartColor->g(), f_bgStartColor->b(), f_bgStartColor->a());
     auto f_bgEndColor = options->bgEndColor();
-    Color3B bgEndColor(f_bgEndColor->r(), f_bgEndColor->g(), f_bgEndColor->b());
+    Color32 bgEndColor(f_bgEndColor->r(), f_bgEndColor->g(), f_bgEndColor->b(), f_bgEndColor->a());
 
     auto f_colorVecor = options->colorVector();
     Vec2 colorVector(f_colorVecor->x(), f_colorVecor->y());
     panel->setBackGroundColorVector(colorVector);
 
-    int bgColorOpacity = options->bgColorOpacity();
+
 
     int colorType = options->colorType();
     panel->setBackGroundColorType(Layout::BackGroundColorType(colorType));
 
     panel->setBackGroundColor(bgStartColor, bgEndColor);
     panel->setBackGroundColor(bgColor);
-    panel->setBackGroundColorOpacity(bgColorOpacity);
 
     bool fileExist = false;
     std::string errorFilePath;
@@ -635,11 +628,9 @@ void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
 
     auto widgetOptions = options->widgetOptions();
     auto f_color       = widgetOptions->color();
-    Color3B color(f_color->r(), f_color->g(), f_color->b());
+    int opacity = widgetOptions->alpha(); // FIXME: redundant field, use f_color->a() ?
+    Color32 color(f_color->r(), f_color->g(), f_color->b(), opacity);
     panel->setColor(color);
-
-    int opacity = widgetOptions->alpha();
-    panel->setOpacity(opacity);
 
     auto widgetReader = WidgetReader::getInstance();
     widgetReader->setPropsWithFlatBuffers(node, (Table*)options->widgetOptions());

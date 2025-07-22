@@ -81,8 +81,8 @@ MenuLayerMainMenu::MenuLayerMainMenu()
     // Label Item (LabelAtlas)
     auto labelAtlas = LabelAtlas::create("0123456789", "fonts/labelatlas.png", 16, 24, '.');
     auto item3      = MenuItemLabel::create(labelAtlas, AX_CALLBACK_1(MenuLayerMainMenu::menuCallbackDisabled, this));
-    item3->setDisabledColor(Color3B(32, 32, 64));
-    item3->setColor(Color3B(200, 200, 255));
+    item3->setDisabledColor(Color32(32, 32, 64));
+    item3->setColor(Color32(200, 200, 255));
     AXLOGD("test MenuItem Label getString: {}", item3->getString());
     // Font Item
     auto item4 = MenuItemFont::create("I toggle enable items",

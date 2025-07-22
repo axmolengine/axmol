@@ -35,7 +35,7 @@ end
 ----MaterialSystemBaseTest
 ----------------------------------------
 local MaterialSystemBaseTest = class("MaterialSystemBaseTest", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     return layer
 end)
 
@@ -82,11 +82,11 @@ function Material_Sprite3DTest:subtitle()
 end
 
 function Material_Sprite3DTest:onEnter()
-    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
+    local sprite = ax.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(8.0)
     sprite:setTexture("MeshRendererTest/boss.png")
     self:addChild(sprite)
-    sprite:setNormalizedPosition(cc.p(0.5,0.5))
+    sprite:setNormalizedPosition(ax.p(0.5,0.5))
 end
 
 
@@ -100,7 +100,7 @@ function Material_MultipleSprite3D:subtitle()
 end
 
 function Material_MultipleSprite3D:onEnter()
-    local names = 
+    local names =
     {
         "MeshRendererTest/ReskinGirl.c3b",
         "MeshRendererTest/ReskinGirl.c3b",
@@ -114,12 +114,12 @@ function Material_MultipleSprite3D:onEnter()
 
     local totalNames = #names
 
-    local size = cc.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getWinSize()
 
     for i = 1 , totalNames do
-        local sprite = cc.Sprite3D:create(names[i])
+        local sprite = ax.Sprite3D:create(names[i])
         self:addChild(sprite)
-        sprite:setPosition(cc.p((size.width/(totalNames+1)) * i, size.height/4))
+        sprite:setPosition(ax.p((size.width/(totalNames+1)) * i, size.height/4))
         sprite:setScale(3)
     end
 end
@@ -135,45 +135,45 @@ end
 
 
 function Material_2DEffects:onEnter()
-    local properties = cc.Properties:createNonRefCounted("Materials/2d_effects.material#sample")
+    local properties = ax.Properties:createNonRefCounted("Materials/2d_effects.material#sample")
 
     -- Print the properties of every namespace within this one.
     -- TODO
     printProperties(properties, 0)
 
-    local mat1 = cc.Material:createWithProperties(properties)
+    local mat1 = ax.Material:createWithProperties(properties)
 
-    local spriteBlur = cc.Sprite:create("Images/grossini.png")
-    spriteBlur:setNormalizedPosition(cc.p(0.2, 0.5))
+    local spriteBlur = ax.Sprite:create("Images/grossini.png")
+    spriteBlur:setNormalizedPosition(ax.p(0.2, 0.5))
     self:addChild(spriteBlur)
     spriteBlur:setProgramState(mat1:getTechniqueByName("blur"):getPassByIndex(0):getProgramState())
 
-    local spriteOutline = cc.Sprite:create("Images/grossini.png")
-    spriteOutline:setNormalizedPosition(cc.p(0.4, 0.5))
+    local spriteOutline = ax.Sprite:create("Images/grossini.png")
+    spriteOutline:setNormalizedPosition(ax.p(0.4, 0.5))
     self:addChild(spriteOutline)
     spriteOutline:setProgramState(mat1:getTechniqueByName("outline"):getPassByIndex(0):getProgramState())
 
-    local spriteNoise = cc.Sprite:create("Images/grossini.png")
-    spriteNoise:setNormalizedPosition(cc.p(0.6, 0.5))
+    local spriteNoise = ax.Sprite:create("Images/grossini.png")
+    spriteNoise:setNormalizedPosition(ax.p(0.6, 0.5))
     self:addChild(spriteNoise)
     spriteNoise:setProgramState(mat1:getTechniqueByName("noise"):getPassByIndex(0):getProgramState())
 
-    local spriteEdgeDetect = cc.Sprite:create("Images/grossini.png")
-    spriteEdgeDetect:setNormalizedPosition(cc.p(0.8, 0.5))
+    local spriteEdgeDetect = ax.Sprite:create("Images/grossini.png")
+    spriteEdgeDetect:setNormalizedPosition(ax.p(0.8, 0.5))
     self:addChild(spriteEdgeDetect)
     spriteEdgeDetect:setProgramState(mat1:getTechniqueByName("edge_detect"):getPassByIndex(0):getProgramState())
 
-    local scheduler = cc.Director:getInstance():getScheduler()
+    local scheduler = ax.Director:getInstance():getScheduler()
     local uTimeLoc = spriteNoise:getProgramState():getUniformLocation("u_Time")
     self._schedulerEntry = scheduler:scheduleScriptFunc(function(dt)
-        local time = cc.Director:getInstance():getTotalFrames() * cc.Director:getInstance():getAnimationInterval()
-        local random = cc.vec4(time / 10., time, time * 2, time * 4)
-        spriteNoise:getProgramState():setUniform(uTimeLoc, cc.bytearray.from_vec4(random));
+        local time = ax.Director:getInstance():getTotalFrames() * ax.Director:getInstance():getAnimationInterval()
+        local random = ax.vec4(time / 10., time, time * 2, time * 4)
+        spriteNoise:getProgramState():setUniform(uTimeLoc, ax.bytearray.from_vec4(random));
     end, 0, false)
 end
 
 function Material_2DEffects:onExit()
-    local scheduler = cc.Director:getInstance():getScheduler()
+    local scheduler = ax.Director:getInstance():getScheduler()
     scheduler:unscheduleScriptEntry(self._schedulerEntry)
 end
 
@@ -187,22 +187,22 @@ function Material_setTechnique:subtitle()
 end
 
 function Material_setTechnique:onEnter()
-    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
+    local sprite = ax.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(6)
     self:addChild(sprite)
-    sprite:setNormalizedPosition(cc.p(0.5,0.5))
+    sprite:setNormalizedPosition(ax.p(0.5,0.5))
 
-    local mat = cc.Material:createWithFilename("Materials/3d_effects.material")
+    local mat = ax.Material:createWithFilename("Materials/3d_effects.material")
     sprite:setMaterial(mat)
 
     --lights
-    local light1 = cc.AmbientLight:create(cc.c3b(255, 0, 0))
+    local light1 = ax.AmbientLight:create(ax.color32(255, 0, 0))
     self:addChild(light1)
 
-    local light2 = cc.DirectionLight:create(cc.vec3(-1,1,0), cc.c3b(0, 255, 0))
+    local light2 = ax.DirectionLight:create(ax.vec3(-1,1,0), ax.color32(0, 255, 0))
     self:addChild(light2)
     local techniqueState = 0
-    local scheduler = cc.Director:getInstance():getScheduler()
+    local scheduler = ax.Director:getInstance():getScheduler()
     self._schedulerEntry = scheduler:scheduleScriptFunc(function(dt)
         if 0 == techniqueState then
             sprite:getMaterial(0):setTechnique("lit")
@@ -217,15 +217,15 @@ function Material_setTechnique:onEnter()
             techniqueState = 0
         end
     end, 1, false)
-    
 
-    local rot = cc.RotateBy:create(5, cc.vec3(30,60,270))
-    local repeatAction = cc.RepeatForever:create(rot)
+
+    local rot = ax.RotateBy:create(5, ax.vec3(30,60,270))
+    local repeatAction = ax.RepeatForever:create(rot)
     sprite:runAction(repeatAction)
 end
 
 function Material_setTechnique:onExit()
-    local scheduler = cc.Director:getInstance():getScheduler()
+    local scheduler = ax.Director:getInstance():getScheduler()
     scheduler:unscheduleScriptEntry(self._schedulerEntry)
 end
 
@@ -239,31 +239,31 @@ function Material_clone:subtitle()
 end
 
 function Material_clone:onEnter()
-    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
+    local sprite = ax.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(3)
     self:addChild(sprite)
-    sprite:setNormalizedPosition(cc.p(0.25, 0.5))
+    sprite:setNormalizedPosition(ax.p(0.25, 0.5))
 
-    local mat = cc.Material:createWithFilename("Materials/3d_effects.material")
+    local mat = ax.Material:createWithFilename("Materials/3d_effects.material")
     sprite:setMaterial(mat)
 
-    local rot = cc.RotateBy:create(5, cc.vec3(360,240,120))
-    local repeatAction = cc.RepeatForever:create(rot)
+    local rot = ax.RotateBy:create(5, ax.vec3(360,240,120))
+    local repeatAction = ax.RepeatForever:create(rot)
     sprite:runAction(repeatAction)
 
     -- sprite 2... using same material
-    local sprite2 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
+    local sprite2 = ax.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite2:setScale(3)
     self:addChild(sprite2)
-    sprite2:setNormalizedPosition(cc.p(0.5, 0.5))
+    sprite2:setNormalizedPosition(ax.p(0.5, 0.5))
     sprite2:setMaterial(mat)
     sprite2:runAction(repeatAction:clone())
 
     -- sprite 3... using cloned material
-    local sprite3 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
+    local sprite3 = ax.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite3:setScale(3)
     self:addChild(sprite3)
-    sprite3:setNormalizedPosition(cc.p(0.75, 0.5))
+    sprite3:setNormalizedPosition(ax.p(0.75, 0.5))
     local mat2 = mat:clone()
     sprite3:setMaterial(mat2)
     sprite3:runAction(repeatAction:clone())
@@ -283,31 +283,31 @@ function Material_clone:subtitle()
 end
 
 function Material_clone:onEnter()
-    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
+    local sprite = ax.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(3)
     self:addChild(sprite)
-    sprite:setNormalizedPosition(cc.p(0.25, 0.5))
+    sprite:setNormalizedPosition(ax.p(0.25, 0.5))
 
-    local mat = cc.Material:createWithFilename("Materials/3d_effects.material")
+    local mat = ax.Material:createWithFilename("Materials/3d_effects.material")
     sprite:setMaterial(mat)
 
-    local rot = cc.RotateBy:create(5, cc.vec3(360,240,120))
-    local repeatAction = cc.RepeatForever:create(rot)
+    local rot = ax.RotateBy:create(5, ax.vec3(360,240,120))
+    local repeatAction = ax.RepeatForever:create(rot)
     sprite:runAction(repeatAction)
 
     -- sprite 2... using same material
-    local sprite2 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
+    local sprite2 = ax.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite2:setScale(3)
     self:addChild(sprite2)
-    sprite2:setNormalizedPosition(cc.p(0.5, 0.5))
+    sprite2:setNormalizedPosition(ax.p(0.5, 0.5))
     sprite2:setMaterial(mat)
     sprite2:runAction(repeatAction:clone())
 
     -- sprite 3... using cloned material
-    local sprite3 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
+    local sprite3 = ax.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite3:setScale(3)
     self:addChild(sprite3)
-    sprite3:setNormalizedPosition(cc.p(0.75, 0.5))
+    sprite3:setNormalizedPosition(ax.p(0.75, 0.5))
     local mat2 = mat:clone()
     sprite3:setMaterial(mat2)
     sprite3:runAction(repeatAction:clone())
@@ -330,8 +330,8 @@ function Material_parsePerformance:onEnter()
     local begin = os.clock()
 
     for i = 1,5000 do
-        cc.Material:createWithFilename("Materials/2d_effects.material")
-        cc.Material:createWithFilename("Materials/3d_effects.material")
+        ax.Material:createWithFilename("Materials/2d_effects.material")
+        ax.Material:createWithFilename("Materials/3d_effects.material")
     end
 
     print("Parsing took: ", os.clock() - begin)
@@ -341,10 +341,10 @@ end
 ----Material_clone
 ----------------------------------------
 function MaterialSystemTest()
-    
-    local scene = cc.Scene:createWithPhysics()
 
-    Helper.createFunctionTable = 
+    local scene = ax.Scene:createWithPhysics()
+
+    Helper.createFunctionTable =
     {
         Material_2DEffects.create,
         Material_setTechnique.create,

@@ -674,7 +674,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                         auto dirLight = static_cast<DirectionLight*>(light);
                         Vec3 dir      = dirLight->getDirectionInWorld();
                         dir.normalize();
-                        const Color3B& col = dirLight->getDisplayedColor();
+                        const Color32& col = dirLight->getDisplayedColor();
                         _dirLightUniformColorValues[enabledDirLightNum].set(
                             col.r / 255.0f * intensity, col.g / 255.0f * intensity, col.b / 255.0f * intensity);
                         _dirLightUniformDirValues[enabledDirLightNum] = dir;
@@ -688,7 +688,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                     {
                         auto pointLight    = static_cast<PointLight*>(light);
                         Mat4 mat           = pointLight->getNodeToWorldTransform();
-                        const Color3B& col = pointLight->getDisplayedColor();
+                        const Color32& col = pointLight->getDisplayedColor();
                         _pointLightUniformColorValues[enabledPointLightNum].set(
                             col.r / 255.0f * intensity, col.g / 255.0f * intensity, col.b / 255.0f * intensity);
                         _pointLightUniformPositionValues[enabledPointLightNum].set(mat.m[12], mat.m[13], mat.m[14]);
@@ -705,7 +705,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                         Vec3 dir       = spotLight->getDirectionInWorld();
                         dir.normalize();
                         Mat4 mat           = light->getNodeToWorldTransform();
-                        const Color3B& col = spotLight->getDisplayedColor();
+                        const Color32& col = spotLight->getDisplayedColor();
                         _spotLightUniformColorValues[enabledSpotLightNum].set(
                             col.r / 255.0f * intensity, col.g / 255.0f * intensity, col.b / 255.0f * intensity);
                         _spotLightUniformPositionValues[enabledSpotLightNum].set(mat.m[12], mat.m[13], mat.m[14]);
@@ -720,7 +720,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                 case LightType::AMBIENT:
                 {
                     auto ambLight      = static_cast<AmbientLight*>(light);
-                    const Color3B& col = ambLight->getDisplayedColor();
+                    const Color32& col = ambLight->getDisplayedColor();
                     ambientColor.add(col.r / 255.0f * intensity, col.g / 255.0f * intensity,
                                      col.b / 255.0f * intensity);
                 }
@@ -787,7 +787,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                 if (useLight)
                 {
                     hasAmbient         = true;
-                    const Color3B& col = light->getDisplayedColor();
+                    const Color32& col = light->getDisplayedColor();
                     ambient.x += col.r * light->getIntensity();
                     ambient.y += col.g * light->getIntensity();
                     ambient.z += col.b * light->getIntensity();

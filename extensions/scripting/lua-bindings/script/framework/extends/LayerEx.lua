@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 ]]
 
-local Layer = cc.Layer
+local Layer = ax.Layer
 
 function Layer:onTouch(callback, isMultiTouches, swallowTouches)
     if type(isMultiTouches) ~= "boolean" then isMultiTouches = false end

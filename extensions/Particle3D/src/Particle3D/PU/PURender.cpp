@@ -553,9 +553,7 @@ void PUParticle3DModelRender::render(Renderer* renderer, const Mat4& transform, 
         mat.m[14]    = particle->position.z;
         if (_meshList[index]->getCameraMask() != particleSystem->getCameraMask())
             _meshList[index]->setCameraMask(particleSystem->getCameraMask());
-        _meshList[index]->setColor(
-            Color3B(particle->color.x * 255, particle->color.y * 255, particle->color.z * 255));
-        _meshList[index]->setOpacity(particle->color.w * 255);
+        _meshList[index]->setColor(Color32(particle->color));
         _meshList[index]->visit(renderer, mat, Node::FLAGS_DIRTY_MASK);
         ++index;
     }

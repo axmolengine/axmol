@@ -182,14 +182,14 @@ void GGraph::updateShape()
     }
 }
 
-ax::Color3B GGraph::getColor() const
+ax::Color32 GGraph::getColor() const
 {
-    return (Color3B)_fillColor;
+    return Color32{_fillColor};
 }
 
-void GGraph::setColor(const ax::Color3B& value)
+void GGraph::setColor(const ax::Color32& value)
 {
-    _fillColor = ax::Color{value, _fillColor.a};
+    _fillColor = ax::Color{value};
     updateShape();
 }
 

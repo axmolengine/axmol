@@ -33,7 +33,7 @@ static void rtrim(std::string& s) {
         s.end());
 }
 
-Color3B HtmlParseOptions::defaultLinkColor(58, 103, 204);
+Color32 HtmlParseOptions::defaultLinkColor(58, 103, 204, 255);
 bool HtmlParseOptions::defaultLinkUnderline = true;
 
 HtmlParseOptions::HtmlParseOptions()
@@ -135,7 +135,7 @@ void HtmlParser::startElement(void* /*ctx*/, const char *elementName, const char
         auto it = attrMap.find("color");
         if (it != attrMap.end())
         {
-            _format.color = (Color3B)ToolSet::hexToColor(it->second.asString().c_str());
+            _format.color = (Color32)ToolSet::hexToColor(it->second.asString().c_str());
             _format._hasColor = true;
         }
     }

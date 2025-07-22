@@ -113,10 +113,8 @@ Node::Node()
     , _updateScriptHandler(0)
 #endif
     , _componentContainer(nullptr)
-    , _displayedOpacity(255)
-    , _realOpacity(255)
-    , _displayedColor(Color3B::WHITE)
-    , _realColor(Color3B::WHITE)
+    , _displayedColor(Color32::WHITE)
+    , _realColor(Color32::WHITE)
     , _cascadeColorEnabled(false)
     , _cascadeOpacityEnabled(false)
     , _childFollowCameraMask(false)
@@ -2009,31 +2007,31 @@ void Node::removeAllComponents()
 
 uint8_t Node::getOpacity() const
 {
-    return _realOpacity;
+    return _realColor.a;
 }
 
 uint8_t Node::getDisplayedOpacity() const
 {
-    return _displayedOpacity;
+    return _displayedColor.a;
 }
 
 void Node::setOpacity(uint8_t opacity)
 {
-    _displayedOpacity = _realOpacity = opacity;
+    _displayedColor.a = _realColor.a = opacity;
 
     updateCascadeOpacity();
 }
 
 void Node::updateDisplayedOpacity(uint8_t parentOpacity)
 {
-    _displayedOpacity = _realOpacity * parentOpacity / 255.0;
+    _displayedColor.a = _realColor.a * parentOpacity / 255.0;
     updateColor();
 
     if (_cascadeOpacityEnabled)
     {
         for (const auto& child : _children)
         {
-            child->updateDisplayedOpacity(_displayedOpacity);
+            child->updateDisplayedOpacity(_displayedColor.a);
         }
     }
 }
@@ -2076,7 +2074,7 @@ void Node::updateCascadeOpacity()
 
 void Node::disableCascadeOpacity()
 {
-    _displayedOpacity = _realOpacity;
+  _displayedColor.a = _realColor.a;
 
     for (const auto& child : _children)
     {
@@ -2091,28 +2089,30 @@ bool Node::isOpacityModifyRGB() const
     return false;
 }
 
-const Color3B& Node::getColor() const
+const Color32& Node::getColor() const
 {
     return _realColor;
 }
 
-const Color3B& Node::getDisplayedColor() const
+const Color32& Node::getDisplayedColor() const
 {
     return _displayedColor;
 }
 
-void Node::setColor(const Color3B& color)
+void Node::setColor(const Color32& color)
 {
     _displayedColor = _realColor = color;
 
     updateCascadeColor();
 }
 
-void Node::updateDisplayedColor(const Color3B& parentColor)
+void Node::updateDisplayedColor(const Color32& parentColor)
 {
-    _displayedColor.r = _realColor.r * parentColor.r / 255.0;
-    _displayedColor.g = _realColor.g * parentColor.g / 255.0;
-    _displayedColor.b = _realColor.b * parentColor.b / 255.0;
+    _displayedColor.r = _realColor.r * parentColor.r / 255.0f;
+    _displayedColor.g = _realColor.g * parentColor.g / 255.0f;
+    _displayedColor.b = _realColor.b * parentColor.b / 255.0f;
+    if (_cascadeOpacityEnabled)
+        _displayedColor.a = _realColor.a * parentColor.a / 255.0f;
     updateColor();
 
     if (_cascadeColorEnabled)
@@ -2150,7 +2150,7 @@ void Node::setCascadeColorEnabled(bool cascadeColorEnabled)
 
 void Node::updateCascadeColor()
 {
-    Color3B parentColor = Color3B::WHITE;
+    Color32 parentColor = Color32::WHITE;
     if (_parent && _parent->isCascadeColorEnabled())
     {
         parentColor = _parent->getDisplayedColor();
@@ -2163,7 +2163,7 @@ void Node::disableCascadeColor()
 {
     for (const auto& child : _children)
     {
-        child->updateDisplayedColor(Color3B::WHITE);
+        child->updateDisplayedColor(Color32::WHITE);
     }
 }
 

@@ -56,6 +56,7 @@ THE SOFTWARE.
 
 #include "base/base64.h"
 #include "base/axstd.h"
+#include "base/charconv.h"
 #include "yasio/string_view.hpp"
 
 using namespace std::string_view_literals;
@@ -224,24 +225,14 @@ std::vector<Node*> findChildren(const Node& node, std::string_view name)
 }
 
 #define MAX_ITOA_BUFFER_SIZE 256
-double atof(const char* str)
+double atof(std::string_view str)
 {
-    if (str == nullptr)
-    {
+    if (str.empty())
         return 0.0;
-    }
 
-    char buf[MAX_ITOA_BUFFER_SIZE];
-    strncpy(buf, str, MAX_ITOA_BUFFER_SIZE);
-
-    // strip string, only remain 7 numbers after '.'
-    char* dot = strchr(buf, '.');
-    if (dot != nullptr && dot - buf + 8 < MAX_ITOA_BUFFER_SIZE)
-    {
-        dot[8] = '\0';
-    }
-
-    return ::atof(buf);
+    double ret{0.0};
+    axstd::from_chars(str.data(), str.data() + str.size(), ret);
+    return ret;
 }
 
 double gettime()

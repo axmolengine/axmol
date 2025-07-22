@@ -48,7 +48,7 @@ bool UITextTest::init()
         Size widgetSize = _widget->getContentSize();
 
         Text* alert = Text::create("Text", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -73,7 +73,7 @@ bool UITextTest_LineWrap::init()
         Size widgetSize = _widget->getContentSize();
 
         Text* alert = Text::create("Text line wrap", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -119,7 +119,7 @@ bool UILabelTest_Effect::init()
         alert->setString("Label Effect");
         alert->setFontName("fonts/Marker Felt.ttf");
         alert->setFontSize(30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.05f));
         _uiLayer->addChild(alert);
@@ -199,7 +199,7 @@ bool UITextTest_TTF::init()
         Size widgetSize = _widget->getContentSize();
 
         Text* alert = Text::create("Text set TTF font", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);

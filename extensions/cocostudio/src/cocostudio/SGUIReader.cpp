@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -680,17 +680,15 @@ void WidgetPropertiesReader0250::setColorPropsForWidgetFromJsonDictionary(Widget
                                                                           const rapidjson::Value& options)
 {
     bool op = DICTOOL->checkObjectExist_json(options, "opacity");
-    if (op)
-    {
-        widget->setOpacity(DICTOOL->getIntValue_json(options, "opacity"));
-    }
     bool cr    = DICTOOL->checkObjectExist_json(options, "colorR");
     bool cg    = DICTOOL->checkObjectExist_json(options, "colorG");
     bool cb    = DICTOOL->checkObjectExist_json(options, "colorB");
+
+    int colorA = op ? DICTOOL->getIntValue_json(options, "opacity") : 255;
     int colorR = cr ? DICTOOL->getIntValue_json(options, "colorR") : 255;
     int colorG = cg ? DICTOOL->getIntValue_json(options, "colorG") : 255;
     int colorB = cb ? DICTOOL->getIntValue_json(options, "colorB") : 255;
-    widget->setColor(Color3B(colorR, colorG, colorB));
+    widget->setColor(Color32(colorR, colorG, colorB, colorA));
 
     this->setAnchorPointForWidget(widget, options);
 
@@ -773,7 +771,7 @@ void WidgetPropertiesReader0250::setPropsForButtonFromJsonDictionary(Widget* wid
     int cri = cr ? DICTOOL->getIntValue_json(options, "textColorR") : 255;
     int cgi = cg ? DICTOOL->getIntValue_json(options, "textColorG") : 255;
     int cbi = cb ? DICTOOL->getIntValue_json(options, "textColorB") : 255;
-    button->setTitleColor(Color3B(cri, cgi, cbi));
+    button->setTitleColor(Color32(cri, cgi, cbi, 255));
     bool fs = DICTOOL->checkObjectExist_json(options, "fontSize");
     if (fs)
     {
@@ -1005,9 +1003,8 @@ void WidgetPropertiesReader0250::setPropsForLayoutFromJsonDictionary(Widget* wid
 
     int colorType = DICTOOL->getIntValue_json(options, "colorType");
     panel->setBackGroundColorType(Layout::BackGroundColorType(colorType));
-    panel->setBackGroundColor(Color3B(scr, scg, scb), Color3B(ecr, ecg, ecb));
-    panel->setBackGroundColor(Color3B(cr, cg, cb));
-    panel->setBackGroundColorOpacity(co);
+    panel->setBackGroundColor(Color32(scr, scg, scb, 255), Color32(ecr, ecg, ecb, 255));
+    panel->setBackGroundColor(Color32(cr, cg, cb, co));
 
     std::string tp_b          = m_strFilePath;
     const char* imageFileName = DICTOOL->getStringValue_json(options, "backGroundImage");

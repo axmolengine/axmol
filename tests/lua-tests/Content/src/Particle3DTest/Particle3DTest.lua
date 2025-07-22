@@ -7,37 +7,37 @@ local function baseInit(self)
 
     self._angle = 0
 
-    local targetPlatform = cc.Application:getInstance():getTargetPlatform()
-   
-    cc.FileUtils:getInstance():addSearchPath("res/Particle3D/materials")
-    cc.FileUtils:getInstance():addSearchPath("res/Particle3D/scripts")
+    local targetPlatform = ax.Application:getInstance():getTargetPlatform()
 
-    local size = cc.Director:getInstance():getWinSize()
-    self._camera = cc.Camera:createPerspective(30.0, size.width / size.height, 1.0, 1000.0)
-    self._camera:setPosition3D(cc.vec3(0.0, 0.0, 100.0))
-    self._camera:lookAt(cc.vec3(0.0, 0.0, 0.0), cc.vec3(0.0, 1.0, 0.0))
-    self._camera:setCameraFlag(cc.CameraFlag.USER1)
+    ax.FileUtils:getInstance():addSearchPath("res/Particle3D/materials")
+    ax.FileUtils:getInstance():addSearchPath("res/Particle3D/scripts")
+
+    local size = ax.Director:getInstance():getWinSize()
+    self._camera = ax.Camera:createPerspective(30.0, size.width / size.height, 1.0, 1000.0)
+    self._camera:setPosition3D(ax.vec3(0.0, 0.0, 100.0))
+    self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))
+    self._camera:setCameraFlag(ax.CameraFlag.USER1)
     self:addChild(self._camera)
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()
+    local listener = ax.EventListenerTouchAllAtOnce:create()
     listener:registerScriptHandler(function (touches, event)
 
-    end,cc.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_TOUCHES_BEGAN)
 
     listener:registerScriptHandler(function (touches, event)
         if #touches ~= 0 then
             local touch = touches[1]
             local delta = touch:getDelta()
-        
+
             self._angle = self._angle - delta.x * math.pi / 180
-            self._camera:setPosition3D(cc.vec3(100.0 *  math.sin(math.deg(self._angle)), 0.0, 100.0 * math.cos(math.deg(self._angle))))
-            self._camera:lookAt(cc.vec3(0.0, 0.0, 0.0), cc.vec3(0.0, 1.0, 0.0)) 
+            self._camera:setPosition3D(ax.vec3(100.0 *  math.sin(math.deg(self._angle)), 0.0, 100.0 * math.cos(math.deg(self._angle))))
+            self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))
         end
-    end,cc.Handler.EVENT_TOUCHES_MOVED)
+    end,ax.Handler.EVENT_TOUCHES_MOVED)
 
     listener:registerScriptHandler(function (touches, event)
-        
-    end,cc.Handler.EVENT_TOUCHES_ENDED)
+
+    end,ax.Handler.EVENT_TOUCHES_ENDED)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -45,9 +45,9 @@ local function baseInit(self)
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/tahoma.ttf"
     ttfConfig.fontSize = 10
-    self._particleLab = cc.Label:createWithTTF(ttfConfig,"Particle Count: 0",cc.TEXT_ALIGNMENT_LEFT)
-    self._particleLab:setPosition(cc.p(0.0, size.height / 6.0))
-    self._particleLab:setAnchorPoint(cc.p(0.0, 0.0))
+    self._particleLab = ax.Label:createWithTTF(ttfConfig,"Particle Count: 0",ax.TEXT_ALIGNMENT_LEFT)
+    self._particleLab:setPosition(ax.p(0.0, size.height / 6.0))
+    self._particleLab:setAnchorPoint(ax.p(0.0, 0.0))
     self:addChild(self._particleLab)
 
     self:scheduleUpdateWithPriorityLua(function(dt)
@@ -78,7 +78,7 @@ end
 
 -- Particle3DLineStreakDemo
 local Particle3DLineStreakDemo = class("Particle3DLineStreakDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -101,8 +101,8 @@ function Particle3DLineStreakDemo:subtitle()
 end
 
 function Particle3DLineStreakDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("lineStreak.pu", "pu_example.material")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("lineStreak.pu", "pu_example.material")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:setScale(5.0)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
@@ -115,7 +115,7 @@ end
 
 -- Particle3DBlackHoleDemo
 local Particle3DBlackHoleDemo = class("Particle3DBlackHoleDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -138,12 +138,12 @@ function Particle3DBlackHoleDemo:subtitle()
 end
 
 function Particle3DBlackHoleDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("blackHole.pu", "pu_example.material")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("blackHole.pu", "pu_example.material")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:setPosition(-25.0, 0.0)
-    local moveby = cc.MoveBy:create(2.0, cc.p(50.0, 0.0))
-    local moveby1 = cc.MoveBy:create(2.0, cc.p(-50.0, 0.0))
-    rootps:runAction(cc.RepeatForever:create(cc.Sequence:create(moveby, moveby1)))
+    local moveby = ax.MoveBy:create(2.0, ax.p(50.0, 0.0))
+    local moveby1 = ax.MoveBy:create(2.0, ax.p(-50.0, 0.0))
+    rootps:runAction(ax.RepeatForever:create(ax.Sequence:create(moveby, moveby1)))
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -154,7 +154,7 @@ end
 
 -- Particle3DHypnoDemo
 local Particle3DHypnoDemo = class("Particle3DHypnoDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -177,8 +177,8 @@ function Particle3DHypnoDemo:subtitle()
 end
 
 function Particle3DHypnoDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("hypno.pu", "pu_example.material")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("hypno.pu", "pu_example.material")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -190,7 +190,7 @@ end
 
 -- Particle3DAdvancedLodSystemDemo
 local Particle3DAdvancedLodSystemDemo = class("Particle3DAdvancedLodSystemDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -213,12 +213,12 @@ function Particle3DAdvancedLodSystemDemo:subtitle()
 end
 
 function Particle3DAdvancedLodSystemDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("advancedLodSystem.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
-    local scale = cc.ScaleBy:create(1.0, 2.0, 2.0, 2.0)
-    local rotate = cc.RotateBy:create(1.0, cc.vec3(0.0, 0.0, 100.0))
-    rootps:runAction(cc.RepeatForever:create(cc.Sequence:create(rotate)))
-    rootps:runAction(cc.RepeatForever:create(cc.Sequence:create(scale, scale:reverse())))
+    local rootps = ax.PUParticleSystem3D:create("advancedLodSystem.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
+    local scale = ax.ScaleBy:create(1.0, 2.0, 2.0, 2.0)
+    local rotate = ax.RotateBy:create(1.0, ax.vec3(0.0, 0.0, 100.0))
+    rootps:runAction(ax.RepeatForever:create(ax.Sequence:create(rotate)))
+    rootps:runAction(ax.RepeatForever:create(ax.Sequence:create(scale, scale:reverse())))
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -230,7 +230,7 @@ end
 
 -- Particle3DTimeShiftDemo
 local Particle3DTimeShiftDemo = class("Particle3DTimeShiftDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -253,9 +253,9 @@ function Particle3DTimeShiftDemo:subtitle()
 end
 
 function Particle3DTimeShiftDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("timeShift.pu", "pu_example.material")
+    local rootps = ax.PUParticleSystem3D:create("timeShift.pu", "pu_example.material")
     rootps:setScale(2.0)
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -267,7 +267,7 @@ end
 
 -- Particle3DUVAnimDemo
 local Particle3DUVAnimDemo = class("Particle3DUVAnimDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -290,8 +290,8 @@ function Particle3DUVAnimDemo:subtitle()
 end
 
 function Particle3DUVAnimDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("UVAnimation.pu", "pu_example.material")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("UVAnimation.pu", "pu_example.material")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -302,7 +302,7 @@ end
 
 -- Particle3DFirePlaceDemo
 local Particle3DFirePlaceDemo = class("Particle3DFirePlaceDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -325,8 +325,8 @@ function Particle3DFirePlaceDemo:subtitle()
 end
 
 function Particle3DFirePlaceDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("mp_torch.pu", "pu_example.material")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("mp_torch.pu", "pu_example.material")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:setScale(5.0)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
@@ -338,7 +338,7 @@ end
 
 -- Particle3DElectricBeamSystemDemo
 local Particle3DElectricBeamSystemDemo = class("Particle3DElectricBeamSystemDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -361,8 +361,8 @@ function Particle3DElectricBeamSystemDemo:subtitle()
 end
 
 function Particle3DElectricBeamSystemDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("electricBeamSystem.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("electricBeamSystem.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -373,7 +373,7 @@ end
 
 -- Particle3DFlareShield
 local Particle3DFlareShieldDemo = class("Particle3DFlareShield", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -396,8 +396,8 @@ function Particle3DFlareShieldDemo:subtitle()
 end
 
 function Particle3DFlareShieldDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("flareShield.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("flareShield.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -408,7 +408,7 @@ end
 
 -- Particle3DLightningBoltDemo
 local Particle3DLightningBoltDemo = class("Particle3DLightningBolt", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -431,8 +431,8 @@ function Particle3DLightningBoltDemo:subtitle()
 end
 
 function Particle3DLightningBoltDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("lightningBolt.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("lightningBolt.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -443,7 +443,7 @@ end
 
 -- Particle3DCanOfWormsDemo
 local Particle3DCanOfWormsDemo = class("Particle3DCanOfWorms", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -466,8 +466,8 @@ function Particle3DCanOfWormsDemo:subtitle()
 end
 
 function Particle3DCanOfWormsDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("canOfWorms.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("canOfWorms.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -478,7 +478,7 @@ end
 
 -- Particle3DRibbonTrailDemo
 local Particle3DRibbonTrailDemo = class("Particle3DRibbonTrail", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -501,8 +501,8 @@ function Particle3DRibbonTrailDemo:subtitle()
 end
 
 function Particle3DRibbonTrailDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("ribbonTrailTest.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("ribbonTrailTest.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -513,7 +513,7 @@ end
 
 -- Particle3DWeaponTrailDemo
 local Particle3DWeaponTrailDemo = class("Particle3DWeaponTrail", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -536,8 +536,8 @@ function Particle3DWeaponTrailDemo:subtitle()
 end
 
 function Particle3DWeaponTrailDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("weaponTrail.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("weaponTrail.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -548,7 +548,7 @@ end
 
 -- Particle3DExplosionSystemDemo
 local Particle3DExplosionSystemDemo = class("Particle3DExplosionSystem", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -571,8 +571,8 @@ function Particle3DExplosionSystemDemo:subtitle()
 end
 
 function Particle3DExplosionSystemDemo:onEnter()
-    local rootps = cc.PUParticleSystem3D:create("explosionSystem.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("explosionSystem.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -583,7 +583,7 @@ end
 
 -- Particle3DWithSprite3DDemo
 local Particle3DWithSprite3DDemo = class("Particle3DWithSprite3D", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
@@ -607,23 +607,23 @@ end
 
 function Particle3DWithSprite3DDemo:onEnter()
 
-    local sprite = cc.Sprite3D:create("MeshRendererTest/orc.c3b")
-    sprite:setPosition3D(cc.vec3(-20, 0, 0))
-    sprite:setRotation3D(cc.vec3(0, 180, 0))
-    sprite:setCameraMask(cc.CameraFlag.USER1)
+    local sprite = ax.Sprite3D:create("MeshRendererTest/orc.c3b")
+    sprite:setPosition3D(ax.vec3(-20, 0, 0))
+    sprite:setRotation3D(ax.vec3(0, 180, 0))
+    sprite:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(sprite)
-    local animation = cc.Animation3D:create("MeshRendererTest/orc.c3b")
-    local animate = cc.Animate3D:create(animation)
-    sprite:runAction(cc.RepeatForever:create(animate))
-    
-    local billboard = cc.BillBoard:create("Images/Icon.png")
-    billboard:setPosition3D(cc.vec3(20, 0, 0))
+    local animation = ax.Animation3D:create("MeshRendererTest/orc.c3b")
+    local animate = ax.Animate3D:create(animation)
+    sprite:runAction(ax.RepeatForever:create(animate))
+
+    local billboard = ax.BillBoard:create("Images/Icon.png")
+    billboard:setPosition3D(ax.vec3(20, 0, 0))
     billboard:setScale(0.2)
-    billboard:setCameraMask(cc.CameraFlag.USER1)
+    billboard:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(billboard)
 
-    local rootps = cc.PUParticleSystem3D:create("lineStreak.pu")
-    rootps:setCameraMask(cc.CameraFlag.USER1)
+    local rootps = ax.PUParticleSystem3D:create("lineStreak.pu")
+    rootps:setCameraMask(ax.CameraFlag.USER1)
     rootps:startParticleSystem()
     self:addChild(rootps, 0, PARTICLE_SYSTEM_TAG)
 end
@@ -633,9 +633,9 @@ function Particle3DWithSprite3DDemo:onExit()
 end
 
 function Particle3DTest()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
-    Helper.createFunctionTable = 
+    Helper.createFunctionTable =
     {
         Particle3DExplosionSystemDemo.create,
         Particle3DLineStreakDemo.create,

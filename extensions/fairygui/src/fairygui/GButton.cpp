@@ -27,9 +27,9 @@ GButton::GButton() : _mode(ButtonMode::COMMON),
                      _down(false),
                      _downEffect(0),
                      _downScaled(false),
-                     _downEffectValue(0.8f), 
-                     _changeStateOnClick(true), 
-                     _sound(UIConfig::buttonSound), 
+                     _downEffectValue(0.8f),
+                     _changeStateOnClick(true),
+                     _sound(UIConfig::buttonSound),
                      _soundVolumeScale(UIConfig::buttonSoundVolumeScale)
 {
 }
@@ -68,16 +68,16 @@ void GButton::setSelectedIcon(const std::string& value)
         _iconObject->setIcon((_selected && _selectedIcon.length() > 0) ? _selectedIcon : _icon);
 }
 
-ax::Color3B GButton::getTitleColor() const
+ax::Color32 GButton::getTitleColor() const
 {
     GTextField* tf = getTextField();
     if (tf)
         return tf->getColor();
     else
-        return Color3B::BLACK;
+        return Color32::BLACK;
 }
 
-void GButton::setTitleColor(const ax::Color3B& value)
+void GButton::setTitleColor(const ax::Color32& value)
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -318,7 +318,7 @@ void GButton::setup_afterAdd(ByteBuffer* buffer, int beginPos)
     if ((str = buffer->readSP()))
         setSelectedIcon(*str);
     if (buffer->readBool())
-        setTitleColor((Color3B)buffer->readColor());
+        setTitleColor(buffer->readColor());
     int iv = buffer->readInt();
     if (iv != 0)
         setTitleFontSize(iv);

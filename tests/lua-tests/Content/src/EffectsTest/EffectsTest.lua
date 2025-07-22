@@ -2,7 +2,7 @@ require "EffectsTest/EffectsName"
 
 
 local ActionIdx = -1
-local size = cc.Director:getInstance():getWinSize()
+local size = ax.Director:getInstance():getWinSize()
 local kTagTextLayer  = 1
 local kTagBackground = 1
 local kTagLabel      = 2
@@ -25,7 +25,7 @@ local function checkAnim(dt)
 end
 
 local function onEnterOrExit(tag)
-    local scheduler = cc.Director:getInstance():getScheduler()
+    local scheduler = ax.Director:getInstance():getScheduler()
     if tag == "enter" then
         entry = scheduler:scheduleScriptFunc(checkAnim, 0, false)
     elseif tag == "exit" then
@@ -54,224 +54,224 @@ local function nextAction()
 end
 
 local function backCallback(sender)
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
     scene:addChild(backAction())
     scene:addChild(CreateBackMenuItem())
 
-    cc.Director:getInstance():replaceScene(scene)
+    ax.Director:getInstance():replaceScene(scene)
 end
 
 local function restartCallback(sender)
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
     scene:addChild(restartAction())
     scene:addChild(CreateBackMenuItem())
 
-    cc.Director:getInstance():replaceScene(scene)
+    ax.Director:getInstance():replaceScene(scene)
 end
 
 local function nextCallback(sender)
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
     scene:addChild(nextAction())
     scene:addChild(CreateBackMenuItem())
 
-    cc.Director:getInstance():replaceScene(scene)
+    ax.Director:getInstance():replaceScene(scene)
 end
 
 --------------------------------------
 --  Shaky3DDemo
 --------------------------------------
 local function Shaky3DDemo(t)
-    return cc.Shaky3D:create(t, cc.size(15,10), 5, false)
+    return ax.Shaky3D:create(t, ax.size(15,10), 5, false)
 end
 
 --------------------------------------
 --  Waves3DDemo
 --------------------------------------
 local function Waves3DDemo(t)
-    return cc.Waves3D:create(t, cc.size(15,10), 5, 40)
+    return ax.Waves3D:create(t, ax.size(15,10), 5, 40)
 end
 
 --------------------------------------
 --  FlipX3DDemo
 --------------------------------------
 local function FlipX3DDemo(t)
-    local flipx  = cc.FlipX3D:create(t)
+    local flipx  = ax.FlipX3D:create(t)
     local flipx_back = flipx:reverse()
-    local delay = cc.DelayTime:create(2)
+    local delay = ax.DelayTime:create(2)
 
-    return cc.Sequence:create(flipx, flipx_back, delay)
+    return ax.Sequence:create(flipx, flipx_back, delay)
 end
 
 --------------------------------------
 --  FlipY3DDemo
 --------------------------------------
 local function FlipY3DDemo(t)
-    local flipy  = cc.FlipY3D:create(t)
+    local flipy  = ax.FlipY3D:create(t)
     local flipy_back = flipy:reverse()
-    local delay = cc.DelayTime:create(2)
+    local delay = ax.DelayTime:create(2)
 
-    return cc.Sequence:create(flipy, flipy_back, delay)
+    return ax.Sequence:create(flipy, flipy_back, delay)
 end
 
 --------------------------------------
 --  Lens3DDemo
 --------------------------------------
 local function Lens3DDemo(t)
-    return cc.Lens3D:create(t, cc.size(15,10), cc.p(size.width/2,size.height/2), 240)
+    return ax.Lens3D:create(t, ax.size(15,10), ax.p(size.width/2,size.height/2), 240)
 end
 
 --------------------------------------
 --  Ripple3DDemo
 --------------------------------------
 local function Ripple3DDemo(t)
-    return cc.Ripple3D:create(t, cc.size(32,24), cc.p(size.width/2,size.height/2), 240, 4, 160)
+    return ax.Ripple3D:create(t, ax.size(32,24), ax.p(size.width/2,size.height/2), 240, 4, 160)
 end
 
 --------------------------------------
 --  LiquidDemo
 --------------------------------------
 local function LiquidDemo(t)
-    return cc.Liquid:create(t, cc.size(16,12), 4, 20)
+    return ax.Liquid:create(t, ax.size(16,12), 4, 20)
 end
 
 --------------------------------------
 --  WavesDemo
 --------------------------------------
 local function WavesDemo(t)
-    return cc.Waves:create(t, cc.size(16,12), 4, 20, true, true)
+    return ax.Waves:create(t, ax.size(16,12), 4, 20, true, true)
 end
 
 --------------------------------------
 --  TwirlDemo
 --------------------------------------
 local function TwirlDemo(t)
-    return cc.Twirl:create(t, cc.size(12,8), cc.p(size.width/2, size.height/2), 1, 2.5)
+    return ax.Twirl:create(t, ax.size(12,8), ax.p(size.width/2, size.height/2), 1, 2.5)
 end
 
 --------------------------------------
 --  ShakyTiles3DDemo
 --------------------------------------
 local function ShakyTiles3DDemo(t)
-    return cc.ShakyTiles3D:create(t, cc.size(16,12), 5, false)
+    return ax.ShakyTiles3D:create(t, ax.size(16,12), 5, false)
 end
 
 --------------------------------------
 --  ShatteredTiles3DDemo
 --------------------------------------
 local function ShatteredTiles3DDemo(t)
-    return cc.ShatteredTiles3D:create(t, cc.size(16,12), 5, false)
+    return ax.ShatteredTiles3D:create(t, ax.size(16,12), 5, false)
 end
 
 --------------------------------------
 --  ShuffleTilesDemo
 --------------------------------------
 local function ShuffleTilesDemo(t)
-    local shuffle = cc.ShuffleTiles:create(t, cc.size(16,12), 25)
+    local shuffle = ax.ShuffleTiles:create(t, ax.size(16,12), 25)
     local shuffle_back = shuffle:reverse()
-    local delay = cc.DelayTime:create(2)
+    local delay = ax.DelayTime:create(2)
 
-    return cc.Sequence:create(shuffle, shuffle_back, delay)
+    return ax.Sequence:create(shuffle, shuffle_back, delay)
 end
 
 --------------------------------------
 --  FadeOutTRTilesDemo
 --------------------------------------
 local function FadeOutTRTilesDemo(t)
-    local fadeout = cc.FadeOutTRTiles:create(t, cc.size(16,12))
+    local fadeout = ax.FadeOutTRTiles:create(t, ax.size(16,12))
     local back = fadeout:reverse()
-    local delay = cc.DelayTime:create(0.5)
+    local delay = ax.DelayTime:create(0.5)
 
-    return cc.Sequence:create(fadeout, back, delay)
+    return ax.Sequence:create(fadeout, back, delay)
 end
 
 --------------------------------------
 --  FadeOutBLTilesDemo
 --------------------------------------
 local function FadeOutBLTilesDemo(t)
-    local fadeout = cc.FadeOutBLTiles:create(t, cc.size(16,12))
+    local fadeout = ax.FadeOutBLTiles:create(t, ax.size(16,12))
     local back = fadeout:reverse()
-    local delay = cc.DelayTime:create(0.5)
+    local delay = ax.DelayTime:create(0.5)
 
-    return cc.Sequence:create(fadeout, back, delay)
+    return ax.Sequence:create(fadeout, back, delay)
 end
 
 --------------------------------------
 --  FadeOutUpTilesDemo
 --------------------------------------
 local function FadeOutUpTilesDemo(t)
-    local fadeout = cc.FadeOutUpTiles:create(t, cc.size(16,12))
+    local fadeout = ax.FadeOutUpTiles:create(t, ax.size(16,12))
     local back = fadeout:reverse()
-    local delay = cc.DelayTime:create(0.5)
+    local delay = ax.DelayTime:create(0.5)
 
-    return cc.Sequence:create(fadeout, back, delay)
+    return ax.Sequence:create(fadeout, back, delay)
 end
 
 --------------------------------------
 --  FadeOutDownTilesDemo
 --------------------------------------
 local function FadeOutDownTilesDemo(t)
-    local fadeout = cc.FadeOutDownTiles:create(t, cc.size(16,12))
+    local fadeout = ax.FadeOutDownTiles:create(t, ax.size(16,12))
     local back = fadeout:reverse()
-    local delay = cc.DelayTime:create(0.5)
+    local delay = ax.DelayTime:create(0.5)
 
-    return cc.Sequence:create(fadeout, back, delay)
+    return ax.Sequence:create(fadeout, back, delay)
 end
 
 --------------------------------------
 --  TurnOffTilesDemo
 --------------------------------------
 local function TurnOffTilesDemo(t)
-    local fadeout = cc.TurnOffTiles:create(t, cc.size(48,32), 25)
+    local fadeout = ax.TurnOffTiles:create(t, ax.size(48,32), 25)
     local back = fadeout:reverse()
-    local delay = cc.DelayTime:create(0.5)
+    local delay = ax.DelayTime:create(0.5)
 
-    return cc.Sequence:create(fadeout, back, delay)
+    return ax.Sequence:create(fadeout, back, delay)
 end
 
 --------------------------------------
 --  WavesTiles3DDemo
 --------------------------------------
 local function WavesTiles3DDemo(t)
-    return cc.WavesTiles3D:create(t, cc.size(15,10), 4, 120)
+    return ax.WavesTiles3D:create(t, ax.size(15,10), 4, 120)
 end
 
 --------------------------------------
 --  JumpTiles3DDemo
 --------------------------------------
 local function JumpTiles3DDemo(t)
-    return cc.JumpTiles3D:create(t, cc.size(15,10), 2, 30)
+    return ax.JumpTiles3D:create(t, ax.size(15,10), 2, 30)
 end
 
 --------------------------------------
 --  SplitRowsDemo
 --------------------------------------
 local function SplitRowsDemo(t)
-    return cc.SplitRows:create(t, 9)
+    return ax.SplitRows:create(t, 9)
 end
 
 --------------------------------------
 --  SplitColsDemo
 --------------------------------------
 local function SplitColsDemo(t)
-    return cc.SplitCols:create(t, 9)
+    return ax.SplitCols:create(t, 9)
 end
 
 --------------------------------------
 --  PageTurn3DDemo
 --------------------------------------
 local function PageTurn3DDemo(t)
-    cc.Director:getInstance():getRenderer():setDepthTest(true)
-    return cc.PageTurn3D:create(t, cc.size(15,10))
+    ax.Director:getInstance():getRenderer():setDepthTest(true)
+    return ax.PageTurn3D:create(t, ax.size(15,10))
 end
 
 --------------------------------------
 --  Effects Test
 --------------------------------------
 local function createEffect(idx, t)
-    cc.Director:getInstance():getRenderer():setDepthTest(false)
+    ax.Director:getInstance():getRenderer():setDepthTest(false)
     local action = nil
 
     if idx == 0 then
@@ -324,56 +324,56 @@ local function createEffect(idx, t)
 end
 
 function CreateEffectsTestLayer()
-    testLayer = cc.LayerColor:create(cc.c4b(32,128,32,255))
+    testLayer = ax.LayerColor:create(ax.color32(32,128,32,255))
 
 
-    gridNodeTarget = cc.NodeGrid:create()
+    gridNodeTarget = ax.NodeGrid:create()
     local effect = createEffect(ActionIdx, 3)
     gridNodeTarget:runAction(effect)
     testLayer:addChild(gridNodeTarget, 0, kTagBackground)
-    
-    local bg = cc.Sprite:create(s_back3)
+
+    local bg = ax.Sprite:create(s_back3)
     gridNodeTarget:addChild(bg, 0)
     bg:setPosition(VisibleRect:center())
 
-    local grossini = cc.Sprite:create(s_pPathSister2)
+    local grossini = ax.Sprite:create(s_pPathSister2)
     gridNodeTarget:addChild(grossini, 1)
-    grossini:setPosition( cc.p(VisibleRect:left().x+VisibleRect:getVisibleRect().width/3,VisibleRect:center().y) )
-    local sc = cc.ScaleBy:create(2, 5)
+    grossini:setPosition( ax.p(VisibleRect:left().x+VisibleRect:getVisibleRect().width/3,VisibleRect:center().y) )
+    local sc = ax.ScaleBy:create(2, 5)
     local sc_back = sc:reverse()
-    grossini:runAction( cc.RepeatForever:create(cc.Sequence:create(sc, sc_back) ) )
+    grossini:runAction( ax.RepeatForever:create(ax.Sequence:create(sc, sc_back) ) )
 
-    local tamara = cc.Sprite:create(s_pPathSister1)
+    local tamara = ax.Sprite:create(s_pPathSister1)
     gridNodeTarget:addChild(tamara, 1)
-    tamara:setPosition( cc.p(VisibleRect:left().x+2*VisibleRect:getVisibleRect().width/3,VisibleRect:center().y) )
-    local sc2 = cc.ScaleBy:create(2, 5)
+    tamara:setPosition( ax.p(VisibleRect:left().x+2*VisibleRect:getVisibleRect().width/3,VisibleRect:center().y) )
+    local sc2 = ax.ScaleBy:create(2, 5)
     local sc2_back = sc2:reverse()
-    tamara:runAction( cc.RepeatForever:create(cc.Sequence:create(sc2, sc2_back)) )
+    tamara:runAction( ax.RepeatForever:create(ax.Sequence:create(sc2, sc2_back)) )
 
     local x, y = size.width, size.height
 
-    titleLabel = cc.Label:createWithTTF(EffectsList[ActionIdx], s_markerFeltFontPath, 32)
-    titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+    titleLabel = ax.Label:createWithTTF(EffectsList[ActionIdx], s_markerFeltFontPath, 32)
+    titleLabel:setAnchorPoint(ax.p(0.5, 0.5))
     titleLabel:setPosition(x / 2, y - 80)
     testLayer:addChild(titleLabel)
     titleLabel:setTag(kTagLabel)
 
-    local item1 = cc.MenuItemImage:create(s_pPathB1, s_pPathB2)
-    local item2 = cc.MenuItemImage:create(s_pPathR1, s_pPathR2)
-    local item3 = cc.MenuItemImage:create(s_pPathF1, s_pPathF2)
+    local item1 = ax.MenuItemImage:create(s_pPathB1, s_pPathB2)
+    local item2 = ax.MenuItemImage:create(s_pPathR1, s_pPathR2)
+    local item3 = ax.MenuItemImage:create(s_pPathF1, s_pPathF2)
     item1:registerScriptTapHandler(backCallback)
     item2:registerScriptTapHandler(restartCallback)
     item3:registerScriptTapHandler(nextCallback)
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
     menu:addChild(item1)
     menu:addChild(item2)
     menu:addChild(item3)
 
-    menu:setPosition(cc.p(0, 0))
-    item1:setPosition(cc.p(size.width/2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
-    item2:setPosition(cc.p(size.width/2, item2:getContentSize().height / 2))
-    item3:setPosition(cc.p(size.width/2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+    menu:setPosition(ax.p(0, 0))
+    item1:setPosition(ax.p(size.width/2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+    item2:setPosition(ax.p(size.width/2, item2:getContentSize().height / 2))
+    item3:setPosition(ax.p(size.width/2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
 
     testLayer:addChild(menu, 1)
 
@@ -383,7 +383,7 @@ function CreateEffectsTestLayer()
 end
 
 function EffectsTest()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
     ActionIdx = -1
     scene:addChild(nextAction())

@@ -15,7 +15,7 @@ local projectile = {
         local owner = self:getOwner()
         local projectileX, projectileY = owner:getPosition()
         local projectileContentSize = owner:getContentSize()
-        local projectileRect = cc.rect(projectileX, projectileY, 
+        local projectileRect = ax.rect(projectileX, projectileY,
                 projectileContentSize.width, projectileContentSize.height)
 
         local scene = owner:getParent()
@@ -27,9 +27,9 @@ local projectile = {
             local enemy = enemies[i]
             local enemyX, enemyY = enemy:getPosition()
             local enemyContentSize = enemy:getContentSize()
-            local enemyRect = cc.rect(enemyX, enemyY, 
+            local enemyRect = ax.rect(enemyX, enemyY,
                     enemyContentSize.width, enemyContentSize.height)
-            if cc.rectIntersectsRect(projectileRect, enemyRect) then 
+            if ax.rectIntersectsRect(projectileRect, enemyRect) then
                 table.remove(enemies, i)
                 scene:removeChild(enemy, true)
                 self.sceneLua:inscreaseCount()

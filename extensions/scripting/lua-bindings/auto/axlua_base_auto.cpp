@@ -11896,7 +11896,7 @@ int lua_ax_base_Node_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getColor",argc, 0);
@@ -11943,7 +11943,7 @@ int lua_ax_base_Node_getDisplayedColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getDisplayedColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:getDisplayedColor",argc, 0);
@@ -11984,9 +11984,9 @@ int lua_ax_base_Node_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.Node:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.Node:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setColor'", nullptr);
@@ -12034,9 +12034,9 @@ int lua_ax_base_Node_updateDisplayedColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.Node:updateDisplayedColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.Node:updateDisplayedColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_updateDisplayedColor'", nullptr);
@@ -21777,30 +21777,24 @@ int lua_ax_base_TintTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4) 
+    if (argc == 2) 
     {
         double arg0;
-        uint16_t arg1;
-        uint16_t arg2;
-        uint16_t arg3;
+        ax::Color32 arg1;
 
         ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:initWithDuration");
 
-        ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ax.TintTo:initWithDuration");
-
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "ax.TintTo:initWithDuration");
-
-        ok &= luaval_to_uint16(tolua_S, 5,&arg3, "ax.TintTo:initWithDuration");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.TintTo:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TintTo_initWithDuration'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->initWithDuration(arg0, arg1, arg2, arg3);
+        auto&& ret = cobj->initWithDuration(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TintTo:initWithDuration",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TintTo:initWithDuration",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -21814,6 +21808,7 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -21822,47 +21817,24 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
     if (!tolua_isusertable(tolua_S,1,"ax.TintTo",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    argc = lua_gettop(tolua_S)-1;
+    argc = lua_gettop(tolua_S) - 1;
 
-    do 
+    if (argc == 2)
     {
-        if (argc == 2)
+        double arg0;
+        ax::Color32 arg1;
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.TintTo:create");
+        if(!ok)
         {
-            double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:create");
-            if (!ok) { break; }
-            ax::Color3B arg1;
-            ok &= luaval_to_color3b(tolua_S, 3, &arg1, "ax.TintTo:create");
-            if (!ok) { break; }
-            ax::TintTo* ret = ax::TintTo::create(arg0, arg1);
-            object_to_luaval<ax::TintTo>(tolua_S, "ax.TintTo",(ax::TintTo*)ret);
-            return 1;
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TintTo_create'", nullptr);
+            return 0;
         }
-    } while (0);
-    ok  = true;
-    do 
-    {
-        if (argc == 4)
-        {
-            double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:create");
-            if (!ok) { break; }
-            uint16_t arg1;
-            ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ax.TintTo:create");
-            if (!ok) { break; }
-            uint16_t arg2;
-            ok &= luaval_to_uint16(tolua_S, 4,&arg2, "ax.TintTo:create");
-            if (!ok) { break; }
-            uint16_t arg3;
-            ok &= luaval_to_uint16(tolua_S, 5,&arg3, "ax.TintTo:create");
-            if (!ok) { break; }
-            ax::TintTo* ret = ax::TintTo::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<ax::TintTo>(tolua_S, "ax.TintTo",(ax::TintTo*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.TintTo:create",argc, 4);
+        auto&& ret = ax::TintTo::create(arg0, arg1);
+        object_to_luaval<ax::TintTo>(tolua_S, "ax.TintTo",(ax::TintTo*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.TintTo:create",argc, 2);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -61387,9 +61359,9 @@ int lua_ax_base_LayerGradient_setStartColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.LayerGradient:setStartColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerGradient:setStartColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerGradient_setStartColor'", nullptr);
@@ -61443,7 +61415,7 @@ int lua_ax_base_LayerGradient_getStartColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getStartColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerGradient:getStartColor",argc, 0);
@@ -61484,9 +61456,9 @@ int lua_ax_base_LayerGradient_setEndColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.LayerGradient:setEndColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerGradient:setEndColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerGradient_setEndColor'", nullptr);
@@ -61540,7 +61512,7 @@ int lua_ax_base_LayerGradient_getEndColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getEndColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerGradient:getEndColor",argc, 0);
@@ -62539,14 +62511,18 @@ int lua_ax_base_LayerRadialGradient_setStartColor(lua_State* tolua_S)
     int argc = 0;
     ax::LayerRadialGradient* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -62554,32 +62530,23 @@ int lua_ax_base_LayerRadialGradient_setStartColor(lua_State* tolua_S)
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 1) {
-            ax::Color32 arg0;
-            ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setStartColor");
+    if (argc == 1) 
+    {
+        ax::Color32 arg0;
 
-            if (!ok) { break; }
-            cobj->setStartColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setStartColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_setStartColor'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            ax::Color3B arg0;
-            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setStartColor");
-
-            if (!ok) { break; }
-            cobj->setStartColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.LayerRadialGradient:setStartColor",argc, 1);
+        cobj->setStartColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerRadialGradient:setStartColor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -62636,66 +62603,23 @@ int lua_ax_base_LayerRadialGradient_getStartColor(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_LayerRadialGradient_getStartColor3B(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::LayerRadialGradient* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getStartColor3B'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_getStartColor3B'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->getStartColor3B();
-        color3b_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerRadialGradient:getStartColor3B",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_LayerRadialGradient_getStartColor3B'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_LayerRadialGradient_setEndColor(lua_State* tolua_S)
 {
     int argc = 0;
     ax::LayerRadialGradient* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -62703,32 +62627,23 @@ int lua_ax_base_LayerRadialGradient_setEndColor(lua_State* tolua_S)
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 1) {
-            ax::Color32 arg0;
-            ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setEndColor");
+    if (argc == 1) 
+    {
+        ax::Color32 arg0;
 
-            if (!ok) { break; }
-            cobj->setEndColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setEndColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_setEndColor'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            ax::Color3B arg0;
-            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setEndColor");
-
-            if (!ok) { break; }
-            cobj->setEndColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.LayerRadialGradient:setEndColor",argc, 1);
+        cobj->setEndColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerRadialGradient:setEndColor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -62781,53 +62696,6 @@ int lua_ax_base_LayerRadialGradient_getEndColor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_LayerRadialGradient_getEndColor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_LayerRadialGradient_getEndColor3B(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::LayerRadialGradient* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_LayerRadialGradient_getEndColor3B'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_getEndColor3B'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->getEndColor3B();
-        color3b_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.LayerRadialGradient:getEndColor3B",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_LayerRadialGradient_getEndColor3B'.",&tolua_err);
 #endif
 
     return 0;
@@ -63110,10 +62978,8 @@ int lua_register_ax_base_LayerRadialGradient(lua_State* tolua_S)
         tolua_function(tolua_S,"getExpand",lua_ax_base_LayerRadialGradient_getExpand);
         tolua_function(tolua_S,"setStartColor",lua_ax_base_LayerRadialGradient_setStartColor);
         tolua_function(tolua_S,"getStartColor",lua_ax_base_LayerRadialGradient_getStartColor);
-        tolua_function(tolua_S,"getStartColor3B",lua_ax_base_LayerRadialGradient_getStartColor3B);
         tolua_function(tolua_S,"setEndColor",lua_ax_base_LayerRadialGradient_setEndColor);
         tolua_function(tolua_S,"getEndColor",lua_ax_base_LayerRadialGradient_getEndColor);
-        tolua_function(tolua_S,"getEndColor3B",lua_ax_base_LayerRadialGradient_getEndColor3B);
         tolua_function(tolua_S,"setBlendFunc",lua_ax_base_LayerRadialGradient_setBlendFunc);
         tolua_function(tolua_S,"getBlendFunc",lua_ax_base_LayerRadialGradient_getBlendFunc);
         tolua_function(tolua_S,"initWithColor",lua_ax_base_LayerRadialGradient_initWithColor);
@@ -63922,7 +63788,7 @@ int lua_ax_base_MenuItemLabel_getDisabledColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getDisabledColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MenuItemLabel:getDisabledColor",argc, 0);
@@ -63963,9 +63829,9 @@ int lua_ax_base_MenuItemLabel_setDisabledColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.MenuItemLabel:setDisabledColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.MenuItemLabel:setDisabledColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MenuItemLabel_setDisabledColor'", nullptr);
@@ -66658,9 +66524,9 @@ int lua_ax_base_MotionStreak_tintWithColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.MotionStreak:tintWithColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.MotionStreak:tintWithColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MotionStreak_tintWithColor'", nullptr);
@@ -67053,8 +66919,8 @@ int lua_ax_base_MotionStreak_initWithFade(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
-            ax::Color3B arg3;
-            ok &= luaval_to_color3b(tolua_S, 5, &arg3, "ax.MotionStreak:initWithFade");
+            ax::Color32 arg3;
+            ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
             ax::Texture2D* arg4;
@@ -67081,8 +66947,8 @@ int lua_ax_base_MotionStreak_initWithFade(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
-            ax::Color3B arg3;
-            ok &= luaval_to_color3b(tolua_S, 5, &arg3, "ax.MotionStreak:initWithFade");
+            ax::Color32 arg3;
+            ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
             std::string_view arg4;
@@ -67132,8 +66998,8 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
             double arg2;
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak:create");
             if (!ok) { break; }
-            ax::Color3B arg3;
-            ok &= luaval_to_color3b(tolua_S, 5, &arg3, "ax.MotionStreak:create");
+            ax::Color32 arg3;
+            ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak:create");
             if (!ok) { break; }
             ax::Texture2D* arg4;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 6, "ax.Texture2D",&arg4, "ax.MotionStreak:create");
@@ -67157,8 +67023,8 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
             double arg2;
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak:create");
             if (!ok) { break; }
-            ax::Color3B arg3;
-            ok &= luaval_to_color3b(tolua_S, 5, &arg3, "ax.MotionStreak:create");
+            ax::Color32 arg3;
+            ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak:create");
             if (!ok) { break; }
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "ax.MotionStreak:create");
@@ -87471,8 +87337,8 @@ int lua_ax_base_TransitionFade_initWithDuration(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFade:initWithDuration");
 
             if (!ok) { break; }
-            ax::Color3B arg2;
-            ok &= luaval_to_color3b(tolua_S, 4, &arg2, "ax.TransitionFade:initWithDuration");
+            ax::Color32 arg2;
+            ok &=luaval_to_color32(tolua_S, 4, &arg2, "ax.TransitionFade:initWithDuration");
 
             if (!ok) { break; }
             bool ret = cobj->initWithDuration(arg0, arg1, arg2);
@@ -87531,8 +87397,8 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFade:create");
             if (!ok) { break; }
-            ax::Color3B arg2;
-            ok &= luaval_to_color3b(tolua_S, 4, &arg2, "ax.TransitionFade:create");
+            ax::Color32 arg2;
+            ok &=luaval_to_color32(tolua_S, 4, &arg2, "ax.TransitionFade:create");
             if (!ok) { break; }
             ax::TransitionFade* ret = ax::TransitionFade::create(arg0, arg1, arg2);
             object_to_luaval<ax::TransitionFade>(tolua_S, "ax.TransitionFade",(ax::TransitionFade*)ret);
@@ -94612,9 +94478,9 @@ int lua_ax_base_DirectionLight_create(lua_State* tolua_S)
     if (argc == 2)
     {
         ax::Vec3 arg0;
-        ax::Color3B arg1;
+        ax::Color32 arg1;
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.DirectionLight:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "ax.DirectionLight:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.DirectionLight:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DirectionLight_create'", nullptr);
@@ -94808,10 +94674,10 @@ int lua_ax_base_PointLight_create(lua_State* tolua_S)
     if (argc == 3)
     {
         ax::Vec3 arg0;
-        ax::Color3B arg1;
+        ax::Color32 arg1;
         double arg2;
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.PointLight:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "ax.PointLight:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.PointLight:create");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PointLight:create");
         if(!ok)
         {
@@ -95438,13 +95304,13 @@ int lua_ax_base_SpotLight_create(lua_State* tolua_S)
     {
         ax::Vec3 arg0;
         ax::Vec3 arg1;
-        ax::Color3B arg2;
+        ax::Color32 arg2;
         double arg3;
         double arg4;
         double arg5;
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.SpotLight:create");
         ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.SpotLight:create");
-        ok &= luaval_to_color3b(tolua_S, 4, &arg2, "ax.SpotLight:create");
+        ok &=luaval_to_color32(tolua_S, 4, &arg2, "ax.SpotLight:create");
         ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.SpotLight:create");
         ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.SpotLight:create");
         ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.SpotLight:create");
@@ -95551,8 +95417,8 @@ int lua_ax_base_AmbientLight_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        ax::Color3B arg0;
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.AmbientLight:create");
+        ax::Color32 arg0;
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.AmbientLight:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AmbientLight_create'", nullptr);
@@ -108521,7 +108387,7 @@ int lua_ax_base_TileMapAtlas_getTileAt(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getTileAt(arg0);
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TileMapAtlas:getTileAt",argc, 1);
@@ -108562,10 +108428,10 @@ int lua_ax_base_TileMapAtlas_setTile(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
         ax::Vec2 arg1;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.TileMapAtlas:setTile");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.TileMapAtlas:setTile");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.TileMapAtlas:setTile");
         if(!ok)
@@ -111877,9 +111743,9 @@ int lua_ax_base_MotionStreak3D_tintWithColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ax.MotionStreak3D:tintWithColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.MotionStreak3D:tintWithColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MotionStreak3D_tintWithColor'", nullptr);
@@ -112466,8 +112332,8 @@ int lua_ax_base_MotionStreak3D_initWithFade(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
-            ax::Color3B arg3;
-            ok &= luaval_to_color3b(tolua_S, 5, &arg3, "ax.MotionStreak3D:initWithFade");
+            ax::Color32 arg3;
+            ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
             ax::Texture2D* arg4;
@@ -112494,8 +112360,8 @@ int lua_ax_base_MotionStreak3D_initWithFade(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
-            ax::Color3B arg3;
-            ok &= luaval_to_color3b(tolua_S, 5, &arg3, "ax.MotionStreak3D:initWithFade");
+            ax::Color32 arg3;
+            ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
             std::string_view arg4;
@@ -112545,8 +112411,8 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
             double arg2;
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak3D:create");
             if (!ok) { break; }
-            ax::Color3B arg3;
-            ok &= luaval_to_color3b(tolua_S, 5, &arg3, "ax.MotionStreak3D:create");
+            ax::Color32 arg3;
+            ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak3D:create");
             if (!ok) { break; }
             ax::Texture2D* arg4;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 6, "ax.Texture2D",&arg4, "ax.MotionStreak3D:create");
@@ -112570,8 +112436,8 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
             double arg2;
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak3D:create");
             if (!ok) { break; }
-            ax::Color3B arg3;
-            ok &= luaval_to_color3b(tolua_S, 5, &arg3, "ax.MotionStreak3D:create");
+            ax::Color32 arg3;
+            ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak3D:create");
             if (!ok) { break; }
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "ax.MotionStreak3D:create");

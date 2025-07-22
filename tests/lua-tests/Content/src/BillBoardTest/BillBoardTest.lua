@@ -2,7 +2,7 @@
 -- BillBoardTest
 --------------------------------
 local BillBoardTest = class("BillBoardTest", function ()
-    return cc.Layer:create()
+    return ax.Layer:create()
 end)
 
 function BillBoardTest:ctor()
@@ -23,9 +23,9 @@ end
 function BillBoardTest:addNewBillBoardWithCoords(p)
     local imgs = {"Images/Icon.png", "Images/r2.png"}
     for i= 1, 10 do
-        local billboard = cc.BillBoard:create(imgs[math.ceil(math.random() + 0.5)])
+        local billboard = ax.BillBoard:create(imgs[math.ceil(math.random() + 0.5)])
         billboard:setScale(0.5)
-        billboard:setPosition3D(cc.vec3(p.x, p.y,  -150.0 + 30 * i))
+        billboard:setPosition3D(ax.vec3(p.x, p.y,  -150.0 + 30 * i))
         billboard:setOpacity(math.random() * 128 + 128)
         self._layerBillBoard:addChild(billboard)
         table.insert(self._billboards, billboard)
@@ -34,37 +34,37 @@ end
 
 function BillBoardTest:addNewAniBillBoardWithCoords(p)
     for i = 1, 10 do
-        local billboardAni = cc.BillBoard:create("Images/grossini.png")
+        local billboardAni = ax.BillBoard:create("Images/grossini.png")
         billboardAni:setScale(0.5)
-        billboardAni:setPosition3D(cc.vec3(p.x, p.y,  -150.0 + 30 * (i - 1)))
+        billboardAni:setPosition3D(ax.vec3(p.x, p.y,  -150.0 + 30 * (i - 1)))
         self._layerBillBoard:addChild(billboardAni)
 
-        local animation = cc.Animation:create()
+        local animation = ax.Animation:create()
         for i=1,14 do
             local szName = string.format("Images/grossini_dance_%02d.png", i)
-            animation:addSpriteFrameWithFile(szName)      
+            animation:addSpriteFrameWithFile(szName)
         end
 
         --should last 2.8 seconds. And there are 14 frames.
         animation:setDelayPerUnit(2.8 / 14.0)
         animation:setRestoreOriginalFrame(true)
 
-        local action = cc.Animate:create(animation)
-        billboardAni:runAction(cc.RepeatForever:create(action))
+        local action = ax.Animate:create(animation)
+        billboardAni:runAction(ax.RepeatForever:create(action))
         billboardAni:setOpacity( math.random() * 128 + 128)
         table.insert(self._billboards, billboardAni)
     end
 end
 
 function BillBoardTest:init()
-    local listener = cc.EventListenerTouchAllAtOnce:create()
+    local listener = ax.EventListenerTouchAllAtOnce:create()
     listener:registerScriptHandler(function(touches, event)
         if #touches == 1 then
             local touch = touches[1]
             local location = touch:getLocation()
             local previousLocation = touch:getPreviousLocation()
-            local newPos = cc.pSub(previousLocation, location)
-    
+            local newPos = ax.pSub(previousLocation, location)
+
             local cameraDir = {}
             local cameraRightDir = {}
             local transformMat = self._camera:getNodeToWorldTransform()
@@ -72,128 +72,128 @@ function BillBoardTest:init()
             cameraDir.x = -transformMat[9]
             cameraDir.y = -transformMat[10]
             cameraDir.z = -transformMat[11]
-            cameraDir = cc.vec3normalize(cameraDir)
+            cameraDir = ax.vec3normalize(cameraDir)
             cameraDir.y = 0
             transformMat = self._camera:getNodeToWorldTransform()
             cameraRightDir.x = transformMat[1]
             cameraRightDir.y = transformMat[2]
             cameraRightDir.z = transformMat[3]
-            cameraRightDir = cc.vec3normalize(cameraRightDir)
+            cameraRightDir = ax.vec3normalize(cameraRightDir)
             cameraRightDir.y=0
 
             local cameraPos=  self._camera:getPosition3D()
-            cameraPos = cc.vec3add(cameraPos, cc.vec3mul(cameraDir, newPos.y * 0.5))
-            cameraPos = cc.vec3add(cameraPos, cc.vec3mul(cameraRightDir, newPos.x * 0.5))
+            cameraPos = ax.vec3add(cameraPos, ax.vec3mul(cameraDir, newPos.y * 0.5))
+            cameraPos = ax.vec3add(cameraPos, ax.vec3mul(cameraRightDir, newPos.x * 0.5))
             self._camera:setPosition3D(cameraPos)
         end
-    end, cc.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_TOUCHES_MOVED)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
 
-    local layer3D = cc.Layer:create()
+    local layer3D = ax.Layer:create()
     self:addChild(layer3D,0)
     self._layerBillBoard = layer3D
 
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
     if self._camera == nil then
-        self._camera = cc.Camera:createPerspective(60, s.width/s.height, 1, 500)
-        self._camera:setCameraFlag(cc.CameraFlag.USER1)
+        self._camera = ax.Camera:createPerspective(60, s.width/s.height, 1, 500)
+        self._camera:setCameraFlag(ax.CameraFlag.USER1)
         self._layerBillBoard:addChild(self._camera)
     end
 
     local imgs = {"Images/Icon.png", "Images/r2.png"}
 
     for i= 1, 4 do
-        local layer = cc.Layer:create()
-        local billboard = cc.BillBoard:create(imgs[math.ceil((math.random() + 0.5))])
+        local layer = ax.Layer:create()
+        local billboard = ax.BillBoard:create(imgs[math.ceil((math.random() + 0.5))])
         billboard:setScale(0.5)
-        billboard:setPosition3D(cc.vec3(0.0, 0.0,  math.random(-1, 1) * 150.0))
+        billboard:setPosition3D(ax.vec3(0.0, 0.0,  math.random(-1, 1) * 150.0))
         billboard:setOpacity(math.random() * 128 + 128)
         table.insert(self._billboards, billboard)
         layer:addChild(billboard)
         self._layerBillBoard:addChild(layer)
-        layer:runAction( cc.RepeatForever:create( cc.RotateBy:create( math.random() * 10, cc.vec3(0.0, 45.0, 0.0) ) ) )
+        layer:runAction( ax.RepeatForever:create( ax.RotateBy:create( math.random() * 10, ax.vec3(0.0, 45.0, 0.0) ) ) )
     end
 
-    local billboard = cc.BillBoard:create("Images/Icon.png")
+    local billboard = ax.BillBoard:create("Images/Icon.png")
     billboard:setScale(0.2)
-    billboard:setPosition3D(cc.vec3(0.0, 30.0, 0.0))
+    billboard:setPosition3D(ax.vec3(0.0, 30.0, 0.0))
 
-    local billboard2 = cc.BillBoard:create("Images/r2.png")
-    billboard2:setPosition3D(cc.vec3(0.0, 0.0, 100.0))
+    local billboard2 = ax.BillBoard:create("Images/r2.png")
+    billboard2:setPosition3D(ax.vec3(0.0, 0.0, 100.0))
     billboard:addChild(billboard2)
     table.insert(self._billboards, billboard)
     table.insert(self._billboards, billboard2)
 
-    local sprite3d = cc.Sprite3D:create("MeshRendererTest/orc.c3t")
+    local sprite3d = ax.Sprite3D:create("MeshRendererTest/orc.c3t")
     sprite3d:setScale(2.0)
     sprite3d:addChild(billboard)
-    sprite3d:runAction( cc.RepeatForever:create( cc.RotateBy:create( 10.0, cc.vec3(0.0, 360.0, 0.0) ) ) )
+    sprite3d:runAction( ax.RepeatForever:create( ax.RotateBy:create( 10.0, ax.vec3(0.0, 360.0, 0.0) ) ) )
     self._layerBillBoard:addChild(sprite3d)
 
-    self:addNewBillBoardWithCoords(cc.vec3(20,5,0))
-    self:addNewBillBoardWithCoords(cc.vec3(60,5,0))
-    self:addNewBillBoardWithCoords(cc.vec3(100,5,0))
-    self:addNewBillBoardWithCoords(cc.vec3(140,5,0))
-    self:addNewBillBoardWithCoords(cc.vec3(180,5,0))
-    self:addNewAniBillBoardWithCoords(cc.vec3(-20,0,0))
-    self:addNewAniBillBoardWithCoords(cc.vec3(-60,0,0))
-    self:addNewAniBillBoardWithCoords(cc.vec3(-100,0,0))
-    self:addNewAniBillBoardWithCoords(cc.vec3(-140,0,0))
-    self:addNewAniBillBoardWithCoords(cc.vec3(-180,0,0))
+    self:addNewBillBoardWithCoords(ax.vec3(20,5,0))
+    self:addNewBillBoardWithCoords(ax.vec3(60,5,0))
+    self:addNewBillBoardWithCoords(ax.vec3(100,5,0))
+    self:addNewBillBoardWithCoords(ax.vec3(140,5,0))
+    self:addNewBillBoardWithCoords(ax.vec3(180,5,0))
+    self:addNewAniBillBoardWithCoords(ax.vec3(-20,0,0))
+    self:addNewAniBillBoardWithCoords(ax.vec3(-60,0,0))
+    self:addNewAniBillBoardWithCoords(ax.vec3(-100,0,0))
+    self:addNewAniBillBoardWithCoords(ax.vec3(-140,0,0))
+    self:addNewAniBillBoardWithCoords(ax.vec3(-180,0,0))
 
-    self._camera:setPosition3D(cc.vec3(0, 130, 230))
-    self._camera:lookAt(cc.vec3(0, 0, 100), cc.vec3(0, 1, 0))
+    self._camera:setPosition3D(ax.vec3(0, 130, 230))
+    self._camera:lookAt(ax.vec3(0, 0, 100), ax.vec3(0, 1, 0))
 
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize = 16
 
-    local label1 = cc.Label:createWithTTF(ttfConfig,"rotate+")
-    local menuItem1 = cc.MenuItemLabel:create(label1)
+    local label1 = ax.Label:createWithTTF(ttfConfig,"rotate+")
+    local menuItem1 = ax.MenuItemLabel:create(label1)
     menuItem1:registerScriptTapHandler(function (tag, sender )
         local  rotation3D= self._camera:getRotation3D()
         rotation3D.y = rotation3D.y + 10
         self._camera:setRotation3D(rotation3D)
     end)
-    local label2 = cc.Label:createWithTTF(ttfConfig,"rotate-")
-    local menuItem2 = cc.MenuItemLabel:create(label2)
+    local label2 = ax.Label:createWithTTF(ttfConfig,"rotate-")
+    local menuItem2 = ax.MenuItemLabel:create(label2)
     menuItem2:registerScriptTapHandler(function (tag, sender )
         local  rotation3D= self._camera:getRotation3D()
         rotation3D.y = rotation3D.y - 10
         self._camera:setRotation3D(rotation3D)
     end)
 
-    local menu = cc.Menu:create(menuItem1,menuItem2)
-    menu:setPosition(cc.p(0, 0))
-    menuItem1:setPosition( cc.p( s.width-80, VisibleRect:top().y-160) )
-    menuItem2:setPosition( cc.p( s.width-80, VisibleRect:top().y-190) )
+    local menu = ax.Menu:create(menuItem1,menuItem2)
+    menu:setPosition(ax.p(0, 0))
+    menuItem1:setPosition( ax.p( s.width-80, VisibleRect:top().y-160) )
+    menuItem2:setPosition( ax.p( s.width-80, VisibleRect:top().y-190) )
     self:addChild(menu, 0)
     self._layerBillBoard:setCameraMask(2)
 
-    label1 = cc.Label:createWithTTF(ttfConfig,"Point Oriented")
-    menuItem1 = cc.MenuItemLabel:create(label1)
+    label1 = ax.Label:createWithTTF(ttfConfig,"Point Oriented")
+    menuItem1 = ax.MenuItemLabel:create(label1)
     menuItem1:registerScriptTapHandler(function (tag, sender )
         for i,billboard in ipairs(self._billboards) do
-            billboard:setMode(cc.BillBoard_Mode.VIEW_POINT_ORIENTED)
+            billboard:setMode(ax.BillBoard_Mode.VIEW_POINT_ORIENTED)
         end
     end)
-    label2 = cc.Label:createWithTTF(ttfConfig,"Plane Oriented")
-    menuItem2 = cc.MenuItemLabel:create(label2)
+    label2 = ax.Label:createWithTTF(ttfConfig,"Plane Oriented")
+    menuItem2 = ax.MenuItemLabel:create(label2)
     menuItem2:registerScriptTapHandler(function (tag, sender )
         for i,billboard in ipairs(self._billboards) do
-            billboard:setMode(cc.BillBoard_Mode.VIEW_PLANE_ORIENTED)
+            billboard:setMode(ax.BillBoard_Mode.VIEW_PLANE_ORIENTED)
         end
     end)
-    menuItem1:setPosition( cc.p( s.width-80, VisibleRect:top().y-100) )
-    menuItem2:setPosition( cc.p( s.width-80, VisibleRect:top().y-130) )
-    menu = cc.Menu:create(menuItem1,menuItem2)
-    menu:setPosition(cc.p(0,0))
+    menuItem1:setPosition( ax.p( s.width-80, VisibleRect:top().y-100) )
+    menuItem2:setPosition( ax.p( s.width-80, VisibleRect:top().y-130) )
+    menu = ax.Menu:create(menuItem1,menuItem2)
+    menu:setPosition(ax.p(0,0))
     self:addChild(menu, 10)
 
     for i,billboard in ipairs(self._billboards) do
-        billboard:setMode(cc.BillBoard_Mode.VIEW_POINT_ORIENTED)
+        billboard:setMode(ax.BillBoard_Mode.VIEW_POINT_ORIENTED)
     end
 end
 
@@ -201,7 +201,7 @@ end
 
 function BillBoardTestMain()
     cclog("BillBoardTestMain")
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     scene:addChild(BillBoardTest.new())
     scene:addChild(CreateBackMenuItem())
 

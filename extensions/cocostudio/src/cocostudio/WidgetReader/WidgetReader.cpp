@@ -95,7 +95,6 @@ WidgetReader::WidgetReader()
     , _positionPercentY(0.0f)
     , _width(0.0f)
     , _height(0.0f)
-    , _opacity(255)
     , _isAdaptScreen(false)
 {
     valueToInt = [](std::string_view str) -> int { return atoi(str.data()); };
@@ -245,17 +244,14 @@ void WidgetReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
 void WidgetReader::setColorPropsFromJsonDictionary(Widget* widget, const rapidjson::Value& options)
 {
     bool op = DICTOOL->checkObjectExist_json(options, P_Opacity);
-    if (op)
-    {
-        widget->setOpacity(DICTOOL->getIntValue_json(options, P_Opacity));
-    }
     bool cr    = DICTOOL->checkObjectExist_json(options, P_ColorR);
     bool cg    = DICTOOL->checkObjectExist_json(options, P_ColorG);
     bool cb    = DICTOOL->checkObjectExist_json(options, P_ColorB);
     int colorR = cr ? DICTOOL->getIntValue_json(options, P_ColorR) : 255;
     int colorG = cg ? DICTOOL->getIntValue_json(options, P_ColorG) : 255;
     int colorB = cb ? DICTOOL->getIntValue_json(options, P_ColorB) : 255;
-    widget->setColor(Color3B(colorR, colorG, colorB));
+    int colorA = op ? DICTOOL->getIntValue_json(options, P_Opacity) : 255;
+    widget->setColor(Color32(colorR, colorG, colorB, colorA));
 
     this->setAnchorPointForWidget(widget, options);
 
@@ -269,9 +265,9 @@ void WidgetReader::beginSetBasicProperties(ax::ui::Widget* widget)
 {
     _position = widget->getPosition();
     // set default color
-    _color = Color3B(255, 255, 255);
+    _color = Color32::WHITE;
+    _color.a = widget->getOpacity();
     widget->setColor(_color);
-    _opacity             = widget->getOpacity();
     _originalAnchorPoint = widget->getAnchorPoint();
 }
 
@@ -287,7 +283,6 @@ void WidgetReader::endSetBasicProperties(Widget* widget)
         _height = screenSize.height;
     }
     widget->setColor(_color);
-    widget->setOpacity(_opacity);
     // the setSize method will be conflict with scale9Width & scale9Height
     if (!widget->isIgnoreContentAdaptWithSize())
     {
@@ -833,11 +828,8 @@ void WidgetReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     widget->setLocalZOrder(zOrder);
 
     auto f_color = options->color();
-    Color3B color(f_color->r(), f_color->g(), f_color->b());
+    Color32 color(f_color->r(), f_color->g(), f_color->b(), options->alpha());
     widget->setColor(color);
-
-    int alpha = options->alpha();
-    widget->setOpacity(alpha);
 
     auto f_anchorPoint = options->anchorPoint();
     Vec2 anchorPoint(f_anchorPoint->x(), f_anchorPoint->y());

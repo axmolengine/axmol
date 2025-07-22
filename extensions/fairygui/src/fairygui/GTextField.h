@@ -31,14 +31,14 @@ public:
 
     virtual const ax::Size& getTextSize() { return _displayObject->getContentSize(); }
 
-    ax::Color3B getColor() const { return getTextFormat()->color; }
-    void setColor(const ax::Color3B& value);
+    ax::Color32 getColor() const { return getTextFormat()->color; }
+    void setColor(const ax::Color32& value);
 
     float getFontSize() const { return getTextFormat()->fontSize; }
     void setFontSize(float value);
 
-    ax::Color3B getOutlineColor() const { return getTextFormat()->outlineColor; }
-    void setOutlineColor(const ax::Color3B& value);
+    ax::Color32 getOutlineColor() const { return getTextFormat()->outlineColor; }
+    void setOutlineColor(const ax::Color32& value);
 
     ax::ValueMap* getTemplateVars() { return _templateVars; }
     void setTemplateVars(ax::ValueMap* value);

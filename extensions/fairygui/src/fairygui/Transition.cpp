@@ -1275,7 +1275,7 @@ void Transition::applyValue(TransitionItem* item)
         break;
 
     case TransitionActionType::Color:
-        item->target->setProp(ObjectPropID::Color, Value(ToolSet::colorToInt((Color3B)((TValue*)item->value)->getColor())));
+        item->target->setProp(ObjectPropID::Color, Value(ToolSet::colorToInt(((TValue*)item->value)->getColor())));
         break;
 
     case TransitionActionType::Animation:

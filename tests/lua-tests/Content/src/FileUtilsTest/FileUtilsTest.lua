@@ -1,11 +1,11 @@
 local FileUtilsGetDataDemo = class("FileUtilsGetDataDemo", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     return layer
 end)
 
 function FileUtilsGetDataDemo:ctor()
-    
+
     self.hexString = [[4f67 6753 0002 0000 0000 0000 0000 ac5c
 4540 0000 0000 b299 90b5 011e 0176 6f72
 6269 7300 0000 0001 112b 0000 ffff ffff
@@ -275,8 +275,8 @@ d6ec 7fb0 7168 be5f a3d7 2771 ecab 7474
 c595 38d3 2983 dbdd db3a 3669 76be 8db0
 c75d cf62 a30f]]
 
-    self.hexString = self.hexString:gsub("%s+", "")                
-    self.hexRead = self:dumpHex(cc.FileUtils:getInstance():getDataFromFile("effect2.ogg"))
+    self.hexString = self.hexString:gsub("%s+", "")
+    self.hexRead = self:dumpHex(ax.FileUtils:getInstance():getDataFromFile("effect2.ogg"))
 
     local function onNodeEvent(event)
         if "enter" == event then
@@ -285,24 +285,24 @@ c75d cf62 a30f]]
     end
 
     self:registerScriptHandler(onNodeEvent)
-    
+
     Helper.titleLabel:setString("Test FileUtils.getDataFromFile")
 end
 
 function FileUtilsGetDataDemo:dumpHex(str)
     local len = string.len(str)
     local hex = ""
-    
+
     for i = 1, len do
         local ord = string.byte(str, i)
         hex = hex .. string.format("%02x", ord)
     end
-    
+
     return hex
 end
 
 function FileUtilsGetDataDemo:onEnter()
-    local label = cc.Label:createWithTTF("error happended while reading file data", "fonts/Marker Felt.ttf", 20)
+    local label = ax.Label:createWithTTF("error happended while reading file data", "fonts/Marker Felt.ttf", 20)
     -- print(self.hexString)
     -- print("............")
     -- print(self.hexRead)
@@ -310,21 +310,21 @@ function FileUtilsGetDataDemo:onEnter()
         label:setString("reading file data correctly")
     end
 
-    local visibleSize = cc.Director:getInstance():getVisibleSize()
-    local origin = cc.Director:getInstance():getVisibleOrigin()
+    local visibleSize = ax.Director:getInstance():getVisibleSize()
+    local origin = ax.Director:getInstance():getVisibleOrigin()
     label:setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2)
     self:addChild(label)
 end
 
 function FileUtilsTestMain()
-    
-    Helper.createFunctionTable = 
+
+    Helper.createFunctionTable =
     {
         FileUtilsGetDataDemo.create
     }
     Helper.index = 1
 
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     scene:addChild(CreateBackMenuItem())
     scene:addChild(FileUtilsGetDataDemo.create())
 

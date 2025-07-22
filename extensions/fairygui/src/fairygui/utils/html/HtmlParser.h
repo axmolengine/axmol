@@ -13,12 +13,12 @@ class HtmlParseOptions
 {
 public:
     static bool defaultLinkUnderline;
-    static ax::Color3B defaultLinkColor;
+    static ax::Color32 defaultLinkColor;
 
     HtmlParseOptions();
 
     bool linkUnderline;
-    ax::Color3B linkColor;
+    ax::Color32 linkColor;
 };
 
 class HtmlParser : public ax::SAXDelegator

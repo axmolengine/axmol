@@ -433,9 +433,9 @@ SpriteCreation::SpriteCreation()
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
     auto decrease = MenuItemFont::create(" - ", AX_CALLBACK_1(SpriteCreation::delSpritesCallback, this));
-    decrease->setColor(Color3B(0, 200, 20));
+    decrease->setColor(Color32(0, 200, 20));
     auto increase = MenuItemFont::create(" + ", AX_CALLBACK_1(SpriteCreation::addSpritesCallback, this));
-    increase->setColor(Color3B(0, 200, 20));
+    increase->setColor(Color32(0, 200, 20));
 
     auto menu = Menu::create(decrease, increase, nullptr);
     menu->alignItemsHorizontally();
@@ -444,7 +444,7 @@ SpriteCreation::SpriteCreation()
 
     TTFConfig ttfCount("fonts/Marker Felt.ttf", 30);
     _labelSpriteNum = Label::createWithTTF(ttfCount, "Label");
-    _labelSpriteNum->setColor(Color3B(0, 200, 20));
+    _labelSpriteNum->setColor(Color32(0, 200, 20));
     _labelSpriteNum->setPosition(Vec2(s.width / 2, s.height - 130));
     addChild(_labelSpriteNum);
 
@@ -792,14 +792,14 @@ RendererBatchQuadTri::RendererBatchQuadTri()
         int y = AXRANDOM_0_1() * s.height;
 
         auto label = LabelAtlas::create("This is a label", "fonts/tuffy_bold_italic-charmap.plist");
-        label->setColor(Color3B::RED);
+        label->setColor(Color32::RED);
         label->setPosition(Vec2(x, y));
         addChild(label);
 
         auto sprite = Sprite::create("fonts/tuffy_bold_italic-charmap.png");
         sprite->setTextureRect(Rect(0.0f, 0.0f, 100.0f, 100.0f));
         sprite->setPosition(Vec2(x, y));
-        sprite->setColor(Color3B::BLUE);
+        sprite->setColor(Color32::BLUE);
         addChild(sprite);
     }
 }
@@ -970,7 +970,7 @@ NonBatchSprites::NonBatchSprites()
     addChild(_spritesAnchor);
 
     _totalSprites = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "sprites");
-    _totalSprites->setColor(Color3B::YELLOW);
+    _totalSprites->setColor(Color32::YELLOW);
     _totalSprites->enableOutline(Color32::RED, 2);
     _totalSprites->setPosition(s.width / 2, s.height / 2);
 

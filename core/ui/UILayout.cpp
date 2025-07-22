@@ -57,15 +57,13 @@ Layout::Layout()
     , _colorType(BackGroundColorType::NONE)
     , _bgImageTexType(TextureResType::LOCAL)
     , _backGroundImageTextureSize(Vec2::ZERO)
-    , _backGroundImageColor(Color3B::WHITE)
-    , _backGroundImageOpacity(255)
+    , _backGroundImageColor(Color32::WHITE)
     , _colorRender(nullptr)
     , _gradientRender(nullptr)
-    , _cColor(Color3B::WHITE)
-    , _gStartColor(Color3B::WHITE)
-    , _gEndColor(Color3B::WHITE)
+    , _cColor(Color32::WHITE)
+    , _gStartColor(Color32::WHITE)
+    , _gEndColor(Color32::WHITE)
     , _alongVector(Vec2(0.0f, -1.0f))
-    , _cOpacity(255)
     , _clippingEnabled(false)
     , _layoutType(Type::ABSOLUTE)
     , _clippingType(ClippingType::STENCIL)
@@ -729,14 +727,13 @@ void Layout::setBackGroundColorType(BackGroundColorType type)
     case BackGroundColorType::SOLID:
         _colorRender = LayerColor::create();
         _colorRender->setContentSize(_contentSize);
-        _colorRender->setOpacity(_cOpacity);
         _colorRender->setColor(_cColor);
         addProtectedChild(_colorRender, BCAKGROUNDCOLORRENDERER_Z, -1);
         break;
     case BackGroundColorType::GRADIENT:
         _gradientRender = LayerGradient::create();
         _gradientRender->setContentSize(_contentSize);
-        _gradientRender->setOpacity(_cOpacity);
+        _gradientRender->setOpacity(_cColor.a);
         _gradientRender->setStartColor(_gStartColor);
         _gradientRender->setEndColor(_gEndColor);
         _gradientRender->setVector(_alongVector);
@@ -752,7 +749,7 @@ Layout::BackGroundColorType Layout::getBackGroundColorType() const
     return _colorType;
 }
 
-void Layout::setBackGroundColor(const Color3B& color)
+void Layout::setBackGroundColor(const Color32& color)
 {
     _cColor = color;
     if (_colorRender)
@@ -761,12 +758,12 @@ void Layout::setBackGroundColor(const Color3B& color)
     }
 }
 
-const Color3B& Layout::getBackGroundColor() const
+const Color32& Layout::getBackGroundColor() const
 {
     return _cColor;
 }
 
-void Layout::setBackGroundColor(const Color3B& startColor, const Color3B& endColor)
+void Layout::setBackGroundColor(const Color32& startColor, const Color32& endColor)
 {
     _gStartColor = startColor;
     if (_gradientRender)
@@ -780,19 +777,19 @@ void Layout::setBackGroundColor(const Color3B& startColor, const Color3B& endCol
     }
 }
 
-const Color3B& Layout::getBackGroundStartColor() const
+const Color32& Layout::getBackGroundStartColor() const
 {
     return _gStartColor;
 }
 
-const Color3B& Layout::getBackGroundEndColor() const
+const Color32& Layout::getBackGroundEndColor() const
 {
     return _gEndColor;
 }
 
 void Layout::setBackGroundColorOpacity(uint8_t opacity)
 {
-    _cOpacity = opacity;
+    _cColor.a = opacity;
     switch (_colorType)
     {
     case BackGroundColorType::NONE:
@@ -810,7 +807,7 @@ void Layout::setBackGroundColorOpacity(uint8_t opacity)
 
 uint8_t Layout::getBackGroundColorOpacity() const
 {
-    return _cOpacity;
+    return _cColor.a;
 }
 
 void Layout::setBackGroundColorVector(const Vec2& vector)
@@ -827,7 +824,7 @@ const Vec2& Layout::getBackGroundColorVector() const
     return _alongVector;
 }
 
-void Layout::setBackGroundImageColor(const Color3B& color)
+void Layout::setBackGroundImageColor(const Color32& color)
 {
     _backGroundImageColor = color;
     updateBackGroundImageColor();
@@ -835,18 +832,18 @@ void Layout::setBackGroundImageColor(const Color3B& color)
 
 void Layout::setBackGroundImageOpacity(uint8_t opacity)
 {
-    _backGroundImageOpacity = opacity;
+    _backGroundImageColor.a = opacity;
     updateBackGroundImageOpacity();
 }
 
-const Color3B& Layout::getBackGroundImageColor() const
+const Color32& Layout::getBackGroundImageColor() const
 {
     return _backGroundImageColor;
 }
 
 uint8_t Layout::getBackGroundImageOpacity() const
 {
-    return _backGroundImageOpacity;
+    return _backGroundImageColor.a;
 }
 
 void Layout::updateBackGroundImageColor()
@@ -861,7 +858,7 @@ void Layout::updateBackGroundImageOpacity()
 {
     if (_backGroundImage)
     {
-        _backGroundImage->setOpacity(_backGroundImageOpacity);
+        _backGroundImage->setOpacity(_backGroundImageColor.a);
     }
 }
 
@@ -870,7 +867,6 @@ void Layout::updateBackGroundImageRGBA()
     if (_backGroundImage)
     {
         _backGroundImage->setColor(_backGroundImageColor);
-        _backGroundImage->setOpacity(_backGroundImageOpacity);
     }
 }
 
@@ -992,7 +988,6 @@ void Layout::copySpecialProperties(Widget* widget)
         setBackGroundColorType(layout->_colorType);
         setBackGroundColor(layout->_cColor);
         setBackGroundColor(layout->_gStartColor, layout->_gEndColor);
-        setBackGroundColorOpacity(layout->_cOpacity);
         setBackGroundColorVector(layout->_alongVector);
         setLayoutType(layout->_layoutType);
         setClippingEnabled(layout->_clippingEnabled);

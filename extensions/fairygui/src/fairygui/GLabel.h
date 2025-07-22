@@ -26,8 +26,8 @@ public:
     virtual const std::string& getIcon() const override;
     virtual void setIcon(const std::string& value) override;
 
-    ax::Color3B getTitleColor() const;
-    void setTitleColor(const ax::Color3B& value);
+    ax::Color32 getTitleColor() const;
+    void setTitleColor(const ax::Color32& value);
 
     int getTitleFontSize() const;
     void setTitleFontSize(int value);

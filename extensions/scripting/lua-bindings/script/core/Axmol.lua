@@ -1,5 +1,5 @@
 
-cc = cc or {}
+ax = ax or {}
 
 -- Native vec2_new use array[2] to store x,y w,h u,v performance is better
 -- p[1] alias: x w u width
@@ -8,7 +8,7 @@ local nvec2 = vec2_new
 local nvec3 = vec3_new
 local nvec4 = vec4_new
 
-function cc.clampf(value, min_inclusive, max_inclusive)
+function ax.clampf(value, min_inclusive, max_inclusive)
     -- body
     local temp = 0
     if min_inclusive > max_inclusive then
@@ -27,7 +27,7 @@ function cc.clampf(value, min_inclusive, max_inclusive)
 end
 
 --Vec2/Point
-function cc.vec2(_x, _y)
+function ax.vec2(_x, _y)
     if nil == _y then
         return nvec2(_x.x, _x.y)
     else
@@ -35,59 +35,59 @@ function cc.vec2(_x, _y)
     end
 
 end
-function cc.p(_x, ...)
-    return cc.vec2(_x, ...)
+function ax.p(_x, ...)
+    return ax.vec2(_x, ...)
 end
 
-function cc.pAdd(pt1,pt2)
-    return cc.p(pt1.x + pt2.x , pt1.y + pt2.y )
+function ax.pAdd(pt1,pt2)
+    return ax.p(pt1.x + pt2.x , pt1.y + pt2.y )
 end
 
-function cc.pSub(pt1,pt2)
-    return cc.p(pt1.x - pt2.x , pt1.y - pt2.y )
+function ax.pSub(pt1,pt2)
+    return ax.p(pt1.x - pt2.x , pt1.y - pt2.y )
 end
 
-function cc.pMul(pt1,factor)
-    return cc.p( pt1.x * factor , pt1.y * factor )
+function ax.pMul(pt1,factor)
+    return ax.p( pt1.x * factor , pt1.y * factor )
 end
 
-function cc.pMidpoint(pt1,pt2)
-    return cc.p( (pt1.x + pt2.x) / 2.0 , ( pt1.y + pt2.y) / 2.0 )
+function ax.pMidpoint(pt1,pt2)
+    return ax.p( (pt1.x + pt2.x) / 2.0 , ( pt1.y + pt2.y) / 2.0 )
 end
 
-function cc.pForAngle(a)
-    return cc.p( math.cos(a), math.sin(a) )
+function ax.pForAngle(a)
+    return ax.p( math.cos(a), math.sin(a) )
 end
 
-function cc.pGetLength(pt)
+function ax.pGetLength(pt)
     return math.sqrt( pt.x * pt.x + pt.y * pt.y )
 end
 
-function cc.pNormalize(pt)
-    local length = cc.pGetLength(pt)
+function ax.pNormalize(pt)
+    local length = ax.pGetLength(pt)
     if 0 == length then
-        return cc.p(  1.0, 0.0 )
+        return ax.p(  1.0, 0.0 )
     end
 
-    return cc.p(  pt.x / length,  pt.y / length )
+    return ax.p(  pt.x / length,  pt.y / length )
 end
 
-function cc.pCross(self,other)
+function ax.pCross(self,other)
     return self.x * other.y - self.y * other.x
 end
 
-function cc.pDot(self,other)
+function ax.pDot(self,other)
     return self.x * other.x + self.y * other.y
 end
 
-function cc.pToAngleSelf(self)
+function ax.pToAngleSelf(self)
     return math.atan2(self.y, self.x)
 end
 
-function cc.pGetAngle(self,other)
-    local a2 = cc.pNormalize(self)
-    local b2 = cc.pNormalize(other)
-    local angle = math.atan2(cc.pCross(a2, b2), cc.pDot(a2, b2) )
+function ax.pGetAngle(self,other)
+    local a2 = ax.pNormalize(self)
+    local b2 = ax.pNormalize(other)
+    local angle = math.atan2(ax.pCross(a2, b2), ax.pDot(a2, b2) )
     if math.abs(angle) < 1.192092896e-7 then
         return 0.0
     end
@@ -95,11 +95,11 @@ function cc.pGetAngle(self,other)
     return angle
 end
 
-function cc.pGetDistance(startP,endP)
-    return cc.pGetLength(cc.pSub(startP,endP))
+function ax.pGetDistance(startP,endP)
+    return ax.pGetLength(ax.pSub(startP,endP))
 end
 
-function cc.pIsLineIntersect(A, B, C, D, s, t)
+function ax.pIsLineIntersect(A, B, C, D, s, t)
     if ((A.x == B.x) and (A.y == B.y)) or ((C.x == D.x) and (C.y == D.y))then
         return false, s, t
     end
@@ -129,47 +129,47 @@ function cc.pIsLineIntersect(A, B, C, D, s, t)
     return true,s,t
 end
 
-function cc.pPerp(pt)
-    return cc.p(  -pt.y,  pt.x )
+function ax.pPerp(pt)
+    return ax.p(  -pt.y,  pt.x )
 end
 
-function cc.RPerp(pt)
-    return cc.p(  pt.y,   -pt.x )
+function ax.RPerp(pt)
+    return ax.p(  pt.y,   -pt.x )
 end
 
-function cc.pProject(pt1, pt2)
-    return cc.p(  pt2.x * (cc.pDot(pt1,pt2) / cc.pDot(pt2,pt2)) ,  pt2.y * (cc.pDot(pt1,pt2) / cc.pDot(pt2,pt2)) )
+function ax.pProject(pt1, pt2)
+    return ax.p(  pt2.x * (ax.pDot(pt1,pt2) / ax.pDot(pt2,pt2)) ,  pt2.y * (ax.pDot(pt1,pt2) / ax.pDot(pt2,pt2)) )
 end
 
-function cc.pRotate(pt1, pt2)
-    return cc.p(  pt1.x * pt2.x - pt1.y * pt2.y,  pt1.x * pt2.y + pt1.y * pt2.x )
+function ax.pRotate(pt1, pt2)
+    return ax.p(  pt1.x * pt2.x - pt1.y * pt2.y,  pt1.x * pt2.y + pt1.y * pt2.x )
 end
 
-function cc.pUnrotate(pt1, pt2)
-    return cc.p(  pt1.x * pt2.x + pt1.y * pt2.y, pt1.y * pt2.x - pt1.x * pt2.y )
+function ax.pUnrotate(pt1, pt2)
+    return ax.p(  pt1.x * pt2.x + pt1.y * pt2.y, pt1.y * pt2.x - pt1.x * pt2.y )
 end
 --Calculates the square length of pt
-function cc.pLengthSQ(pt)
-    return cc.pDot(pt,pt)
+function ax.pLengthSQ(pt)
+    return ax.pDot(pt,pt)
 end
 --Calculates the square distance between pt1 and pt2
-function cc.pDistanceSQ(pt1,pt2)
-    return cc.pLengthSQ(cc.pSub(pt1,pt2))
+function ax.pDistanceSQ(pt1,pt2)
+    return ax.pLengthSQ(ax.pSub(pt1,pt2))
 end
 
-function cc.pGetClampPoint(pt1,pt2,pt3)
-    return cc.p(  cc.clampf(pt1.x, pt2.x, pt3.x),  cc.clampf(pt1.y, pt2.y, pt3.y) )
+function ax.pGetClampPoint(pt1,pt2,pt3)
+    return ax.p(  ax.clampf(pt1.x, pt2.x, pt3.x),  ax.clampf(pt1.y, pt2.y, pt3.y) )
 end
 
-function cc.pFromSize(sz)
-    return cc.p( sz.width,  sz.height )
+function ax.pFromSize(sz)
+    return ax.p( sz.width,  sz.height )
 end
 
-function cc.pLerp(pt1,pt2,alpha)
-    return cc.pAdd(cc.pMul(pt1, 1.0 - alpha), cc.pMul(pt2,alpha) )
+function ax.pLerp(pt1,pt2,alpha)
+    return ax.pAdd(ax.pMul(pt1, 1.0 - alpha), ax.pMul(pt2,alpha) )
 end
 
-function cc.pFuzzyEqual(pt1,pt2,variance)
+function ax.pFuzzyEqual(pt1,pt2,variance)
     if (pt1.x - variance <= pt2.x) and (pt2.x <= pt1.x + variance) and (pt1.y - variance <= pt2.y) and (pt2.y <= pt1.y + variance) then
         return true
     else
@@ -177,13 +177,13 @@ function cc.pFuzzyEqual(pt1,pt2,variance)
     end
 end
 
-function cc.pRotateByAngle(pt1, pt2, angle)
-    return cc.pAdd(pt2, cc.pRotate( cc.pSub(pt1, pt2),cc.pForAngle(angle)))
+function ax.pRotateByAngle(pt1, pt2, angle)
+    return ax.pAdd(pt2, ax.pRotate( ax.pSub(pt1, pt2),ax.pForAngle(angle)))
 end
 
-function cc.pIsSegmentIntersect(pt1,pt2,pt3,pt4)
+function ax.pIsSegmentIntersect(pt1,pt2,pt3,pt4)
     local s,t,ret = 0,0,false
-    ret,s,t =cc.pIsLineIntersect(pt1, pt2, pt3, pt4,s,t)
+    ret,s,t =ax.pIsLineIntersect(pt1, pt2, pt3, pt4,s,t)
 
     if ret and  s >= 0.0 and s <= 1.0 and t >= 0.0 and t <= 1.0 then
         return true
@@ -192,26 +192,26 @@ function cc.pIsSegmentIntersect(pt1,pt2,pt3,pt4)
     return false
 end
 
-function cc.pGetIntersectPoint(pt1,pt2,pt3,pt4)
+function ax.pGetIntersectPoint(pt1,pt2,pt3,pt4)
     local s,t, ret = 0,0,false
-    ret,s,t = cc.pIsLineIntersect(pt1,pt2,pt3,pt4,s,t)
+    ret,s,t = ax.pIsLineIntersect(pt1,pt2,pt3,pt4,s,t)
     if ret then
-        return cc.p(pt1.x + s * (pt2.x - pt1.x), pt1.y + s * (pt2.y - pt1.y))
+        return ax.p(pt1.x + s * (pt2.x - pt1.x), pt1.y + s * (pt2.y - pt1.y))
     else
-        return cc.p(0,0)
+        return ax.p(0,0)
     end
 end
 --Size
-function cc.size( _width,_height )
-    return cc.p(_width, _height)
+function ax.size( _width,_height )
+    return ax.p(_width, _height)
 end
 
 --Rect
-function cc.rect(_x,_y,_width,_height)
+function ax.rect(_x,_y,_width,_height)
     return { x = _x, y = _y, width = _width, height = _height }
 end
 
-function cc.rectEqualToRect(rect1,rect2)
+function ax.rectEqualToRect(rect1,rect2)
     if ((rect1.x >= rect2.x) or (rect1.y >= rect2.y) or
         ( rect1.x + rect1.width <= rect2.x + rect2.width) or
         ( rect1.y + rect1.height <= rect2.y + rect2.height)) then
@@ -221,31 +221,31 @@ function cc.rectEqualToRect(rect1,rect2)
     return true
 end
 
-function cc.rectGetMaxX(rect)
+function ax.rectGetMaxX(rect)
     return rect.x + rect.width
 end
 
-function cc.rectGetMidX(rect)
+function ax.rectGetMidX(rect)
     return rect.x + rect.width / 2.0
 end
 
-function cc.rectGetMinX(rect)
+function ax.rectGetMinX(rect)
     return rect.x
 end
 
-function cc.rectGetMaxY(rect)
+function ax.rectGetMaxY(rect)
     return rect.y + rect.height
 end
 
-function cc.rectGetMidY(rect)
+function ax.rectGetMidY(rect)
     return rect.y + rect.height / 2.0
 end
 
-function cc.rectGetMinY(rect)
+function ax.rectGetMinY(rect)
     return rect.y
 end
 
-function cc.rectContainsPoint( rect, point )
+function ax.rectContainsPoint( rect, point )
     local ret = false
 
     if (point.x >= rect.x) and (point.x <= rect.x + rect.width) and
@@ -256,7 +256,7 @@ function cc.rectContainsPoint( rect, point )
     return ret
 end
 
-function cc.rectIntersectsRect( rect1, rect2 )
+function ax.rectIntersectsRect( rect1, rect2 )
     local intersect = not ( rect1.x > rect2.x + rect2.width or
         rect1.x + rect1.width < rect2.x         or
         rect1.y > rect2.y + rect2.height        or
@@ -265,8 +265,8 @@ function cc.rectIntersectsRect( rect1, rect2 )
     return intersect
 end
 
-function cc.rectUnion( rect1, rect2 )
-    local rect = cc.rect(0, 0, 0, 0)
+function ax.rectUnion( rect1, rect2 )
+    local rect = ax.rect(0, 0, 0, 0)
     rect.x = math.min(rect1.x, rect2.x)
     rect.y = math.min(rect1.y, rect2.y)
     rect.width = math.max(rect1.x + rect1.width, rect2.x + rect2.width) - rect.x
@@ -274,8 +274,8 @@ function cc.rectUnion( rect1, rect2 )
     return rect
 end
 
-function cc.rectIntersection( rect1, rect2 )
-    local intersection = cc.rect(
+function ax.rectIntersection( rect1, rect2 )
+    local intersection = ax.rect(
         math.max(rect1.x, rect2.x),
         math.max(rect1.y, rect2.y),
         0, 0)
@@ -285,27 +285,32 @@ function cc.rectIntersection( rect1, rect2 )
     return intersection
 end
 
---Color3B
-function cc.c3b( _r,_g,_b )
-    return { r = _r, g = _g, b = _b }
-end
-
---Color32
-function cc.c4b( _r,_g,_b,_a )
+-- Color32 deprecated, use ax.color32 instead
+function ax.color32( _r,_g,_b,_a )
     return { r = _r, g = _g, b = _b, a = _a }
 end
 
---ax::Color
-function cc.c4f( _r,_g,_b,_a )
+-- ax::Color deprecated, use ax.color instead
+function ax.c4f( _r,_g,_b,_a )
     return { r = _r, g = _g, b = _b, a = _a }
+end
+
+-- Color32
+function ax.color32( _r,_g,_b,_a )
+    return { r = _r, g = _g, b = _b, a = _a or 255 }
+end
+
+-- Color
+function ax.color( _r,_g,_b,_a )
+    return { r = _r, g = _g, b = _b, a = _a or 1.0 }
 end
 
 local function isFloatColor(c)
     return (c.r <= 1 and c.g <= 1 and c.b <= 1) and (math.ceil(c.r) ~= c.r or math.ceil(c.g) ~= c.g or math.ceil(c.b) ~= c.b)
 end
 
-function cc.convertColor(input, typ)
-    assert(type(input) == "table" and input.r and input.g and input.b, "cc.convertColor() - invalid input color")
+function ax.convertColor(input, typ)
+    assert(type(input) == "table" and input.r and input.g and input.b, "ax.convertColor() - invalid input color")
     local ret
     if typ == "3b" then
         if isFloatColor(input) then
@@ -344,97 +349,97 @@ function cc.convertColor(input, typ)
             ret.a = 255
         end
     else
-        error(string.format("cc.convertColor() - invalid type %s", typ), 0)
+        error(string.format("ax.convertColor() - invalid type %s", typ), 0)
     end
     return ret
 end
 
 --Vertex2F
-function cc.vertex2F(_x,_y)
-    return cc.vec2(_x, _y )
+function ax.vertex2F(_x,_y)
+    return ax.vec2(_x, _y )
 end
 
 --Vertex3F
-function cc.Vertex3F(_x,_y,_z)
-    return cc.vec3(_x, _y, _z)
+function ax.Vertex3F(_x,_y,_z)
+    return ax.vec3(_x, _y, _z)
 end
 
 --Tex2F
-function cc.tex2F(_u,_v)
-    return cc.vec2( _u, _v )
+function ax.tex2F(_u,_v)
+    return ax.vec2( _u, _v )
 end
 
 --PointSprite
-function cc.PointSprite(_pos,_color,_size)
+function ax.PointSprite(_pos,_color,_size)
     return { pos = _pos, color = _color, size = _size }
 end
 
 --Quad2
-function cc.Quad2(_tl,_tr,_bl,_br)
+function ax.Quad2(_tl,_tr,_bl,_br)
     return { tl = _tl, tr = _tr, bl = _bl, br = _br }
 end
 
 --Quad3
-function cc.Quad3(_tl, _tr, _bl, _br)
+function ax.Quad3(_tl, _tr, _bl, _br)
     return { tl = _tl, tr = _tr, bl = _bl, br = _br }
 end
 
 --V2F_T2F_C4F
-function cc.V2F_T2F_C4F(_vertices, _colors, _texCoords)
+function ax.V2F_T2F_C4F(_vertices, _colors, _texCoords)
     return { vertices = _vertices, colors = _colors, texCoords = _texCoords }
 end
 
 --V3F_T2F_C4F
-function cc.V3F_T2F_C4F(_vertices, _colors, _texCoords)
+function ax.V3F_T2F_C4F(_vertices, _colors, _texCoords)
     return { vertices = _vertices, colors = _colors, texCoords = _texCoords }
 end
 
 --V3F_T2F_C4F_Quad
-function cc.V3F_T2F_C4F_Quad(_tl, _bl, _tr, _br)
+function ax.V3F_T2F_C4F_Quad(_tl, _bl, _tr, _br)
     return { tl = _tl, bl = _bl, tr = _tr, br = _br }
 end
 
 --T2F_Quad
-function cc.T2F_Quad(_bl, _br, _tl, _tr)
+function ax.T2F_Quad(_bl, _br, _tl, _tr)
     return { bl = _bl, br = _br, tl = _tl, tr = _tr }
 end
 
 --AnimationFrameData
-function cc.AnimationFrameData( _texCoords, _delay, _size)
+function ax.AnimationFrameData( _texCoords, _delay, _size)
     return { texCoords = _texCoords, delay = _delay, size = _size }
 end
 
 --PhysicsMaterial
-function cc.PhysicsMaterial(_density, _restitution, _friction)
+function ax.PhysicsMaterial(_density, _restitution, _friction)
     return { density = _density, restitution = _restitution, friction = _friction }
 end
 
-function cc.vec3(_x, _y, _z)
+function ax.vec3(_x, _y, _z)
     return nvec3( _x,  _y,  _z)
 end
 
-function cc.vec4(_x, _y, _z, _w)
+function ax.vec4(_x, _y, _z, _w)
     return nvec4(  _x,  _y,  _z, _w )
 end
 
-function cc.vec3add(vec3a, vec3b)
-    return cc.vec3( vec3a.x + vec3b.x,  vec3a.y + vec3b.y,  vec3a.z + vec3b.z)
+function ax.vec3add(vec3a, vec3b)
+    return ax.vec3( vec3a.x + vec3b.x,  vec3a.y + vec3b.y,  vec3a.z + vec3b.z)
 end
 
-function cc.vec3sub(vec3a, vec3b)
-    return cc.vec3( vec3a.x - vec3b.x,  vec3a.y - vec3b.y,  vec3a.z - vec3b.z)
+function ax.vec3sub(vec3a, vec3b)
+    return ax.vec3( vec3a.x - vec3b.x,  vec3a.y - vec3b.y,  vec3a.z - vec3b.z)
 end
 
-function cc.vec3mul(vec3, factor)
-    return cc.vec3( vec3.x * factor,  vec3.y * factor,  vec3.z * factor)
+function ax.vec3mul(vec3, factor)
+    return ax.vec3( vec3.x * factor,  vec3.y * factor,  vec3.z * factor)
 end
 
-function cc.vec3dot(vec3a, vec3b)
+function ax.vec3dot(vec3a, vec3b)
     return vec3a.x * vec3b.x + vec3a.y * vec3b.y + vec3a.z * vec3b.z
 end
 
-function cc.vec3normalize(vec3)
-    local n = cc.vec3dot(vec3, vec3)
+function ax.vec3normalize(vec3)
+    local n = ax.vec3dot(vec3, vec3)
     if n == 1.0 then
         return vec3
     end
@@ -445,21 +450,21 @@ function cc.vec3normalize(vec3)
         return vec3
     end
 
-    return cc.vec3mul(vec3, 1.0/n)
+    return ax.vec3mul(vec3, 1.0/n)
 end
 
-function cc.quaternion(_x, _y ,_z,_w)
-    return cc.vec4(_x, _y, _z, _w)
+function ax.quaternion(_x, _y ,_z,_w)
+    return ax.vec4(_x, _y, _z, _w)
 end
 
-function cc.quaternion_createFromAxisAngle(axis, angle)
+function ax.quaternion_createFromAxisAngle(axis, angle)
 
     local  halfAngle = angle * 0.5
     local  sinHalfAngle = math.sin(halfAngle)
 
-    local normal = cc.vec3(axis.x, axis.y, axis.z)
-    normal = cc.vec3normalize(normal)
-    local dst = cc.vec3(0.0, 0.0, 0.0)
+    local normal = ax.vec3(axis.x, axis.y, axis.z)
+    normal = ax.vec3normalize(normal)
+    local dst = ax.vec3(0.0, 0.0, 0.0)
     dst.x = normal.x * sinHalfAngle
     dst.y = normal.y * sinHalfAngle
     dst.z = normal.z * sinHalfAngle
@@ -468,13 +473,13 @@ function cc.quaternion_createFromAxisAngle(axis, angle)
     return dst
 end
 
-function cc.blendFunc(_src, _dst)
+function ax.blendFunc(_src, _dst)
     return {src = _src, dst = _dst}
 end
 
-cc.mat4 = cc.mat4 or {}
+ax.mat4 = ax.mat4 or {}
 
-function cc.mat4.new(...)
+function ax.mat4.new(...)
     local params = {...}
     local size   = #params
     local obj = {}
@@ -494,50 +499,50 @@ function cc.mat4.new(...)
         end
     end
 
-    setmetatable(obj, {__index = cc.mat4})
+    setmetatable(obj, {__index = ax.mat4})
 
     return obj
 end
 
-function cc.mat4.getInversed(self)
+function ax.mat4.getInversed(self)
     return mat4_getInversed(self)
 end
 
-function cc.mat4.transformVector(...)
+function ax.mat4.transformVector(...)
     return mat4_transformVector(...)
 end
 
-function cc.mat4.multiply(self, mat)
+function ax.mat4.multiply(self, mat)
     return mat4_multiply(self, mat)
 end
 
-function cc.mat4.decompose(self, scale, rotation, translation)
+function ax.mat4.decompose(self, scale, rotation, translation)
     return mat4_decompose(self, scale ,rotation, translation)
 end
 
-function cc.mat4.createIdentity()
-    return cc.mat4.new(1.0 ,0.0, 0.0, 0.0,
+function ax.mat4.createIdentity()
+    return ax.mat4.new(1.0 ,0.0, 0.0, 0.0,
         0.0, 1.0, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         0.0, 0.0, 0.0, 1.0)
 end
 
-function cc.mat4.translate(self,vec3)
+function ax.mat4.translate(self,vec3)
     return mat4_translate(self,vec3)
 end
 
-function cc.mat4.createRotationZ(self,angle)
+function ax.mat4.createRotationZ(self,angle)
     return mat4_createRotationZ(self,angle)
 end
 
-function cc.mat4.setIdentity(self)
+function ax.mat4.setIdentity(self)
     return mat4_setIdentity(self)
 end
 
-function cc.mat4.createTranslation(...)
+function ax.mat4.createTranslation(...)
     return mat4_createTranslation(...)
 end
 
-function cc.mat4.createRotation(...)
+function ax.mat4.createRotation(...)
     return mat4_createRotation(...)
 end

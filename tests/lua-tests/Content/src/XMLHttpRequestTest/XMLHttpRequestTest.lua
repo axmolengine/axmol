@@ -1,31 +1,31 @@
 local json = cjson
 
 local function XMLHttpRequestLayer()
-    local layer = cc.Layer:create()
-    local winSize = cc.Director:getInstance():getWinSize()
+    local layer = ax.Layer:create()
+    local winSize = ax.Director:getInstance():getWinSize()
     local margin = 40
     local space  = 35
 
     local function init()
-        local label = cc.Label:createWithTTF("XML Http Request Test", s_arialPath, 28)
-        label:setAnchorPoint(cc.p(0.5, 0.5))
-        label:setPosition(cc.p(winSize.width / 2, winSize.height - margin))
+        local label = ax.Label:createWithTTF("XML Http Request Test", s_arialPath, 28)
+        label:setAnchorPoint(ax.p(0.5, 0.5))
+        label:setPosition(ax.p(winSize.width / 2, winSize.height - margin))
         layer:addChild(label, 0)
 
         --Response Code Label
-        local labelStatusCode = cc.Label:createWithTTF("HTTP Status Code", s_markerFeltFontPath, 20)
-        labelStatusCode:setAnchorPoint(cc.p(0.5, 0.5))
-        labelStatusCode:setPosition(cc.p(winSize.width / 2,  winSize.height - margin - 6 * space))
+        local labelStatusCode = ax.Label:createWithTTF("HTTP Status Code", s_markerFeltFontPath, 20)
+        labelStatusCode:setAnchorPoint(ax.p(0.5, 0.5))
+        labelStatusCode:setPosition(ax.p(winSize.width / 2,  winSize.height - margin - 6 * space))
         layer:addChild(labelStatusCode)
 
-        local menuRequest = cc.Menu:create()
-        menuRequest:setPosition(cc.p(0,0))
+        local menuRequest = ax.Menu:create()
+        menuRequest:setPosition(ax.p(0,0))
         layer:addChild(menuRequest)
 
         --Get
         local function onMenuGetClicked()
-            local xhr = cc.XMLHttpRequest:new()
-            xhr.responseType = cc.XMLHTTPREQUEST_RESPONSE_STRING
+            local xhr = ax.XMLHttpRequest:new()
+            xhr.responseType = ax.XMLHTTPREQUEST_RESPONSE_STRING
             xhr:open("GET", "https://httpbin.org/get")
 
             local function onReadyStateChanged()
@@ -48,17 +48,17 @@ local function XMLHttpRequestLayer()
             labelStatusCode:setString("waiting...")
         end
 
-        local labelGet  = cc.Label:createWithTTF("Test Get", s_arialPath, 22)
-        labelGet:setAnchorPoint(cc.p(0.5, 0.5))
-        local itemGet  =  cc.MenuItemLabel:create(labelGet)
+        local labelGet  = ax.Label:createWithTTF("Test Get", s_arialPath, 22)
+        labelGet:setAnchorPoint(ax.p(0.5, 0.5))
+        local itemGet  =  ax.MenuItemLabel:create(labelGet)
         itemGet:registerScriptTapHandler(onMenuGetClicked)
-        itemGet:setPosition(cc.p(winSize.width / 2, winSize.height - margin - space))
+        itemGet:setPosition(ax.p(winSize.width / 2, winSize.height - margin - space))
         menuRequest:addChild(itemGet)
 
         --Post
         local function onMenuPostClicked()
-            local xhr = cc.XMLHttpRequest:new()
-            xhr.responseType = cc.XMLHTTPREQUEST_RESPONSE_STRING
+            local xhr = ax.XMLHttpRequest:new()
+            xhr.responseType = ax.XMLHTTPREQUEST_RESPONSE_STRING
             xhr:open("POST", "https://httpbin.org/post")
             local function onReadyStateChanged()
                 if xhr.readyState == 4 and (xhr.status >= 200 and xhr.status < 207) then
@@ -79,17 +79,17 @@ local function XMLHttpRequestLayer()
             labelStatusCode:setString("waiting...")
         end
 
-        local labelPost = cc.Label:createWithTTF("Test Post", s_arialPath, 22)
-        labelPost:setAnchorPoint(cc.p(0.5, 0.5))
-        local itemPost =  cc.MenuItemLabel:create(labelPost)
+        local labelPost = ax.Label:createWithTTF("Test Post", s_arialPath, 22)
+        labelPost:setAnchorPoint(ax.p(0.5, 0.5))
+        local itemPost =  ax.MenuItemLabel:create(labelPost)
         itemPost:registerScriptTapHandler(onMenuPostClicked)
-        itemPost:setPosition(cc.p(winSize.width / 2, winSize.height - margin - 2 * space))
+        itemPost:setPosition(ax.p(winSize.width / 2, winSize.height - margin - 2 * space))
         menuRequest:addChild(itemPost)
 
         --Post Binary
         local function onMenuPostBinaryClicked()
-            local xhr = cc.XMLHttpRequest:new()
-            xhr.responseType = cc.XMLHTTPREQUEST_RESPONSE_ARRAY_BUFFER
+            local xhr = ax.XMLHttpRequest:new()
+            xhr.responseType = ax.XMLHTTPREQUEST_RESPONSE_ARRAY_BUFFER
             xhr:open("POST", "https://httpbin.org/post")
 
             local function onReadyStateChanged()
@@ -125,18 +125,18 @@ local function XMLHttpRequestLayer()
             labelStatusCode:setString("waiting...")
         end
 
-        local labelPostBinary = cc.Label:createWithTTF("Test Post Binary", s_arialPath, 22)
-        labelPostBinary:setAnchorPoint(cc.p(0.5, 0.5))
-        local itemPostBinary = cc.MenuItemLabel:create(labelPostBinary)
+        local labelPostBinary = ax.Label:createWithTTF("Test Post Binary", s_arialPath, 22)
+        labelPostBinary:setAnchorPoint(ax.p(0.5, 0.5))
+        local itemPostBinary = ax.MenuItemLabel:create(labelPostBinary)
         itemPostBinary:registerScriptTapHandler(onMenuPostBinaryClicked)
-        itemPostBinary:setPosition(cc.p(winSize.width / 2, winSize.height - margin - 3 * space))
+        itemPostBinary:setPosition(ax.p(winSize.width / 2, winSize.height - margin - 3 * space))
         menuRequest:addChild(itemPostBinary)
 
         --Post Json
 
         local function onMenuPostJsonClicked()
-            local xhr = cc.XMLHttpRequest:new()
-            xhr.responseType = cc.XMLHTTPREQUEST_RESPONSE_JSON
+            local xhr = ax.XMLHttpRequest:new()
+            xhr.responseType = ax.XMLHTTPREQUEST_RESPONSE_JSON
             xhr:open("POST", "https://httpbin.org/post")
 
             local function onReadyStateChanged()
@@ -163,11 +163,11 @@ local function XMLHttpRequestLayer()
             labelStatusCode:setString("waiting...")
         end
 
-        local labelPostJson = cc.Label:createWithTTF("Test Post Json", s_arialPath, 22)
-        labelPostJson:setAnchorPoint(cc.p(0.5, 0.5))
-        local itemPostJson = cc.MenuItemLabel:create(labelPostJson)
+        local labelPostJson = ax.Label:createWithTTF("Test Post Json", s_arialPath, 22)
+        labelPostJson:setAnchorPoint(ax.p(0.5, 0.5))
+        local itemPostJson = ax.MenuItemLabel:create(labelPostJson)
         itemPostJson:registerScriptTapHandler(onMenuPostJsonClicked)
-        itemPostJson:setPosition(cc.p(winSize.width / 2, winSize.height - margin - 4 * space))
+        itemPostJson:setPosition(ax.p(winSize.width / 2, winSize.height - margin - 4 * space))
         menuRequest:addChild(itemPostJson)
     end
 
@@ -183,7 +183,7 @@ local function XMLHttpRequestLayer()
 end
 
 function XMLHttpRequestTestMain()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     scene:addChild(XMLHttpRequestLayer())
     scene:addChild(CreateBackMenuItem())
     return scene

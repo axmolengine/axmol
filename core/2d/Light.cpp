@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -71,7 +72,7 @@ BaseLight::BaseLight() : _intensity(1.0f), _lightFlag(LightFlag::LIGHT0), _enabl
 BaseLight::~BaseLight() {}
 
 ////////////////////////////////////////////////////////////////////
-DirectionLight* DirectionLight::create(const Vec3& direction, const Color3B& color)
+DirectionLight* DirectionLight::create(const Vec3& direction, const Color32& color)
 {
     auto light = new DirectionLight();
     light->setRotationFromDirection(direction);
@@ -98,7 +99,7 @@ DirectionLight::DirectionLight() {}
 DirectionLight::~DirectionLight() {}
 
 //////////////////////////////////////////////////////////////////
-PointLight* PointLight::create(const Vec3& position, const Color3B& color, float range)
+PointLight* PointLight::create(const Vec3& position, const Color32& color, float range)
 {
     auto light = new PointLight();
     light->setPosition3D(position);
@@ -114,7 +115,7 @@ PointLight::~PointLight() {}
 //////////////////////////////////////////////////////////////
 SpotLight* SpotLight::create(const Vec3& direction,
                              const Vec3& position,
-                             const Color3B& color,
+                             const Color32& color,
                              float innerAngle,
                              float outerAngle,
                              float range)
@@ -165,7 +166,7 @@ SpotLight::~SpotLight() {}
 
 /////////////////////////////////////////////////////////////
 
-AmbientLight* AmbientLight::create(const Color3B& color)
+AmbientLight* AmbientLight::create(const Color32& color)
 {
     auto light = new AmbientLight();
     light->setColor(color);

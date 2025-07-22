@@ -62,7 +62,7 @@ bool UIScrollViewTest_Vertical::init()
 
         // Add the alert
         Text* alert = Text::create("ScrollView vertical", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -81,7 +81,7 @@ bool UIScrollViewTest_Vertical::init()
                                          (backgroundSize.height - scrollView->getContentSize().height) / 2.0f));
         scrollView->setScrollBarWidth(4);
         scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-        scrollView->setScrollBarColor(Color3B::WHITE);
+        scrollView->setScrollBarColor(Color32::WHITE);
         scrollView->setGlobalZOrder(200);
         _uiLayer->addChild(scrollView);
 
@@ -139,7 +139,7 @@ bool UIScrollViewTest_Horizontal::init()
         _uiLayer->addChild(_displayValueLabel);
 
         Text* alert = Text::create("ScrollView horizontal", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -155,7 +155,7 @@ bool UIScrollViewTest_Horizontal::init()
         scrollView->setContentSize(Size(280.0f, 150.0f));
         scrollView->setInnerContainerSize(scrollView->getContentSize());
         scrollView->setScrollBarPositionFromCorner(Vec2(4, 4));
-        scrollView->setScrollBarColor(Color3B::YELLOW);
+        scrollView->setScrollBarColor(Color32::YELLOW);
         Size backgroundSize = background->getContentSize();
         scrollView->setPosition((widgetSize - scrollView->getContentSize()) / 2.0f);
         _uiLayer->addChild(scrollView);
@@ -220,7 +220,7 @@ bool UIScrollViewTest_Both::init()
 
         // Add the alert
         Text* alert = Text::create("ScrollView both", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -285,7 +285,7 @@ bool UIScrollViewTest_ScrollToPercentBothDirection::init()
         // Add the alert
         Text* alert =
             Text::create("ScrollView scroll to percent both direction without scroll bar", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 4.5));
         _uiLayer->addChild(alert);
@@ -295,7 +295,7 @@ bool UIScrollViewTest_ScrollToPercentBothDirection::init()
         Layout* background = static_cast<Layout*>(root->getChildByName("background_Panel"));
 
         ui::ScrollView* sc = ui::ScrollView::create();
-        sc->setBackGroundColor(Color3B::GREEN);
+        sc->setBackGroundColor(Color32::GREEN);
         sc->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         sc->setDirection(ui::ScrollView::Direction::BOTH);
         sc->setInnerContainerSize(Size(480.0f, 320.0f));
@@ -339,7 +339,7 @@ bool UIScrollViewTest_ScrollToPercentBothDirection_Bounce::init()
 
         // Add the alert
         Text* alert = Text::create("ScrollView scroll to percent both direction bounce", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 4.5));
         _uiLayer->addChild(alert);
@@ -349,7 +349,7 @@ bool UIScrollViewTest_ScrollToPercentBothDirection_Bounce::init()
         Layout* background = dynamic_cast<Layout*>(root->getChildByName("background_Panel"));
 
         ui::ScrollView* sc = ui::ScrollView::create();
-        sc->setBackGroundColor(Color3B::GREEN);
+        sc->setBackGroundColor(Color32::GREEN);
         sc->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         sc->setBounceEnabled(true);
         sc->setDirection(ui::ScrollView::Direction::BOTH);
@@ -395,7 +395,7 @@ bool UIScrollViewNestTest::init()
 
         // Add the alert
         Text* alert = Text::create("ScrollView vertical", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -415,7 +415,7 @@ bool UIScrollViewNestTest::init()
                                      (widgetSize.height - backgroundSize.height) / 2.0f +
                                          (backgroundSize.height - scrollView->getContentSize().height) / 2.0f));
         scrollView->setScrollBarPositionFromCornerForVertical(Vec2(scrollView->getContentSize().width - 4, 4.0f));
-        scrollView->setScrollBarColor(Color3B::BLUE);
+        scrollView->setScrollBarColor(Color32::BLUE);
         _uiLayer->addChild(scrollView);
 
         ImageView* imageView = ImageView::create("cocosui/ccicon.png");
@@ -448,7 +448,7 @@ bool UIScrollViewNestTest::init()
 
         // Create the scrollview by both
         ui::ScrollView* sc = ui::ScrollView::create();
-        sc->setBackGroundColor(Color3B::GREEN);
+        sc->setBackGroundColor(Color32::GREEN);
         sc->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         sc->setBounceEnabled(true);
         sc->setDirection(ui::ScrollView::Direction::BOTH);
@@ -491,7 +491,7 @@ bool UIScrollViewRotated::init()
 
         // Add the alert
         Text* alert = Text::create("ScrollView vertical", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -511,7 +511,7 @@ bool UIScrollViewRotated::init()
                                          (backgroundSize.height - scrollView->getContentSize().height) / 2.0f + 100));
         scrollView->setRotation(45);
         scrollView->setScrollBarPositionFromCorner(Vec2(4, 4));
-        scrollView->setScrollBarColor(Color3B::WHITE);
+        scrollView->setScrollBarColor(Color32::WHITE);
         _uiLayer->addChild(scrollView);
 
         ImageView* imageView = ImageView::create("cocosui/ccicon.png");
@@ -569,7 +569,7 @@ bool UIScrollViewDisableTest::init()
 
         // Add the alert
         Text* alert = Text::create("ScrollView vertical", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -589,7 +589,7 @@ bool UIScrollViewDisableTest::init()
         scrollView->setScrollBarWidth(4);
         scrollView->setTouchEnabled(false);
         scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-        scrollView->setScrollBarColor(Color3B::WHITE);
+        scrollView->setScrollBarColor(Color32::WHITE);
         _uiLayer->addChild(scrollView);
 
         ImageView* imageView = ImageView::create("cocosui/ccicon.png");
@@ -648,7 +648,7 @@ bool UIScrollViewInnerSize::init()
         // Add the alert
         Text* alert = Text::create("ScrollView & InnerContainer should be align to the left and top point",
                                    "fonts/Marker Felt.ttf", 10);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -668,11 +668,11 @@ bool UIScrollViewInnerSize::init()
         scrollView->setScrollBarWidth(4);
         scrollView->setTouchEnabled(false);
         scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-        scrollView->setScrollBarColor(Color3B::WHITE);
+        scrollView->setScrollBarColor(Color32::WHITE);
         scrollView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-        scrollView->setBackGroundColor(Color3B(150, 150, 100));
+        scrollView->setBackGroundColor(Color32(150, 150, 100));
         scrollView->getInnerContainer()->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-        scrollView->getInnerContainer()->setBackGroundColor(Color3B(50, 100, 50));
+        scrollView->getInnerContainer()->setBackGroundColor(Color32(50, 100, 50));
         scrollView->getInnerContainer()->setBackGroundColorOpacity(100);
         scrollView->setClippingEnabled(false);
         _uiLayer->addChild(scrollView);
@@ -704,7 +704,7 @@ bool UIScrollViewTestEvents::init()
 
         // Add the alert
         Text* alert = Text::create("ScrollView events", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -784,7 +784,7 @@ bool UIScrollViewStopScrollingTest::init()
 
         // Add the alert
         Text* alert = Text::create("Click the button and start to scroll", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);

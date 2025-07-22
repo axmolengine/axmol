@@ -31,8 +31,11 @@
 namespace ax
 {
 
-void vertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int offset, unsigned int nuPoints)
+void vertexLineToPolygon(Vec2* points, float stroke, V2F_T2F_C4B* vertices, unsigned int offset, unsigned int nuPoints)
 {
+    assert(points != nullptr);
+    assert(vertices != nullptr);
+
     nuPoints += offset;
     if (nuPoints <= 1)
         return;
@@ -72,8 +75,8 @@ void vertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned in
         }
         perpVector = perpVector * stroke;
 
-        vertices[idx].set(p1.x + perpVector.x, p1.y + perpVector.y);
-        vertices[idx + 1].set(p1.x - perpVector.x, p1.y - perpVector.y);
+        vertices[idx].position.set(p1.x + perpVector.x, p1.y + perpVector.y);
+        vertices[idx + 1].position.set(p1.x - perpVector.x, p1.y - perpVector.y);
     }
 
     // Validate vertexes
@@ -83,10 +86,10 @@ void vertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned in
         idx                     = i * 2;
         const unsigned int idx1 = idx + 2;
 
-        Vec2 p1 = vertices[idx];
-        Vec2 p2 = vertices[idx + 1];
-        Vec2 p3 = vertices[idx1];
-        Vec2 p4 = vertices[idx1 + 1];
+        const auto& p1 = vertices[idx].position;
+        const auto& p2 = vertices[idx + 1].position;
+        const auto& p3 = vertices[idx1].position;
+        const auto& p4 = vertices[idx1 + 1].position;
 
         float s;
         // BOOL fixVertex = !ccpLineIntersect(Vec2(p1.x, p1.y), Vec2(p4.x, p4.y), Vec2(p2.x, p2.y), Vec2(p3.x, p3.y),
@@ -98,8 +101,8 @@ void vertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned in
 
         if (fixVertex)
         {
-            vertices[idx1]     = p4;
-            vertices[idx1 + 1] = p3;
+            vertices[idx1].position     = p4;
+            vertices[idx1 + 1].position = p3;
         }
     }
 }

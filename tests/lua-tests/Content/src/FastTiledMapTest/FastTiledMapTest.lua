@@ -1,11 +1,11 @@
-local size = cc.Director:getInstance():getWinSize()
-local scheduler = cc.Director:getInstance():getScheduler()
+local size = ax.Director:getInstance():getWinSize()
+local scheduler = ax.Director:getInstance():getScheduler()
 
 local kTagTileMap = 1
 
 
 local function createTileDemoLayer(title, subtitle)
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     local titleStr = title == nil and "No title" or title
     local subTitleStr = subtitle  == nil and "drag the screen" or subtitle
@@ -16,11 +16,11 @@ local function createTileDemoLayer(title, subtitle)
         local diff = touches[1]:getDelta()
         local node = layer:getChildByTag(kTagTileMap)
         local currentPosX, currentPosY= node:getPosition()
-        node:setPosition(cc.p(currentPosX + diff.x, currentPosY + diff.y))
+        node:setPosition(ax.p(currentPosX + diff.x, currentPosY + diff.y))
     end
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesMoved,cc.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.EventListenerTouchAllAtOnce:create()
+    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -34,7 +34,7 @@ end
 local function TileMapTest()
     local layer = createTileDemoLayer("TileMapAtlas")
 
-    local  map = cc.TileMapAtlas:create(s_TilesPng,  s_LevelMapTga, 16, 16)
+    local  map = ax.TileMapAtlas:create(s_TilesPng,  s_LevelMapTga, 16, 16)
     -- Convert it to "alias" (GL_LINEAR filtering)
     map:getTexture():setAntiAliasTexParameters()
 
@@ -47,14 +47,14 @@ local function TileMapTest()
 
     layer:addChild(map, 0, kTagTileMap)
 
-    map:setAnchorPoint( cc.p(0, 0.5) )
+    map:setAnchorPoint( ax.p(0, 0.5) )
 
-    local scale = cc.ScaleBy:create(4, 0.8)
+    local scale = ax.ScaleBy:create(4, 0.8)
     local scaleBack = scale:reverse()
 
-    local  seq = cc.Sequence:create(scale, scaleBack)
+    local  seq = ax.Sequence:create(scale, scaleBack)
 
-    map:runAction(cc.RepeatForever:create(seq))
+    map:runAction(ax.RepeatForever:create(seq))
 
     return layer
 end
@@ -66,7 +66,7 @@ end
 --------------------------------------------------------------------
 local function TileMapEditTest()
     local layer = createTileDemoLayer("Editable TileMapAtlas")
-    local  map = cc.TileMapAtlas:create(s_TilesPng, s_LevelMapTga, 16, 16)
+    local  map = ax.TileMapAtlas:create(s_TilesPng, s_LevelMapTga, 16, 16)
     -- Create an Aliased Atlas
     map:getTexture():setAliasTexParameters()
 
@@ -90,7 +90,7 @@ local function TileMapEditTest()
         -- over all your tiles in every frame. It's very expensive
         --    for(int x=0 x < tilemap.tgaInfo:width x++)
         --        for(int y=0 y < tilemap.tgaInfo:height y++)
-        --            Color3B c =[tilemap getTileAt:local Make(x,y))
+        --            Color32 c =[tilemap getTileAt:local Make(x,y))
         --            if( c.r != 0 )
         --                --------cclog("%d,%d = %d", x,y,c.r)
         --            end
@@ -98,7 +98,7 @@ local function TileMapEditTest()
         --    end
 
         -- NEW since v0.7
-        local c = tilemap:getTileAt(cc.p(13,21))
+        local c = tilemap:getTileAt(ax.p(13,21))
         c.r = c.r + 1
         c.r = c.r % 50
 
@@ -106,7 +106,7 @@ local function TileMapEditTest()
             c.r=1
         end
         -- NEW since v0.7
-        tilemap:setTile(c, cc.p(13,21) )
+        tilemap:setTile(c, ax.p(13,21) )
     end
 
     local schedulerEntry = nil
@@ -122,8 +122,8 @@ local function TileMapEditTest()
 
     layer:addChild(map, 0, kTagTileMap)
 
-    map:setAnchorPoint( cc.p(0, 0) )
-    map:setPosition( cc.p(-20,-200) )
+    map:setAnchorPoint( ax.p(0, 0) )
+    map:setPosition( ax.p(-20,-200) )
 
     return layer
 end
@@ -141,26 +141,26 @@ local function TMXOrthoTest()
     --
     -- it should not flicker. No artifacts should appear
     --
-    --local  color = cc.LayerColor:create( cc.c4b(64,64,64,255) )
+    --local  color = ax.LayerColor:create( ax.color32(64,64,64,255) )
     --addChild(color, -1)
 
-    local  map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test2.tmx")
+    local  map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test2.tmx")
     layer:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
-    local  scale = cc.ScaleBy:create(10, 0.1)
+    local  scale = ax.ScaleBy:create(10, 0.1)
     local  back  = scale:reverse()
-    local  seq   = cc.Sequence:create(scale, back)
-    local  repeatAction = cc.RepeatForever:create(seq)
+    local  seq   = ax.Sequence:create(scale, back)
+    local  repeatAction = ax.RepeatForever:create(seq)
     map:runAction(repeatAction)
 
     local function onNodeEvent(event)
         if event == "enter" then
-            cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION3_D )
+            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION3_D )
         elseif event == "exit" then
-            cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION_DEFAULT )
+            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
         end
     end
 
@@ -178,13 +178,13 @@ end
 local function TMXOrthoTest2()
     local layer = createTileDemoLayer("TMX Ortho test2")
 
-    local  map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test1.tmx")
+    local  map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test1.tmx")
     layer:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
-    map:runAction( cc.ScaleBy:create(2, 0.5) )
+    map:runAction( ax.ScaleBy:create(2, 0.5) )
     return layer
 end
 
@@ -195,14 +195,14 @@ end
 --------------------------------------------------------------------
 local function TMXOrthoTest3()
     local layer = createTileDemoLayer("TMX anchorPoint test")
-    local map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test3.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test3.tmx")
     layer:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
     map:setScale(0.2)
-    map:setAnchorPoint( cc.p(0.5, 0.5) )
+    map:setAnchorPoint( ax.p(0.5, 0.5) )
     return layer
 end
 
@@ -214,24 +214,24 @@ end
 --------------------------------------------------------------------
 local function TMXOrthoTest4()
     local ret = createTileDemoLayer("TMX width/height test")
-    local map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test4.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test4.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s1 = map:getContentSize()
     cclog("ContentSize: %f, %f", s1.width,s1.height)
 
-    map:setAnchorPoint(cc.p(0, 0))
+    map:setAnchorPoint(ax.p(0, 0))
 
     local layer  = map:getLayer("Layer 0")
     local s      = layer:getLayerSize()
 
-    local sprite = layer:getTileAt(cc.p(0,0))
+    local sprite = layer:getTileAt(ax.p(0,0))
     sprite:setScale(2)
-    sprite       = layer:getTileAt(cc.p(s.width-1,0))
+    sprite       = layer:getTileAt(ax.p(s.width-1,0))
     sprite:setScale(2)
-    sprite       = layer:getTileAt(cc.p(0,s.height-1))
+    sprite       = layer:getTileAt(ax.p(0,s.height-1))
     sprite:setScale(2)
-    sprite       = layer:getTileAt(cc.p(s.width-1,s.height-1))
+    sprite       = layer:getTileAt(ax.p(s.width-1,s.height-1))
     sprite:setScale(2)
 
     local schedulerEntry = nil
@@ -243,10 +243,10 @@ local function TMXOrthoTest4()
         local  layer0 = map:getLayer("Layer 0")
         local s = layer0:getLayerSize()
 
-        local  sprite = layer0:getTileAt(cc.p(s.width-1,0))
+        local  sprite = layer0:getTileAt(ax.p(s.width-1,0))
         layer0:removeChild(sprite, true)
-        local  sprite2 = layer0:getTileAt(cc.p(s.width-1, s.height - 1))
-        local  sprite3 = layer0:getTileAt(cc.p(2, s.height - 1))
+        local  sprite2 = layer0:getTileAt(ax.p(s.width-1, s.height - 1))
+        local  sprite3 = layer0:getTileAt(ax.p(2, s.height - 1))
         layer0:removeChild(sprite3, true)
         layer0:removeChild(sprite2, true)
     end
@@ -277,7 +277,7 @@ local function TMXReadWriteTest()
     local ret = createTileDemoLayer("TMX Read/Write test")
     local m_gid  = 0
     local m_gid2 = 0
-    local  map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test2.tmx")
+    local  map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test2.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
@@ -287,21 +287,21 @@ local function TMXReadWriteTest()
     local  layer = map:getLayer("Layer 0")
     map:setScale( 1 )
 
-    local tile0 = layer:getTileAt(cc.p(1,63))
-    local tile1 = layer:getTileAt(cc.p(2,63))
-    local tile2 = layer:getTileAt(cc.p(3,62))--cc.p(1,62))
-    local tile3 = layer:getTileAt(cc.p(2,62))
-    tile0:setAnchorPoint( cc.p(0.5, 0.5) )
-    tile1:setAnchorPoint( cc.p(0.5, 0.5) )
-    tile2:setAnchorPoint( cc.p(0.5, 0.5) )
-    tile3:setAnchorPoint( cc.p(0.5, 0.5) )
+    local tile0 = layer:getTileAt(ax.p(1,63))
+    local tile1 = layer:getTileAt(ax.p(2,63))
+    local tile2 = layer:getTileAt(ax.p(3,62))--ax.p(1,62))
+    local tile3 = layer:getTileAt(ax.p(2,62))
+    tile0:setAnchorPoint( ax.p(0.5, 0.5) )
+    tile1:setAnchorPoint( ax.p(0.5, 0.5) )
+    tile2:setAnchorPoint( ax.p(0.5, 0.5) )
+    tile3:setAnchorPoint( ax.p(0.5, 0.5) )
 
-    local  move = cc.MoveBy:create(0.5, cc.p(0,160))
-    local  rotate = cc.RotateBy:create(2, 360)
-    local  scale = cc.ScaleBy:create(2, 5)
-    local  opacity = cc.FadeOut:create(2)
-    local  fadein = cc.FadeIn:create(2)
-    local  scaleback = cc.ScaleTo:create(1, 1)
+    local  move = ax.MoveBy:create(0.5, ax.p(0,160))
+    local  rotate = ax.RotateBy:create(2, 360)
+    local  scale = ax.ScaleBy:create(2, 5)
+    local  opacity = ax.FadeOut:create(2)
+    local  fadein = ax.FadeIn:create(2)
+    local  scaleback = ax.ScaleTo:create(1, 1)
 
     local function removeSprite(sender)
         --------cclog("removing tile: %x", sender)
@@ -317,8 +317,8 @@ local function TMXReadWriteTest()
         ----------cclog("atlas quantity: %d", p:textureAtlas():totalQuads())
     end
 
-    local finish = cc.CallFunc:create(removeSprite)
-    local  seq0 = cc.Sequence:create(move, rotate, scale, opacity, fadein, scaleback, finish)
+    local finish = ax.CallFunc:create(removeSprite)
+    local  seq0 = ax.Sequence:create(move, rotate, scale, opacity, fadein, scaleback, finish)
     local  seq1 = seq0:clone()
     local  seq2 = seq0:clone()
     local  seq3 = seq0:clone()
@@ -329,7 +329,7 @@ local function TMXReadWriteTest()
     tile3:runAction(seq3)
 
 
-    m_gid = layer:getTileGIDAt(cc.p(0,63))
+    m_gid = layer:getTileGIDAt(ax.p(0,63))
     --------cclog("Tile GID at:(0,63) is: %d", m_gid)
     local updateColScheduler     = nil
     local repainWithGIDScheduler = nil
@@ -347,7 +347,7 @@ local function TMXReadWriteTest()
         local s = layer:getLayerSize()
         local y = 0
         for y=0, s.height-1, 1 do
-            layer:setTileGID(m_gid2, cc.p(3, y))
+            layer:setTileGID(m_gid2, ax.p(3, y))
         end
 
         m_gid2 = (m_gid2 + 1) % 80
@@ -362,8 +362,8 @@ local function TMXReadWriteTest()
         local x = 0
         for x=0, s.width-1, 1 do
             local y = s.height-1
-            local tmpgid = layer:getTileGIDAt( cc.p(x, y) )
-            layer:setTileGID(tmpgid+1, cc.p(x, y))
+            local tmpgid = layer:getTileGIDAt( ax.p(x, y) )
+            layer:setTileGID(tmpgid+1, ax.p(x, y))
         end
     end
 
@@ -375,7 +375,7 @@ local function TMXReadWriteTest()
         local s = layer:getLayerSize()
         local y = 0
         for y=0, s.height-1, 1 do
-            layer:removeTileAt( cc.p(5.0, y) )
+            layer:removeTileAt( ax.p(5.0, y) )
         end
     end
 
@@ -416,10 +416,10 @@ end
 --------------------------------------------------------------------
 local function TMXHexTest()
     local ret = createTileDemoLayer("TMX Hex tes")
-    local  color = cc.LayerColor:create( cc.c4b(64,64,64,255) )
+    local  color = ax.LayerColor:create( ax.color32(64,64,64,255) )
     ret:addChild(color, -1)
 
-    local  map = cc.TMXTiledMap:create("TileMaps/hexa-test.tmx")
+    local  map = ax.TMXTiledMap:create("TileMaps/hexa-test.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
@@ -434,16 +434,16 @@ end
 --------------------------------------------------------------------
 local function TMXIsoTest()
     local ret = createTileDemoLayer("TMX Isometric test 0")
-    local  color = cc.LayerColor:create( cc.c4b(64,64,64,255) )
+    local  color = ax.LayerColor:create( ax.color32(64,64,64,255) )
     ret:addChild(color, -1)
 
-    local  map = cc.FastTMXTiledMap:create("TileMaps/iso-test.tmx")
+    local  map = ax.FastTMXTiledMap:create("TileMaps/iso-test.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     -- move map to the center of the screen
     local ms = map:getMapSize()
     local ts = map:getTileSize()
-    map:runAction( cc.MoveTo:create(1.0, cc.p( -ms.width * ts.width/2, -ms.height * ts.height/2 )) )
+    map:runAction( ax.MoveTo:create(1.0, ax.p( -ms.width * ts.width/2, -ms.height * ts.height/2 )) )
     return ret
 end
 
@@ -454,16 +454,16 @@ end
 --------------------------------------------------------------------
 local function TMXIsoTest1()
     local ret = createTileDemoLayer("TMX Isometric test + anchorPoint")
-    local  color = cc.LayerColor:create( cc.c4b(64,64,64,255) )
+    local  color = ax.LayerColor:create( ax.color32(64,64,64,255) )
     ret:addChild(color, -1)
 
-    local map = cc.FastTMXTiledMap:create("TileMaps/iso-test1.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/iso-test1.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
-    map:setAnchorPoint(cc.p(0.5, 0.5))
+    map:setAnchorPoint(ax.p(0.5, 0.5))
     return ret
 end
 
@@ -474,10 +474,10 @@ end
 --------------------------------------------------------------------
 local function TMXIsoTest2()
     local ret = createTileDemoLayer("TMX Isometric test 2")
-    local  color = cc.LayerColor:create( cc.c4b(64,64,64,255) )
+    local  color = ax.LayerColor:create( ax.color32(64,64,64,255) )
     ret:addChild(color, -1)
 
-    local map = cc.FastTMXTiledMap:create("TileMaps/iso-test2.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/iso-test2.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
@@ -486,7 +486,7 @@ local function TMXIsoTest2()
     -- move map to the center of the screen
     local ms = map:getMapSize()
     local ts = map:getTileSize()
-    map:runAction( cc.MoveTo:create(1.0, cc.p( -ms.width * ts.width/2, -ms.height * ts.height/2 ) ))
+    map:runAction( ax.MoveTo:create(1.0, ax.p( -ms.width * ts.width/2, -ms.height * ts.height/2 ) ))
     return ret
 end
 
@@ -497,10 +497,10 @@ end
 --------------------------------------------------------------------
 local function TMXUncompressedTest()
     local ret = createTileDemoLayer("TMX Uncompressed test")
-    local  color = cc.LayerColor:create( cc.c4b(64,64,64,255) )
+    local  color = ax.LayerColor:create( ax.color32(64,64,64,255) )
     ret:addChild(color, -1)
 
-    local map = cc.FastTMXTiledMap:create("TileMaps/iso-test2-uncompressed.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/iso-test2-uncompressed.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
@@ -509,7 +509,7 @@ local function TMXUncompressedTest()
     -- move map to the center of the screen
     local ms = map:getMapSize()
     local ts = map:getTileSize()
-    map:runAction(cc.MoveTo:create(1.0, cc.p( -ms.width * ts.width/2, -ms.height * ts.height/2 ) ))
+    map:runAction(ax.MoveTo:create(1.0, ax.p( -ms.width * ts.width/2, -ms.height * ts.height/2 ) ))
 
     return ret
 end
@@ -521,7 +521,7 @@ end
 --------------------------------------------------------------------
 local function TMXTilesetTest()
     local ret = createTileDemoLayer("TMX Tileset test")
-    local map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test5.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test5.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
@@ -537,13 +537,13 @@ end
 --------------------------------------------------------------------
 local function TMXOrthoObjectsTest()
     local ret = createTileDemoLayer("TMX Ortho object test", "You should see a white box around the 3 platforms")
-    local map = cc.FastTMXTiledMap:create("TileMaps/ortho-objects.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/ortho-objects.tmx")
     ret:addChild(map, -1, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
-    
-    local drawNode = cc.DrawNode:create()
+
+    local drawNode = ax.DrawNode:create()
     map:addChild(drawNode, 10)
 
     --------cclog("---: Iterating over all the group objects")
@@ -561,7 +561,7 @@ local function TMXOrthoObjectsTest()
             break
         end
         --------cclog("object: %x", dict)
-        
+
         local key = "x"
         local x = dict["x"]
         key = "y"
@@ -570,19 +570,19 @@ local function TMXOrthoObjectsTest()
         local width = dict["width"]--dynamic_cast<NSNumber*>(dict:objectForKey("width")):getNumber()
         key = "height"
         local height = dict["height"]--dynamic_cast<NSNumber*>(dict:objectForKey("height")):getNumber()
-        
-        local color = cc.c4f(1,1,1,1)
-        drawNode:drawLine( cc.p(x, y), cc.p((x+width), y), color)
-        drawNode:drawLine( cc.p((x+width), y), cc.p((x+width), (y+height)), color)
-        drawNode:drawLine( cc.p((x+width), (y+height)), cc.p(x, (y+height)), color)
-        drawNode:drawLine( cc.p(x, (y+height)), cc.p(x, y), color)
+
+        local color = ax.color(1,1,1,1)
+        drawNode:drawLine( ax.p(x, y), ax.p((x+width), y), color)
+        drawNode:drawLine( ax.p((x+width), y), ax.p((x+width), (y+height)), color)
+        drawNode:drawLine( ax.p((x+width), (y+height)), ax.p(x, (y+height)), color)
+        drawNode:drawLine( ax.p(x, (y+height)), ax.p(x, y), color)
     end
 
     --------cclog("---: Fetching 1 object by name")
     -- local  platform = group:objectNamed("platform")
     --------cclog("platform: %x", platform)
-    
-    
+
+
 
     return ret
 end
@@ -595,13 +595,13 @@ end
 
 local function TMXIsoObjectsTest()
     local ret = createTileDemoLayer("TMX Iso object test", "You need to parse them manually. See bug #810")
-    local  map = cc.FastTMXTiledMap:create("TileMaps/iso-test-objectgroup.tmx")
+    local  map = ax.FastTMXTiledMap:create("TileMaps/iso-test-objectgroup.tmx")
     ret:addChild(map, -1, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
-    
-    local drawNode = cc.DrawNode:create()
+
+    local drawNode = ax.DrawNode:create()
     map:addChild(drawNode, 10)
 
     local  group = map:getObjectGroup("Object Group 1")
@@ -613,13 +613,13 @@ local function TMXIsoObjectsTest()
     local  i = 0
     local  len = #(objects)
     for i = 0, len-1, 1 do
-        dict = tolua.cast(objects[i + 1], "cc.Dictionary")
+        dict = tolua.cast(objects[i + 1], "ax.Dictionary")
 
         if dict == nil then
             break
         end
         --------cclog("object: %x", dict)
-        
+
         local key = "x"
         local x = dict["x"]
         key = "y"
@@ -628,12 +628,12 @@ local function TMXIsoObjectsTest()
         local width = dict["width"]--dynamic_cast<NSNumber*>(dict:objectForKey("width")):getNumber()
         key = "height"
         local height = dict["height"]--dynamic_cast<NSNumber*>(dict:objectForKey("height")):getNumber()
-        
-        local color = cc.c4f(1,1,1,1)
-        drawNode:drawLine( cc.p(x, y), cc.p((x+width), y), color)
-        drawNode:drawLine( cc.p((x+width), y), cc.p((x+width), (y+height)), color)
-        drawNode:drawLine( cc.p((x+width), (y+height)), cc.p(x, (y+height)), color)
-        drawNode:drawLine( cc.p(x, (y+height)), cc.p(x, y), color)
+
+        local color = ax.color(1,1,1,1)
+        drawNode:drawLine( ax.p(x, y), ax.p((x+width), y), color)
+        drawNode:drawLine( ax.p((x+width), y), ax.p((x+width), (y+height)), color)
+        drawNode:drawLine( ax.p((x+width), (y+height)), ax.p(x, (y+height)), color)
+        drawNode:drawLine( ax.p(x, (y+height)), ax.p(x, y), color)
     end
     return ret
 end
@@ -646,7 +646,7 @@ end
 
 local function TMXResizeTest()
     local ret = createTileDemoLayer("TMX resize test", "Should not crash. Testing issue #740")
-    local  map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test5.tmx")
+    local  map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test5.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
@@ -658,7 +658,7 @@ local function TMXResizeTest()
     local y = 0
     for y = 0, ls.height-1, 1 do
         for  x = 0, ls.width-1, 1 do
-            layer:setTileGID(1, cc.p( x, y ) )
+            layer:setTileGID(1, ax.p( x, y ) )
         end
     end
     return ret
@@ -672,27 +672,27 @@ end
 local function TMXIsoZorder()
     local m_tamara = nil
     local ret = createTileDemoLayer("TMX Iso Zorder", "Sprite should hide behind the trees")
-    local map = cc.FastTMXTiledMap:create("TileMaps/iso-test-zorder.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/iso-test-zorder.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
-    map:setPosition(cc.p(-s.width/2,0))
+    map:setPosition(ax.p(-s.width/2,0))
 
-    m_tamara = cc.Sprite:create(s_pPathSister1)
+    m_tamara = ax.Sprite:create(s_pPathSister1)
     map:addChild(m_tamara, #(map:getChildren()))
     m_tamara:retain()
     local mapWidth = map:getMapSize().width * map:getTileSize().width
-    m_tamara:setPosition(AX_POINT_PIXELS_TO_POINTS(cc.p( mapWidth/2,0)))
-    m_tamara:setAnchorPoint(cc.p(0.5,0))
+    m_tamara:setPosition(AX_POINT_PIXELS_TO_POINTS(ax.p( mapWidth/2,0)))
+    m_tamara:setAnchorPoint(ax.p(0.5,0))
 
-    local  move = cc.MoveBy:create(10, cc.p(300,250))
+    local  move = ax.MoveBy:create(10, ax.p(300,250))
     local  back = move:reverse()
-    local  seq = cc.Sequence:create(move, back)
-    m_tamara:runAction( cc.RepeatForever:create(seq) )
+    local  seq = ax.Sequence:create(move, back)
+    m_tamara:runAction( ax.RepeatForever:create(seq) )
 
     local function repositionSprite(dt)
-        local p = cc.p(m_tamara:getPosition())
+        local p = ax.p(m_tamara:getPosition())
         p = AX_POINT_POINTS_TO_PIXELS(p)
         local map = ret:getChildByTag(kTagTileMap)
 
@@ -710,7 +710,7 @@ local function TMXIsoZorder()
     local schedulerEntry = nil
     local function onNodeEvent(event)
         if event == "enter" then
-            cc.Director:getInstance():getRenderer():setDepthTest(false)
+            ax.Director:getInstance():getRenderer():setDepthTest(false)
             schedulerEntry = scheduler:scheduleScriptFunc(repositionSprite, 0, false)
         elseif event == "exit" then
             if m_tamara ~= nil then
@@ -733,25 +733,25 @@ end
 local function TMXOrthoZorder()
     local m_tamara = nil
     local ret = createTileDemoLayer("TMX Ortho Zorder", "Sprite should hide behind the trees")
-    local map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test-zorder.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test-zorder.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
-    m_tamara = cc.Sprite:create(s_pPathSister1)
+    m_tamara = ax.Sprite:create(s_pPathSister1)
     map:addChild(m_tamara,  #(map:getChildren()))
     m_tamara:retain()
-    m_tamara:setAnchorPoint(cc.p(0.5,0))
+    m_tamara:setAnchorPoint(ax.p(0.5,0))
 
 
-    local  move = cc.MoveBy:create(10, cc.p(400,450))
+    local  move = ax.MoveBy:create(10, ax.p(400,450))
     local  back = move:reverse()
-    local  seq = cc.Sequence:create(move, back)
-    m_tamara:runAction( cc.RepeatForever:create(seq))
+    local  seq = ax.Sequence:create(move, back)
+    m_tamara:runAction( ax.RepeatForever:create(seq))
 
     local function repositionSprite(dt)
-        local p = cc.p(m_tamara:getPosition())
+        local p = ax.p(m_tamara:getPosition())
         p = AX_POINT_POINTS_TO_PIXELS(p)
         local  map = ret:getChildByTag(kTagTileMap)
 
@@ -791,28 +791,28 @@ end
 local function TMXIsoVertexZ()
     local m_tamara = nil
     local ret = createTileDemoLayer("TMX Iso VertexZ", "Sprite should hide behind the trees")
-    local map = cc.FastTMXTiledMap:create("TileMaps/iso-test-vertexz.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/iso-test-vertexz.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local s = map:getContentSize()
-    map:setPosition( cc.p(-s.width/2,0) )
+    map:setPosition( ax.p(-s.width/2,0) )
     cclog("ContentSize: %f, %f", s.width,s.height)
 
     -- because I'm lazy, I'm reusing a tile as an sprite, but since this method uses vertexZ, you
-    -- can use any cc.Sprite and it will work OK.
+    -- can use any ax.Sprite and it will work OK.
     local  layer = map:getLayer("Trees")
-    m_tamara = layer:getTileAt( cc.p(29,29) )
+    m_tamara = layer:getTileAt( ax.p(29,29) )
     m_tamara:retain()
 
-    local  move = cc.MoveBy:create(10, cc.pMul( cc.p(300,250), 1/AX_CONTENT_SCALE_FACTOR() ) )
+    local  move = ax.MoveBy:create(10, ax.pMul( ax.p(300,250), 1/AX_CONTENT_SCALE_FACTOR() ) )
     local  back = move:reverse()
-    local  seq = cc.Sequence:create(move, back)
-    m_tamara:runAction( cc.RepeatForever:create(seq) )
+    local  seq = ax.Sequence:create(move, back)
+    m_tamara:runAction( ax.RepeatForever:create(seq) )
     local function repositionSprite(dt)
 
         -- tile height is 64x32
         -- map size: 30x30
-        local p = cc.p(m_tamara:getPosition())
+        local p = ax.p(m_tamara:getPosition())
         p = AX_POINT_POINTS_TO_PIXELS(p)
         local newZ = -(p.y+32) /16
         m_tamara:setPositionZ( newZ )
@@ -822,19 +822,19 @@ local function TMXIsoVertexZ()
     local function onNodeEvent(event)
         if event == "enter" then
             -- TIP: 2d projection should be used
-            cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D )
+            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION2_D )
             schedulerEntry = scheduler:scheduleScriptFunc(repositionSprite, 0, false)
-            cc.Director:getInstance():getRenderer():setDepthTest(true)
-            cc.Director:getInstance():getRenderer():setDepthWrite(true)
+            ax.Director:getInstance():getRenderer():setDepthTest(true)
+            ax.Director:getInstance():getRenderer():setDepthWrite(true)
         elseif event == "exit" then
             -- At exit use any other projection.
-            cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION_DEFAULT )
+            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
             if m_tamara ~= nil then
                 m_tamara:release()
             end
             scheduler:unscheduleScriptEntry(schedulerEntry)
-            cc.Director:getInstance():getRenderer():setDepthTest(false)
-            cc.Director:getInstance():getRenderer():setDepthWrite(false)
+            ax.Director:getInstance():getRenderer():setDepthTest(false)
+            ax.Director:getInstance():getRenderer():setDepthWrite(false)
         end
     end
 
@@ -850,28 +850,28 @@ end
 local function TMXOrthoVertexZ()
     local m_tamara = nil
     local ret = createTileDemoLayer("TMX Ortho vertexZ", "Sprite should hide behind the trees")
-    local map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test-vertexz.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test-vertexz.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
     -- because I'm lazy, I'm reusing a tile as an sprite, but since this method uses vertexZ, you
-    -- can use any cc.Sprite and it will work OK.
+    -- can use any ax.Sprite and it will work OK.
     local  layer = map:getLayer("trees")
-    m_tamara = layer:getTileAt(cc.p(0,11))
+    m_tamara = layer:getTileAt(ax.p(0,11))
     cclog("vertexZ:"..m_tamara:getPositionZ())
     m_tamara:retain()
 
-    local  move = cc.MoveBy:create(10, cc.pMul( cc.p(400,450), 1/AX_CONTENT_SCALE_FACTOR()))
+    local  move = ax.MoveBy:create(10, ax.pMul( ax.p(400,450), 1/AX_CONTENT_SCALE_FACTOR()))
     local  back = move:reverse()
-    local  seq = cc.Sequence:create(move, back)
-    m_tamara:runAction( cc.RepeatForever:create(seq))
+    local  seq = ax.Sequence:create(move, back)
+    m_tamara:runAction( ax.RepeatForever:create(seq))
 
     local function repositionSprite(dt)
         -- tile height is 101x81
         -- map size: 12x12
-        local p = cc.p(m_tamara:getPosition())
+        local p = ax.p(m_tamara:getPosition())
         p = AX_POINT_POINTS_TO_PIXELS(p)
         m_tamara:setPositionZ( -( (p.y+81) /81) )
     end
@@ -880,19 +880,19 @@ local function TMXOrthoVertexZ()
     local function onNodeEvent(event)
         if event == "enter" then
             -- TIP: 2d projection should be used
-            cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D )
+            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION2_D )
             schedulerEntry = scheduler:scheduleScriptFunc(repositionSprite, 0, false)
-            cc.Director:getInstance():getRenderer():setDepthTest(true)
-            cc.Director:getInstance():getRenderer():setDepthWrite(true)
+            ax.Director:getInstance():getRenderer():setDepthTest(true)
+            ax.Director:getInstance():getRenderer():setDepthWrite(true)
         elseif event == "exit" then
             -- At exit use any other projection.
-            cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION_DEFAULT )
+            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
             if m_tamara ~= nil then
                 m_tamara:release()
             end
             scheduler:unscheduleScriptEntry(schedulerEntry)
-            cc.Director:getInstance():getRenderer():setDepthTest(false)
-            cc.Director:getInstance():getRenderer():setDepthWrite(false)
+            ax.Director:getInstance():getRenderer():setDepthTest(false)
+            ax.Director:getInstance():getRenderer():setDepthWrite(false)
         end
     end
 
@@ -908,10 +908,10 @@ end
 --------------------------------------------------------------------
 local function TMXIsoMoveLayer()
     local ret = createTileDemoLayer("TMX Iso Move Layer", "Trees should be horizontally aligned")
-    local  map = cc.FastTMXTiledMap:create("TileMaps/iso-test-movelayer.tmx")
+    local  map = ax.FastTMXTiledMap:create("TileMaps/iso-test-movelayer.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
-    map:setPosition(cc.p(-700,-50))
+    map:setPosition(ax.p(-700,-50))
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
@@ -926,7 +926,7 @@ end
 --------------------------------------------------------------------
 local function TMXOrthoMoveLayer()
     local ret = createTileDemoLayer("TMX Ortho Move Layer", "Trees should be horizontally aligned")
-    local map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test-movelayer.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test-movelayer.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
@@ -942,7 +942,7 @@ end
 
 local function TMXTilePropertyTest()
     local ret = createTileDemoLayer("TMX Tile Property Test", "In the console you should see tile properties")
-    local map = cc.TMXTiledMap:create("TileMaps/ortho-tile-property.tmx")
+    local map = ax.TMXTiledMap:create("TileMaps/ortho-tile-property.tmx")
     ret:addChild(map ,0 ,kTagTileMap)
     local i = 0
     for i=1, 20, 1 do
@@ -959,13 +959,13 @@ end
 
 local function TMXOrthoFlipTest()
     local ret = createTileDemoLayer("TMX tile flip test")
-    local map = cc.FastTMXTiledMap:create("TileMaps/ortho-rotation-test.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/ortho-rotation-test.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
-    local  action = cc.ScaleBy:create(2, 0.5)
+    local  action = ax.ScaleBy:create(2, 0.5)
     map:runAction(action)
     return ret
 end
@@ -978,47 +978,47 @@ end
 
 local function TMXOrthoFlipRunTimeTest()
     local ret = createTileDemoLayer("TMX tile flip run time test", "in 2 sec bottom left tiles will flip")
-    local map = cc.FastTMXTiledMap:create("TileMaps/ortho-rotation-test.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/ortho-rotation-test.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
-    local  action = cc.ScaleBy:create(2, 0.5)
+    local  action = ax.ScaleBy:create(2, 0.5)
     map:runAction(action)
     local function flipIt(dt)
 
         local map = ret:getChildByTag(kTagTileMap)
         local layer = map:getLayer("Layer 0")
-        
-        local tileCoord = cc.p(1, 10)
+
+        local tileCoord = ax.p(1, 10)
         local flags = 0
         local GID, flags = layer:getTileGIDAt(tileCoord, flags)
-        if 0 ~= bit._and(flags, cc.TMX_TILE_VERTICAL_FLAG) then
-            flags = bit._and(flags, bit._not(cc.TMX_TILE_VERTICAL_FLAG))
+        if 0 ~= bit._and(flags, ax.TMX_TILE_VERTICAL_FLAG) then
+            flags = bit._and(flags, bit._not(ax.TMX_TILE_VERTICAL_FLAG))
         else
-            flags = bit._or(flags, cc.TMX_TILE_VERTICAL_FLAG)
+            flags = bit._or(flags, ax.TMX_TILE_VERTICAL_FLAG)
         end
         layer:setTileGID(GID, tileCoord, flags)
 
-        tileCoord = cc.p(1,8)    
+        tileCoord = ax.p(1,8)
         GID, flags = layer:getTileGIDAt(tileCoord, flags)
-        if 0 ~= bit._and(flags, cc.TMX_TILE_VERTICAL_FLAG) then 
-            flags = bit._and(flags, bit._not(cc.TMX_TILE_VERTICAL_FLAG))
+        if 0 ~= bit._and(flags, ax.TMX_TILE_VERTICAL_FLAG) then
+            flags = bit._and(flags, bit._not(ax.TMX_TILE_VERTICAL_FLAG))
         else
-            flags = bit._or(flags, cc.TMX_TILE_VERTICAL_FLAG)
-        end 
+            flags = bit._or(flags, ax.TMX_TILE_VERTICAL_FLAG)
+        end
         layer:setTileGID(GID ,tileCoord, flags)
 
-        tileCoord = cc.p(2,8)
+        tileCoord = ax.p(2,8)
         GID, flags = layer:getTileGIDAt(tileCoord, flags)
         -- Horizontal
-        if 0~= bit._and(flags, cc.TMX_TILE_HORIZONTAL_FLAG) then
-            flags = bit._and(flags, bit._not(cc.TMX_TILE_HORIZONTAL_FLAG))
+        if 0~= bit._and(flags, ax.TMX_TILE_HORIZONTAL_FLAG) then
+            flags = bit._and(flags, bit._not(ax.TMX_TILE_HORIZONTAL_FLAG))
         else
-            flags = bit._or(flags, cc.TMX_TILE_HORIZONTAL_FLAG)
-        end 
-        layer:setTileGID(GID, tileCoord, flags) 
+            flags = bit._or(flags, ax.TMX_TILE_HORIZONTAL_FLAG)
+        end
+        layer:setTileGID(GID, tileCoord, flags)
     end
     local schedulerEntry = nil
     local function onNodeEvent(event)
@@ -1046,19 +1046,19 @@ local function TMXOrthoFromXMLTest()
     local resources = "TileMaps"        -- partial paths are OK as resource paths.
     local file = resources.."/orthogonal-test1.tmx"
 
-    local  str = cc.FileUtils:getInstance():getStringFromFile(file)
-    --    cc.ASSERT(str != NULL, "Unable to open file")
+    local  str = ax.FileUtils:getInstance():getStringFromFile(file)
+    --    ax.ASSERT(str != NULL, "Unable to open file")
     if (str == nil) then
         cclog("Unable to open file")
     end
 
-    local map = cc.FastTMXTiledMap:createWithXML(str ,resources)
+    local map = ax.FastTMXTiledMap:createWithXML(str ,resources)
     ret:addChild(map, 0, kTagTileMap)
 
     local s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
 
-    local  action = cc.ScaleBy:create(2, 0.5)
+    local  action = ax.ScaleBy:create(2, 0.5)
     map:runAction(action)
     return ret
 end
@@ -1072,7 +1072,7 @@ end
 local function TMXOrthoXMLFormatTest()
     local ret = createTileDemoLayer("you should see blue, green and yellow in console.")
 
-    local map = cc.FastTMXTiledMap:create("TileMaps/xml-test.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/xml-test.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local s = map:getContentSize()
@@ -1082,7 +1082,7 @@ local function TMXOrthoXMLFormatTest()
         cclog("GID:%d, Properties:%s", i,  map:getPropertiesForGID(i)["name"])
     end
 
-    local  action = cc.ScaleBy:create(2, 0.5)
+    local  action = ax.ScaleBy:create(2, 0.5)
     map:runAction(action)
     return ret
 end
@@ -1094,15 +1094,15 @@ end
 --------------------------------------------------------------------
 local function TMXBug987()
     local ret = createTileDemoLayer("TMX Bug 987", "You should see an square")
-    local map = cc.FastTMXTiledMap:create("TileMaps/orthogonal-test6.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test6.tmx")
     ret:addChild(map, 0, kTagTileMap)
 
     local  s1 = map:getContentSize()
     cclog("ContentSize: %f, %f", s1.width,s1.height)
 
-    map:setAnchorPoint(cc.p(0, 0))
+    map:setAnchorPoint(ax.p(0, 0))
     local layer = map:getLayer("Tile Layer 1")
-    layer:setTileGID(3, cc.p(2,2))
+    layer:setTileGID(3, ax.p(2,2))
     return ret
 end
 
@@ -1113,7 +1113,7 @@ end
 --------------------------------------------------------------------
 local function TMXBug787()
     local ret = createTileDemoLayer("TMX Bug 787", "You should see a map")
-    local map = cc.FastTMXTiledMap:create("TileMaps/iso-test-bug787.tmx")
+    local map = ax.FastTMXTiledMap:create("TileMaps/iso-test-bug787.tmx")
     ret:addChild(map, 0, kTagTileMap)
     map:setScale(0.25)
     return ret
@@ -1122,7 +1122,7 @@ end
 function FastTiledMapTestMain()
     cclog("FastTiledMapTestMain")
     Helper.index = 1
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
     Helper.createFunctionTable = {
         TMXIsoZorder,
@@ -1156,7 +1156,7 @@ function FastTiledMapTestMain()
      -- TMXGIDObjectsTestNew,
     }
     Helper.index = 1
-    
+
     scene:addChild(TMXIsoZorder())
     scene:addChild(CreateBackMenuItem())
     return scene

@@ -3,17 +3,17 @@ local function AccelerometerMainLayer()
     local function title()
       return "AccelerometerTest"
     end
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
 
     local function onEnter()
         layer:setAccelerometerEnabled(true)
-        local label = cc.Label:createWithTTF(title(), "fonts/arial.ttf", 32)
+        local label = ax.Label:createWithTTF(title(), "fonts/arial.ttf", 32)
         layer:addChild(label, 1)
-        label:setAnchorPoint(cc.p(0.5, 0.5))
-        label:setPosition( cc.p(VisibleRect:center().x, VisibleRect:top().y - 50) )
+        label:setAnchorPoint(ax.p(0.5, 0.5))
+        label:setPosition( ax.p(VisibleRect:center().x, VisibleRect:top().y - 50) )
 
-        local ball = cc.Sprite:create("Images/ball.png")
-        ball:setPosition(cc.p(VisibleRect:center().x, VisibleRect:center().y))
+        local ball = ax.Sprite:create("Images/ball.png")
+        ball:setPosition(ax.p(VisibleRect:center().x, VisibleRect:center().y))
         layer:addChild(ball)
 
         local function accelerometerListener(event,x,y,z,timestamp)
@@ -30,7 +30,7 @@ local function AccelerometerMainLayer()
             elseif ptNowX > maxX then
                 ptNowX = maxX
             end
-      
+
             local minY  = math.floor(VisibleRect:bottom().y + ballSize.height / 2.0)
             local maxY  = math.floor(VisibleRect:top().y   - ballSize.height / 2.0)
             if ptNowY <   minY then
@@ -39,10 +39,10 @@ local function AccelerometerMainLayer()
                 ptNowY = maxY
             end
 
-            target:setPosition(cc.p(ptNowX , ptNowY))
+            target:setPosition(ax.p(ptNowX , ptNowY))
         end
 
-        local listener = cc.EventListenerAcceleration:create(accelerometerListener)
+        local listener = ax.EventListenerAcceleration:create(accelerometerListener)
         layer:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, ball)
     end
 
@@ -59,14 +59,14 @@ local function AccelerometerMainLayer()
     end
 
     layer:registerScriptHandler(onNodeEvent)
-    
+
     return layer
 end
 
 
 function AccelerometerMain()
 	cclog("AccelerometerMain")
-	local scene = cc.Scene:create()
+	local scene = ax.Scene:create()
 	scene:addChild(AccelerometerMainLayer())
 	scene:addChild(CreateBackMenuItem())
 	return scene

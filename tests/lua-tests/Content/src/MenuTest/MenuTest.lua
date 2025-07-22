@@ -21,14 +21,14 @@ local MID_BACKCALLBACK = 1009
 local function MenuLayerMainMenu()
     local m_disabledItem = nil
 
-    local ret = cc.Layer:create()
+    local ret = ax.Layer:create()
 
     -- Font Item
-    local  spriteNormal = cc.Sprite:create(s_MenuItem, cc.rect(0,23*2,115,23))
-    local  spriteSelected = cc.Sprite:create(s_MenuItem, cc.rect(0,23*1,115,23))
-    local  spriteDisabled = cc.Sprite:create(s_MenuItem, cc.rect(0,23*0,115,23))
+    local  spriteNormal = ax.Sprite:create(s_MenuItem, ax.rect(0,23*2,115,23))
+    local  spriteSelected = ax.Sprite:create(s_MenuItem, ax.rect(0,23*1,115,23))
+    local  spriteDisabled = ax.Sprite:create(s_MenuItem, ax.rect(0,23*0,115,23))
 
-    local  item1 = cc.MenuItemSprite:create(spriteNormal, spriteSelected, spriteDisabled)
+    local  item1 = ax.MenuItemSprite:create(spriteNormal, spriteSelected, spriteDisabled)
 
     local function menuCallback(sender)
         cclog("menuCallback...")
@@ -41,16 +41,16 @@ local function MenuLayerMainMenu()
         ret:getParent():switchTo(2, false)
     end
 
-    local  item2 = cc.MenuItemImage:create(s_SendScore, s_PressSendScore)
+    local  item2 = ax.MenuItemImage:create(s_SendScore, s_PressSendScore)
     item2:registerScriptTapHandler(menuCallback2)
 
 
     local schedulerEntry = nil
-    local scheduler = cc.Director:getInstance():getScheduler()
+    local scheduler = ax.Director:getInstance():getScheduler()
     local function allowTouches(dt)
-        local  pDirector = cc.Director:getInstance()
-        --pDirector:getTouchDispatcher():setPriority(cc.MENU_HANDLER_PRIORITY +1, ret)
-        if nil ~=  schedulerEntry then 
+        local  pDirector = ax.Director:getInstance()
+        --pDirector:getTouchDispatcher():setPriority(ax.MENU_HANDLER_PRIORITY +1, ret)
+        if nil ~=  schedulerEntry then
             scheduler:unscheduleScriptEntry(schedulerEntry)
             schedulerEntry = nil
         end
@@ -60,51 +60,51 @@ local function MenuLayerMainMenu()
 
     local function menuCallbackDisabled(sender)
         -- hijack all touch events for 5 seconds
-        local  pDirector = cc.Director:getInstance()
-        --pDirector:getTouchDispatcher():setPriority(cc.MENU_HANDLER_PRIORITY -1, ret)
+        local  pDirector = ax.Director:getInstance()
+        --pDirector:getTouchDispatcher():setPriority(ax.MENU_HANDLER_PRIORITY -1, ret)
         schedulerEntry = scheduler:scheduleScriptFunc(allowTouches, 5, false)
         cclog("TOUCHES DISABLED FOR 5 SECONDS")
     end
 
     -- Label Item (LabelAtlas)
-    local  labelAtlas = cc.LabelAtlas:_create("0123456789", "fonts/labelatlas.png", 16, 24, string.byte('.'))
-    local  item3 = cc.MenuItemLabel:create(labelAtlas)
+    local  labelAtlas = ax.LabelAtlas:_create("0123456789", "fonts/labelatlas.png", 16, 24, string.byte('.'))
+    local  item3 = ax.MenuItemLabel:create(labelAtlas)
     item3:registerScriptTapHandler(menuCallbackDisabled)
-    item3:setDisabledColor( cc.c3b(32,32,64) )
-    item3:setColor( cc.c3b(200,200,255) )
+    item3:setDisabledColor( ax.color32(32,32,64) )
+    item3:setColor( ax.color32(200,200,255) )
 
     local function menuCallbackEnable(sender)
         m_disabledItem:setEnabled(not m_disabledItem:isEnabled() )
     end
 
     -- Font Item
-    local item4 = cc.MenuItemFont:create("I toggle enable items")
+    local item4 = ax.MenuItemFont:create("I toggle enable items")
     item4:registerScriptTapHandler(menuCallbackEnable)
 
     item4:setFontSizeObj(20)
-    cc.MenuItemFont:setFontName("Marker Felt")
+    ax.MenuItemFont:setFontName("Marker Felt")
 
     local function menuCallbackConfig(sender)
         ret:getParent():switchTo(3, false)
     end
 
-    -- Label Item (cc.LabelBMFont)
-    local  label = cc.Label:createWithBMFont("fonts/bitmapFontTest3.fnt", "configuration")
-    label:setAnchorPoint(cc.p(0.5, 0.5))
-    local  item5 = cc.MenuItemLabel:create(label)
+    -- Label Item (ax.LabelBMFont)
+    local  label = ax.Label:createWithBMFont("fonts/bitmapFontTest3.fnt", "configuration")
+    label:setAnchorPoint(ax.p(0.5, 0.5))
+    local  item5 = ax.MenuItemLabel:create(label)
     item5:registerScriptTapHandler(menuCallbackConfig)
 
     -- Testing issue #500
     item5:setScale( 0.8 )
 
     -- Events
-    cc.MenuItemFont:setFontName("Marker Felt")
+    ax.MenuItemFont:setFontName("Marker Felt")
     local function menuCallbackBugsTest(pSender)
         ret:getParent():switchTo(4, false)
     end
 
     -- Bugs Item
-    local item6 = cc.MenuItemFont:create("Bugs")
+    local item6 = ax.MenuItemFont:create("Bugs")
     item6:registerScriptTapHandler(menuCallbackBugsTest)
 
     local function onQuit(sender)
@@ -112,22 +112,22 @@ local function MenuLayerMainMenu()
     end
 
     -- Font Item
-    local  item7 = cc.MenuItemFont:create("Quit")
+    local  item7 = ax.MenuItemFont:create("Quit")
     item7:registerScriptTapHandler(onQuit)
 
     local function menuMovingCallback(pSender)
         ret:getParent():switchTo(5, false)
     end
 
-    local  item8 = cc.MenuItemFont:create("Remove menu item when moving")
+    local  item8 = ax.MenuItemFont:create("Remove menu item when moving")
     item8:registerScriptTapHandler(menuMovingCallback)
 
-    local  color_action = cc.TintBy:create(0.5, 0, -255, -255)
+    local  color_action = ax.TintBy:create(0.5, 0, -255, -255)
     local  color_back = color_action:reverse()
-    local  seq = cc.Sequence:create(color_action, color_back)
-    item7:runAction(cc.RepeatForever:create(seq))
+    local  seq = ax.Sequence:create(color_action, color_back)
+    item7:runAction(ax.RepeatForever:create(seq))
 
-    local  menu = cc.Menu:create()
+    local  menu = ax.Menu:create()
 
     menu:addChild(item1)
     menu:addChild(item2)
@@ -141,7 +141,7 @@ local function MenuLayerMainMenu()
     menu:alignItemsVertically()
 
     -- elastic effect
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
     local i        = 0
     local child    = nil
@@ -159,8 +159,8 @@ local function MenuLayerMainMenu()
         if  i % 2 == 0 then
             offset = 0-offset
         end
-        child:setPosition( cc.p( dstPointX + offset, dstPointY) )
-        child:runAction( cc.EaseElasticOut:create(cc.MoveBy:create(2, cc.p(dstPointX - offset,0)), 0.35) )
+        child:setPosition( ax.p( dstPointX + offset, dstPointY) )
+        child:runAction( ax.EaseElasticOut:create(ax.MoveBy:create(2, ax.p(dstPointX - offset,0)), 0.35) )
     end
 
     m_disabledItem = item3
@@ -169,7 +169,7 @@ local function MenuLayerMainMenu()
     m_disabledItem:setEnabled( false )
 
     ret:addChild(menu)
-    menu:setPosition(cc.p(s.width/2, s.height/2))
+    menu:setPosition(ax.p(s.width/2, s.height/2))
 
 --  local schedulerEntry = nil
     local function onNodeEvent(event)
@@ -194,7 +194,7 @@ end
 --
 --------------------------------------------------------------------
 local function MenuLayer2()
-    local ret = cc.Layer:create()
+    local ret = ax.Layer:create()
     local m_centeredMenu = nil
     local m_alignedH = false
 
@@ -207,12 +207,12 @@ local function MenuLayer2()
                 -- TIP: if no padding, padding = 5
                 menu:alignItemsHorizontally()
                 local x, y = menu:getPosition()
-                menu:setPosition( cc.pAdd(cc.p(x, y), cc.p(0,30)) )
+                menu:setPosition( ax.pAdd(ax.p(x, y), ax.p(0,30)) )
             else
                 -- TIP: but padding is configurable
                 menu:alignItemsHorizontallyWithPadding(40)
                 local x, y = menu:getPosition()
-                menu:setPosition( cc.pSub(cc.p(x, y), cc.p(0,30)) )
+                menu:setPosition( ax.pSub(ax.p(x, y), ax.p(0,30)) )
             end
         end
     end
@@ -226,12 +226,12 @@ local function MenuLayer2()
                 -- TIP: if no padding, padding = 5
                 menu:alignItemsVertically()
                 local x, y = menu:getPosition()
-                menu:setPosition( cc.pAdd(cc.p(x, y), cc.p(100,0)) )
+                menu:setPosition( ax.pAdd(ax.p(x, y), ax.p(100,0)) )
             else
                 -- TIP: but padding is configurable
                 menu:alignItemsVerticallyWithPadding(40)
                 local x, y = menu:getPosition()
-                menu:setPosition( cc.pSub(cc.p(x, y), cc.p(100,0)) )
+                menu:setPosition( ax.pSub(ax.p(x, y), ax.p(100,0)) )
             end
         end
     end
@@ -262,33 +262,33 @@ local function MenuLayer2()
 
     local i = 0
     for i=0, 1 do
-        local  item1 = cc.MenuItemImage:create(s_PlayNormal, s_PlaySelect)
+        local  item1 = ax.MenuItemImage:create(s_PlayNormal, s_PlaySelect)
         item1:registerScriptTapHandler(menuCallback)
 
-        local  item2 = cc.MenuItemImage:create(s_HighNormal, s_HighSelect)
+        local  item2 = ax.MenuItemImage:create(s_HighNormal, s_HighSelect)
         item2:registerScriptTapHandler(menuCallbackOpacity)
 
-        local  item3 = cc.MenuItemImage:create(s_AboutNormal, s_AboutSelect)
+        local  item3 = ax.MenuItemImage:create(s_AboutNormal, s_AboutSelect)
         item3:registerScriptTapHandler(menuCallbackAlign)
 
         item1:setScaleX( 1.5 )
         item2:setScaleX( 0.5 )
         item3:setScaleX( 0.5 )
 
-        local  menu = cc.Menu:create()
+        local  menu = ax.Menu:create()
 
         menu:addChild(item1)
         menu:addChild(item2)
         menu:addChild(item3)
 
-        local s = cc.Director:getInstance():getWinSize()
-        menu:setPosition(cc.p(s.width/2, s.height/2))
+        local s = ax.Director:getInstance():getWinSize()
+        menu:setPosition(ax.p(s.width/2, s.height/2))
 
         menu:setTag( kTagMenu )
 
         ret:addChild(menu, 0, 100+i)
         local x, y = menu:getPosition()
-        m_centeredMenu = cc.p(x, y)
+        m_centeredMenu = ax.p(x, y)
     end
 
     m_alignedH = true
@@ -304,7 +304,7 @@ end
 --------------------------------------------------------------------
 local function MenuLayer3()
     local m_disabledItem = nil
-    local ret = cc.Layer:create()
+    local ret = ax.Layer:create()
     local function menuCallback(sender)
         ret:getParent():switchTo(0, false)
     end
@@ -319,56 +319,56 @@ local function MenuLayer3()
         cclog("MenuItemSprite clicked")
     end
 
-    cc.MenuItemFont:setFontName("Marker Felt")
-    cc.MenuItemFont:setFontSize(28)
+    ax.MenuItemFont:setFontName("Marker Felt")
+    ax.MenuItemFont:setFontSize(28)
 
-    local  label = cc.Label:createWithBMFont("fonts/bitmapFontTest3.fnt", "Enable AtlasItem")
-    label:setAnchorPoint(cc.p(0.5, 0.5))
-    local  item1 = cc.MenuItemLabel:create(label)
+    local  label = ax.Label:createWithBMFont("fonts/bitmapFontTest3.fnt", "Enable AtlasItem")
+    label:setAnchorPoint(ax.p(0.5, 0.5))
+    local  item1 = ax.MenuItemLabel:create(label)
     item1:registerScriptTapHandler(menuCallback2)
 
-    local  item2 = cc.MenuItemFont:create("--- Go Back ---")
+    local  item2 = ax.MenuItemFont:create("--- Go Back ---")
     item2:registerScriptTapHandler(menuCallback)
 
-    local spriteNormal   = cc.Sprite:create(s_MenuItem,  cc.rect(0,23*2,115,23))
-    local spriteSelected = cc.Sprite:create(s_MenuItem,  cc.rect(0,23*1,115,23))
-    local spriteDisabled = cc.Sprite:create(s_MenuItem,  cc.rect(0,23*0,115,23))
+    local spriteNormal   = ax.Sprite:create(s_MenuItem,  ax.rect(0,23*2,115,23))
+    local spriteSelected = ax.Sprite:create(s_MenuItem,  ax.rect(0,23*1,115,23))
+    local spriteDisabled = ax.Sprite:create(s_MenuItem,  ax.rect(0,23*0,115,23))
 
 
-    local  item3 = cc.MenuItemSprite:create(spriteNormal, spriteSelected, spriteDisabled)
+    local  item3 = ax.MenuItemSprite:create(spriteNormal, spriteSelected, spriteDisabled)
     item3:registerScriptTapHandler(menuCallback3)
     m_disabledItem = item3
     item3:retain()
     m_disabledItem:setEnabled( false )
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
 
     menu:addChild(item1)
     menu:addChild(item2)
     menu:addChild(item3)
 
-    menu:setPosition( cc.p(0,0) )
+    menu:setPosition( ax.p(0,0) )
 
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    item1:setPosition( cc.p(s.width/2 - 150, s.height/2) )
-    item2:setPosition( cc.p(s.width/2 - 200, s.height/2) )
-    item3:setPosition( cc.p(s.width/2, s.height/2 - 100) )
+    item1:setPosition( ax.p(s.width/2 - 150, s.height/2) )
+    item2:setPosition( ax.p(s.width/2 - 200, s.height/2) )
+    item3:setPosition( ax.p(s.width/2, s.height/2 - 100) )
 
-    local  jump = cc.JumpBy:create(3, cc.p(400,0), 50, 4)
-    item2:runAction( cc.RepeatForever:create(cc.Sequence:create( jump, jump:reverse())))
+    local  jump = ax.JumpBy:create(3, ax.p(400,0), 50, 4)
+    item2:runAction( ax.RepeatForever:create(ax.Sequence:create( jump, jump:reverse())))
 
-    local  spin1 = cc.RotateBy:create(3, 360)
+    local  spin1 = ax.RotateBy:create(3, 360)
     local  spin2 = spin1:clone()
     local  spin3 = spin1:clone()
 
-    item1:runAction( cc.RepeatForever:create(spin1) )
-    item2:runAction( cc.RepeatForever:create(spin2) )
-    item3:runAction( cc.RepeatForever:create(spin3) )
+    item1:runAction( ax.RepeatForever:create(spin1) )
+    item2:runAction( ax.RepeatForever:create(spin2) )
+    item3:runAction( ax.RepeatForever:create(spin3) )
 
     ret:addChild( menu )
 
-    menu:setPosition(cc.p(0,0))
+    menu:setPosition(ax.p(0,0))
 
     local function onNodeEvent(event)
         if event == "exit" then
@@ -390,14 +390,14 @@ end
 --
 --------------------------------------------------------------------
 local function MenuLayer4()
-    local ret = cc.Layer:create()
-    cc.MenuItemFont:setFontName("American Typewriter")
-    cc.MenuItemFont:setFontSize(18)
-    local title1 = cc.MenuItemFont:create("Sound")
+    local ret = ax.Layer:create()
+    ax.MenuItemFont:setFontName("American Typewriter")
+    ax.MenuItemFont:setFontSize(18)
+    local title1 = ax.MenuItemFont:create("Sound")
     title1:setEnabled(false)
-    cc.MenuItemFont:setFontName( "Marker Felt" )
-    cc.MenuItemFont:setFontSize(34)
-    local  item1 = cc.MenuItemToggle:create(cc.MenuItemFont:create( "On" ))
+    ax.MenuItemFont:setFontName( "Marker Felt" )
+    ax.MenuItemFont:setFontSize(34)
+    local  item1 = ax.MenuItemToggle:create(ax.MenuItemFont:create( "On" ))
 
     local function menuCallback(tag, sender)
         cclog("selected item: tag: %d, index:%d", tag, sender:getSelectedIndex() )
@@ -408,52 +408,52 @@ local function MenuLayer4()
     end
 
     item1:registerScriptTapHandler(menuCallback)
-    item1:addSubItem(cc.MenuItemFont:create( "Off"))
+    item1:addSubItem(ax.MenuItemFont:create( "Off"))
 
-    cc.MenuItemFont:setFontName( "American Typewriter" )
-    cc.MenuItemFont:setFontSize(18)
-    local  title2 = cc.MenuItemFont:create( "Music" )
+    ax.MenuItemFont:setFontName( "American Typewriter" )
+    ax.MenuItemFont:setFontSize(18)
+    local  title2 = ax.MenuItemFont:create( "Music" )
     title2:setEnabled(false)
-    cc.MenuItemFont:setFontName( "Marker Felt" )
-    cc.MenuItemFont:setFontSize(34)
-    local item2 = cc.MenuItemToggle:create(cc.MenuItemFont:create( "On" ))
+    ax.MenuItemFont:setFontName( "Marker Felt" )
+    ax.MenuItemFont:setFontSize(34)
+    local item2 = ax.MenuItemToggle:create(ax.MenuItemFont:create( "On" ))
     item2:registerScriptTapHandler(menuCallback)
-    item2:addSubItem(cc.MenuItemFont:create( "Off"))
+    item2:addSubItem(ax.MenuItemFont:create( "Off"))
 
-    cc.MenuItemFont:setFontName( "American Typewriter" )
-    cc.MenuItemFont:setFontSize(18)
-    local  title3 = cc.MenuItemFont:create( "Quality" )
+    ax.MenuItemFont:setFontName( "American Typewriter" )
+    ax.MenuItemFont:setFontSize(18)
+    local  title3 = ax.MenuItemFont:create( "Quality" )
     title3:setEnabled( false )
-    cc.MenuItemFont:setFontName( "Marker Felt" )
-    cc.MenuItemFont:setFontSize(34)
-    local item3 = cc.MenuItemToggle:create(cc.MenuItemFont:create( "High" ))
+    ax.MenuItemFont:setFontName( "Marker Felt" )
+    ax.MenuItemFont:setFontSize(34)
+    local item3 = ax.MenuItemToggle:create(ax.MenuItemFont:create( "High" ))
     item3:registerScriptTapHandler(menuCallback)
-    item3:addSubItem(cc.MenuItemFont:create( "Low" ))
+    item3:addSubItem(ax.MenuItemFont:create( "Low" ))
 
-    cc.MenuItemFont:setFontName( "American Typewriter" )
-    cc.MenuItemFont:setFontSize(18)
-    local  title4 = cc.MenuItemFont:create( "Orientation" )
+    ax.MenuItemFont:setFontName( "American Typewriter" )
+    ax.MenuItemFont:setFontSize(18)
+    local  title4 = ax.MenuItemFont:create( "Orientation" )
     title4:setEnabled(false)
-    cc.MenuItemFont:setFontName( "Marker Felt" )
-    cc.MenuItemFont:setFontSize(34)
-    local item4 = cc.MenuItemToggle:create(cc.MenuItemFont:create( "Off"),
-                                          cc.MenuItemFont:create( "33%" ),
-                                          cc.MenuItemFont:create( "66%" ),
-                                          cc.MenuItemFont:create( "100%"))
+    ax.MenuItemFont:setFontName( "Marker Felt" )
+    ax.MenuItemFont:setFontSize(34)
+    local item4 = ax.MenuItemToggle:create(ax.MenuItemFont:create( "Off"),
+                                          ax.MenuItemFont:create( "33%" ),
+                                          ax.MenuItemFont:create( "66%" ),
+                                          ax.MenuItemFont:create( "100%"))
     item4:registerScriptTapHandler(menuCallback)
 
     -- you can change the one of the items by doing this
     item4:setSelectedIndex( 2 )
 
-    cc.MenuItemFont:setFontName( "Marker Felt" )
-    cc.MenuItemFont:setFontSize( 34 )
+    ax.MenuItemFont:setFontName( "Marker Felt" )
+    ax.MenuItemFont:setFontSize( 34 )
 
-    local label = cc.Label:createWithBMFont("fonts/bitmapFontTest3.fnt", "go back")
-    label:setAnchorPoint(cc.p(0.5, 0.5))
-    local  back = cc.MenuItemLabel:create(label)
+    local label = ax.Label:createWithBMFont("fonts/bitmapFontTest3.fnt", "go back")
+    label:setAnchorPoint(ax.p(0.5, 0.5))
+    local  back = ax.MenuItemLabel:create(label)
     back:registerScriptTapHandler(backCallback)
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
 
     menu:addChild(title1)
     menu:addChild(title2)
@@ -469,14 +469,14 @@ local function MenuLayer4()
 
     ret:addChild(menu)
 
-    local s = cc.Director:getInstance():getWinSize()
-    menu:setPosition(cc.p(s.width/2, s.height/2))
+    local s = ax.Director:getInstance():getWinSize()
+    menu:setPosition(ax.p(s.width/2, s.height/2))
     return ret
 end
 
 -- BugsTest
 local function BugsTest()
-    local ret = cc.Layer:create()
+    local ret = ax.Layer:create()
     local function issue1410MenuCallback(tag, pSender)
         local menu = pSender:getParent()
         menu:setEnabled(false)
@@ -496,53 +496,53 @@ local function BugsTest()
     end
 
 
-    local issue1410 = cc.MenuItemFont:create("Issue 1410")
+    local issue1410 = ax.MenuItemFont:create("Issue 1410")
     issue1410:registerScriptTapHandler(issue1410MenuCallback)
-    local issue1410_2 = cc.MenuItemFont:create("Issue 1410 #2")
+    local issue1410_2 = ax.MenuItemFont:create("Issue 1410 #2")
     issue1410_2:registerScriptTapHandler(issue1410v2MenuCallback)
-    local back = cc.MenuItemFont:create("Back")
+    local back = ax.MenuItemFont:create("Back")
     back:registerScriptTapHandler(backMenuCallback)
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
     menu:addChild(issue1410)
     menu:addChild(issue1410_2)
     menu:addChild(back)
     ret:addChild(menu)
     menu:alignItemsVertically()
 
-    local s = cc.Director:getInstance():getWinSize()
-    menu:setPosition(cc.p(s.width/2, s.height/2))
+    local s = ax.Director:getInstance():getWinSize()
+    menu:setPosition(ax.p(s.width/2, s.height/2))
     return ret
 end
 
 
 local function RemoveMenuItemWhenMove()
-    local ret = cc.Layer:create()
-    local s = cc.Director:getInstance():getWinSize()
+    local ret = ax.Layer:create()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local  label = cc.Label:createWithTTF("click item and move, should not crash", s_arialPath, 20)
-    label:setAnchorPoint(cc.p(0.5, 0.5))
-    label:setPosition(cc.p(s.width/2, s.height - 30))
+    local  label = ax.Label:createWithTTF("click item and move, should not crash", s_arialPath, 20)
+    label:setAnchorPoint(ax.p(0.5, 0.5))
+    label:setPosition(ax.p(s.width/2, s.height - 30))
     ret:addChild(label)
 
-    local item = cc.MenuItemFont:create("item 1")
+    local item = ax.MenuItemFont:create("item 1")
     item:retain()
 
-    local back = cc.MenuItemFont:create("go back")
+    local back = ax.MenuItemFont:create("go back")
     local function goBack(tag, pSender)
         ret:getParent():switchTo(0, false)
     end
 
     back:registerScriptTapHandler(goBack)
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
     menu:addChild(item)
     menu:addChild(back)
 
     ret:addChild(menu)
     menu:alignItemsVertically()
 
-    menu:setPosition(cc.p(s.width/2, s.height/2))
+    menu:setPosition(ax.p(s.width/2, s.height/2))
 
     local function onTouchBegan(touch, event)
         return true
@@ -556,9 +556,9 @@ local function RemoveMenuItemWhenMove()
         end
     end
 
-    local listener = cc.EventListenerTouchOneByOne:create()
-    listener:registerScriptHandler(onTouchBegan,cc.Handler.EVENT_TOUCH_BEGAN )
-    listener:registerScriptHandler(onTouchMoved,cc.Handler.EVENT_TOUCH_MOVED )
+    local listener = ax.EventListenerTouchOneByOne:create()
+    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_TOUCH_BEGAN )
+    listener:registerScriptHandler(onTouchMoved,ax.Handler.EVENT_TOUCH_MOVED )
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithFixedPriority(listener, -129)
 
@@ -575,7 +575,7 @@ end
 
 function MenuTestMain()
     cclog("MenuTestMain")
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
     local  pLayer1 = MenuLayerMainMenu()
     local  pLayer2 = MenuLayer2()
@@ -585,7 +585,7 @@ function MenuTestMain()
     local  pLayer5 = BugsTest()
     local  pLayer6 = RemoveMenuItemWhenMove()
 
-    local  layer = cc.LayerMultiplex:create(pLayer1,
+    local  layer = ax.LayerMultiplex:create(pLayer1,
                                             pLayer2,
                                             pLayer3,
                                             pLayer4,
