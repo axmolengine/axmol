@@ -17,3 +17,7 @@
 ### For core/new feature PR
 - [ ] I have checked readme and add important infos to this PR.
 - [ ] I have added thorough tests.
+
+### Axmol 3.x   ------------------------------------------------------------
+### For each 3.x PR 
+- [ ] Check the '#include "axmol.h"' and replace it with the needed headers.
