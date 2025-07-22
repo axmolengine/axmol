@@ -474,7 +474,7 @@ void SpritePolygonTest5::loadDefaultSprites()
         drawNode->clear();
         sprites[i]->addChild(drawNode);
     }
-    sprites[0]->setColor(Color3B::RED);
+    sprites[0]->setColor(Color32::RED);
     sprites[1]->setOpacity(100);
     sprites[2]->setTexture(Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister1.png"));
     sprites[3]->setTextureRect(Rect(0.0f, 0.0f, 100.0f, 30.0f));
@@ -901,7 +901,7 @@ SpritePolygonTestPerformance::SpritePolygonTestPerformance()
     addChild(_spritesAnchor);
 
     _totalSprites = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "sprites");
-    _totalSprites->setColor(Color3B::YELLOW);
+    _totalSprites->setColor(Color32::YELLOW);
     _totalSprites->enableOutline(Color32::RED, 2);
     _totalSprites->setPosition(s.width / 2, s.height / 2);
 

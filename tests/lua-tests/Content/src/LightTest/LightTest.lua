@@ -45,7 +45,7 @@ function LightTest:init()
         menuItem0:setString(str)
     end)
 
- 
+
     local directionalLightLabel = cc.Label:createWithTTF(ttfConfig,"Directional Light OFF")
     local menuItem1 = cc.MenuItemLabel:create(directionalLightLabel)
     menuItem1:registerScriptTapHandler(function (tag, sender)
@@ -107,20 +107,20 @@ function LightTest:init()
         if nil ~= self._directionalLight then
             self._directionalLight:setRotation3D(cc.vec3(-45.0, -angleDelta * 57.29577951, 0.0))
         end
-    
+
         if nil ~= self._pointLight then
             self._pointLight:setPositionX(100.0 * math.cos(angleDelta + 2.0 * delta))
             self._pointLight:setPositionY(100.0)
             self._pointLight:setPositionZ(100.0 * math.sin(angleDelta + 2.0 * delta))
         end
-    
+
         if nil ~= self._spotLight then
             self._spotLight:setPositionX(100.0 * math.cos(angleDelta + 4.0 * delta))
             self._spotLight:setPositionY(100.0)
             self._spotLight:setPositionZ(100.0 * math.sin(angleDelta + 4.0 * delta))
             self._spotLight:setDirection(cc.vec3(-math.cos(angleDelta + 4.0 * delta), -1.0, -math.sin(angleDelta + 4.0 * delta)))
         end
-    
+
         angleDelta = angleDelta + delta
     end
 
@@ -151,14 +151,14 @@ function LightTest:addSprite()
     self:addChild(sprite2)
     sprite2:setCameraMask(2)
 
-    
+
     local fileName = "MeshRendererTest/sphere.c3b"
     local sprite3   = cc.Sprite3D:create(fileName)
     sprite3:setScale(0.5)
     sprite3:setPosition(cc.p(-50.0, 0.0))
     self:addChild(sprite3)
     sprite3:setCameraMask(2)
-    
+
     local fileName = "MeshRendererTest/sphere.c3b"
     local sprite4 = cc.Sprite3D:create(fileName)
     sprite4:setScale(0.5)
@@ -169,22 +169,22 @@ end
 
 function LightTest:addLights()
     local s = cc.Director:getInstance():getWinSize()
-    self._ambientLight = cc.AmbientLight:create(cc.c3b(200, 200, 200))
+    self._ambientLight = cc.AmbientLight:create(cc.color(200, 200, 200))
     self._ambientLight:setEnabled(true)
     self:addChild(self._ambientLight)
     self._ambientLight:setCameraMask(2)
 
-    self._directionalLight = cc.DirectionLight:create(cc.vec3(-1.0, -1.0, 0.0), cc.c3b(200, 200, 200))
+    self._directionalLight = cc.DirectionLight:create(cc.vec3(-1.0, -1.0, 0.0), cc.color(200, 200, 200))
     self._directionalLight:setEnabled(false)
     self:addChild(self._directionalLight)
     self._directionalLight:setCameraMask(2)
 
-    self._pointLight = cc.PointLight:create(cc.vec3(0.0, 0.0, 0.0), cc.c3b(200, 200, 200), 10000.0)
+    self._pointLight = cc.PointLight:create(cc.vec3(0.0, 0.0, 0.0), cc.color(200, 200, 200), 10000.0)
     self._pointLight:setEnabled(false)
     self:addChild(self._pointLight)
     self._pointLight:setCameraMask(2)
 
-    self._spotLight = cc.SpotLight:create(cc.vec3(-1.0, -1.0, 0.0), cc.vec3(0.0, 0.0, 0.0), cc.c3b(200, 200, 200), 0.0, 0.5, 10000.0)
+    self._spotLight = cc.SpotLight:create(cc.vec3(-1.0, -1.0, 0.0), cc.vec3(0.0, 0.0, 0.0), cc.color(200, 200, 200), 0.0, 0.5, 10000.0)
     self._spotLight:setEnabled(false)
     self:addChild(self._spotLight)
     self._spotLight:setCameraMask(2)
@@ -230,7 +230,7 @@ function LightTestMain()
     cclog("LightTestMain")
     local scene = cc.Scene:create()
 
-    Helper.createFunctionTable = 
+    Helper.createFunctionTable =
     {
         LightTest.create,
     }

@@ -58,7 +58,7 @@ public:
      * @param path The texture file name of stoke.
      * @return An autoreleased MotionStreak3D object.
      */
-    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
+    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color32& color, std::string_view path);
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture.
      *
      * @param fade The fade time, in seconds.
@@ -68,13 +68,13 @@ public:
      * @param texture The texture name of stoke.
      * @return An autoreleased MotionStreak3D object.
      */
-    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
+    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture);
 
     /** Color used for the tint.
      *
      * @param colors The color used for the tint.
      */
-    void tintWithColor(const Color3B& colors);
+    void tintWithColor(const Color32& colors);
 
     /** Remove all living segments of the ribbon.
      */
@@ -158,10 +158,10 @@ public:
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename
      */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color32& color, std::string_view path);
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture);
 
 protected:
     // renderer callback

@@ -203,7 +203,7 @@ void LabelAtlas::updateAtlasValues()
         quads[i].tr.position.x = (float)(i * _itemWidth + _itemWidth);
         quads[i].tr.position.y = (float)(_itemHeight);
         quads[i].tr.position.z = 0.0f;
-        Color32 c(_displayedColor, _displayedOpacity);
+        const Color32& c = _displayedColor;
         quads[i].tl.color = c;
         quads[i].tr.color = c;
         quads[i].bl.color = c;
@@ -248,7 +248,7 @@ void LabelAtlas::updateColor()
 {
     if (_textureAtlas)
     {
-        Color color(_displayedColor, _displayedOpacity / 255.0f);
+        Color color(_displayedColor);
         if (_isOpacityModifyRGB)
             color.premultiplyAlpha();
         Color32 color32{color};

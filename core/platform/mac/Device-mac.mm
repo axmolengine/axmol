@@ -283,8 +283,7 @@ static bool _initWithString(std::string_view text,
                             const char* fontName,
                             int size,
                             tImageInfo* info,
-                            const Color3B* fontColor,
-                            int fontAlpha,
+                            const Color32* fontColor,
                             bool enableWrap,
                             int overflow,
                             const FontStroke& stroke)
@@ -306,10 +305,10 @@ static bool _initWithString(std::string_view text,
         NSColor* foregroundColor;
         if (fontColor)
         {
-            foregroundColor = [NSColor colorWithDeviceRed:fontColor->r / 255.0
-                                                    green:fontColor->g / 255.0
-                                                     blue:fontColor->b / 255.0
-                                                    alpha:fontAlpha / 255.0];
+            foregroundColor = [NSColor colorWithDeviceRed:fontColor->r / 255.0f
+                                                    green:fontColor->g / 255.0f
+                                                     blue:fontColor->b / 255.0f
+                                                    alpha:fontColor->a / 255.0f];
         }
         else
         {
@@ -424,7 +423,7 @@ Data Device::getTextureDataForText(std::string_view text,
         info.height     = textDefinition._dimensions.height;
 
         if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
-                             &textDefinition._fontFillColor, textDefinition._fontAlpha, textDefinition._enableWrap,
+                             &textDefinition._fontFillColor, textDefinition._enableWrap,
                              textDefinition._overflow, textDefinition._stroke))
         {
             break;

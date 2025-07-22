@@ -115,7 +115,7 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
     _textRender = Label::createWithTTF("TEST", "fonts/arial.ttf", 8.0f);
     _textRender->setAnchorPoint(Vec2(0, 1));
     _textRender->setPosition(VisibleRect::left().x, VisibleRect::top().y - 10);
-    _textRender->setColor(Color3B::WHITE);
+    _textRender->setColor(Color32::WHITE);
     this->addChild(_textRender, 99);
 
     /// circle shader
@@ -139,7 +139,7 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 
         // instanced attributes
         auto vfmtInstanced = pipelinePS->getMutableVertexLayout(true);
-        
+
         vfmtInstanced->setAttrib("a_instanceColor", program->getAttributeLocation("a_instanceColor"),
                                  backend::VertexFormat::FLOAT4, offsetof(CircleData, rgba), false);
         vfmtInstanced->setAttrib("a_instancePosAndRadius", program->getAttributeLocation("a_instancePosAndRadius"),
@@ -270,7 +270,7 @@ void Box2DTestDebugDrawNode::DrawString(int x, int y, const char* pszFormat, ...
     // va_start(args, pszFormat);
     // auto ret = StringUtils::vformat(pszFormat, args);
     // va_end(args);
-    // 
+    //
     // _debugString.append(ret);
     // _debugString.push_back('\n');
     // _textRender->setString(_debugString);

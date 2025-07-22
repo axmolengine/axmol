@@ -31,13 +31,13 @@ MultiTouchTests::MultiTouchTests()
     ADD_TEST_CASE(MultiTouchTest);
 }
 
-static const Color3B* s_TouchColors[5] = {&Color3B::YELLOW, &Color3B::BLUE, &Color3B::GREEN, &Color3B::RED,
-                                          &Color3B::MAGENTA};
+static const Color32* s_TouchColors[5] = {&Color32::YELLOW, &Color32::BLUE, &Color32::GREEN, &Color32::RED,
+                                          &Color32::MAGENTA};
 
 class TouchPoint : public Node
 {
 public:
-    TouchPoint(const Vec2& touchPoint, const Color3B& touchColor)
+    TouchPoint(const Vec2& touchPoint, const Color32& touchColor)
     {
         DrawNode* drawNode = DrawNode::create();
         auto s             = Director::getInstance()->getWinSize();
@@ -48,7 +48,7 @@ public:
         addChild(drawNode);
     }
 
-    static TouchPoint* touchPointWithParent(Node* pParent, const Vec2& touchPoint, const Color3B& touchColor)
+    static TouchPoint* touchPointWithParent(Node* pParent, const Vec2& touchPoint, const Color32& touchColor)
     {
         auto pRet = new TouchPoint(touchPoint, touchColor);
         pRet->setContentSize(pParent->getContentSize());

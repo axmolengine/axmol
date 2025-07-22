@@ -244,7 +244,7 @@ local function ParticleReorder()
 
     onEnterCallback = function ()
         ParticleReorder_Order = 0
-        ParticleReorder_layer:setColor(cc.c3b(0, 0, 0))
+        ParticleReorder_layer:setColor(cc.color(0, 0, 0))
         ParticleReorder_layer:removeChild(background, true)
         background = nil
 
@@ -344,7 +344,7 @@ local function ParticleBatchHybrid()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -375,7 +375,7 @@ local function ParticleBatchMultipleEmitters()
 	local layer = getBaseLayer()
 
     onEnterCallback = function()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -401,7 +401,7 @@ local function ParticleBatchMultipleEmitters()
         titleLabel:setString("Particle Batch")
         subtitleLabel:setString("Multiple emitters. One Batch")
     end
-	
+
 	return layer
 end
 
@@ -420,7 +420,7 @@ local function DemoFlower()
 
         titleLabel:setString("ParticleFlower")
     end
-	
+
 	return layer
 end
 
@@ -441,7 +441,7 @@ local function DemoGalaxy()
 
         titleLabel:setString("ParticleGalaxy")
     end
-	
+
 	return layer
 end
 
@@ -462,7 +462,7 @@ local function DemoFirework()
 
         titleLabel:setString("ParticleFireworks")
     end
-	
+
 	return layer
 end
 
@@ -483,7 +483,7 @@ local function DemoSpiral()
 
         titleLabel:setString("ParticleSpiral")
     end
-	
+
 	return layer
 end
 
@@ -525,7 +525,7 @@ local function DemoPause()
 
         titleLabel:setString("Pasue Particle")
     end
-    
+
     return layer
 end
 
@@ -546,7 +546,7 @@ local function DemoMeteor()
 
         titleLabel:setString("ParticleMeteor")
     end
-	
+
 	return layer
 end
 
@@ -567,7 +567,7 @@ local function DemoFire()
 
         titleLabel:setString("ParticleFire")
     end
-	
+
 	return layer
 end
 
@@ -589,7 +589,7 @@ local function DemoSmoke()
 
         titleLabel:setString("ParticleSmoke")
     end
-	
+
 	return layer
 end
 
@@ -612,7 +612,7 @@ local function DemoExplosion()
 
         titleLabel:setString("ParticleExplosion")
     end
-	
+
 	return layer
 end
 
@@ -978,7 +978,7 @@ local function DemoParticleFromFile(name)
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -1003,7 +1003,7 @@ local function RadiusMode1()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -1078,7 +1078,7 @@ local function RadiusMode2()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -1152,7 +1152,7 @@ local function Issue704()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -1251,9 +1251,9 @@ end
 
 local function Issue870()
 	local layer = getBaseLayer()
-    
+
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
         local system = cc.ParticleSystemQuad:create("Particles/SpinningPeas.plist")
@@ -1279,7 +1279,7 @@ local function MultipleParticleSystems()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -1308,7 +1308,7 @@ local function MultipleParticleSystemsBatched()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -1375,7 +1375,7 @@ local function AddAndDeleteParticleSystems()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
@@ -1440,7 +1440,7 @@ local function ReorderParticleSystems()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background ,true)
         background = nil
 
@@ -1535,7 +1535,7 @@ local function PremultipliedAlphaTest()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 255))
+        layer:setColor(cc.color(0, 0, 255))
         layer:removeChild(background, true)
         background = nil
 
@@ -1567,7 +1567,7 @@ local function PremultipliedAlphaTest2()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(cc.color(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 

@@ -87,8 +87,7 @@ protected:
     float _positionPercentY;
     float _width;
     float _height;
-    ax::Color3B _color;
-    int _opacity;
+    ax::Color32 _color;
     ax::Vec2 _position;
     bool _isAdaptScreen;
     ax::Vec2 _originalAnchorPoint;
@@ -286,7 +285,7 @@ extern const char* P_Path;
     }
 
 #define AX_COLOR_PROPERTY_BINARY_READER                                               \
-    else if (key == P_Opacity) { _opacity = valueToInt(value); }                      \
+    else if (key == P_Opacity) { _color.a = valueToInt(value); }                      \
     else if (key == P_ColorR) { _color.r = valueToInt(value); }                       \
     else if (key == P_ColorG) { _color.g = valueToInt(value); }                       \
     else if (key == P_ColorB) { _color.b = valueToInt(value); }                       \

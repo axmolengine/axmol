@@ -69,7 +69,7 @@ bool UIButtonTest::init()
 
         // Add the alert
         Text* alert = Text::create("Button", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
 
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
@@ -176,7 +176,7 @@ bool UIButtonTest_Scale9::init()
 
         // Add the alert
         Text* alert = Text::create("Button scale9 render", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -259,7 +259,7 @@ bool UIButtonTest_Scale9_State_Change::init()
 
         // Add the alert
         Text* alert = Text::create("Button scale9 render", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -344,7 +344,7 @@ bool UIButtonTest_PressedAction::init()
 
         // Add the alert
         Text* alert = Text::create("Button Pressed Action", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
 
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
@@ -355,7 +355,7 @@ bool UIButtonTest_PressedAction::init()
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         button->setPressedActionEnabled(true);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        button->setColor(Color3B::GREEN);
+        button->setColor(Color32::GREEN);
         button->setOpacity(30);
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_PressedAction::touchEvent, this));
         button->setName("button");
@@ -422,7 +422,7 @@ bool UIButtonTest_Title::init()
 
         // Add the alert
         Text* alert = Text::create("Button with title, title should be flipped!", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
 
@@ -432,8 +432,8 @@ bool UIButtonTest_Title::init()
         Button* button = Button::create("cocosui/backtotoppressed.png", "cocosui/backtotopnormal.png");
         button->setTitleText("Title Button!");
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        button->setTitleColor(Color3B::YELLOW);
-        AXASSERT(button->getTitleColor() == Color3B::YELLOW, "Button setTitleColor & getTitleColor not match!");
+        button->setTitleColor(Color32::YELLOW);
+        AXASSERT(button->getTitleColor() == Color32::YELLOW, "Button setTitleColor & getTitleColor not match!");
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_Title::touchEvent, this));
         _uiLayer->addChild(button);
         button->setFlippedX(true);
@@ -444,7 +444,7 @@ bool UIButtonTest_Title::init()
 
         TextBMFont* text = TextBMFont::create("BMFont", "cocosui/bitmapFontTest2.fnt");
         text->setPosition(button->getPosition() + Vec2(button->getContentSize().width / 2 + 50, 0.0f));
-        text->setColor(Color3B::YELLOW);
+        text->setColor(Color32::YELLOW);
         text->setOpacity(50);
         text->setName("text");
 
@@ -520,7 +520,7 @@ bool UIButtonTestRemoveSelf::init()
         // Add the alert
         Text* alert =
             Text::create("Remove Self in the Button's Callback shouldn't cause crash!", "fonts/Marker Felt.ttf", 10);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
 
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 2.75f));
@@ -529,7 +529,7 @@ bool UIButtonTestRemoveSelf::init()
 
         Layout* layout = Layout::create();
         layout->setContentSize(widgetSize * 0.6f);
-        layout->setBackGroundColor(Color3B::GREEN);
+        layout->setBackGroundColor(Color32::GREEN);
         layout->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         layout->setBackGroundColorOpacity(100);
         layout->setPosition(Size(widgetSize.width / 2, widgetSize.height / 2));
@@ -803,7 +803,7 @@ bool UIButtonTitleEffectTest::init()
         button->setScale(2.0f);
         button->setPressedActionEnabled(true);
         Label* title = button->getTitleRenderer();
-        button->setTitleColor(Color3B::RED);
+        button->setTitleColor(Color32::RED);
         title->enableShadow(Color32::BLACK, Size(2, -2));
 
         _uiLayer->addChild(button);
@@ -883,7 +883,7 @@ bool UIButtonNormalDefaultTest::init()
 
         // Add the alert
         Text* alert = Text::create("Button should scale when clicked", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
 
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
@@ -930,7 +930,7 @@ bool UIButtonDisableDefaultTest::init()
 
         // Add the alert
         Text* alert = Text::create("Left button will turn normal when clicked", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
 
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
@@ -983,7 +983,7 @@ bool UIButtonCloneTest::init()
 
         // Add the alert
         Text* alert = Text::create("This test case shouldn't trigger the Assertion!", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
 
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
@@ -1039,7 +1039,7 @@ bool Issue12249::init()
 
         // Add the alert
         Text* alert = Text::create("This test case two buttons should seem to be same!", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
 
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 2.0f));

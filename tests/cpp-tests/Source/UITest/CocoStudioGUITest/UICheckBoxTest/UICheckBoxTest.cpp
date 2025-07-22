@@ -53,7 +53,7 @@ bool UICheckBoxTest::init()
 
         // Add the alert
         Text* alert = Text::create("CheckBox", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -134,7 +134,7 @@ bool UICheckBoxDefaultBehaviorTest::init()
 
         // Add the alert
         Text* alert = Text::create("Only left two and the last checkbox can be clicked!", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -190,7 +190,7 @@ bool UICheckBoxCopyTest::init()
 
         // Add the alert
         Text* alert = Text::create("Two checkbox are identical.", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);

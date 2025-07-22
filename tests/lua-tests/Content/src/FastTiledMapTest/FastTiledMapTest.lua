@@ -90,7 +90,7 @@ local function TileMapEditTest()
         -- over all your tiles in every frame. It's very expensive
         --    for(int x=0 x < tilemap.tgaInfo:width x++)
         --        for(int y=0 y < tilemap.tgaInfo:height y++)
-        --            Color3B c =[tilemap getTileAt:local Make(x,y))
+        --            Color32 c =[tilemap getTileAt:local Make(x,y))
         --            if( c.r != 0 )
         --                --------cclog("%d,%d = %d", x,y,c.r)
         --            end
@@ -542,7 +542,7 @@ local function TMXOrthoObjectsTest()
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
-    
+
     local drawNode = cc.DrawNode:create()
     map:addChild(drawNode, 10)
 
@@ -561,7 +561,7 @@ local function TMXOrthoObjectsTest()
             break
         end
         --------cclog("object: %x", dict)
-        
+
         local key = "x"
         local x = dict["x"]
         key = "y"
@@ -570,7 +570,7 @@ local function TMXOrthoObjectsTest()
         local width = dict["width"]--dynamic_cast<NSNumber*>(dict:objectForKey("width")):getNumber()
         key = "height"
         local height = dict["height"]--dynamic_cast<NSNumber*>(dict:objectForKey("height")):getNumber()
-        
+
         local color = cc.c4f(1,1,1,1)
         drawNode:drawLine( cc.p(x, y), cc.p((x+width), y), color)
         drawNode:drawLine( cc.p((x+width), y), cc.p((x+width), (y+height)), color)
@@ -581,8 +581,8 @@ local function TMXOrthoObjectsTest()
     --------cclog("---: Fetching 1 object by name")
     -- local  platform = group:objectNamed("platform")
     --------cclog("platform: %x", platform)
-    
-    
+
+
 
     return ret
 end
@@ -600,7 +600,7 @@ local function TMXIsoObjectsTest()
 
     local  s = map:getContentSize()
     cclog("ContentSize: %f, %f", s.width,s.height)
-    
+
     local drawNode = cc.DrawNode:create()
     map:addChild(drawNode, 10)
 
@@ -619,7 +619,7 @@ local function TMXIsoObjectsTest()
             break
         end
         --------cclog("object: %x", dict)
-        
+
         local key = "x"
         local x = dict["x"]
         key = "y"
@@ -628,7 +628,7 @@ local function TMXIsoObjectsTest()
         local width = dict["width"]--dynamic_cast<NSNumber*>(dict:objectForKey("width")):getNumber()
         key = "height"
         local height = dict["height"]--dynamic_cast<NSNumber*>(dict:objectForKey("height")):getNumber()
-        
+
         local color = cc.c4f(1,1,1,1)
         drawNode:drawLine( cc.p(x, y), cc.p((x+width), y), color)
         drawNode:drawLine( cc.p((x+width), y), cc.p((x+width), (y+height)), color)
@@ -990,7 +990,7 @@ local function TMXOrthoFlipRunTimeTest()
 
         local map = ret:getChildByTag(kTagTileMap)
         local layer = map:getLayer("Layer 0")
-        
+
         local tileCoord = cc.p(1, 10)
         local flags = 0
         local GID, flags = layer:getTileGIDAt(tileCoord, flags)
@@ -1001,13 +1001,13 @@ local function TMXOrthoFlipRunTimeTest()
         end
         layer:setTileGID(GID, tileCoord, flags)
 
-        tileCoord = cc.p(1,8)    
+        tileCoord = cc.p(1,8)
         GID, flags = layer:getTileGIDAt(tileCoord, flags)
-        if 0 ~= bit._and(flags, cc.TMX_TILE_VERTICAL_FLAG) then 
+        if 0 ~= bit._and(flags, cc.TMX_TILE_VERTICAL_FLAG) then
             flags = bit._and(flags, bit._not(cc.TMX_TILE_VERTICAL_FLAG))
         else
             flags = bit._or(flags, cc.TMX_TILE_VERTICAL_FLAG)
-        end 
+        end
         layer:setTileGID(GID ,tileCoord, flags)
 
         tileCoord = cc.p(2,8)
@@ -1017,8 +1017,8 @@ local function TMXOrthoFlipRunTimeTest()
             flags = bit._and(flags, bit._not(cc.TMX_TILE_HORIZONTAL_FLAG))
         else
             flags = bit._or(flags, cc.TMX_TILE_HORIZONTAL_FLAG)
-        end 
-        layer:setTileGID(GID, tileCoord, flags) 
+        end
+        layer:setTileGID(GID, tileCoord, flags)
     end
     local schedulerEntry = nil
     local function onNodeEvent(event)
@@ -1156,7 +1156,7 @@ function FastTiledMapTestMain()
      -- TMXGIDObjectsTestNew,
     }
     Helper.index = 1
-    
+
     scene:addChild(TMXIsoZorder())
     scene:addChild(CreateBackMenuItem())
     return scene

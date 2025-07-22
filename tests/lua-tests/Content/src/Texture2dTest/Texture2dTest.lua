@@ -814,7 +814,7 @@ local function TexturePixelFormat()
     -- 4- 16-bit RGB565
 
     local label = ret:getChildByTag(kTagLabel)
-    label:setColor(cc.c3b(16,16,255))
+    label:setColor(cc.color(16,16,255))
 
     local s = cc.Director:getInstance():getWinSize()
 

@@ -627,13 +627,9 @@ void CSLoader::initNode(Node* node, const rapidjson::Value& json)
     if (visible != true)
         node->setVisible(visible);
 
-    if (alpha != 255)
+    if (red != 255 || green != 255 || blue != 255 || alpha != 255)
     {
-        node->setOpacity(alpha);
-    }
-    if (red != 255 || green != 255 || blue != 255)
-    {
-        node->setColor(Color3B(red, green, blue));
+        node->setColor(Color32(red, green, blue, alpha));
     }
 
     node->setTag(tag);

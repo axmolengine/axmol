@@ -82,7 +82,7 @@ local function LayerTestCascadingOpacityA()
 
     layer1:runAction(cc.RepeatForever:create(cc.Sequence:create(cc.FadeTo:create(4, 0),
                                              cc.FadeTo:create(4, 255),
-                                             cc.DelayTime:create(1) 
+                                             cc.DelayTime:create(1)
     )))
 
 
@@ -335,7 +335,7 @@ local function LayerTest1()
         onTouchesMoved(touches, event)
     end
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()    
+    local listener = cc.EventListenerTouchAllAtOnce:create()
     listener:registerScriptHandler(onTouchesBegan,cc.Handler.EVENT_TOUCHES_BEGAN )
     listener:registerScriptHandler(onTouchesMoved,cc.Handler.EVENT_TOUCHES_MOVED )
 
@@ -407,8 +407,8 @@ local function LayerTestBlend()
         local dst = 0
 
         if  blend  then
-            src = ccb.BlendFactor.SRC_ALPHA 
-            dst = ccb.BlendFactor.ONE_MINUS_SRC_ALPHA 
+            src = ccb.BlendFactor.SRC_ALPHA
+            dst = ccb.BlendFactor.ONE_MINUS_SRC_ALPHA
         else
             src = ccb.BlendFactor.ONE_MINUS_DST_COLOR
             dst = ccb.BlendFactor.ZERO
@@ -475,7 +475,7 @@ local function LayerGradient()
         gradient:setVector(diff)
     end
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()    
+    local listener = cc.EventListenerTouchAllAtOnce:create()
     listener:registerScriptHandler(onTouchesMoved,cc.Handler.EVENT_TOUCHES_MOVED )
 
     local eventDispatcher = ret:getEventDispatcher()
@@ -622,8 +622,8 @@ local function LayerExtendedBlendOpacityTest()
     local  layer3 = cc.LayerGradient:create()
     layer3:setContentSize(cc.size(80, 80))
     layer3:setPosition(cc.p(150,140))
-    layer3:setStartColor(cc.c3b(255, 0, 0))
-    layer3:setEndColor(cc.c3b(255, 0, 255))
+    layer3:setStartColor(cc.color(255, 0, 0))
+    layer3:setEndColor(cc.color(255, 0, 255))
     layer3:setStartOpacity(255)
     layer3:setEndOpacity(255)
     layer3:setBlendFunc(cc.blendFunc(ccb.BlendFactor.SRC_ALPHA, ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
@@ -653,7 +653,7 @@ function LayerTestMain()
         LayerExtendedBlendOpacityTest
     }
     Helper.index = 1
-    
+
     scene:addChild(LayerTestCascadingOpacityA())
     scene:addChild(CreateBackMenuItem())
     return scene

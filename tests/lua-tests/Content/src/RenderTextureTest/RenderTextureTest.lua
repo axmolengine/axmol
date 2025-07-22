@@ -70,7 +70,7 @@ local function RenderTextureSave()
             for i = 0,d -1 do
                 -- create a brush image to draw into the texture with
                 local sprite = cc.Sprite:create("Images/fire.png")
-                sprite:setColor(cc.c3b(255, 0, 0))
+                sprite:setColor(cc.color(255, 0, 0))
                 sprite:setOpacity(20)
                 brushes[i + 1] = sprite
             end
@@ -85,7 +85,7 @@ local function RenderTextureSave()
                 brushes[i + 1]:setScale(r)
 
                 -- Use cc.RANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
-                brushes[i + 1]:setColor(cc.c3b(math.random(0, 126) + 128, 255, 255))
+                brushes[i + 1]:setColor(cc.color(math.random(0, 126) + 128, 255, 255))
                 -- Call visit to draw the brush, don't call draw..
                 brushes[i + 1]:visit()
             end
@@ -253,7 +253,7 @@ end
 --     sp9:setVertexZ(-400)
 
 --     sp9:setScale(2)
---     sp9:setColor(cc.c3b::YELLOW)
+--     sp9:setColor(cc.color::YELLOW)
 -- end
 
 -- local function title()
@@ -333,7 +333,7 @@ end
 -- sprite:setOpacity(182)
 -- sprite:setFlippedY(1)
 -- this:addChild(sprite, 999999)
--- sprite:setColor(cc.c3b::GREEN)
+-- sprite:setColor(cc.color::GREEN)
 
 -- sprite:runAction(cc.Sequence:create(cc.FadeTo:create(2, 0),
 --                                    cc.Hide:create(),
@@ -611,7 +611,7 @@ function RenderTextureTestMain()
         -- SpriteRenderTextureBug
     }
     Helper.index = 1
-    
+
     scene:addChild(RenderTextureSave())
     scene:addChild(CreateBackMenuItem())
     return scene

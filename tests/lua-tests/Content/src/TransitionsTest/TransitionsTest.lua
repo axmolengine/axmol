@@ -64,12 +64,12 @@ local function createLayer1()
 
     local titleLabel = cc.Label:createWithTTF(Transition_Name[SceneIdx], s_thonburiPath, 32)
     layer:addChild(titleLabel)
-    titleLabel:setColor(cc.c3b(255,32,32))
+    titleLabel:setColor(cc.color(255,32,32))
     titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
     titleLabel:setPosition(x / 2, y - 100)
 
     local label = cc.Label:createWithTTF("SCENE 1", s_markerFeltFontPath, 38)
-    label:setColor(cc.c3b(16,16,255))
+    label:setColor(cc.color(16,16,255))
     label:setAnchorPoint(cc.p(0.5, 0.5))
     label:setPosition(x / 2, y / 2)
     layer:addChild(label)
@@ -110,11 +110,11 @@ local function createLayer2()
     local titleLabel = cc.Label:createWithTTF(Transition_Name[SceneIdx], s_thonburiPath, 32 )
     layer:addChild(titleLabel)
     titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
-    titleLabel:setColor(cc.c3b(255,32,32))
+    titleLabel:setColor(cc.color(255,32,32))
     titleLabel:setPosition(x / 2, y - 100)
 
     local label = cc.Label:createWithTTF("SCENE 2", s_markerFeltFontPath, 38)
-    label:setColor(cc.c3b(16,16,255))
+    label:setColor(cc.color(16,16,255))
     label:setAnchorPoint(cc.p(0.5, 0.5))
     label:setPosition(x / 2, y / 2)
     layer:addChild(label)
@@ -191,7 +191,7 @@ local function createTransition(index, t, scene)
     elseif index == Transition_Table.CCTransitionFade then
         scene = cc.TransitionFade:create(t, scene)
     elseif index == Transition_Table.FadeWhiteTransition then
-        scene = cc.TransitionFade:create(t, scene, cc.c3b(255, 255, 255))
+        scene = cc.TransitionFade:create(t, scene, cc.color(255, 255, 255))
     elseif index == Transition_Table.FlipXLeftOver then
         scene = cc.TransitionFlipX:create(t, scene, cc.TRANSITION_ORIENTATION_LEFT_OVER )
     elseif index == Transition_Table.FlipXRightOver then

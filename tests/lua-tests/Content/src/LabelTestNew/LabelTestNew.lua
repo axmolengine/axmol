@@ -62,7 +62,7 @@ function LabelFNTColorAndOpacity.create()
     local label2 = cc.Label:createWithBMFont("fonts/bitmapFontTest2.fnt", "Test")
     -- testing anchors
     label2:setAnchorPoint( cc.p(0.5, 0.5) )
-    label2:setColor(cc.c3b(255, 0, 0 ))
+    label2:setColor(cc.color(255, 0, 0 ))
     layer:addChild(label2, 0, kTagBitmapAtlas2)
 
     label2:runAction(repeatAction:clone())
@@ -122,9 +122,9 @@ function LabelFNTSpriteActions.create()
     local layer = cc.Layer:create()
     Helper.initWithLayer(layer)
     LabelFNTSpriteActions.layer = layer
-    
+
     local s = cc.Director:getInstance():getWinSize()
-    
+
     local drawNode = cc.DrawNode:create()
     drawNode:drawLine( cc.p(0, s.height/2), cc.p(s.width, s.height/2), cc.c4f(1,1,1,1))
     drawNode:drawLine( cc.p(s.width/2, 0), cc.p(s.width/2, s.height), cc.c4f(1,1,1,1))
@@ -268,7 +268,7 @@ function LabelFNTColor:create()
     local s = cc.Director:getInstance():getWinSize()
 
     local label = cc.Label:createWithBMFont("fonts/bitmapFontTest5.fnt", "Blue")
-    label:setColor( cc.c3b(0, 0, 255 ))
+    label:setColor( cc.color(0, 0, 255 ))
     layer:addChild(label)
     label:setPosition( cc.p(s.width/2, s.height/4) )
     label:setAnchorPoint( cc.p(0.5, 0.5) )
@@ -277,13 +277,13 @@ function LabelFNTColor:create()
     layer:addChild(label)
     label:setPosition( cc.p(s.width/2, 2*s.height/4) )
     label:setAnchorPoint( cc.p(0.5, 0.5) )
-    label:setColor( cc.c3b(255, 0, 0) )
+    label:setColor( cc.color(255, 0, 0) )
 
     label = cc.Label:createWithBMFont("fonts/bitmapFontTest5.fnt", "Green")
     layer:addChild(label)
     label:setPosition( cc.p(s.width/2, 3*s.height/4) )
     label:setAnchorPoint( cc.p(0.5, 0.5) )
-    label:setColor( cc.c3b(0, 255, 0 ))
+    label:setColor( cc.color(0, 255, 0 ))
     label:setString("Green")
 
     Helper.titleLabel:setString("New Label + .FNT file")
@@ -481,7 +481,7 @@ end
 --
 --------------------------------------------------------------------
 local LabelFNTRetina = {
-    
+
 }
 
 function LabelFNTRetina.create()
@@ -625,7 +625,7 @@ function LabelFNTMultiLineAlignment.create()
     stringMenu:addChild(mixed)
     stringMenu:alignItemsVertically()
 
-    longSentences:setColor(cc.c3b(255, 0, 0))
+    longSentences:setColor(cc.color(255, 0, 0))
     LabelFNTMultiLineAlignment._pLastSentenceItem = longSentences
 
     longSentences:setTag(LongSentences)
@@ -648,7 +648,7 @@ function LabelFNTMultiLineAlignment.create()
 
     alignmentMenu:alignItemsHorizontallyWithPadding(alignmentItemPadding)
 
-    center:setColor(cc.c3b(255, 0, 0))
+    center:setColor(cc.color(255, 0, 0))
     LabelFNTMultiLineAlignment._pLastAlignmentItem = center
     left:setTag(LeftAlign)
     center:setTag(CenterAlign)
@@ -692,7 +692,7 @@ function LabelFNTMultiLineAlignment.create()
         local location = touches[1]:getLocationInView()
 
         LabelFNTMultiLineAlignment._pArrowsShouldRetain:setPosition(
-            math.max(math.min(location.x, ArrowsMax*winSize.width), ArrowsMin*winSize.width), 
+            math.max(math.min(location.x, ArrowsMax*winSize.width), ArrowsMin*winSize.width),
             LabelFNTMultiLineAlignment._pArrowsShouldRetain:getPositionY())
 
         local labelWidth = math.abs(LabelFNTMultiLineAlignment._pArrowsShouldRetain:getPositionX() - LabelFNTMultiLineAlignment._pLabelShouldRetain:getPositionX()) * 2
@@ -706,7 +706,7 @@ function LabelFNTMultiLineAlignment.create()
         LabelFNTMultiLineAlignment._pArrowsBarShouldRetain:setVisible(false)
     end
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()    
+    local listener = cc.EventListenerTouchAllAtOnce:create()
     listener:registerScriptHandler(onTouchesBegan,cc.Handler.EVENT_TOUCHES_BEGAN )
     listener:registerScriptHandler(onTouchesMoved,cc.Handler.EVENT_TOUCHES_MOVED )
     listener:registerScriptHandler(onTouchesEnded,cc.Handler.EVENT_TOUCHES_ENDED )
@@ -729,8 +729,8 @@ end
 
 function LabelFNTMultiLineAlignment.stringChanged(tag, sender)
     local item = sender
-    item:setColor(cc.c3b(255, 0, 0))
-    LabelFNTMultiLineAlignment._pLastAlignmentItem:setColor(cc.c3b(255, 255, 255))
+    item:setColor(cc.color(255, 0, 0))
+    LabelFNTMultiLineAlignment._pLastAlignmentItem:setColor(cc.color(255, 255, 255))
     LabelFNTMultiLineAlignment._pLastAlignmentItem = item
 
     if item:getTag() == LongSentences then
@@ -747,8 +747,8 @@ end
 function LabelFNTMultiLineAlignment.alignmentChanged(tag, sender)
     -- cclog("LabelFNTMultiLineAlignment.alignmentChanged, tag:"..tag)
     local item = sender
-    item:setColor(cc.c3b(255, 0, 0))
-    LabelFNTMultiLineAlignment._pLastAlignmentItem:setColor(cc.c3b(255, 255, 255))
+    item:setColor(cc.color(255, 0, 0))
+    LabelFNTMultiLineAlignment._pLastAlignmentItem:setColor(cc.color(255, 255, 255))
     LabelFNTMultiLineAlignment._pLastAlignmentItem = item
 
     if tag == LeftAlign then
@@ -780,17 +780,17 @@ function LabelFNTUNICODELanguages.create()
     Helper.subtitleLabel:setString("You should see 3 different labels:\nIn Spanish, Chinese, and Japanese")
 
     local s = cc.Director:getInstance():getWinSize()
-    
+
     local label1 = cc.Label:createWithBMFont("fonts/arial-unicode-26.fnt", "Buen día", cc.TEXT_ALIGNMENT_CENTER, 200)
     label1:setAnchorPoint(cc.p(0.5,0.5))
     layer:addChild(label1)
     label1:setPosition(cc.p(s.width/2, s.height/4*3))
-    
+
     local label2 = cc.Label:createWithBMFont("fonts/arial-unicode-26.fnt", "美好的一天")
     label2:setAnchorPoint(cc.p(0.5,0.5))
     layer:addChild(label2)
     label2:setPosition(cc.p(s.width/2, s.height/4*2))
-    
+
     local label3 = cc.Label:createWithBMFont("fonts/arial-unicode-26.fnt", "良い一日を")
     label3:setAnchorPoint(cc.p(0.5,0.5))
     layer:addChild(label3)
@@ -817,12 +817,12 @@ function LabelTTFAlignmentNew.create()
     ttf0:setPosition(cc.p(s.width/2,(s.height/6)*2 - 30))
     ttf0:setAnchorPoint(cc.p(0.5,0.5))
     layer:addChild(ttf0)
-    
+
     local ttf1 = cc.Label:createWithTTF(ttfConfig, "Alignment 1\nnew line", cc.TEXT_ALIGNMENT_CENTER)
     ttf1:setPosition(cc.p(s.width/2,(s.height/6)*3 - 30))
     ttf1:setAnchorPoint(cc.p(0.5,0.5))
     layer:addChild(ttf1)
-    
+
     local ttf2 = cc.Label:createWithTTF(ttfConfig, "Alignment 2\nnew line", cc.TEXT_ALIGNMENT_RIGHT)
     ttf2:setPosition(cc.p(s.width/2,(s.height/6)*4 - 30))
     ttf2:setAnchorPoint(cc.p(0.5,0.5))
@@ -850,17 +850,17 @@ function LabelTTFUnicodeNew.create()
     ttfConfig.fontFilePath="fonts/arial.ttf"
     ttfConfig.fontSize=23
     ttfConfig.glyphs=cc.GLYPHCOLLECTION_ASCII
-    
+
     local label1 =  cc.Label:createWithTTF(ttfConfig,"Buen día, ¿cómo te llamas?", cc.TEXT_ALIGNMENT_CENTER, s.width)
     label1:setAnchorPoint(cc.p(0.5,0.5))
     label1:setPosition(cc.p(s.width/2, vSize - vStep * 4.5))
     layer:addChild(label1)
-    
+
     local label2 = cc.Label:createWithTTF(ttfConfig, "In welcher Straße haben Sie gelebt?", cc.TEXT_ALIGNMENT_CENTER, s.width)
     label2:setAnchorPoint(cc.p(0.5,0.5))
     layer:addChild(label2)
     label2:setPosition(cc.p(s.width/2, vSize - vStep * 5.5))
-    
+
     ttfConfig.fontFilePath = "fonts/HKYuanMini.ttf"
     ttfConfig.glyphs = cc.GLYPHCOLLECTION_CUSTOM
     ttfConfig.customGlyphs = "美好的一天"
@@ -884,16 +884,16 @@ function LabelFNTBounds.create()
     Helper.initWithLayer(layer)
     Helper.titleLabel:setString("New Label + .FNT + Bounds")
     Helper.subtitleLabel:setString("You should see string enclosed by a box")
-    
+
     local s = cc.Director:getInstance():getWinSize()
-    
+
     local colorlayer = cc.LayerColor:create(cc.c4b(128,128,128,255))
     layer:addChild(colorlayer, -10)
-    
+
     -- cc.LabelBMFont
     local label1 = cc.Label:createWithBMFont("fonts/boundsTestFont.fnt", "Testing Glyph Designer", cc.TEXT_ALIGNMENT_CENTER, s.width)
     label1:setAnchorPoint(cc.p(0.5, 0.5))
-    
+
     layer:addChild(label1)
     label1:setPosition(cc.p(s.width/2, s.height/2))
     return layer
@@ -902,12 +902,12 @@ end
 function LabelFNTBounds.draw()
     -- cc.size labelSize = label1:getContentSize()
     -- cc.size origin = cc.Director:getInstance():getWinSize()
-    
+
     -- origin.width = origin.width / 2 - (labelSize.width / 2)
     -- origin.height = origin.height / 2 - (labelSize.height / 2)
-    
+
     -- cc.p vertices[4]=
-    
+
     --     cc.p(origin.width, origin.height),
     --     cc.p(labelSize.width + origin.width, origin.height),
     --     cc.p(labelSize.width + origin.width, labelSize.height + origin.height),
@@ -1030,7 +1030,7 @@ function LabelTTFCJKWrappingTest.create()
     ttfConfig.glyphs = cc.GLYPHCOLLECTION_DYNAMIC
     ttfConfig.customGlyphs = nil
     ttfConfig.distanceFieldEnabled = false
-    
+
     local drawNode = cc.DrawNode:create()
     drawNode:setAnchorPoint(cc.p(0, 0))
     layer:addChild(drawNode)
@@ -1040,7 +1040,7 @@ function LabelTTFCJKWrappingTest.create()
     drawNode:drawSegment(
         cc.p(size.width * 0.85, size.height * 0.8),
         cc.p(size.width * 0.85, 0), 1, cc.c4f(1, 0, 0, 1))
-    
+
     local label1 = cc.Label:createWithTTF(
         ttfConfig, "你好，Axmol Label。",
         cc.TEXT_ALIGNMENT_LEFT, size.width * 0.75)
@@ -1048,7 +1048,7 @@ function LabelTTFCJKWrappingTest.create()
     label1:setPosition(cc.p(size.width * 0.1, size.height * 0.6))
     label1:setAnchorPoint(cc.p(0, 0.5))
     layer:addChild(label1)
-    
+
     local label2 = cc.Label:createWithTTF(
         ttfConfig, "早上好，Axmol Label。",
         cc.TEXT_ALIGNMENT_LEFT, size.width * 0.75)
@@ -1056,7 +1056,7 @@ function LabelTTFCJKWrappingTest.create()
     label2:setPosition(cc.p(size.width * 0.1, size.height * 0.4))
     label2:setAnchorPoint(cc.p(0, 0.5))
     layer:addChild(label2)
-    
+
     local label3 = cc.Label:createWithTTF(
         ttfConfig, "美好的一天啊美好的一天啊美好的一天啊",
         cc.TEXT_ALIGNMENT_LEFT, size.width * 0.75)
@@ -1081,7 +1081,7 @@ function LabelTTFFontsTestNew.create()
 
     local s = cc.Director:getInstance():getWinSize()
 
-    local ttfPaths = 
+    local ttfPaths =
     {
         "fonts/A Damn Mess.ttf",
         "fonts/Abberancy.ttf",
@@ -1100,13 +1100,13 @@ function LabelTTFFontsTestNew.create()
         if nil ~= label then
             label:setPosition( cc.p(s.width/2, ((s.height * 0.6)/#(ttfPaths) * (i -1)) + (s.height/5)))
             layer:addChild(label)
-            
+
             label:setAnchorPoint(cc.p(0.5, 0.5))
         else
             print(string.format("ERROR: Cannot load: %s",ttfPaths[i]))
         end
     end
-    
+
     return layer
 end
 
@@ -1122,7 +1122,7 @@ function LabelBMFontTestNew.create()
     Helper.subtitleLabel:setString("Uses the new Label with .FNT file")
 
     local s = cc.Director:getInstance():getWinSize()
-    
+
     local label1 = cc.Label:createWithBMFont("fonts/bitmapFontTest2.fnt", "Hello World, this is testing the new Label using fnt file", cc.TEXT_ALIGNMENT_CENTER, s.width)
     label1:setAnchorPoint(cc.p(0.5,0.5))
     label1:setPosition(cc.p(s.width/2, s.height/2))
@@ -1148,7 +1148,7 @@ function LabelTTFDistanceField.create()
     ttfConfig.glyphs   = cc.GLYPHCOLLECTION_DYNAMIC
     ttfConfig.customGlyphs = nil
     ttfConfig.distanceFieldEnabled = true
-    
+
     local label1 = cc.Label:createWithTTF(ttfConfig,"Distance Field",cc.TEXT_ALIGNMENT_CENTER,s.width)
     label1:setAnchorPoint(cc.p(0.5,0.5))
     label1:setPosition(cc.p(s.width/2, s.height/2))
@@ -1190,7 +1190,7 @@ function LabelOutlineAndGlowTest.create()
     ttfConfig.customGlyphs = nil
     ttfConfig.distanceFieldEnabled = true
     ttfConfig.outlineSize = 0
-    
+
     local label1 = cc.Label:createWithTTF(ttfConfig,"Glow",cc.TEXT_ALIGNMENT_CENTER,s.width)
     label1:setAnchorPoint(cc.p(0.5,0.5))
     label1:setPosition(cc.p(s.width/2, s.height * 0.7))
@@ -1333,7 +1333,7 @@ function LabelShadowTest.create()
 
     local shadowLabelBMFont = cc.Label:createWithBMFont("fonts/bitmapFontTest.fnt", "BMFont:Shadow")
     shadowLabelBMFont:setPosition( cc.p(size.width/2, size.height*0.35) )
-    shadowLabelBMFont:setColor(cc.c3b(255, 0, 0))
+    shadowLabelBMFont:setColor(cc.color(255, 0, 0))
     shadowLabelBMFont:enableShadow(cc.c4b(0, 255, 0, 255))
     layer:addChild(shadowLabelBMFont)
 
@@ -1395,7 +1395,7 @@ function LabelCharMapColorTest.create()
     layer:addChild(label2, 0, kTagSprite2)
     label2:setAnchorPoint(cc.p(0.0, 0.0))
     label2:setPosition( cc.p(10, 200) )
-    label2:setColor( cc.c3b(255, 0, 0) )
+    label2:setColor( cc.color(255, 0, 0) )
 
     local fade = cc.FadeOut:create(1.0)
     local fade_in = fade:reverse()
@@ -1422,7 +1422,7 @@ function LabelCharMapColorTest.create()
     local function onNodeEvent(event)
         if tag == "exit" then
             layer:unscheduleUpdate()
-        end 
+        end
     end
 
 
@@ -1464,7 +1464,7 @@ end
 ----- LabelAlignmentTest
 --------------------------------------------------------
 
-local LabelAlignmentTest = 
+local LabelAlignmentTest =
 {
     _layer       = nil,
     _label      = nil,
@@ -1547,7 +1547,7 @@ function LabelAlignmentTest.updateAlignment()
         LabelAlignmentTest._label:setHorizontalAlignment(LabelAlignmentTest._horizAlign)
         LabelAlignmentTest._label:setVerticalAlignment(LabelAlignmentTest._vertAlign)
         LabelAlignmentTest._label:setString(LabelAlignmentTest.getCurrentAlignment())
-    end 
+    end
 end
 
 function LabelAlignmentTest.setAlignmentLeft(sender)
@@ -1650,13 +1650,13 @@ function LabelTTFOldNew.create()
     local label1 = cc.Label:createWithSystemFont("Axmol Label Test", "arial", 24)
     layer:addChild(label1, 0, kTagBitmapAtlas1)
     label1:setPosition(cc.p(s.width/2, delta * 2))
-    label1:setColor(cc.c3b(255, 0, 0))
+    label1:setColor(cc.color(255, 0, 0))
 
     local labelSize = label1:getContentSize()
     local origin    = cc.Director:getInstance():getWinSize()
     origin.width = origin.width   / 2 - (labelSize.width / 2)
     origin.height = origin.height / 2 - (labelSize.height / 2)
-    local vertices = 
+    local vertices =
     {
         cc.p(origin.width, origin.height),
         cc.p(labelSize.width + origin.width, origin.height),
@@ -1735,7 +1735,7 @@ function LabelTestNew()
         LabelIssue4428Test.create,
     }
     Helper.index = 1
-    
+
     scene:addChild(LabelFNTColorAndOpacity.create())
     scene:addChild(CreateBackMenuItem())
     return scene

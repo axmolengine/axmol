@@ -350,7 +350,7 @@ void PageView::setIndicatorEnabled(bool enabled)
         _indicator = PageViewIndicator::create();
         _indicator->setDirection(getDirection());
         addProtectedChild(_indicator, 10000);
-        setIndicatorSelectedIndexColor(Color3B(100, 100, 255));
+        setIndicatorSelectedIndexColor(Color32(100, 100, 255, 255));
         refreshIndicatorPosition();
     }
 }
@@ -396,7 +396,7 @@ float PageView::getIndicatorSpaceBetweenIndexNodes() const
     return _indicator->getSpaceBetweenIndexNodes();
 }
 
-void PageView::setIndicatorSelectedIndexColor(const Color3B& color)
+void PageView::setIndicatorSelectedIndexColor(const Color32& color)
 {
     if (_indicator != nullptr)
     {
@@ -404,13 +404,13 @@ void PageView::setIndicatorSelectedIndexColor(const Color3B& color)
     }
 }
 
-const Color3B& PageView::getIndicatorSelectedIndexColor() const
+const Color32& PageView::getIndicatorSelectedIndexColor() const
 {
     AXASSERT(_indicator != nullptr, "");
     return _indicator->getSelectedIndexColor();
 }
 
-void PageView::setIndicatorIndexNodesColor(const Color3B& color)
+void PageView::setIndicatorIndexNodesColor(const Color32& color)
 {
     if (_indicator != nullptr)
     {
@@ -418,7 +418,7 @@ void PageView::setIndicatorIndexNodesColor(const Color3B& color)
     }
 }
 
-const Color3B& PageView::getIndicatorIndexNodesColor() const
+const Color32& PageView::getIndicatorIndexNodesColor() const
 {
     AXASSERT(_indicator != nullptr, "");
     return _indicator->getIndexNodesColor();

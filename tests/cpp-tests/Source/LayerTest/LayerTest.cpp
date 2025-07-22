@@ -214,11 +214,11 @@ void LayerTestCascadingColorA::onEnter()
     label->setPosition(Vec2(s.width / 2, s.height / 2));
 
     layer1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(6, 255, 0, 255), TintTo::create(6, 255, 255, 255), DelayTime::create(1), nullptr)));
+        TintTo::create(6, Color32(255, 0, 255)), TintTo::create(6, Color32(255, 255, 255)), DelayTime::create(1), nullptr)));
 
     sister1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(2, 255, 255, 0), TintTo::create(2, 255, 255, 255), TintTo::create(2, 0, 255, 255),
-        TintTo::create(2, 255, 255, 255), TintTo::create(2, 255, 0, 255), TintTo::create(2, 255, 255, 255),
+        TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(0, 255, 255)),
+        TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
         DelayTime::create(1), nullptr)));
 
     // Enable cascading in scene
@@ -253,11 +253,11 @@ void LayerTestCascadingColorB::onEnter()
     label->setPosition(Vec2(s.width / 2, 0.0f));
 
     layer1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(6, 255, 0, 255), TintTo::create(6, 255, 255, 255), DelayTime::create(1), nullptr)));
+        TintTo::create(6, Color32(255, 0, 255)), TintTo::create(6, Color32(255, 255, 255)), DelayTime::create(1), nullptr)));
 
     sister1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(2, 255, 255, 0), TintTo::create(2, 255, 255, 255), TintTo::create(2, 0, 255, 255),
-        TintTo::create(2, 255, 255, 255), TintTo::create(2, 255, 0, 255), TintTo::create(2, 255, 255, 255),
+        TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(0, 255, 255)),
+        TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
         DelayTime::create(1), nullptr)));
 
     // Enable cascading in scene
@@ -292,11 +292,11 @@ void LayerTestCascadingColorC::onEnter()
     label->setPosition(Vec2(s.width / 2, 0.0f));
 
     layer1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(6, 255, 0, 255), TintTo::create(6, 255, 255, 255), DelayTime::create(1), nullptr)));
+        TintTo::create(6, Color32(255, 0, 255)), TintTo::create(6, Color32(255, 255, 255)), DelayTime::create(1), nullptr)));
 
     sister1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(2, 255, 255, 0), TintTo::create(2, 255, 255, 255), TintTo::create(2, 0, 255, 255),
-        TintTo::create(2, 255, 255, 255), TintTo::create(2, 255, 0, 255), TintTo::create(2, 255, 255, 255),
+        TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(0, 255, 255)),
+        TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
         DelayTime::create(1), nullptr)));
 }
 
@@ -693,8 +693,8 @@ LayerExtendedBlendOpacityTest::LayerExtendedBlendOpacityTest()
     auto layer3 = LayerGradient::create();
     layer3->setContentSize(Size(80.0f, 80.0f));
     layer3->setPosition(Vec2(150.0f, 140.0f));
-    layer3->setStartColor(Color3B(255, 0, 0));
-    layer3->setEndColor(Color3B(255, 0, 255));
+    layer3->setStartColor(Color32(255, 0, 0));
+    layer3->setEndColor(Color32(255, 0, 255));
     layer3->setStartOpacity(255);
     layer3->setEndOpacity(255);
     layer3->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
@@ -875,10 +875,10 @@ void LayerRadialGradientTest::listviewCallback(ax::Object* sender, ax::ui::ListV
     // clear all text to white
     auto listview = static_cast<ax::ui::ListView*>(sender);
     for (auto&& item : listview->getItems())
-        static_cast<ax::ui::Text*>(item)->setColor(ax::Color3B::WHITE);
+        static_cast<ax::ui::Text*>(item)->setColor(ax::Color32::WHITE);
 
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
-    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
+    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color32::RED);
 
     int percent = 100;
     auto slider = static_cast<ax::ui::Slider*>(getChildByTag(101));
@@ -952,7 +952,7 @@ ax::ui::ListView* LayerRadialGradientTest::createListView()
 
     auto scale = ax::ui::Text::create();
     scale->setString("scale[0-2]");
-    scale->setColor(ax::Color3B::RED);  // default seleted item
+    scale->setColor(ax::Color32::RED);  // default seleted item
     scale->setTouchEnabled(true);
     listview->pushBackCustomItem(scale);
 

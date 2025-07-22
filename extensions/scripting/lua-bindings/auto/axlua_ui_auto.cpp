@@ -5007,12 +5007,12 @@ int lua_ax_ui_Layout_setBackGroundColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            ax::Color3B arg0;
-            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColor");
+            ax::Color32 arg0;
+            ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColor");
 
             if (!ok) { break; }
-            ax::Color3B arg1;
-            ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.Layout:setBackGroundColor");
+            ax::Color32 arg1;
+            ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.Layout:setBackGroundColor");
 
             if (!ok) { break; }
             cobj->setBackGroundColor(arg0, arg1);
@@ -5023,8 +5023,8 @@ int lua_ax_ui_Layout_setBackGroundColor(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            ax::Color3B arg0;
-            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColor");
+            ax::Color32 arg0;
+            ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColor");
 
             if (!ok) { break; }
             cobj->setBackGroundColor(arg0);
@@ -5077,7 +5077,7 @@ int lua_ax_ui_Layout_getBackGroundColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getBackGroundColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Layout:getBackGroundColor",argc, 0);
@@ -5124,7 +5124,7 @@ int lua_ax_ui_Layout_getBackGroundStartColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getBackGroundStartColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Layout:getBackGroundStartColor",argc, 0);
@@ -5171,7 +5171,7 @@ int lua_ax_ui_Layout_getBackGroundEndColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getBackGroundEndColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Layout:getBackGroundEndColor",argc, 0);
@@ -5406,9 +5406,9 @@ int lua_ax_ui_Layout_setBackGroundImageColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.Layout:setBackGroundImageColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Layout:setBackGroundImageColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setBackGroundImageColor'", nullptr);
@@ -5512,7 +5512,7 @@ int lua_ax_ui_Layout_getBackGroundImageColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getBackGroundImageColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Layout:getBackGroundImageColor",argc, 0);
@@ -7410,9 +7410,9 @@ int lua_ax_ui_Button_setTitleColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.Button:setTitleColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Button:setTitleColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_setTitleColor'", nullptr);
@@ -7466,7 +7466,7 @@ int lua_ax_ui_Button_getTitleColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getTitleColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getTitleColor",argc, 0);
@@ -17340,9 +17340,9 @@ int lua_ax_ui_ScrollView_setScrollBarColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setScrollBarColor'", nullptr);
@@ -17396,7 +17396,7 @@ int lua_ax_ui_ScrollView_getScrollBarColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getScrollBarColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ScrollView:getScrollBarColor",argc, 0);
@@ -22546,14 +22546,18 @@ int lua_ax_ui_TextField_setPlaceHolderColor(lua_State* tolua_S)
     int argc = 0;
     ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -22561,32 +22565,23 @@ int lua_ax_ui_TextField_setPlaceHolderColor(lua_State* tolua_S)
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 1) {
-            ax::Color32 arg0;
-            ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.TextField:setPlaceHolderColor");
+    if (argc == 1) 
+    {
+        ax::Color32 arg0;
 
-            if (!ok) { break; }
-            cobj->setPlaceHolderColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.TextField:setPlaceHolderColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setPlaceHolderColor'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            ax::Color3B arg0;
-            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.TextField:setPlaceHolderColor");
-
-            if (!ok) { break; }
-            cobj->setPlaceHolderColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axui.TextField:setPlaceHolderColor",argc, 1);
+        cobj->setPlaceHolderColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TextField:setPlaceHolderColor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -26005,9 +26000,9 @@ int lua_ax_ui_PageView_setIndicatorSelectedIndexColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.PageView:setIndicatorSelectedIndexColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.PageView:setIndicatorSelectedIndexColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setIndicatorSelectedIndexColor'", nullptr);
@@ -26061,7 +26056,7 @@ int lua_ax_ui_PageView_getIndicatorSelectedIndexColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getIndicatorSelectedIndexColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.PageView:getIndicatorSelectedIndexColor",argc, 0);
@@ -26102,9 +26097,9 @@ int lua_ax_ui_PageView_setIndicatorIndexNodesColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.PageView:setIndicatorIndexNodesColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.PageView:setIndicatorIndexNodesColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setIndicatorIndexNodesColor'", nullptr);
@@ -26158,7 +26153,7 @@ int lua_ax_ui_PageView_getIndicatorIndexNodesColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getIndicatorIndexNodesColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.PageView:getIndicatorIndexNodesColor",argc, 0);
@@ -27089,27 +27084,24 @@ int lua_ax_ui_RichElement_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3) 
+    if (argc == 2) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElement:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElement:init");
-
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElement:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElement:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElement_init'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->init(arg0, arg1, arg2);
+        auto&& ret = cobj->init(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElement:init",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElement:init",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -27197,9 +27189,9 @@ int lua_ax_ui_RichElement_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.RichElement:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.RichElement:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElement_setColor'", nullptr);
@@ -27267,32 +27259,64 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 8) 
+    if (argc == 7) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 8) 
+    {
+        int arg0;
+        ax::Color32 arg1;
+        std::string_view arg2;
+        std::string_view arg3;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
 
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
+
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:init");
+
+        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
+
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
+
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27305,32 +27329,32 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 9) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27343,35 +27367,35 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 10) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27384,38 +27408,38 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 11) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
+        ax::Vec2 arg10;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:init");
+        ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27428,41 +27452,41 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 12) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
-        ax::Vec2 arg11;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
+        ax::Vec2 arg10;
+        int arg11;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:init");
+        ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:init");
 
-        ok &= luaval_to_vec2(tolua_S, 13, &arg11, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27475,44 +27499,44 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 13) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
-        ax::Vec2 arg11;
-        int arg12;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
+        ax::Vec2 arg10;
+        int arg11;
+        ax::Color32 arg12;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:init");
+        ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:init");
 
-        ok &= luaval_to_vec2(tolua_S, 13, &arg11, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 14,(int *)&arg12, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 14, &arg12, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27525,47 +27549,47 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 14) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
-        ax::Vec2 arg11;
-        int arg12;
-        ax::Color3B arg13;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
+        ax::Vec2 arg10;
+        int arg11;
+        ax::Color32 arg12;
+        std::string_view arg13;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:init");
+        ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:init");
 
-        ok &= luaval_to_vec2(tolua_S, 13, &arg11, "axui.RichElementText:init");
+        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 14,(int *)&arg12, "axui.RichElementText:init");
+        ok &=luaval_to_color32(tolua_S, 14, &arg12, "axui.RichElementText:init");
 
-        ok &= luaval_to_color3b(tolua_S, 15, &arg13, "axui.RichElementText:init");
+        ok &= luaval_to_std_string_view(tolua_S, 15,&arg13, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27575,63 +27599,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 15) 
-    {
-        int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
-        ax::Vec2 arg11;
-        int arg12;
-        ax::Color3B arg13;
-        std::string_view arg14;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
-
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:init");
-
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:init");
-
-        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
-
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:init");
-
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:init");
-
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:init");
-
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:init");
-
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:init");
-
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:init");
-
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:init");
-
-        ok &= luaval_to_vec2(tolua_S, 13, &arg11, "axui.RichElementText:init");
-
-        ok &= luaval_to_int32(tolua_S, 14,(int *)&arg12, "axui.RichElementText:init");
-
-        ok &= luaval_to_color3b(tolua_S, 15, &arg13, "axui.RichElementText:init");
-
-        ok &= luaval_to_std_string_view(tolua_S, 16,&arg14, "axui.RichElementText:init");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementText:init",argc, 8);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementText:init",argc, 7);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -27656,20 +27624,41 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S) - 1;
 
+    if (argc == 5)
+    {
+        int arg0;
+        ax::Color32 arg1;
+        std::string_view arg2;
+        std::string_view arg3;
+        double arg4;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
+        return 1;
+    }
     if (argc == 6)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
+        double arg4;
+        unsigned int arg5;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27682,19 +27671,19 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 7)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27707,21 +27696,21 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 8)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27734,23 +27723,23 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 9)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27763,25 +27752,25 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 10)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27794,27 +27783,27 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 11)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
+        ax::Vec2 arg10;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
+        ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27827,29 +27816,29 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 12)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
-        ax::Vec2 arg11;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
+        ax::Vec2 arg10;
+        int arg11;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:create");
-        ok &= luaval_to_vec2(tolua_S, 13, &arg11, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
+        ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27862,31 +27851,31 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 13)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
-        ax::Vec2 arg11;
-        int arg12;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
+        ax::Vec2 arg10;
+        int arg11;
+        ax::Color32 arg12;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:create");
-        ok &= luaval_to_vec2(tolua_S, 13, &arg11, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 14,(int *)&arg12, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
+        ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 14, &arg12, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27899,33 +27888,33 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 14)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
-        ax::Vec2 arg11;
-        int arg12;
-        ax::Color3B arg13;
+        double arg4;
+        unsigned int arg5;
+        std::string_view arg6;
+        ax::Color32 arg7;
+        int arg8;
+        ax::Color32 arg9;
+        ax::Vec2 arg10;
+        int arg11;
+        ax::Color32 arg12;
+        std::string_view arg13;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:create");
-        ok &= luaval_to_vec2(tolua_S, 13, &arg11, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 14,(int *)&arg12, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 15, &arg13, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
+        ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:create");
+        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:create");
+        ok &=luaval_to_color32(tolua_S, 14, &arg12, "axui.RichElementText:create");
+        ok &= luaval_to_std_string_view(tolua_S, 15,&arg13, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27935,48 +27924,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
-    if (argc == 15)
-    {
-        int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        std::string_view arg3;
-        std::string_view arg4;
-        double arg5;
-        unsigned int arg6;
-        std::string_view arg7;
-        ax::Color3B arg8;
-        int arg9;
-        ax::Color3B arg10;
-        ax::Vec2 arg11;
-        int arg12;
-        ax::Color3B arg13;
-        std::string_view arg14;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 9,&arg7, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 10, &arg8, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 12, &arg10, "axui.RichElementText:create");
-        ok &= luaval_to_vec2(tolua_S, 13, &arg11, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 14,(int *)&arg12, "axui.RichElementText:create");
-        ok &= luaval_to_color3b(tolua_S, 15, &arg13, "axui.RichElementText:create");
-        ok &= luaval_to_std_string_view(tolua_S, 16,&arg14, "axui.RichElementText:create");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
-        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementText:create",argc, 6);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementText:create",argc, 5);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -28069,18 +28017,38 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
+    if (argc == 3) 
+    {
+        int arg0;
+        ax::Color32 arg1;
+        std::string_view arg2;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
+
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:init");
+
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:init");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_init'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->init(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
     if (argc == 4) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:init");
         if(!ok)
@@ -28095,20 +28063,20 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
     if (argc == 5) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
+        ax::ui::Widget::TextureResType arg4;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementImage:init");
+        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.RichElementImage:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_init'", nullptr);
@@ -28121,23 +28089,23 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
     if (argc == 6) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        ax::ui::Widget::TextureResType arg5;
+        ax::ui::Widget::TextureResType arg4;
+        std::string_view arg5;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:init");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:init");
 
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementImage:init");
+        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.RichElementImage:init");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.RichElementImage:init");
+        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axui.RichElementImage:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_init'", nullptr);
@@ -28147,39 +28115,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 7) 
-    {
-        int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        std::string_view arg3;
-        std::string_view arg4;
-        ax::ui::Widget::TextureResType arg5;
-        std::string_view arg6;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
-
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:init");
-
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:init");
-
-        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:init");
-
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementImage:init");
-
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.RichElementImage:init");
-
-        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementImage:init");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_init'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:init",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:init",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -28554,15 +28490,32 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S) - 1;
 
+    if (argc == 3)
+    {
+        int arg0;
+        ax::Color32 arg1;
+        std::string_view arg2;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ui::RichElementImage::create(arg0, arg1, arg2);
+        object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
+        return 1;
+    }
     if (argc == 4)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:create");
         if(!ok)
         {
@@ -28576,15 +28529,15 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
     if (argc == 5)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
+        ax::ui::Widget::TextureResType arg4;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementImage:create");
+        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.RichElementImage:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_create'", nullptr);
@@ -28597,17 +28550,17 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
     if (argc == 6)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
+        ax::Color32 arg1;
+        std::string_view arg2;
         std::string_view arg3;
-        std::string_view arg4;
-        ax::ui::Widget::TextureResType arg5;
+        ax::ui::Widget::TextureResType arg4;
+        std::string_view arg5;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:create");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementImage:create");
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.RichElementImage:create");
+        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.RichElementImage:create");
+        ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axui.RichElementImage:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_create'", nullptr);
@@ -28617,32 +28570,7 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
         object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
         return 1;
     }
-    if (argc == 7)
-    {
-        int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        std::string_view arg3;
-        std::string_view arg4;
-        ax::ui::Widget::TextureResType arg5;
-        std::string_view arg6;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:create");
-        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementImage:create");
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.RichElementImage:create");
-        ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementImage:create");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_create'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-        object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementImage:create",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementImage:create",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -28742,20 +28670,40 @@ int lua_ax_ui_RichElementCustomNode_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4) 
+    if (argc == 3) 
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        ax::Node* arg3;
+        ax::Color32 arg1;
+        ax::Node* arg2;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:init");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementCustomNode:init");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementCustomNode:init");
 
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementCustomNode:init");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 4, "ax.Node",&arg2, "axui.RichElementCustomNode:init");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementCustomNode_init'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->init(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 4) 
+    {
+        int arg0;
+        ax::Color32 arg1;
+        ax::Node* arg2;
+        std::string_view arg3;
 
-        ok &= luaval_to_object<ax::Node>(tolua_S, 5, "ax.Node",&arg3, "axui.RichElementCustomNode:init");
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:init");
+
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementCustomNode:init");
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 4, "ax.Node",&arg2, "axui.RichElementCustomNode:init");
+
+        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementCustomNode:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementCustomNode_init'", nullptr);
@@ -28765,33 +28713,7 @@ int lua_ax_ui_RichElementCustomNode_init(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 5) 
-    {
-        int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        ax::Node* arg3;
-        std::string_view arg4;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:init");
-
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementCustomNode:init");
-
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementCustomNode:init");
-
-        ok &= luaval_to_object<ax::Node>(tolua_S, 5, "ax.Node",&arg3, "axui.RichElementCustomNode:init");
-
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementCustomNode:init");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementCustomNode_init'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementCustomNode:init",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementCustomNode:init",argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -28816,16 +28738,33 @@ int lua_ax_ui_RichElementCustomNode_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S) - 1;
 
+    if (argc == 3)
+    {
+        int arg0;
+        ax::Color32 arg1;
+        ax::Node* arg2;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementCustomNode:create");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 4, "ax.Node",&arg2, "axui.RichElementCustomNode:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementCustomNode_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ui::RichElementCustomNode::create(arg0, arg1, arg2);
+        object_to_luaval<ax::ui::RichElementCustomNode>(tolua_S, "axui.RichElementCustomNode",(ax::ui::RichElementCustomNode*)ret);
+        return 1;
+    }
     if (argc == 4)
     {
         int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        ax::Node* arg3;
+        ax::Color32 arg1;
+        ax::Node* arg2;
+        std::string_view arg3;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementCustomNode:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementCustomNode:create");
-        ok &= luaval_to_object<ax::Node>(tolua_S, 5, "ax.Node",&arg3, "axui.RichElementCustomNode:create");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementCustomNode:create");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 4, "ax.Node",&arg2, "axui.RichElementCustomNode:create");
+        ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementCustomNode:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementCustomNode_create'", nullptr);
@@ -28835,28 +28774,7 @@ int lua_ax_ui_RichElementCustomNode_create(lua_State* tolua_S)
         object_to_luaval<ax::ui::RichElementCustomNode>(tolua_S, "axui.RichElementCustomNode",(ax::ui::RichElementCustomNode*)ret);
         return 1;
     }
-    if (argc == 5)
-    {
-        int arg0;
-        ax::Color3B arg1;
-        uint16_t arg2;
-        ax::Node* arg3;
-        std::string_view arg4;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:create");
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementCustomNode:create");
-        ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementCustomNode:create");
-        ok &= luaval_to_object<ax::Node>(tolua_S, 5, "ax.Node",&arg3, "axui.RichElementCustomNode:create");
-        ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RichElementCustomNode:create");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementCustomNode_create'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::ui::RichElementCustomNode::create(arg0, arg1, arg2, arg3, arg4);
-        object_to_luaval<ax::ui::RichElementCustomNode>(tolua_S, "axui.RichElementCustomNode",(ax::ui::RichElementCustomNode*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementCustomNode:create",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementCustomNode:create",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -28939,7 +28857,7 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
 
     do 
     {
-        if (argc == 4)
+        if (argc == 3)
         {
             int arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
@@ -28947,30 +28865,8 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
             int arg1;
             ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.RichElementNewLine:create");
             if (!ok) { break; }
-            ax::Color3B arg2;
-            ok &= luaval_to_color3b(tolua_S, 4, &arg2, "axui.RichElementNewLine:create");
-            if (!ok) { break; }
-            uint16_t arg3;
-            ok &= luaval_to_uint16(tolua_S, 5,&arg3, "axui.RichElementNewLine:create");
-            if (!ok) { break; }
-            ax::ui::RichElementNewLine* ret = ax::ui::RichElementNewLine::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<ax::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(ax::ui::RichElementNewLine*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do 
-    {
-        if (argc == 3)
-        {
-            int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
-            if (!ok) { break; }
-            ax::Color3B arg1;
-            ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementNewLine:create");
-            if (!ok) { break; }
-            uint16_t arg2;
-            ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementNewLine:create");
+            ax::Color32 arg2;
+            ok &=luaval_to_color32(tolua_S, 4, &arg2, "axui.RichElementNewLine:create");
             if (!ok) { break; }
             ax::ui::RichElementNewLine* ret = ax::ui::RichElementNewLine::create(arg0, arg1, arg2);
             object_to_luaval<ax::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(ax::ui::RichElementNewLine*)ret);
@@ -28978,7 +28874,23 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "axui.RichElementNewLine:create",argc, 3);
+    do 
+    {
+        if (argc == 2)
+        {
+            int arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            ax::Color32 arg1;
+            ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementNewLine:create");
+            if (!ok) { break; }
+            ax::ui::RichElementNewLine* ret = ax::ui::RichElementNewLine::create(arg0, arg1);
+            object_to_luaval<ax::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(ax::ui::RichElementNewLine*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "axui.RichElementNewLine:create",argc, 2);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
@@ -29718,7 +29630,7 @@ int lua_ax_ui_RichText_getFontColor(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichText_getFontColor3B(lua_State* tolua_S)
+int lua_ax_ui_RichText_getFontColor32(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ui::RichText* cobj = nullptr;
@@ -29738,7 +29650,7 @@ int lua_ax_ui_RichText_getFontColor3B(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getFontColor3B'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getFontColor32'", nullptr);
         return 0;
     }
 #endif
@@ -29748,19 +29660,19 @@ int lua_ax_ui_RichText_getFontColor3B(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getFontColor3B'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getFontColor32'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFontColor3B();
-        color3b_to_luaval(tolua_S, ret);
+        auto&& ret = cobj->getFontColor32();
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getFontColor3B",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getFontColor32",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getFontColor3B'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getFontColor32'.",&tolua_err);
 #endif
 
     return 0;
@@ -30056,7 +29968,7 @@ int lua_ax_ui_RichText_getAnchorFontColor(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichText_getAnchorFontColor3B(lua_State* tolua_S)
+int lua_ax_ui_RichText_getAnchorFontColor32(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ui::RichText* cobj = nullptr;
@@ -30076,7 +29988,7 @@ int lua_ax_ui_RichText_getAnchorFontColor3B(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getAnchorFontColor3B'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getAnchorFontColor32'", nullptr);
         return 0;
     }
 #endif
@@ -30086,19 +29998,19 @@ int lua_ax_ui_RichText_getAnchorFontColor3B(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorFontColor3B'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorFontColor32'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchorFontColor3B();
-        color3b_to_luaval(tolua_S, ret);
+        auto&& ret = cobj->getAnchorFontColor32();
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getAnchorFontColor3B",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getAnchorFontColor32",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getAnchorFontColor3B'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getAnchorFontColor32'.",&tolua_err);
 #endif
 
     return 0;
@@ -30534,11 +30446,11 @@ int lua_ax_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
     if (argc == 2) 
     {
         bool arg0;
-        ax::Color3B arg1;
+        ax::Color32 arg1;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextOutline");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextOutline");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextOutline");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextOutline'", nullptr);
@@ -30551,12 +30463,12 @@ int lua_ax_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
     if (argc == 3) 
     {
         bool arg0;
-        ax::Color3B arg1;
+        ax::Color32 arg1;
         int arg2;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextOutline");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextOutline");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextOutline");
 
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.RichText:setAnchorTextOutline");
         if(!ok)
@@ -30625,7 +30537,7 @@ int lua_ax_ui_RichText_isAnchorTextOutlineEnabled(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichText_getAnchorTextOutlineColor3B(lua_State* tolua_S)
+int lua_ax_ui_RichText_getAnchorTextOutlineColor32(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ui::RichText* cobj = nullptr;
@@ -30645,7 +30557,7 @@ int lua_ax_ui_RichText_getAnchorTextOutlineColor3B(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getAnchorTextOutlineColor3B'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getAnchorTextOutlineColor32'", nullptr);
         return 0;
     }
 #endif
@@ -30655,19 +30567,19 @@ int lua_ax_ui_RichText_getAnchorTextOutlineColor3B(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextOutlineColor3B'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextOutlineColor32'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchorTextOutlineColor3B();
-        color3b_to_luaval(tolua_S, ret);
+        auto&& ret = cobj->getAnchorTextOutlineColor32();
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getAnchorTextOutlineColor3B",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getAnchorTextOutlineColor32",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getAnchorTextOutlineColor3B'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getAnchorTextOutlineColor32'.",&tolua_err);
 #endif
 
     return 0;
@@ -30762,11 +30674,11 @@ int lua_ax_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
     if (argc == 2) 
     {
         bool arg0;
-        ax::Color3B arg1;
+        ax::Color32 arg1;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextShadow'", nullptr);
@@ -30779,12 +30691,12 @@ int lua_ax_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
     if (argc == 3) 
     {
         bool arg0;
-        ax::Color3B arg1;
+        ax::Color32 arg1;
         ax::Vec2 arg2;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "axui.RichText:setAnchorTextShadow");
         if(!ok)
@@ -30799,13 +30711,13 @@ int lua_ax_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
     if (argc == 4) 
     {
         bool arg0;
-        ax::Color3B arg1;
+        ax::Color32 arg1;
         ax::Vec2 arg2;
         int arg3;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "axui.RichText:setAnchorTextShadow");
 
@@ -30876,7 +30788,7 @@ int lua_ax_ui_RichText_isAnchorTextShadowEnabled(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichText_getAnchorTextShadowColor3B(lua_State* tolua_S)
+int lua_ax_ui_RichText_getAnchorTextShadowColor32(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ui::RichText* cobj = nullptr;
@@ -30896,7 +30808,7 @@ int lua_ax_ui_RichText_getAnchorTextShadowColor3B(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getAnchorTextShadowColor3B'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getAnchorTextShadowColor32'", nullptr);
         return 0;
     }
 #endif
@@ -30906,19 +30818,19 @@ int lua_ax_ui_RichText_getAnchorTextShadowColor3B(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextShadowColor3B'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextShadowColor32'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchorTextShadowColor3B();
-        color3b_to_luaval(tolua_S, ret);
+        auto&& ret = cobj->getAnchorTextShadowColor32();
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getAnchorTextShadowColor3B",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getAnchorTextShadowColor32",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getAnchorTextShadowColor3B'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getAnchorTextShadowColor32'.",&tolua_err);
 #endif
 
     return 0;
@@ -31060,11 +30972,11 @@ int lua_ax_ui_RichText_setAnchorTextGlow(lua_State* tolua_S)
     if (argc == 2) 
     {
         bool arg0;
-        ax::Color3B arg1;
+        ax::Color32 arg1;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextGlow");
 
-        ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextGlow");
+        ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextGlow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextGlow'", nullptr);
@@ -31131,7 +31043,7 @@ int lua_ax_ui_RichText_isAnchorTextGlowEnabled(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichText_getAnchorTextGlowColor3B(lua_State* tolua_S)
+int lua_ax_ui_RichText_getAnchorTextGlowColor32(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ui::RichText* cobj = nullptr;
@@ -31151,7 +31063,7 @@ int lua_ax_ui_RichText_getAnchorTextGlowColor3B(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getAnchorTextGlowColor3B'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getAnchorTextGlowColor32'", nullptr);
         return 0;
     }
 #endif
@@ -31161,19 +31073,19 @@ int lua_ax_ui_RichText_getAnchorTextGlowColor3B(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextGlowColor3B'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextGlowColor32'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchorTextGlowColor3B();
-        color3b_to_luaval(tolua_S, ret);
+        auto&& ret = cobj->getAnchorTextGlowColor32();
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getAnchorTextGlowColor3B",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getAnchorTextGlowColor32",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getAnchorTextGlowColor3B'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getAnchorTextGlowColor32'.",&tolua_err);
 #endif
 
     return 0;
@@ -31271,156 +31183,6 @@ int lua_ax_ui_RichText_getDefaults(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getDefaults'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_ui_RichText_color3BWithString(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ui::RichText* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_color3BWithString'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichText:color3BWithString");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_color3BWithString'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->color3BWithString(arg0);
-        color3b_to_luaval(tolua_S, ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:color3BWithString",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_color3BWithString'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_ui_RichText_stringWithColor3B(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ui::RichText* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_stringWithColor3B'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        ax::Color3B arg0;
-
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.RichText:stringWithColor3B");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_stringWithColor3B'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->stringWithColor3B(arg0);
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:stringWithColor3B",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_stringWithColor3B'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_ui_RichText_stringWithColor32(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ui::RichText* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_stringWithColor32'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        ax::Color32 arg0;
-
-        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.RichText:stringWithColor32");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_stringWithColor32'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->stringWithColor32(arg0);
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:stringWithColor32",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_stringWithColor32'.",&tolua_err);
 #endif
 
     return 0;
@@ -31695,6 +31457,78 @@ int lua_ax_ui_RichText_createWithXML(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_ui_RichText_parseColor32(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichText:parseColor32");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_parseColor32'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ui::RichText::parseColor32(arg0);
+        color32_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichText:parseColor32",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_parseColor32'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_ui_RichText_formatColor32(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::Color32 arg0;
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.RichText:formatColor32");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_formatColor32'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::ui::RichText::formatColor32(arg0);
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichText:formatColor32",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_formatColor32'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_ui_RichText_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -31758,14 +31592,14 @@ int lua_register_ax_ui_RichText(lua_State* tolua_S)
         tolua_function(tolua_S,"getVerticalAlignment",lua_ax_ui_RichText_getVerticalAlignment);
         tolua_function(tolua_S,"setFontColor",lua_ax_ui_RichText_setFontColor);
         tolua_function(tolua_S,"getFontColor",lua_ax_ui_RichText_getFontColor);
-        tolua_function(tolua_S,"getFontColor3B",lua_ax_ui_RichText_getFontColor3B);
+        tolua_function(tolua_S,"getFontColor32",lua_ax_ui_RichText_getFontColor32);
         tolua_function(tolua_S,"setFontSize",lua_ax_ui_RichText_setFontSize);
         tolua_function(tolua_S,"getFontSize",lua_ax_ui_RichText_getFontSize);
         tolua_function(tolua_S,"setFontFace",lua_ax_ui_RichText_setFontFace);
         tolua_function(tolua_S,"getFontFace",lua_ax_ui_RichText_getFontFace);
         tolua_function(tolua_S,"setAnchorFontColor",lua_ax_ui_RichText_setAnchorFontColor);
         tolua_function(tolua_S,"getAnchorFontColor",lua_ax_ui_RichText_getAnchorFontColor);
-        tolua_function(tolua_S,"getAnchorFontColor3B",lua_ax_ui_RichText_getAnchorFontColor3B);
+        tolua_function(tolua_S,"getAnchorFontColor32",lua_ax_ui_RichText_getAnchorFontColor32);
         tolua_function(tolua_S,"setAnchorTextBold",lua_ax_ui_RichText_setAnchorTextBold);
         tolua_function(tolua_S,"isAnchorTextBoldEnabled",lua_ax_ui_RichText_isAnchorTextBoldEnabled);
         tolua_function(tolua_S,"setAnchorTextItalic",lua_ax_ui_RichText_setAnchorTextItalic);
@@ -31776,26 +31610,25 @@ int lua_register_ax_ui_RichText(lua_State* tolua_S)
         tolua_function(tolua_S,"isAnchorTextUnderlineEnabled",lua_ax_ui_RichText_isAnchorTextUnderlineEnabled);
         tolua_function(tolua_S,"setAnchorTextOutline",lua_ax_ui_RichText_setAnchorTextOutline);
         tolua_function(tolua_S,"isAnchorTextOutlineEnabled",lua_ax_ui_RichText_isAnchorTextOutlineEnabled);
-        tolua_function(tolua_S,"getAnchorTextOutlineColor3B",lua_ax_ui_RichText_getAnchorTextOutlineColor3B);
+        tolua_function(tolua_S,"getAnchorTextOutlineColor32",lua_ax_ui_RichText_getAnchorTextOutlineColor32);
         tolua_function(tolua_S,"getAnchorTextOutlineSize",lua_ax_ui_RichText_getAnchorTextOutlineSize);
         tolua_function(tolua_S,"setAnchorTextShadow",lua_ax_ui_RichText_setAnchorTextShadow);
         tolua_function(tolua_S,"isAnchorTextShadowEnabled",lua_ax_ui_RichText_isAnchorTextShadowEnabled);
-        tolua_function(tolua_S,"getAnchorTextShadowColor3B",lua_ax_ui_RichText_getAnchorTextShadowColor3B);
+        tolua_function(tolua_S,"getAnchorTextShadowColor32",lua_ax_ui_RichText_getAnchorTextShadowColor32);
         tolua_function(tolua_S,"getAnchorTextShadowOffset",lua_ax_ui_RichText_getAnchorTextShadowOffset);
         tolua_function(tolua_S,"getAnchorTextShadowBlurRadius",lua_ax_ui_RichText_getAnchorTextShadowBlurRadius);
         tolua_function(tolua_S,"setAnchorTextGlow",lua_ax_ui_RichText_setAnchorTextGlow);
         tolua_function(tolua_S,"isAnchorTextGlowEnabled",lua_ax_ui_RichText_isAnchorTextGlowEnabled);
-        tolua_function(tolua_S,"getAnchorTextGlowColor3B",lua_ax_ui_RichText_getAnchorTextGlowColor3B);
+        tolua_function(tolua_S,"getAnchorTextGlowColor32",lua_ax_ui_RichText_getAnchorTextGlowColor32);
         tolua_function(tolua_S,"setDefaults",lua_ax_ui_RichText_setDefaults);
         tolua_function(tolua_S,"getDefaults",lua_ax_ui_RichText_getDefaults);
-        tolua_function(tolua_S,"color3BWithString",lua_ax_ui_RichText_color3BWithString);
-        tolua_function(tolua_S,"stringWithColor3B",lua_ax_ui_RichText_stringWithColor3B);
-        tolua_function(tolua_S,"stringWithColor32",lua_ax_ui_RichText_stringWithColor32);
         tolua_function(tolua_S,"openUrl",lua_ax_ui_RichText_openUrl);
         tolua_function(tolua_S,"initWithXML",lua_ax_ui_RichText_initWithXML);
         tolua_function(tolua_S,"setString",lua_ax_ui_RichText_setString);
         tolua_function(tolua_S,"create", lua_ax_ui_RichText_create);
         tolua_function(tolua_S,"createWithXML", lua_ax_ui_RichText_createWithXML);
+        tolua_function(tolua_S,"parseColor32", lua_ax_ui_RichText_parseColor32);
+        tolua_function(tolua_S,"formatColor32", lua_ax_ui_RichText_formatColor32);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::ui::RichText).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RichText";
@@ -35446,14 +35279,18 @@ int lua_ax_ui_EditBox_setFontColor(lua_State* tolua_S)
     int argc = 0;
     ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -35461,32 +35298,23 @@ int lua_ax_ui_EditBox_setFontColor(lua_State* tolua_S)
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 1) {
-            ax::Color32 arg0;
-            ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.EditBox:setFontColor");
+    if (argc == 1) 
+    {
+        ax::Color32 arg0;
 
-            if (!ok) { break; }
-            cobj->setFontColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.EditBox:setFontColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setFontColor'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            ax::Color3B arg0;
-            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.EditBox:setFontColor");
-
-            if (!ok) { break; }
-            cobj->setFontColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axui.EditBox:setFontColor",argc, 1);
+        cobj->setFontColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:setFontColor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -35795,14 +35623,18 @@ int lua_ax_ui_EditBox_setPlaceholderFontColor(lua_State* tolua_S)
     int argc = 0;
     ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -35810,32 +35642,23 @@ int lua_ax_ui_EditBox_setPlaceholderFontColor(lua_State* tolua_S)
         return 0;
     }
 #endif
+
     argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 1) {
-            ax::Color32 arg0;
-            ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.EditBox:setPlaceholderFontColor");
+    if (argc == 1) 
+    {
+        ax::Color32 arg0;
 
-            if (!ok) { break; }
-            cobj->setPlaceholderFontColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.EditBox:setPlaceholderFontColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setPlaceholderFontColor'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            ax::Color3B arg0;
-            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.EditBox:setPlaceholderFontColor");
-
-            if (!ok) { break; }
-            cobj->setPlaceholderFontColor(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axui.EditBox:setPlaceholderFontColor",argc, 1);
+        cobj->setPlaceholderFontColor(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:setPlaceholderFontColor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1

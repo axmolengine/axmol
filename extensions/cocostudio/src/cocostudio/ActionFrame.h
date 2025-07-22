@@ -424,14 +424,14 @@ public:
      *
      * @param ccolor the tint action color
      */
-    void setColor(ax::Color3B ccolor);
+    void setColor(ax::Color32 ccolor);
 
     /**
      * Gets the tint action color.
      *
      * @return the tint action color.
      */
-    ax::Color3B getColor();
+    ax::Color32 getColor();
 
     /**
      * Gets the ActionInterval of ActionFrame.
@@ -443,7 +443,7 @@ public:
     virtual ax::ActionInterval* getAction(float duration);
 
 protected:
-    ax::Color3B _color;
+    ax::Color32 _color;
 };
 
 }  // namespace cocostudio

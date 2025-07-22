@@ -137,7 +137,7 @@ SceneTestLayer3 = function()
     local function item0Clicked(tag, pSender)
         local newScene = cc.Scene:create()
         newScene:addChild(SceneTestLayer3())
-        cc.Director:getInstance():pushScene(cc.TransitionFade:create(0.5, newScene, cc.c3b(0,255,255)))
+        cc.Director:getInstance():pushScene(cc.TransitionFade:create(0.5, newScene, cc.color(0,255,255)))
     end
 
     local function item1Clicked(tag, pSender)

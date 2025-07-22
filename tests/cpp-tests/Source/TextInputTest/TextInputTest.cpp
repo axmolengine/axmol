@@ -285,7 +285,7 @@ bool TextFieldTTFActionTest::onTextFieldInsertText(TextFieldTTF* sender, const c
     // create a insert text sprite and do some action
     auto label = Label::createWithSystemFont(text, FONT_NAME, FONT_SIZE);
     this->addChild(label);
-    Color3B color(226, 121, 7);
+    Color32 color(226, 121, 7);
     label->setColor(color);
 
     // move the sprite from top to position

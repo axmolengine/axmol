@@ -40,7 +40,7 @@ bool UITextBMFontTest::init()
         Size widgetSize = _widget->getContentSize();
 
         Text* alert = Text::create("TextBMFont", "TextBMFont", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);

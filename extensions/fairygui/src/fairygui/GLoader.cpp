@@ -108,12 +108,12 @@ const ax::Size & GLoader::getContentSize()
     return _content->getContentSize();
 }
 
-ax::Color3B GLoader::getColor() const
+ax::Color32 GLoader::getColor() const
 {
     return _content->getColor();
 }
 
-void GLoader::setColor(const ax::Color3B& value)
+void GLoader::setColor(const ax::Color32& value)
 {
     _content->setColor(value);
 }
@@ -565,7 +565,7 @@ void GLoader::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     _frame = buffer->readInt();
 
     if (buffer->readBool())
-        setColor((Color3B)buffer->readColor());
+        setColor(buffer->readColor());
     int fillMethod = buffer->readByte();
     if (fillMethod != 0)
     {

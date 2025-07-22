@@ -61,7 +61,7 @@ MotionStreak3D::~MotionStreak3D()
 MotionStreak3D* MotionStreak3D::create(float fade,
                                        float minSeg,
                                        float stroke,
-                                       const Color3B& color,
+                                       const Color32& color,
                                        std::string_view path)
 {
     MotionStreak3D* ret = new MotionStreak3D();
@@ -75,7 +75,7 @@ MotionStreak3D* MotionStreak3D::create(float fade,
     return nullptr;
 }
 
-MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
+MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
     MotionStreak3D* ret = new MotionStreak3D();
     if (ret && ret->initWithFade(fade, minSeg, stroke, color, texture))
@@ -88,7 +88,7 @@ MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, c
     return nullptr;
 }
 
-bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
+bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color32& color, std::string_view path)
 {
     AXASSERT(!path.empty(), "Invalid filename");
 
@@ -96,7 +96,7 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
     return initWithFade(fade, minSeg, stroke, color, texture);
 }
 
-bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
+bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
     Node::setPosition(Vec2::ZERO);
     setAnchorPoint(Vec2::ZERO);
@@ -231,7 +231,7 @@ void MotionStreak3D::setPositionY(float y)
     _positionR.y = y;
 }
 
-void MotionStreak3D::tintWithColor(const Color3B& colors)
+void MotionStreak3D::tintWithColor(const Color32& colors)
 {
     setColor(colors);
 
@@ -362,8 +362,10 @@ void MotionStreak3D::update(float delta)
         _pointState[_nuPoints]    = 1.0f;
 
         // Color assignment
-        _vertexData[_nuPoints * 2].color     = Color32(_displayedColor, 255);
-        _vertexData[_nuPoints * 2 + 1].color = Color32(_displayedColor, 255);
+        auto color32                         = _displayedColor;
+        color32.a                            = 255;
+        _vertexData[_nuPoints * 2].color     = color32;
+        _vertexData[_nuPoints * 2 + 1].color = color32;
 
         // Generate polygon
         {

@@ -26,7 +26,7 @@ struct PhysicsHelper
 
     static b2HexColor tob2HexColor(Color color)
     {
-        Color3B ret(color);
+        Color32 ret{color};
         return (b2HexColor)(static_cast<uint32_t>(ret.r) << 16 | static_cast<uint32_t>(ret.g) << 8 |
                             static_cast<uint32_t>(ret.b));
     }

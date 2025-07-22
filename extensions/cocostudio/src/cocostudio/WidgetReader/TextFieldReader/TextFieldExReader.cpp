@@ -21,11 +21,6 @@ inline Color32 Color32FromFb(const FColor* pColor)
     return Color32(pColor->r(), pColor->g(), pColor->b(), pColor->a());
 }
 
-inline Color3B Color3BFromFb(const FColor* pColor)
-{
-    return Color3B(pColor->r(), pColor->g(), pColor->b());
-}
-
 namespace cocostudio
 {
 static TextFieldExReader* instanceTextFieldExReader = nullptr;
@@ -337,7 +332,7 @@ void TextFieldExReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffer
 
     textField->setTextColor(Color32FromFb(options->textColor()));
     textField->setPlaceholderColor(Color32FromFb(options->placeholderColor()));
-    textField->setCursorColor(Color3BFromFb(options->cursorColor()));
+    textField->setCursorColor(Color32FromFb(options->cursorColor()));
 
     auto widgetReader = NodeReader::getInstance();
     widgetReader->setPropsWithFlatBuffers(textField, (Table*)options->nodeOptions());

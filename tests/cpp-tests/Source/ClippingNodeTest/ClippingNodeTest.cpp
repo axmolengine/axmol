@@ -990,7 +990,7 @@ void ClippingNodePerformanceTest::setup()
     countLabel->enableOutline(Color32(0, 0, 0, 255), 2);
     countLabel->setPosition(Vec2(s.width / 2, s.height - 120));
     addChild(countLabel, 1);
-    
+
     auto addClippingNode = [this, s, countLabel] (int count) -> void {
         for (int i = 0; i < count; i++) {
             Vec2 pos = Vec2(random(0, (int) s.width), random(0, (int) s.height));
@@ -1004,18 +1004,18 @@ void ClippingNodePerformanceTest::setup()
             auto spriteA = Sprite::create("Images/grossini.png");
             clipper->addChild(spriteA);
         }
-        
+
         _totalCount += count;
         countLabel->setString(std::to_string(_totalCount));
     };
     addClippingNode(100);
-    
+
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
     auto increase = MenuItemFont::create(" + ", [=] (Object*) -> void {
         addClippingNode(10);
     });
-    increase->setColor(Color3B(0, 200, 20));
+    increase->setColor(Color32(0, 200, 20));
     auto menu = Menu::create(increase, nullptr);
     menu->setPosition(Vec2(s.width / 2, s.height - 80));
     addChild(menu, 1);

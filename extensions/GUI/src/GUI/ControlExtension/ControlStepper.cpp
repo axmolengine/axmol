@@ -31,8 +31,8 @@
 
 NS_AX_EXT_BEGIN
 
-#define ControlStepperLabelColorEnabled Color3B(55, 55, 55)
-#define ControlStepperLabelColorDisabled Color3B(147, 147, 147)
+#define ControlStepperLabelColorEnabled Color32(55, 55, 55, 255)
+#define ControlStepperLabelColorDisabled Color32(147, 147, 147, 255)
 
 #define ControlStepperLabelFont "CourierNewPSMT"
 
@@ -259,22 +259,22 @@ void ControlStepper::updateLayoutUsingTouchLocation(Vec2 location)
     {
         _touchedPart = Part::MINUS;
 
-        _minusSprite->setColor(Color3B::GRAY);
-        _plusSprite->setColor(Color3B::WHITE);
+        _minusSprite->setColor(Color32::GRAY);
+        _plusSprite->setColor(Color32::WHITE);
     }
     else if (location.x >= _minusSprite->getContentSize().width && _value < _maximumValue)
     {
         _touchedPart = Part::PLUS;
 
-        _minusSprite->setColor(Color3B::WHITE);
-        _plusSprite->setColor(Color3B::GRAY);
+        _minusSprite->setColor(Color32::WHITE);
+        _plusSprite->setColor(Color32::GRAY);
     }
     else
     {
         _touchedPart = Part::NONE;
 
-        _minusSprite->setColor(Color3B::WHITE);
-        _plusSprite->setColor(Color3B::WHITE);
+        _minusSprite->setColor(Color32::WHITE);
+        _plusSprite->setColor(Color32::WHITE);
     }
 }
 
@@ -321,8 +321,8 @@ void ControlStepper::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
 
         _touchedPart = Part::NONE;
 
-        _minusSprite->setColor(Color3B::WHITE);
-        _plusSprite->setColor(Color3B::WHITE);
+        _minusSprite->setColor(Color32::WHITE);
+        _plusSprite->setColor(Color32::WHITE);
 
         if (_autorepeat)
         {
@@ -333,8 +333,8 @@ void ControlStepper::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
 
 void ControlStepper::onTouchEnded(Touch* pTouch, Event* /*pEvent*/)
 {
-    _minusSprite->setColor(Color3B::WHITE);
-    _plusSprite->setColor(Color3B::WHITE);
+    _minusSprite->setColor(Color32::WHITE);
+    _plusSprite->setColor(Color32::WHITE);
 
     if (_autorepeat)
     {

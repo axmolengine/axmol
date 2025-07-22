@@ -503,10 +503,6 @@ int EditBox::getFontSize() const
     }
     return -1;
 }
-void EditBox::setFontColor(const Color3B& color)
-{
-    setFontColor(Color32(color));
-}
 
 void EditBox::setFontColor(const Color32& color)
 {
@@ -570,11 +566,6 @@ int EditBox::getPlaceholderFontSize() const
         return _editBoxImpl->getPlaceholderFontSize();
     }
     return -1;
-}
-
-void EditBox::setPlaceholderFontColor(const Color3B& color)
-{
-    setPlaceholderFontColor(Color32(color));
 }
 
 void EditBox::setPlaceholderFontColor(const Color32& color)

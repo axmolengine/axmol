@@ -58,7 +58,7 @@ bool UITextFieldTest::init()
 
         // Add the alert
         Text* alert = Text::create("TextField", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -132,7 +132,7 @@ bool UITextFieldTest_MaxLength::init()
 
         // Add the alert
         Text* alert = Text::create("TextField max length", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -213,7 +213,7 @@ bool UITextFieldTest_Password::init()
 
         // Add the alert
         Text* alert = Text::create("TextField password", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -288,7 +288,7 @@ bool UITextFieldTest_LineWrap::init()
 
         // Add the alert
         Text* alert = Text::create("TextField line wrap", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075));
         _uiLayer->addChild(alert);

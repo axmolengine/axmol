@@ -7,12 +7,12 @@ local function createLayer()
     local filename = ""
 
     local title = cc.Label:createWithTTF("New Renderer", "fonts/arial.ttf", 36)
-    title:setColor(cc.c3b(255,255,0))
+    title:setColor(cc.color(255,255,0))
     layer:addChild(title, 1, 10000)
     title:setPosition( cc.p(VisibleRect:center().x, VisibleRect:top().y - 30))
 
     local subTitle = cc.Label:createWithTTF("Capture screen test, press the menu items to capture the screen", "fonts/arial.ttf", 12)
-    subTitle:setColor(cc.c3b(255,255,0))
+    subTitle:setColor(cc.color(255,255,0))
     layer:addChild(subTitle, 1, 10001)
     subTitle:setPosition( cc.p(VisibleRect:center().x, VisibleRect:top().y - 60) )
 

@@ -152,12 +152,6 @@ public:
     virtual const Color32& getColorSpaceHolder();
 
     /**
-     *@brief Change input placeholder color.
-     *@param color A color value in `Color3B`.
-     */
-    virtual void setColorSpaceHolder(const Color3B& color);
-
-    /**
      * Change the placeholder color.
      *@param color The placeholder color in Color32.
      */

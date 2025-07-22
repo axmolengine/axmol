@@ -1032,7 +1032,7 @@ TransitionZoomFlipAngular* TransitionZoomFlipAngular::create(float t, Scene* s)
 TransitionFade::TransitionFade() {}
 TransitionFade::~TransitionFade() {}
 
-TransitionFade* TransitionFade::create(float duration, Scene* scene, const Color3B& color)
+TransitionFade* TransitionFade::create(float duration, Scene* scene, const Color32& color)
 {
     TransitionFade* transition = new TransitionFade();
     transition->initWithDuration(duration, scene, color);
@@ -1042,10 +1042,10 @@ TransitionFade* TransitionFade::create(float duration, Scene* scene, const Color
 
 TransitionFade* TransitionFade::create(float duration, Scene* scene)
 {
-    return TransitionFade::create(duration, scene, Color3B::BLACK);
+    return TransitionFade::create(duration, scene, Color32::BLACK);
 }
 
-bool TransitionFade::initWithDuration(float duration, Scene* scene, const Color3B& color)
+bool TransitionFade::initWithDuration(float duration, Scene* scene, const Color32& color)
 {
     if (TransitionScene::initWithDuration(duration, scene))
     {
@@ -1059,7 +1059,7 @@ bool TransitionFade::initWithDuration(float duration, Scene* scene, const Color3
 
 bool TransitionFade::initWithDuration(float t, Scene* scene)
 {
-    this->initWithDuration(t, scene, Color3B::BLACK);
+    this->initWithDuration(t, scene, Color32::BLACK);
     return true;
 }
 

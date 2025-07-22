@@ -285,18 +285,21 @@ function cc.rectIntersection( rect1, rect2 )
     return intersection
 end
 
---Color3B
-function cc.c3b( _r,_g,_b )
-    return { r = _r, g = _g, b = _b }
-end
-
---Color32
+--Color32 deprecated, use cc.color instead
 function cc.c4b( _r,_g,_b,_a )
     return { r = _r, g = _g, b = _b, a = _a }
 end
 
---ax::Color
+--ax::Color deprecated, use cc.color instead
 function cc.c4f( _r,_g,_b,_a )
+    return { r = _r, g = _g, b = _b, a = _a }
+end
+
+-- Color32 or Color
+function cc.color( _r,_g,_b,_a )
+    if _a == nil then
+        _a = 255
+    end
     return { r = _r, g = _g, b = _b, a = _a }
 end
 

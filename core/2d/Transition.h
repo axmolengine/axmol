@@ -743,14 +743,14 @@ class AX_DLL TransitionFade : public TransitionScene
 {
 public:
     /** Creates the transition with a duration and with an RGB color
-     * Example: FadeTransition::create(2, scene, Color3B(255,0,0); // red color
+     * Example: FadeTransition::create(2, scene, Color32(255,0,0,255); // red color
      *
      * @param duration Duration time, in seconds.
      * @param scene A given scene.
      * @param color A given transition color.
      * @return A autoreleased TransitionFade object.
      */
-    static TransitionFade* create(float duration, Scene* scene, const Color3B& color);
+    static TransitionFade* create(float duration, Scene* scene, const Color32& color);
     /** Creates the transition with a duration.
      *
      * @param duration Duration time, in seconds.
@@ -771,8 +771,8 @@ public:
     TransitionFade();
     virtual ~TransitionFade();
 
-    /** initializes the transition with a duration and with an RGB color */
-    bool initWithDuration(float t, Scene* scene, const Color3B& color);
+    /** initializes the transition with a duration and with an RGBA color */
+    bool initWithDuration(float t, Scene* scene, const Color32& color);
     bool initWithDuration(float t, Scene* scene);
 
 protected:

@@ -1,7 +1,7 @@
 --------------------------------
 -- Camera3DTest
 --------------------------------
-local State = 
+local State =
 {
     None = 0,
     Idle = 0x01,
@@ -13,7 +13,7 @@ local State =
     Attack = 0x40,
 }
 
-local CameraType = 
+local CameraType =
 {
     FreeCamera = 0,
     FirstCamera = 1,
@@ -65,7 +65,7 @@ function Camera3DTestDemo:addNewSpriteWithCoords(vec3, filename, playAnimation, 
 end
 
 function Camera3DTestDemo:scaleCameraCallback(sender, value)
-    
+
 end
 
 function Camera3DTestDemo:rotateCameraCallback( sender,value)
@@ -130,9 +130,9 @@ function Camera3DTestDemo:updateState( dt )
         curFaceDir = cc.vec3normalize(curFaceDir)
 
         local newFaceDir = {x = self._targetPos.x - curPos.x, y = self._targetPos.y - curPos.y, z = self._targetPos.z - curPos.z}
-        newFaceDir.y = 0.0 
+        newFaceDir.y = 0.0
         newFaceDir = cc.vec3normalize(newFaceDir)
-        local cosAngle = math.abs(curFaceDir.x * newFaceDir.x + curFaceDir.y * newFaceDir.y + curFaceDir.z * newFaceDir.z - 1) 
+        local cosAngle = math.abs(curFaceDir.x * newFaceDir.x + curFaceDir.y * newFaceDir.y + curFaceDir.z * newFaceDir.z - 1)
         local distanceX = self._targetPos.x - curPos.x
         local distanceY = self._targetPos.y - curPos.y
         local distanceZ = self._targetPos.z - curPos.z
@@ -183,7 +183,7 @@ function Camera3DTestDemo:onEnter()
     local listener = cc.EventListenerTouchAllAtOnce:create()
 
     listener:registerScriptHandler(function(touches, event)
-        
+
     end,cc.Handler.EVENT_TOUCHES_BEGAN)
 
     listener:registerScriptHandler(function(touches, event)
@@ -236,7 +236,7 @@ function Camera3DTestDemo:onEnter()
                 local ndo = nearP.x * 0 + nearP.y * 1 + nearP.z * 0
                 dist= (0 - ndo) / ndd
                 local p =   cc.vec3add(nearP, cc.vec3mul(dir, dist))
-                
+
                 if p.x >  100 then p.x =  100 end
                 if p.x < -100 then p.x = -100 end
                 if p.z >  100 then p.z =  100 end
@@ -395,17 +395,17 @@ function Camera3DTestDemo:onEnter()
                         mat[2] = right.y
                         mat[3] = right.z
                         mat[4] = 0.0
-    
+
                         mat[5] = up.x
                         mat[6] = up.y
                         mat[7] = up.z
                         mat[8] = 0.0
-    
+
                         mat[9]  = newFaceDir.x
                         mat[10] = newFaceDir.y
                         mat[11] = newFaceDir.z
                         mat[12] = 0.0
-    
+
                         mat[13] = pos.x
                         mat[14] = pos.y
                         mat[15] = pos.z
@@ -492,7 +492,7 @@ end
 
 function CameraRotationTest:onEnter()
     local s = cc.Director:getInstance():getWinSize()
-    
+
     camControlNode = cc.Node:create()
     camControlNode:setNormalizedPosition(cc.p(0.5, 0.5))
     self:addChild(camControlNode)
@@ -504,43 +504,43 @@ function CameraRotationTest:onEnter()
     local sp3d = cc.Sprite3D:create()
     sp3d:setPosition(s.width/2, s.height/2)
     self:addChild(sp3d)
-    
+
     local lship = cc.Label:create()
     lship:setString("Ship")
     lship:setPosition(0, 20)
     sp3d:addChild(lship)
-    
+
     --Billboards
     --Yellow is at the back
     bill1 = cc.BillBoard:create("Images/Icon.png")
     bill1:setPosition3D(cc.vec3(s.width/2 + 50, s.height/2 + 10, -10))
-    bill1:setColor(cc.c3b(255, 255,   0))
+    bill1:setColor(cc.color(255, 255,   0))
     bill1:setScale(0.6)
     self:addChild(bill1)
-    
+
     l1 = cc.Label:create()
     l1:setPosition(cc.p(0,-10))
     l1:setString("Billboard1")
-    l1:setColor(cc.c3b(255, 255, 255))
+    l1:setColor(cc.color(255, 255, 255))
     l1:setScale(3)
     bill1:addChild(l1)
 
     local p1 = cc.ParticleSystemQuad:create("Particles/SmallSun.plist")
     p1:setPosition(30,80)
     bill1:addChild(p1)
-    
+
     bill2 = cc.BillBoard:create("Images/Icon.png")
     bill2:setPosition3D(cc.vec3(s.width/2 - 50, s.height/2 - 10, 10))
     bill2:setScale(0.6)
     self:addChild(bill2)
-    
+
     l2 = cc.Label:create()
     l2:setString("Billboard2")
     l2:setPosition(cc.p(0,-10))
-    l2:setColor(cc.c3b(255, 255, 255))
+    l2:setColor(cc.color(255, 255, 255))
     l2:setScale(3)
     bill2:addChild(l2)
-    
+
     local p2 = cc.ParticleSystemQuad:create("Particles/SmallSun.plist")
     p2:setPosition(30,80)
     bill2:addChild(p2)
@@ -705,9 +705,9 @@ function FogTestDemo:createMenu()
         self._sprite3D2:setProgramState(self._shader2)
     end)
     local menu = cc.Menu:create(menuItem1, menuItem2, menuItem3)
-    
+
     menu:setPosition(cc.p(0.0, 0.0))
-    
+
     menuItem1:setPosition(VisibleRect:left().x + 60, VisibleRect:top().y - 50)
     menuItem2:setPosition(VisibleRect:left().x + 60, VisibleRect:top().y - 100)
     menuItem3:setPosition(VisibleRect:left().x + 60, VisibleRect:top().y - 150)
@@ -731,7 +731,7 @@ function FogTestDemo:createLayer3D()
 
     self._sprite3D1:setProgramState(self._shader1)
     self._sprite3D2:setProgramState(self._shader2)
-    
+
     local attributes = self._shader1:getProgram():getActiveAttributes();
 
     self._shader1:setUniform("u_fogColor", cc.bytearray.from_vec4(cc.vec4(0.5,0.5,0.5,1.0)))
@@ -792,7 +792,7 @@ function FogTestDemo:subtitle()
     return ""
 end
 
-local OperateCamType = 
+local OperateCamType =
 {
     MoveCamera = 0,
     RotateCamera = 1,
@@ -839,7 +839,7 @@ function CameraArcBallDemo:projectToSphere(r, x, y)
     d = math.sqrt(x*x + y*y)
     --inside sphere
     if d < r * 0.70710678118654752440 then
-        z = math.sqrt(r*r - d*d)                      
+        z = math.sqrt(r*r - d*d)
     else--on hyperbola
         t = r / 1.41421356237309504880
         z = t*t / d
@@ -853,7 +853,7 @@ function CameraArcBallDemo:calculateArcBall(axis, angle, p1x, p1y, p2x, p2y)
     local uv = mat4_transformVector(rotation_matrix , 0.0, 1.0, 0.0, 0.0)
     --rotation x
     local sv = mat4_transformVector(rotation_matrix, 1.0, 0.0, 0.0, 0.0)
-    --rotation z 
+    --rotation z
     local lv = mat4_transformVector(rotation_matrix, 0.0, 0.0, -1.0, 0.0)
     --start point screen transform to 3d
     local projectZ1 = self:projectToSphere(self._radius, p1x, p1y)
@@ -876,7 +876,7 @@ function CameraArcBallDemo:calculateArcBall(axis, angle, p1x, p1y, p2x, p2y)
         t = -1.0
     end
     --rotation angle
-    angle = math.asin(t)          
+    angle = math.asin(t)
 
     return axis, angle
 end
@@ -893,13 +893,13 @@ function CameraArcBallDemo:setEventListener()
                 location.y = 2.0 * (visibleSize.height - location.y) / (visibleSize.height) - 1.0
                 prelocation.x = 2.0 * (prelocation.x) / (visibleSize.width) - 1.0
                 prelocation.y = 2.0 * (visibleSize.height - prelocation.y) / (visibleSize.height) - 1.0
-    
+
                 local axes = cc.vec3(0,0,0)
                 local angle = 0.0
                 --calculate  rotation quaternion parameters
-                axes , angle = self:calculateArcBall(axes, angle, prelocation.x, prelocation.y, location.x, location.y) 
-                
-                --get rotation quaternion 
+                axes , angle = self:calculateArcBall(axes, angle, prelocation.x, prelocation.y, location.x, location.y)
+
+                --get rotation quaternion
                 local halfAngle = angle * 0.5
                 local sinHalfAngle = math.sin(math.deg(halfAngle))
 
@@ -911,9 +911,9 @@ function CameraArcBallDemo:setEventListener()
                 local z = quat.w * self._rotationQuat.z + quat.x * self._rotationQuat.y - quat.y * self._rotationQuat.x + quat.z * self._rotationQuat.w
                 local w = quat.w * self._rotationQuat.w - quat.x * self._rotationQuat.x - quat.y * self._rotationQuat.y - quat.z * self._rotationQuat.z
                 self._rotationQuat = cc.quaternion(x, y, z, w)
-    
+
                 self:updateCameraTransform()
-                   
+
             elseif self._operate == OperateCamType.MoveCamera then
                 local previousLocation = touchs[1]:getPreviousLocation()
                 local location         = touchs[1]:getLocation()
@@ -934,9 +934,9 @@ function CameraArcBallDemo:createLayer3D()
 
     cc.MenuItemFont:setFontName("fonts/arial.ttf")
     cc.MenuItemFont:setFontSize(20)
-    
+
     local menuItem1 = cc.MenuItemFont:create("Switch Operation")
-    menuItem1:setColor(cc.c3b(0,200,20))
+    menuItem1:setColor(cc.color(0,200,20))
     menuItem1:registerScriptTapHandler(function (tag, sender )
         if self._operate == OperateCamType.MoveCamera then
             self._operate = OperateCamType.RotateCamera
@@ -945,7 +945,7 @@ function CameraArcBallDemo:createLayer3D()
         end
     end)
     local menuItem2 = cc.MenuItemFont:create("Switch Target")
-    menuItem2:setColor(cc.c3b(0,200,20))
+    menuItem2:setColor(cc.color(0,200,20))
     menuItem2:registerScriptTapHandler(function (tag, sender )
         if self._target == 0 then
             self._target = 1
@@ -1041,7 +1041,7 @@ function Camera3DTestMain()
     cclog("Camera3DTestMain")
     local scene = cc.Scene:create()
 
-    Helper.createFunctionTable = 
+    Helper.createFunctionTable =
     {
         Camera3DTestDemo.create,
         CameraRotationTest.create,
@@ -1050,7 +1050,7 @@ function Camera3DTestMain()
     }
     scene:addChild(Helper.createFunctionTable[1]())
     scene:addChild(CreateBackMenuItem())
-    
+
 
     return scene
 end

@@ -48,16 +48,16 @@ void GLabel::setIcon(const std::string & value)
     updateGear(7);
 }
 
-ax::Color3B GLabel::getTitleColor() const
+ax::Color32 GLabel::getTitleColor() const
 {
     GTextField* tf = getTextField();
     if (tf)
         return tf->getColor();
     else
-        return Color3B::BLACK;
+        return Color32::BLACK;
 }
 
-void GLabel::setTitleColor(const ax::Color3B & value)
+void GLabel::setTitleColor(const ax::Color32 & value)
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -159,7 +159,7 @@ void GLabel::setup_afterAdd(ByteBuffer* buffer, int beginPos)
     if ((str = buffer->readSP()))
         setIcon(*str);
     if (buffer->readBool())
-        setTitleColor((Color3B)buffer->readColor());
+        setTitleColor(buffer->readColor());
     int iv = buffer->readInt();
     if (iv != 0)
         setTitleFontSize(iv);

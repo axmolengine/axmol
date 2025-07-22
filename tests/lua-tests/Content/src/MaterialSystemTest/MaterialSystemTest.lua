@@ -100,7 +100,7 @@ function Material_MultipleSprite3D:subtitle()
 end
 
 function Material_MultipleSprite3D:onEnter()
-    local names = 
+    local names =
     {
         "MeshRendererTest/ReskinGirl.c3b",
         "MeshRendererTest/ReskinGirl.c3b",
@@ -196,10 +196,10 @@ function Material_setTechnique:onEnter()
     sprite:setMaterial(mat)
 
     --lights
-    local light1 = cc.AmbientLight:create(cc.c3b(255, 0, 0))
+    local light1 = cc.AmbientLight:create(cc.color(255, 0, 0))
     self:addChild(light1)
 
-    local light2 = cc.DirectionLight:create(cc.vec3(-1,1,0), cc.c3b(0, 255, 0))
+    local light2 = cc.DirectionLight:create(cc.vec3(-1,1,0), cc.color(0, 255, 0))
     self:addChild(light2)
     local techniqueState = 0
     local scheduler = cc.Director:getInstance():getScheduler()
@@ -217,7 +217,7 @@ function Material_setTechnique:onEnter()
             techniqueState = 0
         end
     end, 1, false)
-    
+
 
     local rot = cc.RotateBy:create(5, cc.vec3(30,60,270))
     local repeatAction = cc.RepeatForever:create(rot)
@@ -341,10 +341,10 @@ end
 ----Material_clone
 ----------------------------------------
 function MaterialSystemTest()
-    
+
     local scene = cc.Scene:createWithPhysics()
 
-    Helper.createFunctionTable = 
+    Helper.createFunctionTable =
     {
         Material_2DEffects.create,
         Material_setTechnique.create,

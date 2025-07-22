@@ -61,7 +61,7 @@ bool UIPageViewTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -94,7 +94,7 @@ bool UIPageViewTest::init()
             layout->addChild(imageView);
 
             Text* label = Text::create(fmt::format("page {}", (i + 1)), "fonts/Marker Felt.ttf", 30);
-            label->setColor(Color3B(192, 192, 192));
+            label->setColor(Color32(192, 192, 192));
             label->setPosition(Vec2(layout->getContentSize().width / 2.0f, layout->getContentSize().height / 2.0f));
             layout->addChild(label);
 
@@ -153,7 +153,7 @@ bool UIPageViewButtonTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView with Buttons", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -261,7 +261,7 @@ bool UIPageViewTouchPropagationTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView Touch Propagation", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -276,7 +276,7 @@ bool UIPageViewTouchPropagationTest::init()
         pageView->setAnchorPoint(Vec2(0.5f, 0.5f));
         Size backgroundSize = background->getContentSize();
         pageView->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        pageView->setBackGroundColor(Color3B::GREEN);
+        pageView->setBackGroundColor(Color32::GREEN);
         pageView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
 
         int pageCount = 4;
@@ -451,7 +451,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView Dynamic Modification", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -467,7 +467,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         pageView->setAnchorPoint(Vec2(0.5f, 0.5f));
         Size backgroundSize = background->getContentSize();
         pageView->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        pageView->setBackGroundColor(Color3B::GREEN);
+        pageView->setBackGroundColor(Color32::GREEN);
         pageView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         pageView->setIndicatorEnabled(true);
         pageView->setIndicatorSpaceBetweenIndexNodes(10);
@@ -512,7 +512,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button->setTitleText("Add A Page");
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
-        button->setTitleColor(Color3B::RED);
+        button->setTitleColor(Color32::RED);
         button->addClickEventListener([this, pageView](Object* /*sender*/) {
             HBox* outerBox = HBox::create();
             outerBox->setContentSize(Size(240.0f, 130.0f));
@@ -546,7 +546,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button2->setTitleText("Remove A Page");
         button2->setZoomScale(0.3f);
         button2->setPressedActionEnabled(true);
-        button2->setTitleColor(Color3B::RED);
+        button2->setTitleColor(Color32::RED);
         button2->addClickEventListener([this, pageView](Object* /*sender*/) {
             if (pageView->getItems().size() > 0)
             {
@@ -567,7 +567,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button3->setTitleText("Remove All Pages");
         button3->setZoomScale(0.3f);
         button3->setPressedActionEnabled(true);
-        button3->setTitleColor(Color3B::RED);
+        button3->setTitleColor(Color32::RED);
         button3->addClickEventListener([this, pageView](Object* /*sender*/) {
             pageView->removeAllItems();
             _displayValueLabel->setString(
@@ -628,7 +628,7 @@ bool UIPageViewJumpToPageTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -661,7 +661,7 @@ bool UIPageViewJumpToPageTest::init()
             layout->addChild(imageView);
 
             Text* label = Text::create(fmt::format("page {}", (i + 1)), "fonts/Marker Felt.ttf", 30);
-            label->setColor(Color3B(192, 192, 192));
+            label->setColor(Color32(192, 192, 192));
             label->setPosition(Vec2(layout->getContentSize().width / 2.0f, layout->getContentSize().height / 2.0f));
             layout->addChild(label);
 
@@ -723,7 +723,7 @@ bool UIPageViewVerticalTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -754,7 +754,7 @@ bool UIPageViewVerticalTest::init()
             layout->addChild(imageView);
 
             Text* label = Text::create(fmt::format("page {}", (i + 1)), "fonts/Marker Felt.ttf", 30);
-            label->setColor(Color3B(192, 192, 192));
+            label->setColor(Color32(192, 192, 192));
             label->setPosition(Vec2(layout->getContentSize().width / 2.0f, layout->getContentSize().height / 2.0f));
             layout->addChild(label);
 
@@ -809,7 +809,7 @@ bool UIPageViewDisableTouchTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -843,7 +843,7 @@ bool UIPageViewDisableTouchTest::init()
             layout->addChild(imageView);
 
             Text* label = Text::create(fmt::format("page {}", (i + 1)), "fonts/Marker Felt.ttf", 30);
-            label->setColor(Color3B(192, 192, 192));
+            label->setColor(Color32(192, 192, 192));
             label->setPosition(Vec2(layout->getContentSize().width / 2.0f, layout->getContentSize().height / 2.0f));
             layout->addChild(label);
 
@@ -877,7 +877,7 @@ bool UIPageViewChildSizeTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -903,7 +903,7 @@ bool UIPageViewChildSizeTest::init()
             imageView->setScale9Enabled(true);
 
             Text* label = Text::create(fmt::format("page {}", (i + 1)), "fonts/Marker Felt.ttf", 30);
-            label->setColor(Color3B(192, 192, 192));
+            label->setColor(Color32(192, 192, 192));
             label->setAnchorPoint(Vec2::ZERO);
             imageView->addChild(label);
 
@@ -959,7 +959,7 @@ bool UIPageViewIndicatorTest::init()
 
         // Add the black background
         Text* alert = Text::create("PageView", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -983,7 +983,7 @@ bool UIPageViewIndicatorTest::init()
         pageView->setIndicatorSpaceBetweenIndexNodes(5);
         pageView->setIndicatorIndexNodesScale(0.5);
         pageView->setIndicatorIndexNodesTexture("cocosui/green_edit.png");
-        pageView->setIndicatorIndexNodesColor(Color3B::RED);
+        pageView->setIndicatorIndexNodesColor(Color32::RED);
 
         int pageCount = 4;
         for (int i = 0; i < pageCount; ++i)
@@ -998,7 +998,7 @@ bool UIPageViewIndicatorTest::init()
             layout->addChild(imageView);
 
             Text* label = Text::create(fmt::format("page {}", (i + 1)), "fonts/Marker Felt.ttf", 30);
-            label->setColor(Color3B(192, 192, 192));
+            label->setColor(Color32(192, 192, 192));
             label->setPosition(Vec2(layout->getContentSize().width / 2.0f, layout->getContentSize().height / 2.0f));
             layout->addChild(label);
 

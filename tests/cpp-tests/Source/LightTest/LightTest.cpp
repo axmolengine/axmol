@@ -166,63 +166,63 @@ void LightTest::addSprite()
 void LightTest::addLights()
 {
     auto s        = Director::getInstance()->getWinSize();
-    _ambientLight = AmbientLight::create(Color3B(200, 200, 200));
+    _ambientLight = AmbientLight::create(Color32(200, 200, 200));
     _ambientLight->retain();
     _ambientLight->setEnabled(true);
     addChild(_ambientLight);
     _ambientLight->setCameraMask(2);
 
-    _directionalLight = DirectionLight::create(Vec3(-1.0f, -1.0f, 0.0f), Color3B(200, 200, 200));
+    _directionalLight = DirectionLight::create(Vec3(-1.0f, -1.0f, 0.0f), Color32(200, 200, 200));
     _directionalLight->retain();
     _directionalLight->setEnabled(false);
     addChild(_directionalLight);
     _directionalLight->setCameraMask(2);
 
-    _pointLight = PointLight::create(Vec3(0.0f, 0.0f, 0.0f), Color3B(200, 200, 200), 10000.0f);
+    _pointLight = PointLight::create(Vec3(0.0f, 0.0f, 0.0f), Color32(200, 200, 200), 10000.0f);
     _pointLight->retain();
     _pointLight->setEnabled(false);
     addChild(_pointLight);
     _pointLight->setCameraMask(2);
 
     _spotLight =
-        SpotLight::create(Vec3(-1.0f, -1.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Color3B(200, 200, 200), 0.0, 0.5, 10000.0f);
+        SpotLight::create(Vec3(-1.0f, -1.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Color32(200, 200, 200), 0.0, 0.5, 10000.0f);
     _spotLight->retain();
     _spotLight->setEnabled(false);
     addChild(_spotLight);
     _spotLight->setCameraMask(2);
 
     {
-        auto tintto1 = TintTo::create(4, 0, 0, 255);
-        auto tintto2 = TintTo::create(4, 0, 255, 0);
-        auto tintto3 = TintTo::create(4, 255, 0, 0);
-        auto tintto4 = TintTo::create(4, 255, 255, 255);
+        auto tintto1 = TintTo::create(4, Color32(0, 0, 255));
+        auto tintto2 = TintTo::create(4, Color32(0, 255, 0));
+        auto tintto3 = TintTo::create(4, Color32(255, 0, 0));
+        auto tintto4 = TintTo::create(4, Color32(255, 255, 255));
         auto seq     = Sequence::create(tintto1, tintto2, tintto3, tintto4, nullptr);
         _ambientLight->runAction(RepeatForever::create(seq));
     }
 
     {
-        auto tintto1 = TintTo::create(4, 255, 0, 0);
-        auto tintto2 = TintTo::create(4, 0, 255, 0);
-        auto tintto3 = TintTo::create(4, 0, 0, 255);
-        auto tintto4 = TintTo::create(4, 255, 255, 255);
+        auto tintto1 = TintTo::create(4, Color32(255, 0, 0));
+        auto tintto2 = TintTo::create(4, Color32(0, 255, 0));
+        auto tintto3 = TintTo::create(4, Color32(0, 0, 255));
+        auto tintto4 = TintTo::create(4, Color32(255, 255, 255));
         auto seq     = Sequence::create(tintto1, tintto2, tintto3, tintto4, nullptr);
         _directionalLight->runAction(RepeatForever::create(seq));
     }
 
     {
-        auto tintto1 = TintTo::create(4, 255, 0, 0);
-        auto tintto2 = TintTo::create(4, 0, 255, 0);
-        auto tintto3 = TintTo::create(4, 0, 0, 255);
-        auto tintto4 = TintTo::create(4, 255, 255, 255);
+        auto tintto1 = TintTo::create(4, Color32(255, 0, 0));
+        auto tintto2 = TintTo::create(4, Color32(0, 255, 0));
+        auto tintto3 = TintTo::create(4, Color32(0, 0, 255));
+        auto tintto4 = TintTo::create(4, Color32(255, 255, 255));
         auto seq     = Sequence::create(tintto2, tintto1, tintto3, tintto4, nullptr);
         _pointLight->runAction(RepeatForever::create(seq));
     }
 
     {
-        auto tintto1 = TintTo::create(4, 255, 0, 0);
-        auto tintto2 = TintTo::create(4, 0, 255, 0);
-        auto tintto3 = TintTo::create(4, 0, 0, 255);
-        auto tintto4 = TintTo::create(4, 255, 255, 255);
+        auto tintto1 = TintTo::create(4, Color32(255, 0, 0));
+        auto tintto2 = TintTo::create(4, Color32(0, 255, 0));
+        auto tintto3 = TintTo::create(4, Color32(0, 0, 255));
+        auto tintto4 = TintTo::create(4, Color32(255, 255, 255));
         auto seq     = Sequence::create(tintto3, tintto2, tintto1, tintto4, nullptr);
         _spotLight->runAction(RepeatForever::create(seq));
     }

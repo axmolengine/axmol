@@ -68,10 +68,10 @@ local function ActionManual()
 
 	grossini:setRotation(120)
 	grossini:setPosition(cc.p(size.width / 2, size.height / 2))
-	grossini:setColor(cc.c3b(255, 0, 0))
+	grossini:setColor(cc.color(255, 0, 0, 255))
 
 	kathia:setPosition(cc.p(size.width - 100, size.height / 2))
-	kathia:setColor(cc.c3b(0, 0, 255))
+	kathia:setColor(cc.color(0, 0, 255, 255))
 
 	Helper.subtitleLabel:setString("Manual Transformation")
 	return layer

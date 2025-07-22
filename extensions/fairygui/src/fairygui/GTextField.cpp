@@ -35,7 +35,7 @@ void GTextField::setUBBEnabled(bool value)
     }
 }
 
-void GTextField::setColor(const ax::Color3B& value)
+void GTextField::setColor(const ax::Color32& value)
 {
     TextFormat* tf = getTextFormat();
     if (tf->color != value)
@@ -55,7 +55,7 @@ void GTextField::setFontSize(float value)
     }
 }
 
-void GTextField::setOutlineColor(const ax::Color3B& value)
+void GTextField::setOutlineColor(const ax::Color32& value)
 {
     TextFormat* tf = getTextFormat();
     if (tf->outlineColor != value)
@@ -146,7 +146,7 @@ void GTextField::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
 
     tf->face = buffer->readS();
     tf->fontSize = buffer->readShort();
-    tf->color = (Color3B)buffer->readColor();
+    tf->color = buffer->readColor();
     tf->align = (TextHAlignment)buffer->readByte();
     tf->verticalAlign = (TextVAlignment)buffer->readByte();
     tf->lineSpacing = buffer->readShort();
@@ -160,14 +160,14 @@ void GTextField::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
         setSingleLine(true);
     if (buffer->readBool())
     {
-        tf->outlineColor = (Color3B)buffer->readColor();
+        tf->outlineColor = buffer->readColor();
         tf->outlineSize = buffer->readFloat();
         tf->enableEffect(TextFormat::OUTLINE);
     }
 
     if (buffer->readBool())
     {
-        tf->shadowColor = (Color3B)buffer->readColor();
+        tf->shadowColor = buffer->readColor();
         float f1 = buffer->readFloat();
         float f2 = buffer->readFloat();
         tf->shadowOffset = Vec2(f1, -f2);

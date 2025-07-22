@@ -53,7 +53,7 @@ MotionStreak::~MotionStreak()
     AX_SAFE_FREE(_texCoords);
 }
 
-MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
+MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color32& color, std::string_view path)
 {
     MotionStreak* ret = new MotionStreak();
     if (ret->initWithFade(fade, minSeg, stroke, color, path))
@@ -66,7 +66,7 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
     return nullptr;
 }
 
-MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
+MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
     MotionStreak* ret = new MotionStreak();
     if (ret->initWithFade(fade, minSeg, stroke, color, texture))
@@ -79,7 +79,7 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
     return nullptr;
 }
 
-bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
+bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color32& color, std::string_view path)
 {
     AXASSERT(!path.empty(), "Invalid filename");
 
@@ -87,7 +87,7 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     return initWithFade(fade, minSeg, stroke, color, texture);
 }
 
-bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
+bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
     Node::setPosition(Vec2::ZERO);
     setAnchorPoint(Vec2::ZERO);
@@ -194,14 +194,14 @@ void MotionStreak::setPositionY(float y)
     _positionR.y = y;
 }
 
-void MotionStreak::tintWithColor(const Color3B& colors)
+void MotionStreak::tintWithColor(const Color32& colors)
 {
     setColor(colors);
 
-    // Fast assignation
+    // Fast assignation, FIXME: consider using a Color32 array
     for (unsigned int i = 0; i < _nuPoints * 2; i++)
     {
-        *((Color3B*)(_colorPointer + i * 4)) = colors;
+        *((Color32*)(_colorPointer + i * 4)) = colors;
     }
 }
 
@@ -363,8 +363,8 @@ void MotionStreak::update(float delta)
 
         // Color assignment
         const unsigned int offset                 = _nuPoints * 8;
-        *((Color3B*)(_colorPointer + offset))     = _displayedColor;
-        *((Color3B*)(_colorPointer + offset + 4)) = _displayedColor;
+        *((Color32*)(_colorPointer + offset))     = _displayedColor;
+        *((Color32*)(_colorPointer + offset + 4)) = _displayedColor;
 
         // Opacity
         _colorPointer[offset + 3] = 255;

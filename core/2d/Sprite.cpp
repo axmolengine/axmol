@@ -1503,7 +1503,7 @@ void Sprite::flipY()
 
 void Sprite::updateColor()
 {
-    Color color(_displayedColor, _displayedOpacity / 255.0f);
+    Color color(_displayedColor);
 
     // special opacity for premultiplied textures
     if (_opacityModifyRGB)

@@ -405,11 +405,6 @@ const Color32& TextField::getPlaceHolderColor() const
     return _textFieldRenderer->getColorSpaceHolder();
 }
 
-void TextField::setPlaceHolderColor(const ax::Color3B& color)
-{
-    _textFieldRenderer->setColorSpaceHolder(color);
-}
-
 void TextField::setPlaceHolderColor(const ax::Color32& color)
 {
     _textFieldRenderer->setColorSpaceHolder(color);

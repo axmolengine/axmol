@@ -161,11 +161,11 @@ if type(AX_DESIGN_RESOLUTION) == "table" then
     display.setAutoScale(AX_DESIGN_RESOLUTION)
 end
 
-display.COLOR_WHITE = cc.c3b(255, 255, 255)
-display.COLOR_BLACK = cc.c3b(0, 0, 0)
-display.COLOR_RED   = cc.c3b(255, 0, 0)
-display.COLOR_GREEN = cc.c3b(0, 255, 0)
-display.COLOR_BLUE  = cc.c3b(0, 0, 255)
+display.COLOR_WHITE = cc.c4b(255, 255, 255, 255)
+display.COLOR_BLACK = cc.c4b(0, 0, 0, 255)
+display.COLOR_RED   = cc.c4b(255, 0, 0, 255)
+display.COLOR_GREEN = cc.c4b(0, 255, 0, 255)
+display.COLOR_BLUE  = cc.c4b(0, 0, 255, 255)
 
 display.AUTO_SIZE      = 0
 display.FIXED_SIZE     = 1
@@ -186,7 +186,7 @@ display.CENTER_BOTTOM = cc.p(0.5, 0)
 
 display.SCENE_TRANSITIONS = {
     CROSSFADE       = {cc.TransitionCrossFade},
-    FADE            = {cc.TransitionFade, cc.c3b(0, 0, 0)},
+    FADE            = {cc.TransitionFade, cc.c4b(0, 0, 0, 255)},
     FADEBL          = {cc.TransitionFadeBL},
     FADEDOWN        = {cc.TransitionFadeDown},
     FADETR          = {cc.TransitionFadeTR},

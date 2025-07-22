@@ -186,7 +186,7 @@ void TileMapEditTestNew::updateMap(float dt)
     // over all your tiles in every frame. It's very expensive
     //    for(int x=0; x < tilemap.tgaInfo->width; x++) {
     //        for(int y=0; y < tilemap.tgaInfo->height; y++) {
-    //            Color3B c =[tilemap tileAt:Size(x,y));
+    //            Color32 c =[tilemap tileAt:Size(x,y));
     //            if( c.r != 0 ) {
     //                ////----AXLOGD("{},{} = {}", x,y,c.r);
     //            }
@@ -194,7 +194,7 @@ void TileMapEditTestNew::updateMap(float dt)
     //    }
 
     // NEW since v0.7
-    Color3B c = tilemap->getTileAt(Vec2(13, 21));
+    Color32 c = tilemap->getTileAt(Vec2(13, 21));
     c.r++;
     c.r %= 50;
     if (c.r == 0)

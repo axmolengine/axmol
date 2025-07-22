@@ -50,7 +50,7 @@ local function MenuLayerMainMenu()
     local function allowTouches(dt)
         local  pDirector = cc.Director:getInstance()
         --pDirector:getTouchDispatcher():setPriority(cc.MENU_HANDLER_PRIORITY +1, ret)
-        if nil ~=  schedulerEntry then 
+        if nil ~=  schedulerEntry then
             scheduler:unscheduleScriptEntry(schedulerEntry)
             schedulerEntry = nil
         end
@@ -70,8 +70,8 @@ local function MenuLayerMainMenu()
     local  labelAtlas = cc.LabelAtlas:_create("0123456789", "fonts/labelatlas.png", 16, 24, string.byte('.'))
     local  item3 = cc.MenuItemLabel:create(labelAtlas)
     item3:registerScriptTapHandler(menuCallbackDisabled)
-    item3:setDisabledColor( cc.c3b(32,32,64) )
-    item3:setColor( cc.c3b(200,200,255) )
+    item3:setDisabledColor( cc.color(32,32,64) )
+    item3:setColor( cc.color(200,200,255) )
 
     local function menuCallbackEnable(sender)
         m_disabledItem:setEnabled(not m_disabledItem:isEnabled() )

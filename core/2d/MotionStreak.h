@@ -59,7 +59,7 @@ public:
     static MotionStreak* create(float timeToFade,
                                 float minSeg,
                                 float strokeWidth,
-                                const Color3B& strokeColor,
+                                const Color32& strokeColor,
                                 std::string_view imagePath);
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture.
      *
@@ -73,7 +73,7 @@ public:
     static MotionStreak* create(float timeToFade,
                                 float minSeg,
                                 float strokeWidth,
-                                const Color3B& strokeColor,
+                                const Color32& strokeColor,
                                 Texture2D* texture);
 
     // Overrides
@@ -113,7 +113,7 @@ public:
      *
      * @param colors The color used for the tint.
      */
-    void tintWithColor(const Color3B& colors);
+    void tintWithColor(const Color32& colors);
 
     /** Remove all living segments of the ribbon.
      */
@@ -161,10 +161,10 @@ public:
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename
      */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color32& color, std::string_view path);
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture);
 
 protected:
     bool _fastMode                    = false;

@@ -130,11 +130,11 @@ function NavMeshBaseTestDemo:initScene()
     self:setNavMesh(navMesh)
     self:setNavMeshDebugCamera(self._camera)
 
-    local ambientLight = cc.AmbientLight:create(cc.c3b(64, 64, 64))
+    local ambientLight = cc.AmbientLight:create(cc.color(64, 64, 64))
     ambientLight:setCameraMask(cc.CameraFlag.USER1)
     self:addChild(ambientLight)
 
-    local dirLight = cc.DirectionLight:create(cc.vec3(1.2, -1.1, 0.5), cc.c3b(255, 255, 255))
+    local dirLight = cc.DirectionLight:create(cc.vec3(1.2, -1.1, 0.5), cc.color(255, 255, 255))
     dirLight:setCameraMask(cc.CameraFlag.USER1)
     self:addChild(dirLight)
 end
@@ -193,7 +193,7 @@ function NavMeshBaseTestDemo:moveAgents(des)
             if agent:isOnOffMeshLink() then
                 agent:setAutoTraverseOffMeshLink(false)
                 agent:setAutoOrientation(false)
-                
+
                 local linkdata = agent:getCurrentOffMeshLinkData()
 
                 agent:getOwner():setPosition3D(jump(linkdata.startPosition, linkdata.endPosition, 10.0, data))
@@ -252,7 +252,7 @@ function NavMeshBasicTestDemo:registerTouchEvent()
             self._angle = self._angle - delta.x * math.pi / 180.0
             self._camera:setPosition3D(cc.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
             self._camera:lookAt(cc.vec3(0.0, 0.0, 0.0), cc.vec3(0.0, 1.0, 0.0))
-    
+
             if (delta.x * delta.x + delta.y * delta.y) > 16 then
                 self._needMoveAgents = false
             end
@@ -267,7 +267,7 @@ function NavMeshBasicTestDemo:registerTouchEvent()
         if #touches > 0 then
             local touch = touches[1]
             local location = touch:getLocationInView()
-            local nearP = cc.vec3(location.x, location.y, 0.0) 
+            local nearP = cc.vec3(location.x, location.y, 0.0)
             local farP  = cc.vec3(location.x, location.y, 1.0)
 
             local size = cc.Director:getInstance():getWinSize()
@@ -338,7 +338,7 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
             self._angle = self._angle - delta.x * math.pi / 180.0
             self._camera:setPosition3D(cc.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
             self._camera:lookAt(cc.vec3(0.0, 0.0, 0.0), cc.vec3(0.0, 1.0, 0.0))
-    
+
             if (delta.x * delta.x + delta.y * delta.y) > 16 then
                 self._needMoveAgents = false
             end
@@ -353,7 +353,7 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
         if #touches > 0 then
             local touch = touches[1]
             local location = touch:getLocationInView()
-            local nearP = cc.vec3(location.x, location.y, 0.0) 
+            local nearP = cc.vec3(location.x, location.y, 0.0)
             local farP  = cc.vec3(location.x, location.y, 1.0)
 
             local size = cc.Director:getInstance():getWinSize()
@@ -432,7 +432,7 @@ end
 function NavMeshTest()
     Helper.usePhysics = true
 
-    TestCastScene.createFunctionTable = 
+    TestCastScene.createFunctionTable =
     {
         NavMeshBasicTestDemo.create,
         NavMeshAdvanceTestDemo.create,

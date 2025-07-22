@@ -449,7 +449,7 @@ void TextFieldTTF::setTextColorInternally(const Color32& color)
 {
     if (_currentLabelType == LabelType::BMFONT)
     {
-        Label::setColor(Color3B(color));
+        Label::setColor(color);
         return;
     }
 
@@ -508,11 +508,6 @@ void TextFieldTTF::update(float delta)
 const Color32& TextFieldTTF::getColorSpaceHolder()
 {
     return _colorSpaceHolder;
-}
-
-void TextFieldTTF::setColorSpaceHolder(const Color3B& color)
-{
-    setColorSpaceHolder(Color32(color));
 }
 
 void TextFieldTTF::setColorSpaceHolder(const Color32& color)

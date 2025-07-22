@@ -57,7 +57,7 @@ local function BugTest422()
         end
 
         pResetLayer:removeChild(pNode, false)
-        
+
         local function menuCallback(tag,pMenuItem)
             if nil ~= pMenuItem then
                 local pCallbackLayer = pMenuItem:getParent():getParent()
@@ -78,7 +78,7 @@ local function BugTest422()
         pMenu:setPosition(cc.p(menuPosX + fX,menuPosY + fY))
         pResetLayer:addChild(pMenu,0,nLocalTag)
     end
-    
+
     local pLayer = cc.Layer:create()
     reset(pLayer)
     return pLayer
@@ -88,13 +88,13 @@ end
 local nColorFlag = 0
 local function BugTest458()
     local pLayer = cc.Layer:create()
-    
+
     local function InitQuestionContainerSprite(pSprite)
         --Add label
         local pLabel = cc.Label:createWithTTF("Answer 1", s_arialPath, 12)
         pLabel:setAnchorPoint(cc.p(0.5,0.5))
         pLabel:setTag(100)
-        
+
         --Add the background
         local pCorner = cc.Sprite:create("Images/bugs/corner.png")
         local nWidth = Winsize.width * 0.9 - (pCorner:getContentSize().width * 2)
@@ -103,17 +103,17 @@ local function BugTest458()
         pColorLayer:setPosition(cc.p(-nWidth / 2, -nHeight / 2))
         --First button is blue,Second is red,Used for testing - change later
         if (0 == nColorFlag) then
-            pLabel:setColor(cc.c3b(0,0,255))
+            pLabel:setColor(cc.color(0,0,255))
         else
             print("Color changed")
-            pLabel:setColor(cc.c3b(255,0,0))
+            pLabel:setColor(cc.color(255,0,0))
         end
         nColorFlag = nColorFlag + 1
         pSprite:addChild(pColorLayer)
-        
+
         pCorner:setPosition(cc.p(-(nWidth / 2 + pCorner:getContentSize().width / 2), -(nHeight / 2 + pCorner:getContentSize().height / 2)))
         pSprite:addChild(pCorner)
-		
+
 		local nX,nY = pCorner:getPosition()
         local pCorner2 = cc.Sprite:create("Images/bugs/corner.png")
         pCorner2:setPosition(cc.p(-nX, nY))
@@ -135,7 +135,7 @@ local function BugTest458()
         pEdge:setScaleX(nWidth)
         pEdge:setPosition(cc.p(nX + (pCorner:getContentSize().width / 2) + (nWidth / 2), nY))
         pSprite:addChild(pEdge)
-        
+
         local pEdge2 = cc.Sprite:create("Images/bugs/edge.png")
         pEdge2:setScaleX(nWidth)
         pEdge2:setPosition(cc.p(nX + (pCorner:getContentSize().width / 2) + (nWidth / 2), -nY))
@@ -156,12 +156,12 @@ local function BugTest458()
 
         pSprite:addChild(pLabel)
     end
-    
+
     local pQuestion1 = cc.Sprite:create()
     InitQuestionContainerSprite(pQuestion1)
     local pQuestion2 = cc.Sprite:create()
     InitQuestionContainerSprite(pQuestion2)
-    
+
     local function menuCallback()
         print("Selected")
     end
@@ -172,8 +172,8 @@ local function BugTest458()
 --  question2->release()
 
     local pLayerColor2 = cc.LayerColor:create(cc.c4b(255,0,0,255), 100, 100)
-    local pMenuItemSprite2 = cc.MenuItemSprite:create(pLayerColor1, pLayerColor2)   
-    pMenuItemSprite2:registerScriptTapHandler(menuCallback) 
+    local pMenuItemSprite2 = cc.MenuItemSprite:create(pLayerColor1, pLayerColor2)
+    pMenuItemSprite2:registerScriptTapHandler(menuCallback)
     local pMenu = cc.Menu:create(pMenuItemSprite, pMenuItemSprite2)
     pMenu:alignItemsVerticallyWithPadding(100)
     pMenu:setPosition(cc.p(Winsize.width / 2, Winsize.height / 2))
@@ -190,26 +190,26 @@ local BugTest624_2_entry = nil
 
 local function BugTest624()
     local pLayer = cc.Layer:create()
-    
+
     local pLabel = cc.Label:createWithTTF("Layer1", s_markerFeltFontPath, 36)
     pLabel:setAnchorPoint(cc.p(0.5, 0.5))
     pLabel:setPosition(cc.p(Winsize.width / 2, Winsize.height / 2))
     pLayer:addChild(pLabel)
     pLayer:setAccelerometerEnabled(true)
 --  schedule(schedule_selector(Bug624Layer::switchLayer), 5.0f)
-	
+
 	local function BugTest624_SwitchLayer()
 		local scheduler = cc.Director:getInstance():getScheduler()
 		scheduler:unscheduleScriptEntry(BugTest624_entry)
-			
-		local pScene = cc.Scene:create() 
+
+		local pScene = cc.Scene:create()
 		local pNewPlayer = BugTest624_2()
-		CreateBugsTestBackMenuItem(pNewPlayer)   
-        pScene:addChild(pNewPlayer)   
-        cc.Director:getInstance():replaceScene(cc.TransitionFade:create(2.0, pScene, cc.c3b(255,255,255))) 
+		CreateBugsTestBackMenuItem(pNewPlayer)
+        pScene:addChild(pNewPlayer)
+        cc.Director:getInstance():replaceScene(cc.TransitionFade:create(2.0, pScene, cc.color(255,255,255)))
 	end
-	
-	
+
+
     local function BugTest624_OnEnterOrExit(tag)
     	local scheduler = cc.Director:getInstance():getScheduler()
 		if tag == "enter" then
@@ -217,37 +217,37 @@ local function BugTest624()
 		elseif tag == "exit" then
 			scheduler:unscheduleScriptEntry(BugTest624_entry)
 		end
-    end 
+    end
     pLayer:registerScriptHandler(BugTest624_OnEnterOrExit)
-    
+
     local function didAccelerate(x,y,z,timestamp)
     	print("Layer1 accel")
     end
     pLayer:registerScriptAccelerateHandler(didAccelerate)
-    
-    return pLayer 
+
+    return pLayer
 end
 
 function BugTest624_2()
 	local pLayer = cc.Layer:create()
-	
+
 	local pLabel = cc.Label:createWithTTF("Layer2", s_markerFeltFontPath, 36)
     pLabel:setAnchorPoint(cc.p(0.5, 0.5))
 	pLabel:setPosition(cc.p(Winsize.width / 2, Winsize.height / 2))
     pLayer:addChild(pLabel)
     pLayer:setAccelerometerEnabled(true)
-    
+
     local function BugTest624_2_SwitchLayer()
 		local scheduler = cc.Director:getInstance():getScheduler()
 		scheduler:unscheduleScriptEntry(BugTest624_2_entry)
-			
-		local pScene = cc.Scene:create() 
+
+		local pScene = cc.Scene:create()
 		local pNewPlayer = BugTest624()
-		CreateBugsTestBackMenuItem(pNewPlayer)   
+		CreateBugsTestBackMenuItem(pNewPlayer)
         pScene:addChild(pNewPlayer)
-        cc.Director:getInstance():replaceScene(cc.TransitionFade:create(2.0, pScene, cc.c3b(255,0,0))) 
+        cc.Director:getInstance():replaceScene(cc.TransitionFade:create(2.0, pScene, cc.color(255,0,0)))
 	end
-	
+
 	local function BugTest624_2_OnEnterOrExit(tag)
     	local scheduler = cc.Director:getInstance():getScheduler()
 		if tag == "enter" then
@@ -255,13 +255,13 @@ function BugTest624_2()
 		elseif tag == "exit" then
 			scheduler:unscheduleScriptEntry(BugTest624_2_entry)
 		end
-    end    
+    end
     pLayer:registerScriptHandler(BugTest624_2_OnEnterOrExit)
-    
+
     local function didAccelerate(x,y,z,timestamp)
     	print("Layer2 accel")
     end
-    
+
     pLayer:registerScriptAccelerateHandler(didAccelerate)
 	return pLayer
 end
@@ -269,26 +269,26 @@ end
 --BugTest886
 local function BugTest886()
     local pLayer = cc.Layer:create()
-    
+
     local pSprite1 = cc.Sprite:create("Images/bugs/bug886.jpg")
     pSprite1:setAnchorPoint(cc.p(0, 0))
     pSprite1:setPosition(cc.p(0, 0))
     pSprite1:setScaleX(0.6)
     pLayer:addChild(pSprite1)
-    
+
     local pSprite2 = cc.Sprite:create("Images/bugs/bug886.jpg")
     pSprite2:setAnchorPoint(cc.p(0, 0))
     pSprite2:setScaleX(0.6)
     pSprite2:setPosition(cc.p(pSprite1:getContentSize().width * 0.6 + 10, 0))
     pLayer:addChild(pSprite2)
-    
+
     return pLayer
 end
 
 --BugTest899
 local function BugTest899()
     local pLayer = cc.Layer:create()
-    
+
     local pBg = cc.Sprite:create("Images/bugs/RetinaDisplay.jpg")
     pLayer:addChild(pBg,0)
     pBg:setAnchorPoint(cc.p(0, 0))
@@ -299,9 +299,9 @@ end
 --BugTest914
 local function BugTest914()
     local layer = cc.Layer:create()
-    
+
     local layerColor = nil
-    
+
     for i = 0, 4 do
        layerColor = cc.LayerColor:create(cc.c4b(i*20, i*20, i*20,255))
        layerColor:setContentSize(cc.size(i*100, i*100))
@@ -310,7 +310,7 @@ local function BugTest914()
        layerColor:setIgnoreAnchorPointForPosition(false)
        layer:addChild(layerColor, -1-i)
     end
-    
+
     --create and initialize a Label
     local function restart()
        local scene = cc.Scene:create()
@@ -325,19 +325,19 @@ local function BugTest914()
     --position the label on the center of the screen
     label:setPosition(cc.p( Winsize.width /2 , Winsize.height/2 ))
     layer:addChild(label)
-    
+
     local item1 = cc.MenuItemFont:create("restart")
     item1:registerScriptTapHandler(restart)
-    
+
     local menu = cc.Menu:create()
     menu:addChild(item1)
     menu:alignItemsVertically()
     menu:setPosition(cc.p(Winsize.width/2, 100))
     layer:addChild(menu)
-    
-    -- handling touch events   
-    local function onTouchMoved(touches, event)		
-		local count = #(touches)	
+
+    -- handling touch events
+    local function onTouchMoved(touches, event)
+		local count = #(touches)
 		print("Number of touches: ",count)
     end
     local function onTouchBegan(touches, event)
@@ -365,7 +365,7 @@ local function BugTest1159()
     sprite_a:setIgnoreAnchorPointForPosition(false)
     sprite_a:setPosition(cc.p(0.0, Winsize.height/2))
     pLayer:addChild(sprite_a)
-    local seq = cc.Sequence:create(cc.MoveTo:create(1.0, cc.p(1024.0, 384.0)), cc.MoveTo:create(1.0, cc.p(0.0, 384.0)))     
+    local seq = cc.Sequence:create(cc.MoveTo:create(1.0, cc.p(1024.0, 384.0)), cc.MoveTo:create(1.0, cc.p(0.0, 384.0)))
     sprite_a:runAction(cc.RepeatForever:create(seq))
 
     local sprite_b = cc.LayerColor:create(cc.c4b(0, 0, 255, 255), 400, 400)
@@ -388,7 +388,7 @@ local function BugTest1159()
     menu:addChild(label)
     menu:setPosition(cc.p(Winsize.width - 200.0, 50.0))
     pLayer:addChild(menu)
-    
+
     local function onNodeEvent(event)
         if event == "exit" then
         --[[
@@ -415,16 +415,16 @@ local function BugTest1174()
     subtitleLabel:setAnchorPoint(cc.p(0.5, 0.5))
     layer:addChild(subtitleLabel, 1)
     subtitleLabel:setPosition(size.width / 2, size.height - 80)
-    
+
     local function check_for_error(p1,p2,p3,p4,s,t)
         local p4_p3 = cc.pSub(p4,p3)
         local p4_p3_t = cc.pMul(p4_p3,t)
         local hitp1 = cc.pAdd(p3,p4_p3_t)
-        
+
         local p2_p1 = cc.pSub(p2,p1)
         local p2_p1_s = cc.pMul(p2_p1,s)
         local hitp2 = cc.pAdd(p1,p2_p1_s)
-        
+
         if math.abs(hitp1.x - hitp2.x ) > 0.1 or math.abs(hitp1.y - hitp2.y) > 0.1 then
         	local strErr = "ERROR: ("..hitp1.x..","..hitp1.y..") != ("..hitp2.x..","..hitp2.y..")"
             print(strErr)
@@ -438,7 +438,7 @@ local function BugTest1174()
     local err = 0
     local ok  = 0
     local bRet = false
-    
+
     print("Test1 - Start")
     local i = 0
     for i = 0, 9999 do
@@ -452,19 +452,19 @@ local function BugTest1174()
         --[[
         a|b
         -----
-        c|D 
-        ]]--      
+        c|D
+        ]]--
         local dx = math.random() * 5000
         local dy = math.random() * -5000
-        
+
         --[[
         a|B
         -----
-        c|d 
+        c|d
         ]]--
         local bx = math.random() * 5000
         local by = math.random() * 5000
-        
+
         --[[
         a|b
         -----
@@ -472,12 +472,12 @@ local function BugTest1174()
         ]]--
         local cx = math.random() * -5000
         local cy = math.random() * -5000
-        
+
         A = cc.p(ax,ay)
         B = cc.p(bx,by)
         C = cc.p(cx,cy)
         D = cc.p(dx,dy)
-       
+
         bRet,s,t = cc.pIsLineIntersect( A, D, B, C, s, t)
         if true == bRet then
             if 1 == check_for_error(A,D,B,C,s,t) then
@@ -493,7 +493,7 @@ local function BugTest1174()
     --Test 2
     --------
     print("Test2 - Start")
-        
+
     p1 = cc.p(220,480)
     p2 = cc.p(304,325)
     p3 = cc.p(264,416)
@@ -505,12 +505,12 @@ local function BugTest1174()
     	check_for_error(p1, p2, p3, p4, s, t)
     end
     print("Test2 - End")
-    
+
     ------
     --Test 3
     ------
     print("Test3 - Start")
-        
+
     ok=0
     err=0
     for i = 0 , 9999 do
@@ -526,27 +526,27 @@ local function BugTest1174()
         local dx = math.random() * 500
         local dy = math.random() * -500
         p2 = cc.p(dx,dy)
-        
+
         -------
-            
+
         local y = ay - ((ay - dy) / 2.0)
-        
+
         -- a | b
         -- -----
         -- C | d
         local cx = math.random() * -500
         p3 = cc.p(cx,y)
-            
+
         -- a | B
         -- -----
         -- c | d
         local bx = math.random() * 500
         p4 = cc.p(bx,y)
-        
+
         s = 0.0
         t = 0.0
         bRet,s,t = cc.pIsLineIntersect(p1, p2, p3, p4, s, t)
-        if true == bRet then 
+        if true == bRet then
           if 1 == check_for_error(p1, p2, p3, p4, s,t ) then
              err = err + 1
           else
@@ -556,7 +556,7 @@ local function BugTest1174()
     end
     strLog = "Test3 - End. OK="..ok..", Err="..err
     print(strLog)
-    
+
     return layer
 end
 
@@ -602,8 +602,8 @@ end
 
 
 local function BugsTestMainLayer()
-	local ret = cc.Layer:create() 
-    
+	local ret = cc.Layer:create()
+
     --menu callback
     local function menuCallback(tag, pMenuItem)
         local nIdx = pMenuItem:getLocalZOrder() - kItemTagBasic
@@ -612,11 +612,11 @@ local function BugsTestMainLayer()
             cc.Director:getInstance():replaceScene(testScene)
         end
     end
-	
+
 	-- add menu items for tests
     local pItemMenu = cc.Menu:create()
     local nTestCount = #(testNames)
-    
+
     local i = 1
     for  i = 1, nTestCount do
         local  label = cc.Label:createWithTTF(testNames[i], s_arialPath, 24)
@@ -627,17 +627,17 @@ local function BugsTestMainLayer()
         pItemMenu:addChild(pMenuItem, i + kItemTagBasic)
        pMenuItem:setPosition( cc.p( VisibleRect:center().x, (VisibleRect:top().y - i * LINE_SPACE) ))
     end
-    
-    pItemMenu:setPosition(cc.p(0, 0))   
+
+    pItemMenu:setPosition(cc.p(0, 0))
     ret:addChild(pItemMenu)
-    
+
     -- handling touch events
     local ptBeginPos = {x = 0, y = 0}
     local ptCurPos  = {x = 0, y = 0}
 
-    -- handling touch events   
-    local function onTouchMoved(touches, event) 
-        local touchLocation = touches[1]:getLocation()   
+    -- handling touch events
+    local function onTouchMoved(touches, event)
+        local touchLocation = touches[1]:getLocation()
         local nMoveY = touchLocation.y - ptBeginPos.y
         local curPosx, curPosy = pItemMenu:getPosition()
         local nextPosy = curPosy + nMoveY
@@ -663,8 +663,8 @@ local function BugsTestMainLayer()
     listener:registerScriptHandler(onTouchMoved,cc.Handler.EVENT_TOUCHES_MOVED )
 
     local eventDispatcher = ret:getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret) 
-    
+    eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
+
     return ret
 end
 function BugsTestMain()

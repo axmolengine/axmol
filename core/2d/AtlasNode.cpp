@@ -72,7 +72,7 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
     _itemWidth  = tileWidth;
     _itemHeight = tileHeight;
 
-    _colorUnmodified    = Color3B::WHITE;
+    _colorUnmodified    = Color32::WHITE;
     _isOpacityModifyRGB = true;
 
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
@@ -145,7 +145,7 @@ void AtlasNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 // AtlasNode - RGBA protocol
 
-const Color3B& AtlasNode::getColor() const
+const Color32& AtlasNode::getColor() const
 {
     if (_isOpacityModifyRGB)
     {
@@ -154,16 +154,15 @@ const Color3B& AtlasNode::getColor() const
     return Node::getColor();
 }
 
-void AtlasNode::setColor(const Color3B& color3)
+void AtlasNode::setColor(const Color32& color)
 {
-    Color3B tmp      = color3;
-    _colorUnmodified = color3;
-
+    Color32 tmp      = color;
+    _colorUnmodified = color;
     if (_isOpacityModifyRGB)
     {
-        tmp.r = tmp.r * _displayedOpacity / 255;
-        tmp.g = tmp.g * _displayedOpacity / 255;
-        tmp.b = tmp.b * _displayedOpacity / 255;
+        tmp.r = tmp.r * _displayedColor.a / 255;
+        tmp.g = tmp.g * _displayedColor.a / 255;
+        tmp.b = tmp.b * _displayedColor.a / 255;
     }
     Node::setColor(tmp);
 }
@@ -179,7 +178,7 @@ void AtlasNode::setOpacity(uint8_t opacity)
 
 void AtlasNode::setOpacityModifyRGB(bool value)
 {
-    Color3B oldColor    = this->getColor();
+    Color32 oldColor    = this->getColor();
     _isOpacityModifyRGB = value;
     this->setColor(oldColor);
 }

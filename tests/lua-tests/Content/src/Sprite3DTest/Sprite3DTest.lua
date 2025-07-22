@@ -2,7 +2,7 @@ require "axmol.3d.3dConstants"
 
 local size = cc.Director:getInstance():getWinSize()
 local scheduler = cc.Director:getInstance():getScheduler()
-local attributeNames = 
+local attributeNames =
 {
     "a_position",
     "a_color",
@@ -172,7 +172,7 @@ function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent,x,y)
         local speed = 1.0
 
         if rand2 < 1/3 then
-            speed = animate:getSpeed() + math.random()  
+            speed = animate:getSpeed() + math.random()
         elseif rand2 < 2/3 then
             speed = animate:getSpeed() - 0.5 *  math.random()
         end
@@ -203,7 +203,7 @@ function Sprite3DWithSkinTest.create()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
     Sprite3DWithSkinTest._sprites = {}
     Sprite3DWithSkinTest.addNewSpriteWithCoords(layer, size.width / 2, size.height / 2)
-    
+
     cc.MenuItemFont:setFontName("fonts/arial.ttf")
     cc.MenuItemFont:setFontSize(15)
     local menuItem =  cc.MenuItemFont:create("High Quality")
@@ -241,7 +241,7 @@ end
 ----------------------------------------
 ----Animate3DTest
 ----------------------------------------
-local State = 
+local State =
 {
     SWIMMING = 0,
     SWIMMING_TO_HURT = 1,
@@ -294,7 +294,7 @@ function Animate3DTest:onEnter()
                     return
                 end
             end
-        end  
+        end
     end
 
     self:addSprite3D()
@@ -309,7 +309,7 @@ function Animate3DTest:onEnter()
         if self._state == State.HURT_TO_SWIMMING then
             self._elapseTransTime = self._elapseTransTime + dt
             local t = self._elapseTransTime / self._transTime
-            
+
             if t >= 1.0 then
                 t = 1.0
                 self._sprite:stopAction(self._hurt)
@@ -425,16 +425,16 @@ function AttachmentTest.create()
         sprite:setRotation3D({x = 0, y =180, z = 0})
         layer:addChild(sprite)
         sprite:setPosition( cc.p( pos.x, pos.y) )
-    
+
         --test attach
         local sp = cc.Sprite3D:create("MeshRendererTest/axe.c3b")
         sprite:getAttachNode("Bip001 R Hand"):addChild(sp)
-    
+
         local animation = cc.Animation3D:create(fileName)
         if nil ~=animation then
             local animate = cc.Animate3D:create(animation)
             sprite:runAction(cc.RepeatForever:create(animate))
-        end 
+        end
 
         _sprite = sprite
         _hasWeapon = true
@@ -485,13 +485,13 @@ function Sprite3DReskinTest:init()
     self._useShoesId = 0
     self._girlHair   = {}
     self._useHairId  = 0
-    self._sprite     = nil 
+    self._sprite     = nil
 
     self:addNewSpriteWithCoords(cc.p(size.width / 2, size.height / 2))
 
     local listener = cc.EventListenerTouchAllAtOnce:create()
     listener:registerScriptHandler(function (touches, event)
-        
+
     end,cc.Handler.EVENT_TOUCHES_ENDED)
 
     local eventDispatcher = self:getEventDispatcher()
@@ -698,7 +698,7 @@ function Sprite3DWithOBBPerfromanceTest:ctor()
     end,cc.Handler.EVENT_TOUCHES_BEGAN)
 
     listener:registerScriptHandler(function (touches, event)
-        
+
     end,cc.Handler.EVENT_TOUCHES_ENDED)
 
     listener:registerScriptHandler(function (touches, event)
@@ -730,13 +730,13 @@ function Sprite3DWithOBBPerfromanceTest:ctor()
     decrease:registerScriptTapHandler(function(tag, sender)
         self:delOBBWithCount(10)
     end)
-    decrease:setColor(cc.c3b(0, 200, 20))
+    decrease:setColor(cc.color(0, 200, 20))
 
     local increase =  cc.MenuItemFont:create(" + ")
     increase:registerScriptTapHandler(function(tag, sender)
         self:addOBBWithCount(10)
     end)
-    increase:setColor(cc.c3b(0, 200, 20))
+    increase:setColor(cc.color(0, 200, 20))
 
     local menu = cc.Menu:create(decrease, increase)
     menu:alignItemsHorizontally()
@@ -747,7 +747,7 @@ function Sprite3DWithOBBPerfromanceTest:ctor()
     ttfConfig.fontFilePath = "fonts/Marker Felt.ttf"
     ttfConfig.fontSize = 30
     self._labelCubeCount = cc.Label:createWithTTF(ttfConfig,"0 cubes")
-    self._labelCubeCount:setColor(cc.c3b(0,200,20))
+    self._labelCubeCount:setColor(cc.color(0,200,20))
     self._labelCubeCount:setPosition(cc.p(s.width/2, s.height-90))
     self:addChild(self._labelCubeCount)
 
@@ -813,9 +813,9 @@ function Sprite3DWithOBBPerfromanceTest:delOBBWithCount( value )
     if #self._obb >= 10 then
         for i= 1, 10 do
             table.remove(self._obb)
-        end 
+        end
         self._drawOBB:clear()
-    end 
+    end
 end
 
 function Sprite3DWithOBBPerfromanceTest:initDrawBox()
@@ -858,7 +858,7 @@ function Sprite3DWithOBBPerfromanceTest:calculateRayByLocationInView(ray, locati
     direction.y = farPoint.y - nearPoint.y
     direction.z = farPoint.z - nearPoint.z
     direction   = cc.vec3normalize(direction)
-    
+
     ray._origin    = nearPoint
     ray._direction = direction
 end
@@ -876,7 +876,7 @@ function Sprite3DWithOBBPerfromanceTest:addNewSpriteWithCoords(vec2)
         local animate = cc.Animate3D:create(animation, 0.0, 1.933)
         sprite:runAction(cc.RepeatForever:create(animate))
     end
-    
+
     self._moveAction = cc.MoveTo:create(4.0, cc.p(s.width / 5.0, s.height / 2.0))
     self._moveAction:retain()
     local function reachEndCallBack()
@@ -894,10 +894,10 @@ function Sprite3DWithOBBPerfromanceTest:addNewSpriteWithCoords(vec2)
     local seq = cc.Sequence:create(self._moveAction, cc.CallFunc:create(reachEndCallBack))
     seq:setTag(100)
     sprite:runAction(seq)
- 
+
     local aabb = self._sprite:getAABB()
     self._obbt = cc.OBB:new(aabb)
-    
+
     self._drawDebug = cc.DrawNode3D:create()
     self:addChild(self._drawDebug)
 end
@@ -933,7 +933,7 @@ function Sprite3DMirrorTest.create()
     local animation = cc.Animation3D:create(fileName)
     if nil ~= animation then
         local animate = cc.Animate3D:create(animation)
-        
+
         sprite:runAction(cc.RepeatForever:create(animate))
     end
 
@@ -949,11 +949,11 @@ function Sprite3DMirrorTest.create()
     --test attach
     sp = cc.Sprite3D:create("MeshRendererTest/axe.c3b")
     sprite:getAttachNode("Bip001 R Hand"):addChild(sp)
-    
+
     animation = cc.Animation3D:create(fileName)
     if nil ~= animation then
         local animate = cc.Animate3D:create(animation)
-        
+
         sprite:runAction(cc.RepeatForever:create(animate))
     end
 
@@ -1010,11 +1010,11 @@ function AsyncLoadSprite3DTest:onEnter()
     function menuCallback_asyncLoadSprite(tag, sender)
         --Note that you must stop the tasks before leaving the scene.
         cc.AsyncTaskPool:getInstance():stopTasks(cc.AsyncTaskPool.TaskType.TASK_IO)
-    
+
         local node = self:getChildByTag(101)
         --remove all loaded sprite
         node:removeAllChildren()
-    
+
         --remove cache data
         cc.MeshRendererCache:getInstance():removeAllMeshRenderData()
 
@@ -1048,18 +1048,18 @@ function AsyncLoadSprite3DTest:onEnter()
         end)
     end
     item1:registerScriptTapHandler(menuCallback_asyncLoadSprite)
-    
+
     local s = cc.Director:getInstance():getWinSize()
     item1:setPosition( s.width * 0.5, s.height * 0.8)
-    
+
     local menu = cc.Menu:create(item1)
     menu:setPosition(cc.p(0,0))
     self:addChild(menu, 10)
-    
+
     local node = cc.Node:create()
     node:setTag(101)
     self:addChild(node)
-    
+
     menuCallback_asyncLoadSprite()
 end
 
@@ -1125,7 +1125,7 @@ function Sprite3DCubeMapTest:addNewSpriteWithCoords(pos)
 
     local program = axb.ProgramManager:getInstance():loadProgram('custom/cube_map_vs', 'custom/cube_map_fs')
     local programState = ccb.ProgramState:new(program)
-    
+
     self._textureCube = cc.TextureCube:create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
         "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
         "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg")
@@ -1148,7 +1148,7 @@ function Sprite3DCubeMapTest:addNewSpriteWithCoords(pos)
 
     --pass mesh's attribute to shader
 
-    local attributeNames = 
+    local attributeNames =
     {
         "a_position",
         "a_color",
@@ -1229,7 +1229,7 @@ function Sprite3DNormalMappingTest:onEnter()
     local radius = 100.0
     local angle = 0.0
     local reverseDir = false
-    local light = cc.PointLight:create(cc.vec3(0.0, 0.0, 0.0), cc.c3b(255, 255, 255), 1000.0)
+    local light = cc.PointLight:create(cc.vec3(0.0, 0.0, 0.0), cc.color(255, 255, 255), 1000.0)
     local function lightUpdate()
         light:setPosition3D(cc.vec3(radius * math.cos(angle), 0.0, radius * math.sin(angle)))
         if reverseDir == true then
