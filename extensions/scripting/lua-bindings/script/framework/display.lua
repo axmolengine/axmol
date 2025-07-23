@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 local display = {}
 
-local director = cc.Director:getInstance()
+local director = ax.Director:getInstance()
 local view = director:getRenderView()
 
 if not view then
@@ -38,14 +38,14 @@ if not view then
             height = AX_DESIGN_RESOLUTION.height
         end
     end
-    view = cc.RenderViewImpl:createWithRect("Axmol-Lua", cc.rect(0, 0, width, height))
+    view = ax.RenderViewImpl:createWithRect("Axmol-Lua", ax.rect(0, 0, width, height))
     director:setRenderView(view)
 end
 
 local framesize = view:getFrameSize()
 local textureCache = director:getTextureCache()
-local spriteFrameCache = cc.SpriteFrameCache:getInstance()
-local animationCache = cc.AnimationCache:getInstance()
+local spriteFrameCache = ax.SpriteFrameCache:getInstance()
+local animationCache = ax.AnimationCache:getInstance()
 
 -- auto scale
 local function checkResolution(r)
@@ -58,24 +58,24 @@ end
 
 local function setDesignResolution(r, framesize)
     if r.autoscale == "FILL_ALL" then
-        view:setDesignResolutionSize(framesize.width, framesize.height, cc.ResolutionPolicy.FILL_ALL)
+        view:setDesignResolutionSize(framesize.width, framesize.height, ax.ResolutionPolicy.FILL_ALL)
     else
         local scaleX, scaleY = framesize.width / r.width, framesize.height / r.height
         local width, height = framesize.width, framesize.height
         if r.autoscale == "FIXED_WIDTH" then
             width = framesize.width / scaleX
             height = framesize.height / scaleX
-            view:setDesignResolutionSize(width, height, cc.ResolutionPolicy.NO_BORDER)
+            view:setDesignResolutionSize(width, height, ax.ResolutionPolicy.NO_BORDER)
         elseif r.autoscale == "FIXED_HEIGHT" then
             width = framesize.width / scaleY
             height = framesize.height / scaleY
-            view:setDesignResolutionSize(width, height, cc.ResolutionPolicy.NO_BORDER)
+            view:setDesignResolutionSize(width, height, ax.ResolutionPolicy.NO_BORDER)
         elseif r.autoscale == "EXACT_FIT" then
-            view:setDesignResolutionSize(r.width, r.height, cc.ResolutionPolicy.EXACT_FIT)
+            view:setDesignResolutionSize(r.width, r.height, ax.ResolutionPolicy.EXACT_FIT)
         elseif r.autoscale == "NO_BORDER" then
-            view:setDesignResolutionSize(r.width, r.height, cc.ResolutionPolicy.NO_BORDER)
+            view:setDesignResolutionSize(r.width, r.height, ax.ResolutionPolicy.NO_BORDER)
         elseif r.autoscale == "SHOW_ALL" then
-            view:setDesignResolutionSize(r.width, r.height, cc.ResolutionPolicy.SHOW_ALL)
+            view:setDesignResolutionSize(r.width, r.height, ax.ResolutionPolicy.SHOW_ALL)
         else
             printError(string.format("display - invalid r.autoscale \"%s\"", r.autoscale))
         end
@@ -101,15 +101,15 @@ local function setConstants()
     display.right              = display.width
     display.top                = display.height
     display.bottom             = 0
-    display.center             = cc.p(display.cx, display.cy)
-    display.left_top           = cc.p(display.left, display.top)
-    display.left_bottom        = cc.p(display.left, display.bottom)
-    display.left_center        = cc.p(display.left, display.cy)
-    display.right_top          = cc.p(display.right, display.top)
-    display.right_bottom       = cc.p(display.right, display.bottom)
-    display.right_center       = cc.p(display.right, display.cy)
-    display.top_center         = cc.p(display.cx, display.top)
-    display.top_bottom         = cc.p(display.cx, display.bottom)
+    display.center             = ax.p(display.cx, display.cy)
+    display.left_top           = ax.p(display.left, display.top)
+    display.left_bottom        = ax.p(display.left, display.bottom)
+    display.left_center        = ax.p(display.left, display.cy)
+    display.right_top          = ax.p(display.right, display.top)
+    display.right_bottom       = ax.p(display.right, display.bottom)
+    display.right_center       = ax.p(display.right, display.cy)
+    display.top_center         = ax.p(display.cx, display.top)
+    display.top_bottom         = ax.p(display.cx, display.bottom)
 
     printInfo(string.format("# display.sizeInPixels         = {width = %0.2f, height = %0.2f}", display.sizeInPixels.width, display.sizeInPixels.height))
     printInfo(string.format("# display.size                 = {width = %0.2f, height = %0.2f}", display.size.width, display.size.height))
@@ -161,11 +161,11 @@ if type(AX_DESIGN_RESOLUTION) == "table" then
     display.setAutoScale(AX_DESIGN_RESOLUTION)
 end
 
-display.COLOR_WHITE = cc.c3b(255, 255, 255)
-display.COLOR_BLACK = cc.c3b(0, 0, 0)
-display.COLOR_RED   = cc.c3b(255, 0, 0)
-display.COLOR_GREEN = cc.c3b(0, 255, 0)
-display.COLOR_BLUE  = cc.c3b(0, 0, 255)
+display.COLOR_WHITE = ax.color32(255, 255, 255, 255)
+display.COLOR_BLACK = ax.color32(0, 0, 0, 255)
+display.COLOR_RED   = ax.color32(255, 0, 0, 255)
+display.COLOR_GREEN = ax.color32(0, 255, 0, 255)
+display.COLOR_BLUE  = ax.color32(0, 0, 255, 255)
 
 display.AUTO_SIZE      = 0
 display.FIXED_SIZE     = 1
@@ -174,44 +174,44 @@ display.RIGHT_TO_LEFT  = 1
 display.TOP_TO_BOTTOM  = 2
 display.BOTTOM_TO_TOP  = 3
 
-display.CENTER        = cc.p(0.5, 0.5)
-display.LEFT_TOP      = cc.p(0, 1)
-display.LEFT_BOTTOM   = cc.p(0, 0)
-display.LEFT_CENTER   = cc.p(0, 0.5)
-display.RIGHT_TOP     = cc.p(1, 1)
-display.RIGHT_BOTTOM  = cc.p(1, 0)
-display.RIGHT_CENTER  = cc.p(1, 0.5)
-display.CENTER_TOP    = cc.p(0.5, 1)
-display.CENTER_BOTTOM = cc.p(0.5, 0)
+display.CENTER        = ax.p(0.5, 0.5)
+display.LEFT_TOP      = ax.p(0, 1)
+display.LEFT_BOTTOM   = ax.p(0, 0)
+display.LEFT_CENTER   = ax.p(0, 0.5)
+display.RIGHT_TOP     = ax.p(1, 1)
+display.RIGHT_BOTTOM  = ax.p(1, 0)
+display.RIGHT_CENTER  = ax.p(1, 0.5)
+display.CENTER_TOP    = ax.p(0.5, 1)
+display.CENTER_BOTTOM = ax.p(0.5, 0)
 
 display.SCENE_TRANSITIONS = {
-    CROSSFADE       = {cc.TransitionCrossFade},
-    FADE            = {cc.TransitionFade, cc.c3b(0, 0, 0)},
-    FADEBL          = {cc.TransitionFadeBL},
-    FADEDOWN        = {cc.TransitionFadeDown},
-    FADETR          = {cc.TransitionFadeTR},
-    FADEUP          = {cc.TransitionFadeUp},
-    FLIPANGULAR     = {cc.TransitionFlipAngular, cc.TRANSITION_ORIENTATION_LEFT_OVER},
-    FLIPX           = {cc.TransitionFlipX, cc.TRANSITION_ORIENTATION_LEFT_OVER},
-    FLIPY           = {cc.TransitionFlipY, cc.TRANSITION_ORIENTATION_UP_OVER},
-    JUMPZOOM        = {cc.TransitionJumpZoom},
-    MOVEINB         = {cc.TransitionMoveInB},
-    MOVEINL         = {cc.TransitionMoveInL},
-    MOVEINR         = {cc.TransitionMoveInR},
-    MOVEINT         = {cc.TransitionMoveInT},
-    PAGETURN        = {cc.TransitionPageTurn, false},
-    ROTOZOOM        = {cc.TransitionRotoZoom},
-    SHRINKGROW      = {cc.TransitionShrinkGrow},
-    SLIDEINB        = {cc.TransitionSlideInB},
-    SLIDEINL        = {cc.TransitionSlideInL},
-    SLIDEINR        = {cc.TransitionSlideInR},
-    SLIDEINT        = {cc.TransitionSlideInT},
-    SPLITCOLS       = {cc.TransitionSplitCols},
-    SPLITROWS       = {cc.TransitionSplitRows},
-    TURNOFFTILES    = {cc.TransitionTurnOffTiles},
-    ZOOMFLIPANGULAR = {cc.TransitionZoomFlipAngular},
-    ZOOMFLIPX       = {cc.TransitionZoomFlipX, cc.TRANSITION_ORIENTATION_LEFT_OVER},
-    ZOOMFLIPY       = {cc.TransitionZoomFlipY, cc.TRANSITION_ORIENTATION_UP_OVER},
+    CROSSFADE       = {ax.TransitionCrossFade},
+    FADE            = {ax.TransitionFade, ax.color32(0, 0, 0, 255)},
+    FADEBL          = {ax.TransitionFadeBL},
+    FADEDOWN        = {ax.TransitionFadeDown},
+    FADETR          = {ax.TransitionFadeTR},
+    FADEUP          = {ax.TransitionFadeUp},
+    FLIPANGULAR     = {ax.TransitionFlipAngular, ax.TRANSITION_ORIENTATION_LEFT_OVER},
+    FLIPX           = {ax.TransitionFlipX, ax.TRANSITION_ORIENTATION_LEFT_OVER},
+    FLIPY           = {ax.TransitionFlipY, ax.TRANSITION_ORIENTATION_UP_OVER},
+    JUMPZOOM        = {ax.TransitionJumpZoom},
+    MOVEINB         = {ax.TransitionMoveInB},
+    MOVEINL         = {ax.TransitionMoveInL},
+    MOVEINR         = {ax.TransitionMoveInR},
+    MOVEINT         = {ax.TransitionMoveInT},
+    PAGETURN        = {ax.TransitionPageTurn, false},
+    ROTOZOOM        = {ax.TransitionRotoZoom},
+    SHRINKGROW      = {ax.TransitionShrinkGrow},
+    SLIDEINB        = {ax.TransitionSlideInB},
+    SLIDEINL        = {ax.TransitionSlideInL},
+    SLIDEINR        = {ax.TransitionSlideInR},
+    SLIDEINT        = {ax.TransitionSlideInT},
+    SPLITCOLS       = {ax.TransitionSplitCols},
+    SPLITROWS       = {ax.TransitionSplitRows},
+    TURNOFFTILES    = {ax.TransitionTurnOffTiles},
+    ZOOMFLIPANGULAR = {ax.TransitionZoomFlipAngular},
+    ZOOMFLIPX       = {ax.TransitionZoomFlipX, ax.TRANSITION_ORIENTATION_LEFT_OVER},
+    ZOOMFLIPY       = {ax.TransitionZoomFlipY, ax.TRANSITION_ORIENTATION_UP_OVER},
 }
 
 display.TEXTURES_PIXEL_FORMAT = {}
@@ -221,7 +221,7 @@ display.DEFAULT_TTF_FONT_SIZE   = 32
 
 
 local PARAMS_EMPTY = {}
-local RECT_ZERO = cc.rect(0, 0, 0, 0)
+local RECT_ZERO = ax.rect(0, 0, 0, 0)
 
 local sceneIndex = 0
 function display.newScene(name, params)
@@ -229,9 +229,9 @@ function display.newScene(name, params)
     sceneIndex = sceneIndex + 1
     local scene
     if not params.physics then
-        scene = cc.Scene:create()
+        scene = ax.Scene:create()
     else
-        scene = cc.Scene:createWithPhysics()
+        scene = ax.Scene:createWithPhysics()
     end
     scene.name_ = string.format("%s:%d", name or "<unknown-scene>", sceneIndex)
 
@@ -282,7 +282,7 @@ function display.getRunningScene()
 end
 
 function display.newNode()
-    return cc.Node:create()
+    return ax.Node:create()
 end
 
 function display.newLayer(...)
@@ -292,24 +292,24 @@ function display.newLayer(...)
     if c == 0 then
         -- /** creates a fullscreen black layer */
         -- static Layer *create();
-        layer = cc.Layer:create()
+        layer = ax.Layer:create()
     elseif c == 1 then
         -- /** creates a Layer with color. Width and height are the window size. */
         -- static LayerColor * create(const Color32& color);
-        layer = cc.LayerColor:create(cc.convertColor(params[1], "4b"))
+        layer = ax.LayerColor:create(ax.convertColor(params[1], "4b"))
     elseif c == 2 then
         -- /** creates a Layer with color, width and height in Points */
         -- static LayerColor * create(const Color32& color, const Size& size);
         --
         -- /** Creates a full-screen Layer with a gradient between start and end. */
         -- static LayerGradient* create(const Color32& start, const Color32& end);
-        local color1 = cc.convertColor(params[1], "4b")
+        local color1 = ax.convertColor(params[1], "4b")
         local p2 = params[2]
         assert(type(p2) == "table" and (p2.width or p2.r), "display.newLayer() - invalid paramerter 2")
         if p2.r then
-            layer = cc.LayerGradient:create(color1, cc.convertColor(p2, "4b"))
+            layer = ax.LayerGradient:create(color1, ax.convertColor(p2, "4b"))
         else
-            layer = cc.LayerColor:create(color1, p2.width, p2.height)
+            layer = ax.LayerColor:create(color1, p2.width, p2.height)
         end
     elseif c == 3 then
         -- /** creates a Layer with color, width and height in Points */
@@ -317,20 +317,20 @@ function display.newLayer(...)
         --
         -- /** Creates a full-screen Layer with a gradient between start and end in the direction of v. */
         -- static LayerGradient* create(const Color32& start, const Color32& end, const Vec2& v);
-        local color1 = cc.convertColor(params[1], "4b")
+        local color1 = ax.convertColor(params[1], "4b")
         local p2 = params[2]
         local p2type = type(p2)
         if p2type == "table" then
-            layer = cc.LayerGradient:create(color1, cc.convertColor(p2, "4b"), params[3])
+            layer = ax.LayerGradient:create(color1, ax.convertColor(p2, "4b"), params[3])
         else
-            layer = cc.LayerColor:create(color1, p2, params[3])
+            layer = ax.LayerColor:create(color1, p2, params[3])
         end
     end
     return layer
 end
 
 function display.newSprite(source, x, y, params)
-    local spriteClass = cc.Sprite
+    local spriteClass = ax.Sprite
     local scale9 = false
 
     if type(x) == "table" and not x.x then
@@ -415,7 +415,7 @@ function display.newSpriteFrame(source, ...)
             error(string.format("display.newSpriteFrame() - invalid frame name \"%s\"", tostring(source)), 0)
         end
     elseif tolua.type(source) == "ax.Texture2D" then
-        frame = cc.SpriteFrame:createWithTexture(source, ...)
+        frame = ax.SpriteFrame:createWithTexture(source, ...)
     else
         error("display.newSpriteFrame() - invalid parameters", 0)
     end
@@ -446,8 +446,8 @@ local function newAnimation(frames, time)
     local count = #frames
     assert(count > 0, "display.newAnimation() - invalid frames")
     time = time or 1.0 / count
-    return cc.Animation:createWithSpriteFrames(frames, time),
-           cc.Sprite:createWithSpriteFrame(frames[1])
+    return ax.Animation:createWithSpriteFrames(frames, time),
+           ax.Sprite:createWithSpriteFrame(frames[1])
 end
 
 function display.newAnimation(...)
@@ -477,7 +477,7 @@ function display.loadImage(imageFilename, callback)
     end
 end
 
-local fileUtils = cc.FileUtils:getInstance()
+local fileUtils = ax.FileUtils:getInstance()
 function display.getImage(imageFilename)
     local fullpath = fileUtils:fullPathForFilename(imageFilename)
     return textureCache:getTextureForKey(fullpath)

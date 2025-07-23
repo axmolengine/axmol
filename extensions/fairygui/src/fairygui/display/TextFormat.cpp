@@ -5,7 +5,7 @@ using namespace ax;
 
 TextFormat::TextFormat() :
     fontSize(12),
-    color(Color3B::BLACK),
+    color(Color32::BLACK),
     bold(false),
     italics(false),
     underline(false),

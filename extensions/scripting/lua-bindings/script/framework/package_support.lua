@@ -24,28 +24,28 @@ THE SOFTWARE.
 
 -- Cocos2d-Lua core functions
 local unpack = table.unpack
-cc.loaded_packages = {}
-local loaded_packages = cc.loaded_packages
+ax.loaded_packages = {}
+local loaded_packages = ax.loaded_packages
 
-function cc.register(name, package)
-    cc.loaded_packages[name] = package
+function ax.register(name, package)
+    ax.loaded_packages[name] = package
 end
 
-function cc.load(...)
+function ax.load(...)
     local names = {...}
-    assert(#names > 0, "cc.load() - invalid package names")
+    assert(#names > 0, "ax.load() - invalid package names")
 
     local packages = {}
     for _, name in ipairs(names) do
-        assert(type(name) == "string", string.format("cc.load() - invalid package name \"%s\"", tostring(name)))
+        assert(type(name) == "string", string.format("ax.load() - invalid package name \"%s\"", tostring(name)))
         if not loaded_packages[name] then
             local packageName = string.format("packages.%s.init", name)
             local cls = require(packageName)
-            assert(cls, string.format("cc.load() - package class \"%s\" load failed", packageName))
+            assert(cls, string.format("ax.load() - package class \"%s\" load failed", packageName))
             loaded_packages[name] = cls
 
             if DEBUG > 1 then
-                printInfo("cc.load() - load module \"packages.%s.init\"", name)
+                printInfo("ax.load() - load module \"packages.%s.init\"", name)
             end
         end
         packages[#packages + 1] = loaded_packages[name]
@@ -53,18 +53,18 @@ function cc.load(...)
     return unpack(packages)
 end
 
-local load_ = cc.load
+local load_ = ax.load
 local bind_
 bind_ = function(target, ...)
     local t = type(target)
-    assert(t == "table" or t == "userdata", string.format("cc.bind() - invalid target, expected is object, actual is %s", t))
+    assert(t == "table" or t == "userdata", string.format("ax.bind() - invalid target, expected is object, actual is %s", t))
     local names = {...}
-    assert(#names > 0, "cc.bind() - package names expected")
+    assert(#names > 0, "ax.bind() - package names expected")
 
     load_(...)
     if not target.components_ then target.components_ = {} end
     for _, name in ipairs(names) do
-        assert(type(name) == "string" and name ~= "", string.format("cc.bind() - invalid package name \"%s\"", name))
+        assert(type(name) == "string" and name ~= "", string.format("ax.bind() - invalid package name \"%s\"", name))
         if not target.components_[name] then
             local cls = loaded_packages[name]
             for __, depend in ipairs(cls.depends or {}) do
@@ -80,25 +80,25 @@ bind_ = function(target, ...)
 
     return target
 end
-cc.bind = bind_
+ax.bind = bind_
 
-function cc.unbind(target, ...)
+function ax.unbind(target, ...)
     if not target.components_ then return end
 
     local names = {...}
-    assert(#names > 0, "cc.unbind() - invalid package names")
+    assert(#names > 0, "ax.unbind() - invalid package names")
 
     for _, name in ipairs(names) do
-        assert(type(name) == "string" and name ~= "", string.format("cc.unbind() - invalid package name \"%s\"", name))
+        assert(type(name) == "string" and name ~= "", string.format("ax.unbind() - invalid package name \"%s\"", name))
         local component = target.components_[name]
-        assert(component, string.format("cc.unbind() - component \"%s\" not found", tostring(name)))
+        assert(component, string.format("ax.unbind() - component \"%s\" not found", tostring(name)))
         component:unbind(target)
         target.components_[name] = nil
     end
     return target
 end
 
-function cc.setmethods(target, component, methods)
+function ax.setmethods(target, component, methods)
     for _, name in ipairs(methods) do
         local method = component[name]
         target[name] = function(__, ...)
@@ -107,7 +107,7 @@ function cc.setmethods(target, component, methods)
     end
 end
 
-function cc.unsetmethods(target, methods)
+function ax.unsetmethods(target, methods)
     for _, name in ipairs(methods) do
         target[name] = nil
     end

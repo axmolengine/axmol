@@ -72,6 +72,20 @@ struct Quad3
     Vec3 tr;
 };
 
+/* @struct V2F_T2F
+ * A Vec2 with a vertex point and a tex coord point.
+ * MotionStreak
+ */
+struct V2F_T2F_C4B
+{
+    /// position (2F)
+    Vec2 position;
+    /// tex coords (2F)
+    Tex2F texCoord;
+    /// color (4F)
+    Color32 color;
+};
+
 /** @struct V2F_T2F_C4F
  * A Vec2 with a vertex point, a tex coord point and a color 4F.
  */
@@ -319,13 +333,11 @@ struct AX_DLL FontShadow
 struct AX_DLL FontStroke
 {
     /// stroke color
-    Color3B _strokeColor = Color3B::BLACK;
+    Color32 _strokeColor = Color32::BLACK;
     /// stroke size
     float _strokeSize = 0.f;
     /// true if stroke enabled
     bool _strokeEnabled = false;
-    /// stroke alpha
-    uint8_t _strokeAlpha = 255;
 };
 
 /** @struct FontDefinition
@@ -344,9 +356,7 @@ struct AX_DLL FontDefinition
     /// rendering box
     Vec2 _dimensions = Vec2::ZERO;
     /// font color
-    Color3B _fontFillColor = Color3B::WHITE;
-    /// font alpha
-    uint8_t _fontAlpha = 255;
+    Color32 _fontFillColor = Color32::WHITE;
     /// font shadow
     FontShadow _shadow;
     /// font stroke

@@ -39,41 +39,6 @@ struct Color;
 struct HSV;
 
 /**
- * RGB color composed of bytes 3 bytes.
- * @since v3.0
- */
-struct AX_DLL Color3B
-{
-    Color3B() {};
-    Color3B(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b) {}
-    explicit Color3B(const Color32& color);
-    explicit Color3B(const Color& color);
-
-    bool operator==(const Color3B& right) const;
-    bool operator==(const Color32& right) const;
-    bool operator==(const Color& right) const;
-    bool operator!=(const Color3B& right) const;
-    bool operator!=(const Color32& right) const;
-    bool operator!=(const Color& right) const;
-
-    bool equals(const Color3B& other) const { return (*this == other); }
-
-    uint8_t r = 0;
-    uint8_t g = 0;
-    uint8_t b = 0;
-
-    static const Color3B WHITE;
-    static const Color3B YELLOW;
-    static const Color3B BLUE;
-    static const Color3B GREEN;
-    static const Color3B RED;
-    static const Color3B MAGENTA;
-    static const Color3B BLACK;
-    static const Color3B ORANGE;
-    static const Color3B GRAY;
-};
-
-/**
  * RGBA color composed of 4 bytes.
  * @since v3.0
  */
@@ -81,7 +46,8 @@ struct AX_DLL Color32
 {
     Color32() : value(0) {}
     Color32(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
-    explicit Color32(const Color3B& color, uint8_t _a = 255) : r(color.r), g(color.g), b(color.b), a(_a) {}
+
+    Color32(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b), a(255) {}
 
     template <class _Other,
               typename = std::enable_if_t<std::is_unsigned_v<decltype(_Other{}.r)> &&
@@ -128,10 +94,8 @@ struct AX_DLL Color32
     }
 
     bool operator==(const Color32& right) const;
-    bool operator==(const Color3B& right) const;
     bool operator==(const Color& right) const;
     bool operator!=(const Color32& right) const;
-    bool operator!=(const Color3B& right) const;
     bool operator!=(const Color& right) const;
 
     union
@@ -166,9 +130,7 @@ struct AX_DLL Color : public Vec4Adapter<Color>
 {
     Color() {}
     Color(float _r, float _g, float _b, float _a) : Vec4Adapter(_r, _g, _b, _a) {}
-    explicit Color(const Color3B& color, float _a = 1.0f)
-        : Vec4Adapter(color.r / 255.f, color.g / 255.f, color.b / 255.f, _a)
-    {}
+    Color(float _r, float _g, float _b) : Vec4Adapter(_r, _g, _b, 1.0f) {}
     explicit Color(const Color32& color)
         : Vec4Adapter(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f)
     {}
@@ -193,9 +155,7 @@ struct AX_DLL Color : public Vec4Adapter<Color>
         return *this;
     }
 
-    bool operator==(const Color3B& rhs) const;
     bool operator==(const Color32& rhs) const;
-    bool operator!=(const Color3B& rhs) const;
     bool operator!=(const Color32& rhs) const;
 
     bool equals(const Color& other) const { return (*this == other); }
@@ -222,8 +182,6 @@ struct AX_DLL HSV : public Vec4Adapter<HSV>
 {
     HSV();
     HSV(float _h, float _s, float _v, float _a = 1.0F);
-
-    explicit HSV(const Color3B& c);
     explicit HSV(const Color32& c);
     explicit HSV(const Color& c);
 
@@ -231,8 +189,6 @@ struct AX_DLL HSV : public Vec4Adapter<HSV>
 
     void fromRgba(const Color& rgba);
     Color toRgba() const;
-
-    Color3B toColor3B() const;
     Color32 toColor32() const;
 };
 
@@ -247,7 +203,6 @@ struct AX_DLL HSL : public Vec4Adapter<HSL>
     HSL();
     HSL(float _h, float _s, float _l, float _a = 1.0F);
 
-    explicit HSL(const Color3B& c);
     explicit HSL(const Color32& c);
     explicit HSL(const Color& c);
 
@@ -258,16 +213,9 @@ struct AX_DLL HSL : public Vec4Adapter<HSL>
 
     static float hue2rgb(float p, float q, float t);
 
-    Color3B toColor3B() const;
     Color32 toColor32() const;
 };
 
-inline Color3B::Color3B(const Color32& color) : r(color.r), g(color.g), b(color.b) {}
-inline Color3B::Color3B(const Color& color)
-    : r(static_cast<uint8_t>(color.r * 255))
-    , g(static_cast<uint8_t>(color.g * 255))
-    , b(static_cast<uint8_t>(color.b * 255))
-{}
 inline Color32::operator Color() const
 {
     return Color{r / 255.f, g / 255.f, b / 255.f, a / 255.f};

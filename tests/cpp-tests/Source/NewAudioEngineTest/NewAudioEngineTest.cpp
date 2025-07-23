@@ -92,11 +92,11 @@ public:
         _enabled = enabled;
         if (_enabled)
         {
-            this->setColor(Color3B::WHITE);
+            this->setColor(Color32::WHITE);
         }
         else
         {
-            this->setColor(Color3B::GRAY);
+            this->setColor(Color32::GRAY);
         }
     }
 

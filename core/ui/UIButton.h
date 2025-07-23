@@ -216,15 +216,15 @@ public:
 
     /**
      * Change the color of button's title.
-     *@param color The title color in Color3B.
+     *@param color The title color in Color32.
      */
-    void setTitleColor(const Color3B& color);
+    void setTitleColor(const Color32& color);
 
     /**
      * Query the button title color.
-     *@return Color3B of button title.
+     *@return Color32 of button title.
      */
-    Color3B getTitleColor() const;
+    const Color32& getTitleColor() const;
 
     /**
      * Change the font size of button's title

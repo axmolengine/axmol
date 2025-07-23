@@ -61,10 +61,10 @@ public:
      */
     virtual ~ControlColourPicker();
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual void setColor(const Color3B& colorValue) override;
-    virtual void setEnabled(bool bEnabled) override;
+    void setColor(const Color32& colorValue) override;
+    void setEnabled(bool bEnabled) override;
 
     // virtual ~ControlColourPicker();
     void hueSliderValueChanged(Object* sender, Control::EventType controlEvent);
@@ -73,7 +73,7 @@ public:
 protected:
     void updateControlPicker();
     void updateHueAndControlPicker();
-    virtual bool onTouchBegan(Touch* touch, Event* pEvent) override;
+    bool onTouchBegan(Touch* touch, Event* pEvent) override;
 
     HSV _hsv;
     AX_SYNTHESIZE_RETAIN(ControlSaturationBrightnessPicker*, _colourPicker, colourPicker)

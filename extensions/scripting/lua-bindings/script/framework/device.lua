@@ -27,21 +27,21 @@ local device = {}
 device.platform    = "unknown"
 device.model       = "unknown"
 
-local app = cc.Application:getInstance()
+local app = ax.Application:getInstance()
 local target = app:getTargetPlatform()
-if target == cc.PLATFORM_WINDOWS then
+if target == ax.PLATFORM_WINDOWS then
     device.platform = "windows"
-elseif target == cc.PLATFORM_UWP then
+elseif target == ax.PLATFORM_UWP then
     device.platform = "uwp"
-elseif target == cc.PLATFORM_UWP_PHONE then
+elseif target == ax.PLATFORM_UWP_PHONE then
     device.platform = "uwp phone"
-elseif target == cc.PLATFORM_MAC then
+elseif target == ax.PLATFORM_MAC then
     device.platform = "mac"
-elseif target == cc.PLATFORM_ANDROID then
+elseif target == ax.PLATFORM_ANDROID then
     device.platform = "android"
-elseif target == cc.PLATFORM_IOS then
+elseif target == ax.PLATFORM_IOS then
     device.platform = "ios"
-    local director = cc.Director:getInstance()
+    local director = ax.Director:getInstance()
     local view = director:getRenderView()
     local framesize = view:getFrameSize()
     local w, h = framesize.width, framesize.height
@@ -61,34 +61,34 @@ elseif target == cc.PLATFORM_IOS then
 end
 
 local language_ = app:getCurrentLanguage()
-if language_ == cc.LANGUAGE_CHINESE then
+if language_ == ax.LANGUAGE_CHINESE then
     language_ = "cn"
-elseif language_ == cc.LANGUAGE_FRENCH then
+elseif language_ == ax.LANGUAGE_FRENCH then
     language_ = "fr"
-elseif language_ == cc.LANGUAGE_ITALIAN then
+elseif language_ == ax.LANGUAGE_ITALIAN then
     language_ = "it"
-elseif language_ == cc.LANGUAGE_GERMAN then
+elseif language_ == ax.LANGUAGE_GERMAN then
     language_ = "gr"
-elseif language_ == cc.LANGUAGE_SPANISH then
+elseif language_ == ax.LANGUAGE_SPANISH then
     language_ = "sp"
-elseif language_ == cc.LANGUAGE_RUSSIAN then
+elseif language_ == ax.LANGUAGE_RUSSIAN then
     language_ = "ru"
-elseif language_ == cc.LANGUAGE_KOREAN then
+elseif language_ == ax.LANGUAGE_KOREAN then
     language_ = "kr"
-elseif language_ == cc.LANGUAGE_JAPANESE then
+elseif language_ == ax.LANGUAGE_JAPANESE then
     language_ = "jp"
-elseif language_ == cc.LANGUAGE_HUNGARIAN then
+elseif language_ == ax.LANGUAGE_HUNGARIAN then
     language_ = "hu"
-elseif language_ == cc.LANGUAGE_PORTUGUESE then
+elseif language_ == ax.LANGUAGE_PORTUGUESE then
     language_ = "pt"
-elseif language_ == cc.LANGUAGE_ARABIC then
+elseif language_ == ax.LANGUAGE_ARABIC then
     language_ = "ar"
 else
     language_ = "en"
 end
 
 device.language = language_
-device.writablePath = cc.FileUtils:getInstance():getWritablePath()
+device.writablePath = ax.FileUtils:getInstance():getWritablePath()
 device.directorySeparator = "/"
 device.pathSeparator = ":"
 if device.platform == "windows" then

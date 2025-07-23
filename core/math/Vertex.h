@@ -36,11 +36,11 @@
 namespace ax
 {
 
-/** @file CCVertex.h */
+/** @file Vertex.h */
 
 /** converts a line to a polygon */
 void AX_DLL
-vertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int offset, unsigned int nuPoints);
+vertexLineToPolygon(Vec2* points, float stroke, V2F_T2F_C4B* vertices, unsigned int offset, unsigned int nuPoints);
 
 /** returns whether or not the line intersects */
 bool AX_DLL

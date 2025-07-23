@@ -219,7 +219,7 @@ void SceneTestLayer3::item0Clicked(Object* sender)
     auto s        = Director::getInstance()->getWinSize();
     auto newScene = Scene::createWithSize(s);
     newScene->addChild(SceneTestLayer3::create());
-    Director::getInstance()->pushScene(TransitionFade::create(0.5, newScene, Color3B(0, 255, 255)));
+    Director::getInstance()->pushScene(TransitionFade::create(0.5, newScene, Color32(0, 255, 255)));
 }
 
 void SceneTestLayer3::item1Clicked(Object* sender)

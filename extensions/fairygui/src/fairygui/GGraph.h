@@ -21,8 +21,8 @@ public:
     void drawRegularPolygon(int lineSize, const ax::Color& lineColor, const ax::Color& fillColor, int sides, float startAngle = 0, const float* distances = nullptr, int distanceCount = 0);
     bool isEmpty() const { return _type == 0; }
 
-    ax::Color3B getColor() const;
-    void setColor(const ax::Color3B& value);
+    ax::Color32 getColor() const;
+    void setColor(const ax::Color32& value);
 
     virtual ax::Value getProp(ObjectPropID propId) override;
     virtual void setProp(ObjectPropID propId, const ax::Value& value) override;

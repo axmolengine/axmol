@@ -58,16 +58,16 @@ public:
     void clear();
     void setSpaceBetweenIndexNodes(float spaceBetweenIndexNodes);
     float getSpaceBetweenIndexNodes() const { return _spaceBetweenIndexNodes; }
-    void setSelectedIndexColor(const Color3B& color) { _currentIndexNode->setColor(color); }
-    const Color3B& getSelectedIndexColor() const { return _currentIndexNode->getColor(); }
-    void setIndexNodesColor(const Color3B& indexNodesColor);
-    const Color3B& getIndexNodesColor() const { return _indexNodesColor; }
+    void setSelectedIndexColor(const Color32& color) { _currentIndexNode->setColor(color); }
+    const Color32& getSelectedIndexColor() const { return _currentIndexNode->getColor(); }
+    void setIndexNodesColor(const Color32& indexNodesColor);
+    const Color32& getIndexNodesColor() const { return _indexNodesColor; }
     void setIndexNodesScale(float indexNodesScale);
     float getIndexNodesScale() const { return _indexNodesScale; }
     void setSelectedIndexOpacity(uint8_t opacity) { _currentIndexNode->setOpacity(opacity); }
     uint8_t getSelectedIndexOpacity() const { return _currentIndexNode->getOpacity(); }
     void setIndexNodesOpacity(uint8_t opacity);
-    uint8_t getIndexNodesOpacity() const { return _indexNodesOpacity; }
+    uint8_t getIndexNodesOpacity() const { return _indexNodesColor.a; }
 
     /**
      * Sets texture for index nodes.
@@ -89,8 +89,7 @@ protected:
     Sprite* _currentOverlappingIndexNode;
     float _spaceBetweenIndexNodes;
     float _indexNodesScale;
-    Color3B _indexNodesColor;
-    uint8_t _indexNodesOpacity;
+    Color32 _indexNodesColor;
 
     bool _useDefaultTexture;
     std::string _indexNodesTextureFile;

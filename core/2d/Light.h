@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -111,7 +112,7 @@ public:
      *
      * @return The new direction light.
      */
-    static DirectionLight* create(const Vec3& direction, const Color3B& color);
+    static DirectionLight* create(const Vec3& direction, const Color32& color);
 
     // get light type
     virtual LightType getLightType() const override { return LightType::DIRECTIONAL; }
@@ -150,7 +151,7 @@ public:
      *
      * @return The new point light.
      */
-    static PointLight* create(const Vec3& position, const Color3B& color, float range);
+    static PointLight* create(const Vec3& position, const Color32& color, float range);
 
     // get light type
     virtual LightType getLightType() const override { return LightType::POINT; }
@@ -184,7 +185,7 @@ public:
      */
     static SpotLight* create(const Vec3& direction,
                              const Vec3& position,
-                             const Color3B& color,
+                             const Color32& color,
                              float innerAngle,
                              float outerAngle,
                              float range);
@@ -274,7 +275,7 @@ public:
      *
      * @return The new ambient light.
      */
-    static AmbientLight* create(const Color3B& color);
+    static AmbientLight* create(const Color32& color);
 
     // get light type
     virtual LightType getLightType() const override { return LightType::AMBIENT; }

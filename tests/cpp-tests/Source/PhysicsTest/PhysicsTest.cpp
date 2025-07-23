@@ -1346,9 +1346,9 @@ void PhysicsContactTest::onEnter()
 
     MenuItemFont::setFontSize(65);
     auto decrease1 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
-    decrease1->setColor(Color3B(0, 200, 20));
+    decrease1->setColor(Color32(0, 200, 20));
     auto increase1 = MenuItemFont::create(" + ", AX_CALLBACK_1(PhysicsContactTest::onIncrease, this));
-    increase1->setColor(Color3B(0, 200, 20));
+    increase1->setColor(Color32(0, 200, 20));
     decrease1->setTag(1);
     increase1->setTag(1);
 
@@ -1364,9 +1364,9 @@ void PhysicsContactTest::onEnter()
     label->setPosition(Vec2(s.width / 2 - 150, prevMenuPos));
 
     auto decrease2 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
-    decrease2->setColor(Color3B(0, 200, 20));
+    decrease2->setColor(Color32(0, 200, 20));
     auto increase2 = MenuItemFont::create(" + ", AX_CALLBACK_1(PhysicsContactTest::onIncrease, this));
-    increase2->setColor(Color3B(0, 200, 20));
+    increase2->setColor(Color32(0, 200, 20));
     decrease2->setTag(2);
     increase2->setTag(2);
 
@@ -1380,9 +1380,9 @@ void PhysicsContactTest::onEnter()
     label->setPosition(Vec2(s.width / 2 - 150, prevMenuPos));
 
     auto decrease3 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
-    decrease3->setColor(Color3B(0, 200, 20));
+    decrease3->setColor(Color32(0, 200, 20));
     auto increase3 = MenuItemFont::create(" + ", AX_CALLBACK_1(PhysicsContactTest::onIncrease, this));
-    increase3->setColor(Color3B(0, 200, 20));
+    increase3->setColor(Color32(0, 200, 20));
     decrease3->setTag(3);
     increase3->setTag(3);
 
@@ -1396,9 +1396,9 @@ void PhysicsContactTest::onEnter()
     label->setPosition(Vec2(s.width / 2 - 150, prevMenuPos));
 
     auto decrease4 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
-    decrease4->setColor(Color3B(0, 200, 20));
+    decrease4->setColor(Color32(0, 200, 20));
     auto increase4 = MenuItemFont::create(" + ", AX_CALLBACK_1(PhysicsContactTest::onIncrease, this));
-    increase4->setColor(Color3B(0, 200, 20));
+    increase4->setColor(Color32(0, 200, 20));
     decrease4->setTag(4);
     increase4->setTag(4);
 

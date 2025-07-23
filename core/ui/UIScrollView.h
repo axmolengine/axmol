@@ -455,14 +455,14 @@ public:
      *
      * @param color the scroll bar's color
      */
-    void setScrollBarColor(const Color3B& color);
+    void setScrollBarColor(const Color32& color);
 
     /**
      * @brief Get the scroll bar's color
      *
      * @return the scroll bar's color
      */
-    const Color3B& getScrollBarColor() const;
+    const Color32& getScrollBarColor() const;
 
     /**
      * @brief Set the scroll bar's opacity

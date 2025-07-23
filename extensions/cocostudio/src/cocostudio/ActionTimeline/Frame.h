@@ -1,5 +1,6 @@
 /****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -315,14 +316,14 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setColor(const ax::Color3B& color) { _color = color; }
-    inline ax::Color3B getColor() const { return _color; }
+    inline void setColor(const ax::Color32& color) { _color = color; }
+    inline void setColor(uint8_t r, uint8_t g, uint8_t b) { _color.r = r; _color.g = g; _color.b = b; }
+    inline ax::Color32 getColor() const { return _color; }
 
 protected:
     virtual void onApply(float percent) override;
 
-    uint8_t _alpha;
-    ax::Color3B _color;
+    ax::Color32 _color;
 
     int _betweenRed;
     int _betweenGreen;

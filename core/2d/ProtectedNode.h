@@ -180,21 +180,21 @@ public:
      * If you override onExit, you shall call its parent's one, e.g., Node::onExit().
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
 
     /**
      * Event callback that is called every time the Node leaves the 'stage'.
      * If the Node leaves the 'stage' with a transition, this callback is called when the transition starts.
      * @lua NA
      */
-    virtual void onExitTransitionDidStart() override;
+    void onExitTransitionDidStart() override;
 
-    virtual void updateDisplayedOpacity(uint8_t parentOpacity) override;
-    virtual void updateDisplayedColor(const Color3B& parentColor) override;
-    virtual void disableCascadeColor() override;
-    virtual void disableCascadeOpacity() override;
-    virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
-    virtual void setGlobalZOrder(float globalZOrder) override;
+    void updateDisplayedOpacity(uint8_t parentOpacity) override;
+    void updateDisplayedColor(const Color32& parentColor) override;
+    void disableCascadeColor() override;
+    void disableCascadeOpacity() override;
+    void setCameraMask(unsigned short mask, bool applyChildren = true) override;
+    void setGlobalZOrder(float globalZOrder) override;
     ProtectedNode();
     virtual ~ProtectedNode();
 

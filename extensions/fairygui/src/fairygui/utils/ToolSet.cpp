@@ -29,14 +29,14 @@ Color32 ToolSet::hexToColor(const char* str)
     }
 }
 
-ax::Color3B ToolSet::intToColor(unsigned int rgb)
+ax::Color32 ToolSet::intToColor(unsigned int argb)
 {
-    return Color3B((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF);
+    return Color32((argb >> 16) & 0xFF, (argb >> 8) & 0xFF, argb & 0xFF, (argb >> 24) & 0xFF);
 }
 
-unsigned int ToolSet::colorToInt(const ax::Color3B& color)
+unsigned int ToolSet::colorToInt(const ax::Color32& color)
 {
-    return (color.r << 16) + (color.g << 8) + color.b;
+    return (color.a << 24) + (color.r << 16) + (color.g << 8) + color.b;
 }
 
 Rect ToolSet::intersection(const Rect& rect1, const Rect& rect2)

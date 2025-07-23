@@ -751,19 +751,19 @@ std::string_view Button::getTitleText() const
     return _titleRenderer->getString();
 }
 
-void Button::setTitleColor(const Color3B& color)
+void Button::setTitleColor(const Color32& color)
 {
     createTitleRendererIfNull();
-    _titleRenderer->setTextColor(Color32(color));
+    _titleRenderer->setTextColor(color);
 }
 
-Color3B Button::getTitleColor() const
+const Color32& Button::getTitleColor() const
 {
     if (nullptr == _titleRenderer)
     {
-        return Color3B::WHITE;
+        return Color32::WHITE;
     }
-    return Color3B(_titleRenderer->getTextColor());
+    return _titleRenderer->getTextColor();
 }
 
 void Button::setTitleFontSize(float size)

@@ -98,7 +98,7 @@ public:
      * @return The color of the title for the specified state.
      */
 
-    virtual Color3B getTitleColorForState(State state) const;
+    virtual Color32 getTitleColorForState(State state) const;
 
     /**
      * Sets the color of the title to use for the specified state.
@@ -107,7 +107,7 @@ public:
      * @param state The state that uses the specified color. The values are described
      * in "CCControlState".
      */
-    virtual void setTitleColorForState(const Color3B& color, State state);
+    virtual void setTitleColorForState(const Color32& color, State state);
 
     /**
      * Returns the title label used for a state.
@@ -178,15 +178,15 @@ public:
     void setAdjustBackgroundImage(bool adjustBackgroundImage);
 
     // Overrides
-    virtual bool onTouchBegan(Touch* touch, Event* event) override;
-    virtual void onTouchMoved(Touch* touch, Event* event) override;
-    virtual void onTouchEnded(Touch* touch, Event* event) override;
-    virtual void onTouchCancelled(Touch* touch, Event* event) override;
+    bool onTouchBegan(Touch* touch, Event* event) override;
+    void onTouchMoved(Touch* touch, Event* event) override;
+    void onTouchEnded(Touch* touch, Event* event) override;
+    void onTouchCancelled(Touch* touch, Event* event) override;
 
-    virtual void setOpacity(uint8_t var) override;
-    virtual void updateDisplayedOpacity(uint8_t parentOpacity) override;
-    virtual void setColor(const Color3B&) override;
-    virtual void updateDisplayedColor(const Color3B& parentColor) override;
+    void setOpacity(uint8_t var) override;
+    void updateDisplayedOpacity(uint8_t parentOpacity) override;
+    void setColor(const Color32&) override;
+    void updateDisplayedColor(const Color32& parentColor) override;
 
     std::string_view getCurrentTitle() const { return _currentTitle; };
     std::string getCurrentTitle() { return _currentTitle; };
@@ -199,7 +199,7 @@ public:
      */
     virtual ~ControlButton();
 
-    virtual bool init() override;
+    bool init() override;
     virtual bool initWithLabelAndBackgroundSprite(Node* label,
                                                   ax::ui::Scale9Sprite* backgroundSprite,
                                                   bool adjustBackGroundSize);
@@ -215,7 +215,7 @@ protected:
     std::string _currentTitle;
 
     /** The current color used to display the title. */
-    AX_SYNTHESIZE_READONLY_PASS_BY_REF(Color3B, _currentTitleColor, CurrentTitleColor);
+    AX_SYNTHESIZE_READONLY_PASS_BY_REF(Color32, _currentTitleColor, CurrentTitleColor);
 
     /** The current title label. */
     AX_SYNTHESIZE_RETAIN(Node*, _titleLabel, TitleLabel);
@@ -234,7 +234,7 @@ protected:
     AX_PROPERTY_PASS_BY_REF(Vec2, _labelAnchorPoint, LabelAnchorPoint);
 
     std::unordered_map<int, std::string> _titleDispatchTable;
-    std::unordered_map<int, Color3B> _titleColorDispatchTable;
+    std::unordered_map<int, Color32> _titleColorDispatchTable;
 
     Map<int, Node*> _titleLabelDispatchTable;
     Map<int, ax::ui::Scale9Sprite*> _backgroundSpriteDispatchTable;

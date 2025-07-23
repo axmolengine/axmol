@@ -1282,19 +1282,14 @@ public:
     /**
      * Creates an action with duration and color.
      * @param duration Duration time, in seconds.
-     * @param red Red Color, from 0 to 255.
-     * @param green Green Color, from 0 to 255.
-     * @param blue Blue Color, from 0 to 255.
+     * @param color It's a Color32 type.
      * @return An autoreleased TintTo object.
      */
-    static TintTo* create(float duration, uint8_t red, uint8_t green, uint8_t blue);
-    /**
-     * Creates an action with duration and color.
-     * @param duration Duration time, in seconds.
-     * @param color It's a Color3B type.
-     * @return An autoreleased TintTo object.
-     */
-    static TintTo* create(float duration, const Color3B& color);
+    static TintTo* create(float duration, uint8_t r, uint8_t g, uint8_t b)
+    {
+        return TintTo::create(duration, Color32{r, g, b});
+    }
+    static TintTo* create(float duration, const Color32& color);
 
     //
     // Overrides
@@ -1311,11 +1306,11 @@ public:
     virtual ~TintTo() {}
 
     /** initializes the action with duration and color */
-    bool initWithDuration(float duration, uint8_t red, uint8_t green, uint8_t blue);
+    bool initWithDuration(float duration, const Color32& color);
 
 protected:
-    Color3B _to;
-    Color3B _from;
+    Color32 _to;
+    Color32 _from;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TintTo);

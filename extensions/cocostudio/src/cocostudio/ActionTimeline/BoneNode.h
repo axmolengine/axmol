@@ -182,19 +182,19 @@ protected:
     virtual void removeFromSkinList(SkinNode* skin);
 
     // sort all _children ,  bone list and skin list
-    virtual void sortAllChildren() override;
+    void sortAllChildren() override;
 
     virtual void updateVertices();
-    virtual void updateColor() override;
+    void updateColor() override;
 
     // bone's color and opacity cannot cascade to bone
-    virtual void updateDisplayedColor(const ax::Color3B& parentColor) override;
-    virtual void updateDisplayedOpacity(uint8_t parentOpacity) override;
-    virtual void disableCascadeOpacity() override;
-    virtual void disableCascadeColor() override;
+    void updateDisplayedColor(const ax::Color32& parentColor) override;
+    void updateDisplayedOpacity(uint8_t parentOpacity) override;
+    void disableCascadeOpacity() override;
+    void disableCascadeColor() override;
 
     // override Node::visit, just visit bones in children
-    virtual void visit(ax::Renderer* renderer,
+    void visit(ax::Renderer* renderer,
                        const ax::Mat4& parentTransform,
                        uint32_t parentFlags) override;
 

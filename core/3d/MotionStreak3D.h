@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -57,7 +58,7 @@ public:
      * @param path The texture file name of stoke.
      * @return An autoreleased MotionStreak3D object.
      */
-    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
+    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color32& color, std::string_view path);
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture.
      *
      * @param fade The fade time, in seconds.
@@ -67,13 +68,13 @@ public:
      * @param texture The texture name of stoke.
      * @return An autoreleased MotionStreak3D object.
      */
-    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
+    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture);
 
     /** Color used for the tint.
      *
      * @param colors The color used for the tint.
      */
-    void tintWithColor(const Color3B& colors);
+    void tintWithColor(const Color32& colors);
 
     /** Remove all living segments of the ribbon.
      */
@@ -157,22 +158,15 @@ public:
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename
      */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color32& color, std::string_view path);
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture);
 
 protected:
     // renderer callback
 
     void initCustomCommand();
-
-    struct VertexData
-    {
-        Vec3 pos;
-        Color32 color;
-        Tex2F texPos;
-    };
 
     bool _startingPositionInitialized;
 
@@ -195,7 +189,7 @@ protected:
     std::vector<Vec3> _pointVertexes;
     std::vector<float> _pointState;
 
-    std::vector<VertexData> _vertexData;
+    std::vector<V3F_T2F_C4B> _vertices;
 
     CustomCommand _customCommand;
 

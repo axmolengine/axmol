@@ -10,8 +10,8 @@ class ToolSet
 {
 public:
     static ax::Color32 hexToColor(const char* str);
-    static ax::Color3B intToColor(unsigned int rgb);
-    static unsigned int colorToInt(const ax::Color3B& color);
+    static ax::Color32 intToColor(unsigned int rgb);
+    static unsigned int colorToInt(const ax::Color32& color);
 
     static ax::Rect intersection(const ax::Rect& rect1, const ax::Rect& rect2);
     static int findInStringArray(const std::vector<std::string>& arr, const std::string& str);

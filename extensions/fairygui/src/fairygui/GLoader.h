@@ -42,8 +42,8 @@ public:
 
     const ax::Size& getContentSize();
 
-    ax::Color3B getColor() const;
-    void setColor(const ax::Color3B& value);
+    ax::Color32 getColor() const;
+    void setColor(const ax::Color32& value);
 
     bool isPlaying() const { return _playing; }
     void setPlaying(bool value);

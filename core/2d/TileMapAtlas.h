@@ -76,12 +76,12 @@ public:
      * Returns a tile from position x,y.
      *For the moment only channel R is used
      */
-    Color3B getTileAt(const Vec2& position) const;
+    Color32 getTileAt(const Vec2& position) const;
 
     /** sets a tile at position x,y.
     For the moment only channel R is used
     */
-    void setTile(const Color3B& tile, const Vec2& position);
+    void setTile(const Color32& tile, const Vec2& position);
     /** dealloc the map from memory */
     void releaseMap();
 
@@ -100,7 +100,7 @@ public:
 protected:
     void loadTGAfile(std::string_view file);
     void calculateItemsToRender();
-    void updateAtlasValueAt(const Vec2& pos, const Color3B& value, int index);
+    void updateAtlasValueAt(const Vec2& pos, const uint8_t* color24, int index);
     void updateAtlasValues();
 
     //! x,y to atlas dictionary

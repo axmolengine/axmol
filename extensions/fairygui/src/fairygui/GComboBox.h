@@ -24,8 +24,8 @@ public:
     virtual const std::string& getText() const override { return getTitle(); }
     virtual void setText(const std::string& value) override { setTitle(value); }
 
-    const ax::Color3B getTitleColor() const;
-    void setTitleColor(const ax::Color3B& value);
+    const ax::Color32 getTitleColor() const;
+    void setTitleColor(const ax::Color32& value);
 
     int getTitleFontSize() const;
     void setTitleFontSize(int value);
@@ -45,7 +45,7 @@ public:
     std::vector<std::string>& getItems() { return _items; }
     std::vector<std::string>& getIcons() { return _icons; }
     std::vector<std::string>& getValues() { return _values; }
-    
+
     GObject* getDropdown() const { return _dropdown; }
 
     void refresh();

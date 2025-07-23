@@ -76,8 +76,8 @@ public:
     virtual void setTextColor(const Color32& textColor);
     virtual const Color32& getTextColor(void) const;
 
-    void setCursorColor(const Color3B& color);
-    const Color3B& getCursorColor(void) const;
+    void setCursorColor(const Color32& color);
+    const Color32& getCursorColor(void) const;
 
     // input text property
     virtual void setString(std::string_view text);

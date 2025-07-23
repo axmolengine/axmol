@@ -92,12 +92,9 @@ void TileMapAtlas::calculateItemsToRender()
     {
         for (int y = 0; y < _TGAInfo->height; y++)
         {
-            Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
-            Color3B value = ptr[x + y * _TGAInfo->width];
-            if (value.r)
-            {
+            uint8_t* color24 = (uint8_t*)_TGAInfo->imageData + (x + y * _TGAInfo->width) * 3;
+            if (color24[0])
                 ++_itemsToRender;
-            }
         }
     }
 }
@@ -121,45 +118,41 @@ void TileMapAtlas::loadTGAfile(std::string_view file)
 }
 
 // TileMapAtlas - Atlas generation / updates
-void TileMapAtlas::setTile(const Color3B& tile, const Vec2& position)
+void TileMapAtlas::setTile(const Color32& tile, const Vec2& position)
 {
     AXASSERT(_TGAInfo != nullptr, "tgaInfo must not be nil");
     AXASSERT(position.x < _TGAInfo->width, "Invalid position.x");
     AXASSERT(position.y < _TGAInfo->height, "Invalid position.x");
     AXASSERT(tile.r != 0, "R component must be non 0");
 
-    Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
-    Color3B value = ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)];
-    if (value.r == 0)
+    auto color24  = (uint8_t*)_TGAInfo->imageData + static_cast<int>(position.x + position.y * _TGAInfo->width) * 3;
+    if (color24[0])
     {
-        AXLOGD("Value.r must be non 0.");
-    }
-    else
-    {
-        ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)] = tile;
+        color24[0] = tile.r;
+        color24[1] = tile.g;
+        color24[2] = tile.b;
 
-        // FIXME:: this method consumes a lot of memory
         // FIXME:: a tree of something like that shall be implemented
-        std::string key = StringUtils::toString(position.x) + "," + StringUtils::toString(position.y);
+        std::string key = fmt::format("{},{}", position.x, position.y);
         int num         = _posToAtlasIndex[key].asInt();
 
-        this->updateAtlasValueAt(position, tile, num);
+        this->updateAtlasValueAt(position, &tile.r, num);
     }
+    else
+        AXLOGD("Value.r must be non 0.");
 }
 
-Color3B TileMapAtlas::getTileAt(const Vec2& position) const
+Color32 TileMapAtlas::getTileAt(const Vec2& position) const
 {
     AXASSERT(_TGAInfo != nullptr, "tgaInfo must not be nil");
     AXASSERT(position.x < _TGAInfo->width, "Invalid position.x");
     AXASSERT(position.y < _TGAInfo->height, "Invalid position.y");
 
-    Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
-    Color3B value = ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)];
-
-    return value;
+    auto color24  = (uint8_t*)_TGAInfo->imageData + static_cast<int>(position.x + position.y * _TGAInfo->width) * 3;
+    return Color32{color24[0], color24[1], color24[2]};
 }
 
-void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int index)
+void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const uint8_t* color24, int index)
 {
     AXASSERT(index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
 
@@ -167,8 +160,10 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
 
     int x     = pos.x;
     int y     = pos.y;
-    float row = (float)(value.r % _itemsPerRow);
-    float col = (float)(value.r / _itemsPerRow);
+
+    const auto red = color24[0];
+    float row = (float)(red % _itemsPerRow);
+    float col = (float)(red / _itemsPerRow);
 
     float textureWide = (float)(_textureAtlas->getTexture()->getPixelsWide());
     float textureHigh = (float)(_textureAtlas->getTexture()->getPixelsHigh());
@@ -210,7 +205,7 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
     quad->tr.position.y = (float)(y * _itemHeight + _itemHeight);
     quad->tr.position.z = 0.0f;
 
-    Color32 color(_displayedColor, _displayedOpacity);
+    const Color32& color = _displayedColor;
     quad->tr.color = color;
     quad->tl.color = color;
     quad->br.color = color;
@@ -236,12 +231,10 @@ void TileMapAtlas::updateAtlasValues()
         {
             if (total < _itemsToRender)
             {
-                Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
-                Color3B value = ptr[x + y * _TGAInfo->width];
-
-                if (value.r != 0)
+                auto color24 = (uint8_t*)_TGAInfo->imageData + (x + y * _TGAInfo->width) * 3;
+                if (color24[0])
                 {
-                    this->updateAtlasValueAt(Vec2(x, y), value, total);
+                    this->updateAtlasValueAt(Vec2(x, y), color24, total);
 
                     std::string key       = fmt::format("{},{}", x, y);
                     _posToAtlasIndex[key] = total;

@@ -32,8 +32,8 @@ public:
     bool isAnchorTextUnderline();
     void setAnchorTextUnderline(bool enable);
 
-    const ax::Color3B& getAnchorFontColor();
-    void setAnchorFontColor(const ax::Color3B& color);
+    const ax::Color32& getAnchorFontColor();
+    void setAnchorFontColor(const ax::Color32& color);
 
     void setObjectFactory(const std::function<HtmlObject*(HtmlElement*)>& value) { _objectFactory = value; }
     HtmlParseOptions& parseOptions() { return _parseOptions; }

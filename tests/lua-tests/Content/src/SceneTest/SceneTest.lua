@@ -16,22 +16,22 @@ local SceneTestLayer3 = nil
 --------------------------------------------------------------------
 
 SceneTestLayer1 = function()
-    local ret = cc.Layer:create()
+    local ret = ax.Layer:create()
 
     local function onPushScene(tag, pSender)
-        local scene = cc.Scene:create()
+        local scene = ax.Scene:create()
         local  layer = SceneTestLayer2()
         scene:addChild(layer, 0)
         scene:addChild(CreateBackMenuItem())
-        cc.Director:getInstance():pushScene( scene )
+        ax.Director:getInstance():pushScene( scene )
     end
 
     local function onPushSceneTran(tag, pSender)
-        local scene = cc.Scene:create()
+        local scene = ax.Scene:create()
         local  layer = SceneTestLayer2()
         scene:addChild(layer, 0)
         scene:addChild(CreateBackMenuItem())
-        cc.Director:getInstance():pushScene( cc.TransitionSlideInT:create(1, scene) )
+        ax.Director:getInstance():pushScene( ax.TransitionSlideInT:create(1, scene) )
     end
 
 
@@ -39,24 +39,24 @@ SceneTestLayer1 = function()
         cclog("onQuit")
     end
 
-    local  item1 = cc.MenuItemFont:create( "Test pushScene")
+    local  item1 = ax.MenuItemFont:create( "Test pushScene")
     item1:registerScriptTapHandler(onPushScene)
-    local  item2 = cc.MenuItemFont:create( "Test pushScene w/transition")
+    local  item2 = ax.MenuItemFont:create( "Test pushScene w/transition")
     item2:registerScriptTapHandler(onPushSceneTran)
-    local  item3 = cc.MenuItemFont:create( "Quit")
+    local  item3 = ax.MenuItemFont:create( "Quit")
     item3:registerScriptTapHandler(onQuit)
 
-    local  menu = cc.Menu:create(item1, item2, item3)
+    local  menu = ax.Menu:create(item1, item2, item3)
     menu:alignItemsVertically()
 
     ret:addChild( menu )
 
-    local s = cc.Director:getInstance():getWinSize()
-    local  sprite = cc.Sprite:create(s_pPathGrossini)
+    local s = ax.Director:getInstance():getWinSize()
+    local  sprite = ax.Sprite:create(s_pPathGrossini)
     ret:addChild(sprite)
-    sprite:setPosition( cc.p(s.width-40, s.height/2) )
-    local  rotate = cc.RotateBy:create(2, 360)
-    local  repeatAction = cc.RepeatForever:create(rotate)
+    sprite:setPosition( ax.p(s.width-40, s.height/2) )
+    local  rotate = ax.RotateBy:create(2, 360)
+    local  repeatAction = ax.RepeatForever:create(rotate)
     sprite:runAction(repeatAction)
 
     local function onNodeEvent(event)
@@ -78,47 +78,47 @@ end
 --------------------------------------------------------------------
 
 SceneTestLayer2 = function()
-    local ret = cc.Layer:create()
+    local ret = ax.Layer:create()
     local m_timeCounter = 0
 
     local function onGoBack(tag, pSender)
-        cc.Director:getInstance():popScene()
+        ax.Director:getInstance():popScene()
     end
 
     local function onReplaceScene(tag, pSender)
-        local scene = cc.Scene:create()
+        local scene = ax.Scene:create()
         local  layer = SceneTestLayer3()
         scene:addChild(layer, 0)
         scene:addChild(CreateBackMenuItem())
-        cc.Director:getInstance():replaceScene( scene )
+        ax.Director:getInstance():replaceScene( scene )
     end
 
 
     local function onReplaceSceneTran(tag, pSender)
-        local scene = cc.Scene:create()
+        local scene = ax.Scene:create()
         local  layer = SceneTestLayer3()
         scene:addChild(layer, 0)
         scene:addChild(CreateBackMenuItem())
-        cc.Director:getInstance():replaceScene( cc.TransitionFlipX:create(2, scene) )
+        ax.Director:getInstance():replaceScene( ax.TransitionFlipX:create(2, scene) )
     end
 
-    local  item1 = cc.MenuItemFont:create( "replaceScene")
+    local  item1 = ax.MenuItemFont:create( "replaceScene")
     item1:registerScriptTapHandler(onReplaceScene)
-    local  item2 = cc.MenuItemFont:create( "replaceScene w/transition")
+    local  item2 = ax.MenuItemFont:create( "replaceScene w/transition")
     item2:registerScriptTapHandler(onReplaceSceneTran)
-    local  item3 = cc.MenuItemFont:create( "Go Back")
+    local  item3 = ax.MenuItemFont:create( "Go Back")
     item3:registerScriptTapHandler(onGoBack)
-    local  menu = cc.Menu:create(item1, item2, item3)
+    local  menu = ax.Menu:create(item1, item2, item3)
     menu:alignItemsVertically()
 
     ret:addChild( menu )
 
-    local s = cc.Director:getInstance():getWinSize()
-    local  sprite = cc.Sprite:create(s_pPathGrossini)
+    local s = ax.Director:getInstance():getWinSize()
+    local  sprite = ax.Sprite:create(s_pPathGrossini)
     ret:addChild(sprite)
-    sprite:setPosition( cc.p(s.width-40, s.height/2) )
-    local  rotate = cc.RotateBy:create(2, 360)
-    local  repeat_action = cc.RepeatForever:create(rotate)
+    sprite:setPosition( ax.p(s.width-40, s.height/2) )
+    local  rotate = ax.RotateBy:create(2, 360)
+    local  repeat_action = ax.RepeatForever:create(rotate)
     sprite:runAction(repeat_action)
 
     return ret
@@ -131,39 +131,39 @@ end
 --------------------------------------------------------------------
 
 SceneTestLayer3 = function()
-    local ret = cc.LayerColor:create(cc.c4b(0,0,255,255))
-    local s = cc.Director:getInstance():getWinSize()
+    local ret = ax.LayerColor:create(ax.color32(0,0,255,255))
+    local s = ax.Director:getInstance():getWinSize()
 
     local function item0Clicked(tag, pSender)
-        local newScene = cc.Scene:create()
+        local newScene = ax.Scene:create()
         newScene:addChild(SceneTestLayer3())
-        cc.Director:getInstance():pushScene(cc.TransitionFade:create(0.5, newScene, cc.c3b(0,255,255)))
+        ax.Director:getInstance():pushScene(ax.TransitionFade:create(0.5, newScene, ax.color32(0,255,255)))
     end
 
     local function item1Clicked(tag, pSender)
-        cc.Director:getInstance():popScene()
+        ax.Director:getInstance():popScene()
     end
 
     local function item2Clicked(tag, pSender)
-        cc.Director:getInstance():popToRootScene()
+        ax.Director:getInstance():popToRootScene()
     end
 
-    local item0 = cc.MenuItemFont:create("Touch to pushScene (self)")
+    local item0 = ax.MenuItemFont:create("Touch to pushScene (self)")
     item0:registerScriptTapHandler(item0Clicked)
-    local item1 = cc.MenuItemFont:create("Touch to popScene")
+    local item1 = ax.MenuItemFont:create("Touch to popScene")
     item1:registerScriptTapHandler(item1Clicked)
-    local item2 = cc.MenuItemFont:create("Touch to popToRootScene")
+    local item2 = ax.MenuItemFont:create("Touch to popToRootScene")
     item2:registerScriptTapHandler(item2Clicked)
 
-    local menu = cc.Menu:create(item0, item1, item2)
+    local menu = ax.Menu:create(item0, item1, item2)
     ret:addChild(menu)
     menu:alignItemsVertically()
 
-    local  sprite = cc.Sprite:create(s_pPathGrossini)
+    local  sprite = ax.Sprite:create(s_pPathGrossini)
     ret:addChild(sprite)
-    sprite:setPosition( cc.p(s.width/2, 40) )
-    local  rotate = cc.RotateBy:create(2, 360)
-    local  repeatAction = cc.RepeatForever:create(rotate)
+    sprite:setPosition( ax.p(s.width/2, 40) )
+    local  rotate = ax.RotateBy:create(2, 360)
+    local  repeatAction = ax.RepeatForever:create(rotate)
     sprite:runAction(repeatAction)
     return ret
 end
@@ -172,7 +172,7 @@ end
 
 function SceneTestMain()
     cclog("SceneTestMain")
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     local  layer = SceneTestLayer1()
     scene:addChild(layer, 0)
     scene:addChild(CreateBackMenuItem())

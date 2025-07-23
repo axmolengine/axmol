@@ -116,7 +116,7 @@ AX_DLL std::vector<Node*> findChildren(const Node& node, std::string_view name);
  * @param str The string be to converted to double.
  * @return Returns converted value of a string.
  */
-AX_DLL double atof(const char* str);
+AX_DLL double atof(std::string_view str);
 
 /** Get current exact time, accurate to nanoseconds.
  * @return Returns the time in seconds since the Epoch.

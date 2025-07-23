@@ -1,39 +1,39 @@
 local function CurrentLanguageTest()
-    local ret = cc.Layer:create()
-    local  label = cc.Label:createWithTTF("Current language Test", s_arialPath, 28)
+    local ret = ax.Layer:create()
+    local  label = ax.Label:createWithTTF("Current language Test", s_arialPath, 28)
     ret:addChild(label, 0)
-    label:setAnchorPoint(cc.p(0.5, 0.5))
-    label:setPosition( cc.p(VisibleRect:center().x, VisibleRect:top().y-50) )
+    label:setAnchorPoint(ax.p(0.5, 0.5))
+    label:setPosition( ax.p(VisibleRect:center().x, VisibleRect:top().y-50) )
 
-    local labelLanguage = cc.Label:createWithTTF("", s_arialPath, 20)
-    labelLanguage:setAnchorPoint(cc.p(0.5, 0.5))
+    local labelLanguage = ax.Label:createWithTTF("", s_arialPath, 20)
+    labelLanguage:setAnchorPoint(ax.p(0.5, 0.5))
     labelLanguage:setPosition(VisibleRect:center())
 
-    local currentLanguageType = cc.Application:getInstance():getCurrentLanguage()
+    local currentLanguageType = ax.Application:getInstance():getCurrentLanguage()
 
-    if currentLanguageType == cc.LANGUAGE_ENGLISH then
+    if currentLanguageType == ax.LANGUAGE_ENGLISH then
         labelLanguage:setString("current language is English")
-    elseif currentLanguageType == cc.LANGUAGE_CHINESE then
+    elseif currentLanguageType == ax.LANGUAGE_CHINESE then
         labelLanguage:setString("current language is Chinese")
-    elseif currentLanguageType == cc.LANGUAGE_FRENCH then
+    elseif currentLanguageType == ax.LANGUAGE_FRENCH then
         labelLanguage:setString("current language is French")
-    elseif currentLanguageType == cc.LANGUAGE_GERMAN then
+    elseif currentLanguageType == ax.LANGUAGE_GERMAN then
         labelLanguage:setString("current language is German")
-    elseif currentLanguageType == cc.LANGUAGE_ITALIAN then
+    elseif currentLanguageType == ax.LANGUAGE_ITALIAN then
         labelLanguage:setString("current language is Italian")
-    elseif currentLanguageType == cc.LANGUAGE_RUSSIAN then
+    elseif currentLanguageType == ax.LANGUAGE_RUSSIAN then
         labelLanguage:setString("current language is Russian")
-    elseif currentLanguageType == cc.LANGUAGE_SPANISH then
+    elseif currentLanguageType == ax.LANGUAGE_SPANISH then
         labelLanguage:setString("current language is Spanish")
-    elseif currentLanguageType == cc.LANGUAGE_KOREAN then
+    elseif currentLanguageType == ax.LANGUAGE_KOREAN then
         labelLanguage:setString("current language is Korean")
-    elseif currentLanguageType == cc.LANGUAGE_JAPANESE then
+    elseif currentLanguageType == ax.LANGUAGE_JAPANESE then
         labelLanguage:setString("current language is Japanese")
-    elseif currentLanguageType == cc.LANGUAGE_HUNGARIAN then
+    elseif currentLanguageType == ax.LANGUAGE_HUNGARIAN then
         labelLanguage:setString("current language is Hungarian")
-    elseif currentLanguageType == cc.LANGUAGE_PORTUGUESE then
+    elseif currentLanguageType == ax.LANGUAGE_PORTUGUESE then
         labelLanguage:setString("current language is Portuguese")
-    elseif currentLanguageType == cc.LANGUAGE_ARABIC then
+    elseif currentLanguageType == ax.LANGUAGE_ARABIC then
         labelLanguage:setString("current language is Arabic")
     end
     ret:addChild(labelLanguage)
@@ -41,7 +41,7 @@ local function CurrentLanguageTest()
 end
 
 function CurrentLanguageTestMain()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     local pLayer = CurrentLanguageTest()
     scene:addChild(pLayer)
     scene:addChild(CreateBackMenuItem())

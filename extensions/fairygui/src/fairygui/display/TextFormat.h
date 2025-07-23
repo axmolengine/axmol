@@ -24,7 +24,7 @@ public:
 
     std::string face;
     float fontSize;
-    ax::Color3B color;
+    ax::Color32 color;
     bool bold;
     bool italics;
     bool underline;
@@ -34,12 +34,12 @@ public:
     ax::TextVAlignment verticalAlign;
 
     int effect;
-    ax::Color3B outlineColor;
+    ax::Color32 outlineColor;
     int outlineSize;
-    ax::Color3B shadowColor;
+    ax::Color32 shadowColor;
     ax::Size shadowOffset;
     int shadowBlurRadius;
-    ax::Color3B glowColor;
+    ax::Color32 glowColor;
 
     //internal use
     bool _hasColor;

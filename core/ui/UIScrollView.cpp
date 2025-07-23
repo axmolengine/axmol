@@ -142,8 +142,7 @@ void ScrollView::initRenderer()
 {
     Layout::initRenderer();
     _innerContainer = Layout::create();
-    _innerContainer->setColor(Color3B(255, 255, 255));
-    _innerContainer->setOpacity(255);
+    _innerContainer->setColor(Color32::WHITE);
     _innerContainer->setCascadeColorEnabled(true);
     _innerContainer->setCascadeOpacityEnabled(true);
     addProtectedChild(_innerContainer, 1, 1);
@@ -1376,7 +1375,7 @@ float ScrollView::getScrollBarWidth() const
     return 0;
 }
 
-void ScrollView::setScrollBarColor(const Color3B& color)
+void ScrollView::setScrollBarColor(const Color32& color)
 {
     AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
@@ -1389,7 +1388,7 @@ void ScrollView::setScrollBarColor(const Color3B& color)
     }
 }
 
-const Color3B& ScrollView::getScrollBarColor() const
+const Color32& ScrollView::getScrollBarColor() const
 {
     AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
@@ -1400,7 +1399,7 @@ const Color3B& ScrollView::getScrollBarColor() const
     {
         return _horizontalScrollBar->getColor();
     }
-    return Color3B::WHITE;
+    return Color32::WHITE;
 }
 
 void ScrollView::setScrollBarOpacity(uint8_t opacity)

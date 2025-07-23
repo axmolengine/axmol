@@ -160,12 +160,10 @@ public:
             return;
         }
 
-        auto displayedOpacity = _displayedOpacity;
+        Color color(_displayedColor);
         if (!_letterVisible)
-        {
-            displayedOpacity = 0.0f;
-        }
-        Color color(_displayedColor, displayedOpacity / 255.0f);
+            color.a = 0.0f;
+
         // special opacity for premultiplied textures
         if (_opacityModifyRGB)
             color.premultiplyAlpha();
@@ -618,10 +616,11 @@ void Label::reset()
     _hAlignment             = TextHAlignment::LEFT;
     _vAlignment             = TextVAlignment::TOP;
 
-    _effectColor  = Color::BLACK;
-    _textColor    = Color32::WHITE;
-    _textColorF   = Color::WHITE;
-    setColor(Color3B::WHITE);
+    _effectColor = Color::BLACK;
+    _textColor   = Color::WHITE;
+    _textColor32 = Color32::WHITE;
+
+    setColor(Color32::WHITE);
 
     _shadowDirty      = false;
     _shadowEnabled    = false;
@@ -1055,7 +1054,7 @@ void Label::updateLabelLetters()
                         letterInfo.positionX + _fontScale * uvRect.size.width / 2 + _linesOffsetX[letterInfo.lineIndex];
                     auto py = letterInfo.positionY - _fontScale * uvRect.size.height / 2 + _letterOffsetY;
                     letterSprite->setPosition(px, py);
-                    letterSprite->setOpacity(_realOpacity);
+                    letterSprite->setOpacity(_realColor.a);
                 }
                 else
                 {
@@ -1446,10 +1445,7 @@ void Label::enableShadow(const Color32& shadowColor /* = Color32::BLACK */,
     _shadowOffset.height = offset.height;
     // TODO: support blur for shadow
 
-    _shadowColor3B.r = shadowColor.r;
-    _shadowColor3B.g = shadowColor.g;
-    _shadowColor3B.b = shadowColor.b;
-    _shadowOpacity   = shadowColor.a;
+    _shadowColor32 = shadowColor;
 
     if (!_systemFontDirty && !_contentDirty && _textSprite)
     {
@@ -1513,7 +1509,7 @@ void Label::enableUnderline()
     {
         _lineDrawNode = DrawNode::create();
         _lineDrawNode->setGlobalZOrder(getGlobalZOrder());
-        _lineDrawNode->setOpacity(_displayedOpacity);
+        _lineDrawNode->setOpacity(_displayedColor.a);
         _lineDrawNode->properties.setFactor(_lineDrawNode->properties.getFactor() *
                                             2.0f);  // 2.0f: Makes the line smaller
         addChild(_lineDrawNode, 100000);
@@ -1532,7 +1528,7 @@ void Label::enableStrikethrough()
     {
         _lineDrawNode = DrawNode::create();
         _lineDrawNode->setGlobalZOrder(getGlobalZOrder());
-        _lineDrawNode->setOpacity(_displayedOpacity);
+        _lineDrawNode->setOpacity(_displayedColor.a);
         _lineDrawNode->properties.setFactor(_lineDrawNode->properties.getFactor() *
                                             2.0f);  // 2.0f: Makes the line smaller
         addChild(_lineDrawNode, 100000);
@@ -1656,28 +1652,22 @@ void Label::createSpriteForSystemFont(const FontDefinition& fontDef)
 
     _textSprite->retain();
     _textSprite->updateDisplayedColor(_displayedColor);
-    _textSprite->updateDisplayedOpacity(_displayedOpacity);
 }
 
 void Label::createShadowSpriteForSystemFont(const FontDefinition& fontDef)
 {
-    if (!fontDef._stroke._strokeEnabled && fontDef._fontFillColor == _shadowColor3B &&
-        (fontDef._fontAlpha == _shadowOpacity))
+    if (!fontDef._stroke._strokeEnabled && fontDef._fontFillColor == _shadowColor32)
     {
         _shadowNode = Sprite::createWithTexture(_textSprite->getTexture());
     }
     else
     {
-        FontDefinition shadowFontDefinition   = fontDef;
-        shadowFontDefinition._fontFillColor.r = _shadowColor3B.r;
-        shadowFontDefinition._fontFillColor.g = _shadowColor3B.g;
-        shadowFontDefinition._fontFillColor.b = _shadowColor3B.b;
-        shadowFontDefinition._fontAlpha       = _shadowOpacity;
+        FontDefinition shadowFontDefinition = fontDef;
+        shadowFontDefinition._fontFillColor = _shadowColor32;
 
         shadowFontDefinition._stroke._strokeColor = shadowFontDefinition._fontFillColor;
-        shadowFontDefinition._stroke._strokeAlpha = shadowFontDefinition._fontAlpha;
 
-        auto texture = new Texture2D;
+        auto texture = new Texture2D();
         texture->initWithString(_utf8Text, shadowFontDefinition);
         _shadowNode = Sprite::createWithTexture(texture);
         texture->release();
@@ -1696,7 +1686,6 @@ void Label::createShadowSpriteForSystemFont(const FontDefinition& fontDef)
 
         _shadowNode->retain();
         _shadowNode->updateDisplayedColor(_displayedColor);
-        _shadowNode->updateDisplayedOpacity(_displayedOpacity);
     }
 }
 
@@ -1767,8 +1756,8 @@ void Label::updateContent()
     if (_lineDrawNode)
     {
         Color32 lineColor = Color32(_displayedColor);
-        if (_textColor != Color32::WHITE && _textColor != lineColor)
-            lineColor = _textColor;
+        if (_textColor32 != Color32::WHITE && _textColor32 != lineColor)
+            lineColor = _textColor32;
 
         _lineDrawNode->clear();
 
@@ -2011,16 +2000,16 @@ void Label::updateEffectUniforms(BatchCommand& batch,
     {
         if (_shadowEnabled)
         {
-            Color3B oldColor   = _realColor;
-            uint8_t oldOPacity = _displayedOpacity;
-            _displayedOpacity  = _shadowColor.a * (oldOPacity / 255.0f) * 255;
-            setColor(Color3B(_shadowColor));
+            Color32 oldColor   = _realColor;
+            uint8_t oldOPacity = _displayedColor.a;
+            _displayedColor.a    = _shadowColor.a * (oldOPacity / 255.0f) * 255;
+            setColor(Color32{_shadowColor});
             batch.shadowCommand.updateVertexBuffer(
                 textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_T2F_C4B_Quad)));
             batch.shadowCommand.init(_globalZOrder);
             renderer->addCommand(&batch.shadowCommand);
 
-            _displayedOpacity = oldOPacity;
+            _displayedColor.a = oldOPacity;
             setColor(oldColor);
         }
     }
@@ -2103,8 +2092,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
                 for (auto&& command : batch.getCommandArray())
                 {
                     auto* programState = command->getPipelineDescriptor().programState;
-                    Vec4 textColor(_textColorF.r, _textColorF.g, _textColorF.b, _textColorF.a);
-                    programState->setUniform(_textColorLocation, &textColor, sizeof(Vec4));
+                    programState->setUniform(_textColorLocation, &_textColor, sizeof(_textColor));
                     programState->setTexture(textureAtlas->getTexture()->getBackendTexture());
                 }
                 batch.textCommand.getPipelineDescriptor().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
@@ -2303,7 +2291,7 @@ Sprite* Label::getLetter(int letterIndex)
                         letterInfo.positionX + _fontScale * uvRect.size.width / 2 + _linesOffsetX[letterInfo.lineIndex];
                     auto py = letterInfo.positionY - _fontScale * uvRect.size.height / 2 + _letterOffsetY;
                     letter->setPosition(px, py);
-                    letter->setOpacity(_realOpacity);
+                    letter->setOpacity(_realColor.a);
                     this->updateLetterSpriteScale(letter);
                 }
 
@@ -2423,7 +2411,7 @@ void Label::setOpacityModifyRGB(bool isOpacityModifyRGB)
     }
 }
 
-void Label::updateDisplayedColor(const Color3B& parentColor)
+void Label::updateDisplayedColor(const Color32& parentColor)
 {
     Node::updateDisplayedColor(parentColor);
 
@@ -2459,21 +2447,21 @@ void Label::updateDisplayedOpacity(uint8_t parentOpacity)
 
     if (_textSprite)
     {
-        _textSprite->updateDisplayedOpacity(_displayedOpacity);
+        _textSprite->updateDisplayedOpacity(_displayedColor.a);
         if (_shadowNode)
         {
-            _shadowNode->updateDisplayedOpacity(_displayedOpacity);
+            _shadowNode->updateDisplayedOpacity(_displayedColor.a);
         }
     }
 
     for (auto&& it : _letters)
     {
-        it.second->updateDisplayedOpacity(_displayedOpacity);
+        it.second->updateDisplayedOpacity(_displayedColor.a);
     }
 
     if (_lineDrawNode)
     {
-        _lineDrawNode->setOpacity(_displayedOpacity);
+        _lineDrawNode->setOpacity(_displayedColor.a);
         _contentDirty = true;
     }
 }
@@ -2483,7 +2471,7 @@ void Label::updateDisplayedOpacity(uint8_t parentOpacity)
 // that's fine but it should be documented
 void Label::setTextColor(const Color32& color)
 {
-    if (_textColor != color)
+    if (_textColor32 != color)
     {
         switch (_currentLabelType)
         {
@@ -2494,15 +2482,11 @@ void Label::setTextColor(const Color32& color)
             break;
         }
     }
-    _textColor    = color;
-    _textColorF.r = _textColor.r / 255.0f;
-    _textColorF.g = _textColor.g / 255.0f;
-    _textColorF.b = _textColor.b / 255.0f;
-    _textColorF.a = _textColor.a / 255.0f;
+    _textColor = color;
 
     //  System font and TTF using setColor for Outline/Glow!");
     if (_currentLabelType != LabelType::TTF && _currentLabelType != LabelType::STRING_TEXTURE)
-        setColor(Color3B(color));
+        setColor(color);
 }
 
 void Label::updateColor()
@@ -2512,7 +2496,7 @@ void Label::updateColor()
         return;
     }
 
-    Color color(_displayedColor, _displayedOpacity / 255.0f);
+    Color color(_displayedColor);
 
     // special opacity for premultiplied textures
     if (_isOpacityModifyRGB)
@@ -2608,10 +2592,7 @@ FontDefinition Label::_getFontDefinition() const
     systemFontDef._vertAlignment         = _vAlignment;
     systemFontDef._dimensions.width      = _labelWidth == 0.f ? _maxLineWidth : _labelWidth;
     systemFontDef._dimensions.height     = _labelHeight;
-    systemFontDef._fontFillColor.r       = _textColor.r;
-    systemFontDef._fontFillColor.g       = _textColor.g;
-    systemFontDef._fontFillColor.b       = _textColor.b;
-    systemFontDef._fontAlpha             = _textColor.a;
+    systemFontDef._fontFillColor         = _textColor32;
     systemFontDef._shadow._shadowEnabled = false;
     systemFontDef._enableWrap            = _enableWrap;
     systemFontDef._overflow              = (int)_overflow;
@@ -2620,10 +2601,7 @@ FontDefinition Label::_getFontDefinition() const
     {
         systemFontDef._stroke._strokeEnabled = true;
         systemFontDef._stroke._strokeSize    = _outlineSize;
-        systemFontDef._stroke._strokeColor.r = _effectColor.r * 255.f;
-        systemFontDef._stroke._strokeColor.g = _effectColor.g * 255.f;
-        systemFontDef._stroke._strokeColor.b = _effectColor.b * 255.f;
-        systemFontDef._stroke._strokeAlpha   = _effectColor.a * 255.f;
+        systemFontDef._stroke._strokeColor   = Color32{_effectColor};
     }
     else
     {

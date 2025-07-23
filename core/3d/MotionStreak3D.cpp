@@ -3,6 +3,7 @@ Copyright (c) 2011      ForzeField Studios S.L.
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -61,7 +62,7 @@ MotionStreak3D::~MotionStreak3D()
 MotionStreak3D* MotionStreak3D::create(float fade,
                                        float minSeg,
                                        float stroke,
-                                       const Color3B& color,
+                                       const Color32& color,
                                        std::string_view path)
 {
     MotionStreak3D* ret = new MotionStreak3D();
@@ -75,7 +76,7 @@ MotionStreak3D* MotionStreak3D::create(float fade,
     return nullptr;
 }
 
-MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
+MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
     MotionStreak3D* ret = new MotionStreak3D();
     if (ret && ret->initWithFade(fade, minSeg, stroke, color, texture))
@@ -88,7 +89,7 @@ MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, c
     return nullptr;
 }
 
-bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
+bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color32& color, std::string_view path)
 {
     AXASSERT(!path.empty(), "Invalid filename");
 
@@ -96,7 +97,7 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
     return initWithFade(fade, minSeg, stroke, color, texture);
 }
 
-bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
+bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
     Node::setPosition(Vec2::ZERO);
     setAnchorPoint(Vec2::ZERO);
@@ -116,7 +117,7 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
     _pointState.resize(_maxPoints);
     _pointVertexes.resize(_maxPoints);
 
-    _vertexData.resize(_maxPoints * 2);
+    _vertices.resize(_maxPoints * 2);
 
     // Set blend mode
     _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
@@ -150,7 +151,7 @@ void MotionStreak3D::initCustomCommand()
     _locMVP     = _programState->getUniformLocation("u_MVPMatrix");
     _locTexture = _programState->getUniformLocation("u_tex0");
 
-    _customCommand.createVertexBuffer(sizeof(VertexData), _vertexData.size(), CustomCommand::BufferUsage::DYNAMIC);
+    _customCommand.createVertexBuffer(sizeof(_vertices[0]), _vertices.size(), CustomCommand::BufferUsage::DYNAMIC);
 }
 
 void MotionStreak3D::setPosition(const Vec2& position)
@@ -231,15 +232,14 @@ void MotionStreak3D::setPositionY(float y)
     _positionR.y = y;
 }
 
-void MotionStreak3D::tintWithColor(const Color3B& colors)
+void MotionStreak3D::tintWithColor(const Color32& color)
 {
-    setColor(colors);
+    setColor(color);
 
     // Fast assignation
     for (unsigned int i = 0; i < _nuPoints * 2; i++)
     {
-        auto& color = _vertexData[i].color;
-        color.set(colors.r, colors.g, colors.b, color.a);
+        _vertices[i].color = color;
     }
 }
 
@@ -250,6 +250,9 @@ Texture2D* MotionStreak3D::getTexture() const
 
 void MotionStreak3D::setTexture(Texture2D* texture)
 {
+    if (texture == nullptr)
+        texture = _director->getTextureCache()->getWhiteTexture();
+
     if (_texture != texture)
     {
         AX_SAFE_RETAIN(texture);
@@ -318,22 +321,22 @@ void MotionStreak3D::update(float delta)
                 // Move point
                 _pointVertexes[newIdx] = _pointVertexes[i];
 
-                // Move vertices
+                // Move pos
                 i2                           = i * 2;
                 newIdx2                      = newIdx * 2;
-                _vertexData[newIdx2].pos     = _vertexData[i2].pos;
-                _vertexData[newIdx2 + 1].pos = _vertexData[i2 + 1].pos;
+                _vertices[newIdx2].position       = _vertices[i2].position;
+                _vertices[newIdx2 + 1].position = _vertices[i2 + 1].position;
 
                 // Move color
-                _vertexData[newIdx2].color     = _vertexData[i2].color;
-                _vertexData[newIdx2 + 1].color = _vertexData[i2 + 1].color;
+                _vertices[newIdx2].color     = _vertices[i2].color;
+                _vertices[newIdx2 + 1].color = _vertices[i2 + 1].color;
             }
             else
                 newIdx2 = newIdx * 2;
 
-            const uint8_t op                 = (uint8_t)(_pointState[newIdx] * 255.0f);
-            _vertexData[newIdx2].color.a     = op;
-            _vertexData[newIdx2 + 1].color.a = op;
+            const uint8_t alpha                 = (uint8_t)(_pointState[newIdx] * 255.0f);
+            _vertices[newIdx2].color.a       = alpha;
+            _vertices[newIdx2 + 1].color.a      = alpha;
         }
     }
     _nuPoints -= mov;
@@ -362,14 +365,16 @@ void MotionStreak3D::update(float delta)
         _pointState[_nuPoints]    = 1.0f;
 
         // Color assignment
-        _vertexData[_nuPoints * 2].color     = Color32(_displayedColor, 255);
-        _vertexData[_nuPoints * 2 + 1].color = Color32(_displayedColor, 255);
+        auto tmpColor                         = _displayedColor;
+        tmpColor.a                            = 255;
+        _vertices[_nuPoints * 2].color        = tmpColor;
+        _vertices[_nuPoints * 2 + 1].color    = tmpColor;
 
         // Generate polygon
         {
-            float stroke                       = _stroke * 0.5f;
-            _vertexData[_nuPoints * 2].pos     = _pointVertexes[_nuPoints] + (_sweepAxis * stroke);
-            _vertexData[_nuPoints * 2 + 1].pos = _pointVertexes[_nuPoints] - (_sweepAxis * stroke);
+            float stroke                            = _stroke * 0.5f;
+            _vertices[_nuPoints * 2].position       = _pointVertexes[_nuPoints] + (_sweepAxis * stroke);
+            _vertices[_nuPoints * 2 + 1].position   = _pointVertexes[_nuPoints] - (_sweepAxis * stroke);
         }
 
         _nuPoints++;
@@ -381,8 +386,8 @@ void MotionStreak3D::update(float delta)
         float texDelta = 1.0f / _nuPoints;
         for (i = 0; i < _nuPoints; i++)
         {
-            _vertexData[i * 2].texPos     = Tex2F(0, texDelta * i);
-            _vertexData[i * 2 + 1].texPos = Tex2F(1, texDelta * i);
+            _vertices[i * 2].texCoord     = Tex2F(0, texDelta * i);
+            _vertices[i * 2 + 1].texCoord = Tex2F(1, texDelta * i);
         }
 
         _previousNuPoints = _nuPoints;
@@ -413,7 +418,7 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
     beforeCommand->func = AX_CALLBACK_0(MotionStreak3D::onBeforeDraw, this);
     afterCommand->func  = AX_CALLBACK_0(MotionStreak3D::onAfterDraw, this);
 
-    _customCommand.updateVertexBuffer(_vertexData.data(), sizeof(_vertexData[0]) * _nuPoints * 2);
+    _customCommand.updateVertexBuffer(_vertices.data(), sizeof(_vertices[0]) * _nuPoints * 2);
 
     _customCommand.setVertexDrawInfo(0, _nuPoints * 2);
 

@@ -39,8 +39,8 @@ public:
     const std::string& getSelectedIcon() const { return _selectedIcon; }
     void setSelectedIcon(const std::string& value);
 
-    ax::Color3B getTitleColor() const;
-    void setTitleColor(const ax::Color3B& value);
+    ax::Color32 getTitleColor() const;
+    void setTitleColor(const ax::Color32& value);
 
     int getTitleFontSize() const;
     void setTitleFontSize(int value);

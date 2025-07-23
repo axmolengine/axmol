@@ -194,7 +194,7 @@ bool UIRichTextTest::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125f));
         _widget->addChild(alert);
@@ -206,23 +206,23 @@ bool UIRichTextTest::init()
         _richText->ignoreContentAdaptWithSize(false);
         _richText->setContentSize(_defaultContentSize);
 
-        RichElementText* re1 = RichElementText::create(1, Color3B::WHITE, 255, str1, "SimSun", 10);
+        RichElementText* re1 = RichElementText::create(1, Color32::WHITE, str1, "SimSun", 10);
         RichElementText* re2 =
-            RichElementText::create(2, Color3B::YELLOW, 255, "And this is yellow. ", "Helvetica", 10);
-        RichElementText* re3 = RichElementText::create(3, Color3B::GRAY, 255, str2, "Yu Mincho", 10);
-        RichElementText* re4 = RichElementText::create(4, Color3B::GREEN, 255, "And green with TTF support. ",
+            RichElementText::create(2, Color32::YELLOW, "And this is yellow. ", "Helvetica", 10);
+        RichElementText* re3 = RichElementText::create(3, Color32::GRAY, str2, "Yu Mincho", 10);
+        RichElementText* re4 = RichElementText::create(4, Color32::GREEN, "And green with TTF support. ",
                                                        "fonts/Marker Felt.ttf", 10);
-        RichElementText* re5 = RichElementText::create(5, Color3B::RED, 255, "Last one is red ", "Helvetica", 10);
+        RichElementText* re5 = RichElementText::create(5, Color32::RED, "Last one is red ", "Helvetica", 10);
 
-        RichElementImage* reimg = RichElementImage::create(6, Color3B::WHITE, 255, "cocosui/sliderballnormal.png");
+        RichElementImage* reimg = RichElementImage::create(6, Color32::WHITE, "cocosui/sliderballnormal.png");
 
         //        TODO
         //        cocostudio::ArmatureDataManager::getInstance()->addArmatureFileInfo("cocosui/100/100.ExportJson");
         //        cocostudio::Armature *pAr = cocostudio::Armature::create("100"); //
         //        pAr->getAnimation()->play("Animation1");
 
-        //        RichElementCustomNode* recustom = RichElementCustomNode::create(1, Color3B::WHITE, 255, pAr);
-        RichElementText* re6 = RichElementText::create(7, Color3B::ORANGE, 255, "Have fun!! ", "Helvetica", 10);
+        //        RichElementCustomNode* recustom = RichElementCustomNode::create(1, Color32::WHITE, 255, pAr);
+        RichElementText* re6 = RichElementText::create(7, Color32::ORANGE, "Have fun!! ", "Helvetica", 10);
         _richText->pushBackElement(re1);
         _richText->insertElement(re2, 1);
         _richText->pushBackElement(re3);
@@ -256,7 +256,7 @@ bool UIRichTextXMLBasic::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -294,7 +294,7 @@ bool UIRichTextXMLSmallBig::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -331,7 +331,7 @@ bool UIRichTextXMLColor::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -368,7 +368,7 @@ bool UIRichTextXMLSUIB::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -405,7 +405,7 @@ bool UIRichTextXMLSUIB2::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -443,7 +443,7 @@ bool UIRichTextXMLSUIB3::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -481,7 +481,7 @@ bool UIRichTextXMLImg::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -529,7 +529,7 @@ bool UIRichTextXMLUrl::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -566,7 +566,7 @@ bool UIRichTextXMLUrlImg::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -604,7 +604,7 @@ bool UIRichTextXMLFace::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -644,7 +644,7 @@ bool UIRichTextXMLBR::init()
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -681,7 +681,7 @@ bool UIRichTextXMLInvalid::init()
 
         // Add the alert
         Text* alert = Text::create("Invalid XML test", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -717,7 +717,7 @@ bool UIRichTextXMLOutline::init()
 
         // Add the alert
         Text* alert = Text::create("Outline", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -755,7 +755,7 @@ bool UIRichTextXMLShadow::init()
 
         // Add the alert
         Text* alert = Text::create("Shadow", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -795,7 +795,7 @@ bool UIRichTextXMLGlow::init()
 
         // Add the alert
         Text* alert = Text::create("Glow", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -832,7 +832,7 @@ bool UIRichTextXMLExtend::init()
 
         // Add the alert
         Text* alert = Text::create("Extend", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -841,12 +841,12 @@ bool UIRichTextXMLExtend::init()
 
         /* Tag extension */
         RichText::setTagDescription("CloseNormal", false, [](const ValueMap& tagAttrValueMap) {
-            RichElementImage* richElement = RichElementImage::create(0, Color3B::WHITE, 255, "cocosui/CloseNormal.png");
+            RichElementImage* richElement = RichElementImage::create(0, Color32::WHITE, "cocosui/CloseNormal.png");
             return make_pair(ValueMap(), richElement);
         });
         RichText::setTagDescription("CloseSelected", false, [](const ValueMap& tagAttrValueMap) {
             RichElementImage* richElement =
-                RichElementImage::create(0, Color3B::WHITE, 255, "cocosui/CloseSelected.png");
+                RichElementImage::create(0, Color32::WHITE, "cocosui/CloseSelected.png");
             return make_pair(ValueMap(), richElement);
         });
 
@@ -905,7 +905,7 @@ bool UIRichTextXMLSpace::init()
 
         // Add the alert
         Text* alert = Text::create("Space", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -945,7 +945,7 @@ bool UIRichTextNewline::init()
 
                 // Add the alert
         Text* alert = Text::create("Axmol Issue #1170", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -957,9 +957,9 @@ bool UIRichTextNewline::init()
         _richText = RichText::create();
         _richText->setHorizontalAlignment(ui::RichText::HorizontalAlignment::CENTER);
         auto* textElement =
-            ui::RichElementText::create(1, Color3B::WHITE, 255, "Line1\nLine2\n", "fonts/Marker Felt.ttf", 32, 0);
+            ui::RichElementText::create(1, Color32::WHITE, "Line1\nLine2\n", "fonts/Marker Felt.ttf", 32, 0);
         _richText->pushBackElement(textElement);
-        textElement = ui::RichElementText::create(2, Color3B::WHITE, 255, "Line3", "fonts/Marker Felt.ttf", 32, 0);
+        textElement = ui::RichElementText::create(2, Color32::WHITE, "Line3", "fonts/Marker Felt.ttf", 32, 0);
         _richText->pushBackElement(textElement);
         _richText->ignoreContentAdaptWithSize(false);
         _richText->setContentSize(_defaultContentSize);
@@ -984,7 +984,7 @@ bool UIRichTextHeadings::init()
 
         // Add the alert
         Text* alert = Text::create("Header Tags", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -1022,7 +1022,7 @@ bool UIRichTextDynamicFontSize::init()
 
         // Add the alert
         Text* alert = Text::create("Header Tags", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -1060,7 +1060,7 @@ bool UIRichTextParagraph::init()
 
         // Add the alert
         Text* alert = Text::create("Paragraph Tag", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -1102,7 +1102,7 @@ bool UIRichTextScrollTo::init()
 
         // Add the alert
         Text* alert = Text::create("Paragraph Tag", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
         _widget->addChild(alert);
@@ -1123,7 +1123,7 @@ bool UIRichTextScrollTo::init()
         _scrollView->setScrollBarEnabled(true);
         _scrollView->setScrollBarWidth(4);
         _scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-        _scrollView->setScrollBarColor(Color3B::WHITE);
+        _scrollView->setScrollBarColor(Color32::WHITE);
         _scrollView->setScrollBarAutoHideEnabled(false);
         _scrollView->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         _scrollView->setPosition(_widget->getContentSize() / 2);
@@ -1132,7 +1132,7 @@ bool UIRichTextScrollTo::init()
 
         ValueMap valMap;
         valMap[RichText::KEY_ANCHOR_FONT_COLOR_STRING] = "#00ffdd";
-        
+
         // RichText
         _richText = RichText::createWithXML(
             R"(<h1>Quick Links</h1>
@@ -1140,25 +1140,25 @@ bool UIRichTextScrollTo::init()
 <a href="#paragraph_2">Jump To Second Paragraph</a><br/>
 <a href="#some_link">Jump To Web Search</a><br/>
 <br/>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
-dolore magna aliqua. 
-Purus faucibus ornare suspendisse sed nisi. Viverra aliquet eget sit amet tellus cras adipiscing. 
-Ut tellus elementum sagittis vitae. 
-Risus feugiat in ante metus dictum at. Semper eget duis at tellus at. Iaculis eu non diam phasellus vestibulum 
-lorem sed risus. 
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+dolore magna aliqua.
+Purus faucibus ornare suspendisse sed nisi. Viverra aliquet eget sit amet tellus cras adipiscing.
+Ut tellus elementum sagittis vitae.
+Risus feugiat in ante metus dictum at. Semper eget duis at tellus at. Iaculis eu non diam phasellus vestibulum
+lorem sed risus.
 Sed vulputate odio ut enim. Morbi tristique senectus et netus et malesuada fames.</p>
 <h1 id="fancy_header">Fancy Header</h1>
-<p id="paragraph_2">This is the second paragraph! Cras sed felis eget velit aliquet sagittis id consectetur purus. 
-Turpis nunc eget lorem dolor sed viverra ipsum nunc. 
-Ultrices tincidunt arcu non sodales neque sodales ut etiam sit. Risus feugiat in ante metus dictum at tempor. 
+<p id="paragraph_2">This is the second paragraph! Cras sed felis eget velit aliquet sagittis id consectetur purus.
+Turpis nunc eget lorem dolor sed viverra ipsum nunc.
+Ultrices tincidunt arcu non sodales neque sodales ut etiam sit. Risus feugiat in ante metus dictum at tempor.
 Id neque aliquam vestibulum morbi blandit cursus risus.</p>
-<p>Tortor condimentum lacinia quis vel eros donec ac. Molestie ac feugiat sed lectus. 
-Aliquam id diam maecenas ultricies mi eget mauris. 
-Ullamcorper malesuada proin libero nunc consequat interdum varius. 
-Sollicitudin nibh sit amet commodo nulla facilisi nullam vehicula ipsum. 
-Diam quam nulla porttitor massa id neque aliquam vestibulum morbi. Sed velit dignissim sodales ut. 
-Morbi leo urna molestie at elementum eu facilisis. 
-Cursus metus aliquam eleifend mi in. Euismod lacinia at quis risus sed vulputate odio. 
+<p>Tortor condimentum lacinia quis vel eros donec ac. Molestie ac feugiat sed lectus.
+Aliquam id diam maecenas ultricies mi eget mauris.
+Ullamcorper malesuada proin libero nunc consequat interdum varius.
+Sollicitudin nibh sit amet commodo nulla facilisi nullam vehicula ipsum.
+Diam quam nulla porttitor massa id neque aliquam vestibulum morbi. Sed velit dignissim sodales ut.
+Morbi leo urna molestie at elementum eu facilisis.
+Cursus metus aliquam eleifend mi in. Euismod lacinia at quis risus sed vulputate odio.
 Sit amet mattis vulputate enim nulla aliquet porttitor lacus luctus.</p>
 <a id="some_link" href="https://google.com">Google!</a>)",
             valMap);

@@ -300,13 +300,9 @@ void SpriteReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     uint8_t green = (uint8_t)nodeOptions->color()->g();
     uint8_t blue  = (uint8_t)nodeOptions->color()->b();
 
-    if (alpha != 255)
+    if (red != 255 || green != 255 || blue != 255 || alpha != 255)
     {
-        sprite->setOpacity(alpha);
-    }
-    if (red != 255 || green != 255 || blue != 255)
-    {
-        sprite->setColor(Color3B(red, green, blue));
+        sprite->setColor(Color32(red, green, blue, alpha));
     }
 
     bool flipX = nodeOptions->flipX() != 0;

@@ -403,17 +403,17 @@ SpriteColorOpacityHSVHSL::SpriteColorOpacityHSVHSL()
     auto action_back = action->reverse();
     auto fade        = RepeatForever::create(Sequence::create(action, action_back, nullptr));
 
-    auto col          = HSV(0, 1, 1, 1).toColor3B();
+    auto col          = HSV(0, 1, 1, 1).toColor32();
     auto tintred      = TintBy::create(2, col.r, col.g, col.b);
     auto tintred_back = tintred->reverse();
     auto red          = RepeatForever::create(Sequence::create(tintred, tintred_back, nullptr));
 
-    col                 = HSV(120, 1, 1, 1).toColor3B();
+    col                 = HSV(120, 1, 1, 1).toColor32();
     auto tintgreen      = TintBy::create(2, col.r, col.g, col.b);
     auto tintgreen_back = tintgreen->reverse();
     auto green          = RepeatForever::create(Sequence::create(tintgreen, tintgreen_back, nullptr));
 
-    col                = HSV(240, 1, 1, 1).toColor3B();
+    col                = HSV(240, 1, 1, 1).toColor32();
     auto tintblue      = TintBy::create(2, col.r, col.g, col.b);
     auto tintblue_back = tintblue->reverse();
     auto blue          = RepeatForever::create(Sequence::create(tintblue, tintblue_back, nullptr));
@@ -427,17 +427,17 @@ SpriteColorOpacityHSVHSL::SpriteColorOpacityHSVHSL()
     action_back = action->reverse();
     fade        = RepeatForever::create(Sequence::create(action, action_back, nullptr));
 
-    col          = HSL(0, 1, .7, 1).toColor3B();
+    col          = HSL(0, 1, .7, 1).toColor32();
     tintred      = TintBy::create(2, col.r, col.g, col.b);
     tintred_back = tintred->reverse();
     red          = RepeatForever::create(Sequence::create(tintred, tintred_back, nullptr));
 
-    col            = HSL(120, 1, .7, 1).toColor3B();
+    col            = HSL(120, 1, .7, 1).toColor32();
     tintgreen      = TintBy::create(2, col.r, col.g, col.b);
     tintgreen_back = tintgreen->reverse();
     green          = RepeatForever::create(Sequence::create(tintgreen, tintgreen_back, nullptr));
 
-    col           = HSL(240, 1, .7, 1).toColor3B();
+    col           = HSL(240, 1, .7, 1).toColor32();
     tintblue      = TintBy::create(2, col.r, col.g, col.b);
     tintblue_back = tintblue->reverse();
     blue          = RepeatForever::create(Sequence::create(tintblue, tintblue_back, nullptr));
@@ -606,7 +606,7 @@ SpriteZOrder::SpriteZOrder()
     addChild(sprite, -1, kTagSprite1);
     sprite->setPosition(Vec2(s.width / 2, s.height / 2 - 20));
     sprite->setScaleX(6);
-    sprite->setColor(Color3B::RED);
+    sprite->setColor(Color32::RED);
 
     schedule(AX_CALLBACK_1(SpriteZOrder::reorderSprite, this), 1, "reorder_key");
 }
@@ -673,7 +673,7 @@ SpriteBatchNodeZOrder::SpriteBatchNodeZOrder()
     batch->addChild(sprite, -1, kTagSprite1);
     sprite->setPosition(Vec2(s.width / 2, s.height / 2 - 20));
     sprite->setScaleX(6);
-    sprite->setColor(Color3B::RED);
+    sprite->setColor(Color32::RED);
 
     schedule(AX_CALLBACK_1(SpriteBatchNodeZOrder::reorderSprite, this), 1, "reorder_key");
 }
@@ -1226,7 +1226,7 @@ SpriteWithoutVertexAnchorPoint::SpriteWithoutVertexAnchorPoint()
         addChild(sprite, i);
 
         auto lb = Label::createWithSystemFont("This is a text", "", 16);
-        lb->setColor(Color3B::WHITE);
+        lb->setColor(Color32::WHITE);
         sprite->addChild(lb, i);
     }
 }
@@ -1283,7 +1283,7 @@ SpriteVertexAnchorPoint::SpriteVertexAnchorPoint()
         addChild(sprite, i);
 
         auto lb = Label::createWithSystemFont("This is a text", "", 16);
-        lb->setColor(Color3B::WHITE);
+        lb->setColor(Color32::WHITE);
         sprite->addChild(lb, i);
     }
 }
@@ -3588,14 +3588,14 @@ SpriteNilTexture::SpriteNilTexture()
 
     sprite = Sprite::create();
     sprite->setTextureRect(Rect(0, 0, 300, 300));
-    sprite->setColor(Color3B::RED);
+    sprite->setColor(Color32::RED);
     sprite->setOpacity(128);
     sprite->setPosition(Vec2(3 * s.width / 4, s.height / 2));
     addChild(sprite, 100);
 
     sprite = Sprite::create();
     sprite->setTextureRect(Rect(0.0f, 0.0f, 300.0f, 300.0f));
-    sprite->setColor(Color3B::BLUE);
+    sprite->setColor(Color32::BLUE);
     sprite->setOpacity(128);
     sprite->setPosition(Vec2(1 * s.width / 4, s.height / 2));
     addChild(sprite, 100);
@@ -3854,9 +3854,9 @@ SpriteBatchBug1217::SpriteBatchBug1217()
     auto s2 = Sprite::createWithTexture(bn->getTexture(), Rect(0.0f, 0.0f, 57.0f, 57.0f));
     auto s3 = Sprite::createWithTexture(bn->getTexture(), Rect(0.0f, 0.0f, 57.0f, 57.0f));
 
-    s1->setColor(Color3B(255, 0, 0));
-    s2->setColor(Color3B(0, 255, 0));
-    s3->setColor(Color3B(0, 0, 255));
+    s1->setColor(Color32(255, 0, 0));
+    s2->setColor(Color32(0, 255, 0));
+    s3->setColor(Color32(0, 0, 255));
 
     s1->setPosition(Vec2(20.0f, 200.0f));
     s2->setPosition(Vec2(100.0f, 0.0f));
@@ -5908,7 +5908,7 @@ void Issue17119::update(float dt)
 SpriteWithImageDataTest1::SpriteWithImageDataTest1()
 {
     Size s = Director::getInstance()->getVisibleSize();
-    
+
     ax::Data imageData = FileUtils::getInstance()->getDataFromFile("Images/grossini.png");
 
     Sprite* sprite = Sprite::create(imageData, "sprite_image_key_test_1");

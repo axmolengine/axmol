@@ -21,7 +21,7 @@ public:
     TextFormat* getTextFormat() const { return _textFormat; }
     void applyTextFormat();
 
-    void setUnderlineColor(const ax::Color3B& value);
+    void setUnderlineColor(const ax::Color32& value);
 
 #if defined(AX_VERSION)
     bool setBMFontFilePath(std::string_view bmfontFilePath,

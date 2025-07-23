@@ -215,36 +215,36 @@ public:
      * Set background color for layout
      * The color only applies to layout when it's color type is BackGroundColorType::SOLIDE
      *
-     * @param color Color in Color3B.
+     * @param color Color in Color32.
      */
-    void setBackGroundColor(const Color3B& color);
+    void setBackGroundColor(const Color32& color);
 
     /**
      * Query the layout's background color.
-     *@return Background color in Color3B.
+     *@return Background color in Color32.
      */
-    const Color3B& getBackGroundColor() const;
+    const Color32& getBackGroundColor() const;
 
     /**
      * Set start and end background color for layout.
      * This setting only take effect when the layout's  color type is BackGroundColorType::GRADIENT
      *
-     * @param startColor Color value in Color3B.
-     * @param endColor Color value in Color3B.
+     * @param startColor Color value in Color32.
+     * @param endColor Color value in Color32.
      */
-    void setBackGroundColor(const Color3B& startColor, const Color3B& endColor);
+    void setBackGroundColor(const Color32& startColor, const Color32& endColor);
 
     /**
      * Get the gradient background start color.
      *@return  Gradient background start color value.
      */
-    const Color3B& getBackGroundStartColor() const;
+    const Color32& getBackGroundStartColor() const;
 
     /**
      * Get the gradient background end color.
      * @return Gradient background end color value.
      */
-    const Color3B& getBackGroundEndColor() const;
+    const Color32& getBackGroundEndColor() const;
 
     /**
      * Sets background color opacity of layout.
@@ -275,9 +275,9 @@ public:
 
     /**
      * Set layout's background image color.
-     *@param color Background color value in `Color3B`.
+     *@param color Background color value in `Color32`.
      */
-    void setBackGroundImageColor(const Color3B& color);
+    void setBackGroundImageColor(const Color32& color);
 
     /**
      * Set opacity of background image.
@@ -289,7 +289,7 @@ public:
      * Get color of layout's background image.
      *@return Layout's background image color.
      */
-    const Color3B& getBackGroundImageColor() const;
+    const Color32& getBackGroundImageColor() const;
 
     /**
      * Get the opacity of layout's background image.
@@ -611,16 +611,14 @@ protected:
     BackGroundColorType _colorType;
     TextureResType _bgImageTexType;
     Vec2 _backGroundImageTextureSize;
-    Color3B _backGroundImageColor;
-    uint8_t _backGroundImageOpacity;
+    Color32 _backGroundImageColor;
 
     LayerColor* _colorRender;
     LayerGradient* _gradientRender;
-    Color3B _cColor;
-    Color3B _gStartColor;
-    Color3B _gEndColor;
+    Color32 _cColor;
+    Color32 _gStartColor;
+    Color32 _gEndColor;
     Vec2 _alongVector;
-    uint8_t _cOpacity;
 
     // clipping
     bool _clippingEnabled;

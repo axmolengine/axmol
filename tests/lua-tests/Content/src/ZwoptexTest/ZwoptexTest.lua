@@ -1,4 +1,4 @@
-local scheduler = cc.Director:getInstance():getScheduler()
+local scheduler = ax.Director:getInstance():getScheduler()
 --------------------------------------------------------------------
 --
 -- ZwoptexGenericTest
@@ -9,33 +9,33 @@ local function ZwoptexGenericTest()
                                 "Coordinate Formats, Rotation, Trimming, flipX/Y")
     local spriteFrameIndex = 0
     local counter = 0
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
     local schedulerEntry = nil
     local schedulerFlipSpriteEntry = nil
     local sprite1 = nil
     local sprite2 = nil
 
     local function onEnter()
-        cc.SpriteFrameCache:getInstance():addSpriteFrames("zwoptex/grossini.plist")
-        cc.SpriteFrameCache:getInstance():addSpriteFrames("zwoptex/grossini-generic.plist")
+        ax.SpriteFrameCache:getInstance():addSpriteFrames("zwoptex/grossini.plist")
+        ax.SpriteFrameCache:getInstance():addSpriteFrames("zwoptex/grossini-generic.plist")
 
-        local layer1 = cc.LayerColor:create(cc.c4b(255, 0, 0, 255), 85, 121)
-        layer1:setPosition(cc.p(s.width/2-80 - (85.0 * 0.5), s.height/2 - (121.0 * 0.5)))
+        local layer1 = ax.LayerColor:create(ax.color32(255, 0, 0, 255), 85, 121)
+        layer1:setPosition(ax.p(s.width/2-80 - (85.0 * 0.5), s.height/2 - (121.0 * 0.5)))
         ret:addChild(layer1)
 
-        sprite1 = cc.Sprite:createWithSpriteFrame(cc.SpriteFrameCache:getInstance():getSpriteFrame("grossini_dance_01.png"))
-        sprite1:setPosition(cc.p( s.width/2-80, s.height/2))
+        sprite1 = ax.Sprite:createWithSpriteFrame(ax.SpriteFrameCache:getInstance():getSpriteFrame("grossini_dance_01.png"))
+        sprite1:setPosition(ax.p( s.width/2-80, s.height/2))
         ret:addChild(sprite1)
 
         sprite1:setFlippedX(false)
         sprite1:setFlippedY(false)
 
-        local layer2 = cc.LayerColor:create(cc.c4b(255, 0, 0, 255), 85, 121)
-        layer2:setPosition(cc.p(s.width/2+80 - (85.0 * 0.5), s.height/2 - (121.0 * 0.5)))
+        local layer2 = ax.LayerColor:create(ax.color32(255, 0, 0, 255), 85, 121)
+        layer2:setPosition(ax.p(s.width/2+80 - (85.0 * 0.5), s.height/2 - (121.0 * 0.5)))
         ret:addChild(layer2)
 
-        sprite2 = cc.Sprite:createWithSpriteFrame(cc.SpriteFrameCache:getInstance():getSpriteFrame("grossini_dance_generic_01.png"))
-        sprite2:setPosition(cc.p( s.width/2 + 80, s.height/2))
+        sprite2 = ax.Sprite:createWithSpriteFrame(ax.SpriteFrameCache:getInstance():getSpriteFrame("grossini_dance_generic_01.png"))
+        sprite2:setPosition(ax.p( s.width/2 + 80, s.height/2))
         ret:addChild(sprite2)
 
         sprite2:setFlippedX(false)
@@ -74,8 +74,8 @@ local function ZwoptexGenericTest()
 
             local str1 = string.format("grossini_dance_%02d.png", spriteFrameIndex)
             local str2 = string.format("grossini_dance_generic_%02d.png", spriteFrameIndex)
-            sprite1:setSpriteFrame(cc.SpriteFrameCache:getInstance():getSpriteFrame(str1))
-            sprite2:setSpriteFrame(cc.SpriteFrameCache:getInstance():getSpriteFrame(str2))
+            sprite1:setSpriteFrame(ax.SpriteFrameCache:getInstance():getSpriteFrame(str1))
+            sprite2:setSpriteFrame(ax.SpriteFrameCache:getInstance():getSpriteFrame(str2))
         end
 
         sprite1:retain()
@@ -97,7 +97,7 @@ local function ZwoptexGenericTest()
         end
         sprite1:release()
         sprite2:release()
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("zwoptex/grossini.plist")
         cache:removeSpriteFramesFromFile("zwoptex/grossini-generic.plist")
     end
@@ -117,7 +117,7 @@ end
 
 function ZwoptexTestMain()
     cclog("ZwoptexTestMain")
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     Helper.createFunctionTable = {
         ZwoptexGenericTest
     }

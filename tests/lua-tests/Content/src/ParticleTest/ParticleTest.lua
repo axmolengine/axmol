@@ -10,7 +10,7 @@ local titleLabel = nil
 local subtitleLabel = nil
 local baseLayer_entry = nil
 
-local s = cc.Director:getInstance():getWinSize()
+local s = ax.Director:getInstance():getWinSize()
 
 local  onEnterCallback = nil
 
@@ -35,40 +35,40 @@ local function nextAction()
 end
 
 local function backCallback(sender)
-	local scene = cc.Scene:create()
+	local scene = ax.Scene:create()
 
 	scene:addChild(backAction())
 	scene:addChild(CreateBackMenuItem())
 
-	cc.Director:getInstance():replaceScene(scene)
+	ax.Director:getInstance():replaceScene(scene)
 end
 
 local function restartCallback(sender)
-	local scene = cc.Scene:create()
+	local scene = ax.Scene:create()
 
 	scene:addChild(restartAction())
 	scene:addChild(CreateBackMenuItem())
 
-	cc.Director:getInstance():replaceScene(scene)
+	ax.Director:getInstance():replaceScene(scene)
 end
 
 local function nextCallback(sender)
-	local scene = cc.Scene:create()
+	local scene = ax.Scene:create()
 
 	scene:addChild(nextAction())
 	scene:addChild(CreateBackMenuItem())
 
-	cc.Director:getInstance():replaceScene(scene)
+	ax.Director:getInstance():replaceScene(scene)
 end
 
 local function toggleCallback(sender)
 	if emitter ~= nil then
-        if emitter:getPositionType() == cc.POSITION_TYPE_GROUPED then
-            emitter:setPositionType(cc.POSITION_TYPE_FREE)
-        elseif emitter:getPositionType() == cc.POSITION_TYPE_FREE then
-            emitter:setPositionType(cc.POSITION_TYPE_RELATIVE)
-        elseif emitter:getPositionType() == cc.POSITION_TYPE_RELATIVE then
-            emitter:setPositionType(cc.POSITION_TYPE_GROUPED)
+        if emitter:getPositionType() == ax.POSITION_TYPE_GROUPED then
+            emitter:setPositionType(ax.POSITION_TYPE_FREE)
+        elseif emitter:getPositionType() == ax.POSITION_TYPE_FREE then
+            emitter:setPositionType(ax.POSITION_TYPE_RELATIVE)
+        elseif emitter:getPositionType() == ax.POSITION_TYPE_RELATIVE then
+            emitter:setPositionType(ax.POSITION_TYPE_GROUPED)
 		end
     end
 end
@@ -88,7 +88,7 @@ local function update(dt)
 end
 
 local function baseLayer_onEnterOrExit(tag)
-	local scheduler = cc.Director:getInstance():getScheduler()
+	local scheduler = ax.Director:getInstance():getScheduler()
 	if tag == "enter" then
 		baseLayer_entry = scheduler:scheduleScriptFunc(update, 0, false)
         if onEnterCallback ~= nil then
@@ -104,70 +104,70 @@ local function baseLayer_onEnterOrExit(tag)
 end
 
 local function getBaseLayer()
-	local layer = cc.LayerColor:create(cc.c4b(127,127,127,255))
+	local layer = ax.LayerColor:create(ax.color32(127,127,127,255))
 
     emitter = nil
 
-    titleLabel = cc.Label:createWithTTF("", s_arialPath, 28)
+    titleLabel = ax.Label:createWithTTF("", s_arialPath, 28)
     layer:addChild(titleLabel, 100, 1000)
-    titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+    titleLabel:setAnchorPoint(ax.p(0.5, 0.5))
     titleLabel:setPosition(s.width / 2, s.height - 50)
 
-    subtitleLabel = cc.Label:createWithTTF("", s_arialPath, 16)
+    subtitleLabel = ax.Label:createWithTTF("", s_arialPath, 16)
     layer:addChild(subtitleLabel, 100)
-    subtitleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+    subtitleLabel:setAnchorPoint(ax.p(0.5, 0.5))
     subtitleLabel:setPosition(s.width / 2, s.height - 80)
 
 
-    local item1 = cc.MenuItemImage:create(s_pPathB1, s_pPathB2)
-    local item2 = cc.MenuItemImage:create(s_pPathR1, s_pPathR2)
-    local item3 = cc.MenuItemImage:create(s_pPathF1, s_pPathF2)
-	local item4 = cc.MenuItemToggle:create(cc.MenuItemFont:create("Free Movement"))
-	item4:addSubItem(cc.MenuItemFont:create("Relative Movement"))
-	item4:addSubItem(cc.MenuItemFont:create("Grouped Movement"))
+    local item1 = ax.MenuItemImage:create(s_pPathB1, s_pPathB2)
+    local item2 = ax.MenuItemImage:create(s_pPathR1, s_pPathR2)
+    local item3 = ax.MenuItemImage:create(s_pPathF1, s_pPathF2)
+	local item4 = ax.MenuItemToggle:create(ax.MenuItemFont:create("Free Movement"))
+	item4:addSubItem(ax.MenuItemFont:create("Relative Movement"))
+	item4:addSubItem(ax.MenuItemFont:create("Grouped Movement"))
 	item1:registerScriptTapHandler(backCallback)
 	item2:registerScriptTapHandler(restartCallback)
 	item3:registerScriptTapHandler(nextCallback)
 	item4:registerScriptTapHandler(toggleCallback)
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
 	menu:addChild(item1)
 	menu:addChild(item2)
 	menu:addChild(item3)
 	menu:addChild(item4)
 
-    menu:setPosition(cc.p(0, 0))
-    item1:setPosition(cc.p(s.width/2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
-    item2:setPosition(cc.p(s.width/2, item2:getContentSize().height / 2))
-    item3:setPosition(cc.p(s.width/2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
-	item4:setPosition(cc.p(0, 100))
-    item4:setAnchorPoint(cc.p(0, 0))
+    menu:setPosition(ax.p(0, 0))
+    item1:setPosition(ax.p(s.width/2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+    item2:setPosition(ax.p(s.width/2, item2:getContentSize().height / 2))
+    item3:setPosition(ax.p(s.width/2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+	item4:setPosition(ax.p(0, 100))
+    item4:setAnchorPoint(ax.p(0, 0))
 
     layer:addChild(menu, 100)
 
-    labelAtlas = cc.LabelAtlas:_create("0000", "fps_images.png", 12, 32, string.byte('.'))
+    labelAtlas = ax.LabelAtlas:_create("0000", "fps_images.png", 12, 32, string.byte('.'))
     layer:addChild(labelAtlas, 100)
-    labelAtlas:setPosition(cc.p(s.width - 66, 50))
+    labelAtlas:setPosition(ax.p(s.width - 66, 50))
 
     -- moving background
-    background = cc.Sprite:create(s_back3)
+    background = ax.Sprite:create(s_back3)
     layer:addChild(background, 5)
-    background:setPosition(cc.p(s.width / 2, s.height - 180))
+    background:setPosition(ax.p(s.width / 2, s.height - 180))
 
-    local move = cc.MoveBy:create(4, cc.p(300, 0))
+    local move = ax.MoveBy:create(4, ax.p(300, 0))
     local move_back = move:reverse()
-    local seq = cc.Sequence:create(move, move_back)
-    background:runAction(cc.RepeatForever:create(seq))
+    local seq = ax.Sequence:create(move, move_back)
+    background:runAction(ax.RepeatForever:create(seq))
 
     local function onTouchesEnded(touches, event)
         local location = touches[1]:getLocation()
-        local pos = cc.p(0, 0)
+        local pos = ax.p(0, 0)
         if background ~= nil then
-            pos = background:convertToWorldSpace(cc.p(0, 0))
+            pos = background:convertToWorldSpace(ax.p(0, 0))
         end
 
         if emitter ~= nil then
-            local newPos = cc.pSub(location, pos)
+            local newPos = ax.pSub(location, pos)
             emitter:setPosition(newPos.x, newPos.y)
         end
     end
@@ -180,10 +180,10 @@ local function getBaseLayer()
          onTouchesEnded(touches, event);
     end
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesBegan,cc.Handler.EVENT_TOUCHES_BEGAN )
-    listener:registerScriptHandler(onTouchesMoved,cc.Handler.EVENT_TOUCHES_MOVED )
-    listener:registerScriptHandler(onTouchesEnded,cc.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.EventListenerTouchAllAtOnce:create()
+    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_TOUCHES_BEGAN )
+    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
+    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_TOUCHES_ENDED )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -229,7 +229,7 @@ local function reorderParticles(dt)
 end
 
 local function ParticleReorder_onEnterOrExit(tag)
-	local scheduler = cc.Director:getInstance():getScheduler()
+	local scheduler = ax.Director:getInstance():getScheduler()
 	if tag == "enterTransitionFinish" then
 		ParticleReorder_entry = scheduler:scheduleScriptFunc(reorderParticles, 1.0, false)
 	elseif tag == "exit" then
@@ -244,13 +244,13 @@ local function ParticleReorder()
 
     onEnterCallback = function ()
         ParticleReorder_Order = 0
-        ParticleReorder_layer:setColor(cc.c3b(0, 0, 0))
+        ParticleReorder_layer:setColor(ax.color32(0, 0, 0))
         ParticleReorder_layer:removeChild(background, true)
         background = nil
 
-        local ignore = cc.ParticleSystemQuad:create("Particles/SmallSun.plist")
-        local parent1 = cc.Node:create()
-        local parent2 = cc.ParticleBatchNode:createWithTexture(ignore:getTexture())
+        local ignore = ax.ParticleSystemQuad:create("Particles/SmallSun.plist")
+        local parent1 = ax.Node:create()
+        local parent2 = ax.ParticleBatchNode:createWithTexture(ignore:getTexture())
         ignore:unscheduleUpdate()
 
         for i = 0, 1 do
@@ -261,14 +261,14 @@ local function ParticleReorder()
                 parent = parent2
             end
 
-            local emitter1 = cc.ParticleSystemQuad:create("Particles/SmallSun.plist")
-            emitter1:setStartColor(cc.c4f(1,0,0,1))
+            local emitter1 = ax.ParticleSystemQuad:create("Particles/SmallSun.plist")
+            emitter1:setStartColor(ax.color(1,0,0,1))
             emitter1:setBlendAdditive(false)
-            local emitter2 = cc.ParticleSystemQuad:create("Particles/SmallSun.plist")
-            emitter2:setStartColor(cc.c4f(0,1,0,1))
+            local emitter2 = ax.ParticleSystemQuad:create("Particles/SmallSun.plist")
+            emitter2:setStartColor(ax.color(0,1,0,1))
             emitter2:setBlendAdditive(false)
-            local emitter3 = cc.ParticleSystemQuad:create("Particles/SmallSun.plist")
-            emitter3:setStartColor(cc.c4f(0,0,1,1))
+            local emitter3 = ax.ParticleSystemQuad:create("Particles/SmallSun.plist")
+            emitter3:setStartColor(ax.color(0,0,1,1))
             emitter3:setBlendAdditive(false)
 
             local neg = nil
@@ -278,9 +278,9 @@ local function ParticleReorder()
                 neg = -1
             end
 
-            emitter1:setPosition(cc.p( s.width / 2 - 30, s.height / 2 + 60 * neg))
-            emitter2:setPosition(cc.p( s.width / 2, s.height / 2 + 60 * neg))
-            emitter3:setPosition(cc.p( s.width / 2 + 30, s.height / 2 + 60 * neg))
+            emitter1:setPosition(ax.p( s.width / 2 - 30, s.height / 2 + 60 * neg))
+            emitter2:setPosition(ax.p( s.width / 2, s.height / 2 + 60 * neg))
+            emitter3:setPosition(ax.p( s.width / 2 + 30, s.height / 2 + 60 * neg))
 
             parent:addChild(emitter1, 0, 1)
             parent:addChild(emitter2, 0, 2)
@@ -326,7 +326,7 @@ local function switchRender(dt)
 end
 
 local function ParticleBatchHybrid_onEnterOrExit(tag)
-	local scheduler = cc.Director:getInstance():getScheduler()
+	local scheduler = ax.Director:getInstance():getScheduler()
 	if tag == "enterTransitionFinish" then
 		ParticleBatchHybrid_entry = scheduler:scheduleScriptFunc(switchRender, 2.0, false)
 	elseif tag == "exit" then
@@ -344,17 +344,17 @@ local function ParticleBatchHybrid()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
-        emitter = cc.ParticleSystemQuad:create("Particles/LavaFlow.plist")
+        emitter = ax.ParticleSystemQuad:create("Particles/LavaFlow.plist")
         emitter:retain()
-        local batch = cc.ParticleBatchNode:createWithTexture(emitter:getTexture())
+        local batch = ax.ParticleBatchNode:createWithTexture(emitter:getTexture())
         batch:addChild(emitter)
         layer:addChild(batch, 10)
 
-        local node = cc.Node:create()
+        local node = ax.Node:create()
         layer:addChild(node)
         ParticleBatchHybrid_parent1 = batch
         ParticleBatchHybrid_parent2 = node
@@ -375,22 +375,22 @@ local function ParticleBatchMultipleEmitters()
 	local layer = getBaseLayer()
 
     onEnterCallback = function()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
-        local emitter1 = cc.ParticleSystemQuad:create("Particles/LavaFlow.plist")
-        emitter1:setStartColor(cc.c4f(1,0,0,1))
-        local emitter2 = cc.ParticleSystemQuad:create("Particles/LavaFlow.plist")
-        emitter2:setStartColor(cc.c4f(0,1,0,1))
-        local emitter3 = cc.ParticleSystemQuad:create("Particles/LavaFlow.plist")
-        emitter3:setStartColor(cc.c4f(0,0,1,1))
+        local emitter1 = ax.ParticleSystemQuad:create("Particles/LavaFlow.plist")
+        emitter1:setStartColor(ax.color(1,0,0,1))
+        local emitter2 = ax.ParticleSystemQuad:create("Particles/LavaFlow.plist")
+        emitter2:setStartColor(ax.color(0,1,0,1))
+        local emitter3 = ax.ParticleSystemQuad:create("Particles/LavaFlow.plist")
+        emitter3:setStartColor(ax.color(0,0,1,1))
 
-        emitter1:setPosition(cc.p(s.width / 1.25, s.height / 1.25))
-        emitter2:setPosition(cc.p(s.width / 2, s.height / 2))
-        emitter3:setPosition(cc.p(s.width / 4, s.height / 4))
+        emitter1:setPosition(ax.p(s.width / 1.25, s.height / 1.25))
+        emitter2:setPosition(ax.p(s.width / 2, s.height / 2))
+        emitter3:setPosition(ax.p(s.width / 4, s.height / 4))
 
-        local batch = cc.ParticleBatchNode:createWithTexture(emitter1:getTexture())
+        local batch = ax.ParticleBatchNode:createWithTexture(emitter1:getTexture())
 
         batch:addChild(emitter1, 0)
         batch:addChild(emitter2, 0)
@@ -401,7 +401,7 @@ local function ParticleBatchMultipleEmitters()
         titleLabel:setString("Particle Batch")
         subtitleLabel:setString("Multiple emitters. One Batch")
     end
-	
+
 	return layer
 end
 
@@ -412,15 +412,15 @@ local function DemoFlower()
 	local layer = getBaseLayer()
 
     onEnterCallback = function()
-        emitter = cc.ParticleFlower:create()
+        emitter = ax.ParticleFlower:create()
         emitter:retain()
         background:addChild(emitter, 10)
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_stars1))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_stars1))
         setEmitterPosition()
 
         titleLabel:setString("ParticleFlower")
     end
-	
+
 	return layer
 end
 
@@ -431,17 +431,17 @@ local function DemoGalaxy()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleGalaxy:create()
+        emitter = ax.ParticleGalaxy:create()
         emitter:retain()
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
         setEmitterPosition()
 
         titleLabel:setString("ParticleGalaxy")
     end
-	
+
 	return layer
 end
 
@@ -452,17 +452,17 @@ local function DemoFirework()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleFireworks:create()
+        emitter = ax.ParticleFireworks:create()
         emitter:retain()
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_stars1))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_stars1))
 
         setEmitterPosition()
 
         titleLabel:setString("ParticleFireworks")
     end
-	
+
 	return layer
 end
 
@@ -473,17 +473,17 @@ local function DemoSpiral()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleSpiral:create()
+        emitter = ax.ParticleSpiral:create()
         emitter:retain()
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
         setEmitterPosition()
 
         titleLabel:setString("ParticleSpiral")
     end
-	
+
 	return layer
 end
 
@@ -494,11 +494,11 @@ local function DemoSun()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleSun:create()
+        emitter = ax.ParticleSun:create()
         emitter:retain()
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
         setEmitterPosition()
 
@@ -515,17 +515,17 @@ local function DemoPause()
     local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleSmoke:create()
+        emitter = ax.ParticleSmoke:create()
         emitter:retain()
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
         setEmitterPosition()
 
         titleLabel:setString("Pasue Particle")
     end
-    
+
     return layer
 end
 
@@ -536,17 +536,17 @@ local function DemoMeteor()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleMeteor:create()
+        emitter = ax.ParticleMeteor:create()
         emitter:retain()
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
         setEmitterPosition()
 
         titleLabel:setString("ParticleMeteor")
     end
-	
+
 	return layer
 end
 
@@ -557,17 +557,17 @@ local function DemoFire()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleFire:create()
+        emitter = ax.ParticleFire:create()
         emitter:retain()
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
         local pos_x, pos_y = emitter:getPosition()
         emitter:setPosition(pos_x, 100)
 
         titleLabel:setString("ParticleFire")
     end
-	
+
 	return layer
 end
 
@@ -578,10 +578,10 @@ local function DemoSmoke()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleSmoke:create()
+        emitter = ax.ParticleSmoke:create()
         emitter:retain()
         background:addChild(emitter, 10)
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
         local pos_x, pos_y = emitter:getPosition()
         emitter:setPosition(pos_x, 100)
 
@@ -589,7 +589,7 @@ local function DemoSmoke()
 
         titleLabel:setString("ParticleSmoke")
     end
-	
+
 	return layer
 end
 
@@ -600,11 +600,11 @@ local function DemoExplosion()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleExplosion:create()
+        emitter = ax.ParticleExplosion:create()
         emitter:retain()
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_stars1))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_stars1))
 
         emitter:setAutoRemoveOnFinish(true)
 
@@ -612,7 +612,7 @@ local function DemoExplosion()
 
         titleLabel:setString("ParticleExplosion")
     end
-	
+
 	return layer
 end
 
@@ -623,7 +623,7 @@ local function DemoSnow()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleSnow:create()
+        emitter = ax.ParticleSnow:create()
         emitter:retain()
         background:addChild(emitter, 10)
         local pos_x, pos_y = emitter:getPosition()
@@ -632,7 +632,7 @@ local function DemoSnow()
         emitter:setLifeVar(1)
 
         -- gravity
-        emitter:setGravity(cc.p(0, -10))
+        emitter:setGravity(ax.p(0, -10))
 
         -- speed of particles
         emitter:setSpeed(130)
@@ -650,7 +650,7 @@ local function DemoSnow()
 
         emitter:setEmissionRate(emitter:getTotalParticles() / emitter:getLife())
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_snow))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_snow))
 
         setEmitterPosition()
 
@@ -667,14 +667,14 @@ local function DemoRain()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleRain:create()
+        emitter = ax.ParticleRain:create()
         emitter:retain()
         background:addChild(emitter, 10)
         local pos_x, pos_y = emitter:getPosition()
         emitter:setPosition(pos_x, pos_y - 100)
         emitter:setLife(4)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
         setEmitterPosition()
 
@@ -691,15 +691,15 @@ local function DemoBigFlower()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleSystemQuad:createWithTotalParticles(50)
+        emitter = ax.ParticleSystemQuad:createWithTotalParticles(50)
         emitter:retain()
 
         background:addChild(emitter, 10)
-        emitter:setTexture( cc.Director:getInstance():getTextureCache():addImage(s_stars1) )
+        emitter:setTexture( ax.Director:getInstance():getTextureCache():addImage(s_stars1) )
         emitter:setDuration(-1)
 
         -- gravity
-        emitter:setGravity(cc.p(0, 0))
+        emitter:setGravity(ax.p(0, 0))
 
         -- angle
         emitter:setAngle(90)
@@ -719,7 +719,7 @@ local function DemoBigFlower()
 
         -- emitter position
         emitter:setPosition(160, 240)
-        emitter:setPosVar(cc.p(0, 0))
+        emitter:setPosVar(ax.p(0, 0))
 
         -- life of particles
         emitter:setLife(4)
@@ -732,15 +732,15 @@ local function DemoBigFlower()
         emitter:setEndSpinVar(0)
 
         -- color of particles
-        emitter:setStartColor(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setStartColorVar(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setEndColor(cc.c4f(0.1, 0.1, 0.1, 0.2))
-        emitter:setEndColorVar(cc.c4f(0.1, 0.1, 0.1, 0.2))
+        emitter:setStartColor(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setStartColorVar(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setEndColor(ax.color(0.1, 0.1, 0.1, 0.2))
+        emitter:setEndColorVar(ax.color(0.1, 0.1, 0.1, 0.2))
 
         -- size, in pixels
         emitter:setStartSize(80.0)
         emitter:setStartSizeVar(40.0)
-        emitter:setEndSize(cc.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE )
+        emitter:setEndSize(ax.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE )
 
         -- emits per second
         emitter:setEmissionRate(emitter:getTotalParticles() / emitter:getLife())
@@ -763,18 +763,18 @@ local function DemoRotFlower()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleSystemQuad:createWithTotalParticles(300)
+        emitter = ax.ParticleSystemQuad:createWithTotalParticles(300)
         emitter:retain()
 
         background:addChild(emitter, 10)
         ----emitter:release()    -- win32 : Remove this line
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_stars2))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_stars2))
 
         -- duration
         emitter:setDuration(-1)
 
         -- gravity
-        emitter:setGravity(cc.p(0, 0))
+        emitter:setGravity(ax.p(0, 0))
 
         -- angle
         emitter:setAngle(90)
@@ -794,7 +794,7 @@ local function DemoRotFlower()
 
         -- emitter position
         emitter:setPosition(160, 240)
-        emitter:setPosVar(cc.p(0, 0))
+        emitter:setPosVar(ax.p(0, 0))
 
         -- life of particles
         emitter:setLife(3)
@@ -807,15 +807,15 @@ local function DemoRotFlower()
         emitter:setEndSpinVar(2000)
 
         -- color of particles
-        emitter:setStartColor(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setStartColorVar(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setEndColor(cc.c4f(0.1, 0.1, 0.1, 0.2))
-        emitter:setEndColorVar(cc.c4f(0.1, 0.1, 0.1, 0.2))
+        emitter:setStartColor(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setStartColorVar(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setEndColor(ax.color(0.1, 0.1, 0.1, 0.2))
+        emitter:setEndColorVar(ax.color(0.1, 0.1, 0.1, 0.2))
 
         -- size, in pixels
         emitter:setStartSize(30.0)
         emitter:setStartSizeVar(0)
-        emitter:setEndSize(cc.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE )
+        emitter:setEndSize(ax.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE )
 
         -- emits per second
         emitter:setEmissionRate(emitter:getTotalParticles() / emitter:getLife())
@@ -838,7 +838,7 @@ local function DemoModernArt()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleSystemQuad:createWithTotalParticles(1000)
+        emitter = ax.ParticleSystemQuad:createWithTotalParticles(1000)
         emitter:retain()
 
         background:addChild(emitter, 10)
@@ -848,7 +848,7 @@ local function DemoModernArt()
         emitter:setDuration(-1)
 
         -- gravity
-        emitter:setGravity(cc.p(0,0))
+        emitter:setGravity(ax.p(0,0))
 
         -- angle
         emitter:setAngle(0)
@@ -868,7 +868,7 @@ local function DemoModernArt()
 
         -- emitter position
         emitter:setPosition(s.width / 2, s.height / 2)
-        emitter:setPosVar(cc.p(0, 0))
+        emitter:setPosVar(ax.p(0, 0))
 
         -- life of particles
         emitter:setLife(2.0)
@@ -878,10 +878,10 @@ local function DemoModernArt()
         emitter:setEmissionRate(emitter:getTotalParticles() / emitter:getLife())
 
         -- color of particles
-        emitter:setStartColor(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setStartColorVar(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setEndColor(cc.c4f(0.1, 0.1, 0.1, 0.2))
-        emitter:setEndColorVar(cc.c4f(0.1, 0.1, 0.1, 0.2))
+        emitter:setStartColor(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setStartColorVar(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setEndColor(ax.color(0.1, 0.1, 0.1, 0.2))
+        emitter:setEndColorVar(ax.color(0.1, 0.1, 0.1, 0.2))
 
         -- size, in pixels
         emitter:setStartSize(1.0)
@@ -890,7 +890,7 @@ local function DemoModernArt()
         emitter:setEndSizeVar(8.0)
 
         -- texture
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
         -- additive
         emitter:setBlendAdditive(false)
@@ -910,12 +910,12 @@ local function DemoRing()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        emitter = cc.ParticleFlower:create()
+        emitter = ax.ParticleFlower:create()
         emitter:retain()
 
         background:addChild(emitter, 10)
 
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_stars1))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_stars1))
         emitter:setLifeVar(0)
         emitter:setLife(10)
         emitter:setSpeed(100)
@@ -940,30 +940,30 @@ local function ParallaxParticle()
         background:getParent():removeChild(background, true)
         background = nil
 
-        local p = cc.ParallaxNode:create()
+        local p = ax.ParallaxNode:create()
         layer:addChild(p, 5)
 
-        local p1 = cc.Sprite:create(s_back3)
-        local p2 = cc.Sprite:create(s_back3)
+        local p1 = ax.Sprite:create(s_back3)
+        local p2 = ax.Sprite:create(s_back3)
 
-        p:addChild(p1, 1, cc.p(0.5, 1), cc.p(0, 250))
-        p:addChild(p2, 2, cc.p(1.5, 1), cc.p(0, 50))
+        p:addChild(p1, 1, ax.p(0.5, 1), ax.p(0, 250))
+        p:addChild(p2, 2, ax.p(1.5, 1), ax.p(0, 50))
 
-        emitter = cc.ParticleFlower:create()
+        emitter = ax.ParticleFlower:create()
         emitter:retain()
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
         p1:addChild(emitter, 10)
         emitter:setPosition(250, 200)
 
-        local par = cc.ParticleSun:create()
+        local par = ax.ParticleSun:create()
         p2:addChild(par, 10)
-        par:setTexture(cc.Director:getInstance():getTextureCache():addImage(s_fire))
+        par:setTexture(ax.Director:getInstance():getTextureCache():addImage(s_fire))
 
-        local move = cc.MoveBy:create(4, cc.p(300,0))
+        local move = ax.MoveBy:create(4, ax.p(300,0))
         local move_back = move:reverse()
-        local seq = cc.Sequence:create(move, move_back)
-        p:runAction(cc.RepeatForever:create(seq))
+        local seq = ax.Sequence:create(move, move_back)
+        p:runAction(ax.RepeatForever:create(seq))
 
         titleLabel:setString("Parallax + Particles")
     end
@@ -978,12 +978,12 @@ local function DemoParticleFromFile(name)
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
         local filename = "Particles/" .. name .. ".plist"
-        emitter = cc.ParticleSystemQuad:create(filename)
+        emitter = ax.ParticleSystemQuad:create(filename)
         emitter:retain()
 
         layer:addChild(emitter, 10)
@@ -1003,21 +1003,21 @@ local function RadiusMode1()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
-        emitter = cc.ParticleSystemQuad:createWithTotalParticles(200)
+        emitter = ax.ParticleSystemQuad:createWithTotalParticles(200)
         emitter:retain()
 
         layer:addChild(emitter, 10)
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage("Images/stars-grayscale.png"))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage("Images/stars-grayscale.png"))
 
         -- duration
-        emitter:setDuration(cc.PARTICLE_DURATION_INFINITY)
+        emitter:setDuration(ax.PARTICLE_DURATION_INFINITY)
 
         -- radius mode
-        emitter:setEmitterMode(cc.PARTICLE_MODE_RADIUS)
+        emitter:setEmitterMode(ax.PARTICLE_MODE_RADIUS)
 
         -- radius mode: start and end radius in pixels
         emitter:setStartRadius(0)
@@ -1036,7 +1036,7 @@ local function RadiusMode1()
 
         -- emitter position
         emitter:setPosition(s.width / 2, s.height / 2)
-        emitter:setPosVar(cc.p(0, 0))
+        emitter:setPosVar(ax.p(0, 0))
 
         -- life of particles
         emitter:setLife(5)
@@ -1049,15 +1049,15 @@ local function RadiusMode1()
         emitter:setEndSpinVar(0)
 
         -- color of particles
-        emitter:setStartColor(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setStartColorVar(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setEndColor(cc.c4f(0.1, 0.1, 0.1, 0.2))
-        emitter:setEndColorVar(cc.c4f(0.1, 0.1, 0.1, 0.2))
+        emitter:setStartColor(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setStartColorVar(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setEndColor(ax.color(0.1, 0.1, 0.1, 0.2))
+        emitter:setEndColorVar(ax.color(0.1, 0.1, 0.1, 0.2))
 
         -- size, in pixels
         emitter:setStartSize(32)
         emitter:setStartSizeVar(0)
-        emitter:setEndSize(cc.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE )
+        emitter:setEndSize(ax.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE )
 
         -- emits per second
         emitter:setEmissionRate(emitter:getTotalParticles() / emitter:getLife())
@@ -1078,26 +1078,26 @@ local function RadiusMode2()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
-        emitter = cc.ParticleSystemQuad:createWithTotalParticles(200)
+        emitter = ax.ParticleSystemQuad:createWithTotalParticles(200)
         emitter:retain()
 
         layer:addChild(emitter, 10)
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage("Images/stars-grayscale.png"))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage("Images/stars-grayscale.png"))
 
         -- duration
-        emitter:setDuration(cc.PARTICLE_DURATION_INFINITY )
+        emitter:setDuration(ax.PARTICLE_DURATION_INFINITY )
 
         -- radius mode
-        emitter:setEmitterMode(cc.PARTICLE_MODE_RADIUS)
+        emitter:setEmitterMode(ax.PARTICLE_MODE_RADIUS)
 
         -- radius mode: start and end radius in pixels
         emitter:setStartRadius(100)
         emitter:setStartRadiusVar(0)
-        emitter:setEndRadius(cc.PARTICLE_START_RADIUS_EQUAL_TO_END_RADIUS)
+        emitter:setEndRadius(ax.PARTICLE_START_RADIUS_EQUAL_TO_END_RADIUS)
         emitter:setEndRadiusVar(0)
 
         -- radius mode: degrees per second
@@ -1110,7 +1110,7 @@ local function RadiusMode2()
 
         -- emitter position
         emitter:setPosition(s.width / 2, s.height / 2)
-        emitter:setPosVar(cc.p(0, 0))
+        emitter:setPosVar(ax.p(0, 0))
 
         -- life of particles
         emitter:setLife(4)
@@ -1123,15 +1123,15 @@ local function RadiusMode2()
         emitter:setEndSpinVar(0)
 
         -- color of particles
-        emitter:setStartColor(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setStartColorVar(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setEndColor(cc.c4f(0.1, 0.1, 0.1, 0.2))
-        emitter:setEndColorVar(cc.c4f(0.1, 0.1, 0.1, 0.2))
+        emitter:setStartColor(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setStartColorVar(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setEndColor(ax.color(0.1, 0.1, 0.1, 0.2))
+        emitter:setEndColorVar(ax.color(0.1, 0.1, 0.1, 0.2))
 
         -- size, in pixels
         emitter:setStartSize(32)
         emitter:setStartSizeVar(0)
-        emitter:setEndSize(cc.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE)
+        emitter:setEndSize(ax.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE)
 
         -- emits per second
         emitter:setEmissionRate(emitter:getTotalParticles() / emitter:getLife())
@@ -1152,26 +1152,26 @@ local function Issue704()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
-        emitter = cc.ParticleSystemQuad:createWithTotalParticles(100)
+        emitter = ax.ParticleSystemQuad:createWithTotalParticles(100)
         emitter:retain()
 
         layer:addChild(emitter, 10)
-        emitter:setTexture(cc.Director:getInstance():getTextureCache():addImage("Images/fire.png"))
+        emitter:setTexture(ax.Director:getInstance():getTextureCache():addImage("Images/fire.png"))
 
         -- duration
-        emitter:setDuration(cc.PARTICLE_DURATION_INFINITY)
+        emitter:setDuration(ax.PARTICLE_DURATION_INFINITY)
 
         -- radius mode
-        emitter:setEmitterMode(cc.PARTICLE_MODE_RADIUS)
+        emitter:setEmitterMode(ax.PARTICLE_MODE_RADIUS)
 
         -- radius mode: start and end radius in pixels
         emitter:setStartRadius(50)
         emitter:setStartRadiusVar(0)
-        emitter:setEndRadius(cc.PARTICLE_START_RADIUS_EQUAL_TO_END_RADIUS )
+        emitter:setEndRadius(ax.PARTICLE_START_RADIUS_EQUAL_TO_END_RADIUS )
         emitter:setEndRadiusVar(0)
 
         -- radius mode: degrees per second
@@ -1185,7 +1185,7 @@ local function Issue704()
 
         -- emitter position
         emitter:setPosition(s.width / 2, s.height / 2)
-        emitter:setPosVar(cc.p(0, 0))
+        emitter:setPosVar(ax.p(0, 0))
 
         -- life of particles
         emitter:setLife(5)
@@ -1198,15 +1198,15 @@ local function Issue704()
         emitter:setEndSpinVar(0)
 
         -- color of particles
-        emitter:setStartColor(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setStartColorVar(cc.c4f(0.5, 0.5, 0.5, 1.0))
-        emitter:setEndColor(cc.c4f(0.1, 0.1, 0.1, 0.2))
-        emitter:setEndColorVar(cc.c4f(0.1, 0.1, 0.1, 0.2))
+        emitter:setStartColor(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setStartColorVar(ax.color(0.5, 0.5, 0.5, 1.0))
+        emitter:setEndColor(ax.color(0.1, 0.1, 0.1, 0.2))
+        emitter:setEndColorVar(ax.color(0.1, 0.1, 0.1, 0.2))
 
         -- size, in pixels
         emitter:setStartSize(16)
         emitter:setStartSizeVar(0)
-        emitter:setEndSize(cc.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE)
+        emitter:setEndSize(ax.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE)
 
         -- emits per second
         emitter:setEmissionRate(emitter:getTotalParticles() / emitter:getLife())
@@ -1214,8 +1214,8 @@ local function Issue704()
         -- additive
         emitter:setBlendAdditive(false)
 
-        local rot = cc.RotateBy:create(16, 360)
-        emitter:runAction(cc.RepeatForever:create(rot))
+        local rot = ax.RotateBy:create(16, 360)
+        emitter:runAction(ax.RepeatForever:create(rot))
 
         titleLabel:setString("Issue 704. Free + Rot")
         subtitleLabel:setString("Emitted particles should not rotate")
@@ -1234,12 +1234,12 @@ local function updateQuads(dt)
 	update(dt)
 
 	Issue870_index = math.fmod(Issue870_index + 1, 4)
-    local rect = cc.rect(Issue870_index * 32, 0, 32, 32)
+    local rect = ax.rect(Issue870_index * 32, 0, 32, 32)
     emitter:setTextureWithRect(emitter:getTexture(), rect)
 end
 
 local function Issue870_onEnterOrExit(tag)
-	local scheduler = cc.Director:getInstance():getScheduler()
+	local scheduler = ax.Director:getInstance():getScheduler()
 	if tag == "enterTransitionFinish" then
 		Issue870_entry = scheduler:scheduleScriptFunc(updateQuads, 2.0, false)
 	elseif tag == "exit" then
@@ -1251,13 +1251,13 @@ end
 
 local function Issue870()
 	local layer = getBaseLayer()
-    
+
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
-        local system = cc.ParticleSystemQuad:create("Particles/SpinningPeas.plist")
-        system:setTextureWithRect(cc.Director:getInstance():getTextureCache():addImage("Images/particles.png"), cc.rect(0,0,32,32))
+        local system = ax.ParticleSystemQuad:create("Particles/SpinningPeas.plist")
+        system:setTextureWithRect(ax.Director:getInstance():getTextureCache():addImage("Images/particles.png"), ax.rect(0,0,32,32))
         layer:addChild(system, 10)
         emitter = system
         emitter:retain()
@@ -1279,16 +1279,16 @@ local function MultipleParticleSystems()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
-        cc.Director:getInstance():getTextureCache():addImage("Images/particles.png")
+        ax.Director:getInstance():getTextureCache():addImage("Images/particles.png")
 
         for i = 0, 4 do
-            local particleSystem = cc.ParticleSystemQuad:create("Particles/SpinningPeas.plist")
+            local particleSystem = ax.ParticleSystemQuad:create("Particles/SpinningPeas.plist")
             particleSystem:setPosition(i * 50, i * 50)
-            particleSystem:setPositionType(cc.POSITION_TYPE_GROUPED )
+            particleSystem:setPositionType(ax.POSITION_TYPE_GROUPED )
             layer:addChild(particleSystem)
         end
 
@@ -1308,16 +1308,16 @@ local function MultipleParticleSystemsBatched()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
-        local batchNode = cc.ParticleBatchNode:createWithTexture(nil, 3000)
+        local batchNode = ax.ParticleBatchNode:createWithTexture(nil, 3000)
         layer:addChild(batchNode, 1, 2)
 
         for i = 0, 4 do
-            local particleSystem = cc.ParticleSystemQuad:create("Particles/SpinningPeas.plist")
-            particleSystem:setPositionType(cc.POSITION_TYPE_GROUPED )
+            local particleSystem = ax.ParticleSystemQuad:create("Particles/SpinningPeas.plist")
+            particleSystem:setPositionType(ax.POSITION_TYPE_GROUPED )
             particleSystem:setPosition(i * 50, i * 50)
             batchNode:setTexture(particleSystem:getTexture())
             batchNode:addChild(particleSystem)
@@ -1348,8 +1348,8 @@ local function removeSystem(dt)
         AddAndDeleteParticleSystems_batchNode:removeChild(AddAndDeleteParticleSystems_batchNode:getChildren()[(rand)], true)
 
 		--add new
-        local particleSystem = cc.ParticleSystemQuad:create("Particles/Spiral.plist")
-        particleSystem:setPositionType(cc.POSITION_TYPE_GROUPED )
+        local particleSystem = ax.ParticleSystemQuad:create("Particles/Spiral.plist")
+        particleSystem:setPositionType(ax.POSITION_TYPE_GROUPED )
         particleSystem:setTotalParticles(200)
 
         particleSystem:setPosition(math.fmod(math.random(1, 999999), 300) ,math.fmod(math.random(1, 999999), 400))
@@ -1361,7 +1361,7 @@ local function removeSystem(dt)
 end
 
 local function AddAndDeleteParticleSystems_onEnterOrExit(tag)
-	local scheduler = cc.Director:getInstance():getScheduler()
+	local scheduler = ax.Director:getInstance():getScheduler()
 	if tag == "enterTransitionFinish" then
 		AddAndDeleteParticleSystems_entry = scheduler:scheduleScriptFunc(removeSystem, 2.0, false)
 	elseif tag == "exit" then
@@ -1375,20 +1375,20 @@ local function AddAndDeleteParticleSystems()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
         --adds the texture inside the plist to the texture cache
-        AddAndDeleteParticleSystems_batchNode = cc.ParticleBatchNode:createWithTexture(nil, 16000)
+        AddAndDeleteParticleSystems_batchNode = ax.ParticleBatchNode:createWithTexture(nil, 16000)
 
         layer:addChild(AddAndDeleteParticleSystems_batchNode, 1, 2)
 
         for i = 0, 5 do
-            local particleSystem = cc.ParticleSystemQuad:create("Particles/Spiral.plist")
+            local particleSystem = ax.ParticleSystemQuad:create("Particles/Spiral.plist")
             AddAndDeleteParticleSystems_batchNode:setTexture(particleSystem:getTexture())
 
-            particleSystem:setPositionType(cc.POSITION_TYPE_GROUPED )
+            particleSystem:setPositionType(ax.POSITION_TYPE_GROUPED )
             particleSystem:setTotalParticles(200)
 
             particleSystem:setPosition(i * 15 + 100, i * 15 + 100)
@@ -1420,13 +1420,13 @@ local function reorderSystem(dt)
     local childArray = ReorderParticleSystems_batchNode:getChildren()
     local random     = math.random(1,#(childArray))
 	local child = childArray[random]
-	-- problem: there's no getLocalZOrder() for cc.Object
+	-- problem: there's no getLocalZOrder() for ax.Object
 	-- ReorderParticleSystems_batchNode:reorderChild(child, child:getLocalZOrder() - 1)
 	ReorderParticleSystems_batchNode:reorderChild(child, math.random(0, 99999))
 end
 
 local function ReorderParticleSystems_onEnterOrExit(tag)
-	local scheduler = cc.Director:getInstance():getScheduler()
+	local scheduler = ax.Director:getInstance():getScheduler()
 	if tag == "enterTransitionFinish" then
 		ReorderParticleSystems_entry = scheduler:scheduleScriptFunc(reorderSystem, 2.0, false)
 	elseif tag == "exit" then
@@ -1440,28 +1440,28 @@ local function ReorderParticleSystems()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background ,true)
         background = nil
 
-        ReorderParticleSystems_batchNode = cc.ParticleBatchNode:create("Images/stars-grayscale.png", 3000)
+        ReorderParticleSystems_batchNode = ax.ParticleBatchNode:create("Images/stars-grayscale.png", 3000)
 
         layer:addChild(ReorderParticleSystems_batchNode, 1, 2)
 
         for i = 0, 2 do
-            local particleSystem = cc.ParticleSystemQuad:createWithTotalParticles(200)
+            local particleSystem = ax.ParticleSystemQuad:createWithTotalParticles(200)
             particleSystem:setTexture(ReorderParticleSystems_batchNode:getTexture())
 
             -- duration
-            particleSystem:setDuration(cc.PARTICLE_DURATION_INFINITY)
+            particleSystem:setDuration(ax.PARTICLE_DURATION_INFINITY)
 
             -- radius mode
-            particleSystem:setEmitterMode(cc.PARTICLE_MODE_RADIUS)
+            particleSystem:setEmitterMode(ax.PARTICLE_MODE_RADIUS)
 
             -- radius mode: 100 pixels from center
             particleSystem:setStartRadius(100)
             particleSystem:setStartRadiusVar(0)
-            particleSystem:setEndRadius(cc.PARTICLE_START_RADIUS_EQUAL_TO_END_RADIUS )
+            particleSystem:setEndRadius(ax.PARTICLE_START_RADIUS_EQUAL_TO_END_RADIUS )
             particleSystem:setEndRadiusVar(0)    -- not used when start == end
 
             -- radius mode: degrees per second
@@ -1475,7 +1475,7 @@ local function ReorderParticleSystems()
             particleSystem:setAngleVar(0)
 
             -- emitter position
-            particleSystem:setPosVar(cc.p(0, 0))
+            particleSystem:setPosVar(ax.p(0, 0))
 
             -- life of particles
             particleSystem:setLife(4)
@@ -1488,23 +1488,23 @@ local function ReorderParticleSystems()
             particleSystem:setEndSpinVar(0)
 
             -- color of particles
-            local startColor = cc.c4f(0, 0, 0, 1)
+            local startColor = ax.color(0, 0, 0, 1)
             if i == 0 then startColor.r = 1
             elseif i == 1 then startColor.g = 1
             elseif i == 2 then startColor.b = 1
             end
 
             particleSystem:setStartColor(startColor)
-            particleSystem:setStartColorVar(cc.c4f(0, 0, 0, 0))
+            particleSystem:setStartColorVar(ax.color(0, 0, 0, 0))
 
             local endColor = startColor
             particleSystem:setEndColor(endColor)
-            particleSystem:setEndColorVar(cc.c4f(0, 0, 0, 0))
+            particleSystem:setEndColorVar(ax.color(0, 0, 0, 0))
 
             -- size, in pixels
             particleSystem:setStartSize(32)
             particleSystem:setStartSizeVar(0)
-            particleSystem:setEndSize(cc.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE)
+            particleSystem:setEndSize(ax.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE)
 
             -- emits per second
             particleSystem:setEmissionRate(particleSystem:getTotalParticles() / particleSystem:getLife())
@@ -1513,7 +1513,7 @@ local function ReorderParticleSystems()
             particleSystem:setPosition(i * 10 + 120, 200)
 
             ReorderParticleSystems_batchNode:addChild(particleSystem)
-            particleSystem:setPositionType(cc.POSITION_TYPE_FREE )
+            particleSystem:setPositionType(ax.POSITION_TYPE_FREE )
 
             --particleSystem:release()
         end
@@ -1535,21 +1535,21 @@ local function PremultipliedAlphaTest()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 255))
+        layer:setColor(ax.color32(0, 0, 255))
         layer:removeChild(background, true)
         background = nil
 
-        emitter = cc.ParticleSystemQuad:create("Particles/BoilingFoam.plist")
+        emitter = ax.ParticleSystemQuad:create("Particles/BoilingFoam.plist")
         emitter:retain()
 
-        emitter:setBlendFunc(cc.blendFunc(ccb.BlendFactor.ONE, ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
+        emitter:setBlendFunc(ax.blendFunc(ccb.BlendFactor.ONE, ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
 
         --assert(emitter:getOpacityModifyRGB(), "Particle texture does not have premultiplied alpha, test is useless")
 
-        emitter:setStartColor(cc.c4f(1, 1, 1, 1))
-        emitter:setEndColor(cc.c4f(1, 1, 1, 0))
-        emitter:setStartColorVar(cc.c4f(0, 0, 0, 0))
-        emitter:setEndColorVar(cc.c4f(0, 0, 0, 0))
+        emitter:setStartColor(ax.color(1, 1, 1, 1))
+        emitter:setEndColor(ax.color(1, 1, 1, 0))
+        emitter:setStartColorVar(ax.color(0, 0, 0, 0))
+        emitter:setEndColorVar(ax.color(0, 0, 0, 0))
 
         layer:addChild(emitter, 10)
 
@@ -1567,11 +1567,11 @@ local function PremultipliedAlphaTest2()
 	local layer = getBaseLayer()
 
     onEnterCallback = function ()
-        layer:setColor(cc.c3b(0, 0, 0))
+        layer:setColor(ax.color32(0, 0, 0))
         layer:removeChild(background, true)
         background = nil
 
-        emitter = cc.ParticleSystemQuad:create("Particles/TestPremultipliedAlpha.plist")
+        emitter = ax.ParticleSystemQuad:create("Particles/TestPremultipliedAlpha.plist")
         emitter:retain()
         layer:addChild(emitter ,10)
 
@@ -1638,7 +1638,7 @@ end
 
 function ParticleTest()
 	cclog("ParticleTest")
-	local scene = cc.Scene:create()
+	local scene = ax.Scene:create()
 
 	SceneIdx = -1
 	scene:addChild(nextAction())

@@ -99,9 +99,8 @@ void InspectorNodePropertyHandler::drawProperties(Node* node)
     auto color      = node->getColor();
     float _color[4] = {color.r / 255.f, color.g / 255.f, color.b / 255.f, node->getOpacity() / 255.f};
     ImGui::ColorEdit4("Color", _color);
-    node->setColor({static_cast<GLubyte>(_color[0] * 255), static_cast<GLubyte>(_color[1] * 255),
-                              static_cast<GLubyte>(_color[2] * 255)});
-    node->setOpacity(static_cast<int>(_color[3] * 255.f));
+    node->setColor({static_cast<uint8_t>(_color[0] * 255), static_cast<uint8_t>(_color[1] * 255),
+                    static_cast<uint8_t>(_color[2] * 255), static_cast<uint8_t>(_color[3] * 255.f)});
 }
 
 bool InspectorSpritePropertyHandler::isSupportedType(Node* node)

@@ -60,9 +60,9 @@ namespace {
         void setEnabled(bool enabled) {
             _enabled = enabled;
             if (_enabled) {
-                this->setColor(Color3B::WHITE);
+                this->setColor(Color32::WHITE);
             } else {
-                this->setColor(Color3B::GRAY);
+                this->setColor(Color32::GRAY);
             }
         }
 
@@ -290,7 +290,7 @@ protected:
             if (rect.containsPoint(locationInNode))
             {
                 AXLOGD("TouchableSprite: onTouchBegan ...");
-                this->setColor(Color3B::RED);
+                this->setColor(Color32::RED);
                 return true;
             }
             return false;
@@ -298,7 +298,7 @@ protected:
 
         listener->onTouchEnded = [this](Touch* touch, Event* event) {
             AXLOGD("TouchableSprite: onTouchEnded ...");
-            this->setColor(Color3B::WHITE);
+            this->setColor(Color32::WHITE);
 
             if (_removeListenerOnTouchEnded)
             {
@@ -400,13 +400,13 @@ void RemoveListenerWhenDispatching::onEnter()
 
         if (rect.containsPoint(locationInNode))
         {
-            sprite1->setColor(Color3B::RED);
+            sprite1->setColor(Color32::RED);
             return true;
         }
         return false;
     };
 
-    listener1->onTouchEnded = [=](Touch* touch, Event* event) { sprite1->setColor(Color3B::WHITE); };
+    listener1->onTouchEnded = [=](Touch* touch, Event* event) { sprite1->setColor(Color32::WHITE); };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, sprite1);
 
@@ -1370,7 +1370,7 @@ PauseResumeTargetTest3::PauseResumeTargetTest3()
             if (rect.containsPoint(locationInNode))
             {
                 AXLOGD("TouchableSprite: onTouchBegan ...");
-                _touchableSprite->setColor(Color3B::RED);
+                _touchableSprite->setColor(Color32::RED);
                 return true;
             }
             return false;
@@ -1378,7 +1378,7 @@ PauseResumeTargetTest3::PauseResumeTargetTest3()
 
         listener->onTouchEnded = [this](Touch* touch, Event* event) {
             AXLOGD("TouchableSprite: onTouchEnded ...");
-            _touchableSprite->setColor(Color3B::WHITE);
+            _touchableSprite->setColor(Color32::WHITE);
         };
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, _touchableSprite);

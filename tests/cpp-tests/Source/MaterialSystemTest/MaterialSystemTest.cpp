@@ -302,10 +302,10 @@ void Material_setTechnique::onEnter()
     mesh->setMaterial(mat);
 
     // lights
-    auto light1 = AmbientLight::create(Color3B::RED);
+    auto light1 = AmbientLight::create(Color32::RED);
     addChild(light1);
 
-    auto light2 = DirectionLight::create(Vec3(-1, 1, 0), Color3B::GREEN);
+    auto light2 = DirectionLight::create(Vec3(-1, 1, 0), Color32::GREEN);
     addChild(light2);
 
     this->schedule(AX_CALLBACK_1(Material_setTechnique::changeMaterial, this), 1, "cookie");

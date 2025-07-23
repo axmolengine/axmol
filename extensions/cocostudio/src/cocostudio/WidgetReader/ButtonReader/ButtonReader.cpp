@@ -146,7 +146,7 @@ void ButtonReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
         button->setContentSize(Size(scale9Width, scale9Height));
     }
 
-    button->setTitleColor(Color3B(cri, cgi, cbi));
+    button->setTitleColor(Color32(cri, cgi, cbi, button->getTitleColor().a));
 }
 
 void ButtonReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::Value& options)
@@ -213,7 +213,7 @@ void ButtonReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
     int cri = DICTOOL->getIntValue_json(options, P_TextColorR, 255);
     int cgi = DICTOOL->getIntValue_json(options, P_TextColorG, 255);
     int cbi = DICTOOL->getIntValue_json(options, P_TextColorB, 255);
-    button->setTitleColor(Color3B(cri, cgi, cbi));
+    button->setTitleColor(Color32(cri, cgi, cbi, 255));
 
     button->setTitleFontSize(DICTOOL->getIntValue_json(options, P_FontSize, 14));
 
@@ -862,7 +862,7 @@ void ButtonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     }
 
     auto textColor = options->textColor();
-    Color3B titleColor(textColor->r(), textColor->g(), textColor->b());
+    Color32 titleColor(textColor->r(), textColor->g(), textColor->b(), textColor->a());
     button->setTitleColor(titleColor);
 
     std::string titleFontName = options->fontName()->c_str();

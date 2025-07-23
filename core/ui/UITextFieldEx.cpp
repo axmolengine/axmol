@@ -115,8 +115,7 @@ static Sprite* engine_inj_create_lump(const Color32& color, int height, int widt
 
     auto cursor = Sprite::createWithTexture(texture);
 
-    cursor->setColor(Color3B(color));
-    cursor->setOpacity(color.a);
+    cursor->setColor(color);
 
     texture->release();
 
@@ -749,12 +748,12 @@ const Color32& TextFieldEx::getTextColor(void) const
     return _colorText;
 }
 
-void TextFieldEx::setCursorColor(const Color3B& color)
+void TextFieldEx::setCursorColor(const Color32& color)
 {
     _cursor->setColor(color);
 }
 
-const Color3B& TextFieldEx::getCursorColor(void) const
+const Color32& TextFieldEx::getCursorColor(void) const
 {
     return _cursor->getColor();
 }

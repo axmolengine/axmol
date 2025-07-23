@@ -6,10 +6,11 @@
 NS_FGUI_BEGIN
 using namespace ax;
 
-static Color3B toGrayed(const Color3B& source)
+static Color32 toGrayed(const Color32& source)
 {
-    Color3B c = source;
+    Color32 c = source;
     c.r = c.g = c.b = c.r * 0.299f + c.g * 0.587f + c.b * 0.114f;
+    c.a = source.a; // keep alpha
     return c;
 }
 
@@ -191,7 +192,7 @@ void FUILabel::updateFontScale()
     }
 }
 
-void FUILabel::setUnderlineColor(const ax::Color3B& value)
+void FUILabel::setUnderlineColor(const ax::Color32& value)
 {
     //NOT IMPLEMENTED
 }

@@ -61,11 +61,10 @@ Offset<Table> PageViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     int resourceType = 0;
 
     bool clipEnabled = false;
-    Color3B bgColor;
-    Color3B bgStartColor;
-    Color3B bgEndColor;
+    Color32 bgColor = Color32::WHITE;
+    Color32 bgStartColor = Color32::WHITE;
+    Color32 bgEndColor = Color32::WHITE;
     int colorType          = 0;
-    uint8_t bgColorOpacity = 255;
     Vec2 colorVector(0.0f, -0.5f);
     Rect capInsets;
     Size scale9Size;
@@ -88,7 +87,7 @@ Offset<Table> PageViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
         }
         else if (name == "BackColorAlpha")
         {
-            bgColorOpacity = atoi(value.data());
+            bgColor.a = atoi(value.data());
         }
         else if (name == "Scale9Enable")
         {
@@ -288,7 +287,7 @@ Offset<Table> PageViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto options = CreatePageViewOptions(
         *builder, widgetOptions,
         CreateResourceData(*builder, builder->CreateString(path), builder->CreateString(plistFile), resourceType),
-        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColorOpacity, &f_colorVector,
+        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColor.a, &f_colorVector,
         &f_capInsets, &f_scale9Size, backGroundScale9Enabled);
 
     return *(Offset<Table>*)(&options);
@@ -306,24 +305,22 @@ void PageViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
     pageView->setBackGroundImageScale9Enabled(backGroundScale9Enabled);
 
     auto f_bgColor = options->bgColor();
-    Color3B bgColor(f_bgColor->r(), f_bgColor->g(), f_bgColor->b());
+    int bgColorOpacity = options->bgColorOpacity(); // FIXME: redundant, should we use f_bgColor->a() instead?
+    Color32 bgColor(f_bgColor->r(), f_bgColor->g(), f_bgColor->b(), bgColorOpacity);
     auto f_bgStartColor = options->bgStartColor();
-    Color3B bgStartColor(f_bgStartColor->r(), f_bgStartColor->g(), f_bgStartColor->b());
+    Color32 bgStartColor(f_bgStartColor->r(), f_bgStartColor->g(), f_bgStartColor->b(), f_bgStartColor->a());
     auto f_bgEndColor = options->bgEndColor();
-    Color3B bgEndColor(f_bgEndColor->r(), f_bgEndColor->g(), f_bgEndColor->b());
+    Color32 bgEndColor(f_bgEndColor->r(), f_bgEndColor->g(), f_bgEndColor->b(), f_bgEndColor->a());
 
     auto f_colorVecor = options->colorVector();
     Vec2 colorVector(f_colorVecor->x(), f_colorVecor->y());
     pageView->setBackGroundColorVector(colorVector);
-
-    int bgColorOpacity = options->bgColorOpacity();
 
     int colorType = options->colorType();
     pageView->setBackGroundColorType(Layout::BackGroundColorType(colorType));
 
     pageView->setBackGroundColor(bgStartColor, bgEndColor);
     pageView->setBackGroundColor(bgColor);
-    pageView->setBackGroundColorOpacity(bgColorOpacity);
 
     bool fileExist = false;
     std::string errorFilePath;
@@ -388,11 +385,9 @@ void PageViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
 
     auto widgetOptions = options->widgetOptions();
     auto f_color       = widgetOptions->color();
-    Color3B color(f_color->r(), f_color->g(), f_color->b());
+    int opacity = widgetOptions->alpha(); // FIXME: shoud we use f_color->a() instead?
+    Color32 color(f_color->r(), f_color->g(), f_color->b(), opacity);
     pageView->setColor(color);
-
-    int opacity = widgetOptions->alpha();
-    pageView->setOpacity(opacity);
 
     auto widgetReader = WidgetReader::getInstance();
     widgetReader->setPropsWithFlatBuffers(node, (Table*)options->widgetOptions());

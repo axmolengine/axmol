@@ -31,8 +31,8 @@ public:
     FlipType getFlip() const;
     void setFlip(FlipType value);
 
-    ax::Color3B getColor() const { return _content->getColor(); }
-    void setColor(const ax::Color3B& value);
+    ax::Color32 getColor() const { return _content->getColor(); }
+    void setColor(const ax::Color32& value);
 
     //from start to end(-1 means ending) repeat times(0 means infinite loop) when all is over, stopping at endAt(-1 means same value of end)
     void setPlaySettings(int start = 0, int end = -1, int times = 0, int endAt = -1, std::function<void()> completeCallback = nullptr);

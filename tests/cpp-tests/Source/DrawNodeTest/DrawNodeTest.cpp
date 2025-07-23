@@ -1446,10 +1446,10 @@ void DrawNodeBaseTest::listviewCallback(ax::Object* sender, ax::ui::ListView::Ev
     auto listview = static_cast<ax::ui::ListView*>(sender);
     for (auto&& item : listview->getItems())
     {
-        static_cast<ax::ui::Text*>(item)->setColor(ax::Color3B::WHITE);
+        static_cast<ax::ui::Text*>(item)->setColor(ax::Color32::WHITE);
     }
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
-    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
+    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color32::RED);
 }
 
 void DrawNodeBaseTest::onChangedRadioButtonSelect(ui::RadioButton* radioButton, ui::RadioButton::EventType type)
@@ -2604,7 +2604,7 @@ ax::ui::ListView* DrawNodeMethodsTest::createListView()
         (ui::ListView::ccListViewCallback)AX_CALLBACK_2(DrawNodeBaseTest::listviewCallback, this));
     listview->setTag(100);
 
-    listview->getItem(_currentSeletedItemIndex)->setColor(Color3B::RED);
+    listview->getItem(_currentSeletedItemIndex)->setColor(Color32::RED);
 
     return listview;
 }

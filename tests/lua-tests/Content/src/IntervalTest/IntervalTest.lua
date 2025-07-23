@@ -1,38 +1,38 @@
-local scheduler = cc.Director:getInstance():getScheduler()
+local scheduler = ax.Director:getInstance():getScheduler()
 local SID_STEP1    = 100
 local SID_STEP2    = 101
 local SID_STEP3    = 102
 local IDC_PAUSE    = 200
 
 local function IntervalLayer()
-    local ret = cc.Layer:create()
+    local ret = ax.Layer:create()
     local m_time0 = 0
     local m_time1 = 0
     local m_time2 = 0
     local m_time3 = 0
     local m_time4 = 0
 
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
     -- sun
-    local  sun = cc.ParticleSun:create()
-    sun:setTexture(cc.Director:getInstance():getTextureCache():addImage("Images/fire.png"))
-    sun:setPosition( cc.p(VisibleRect:rightTop().x-32,VisibleRect:rightTop().y-32) )
+    local  sun = ax.ParticleSun:create()
+    sun:setTexture(ax.Director:getInstance():getTextureCache():addImage("Images/fire.png"))
+    sun:setPosition( ax.p(VisibleRect:rightTop().x-32,VisibleRect:rightTop().y-32) )
 
     sun:setTotalParticles(130)
     sun:setLife(0.6)
     ret:addChild(sun)
 
     -- timers
-    m_label0 = cc.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
-    m_label0:setAnchorPoint(cc.p(0.5, 0.5))
-    m_label1 = cc.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
-    m_label1:setAnchorPoint(cc.p(0.5, 0.5))
-    m_label2 = cc.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
-    m_label2:setAnchorPoint(cc.p(0.5, 0.5))
-    m_label3 = cc.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
-    m_label3:setAnchorPoint(cc.p(0.5, 0.5))
-    m_label4 = cc.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
-    m_label4:setAnchorPoint(cc.p(0.5, 0.5))
+    m_label0 = ax.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
+    m_label0:setAnchorPoint(ax.p(0.5, 0.5))
+    m_label1 = ax.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
+    m_label1:setAnchorPoint(ax.p(0.5, 0.5))
+    m_label2 = ax.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
+    m_label2:setAnchorPoint(ax.p(0.5, 0.5))
+    m_label3 = ax.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
+    m_label3:setAnchorPoint(ax.p(0.5, 0.5))
+    m_label4 = ax.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "0")
+    m_label4:setAnchorPoint(ax.p(0.5, 0.5))
 
     local function update(dt)
         m_time0 = m_time0 + dt
@@ -82,8 +82,8 @@ local function IntervalLayer()
             scheduler:unscheduleScriptEntry(schedulerEntry2)
             scheduler:unscheduleScriptEntry(schedulerEntry3)
             scheduler:unscheduleScriptEntry(schedulerEntry4)
-            if cc.Director:getInstance():isPaused() then
-                cc.Director:getInstance():resume()
+            if ax.Director:getInstance():isPaused() then
+                ax.Director:getInstance():resume()
             end
         end
     end
@@ -91,11 +91,11 @@ local function IntervalLayer()
     ret:registerScriptHandler(onNodeEvent)
 
 
-    m_label0:setPosition(cc.p(s.width*1/6, s.height/2))
-    m_label1:setPosition(cc.p(s.width*2/6, s.height/2))
-    m_label2:setPosition(cc.p(s.width*3/6, s.height/2))
-    m_label3:setPosition(cc.p(s.width*4/6, s.height/2))
-    m_label4:setPosition(cc.p(s.width*5/6, s.height/2))
+    m_label0:setPosition(ax.p(s.width*1/6, s.height/2))
+    m_label1:setPosition(ax.p(s.width*2/6, s.height/2))
+    m_label2:setPosition(ax.p(s.width*3/6, s.height/2))
+    m_label3:setPosition(ax.p(s.width*4/6, s.height/2))
+    m_label4:setPosition(ax.p(s.width*5/6, s.height/2))
 
     ret:addChild(m_label0)
     ret:addChild(m_label1)
@@ -104,26 +104,26 @@ local function IntervalLayer()
     ret:addChild(m_label4)
 
     -- Sprite
-    local  sprite = cc.Sprite:create(s_pPathGrossini)
-    sprite:setPosition( cc.p(VisibleRect:left().x + 40, VisibleRect:bottom().y + 50) )
+    local  sprite = ax.Sprite:create(s_pPathGrossini)
+    sprite:setPosition( ax.p(VisibleRect:left().x + 40, VisibleRect:bottom().y + 50) )
 
-    local  jump = cc.JumpBy:create(3, cc.p(s.width-80,0), 50, 4)
+    local  jump = ax.JumpBy:create(3, ax.p(s.width-80,0), 50, 4)
 
     ret:addChild(sprite)
-    sprite:runAction( cc.RepeatForever:create(cc.Sequence:create(jump, jump:reverse())))
+    sprite:runAction( ax.RepeatForever:create(ax.Sequence:create(jump, jump:reverse())))
     -- pause button
-    local  item1 = cc.MenuItemFont:create("Pause")
+    local  item1 = ax.MenuItemFont:create("Pause")
     local function onPause(tag, pSender)
-        if cc.Director:getInstance():isPaused() then
-            cc.Director:getInstance():resume()
+        if ax.Director:getInstance():isPaused() then
+            ax.Director:getInstance():resume()
         else
-            cc.Director:getInstance():pause()
+            ax.Director:getInstance():pause()
         end
     end
 
     item1:registerScriptTapHandler(onPause)
-    local  menu = cc.Menu:create(item1)
-    menu:setPosition( cc.p(s.width/2, s.height-50) )
+    local  menu = ax.Menu:create(item1)
+    menu:setPosition( ax.p(s.width/2, s.height-50) )
 
     ret:addChild( menu )
 
@@ -133,7 +133,7 @@ end
 
 function IntervalTestMain()
     cclog("IntervalTestMain")
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     local  layer = IntervalLayer()
     scene:addChild(layer, 0)
     scene:addChild(CreateBackMenuItem())

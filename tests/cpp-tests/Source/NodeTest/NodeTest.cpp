@@ -703,7 +703,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0);
     sprite->setPosition(Vec2(s.width / 5 * 1, s.height / 5 * 1));
-    sprite->setColor(Color3B::RED);
+    sprite->setColor(Color32::RED);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -713,7 +713,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 5 * 1, s.height / 5 * 4));
-    sprite->setColor(Color3B::BLUE);
+    sprite->setColor(Color32::BLUE);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -722,7 +722,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0);
     sprite->setPosition(Vec2(s.width / 5 * 4, s.height / 5 * 1));
-    sprite->setColor(Color3B::YELLOW);
+    sprite->setColor(Color32::YELLOW);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -731,7 +731,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 5 * 4, s.height / 5 * 4));
-    sprite->setColor(Color3B::GREEN);
+    sprite->setColor(Color32::GREEN);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -740,7 +740,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 2, s.height / 2));
-    sprite->setColor(Color3B::WHITE);
+    sprite->setColor(Color32::WHITE);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));

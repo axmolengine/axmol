@@ -745,7 +745,7 @@ protected:
     void setAlignmentTop(ax::Object* sender);
     void setAlignmentMiddle(ax::Object* sender);
     void setAlignmentBottom(ax::Object* sender);
-    
+
     void initWrapOption(const ax::Size& size);
     void initToggleLabelTypeOption(const ax::Size& size);
     void initAlignmentOption(const ax::Size& size);
@@ -1073,7 +1073,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    static void setLetterColors(ax::Label* label, const ax::Color3B& color);
+    static void setLetterColors(ax::Label* label, const ax::Color32& color);
 };
 
 #endif

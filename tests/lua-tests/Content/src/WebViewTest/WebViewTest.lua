@@ -3,7 +3,7 @@
 ----WebViewTest
 ----------------------------------------
 local WebViewTest = class("WebViewTest", function ()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
 
     return layer
 end)
@@ -17,7 +17,7 @@ function WebViewTest:init()
     Helper.titleLabel:setString(self:title())
     Helper.subtitleLabel:setString(self:subtitle())
 
-    local winSize = cc.Director:getInstance():getVisibleSize()
+    local winSize = ax.Director:getInstance():getVisibleSize()
     self._webView = ccui.WebView:create()
     self._webView:setPosition(winSize.width / 2, winSize.height / 2)
     self._webView:setContentSize(winSize.width / 2,  winSize.height / 2)
@@ -38,13 +38,13 @@ function WebViewTest:init()
     self:addChild(self._webView)
 
     local urlTextField = ccui.TextField:create("Input a URL here", "Arial", 20)
-    urlTextField:setPlaceHolderColor(cc.c4b(255, 0, 0,  255))
+    urlTextField:setPlaceHolderColor(ax.color32(255, 0, 0,  255))
     urlTextField:setPosition(winSize.width/2 - 80, winSize.height/2 + self._webView:getContentSize().height/2 + urlTextField:getContentSize().height/2 + 10)
     self:addChild(urlTextField)
-    
+
     local httpLabel = ccui.Text:create("https:// ", "Arial", 20)
-    httpLabel:setTextColor(cc.c4b(0, 255,   0, 255))
-    httpLabel:setAnchorPoint(cc.p(1.0,0.5))
+    httpLabel:setTextColor(ax.color32(0, 255,   0, 255))
+    httpLabel:setAnchorPoint(ax.p(1.0,0.5))
     local x,y = urlTextField:getPosition()
     httpLabel:setPosition( x - urlTextField:getContentSize().width / 2, y)
     self:addChild(httpLabel)
@@ -55,7 +55,7 @@ function WebViewTest:init()
     resetBtn:addClickEventListener(function(sender)
         if urlTextField:getString() ~=  nil then
             self._webView:loadURL("https://" .. urlTextField:getString())
-        end    
+        end
     end)
     self:addChild(resetBtn)
 
@@ -90,7 +90,7 @@ function WebViewTest:init()
         self._webView:loadFile("Test.html")
     end)
     self:addChild(loadFileBtn)
-    
+
     local loadHTMLBtn = ccui.Button:create("cocosui/animationbuttonnormal.png","cocosui/animationbuttonpressed.png")
     loadHTMLBtn:setTitleText("Load Data")
     loadHTMLBtn:setPosition(winSize.width / 2 - self._webView:getContentSize().width/2 - loadHTMLBtn:getContentSize().width/2 - 30, winSize.height / 2)
@@ -98,7 +98,7 @@ function WebViewTest:init()
         self._webView:loadHTMLString("<body style=\"font-size:50px\">Hello World <img src=\"Icon.png\"/> </body>","Images/")
     end)
     self:addChild(loadHTMLBtn)
-    
+
     local evalJsBtn = ccui.Button:create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png")
     evalJsBtn:setTitleText("Evaluate JS")
     evalJsBtn:setPosition(winSize.width / 2 - self._webView:getContentSize().width/2 - evalJsBtn:getContentSize().width/2 - 30, winSize.height / 2 - 50)
@@ -123,7 +123,7 @@ function WebViewTestMain()
     }
     Helper.index = 1
 
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     scene:addChild(WebViewTest.create())
     scene:addChild(CreateBackMenuItem())
     return scene

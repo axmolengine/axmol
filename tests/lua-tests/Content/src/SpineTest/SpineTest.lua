@@ -1,7 +1,7 @@
 require "axmol.spine.SpineConstants"
 
 local SpineTestLayerNormal = class("SpineTestLayerNormal",function()
-    return cc.Layer:create()
+    return ax.Layer:create()
 end)
 
 function SpineTestLayerNormal:ctor()
@@ -20,29 +20,29 @@ function SpineTestLayerNormal:init()
   skeletonNode:setScale(0.5)
 
   skeletonNode:registerSpineEventHandler(function (event)
-      print(string.format("[spine] %d start: %s", 
+      print(string.format("[spine] %d start: %s",
                               event.trackIndex,
                               event.animation))
   end, sp.EventType.ANIMATION_START)
 
   skeletonNode:registerSpineEventHandler(function (event)
-      print(string.format("[spine] %d end:", 
+      print(string.format("[spine] %d end:",
                                 event.trackIndex))
   end, sp.EventType.ANIMATION_END)
-    
+
   skeletonNode:registerSpineEventHandler(function (event)
-      print(string.format("[spine] %d complete: %d", 
+      print(string.format("[spine] %d complete: %d",
                               event.trackIndex,
                               event.loopCount))
   end, sp.EventType.ANIMATION_COMPLETE)
 
   skeletonNode:registerSpineEventHandler(function (event)
-      print(string.format("[spine] %d event: %s, %d, %f, %s", 
+      print(string.format("[spine] %d event: %s, %d, %f, %s",
                               event.trackIndex,
                               event.eventData.name,
                               event.eventData.intValue,
                               event.eventData.floatValue,
-                              event.eventData.stringValue)) 
+                              event.eventData.stringValue))
   end, sp.EventType.ANIMATION_EVENT)
 
   skeletonNode:setMix("walk", "jump", 0.2)
@@ -52,11 +52,11 @@ function SpineTestLayerNormal:init()
   skeletonNode:addAnimation(0, "jump", false, 3)
   skeletonNode:addAnimation(0, "run", true)
 
-  local windowSize = cc.Director:getInstance():getWinSize()
-  skeletonNode:setPosition(cc.p(windowSize.width / 2, 20))
+  local windowSize = ax.Director:getInstance():getWinSize()
+  skeletonNode:setPosition(ax.p(windowSize.width / 2, 20))
   self:addChild(skeletonNode)
 
-  local listener = cc.EventListenerTouchOneByOne:create()
+  local listener = ax.EventListenerTouchOneByOne:create()
   listener:registerScriptHandler(function (touch, event)
         if not skeletonNode:getDebugBonesEnabled() then
             skeletonNode:setDebugBonesEnabled(true)
@@ -68,7 +68,7 @@ function SpineTestLayerNormal:init()
         end
 
         return true
-    end,cc.Handler.EVENT_TOUCH_BEGAN )
+    end,ax.Handler.EVENT_TOUCH_BEGAN )
 
   local eventDispatcher = self:getEventDispatcher()
   eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -83,7 +83,7 @@ end
 
 ----
 local SpineTestLayerFFD = class("SpineTestLayerFFD",function()
-    return cc.Layer:create()
+    return ax.Layer:create()
 end)
 
 function SpineTestLayerFFD:ctor()
@@ -101,13 +101,13 @@ function SpineTestLayerFFD:init()
   skeletonNode = sp.SkeletonAnimation:create("spine/goblins-pro.json", "spine/goblins.atlas", 1.5)
   skeletonNode:setAnimation(0, "walk", true)
   skeletonNode:setSkin("goblin")
-    
+
   skeletonNode:setScale(0.5)
-  local windowSize = cc.Director:getInstance():getWinSize()
-  skeletonNode:setPosition(cc.p(windowSize.width / 2, 20))
+  local windowSize = ax.Director:getInstance():getWinSize()
+  skeletonNode:setPosition(ax.p(windowSize.width / 2, 20))
   self:addChild(skeletonNode)
-    
-  local listener = cc.EventListenerTouchOneByOne:create()
+
+  local listener = ax.EventListenerTouchOneByOne:create()
   listener:registerScriptHandler(function (touch, event)
         if not skeletonNode:getDebugBonesEnabled() then
             skeletonNode:setDebugBonesEnabled(true)
@@ -119,7 +119,7 @@ function SpineTestLayerFFD:init()
         end
 
         return true
-    end,cc.Handler.EVENT_TOUCH_BEGAN )
+    end,ax.Handler.EVENT_TOUCH_BEGAN )
 
   local eventDispatcher = self:getEventDispatcher()
   eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -134,9 +134,9 @@ end
 
 function SpineTestMain()
     cclog("SpineTestMain")
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
-    Helper.createFunctionTable = 
+    Helper.createFunctionTable =
     {
         SpineTestLayerNormal.create,
         SpineTestLayerFFD.create,

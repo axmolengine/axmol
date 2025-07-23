@@ -78,17 +78,17 @@ bool UITabControlTest::init()
         auto container1 = Layout::create();
         container1->setOpacity(255);
         container1->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-        container1->setBackGroundColor(Color3B::GRAY);
+        container1->setBackGroundColor(Color32::GRAY);
         container1->setBackGroundColorOpacity(255);
         auto container2 = Layout::create();
         container2->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         container2->setOpacity(255);
-        container2->setBackGroundColor(Color3B::BLUE);
+        container2->setBackGroundColor(Color32::BLUE);
         container2->setBackGroundColorOpacity(255);
         auto container3 = Layout::create();
         container3->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         container3->setOpacity(255);
-        container3->setBackGroundColor(Color3B::RED);
+        container3->setBackGroundColor(Color32::RED);
         container3->setBackGroundColorOpacity(255);
 
         tab->insertTab(0, header1, container1);

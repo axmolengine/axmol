@@ -91,14 +91,14 @@ CameraRotationTest::CameraRotationTest()
     // Yellow is at the back
     bill1 = BillBoard::create("Images/Icon.png");
     bill1->setPosition3D(Vec3(50.0f, 10.0f, -10.0f));
-    bill1->setColor(Color3B::YELLOW);
+    bill1->setColor(Color32::YELLOW);
     bill1->setScale(0.6f);
     mesh->addChild(bill1);
 
     l1 = Label::create();
     l1->setPosition(Vec2(0.0f, -10.0f));
     l1->setString("Billboard1");
-    l1->setColor(Color3B::WHITE);
+    l1->setColor(Color32::WHITE);
     l1->setScale(3);
     bill1->addChild(l1);
 
@@ -114,7 +114,7 @@ CameraRotationTest::CameraRotationTest()
     l2 = Label::create();
     l2->setString("Billboard2");
     l2->setPosition(Vec2(0.0f, -10.0f));
-    l2->setColor(Color3B::WHITE);
+    l2->setColor(Color32::WHITE);
     l2->setScale(3);
     bill2->addChild(l2);
 
@@ -230,10 +230,10 @@ void Camera3DTestDemo::SwitchViewCallback(Object* sender, CameraType cameraType)
         _camera->setPosition3D(Vec3(0, 130, 130) + _mesh->getPosition3D());
         _camera->lookAt(_mesh->getPosition3D());
 
-        _RotateRightlabel->setColor(Color3B::WHITE);
-        _RotateLeftlabel->setColor(Color3B::WHITE);
-        _ZoomInlabel->setColor(Color3B::WHITE);
-        _ZoomOutlabel->setColor(Color3B::WHITE);
+        _RotateRightlabel->setColor(Color32::WHITE);
+        _RotateLeftlabel->setColor(Color32::WHITE);
+        _ZoomInlabel->setColor(Color32::WHITE);
+        _ZoomOutlabel->setColor(Color32::WHITE);
     }
     else if (_cameraType == CameraType::FirstPerson)
     {
@@ -243,20 +243,20 @@ void Camera3DTestDemo::SwitchViewCallback(Object* sender, CameraType cameraType)
         _camera->setPosition3D(Vec3(0, 35, 0) + _mesh->getPosition3D());
         _camera->lookAt(_mesh->getPosition3D() + newFaceDir * 50);
 
-        _RotateRightlabel->setColor(Color3B::WHITE);
-        _RotateLeftlabel->setColor(Color3B::WHITE);
-        _ZoomInlabel->setColor(Color3B::GRAY);
-        _ZoomOutlabel->setColor(Color3B::GRAY);
+        _RotateRightlabel->setColor(Color32::WHITE);
+        _RotateLeftlabel->setColor(Color32::WHITE);
+        _ZoomInlabel->setColor(Color32::GRAY);
+        _ZoomOutlabel->setColor(Color32::GRAY);
     }
     else if (_cameraType == CameraType::ThirdPerson)
     {
         _camera->setPosition3D(Vec3(0, 130, 130) + _mesh->getPosition3D());
         _camera->lookAt(_mesh->getPosition3D());
 
-        _RotateRightlabel->setColor(Color3B::GRAY);
-        _RotateLeftlabel->setColor(Color3B::GRAY);
-        _ZoomInlabel->setColor(Color3B::WHITE);
-        _ZoomOutlabel->setColor(Color3B::WHITE);
+        _RotateRightlabel->setColor(Color32::GRAY);
+        _RotateLeftlabel->setColor(Color32::GRAY);
+        _ZoomInlabel->setColor(Color32::WHITE);
+        _ZoomOutlabel->setColor(Color32::WHITE);
     }
 }
 void Camera3DTestDemo::onEnter()
@@ -740,7 +740,7 @@ void CameraCullingDemo::onEnter()
     MenuItemFont::setFontSize(20);
 
     auto menuItem1 = MenuItemFont::create("Switch Camera", AX_CALLBACK_1(CameraCullingDemo::switchViewCallback, this));
-    menuItem1->setColor(Color3B(0, 200, 20));
+    menuItem1->setColor(Color32(0, 200, 20));
     auto menu = Menu::create(menuItem1, NULL);
     menu->setPosition(Vec2::ZERO);
     menuItem1->setPosition(VisibleRect::left().x + 80, VisibleRect::top().y - 70);
@@ -749,9 +749,9 @@ void CameraCullingDemo::onEnter()
     // + -
     MenuItemFont::setFontSize(40);
     auto decrease = MenuItemFont::create(" - ", AX_CALLBACK_1(CameraCullingDemo::delMeshCallback, this));
-    decrease->setColor(Color3B(0, 200, 20));
+    decrease->setColor(Color32(0, 200, 20));
     auto increase = MenuItemFont::create(" + ", AX_CALLBACK_1(CameraCullingDemo::addMeshCallback, this));
-    increase->setColor(Color3B(0, 200, 20));
+    increase->setColor(Color32(0, 200, 20));
 
     menu = Menu::create(decrease, increase, nullptr);
     menu->alignItemsHorizontally();
@@ -760,7 +760,7 @@ void CameraCullingDemo::onEnter()
 
     TTFConfig ttfCount("fonts/Marker Felt.ttf", 30);
     _labelMeshCount = Label::createWithTTF(ttfCount, "0 sprits");
-    _labelMeshCount->setColor(Color3B(0, 200, 20));
+    _labelMeshCount->setColor(Color32(0, 200, 20));
     _labelMeshCount->setPosition(Vec2(s.width / 2, VisibleRect::top().y - 70));
     addChild(_labelMeshCount);
 
@@ -1020,10 +1020,10 @@ void CameraArcBallDemo::onEnter()
 
     auto menuItem1 =
         MenuItemFont::create("Switch Operation", AX_CALLBACK_1(CameraArcBallDemo::switchOperateCallback, this));
-    menuItem1->setColor(Color3B(0, 200, 20));
+    menuItem1->setColor(Color32(0, 200, 20));
     auto menuItem2 =
         MenuItemFont::create("Switch Target", AX_CALLBACK_1(CameraArcBallDemo::switchTargetCallback, this));
-    menuItem2->setColor(Color3B(0, 200, 20));
+    menuItem2->setColor(Color32(0, 200, 20));
     auto menu = Menu::create(menuItem1, menuItem2, NULL);
     menu->setPosition(Vec2::ZERO);
     menuItem1->setPosition(VisibleRect::left().x + 80, VisibleRect::top().y - 70);

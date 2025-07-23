@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -452,7 +453,7 @@ void TextFieldTTF::setTextColorInternally(const Color32& color)
 {
     if (_currentLabelType == LabelType::BMFONT)
     {
-        Label::setColor(Color3B(color));
+        Label::setColor(color);
         return;
     }
 
@@ -511,11 +512,6 @@ void TextFieldTTF::update(float delta)
 const Color32& TextFieldTTF::getColorSpaceHolder()
 {
     return _colorSpaceHolder;
-}
-
-void TextFieldTTF::setColorSpaceHolder(const Color3B& color)
-{
-    setColorSpaceHolder(Color32(color));
 }
 
 void TextFieldTTF::setColorSpaceHolder(const Color32& color)

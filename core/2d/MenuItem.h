@@ -148,10 +148,10 @@ public:
     std::string_view getString() const;
 
     /** Gets the color that will be used when the item is disabled. */
-    const Color3B& getDisabledColor() const { return _disabledColor; }
+    const Color32& getDisabledColor() const { return _disabledColor; }
 
     /** Sets the color that will be used when the item is disabled. */
-    void setDisabledColor(const Color3B& color) { _disabledColor = color; }
+    void setDisabledColor(const Color32& color) { _disabledColor = color; }
 
     /** Gets the label that is rendered. */
     Node* getLabel() const { return _label; }
@@ -177,11 +177,11 @@ public:
     bool initWithLabel(Node* label, const ccMenuCallback& callback);
 
 protected:
-    Color3B _colorBackup;
+    Color32 _colorBackup;
     float _originalScale;
 
     /** The color that will be used to disable the item. */
-    Color3B _disabledColor;
+    Color32 _disabledColor;
     /** Label that is rendered. It can be any Node that implements the LabelProtocol. */
     Node* _label;
 

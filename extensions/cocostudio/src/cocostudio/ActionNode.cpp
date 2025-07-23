@@ -179,7 +179,7 @@ void ActionNode::initWithDictionary(const rapidjson::Value& dic, Object* root)
             actionFrame->setFrameIndex(frameInex);
             actionFrame->setEasingType(frameTweenType);
             actionFrame->setEasingParameter(frameTweenParameter);
-            actionFrame->setColor(Color3B(colorR, colorG, colorB));
+            actionFrame->setColor(colorR, colorG, colorB);
             auto cActionArray = _frameArray.at((int)kKeyframeFade);
             cActionArray->pushBack(actionFrame);
             actionFrame->release();
@@ -350,7 +350,7 @@ void ActionNode::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode,
                 actionFrame->setEasingType(frameTweenType);
                 actionFrame->setEasingParameter(frameTweenParameter);
                 actionFrame->setFrameIndex(frameIndex);
-                actionFrame->setColor(Color3B(colorR, colorG, colorB));
+                actionFrame->setColor(colorR, colorG, colorB);
                 auto cActionArray = _frameArray.at((int)kKeyframeTint);
                 cActionArray->pushBack(actionFrame);
             }

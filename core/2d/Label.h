@@ -397,7 +397,7 @@ public:
     virtual void setTextColor(const Color32& color);
 
     /** Returns the text color of the Label.*/
-    const Color32& getTextColor() const { return _textColor; }
+    const Color32& getTextColor() const { return _textColor32; }
 
     /**
      * Enable shadow effect to Label.
@@ -665,24 +665,24 @@ public:
     virtual const BlendFunc& getBlendFunc() const override { return _blendFunc; }
     virtual void setBlendFunc(const BlendFunc& blendFunc) override;
 
-    virtual bool isOpacityModifyRGB() const override { return _isOpacityModifyRGB; }
-    virtual void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
-    virtual void updateDisplayedColor(const Color3B& parentColor) override;
-    virtual void updateDisplayedOpacity(uint8_t parentOpacity) override;
+    bool isOpacityModifyRGB() const override { return _isOpacityModifyRGB; }
+    void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
+    void updateDisplayedColor(const Color32& parentColor) override;
+    void updateDisplayedOpacity(uint8_t parentOpacity) override;
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
-    virtual const Vec2& getContentSize() const override;
-    virtual Rect getBoundingBox() const override;
+    const Vec2& getContentSize() const override;
+    Rect getBoundingBox() const override;
 
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-    virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
+    void setCameraMask(unsigned short mask, bool applyChildren = true) override;
 
-    virtual void removeAllChildrenWithCleanup(bool cleanup) override;
-    virtual void removeChild(Node* child, bool cleanup = true) override;
-    virtual void setGlobalZOrder(float globalZOrder) override;
+    void removeAllChildrenWithCleanup(bool cleanup) override;
+    void removeChild(Node* child, bool cleanup = true) override;
+    void setGlobalZOrder(float globalZOrder) override;
 
     /**
      * Constructor of Label.
@@ -823,9 +823,8 @@ protected:
     bool _strikethroughEnabled;
     bool _underlineEnabled;
     bool _lineBreakWithoutSpaces;
-    uint8_t _shadowOpacity;
 
-    Color3B _shadowColor3B;
+    Color32 _shadowColor32;
 
     LabelType _currentLabelType;
     int _numberOfLines;
@@ -860,7 +859,7 @@ protected:
 
     Overflow _overflow;
     float _originalFontSize;
-    Color32 _textColor;
+    Color32 _textColor32;
 
     BlendFunc _blendFunc;
 
@@ -880,7 +879,7 @@ protected:
     Rect _reusedRect;
 
     Color _effectColor;
-    Color _textColorF;
+    Color _textColor;
     Color _shadowColor;
     Mat4 _shadowTransform;
 

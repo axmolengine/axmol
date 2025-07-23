@@ -687,7 +687,7 @@ void DemoFixedFPS::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -717,7 +717,7 @@ void DemoTimeScale::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -756,7 +756,7 @@ void DemoSpawnFadeIn::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -787,7 +787,7 @@ void DemoScaleFadeIn::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -818,7 +818,7 @@ void DemoSimulation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -848,7 +848,7 @@ void DemoSpawnRotation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -879,7 +879,7 @@ void DemoHSV::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -916,7 +916,7 @@ void DemoLifeAnimation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -971,7 +971,7 @@ void DemoLifeAnimationAtlas::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1015,7 +1015,7 @@ void DemoLifeAnimationReversed::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1072,7 +1072,7 @@ void DemoLoopAnimation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1130,7 +1130,7 @@ void DemoLoopAnimationReversed::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1188,7 +1188,7 @@ void DemoEmitterAnimation::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1243,7 +1243,7 @@ void DemoEmitterAnimationDescriptor::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1301,7 +1301,7 @@ void DemoLoopAnimationMultiDescriptor::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1361,7 +1361,7 @@ void DemoEmissionShapePoint::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1400,7 +1400,7 @@ void DemoEmissionShapeRect::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1436,7 +1436,7 @@ void DemoEmissionShapeRectTorus::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1472,7 +1472,7 @@ void DemoEmissionShapeCircle::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1508,7 +1508,7 @@ void DemoEmissionShapeCircleBiasEdge::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1544,7 +1544,7 @@ void DemoEmissionShapeCircleBiasCenter::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1580,7 +1580,7 @@ void DemoEmissionShapeTorus::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1616,7 +1616,7 @@ void DemoEmissionShapeTorusBiasEdge::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1652,7 +1652,7 @@ void DemoEmissionShapeTorusBiasInner::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1688,7 +1688,7 @@ void DemoEmissionShapeCone::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1724,7 +1724,7 @@ void DemoEmissionShapeConeTorus::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1760,7 +1760,7 @@ void DemoEmissionShapeAlphaMask::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1808,7 +1808,7 @@ void RadiusMode1::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1891,7 +1891,7 @@ void RadiusMode2::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -1974,7 +1974,7 @@ void Issue704::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2065,7 +2065,7 @@ void Issue870::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2106,7 +2106,7 @@ void DemoParticleFromFile::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2352,7 +2352,7 @@ void ParticleBatchHybrid::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2400,7 +2400,7 @@ void ParticleBatchMultipleEmitters::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2443,7 +2443,7 @@ void ParticleReorder::onEnter()
     ParticleDemo::onEnter();
 
     _order = 0;
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2615,7 +2615,7 @@ void Issue1201::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2645,7 +2645,7 @@ void MultipleParticleSystems::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2700,7 +2700,7 @@ void MultipleParticleSystemsBatched::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2760,7 +2760,7 @@ void AddAndDeleteParticleSystems::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -2848,7 +2848,7 @@ void ReorderParticleSystems::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -3002,7 +3002,7 @@ void PremultipliedAlphaTest::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLUE);
+    _color->setColor(Color32::BLUE);
     this->removeChild(_background, true);
     _background = nullptr;
 
@@ -3036,7 +3036,7 @@ void PremultipliedAlphaTest2::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     this->removeChild(_background, true);
     _background = nullptr;
 
@@ -3061,7 +3061,7 @@ void Issue3990::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     this->removeChild(_background, true);
     _background = nullptr;
 
@@ -3124,7 +3124,7 @@ void ParticleAutoBatching::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     this->removeChild(_background, true);
     _background = nullptr;
 
@@ -3156,7 +3156,7 @@ void ParticleResetTotalParticles::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 
@@ -3198,7 +3198,7 @@ void ParticleIssue12310::onEnter()
 {
     ParticleDemo::onEnter();
 
-    _color->setColor(Color3B::BLACK);
+    _color->setColor(Color32::BLACK);
     removeChild(_background, true);
     _background = nullptr;
 

@@ -319,13 +319,6 @@ public:
     /**
      * @brief Change the placeholder color.
      *
-     * @param color A color value in `Color3B`.
-     */
-    void setPlaceHolderColor(const Color3B& color);
-
-    /**
-     * @brief Change the placeholder color.
-     *
      * @param color A color value in `Color32`.
      */
     void setPlaceHolderColor(const Color32& color);

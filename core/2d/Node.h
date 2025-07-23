@@ -1695,24 +1695,24 @@ public:
 
     /**
      * Query node's color value.
-     * @return A Color3B color value.
+     * @return A Color32 color value.
      */
-    virtual const Color3B& getColor() const;
+    virtual const Color32& getColor() const;
     /**
      * Query node's displayed color.
-     * @return A Color3B color value.
+     * @return A Color32 color value.
      */
-    virtual const Color3B& getDisplayedColor() const;
+    virtual const Color32& getDisplayedColor() const;
     /**
      * Change the color of node.
-     * @param color A Color3B color value.
+     * @param color A Color32 color value.
      */
-    virtual void setColor(const Color3B& color);
+    virtual void setColor(const Color32& color);
     /**
      * Update node's displayed color with its parent color.
-     * @param parentColor A Color3B color value.
+     * @param parentColor A Color32 color value.
      */
-    virtual void updateDisplayedColor(const Color3B& parentColor);
+    virtual void updateDisplayedColor(const Color32& parentColor);
     /**
      * Query whether cascadeColor is enabled or not.
      * @return Whether cascadeColor is enabled or not.
@@ -1993,10 +1993,8 @@ protected:
     ComponentContainer* _componentContainer;  ///< Dictionary of components
 
     // opacity controls
-    Color3B _displayedColor;
-    uint8_t _displayedOpacity;
-    Color3B _realColor;
-    uint8_t _realOpacity;
+    Color32 _displayedColor;
+    Color32 _realColor;
 
     std::function<void()> _onEnterCallback;
     std::function<void()> _onExitCallback;

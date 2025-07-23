@@ -249,28 +249,28 @@ public:
      *
      * @param color New color for selected (current) index.
      */
-    void setIndicatorSelectedIndexColor(const Color3B& color);
+    void setIndicatorSelectedIndexColor(const Color32& color);
 
     /**
      * @brief Get the color of page indicator's selected index.
      *
      * @return color
      */
-    const Color3B& getIndicatorSelectedIndexColor() const;
+    const Color32& getIndicatorSelectedIndexColor() const;
 
     /**
      * @brief Set color of page indicator's index nodes.
      *
      * @param color New indicator node color.
      */
-    void setIndicatorIndexNodesColor(const Color3B& color);
+    void setIndicatorIndexNodesColor(const Color32& color);
 
     /**
      * @brief Get the color of page indicator's index nodes.
      *
      * @return color
      */
-    const Color3B& getIndicatorIndexNodesColor() const;
+    const Color32& getIndicatorIndexNodesColor() const;
 
     /**
      * @brief Set opacity of page indicator's selected index.

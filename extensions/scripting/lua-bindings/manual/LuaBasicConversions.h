@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
  https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -267,20 +267,6 @@ extern bool luaval_to_size(lua_State* L, int lo, Size* outValue, const char* fun
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_rect(lua_State* L, int lo, Rect* outValue, const char* funcName = "");
-
-/**
- * Get a Color3B object value from the given acceptable index of stack.
- * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
- * If the table has the `r`,`g` and `b` keys and the corresponding values are not nil, this function would assign the
- * values to the corresponding members of outValue. Otherwise, the value of members of outValue would be 0.
- *
- * @param L the current lua_State.
- * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a Color3B object which stores the values from the Lua table.
- * @param funcName the name of calling function, it is used for error output in the debug model.
- * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
- */
-extern AX_LUA_DLL bool luaval_to_color3b(lua_State* L, int lo, Color3B* outValue, const char* funcName = "");
 
 /**
  * Get a Color32 object value from the given acceptable index of stack.
@@ -933,15 +919,6 @@ extern void size_to_luaval(lua_State* L, const Size& sz);
 extern void rect_to_luaval(lua_State* L, const Rect& rt);
 
 /**
- * Push a table converted from a ax::Color3B object into the Lua stack.
- * The format of table as follows: {r=numberValue1, g=numberValue2, b=numberValue3}
- *
- * @param L the current lua_State.
- * @param cc  a ax::Color3B object.
- */
-extern AX_LUA_DLL void color3b_to_luaval(lua_State* L, const Color3B& cc);
-
-/**
  * Push a table converted from a ax::Color32 object into the Lua stack.
  * The format of table as follows: {r=numberValue1, g=numberValue2, b=numberValue3, a=numberValue4}
  *
@@ -1005,9 +982,9 @@ extern void affinetransform_to_luaval(lua_State* L, const AffineTransform& inVal
 /**
  * Push a table converted from a ax::FontDefinition object into the Lua stack.
  * The format of table as follows: {fontName=stringValue1, fontSize=numberValue1, fontAlignmentH=numberValue2,
- * fontAlignmentV=numberValue3,fontFillColor=color3b_table1, fontDimensions=size_table1, shadowEnabled=booleanValue1,
+ * fontAlignmentV=numberValue3,fontFillColor=color32_table1, fontDimensions=size_table1, shadowEnabled=booleanValue1,
  * shadowOffset=size_table2, shadowBlur=numberValue4, shadowOpacity=numberValue5, shadowEnabled=booleanValue2,
- * strokeColor=color3b_table2, strokeSize=size_table3}
+ * strokeColor=color32_table2, strokeSize=size_table3}
  *
  * @param L the current lua_State.
  * @param inValue a ax::FontDefinition object.

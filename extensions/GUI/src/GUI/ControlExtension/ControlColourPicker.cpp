@@ -120,7 +120,7 @@ ControlColourPicker* ControlColourPicker::create()
     return pRet;
 }
 
-void ControlColourPicker::setColor(const Color3B& color)
+void ControlColourPicker::setColor(const Color32& color)
 {
     // FIXME: fixed me if not correct
     Control::setColor(color);
@@ -129,7 +129,7 @@ void ControlColourPicker::setColor(const Color3B& color)
     rgba.r = color.r / 255.0f;
     rgba.g = color.g / 255.0f;
     rgba.b = color.b / 255.0f;
-    rgba.a = 1.0f;
+    rgba.a = color.a / 255.0f;
 
     _hsv = ControlUtils::HSVfromRGB(rgba);
     updateHueAndControlPicker();
@@ -168,9 +168,9 @@ void ControlColourPicker::hueSliderValueChanged(Object* sender, Control::EventTy
     _hsv.h = ((ControlHuePicker*)sender)->getHue();
 
     // Update the value
-    RGBA rgb = ControlUtils::RGBfromHSV(_hsv);
+    RGBA rgba = ControlUtils::RGBfromHSV(_hsv);
     // FIXME: fixed me if not correct
-    Control::setColor(Color3B((uint8_t)(rgb.r * 255.0f), (uint8_t)(rgb.g * 255.0f), (uint8_t)(rgb.b * 255.0f)));
+    Control::setColor(Color32(rgba));
 
     // Send Control callback
     sendActionsForControlEvents(Control::EventType::VALUE_CHANGED);
@@ -183,9 +183,9 @@ void ControlColourPicker::colourSliderValueChanged(Object* sender, Control::Even
     _hsv.v = ((ControlSaturationBrightnessPicker*)sender)->getBrightness();
 
     // Update the value
-    RGBA rgb = ControlUtils::RGBfromHSV(_hsv);
+    RGBA rgba = ControlUtils::RGBfromHSV(_hsv);
     // FIXME: fixed me if not correct
-    Control::setColor(Color3B((uint8_t)(rgb.r * 255.0f), (uint8_t)(rgb.g * 255.0f), (uint8_t)(rgb.b * 255.0f)));
+    Control::setColor(Color32(rgba));
 
     // Send Control callback
     sendActionsForControlEvents(Control::EventType::VALUE_CHANGED);
