@@ -46,7 +46,7 @@ cmdlinetools=19.0
 # - https://developer.android.google.cn/about/versions/15/behavior-changes-all?hl=zh-cn#16-kb
 # In China Mainland, please download from https://pan.baidu.com/s/1neJydxOGTT7aCQvLLwbicw?pwd=qqiq
 # to $AX_ROOT/cache/, then run `setup.ps1 -p android`
-ndk=r27c
+ndk=r27d
 
 # The android target sdk version, @gradle
 # as latest as possible
