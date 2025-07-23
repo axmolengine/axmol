@@ -44,13 +44,13 @@ public:
     static PULineEmitter* create();
     /**
      */
-    virtual void notifyStart() override;
+    void notifyStart() override;
 
     /** Override the default implementation, to allow that no particles are emitted if there
         is an incremental emission of particles (along a path), and the end of the line has
         been reached.
     */
-    virtual unsigned short calculateRequestedParticles(float timeElapsed) override;
+    unsigned short calculateRequestedParticles(float timeElapsed) override;
 
     /**
      */
@@ -77,18 +77,18 @@ public:
 
     /**
      */
-    virtual void notifyRescaled(const Vec3& scale) override;
+    void notifyRescaled(const Vec3& scale) override;
 
     /**
      */
-    virtual void initParticlePosition(PUParticle3D* particle) override;
+    void initParticlePosition(PUParticle3D* particle) override;
 
     /**
      */
-    virtual void initParticleDirection(PUParticle3D* particle) override;
+    void initParticleDirection(PUParticle3D* particle) override;
 
-    virtual PULineEmitter* clone() override;
-    virtual void copyAttributesTo(PUEmitter* emitter) override;
+    PULineEmitter* clone() override;
+    void copyAttributesTo(PUEmitter* emitter) override;
 
     PULineEmitter();
     virtual ~PULineEmitter(){};

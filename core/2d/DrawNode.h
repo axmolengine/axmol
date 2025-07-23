@@ -522,9 +522,9 @@ public:
     void setBlendFunc(const BlendFunc& blendFunc) override;
 
     // Overrides
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * When isolated is set, the position of the node is no longer affected by parent nodes.
@@ -536,7 +536,7 @@ public:
 
     DrawNode();
     virtual ~DrawNode();
-    virtual bool init() override;
+    bool init() override;
 
 protected:
     void updateBuffers();

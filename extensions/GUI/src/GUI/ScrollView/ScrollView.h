@@ -234,20 +234,20 @@ public:
     virtual void onTouchCancelled(Touch* touch, Event* event);
 
     // Overrides
-    virtual void setContentSize(const Size& size) override;
-    virtual const Size& getContentSize() const override;
+    void setContentSize(const Size& size) override;
+    const Size& getContentSize() const override;
     /**
      * @lua NA
      */
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     using Node::addChild;
-    virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
+    void addChild(Node* child, int zOrder, int tag) override;
+    void addChild(Node* child, int zOrder, std::string_view name) override;
 
-    virtual void removeAllChildren() override;
-    virtual void removeAllChildrenWithCleanup(bool cleanup) override;
-    virtual void removeChild(Node* child, bool cleanup = true) override;
+    void removeAllChildren() override;
+    void removeAllChildrenWithCleanup(bool cleanup) override;
+    void removeChild(Node* child, bool cleanup = true) override;
     /**
      * CCActionTweenDelegate
      */

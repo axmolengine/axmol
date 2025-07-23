@@ -139,19 +139,19 @@ public:
     virtual void onTouchMoved(Touch* touch, Event* event);
 
     // overrides
-    virtual void removeChild(Node* child, bool cleanup) override;
+    void removeChild(Node* child, bool cleanup) override;
 
-    virtual void addChild(Node* child) override;
-    virtual void addChild(Node* child, int zOrder) override;
-    virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
+    void addChild(Node* child) override;
+    void addChild(Node* child, int zOrder) override;
+    void addChild(Node* child, int zOrder, int tag) override;
+    void addChild(Node* child, int zOrder, std::string_view name) override;
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
-    virtual void setOpacityModifyRGB(bool value) override;
-    virtual bool isOpacityModifyRGB() const override;
+    void onEnter() override;
+    void onExit() override;
+    void setOpacityModifyRGB(bool value) override;
+    bool isOpacityModifyRGB() const override;
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      */

@@ -108,10 +108,10 @@ public:
     //
     // Overrides
     //
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
-    virtual void onEnter() override;
-    virtual void onExit() override;
-    virtual void cleanup() override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void onEnter() override;
+    void onExit() override;
+    void cleanup() override;
 
     TransitionScene();
     virtual ~TransitionScene();
@@ -187,7 +187,7 @@ public:
     //
     // Overrides
     //
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionRotoZoom();
     virtual ~TransitionRotoZoom();
@@ -214,7 +214,7 @@ public:
     //
     // Overrides
     //
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionJumpZoom();
     virtual ~TransitionJumpZoom();
@@ -244,12 +244,12 @@ public:
      */
     virtual ActionInterval* action();
 
-    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
+    ActionInterval* easeActionWithAction(ActionInterval* action) override;
 
     //
     // Overrides
     //
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionMoveInL();
     virtual ~TransitionMoveInL();
@@ -352,7 +352,7 @@ public:
      */
     static TransitionSlideInL* create(float t, Scene* scene);
 
-    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
+    ActionInterval* easeActionWithAction(ActionInterval* action) override;
 
     /** Returns the action that will be performed by the incoming and outgoing scene.
      *
@@ -363,7 +363,7 @@ public:
     //
     // Overrides
     //
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionSlideInL();
     virtual ~TransitionSlideInL();
@@ -372,7 +372,7 @@ protected:
     /** initializes the scenes */
     virtual void initScenes();
 
-    virtual void sceneOrder() override;
+    void sceneOrder() override;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInL);
@@ -394,16 +394,16 @@ public:
     static TransitionSlideInR* create(float t, Scene* scene);
 
     /** Returns the action that will be performed by the incoming and outgoing scene. */
-    virtual ActionInterval* action() override;
+    ActionInterval* action() override;
 
     TransitionSlideInR();
     virtual ~TransitionSlideInR();
 
 protected:
     /** initializes the scenes */
-    virtual void initScenes() override;
+    void initScenes() override;
 
-    virtual void sceneOrder() override;
+    void sceneOrder() override;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInR);
@@ -425,16 +425,16 @@ public:
     static TransitionSlideInB* create(float t, Scene* scene);
 
     /** returns the action that will be performed by the incoming and outgoing scene */
-    virtual ActionInterval* action() override;
+    ActionInterval* action() override;
 
     TransitionSlideInB();
     virtual ~TransitionSlideInB();
 
 protected:
     /** initializes the scenes */
-    virtual void initScenes() override;
+    void initScenes() override;
 
-    virtual void sceneOrder() override;
+    void sceneOrder() override;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInB);
@@ -456,16 +456,16 @@ public:
     static TransitionSlideInT* create(float t, Scene* scene);
 
     /** returns the action that will be performed by the incoming and outgoing scene */
-    virtual ActionInterval* action() override;
+    ActionInterval* action() override;
 
     TransitionSlideInT();
     virtual ~TransitionSlideInT();
 
 protected:
     /** initializes the scenes */
-    virtual void initScenes() override;
+    void initScenes() override;
 
-    virtual void sceneOrder() override;
+    void sceneOrder() override;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInT);
@@ -491,8 +491,8 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
-    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
+    void onEnter() override;
+    ActionInterval* easeActionWithAction(ActionInterval* action) override;
 
     TransitionShrinkGrow();
     virtual ~TransitionShrinkGrow();
@@ -531,7 +531,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionFlipX();
     virtual ~TransitionFlipX();
@@ -570,7 +570,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionFlipY();
     virtual ~TransitionFlipY();
@@ -609,7 +609,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionFlipAngular();
     virtual ~TransitionFlipAngular();
@@ -648,7 +648,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionZoomFlipX();
     virtual ~TransitionZoomFlipX();
@@ -687,7 +687,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionZoomFlipY();
     virtual ~TransitionZoomFlipY();
@@ -726,7 +726,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     TransitionZoomFlipAngular();
     virtual ~TransitionZoomFlipAngular();
@@ -762,11 +762,11 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
 
     TransitionFade();
     virtual ~TransitionFade();
@@ -804,15 +804,15 @@ public:
     /**
      * @lua NA
      */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
 
     TransitionCrossFade();
     virtual ~TransitionCrossFade();
@@ -842,20 +842,20 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
     /**
      */
-    virtual void onExit() override;
-    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
+    void onExit() override;
+    ActionInterval* easeActionWithAction(ActionInterval* action) override;
     /**
      */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     TransitionTurnOffTiles();
     virtual ~TransitionTurnOffTiles();
 
 protected:
-    virtual void sceneOrder() override;
+    void sceneOrder() override;
     NodeGrid* _outSceneProxy;
 
 private:
@@ -889,10 +889,10 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
-    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
-    virtual void onExit() override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void onEnter() override;
+    ActionInterval* easeActionWithAction(ActionInterval* action) override;
+    void onExit() override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     TransitionSplitCols();
     virtual ~TransitionSplitCols();
@@ -923,7 +923,7 @@ public:
     //
     // Overrides
     //
-    virtual ActionInterval* action() override;
+    ActionInterval* action() override;
 
     TransitionSplitRows();
     virtual ~TransitionSplitRows();
@@ -960,16 +960,16 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
-    virtual ActionInterval* easeActionWithAction(ActionInterval* action) override;
-    virtual void onExit() override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void onEnter() override;
+    ActionInterval* easeActionWithAction(ActionInterval* action) override;
+    void onExit() override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     TransitionFadeTR();
     virtual ~TransitionFadeTR();
 
 protected:
-    virtual void sceneOrder() override;
+    void sceneOrder() override;
 
     NodeGrid* _outSceneProxy;
 
@@ -995,7 +995,7 @@ public:
     //
     // Overrides
     //
-    virtual ActionInterval* actionWithSize(const Vec2& size) override;
+    ActionInterval* actionWithSize(const Vec2& size) override;
 
     TransitionFadeBL();
     virtual ~TransitionFadeBL();
@@ -1022,7 +1022,7 @@ public:
     //
     // Overrides
     //
-    virtual ActionInterval* actionWithSize(const Vec2& size) override;
+    ActionInterval* actionWithSize(const Vec2& size) override;
 
     TransitionFadeUp();
     virtual ~TransitionFadeUp();
@@ -1049,7 +1049,7 @@ public:
     //
     // Overrides
     //
-    virtual ActionInterval* actionWithSize(const Vec2& size) override;
+    ActionInterval* actionWithSize(const Vec2& size) override;
 
     TransitionFadeDown();
     virtual ~TransitionFadeDown();

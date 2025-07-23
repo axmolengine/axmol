@@ -124,15 +124,15 @@ public:
      */
     void addEventListener(const ccRadioButtonCallback& callback);
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
 protected:
-    virtual void releaseUpEvent() override;
+    void releaseUpEvent() override;
 
-    virtual void dispatchSelectChangedEvent(bool selected) override;
+    void dispatchSelectChangedEvent(bool selected) override;
 
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
 
     ccRadioButtonCallback _radioButtonEventCallback;
     RadioButtonGroup* _group;
@@ -272,11 +272,11 @@ public:
      */
     bool isAllowedNoSelection() const;
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
 protected:
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
 
     void onChangedRadioButtonSelect(RadioButton* radioButton);
     void deselect();

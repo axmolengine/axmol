@@ -69,8 +69,8 @@ public:
     bool isSwallowTouches();
 
     /// Overrides
-    virtual EventListenerTouchOneByOne* clone() override;
-    virtual bool checkAvailable() override;
+    EventListenerTouchOneByOne* clone() override;
+    bool checkAvailable() override;
     //
 
 public:
@@ -110,8 +110,8 @@ public:
     virtual ~EventListenerTouchAllAtOnce();
 
     /// Overrides
-    virtual EventListenerTouchAllAtOnce* clone() override;
-    virtual bool checkAvailable() override;
+    EventListenerTouchAllAtOnce* clone() override;
+    bool checkAvailable() override;
     //
 public:
     typedef std::function<void(const std::vector<Touch*>&, Event*)> ccTouchesCallback;

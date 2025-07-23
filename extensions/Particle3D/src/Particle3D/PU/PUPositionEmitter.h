@@ -64,14 +64,14 @@ public:
 
     /** See ParticleEmitter
      */
-    virtual unsigned short calculateRequestedParticles(float timeElapsed) override;
+    unsigned short calculateRequestedParticles(float timeElapsed) override;
 
     /** Generate a particle position based on the added positions.
      */
-    virtual void initParticlePosition(PUParticle3D* particle) override;
+    void initParticlePosition(PUParticle3D* particle) override;
 
-    virtual PUPositionEmitter* clone() override;
-    virtual void copyAttributesTo(PUEmitter* emitter) override;
+    PUPositionEmitter* clone() override;
+    void copyAttributesTo(PUEmitter* emitter) override;
 
     PUPositionEmitter();
     virtual ~PUPositionEmitter(){};

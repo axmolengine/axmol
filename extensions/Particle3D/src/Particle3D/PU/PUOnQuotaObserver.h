@@ -43,10 +43,10 @@ public:
     static PUOnQuotaObserver* create();
 
     /** @copydoc ParticleObserver::_notifyStart */
-    virtual bool observe(PUParticle3D* particle, float timeElapsed) override;
+    bool observe(PUParticle3D* particle, float timeElapsed) override;
 
     /** @copydoc ParticleObserver::_notifyStart */
-    virtual void postUpdateObserver(float deltaTime) override;
+    void postUpdateObserver(float deltaTime) override;
 
     PUOnQuotaObserver() : PUObserver(), _result(false) {}
     virtual ~PUOnQuotaObserver(){};

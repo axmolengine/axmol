@@ -67,8 +67,8 @@ public:
     static NavMeshObstacle* create(float radius, float height);
     static std::string_view getNavMeshObstacleComponentName();
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
     /** Set radius of obstacle */
     void setRadius(float radius);

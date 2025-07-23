@@ -60,11 +60,11 @@ public:
     static ControlButton* create(std::string_view title, std::string_view fontName, float fontSize);
     static ControlButton* create(Node* label, ax::ui::Scale9Sprite* backgroundSprite, bool adjustBackGroundSize);
 
-    virtual void needsLayout() override;
+    void needsLayout() override;
 
-    virtual void setEnabled(bool enabled) override;
-    virtual void setSelected(bool enabled) override;
-    virtual void setHighlighted(bool enabled) override;
+    void setEnabled(bool enabled) override;
+    void setSelected(bool enabled) override;
+    void setHighlighted(bool enabled) override;
 
     bool isPushed() const { return _isPushed; }
 

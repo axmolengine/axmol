@@ -74,7 +74,7 @@ public:
     static RelativeBox* create(const Vec2& size);
 
     // initializes state of widget.
-    virtual bool init() override;
+    bool init() override;
     virtual bool initWithSize(const Vec2& size);
 };
 

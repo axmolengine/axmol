@@ -48,8 +48,8 @@ public:
     const static std::string COMPONENT_NAME;
 
     static ComAttribute* create(void);
-    virtual bool init() override;
-    virtual bool serialize(void* r) override;
+    bool init() override;
+    bool serialize(void* r) override;
 
     void setInt(std::string_view key, int value);
     void setFloat(std::string_view key, float value);

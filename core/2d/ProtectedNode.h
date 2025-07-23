@@ -159,11 +159,11 @@ public:
 
     /**
      */
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-    virtual void cleanup() override;
+    void cleanup() override;
 
-    virtual void onEnter() override;
+    void onEnter() override;
 
     /** Event callback that is invoked when the Node enters in the 'stage'.
      * If the Node enters the 'stage' with a transition, this event is called when the transition finishes.
@@ -171,7 +171,7 @@ public:
      * Node::onEnterTransitionDidFinish()
      * @lua NA
      */
-    virtual void onEnterTransitionDidFinish() override;
+    void onEnterTransitionDidFinish() override;
 
     /**
      * Event callback that is invoked every time the Node leaves the 'stage'.

@@ -49,7 +49,7 @@ public:
 
     static PUColorAffector* create();
 
-    virtual void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
+    void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
 
     /**
      */
@@ -71,7 +71,7 @@ public:
      */
     void setColorOperation(const ColorOperation& colorOperation);
 
-    virtual void copyAttributesTo(PUAffector* affector) override;
+    void copyAttributesTo(PUAffector* affector) override;
 
     PUColorAffector();
     virtual ~PUColorAffector();

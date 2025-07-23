@@ -48,10 +48,10 @@ public:
 
     /** See ParticleBehaviour.
      */
-    virtual void updateBehaviour(PUParticle3D* particle, float deltaTime) override;
+    void updateBehaviour(PUParticle3D* particle, float deltaTime) override;
 
-    virtual PUSlaveBehaviour* clone() override;
-    virtual void copyAttributesTo(PUBehaviour* behaviour) override;
+    PUSlaveBehaviour* clone() override;
+    void copyAttributesTo(PUBehaviour* behaviour) override;
 
     PUSlaveBehaviour();
     virtual ~PUSlaveBehaviour();

@@ -280,8 +280,8 @@ public:
     //
     // Override
     //
-    virtual std::string getDescription() const override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    std::string getDescription() const override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     void removeChild(Node* child, bool cleanup = true) override;
 
     /** Map from gid of animated tile to its instance.
@@ -299,7 +299,7 @@ public:
                                                      TMXMapInfo* mapInfo);
 
 protected:
-    virtual void setOpacity(uint8_t opacity) override;
+    void setOpacity(uint8_t opacity) override;
 
     void updateTiles(const Rect& culledRect);
     Vec2 calculateLayerOffset(const Vec2& offset);

@@ -48,25 +48,25 @@ public:
 public:
     static ComAudio* create();
 
-    virtual bool init() override;
+    bool init() override;
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
     /**
      * @lua NA
      */
-    virtual void onAdd() override;
+    void onAdd() override;
     /**
      * @lua NA
      */
-    virtual void onRemove() override;
+    void onRemove() override;
 
-    virtual bool serialize(void* r) override;
+    bool serialize(void* r) override;
 
 public:
     /**
@@ -107,9 +107,9 @@ public:
     /// @{
     /// @name implement Playable Protocol
     // play the effect sound path in _filePath
-    virtual void start() override;
+    void start() override;
     // stop the effect sound which started with latest start()
-    virtual void stop() override;
+    void stop() override;
     /// @} end of PlayableProtocol
 
 private:

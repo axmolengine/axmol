@@ -98,7 +98,7 @@ public:
      *  Direction Direction::VERTICAL means vertical scroll, Direction::HORIZONTAL means horizontal scroll.
      * @param direction Set the page view's scroll direction.
      */
-    virtual void setDirection(Direction direction) override;
+    void setDirection(Direction direction) override;
 
     /**
      * Insert a page into the end of PageView.
@@ -186,7 +186,7 @@ public:
     void addEventListener(const ccPageViewCallback& callback);
     using ScrollView::addEventListener;
     // override methods
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      * @brief Toggle page indicator enabled.
@@ -325,24 +325,24 @@ public:
 
     void setAutoScrollStopEpsilon(float epsilon);
 
-    virtual bool init() override;
+    bool init() override;
 
     // override methods
-    virtual void doLayout() override;
+    void doLayout() override;
 
 protected:
     void pageTurningEvent();
-    virtual float getAutoScrollStopEpsilon() const override;
+    float getAutoScrollStopEpsilon() const override;
 
-    virtual void remedyLayoutParameter(Widget* item) override;
-    virtual void moveInnerContainer(const Vec2& deltaMove, bool canStartBounceBack) override;
-    virtual void onItemListChanged() override;
-    virtual void onSizeChanged() override;
-    virtual void handleReleaseLogic(Touch* touch) override;
-    virtual void handlePressLogic(Touch* touch) override;
+    void remedyLayoutParameter(Widget* item) override;
+    void moveInnerContainer(const Vec2& deltaMove, bool canStartBounceBack) override;
+    void onItemListChanged() override;
+    void onSizeChanged() override;
+    void handleReleaseLogic(Touch* touch) override;
+    void handlePressLogic(Touch* touch) override;
 
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
 
     void refreshIndicatorPosition();
 

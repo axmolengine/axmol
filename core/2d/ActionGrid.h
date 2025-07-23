@@ -55,13 +55,13 @@ public:
     virtual GridBase* getGrid();
 
     // overrides
-    virtual GridAction* clone() const override
+    GridAction* clone() const override
     {
         AX_ASSERT(0);
         return nullptr;
     }
-    virtual GridAction* reverse() const override;
-    virtual void startWithTarget(Node* target) override;
+    GridAction* reverse() const override;
+    void startWithTarget(Node* target) override;
 
     GridAction() {}
     virtual ~GridAction() {}
@@ -91,7 +91,7 @@ private:
 class AX_DLL Grid3DAction : public GridAction
 {
 public:
-    virtual GridBase* getGrid() override;
+    GridBase* getGrid() override;
     /**
      * @brief Get the vertex that belongs to certain position in the grid.
      * @param position The position of the grid.
@@ -117,7 +117,7 @@ public:
     void setVertex(const Vec2& position, const Vec3& vertex);
 
     // Overrides
-    virtual Grid3DAction* clone() const override
+    Grid3DAction* clone() const override
     {
         AX_ASSERT(0);
         return nullptr;
@@ -170,10 +170,10 @@ public:
     void setTile(const Vec2& position, const Quad3& coords);
 
     /** returns the grid */
-    virtual GridBase* getGrid() override;
+    GridBase* getGrid() override;
 
     // Override
-    virtual TiledGrid3DAction* clone() const override
+    TiledGrid3DAction* clone() const override
     {
         AX_ASSERT(0);
         return nullptr;
@@ -206,10 +206,10 @@ public:
     void setRate(float rate) { _rate = rate; }
 
     // Overrides
-    virtual void startWithTarget(Node* target) override;
-    virtual void update(float time) override;
-    virtual AccelDeccelAmplitude* clone() const override;
-    virtual AccelDeccelAmplitude* reverse() const override;
+    void startWithTarget(Node* target) override;
+    void update(float time) override;
+    AccelDeccelAmplitude* clone() const override;
+    AccelDeccelAmplitude* reverse() const override;
 
     AccelDeccelAmplitude() {}
     virtual ~AccelDeccelAmplitude();
@@ -256,10 +256,10 @@ public:
     void setRate(float rate) { _rate = rate; }
 
     // Overrides
-    virtual void startWithTarget(Node* target) override;
-    virtual void update(float time) override;
-    virtual AccelAmplitude* clone() const override;
-    virtual AccelAmplitude* reverse() const override;
+    void startWithTarget(Node* target) override;
+    void update(float time) override;
+    AccelAmplitude* clone() const override;
+    AccelAmplitude* reverse() const override;
 
     AccelAmplitude() {}
     virtual ~AccelAmplitude();
@@ -300,10 +300,10 @@ public:
     void setRate(float rate) { _rate = rate; }
 
     // overrides
-    virtual void startWithTarget(Node* target) override;
-    virtual void update(float time) override;
-    virtual DeccelAmplitude* clone() const override;
-    virtual DeccelAmplitude* reverse() const override;
+    void startWithTarget(Node* target) override;
+    void update(float time) override;
+    DeccelAmplitude* clone() const override;
+    DeccelAmplitude* reverse() const override;
 
     DeccelAmplitude() {}
     virtual ~DeccelAmplitude();
@@ -342,9 +342,9 @@ public:
     static StopGrid* create();
 
     // Overrides
-    virtual void startWithTarget(Node* target) override;
-    virtual StopGrid* clone() const override;
-    virtual StopGrid* reverse() const override;
+    void startWithTarget(Node* target) override;
+    StopGrid* clone() const override;
+    StopGrid* reverse() const override;
 
     StopGrid() {}
     virtual ~StopGrid() {}
@@ -372,9 +372,9 @@ public:
     static ReuseGrid* create(int times);
 
     // Override
-    virtual void startWithTarget(Node* target) override;
-    virtual ReuseGrid* clone() const override;
-    virtual ReuseGrid* reverse() const override;
+    void startWithTarget(Node* target) override;
+    ReuseGrid* clone() const override;
+    ReuseGrid* reverse() const override;
 
     ReuseGrid() {}
     virtual ~ReuseGrid() {}

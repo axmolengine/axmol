@@ -206,12 +206,12 @@ public:
     //
     // Overrides
     //
-    virtual FiniteTimeAction* reverse() const override
+    FiniteTimeAction* reverse() const override
     {
         AX_ASSERT(0);
         return nullptr;
     }
-    virtual FiniteTimeAction* clone() const override
+    FiniteTimeAction* clone() const override
     {
         AX_ASSERT(0);
         return nullptr;
@@ -271,19 +271,19 @@ public:
     //
     // Override
     //
-    virtual Speed* clone() const override;
-    virtual Speed* reverse() const override;
-    virtual void startWithTarget(Node* target) override;
-    virtual void stop() override;
+    Speed* clone() const override;
+    Speed* reverse() const override;
+    void startWithTarget(Node* target) override;
+    void stop() override;
     /**
      * @param dt in seconds.
      */
-    virtual void step(float dt) override;
+    void step(float dt) override;
     /** Return true if the action has finished.
      *
      * @return Is true if the action has finished.
      */
-    virtual bool isDone() const override;
+    bool isDone() const override;
 
     Speed();
     virtual ~Speed();
@@ -352,14 +352,14 @@ public:
     //
     // Override
     //
-    virtual Follow* clone() const override;
-    virtual Follow* reverse() const override;
+    Follow* clone() const override;
+    Follow* reverse() const override;
     /**
      * @param dt in seconds.
      */
-    virtual void step(float dt) override;
-    virtual bool isDone() const override;
-    virtual void stop() override;
+    void step(float dt) override;
+    bool isDone() const override;
+    void stop() override;
 
     /**
      */

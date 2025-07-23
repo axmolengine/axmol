@@ -56,8 +56,8 @@ public:
     static ShakyTiles3D* create(float duration, const Vec2& gridSize, int range, bool shakeZ);
 
     // Override
-    virtual ShakyTiles3D* clone() const override;
-    virtual void update(float time) override;
+    ShakyTiles3D* clone() const override;
+    void update(float time) override;
 
     ShakyTiles3D() {}
     virtual ~ShakyTiles3D() {}
@@ -100,8 +100,8 @@ public:
     static ShatteredTiles3D* create(float duration, const Vec2& gridSize, int range, bool shatterZ);
 
     // Override
-    virtual ShatteredTiles3D* clone() const override;
-    virtual void update(float time) override;
+    ShatteredTiles3D* clone() const override;
+    void update(float time) override;
 
     ShatteredTiles3D() {}
     virtual ~ShatteredTiles3D() {}
@@ -149,9 +149,9 @@ public:
     void placeTile(const Vec2& pos, Tile* t);
 
     // Overrides
-    virtual void startWithTarget(Node* target) override;
-    virtual void update(float time) override;
-    virtual ShuffleTiles* clone() const override;
+    void startWithTarget(Node* target) override;
+    void update(float time) override;
+    ShuffleTiles* clone() const override;
 
     ShuffleTiles() {}
     virtual ~ShuffleTiles();
@@ -218,8 +218,8 @@ public:
     virtual void transformTile(const Vec2& pos, float distance);
 
     // Overrides
-    virtual void update(float time) override;
-    virtual FadeOutTRTiles* clone() const override;
+    void update(float time) override;
+    FadeOutTRTiles* clone() const override;
 
     FadeOutTRTiles() {}
     virtual ~FadeOutTRTiles() {}
@@ -244,8 +244,8 @@ public:
     static FadeOutBLTiles* create(float duration, const Vec2& gridSize);
 
     // Overrides
-    virtual float testFunc(const Vec2& pos, float time) override;
-    virtual FadeOutBLTiles* clone() const override;
+    float testFunc(const Vec2& pos, float time) override;
+    FadeOutBLTiles* clone() const override;
 
     FadeOutBLTiles() {}
     virtual ~FadeOutBLTiles() {}
@@ -269,11 +269,11 @@ public:
      */
     static FadeOutUpTiles* create(float duration, const Vec2& gridSize);
 
-    virtual void transformTile(const Vec2& pos, float distance) override;
+    void transformTile(const Vec2& pos, float distance) override;
 
     // Overrides
-    virtual FadeOutUpTiles* clone() const override;
-    virtual float testFunc(const Vec2& pos, float time) override;
+    FadeOutUpTiles* clone() const override;
+    float testFunc(const Vec2& pos, float time) override;
 
     FadeOutUpTiles() {}
     virtual ~FadeOutUpTiles() {}
@@ -298,8 +298,8 @@ public:
     static FadeOutDownTiles* create(float duration, const Vec2& gridSize);
 
     // Overrides
-    virtual FadeOutDownTiles* clone() const override;
-    virtual float testFunc(const Vec2& pos, float time) override;
+    FadeOutDownTiles* clone() const override;
+    float testFunc(const Vec2& pos, float time) override;
 
     FadeOutDownTiles() {}
     virtual ~FadeOutDownTiles() {}
@@ -351,9 +351,9 @@ public:
     void turnOffTile(const Vec2& pos);
 
     // Overrides
-    virtual TurnOffTiles* clone() const override;
-    virtual void startWithTarget(Node* target) override;
-    virtual void update(float time) override;
+    TurnOffTiles* clone() const override;
+    void startWithTarget(Node* target) override;
+    void update(float time) override;
 
     TurnOffTiles() {}
     virtual ~TurnOffTiles();
@@ -416,8 +416,8 @@ public:
     void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
 
     // Override
-    virtual WavesTiles3D* clone() const override;
-    virtual void update(float time) override;
+    WavesTiles3D* clone() const override;
+    void update(float time) override;
 
     WavesTiles3D() {}
     virtual ~WavesTiles3D() {}
@@ -481,8 +481,8 @@ public:
     void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
 
     // Override
-    virtual JumpTiles3D* clone() const override;
-    virtual void update(float time) override;
+    JumpTiles3D* clone() const override;
+    void update(float time) override;
 
     JumpTiles3D() {}
     virtual ~JumpTiles3D() {}
@@ -523,9 +523,9 @@ public:
     static SplitRows* create(float duration, unsigned int rows);
 
     // Overrides
-    virtual SplitRows* clone() const override;
-    virtual void update(float time) override;
-    virtual void startWithTarget(Node* target) override;
+    SplitRows* clone() const override;
+    void update(float time) override;
+    void startWithTarget(Node* target) override;
 
     SplitRows() {}
     virtual ~SplitRows() {}
@@ -563,12 +563,12 @@ public:
     static SplitCols* create(float duration, unsigned int cols);
 
     // Overrides
-    virtual SplitCols* clone() const override;
+    SplitCols* clone() const override;
     /**
      * @param time in seconds
      */
-    virtual void update(float time) override;
-    virtual void startWithTarget(Node* target) override;
+    void update(float time) override;
+    void startWithTarget(Node* target) override;
 
     SplitCols() {}
     virtual ~SplitCols() {}

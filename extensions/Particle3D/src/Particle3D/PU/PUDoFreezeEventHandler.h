@@ -46,7 +46,7 @@ public:
 
     /**
      */
-    virtual void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
+    void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
 
     PUDoFreezeEventHandler() : PUEventHandler() {}
     virtual ~PUDoFreezeEventHandler(){};

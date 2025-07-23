@@ -86,11 +86,11 @@ public:
     virtual void prepare();
     virtual void unPrepare();
     virtual void preUpdateEmitter(float deltaTime);
-    virtual void updateEmitter(Particle3D* particle, float deltaTime) override;
+    void updateEmitter(Particle3D* particle, float deltaTime) override;
     virtual void postUpdateEmitter(float deltaTime);
     virtual unsigned short calculateRequestedParticles(float timeElapsed);
 
-    virtual void emit(int count) override;
+    void emit(int count) override;
 
     void setLocalPosition(const Vec3& pos) { _position = pos; };
     const Vec3 getLocalPosition() const { return _position; };

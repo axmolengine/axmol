@@ -589,44 +589,44 @@ public:
     TextHAlignment getTextHorizontalAlignment() const;
 
     /* override functions */
-    virtual void setPosition(const Vec2& pos) override;
-    virtual void setVisible(bool visible) override;
-    virtual void setContentSize(const Size& size) override;
-    virtual void setAnchorPoint(const Vec2& anchorPoint) override;
+    void setPosition(const Vec2& pos) override;
+    void setVisible(bool visible) override;
+    void setContentSize(const Size& size) override;
+    void setAnchorPoint(const Vec2& anchorPoint) override;
 
     /**
      * Returns the "class name" of widget.
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      * @lua NA
      */
-    virtual void draw(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void draw(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
     /**
      * @lua NA
      */
-    virtual void keyboardWillShow(IMEKeyboardNotificationInfo& info) override;
+    void keyboardWillShow(IMEKeyboardNotificationInfo& info) override;
     /**
      * @lua NA
      */
-    virtual void keyboardDidShow(IMEKeyboardNotificationInfo& info) override;
+    void keyboardDidShow(IMEKeyboardNotificationInfo& info) override;
     /**
      * @lua NA
      */
-    virtual void keyboardWillHide(IMEKeyboardNotificationInfo& info) override;
+    void keyboardWillHide(IMEKeyboardNotificationInfo& info) override;
     /**
      * @lua NA
      */
-    virtual void keyboardDidHide(IMEKeyboardNotificationInfo& info) override;
+    void keyboardDidHide(IMEKeyboardNotificationInfo& info) override;
 
     void setGlobalZOrder(float globalZOrder) override;
 
@@ -634,13 +634,13 @@ public:
     void closeKeyboard() const;
 
 protected:
-    virtual void releaseUpEvent() override;
+    void releaseUpEvent() override;
 
-    virtual void initRenderer() override;
-    virtual void onPressStateChangedToNormal() override;
-    virtual void onPressStateChangedToPressed() override;
-    virtual void onPressStateChangedToDisabled() override;
-    virtual void onSizeChanged() override;
+    void initRenderer() override;
+    void onPressStateChangedToNormal() override;
+    void onPressStateChangedToPressed() override;
+    void onPressStateChangedToDisabled() override;
+    void onSizeChanged() override;
 
     void loadTextureNormal(SpriteFrame* normalSpriteFrame);
     void setupNormalTexture(bool textureLoaded);
@@ -653,7 +653,7 @@ protected:
     void pressedTextureScaleChangedWithSize();
     void disabledTextureScaleChangedWithSize();
 
-    virtual void adaptRenderers() override;
+    void adaptRenderers() override;
 
 protected:
     void updatePosition(float dt);

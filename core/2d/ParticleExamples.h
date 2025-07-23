@@ -64,7 +64,7 @@ public:
     virtual ~ParticleFire() {}
 
     bool init() override { return initWithTotalParticles(250); }
-    virtual bool initWithTotalParticles(int numberOfParticles) override;
+    bool initWithTotalParticles(int numberOfParticles) override;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(ParticleFire);

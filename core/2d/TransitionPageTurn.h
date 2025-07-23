@@ -70,7 +70,7 @@ public:
     //
     // Overrides
     //
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     /**
      * Creates a base transition with duration and incoming scene.
@@ -95,8 +95,8 @@ public:
     //
     // Overrides
     //
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
     /**
      */
@@ -107,7 +107,7 @@ public:
     virtual ~TransitionPageTurn();
 
 protected:
-    virtual void sceneOrder() override;
+    void sceneOrder() override;
 
 protected:
     NodeGrid* _inSceneProxy;

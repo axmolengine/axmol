@@ -43,7 +43,7 @@ public:
     static PUOnEmissionObserver* create();
     /**
      */
-    virtual bool observe(PUParticle3D* particle, float timeElapsed) override;
+    bool observe(PUParticle3D* particle, float timeElapsed) override;
 
     PUOnEmissionObserver() : PUObserver() {}
     virtual ~PUOnEmissionObserver(){};

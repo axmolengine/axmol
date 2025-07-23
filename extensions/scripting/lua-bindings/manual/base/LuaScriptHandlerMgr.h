@@ -97,8 +97,8 @@ public:
      * @param func a function pointer for callback.
      */
     bool initWithFunction(const std::function<void(void* self, Node*)>& func);
-    virtual LuaCallFunc* clone() const override;
-    virtual void execute() override;
+    LuaCallFunc* clone() const override;
+    void execute() override;
 
 protected:
     std::function<void(void* self, Node*)> _functionLua;

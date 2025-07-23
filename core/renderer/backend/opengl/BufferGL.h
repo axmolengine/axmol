@@ -58,7 +58,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateSubData(void* data, unsigned int offset, unsigned int size)`
      */
-    virtual void updateData(const void* data, std::size_t size) override;
+    void updateData(const void* data, std::size_t size) override;
 
     /**
      * @brief Update buffer sub-region data
@@ -68,7 +68,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateData(void* data, unsigned int size)`
      */
-    virtual void updateSubData(const void* data, std::size_t offset, std::size_t size) override;
+    void updateSubData(const void* data, std::size_t offset, std::size_t size) override;
 
     /**
      * Static buffer data will automatically stored when it comes to foreground.
@@ -76,7 +76,7 @@ public:
      * using the default stored data(true).
      * @param needDefaultStoredData Specifies whether to use the default stored data.
      */
-    virtual void usingDefaultStoredData(bool needDefaultStoredData) override;
+    void usingDefaultStoredData(bool needDefaultStoredData) override;
 
     /**
      * Get buffer object.

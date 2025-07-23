@@ -100,8 +100,8 @@ public:
     static NavMeshAgent* create(const NavMeshAgentParam& param);
     static std::string_view getNavMeshAgentComponentName();
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
     /** set agent radius */
     void setRadius(float radius);

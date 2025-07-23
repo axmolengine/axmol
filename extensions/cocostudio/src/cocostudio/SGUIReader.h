@@ -151,14 +151,14 @@ public:
                                               const char* fullPath,
                                               const char* fileName) override;
 
-    virtual ax::ui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic) override;
+    ax::ui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic) override;
 
     // added for binary parsing
     virtual ax::ui::Widget* createWidgetFromBinary(CocoLoader* cocoLoader,
                                                         stExpCocoNode* pCocoNode,
                                                         const char* fileName) override;
 
-    virtual ax::ui::Widget* widgetFromBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
+    ax::ui::Widget* widgetFromBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
 
     virtual void setPropsForAllWidgetFromBinary(WidgetReaderProtocol* reader,
                                                 ax::ui::Widget* widget,
@@ -205,7 +205,7 @@ public:
                                                         stExpCocoNode* pCocoNode,
                                                         const char* fileName) override;
 
-    virtual ax::ui::Widget* widgetFromBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
+    ax::ui::Widget* widgetFromBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
 
     virtual void setPropsForAllWidgetFromBinary(WidgetReaderProtocol* reader,
                                                 ax::ui::Widget* widget,
@@ -217,7 +217,7 @@ public:
                                                       CocoLoader* cocoLoader,
                                                       stExpCocoNode* pCocoNode);
 
-    virtual ax::ui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic) override;
+    ax::ui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic) override;
 
     virtual void setPropsForAllWidgetFromJsonDictionary(WidgetReaderProtocol* reader,
                                                         ax::ui::Widget* widget,

@@ -133,8 +133,8 @@ public:
     //
     // Overrides
     //
-    virtual bool isDone() const override;
-    virtual void step(float dt) override;
+    bool isDone() const override;
+    void step(float dt) override;
 
 public:
     ActionCoroutine() = default;

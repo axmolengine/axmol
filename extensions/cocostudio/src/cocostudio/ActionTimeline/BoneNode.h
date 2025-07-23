@@ -51,11 +51,11 @@ public:
 
     using Node::addChild;
     // add child, and add child to bone list and skeleton's sub bone map or add it to skin list
-    virtual void addChild(ax::Node* child, int localZOrder, std::string_view name) override;
-    virtual void addChild(ax::Node* child, int localZOrder, int tag) override;
+    void addChild(ax::Node* child, int localZOrder, std::string_view name) override;
+    void addChild(ax::Node* child, int localZOrder, int tag) override;
 
     // remove child, and remove child from bone list and skeleton's sub bone map or remove it from skin list
-    virtual void removeChild(Node* child, bool cleanup) override;
+    void removeChild(Node* child, bool cleanup) override;
 
     // get child bone list
     virtual const ax::Vector<BoneNode*>& getChildBones() const { return _childBones; }
@@ -110,8 +110,8 @@ public:
     ax::Vector<SkinNode*> getAllSubSkins() const;
 
     // blendFunc
-    virtual void setBlendFunc(const ax::BlendFunc& blendFunc) override;
-    virtual const ax::BlendFunc& getBlendFunc() const override { return _blendFunc; }
+    void setBlendFunc(const ax::BlendFunc& blendFunc) override;
+    const ax::BlendFunc& getBlendFunc() const override { return _blendFunc; }
 
     // debug draw show, bone's debugdraw can be draw when bone is visible
     // when bone's added to skeleton, DebugDrawEnabled controlled by skeleton's DebugDrawEnabled
@@ -139,22 +139,22 @@ public:
     virtual ax::Rect getVisibleSkinsRect() const;
 
     // transform & draw
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
     // set local zorder, and dirty the debugdraw to make debugdraw's render layer right
-    virtual void setLocalZOrder(int localZOrder) override;
+    void setLocalZOrder(int localZOrder) override;
 
     // set name, and replace the subbone map in skeleton
-    virtual void setName(std::string_view name) override;
+    void setName(std::string_view name) override;
 
     // set visible, and dirty the debugdraw to make debugdraw's render layer right
-    virtual void setVisible(bool visible) override;
+    void setVisible(bool visible) override;
 
     // set contentsize, and recalculate debugdraw
-    virtual void setContentSize(const ax::Size& contentSize) override;
+    void setContentSize(const ax::Size& contentSize) override;
 
     // set localzorder, and recalculate debugdraw
-    virtual void setAnchorPoint(const ax::Vec2& anchorPoint) override;
+    void setAnchorPoint(const ax::Vec2& anchorPoint) override;
 
 #ifdef AX_STUDIO_ENABLED_VIEW
     // hit test , bonePoint is in self coordinate
@@ -163,7 +163,7 @@ public:
 
     BoneNode() = default;
     virtual ~BoneNode();
-    virtual bool init() override;
+    bool init() override;
 
 protected:
     virtual void addToChildrenListHelper(Node* child);

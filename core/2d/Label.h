@@ -372,10 +372,10 @@ public:
     /// @}
 
     /** Sets the text that this Label is to display.*/
-    virtual void setString(std::string_view text) override;
+    void setString(std::string_view text) override;
 
     /** Return the text the Label is currently displaying.*/
-    virtual std::string_view getString() const override { return _utf8Text; }
+    std::string_view getString() const override { return _utf8Text; }
 
     /**
      * Return the number of lines of text.
@@ -662,8 +662,8 @@ public:
 
     FontAtlas* getFontAtlas() { return _fontAtlas; }
 
-    virtual const BlendFunc& getBlendFunc() const override { return _blendFunc; }
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    const BlendFunc& getBlendFunc() const override { return _blendFunc; }
+    void setBlendFunc(const BlendFunc& blendFunc) override;
 
     bool isOpacityModifyRGB() const override { return _isOpacityModifyRGB; }
     void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
@@ -790,7 +790,7 @@ protected:
 
     FontDefinition _getFontDefinition() const;
 
-    virtual void updateColor() override;
+    void updateColor() override;
 
     void updateUniformLocations();
     void setVertexLayout();

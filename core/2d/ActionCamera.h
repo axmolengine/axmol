@@ -58,9 +58,9 @@ public:
     virtual ~ActionCamera(){};
 
     // Overrides
-    virtual void startWithTarget(Node* target) override;
-    virtual ActionCamera* reverse() const override;
-    virtual ActionCamera* clone() const override;
+    void startWithTarget(Node* target) override;
+    ActionCamera* reverse() const override;
+    ActionCamera* clone() const override;
 
     /* Sets the Eye value of the Camera.
      *
@@ -136,8 +136,8 @@ public:
 
     // Overrides
     OrbitCamera* clone() const override;
-    virtual void startWithTarget(Node* target) override;
-    virtual void update(float time) override;
+    void startWithTarget(Node* target) override;
+    void update(float time) override;
 
     /**
      */

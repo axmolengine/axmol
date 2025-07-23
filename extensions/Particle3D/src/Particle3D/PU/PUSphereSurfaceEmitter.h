@@ -45,14 +45,14 @@ public:
 
     /**
      */
-    virtual void initParticlePosition(PUParticle3D* particle) override;
+    void initParticlePosition(PUParticle3D* particle) override;
 
     /**
      */
-    virtual void initParticleDirection(PUParticle3D* particle) override;
+    void initParticleDirection(PUParticle3D* particle) override;
 
-    virtual PUSphereSurfaceEmitter* clone() override;
-    virtual void copyAttributesTo(PUEmitter* emitter) override;
+    PUSphereSurfaceEmitter* clone() override;
+    void copyAttributesTo(PUEmitter* emitter) override;
 
     PUSphereSurfaceEmitter();
     virtual ~PUSphereSurfaceEmitter(){};

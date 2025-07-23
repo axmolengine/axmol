@@ -97,8 +97,8 @@ public:
 
     VisibleFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setVisible(bool visible) { _visible = visible; }
     inline bool isVisible() const { return _visible; }
@@ -114,10 +114,10 @@ public:
 
     TextureFrame();
 
-    virtual void setNode(ax::Node* node) override;
+    void setNode(ax::Node* node) override;
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setTextureName(std::string_view textureName) { _textureName = textureName; }
     inline std::string_view getTextureName() const { return _textureName; }
@@ -134,14 +134,14 @@ public:
 
     RotationFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setRotation(float rotation) { _rotation = rotation; }
     inline float getRotation() const { return _rotation; }
 
 protected:
-    virtual void onApply(float percent) override;
+    void onApply(float percent) override;
 
     float _rotation;
     float _betwennRotation;
@@ -154,8 +154,8 @@ public:
 
     SkewFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setSkewX(float skewx) { _skewX = skewx; }
     inline float getSkewX() const { return _skewX; }
@@ -164,7 +164,7 @@ public:
     inline float getSkewY() const { return _skewY; }
 
 protected:
-    virtual void onApply(float percent) override;
+    void onApply(float percent) override;
 
     float _skewX;
     float _skewY;
@@ -179,11 +179,11 @@ public:
 
     RotationSkewFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
 protected:
-    virtual void onApply(float percent) override;
+    void onApply(float percent) override;
 };
 
 class CCS_DLL PositionFrame : public Frame
@@ -193,8 +193,8 @@ public:
 
     PositionFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setPosition(const ax::Point& position) { _position = position; }
     inline ax::Point getPosition() const { return _position; }
@@ -206,7 +206,7 @@ public:
     inline float getY() const { return _position.y; }
 
 protected:
-    virtual void onApply(float percent) override;
+    void onApply(float percent) override;
 
     ax::Point _position;
     float _betweenX;
@@ -220,8 +220,8 @@ public:
 
     ScaleFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setScale(float scale)
     {
@@ -236,7 +236,7 @@ public:
     inline float getScaleY() const { return _scaleY; }
 
 protected:
-    virtual void onApply(float percent) override;
+    void onApply(float percent) override;
 
     float _scaleX;
     float _scaleY;
@@ -251,14 +251,14 @@ public:
 
     AnchorPointFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setAnchorPoint(const ax::Point& point) { _anchorPoint = point; }
     inline ax::Point getAnchorPoint() const { return _anchorPoint; }
 
 protected:
-    virtual void onApply(float percent) override;
+    void onApply(float percent) override;
 
     ax::Vec2 _betweenAnchorPoint;
     ax::Vec2 _anchorPoint;
@@ -279,8 +279,8 @@ public:
     static InnerActionFrame* create();
     InnerActionFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setInnerActionType(InnerActionType type) { _innerActionType = type; }
     inline InnerActionType getInnerActionType() const { return _innerActionType; }
@@ -313,15 +313,15 @@ public:
     static ColorFrame* create();
     ColorFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setColor(const ax::Color32& color) { _color = color; }
     inline void setColor(uint8_t r, uint8_t g, uint8_t b) { _color.r = r; _color.g = g; _color.b = b; }
     inline ax::Color32 getColor() const { return _color; }
 
 protected:
-    virtual void onApply(float percent) override;
+    void onApply(float percent) override;
 
     ax::Color32 _color;
 
@@ -336,14 +336,14 @@ public:
     static AlphaFrame* create();
     AlphaFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setAlpha(uint8_t alpha) { _alpha = alpha; }
     inline uint8_t getAlpha() const { return _alpha; }
 
 protected:
-    virtual void onApply(float percent) override;
+    void onApply(float percent) override;
 
     uint8_t _alpha;
     int _betweenAlpha;
@@ -357,10 +357,10 @@ public:
 
     EventFrame();
 
-    virtual void setNode(ax::Node* node) override;
+    void setNode(ax::Node* node) override;
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setEvent(std::string_view event) { _event = event; }
     inline std::string_view getEvent() const { return _event; }
@@ -377,8 +377,8 @@ public:
 
     ZOrderFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline void setZOrder(int zorder) { _zorder = zorder; }
     inline int getZOrder() const { return _zorder; }
@@ -394,8 +394,8 @@ public:
 
     BlendFuncFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameIndex) override;
+    Frame* clone() override;
 
     inline ax::BlendFunc getBlendFunc() const { return _blendFunc; }
     inline void setBlendFunc(ax::BlendFunc blendFunc) { _blendFunc = blendFunc; }
@@ -411,8 +411,8 @@ public:
 
     PlayableFrame();
 
-    virtual void onEnter(Frame* nextFrame, int currentFrameINdex) override;
-    virtual Frame* clone() override;
+    void onEnter(Frame* nextFrame, int currentFrameINdex) override;
+    Frame* clone() override;
 
     inline std::string getPlayableAct() const { return _playableAct; }
     // @param playact, express the interface in PlayableProtocol, should be "start"  or "stop"

@@ -342,7 +342,7 @@ public:
     /**
      * Returns the "class name" of widget.
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      * Change the layout type.
@@ -356,8 +356,8 @@ public:
      */
     virtual Type getLayoutType() const;
 
-    virtual void addChild(Node* child) override;
-    virtual void addChild(Node* child, int localZOrder) override;
+    void addChild(Node* child) override;
+    void addChild(Node* child, int localZOrder) override;
     /**
      * Adds a child to the container with z order and tag
      *
@@ -368,19 +368,19 @@ public:
      * @param localZOrder    Z order for drawing priority. Please refer to setLocalZOrder(int)
      * @param tag       A integer to identify the node easily. Please refer to setTag(int)
      */
-    virtual void addChild(Node* child, int localZOrder, int tag) override;
-    virtual void addChild(Node* child, int localZOrder, std::string_view name) override;
+    void addChild(Node* child, int localZOrder, int tag) override;
+    void addChild(Node* child, int localZOrder, std::string_view name) override;
 
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-    virtual void removeChild(Node* child, bool cleanup = true) override;
+    void removeChild(Node* child, bool cleanup = true) override;
 
     /**
      * Removes all children from the container with a cleanup.
      *
      * @see `removeAllChildrenWithCleanup(bool)`
      */
-    virtual void removeAllChildren() override;
+    void removeAllChildren() override;
     /**
      * Removes all children from the container, and do a cleanup to all running actions depending on the cleanup
      * parameter.
@@ -388,7 +388,7 @@ public:
      * @param cleanup   true if all running actions on all children nodes should be cleanup, false otherwise.
      * @lua removeAllChildren
      */
-    virtual void removeAllChildrenWithCleanup(bool cleanup) override;
+    void removeAllChildrenWithCleanup(bool cleanup) override;
 
     /**
      * force refresh widget layout
@@ -403,14 +403,14 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
 
-    virtual void setGlobalZOrder(float globalZOrder) override;
+    void setGlobalZOrder(float globalZOrder) override;
 
     /**
      * If a layout is loop focused which means that the focus movement will be inside the layout
@@ -441,7 +441,7 @@ public:
      *@param current  the current focused widget
      *@return the next focused widget in a layout
      */
-    virtual Widget* findNextFocusedWidget(FocusDirection direction, Widget* current) override;
+    Widget* findNextFocusedWidget(FocusDirection direction, Widget* current) override;
 
     /**
      * To specify a user-defined functor to decide which child widget of the layout should get focused
@@ -457,24 +457,24 @@ public:
      * @param mask Mask being set
      * @param applyChildren If true call this function recursively from this node to its children.
      */
-    virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
+    void setCameraMask(unsigned short mask, bool applyChildren = true) override;
 
     ResourceData getRenderFile();
 
     // override "init" method of widget.
-    virtual bool init() override;
+    bool init() override;
 
 protected:
     // override "onSizeChanged" method of widget.
-    virtual void onSizeChanged() override;
+    void onSizeChanged() override;
 
     // init background image renderer.
     void addBackGroundImage();
 
     void supplyTheLayoutParameterLackToChild(Widget* child);
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
-    virtual void copyClonedWidgetChildren(Widget* model) override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
+    void copyClonedWidgetChildren(Widget* model) override;
 
     void stencilClippingVisit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
     void scissorClippingVisit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
@@ -482,10 +482,10 @@ protected:
     void setStencilClippingSize(const Vec2& size);
     const Rect& getClippingRect();
 
-    virtual void doLayout() override;
-    virtual LayoutManager* createLayoutManager() override;
-    virtual Vec2 getLayoutContentSize() const override;
-    virtual const Vector<Node*>& getLayoutElements() const override;
+    void doLayout() override;
+    LayoutManager* createLayoutManager() override;
+    Vec2 getLayoutContentSize() const override;
+    const Vector<Node*>& getLayoutElements() const override;
 
     // clipping
 

@@ -235,26 +235,26 @@ public:
      */
     void addEventListener(const ccSliderCallback& callback);
 
-    virtual bool onTouchBegan(Touch* touch, Event* unusedEvent) override;
-    virtual void onTouchMoved(Touch* touch, Event* unusedEvent) override;
-    virtual void onTouchEnded(Touch* touch, Event* unusedEvent) override;
-    virtual void onTouchCancelled(Touch* touch, Event* unusedEvent) override;
+    bool onTouchBegan(Touch* touch, Event* unusedEvent) override;
+    void onTouchMoved(Touch* touch, Event* unusedEvent) override;
+    void onTouchEnded(Touch* touch, Event* unusedEvent) override;
+    void onTouchCancelled(Touch* touch, Event* unusedEvent) override;
 
     // override "getVirtualRendererSize" method of widget.
-    virtual Vec2 getVirtualRendererSize() const override;
+    Vec2 getVirtualRendererSize() const override;
 
     // override "getVirtualRenderer" method of widget.
-    virtual Node* getVirtualRenderer() override;
+    Node* getVirtualRenderer() override;
 
     // override "ignoreContentAdaptWithSize" method of widget.
-    virtual void ignoreContentAdaptWithSize(bool ignore) override;
+    void ignoreContentAdaptWithSize(bool ignore) override;
 
     // override the widget's hitTest function to perform its own
-    virtual bool hitTest(const Vec2& pt, const Camera* camera, Vec3* p) const override;
+    bool hitTest(const Vec2& pt, const Camera* camera, Vec3* p) const override;
     /**
      * Returns the "class name" of widget.
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /** When user pressed the button, the button will zoom to a scale.
      * The final scale of the button  equals (button original scale + _zoomScale)
@@ -278,16 +278,16 @@ public:
     ResourceData getBallPressedFile();
     ResourceData getBallDisabledFile();
 
-    virtual bool init() override;
+    bool init() override;
 
 protected:
-    virtual void initRenderer() override;
+    void initRenderer() override;
     float getPercentWithBallPos(const Vec2& pt) const;
     void percentChangedEvent(EventType event);
-    virtual void onPressStateChangedToNormal() override;
-    virtual void onPressStateChangedToPressed() override;
-    virtual void onPressStateChangedToDisabled() override;
-    virtual void onSizeChanged() override;
+    void onPressStateChangedToNormal() override;
+    void onPressStateChangedToPressed() override;
+    void onPressStateChangedToDisabled() override;
+    void onSizeChanged() override;
 
     void setupBarTexture();
     void loadBarTexture(SpriteFrame* spriteframe);
@@ -299,9 +299,9 @@ protected:
 
     void barRendererScaleChangedWithSize();
     void progressBarRendererScaleChangedWithSize();
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
-    virtual void adaptRenderers() override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
+    void adaptRenderers() override;
 
 protected:
     Scale9Sprite* _barRenderer;

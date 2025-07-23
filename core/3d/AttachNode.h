@@ -54,10 +54,10 @@ public:
     static AttachNode* create(Bone3D* attachBone);
 
     // override
-    virtual Mat4 getWorldToNodeTransform() const override;
-    virtual Mat4 getNodeToWorldTransform() const override;
-    virtual const Mat4& getNodeToParentTransform() const override;
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    Mat4 getWorldToNodeTransform() const override;
+    Mat4 getNodeToWorldTransform() const override;
+    const Mat4& getNodeToParentTransform() const override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     AttachNode();
     virtual ~AttachNode();

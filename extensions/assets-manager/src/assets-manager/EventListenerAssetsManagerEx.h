@@ -62,8 +62,8 @@ public:
                                                 const std::function<void(EventAssetsManagerEx*)>& callback);
 
     /// Overrides
-    virtual bool checkAvailable() override;
-    virtual EventListenerAssetsManagerEx* clone() override;
+    bool checkAvailable() override;
+    EventListenerAssetsManagerEx* clone() override;
 
     /** Constructor */
     EventListenerAssetsManagerEx();

@@ -46,7 +46,7 @@ public:
     void end() override;
     void swapBuffers() override;
     void setIMEKeyboardState(bool bOpen) override;
-    virtual Rect getSafeAreaRect() const override;
+    Rect getSafeAreaRect() const override;
 
     void queueOperation(void (*op)(void*), void* param) override;
 

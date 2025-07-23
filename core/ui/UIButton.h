@@ -190,10 +190,10 @@ public:
     void setPressedActionEnabled(bool enabled);
 
     // override methods
-    virtual void ignoreContentAdaptWithSize(bool ignore) override;
-    virtual Vec2 getVirtualRendererSize() const override;
-    virtual Node* getVirtualRenderer() override;
-    virtual std::string getDescription() const override;
+    void ignoreContentAdaptWithSize(bool ignore) override;
+    Vec2 getVirtualRendererSize() const override;
+    Node* getVirtualRenderer() override;
+    std::string getDescription() const override;
 
     /**
      * Return the inner title renderer of Button.
@@ -313,7 +313,7 @@ public:
     ResourceData getPressedFile();
     ResourceData getDisabledFile();
 
-    virtual bool init() override;
+    bool init() override;
     virtual bool init(std::string_view normalImage,
                       std::string_view selectedImage = "",
                       std::string_view disableImage  = "",
@@ -322,11 +322,11 @@ public:
     virtual Vec2 getNormalTextureSize() const;
 
 protected:
-    virtual void initRenderer() override;
-    virtual void onPressStateChangedToNormal() override;
-    virtual void onPressStateChangedToPressed() override;
-    virtual void onPressStateChangedToDisabled() override;
-    virtual void onSizeChanged() override;
+    void initRenderer() override;
+    void onPressStateChangedToNormal() override;
+    void onPressStateChangedToPressed() override;
+    void onPressStateChangedToDisabled() override;
+    void onSizeChanged() override;
 
     void loadTextureNormal(SpriteFrame* normalSpriteFrame);
     void setupNormalTexture(bool textureLoaded);
@@ -339,14 +339,14 @@ protected:
     void pressedTextureScaleChangedWithSize();
     void disabledTextureScaleChangedWithSize();
 
-    virtual void adaptRenderers() override;
+    void adaptRenderers() override;
     virtual void updateTitleLocation();
     void updateContentSize();
     virtual void createTitleRenderer();
     bool createTitleRendererIfNull();
 
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
 
     virtual Vec2 getNormalSize() const;
 

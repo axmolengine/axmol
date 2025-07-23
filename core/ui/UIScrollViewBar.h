@@ -131,10 +131,10 @@ public:
     /**
      * @lua NA
      */
-    virtual void setOpacity(uint8_t opacity) override { _opacity = opacity; }
-    virtual uint8_t getOpacity() const override { return _opacity; }
-    virtual void onEnter() override;
-    virtual void update(float deltaTime) override;
+    void setOpacity(uint8_t opacity) override { _opacity = opacity; }
+    uint8_t getOpacity() const override { return _opacity; }
+    void onEnter() override;
+    void update(float deltaTime) override;
 
     /**
      * @brief This is called by parent ScrollView when a touch is began. Don't call this directly.
@@ -146,7 +146,7 @@ public:
      */
     void onTouchEnded();
 
-    virtual bool init() override;
+    bool init() override;
 
 private:
     float calculateLength(float innerContainerMeasure, float scrollViewMeasure, float outOfBoundaryValue);

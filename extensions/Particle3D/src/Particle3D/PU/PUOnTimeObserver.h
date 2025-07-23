@@ -49,11 +49,11 @@ public:
     /** In case there are no particles, but the observation returns true, the event handlers must still be
         called.
     */
-    virtual void preUpdateObserver(float deltaTime) override;
+    void preUpdateObserver(float deltaTime) override;
 
     /**
      */
-    virtual bool observe(PUParticle3D* particle, float timeElapsed) override;
+    bool observe(PUParticle3D* particle, float timeElapsed) override;
 
     /**
      */
@@ -70,7 +70,7 @@ public:
     bool isSinceStartSystem() const { return _sinceStartSystem; };
     void setSinceStartSystem(bool sinceStartSystem) { _sinceStartSystem = sinceStartSystem; };
 
-    virtual void copyAttributesTo(PUObserver* observer) override;
+    void copyAttributesTo(PUObserver* observer) override;
 
     PUOnTimeObserver();
     virtual ~PUOnTimeObserver(){};

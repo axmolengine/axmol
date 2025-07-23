@@ -125,7 +125,7 @@ public:
      * {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA}.
      * @lua NA
      */
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
 
     /**
      * Returns the blending function that is currently being used.
@@ -133,31 +133,31 @@ public:
      * @return A BlendFunc structure with source and destination factor which specified pixel arithmetic.
      * @lua NA
      */
-    virtual const BlendFunc& getBlendFunc() const override;
+    const BlendFunc& getBlendFunc() const override;
 
     // override methods.
-    virtual void ignoreContentAdaptWithSize(bool ignore) override;
-    virtual std::string getDescription() const override;
-    virtual Vec2 getVirtualRendererSize() const override;
-    virtual Node* getVirtualRenderer() override;
+    void ignoreContentAdaptWithSize(bool ignore) override;
+    std::string getDescription() const override;
+    Vec2 getVirtualRendererSize() const override;
+    Node* getVirtualRenderer() override;
 
     ResourceData getRenderFile();
 
     // initializes state of widget.
-    virtual bool init() override;
+    bool init() override;
     virtual bool init(std::string_view imageFileName, TextureResType texType = TextureResType::LOCAL);
 
 protected:
-    virtual void initRenderer() override;
-    virtual void onSizeChanged() override;
+    void initRenderer() override;
+    void onSizeChanged() override;
 
-    virtual void adaptRenderers() override;
+    void adaptRenderers() override;
     void loadTexture(SpriteFrame* spriteframe);
     void setupTexture();
 
     void imageTextureScaleChangedWithSize();
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
 
 protected:
     bool _scale9Enabled;

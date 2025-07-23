@@ -44,24 +44,24 @@ public:
     EditBoxImplWasm(EditBox* pEditText);
     virtual ~EditBoxImplWasm();
 
-    virtual bool isEditing() override;
-    virtual void createNativeControl(const Rect& frame) override;
-    virtual void setNativeFont(const char* pFontName, int fontSize) override;
-    virtual void setNativeFontColor(const Color32& color) override;
-    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) override;
-    virtual void setNativePlaceholderFontColor(const Color32& color) override;
-    virtual void setNativeInputMode(EditBox::InputMode inputMode) override;
-    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag) override;
-    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType) override;
-    virtual void setNativeTextHorizontalAlignment(TextHAlignment alignment) override;
-    virtual void setNativeText(const char* pText) override;
-    virtual void setNativePlaceHolder(const char* pText) override;
-    virtual void setNativeVisible(bool visible) override;
-    virtual void updateNativeFrame(const Rect& rect) override;
-    virtual const char* getNativeDefaultFontName() override;
-    virtual void nativeOpenKeyboard() override;
-    virtual void nativeCloseKeyboard() override;
-    virtual void setNativeMaxLength(int maxLength) override;
+    bool isEditing() override;
+    void createNativeControl(const Rect& frame) override;
+    void setNativeFont(const char* pFontName, int fontSize) override;
+    void setNativeFontColor(const Color32& color) override;
+    void setNativePlaceholderFont(const char* pFontName, int fontSize) override;
+    void setNativePlaceholderFontColor(const Color32& color) override;
+    void setNativeInputMode(EditBox::InputMode inputMode) override;
+    void setNativeInputFlag(EditBox::InputFlag inputFlag) override;
+    void setNativeReturnType(EditBox::KeyboardReturnType returnType) override;
+    void setNativeTextHorizontalAlignment(TextHAlignment alignment) override;
+    void setNativeText(const char* pText) override;
+    void setNativePlaceHolder(const char* pText) override;
+    void setNativeVisible(bool visible) override;
+    void updateNativeFrame(const Rect& rect) override;
+    const char* getNativeDefaultFontName() override;
+    void nativeOpenKeyboard() override;
+    void nativeCloseKeyboard() override;
+    void setNativeMaxLength(int maxLength) override;
     //EditBoxDelegate::EditBoxEndAction _endAction;
     bool isEditingMode() const { return _editingMode; }
 private:

@@ -52,10 +52,10 @@ protected:
 public:
     /* override functions */
     bool init() override;
-    virtual std::string getWritablePath() const override;
+    std::string getWritablePath() const override;
     std::string getNativeWritableAbsolutePath() const override;
 private:
-    virtual bool isFileExistInternal(std::string_view path) const override;
+    bool isFileExistInternal(std::string_view path) const override;
 };
 
 // end of platform group

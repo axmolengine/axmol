@@ -51,11 +51,11 @@ protected:
 public:
     /* override functions */
     bool init() override;
-    virtual std::string getWritablePath() const override;
-    virtual std::string getNativeWritableAbsolutePath() const override;
+    std::string getWritablePath() const override;
+    std::string getNativeWritableAbsolutePath() const override;
 
 protected:
-    virtual bool isFileExistInternal(std::string_view strFilePath) const override;
+    bool isFileExistInternal(std::string_view strFilePath) const override;
 
     /**
      *  Renames a file under the given directory.
@@ -65,7 +65,7 @@ protected:
      *  @param name     The new name of the file.
      *  @return True if the file have been renamed successfully, false if not.
      */
-    virtual bool renameFile(std::string_view path, std::string_view oldname, std::string_view name) const override;
+    bool renameFile(std::string_view path, std::string_view oldname, std::string_view name) const override;
 
     /**
      *  Renames a file under the given directory.
@@ -74,14 +74,14 @@ protected:
      *  @param newfullpath  The new path + name of the file.
      *  @return True if the file have been renamed successfully, false if not.
      */
-    virtual bool renameFile(std::string_view oldfullpath, std::string_view newfullpath) const override;
+    bool renameFile(std::string_view oldfullpath, std::string_view newfullpath) const override;
 
     /**
      *  Checks whether a directory exists without considering search paths and resolution orders.
      *  @param dirPath The directory (with absolute path) to look up for
      *  @return Returns true if the directory found at the given absolute path, otherwise returns false
      */
-    virtual bool isDirectoryExistInternal(std::string_view dirPath) const override;
+    bool isDirectoryExistInternal(std::string_view dirPath) const override;
 
     /**
      *  Removes a file.
@@ -89,7 +89,7 @@ protected:
      *  @param filepath The full path of the file, it must be an absolute path.
      *  @return True if the file have been removed successfully, false if not.
      */
-    virtual bool removeFile(std::string_view filepath) const override;
+    bool removeFile(std::string_view filepath) const override;
 
     /**
      *  Creates a directory.
@@ -97,7 +97,7 @@ protected:
      *  @param dirPath The path of the directory, it must be an absolute path.
      *  @return True if the directory have been created successfully, false if not.
      */
-    virtual bool createDirectories(std::string_view dirPath) const override;
+    bool createDirectories(std::string_view dirPath) const override;
 
     /**
      *  Removes a directory.
@@ -105,9 +105,9 @@ protected:
      *  @param dirPath  The full path of the directory, it must be an absolute path.
      *  @return True if the directory have been removed successfully, false if not.
      */
-    virtual bool removeDirectory(std::string_view dirPath) const override;
+    bool removeDirectory(std::string_view dirPath) const override;
 
-    virtual int64_t getFileSize(std::string_view filepath) const override;
+    int64_t getFileSize(std::string_view filepath) const override;
 
     /**
      *  Gets full path for filename, resolution directory and search path.

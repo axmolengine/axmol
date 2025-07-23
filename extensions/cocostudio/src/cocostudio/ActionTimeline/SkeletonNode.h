@@ -73,16 +73,16 @@ public:
 
     SkeletonNode();
     virtual ~SkeletonNode();
-    virtual bool init() override;
+    bool init() override;
 
 protected:
-    virtual void updateVertices() override;
-    virtual void updateColor() override;
+    void updateVertices() override;
+    void updateColor() override;
 
     virtual void visit(ax::Renderer* renderer,
                        const ax::Mat4& parentTransform,
                        uint32_t parentFlags) override;
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:
     ax::StringMap<BoneNode*> _subBonesMap;

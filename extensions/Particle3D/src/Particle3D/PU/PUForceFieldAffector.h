@@ -50,10 +50,10 @@ public:
 
     static PUForceFieldAffector* create();
 
-    virtual void notifyStart() override;
-    virtual void preUpdateAffector(float deltaTime) override;
-    virtual void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
-    virtual void prepare() override;
+    void notifyStart() override;
+    void preUpdateAffector(float deltaTime) override;
+    void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
+    void prepare() override;
 
     /** Get/Set Forcefield type
      */
@@ -126,7 +126,7 @@ public:
      */
     void suppressGeneration(bool suppress);
 
-    virtual void copyAttributesTo(PUAffector* affector) override;
+    void copyAttributesTo(PUAffector* affector) override;
 
     PUForceFieldAffector();
     ~PUForceFieldAffector();

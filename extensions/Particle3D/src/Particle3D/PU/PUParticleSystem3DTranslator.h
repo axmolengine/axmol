@@ -42,10 +42,10 @@ public:
 
     void setParticleSystem3D(PUParticleSystem3D* pu) { _system = pu; };
 
-    virtual bool isParticleSystemTranslator() const override { return true; }
+    bool isParticleSystemTranslator() const override { return true; }
 
 public:
-    virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node) override;
+    void translate(PUScriptCompiler* compiler, PUAbstractNode* node) override;
 
 protected:
     PUParticleSystem3D* _system;

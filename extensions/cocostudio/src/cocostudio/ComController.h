@@ -50,28 +50,28 @@ public:
      */
     virtual ~ComController();
 
-    virtual bool init() override;
+    bool init() override;
 
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
 
     /**
      * @lua NA
      */
-    virtual void onAdd() override;
+    void onAdd() override;
 
     /**
      * @lua NA
      */
-    virtual void onRemove() override;
-    virtual void update(float delta) override;
+    void onRemove() override;
+    void update(float delta) override;
 };
 
 }  // namespace cocostudio

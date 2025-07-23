@@ -319,7 +319,7 @@ public:
     bool isKinematic() const;
 
     /** override. */
-    virtual ax::Mat4 getWorldTransform() const override;
+    ax::Mat4 getWorldTransform() const override;
 
     /** Get constraint by index. */
     Physics3DConstraint* getConstraint(unsigned int idx) const;

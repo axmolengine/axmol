@@ -46,8 +46,8 @@ public:
      */
     Skin();
 
-    virtual bool initWithSpriteFrameName(std::string_view spriteFrameName) override;
-    virtual bool initWithFile(std::string_view filename) override;
+    bool initWithSpriteFrameName(std::string_view spriteFrameName) override;
+    bool initWithFile(std::string_view filename) override;
 
     void updateArmatureTransform();
     void updateTransform() override;
@@ -55,7 +55,7 @@ public:
     ax::Mat4 getNodeToWorldTransform() const override;
     ax::Mat4 getNodeToWorldTransformAR() const;
 
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
     /**
      *  @lua NA

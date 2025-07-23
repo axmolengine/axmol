@@ -85,13 +85,13 @@ public:
     //
     // Overrides
     //
-    virtual void stop() override;
-    virtual void step(float dt) override;
-    virtual void startWithTarget(Node* target) override;
-    virtual Animate3D* reverse() const override;
-    virtual Animate3D* clone() const override;
+    void stop() override;
+    void step(float dt) override;
+    void startWithTarget(Node* target) override;
+    Animate3D* reverse() const override;
+    Animate3D* clone() const override;
 
-    virtual void update(float t) override;
+    void update(float t) override;
 
     /**get & set speed, negative speed means playing reverse */
     float getSpeed() const;

@@ -122,17 +122,17 @@ public:
         is not found, other ParticleTechniques are searched. The ParticleEmitter is 'forced' to emit the
         requested number of particles.
     */
-    virtual void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
+    void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
 
     /** Initialise the emitted particle. This means that its position is set.
      */
-    virtual void particleEmitted(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
+    void particleEmitted(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
 
     /** No implementation.
      */
-    virtual void particleExpired(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
+    void particleExpired(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
 
-    virtual void copyAttributesTo(PUEventHandler* eventHandler) override;
+    void copyAttributesTo(PUEventHandler* eventHandler) override;
 
     PUDoPlacementParticleEventHandler();
     virtual ~PUDoPlacementParticleEventHandler();

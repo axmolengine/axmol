@@ -63,16 +63,16 @@ public:
     /* override functions */
     bool init() override;
 
-    virtual std::string getWritablePath() const override;
+    std::string getWritablePath() const override;
     std::string getNativeWritableAbsolutePath() const override;
-    virtual bool isAbsolutePath(std::string_view strPath) const override;
+    bool isAbsolutePath(std::string_view strPath) const override;
 
-    virtual int64_t getFileSize(std::string_view filepath) const override;
-    virtual std::vector<std::string> listFiles(std::string_view dirPath) const override;
+    int64_t getFileSize(std::string_view filepath) const override;
+    std::vector<std::string> listFiles(std::string_view dirPath) const override;
 
 private:
-    virtual bool isFileExistInternal(std::string_view strFilePath) const override;
-    virtual bool isDirectoryExistInternal(std::string_view dirPath) const override;
+    bool isFileExistInternal(std::string_view strFilePath) const override;
+    bool isDirectoryExistInternal(std::string_view dirPath) const override;
 
     static AAssetManager* assetmanager;
     static ZipFile* obbfile;

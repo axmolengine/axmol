@@ -52,57 +52,57 @@ public:
      */
     virtual ~EditBoxImplCommon();
 
-    virtual bool initWithSize(const Size& size) override;
+    bool initWithSize(const Size& size) override;
 
-    virtual void setFont(const char* pFontName, int fontSize) override;
-    virtual void setFontColor(const Color32& color) override;
-    virtual void setPlaceholderFont(const char* pFontName, int fontSize) override;
-    virtual void setPlaceholderFontColor(const Color32& color) override;
-    virtual void setInputMode(EditBox::InputMode inputMode) override;
-    virtual void setInputFlag(EditBox::InputFlag inputFlag) override;
-    virtual void setReturnType(EditBox::KeyboardReturnType returnType) override;
-    virtual void setText(const char* pText) override;
-    virtual void setPlaceHolder(const char* pText) override;
-    virtual void setVisible(bool visible) override;
+    void setFont(const char* pFontName, int fontSize) override;
+    void setFontColor(const Color32& color) override;
+    void setPlaceholderFont(const char* pFontName, int fontSize) override;
+    void setPlaceholderFontColor(const Color32& color) override;
+    void setInputMode(EditBox::InputMode inputMode) override;
+    void setInputFlag(EditBox::InputFlag inputFlag) override;
+    void setReturnType(EditBox::KeyboardReturnType returnType) override;
+    void setText(const char* pText) override;
+    void setPlaceHolder(const char* pText) override;
+    void setVisible(bool visible) override;
 
-    virtual void setMaxLength(int maxLength) override;
-    virtual void setTextHorizontalAlignment(TextHAlignment alignment) override;
+    void setMaxLength(int maxLength) override;
+    void setTextHorizontalAlignment(TextHAlignment alignment) override;
 
-    virtual int getMaxLength() override { return _maxLength; }
-    virtual const char* getText() override { return _text.c_str(); }
-    virtual const char* getPlaceHolder() override { return _placeHolder.c_str(); }
+    int getMaxLength() override { return _maxLength; }
+    const char* getText() override { return _text.c_str(); }
+    const char* getPlaceHolder() override { return _placeHolder.c_str(); }
 
-    virtual const char* getFontName() override { return _fontName.c_str(); }
-    virtual int getFontSize() override { return _fontSize; }
-    virtual const Color32& getFontColor() override { return _colText; }
+    const char* getFontName() override { return _fontName.c_str(); }
+    int getFontSize() override { return _fontSize; }
+    const Color32& getFontColor() override { return _colText; }
 
-    virtual const char* getPlaceholderFontName() override { return _placeholderFontName.c_str(); }
-    virtual int getPlaceholderFontSize() override { return _placeholderFontSize; }
-    virtual const Color32& getPlaceholderFontColor() override { return _colPlaceHolder; }
+    const char* getPlaceholderFontName() override { return _placeholderFontName.c_str(); }
+    int getPlaceholderFontSize() override { return _placeholderFontSize; }
+    const Color32& getPlaceholderFontColor() override { return _colPlaceHolder; }
 
-    virtual EditBox::InputMode getInputMode() override { return _editBoxInputMode; }
-    virtual EditBox::InputFlag getInputFlag() override { return _editBoxInputFlag; }
-    virtual EditBox::KeyboardReturnType getReturnType() override { return _keyboardReturnType; }
-    virtual TextHAlignment getTextHorizontalAlignment() override { return _alignment; }
+    EditBox::InputMode getInputMode() override { return _editBoxInputMode; }
+    EditBox::InputFlag getInputFlag() override { return _editBoxInputFlag; }
+    EditBox::KeyboardReturnType getReturnType() override { return _keyboardReturnType; }
+    TextHAlignment getTextHorizontalAlignment() override { return _alignment; }
 
     virtual void refreshInactiveText();
 
-    virtual void setContentSize(const Size& size) override;
+    void setContentSize(const Size& size) override;
 
-    virtual void setAnchorPoint(const Vec2& anchorPoint) override {}
-    virtual void setPosition(const Vec2& pos) override {}
-    virtual void setGlobalZOrder(float globalZOrder) override;
+    void setAnchorPoint(const Vec2& anchorPoint) override {}
+    void setPosition(const Vec2& pos) override {}
+    void setGlobalZOrder(float globalZOrder) override;
 
     /**
      * @lua NA
      */
-    virtual void draw(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void draw(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
-    virtual void openKeyboard() override;
-    virtual void closeKeyboard() override;
+    void onEnter() override;
+    void openKeyboard() override;
+    void closeKeyboard() override;
 
     virtual void onEndEditing(std::string_view text);
 
@@ -111,7 +111,7 @@ public:
     void editBoxEditingDidEnd(std::string_view text,
                               EditBoxDelegate::EditBoxEndAction action = EditBoxDelegate::EditBoxEndAction::UNKNOWN);
 
-    virtual bool isEditing() override                                                = 0;
+    bool isEditing() override                                                = 0;
     virtual void createNativeControl(const Rect& frame)                              = 0;
     virtual void setNativeFont(const char* pFontName, int fontSize)                  = 0;
     virtual void setNativeFontColor(const Color32& color)                            = 0;
@@ -135,7 +135,7 @@ protected:
     void setInactiveText(const char* pText);
     void refreshLabelAlignment();
     void placeInactiveLabels(const Size& size);
-    virtual void doAnimationWhenKeyboardMove(float duration, float distance) override{};
+    void doAnimationWhenKeyboardMove(float duration, float distance) override{};
 
     Label* _label;
     Label* _labelPlaceHolder;

@@ -181,21 +181,21 @@ public:
     /** Inherit from Action. */
 
     /** Returns a clone of ActionTimeline */
-    virtual ActionTimeline* clone() const override;
+    ActionTimeline* clone() const override;
 
     /** Returns a reverse of ActionTimeline.
      *  Not implement yet.
      */
-    virtual ActionTimeline* reverse() const override { return nullptr; }
+    ActionTimeline* reverse() const override { return nullptr; }
 
-    virtual void step(float delta) override;
-    virtual void startWithTarget(ax::Node* target) override;
-    virtual bool isDone() const override { return false; }
+    void step(float delta) override;
+    void startWithTarget(ax::Node* target) override;
+    bool isDone() const override { return false; }
 
     /// @{
     /// @name implement Playable Protocol
-    virtual void start() override;
-    virtual void stop() override;
+    void start() override;
+    void stop() override;
     /// @} end of PlayableProtocol
 
 protected:

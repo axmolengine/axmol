@@ -627,10 +627,10 @@ public:
      */
     virtual void setRotatePerSecondVar(float degrees);
 
-    virtual void setScale(float s) override;
-    virtual void setRotation(float newRotation) override;
-    virtual void setScaleX(float newScaleX) override;
-    virtual void setScaleY(float newScaleY) override;
+    void setScale(float s) override;
+    void setRotation(float newRotation) override;
+    void setScaleX(float newScaleX) override;
+    void setScaleY(float newScaleY) override;
 
     /** Whether or not the particle system is active.
      *
@@ -1353,11 +1353,11 @@ public:
                     float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
 
     // Overrides
-    virtual void onEnter() override;
-    virtual void onExit() override;
-    virtual void update(float dt) override;
-    virtual Texture2D* getTexture() const override;
-    virtual void setTexture(Texture2D* texture) override;
+    void onEnter() override;
+    void onExit() override;
+    void update(float dt) override;
+    Texture2D* getTexture() const override;
+    void setTexture(Texture2D* texture) override;
     /**
      *@code
      *When this function bound into js or lua,the parameter will be changed
@@ -1365,18 +1365,18 @@ public:
      *In lua: local setBlendFunc(local src, local dst)
      *@endcode
      */
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
     /**
      * @lua NA
      */
-    virtual const BlendFunc& getBlendFunc() const override;
+    const BlendFunc& getBlendFunc() const override;
 
     std::string_view getResourceFile() const { return _plistFile; }
 
     /// @{
     /// @name implement Playable Protocol
-    virtual void start() override;
-    virtual void stop() override;
+    void start() override;
+    void stop() override;
     /// @} end of PlayableProtocol
 
     void setSourcePositionCompatible(bool sourcePositionCompatible)

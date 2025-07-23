@@ -42,8 +42,8 @@ public:
     static FontCharMap* create(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
     static FontCharMap* create(std::string_view plistFile);
 
-    virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
-    virtual FontAtlas* newFontAtlas() override;
+    int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
+    FontAtlas* newFontAtlas() override;
 
 protected:
     FontCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)

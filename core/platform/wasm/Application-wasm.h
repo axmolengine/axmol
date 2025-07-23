@@ -54,7 +54,7 @@ public:
      @brief Callback by Director for limit FPS.
      @param interval    The time, which expressed in second in second, between current frame and next.
      */
-    virtual void setAnimationInterval(float interval) override;
+    void setAnimationInterval(float interval) override;
 
     /**
      @brief Run the message loop.
@@ -68,30 +68,30 @@ public:
     static Application* getInstance();
 
     /* override functions */
-    virtual LanguageType getCurrentLanguage() override;
+    LanguageType getCurrentLanguage() override;
 
     /**
     @brief Get current language iso 639-1 code
     @return Current language iso 639-1 code
     */
-    virtual const char * getCurrentLanguageCode() override;
+    const char * getCurrentLanguageCode() override;
 
     /**
     @brief Get application version
     */
-    virtual std::string getVersion() override;
+    std::string getVersion() override;
 
     /**
      @brief Open url in default browser
      @param String with url to open.
      @return true if the resource located by the URL was successfully opened; otherwise false.
      */
-    virtual bool openURL(std::string_view url) override;
+    bool openURL(std::string_view url) override;
 
     /**
      @brief Get target platform
      */
-    virtual Platform getTargetPlatform() override;
+    Platform getTargetPlatform() override;
 protected:
     std::string _resourceRootPath;
 

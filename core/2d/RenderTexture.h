@@ -98,9 +98,9 @@ public:
     static RenderTexture* create(int w, int h, bool sharedRenderTarget = false);
 
     // Overrides
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     /** Starts grabbing. */
     virtual void begin();

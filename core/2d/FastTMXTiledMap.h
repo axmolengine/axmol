@@ -200,7 +200,7 @@ public:
      */
     void setProperties(const ValueMap& properties) { _properties = properties; }
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /** Set all tile animations enabled or not.
      *  animations are not enabled by default
@@ -223,7 +223,7 @@ public:
     /**
      * @lua NA
      */
-    virtual ~FastTMXTiledMap() override;
+    ~FastTMXTiledMap() override;
 
     /** initializes a TMX Tiled Map with a TMX file */
     bool initWithTMXFile(std::string_view tmxFile, bool allowInvisibleLayers = false);

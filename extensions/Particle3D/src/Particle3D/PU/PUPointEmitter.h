@@ -36,8 +36,8 @@ class AX_EX_DLL PUPointEmitter : public PUEmitter
 public:
     static PUPointEmitter* create();
 
-    virtual PUPointEmitter* clone() override;
-    virtual void copyAttributesTo(PUEmitter* emitter) override;
+    PUPointEmitter* clone() override;
+    void copyAttributesTo(PUEmitter* emitter) override;
 
     PUPointEmitter();
     virtual ~PUPointEmitter();

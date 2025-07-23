@@ -159,15 +159,15 @@ protected:
     TabHeader();
     ~TabHeader();
 
-    virtual void initRenderer() override;
-    virtual void onSizeChanged() override;
+    void initRenderer() override;
+    void onSizeChanged() override;
 
     void updateContentSize();
 
-    virtual void releaseUpEvent() override;
+    void releaseUpEvent() override;
     void dispatchSelectChangedEvent(bool select) override;
 
-    virtual void copySpecialProperties(Widget* model) override;
+    void copySpecialProperties(Widget* model) override;
 
 private:
     Label* _tabLabelRender;
@@ -342,7 +342,7 @@ protected:
     void onSizeChanged() override;
     void initTabHeadersPos(int startIndex);
     void initContainers();
-    virtual void copySpecialProperties(Widget* model) override;
+    void copySpecialProperties(Widget* model) override;
 
     ccTabControlCallback _tabChangedCallback;
     // dispatch selected changed

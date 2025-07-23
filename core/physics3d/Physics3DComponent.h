@@ -63,7 +63,7 @@ public:
 
     CREATE_FUNC(Physics3DComponent);
     virtual ~Physics3DComponent();
-    virtual bool init() override;
+    bool init() override;
 
     /**
      * create Physics3DComponent
@@ -94,10 +94,10 @@ public:
     /**
      * set it enable or not
      */
-    virtual void setEnabled(bool b) override;
+    void setEnabled(bool b) override;
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
     /**
      * add this component to physics world, called by scene

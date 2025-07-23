@@ -55,7 +55,7 @@ public:
     ForceApplication getForceApplication() const;
     void setForceApplication(ForceApplication forceApplication);
 
-    virtual void copyAttributesTo(PUAffector* affector) override;
+    void copyAttributesTo(PUAffector* affector) override;
 
     PUBaseForceAffector();
     virtual ~PUBaseForceAffector();

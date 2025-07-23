@@ -50,7 +50,7 @@ class AX_DLL PageTurn3D : public Grid3DAction
 public:
     /**
      */
-    virtual GridBase* getGrid() override;
+    GridBase* getGrid() override;
 
     /**
     @brief Create an action with duration, grid size.
@@ -61,8 +61,8 @@ public:
     static PageTurn3D* create(float duration, const Vec2& gridSize);
 
     // Overrides
-    virtual PageTurn3D* clone() const override;
-    virtual void update(float time) override;
+    PageTurn3D* clone() const override;
+    void update(float time) override;
 };
 
 // end of actions group

@@ -55,28 +55,28 @@ public:
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(std::string_view uniform) const override;
+    UniformLocation getUniformLocation(std::string_view uniform) const override;
 
     /**
      * Get uniform location by engine built-in uniform enum name.
      * @param name Specifies the engine built-in uniform enum name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(backend::Uniform name) const override;
+    UniformLocation getUniformLocation(backend::Uniform name) const override;
 
     /**
      * Get attribute location by attribute name.
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(std::string_view name) const override;
+    int getAttributeLocation(std::string_view name) const override;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(Attribute name) const override;
+    int getAttributeLocation(Attribute name) const override;
 
     /**
      * Get vertex shader module.
@@ -100,26 +100,26 @@ public:
      * Get maximum vertex location.
      * @return Maximum vertex locaiton.
      */
-    virtual int getMaxVertexLocation() const override;
+    int getMaxVertexLocation() const override;
 
     /**
      * Get maximum fragment location.
      * @return Maximum fragment location.
      */
-    virtual int getMaxFragmentLocation() const override;
+    int getMaxFragmentLocation() const override;
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
      * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
      * @return The uniform buffer size in bytes.
      */
-    virtual std::size_t getUniformBufferSize(ShaderStage stage) const override;
+    std::size_t getUniformBufferSize(ShaderStage stage) const override;
 
     /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
+    const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
 
 private:
     ShaderModuleMTL* _vertexShader   = nullptr;

@@ -75,9 +75,9 @@ public:
         DoEnableComponentEventHandler is defined, or if the ParticleEmitter/Affector is not
         found, other ParticleTechniques are searched.
     */
-    virtual void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
+    void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
 
-    virtual void copyAttributesTo(PUEventHandler* eventHandler) override;
+    void copyAttributesTo(PUEventHandler* eventHandler) override;
 
     PUDoEnableComponentEventHandler();
     virtual ~PUDoEnableComponentEventHandler(){};

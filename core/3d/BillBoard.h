@@ -94,14 +94,14 @@ public:
     // override
 
     /** update billboard's transform and turn it towards camera */
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * draw BillBoard object.
      *
      * @lua NA
      */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     BillBoard();
     virtual ~BillBoard();

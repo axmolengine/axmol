@@ -123,8 +123,8 @@ public:
     void setSelected(bool selected);
 
     // override functions
-    virtual Vec2 getVirtualRendererSize() const override;
-    virtual Node* getVirtualRenderer() override;
+    Vec2 getVirtualRendererSize() const override;
+    Node* getVirtualRenderer() override;
 
     /** When user pressed the CheckBox, the button will zoom to a scale.
      * The final scale of the CheckBox  equals (CheckBox original scale + _zoomScale)
@@ -174,7 +174,7 @@ public:
     ResourceData getCrossNormalFile();
     ResourceData getCrossDisabledFile();
 
-    virtual bool init() override;
+    bool init() override;
     virtual bool init(std::string_view backGround,
                       std::string_view backGroundSelected,
                       std::string_view cross,
@@ -195,10 +195,10 @@ protected:
      */
     virtual ~AbstractCheckButton();
 
-    virtual void initRenderer() override;
-    virtual void onPressStateChangedToNormal() override;
-    virtual void onPressStateChangedToPressed() override;
-    virtual void onPressStateChangedToDisabled() override;
+    void initRenderer() override;
+    void onPressStateChangedToNormal() override;
+    void onPressStateChangedToPressed() override;
+    void onPressStateChangedToDisabled() override;
 
     void setupBackgroundTexture();
     void loadTextureBackGround(SpriteFrame* spriteFrame);
@@ -213,7 +213,7 @@ protected:
 
     virtual void dispatchSelectChangedEvent(bool selected) = 0;
 
-    virtual void onSizeChanged() override;
+    void onSizeChanged() override;
 
     void backGroundTextureScaleChangedWithSize();
     void backGroundSelectedTextureScaleChangedWithSize();
@@ -221,8 +221,8 @@ protected:
     void backGroundDisabledTextureScaleChangedWithSize();
     void frontCrossDisabledTextureScaleChangedWithSize();
 
-    virtual void copySpecialProperties(Widget* model) override;
-    virtual void adaptRenderers() override;
+    void copySpecialProperties(Widget* model) override;
+    void adaptRenderers() override;
 
 protected:
     Sprite* _backGroundBoxRenderer;

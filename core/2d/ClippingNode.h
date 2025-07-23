@@ -122,24 +122,24 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
     /**
      * @lua NA
      */
-    virtual void onEnterTransitionDidFinish() override;
+    void onEnterTransitionDidFinish() override;
     /**
      * @lua NA
      */
-    virtual void onExitTransitionDidStart() override;
+    void onExitTransitionDidStart() override;
     /**
      * @lua NA
      */
-    virtual void onExit() override;
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void onExit() override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-    virtual void setGlobalZOrder(float globalZOrder) override;
+    void setGlobalZOrder(float globalZOrder) override;
 
-    virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
+    void setCameraMask(unsigned short mask, bool applyChildren = true) override;
 
     ClippingNode();
 
@@ -150,7 +150,7 @@ public:
 
     /** Initializes a clipping node without a stencil.
      */
-    virtual bool init() override;
+    bool init() override;
 
     /** Initializes a clipping node with an other node as its stencil.
      The stencil node will be retained, and its parent will be set to this clipping node.

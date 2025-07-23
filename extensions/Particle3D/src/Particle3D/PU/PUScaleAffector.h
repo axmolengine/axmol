@@ -44,7 +44,7 @@ public:
 
     static PUScaleAffector* create();
 
-    virtual void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
+    void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
 
     /**
      */
@@ -75,7 +75,7 @@ public:
     bool isSinceStartSystem() const { return _sinceStartSystem; };
     void setSinceStartSystem(bool sinceStartSystem) { _sinceStartSystem = sinceStartSystem; };
 
-    virtual void copyAttributesTo(PUAffector* affector) override;
+    void copyAttributesTo(PUAffector* affector) override;
 
     PUScaleAffector();
     virtual ~PUScaleAffector();

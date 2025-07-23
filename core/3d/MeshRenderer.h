@@ -125,8 +125,8 @@ public:
     void removeAllAttachNode();
 
     // overrides
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
-    virtual const BlendFunc& getBlendFunc() const override;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
+    const BlendFunc& getBlendFunc() const override;
 
     // overrides
     /** Sets ProgramState, attributes should be bound by the user */
@@ -156,7 +156,7 @@ public:
      *
      * @return a pointer to Action
      */
-    virtual Action* runAction(Action* action) override;
+    Action* runAction(Action* action) override;
 
     /**
      * Force depth buffer writing, this is useful if you want to achieve effects like fading.
@@ -168,7 +168,7 @@ public:
      * Returns a 2d bounding-box
      * Note: the bounding-box is taken from the mesh's AABB with Z-axis ignored.
      */
-    virtual Rect getBoundingBox() const override;
+    Rect getBoundingBox() const override;
 
     // set face culling side, CullFaceSide::BACK, CullFaceSide::FRONT and CullFaceSide::NONE.
     virtual void setCullFace(CullFaceSide side);
@@ -186,7 +186,7 @@ public:
     bool isWireframe() const { return _wireframe; }
 
     /** render all meshes within this mesh renderer */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     /** Adds a new material to this mesh renderer.
      The Material will be applied to all the meshes that belong to the mesh renderer.
@@ -213,7 +213,7 @@ public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
-    virtual bool init() override;
+    bool init() override;
 
     bool initWithFile(std::string_view path);
 
@@ -231,7 +231,7 @@ public:
      * Note: all children will be rendered in 3D space with depth, this behaviour can be changed using
      * setForce2DQueue()
      */
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /** generate default material. */
     void genMaterial(bool useLight = false);

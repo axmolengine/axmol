@@ -89,12 +89,12 @@ class ResizableBufferAdapter : public ResizableBuffer
 
 public:
     explicit ResizableBufferAdapter(T* buffer) : _buffer(buffer) {}
-    virtual void resize(size_t size) override
+    void resize(size_t size) override
     {
         _buffer->resize((size + sizeof(typename T::value_type) - 1) / sizeof(typename T::value_type));
     }
-    virtual void* buffer() const override { return _buffer->data(); }
-    virtual size_t size() const override { return _buffer->size() * sizeof(typename T::value_type); }
+    void* buffer() const override { return _buffer->data(); }
+    size_t size() const override { return _buffer->size() * sizeof(typename T::value_type); }
 };
 
 /** Helper class to handle file operations. */

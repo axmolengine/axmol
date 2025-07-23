@@ -47,22 +47,22 @@ public:
 
     /** See ParticleObserver::_preProcessParticles()
      */
-    virtual void preUpdateObserver(float deltaTime) override;
+    void preUpdateObserver(float deltaTime) override;
 
     /** See ParticleObserver::_processParticle()
      */
-    virtual void updateObserver(PUParticle3D* particle, float deltaTime, bool firstParticle) override;
+    void updateObserver(PUParticle3D* particle, float deltaTime, bool firstParticle) override;
 
     /**
      */
-    virtual bool observe(PUParticle3D* particle, float timeElapsed) override;
+    bool observe(PUParticle3D* particle, float timeElapsed) override;
 
     /**
      */
     float getThreshold() const { return _threshold; };
     void setThreshold(float threshold) { _threshold = threshold; };
 
-    virtual void copyAttributesTo(PUObserver* observer) override;
+    void copyAttributesTo(PUObserver* observer) override;
 
     PUOnRandomObserver();
     virtual ~PUOnRandomObserver(){};

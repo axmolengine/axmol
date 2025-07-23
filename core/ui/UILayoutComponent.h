@@ -59,7 +59,7 @@ public:
      */
     ~LayoutComponent();
 
-    virtual bool init() override;
+    bool init() override;
 
     /**
      * Create a LayoutComponent instance with default settings.

@@ -263,7 +263,7 @@ public:
      * texture's full rect.
      * @return True if initializes success, false otherwise.
      */
-    virtual bool initWithFile(std::string_view file, const Rect& rect) override;
+    bool initWithFile(std::string_view file, const Rect& rect) override;
 
     /**
      * Initializes a 9-slice sprite with a texture file. The whole texture will be
@@ -275,7 +275,7 @@ public:
      * @param file The name of the texture file.
      * @return True if initializes success, false otherwise.
      */
-    virtual bool initWithFile(std::string_view file) override;
+    bool initWithFile(std::string_view file) override;
 
     /**
      * Initializes a 9-slice sprite with an sprite frame name.
@@ -286,9 +286,9 @@ public:
      * @param spriteFrameName The sprite frame name.
      * @return True if initializes success, false otherwise.
      */
-    virtual bool initWithSpriteFrameName(std::string_view spriteFrameName) override;
+    bool initWithSpriteFrameName(std::string_view spriteFrameName) override;
 
-    virtual bool init() override;
+    bool init() override;
 
     /**
      * @brief Initializes a 9-slice sprite with an sprite instance.

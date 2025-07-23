@@ -62,21 +62,21 @@ public:
     static Application* getInstance();
 
     /* override functions */
-    virtual void setAnimationInterval(float interval) override;
+    void setAnimationInterval(float interval) override;
     // virtual void setAnimationInterval(float interval, SetIntervalReason reason) override;
 
-    virtual LanguageType getCurrentLanguage() override;
-    virtual const char* getCurrentLanguageCode() override;
+    LanguageType getCurrentLanguage() override;
+    const char* getCurrentLanguageCode() override;
 
     /**
      @brief Get target platform
      */
-    virtual Platform getTargetPlatform() override;
+    Platform getTargetPlatform() override;
 
     /**
      @brief Get application version
      */
-    virtual std::string getVersion() override;
+    std::string getVersion() override;
 
     /**
      @brief Open url in default browser

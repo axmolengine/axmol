@@ -164,16 +164,16 @@ public:
     const Rect& getCapInsets() const;
 
     // override methods.
-    virtual void ignoreContentAdaptWithSize(bool ignore) override;
-    virtual Vec2 getVirtualRendererSize() const override;
-    virtual Node* getVirtualRenderer() override;
-    virtual std::string getDescription() const override;
+    void ignoreContentAdaptWithSize(bool ignore) override;
+    Vec2 getVirtualRendererSize() const override;
+    Node* getVirtualRenderer() override;
+    std::string getDescription() const override;
 
     ResourceData getRenderFile();
 
 protected:
-    virtual void initRenderer() override;
-    virtual void onSizeChanged() override;
+    void initRenderer() override;
+    void onSizeChanged() override;
 
     void setScale9Scale();
     void updateProgressBar();
@@ -183,10 +183,10 @@ protected:
     void handleSpriteFlipX();
     void loadTexture(SpriteFrame* spriteframe);
 
-    virtual void adaptRenderers() override;
+    void adaptRenderers() override;
 
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
 
 protected:
     Direction _direction;

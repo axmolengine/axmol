@@ -45,11 +45,11 @@ public:
 
     /**
      */
-    virtual void notifyRescaled(const Vec3& scale) override;
-    virtual void preUpdateAffector(float deltaTime) override;
-    virtual void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
-    virtual void postUpdateAffector(float deltaTime) override;
-    virtual void firstParticleUpdate(PUParticle3D* particle, float deltaTime) override;
+    void notifyRescaled(const Vec3& scale) override;
+    void preUpdateAffector(float deltaTime) override;
+    void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
+    void postUpdateAffector(float deltaTime) override;
+    void firstParticleUpdate(PUParticle3D* particle, float deltaTime) override;
     /**
      */
     float getMaxDeviation() const;
@@ -70,7 +70,7 @@ public:
     float getDrift() const;
     void setDrift(float drift);
 
-    virtual void copyAttributesTo(PUAffector* affector) override;
+    void copyAttributesTo(PUAffector* affector) override;
 
     PULineAffector();
     virtual ~PULineAffector();

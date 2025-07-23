@@ -214,7 +214,7 @@ public:
     /**
      * Updates the quad according the rotation, position, scale values.
      */
-    virtual void updateTransform() override;
+    void updateTransform() override;
 
     /**
      * Returns the batch node object if this sprite is rendered by SpriteBatchNode.
@@ -251,10 +251,10 @@ public:
      *
      *  The Texture's rect is not changed.
      */
-    virtual void setTexture(Texture2D* texture) override;
+    void setTexture(Texture2D* texture) override;
 
     /** Returns the Texture2D object used by the sprite. */
-    virtual Texture2D* getTexture() const override;
+    Texture2D* getTexture() const override;
 
     /**
      * Updates the texture rect of the Sprite in points.
@@ -358,41 +358,41 @@ public:
 
     /**
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /// @{
     /// @name Functions inherited from Node.
-    virtual void setScaleX(float scaleX) override;
-    virtual void setScaleY(float scaleY) override;
-    virtual void setScale(float scaleX, float scaleY) override;
+    void setScaleX(float scaleX) override;
+    void setScaleY(float scaleY) override;
+    void setScale(float scaleX, float scaleY) override;
     /**
      * @lua NA
      */
-    virtual void setPosition(const Vec2& pos) override;
-    virtual void setPosition(float x, float y) override;
-    virtual void setRotation(float rotation) override;
-    virtual void setRotationSkewX(float rotationX) override;
-    virtual void setRotationSkewY(float rotationY) override;
-    virtual void setSkewX(float sx) override;
-    virtual void setSkewY(float sy) override;
-    virtual void removeChild(Node* child, bool cleanup = true) override;
-    virtual void removeAllChildrenWithCleanup(bool cleanup) override;
-    virtual void reorderChild(Node* child, int zOrder) override;
+    void setPosition(const Vec2& pos) override;
+    void setPosition(float x, float y) override;
+    void setRotation(float rotation) override;
+    void setRotationSkewX(float rotationX) override;
+    void setRotationSkewY(float rotationY) override;
+    void setSkewX(float sx) override;
+    void setSkewY(float sy) override;
+    void removeChild(Node* child, bool cleanup = true) override;
+    void removeAllChildrenWithCleanup(bool cleanup) override;
+    void reorderChild(Node* child, int zOrder) override;
     using Node::addChild;
-    virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
-    virtual void sortAllChildren() override;
-    virtual void setScale(float scale) override;
-    virtual void setPositionZ(float positionZ) override;
-    virtual void setAnchorPoint(const Vec2& anchor) override;
-    virtual void setContentSize(const Vec2& size) override;
+    void addChild(Node* child, int zOrder, int tag) override;
+    void addChild(Node* child, int zOrder, std::string_view name) override;
+    void sortAllChildren() override;
+    void setScale(float scale) override;
+    void setPositionZ(float positionZ) override;
+    void setAnchorPoint(const Vec2& anchor) override;
+    void setContentSize(const Vec2& size) override;
 
-    virtual void setIgnoreAnchorPointForPosition(bool value) override;
+    void setIgnoreAnchorPointForPosition(bool value) override;
 
-    virtual void setVisible(bool bVisible) override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
-    virtual void setOpacityModifyRGB(bool modify) override;
-    virtual bool isOpacityModifyRGB() const override;
+    void setVisible(bool bVisible) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void setOpacityModifyRGB(bool modify) override;
+    bool isOpacityModifyRGB() const override;
     /// @}
 
     /**
@@ -529,7 +529,7 @@ public:
     virtual ~Sprite();
 
     /* Initializes an empty sprite with no parameters. */
-    virtual bool init() override;
+    bool init() override;
 
     /**
      * Initializes a sprite with a texture.
@@ -653,7 +653,7 @@ public:
     void setAutoSize(bool enabled) { _autoSizeEnabled = enabled; }
 
 protected:
-    virtual void updateColor() override;
+    void updateColor() override;
     virtual void setTextureCoords(const Rect& rect);
     virtual void setTextureCoords(const Rect& rect, V3F_T2F_C4B_Quad* outQuad);
     virtual void setVertexCoords(const Rect& rect, V3F_T2F_C4B_Quad* outQuad);

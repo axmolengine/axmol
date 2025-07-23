@@ -98,16 +98,16 @@ public:
      * starting char of the atlas */
     bool initWithString(std::string_view string, Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
 
-    virtual void setString(std::string_view label) override;
-    virtual std::string_view getString() const override;
+    void setString(std::string_view label) override;
+    std::string_view getString() const override;
 
-    virtual void updateAtlasValues() override;
+    void updateAtlasValues() override;
     /**
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
 #if AX_LABELATLAS_DEBUG_DRAW
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 #endif
 
     LabelAtlas()
@@ -121,7 +121,7 @@ public:
     virtual ~LabelAtlas() { _string.clear(); }
 
 protected:
-    virtual void updateColor() override;
+    void updateColor() override;
 
 #if AX_LABELATLAS_DEBUG_DRAW
     DrawNode* _debugDrawNode;
