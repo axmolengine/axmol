@@ -1,7 +1,7 @@
 
-cc = cc or {}
+ax = ax or {}
 
-cc.ControllerKey =
+ax.ControllerKey =
 {
     JOYSTICK_LEFT_X = 1000,
     JOYSTICK_LEFT_Y = 1001,

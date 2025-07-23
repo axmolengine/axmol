@@ -1,16 +1,16 @@
 
 local player = {
     generateProjectile = function (self, x, y)
-        local projectile = cc.Sprite:create("components/Projectile.png", cc.rect(0, 0, 20, 20))
-        local scriptComponent = cc.ComponentLua:create("ComponentTest/projectile.lua")
+        local projectile = ax.Sprite:create("components/Projectile.png", ax.rect(0, 0, 20, 20))
+        local scriptComponent = ax.ComponentLua:create("ComponentTest/projectile.lua")
         projectile:addComponent(scriptComponent)
         self:getOwner():getParent():addChild(projectile)
 
         -- set position
-        local director = cc.Director:getInstance()
+        local director = ax.Director:getInstance()
         local winSize = director:getVisibleSize()
         local visibleOrigin = director:getVisibleOrigin()
-        projectile:setPosition(cc.p(visibleOrigin.x + 20, visibleOrigin.y + winSize.height/2))
+        projectile:setPosition(ax.p(visibleOrigin.x + 20, visibleOrigin.y + winSize.height/2))
 
         -- run action
         local posX, posY = projectile:getPosition()
@@ -25,7 +25,7 @@ local player = {
         local realX = visibleOrigin.x + winSize.width + contentSize.width/2
         local ratio = offY / offX
         local realY = (realX * ratio) + posY
-        local realDest = cc.p(realX, realY)
+        local realDest = ax.p(realX, realY)
 
         local offRealX = realX - posX
         local offRealY = realY - posY
@@ -33,19 +33,19 @@ local player = {
         local velocity = 960
         local realMoveDuration = length / velocity
 
-        projectile:runAction(cc.MoveTo:create(realMoveDuration, realDest))
+        projectile:runAction(ax.MoveTo:create(realMoveDuration, realDest))
     end,
 
     onEnter = function(self)
         local function onTouchesEnded(touches, event)
             local location = touches[1]:getLocation()
             self:generateProjectile(location.x, location.y)
-            cc.AudioEngine:play2d("pew-pew-lei.wav")
+            ax.AudioEngine:play2d("pew-pew-lei.wav")
         end
 
-        local listener = cc.EventListenerTouchAllAtOnce:create()
-        listener:registerScriptHandler(onTouchesEnded, cc.Handler.EVENT_TOUCHES_ENDED)
-        local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+        local listener = ax.EventListenerTouchAllAtOnce:create()
+        listener:registerScriptHandler(onTouchesEnded, ax.Handler.EVENT_TOUCHES_ENDED)
+        local eventDispatcher = ax.Director:getInstance():getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self:getOwner())
     end,
 }

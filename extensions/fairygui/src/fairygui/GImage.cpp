@@ -73,12 +73,12 @@ void GImage::handleGrayedChanged()
     ((FUISprite*)_content)->setGrayed(_finalGrayed);
 }
 
-ax::Color3B GImage::getColor() const
+ax::Color32 GImage::getColor() const
 {
     return _content->getColor();
 }
 
-void GImage::setColor(const ax::Color3B& value)
+void GImage::setColor(const ax::Color32& value)
 {
     _content->setColor(value);
 }
@@ -182,7 +182,7 @@ void GImage::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     buffer->seek(beginPos, 5);
 
     if (buffer->readBool())
-        setColor((Color3B)buffer->readColor());
+        setColor(buffer->readColor());
     setFlip((FlipType)buffer->readByte());
     int fillMethod = buffer->readByte();
     if (fillMethod != 0)

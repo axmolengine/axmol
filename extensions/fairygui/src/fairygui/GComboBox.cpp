@@ -17,8 +17,8 @@ GComboBox::GComboBox()
       _iconObject(nullptr),
       _list(nullptr),
       _selectionController(nullptr),
-      _itemsUpdated(true), 
-      _selectedIndex(-1), 
+      _itemsUpdated(true),
+      _selectedIndex(-1),
       _buttonController(nullptr),
       _down(false),
       _over(false)
@@ -46,16 +46,16 @@ void GComboBox::setTitle(const std::string& value)
     updateGear(6);
 }
 
-const ax::Color3B GComboBox::getTitleColor() const
+const ax::Color32 GComboBox::getTitleColor() const
 {
     GTextField* tf = getTextField();
     if (tf)
         return tf->getColor();
     else
-        return Color3B::BLACK;
+        return Color32::BLACK;
 }
 
-void GComboBox::setTitleColor(const ax::Color3B& value)
+void GComboBox::setTitleColor(const ax::Color32& value)
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -381,7 +381,7 @@ void GComboBox::setup_afterAdd(ByteBuffer* buffer, int beginPos)
         setIcon(*str);
 
     if (buffer->readBool())
-        setTitleColor((Color3B)buffer->readColor());
+        setTitleColor(buffer->readColor());
     int iv = buffer->readInt();
     if (iv > 0)
         visibleItemCount = iv;

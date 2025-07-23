@@ -63,20 +63,18 @@ public:
      * @brief Initialize a rich element with different arguments.
      *
      * @param tag A integer tag value.
-     * @param color A color in @see `Color3B`.
-     * @param opacity A opacity value in `GLubyte`.
+     * @param color A color in @see `Color32`.
      * @return True if initialize success, false otherwise.
      */
-    bool init(int tag, const Color3B& color, uint8_t opacity);
+    bool init(int tag, const Color32& color);
 
     bool equalType(Type type);
-    void setColor(const Color3B& color);
+    void setColor(const Color32& color);
 
 protected:
     Type _type{};       /*!< Rich element type. */
     int _tag{};         /*!< A integer tag value. */
-    Color3B _color{};   /*!< A color in `Color3B`. */
-    uint8_t _opacity{}; /*!< A opacity value in `GLubyte`. */
+    Color32 _color{};   /*!< A color in `Color32`. */
     friend class RichText;
 };
 
@@ -108,8 +106,7 @@ public:
      * @brief Initialize a RichElementText with various arguments.
      *
      * @param tag A integer tag value.
-     * @param color A color in Color3B.
-     * @param opacity A opacity in GLubyte.
+     * @param color A color in Color32.
      * @param text Content string.
      * @param fontName Content font name.
      * @param fontSize Content font size.
@@ -125,27 +122,25 @@ public:
      * @return True if initialize success, false otherwise.
      */
     bool init(int tag,
-              const Color3B& color,
-              uint8_t opacity,
+              const Color32& color,
               std::string_view text,
               std::string_view fontName,
               float fontSize,
               uint32_t flags,
               std::string_view url,
-              const Color3B& outlineColor = Color3B::WHITE,
+              const Color32& outlineColor = Color32::WHITE,
               int outlineSize             = -1,
-              const Color3B& shadowColor  = Color3B::BLACK,
+              const Color32& shadowColor  = Color32::BLACK,
               const Vec2& shadowOffset    = Vec2(2.0, -2.0),
               int shadowBlurRadius        = 0,
-              const Color3B& glowColor    = Color3B::WHITE,
+              const Color32& glowColor    = Color32::WHITE,
               std::string_view id         = ""sv);
 
     /**
      * @brief Create a RichElementText with various arguments.
      *
      * @param tag A integer tag value.
-     * @param color A color in Color3B.
-     * @param opacity A opacity in GLubyte.
+     * @param color A color in Color32.
      * @param text Content string.
      * @param fontName Content font name.
      * @param fontSize Content font size.
@@ -161,19 +156,18 @@ public:
      * @return RichElementText instance.
      */
     static RichElementText* create(int tag,
-                                   const Color3B& color,
-                                   uint8_t opacity,
+                                   const Color32& color,
                                    std::string_view text,
                                    std::string_view fontName,
                                    float fontSize,
                                    uint32_t flags              = 0,
                                    std::string_view url        = "",
-                                   const Color3B& outlineColor = Color3B::WHITE,
+                                   const Color32& outlineColor = Color32::WHITE,
                                    int outlineSize             = -1,
-                                   const Color3B& shadowColor  = Color3B::BLACK,
+                                   const Color32& shadowColor  = Color32::BLACK,
                                    const Vec2& shadowOffset    = Vec2(2.0, -2.0),
                                    int shadowBlurRadius        = 0,
-                                   const Color3B& glowColor    = Color3B::WHITE,
+                                   const Color32& glowColor    = Color32::WHITE,
                                    std::string_view id         = ""sv);
 
 protected:
@@ -182,12 +176,12 @@ protected:
     float _fontSize;
     uint32_t _flags;
     std::string _url;
-    Color3B _outlineColor; /*!< the color of the outline */
+    Color32 _outlineColor; /*!< the color of the outline */
     int _outlineSize;      /*!< the outline effect size value */
-    Color3B _shadowColor;  /*!< the shadow effect color value */
+    Color32 _shadowColor;  /*!< the shadow effect color value */
     Vec2 _shadowOffset;    /*!< shadow effect offset value */
     int _shadowBlurRadius; /*!< the shadow effect blur radius */
-    Color3B _glowColor;    /*!< attributes of glow tag */
+    Color32 _glowColor;    /*!< attributes of glow tag */
     std::string _id;       /*!< ID of this text field */
     friend class RichText;
 };
@@ -209,8 +203,7 @@ public:
      * @brief Initialize a RichElementImage with various arguments.
      *
      * @param tag A integer tag value.
-     * @param color A color in Color3B.
-     * @param opacity A opacity in GLubyte.
+     * @param color A color in Color32.
      * @param filePath A image file name.
      * @param url uniform resource locator
      * @param texType texture type, may be a valid file path, or a sprite frame name
@@ -218,8 +211,7 @@ public:
      * @return True if initialize success, false otherwise.
      */
     bool init(int tag,
-              const Color3B& color,
-              uint8_t opacity,
+              const Color32& color,
               std::string_view filePath,
               std::string_view url           = "",
               Widget::TextureResType texType = Widget::TextureResType::LOCAL,
@@ -229,8 +221,7 @@ public:
      * @brief Create a RichElementImage with various arguments.
      *
      * @param tag A integer tag value.
-     * @param color A color in Color3B.
-     * @param opacity A opacity in GLubyte.
+     * @param color A color in Color32.
      * @param filePath A image file name.
      * @param url uniform resource locator
      * @param texType texture type, may be a valid file path, or a sprite frame name
@@ -238,8 +229,7 @@ public:
      * @return A RichElementImage instance.
      */
     static RichElementImage* create(int tag,
-                                    const Color3B& color,
-                                    uint8_t opacity,
+                                    const Color32& color,
                                     std::string_view filePath,
                                     std::string_view url           = "",
                                     Widget::TextureResType texType = Widget::TextureResType::LOCAL,
@@ -288,27 +278,24 @@ public:
      * @brief Initialize a RichElementCustomNode with various arguments.
      *
      * @param tag A integer tag value.
-     * @param color A color in Color3B.
-     * @param opacity A opacity in GLubyte.
+     * @param color A color in Color32.
      * @param customNode A custom node pointer.
      * @param id ID of element
      * @return True if initialize success, false otherwise.
      */
-    bool init(int tag, const Color3B& color, uint8_t opacity, Node* customNode, std::string_view id = ""sv);
+    bool init(int tag, const Color32& color, Node* customNode, std::string_view id = ""sv);
 
     /**
      * @brief Create a RichElementCustomNode with various arguments.
      *
      * @param tag A integer tag value.
-     * @param color A color in Color3B.
-     * @param opacity A opacity in GLubyte.
+     * @param color A color in Color32.
      * @param customNode A custom node pointer.
      * @param id ID of element
      * @return A RichElementCustomNode instance.
      */
     static RichElementCustomNode* create(int tag,
-                                         const Color3B& color,
-                                         uint8_t opacity,
+                                         const Color32& color,
                                          Node* customNode,
                                          std::string_view id = ""sv);
 
@@ -342,22 +329,20 @@ public:
      * @brief Create a RichElementNewLine with various arguments.
      *
      * @param tag A integer tag value.
-     * @param color A color in Color3B.
-     * @param opacity A opacity in GLubyte.
+     * @param color A color in Color32.
      * @return A RichElementNewLine instance.
      */
-    static RichElementNewLine* create(int tag, const Color3B& color, uint8_t opacity);
+    static RichElementNewLine* create(int tag, const Color32& color);
 
     /**
      * @brief Create a RichElementNewLine with various arguments.
      *
      * @param tag A integer tag value.
      * @param quantity Number of new lines to add
-     * @param color A color in Color3B.
-     * @param opacity A opacity in GLubyte.
+     * @param color A color in Color32.
      * @return A RichElementNewLine instance.
      */
-    static RichElementNewLine* create(int tag, int quantity, const Color3B& color, uint8_t opacity);
+    static RichElementNewLine* create(int tag, int quantity, const Color32& color);
 
 protected:
     friend class RichText;
@@ -532,14 +517,14 @@ public:
     void setFontColor(
         std::string_view color);             /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
     std::string getFontColor();              /*!< return the current font color */
-    Color3B getFontColor3B();                /*!< return the current font color */
+    Color32 getFontColor32();                /*!< return the current font Color32 */
     void setFontSize(float size);            /*!< Set the font size. @param size the font size. */
     float getFontSize();                     /*!< return the current font size */
     void setFontFace(std::string_view face); /*!< Set the font face. @param face the font face. */
     std::string getFontFace();               /*!< return the current font face */
     void setAnchorFontColor(std::string_view color); /*!< Set the font color of a-tag. @param color the font color. */
     std::string getAnchorFontColor();                /*!< return the current font color of a-tag */
-    ax::Color3B getAnchorFontColor3B();              /*!< return the current font color of a-tag */
+    ax::Color32 getAnchorFontColor32();              /*!< return the current font color of a-tag */
     void setAnchorTextBold(bool enable);             /*!< enable bold text of a-tag */
     bool isAnchorTextBoldEnabled();                  /*!< valid style is bold text of a-tag? */
     void setAnchorTextItalic(bool enable);           /*!< enable italic text of a-tag */
@@ -549,28 +534,27 @@ public:
     void setAnchorTextUnderline(bool enable);        /*!< enable the underline of a-tag */
     bool isAnchorTextUnderlineEnabled();             /*!< valid underline of a-tag? */
     /** @brief enable the outline of a-tag */
-    void setAnchorTextOutline(bool enable, const Color3B& outlineColor = Color3B::WHITE, int outlineSize = -1);
+    void setAnchorTextOutline(bool enable, const Color32& outlineColor = Color32::WHITE, int outlineSize = -1);
     bool isAnchorTextOutlineEnabled();     /*!< valid outline of a-tag? */
-    Color3B getAnchorTextOutlineColor3B(); /*!< return the current text outline color of a-tag */
+    Color32 getAnchorTextOutlineColor32(); /*!< return the current text outline color of a-tag */
     int getAnchorTextOutlineSize();        /*!< return the current text outline size of a-tag */
     /** @brief enable the shadow of a-tag */
     void setAnchorTextShadow(bool enable,
-                             const Color3B& shadowColor = Color3B::BLACK,
+                             const Color32& shadowColor = Color32::BLACK,
                              const Vec2& offset         = Vec2(2.0, -2.0),
                              int blurRadius             = 0);
     bool isAnchorTextShadowEnabled();     /*!< valid shadow of a-tag? */
-    Color3B getAnchorTextShadowColor3B(); /*!< return the current text shadow color of a-tag */
+    Color32 getAnchorTextShadowColor32(); /*!< return the current text shadow color of a-tag */
     Vec2 getAnchorTextShadowOffset();     /*!< return the current text shadow offset of a-tag */
     int getAnchorTextShadowBlurRadius();  /*!< return the current text shadow blur radius of a-tag */
-    void setAnchorTextGlow(bool enable, const Color3B& glowColor = Color3B::WHITE); /*!< enable the glow of a-tag */
+    void setAnchorTextGlow(bool enable, const Color32& glowColor = Color32::WHITE); /*!< enable the glow of a-tag */
     bool isAnchorTextGlowEnabled();                                                 /*!< valid glow of a-tag? */
-    Color3B getAnchorTextGlowColor3B();         /*!< return the current text glow color of a-tag */
+    Color32 getAnchorTextGlowColor32();         /*!< return the current text glow color of a-tag */
     void setDefaults(const ValueMap& defaults); /*!< set the default values */
     ValueMap getDefaults() const;               /*!< returns the default values */
 
-    ax::Color3B color3BWithString(std::string_view color);     /*!< convert a color string into a Color3B. */
-    std::string stringWithColor3B(const ax::Color3B& color3b); /*!< convert a Color3B into a color string. */
-    std::string stringWithColor32(const ax::Color32& Color32); /*!< convert a Color32 into a color string. */
+    static ax::Color32 parseColor32(std::string_view color);     /*!< convert a color string into a Color32. */
+    static std::string formatColor32(const ax::Color32& Color32); /*!< convert a Color32 into a color string. */
 
     /**
      * @brief add a callback to own tag.
@@ -615,21 +599,19 @@ protected:
     void handleTextRenderer(std::string_view text,
                             std::string_view fontName,
                             float fontSize,
-                            const Color3B& color,
-                            uint8_t opacity,
+                            const Color32& color,
                             uint32_t flags,
                             std::string_view url        = "",
-                            const Color3B& outlineColor = Color3B::WHITE,
+                            const Color32& outlineColor = Color32::WHITE,
                             int outlineSize             = -1,
-                            const Color3B& shadowColor  = Color3B::BLACK,
+                            const Color32& shadowColor  = Color32::BLACK,
                             const Vec2& shadowOffset    = Vec2(2.0, -2.0),
                             int shadowBlurRadius        = 0,
-                            const Color3B& glowColor    = Color3B::WHITE,
+                            const Color32& glowColor    = Color32::WHITE,
                             std::string_view id         = ""sv);
     void handleImageRenderer(std::string_view filePath,
                              Widget::TextureResType textureType,
-                             const Color3B& color,
-                             uint8_t opacity,
+                             const Color32& color,
                              int width,
                              int height,
                              std::string_view url,

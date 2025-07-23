@@ -200,7 +200,8 @@ void DrawNode::updateUniforms(const Mat4& transform, CustomCommand& cmd)
     auto mvpLocation         = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     pipelineDescriptor.programState->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));
 
-    float alpha               = _displayedOpacity / 255.0f;
+    // FIXME: consider whether 'u_alpha' is a redundant uniform in shaders?
+    float alpha               = _displayedColor.a / 255.0f;
     auto alphaUniformLocation = pipelineDescriptor.programState->getUniformLocation("u_alpha");
     pipelineDescriptor.programState->setUniform(alphaUniformLocation, &alpha, sizeof(alpha));
 }

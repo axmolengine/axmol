@@ -466,7 +466,6 @@ public:
     /**
      * Set the font color of the widget's text.
      */
-    void setFontColor(const Color3B& color);
     void setFontColor(const Color32& color);
 
     /**
@@ -504,11 +503,6 @@ public:
      * @return The font size.
      */
     int getPlaceholderFontSize() const;
-
-    /**
-     * Set the font color of the placeholder text when the edit box is empty.
-     */
-    void setPlaceholderFontColor(const Color3B& color);
 
     /**
      * Set the font color of the placeholder text when the edit box is empty.

@@ -1,4 +1,4 @@
-local targetPlatform = cc.Application:getInstance():getTargetPlatform()
+local targetPlatform = ax.Application:getInstance():getTargetPlatform()
 
 local lineSpace = 40
 local itemTagBasic = 1000
@@ -9,15 +9,15 @@ local menuItemNames =
     "update",
 }
 
-local winSize = cc.Director:getInstance():getWinSize()
+local winSize = ax.Director:getInstance():getWinSize()
 
 local function updateLayer()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
 
     local support  = false
-    if (cc.PLATFORM_OS_IPHONE == targetPlatform) or (cc.PLATFORM_OS_IPAD == targetPlatform) 
-        or (cc.PLATFORM_OS_WINDOWS == targetPlatform) or (cc.PLATFORM_OS_ANDROID == targetPlatform) 
-        or (cc.PLATFORM_OS_MAC  == targetPlatform) then
+    if (ax.PLATFORM_OS_IPHONE == targetPlatform) or (ax.PLATFORM_OS_IPAD == targetPlatform)
+        or (ax.PLATFORM_OS_WINDOWS == targetPlatform) or (ax.PLATFORM_OS_ANDROID == targetPlatform)
+        or (ax.PLATFORM_OS_MAC  == targetPlatform) then
         support = true
     end
 
@@ -30,22 +30,22 @@ local function updateLayer()
     local assetsManager       = nil
     local pathToSave          = ""
 
-    local menu = cc.Menu:create()
-    menu:setPosition(cc.p(0, 0))
-    cc.MenuItemFont:setFontName("Arial")
-    cc.MenuItemFont:setFontSize(24)
+    local menu = ax.Menu:create()
+    menu:setPosition(ax.p(0, 0))
+    ax.MenuItemFont:setFontName("Arial")
+    ax.MenuItemFont:setFontSize(24)
 
-    local progressLable = cc.Label:createWithTTF("",s_arialPath,30)
-    progressLable:setAnchorPoint(cc.p(0.5, 0.5))
-    progressLable:setPosition(cc.p(140,50))
+    local progressLable = ax.Label:createWithTTF("",s_arialPath,30)
+    progressLable:setAnchorPoint(ax.p(0.5, 0.5))
+    progressLable:setPosition(ax.p(140,50))
     layer:addChild(progressLable)
 
     pathToSave = createDownloadDir()
 
     local function onError(errorCode)
-        if errorCode == cc.ASSETSMANAGER_NO_NEW_VERSION then
+        if errorCode == ax.ASSETSMANAGER_NO_NEW_VERSION then
             progressLable:setString("no new version")
-        elseif errorCode == cc.ASSETSMANAGER_NETWORK then
+        elseif errorCode == ax.ASSETSMANAGER_NETWORK then
             progressLable:setString("network error")
         end
     end
@@ -61,13 +61,13 @@ local function updateLayer()
 
     local function getAssetsManager()
         if nil == assetsManager then
-            assetsManager = cc.AssetsManager:new("https://raw.github.com/samuele3hu/AssetsManagerTest/master/package.zip",
+            assetsManager = ax.AssetsManager:new("https://raw.github.com/samuele3hu/AssetsManagerTest/master/package.zip",
                                            "https://raw.github.com/samuele3hu/AssetsManagerTest/master/version",
                                            pathToSave)
             assetsManager:retain()
-            assetsManager:setDelegate(onError, cc.ASSETSMANAGER_PROTOCOL_ERROR )
-            assetsManager:setDelegate(onProgress, cc.ASSETSMANAGER_PROTOCOL_PROGRESS)
-            assetsManager:setDelegate(onSuccess, cc.ASSETSMANAGER_PROTOCOL_SUCCESS )
+            assetsManager:setDelegate(onError, ax.ASSETSMANAGER_PROTOCOL_ERROR )
+            assetsManager:setDelegate(onProgress, ax.ASSETSMANAGER_PROTOCOL_PROGRESS)
+            assetsManager:setDelegate(onSuccess, ax.ASSETSMANAGER_PROTOCOL_SUCCESS )
             assetsManager:setConnectionTimeout(3)
         end
 
@@ -120,12 +120,12 @@ local function updateLayer()
         local nIdx = menuItem:getLocalZOrder() - itemTagBasic
         local ExtensionsTestScene = CreateExtensionsTestScene(nIdx)
         if nil ~= ExtensionsTestScene then
-            cc.Director:getInstance():replaceScene(ExtensionsTestScene)
+            ax.Director:getInstance():replaceScene(ExtensionsTestScene)
         end
     end
 
     for i = 1, #(menuItemNames) do
-        local item = cc.MenuItemFont:create(menuItemNames[i])
+        local item = ax.MenuItemFont:create(menuItemNames[i])
         item:registerScriptTapHandler(callbackFuncs[i])
         item:setPosition(winSize.width / 2, winSize.height - i * lineSpace)
         if not support then
@@ -152,7 +152,7 @@ end
 --  AssetsManager Test
 -------------------------------------
 function AssetsManagerTestMain()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     scene:addChild(updateLayer())
     scene:addChild(CreateBackMenuItem())
     return scene

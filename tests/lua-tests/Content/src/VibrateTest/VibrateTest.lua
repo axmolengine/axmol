@@ -2,7 +2,7 @@
 local VibrateControlTest = {}
 
 function VibrateControlTest.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     Helper.titleLabel:setString("vibrate control test")
     -- Helper.subtitleLabel:setString("subtitleLabel")
@@ -12,20 +12,20 @@ function VibrateControlTest.create()
 
     ------playItem
     local function onStartVibrate(tag, sender)
-        cc.Device:vibrate(VibrateControlTest._duration)
+        ax.Device:vibrate(VibrateControlTest._duration)
     end
 
-    local vibrateItem = cc.MenuItemFont:create("vibrate")
-    vibrateItem:setPosition(cc.p(layerSize.width * 0.5,layerSize.height * 0.7))
+    local vibrateItem = ax.MenuItemFont:create("vibrate")
+    vibrateItem:setPosition(ax.p(layerSize.width * 0.5,layerSize.height * 0.7))
     vibrateItem:registerScriptTapHandler(onStartVibrate)
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
     menu:addChild(vibrateItem)
-    menu:setPosition(cc.p(0, 0))
+    menu:setPosition(ax.p(0, 0))
     layer:addChild(menu)
 
-    VibrateControlTest._durationLabel = cc.Label:createWithTTF("duration: "..string.format("%.3f", VibrateControlTest._duration).."s", "fonts/arial.ttf", 20)
-    VibrateControlTest._durationLabel:setPosition(cc.p(layerSize.width * 0.5,layerSize.height * 0.5))
+    VibrateControlTest._durationLabel = ax.Label:createWithTTF("duration: "..string.format("%.3f", VibrateControlTest._duration).."s", "fonts/arial.ttf", 20)
+    VibrateControlTest._durationLabel:setPosition(ax.p(layerSize.width * 0.5,layerSize.height * 0.5))
     layer:addChild(VibrateControlTest._durationLabel)
 
     local function durationSliderChangedEvent(sender,eventType)
@@ -38,7 +38,7 @@ function VibrateControlTest.create()
     durationSlider:loadBarTexture("cocosui/sliderTrack.png")
     durationSlider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")
     durationSlider:loadProgressBarTexture("cocosui/sliderProgress.png")
-    durationSlider:setPosition(cc.p(layerSize.width * 0.5,layerSize.height * 0.35))
+    durationSlider:setPosition(ax.p(layerSize.width * 0.5,layerSize.height * 0.35))
     durationSlider:addEventListener(durationSliderChangedEvent)
     layer:addChild(durationSlider)
 
@@ -52,13 +52,13 @@ function VibrateControlTest.create()
 end
 ------------------------------------------------------------------------
 function VibrateTestMain()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
     Helper.createFunctionTable = {
         VibrateControlTest.create
     }
     Helper.index = 1
-    
+
     scene:addChild(VibrateControlTest.create())
     scene:addChild(CreateBackMenuItem())
     return scene

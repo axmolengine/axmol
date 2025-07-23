@@ -2,42 +2,42 @@ local AssetManagerModule = {}
 
 function AssetManagerModule.newScene(backfunc)
 
-    local winSize = cc.Director:getInstance():getWinSize()
-    
-    local newScene = cc.Scene:create()
-    local layer    = cc.Layer:create()
+    local winSize = ax.Director:getInstance():getWinSize()
+
+    local newScene = ax.Scene:create()
+    local layer    = ax.Layer:create()
 
     local function backToUpdate()
         local scene = backfunc()
         if scene ~= nil then
-            cc.Director:getInstance():replaceScene(scene)
+            ax.Director:getInstance():replaceScene(scene)
         end
     end
 
     --Create BackMneu
-    cc.MenuItemFont:setFontName("Arial")
-    cc.MenuItemFont:setFontSize(24)
-    local backMenuItem = cc.MenuItemFont:create("Back")
-    backMenuItem:setPosition(cc.p(VisibleRect:rightBottom().x - 50, VisibleRect:rightBottom().y + 25))
+    ax.MenuItemFont:setFontName("Arial")
+    ax.MenuItemFont:setFontSize(24)
+    local backMenuItem = ax.MenuItemFont:create("Back")
+    backMenuItem:setPosition(ax.p(VisibleRect:rightBottom().x - 50, VisibleRect:rightBottom().y + 25))
     backMenuItem:registerScriptTapHandler(backToUpdate)
 
-    local backMenu = cc.Menu:create()
+    local backMenu = ax.Menu:create()
     backMenu:setPosition(0, 0)
     backMenu:addChild(backMenuItem)
     layer:addChild(backMenu,6)
 
-    local helloLabel =  cc.Label:createWithTTF("Hello World", s_arialPath, 38)
-    helloLabel:setAnchorPoint(cc.p(0.5, 0.5))
-    helloLabel:setPosition(cc.p(winSize.width / 2, winSize.height - 40))
+    local helloLabel =  ax.Label:createWithTTF("Hello World", s_arialPath, 38)
+    helloLabel:setAnchorPoint(ax.p(0.5, 0.5))
+    helloLabel:setPosition(ax.p(winSize.width / 2, winSize.height - 40))
     layer:addChild(helloLabel, 5)
 
-    local sprite = cc.Sprite:create("Images/background.png")
-    sprite:setAnchorPoint(cc.p(0.5, 0.5))
-    sprite:setPosition(cc.p(winSize.width / 2, winSize.height / 2))
+    local sprite = ax.Sprite:create("Images/background.png")
+    sprite:setAnchorPoint(ax.p(0.5, 0.5))
+    sprite:setPosition(ax.p(winSize.width / 2, winSize.height / 2))
     layer:addChild(sprite, 0)
 
     newScene:addChild(layer)
-    cc.Director:getInstance():replaceScene(newScene)
+    ax.Director:getInstance():replaceScene(newScene)
 end
 
 

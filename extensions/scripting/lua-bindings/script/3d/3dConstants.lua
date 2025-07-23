@@ -1,14 +1,14 @@
-if nil == cc.Terrain then
+if nil == ax.Terrain then
     return
 end
 
-cc.Terrain.CrackFixedType =
+ax.Terrain.CrackFixedType =
 {
-    SKIRT = 0, 
+    SKIRT = 0,
     INCREASE_LOWER = 1,
 }
 
-cc.Animate3DQuality =
+ax.Animate3DQuality =
 {
 	QUALITY_NONE = 0,
 	QUALITY_LOW  = 1,

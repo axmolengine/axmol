@@ -134,7 +134,7 @@ public:
 
     void update(float delta) override;
 
-    void updateDisplayedColor(const ax::Color3B& parentColor) override;
+    void updateDisplayedColor(const ax::Color32& parentColor) override;
     void updateDisplayedOpacity(uint8_t parentOpacity) override;
 
     //! Update color to render display

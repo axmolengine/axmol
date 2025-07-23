@@ -83,7 +83,7 @@ bool Box2DTest::init()
     auto label = Label::createWithTTF("Tap screen add boxes.\nSome objects be only visible with debug on.",
                                       "fonts/Marker Felt.ttf", 12.0f);
     addChild(label, 0);
-    label->setColor(Color3B(0, 0, 255));
+    label->setColor(Color32(0, 0, 255));
     label->setPosition(VisibleRect::center().x - 50, VisibleRect::top().y - 60);
 
     // menu for debug layer

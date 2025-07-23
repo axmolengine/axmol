@@ -1,4 +1,4 @@
-local size = cc.Director:getInstance():getWinSize()
+local size = ax.Director:getInstance():getWinSize()
 local kTagTileMap = 1
 local kTagSpriteBatchNode = 1
 local kTagNode = 2
@@ -29,30 +29,30 @@ function Sprite1.addNewSpriteWithCoords(layer, point)
     local x = math.floor(math.fmod(idx,5) * 85)
     local y = math.floor(idx / 5) * 121
 
-    local sprite = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(x,y,85,121) )
+    local sprite = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(x,y,85,121) )
     layer:addChild( sprite )
 
-    sprite:setPosition( cc.p(point.x, point.y) )
+    sprite:setPosition( ax.p(point.x, point.y) )
 
     local action = nil
     local random = math.random()
     cclog("random = " .. random)
     if( random < 0.20 ) then
-        action = cc.ScaleBy:create(3, 2)
+        action = ax.ScaleBy:create(3, 2)
     elseif(random < 0.40) then
-        action = cc.RotateBy:create(3, 360)
+        action = ax.RotateBy:create(3, 360)
     elseif( random < 0.60) then
-        action = cc.Blink:create(1, 3)
+        action = ax.Blink:create(1, 3)
     elseif( random < 0.8 ) then
-        action = cc.TintBy:create(2, 0, -255, -255)
-    else 
-        action = cc.FadeOut:create(2)
+        action = ax.TintBy:create(2, 0, -255, -255)
+    else
+        action = ax.FadeOut:create(2)
     end
 
     local action_back = action:reverse()
-    local seq = cc.Sequence:create( action, action_back)
+    local seq = ax.Sequence:create( action, action_back)
 
-    sprite:runAction( cc.RepeatForever:create(seq) )
+    sprite:runAction( ax.RepeatForever:create(seq) )
 end
 
 function Sprite1.onTouchesEnd(touches, event)
@@ -64,12 +64,12 @@ end
 
 function Sprite1.create()
     cclog("sprite1")
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
-    Sprite1.addNewSpriteWithCoords(layer, cc.p(size.width/2, size.height/2))
+    Sprite1.addNewSpriteWithCoords(layer, ax.p(size.width/2, size.height/2))
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(Sprite1.onTouchesEnd,cc.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.EventListenerTouchAllAtOnce:create()
+    listener:registerScriptHandler(Sprite1.onTouchesEnd,ax.Handler.EVENT_TOUCHES_ENDED )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -90,30 +90,30 @@ function SpriteBatchNode1.addNewSpriteWithCoords(layer, point)
     local x = math.floor(math.fmod(idx,5) * 85)
     local y = math.floor(idx / 5) * 121
 
-    local sprite = cc.Sprite:createWithTexture(BatchNode:getTexture(), cc.rect(x,y,85,121) )
+    local sprite = ax.Sprite:createWithTexture(BatchNode:getTexture(), ax.rect(x,y,85,121) )
     layer:addChild( sprite )
 
-    sprite:setPosition( cc.p(point.x, point.y) )
+    sprite:setPosition( ax.p(point.x, point.y) )
 
     local action = nil
     local random = math.random()
     cclog("random = " .. random)
     if( random < 0.20 ) then
-        action = cc.ScaleBy:create(3, 2)
+        action = ax.ScaleBy:create(3, 2)
     elseif(random < 0.40) then
-        action = cc.RotateBy:create(3, 360)
+        action = ax.RotateBy:create(3, 360)
     elseif( random < 0.60) then
-        action = cc.Blink:create(1, 3)
+        action = ax.Blink:create(1, 3)
     elseif( random < 0.8 ) then
-        action = cc.TintBy:create(2, 0, -255, -255)
-    else 
-        action = cc.FadeOut:create(2)
+        action = ax.TintBy:create(2, 0, -255, -255)
+    else
+        action = ax.FadeOut:create(2)
     end
 
     local action_back = action:reverse()
-    local seq = cc.Sequence:create( action, action_back)
+    local seq = ax.Sequence:create( action, action_back)
 
-    sprite:runAction( cc.RepeatForever:create(seq) )
+    sprite:runAction( ax.RepeatForever:create(seq) )
 end
 
 function SpriteBatchNode1.onTouchesEnd(touches,event)
@@ -124,15 +124,15 @@ function SpriteBatchNode1.onTouchesEnd(touches,event)
 end
 
 function SpriteBatchNode1.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
-    local BatchNode = cc.SpriteBatchNode:create("Images/grossini_dance_atlas.png", 50)
+    local BatchNode = ax.SpriteBatchNode:create("Images/grossini_dance_atlas.png", 50)
     layer:addChild(BatchNode, 0, kTagSpriteBatchNode)
 
-    SpriteBatchNode1.addNewSpriteWithCoords(layer, cc.p(size.width/2, size.height/2))
+    SpriteBatchNode1.addNewSpriteWithCoords(layer, ax.p(size.width/2, size.height/2))
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(Sprite1.onTouchesEnd,cc.Handler.EVENT_TOUCHES_ENDED )
+    local listener = ax.EventListenerTouchAllAtOnce:create()
+    listener:registerScriptHandler(Sprite1.onTouchesEnd,ax.Handler.EVENT_TOUCHES_ENDED )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -149,47 +149,47 @@ SpriteColorOpacity.__index = SpriteColorOpacity
 SpriteColorOpacity.entry = nil
 
 function SpriteColorOpacity.setLayerSprite(layer)
-    local sprite1 = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*0, 121*1, 85, 121))
-    local sprite2 = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*1, 121*1, 85, 121))
-    local sprite3 = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*2, 121*1, 85, 121))
-    local sprite4 = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*3, 121*1, 85, 121))
-    
-    local sprite5 = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*0, 121*1, 85, 121))
-    local sprite6 = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*1, 121*1, 85, 121))
-    local sprite7 = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*2, 121*1, 85, 121))
-    local sprite8 = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*3, 121*1, 85, 121))
-    
-    local s = cc.Director:getInstance():getWinSize()
-    sprite1:setPosition( cc.p( (s.width/5)*1, (s.height/3)*1) )
-    sprite2:setPosition( cc.p( (s.width/5)*2, (s.height/3)*1) )
-    sprite3:setPosition( cc.p( (s.width/5)*3, (s.height/3)*1) )
-    sprite4:setPosition( cc.p( (s.width/5)*4, (s.height/3)*1) )
-    sprite5:setPosition( cc.p( (s.width/5)*1, (s.height/3)*2) )
-    sprite6:setPosition( cc.p( (s.width/5)*2, (s.height/3)*2) )
-    sprite7:setPosition( cc.p( (s.width/5)*3, (s.height/3)*2) )
-    sprite8:setPosition( cc.p( (s.width/5)*4, (s.height/3)*2) )
-    
-    local action = cc.FadeIn:create(2)
+    local sprite1 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*0, 121*1, 85, 121))
+    local sprite2 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*1, 121*1, 85, 121))
+    local sprite3 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*2, 121*1, 85, 121))
+    local sprite4 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*3, 121*1, 85, 121))
+
+    local sprite5 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*0, 121*1, 85, 121))
+    local sprite6 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*1, 121*1, 85, 121))
+    local sprite7 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*2, 121*1, 85, 121))
+    local sprite8 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*3, 121*1, 85, 121))
+
+    local s = ax.Director:getInstance():getWinSize()
+    sprite1:setPosition( ax.p( (s.width/5)*1, (s.height/3)*1) )
+    sprite2:setPosition( ax.p( (s.width/5)*2, (s.height/3)*1) )
+    sprite3:setPosition( ax.p( (s.width/5)*3, (s.height/3)*1) )
+    sprite4:setPosition( ax.p( (s.width/5)*4, (s.height/3)*1) )
+    sprite5:setPosition( ax.p( (s.width/5)*1, (s.height/3)*2) )
+    sprite6:setPosition( ax.p( (s.width/5)*2, (s.height/3)*2) )
+    sprite7:setPosition( ax.p( (s.width/5)*3, (s.height/3)*2) )
+    sprite8:setPosition( ax.p( (s.width/5)*4, (s.height/3)*2) )
+
+    local action = ax.FadeIn:create(2)
     local action_back = action:reverse()
-    local fade = cc.RepeatForever:create( cc.Sequence:create( action, action_back) )
-    
-    local tintred = cc.TintBy:create(2, 0, -255, -255)
+    local fade = ax.RepeatForever:create( ax.Sequence:create( action, action_back) )
+
+    local tintred = ax.TintBy:create(2, 0, -255, -255)
     local tintred_back = tintred:reverse()
-    local red = cc.RepeatForever:create( cc.Sequence:create( tintred, tintred_back) )
-    
-    local tintgreen = cc.TintBy:create(2, -255, 0, -255)
+    local red = ax.RepeatForever:create( ax.Sequence:create( tintred, tintred_back) )
+
+    local tintgreen = ax.TintBy:create(2, -255, 0, -255)
     local tintgreen_back = tintgreen:reverse()
-    local green = cc.RepeatForever:create( cc.Sequence:create( tintgreen, tintgreen_back) )
-    
-    local tintblue = cc.TintBy:create(2, -255, -255, 0)
+    local green = ax.RepeatForever:create( ax.Sequence:create( tintgreen, tintgreen_back) )
+
+    local tintblue = ax.TintBy:create(2, -255, -255, 0)
     local tintblue_back = tintblue:reverse()
-    local blue = cc.RepeatForever:create( cc.Sequence:create( tintblue, tintblue_back) )
-    
+    local blue = ax.RepeatForever:create( ax.Sequence:create( tintblue, tintblue_back) )
+
     sprite5:runAction(red)
     sprite6:runAction(green)
     sprite7:runAction(blue)
     sprite8:runAction(fade)
-    
+
     layer:addChild(sprite1, 0, kTagSprite1)
     layer:addChild(sprite2, 0, kTagSprite2)
     layer:addChild(sprite3, 0, kTagSprite3)
@@ -198,7 +198,7 @@ function SpriteColorOpacity.setLayerSprite(layer)
     layer:addChild(sprite6, 0, kTagSprite6)
     layer:addChild(sprite7, 0, kTagSprite7)
     layer:addChild(sprite8, 0, kTagSprite8)
-    
+
     layer:registerScriptHandler(SpriteColorOpacity.onEnterOrExit)
 end
 
@@ -211,17 +211,17 @@ function SpriteColorOpacity.onEnterOrExit(tag)
 end
 
 function SpriteColorOpacity.removeAndAddSprite(dt)
-    local sprite = Helper.currentLayer:getChildByTag(kTagSprite5)    
+    local sprite = Helper.currentLayer:getChildByTag(kTagSprite5)
     sprite:retain()
-    
+
     Helper.currentLayer:removeChild(sprite, false)
     Helper.currentLayer:addChild(sprite, 0, kTagSprite5)
-    
+
     sprite:release()
 end
 
 function SpriteColorOpacity.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     SpriteColorOpacity.setLayerSprite(layer)
     layer:registerScriptHandler(SpriteColorOpacity.onEnterOrExit)
@@ -241,34 +241,34 @@ SpriteFrameTest.m_pSprite2 = nil
 SpriteFrameTest.m_nCounter = 0
 
 function SpriteFrameTest.onEnter()
-    local s = cc.Director:getInstance():getWinSize()
-    local cache = cc.SpriteFrameCache:getInstance()
+    local s = ax.Director:getInstance():getWinSize()
+    local cache = ax.SpriteFrameCache:getInstance()
 
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
     cache:addSpriteFrames("animations/grossini_blue.plist", "animations/grossini_blue.png")
 
-    SpriteFrameTest.m_pSprite1 = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-    SpriteFrameTest.m_pSprite1:setPosition( cc.p( s.width/2-80, s.height/2) )
+    SpriteFrameTest.m_pSprite1 = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+    SpriteFrameTest.m_pSprite1:setPosition( ax.p( s.width/2-80, s.height/2) )
 
-    local spritebatch = cc.SpriteBatchNode:create("animations/grossini.png")
+    local spritebatch = ax.SpriteBatchNode:create("animations/grossini.png")
     spritebatch:addChild(SpriteFrameTest.m_pSprite1)
     Helper.currentLayer:addChild(spritebatch)
 
     local animFrames = {}
-    for i = 1,14 do 
+    for i = 1,14 do
         local frame = cache:getSpriteFrame( string.format("grossini_dance_%02d.png", i) )
         animFrames[i] = frame
     end
 
-    local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-    SpriteFrameTest.m_pSprite1:runAction( cc.RepeatForever:create( cc.Animate:create(animation) ) )
+    local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+    SpriteFrameTest.m_pSprite1:runAction( ax.RepeatForever:create( ax.Animate:create(animation) ) )
 
     SpriteFrameTest.m_pSprite1:setFlippedX(false)
     SpriteFrameTest.m_pSprite1:setFlippedY(false)
 
-    SpriteFrameTest.m_pSprite2 = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-    SpriteFrameTest.m_pSprite2:setPosition( cc.p( s.width/2 + 80, s.height/2) )
+    SpriteFrameTest.m_pSprite2 = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+    SpriteFrameTest.m_pSprite2:setPosition( ax.p( s.width/2 + 80, s.height/2) )
     Helper.currentLayer:addChild(SpriteFrameTest.m_pSprite2)
 
     local moreFrames = {}
@@ -287,10 +287,10 @@ function SpriteFrameTest.onEnter()
         moreFrames[18 + i] =  animFrames[i]
     end
 
-    
-    local animMixed = cc.Animation:createWithSpriteFrames(moreFrames, 0.3)
 
-    SpriteFrameTest.m_pSprite2:runAction(cc.RepeatForever:create( cc.Animate:create(animMixed) ) )
+    local animMixed = ax.Animation:createWithSpriteFrames(moreFrames, 0.3)
+
+    SpriteFrameTest.m_pSprite2:runAction(ax.RepeatForever:create( ax.Animate:create(animMixed) ) )
 
     SpriteFrameTest.m_pSprite2:setFlippedX(false)
     SpriteFrameTest.m_pSprite2:setFlippedY(false)
@@ -301,7 +301,7 @@ function SpriteFrameTest.onEnter()
 end
 
 function SpriteFrameTest.onExit()
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:removeSpriteFramesFromFile("animations/grossini.plist")
     cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     cache:removeSpriteFramesFromFile("animations/grossini_blue.plist")
@@ -348,7 +348,7 @@ function SpriteFrameTest.onEnterOrExit(tag)
 end
 
 function SpriteFrameTest.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
     layer:registerScriptHandler(SpriteFrameTest.onEnterOrExit)
@@ -366,15 +366,15 @@ local SpriteFrameAliasNameTest = {}
 SpriteFrameAliasNameTest.__index = SpriteFrameAliasNameTest
 
 function SpriteFrameAliasNameTest.onEnter()
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini-aliases.plist", "animations/grossini-aliases.png")
 
-    local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-    sprite:setPosition(cc.p(s.width * 0.5, s.height * 0.5))
+    local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+    sprite:setPosition(ax.p(s.width * 0.5, s.height * 0.5))
 
-    local spriteBatch = cc.SpriteBatchNode:create("animations/grossini-aliases.png")
+    local spriteBatch = ax.SpriteBatchNode:create("animations/grossini-aliases.png")
     cclog("spriteBatch = " .. tostring(tolua.isnull(spriteBatch)))
     cclog("sprite = " .. tostring(tolua.isnull(sprite)))
     spriteBatch:addChild(sprite)
@@ -386,13 +386,13 @@ function SpriteFrameAliasNameTest.onEnter()
         animFrames[i] = frame
     end
 
-    local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
+    local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
     -- 14 frames * 1sec = 14 seconds
-    sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
+    sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
 end
 
 function SpriteFrameAliasNameTest.onExit()
-    cc.SpriteFrameCache:getInstance():removeSpriteFramesFromFile("animations/grossini-aliases.plist")
+    ax.SpriteFrameCache:getInstance():removeSpriteFramesFromFile("animations/grossini-aliases.plist")
 end
 
 function SpriteFrameAliasNameTest.onEnterOrExit(tag)
@@ -404,7 +404,7 @@ function SpriteFrameAliasNameTest.onEnterOrExit(tag)
 end
 
 function SpriteFrameAliasNameTest.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
     layer:registerScriptHandler(SpriteFrameAliasNameTest.onEnterOrExit)
@@ -423,39 +423,39 @@ local SpriteAnchorPoint = {}
 SpriteAnchorPoint.__index = SpriteAnchorPoint
 
 function SpriteAnchorPoint.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()
-    
-    local rotate = cc.RotateBy:create(10, 360)
-    local action = cc.RepeatForever:create(rotate)
-    
+    local s = ax.Director:getInstance():getWinSize()
+
+    local rotate = ax.RotateBy:create(10, 360)
+    local action = ax.RepeatForever:create(rotate)
+
     for i = 0, 2 do
-        local sprite = cc.Sprite:create("Images/grossini_dance_atlas.png", cc.rect(85*i, 121*1, 85, 121) )
-        sprite:setPosition( cc.p( s.width/4*(i+1), s.height/2) )
-        
-        local point = cc.Sprite:create("Images/r1.png")
+        local sprite = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*i, 121*1, 85, 121) )
+        sprite:setPosition( ax.p( s.width/4*(i+1), s.height/2) )
+
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale( 0.25 )
         point:setPosition( sprite:getPosition() )
         layer:addChild(point, 10)
-        
+
         if i == 0 then
-            sprite:setAnchorPoint( cc.p(0, 0) )
+            sprite:setAnchorPoint( ax.p(0, 0) )
         elseif i == 1 then
-            sprite:setAnchorPoint( cc.p(0.5, 0.5) )
+            sprite:setAnchorPoint( ax.p(0.5, 0.5) )
         elseif i == 2 then
-            sprite:setAnchorPoint( cc.p(1,1) )
+            sprite:setAnchorPoint( ax.p(1,1) )
         end
         point:setPosition( sprite:getPosition() )
-        
+
         local copy = action:clone()
         sprite:runAction(copy)
         layer:addChild(sprite, i)
-    end        
+    end
 
     return layer
 end
 
 function SpriteAnchorPoint.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
     layer = SpriteAnchorPoint.initLayer(layer)
@@ -473,31 +473,31 @@ SpriteBatchNodeAnchorPoint.__index = SpriteBatchNodeAnchorPoint
 function SpriteBatchNodeAnchorPoint.initLayer(layer)
     -- small capacity. Testing resizing.
     -- Don't use capacity=1 in your real game. It is expensive to resize the capacity
-    local batch = cc.SpriteBatchNode:create("Images/grossini_dance_atlas.png", 1)
-    layer:addChild(batch, 0, kTagSpriteBatchNode)        
+    local batch = ax.SpriteBatchNode:create("Images/grossini_dance_atlas.png", 1)
+    layer:addChild(batch, 0, kTagSpriteBatchNode)
 
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local rotate = cc.RotateBy:create(10, 360)
-    local action = cc.RepeatForever:create(rotate)
+    local rotate = ax.RotateBy:create(10, 360)
+    local action = ax.RepeatForever:create(rotate)
     for i=0,2 do
-        local sprite = cc.Sprite:createWithTexture(batch:getTexture(), cc.rect(85*i, 121*1, 85, 121))
-        sprite:setPosition( cc.p( s.width/4*(i+1), s.height/2) )
+        local sprite = ax.Sprite:createWithTexture(batch:getTexture(), ax.rect(85*i, 121*1, 85, 121))
+        sprite:setPosition( ax.p( s.width/4*(i+1), s.height/2) )
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale( 0.25 )
-        point:setPosition( cc.p(sprite:getPosition()) )
+        point:setPosition( ax.p(sprite:getPosition()) )
         layer:addChild(point, 1)
 
         if i == 0 then
-            sprite:setAnchorPoint( cc.p(0,0) )
+            sprite:setAnchorPoint( ax.p(0,0) )
         elseif i == 1 then
-            sprite:setAnchorPoint( cc.p(0.5, 0.5) )
+            sprite:setAnchorPoint( ax.p(0.5, 0.5) )
         elseif i == 2 then
-            sprite:setAnchorPoint( cc.p(1,1) )
+            sprite:setAnchorPoint( ax.p(1,1) )
         end
 
-        point:setPosition( cc.p(sprite:getPosition()) )
+        point:setPosition( ax.p(sprite:getPosition()) )
 
         local copy = action:clone()
         sprite:runAction(copy)
@@ -508,7 +508,7 @@ function SpriteBatchNodeAnchorPoint.initLayer(layer)
 end
 
 function SpriteBatchNodeAnchorPoint.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
     layer = SpriteBatchNodeAnchorPoint.initLayer(layer)
@@ -527,8 +527,8 @@ local SpriteOffsetAnchorRotation = {}
 SpriteOffsetAnchorRotation.__index = SpriteOffsetAnchorRotation
 
 function SpriteOffsetAnchorRotation.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()        
-    local cache = cc.SpriteFrameCache:getInstance()
+    local s = ax.Director:getInstance():getWinSize()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
 
@@ -536,51 +536,51 @@ function SpriteOffsetAnchorRotation.initLayer(layer)
         --
         -- Animation using Sprite batch
         --
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p( s.width/4*(i+1), s.height/2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p( s.width/4*(i+1), s.height/2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale( 0.25 )
         point:setPosition( sprite:getPosition() )
         layer:addChild(point, 1)
 
         if i == 0 then
-            sprite:setAnchorPoint( cc.p(0, 0) )
+            sprite:setAnchorPoint( ax.p(0, 0) )
         elseif i == 1 then
-            sprite:setAnchorPoint( cc.p(0.5, 0.5) )
+            sprite:setAnchorPoint( ax.p(0.5, 0.5) )
         elseif i == 2 then
-            sprite:setAnchorPoint( cc.p(1,1) )
+            sprite:setAnchorPoint( ax.p(1,1) )
         end
 
-        point:setPosition( cc.p(sprite:getPosition()) )
+        point:setPosition( ax.p(sprite:getPosition()) )
 
         local animFrames = {}
-        
-        for i = 0, 13 do 
+
+        for i = 0, 13 do
             local frame = cache:getSpriteFrame(string.format("grossini_dance_%02d.png",(i+1)))
             animFrames[i + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create( cc.Animate:create(animation) ) )            
-        sprite:runAction(cc.RepeatForever:create(cc.RotateBy:create(10, 360) ) )
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create( ax.Animate:create(animation) ) )
+        sprite:runAction(ax.RepeatForever:create(ax.RotateBy:create(10, 360) ) )
 
         layer:addChild(sprite, 0)
-    end        
+    end
 
     return layer
 end
 
 function SpriteOffsetAnchorRotation.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteOffsetAnchorRotation.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteOffsetAnchorRotation.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -601,13 +601,13 @@ SpriteBatchNodeOffsetAnchorRotation.__index = SpriteBatchNodeOffsetAnchorRotatio
 
 function SpriteBatchNodeOffsetAnchorRotation.initLayer(layer)
 
-    local s = cc.Director:getInstance():getWinSize() 
+    local s = ax.Director:getInstance():getWinSize()
 
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
 
-    local spritebatch = cc.SpriteBatchNode:create("animations/grossini.png")
+    local spritebatch = ax.SpriteBatchNode:create("animations/grossini.png")
     cclog("1")
     layer:addChild(spritebatch)
 
@@ -616,23 +616,23 @@ function SpriteBatchNodeOffsetAnchorRotation.initLayer(layer)
         --
         -- Animation using Sprite BatchNode
         --
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition( cc.p( s.width/4*(i+1), s.height/2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition( ax.p( s.width/4*(i+1), s.height/2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale( 0.25 )
-        point:setPosition( cc.p(sprite:getPosition()) )
+        point:setPosition( ax.p(sprite:getPosition()) )
         layer:addChild(point, 200)
 
         if i == 0 then
-            sprite:setAnchorPoint( cc.p(0,0) )
+            sprite:setAnchorPoint( ax.p(0,0) )
         elseif i == 1 then
-            sprite:setAnchorPoint( cc.p(0.5, 0.5) )
+            sprite:setAnchorPoint( ax.p(0.5, 0.5) )
         elseif i == 2 then
-            sprite:setAnchorPoint( cc.p(1,1) )
+            sprite:setAnchorPoint( ax.p(1,1) )
         end
 
-        point:setPosition( cc.p(sprite:getPosition()) )
+        point:setPosition( ax.p(sprite:getPosition()) )
 
         local animFrames = {}
         for k = 0, 13 do
@@ -640,9 +640,9 @@ function SpriteBatchNodeOffsetAnchorRotation.initLayer(layer)
             animFrames[k + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create( cc.Animate:create(animation) ))
-        sprite:runAction(cc.RepeatForever:create(cc.RotateBy:create(10, 360) ))
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create( ax.Animate:create(animation) ))
+        sprite:runAction(ax.RepeatForever:create(ax.RotateBy:create(10, 360) ))
         spritebatch:addChild(sprite, i)
     end
 
@@ -651,14 +651,14 @@ end
 
 function SpriteBatchNodeOffsetAnchorRotation.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteBatchNodeOffsetAnchorRotation.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorRotation.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -678,34 +678,34 @@ local SpriteOffsetAnchorScale = {}
 SpriteOffsetAnchorScale.__index = SpriteOffsetAnchorScale
 
 function SpriteOffsetAnchorScale.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()   
-    
-    local cache = cc.SpriteFrameCache:getInstance()
+    local s = ax.Director:getInstance():getWinSize()
+
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
-    
+
     for i = 0,2 do
         --
         -- Animation using Sprite BatchNode
         --
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition( cc.p( s.width/4*(i+1), s.height/2) )
-        
-        local point = cc.Sprite:create("Images/r1.png")
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition( ax.p( s.width/4*(i+1), s.height/2) )
+
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale( 0.25 )
         point:setPosition( sprite:getPosition() )
         layer:addChild(point, 1)
-        
+
         if i == 0 then
-            sprite:setAnchorPoint( cc.p(0, 0) )
+            sprite:setAnchorPoint( ax.p(0, 0) )
         elseif i == 1 then
-            sprite:setAnchorPoint( cc.p(0.5, 0.5) )
+            sprite:setAnchorPoint( ax.p(0.5, 0.5) )
         elseif i == 2 then
-            sprite:setAnchorPoint( cc.p(1,1) )
+            sprite:setAnchorPoint( ax.p(1,1) )
         end
-        
-        point:setPosition( cc.p(sprite:getPosition()) )
-        
+
+        point:setPosition( ax.p(sprite:getPosition()) )
+
         local animFrames = {}
 
         for i = 0, 13 do
@@ -713,14 +713,14 @@ function SpriteOffsetAnchorScale.initLayer(layer)
             animFrames[i + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create( cc.Animate:create(animation) ))            
-        
-        local scale = cc.ScaleBy:create(2, 2)
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create( ax.Animate:create(animation) ))
+
+        local scale = ax.ScaleBy:create(2, 2)
         local scale_back = scale:reverse()
-        local seq_scale = cc.Sequence:create(scale, scale_back)
-        sprite:runAction(cc.RepeatForever:create(seq_scale))
-        
+        local seq_scale = ax.Sequence:create(scale, scale_back)
+        sprite:runAction(ax.RepeatForever:create(seq_scale))
+
         layer:addChild(sprite, 0)
     end
 
@@ -729,14 +729,14 @@ end
 
 function SpriteOffsetAnchorScale.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteOffsetAnchorScale.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteOffsetAnchorScale.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -755,31 +755,31 @@ end
 local SpriteBatchNodeOffsetAnchorScale = {}
 
 function SpriteBatchNodeOffsetAnchorScale.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
 
-    local spritesheet = cc.SpriteBatchNode:create("animations/grossini.png")
+    local spritesheet = ax.SpriteBatchNode:create("animations/grossini.png")
     layer:addChild(spritesheet)
 
     for i = 0,2 do
         -- Animation using Sprite BatchNode
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width/4*(i+1), s.height/2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width/4*(i+1), s.height/2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale(0.25)
         point:setPosition(sprite:getPosition())
         layer:addChild(point, 200)
 
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0,0))
+            sprite:setAnchorPoint(ax.p(0,0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         else
-            sprite:setAnchorPoint(cc.p(1, 1))
+            sprite:setAnchorPoint(ax.p(1, 1))
         end
 
         point:setPosition(sprite:getPosition())
@@ -792,13 +792,13 @@ function SpriteBatchNodeOffsetAnchorScale.initLayer(layer)
             animFrames[k + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
 
-        local scale = cc.ScaleBy:create(2, 2)
+        local scale = ax.ScaleBy:create(2, 2)
         local scale_back = scale:reverse()
-        local seq_scale = cc.Sequence:create(scale, scale_back)
-        sprite:runAction(cc.RepeatForever:create(seq_scale))
+        local seq_scale = ax.Sequence:create(scale, scale_back)
+        sprite:runAction(ax.RepeatForever:create(seq_scale))
 
         spritesheet:addChild(sprite, i)
     end
@@ -807,7 +807,7 @@ function SpriteBatchNodeOffsetAnchorScale.initLayer(layer)
 end
 
 function SpriteBatchNodeOffsetAnchorScale.onExit()
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:removeSpriteFramesFromFile("animations/grossini.plist")
     cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
 end
@@ -819,7 +819,7 @@ function SpriteBatchNodeOffsetAnchorScale.eventHandler(tag)
 end
 
 function SpriteBatchNodeOffsetAnchorScale.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorScale.eventHandler)
 
@@ -840,9 +840,9 @@ SpriteOffsetAnchorSkew.__index = SpriteOffsetAnchorSkew
 
 function SpriteOffsetAnchorSkew.initLayer(layer)
 
-    local s = cc.Director:getInstance():getWinSize()
-    
-    local cache = cc.SpriteFrameCache:getInstance()
+    local s = ax.Director:getInstance():getWinSize()
+
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
 
@@ -850,20 +850,20 @@ function SpriteOffsetAnchorSkew.initLayer(layer)
         --
         -- Animation using Sprite batch
         --
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width / 4 * (i + 1), s.height / 2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width / 4 * (i + 1), s.height / 2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale(0.25)
         point:setPosition(sprite:getPosition())
         layer:addChild(point, 1)
 
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0, 0))
+            sprite:setAnchorPoint(ax.p(0, 0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         elseif i == 2 then
-            sprite:setAnchorPoint(cc.p(1, 1))
+            sprite:setAnchorPoint(ax.p(1, 1))
         end
 
         point:setPosition(sprite:getPosition())
@@ -874,33 +874,33 @@ function SpriteOffsetAnchorSkew.initLayer(layer)
             animFrames[j + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
 
-        local skewX = cc.SkewBy:create(2, 45, 0)
+        local skewX = ax.SkewBy:create(2, 45, 0)
         local skewX_back = skewX:reverse()
-        local skewY = cc.SkewBy:create(2, 0, 45)
+        local skewY = ax.SkewBy:create(2, 0, 45)
         local skewY_back = skewY:reverse()
 
-        local seq_skew = cc.Sequence:create(skewX, skewX_back, skewY, skewY_back)
-        sprite:runAction(cc.RepeatForever:create(seq_skew))
+        local seq_skew = ax.Sequence:create(skewX, skewX_back, skewY, skewY_back)
+        sprite:runAction(ax.RepeatForever:create(seq_skew))
 
         layer:addChild(sprite, 0)
-    end       
+    end
 
     return layer
 end
 
 function SpriteOffsetAnchorSkew.eventHandler(tag)
      if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
      end
 end
 
 function SpriteOffsetAnchorSkew.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteOffsetAnchorSkew.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -918,51 +918,51 @@ SpriteOffsetAnchorRotationalSkew.__index = SpriteOffsetAnchorRotationalSkew
 
 function SpriteOffsetAnchorRotationalSkew.initLayer(layer)
 
-    local s = cc.Director:getInstance():getWinSize()
-    
-    local cache = cc.SpriteFrameCache:getInstance()
+    local s = ax.Director:getInstance():getWinSize()
+
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
-    
+
     for i = 0, 2 do
         --
         -- Animation using Sprite batch
         --
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width/4*(i+1), s.height/2))
-        
-        local point = cc.Sprite:create("Images/r1.png")
-                            
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width/4*(i+1), s.height/2))
+
+        local point = ax.Sprite:create("Images/r1.png")
+
         point:setScale(0.25)
-        point:setPosition(cc.p(sprite:getPosition()))
+        point:setPosition(ax.p(sprite:getPosition()))
         layer:addChild(point, 1)
-        
+
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0,0))
+            sprite:setAnchorPoint(ax.p(0,0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         elseif i == 2 then
-            sprite:setAnchorPoint(cc.p(1,1))
+            sprite:setAnchorPoint(ax.p(1,1))
         end
-        
-        point:setPosition(cc.p(sprite:getPosition()))
-        
+
+        point:setPosition(ax.p(sprite:getPosition()))
+
         local animFrames = {}
         for i = 0,13 do
             local frame = cache:getSpriteFrame(string.format("grossini_dance_%02d.png", (i+1)))
             animFrames[i + 1] = frame
         end
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
-        
-        local skewX = cc.RotateBy:create(2, 45)
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
+
+        local skewX = ax.RotateBy:create(2, 45)
         local skewX_back = skewX:reverse()
-        local skewY = cc.RotateBy:create(2, -45)
+        local skewY = ax.RotateBy:create(2, -45)
         local skewY_back = skewY:reverse()
-        
-        local seq_skew = cc.Sequence:create(skewX, skewX_back, skewY, skewY_back)
-        sprite:runAction(cc.RepeatForever:create(seq_skew))
-        
+
+        local seq_skew = ax.Sequence:create(skewX, skewX_back, skewY, skewY_back)
+        sprite:runAction(ax.RepeatForever:create(seq_skew))
+
         layer:addChild(sprite, 0)
     end
     return layer
@@ -970,14 +970,14 @@ end
 
 function SpriteOffsetAnchorRotationalSkew.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteOffsetAnchorRotationalSkew.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteOffsetAnchorRotationalSkew.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -997,53 +997,53 @@ SpriteBatchNodeOffsetAnchorSkew.__index = SpriteBatchNodeOffsetAnchorSkew
 
 function SpriteBatchNodeOffsetAnchorSkew.initLayer(layer)
 
-    local s = cc.Director:getInstance():getWinSize()
-    
-    local cache = cc.SpriteFrameCache:getInstance()
+    local s = ax.Director:getInstance():getWinSize()
+
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
-    
-    local spritebatch = cc.SpriteBatchNode:create("animations/grossini.png")
+
+    local spritebatch = ax.SpriteBatchNode:create("animations/grossini.png")
     layer:addChild(spritebatch)
 
     for i = 0, 2 do
         --
         -- Animation using Sprite batch
         --
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width / 4 * (i + 1), s.height / 2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width / 4 * (i + 1), s.height / 2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale(0.25)
-        point:setPosition(cc.p(sprite:getPosition()))
+        point:setPosition(ax.p(sprite:getPosition()))
         layer:addChild(point, 200)
 
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0, 0))
+            sprite:setAnchorPoint(ax.p(0, 0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         elseif i == 2 then
-            sprite:setAnchorPoint(cc.p(1, 1))
+            sprite:setAnchorPoint(ax.p(1, 1))
         end
 
-        point:setPosition(cc.p(sprite:getPosition()))
-        
+        point:setPosition(ax.p(sprite:getPosition()))
+
         local animFrames = {}
         for j = 0, 13 do
             local frame = cache:getSpriteFrame(string.format("grossini_dance_%02d.png", j + 1))
             animFrames[j + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
 
-        local skewX = cc.SkewBy:create(2, 45, 0)
+        local skewX = ax.SkewBy:create(2, 45, 0)
         local skewX_back = skewX:reverse()
-        local skewY = cc.SkewBy:create(2, 0, 45)
+        local skewY = ax.SkewBy:create(2, 0, 45)
         local skewY_back = skewY:reverse()
 
-        local seq_skew = cc.Sequence:create(skewX, skewX_back, skewY, skewY_back)
-        sprite:runAction(cc.RepeatForever:create(seq_skew))
+        local seq_skew = ax.Sequence:create(skewX, skewX_back, skewY, skewY_back)
+        sprite:runAction(ax.RepeatForever:create(seq_skew))
 
         spritebatch:addChild(sprite, i)
     end
@@ -1053,14 +1053,14 @@ end
 
 function SpriteBatchNodeOffsetAnchorSkew.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteBatchNodeOffsetAnchorSkew.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorSkew.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -1073,61 +1073,61 @@ end
 
 --
 -- SpriteBatchNodeOffsetAnchorRotationalSkew
--- 
+--
 local SpriteBatchNodeOffsetAnchorRotationalSkew = {}
 SpriteBatchNodeOffsetAnchorRotationalSkew.__index = SpriteBatchNodeOffsetAnchorRotationalSkew
 
 function SpriteBatchNodeOffsetAnchorRotationalSkew.initLayer(layer)
 
-    local s = cc.Director:getInstance():getWinSize()
-    
-    local cache = cc.SpriteFrameCache:getInstance()
+    local s = ax.Director:getInstance():getWinSize()
+
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
-    
-    local spritebatch = cc.SpriteBatchNode:create("animations/grossini.png")
+
+    local spritebatch = ax.SpriteBatchNode:create("animations/grossini.png")
     layer:addChild(spritebatch)
-    
+
     for i = 0, 2 do
         --
         -- Animation using Sprite batch
         --
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width/4*(i+1), s.height/2))
-        
-        local point = cc.Sprite:create("Images/r1.png")
-        
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width/4*(i+1), s.height/2))
+
+        local point = ax.Sprite:create("Images/r1.png")
+
         point:setScale(0.25)
-        point:setPosition(cc.p(sprite:getPosition()))
+        point:setPosition(ax.p(sprite:getPosition()))
         layer:addChild(point, 200)
-        
+
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0,0))
+            sprite:setAnchorPoint(ax.p(0,0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         elseif i == 2 then
-            sprite:setAnchorPoint(cc.p(1,1))
+            sprite:setAnchorPoint(ax.p(1,1))
         end
-        
-        point:setPosition(cc.p(sprite:getPosition()))
-        
+
+        point:setPosition(ax.p(sprite:getPosition()))
+
         local animFrames = {}
         for j = 0, 13 do
             local frame = cache:getSpriteFrame(string.format("grossini_dance_%02d.png", (j+1)))
             animFrames[j + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
-        
-        local skewX = cc.RotateBy:create(2, 45)
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
+
+        local skewX = ax.RotateBy:create(2, 45)
         local skewX_back = skewX:reverse()
-        local skewY = cc.RotateBy:create(2, -45)
+        local skewY = ax.RotateBy:create(2, -45)
         local skewY_back = skewY:reverse()
-        
-        local seq_skew = cc.Sequence:create(skewX, skewX_back, skewY, skewY_back)
-        sprite:runAction(cc.RepeatForever:create(seq_skew))
-        
+
+        local seq_skew = ax.Sequence:create(skewX, skewX_back, skewY, skewY_back)
+        sprite:runAction(ax.RepeatForever:create(seq_skew))
+
         spritebatch:addChild(sprite, i)
     end
 
@@ -1137,14 +1137,14 @@ end
 -- remove resources
 function SpriteBatchNodeOffsetAnchorRotationalSkew.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteBatchNodeOffsetAnchorRotationalSkew.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorRotationalSkew.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -1157,32 +1157,32 @@ end
 
 --
 -- SpriteOffsetAnchorSkewScale
--- 
+--
 local SpriteOffsetAnchorSkewScale = {}
 
 function SpriteOffsetAnchorSkewScale.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
 
     for i = 0, 2 do
         -- Animation using Sprite batch
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width / 4 * (i + 1), s.height / 2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width / 4 * (i + 1), s.height / 2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale(0.25)
         point:setPosition(sprite:getPosition())
         layer:addChild(point, 1)
 
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0,0))
+            sprite:setAnchorPoint(ax.p(0,0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         else
-            sprite:setAnchorPoint(cc.p(1, 1))
+            sprite:setAnchorPoint(ax.p(1, 1))
         end
 
         point:setPosition(sprite:getPosition())
@@ -1193,23 +1193,23 @@ function SpriteOffsetAnchorSkewScale.initLayer(layer)
             animFrames[j + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
 
         -- Skew
-        local skewX = cc.SkewBy:create(2, 45, 0)
+        local skewX = ax.SkewBy:create(2, 45, 0)
         local skewX_back = skewX:reverse()
-        local skewY = cc.SkewBy:create(2, 0, 45)
+        local skewY = ax.SkewBy:create(2, 0, 45)
         local skewY_back = skewY:reverse()
 
-        local seq_skew = cc.Sequence:create(skewX, skewX_back, skewY, skewY_back)
-        sprite:runAction(cc.RepeatForever:create(seq_skew))
+        local seq_skew = ax.Sequence:create(skewX, skewX_back, skewY, skewY_back)
+        sprite:runAction(ax.RepeatForever:create(seq_skew))
 
         -- Scale
-        local scale = cc.ScaleBy:create(2, 2)
+        local scale = ax.ScaleBy:create(2, 2)
         local scale_back = scale:reverse()
-        local seq_scale = cc.Sequence:create(scale, scale_back)
-        sprite:runAction(cc.RepeatForever:create(seq_scale))
+        local seq_scale = ax.Sequence:create(scale, scale_back)
+        sprite:runAction(ax.RepeatForever:create(seq_scale))
 
         layer:addChild(sprite, 0)
     end
@@ -1219,14 +1219,14 @@ end
 
 function SpriteOffsetAnchorSkewScale.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteOffsetAnchorSkewScale.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteOffsetAnchorSkewScale.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -1242,31 +1242,31 @@ end
 local SpriteOffsetAnchorRotationalSkewScale = {}
 
 function SpriteOffsetAnchorRotationalSkewScale.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
-    
+
     for i = 0, 2 do
         -- Animation using Sprite batch
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width/4*(i+1), s.height/2))
-        
-        local point = cc.Sprite:create("Images/r1.png")
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width/4*(i+1), s.height/2))
+
+        local point = ax.Sprite:create("Images/r1.png")
 
         point:setScale(0.25)
         point:setPosition(sprite:getPosition())
         layer:addChild(point, 1)
 
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0, 0))
+            sprite:setAnchorPoint(ax.p(0, 0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         else
-            sprite:setAnchorPoint(cc.p(1, 1))
+            sprite:setAnchorPoint(ax.p(1, 1))
         end
-        
+
         point:setPosition(sprite:getPosition())
 
         local animFrames = {}
@@ -1274,23 +1274,23 @@ function SpriteOffsetAnchorRotationalSkewScale.initLayer(layer)
             local frame = cache:getSpriteFrame(string.format("grossini_dance_%02d.png", (j+1)))
             animFrames[j + 1] = frame
         end
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
-        
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
+
         -- Skew
-        local skewX = cc.RotateBy:create(2, 45, 0)
+        local skewX = ax.RotateBy:create(2, 45, 0)
         local skewX_back = skewX:reverse()
-        local skewY = cc.RotateBy:create(2, 0, 45)
+        local skewY = ax.RotateBy:create(2, 0, 45)
         local skewY_back = skewY:reverse()
 
-        local seq_skew = cc.Sequence:create(skewX, skewX_back, skewY, skewY_back)
-        sprite:runAction(cc.RepeatForever:create(seq_skew))
-        
+        local seq_skew = ax.Sequence:create(skewX, skewX_back, skewY, skewY_back)
+        sprite:runAction(ax.RepeatForever:create(seq_skew))
+
         -- Scale
-        local scale = cc.ScaleBy:create(2, 2)
+        local scale = ax.ScaleBy:create(2, 2)
         local scale_back = scale:reverse()
-        local seq_scale = cc.Sequence:create(scale, scale_back)
-        sprite:runAction(cc.RepeatForever:create(seq_scale))
+        local seq_scale = ax.Sequence:create(scale, scale_back)
+        sprite:runAction(ax.RepeatForever:create(seq_scale))
 
         layer:addChild(sprite, i)
     end
@@ -1300,14 +1300,14 @@ end
 
 function SpriteOffsetAnchorRotationalSkewScale.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteOffsetAnchorRotationalSkewScale.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteOffsetAnchorRotationalSkewScale.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -1323,35 +1323,35 @@ end
 local SpriteBatchNodeOffsetAnchorSkewScale = {}
 
 function SpriteBatchNodeOffsetAnchorSkewScale.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
 
-    local spritebatch = cc.SpriteBatchNode:create("animations/grossini.png")
+    local spritebatch = ax.SpriteBatchNode:create("animations/grossini.png")
     layer:addChild(spritebatch)
 
     for i = 0, 2 do
         -- Animation using Sprite batch
 
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width / 4 * (i + 1), s.height / 2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width / 4 * (i + 1), s.height / 2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale(0.25)
         point:setPosition(sprite:getPosition())
         layer:addChild(point, 200)
 
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0, 0))
+            sprite:setAnchorPoint(ax.p(0, 0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         else
-            sprite:setAnchorPoint(cc.p(1, 1)) 
+            sprite:setAnchorPoint(ax.p(1, 1))
         end
 
-        point:setPosition(sprite:getPosition())       
+        point:setPosition(sprite:getPosition())
 
         local animFrames = {}
         for j = 0, 13 do
@@ -1359,24 +1359,24 @@ function SpriteBatchNodeOffsetAnchorSkewScale.initLayer(layer)
             animFrames[j + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
 
         -- skew
-        local skewX = cc.SkewBy:create(2, 45, 0)
+        local skewX = ax.SkewBy:create(2, 45, 0)
         local skewX_back = skewX:reverse()
-        local skewY = cc.SkewBy:create(2, 0, 45)
+        local skewY = ax.SkewBy:create(2, 0, 45)
         local skewY_back = skewY:reverse()
 
-        local seq_skew = cc.Sequence:create(skewX, skewX_back, skewY, skewY_back)
-        sprite:runAction(cc.RepeatForever:create(seq_skew))
+        local seq_skew = ax.Sequence:create(skewX, skewX_back, skewY, skewY_back)
+        sprite:runAction(ax.RepeatForever:create(seq_skew))
 
 
-        -- scale 
-        local scale = cc.ScaleBy:create(2, 2)
+        -- scale
+        local scale = ax.ScaleBy:create(2, 2)
         local scale_back = scale:reverse()
-        local seq_scale = cc.Sequence:create(scale, scale_back)
-        sprite:runAction(cc.RepeatForever:create(seq_scale))
+        local seq_scale = ax.Sequence:create(scale, scale_back)
+        sprite:runAction(ax.RepeatForever:create(seq_scale))
 
         spritebatch:addChild(sprite, i)
     end
@@ -1384,14 +1384,14 @@ end
 
 function SpriteBatchNodeOffsetAnchorSkewScale.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteBatchNodeOffsetAnchorSkewScale.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorSkewScale.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -1403,24 +1403,24 @@ end
 
 --
 -- SpriteBatchNodeOffsetAnchorRotationalSkewScale
--- 
+--
 local SpriteBatchNodeOffsetAnchorRotationalSkewScale = {}
 function SpriteBatchNodeOffsetAnchorRotationalSkewScale.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()
-    
-    local cache = cc.SpriteFrameCache:getInstance()
+    local s = ax.Director:getInstance():getWinSize()
+
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
 
-    local spritebatch = cc.SpriteBatchNode:create("animations/grossini.png")
+    local spritebatch = ax.SpriteBatchNode:create("animations/grossini.png")
     layer:addChild(spritebatch)
-    
+
     for i = 0, 2 do
         -- Animation using Sprite batch
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width/4*(i+1), s.height/2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width/4*(i+1), s.height/2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
 
         point:setScale(0.25)
         point:setPosition(sprite:getPosition())
@@ -1428,13 +1428,13 @@ function SpriteBatchNodeOffsetAnchorRotationalSkewScale.initLayer(layer)
         layer:addChild(point, 200)
 
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0, 0))
+            sprite:setAnchorPoint(ax.p(0, 0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         else
-            sprite:setAnchorPoint(cc.p(1, 1))
+            sprite:setAnchorPoint(ax.p(1, 1))
         end
-        
+
         point:setPosition(sprite:getPosition())
 
         local animFrames = {}
@@ -1442,38 +1442,38 @@ function SpriteBatchNodeOffsetAnchorRotationalSkewScale.initLayer(layer)
             local frame = cache:getSpriteFrame(string.format("grossini_dance_%02d.png", j+1))
             animFrames[j + 1] = frame
         end
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
-        
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
+
         -- Skew
-        local skewX = cc.RotateBy:create(2, 45, 0)
+        local skewX = ax.RotateBy:create(2, 45, 0)
         local skewX_back = skewX:reverse()
-        local skewY = cc.RotateBy:create(2, 0, 45)
+        local skewY = ax.RotateBy:create(2, 0, 45)
         local skewY_back = skewY:reverse()
 
-        local seq_skew = cc.Sequence:create(skewX, skewX_back, skewY, skewY_back)
-        sprite:runAction(cc.RepeatForever:create(seq_skew))
-        
+        local seq_skew = ax.Sequence:create(skewX, skewX_back, skewY, skewY_back)
+        sprite:runAction(ax.RepeatForever:create(seq_skew))
+
         -- Scale
-        local scale = cc.ScaleBy:create(2, 2)
+        local scale = ax.ScaleBy:create(2, 2)
         local scale_back = scale:reverse()
-        local seq_scale = cc.Sequence:create(scale, scale_back)
-        sprite:runAction(cc.RepeatForever:create(seq_scale))
-        
+        local seq_scale = ax.Sequence:create(scale, scale_back)
+        sprite:runAction(ax.RepeatForever:create(seq_scale))
+
         spritebatch:addChild(sprite, i)
     end
 end
 
 function SpriteBatchNodeOffsetAnchorRotationalSkewScale.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteBatchNodeOffsetAnchorRotationalSkewScale.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorRotationalSkewScale.eventHandler)
     Helper.initWithLayer(layer)
     SpriteBatchNodeOffsetAnchorRotationalSkewScale.initLayer(layer)
@@ -1488,28 +1488,28 @@ end
 --
 local SpriteOffsetAnchorFlip = {}
 function SpriteOffsetAnchorFlip.initLayer(layer)
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local cache = cc.SpriteFrameCache:getInstance()
+    local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
 
     for i = 0, 2 do
         -- Animation using Sprite batch
-        local sprite = cc.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
-        sprite:setPosition(cc.p(s.width / 4 * (i + 1), s.height / 2))
+        local sprite = ax.Sprite:createWithSpriteFrameName("grossini_dance_01.png")
+        sprite:setPosition(ax.p(s.width / 4 * (i + 1), s.height / 2))
 
-        local point = cc.Sprite:create("Images/r1.png")
+        local point = ax.Sprite:create("Images/r1.png")
         point:setScale(0.25)
         point:setPosition(sprite:getPosition())
         layer:addChild(point, 1)
 
         if i == 0 then
-            sprite:setAnchorPoint(cc.p(0, 0))
+            sprite:setAnchorPoint(ax.p(0, 0))
         elseif i == 1 then
-            sprite:setAnchorPoint(cc.p(0.5, 0.5))
+            sprite:setAnchorPoint(ax.p(0.5, 0.5))
         else
-            sprite:setAnchorPoint(cc.p(1, 1))
+            sprite:setAnchorPoint(ax.p(1, 1))
         end
 
         point:setPosition(sprite:getPosition())
@@ -1520,16 +1520,16 @@ function SpriteOffsetAnchorFlip.initLayer(layer)
             animFrames[j + 1] = frame
         end
 
-        local animation = cc.Animation:createWithSpriteFrames(animFrames, 0.3)
-        sprite:runAction(cc.RepeatForever:create(cc.Animate:create(animation)))
+        local animation = ax.Animation:createWithSpriteFrames(animFrames, 0.3)
+        sprite:runAction(ax.RepeatForever:create(ax.Animate:create(animation)))
 
-        local flip = cc.FlipY:create(true)
-        local flip_back = cc.FlipY:create(false)
-        local delay = cc.DelayTime:create(1)
-        local delay2 = cc.DelayTime:create(1)
+        local flip = ax.FlipY:create(true)
+        local flip_back = ax.FlipY:create(false)
+        local delay = ax.DelayTime:create(1)
+        local delay2 = ax.DelayTime:create(1)
 
-        local seq = cc.Sequence:create(delay, flip, delay2, flip_back)
-        sprite:runAction(cc.RepeatForever:create(seq))
+        local seq = ax.Sequence:create(delay, flip, delay2, flip_back)
+        sprite:runAction(ax.RepeatForever:create(seq))
 
         layer:addChild(sprite, 0)
     end
@@ -1537,14 +1537,14 @@ end
 
 function SpriteOffsetAnchorFlip.eventHandler(tag)
     if tag == "exit" then
-        local cache = cc.SpriteFrameCache:getInstance()
+        local cache = ax.SpriteFrameCache:getInstance()
         cache:removeSpriteFramesFromFile("animations/grossini.plist")
         cache:removeSpriteFramesFromFile("animations/grossini_gray.plist")
     end
 end
 
 function SpriteOffsetAnchorFlip.create()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     layer:registerScriptHandler(SpriteOffsetAnchorFlip.eventHandler)
     Helper.initWithLayer(layer)
 
@@ -1557,8 +1557,8 @@ end
 
 
 function SpriteTest()
-	local scene = cc.Scene:create()
-	
+	local scene = ax.Scene:create()
+
 	Helper.createFunctionTable = {
         Sprite1.create,
         SpriteBatchNode1.create,

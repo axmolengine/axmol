@@ -12,14 +12,14 @@ local function jump(v1, v2, height, t)
     return out
 end
 
-local actionManager = cc.Director:getInstance():getActionManager()
+local actionManager = ax.Director:getInstance():getActionManager()
 
 ----------------------------------------
 ----NavMeshBaseTestDemo
 ----------------------------------------
 local NavMeshBaseTestDemo = class("NavMeshBaseTestDemo", function ()
     -- body
-    local scene = cc.Scene:createWithPhysics()
+    local scene = ax.Scene:createWithPhysics()
     return scene
 end)
 
@@ -53,11 +53,11 @@ end
 function NavMeshBaseTestDemo:init()
     self._angle = 0.0
     self._agents = {}
-    local size = cc.Director:getInstance():getWinSize()
-    self._camera = cc.Camera:createPerspective(30.0, size.width / size.height, 1.0, 1000.0)
-    self._camera:setPosition3D(cc.vec3(0.0, 50.0, 100.0))
-    self._camera:lookAt(cc.vec3(0.0, 0.0, 0.0), cc.vec3(0.0, 1.0, 0.0))
-    self._camera:setCameraFlag(cc.CameraFlag.USER1)
+    local size = ax.Director:getInstance():getWinSize()
+    self._camera = ax.Camera:createPerspective(30.0, size.width / size.height, 1.0, 1000.0)
+    self._camera:setPosition3D(ax.vec3(0.0, 50.0, 100.0))
+    self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))
+    self._camera:setCameraFlag(ax.CameraFlag.USER1)
     self:addChild(self._camera)
 
     self:registerTouchEvent()
@@ -93,7 +93,7 @@ function NavMeshBaseTestDemo:onEnter()
     local hitResult = {}
     local ret = false
     local physicsWorld = self:getPhysics3DWorld()
-    ret, hitResult = physicsWorld:rayCast(cc.vec3(0.0, 50.0, 0.0), cc.vec3(0.0, -50.0, 0.0), hitResult)
+    ret, hitResult = physicsWorld:rayCast(ax.vec3(0.0, 50.0, 0.0), ax.vec3(0.0, -50.0, 0.0), hitResult)
     self:createAgent(hitResult.hitPosition)
 end
 
@@ -112,30 +112,30 @@ end
 function NavMeshBaseTestDemo:initScene()
     self:getPhysics3DWorld():setDebugDrawEnable(false)
 
-    local trianglesList = cc.Bundle3D:getTrianglesList("NavMesh/scene.obj")
+    local trianglesList = ax.Bundle3D:getTrianglesList("NavMesh/scene.obj")
 
     local rbDes = {}
     rbDes.mass = 0.0
-    rbDes.shape = cc.Physics3DShape:createMesh(trianglesList, math.floor(#trianglesList / 3))
-    local rigidBody = cc.Physics3DRigidBody:create(rbDes)
-    local component = cc.Physics3DComponent:create(rigidBody)
-    local sprite = cc.Sprite3D:create("NavMesh/scene.obj")
+    rbDes.shape = ax.Physics3DShape:createMesh(trianglesList, math.floor(#trianglesList / 3))
+    local rigidBody = ax.Physics3DRigidBody:create(rbDes)
+    local component = ax.Physics3DComponent:create(rigidBody)
+    local sprite = ax.Sprite3D:create("NavMesh/scene.obj")
     sprite:addComponent(component)
-    sprite:setCameraMask(cc.CameraFlag.USER1)
+    sprite:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(sprite)
     self:setPhysics3DDebugCamera(self._camera)
 
-    local navMesh = cc.NavMesh:create("NavMesh/all_tiles_tilecache.bin", "NavMesh/geomset.txt")
+    local navMesh = ax.NavMesh:create("NavMesh/all_tiles_tilecache.bin", "NavMesh/geomset.txt")
     navMesh:setDebugDrawEnable(true)
     self:setNavMesh(navMesh)
     self:setNavMeshDebugCamera(self._camera)
 
-    local ambientLight = cc.AmbientLight:create(cc.c3b(64, 64, 64))
-    ambientLight:setCameraMask(cc.CameraFlag.USER1)
+    local ambientLight = ax.AmbientLight:create(ax.color32(64, 64, 64))
+    ambientLight:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(ambientLight)
 
-    local dirLight = cc.DirectionLight:create(cc.vec3(1.2, -1.1, 0.5), cc.c3b(255, 255, 255))
-    dirLight:setCameraMask(cc.CameraFlag.USER1)
+    local dirLight = ax.DirectionLight:create(ax.vec3(1.2, -1.1, 0.5), ax.color32(255, 255, 255))
+    dirLight:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(dirLight)
 end
 
@@ -147,23 +147,23 @@ function NavMeshBaseTestDemo:createAgent(pos)
     navMeshAgentParam.height = 8.0
     navMeshAgentParam.maxSpeed = 8.0
 
-    local agent = cc.NavMeshAgent:create(navMeshAgentParam)
-    local agentNode = cc.Sprite3D:create(filePath)
-    agent:setOrientationRefAxes(cc.vec3(-1.0, 0.0, 1.0))
+    local agent = ax.NavMeshAgent:create(navMeshAgentParam)
+    local agentNode = ax.Sprite3D:create(filePath)
+    agent:setOrientationRefAxes(ax.vec3(-1.0, 0.0, 1.0))
     agent.userdata = 0.0
     agentNode:setScale(0.05)
     agentNode:addComponent(agent)
 
-    local node = cc.Node:create()
+    local node = ax.Node:create()
     node:addChild(agentNode)
     node:setPosition3D(pos)
-    node:setCameraMask(cc.CameraFlag.USER1)
+    node:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(node)
 
-    local animation = cc.Animation3D:create(filePath)
-    local animate   = cc.Animate3D:create(animation)
+    local animation = ax.Animation3D:create(filePath)
+    local animate   = ax.Animate3D:create(animation)
     if nil ~= animate then
-        agentNode:runAction(cc.RepeatForever:create(animate))
+        agentNode:runAction(ax.RepeatForever:create(animate))
         animate:setSpeed(0.0)
     end
 
@@ -171,13 +171,13 @@ function NavMeshBaseTestDemo:createAgent(pos)
 end
 
 function NavMeshBaseTestDemo:createObstacle(pos)
-    local obstacle = cc.NavMeshObstacle:create(2.0, 8.0)
-    local obstacleNode = cc.Sprite3D:create("MeshRendererTest/cylinder.c3b")
-    obstacleNode:setPosition3D(cc.vec3(pos.x, pos.y -0.5, pos.z))
-    obstacleNode:setRotation3D(cc.vec3(-90.0, 0.0, 0.0))
+    local obstacle = ax.NavMeshObstacle:create(2.0, 8.0)
+    local obstacleNode = ax.Sprite3D:create("MeshRendererTest/cylinder.c3b")
+    obstacleNode:setPosition3D(ax.vec3(pos.x, pos.y -0.5, pos.z))
+    obstacleNode:setRotation3D(ax.vec3(-90.0, 0.0, 0.0))
     obstacleNode:setScale(0.3)
     obstacleNode:addComponent(obstacle)
-    obstacleNode:setCameraMask(cc.CameraFlag.USER1)
+    obstacleNode:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(obstacleNode)
 end
 
@@ -193,22 +193,22 @@ function NavMeshBaseTestDemo:moveAgents(des)
             if agent:isOnOffMeshLink() then
                 agent:setAutoTraverseOffMeshLink(false)
                 agent:setAutoOrientation(false)
-                
+
                 local linkdata = agent:getCurrentOffMeshLinkData()
 
                 agent:getOwner():setPosition3D(jump(linkdata.startPosition, linkdata.endPosition, 10.0, data))
-                local dir = cc.vec3sub(linkdata.endPosition, linkdata.startPosition)
+                local dir = ax.vec3sub(linkdata.endPosition, linkdata.startPosition)
                 dir.y = 0.0
-                dir = cc.vec3normalize(dir)
-                local axes = cc.vec3(0.0, 0.0, 0.0)
-                local refAxes = cc.vec3(-1.0, 0.0, 1.0)
-                refAxes = cc.vec3normalize(refAxes)
+                dir = ax.vec3normalize(dir)
+                local axes = ax.vec3(0.0, 0.0, 0.0)
+                local refAxes = ax.vec3(-1.0, 0.0, 1.0)
+                refAxes = ax.vec3normalize(refAxes)
 
                 axes = vec3_cross(refAxes, dir, axes)
 
-                local angle = cc.vec3dot(refAxes, dir)
+                local angle = ax.vec3dot(refAxes, dir)
 
-                local quaternion = cc.quaternion_createFromAxisAngle(axes, math.acos(angle))
+                local quaternion = ax.quaternion_createFromAxisAngle(axes, math.acos(angle))
 
                 agent:getOwner():setRotationQuat(quaternion)
                 agent.userdata = agent.userdata + 0.01
@@ -238,10 +238,10 @@ function NavMeshBasicTestDemo:subtitle()
 end
 
 function NavMeshBasicTestDemo:registerTouchEvent()
-    local listener = cc.EventListenerTouchAllAtOnce:create()
+    local listener = ax.EventListenerTouchAllAtOnce:create()
     listener:registerScriptHandler(function(touches, event)
         self._needMoveAgents = true
-    end,cc.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_TOUCHES_BEGAN)
 
     listener:registerScriptHandler(function(touches, event)
 
@@ -250,14 +250,14 @@ function NavMeshBasicTestDemo:registerTouchEvent()
             local delta = touch:getDelta()
 
             self._angle = self._angle - delta.x * math.pi / 180.0
-            self._camera:setPosition3D(cc.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
-            self._camera:lookAt(cc.vec3(0.0, 0.0, 0.0), cc.vec3(0.0, 1.0, 0.0))
-    
+            self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
+            self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))
+
             if (delta.x * delta.x + delta.y * delta.y) > 16 then
                 self._needMoveAgents = false
             end
         end
-    end, cc.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_TOUCHES_MOVED)
 
     listener:registerScriptHandler(function(touches, event)
         if not self._needMoveAgents then
@@ -267,10 +267,10 @@ function NavMeshBasicTestDemo:registerTouchEvent()
         if #touches > 0 then
             local touch = touches[1]
             local location = touch:getLocationInView()
-            local nearP = cc.vec3(location.x, location.y, 0.0) 
-            local farP  = cc.vec3(location.x, location.y, 1.0)
+            local nearP = ax.vec3(location.x, location.y, 0.0)
+            local farP  = ax.vec3(location.x, location.y, 1.0)
 
-            local size = cc.Director:getInstance():getWinSize()
+            local size = ax.Director:getInstance():getWinSize()
             nearP = self._camera:unproject(size, nearP, nearP)
             farP  = self._camera:unproject(size, farP, farP)
 
@@ -279,7 +279,7 @@ function NavMeshBasicTestDemo:registerTouchEvent()
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
             self:moveAgents(hitResult.hitPosition)
         end
-    end, cc.Handler.EVENT_TOUCHES_ENDED)
+    end, ax.Handler.EVENT_TOUCHES_ENDED)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -289,10 +289,10 @@ function NavMeshBasicTestDemo:extend()
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize = 15
-    local debugLabel = cc.Label:createWithTTF(ttfConfig,"Debug Draw ON")
-    local menuItem = cc.MenuItemLabel:create(debugLabel)
+    local debugLabel = ax.Label:createWithTTF(ttfConfig,"Debug Draw ON")
+    local menuItem = ax.MenuItemLabel:create(debugLabel)
     menuItem:registerScriptTapHandler(function (tag, sender)
-        local scene = cc.Director:getInstance():getRunningScene()
+        local scene = ax.Director:getInstance():getRunningScene()
         local enabledDebug = not scene:getNavMesh():isDebugDrawEnabled()
         scene:getNavMesh():setDebugDrawEnable(enabledDebug)
 
@@ -303,10 +303,10 @@ function NavMeshBasicTestDemo:extend()
         end
     end)
 
-    menuItem:setAnchorPoint(cc.p(0.0, 1.0))
-    menuItem:setPosition(cc.p(VisibleRect:left().x, VisibleRect:top().y - 100))
-    local menu = cc.Menu:create(menuItem)
-    menu:setPosition(cc.p(0.0, 0.0))
+    menuItem:setAnchorPoint(ax.p(0.0, 1.0))
+    menuItem:setPosition(ax.p(VisibleRect:left().x, VisibleRect:top().y - 100))
+    local menu = ax.Menu:create(menuItem)
+    menu:setPosition(ax.p(0.0, 0.0))
     self:addChild(menu)
 end
 ----------------------------------------
@@ -324,10 +324,10 @@ function NavMeshAdvanceTestDemo:subtitle()
 end
 
 function NavMeshAdvanceTestDemo:registerTouchEvent()
-    local listener = cc.EventListenerTouchAllAtOnce:create()
+    local listener = ax.EventListenerTouchAllAtOnce:create()
     listener:registerScriptHandler(function(touches, event)
         self._needMoveAgents = true
-    end,cc.Handler.EVENT_TOUCHES_BEGAN)
+    end,ax.Handler.EVENT_TOUCHES_BEGAN)
 
     listener:registerScriptHandler(function(touches, event)
 
@@ -336,14 +336,14 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
             local delta = touch:getDelta()
 
             self._angle = self._angle - delta.x * math.pi / 180.0
-            self._camera:setPosition3D(cc.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
-            self._camera:lookAt(cc.vec3(0.0, 0.0, 0.0), cc.vec3(0.0, 1.0, 0.0))
-    
+            self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
+            self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))
+
             if (delta.x * delta.x + delta.y * delta.y) > 16 then
                 self._needMoveAgents = false
             end
         end
-    end, cc.Handler.EVENT_TOUCHES_MOVED)
+    end, ax.Handler.EVENT_TOUCHES_MOVED)
 
     listener:registerScriptHandler(function(touches, event)
         if not self._needMoveAgents then
@@ -353,10 +353,10 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
         if #touches > 0 then
             local touch = touches[1]
             local location = touch:getLocationInView()
-            local nearP = cc.vec3(location.x, location.y, 0.0) 
-            local farP  = cc.vec3(location.x, location.y, 1.0)
+            local nearP = ax.vec3(location.x, location.y, 0.0)
+            local farP  = ax.vec3(location.x, location.y, 1.0)
 
-            local size = cc.Director:getInstance():getWinSize()
+            local size = ax.Director:getInstance():getWinSize()
             nearP = self._camera:unproject(size, nearP, nearP)
             farP  = self._camera:unproject(size, farP, farP)
 
@@ -365,7 +365,7 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
             self:moveAgents(hitResult.hitPosition)
         end
-    end, cc.Handler.EVENT_TOUCHES_ENDED)
+    end, ax.Handler.EVENT_TOUCHES_ENDED)
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -375,40 +375,40 @@ function NavMeshAdvanceTestDemo:extend()
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize = 15
-    local obstacleLabel = cc.Label:createWithTTF(ttfConfig,"Create Obstacle")
-    local menuItem0 = cc.MenuItemLabel:create(obstacleLabel)
+    local obstacleLabel = ax.Label:createWithTTF(ttfConfig,"Create Obstacle")
+    local menuItem0 = ax.MenuItemLabel:create(obstacleLabel)
     menuItem0:registerScriptTapHandler(function (tag, sender)
-        local scene = cc.Director:getInstance():getRunningScene()
+        local scene = ax.Director:getInstance():getRunningScene()
         local x = math.random(-50, 50)
         local z = math.random(-50.0, 50.0)
 
         local hitResult = {}
         local ret = false
-        ret, hitResult = scene:getPhysics3DWorld():rayCast(cc.vec3(x, 50.0, z), cc.vec3(x, -50.0, z), hitResult)
+        ret, hitResult = scene:getPhysics3DWorld():rayCast(ax.vec3(x, 50.0, z), ax.vec3(x, -50.0, z), hitResult)
         self:createObstacle(hitResult.hitPosition)
     end)
-    menuItem0:setAnchorPoint(cc.p(0.0, 1.0))
-    menuItem0:setPosition(cc.p(VisibleRect:left().x, VisibleRect:top().y - 50))
+    menuItem0:setAnchorPoint(ax.p(0.0, 1.0))
+    menuItem0:setPosition(ax.p(VisibleRect:left().x, VisibleRect:top().y - 50))
 
-    local agentLabel    = cc.Label:createWithTTF(ttfConfig,"Create Agent")
-    local menuItem1 = cc.MenuItemLabel:create(agentLabel)
+    local agentLabel    = ax.Label:createWithTTF(ttfConfig,"Create Agent")
+    local menuItem1 = ax.MenuItemLabel:create(agentLabel)
     menuItem1:registerScriptTapHandler(function (tag, sender)
-        local scene = cc.Director:getInstance():getRunningScene()
+        local scene = ax.Director:getInstance():getRunningScene()
         local x = math.random(-50, 50)
         local z = math.random(-50.0, 50.0)
 
         local hitResult = {}
         local ret    = false
-        ret, hitResult = scene:getPhysics3DWorld():rayCast(cc.vec3(x, 50.0, z), cc.vec3(x, -50.0, z), hitResult)
+        ret, hitResult = scene:getPhysics3DWorld():rayCast(ax.vec3(x, 50.0, z), ax.vec3(x, -50.0, z), hitResult)
         self:createAgent(hitResult.hitPosition)
     end)
-    menuItem1:setAnchorPoint(cc.p(0.0, 1.0))
-    menuItem1:setPosition(cc.p(VisibleRect:left().x, VisibleRect:top().y - 100))
+    menuItem1:setAnchorPoint(ax.p(0.0, 1.0))
+    menuItem1:setPosition(ax.p(VisibleRect:left().x, VisibleRect:top().y - 100))
 
-    local debugLabel    = cc.Label:createWithTTF(ttfConfig,"Debug Draw ON")
-    local menuItem2 = cc.MenuItemLabel:create(debugLabel)
+    local debugLabel    = ax.Label:createWithTTF(ttfConfig,"Debug Draw ON")
+    local menuItem2 = ax.MenuItemLabel:create(debugLabel)
     menuItem2:registerScriptTapHandler(function (tag, sender)
-        local scene = cc.Director:getInstance():getRunningScene()
+        local scene = ax.Director:getInstance():getRunningScene()
         local enabledDebug = not scene:getNavMesh():isDebugDrawEnabled()
         scene:getNavMesh():setDebugDrawEnable(enabledDebug)
 
@@ -418,11 +418,11 @@ function NavMeshAdvanceTestDemo:extend()
             debugLabel:setString("DebugDraw OFF")
         end
     end)
-    menuItem2:setAnchorPoint(cc.p(0.0, 1.0))
-    menuItem2:setPosition(cc.p(VisibleRect:left().x, VisibleRect:top().y - 150))
+    menuItem2:setAnchorPoint(ax.p(0.0, 1.0))
+    menuItem2:setPosition(ax.p(VisibleRect:left().x, VisibleRect:top().y - 150))
 
-    local menu = cc.Menu:create(menuItem0, menuItem1, menuItem2)
-    menu:setPosition(cc.p(0.0, 0.0))
+    local menu = ax.Menu:create(menuItem0, menuItem1, menuItem2)
+    menu:setPosition(ax.p(0.0, 0.0))
     self:addChild(menu)
 end
 
@@ -432,7 +432,7 @@ end
 function NavMeshTest()
     Helper.usePhysics = true
 
-    TestCastScene.createFunctionTable = 
+    TestCastScene.createFunctionTable =
     {
         NavMeshBasicTestDemo.create,
         NavMeshAdvanceTestDemo.create,

@@ -54,13 +54,13 @@ end
 ccui.Text.getStringValue = TextBMFontDeprecated.getStringValue
 --functions of ccui.TextBMFont will be deprecated begin
 
---functions of cc.ShaderCache will be deprecated begin
+--functions of ax.ShaderCache will be deprecated begin
 local ShaderCacheDeprecated = { }
 function ShaderCacheDeprecated.getProgram(self,strShader)
-    deprecatedTip("cc.ShaderCache:getProgram","cc.ShaderCache:getGLProgram")
+    deprecatedTip("ax.ShaderCache:getProgram","ax.ShaderCache:getGLProgram")
     return self:getGLProgram(strShader)
 end
-cc.ShaderCache.getProgram = ShaderCacheDeprecated.getProgram
+ax.ShaderCache.getProgram = ShaderCacheDeprecated.getProgram
 --functions of ccui.TextBMFont will be deprecated begin
 
 --functions of ccui.Widget will be deprecated begin

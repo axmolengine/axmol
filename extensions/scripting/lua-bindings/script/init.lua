@@ -37,8 +37,8 @@ end
 
 -- < axmol-1.0
 cc = ax
-cc.Director.setDisplayStats = ax.Director.setStatsDisplay
-cc.Sprite3D = ax.MeshRenderer
+ax.Director.setDisplayStats = ax.Director.setStatsDisplay
+ax.Sprite3D = ax.MeshRenderer
 ccexp = axexp
 ccui = axui
 ccb = axb

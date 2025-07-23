@@ -13,7 +13,7 @@ GearColor::GearColorValue::GearColorValue()
 {
 }
 
-GearColor::GearColorValue::GearColorValue(const Color3B& color, const Color3B& strokeColor)
+GearColor::GearColorValue::GearColorValue(const Color32& color, const Color32& strokeColor)
 {
     this->color = color;
     this->outlineColor = strokeColor;
@@ -37,8 +37,8 @@ void GearColor::init()
 void GearColor::addStatus(const std::string& pageId, ByteBuffer* buffer)
 {
     GearColorValue gv;
-    gv.color = (Color3B)buffer->readColor();
-    gv.outlineColor = (Color3B)buffer->readColor();
+    gv.color = buffer->readColor();
+    gv.outlineColor = buffer->readColor();
     if (pageId.size() == 0)
         _default = gv;
     else
@@ -56,8 +56,8 @@ void GearColor::apply()
 
     if (_tweenConfig && _tweenConfig->tween && UIPackage::_constructing == 0 && !disableAllTweenEffect)
     {
-        Color3B curColor = ToolSet::intToColor(_owner->getProp(ObjectPropID::Color).asUnsignedInt());
-        Color3B curStrokeColor = ToolSet::intToColor(_owner->getProp(ObjectPropID::OutlineColor).asUnsignedInt());
+        auto curColor = ToolSet::intToColor(_owner->getProp(ObjectPropID::Color).asUnsignedInt());
+        auto curStrokeColor = ToolSet::intToColor(_owner->getProp(ObjectPropID::OutlineColor).asUnsignedInt());
 
         if (gv.outlineColor != curStrokeColor)
         {
@@ -102,7 +102,7 @@ void GearColor::apply()
 void GearColor::onTweenUpdate(GTweener* tweener)
 {
     _owner->_gearLocked = true;
-    _owner->setProp(ObjectPropID::Color, Value(ToolSet::colorToInt((Color3B)_tweenConfig->_tweener->value.getColor())));
+    _owner->setProp(ObjectPropID::Color, Value(ToolSet::colorToInt(_tweenConfig->_tweener->value.getColor())));
     _owner->_gearLocked = false;
 }
 

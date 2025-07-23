@@ -1,4 +1,4 @@
-local targetPlatform = cc.Application:getInstance():getTargetPlatform()
+local targetPlatform = ax.Application:getInstance():getTargetPlatform()
 
 local LINE_SPACE = 40
 local itemTagBasic = 1000
@@ -9,58 +9,58 @@ local LuaBridgeTestsName =
     "LuaTableToObjcDictTest",
 }
 
-local s = cc.Director:getInstance():getWinSize()
+local s = ax.Director:getInstance():getWinSize()
 
 local function LuaBridgeLayer()
-    local layer = cc.Layer:create()
-    local menu = cc.Menu:create()
-    menu:setPosition(cc.p(0, 0))
-    cc.MenuItemFont:setFontName("Arial")
-    cc.MenuItemFont:setFontSize(24)
+    local layer = ax.Layer:create()
+    local menu = ax.Menu:create()
+    menu:setPosition(ax.p(0, 0))
+    ax.MenuItemFont:setFontName("Arial")
+    ax.MenuItemFont:setFontSize(24)
 
     local supportObjectCBridge  = false
-    if (cc.PLATFORM_OS_IPHONE == targetPlatform) or (cc.PLATFORM_OS_IPAD == targetPlatform) or (cc.PLATFORM_OS_MAC == targetPlatform)  then
+    if (ax.PLATFORM_OS_IPHONE == targetPlatform) or (ax.PLATFORM_OS_IPAD == targetPlatform) or (ax.PLATFORM_OS_MAC == targetPlatform)  then
         supportObjectCBridge = true
     end
 
     local supportJavaBridge = false
-    if (cc.PLATFORM_OS_ANDROID == targetPlatform) then
+    if (ax.PLATFORM_OS_ANDROID == targetPlatform) then
         supportJavaBridge = true
     end
 
     local function createMenuToBridgeScene()
-        local menuToBridgeScene = cc.Menu:create()
+        local menuToBridgeScene = ax.Menu:create()
         local function toBridgeScene()
             local scene = LuaBridgeMainTest()
             if scene ~= nil then
-                cc.Director:getInstance():replaceScene(scene)
+                ax.Director:getInstance():replaceScene(scene)
             end
-        end 
+        end
         --Create BackMneu
-        cc.MenuItemFont:setFontName("Arial")
-        cc.MenuItemFont:setFontSize(24)
-        local menuItemFont = cc.MenuItemFont:create("Back")
-        menuItemFont:setPosition(cc.p(VisibleRect:rightBottom().x - 50, VisibleRect:rightBottom().y + 25))
+        ax.MenuItemFont:setFontName("Arial")
+        ax.MenuItemFont:setFontSize(24)
+        local menuItemFont = ax.MenuItemFont:create("Back")
+        menuItemFont:setPosition(ax.p(VisibleRect:rightBottom().x - 50, VisibleRect:rightBottom().y + 25))
         menuItemFont:registerScriptTapHandler(toBridgeScene)
-        menuToBridgeScene:addChild(menuItemFont)        
-        menuToBridgeScene:setPosition(cc.p(0, 0))
+        menuToBridgeScene:addChild(menuItemFont)
+        menuToBridgeScene:setPosition(ax.p(0, 0))
         return menuToBridgeScene
     end
 
     local function newLuaJavaBridge()
-        local newScene   = cc.Scene:create()
-        local titleLabel = cc.Label:createWithTTF("", s_arialPath, 28)
+        local newScene   = ax.Scene:create()
+        local titleLabel = ax.Label:createWithTTF("", s_arialPath, 28)
         newScene:addChild(titleLabel, 1)
-        titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+        titleLabel:setAnchorPoint(ax.p(0.5, 0.5))
         titleLabel:setPosition(s.width / 2, s.height - 50)
         titleLabel:setString("LuaJavaBridge Test")
 
-        subtitleLabel = cc.Label:createWithTTF("", s_thonburiPath, 16)
+        subtitleLabel = ax.Label:createWithTTF("", s_thonburiPath, 16)
         newScene:addChild(subtitleLabel, 1)
-        subtitleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+        subtitleLabel:setAnchorPoint(ax.p(0.5, 0.5))
         subtitleLabel:setPosition(s.width / 2, s.height - 80)
         subtitleLabel:setString("See the console.")
-        if (cc.PLATFORM_OS_ANDROID == targetPlatform) then
+        if (ax.PLATFORM_OS_ANDROID == targetPlatform) then
             local args = { 2 , 3}
             local sigs = "(II)I"
             local luaj = require "axmol.cocos2d.luaj"
@@ -88,19 +88,19 @@ local function LuaBridgeLayer()
     end
 
     local function newLuaObjectCBridge()
-        local newScene = cc.Scene:create()
-        local titleLabel = cc.Label:createWithTTF("", s_arialPath, 28)
+        local newScene = ax.Scene:create()
+        local titleLabel = ax.Label:createWithTTF("", s_arialPath, 28)
         newScene:addChild(titleLabel, 1)
-        titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+        titleLabel:setAnchorPoint(ax.p(0.5, 0.5))
         titleLabel:setPosition(s.width / 2, s.height - 50)
         titleLabel:setString("LuaObjectCBridge Test")
 
-        subtitleLabel = cc.Label:createWithTTF("", s_thonburiPath, 16)
+        subtitleLabel = ax.Label:createWithTTF("", s_thonburiPath, 16)
         newScene:addChild(subtitleLabel, 1)
-        subtitleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+        subtitleLabel:setAnchorPoint(ax.p(0.5, 0.5))
         subtitleLabel:setPosition(s.width / 2, s.height - 80)
         subtitleLabel:setString("See the console.")
-        if (cc.PLATFORM_OS_IPHONE == targetPlatform) or (cc.PLATFORM_OS_IPAD == targetPlatform) or (cc.PLATFORM_OS_MAC == targetPlatform) then
+        if (ax.PLATFORM_OS_IPHONE == targetPlatform) or (ax.PLATFORM_OS_IPAD == targetPlatform) or (ax.PLATFORM_OS_MAC == targetPlatform) then
             local args = { num1 = 2 , num2 = 3 }
             local luaoc = require "axmol.cocos2d.luaoc"
             local className = "LuaObjectCBridgeTest"
@@ -123,19 +123,19 @@ local function LuaBridgeLayer()
     end
 
     local function newLuaTableToObjcDict()
-        local newScene = cc.Scene:create()
-        local titleLabel = cc.Label:createWithTTF("", s_arialPath, 28)
+        local newScene = ax.Scene:create()
+        local titleLabel = ax.Label:createWithTTF("", s_arialPath, 28)
         newScene:addChild(titleLabel, 1)
-        titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+        titleLabel:setAnchorPoint(ax.p(0.5, 0.5))
         titleLabel:setPosition(s.width / 2, s.height - 50)
         titleLabel:setString("LuaTableToObjcDict Test")
 
-        subtitleLabel = cc.Label:createWithTTF("", s_thonburiPath, 16)
+        subtitleLabel = ax.Label:createWithTTF("", s_thonburiPath, 16)
         newScene:addChild(subtitleLabel, 1)
-        subtitleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+        subtitleLabel:setAnchorPoint(ax.p(0.5, 0.5))
         subtitleLabel:setPosition(s.width / 2, s.height - 80)
         subtitleLabel:setString("See the console.")
-        if (cc.PLATFORM_OS_IPHONE == targetPlatform) or (cc.PLATFORM_OS_IPAD == targetPlatform) or (cc.PLATFORM_OS_MAC == targetPlatform) then
+        if (ax.PLATFORM_OS_IPHONE == targetPlatform) or (ax.PLATFORM_OS_IPAD == targetPlatform) or (ax.PLATFORM_OS_MAC == targetPlatform) then
             local args = {name = "jett" ,method = "call OC"}
             local args_tab = {tab = args , name = "table_test"}
             local luaoc = require "axmol.cocos2d.luaoc"
@@ -163,17 +163,17 @@ local function LuaBridgeLayer()
         local newScene = newLuaBridgeScene(nIdx)
         if nil ~= newScene then
             newScene:addChild(createMenuToBridgeScene(),10)
-            cc.Director:getInstance():replaceScene(newScene)
+            ax.Director:getInstance():replaceScene(newScene)
         end
     end
 
     for i = 1, #(LuaBridgeTestsName) do
-        local item = cc.MenuItemFont:create(LuaBridgeTestsName[i])
+        local item = ax.MenuItemFont:create(LuaBridgeTestsName[i])
         item:registerScriptTapHandler(menuCallback)
         item:setPosition(s.width / 2, s.height - i * LINE_SPACE)
         menu:addChild(item, itemTagBasic + i)
         if ((i == 1) and (false == supportJavaBridge))
-        or ((i == 2) and (false == supportObjectCBridge)) 
+        or ((i == 2) and (false == supportObjectCBridge))
         or ((i == 3) and (false == supportObjectCBridge))then
             item:setEnabled(false)
         end
@@ -188,7 +188,7 @@ end
 --  LuaBridge Test
 -------------------------------------
 function LuaBridgeMainTest()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     scene:addChild(LuaBridgeLayer())
     scene:addChild(CreateBackMenuItem())
     return scene

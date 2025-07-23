@@ -458,7 +458,7 @@ void BoneNode::updateColor()
     _transformUpdated = _transformDirty = _inverseDirty = _contentSizeDirty = true;
 }
 
-void BoneNode::updateDisplayedColor(const ax::Color3B& /*parentColor*/)
+void BoneNode::updateDisplayedColor(const ax::Color32& /*parentColor*/)
 {
     if (_cascadeColorEnabled)
     {
@@ -475,7 +475,7 @@ void BoneNode::updateDisplayedOpacity(uint8_t /*parentOpacity*/)
     {
         for (const auto& child : _boneSkins)
         {
-            child->updateDisplayedOpacity(_displayedOpacity);
+            child->updateDisplayedOpacity(_displayedColor.a);
         }
     }
 }
@@ -492,7 +492,7 @@ void BoneNode::disableCascadeColor()
 {
     for (const auto& child : _boneSkins)
     {
-        child->updateDisplayedColor(ax::Color3B::WHITE);
+        child->updateDisplayedColor(ax::Color32::WHITE);
     }
 }
 

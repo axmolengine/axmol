@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -66,14 +67,14 @@ public:
     virtual void updateAtlasValues();
 
     // Overrides
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
-    virtual Texture2D* getTexture() const override;
-    virtual void setTexture(Texture2D* texture) override;
-    virtual bool isOpacityModifyRGB() const override;
-    virtual void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
-    virtual const Color3B& getColor() const override;
-    virtual void setColor(const Color3B& color) override;
-    virtual void setOpacity(uint8_t opacity) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    Texture2D* getTexture() const override;
+    void setTexture(Texture2D* texture) override;
+    bool isOpacityModifyRGB() const override;
+    void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
+    const Color32& getColor() const override;
+    void setColor(const Color32& color) override;
+    void setOpacity(uint8_t opacity) override;
 
     /**
      * @code
@@ -131,7 +132,7 @@ protected:
     /** Height of each char. */
     int _itemHeight = 0;
 
-    Color3B _colorUnmodified;
+    Color32 _colorUnmodified;
 
     TextureAtlas* _textureAtlas = nullptr;
     /** Protocol variables. */

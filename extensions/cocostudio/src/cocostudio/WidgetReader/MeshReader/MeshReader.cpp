@@ -230,13 +230,9 @@ void MeshReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Tabl
     uint8_t green = (uint8_t)nodeOptions->color()->g();
     uint8_t blue  = (uint8_t)nodeOptions->color()->b();
 
-    if (alpha != 255)
+    if (red != 255 || green != 255 || blue != 255 || alpha != 255)
     {
-        mesh->setOpacity(alpha);
-    }
-    if (red != 255 || green != 255 || blue != 255)
-    {
-        mesh->setColor(Color3B(red, green, blue));
+        mesh->setColor(Color32(red, green, blue, alpha));
     }
     if (isFlipped)
     {

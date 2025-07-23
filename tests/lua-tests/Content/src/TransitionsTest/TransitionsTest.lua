@@ -4,7 +4,7 @@ require "TransitionsTest/TransitionsName"
 local SceneIdx = -1
 local CurSceneNo = 2
 local TRANSITION_DURATION = 1.2
-local s = cc.Director:getInstance():getWinSize()
+local s = ax.Director:getInstance():getWinSize()
 
 local function switchSceneTypeNo()
     if CurSceneNo == 1 then
@@ -38,58 +38,58 @@ end
 
 local function backCallback(sender)
     local scene = backAction()
-    cc.Director:getInstance():replaceScene(scene)
+    ax.Director:getInstance():replaceScene(scene)
 end
 
 local function restartCallback(sender)
     local scene = restartAction()
-    cc.Director:getInstance():replaceScene(scene)
+    ax.Director:getInstance():replaceScene(scene)
 end
 
 local function nextCallback(sender)
     local scene = nextAction()
-    cc.Director:getInstance():replaceScene(scene)
+    ax.Director:getInstance():replaceScene(scene)
 end
 
 -----------------------------
 -- TestLayer1
 -----------------------------
 local function createLayer1()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     local x, y = s.width, s.height
 
-    local bg1 = cc.Sprite:create(s_back1)
-    bg1:setPosition(cc.p(s.width / 2, s.height / 2))
+    local bg1 = ax.Sprite:create(s_back1)
+    bg1:setPosition(ax.p(s.width / 2, s.height / 2))
     layer:addChild(bg1, -1)
 
-    local titleLabel = cc.Label:createWithTTF(Transition_Name[SceneIdx], s_thonburiPath, 32)
+    local titleLabel = ax.Label:createWithTTF(Transition_Name[SceneIdx], s_thonburiPath, 32)
     layer:addChild(titleLabel)
-    titleLabel:setColor(cc.c3b(255,32,32))
-    titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
+    titleLabel:setColor(ax.color32(255,32,32))
+    titleLabel:setAnchorPoint(ax.p(0.5, 0.5))
     titleLabel:setPosition(x / 2, y - 100)
 
-    local label = cc.Label:createWithTTF("SCENE 1", s_markerFeltFontPath, 38)
-    label:setColor(cc.c3b(16,16,255))
-    label:setAnchorPoint(cc.p(0.5, 0.5))
+    local label = ax.Label:createWithTTF("SCENE 1", s_markerFeltFontPath, 38)
+    label:setColor(ax.color32(16,16,255))
+    label:setAnchorPoint(ax.p(0.5, 0.5))
     label:setPosition(x / 2, y / 2)
     layer:addChild(label)
 
     -- menu
-    local item1 = cc.MenuItemImage:create(s_pPathB1, s_pPathB2)
-    local item2 = cc.MenuItemImage:create(s_pPathR1, s_pPathR2)
-    local item3 = cc.MenuItemImage:create(s_pPathF1, s_pPathF2)
+    local item1 = ax.MenuItemImage:create(s_pPathB1, s_pPathB2)
+    local item2 = ax.MenuItemImage:create(s_pPathR1, s_pPathR2)
+    local item3 = ax.MenuItemImage:create(s_pPathF1, s_pPathF2)
     item1:registerScriptTapHandler(backCallback)
     item2:registerScriptTapHandler(restartCallback)
     item3:registerScriptTapHandler(nextCallback)
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
     menu:addChild(item1)
     menu:addChild(item2)
     menu:addChild(item3)
-    menu:setPosition(cc.p(0, 0))
-    item1:setPosition(cc.p(s.width / 2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
-    item2:setPosition(cc.p(s.width / 2, item2:getContentSize().height / 2))
-    item3:setPosition(cc.p(s.width / 2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+    menu:setPosition(ax.p(0, 0))
+    item1:setPosition(ax.p(s.width / 2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+    item2:setPosition(ax.p(s.width / 2, item2:getContentSize().height / 2))
+    item3:setPosition(ax.p(s.width / 2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
 
     layer:addChild(menu, 1)
 
@@ -100,41 +100,41 @@ end
 -- TestLayer2
 -----------------------------
 local function createLayer2()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     local x, y = s.width, s.height
 
-    local bg1 = cc.Sprite:create(s_back2)
-    bg1:setPosition(cc.p(s.width / 2, s.height / 2))
+    local bg1 = ax.Sprite:create(s_back2)
+    bg1:setPosition(ax.p(s.width / 2, s.height / 2))
     layer:addChild(bg1, -1)
 
-    local titleLabel = cc.Label:createWithTTF(Transition_Name[SceneIdx], s_thonburiPath, 32 )
+    local titleLabel = ax.Label:createWithTTF(Transition_Name[SceneIdx], s_thonburiPath, 32 )
     layer:addChild(titleLabel)
-    titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
-    titleLabel:setColor(cc.c3b(255,32,32))
+    titleLabel:setAnchorPoint(ax.p(0.5, 0.5))
+    titleLabel:setColor(ax.color32(255,32,32))
     titleLabel:setPosition(x / 2, y - 100)
 
-    local label = cc.Label:createWithTTF("SCENE 2", s_markerFeltFontPath, 38)
-    label:setColor(cc.c3b(16,16,255))
-    label:setAnchorPoint(cc.p(0.5, 0.5))
+    local label = ax.Label:createWithTTF("SCENE 2", s_markerFeltFontPath, 38)
+    label:setColor(ax.color32(16,16,255))
+    label:setAnchorPoint(ax.p(0.5, 0.5))
     label:setPosition(x / 2, y / 2)
     layer:addChild(label)
 
     -- menu
-    local item1 = cc.MenuItemImage:create(s_pPathB1, s_pPathB2)
-    local item2 = cc.MenuItemImage:create(s_pPathR1, s_pPathR2)
-    local item3 = cc.MenuItemImage:create(s_pPathF1, s_pPathF2)
+    local item1 = ax.MenuItemImage:create(s_pPathB1, s_pPathB2)
+    local item2 = ax.MenuItemImage:create(s_pPathR1, s_pPathR2)
+    local item3 = ax.MenuItemImage:create(s_pPathF1, s_pPathF2)
     item1:registerScriptTapHandler(backCallback)
     item2:registerScriptTapHandler(restartCallback)
     item3:registerScriptTapHandler(nextCallback)
 
-    local menu = cc.Menu:create()
+    local menu = ax.Menu:create()
     menu:addChild(item1)
     menu:addChild(item2)
     menu:addChild(item3)
-    menu:setPosition(cc.p(0, 0))
-    item1:setPosition(cc.p(s.width / 2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
-    item2:setPosition(cc.p(s.width / 2, item2:getContentSize().height / 2))
-    item3:setPosition(cc.p(s.width / 2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+    menu:setPosition(ax.p(0, 0))
+    item1:setPosition(ax.p(s.width / 2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+    item2:setPosition(ax.p(s.width / 2, item2:getContentSize().height / 2))
+    item3:setPosition(ax.p(s.width / 2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
 
     layer:addChild(menu, 1)
 
@@ -145,7 +145,7 @@ end
 -- Create Transition Test
 -----------------------------
 local function createTransition(index, t, scene)
-    cc.Director:getInstance():getRenderer():setDepthTest(false)
+    ax.Director:getInstance():getRenderer():setDepthTest(false)
 
     if firstEnter == true then
         firstEnter = false
@@ -153,96 +153,96 @@ local function createTransition(index, t, scene)
     end
 
     if index == Transition_Table.CCTransitionJumpZoom then
-        scene = cc.TransitionJumpZoom:create(t, scene)
+        scene = ax.TransitionJumpZoom:create(t, scene)
     elseif index == Transition_Table.CCTransitionProgressRadialCCW then
-        scene = cc.TransitionProgressRadialCCW:create(t, scene)
+        scene = ax.TransitionProgressRadialCCW:create(t, scene)
     elseif index == Transition_Table.CCTransitionProgressRadialCW then
-        scene = cc.TransitionProgressRadialCW:create(t, scene)
+        scene = ax.TransitionProgressRadialCW:create(t, scene)
     elseif index == Transition_Table.CCTransitionProgressHorizontal then
-        scene = cc.TransitionProgressHorizontal:create(t, scene)
+        scene = ax.TransitionProgressHorizontal:create(t, scene)
     elseif index == Transition_Table.CCTransitionProgressVertical then
-        scene = cc.TransitionProgressVertical:create(t, scene)
+        scene = ax.TransitionProgressVertical:create(t, scene)
     elseif index == Transition_Table.CCTransitionProgressInOut then
-        scene = cc.TransitionProgressInOut:create(t, scene)
+        scene = ax.TransitionProgressInOut:create(t, scene)
     elseif index == Transition_Table.CCTransitionProgressOutIn then
-        scene = cc.TransitionProgressOutIn:create(t, scene)
+        scene = ax.TransitionProgressOutIn:create(t, scene)
     elseif index == Transition_Table.CCTransitionCrossFade then
-        scene = cc.TransitionCrossFade:create(t, scene)
+        scene = ax.TransitionCrossFade:create(t, scene)
     elseif index == Transition_Table.TransitionPageForward then
-        cc.Director:getInstance():getRenderer():setDepthTest(true)
-        scene = cc.TransitionPageTurn:create(t, scene, false)
+        ax.Director:getInstance():getRenderer():setDepthTest(true)
+        scene = ax.TransitionPageTurn:create(t, scene, false)
     elseif index == Transition_Table.TransitionPageBackward then
-        cc.Director:getInstance():getRenderer():setDepthTest(true)
-        scene = cc.TransitionPageTurn:create(t, scene, true)
+        ax.Director:getInstance():getRenderer():setDepthTest(true)
+        scene = ax.TransitionPageTurn:create(t, scene, true)
     elseif index == Transition_Table.CCTransitionFadeTR then
-        scene = cc.TransitionFadeTR:create(t, scene)
+        scene = ax.TransitionFadeTR:create(t, scene)
     elseif index == Transition_Table.CCTransitionFadeBL then
-        scene = cc.TransitionFadeBL:create(t, scene)
+        scene = ax.TransitionFadeBL:create(t, scene)
     elseif index == Transition_Table.CCTransitionFadeUp then
-        scene = cc.TransitionFadeUp:create(t, scene)
+        scene = ax.TransitionFadeUp:create(t, scene)
     elseif index == Transition_Table.CCTransitionFadeDown then
-        scene = cc.TransitionFadeDown:create(t, scene)
+        scene = ax.TransitionFadeDown:create(t, scene)
     elseif index == Transition_Table.CCTransitionTurnOffTiles then
-        scene = cc.TransitionTurnOffTiles:create(t, scene)
+        scene = ax.TransitionTurnOffTiles:create(t, scene)
     elseif index == Transition_Table.CCTransitionSplitRows then
-        scene = cc.TransitionSplitRows:create(t, scene)
+        scene = ax.TransitionSplitRows:create(t, scene)
     elseif index == Transition_Table.CCTransitionSplitCols then
-        scene = cc.TransitionSplitCols:create(t, scene)
+        scene = ax.TransitionSplitCols:create(t, scene)
     elseif index == Transition_Table.CCTransitionFade then
-        scene = cc.TransitionFade:create(t, scene)
+        scene = ax.TransitionFade:create(t, scene)
     elseif index == Transition_Table.FadeWhiteTransition then
-        scene = cc.TransitionFade:create(t, scene, cc.c3b(255, 255, 255))
+        scene = ax.TransitionFade:create(t, scene, ax.color32(255, 255, 255))
     elseif index == Transition_Table.FlipXLeftOver then
-        scene = cc.TransitionFlipX:create(t, scene, cc.TRANSITION_ORIENTATION_LEFT_OVER )
+        scene = ax.TransitionFlipX:create(t, scene, ax.TRANSITION_ORIENTATION_LEFT_OVER )
     elseif index == Transition_Table.FlipXRightOver then
-        scene = cc.TransitionFlipX:create(t, scene, cc.TRANSITION_ORIENTATION_RIGHT_OVER )
+        scene = ax.TransitionFlipX:create(t, scene, ax.TRANSITION_ORIENTATION_RIGHT_OVER )
     elseif index == Transition_Table.FlipYUpOver then
-        scene = cc.TransitionFlipY:create(t, scene, cc.TRANSITION_ORIENTATION_UP_OVER)
+        scene = ax.TransitionFlipY:create(t, scene, ax.TRANSITION_ORIENTATION_UP_OVER)
     elseif index == Transition_Table.FlipYDownOver then
-        scene = cc.TransitionFlipY:create(t, scene, cc.TRANSITION_ORIENTATION_DOWN_OVER )
+        scene = ax.TransitionFlipY:create(t, scene, ax.TRANSITION_ORIENTATION_DOWN_OVER )
     elseif index == Transition_Table.FlipAngularLeftOver then
-        scene = cc.TransitionFlipAngular:create(t, scene, cc.TRANSITION_ORIENTATION_LEFT_OVER )
+        scene = ax.TransitionFlipAngular:create(t, scene, ax.TRANSITION_ORIENTATION_LEFT_OVER )
     elseif index == Transition_Table.FlipAngularRightOver then
-        scene = cc.TransitionFlipAngular:create(t, scene, cc.TRANSITION_ORIENTATION_RIGHT_OVER )
+        scene = ax.TransitionFlipAngular:create(t, scene, ax.TRANSITION_ORIENTATION_RIGHT_OVER )
     elseif index == Transition_Table.ZoomFlipXLeftOver then
-        scene = cc.TransitionZoomFlipX:create(t, scene, cc.TRANSITION_ORIENTATION_LEFT_OVER )
+        scene = ax.TransitionZoomFlipX:create(t, scene, ax.TRANSITION_ORIENTATION_LEFT_OVER )
     elseif index == Transition_Table.ZoomFlipXRightOver then
-        scene = cc.TransitionZoomFlipX:create(t, scene, cc.TRANSITION_ORIENTATION_RIGHT_OVER )
+        scene = ax.TransitionZoomFlipX:create(t, scene, ax.TRANSITION_ORIENTATION_RIGHT_OVER )
     elseif index == Transition_Table.ZoomFlipYUpOver then
-        scene = cc.TransitionZoomFlipY:create(t, scene, cc.TRANSITION_ORIENTATION_UP_OVER)
+        scene = ax.TransitionZoomFlipY:create(t, scene, ax.TRANSITION_ORIENTATION_UP_OVER)
     elseif index == Transition_Table.ZoomFlipYDownOver then
-        scene = cc.TransitionZoomFlipY:create(t, scene, cc.TRANSITION_ORIENTATION_DOWN_OVER )
+        scene = ax.TransitionZoomFlipY:create(t, scene, ax.TRANSITION_ORIENTATION_DOWN_OVER )
     elseif index == Transition_Table.ZoomFlipAngularLeftOver then
-        scene = cc.TransitionZoomFlipAngular:create(t, scene, cc.TRANSITION_ORIENTATION_LEFT_OVER )
+        scene = ax.TransitionZoomFlipAngular:create(t, scene, ax.TRANSITION_ORIENTATION_LEFT_OVER )
     elseif index == Transition_Table.ZoomFlipAngularRightOver then
-        scene = cc.TransitionZoomFlipAngular:create(t, scene, cc.TRANSITION_ORIENTATION_RIGHT_OVER )
+        scene = ax.TransitionZoomFlipAngular:create(t, scene, ax.TRANSITION_ORIENTATION_RIGHT_OVER )
     elseif index == Transition_Table.CCTransitionShrinkGrow then
-        scene = cc.TransitionShrinkGrow:create(t, scene)
+        scene = ax.TransitionShrinkGrow:create(t, scene)
     elseif index == Transition_Table.CCTransitionRotoZoom then
-        scene = cc.TransitionRotoZoom:create(t, scene)
+        scene = ax.TransitionRotoZoom:create(t, scene)
     elseif index == Transition_Table.CCTransitionMoveInL then
-        scene = cc.TransitionMoveInL:create(t, scene)
+        scene = ax.TransitionMoveInL:create(t, scene)
     elseif index == Transition_Table.CCTransitionMoveInR then
-        scene = cc.TransitionMoveInR:create(t, scene)
+        scene = ax.TransitionMoveInR:create(t, scene)
     elseif index == Transition_Table.CCTransitionMoveInT then
-        scene = cc.TransitionMoveInT:create(t, scene)
+        scene = ax.TransitionMoveInT:create(t, scene)
     elseif index == Transition_Table.CCTransitionMoveInB then
-        scene = cc.TransitionMoveInB:create(t, scene)
+        scene = ax.TransitionMoveInB:create(t, scene)
     elseif index == Transition_Table.CCTransitionSlideInL then
-        scene = cc.TransitionSlideInL:create(t, scene)
+        scene = ax.TransitionSlideInL:create(t, scene)
     elseif index == Transition_Table.CCTransitionSlideInR then
-        scene = cc.TransitionSlideInR:create(t, scene)
+        scene = ax.TransitionSlideInR:create(t, scene)
     elseif index == Transition_Table.CCTransitionSlideInT then
-        scene = cc.TransitionSlideInT:create(t, scene)
+        scene = ax.TransitionSlideInT:create(t, scene)
     elseif index == Transition_Table.CCTransitionSlideInB then
-        scene = cc.TransitionSlideInB:create(t, scene)
+        scene = ax.TransitionSlideInB:create(t, scene)
     end
 
     return scene
 end
 
 function generateTranScene()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     local layer = nil
 
     if CurSceneNo == 1 then
@@ -259,7 +259,7 @@ end
 
 function TransitionsTest()
     cclog("TransitionsTest")
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
     SceneIdx = -1
     CurSceneNo = 2

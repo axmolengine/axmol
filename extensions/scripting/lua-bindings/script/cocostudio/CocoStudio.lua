@@ -376,7 +376,7 @@ function ccs.TriggerMng:isEmpty()
 end
 
 function __onParseConfig(configType,jasonStr)
-    if configType == cc.ConfigType.COCOSTUDIO then
+    if configType == ax.ConfigType.COCOSTUDIO then
         ccs.TriggerMng.getInstance():parse(jasonStr)
     end
 end

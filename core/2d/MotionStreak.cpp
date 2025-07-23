@@ -3,6 +3,7 @@ Copyright (c) 2011      ForzeField Studios S.L.
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -48,12 +49,9 @@ MotionStreak::~MotionStreak()
     AX_SAFE_RELEASE(_texture);
     AX_SAFE_FREE(_pointState);
     AX_SAFE_FREE(_pointVertexes);
-    AX_SAFE_FREE(_vertices);
-    AX_SAFE_FREE(_colorPointer);
-    AX_SAFE_FREE(_texCoords);
 }
 
-MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
+MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color32& color, std::string_view path)
 {
     MotionStreak* ret = new MotionStreak();
     if (ret->initWithFade(fade, minSeg, stroke, color, path))
@@ -66,7 +64,7 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
     return nullptr;
 }
 
-MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
+MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
     MotionStreak* ret = new MotionStreak();
     if (ret->initWithFade(fade, minSeg, stroke, color, texture))
@@ -79,7 +77,7 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
     return nullptr;
 }
 
-bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
+bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color32& color, std::string_view path)
 {
     AXASSERT(!path.empty(), "Invalid filename");
 
@@ -87,7 +85,7 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     return initWithFade(fade, minSeg, stroke, color, texture);
 }
 
-bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
+bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
     Node::setPosition(Vec2::ZERO);
     setAnchorPoint(Vec2::ZERO);
@@ -113,16 +111,14 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     _pointState    = (float*)malloc(sizeof(float) * _maxPoints);
     _pointVertexes = (Vec2*)malloc(sizeof(Vec2) * _maxPoints);
 
-    const size_t VERTEX_SIZE = sizeof(Vec2) + sizeof(Tex2F) + sizeof(uint8_t) * 4;
+    constexpr size_t vertexSize = sizeof(_vertices[0]);
 
-    _vertexCount  = _maxPoints * 2;
-    _vertices     = (Vec2*)malloc(sizeof(Vec2) * _vertexCount);
-    _texCoords    = (Tex2F*)malloc(sizeof(Tex2F) * _vertexCount);
-    _colorPointer = (uint8_t*)malloc(sizeof(uint8_t) * 4 * _vertexCount);
-    _customCommand.createVertexBuffer(VERTEX_SIZE, _vertexCount, CustomCommand::BufferUsage::DYNAMIC);
+    auto vertexCount  = _maxPoints * 2;
+    _vertices.resize(vertexCount);
+    memset(_vertices.data(), 0, sizeof(_vertices[0]) * vertexCount);
+    _customCommand.createVertexBuffer(vertexSize, vertexCount, CustomCommand::BufferUsage::DYNAMIC);
 
-    auto zeros = std::make_unique<uint8_t[]>(VERTEX_SIZE * _vertexCount);
-    _customCommand.updateVertexBuffer(zeros.get(), VERTEX_SIZE * _vertexCount);
+    _customCommand.updateVertexBuffer(_vertices.data(), vertexSize * vertexCount);
 
     setTexture(texture);
     setColor(color);
@@ -194,14 +190,14 @@ void MotionStreak::setPositionY(float y)
     _positionR.y = y;
 }
 
-void MotionStreak::tintWithColor(const Color3B& colors)
+void MotionStreak::tintWithColor(const Color32& color)
 {
-    setColor(colors);
+    setColor(color);
 
     // Fast assignation
-    for (unsigned int i = 0; i < _nuPoints * 2; i++)
+    for (unsigned int i = 0; i < _nuPoints * 2; ++i)
     {
-        *((Color3B*)(_colorPointer + i * 4)) = colors;
+        _vertices[i].color = color;
     }
 }
 
@@ -212,6 +208,9 @@ Texture2D* MotionStreak::getTexture() const
 
 void MotionStreak::setTexture(Texture2D* texture)
 {
+    if (texture == nullptr)
+        texture = _director->getTextureCache()->getWhiteTexture();
+
     if (_texture != texture)
     {
         AX_SAFE_RETAIN(texture);
@@ -243,16 +242,16 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool own
         iter = attributeInfo.find("a_texCoord");
         if (iter != attributeInfo.end())
         {
-            layout->setAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
-                                      2 * sizeof(float), false);
+            layout->setAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, sizeof(Vec2), false);
         }
         iter = attributeInfo.find("a_color");
         if (iter != attributeInfo.end())
         {
-            layout->setAttrib("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
-                                      4 * sizeof(float), true);
+            layout->setAttrib("a_color", iter->second.location, backend::VertexFormat::UBYTE4, sizeof(Vec2) * 2, true);
         }
-        layout->setStride(4 * sizeof(float) + 4 * sizeof(uint8_t));
+
+        constexpr size_t vertexSize = sizeof(_vertices[0]);
+        layout->setStride(vertexSize);
 
         updateProgramStateTexture(_texture);
         return true;
@@ -317,28 +316,22 @@ void MotionStreak::update(float delta)
                 // Move point
                 _pointVertexes[newIdx] = _pointVertexes[i];
 
-                // Move vertices
+                // Move pos
                 i2                     = i * 2;
                 newIdx2                = newIdx * 2;
-                _vertices[newIdx2]     = _vertices[i2];
-                _vertices[newIdx2 + 1] = _vertices[i2 + 1];
+                _vertices[newIdx2].position     = _vertices[i2].position;
+                _vertices[newIdx2 + 1].position = _vertices[i2 + 1].position;
 
                 // Move color
-                i2 *= 4;
-                newIdx2 *= 4;
-                _colorPointer[newIdx2 + 0] = _colorPointer[i2 + 0];
-                _colorPointer[newIdx2 + 1] = _colorPointer[i2 + 1];
-                _colorPointer[newIdx2 + 2] = _colorPointer[i2 + 2];
-                _colorPointer[newIdx2 + 4] = _colorPointer[i2 + 4];
-                _colorPointer[newIdx2 + 5] = _colorPointer[i2 + 5];
-                _colorPointer[newIdx2 + 6] = _colorPointer[i2 + 6];
+                _vertices[newIdx2].color     = _vertices[i2].color;
+                _vertices[newIdx2 + 1].color = _vertices[i2 + 1].color;
             }
             else
-                newIdx2 = newIdx * 8;
+                newIdx2 = newIdx * 2;
 
-            const uint8_t op           = (uint8_t)(_pointState[newIdx] * 255.0f);
-            _colorPointer[newIdx2 + 3] = op;
-            _colorPointer[newIdx2 + 7] = op;
+            const uint8_t alpha           = (uint8_t)(_pointState[newIdx] * 255.0f);
+            _vertices[newIdx2].color.a    = alpha;
+            _vertices[newIdx2].color.a    = alpha;
         }
     }
     _nuPoints -= mov;
@@ -362,41 +355,39 @@ void MotionStreak::update(float delta)
         _pointState[_nuPoints]    = 1.0f;
 
         // Color assignment
-        const unsigned int offset                 = _nuPoints * 8;
-        *((Color3B*)(_colorPointer + offset))     = _displayedColor;
-        *((Color3B*)(_colorPointer + offset + 4)) = _displayedColor;
-
-        // Opacity
-        _colorPointer[offset + 3] = 255;
-        _colorPointer[offset + 7] = 255;
+        const auto offset           = _nuPoints * 2;
+        auto tmpColor               = _displayedColor;
+        tmpColor.a                  = 255;
+        _vertices[offset].color     = tmpColor;
+        _vertices[offset + 1].color = tmpColor;
 
         // Generate polygon
         if (_nuPoints > 0 && _fastMode)
         {
             if (_nuPoints > 1)
             {
-                vertexLineToPolygon(_pointVertexes, _stroke, _vertices, _nuPoints, 1);
+                vertexLineToPolygon(_pointVertexes, _stroke, _vertices.data(), _nuPoints, 1);
             }
             else
             {
-                vertexLineToPolygon(_pointVertexes, _stroke, _vertices, 0, 2);
+                vertexLineToPolygon(_pointVertexes, _stroke, _vertices.data(), 0, 2);
             }
         }
 
-        _nuPoints++;
+        ++_nuPoints;
     }
 
     if (!_fastMode)
-        vertexLineToPolygon(_pointVertexes, _stroke, _vertices, 0, _nuPoints);
+        vertexLineToPolygon(_pointVertexes, _stroke, _vertices.data(), 0, _nuPoints);
 
     // Updated Tex Coords only if they are different than previous step
     if (_nuPoints && _previousNuPoints != _nuPoints)
     {
         float texDelta = 1.0f / _nuPoints;
-        for (i = 0; i < _nuPoints; i++)
+        for (i = 0; i < _nuPoints; ++i)
         {
-            _texCoords[i * 2]     = Tex2F(0, texDelta * i);
-            _texCoords[i * 2 + 1] = Tex2F(1, texDelta * i);
+            _vertices[i * 2].texCoord     = Tex2F(0, texDelta * i);
+            _vertices[i * 2 + 1].texCoord = Tex2F(1, texDelta * i);
         }
 
         _previousNuPoints = _nuPoints;
@@ -425,16 +416,7 @@ void MotionStreak::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     Mat4 finalMat             = projectionMat * transform;
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(Mat4));
 
-    unsigned int offset     = 0;
-    unsigned int vertexSize = sizeof(Vec2) + sizeof(Vec2) + sizeof(uint8_t) * 4;
-    for (unsigned int i = 0; i < drawCount; ++i)
-    {
-        offset = i * vertexSize;
-        _customCommand.updateVertexBuffer(&_vertices[i], offset, sizeof(_vertices[0]));
-        _customCommand.updateVertexBuffer(&_texCoords[i], offset + sizeof(_vertices[0]), sizeof(_texCoords[0]));
-        _customCommand.updateVertexBuffer(&_colorPointer[i * 4], offset + sizeof(_vertices[0]) + sizeof(_texCoords[0]),
-                                          4 * sizeof(uint8_t));
-    }
+    _customCommand.updateVertexBuffer(_vertices.data(), sizeof(_vertices[0]) * drawCount);
 }
 
 }

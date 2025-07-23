@@ -48,26 +48,26 @@ public:
     /**
      * Changes the color with R,G,B bytes
      *
-     * @param color Example: Color3B(255,100,0) means R=255, G=100, B=0
+     * @param color Example: Color32(255,100,0) means R=255, G=100, B=0
      * @lua NA
      */
-    virtual void setColor(const Color3B& color) = 0;
+    virtual void setColor(const Color32& color) = 0;
 
     /**
      * Returns color that is currently used.
      *
-     * @return The Color3B contains R,G,B bytes.
+     * @return The Color32 contains R,G,B bytes.
      * @lua NA
      */
-    virtual const Color3B& getColor() const = 0;
+    virtual const Color32& getColor() const = 0;
 
     /**
      * Returns the displayed color.
      *
-     * @return The Color3B contains R,G,B bytes.
+     * @return The Color32 contains R,G,B bytes.
      * @lua NA
      */
-    virtual const Color3B& getDisplayedColor() const = 0;
+    virtual const Color32& getDisplayedColor() const = 0;
 
     /**
      * Returns the displayed opacity.
@@ -131,7 +131,7 @@ public:
      *  recursive method that updates display color
      * @lua NA
      */
-    virtual void updateDisplayedColor(const Color3B& color) = 0;
+    virtual void updateDisplayedColor(const Color32& color) = 0;
 
     /**
      *  whether or not opacity should be propagated to its children.

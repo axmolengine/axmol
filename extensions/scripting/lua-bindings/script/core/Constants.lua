@@ -531,7 +531,7 @@ ax.KeyCode.KEY_LEFT_ALT   = ax.KeyCode.KEY_ALT
 
 ax.EventAssetsManagerEx =
 {
-    EventCode = 
+    EventCode =
     {
         ERROR_NO_LOCAL_MANIFEST = 0,
         ERROR_DOWNLOAD_MANIFEST = 1,
@@ -586,7 +586,7 @@ ax.CameraFlag =
     USER8 = 256,
 }
 
-ax.CameraBackgroundBrush.BrushType = 
+ax.CameraBackgroundBrush.BrushType =
 {
     NONE = 0,
     DEPTH = 1,
@@ -627,7 +627,7 @@ ax.MATRIX_STACK_TYPE =
     TEXTURE = 2,
 }
 
-ax.LightType = 
+ax.LightType =
 {
     DIRECTIONAL = 0,
     POINT = 1,
@@ -635,7 +635,7 @@ ax.LightType =
     AMBIENT = 3,
 }
 
-ax.LightFlag = 
+ax.LightFlag =
 {
     LIGHT0  = math.pow(2,0),
     LIGHT1  = math.pow(2,1),
@@ -655,10 +655,10 @@ ax.LightFlag =
     LIGHT15 = math.pow(2,15),
 }
 
-ax.RED = ax.c3b(255,0,0)
-ax.GREEN = ax.c3b(0,255,0)
-ax.BLUE = ax.c3b(0,0,255)
-ax.BLACK = ax.c3b(0,0,0)
-ax.WHITE = ax.c3b(255,255,255)
-ax.YELLOW = ax.c3b(255,255,0)
+ax.RED = ax.color32(255,0,0)
+ax.GREEN = ax.color32(0,255,0)
+ax.BLUE = ax.color32(0,0,255)
+ax.BLACK = ax.color32(0,0,0)
+ax.WHITE = ax.color32(255,255,255)
+ax.YELLOW = ax.color32(255,255,0)
 

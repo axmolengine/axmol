@@ -1,7 +1,7 @@
 local imageFileName = "Images/grossini.png"
 
 local SpritePolygonTestDemo = class("SpritePolygonTestDemo", function()
-    local layer = cc.Layer:create()
+    local layer = ax.Layer:create()
     return layer
 end)
 
@@ -18,11 +18,11 @@ function SpritePolygonTestDemo:registerNodeEvent()
 end
 
 function SpritePolygonTestDemo:onEnter()
-    cc.Director:getInstance():setClearColor(cc.c4f(102.0/255, 184.0/255, 204.0/255, 255.0))
+    ax.Director:getInstance():setClearColor(ax.color(102.0/255, 184.0/255, 204.0/255, 1.0))
 end
 
 function SpritePolygonTestDemo:onExit()
-    cc.Director:getInstance():setClearColor(cc.c4f(0.0, 0.0, 0.0, 1.0))
+    ax.Director:getInstance():setClearColor(ax.color(0.0, 0.0, 0.0, 1.0))
 end
 
 ----------------------------------------
@@ -36,18 +36,18 @@ end
 
 function SpritePolygonTest1:ctor()
 
-    local s = cc.Director:getInstance():getWinSize()
-    local offset = cc.p(0.15 * s.width, 0)
+    local s = ax.Director:getInstance():getWinSize()
+    local offset = ax.p(0.15 * s.width, 0)
     local filename = s_pPathGrossini
-    local info =  cc.AutoPolygon:generatePolygon(filename)
-    local spp  =  cc.Sprite:create(info)
+    local info =  ax.AutoPolygon:generatePolygon(filename)
+    local spp  =  ax.Sprite:create(info)
     self:addChild(spp)
-    spp:setPosition(cc.p(s.width / 2 + offset.x, s.height / 2 + offset.y))
+    spp:setPosition(ax.p(s.width / 2 + offset.x, s.height / 2 + offset.y))
 
 
-    local sp = cc.Sprite:create(filename)
+    local sp = ax.Sprite:create(filename)
     self:addChild(sp)
-    sp:setPosition(cc.p(s.width/2 - offset.x, s.height/2 - offset.y))
+    sp:setPosition(ax.p(s.width/2 - offset.x, s.height/2 - offset.y))
 
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
@@ -55,15 +55,15 @@ function SpritePolygonTest1:ctor()
 
     local temp = "Sprite:\nPixels drawn: "
     local spSize = sp:getContentSize()
-    local spArea = cc.Label:createWithTTF(ttfConfig, temp .. (spSize.width * spSize.height))
+    local spArea = ax.Label:createWithTTF(ttfConfig, temp .. (spSize.width * spSize.height))
     sp:addChild(spArea)
-    spArea:setAnchorPoint(cc.p(0, 1))
+    spArea:setAnchorPoint(ax.p(0, 1))
 
     temp = "SpritePolygon:\nPixels drawn: "
     local vertCount = "\nverts:" .. info:getVertCount()
-    local sppArea = cc.Label:createWithTTF(ttfConfig, temp .. math.floor(info:getArea()) .. vertCount)
+    local sppArea = ax.Label:createWithTTF(ttfConfig, temp .. math.floor(info:getArea()) .. vertCount)
     spp:addChild(sppArea)
-    sppArea:setAnchorPoint(cc.p(0, 1))
+    sppArea:setAnchorPoint(ax.p(0, 1))
 
     Helper.initWithLayer(self)
     Helper.titleLabel:setString(self:title())
@@ -86,19 +86,19 @@ end
 local SpritePolygonTest2 = class("SpritePolygonTest2", SpritePolygonTestDemo)
 
 function SpritePolygonTest2:make2Sprites()
-    local s = cc.Director:getInstance():getWinSize()
-    local offset = cc.p(0.15 * s.width, 0)
+    local s = ax.Director:getInstance():getWinSize()
+    local offset = ax.p(0.15 * s.width, 0)
     local filename = s_pPathGrossini
-    local head = cc.rect(30, 25, 25, 25)
-    local info =  cc.AutoPolygon:generatePolygon(filename, head)
-    self.spp  =  cc.Sprite:create(info)
+    local head = ax.rect(30, 25, 25, 25)
+    local info =  ax.AutoPolygon:generatePolygon(filename, head)
+    self.spp  =  ax.Sprite:create(info)
     self:addChild(self.spp)
-    self.spp:setPosition(cc.p(s.width / 2 + offset.x, s.height / 2 + offset.y))
+    self.spp:setPosition(ax.p(s.width / 2 + offset.x, s.height / 2 + offset.y))
 
 
-    self.sp = cc.Sprite:create(filename,head)
+    self.sp = ax.Sprite:create(filename,head)
     self:addChild(self.sp)
-    self.sp:setPosition(cc.p(s.width/2 - offset.x, s.height/2 - offset.y))
+    self.sp:setPosition(ax.p(s.width/2 - offset.x, s.height/2 - offset.y))
 
 
     local ttfConfig = {}
@@ -107,15 +107,15 @@ function SpritePolygonTest2:make2Sprites()
 
     local temp = "Sprite:\nPixels drawn: "
     local spSize = self.sp:getContentSize()
-    local spArea = cc.Label:createWithTTF(ttfConfig, temp .. (spSize.width * spSize.height))
+    local spArea = ax.Label:createWithTTF(ttfConfig, temp .. (spSize.width * spSize.height))
     self.sp:addChild(spArea)
-    spArea:setAnchorPoint(cc.p(0, 1))
+    spArea:setAnchorPoint(ax.p(0, 1))
 
     temp = "SpritePolygon:\nPixels drawn: "
     local vertCount = "\nverts:" .. info:getVertCount()
-    local sppArea = cc.Label:createWithTTF(ttfConfig, temp .. math.floor(info:getArea()) .. vertCount)
+    local sppArea = ax.Label:createWithTTF(ttfConfig, temp .. math.floor(info:getArea()) .. vertCount)
     self.spp:addChild(sppArea)
-    sppArea:setAnchorPoint(cc.p(0, 1))
+    sppArea:setAnchorPoint(ax.p(0, 1))
 end
 
 function SpritePolygonTest2:ctor()
@@ -143,25 +143,25 @@ end
 local SpritePolygonTest3 = class("SpritePolygonTest3", SpritePolygonTestDemo)
 
 function SpritePolygonTest3:makeSprite(filename, pos)
-    local quadSize = cc.Sprite:create(filename):getContentSize()
+    local quadSize = ax.Sprite:create(filename):getContentSize()
     local originalSize = quadSize.width * quadSize.height
-    local info = cc.AutoPolygon:generatePolygon(filename)
-    local ret = cc.Sprite:create(info)
+    local info = ax.AutoPolygon:generatePolygon(filename)
+    local ret = ax.Sprite:create(info)
     ret:setPosition(pos)
-    
-    local spArea = cc.Label:createWithTTF(self._ttfConfig, filename .. "\nVerts: " .. info:getVertCount() .. "\nPixels: " .. math.floor(info:getArea() / originalSize * 100)  .. "%")
+
+    local spArea = ax.Label:createWithTTF(self._ttfConfig, filename .. "\nVerts: " .. info:getVertCount() .. "\nPixels: " .. math.floor(info:getArea() / originalSize * 100)  .. "%")
     ret:addChild(spArea)
-    spArea:setAnchorPoint(cc.p(0,1))
+    spArea:setAnchorPoint(ax.p(0,1))
     ret:setName(filename)
-    ret:setAnchorPoint(cc.p(0.5, 0))
-    return ret 
+    ret:setAnchorPoint(ax.p(0.5, 0))
+    return ret
 end
 
 function SpritePolygonTest3:makeSprites(list, count, y)
-    local vsize = cc.Director:getInstance():getVisibleSize()
+    local vsize = ax.Director:getInstance():getVisibleSize()
     local offset = (vsize.width - 100) / (count - 1)
     for i = 1, count do
-        local sp = self:makeSprite(list[i], cc.p(50 + offset * (i - 1), y))
+        local sp = self:makeSprite(list[i], ax.p(50 + offset * (i - 1), y))
         self:addChild(sp)
     end
 end
@@ -169,8 +169,8 @@ end
 function SpritePolygonTest3:updateLabel(sprite, polygonInfo)
     local label = sprite:getChildren()[1]
     local filename = sprite:getName()
-    local scaleFactor = cc.Director:getInstance():getContentScaleFactor()
-    local size = cc.size(polygonInfo.rect.width / scaleFactor , polygonInfo.rect.height / scaleFactor )
+    local scaleFactor = ax.Director:getInstance():getContentScaleFactor()
+    local size = ax.size(polygonInfo.rect.width / scaleFactor , polygonInfo.rect.height / scaleFactor )
     local labelInfo = filename .. "\nVerts: " .. polygonInfo:getVertCount() .. "\nPixels: " .. math.floor(polygonInfo:getArea() / (size.width*size.height)*100) .. "%"
     label:setString(labelInfo)
 end
@@ -180,14 +180,14 @@ function SpritePolygonTest3:ctor()
     self._ttfConfig.fontFilePath = "fonts/arial.ttf"
     self._ttfConfig.fontSize = 8
 
-    local vsize = cc.Director:getInstance():getVisibleSize()
+    local vsize = ax.Director:getInstance():getVisibleSize()
 
     local slider = ccui.Slider:create()
     slider:loadBarTexture("cocosui/sliderTrack.png")
     slider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")
     slider:loadProgressBarTexture("cocosui/sliderProgress.png")
-    slider:setPosition(cc.p(vsize.width/2, vsize.height/4))
-    
+    slider:setPosition(ax.p(vsize.width/2, vsize.height/4))
+
 
         local function percentChangedEvent(sender,eventType)
         if eventType == ccui.SliderEventType.percentChanged then
@@ -195,7 +195,7 @@ function SpritePolygonTest3:ctor()
             local percent = "Percent " .. slider:getPercent()
             self._displayValueLabel:setString(percent)
         end
-    end 
+    end
 
     slider:addEventListener(function(sender, eventType)
         local epsilon = math.pow(sender:getPercent() / 100.0 , 2) * 19.0 + 1.0
@@ -204,7 +204,7 @@ function SpritePolygonTest3:ctor()
             local child = children[i]
             if child:getName() ~= nil and child:getName() ~= "" then
                 local file = child:getName()
-                local info = cc.AutoPolygon:generatePolygon(file, cc.rect(0, 0, 0, 0), epsilon)
+                local info = ax.AutoPolygon:generatePolygon(file, ax.rect(0, 0, 0, 0), epsilon)
                 child:setPolygonInfo(info)
                 self:updateLabel(child, info)
             end
@@ -213,10 +213,10 @@ function SpritePolygonTest3:ctor()
         self._epsilonLabel:setString("Epsilon: " .. epsilon)
     end)
     slider:setPercent(math.sqrt(1.0 /19.0 )*100)
-    
-    self._epsilonLabel = cc.Label:createWithTTF(self._ttfConfig, "Epsilon: 2.0")
+
+    self._epsilonLabel = ax.Label:createWithTTF(self._ttfConfig, "Epsilon: 2.0")
     self:addChild(self._epsilonLabel)
-    self._epsilonLabel:setPosition(cc.p(vsize.width/2, vsize.height/4 + 15))
+    self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
     self:addChild(slider)
 
     local list = {
@@ -244,11 +244,11 @@ function SpritePolygonTest3:subtitle()
 end
 
 function SpritePolygonTest3:onEnter()
-    cc.Director:getInstance():setClearColor(cc.c4f(102.0/255, 184.0/255, 204.0/255, 255.0))
+    ax.Director:getInstance():setClearColor(ax.color(102.0/255, 184.0/255, 204.0/255, 1.0))
 end
 
 function SpritePolygonTest3:onExit()
-    cc.Director:getInstance():setClearColor(cc.c4f(0.0, 0.0, 0.0, 1.0))
+    ax.Director:getInstance():setClearColor(ax.color(0.0, 0.0, 0.0, 1.0))
 end
 
 
@@ -262,14 +262,14 @@ function SpritePolygonTest4:ctor()
     self._ttfConfig.fontFilePath = "fonts/arial.ttf"
     self._ttfConfig.fontSize = 8
 
-    local vsize = cc.Director:getInstance():getVisibleSize()
+    local vsize = ax.Director:getInstance():getVisibleSize()
 
     local slider = ccui.Slider:create()
     slider:loadBarTexture("cocosui/sliderTrack.png")
     slider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")
     slider:loadProgressBarTexture("cocosui/sliderProgress.png")
-    slider:setPosition(cc.p(vsize.width/2, vsize.height/4))
-    
+    slider:setPosition(ax.p(vsize.width/2, vsize.height/4))
+
 
         local function percentChangedEvent(sender,eventType)
         if eventType == ccui.SliderEventType.percentChanged then
@@ -277,7 +277,7 @@ function SpritePolygonTest4:ctor()
             local percent = "Percent " .. slider:getPercent()
             self._displayValueLabel:setString(percent)
         end
-    end 
+    end
 
     slider:addEventListener(function(sender, eventType)
         local epsilon = math.pow(sender:getPercent() / 100.0 , 2) * 19.0 + 1.0
@@ -286,7 +286,7 @@ function SpritePolygonTest4:ctor()
             local child = children[i]
             if child:getName() ~= nil and child:getName() ~= "" then
                 local file = child:getName()
-                local info = cc.AutoPolygon:generatePolygon(file, cc.rect(0, 0, 0, 0), epsilon)
+                local info = ax.AutoPolygon:generatePolygon(file, ax.rect(0, 0, 0, 0), epsilon)
                 child:setPolygonInfo(info)
                 self:updateLabel(child, info)
             end
@@ -295,10 +295,10 @@ function SpritePolygonTest4:ctor()
         self._epsilonLabel:setString("Epsilon: " .. epsilon)
     end)
     slider:setPercent(math.sqrt(1.0 /19.0 )*100)
-    
-    self._epsilonLabel = cc.Label:createWithTTF(self._ttfConfig, "Epsilon: 2.0")
+
+    self._epsilonLabel = ax.Label:createWithTTF(self._ttfConfig, "Epsilon: 2.0")
     self:addChild(self._epsilonLabel)
-    self._epsilonLabel:setPosition(cc.p(vsize.width/2, vsize.height/4 + 15))
+    self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
     self:addChild(slider)
 
     local list = {
@@ -327,42 +327,42 @@ end
 function SpritePolygonTest4:updateLabel(sprite, polygonInfo)
     local label = sprite:getChildren()[1]
     local filename = sprite:getName()
-    local rectSize = cc.size(polygonInfo.rect.width, polygonInfo.rect.height)
-    local size = cc.size(rectSize.width / cc.Director:getInstance():getContentScaleFactor(), rectSize.height / cc.Director:getInstance():getContentScaleFactor())
+    local rectSize = ax.size(polygonInfo.rect.width, polygonInfo.rect.height)
+    local size = ax.size(rectSize.width / ax.Director:getInstance():getContentScaleFactor(), rectSize.height / ax.Director:getInstance():getContentScaleFactor())
     local labelInfo = filename .. "\nVerts: " .. polygonInfo:getVertCount() .. "\nPixels: " .. math.floor(polygonInfo:getArea() / (size.width*size.height)*100) .. "%"
     label:setString(labelInfo)
 end
 
 function SpritePolygonTest4:makeSprite(filename, pos)
-    local quadSize = cc.Sprite:create(filename):getContentSize()
+    local quadSize = ax.Sprite:create(filename):getContentSize()
     local originalSize = quadSize.width * quadSize.height
-    local info = cc.AutoPolygon:generatePolygon(filename)
-    local ret = cc.Sprite:create(info)
+    local info = ax.AutoPolygon:generatePolygon(filename)
+    local ret = ax.Sprite:create(info)
     ret:setPosition(pos)
-    
-    local spArea = cc.Label:createWithTTF(self._ttfConfig, filename .. "\nVerts: " .. info:getVertCount() .. "\nPixels: " .. math.floor(info:getArea() / originalSize * 100)  .. "%")
+
+    local spArea = ax.Label:createWithTTF(self._ttfConfig, filename .. "\nVerts: " .. info:getVertCount() .. "\nPixels: " .. math.floor(info:getArea() / originalSize * 100)  .. "%")
     ret:addChild(spArea)
-    spArea:setAnchorPoint(cc.p(0,1))
+    spArea:setAnchorPoint(ax.p(0,1))
     ret:setName(filename)
-    ret:setAnchorPoint(cc.p(0.5, 0))
-    return ret 
+    ret:setAnchorPoint(ax.p(0.5, 0))
+    return ret
 end
 
 function SpritePolygonTest4:makeSprites(list, count, y)
-    local vsize = cc.Director:getInstance():getVisibleSize()
+    local vsize = ax.Director:getInstance():getVisibleSize()
     local offset = (vsize.width - 100) / (count - 1)
     for i = 1, count do
-        local sp = self:makeSprite(list[i], cc.p(50 + offset * (i - 1), y))
+        local sp = self:makeSprite(list[i], ax.p(50 + offset * (i - 1), y))
         self:addChild(sp)
     end
 end
 
 function SpritePolygonTest4:onEnter()
-    cc.Director:getInstance():setClearColor(cc.c4f(102.0/255, 184.0/255, 204.0/255, 255.0))
+    ax.Director:getInstance():setClearColor(ax.color(102.0/255, 184.0/255, 204.0/255, 1.0))
 end
 
 function SpritePolygonTest4:onExit()
-    cc.Director:getInstance():setClearColor(cc.c4f(0.0, 0.0, 0.0, 1.0))
+    ax.Director:getInstance():setClearColor(ax.color(0.0, 0.0, 0.0, 1.0))
 end
 
 
@@ -400,23 +400,23 @@ function SpritePolygonPerformance:updateLabel()
 end
 
 function SpritePolygonPerformance:onEnter()
-    cc.Director:getInstance():setClearColor(cc.c4f(102.0/255, 184.0/255, 204.0/255, 255.0))
+    ax.Director:getInstance():setClearColor(ax.color(102.0/255, 184.0/255, 204.0/255, 1.0))
 end
 
 function SpritePolygonPerformance:onExit()
-    cc.Director:getInstance():setClearColor(cc.c4f(0.0, 0.0, 0.0, 1.0))
+    ax.Director:getInstance():setClearColor(ax.color(0.0, 0.0, 0.0, 1.0))
     self:unscheduleUpdate()
 end
 
 function SpritePolygonPerformance:init()
     local ttfConfig  = { fontFilePath = "fonts/arial.ttf",  fontSize = 8 }
-    self._perfLabel = cc.Label:createWithTTF(ttfConfig, "performance test")
+    self._perfLabel = ax.Label:createWithTTF(ttfConfig, "performance test")
     self:addChild(self._perfLabel)
-    self._perfLabel:setPosition(cc.Director:getInstance():getVisibleSize().width / 2, 80)
+    self._perfLabel:setPosition(ax.Director:getInstance():getVisibleSize().width / 2, 80)
 
     self._spriteCount, self._vertCount, self._triCount, self._pixelCount, self._continuousLowDt = 0,0,0,0,0
-    
-    local size = cc.Director:getInstance():getVisibleSize()
+
+    local size = ax.Director:getInstance():getVisibleSize()
     self._elapsedTime = 0
     self._posX,self._leftX = size.width * 0.15, size.width * 0.15
     self._rightX = size.width*0.85
@@ -433,8 +433,8 @@ function SpritePolygonPerformance:init()
         self._elapsedTime = self._elapsedTime + dt
         local loops = math.floor((0.025 - dt)*1000)
         if dt < 0.025 and loops > 0 then
-            self._continuousHighDtTime = cc.clampf(self._continuousHighDtTime-dt*2, 0.0, 1.0)
-            self._waitingTime = cc.clampf(self._waitingTime-dt, 0.0, 5.0)
+            self._continuousHighDtTime = ax.clampf(self._continuousHighDtTime-dt*2, 0.0, 1.0)
+            self._waitingTime = ax.clampf(self._waitingTime-dt, 0.0, 5.0)
             self._continuousLowDt = self._continuousLowDt + 1
         else
             self._continuousHighDtTime = self._continuousHighDtTime + dt
@@ -479,7 +479,7 @@ function SpritePolygonPerformance:initExtend()
 end
 
 function SpritePolygonPerformance:makeSprite()
-    return cc.Node:create()
+    return ax.Node:create()
 end
 
 function SpritePolygonPerformance:incrementStats()
@@ -496,13 +496,13 @@ end
 local SpritePolygonPerformanceTestDynamic = class("SpritePolygonPerformanceTestDynamic", SpritePolygonPerformance)
 
 function SpritePolygonPerformanceTestDynamic:makeSprite()
-    local ret = cc.Sprite:create(self._info)
-    ret:runAction(cc.RepeatForever:create(cc.RotateBy:create(1.0,360.0)))
+    local ret = ax.Sprite:create(self._info)
+    ret:runAction(ax.RepeatForever:create(ax.RotateBy:create(1.0,360.0)))
     return ret
 end
 
 function SpritePolygonPerformanceTestDynamic:initExtend()
-    self._info = cc.AutoPolygon:generatePolygon(imageFileName)
+    self._info = ax.AutoPolygon:generatePolygon(imageFileName)
     self:initIncrementStats()
 end
 
@@ -526,7 +526,7 @@ end
 local SpritePerformanceTestDynamic = class("SpritePerformanceTestDynamic", SpritePolygonPerformance)
 
 function SpritePerformanceTestDynamic:initExtend()
-    -- self._info = cc.AutoPolygon:generatePolygon(imageFileName)
+    -- self._info = ax.AutoPolygon:generatePolygon(imageFileName)
     self:initIncrementStats()
 end
 
@@ -539,15 +539,15 @@ function SpritePerformanceTestDynamic:subtitle()
 end
 
 function SpritePerformanceTestDynamic:initIncrementStats()
-    local t = cc.Sprite:create(imageFileName)
+    local t = ax.Sprite:create(imageFileName)
     self._incVert = 4
     self._incTri = 2
     self._incPix = t:getContentSize().width * t:getContentSize().height
 end
 
 function SpritePerformanceTestDynamic:makeSprite()
-    local ret =  cc.Sprite:create(imageFileName)
-    ret:runAction(cc.RepeatForever:create(cc.RotateBy:create(1.0,360.0)))
+    local ret =  ax.Sprite:create(imageFileName)
+    ret:runAction(ax.RepeatForever:create(ax.RotateBy:create(1.0,360.0)))
     return ret
 end
 
@@ -556,9 +556,9 @@ end
 ----SpritePolygonTest
 ----------------------------------------
 function SpritePolygonTest()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
 
-    Helper.createFunctionTable = 
+    Helper.createFunctionTable =
     {
         SpritePolygonTest1.create,
         SpritePolygonTest2.create,

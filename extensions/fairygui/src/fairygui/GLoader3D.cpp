@@ -24,7 +24,7 @@ GLoader3D::GLoader3D()
     _playing(true),
     _frame(0),
     _loop(false),
-    _color(255, 255, 255)
+    _color(Color32::WHITE)
 {
 }
 
@@ -102,12 +102,12 @@ void GLoader3D::setShrinkOnly(bool value)
     }
 }
 
-ax::Color3B GLoader3D::getColor() const
+ax::Color32 GLoader3D::getColor() const
 {
     return _color;
 }
 
-void GLoader3D::setColor(const ax::Color3B& value)
+void GLoader3D::setColor(const ax::Color32& value)
 {
     _color = value;
     if (_content != nullptr)
@@ -313,7 +313,7 @@ void GLoader3D::clearContent()
         _container->removeChild(_content);
         AX_SAFE_RELEASE_NULL(_content);
     }
-    
+
     _contentItem = nullptr;
 }
 
@@ -481,7 +481,7 @@ void GLoader3D::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     _loop = buffer->readBool();
 
     if (buffer->readBool())
-        setColor((Color3B)buffer->readColor());
+        setColor(buffer->readColor());
 
     if (_url.length() > 0)
         loadContent();

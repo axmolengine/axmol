@@ -66,8 +66,7 @@ PageViewIndicator::PageViewIndicator()
     , _currentOverlappingIndexNode(nullptr)
     , _spaceBetweenIndexNodes(SPACE_BETWEEN_INDEX_NODES_DEFAULT)
     , _indexNodesScale(1.0f)
-    , _indexNodesColor(Color3B::WHITE)
-    , _indexNodesOpacity(INDEX_NODES_OPACITY_DEFAULT)
+    , _indexNodesColor(Color32{255, 255, 255, INDEX_NODES_OPACITY_DEFAULT})
     , _useDefaultTexture(true)
     , _indexNodesTextureFile("")
     , _indexNodesTexType(Widget::TextureResType::LOCAL)
@@ -163,7 +162,7 @@ void PageViewIndicator::setSpaceBetweenIndexNodes(float spaceBetweenIndexNodes)
     rearrange();
 }
 
-void PageViewIndicator::setIndexNodesColor(const Color3B& indexNodesColor)
+void PageViewIndicator::setIndexNodesColor(const Color32& indexNodesColor)
 {
     _indexNodesColor = indexNodesColor;
 
@@ -175,7 +174,7 @@ void PageViewIndicator::setIndexNodesColor(const Color3B& indexNodesColor)
 
 void PageViewIndicator::setIndexNodesOpacity(uint8_t opacity)
 {
-    _indexNodesOpacity = opacity;
+    _indexNodesColor.a = opacity;
     for (auto&& indexNode : _indexNodes)
         indexNode->setOpacity(opacity);
 }
@@ -256,7 +255,6 @@ void PageViewIndicator::increaseNumberOfPages()
 
     indexNode->setColor(_indexNodesColor);
     indexNode->setScale(_indexNodesScale);
-    indexNode->setOpacity(_indexNodesOpacity);
     addProtectedChild(indexNode);
     _indexNodes.pushBack(indexNode);
 }

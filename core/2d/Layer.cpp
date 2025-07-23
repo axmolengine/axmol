@@ -115,8 +115,7 @@ bool LayerColor::initWithColor(const Color32& color, float w, float h)
         const Rect defaultRect{0.f, 0.f, 2.f, 2.f};
         setTextureRect(defaultRect, false, defaultRect.size);
         setContentSize(Size(w, h));
-        setColor(Color3B{color});
-        setOpacity(color.a);
+        setColor(color);
 
         return true;
     }
@@ -201,17 +200,12 @@ bool LayerGradient::initWithColor(const Color32& start, const Color32& end)
 
 bool LayerGradient::initWithColor(const Color32& start, const Color32& end, const Vec2& v)
 {
-    _endColor.r = end.r;
-    _endColor.g = end.g;
-    _endColor.b = end.b;
-
-    _endOpacity   = end.a;
-    _startOpacity = start.a;
+    _endColor = end;
     _alongVector  = v;
 
     _compressedInterpolation = true;
 
-    return LayerColor::initWithColor(Color32(start.r, start.g, start.b, 255));
+    return LayerColor::initWithColor(start);
 }
 
 void LayerGradient::updateColor()
@@ -230,12 +224,12 @@ void LayerGradient::updateColor()
         u        = u * (h2 * (float)c);
     }
 
-    float opacityf = (float)_displayedOpacity / 255.0f;
+    float opacityf = (float)_displayedColor.a / 255.0f;
 
-    Color S(_displayedColor,
-              _startOpacity * opacityf / 255.0f);
+    Color S(_displayedColor.r / 255.f, _displayedColor.g / 255.f, _displayedColor.b / 255.f,
+            _startColor.a / 255.0f * opacityf);
 
-    Color E(_endColor, _endOpacity * opacityf / 255.0f);
+    Color E(_endColor.r / 255.f, _endColor.g / 255.f, _endColor.b / 255.f, _endColor.a / 255.0f * opacityf);
 
     // (-1, -1)
     _quad.bl.color.r = (E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c))) * 255;
@@ -270,47 +264,47 @@ void LayerGradient::updateColor()
     }
 }
 
-const Color3B& LayerGradient::getStartColor() const
+const Color32& LayerGradient::getStartColor() const
 {
     return _realColor;
 }
 
-void LayerGradient::setStartColor(const Color3B& color)
+void LayerGradient::setStartColor(const Color32& color)
 {
     setColor(color);
 }
 
-void LayerGradient::setEndColor(const Color3B& color)
+void LayerGradient::setEndColor(const Color32& color)
 {
     _endColor = color;
     updateColor();
 }
 
-const Color3B& LayerGradient::getEndColor() const
+const Color32& LayerGradient::getEndColor() const
 {
     return _endColor;
 }
 
 void LayerGradient::setStartOpacity(uint8_t o)
 {
-    _startOpacity = o;
+    _startColor.a = o;
     updateColor();
 }
 
 uint8_t LayerGradient::getStartOpacity() const
 {
-    return _startOpacity;
+    return _startColor.a;
 }
 
 void LayerGradient::setEndOpacity(uint8_t o)
 {
-    _endOpacity = o;
+    _endColor.a = o;
     updateColor();
 }
 
 uint8_t LayerGradient::getEndOpacity() const
 {
-    return _endOpacity;
+    return _endColor.a;
 }
 
 void LayerGradient::setVector(const Vec2& var)
@@ -506,11 +500,6 @@ float LayerRadialGradient::getExpand() const
     return _expand;
 }
 
-void LayerRadialGradient::setStartColor(const Color3B& color)
-{
-    setStartColor(Color32(color));
-}
-
 void LayerRadialGradient::setStartColor(const ax::Color32& color)
 {
     _startColor = color;
@@ -522,16 +511,6 @@ Color32 LayerRadialGradient::getStartColor() const
     return _startColor;
 }
 
-Color3B LayerRadialGradient::getStartColor3B() const
-{
-    return Color3B(_startColor);
-}
-
-void LayerRadialGradient::setEndColor(const Color3B& color)
-{
-    setEndColor(Color32(color));
-}
-
 void LayerRadialGradient::setEndColor(const ax::Color32& color)
 {
     _endColor = color;
@@ -541,11 +520,6 @@ void LayerRadialGradient::setEndColor(const ax::Color32& color)
 Color32 LayerRadialGradient::getEndColor() const
 {
     return _endColor;
-}
-
-Color3B LayerRadialGradient::getEndColor3B() const
-{
-    return Color3B(_endColor);
 }
 
 void LayerRadialGradient::setBlendFunc(const BlendFunc& blendFunc)

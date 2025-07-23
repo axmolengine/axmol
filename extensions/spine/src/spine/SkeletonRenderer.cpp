@@ -249,12 +249,12 @@ namespace spine {
 		SkeletonTwoColorBatch *twoColorBatch = SkeletonTwoColorBatch::getInstance();
 		const bool hasSingleTint = (isTwoColorTint() == false);
 
-		const Color3B displayedColor = getDisplayedColor();
+		auto&& displayedColor = getDisplayedColor();
 		Color nodeColor;
 		nodeColor.r = displayedColor.r / 255.f;
 		nodeColor.g = displayedColor.g / 255.f;
 		nodeColor.b = displayedColor.b / 255.f;
-		nodeColor.a = getDisplayedOpacity() / 255.f;
+		nodeColor.a = displayedColor.a / 255.f;
 
 		Color color;
 		Color darkColor;

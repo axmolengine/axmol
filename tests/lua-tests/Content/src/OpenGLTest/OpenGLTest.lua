@@ -16,7 +16,7 @@ local vertDefaultSource = "\n".."\n" ..
                   "   v_texCoord = a_texCoord;\n" ..
                   "} \n"
 
-local scaleFactor = cc.Director:getInstance():getContentScaleFactor()
+local scaleFactor = ax.Director:getInstance():getContentScaleFactor()
 
 local function OpenGLTestMainLayer()
     local kItemTagBasic = 1000
@@ -25,7 +25,7 @@ local function OpenGLTestMainLayer()
     local curCase  = 0
     local accum    = 0
     local labelBMFont = nil
-    local size = cc.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getWinSize()
     local curLayer = nil
     local schedulEntry = nil
     local  function OrderCallbackMenu()
@@ -47,23 +47,23 @@ local function OpenGLTestMainLayer()
             ShowCurrentTest()
         end
 
-        local ordercallbackmenu = cc.Menu:create()
-        local size = cc.Director:getInstance():getWinSize()
-        local item1 = cc.MenuItemImage:create(s_pPathB1, s_pPathB2)
+        local ordercallbackmenu = ax.Menu:create()
+        local size = ax.Director:getInstance():getWinSize()
+        local item1 = ax.MenuItemImage:create(s_pPathB1, s_pPathB2)
         item1:registerScriptTapHandler(backCallback)
         ordercallbackmenu:addChild(item1,kItemTagBasic)
-        local item2 = cc.MenuItemImage:create(s_pPathR1, s_pPathR2)
+        local item2 = ax.MenuItemImage:create(s_pPathR1, s_pPathR2)
         item2:registerScriptTapHandler(restartCallback)
         ordercallbackmenu:addChild(item2,kItemTagBasic)
-        local item3 = cc.MenuItemImage:create(s_pPathF1, s_pPathF2)
+        local item3 = ax.MenuItemImage:create(s_pPathF1, s_pPathF2)
         ordercallbackmenu:addChild(item3,kItemTagBasic)
         item3:registerScriptTapHandler(nextCallback)
 
-        item1:setPosition(cc.p(size.width / 2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
-        item2:setPosition(cc.p(size.width / 2, item2:getContentSize().height / 2))
-        item3:setPosition(cc.p(size.width / 2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+        item1:setPosition(ax.p(size.width / 2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
+        item2:setPosition(ax.p(size.width / 2, item2:getContentSize().height / 2))
+        item3:setPosition(ax.p(size.width / 2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
 
-        ordercallbackmenu:setPosition(cc.p(0, 0))
+        ordercallbackmenu:setPosition(ax.p(0, 0))
 
         return ordercallbackmenu
     end
@@ -128,7 +128,7 @@ local function OpenGLTestMainLayer()
         elseif 10 == curCase then
             return "Tests ReadPixels. See console"
         elseif 11 == curCase then
-            return "Testing gl.clear() with cc.GLNode"
+            return "Testing gl.clear() with ax.GLNode"
         elseif 12 == curCase then
             return "blue background with a red triangle in the middle"
         elseif 13 == curCase then
@@ -142,16 +142,16 @@ local function OpenGLTestMainLayer()
 
     local function InitTitle(layer)
         --Title
-        local lableTitle = cc.Label:createWithTTF(GetTitle(), s_arialPath, 40)
+        local lableTitle = ax.Label:createWithTTF(GetTitle(), s_arialPath, 40)
         layer:addChild(lableTitle, 15)
-        lableTitle:setAnchorPoint(cc.p(0.5, 0.5))
-        lableTitle:setPosition(cc.p(size.width/2, size.height-32))
-        lableTitle:setColor(cc.c3b(255,255,40))
+        lableTitle:setAnchorPoint(ax.p(0.5, 0.5))
+        lableTitle:setPosition(ax.p(size.width/2, size.height-32))
+        lableTitle:setColor(ax.color32(255,255,40))
         --SubTitle
-        local subLabelTitle = cc.Label:createWithTTF(GetSubTitle(), s_thonburiPath, 16)
+        local subLabelTitle = ax.Label:createWithTTF(GetSubTitle(), s_thonburiPath, 16)
         layer:addChild(subLabelTitle, 15)
-        subLabelTitle:setAnchorPoint(cc.p(0.5, 0.5))
-        subLabelTitle:setPosition(cc.p(size.width/2, size.height-80))
+        subLabelTitle:setAnchorPoint(ax.p(0.5, 0.5))
+        subLabelTitle:setPosition(ax.p(size.width/2, size.height-80))
     end
 
     local function updateRetroEffect(fTime)
@@ -171,16 +171,16 @@ local function OpenGLTestMainLayer()
     end
 
     local function createShaderRetroEffect()
-        local RetroEffectlayer = cc.Layer:create()
+        local RetroEffectlayer = ax.Layer:create()
         InitTitle(RetroEffectlayer)
-        local program = cc.GLProgram:create("Shaders/example_ColorBars.vsh", "Shaders/example_ColorBars.fsh")
-        program:bindAttribLocation(cc.ATTRIBUTE_NAME_POSITION, cc.VERTEX_ATTRIB_POSITION)
-        program:bindAttribLocation(cc.ATTRIBUTE_NAME_TEX_COORD, cc.VERTEX_ATTRIB_TEX_COORD)
+        local program = ax.GLProgram:create("Shaders/example_ColorBars.vsh", "Shaders/example_ColorBars.fsh")
+        program:bindAttribLocation(ax.ATTRIBUTE_NAME_POSITION, ax.VERTEX_ATTRIB_POSITION)
+        program:bindAttribLocation(ax.ATTRIBUTE_NAME_TEX_COORD, ax.VERTEX_ATTRIB_TEX_COORD)
         program:link()
         program:updateUniforms()
 
-        label = cc.Label:createWithBMFont("fonts/west_england-64.fnt", "RETRO EFFECT")
-        label:setAnchorPoint(cc.p(0.5, 0.5))
+        label = ax.Label:createWithBMFont("fonts/west_england-64.fnt", "RETRO EFFECT")
+        label:setAnchorPoint(ax.p(0.5, 0.5))
         label:setGLProgram( program )
 
         label:setPosition(size.width/2, size.height/2)
@@ -191,23 +191,23 @@ local function OpenGLTestMainLayer()
     end
 
     local function createShaderNodeLayer(vSource, fSource)
-        local shaderNodeLayer = cc.Layer:create()
+        local shaderNodeLayer = ax.Layer:create()
 
         InitTitle(shaderNodeLayer)
 
         local vertSource = vSource
         local fragSource = fSource
-        local glProgram = cc.GLProgram:createWithByteArrays(vertSource, fragSource)
+        local glProgram = ax.GLProgram:createWithByteArrays(vertSource, fragSource)
         glProgram:retain()
 
         local glNode  = gl.glNodeCreate()
 
-        local resolution = cc.p(256, 256)
-        local director = cc.Director:getInstance()
+        local resolution = ax.p(256, 256)
+        local director = ax.Director:getInstance()
         local frameSize = director:getRenderView():getFrameSize()
         local visibleSize = director:getVisibleSize()
         local retinaFactor = director:getRenderView():getRetinaFactor()
-        local center = cc.p( size.width / 2 * frameSize.width / visibleSize.width * retinaFactor, size.height / 2 * frameSize.height / visibleSize.height * retinaFactor)
+        local center = ax.p( size.width / 2 * frameSize.width / visibleSize.width * retinaFactor, size.height / 2 * frameSize.height / visibleSize.height * retinaFactor)
 
         local function initBuffers()
             local w = 256
@@ -237,9 +237,9 @@ local function OpenGLTestMainLayer()
             local uniformResolution = gl.getUniformLocation(glProgram:getProgram(), "resolution")
             glProgram:setUniformLocationF32(uniformResolution, resolution.x, resolution.y)
 
-            gl.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION)
+            gl.glEnableVertexAttribs(ax.VERTEX_ATTRIB_FLAG_POSITION)
             gl.bindBuffer(gl.ARRAY_BUFFER, vbo)
-            gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(ax.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, 0);
             gl.drawArrays(gl.TRIANGLES, 0, 6)
             gl.bindBuffer(gl.ARRAY_BUFFER, 0)
         end
@@ -263,49 +263,49 @@ local function OpenGLTestMainLayer()
 
     local function createShaderMajoriTest()
         local vSource = vertDefaultSource
-        local fSource = cc.FileUtils:getInstance():getStringFromFile("Shaders/example_Monjori.fsh")
+        local fSource = ax.FileUtils:getInstance():getStringFromFile("Shaders/example_Monjori.fsh")
         return createShaderNodeLayer(vSource, fSource)
     end
 
     local function createShaderMandelbrotTest()
         local vSource = vertDefaultSource
-        local fSource = cc.FileUtils:getInstance():getStringFromFile("Shaders/example_Mandelbrot.fsh")
+        local fSource = ax.FileUtils:getInstance():getStringFromFile("Shaders/example_Mandelbrot.fsh")
         return createShaderNodeLayer(vSource, fSource)
     end
 
     local function createShaderHeartTest()
         local vSource = vertDefaultSource
-        local fSource = cc.FileUtils:getInstance():getStringFromFile("Shaders/example_Heart.fsh")
+        local fSource = ax.FileUtils:getInstance():getStringFromFile("Shaders/example_Heart.fsh")
         return createShaderNodeLayer(vSource, fSource)
     end
 
     local function createShaderPlasmaTest()
         local vSource = vertDefaultSource
-        local fSource = cc.FileUtils:getInstance():getStringFromFile("Shaders/example_Plasma.fsh")
+        local fSource = ax.FileUtils:getInstance():getStringFromFile("Shaders/example_Plasma.fsh")
         return createShaderNodeLayer(vSource, fSource)
     end
 
     local function createShaderFlowerTest()
         local vSource = vertDefaultSource
-        local fSource = cc.FileUtils:getInstance():getStringFromFile("Shaders/example_Flower.fsh")
+        local fSource = ax.FileUtils:getInstance():getStringFromFile("Shaders/example_Flower.fsh")
         return createShaderNodeLayer(vSource, fSource)
     end
 
     local function createShaderJuliaTest()
         local vSource = vertDefaultSource
-        local fSource = cc.FileUtils:getInstance():getStringFromFile("Shaders/example_Julia.fsh")
+        local fSource = ax.FileUtils:getInstance():getStringFromFile("Shaders/example_Julia.fsh")
         return createShaderNodeLayer(vSource, fSource)
     end
 
     local function createGLGetActiveTest()
-        local glGetActiveLayer = cc.Layer:create()
+        local glGetActiveLayer = ax.Layer:create()
         InitTitle(glGetActiveLayer)
-        local sprite = cc.Sprite:create("Images/grossini.png")
+        local sprite = ax.Sprite:create("Images/grossini.png")
         sprite:setPosition( size.width/2, size.height/2)
         glGetActiveLayer:addChild(sprite)
         local glNode = gl.glNodeCreate()
         glGetActiveLayer:addChild(glNode,-10)
-        local scheduler = cc.Director:getInstance():getScheduler()
+        local scheduler = ax.Director:getInstance():getScheduler()
 
         local function getCurrentResult()
             local var = {}
@@ -348,14 +348,14 @@ local function OpenGLTestMainLayer()
         local texture = {}
         local squareVertexPositionBuffer = {}
         local squareVertexTextureBuffer  = {}
-        local texImage2dLayer = cc.Layer:create()
+        local texImage2dLayer = ax.Layer:create()
         InitTitle(texImage2dLayer)
         local glNode   = gl.glNodeCreate()
         texImage2dLayer:addChild(glNode, 10)
         glNode:setPosition(size.width/2, size.height/2)
-        glNode:setContentSize(cc.size(128,128))
-        glNode:setAnchorPoint(cc.p(0.5,0.5))
-        local shaderCache = cc.ShaderCache:getInstance()
+        glNode:setContentSize(ax.size(128,128))
+        glNode:setAnchorPoint(ax.p(0.5,0.5))
+        local shaderCache = ax.ShaderCache:getInstance()
         local shader = shaderCache:getProgram("ShaderPositionTexture")
 
         local function initGL()
@@ -398,14 +398,14 @@ local function OpenGLTestMainLayer()
                 shader:setUniformsForBuiltins(transform)
 
                 gl.bindTexture(gl.TEXTURE_2D, texture.texture_id)
-                gl.glEnableVertexAttribs(bit._or(cc.VERTEX_ATTRIB_FLAG_TEX_COORDS, cc.VERTEX_ATTRIB_FLAG_POSITION))
+                gl.glEnableVertexAttribs(bit._or(ax.VERTEX_ATTRIB_FLAG_TEX_COORDS, ax.VERTEX_ATTRIB_FLAG_POSITION))
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer.buffer_id)
-                gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION,2,gl.FLOAT,false,0,0)
+                gl.vertexAttribPointer(ax.VERTEX_ATTRIB_POSITION,2,gl.FLOAT,false,0,0)
 
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexTextureBuffer.buffer_id)
-                gl.vertexAttribPointer(cc.VERTEX_ATTRIB_TEX_COORD,2,gl.FLOAT,false,0,0)
+                gl.vertexAttribPointer(ax.VERTEX_ATTRIB_TEX_COORD,2,gl.FLOAT,false,0,0)
 
                 gl.drawArrays(gl.TRIANGLE_STRIP,0,4)
 
@@ -420,7 +420,7 @@ local function OpenGLTestMainLayer()
     end
 
     local function CreateSupportedExtensionsLayer()
-        local extensionsLayer = cc.Layer:create()
+        local extensionsLayer = ax.Layer:create()
         InitTitle(extensionsLayer)
         local glNode = gl.glNodeCreate()
         extensionsLayer:addChild(glNode,-10)
@@ -439,7 +439,7 @@ local function OpenGLTestMainLayer()
     end
 
     local function CreateReadPixelsTest()
-        local readPixelsLayer = cc.Layer:create()
+        local readPixelsLayer = ax.Layer:create()
         InitTitle(readPixelsLayer)
         local glNode = gl.glNodeCreate()
         readPixelsLayer:addChild(glNode,-10)
@@ -447,10 +447,10 @@ local function OpenGLTestMainLayer()
         local x = size.width
         local y = size.height
 
-        local blue = cc.LayerColor:create(cc.c4b(0, 0, 255, 255))
-        local red = cc.LayerColor:create(cc.c4b(255, 0, 0, 255))
-        local green = cc.LayerColor:create(cc.c4b(0, 255, 0, 255))
-        local white = cc.LayerColor:create(cc.c4b(255, 255, 255, 255))
+        local blue = ax.LayerColor:create(ax.color32(0, 0, 255, 255))
+        local red = ax.LayerColor:create(ax.color32(255, 0, 0, 255))
+        local green = ax.LayerColor:create(ax.color32(0, 255, 0, 255))
+        local white = ax.LayerColor:create(ax.color32(255, 255, 255, 255))
 
         blue:setScale(0.5)
         blue:setPosition(-x / 4, -y / 4)
@@ -469,7 +469,7 @@ local function OpenGLTestMainLayer()
         readPixelsLayer:addChild(green,12)
         readPixelsLayer:addChild(red,13)
 
-        local scheduler = cc.Director:getInstance():getScheduler()
+        local scheduler = ax.Director:getInstance():getScheduler()
 
         local function getCurrentResult()
             local x = size.width
@@ -525,16 +525,16 @@ local function OpenGLTestMainLayer()
     end
 
     local function createClearTest()
-        local clearLayer = cc.Layer:create()
+        local clearLayer = ax.Layer:create()
         InitTitle(clearLayer)
 
-        local blue = cc.LayerColor:create(cc.c4b(0, 0, 255, 255))
+        local blue = ax.LayerColor:create(ax.color32(0, 0, 255, 255))
         clearLayer:addChild( blue, 1 )
 
         local glNode = gl.glNodeCreate()
         clearLayer:addChild(glNode,10)
         --gl.init()
-        local scheduler = cc.Director:getInstance():getScheduler()
+        local scheduler = ax.Director:getInstance():getScheduler()
 
         local function clearDraw()
             gl.clear(gl.COLOR_BUFFER_BIT)
@@ -565,7 +565,7 @@ local function OpenGLTestMainLayer()
     end
 
     local function createNodeWebGLAPITest()
-        local nodeWebGLAPILayer = cc.Layer:create()
+        local nodeWebGLAPILayer = ax.Layer:create()
         InitTitle(nodeWebGLAPILayer)
         local glNode = gl.glNodeCreate()
         nodeWebGLAPILayer:addChild(glNode,10)
@@ -723,11 +723,11 @@ local function OpenGLTestMainLayer()
     end
 
     local function createGLNodeCCAPITest()
-        local nodeCCAPILayer = cc.Layer:create()
+        local nodeCCAPILayer = ax.Layer:create()
         InitTitle(nodeCCAPILayer)
         local glNode = gl.glNodeCreate()
         nodeCCAPILayer:addChild(glNode,10)
-        local shader = cc.GLProgramCache:getInstance():getGLProgram("ShaderPositionColor")
+        local shader = ax.GLProgramCache:getInstance():getGLProgram("ShaderPositionColor")
         local triangleVertexPositionBuffer = {}
         local triangleVertexColorBuffer = {}
         local squareVertexPositionBuffer = {}
@@ -789,22 +789,22 @@ local function OpenGLTestMainLayer()
         local function GLNodeCCAPIDraw(transform, transformUpdated)
             shader:use()
             shader:setUniformsForBuiltins(transform)
-            gl.glEnableVertexAttribs(BitOR(cc.VERTEX_ATTRIB_FLAG_COLOR , cc.VERTEX_ATTRIB_FLAG_POSITION))
+            gl.glEnableVertexAttribs(BitOR(ax.VERTEX_ATTRIB_FLAG_COLOR , ax.VERTEX_ATTRIB_FLAG_POSITION))
 
             --
             gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer.buffer_id)
-            gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, 0)
+            gl.vertexAttribPointer(ax.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, 0)
 
             gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer.buffer_id)
-            gl.vertexAttribPointer(cc.VERTEX_ATTRIB_COLOR, 4, gl.FLOAT, false, 0, 0)
+            gl.vertexAttribPointer(ax.VERTEX_ATTRIB_COLOR, 4, gl.FLOAT, false, 0, 0)
 
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
 
             gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer.buffer_id)
-            gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, 0)
+            gl.vertexAttribPointer(ax.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, 0)
 
             gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer.buffer_id)
-            gl.vertexAttribPointer(cc.VERTEX_ATTRIB_COLOR, 4, gl.FLOAT, false, 0, 0)
+            gl.vertexAttribPointer(ax.VERTEX_ATTRIB_COLOR, 4, gl.FLOAT, false, 0, 0)
 
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3)
 
@@ -819,7 +819,7 @@ local function OpenGLTestMainLayer()
     end
 
     local function createGLTexParamterTest()
-        local glTexParamLayer = cc.Layer:create()
+        local glTexParamLayer = ax.Layer:create()
         InitTitle(glTexParamLayer)
         local glNode  = gl.glNodeCreate()
         glTexParamLayer:addChild(glNode,10)
@@ -842,14 +842,14 @@ local function OpenGLTestMainLayer()
     end
 
     local function createGetUniformTest()
-        local getUniformLayer = cc.Layer:create()
+        local getUniformLayer = ax.Layer:create()
         InitTitle(getUniformLayer)
         local glNode  = gl.glNodeCreate()
         getUniformLayer:addChild(glNode,10)
         local pMatrix = {1,2,3,4, 4,3,2,1, 1,2,4,8, 1.1,1.2,1.3,1.4}
 
         local function runTest()
-            local shader = cc.ShaderCache:getInstance():getProgram("ShaderPositionTextureColor")
+            local shader = ax.ShaderCache:getInstance():getProgram("ShaderPositionTextureColor")
             local program = shader:getProgram()
 
             shader:use()
@@ -917,10 +917,10 @@ local function OpenGLTestMainLayer()
     end
 
     function ShowCurrentTest()
-        local curScene = cc.Scene:create()
+        local curScene = ax.Scene:create()
         if nil ~= curScene then
             if nil ~= curLayer then
-                local scheduler = cc.Director:getInstance():getScheduler()
+                local scheduler = ax.Director:getInstance():getScheduler()
                 if nil ~= schedulEntry then
                     scheduler:unscheduleScriptEntry(schedulEntry)
                 end
@@ -930,7 +930,7 @@ local function OpenGLTestMainLayer()
                 curScene:addChild(curLayer)
                 curLayer:addChild(OrderCallbackMenu(),15)
                 curScene:addChild(CreateBackMenuItem())
-                cc.Director:getInstance():replaceScene(curScene)
+                ax.Director:getInstance():replaceScene(curScene)
             end
         end
     end
@@ -940,7 +940,7 @@ local function OpenGLTestMainLayer()
 end
 
 function OpenGLTestMain()
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     scene:addChild(OpenGLTestMainLayer())
     scene:addChild(CreateBackMenuItem())
     return scene

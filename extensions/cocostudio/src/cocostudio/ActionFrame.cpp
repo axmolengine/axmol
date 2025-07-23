@@ -319,26 +319,26 @@ ActionInterval* ActionFadeFrame::getAction(float fDuration)
     return this->getEasingAction(FadeTo::create(fDuration, _opacity));
 }
 
-ActionTintFrame::ActionTintFrame() : _color(Color3B(255, 255, 255))
+ActionTintFrame::ActionTintFrame() : _color(Color32::WHITE)
 {
     _frameType = (int)kKeyframeTint;
 }
 
 ActionTintFrame::~ActionTintFrame() {}
 
-void ActionTintFrame::setColor(Color3B ccolor)
+void ActionTintFrame::setColor(Color32 ccolor)
 {
     _color = ccolor;
 }
 
-Color3B ActionTintFrame::getColor()
+const Color32& ActionTintFrame::getColor() const
 {
     return _color;
 }
 
 ActionInterval* ActionTintFrame::getAction(float fDuration)
 {
-    return this->getEasingAction(TintTo::create(fDuration, _color.r, _color.g, _color.b));
+    return this->getEasingAction(TintTo::create(fDuration, _color));
 }
 
 }  // namespace cocostudio

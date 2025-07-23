@@ -360,7 +360,7 @@ Frame* ActionTimelineCache::loadColorFrame(const rapidjson::Value& json)
     uint8_t green = (uint8_t)DICTOOL->getIntValue_json(json, GREEN);
     uint8_t blue  = (uint8_t)DICTOOL->getIntValue_json(json, BLUE);
 
-    frame->setColor(Color3B(red, green, blue));
+    frame->setColor(red, green, blue);
 
     return frame;
 }
@@ -703,8 +703,7 @@ Frame* ActionTimelineCache::loadColorFrameWithFlatBuffers(const flatbuffers::Col
     ColorFrame* frame = ColorFrame::create();
 
     auto f_color = flatbuffers->color();
-    Color3B color(f_color->r(), f_color->g(), f_color->b());
-    frame->setColor(color);
+    frame->setColor(f_color->r(), f_color->g(), f_color->b());
 
     int frameIndex = flatbuffers->frameIndex();
     frame->setFrameIndex(frameIndex);

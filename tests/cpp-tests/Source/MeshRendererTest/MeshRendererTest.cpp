@@ -2,6 +2,7 @@
  Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -786,10 +787,10 @@ MeshRendererLightMapTest::MeshRendererLightMapTest()
     setCameraMask(2);
 
     // add a point light
-    auto light = PointLight::create(Vec3(35, 75, -20.5), Color3B(255, 255, 255), 150);
+    auto light = PointLight::create(Vec3(35, 75, -20.5), Color32(255, 255, 255), 150);
     addChild(light);
     // set the ambient light
-    auto ambient = AmbientLight::create(Color3B(55, 55, 55));
+    auto ambient = AmbientLight::create(Color32(55, 55, 55));
     addChild(ambient);
 
     // create a listener
@@ -1062,7 +1063,7 @@ MeshRendererWithSkinTest::MeshRendererWithSkinTest()
     _animateQuality = (int)Animate3DQuality::QUALITY_LOW;
     _menuItem       = MenuItemFont::create(getAnimationQualityMessage(),
                                            AX_CALLBACK_1(MeshRendererWithSkinTest::switchAnimationQualityCallback, this));
-    _menuItem->setColor(Color3B(0, 200, 20));
+    _menuItem->setColor(Color32(0, 200, 20));
     auto menu = Menu::create(_menuItem, NULL);
     menu->setPosition(Vec2::ZERO);
     _menuItem->setPosition(VisibleRect::left().x + 50, VisibleRect::top().y - 70);
@@ -1565,9 +1566,9 @@ MeshRendererWithOBBPerformanceTest::MeshRendererWithOBBPerformanceTest()
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
     auto decrease = MenuItemFont::create(" - ", AX_CALLBACK_1(MeshRendererWithOBBPerformanceTest::delOBBCallback, this));
-    decrease->setColor(Color3B(0, 200, 20));
+    decrease->setColor(Color32(0, 200, 20));
     auto increase = MenuItemFont::create(" + ", AX_CALLBACK_1(MeshRendererWithOBBPerformanceTest::addOBBCallback, this));
-    increase->setColor(Color3B(0, 200, 20));
+    increase->setColor(Color32(0, 200, 20));
 
     auto menu = Menu::create(decrease, increase, nullptr);
     menu->alignItemsHorizontally();
@@ -1576,7 +1577,7 @@ MeshRendererWithOBBPerformanceTest::MeshRendererWithOBBPerformanceTest()
 
     TTFConfig ttfCount("fonts/Marker Felt.ttf", 30);
     _labelCubeCount = Label::createWithTTF(ttfCount, "0 cubes");
-    _labelCubeCount->setColor(Color3B(0, 200, 20));
+    _labelCubeCount->setColor(Color32(0, 200, 20));
     _labelCubeCount->setPosition(Vec2(s.width / 2, s.height - 90));
     addChild(_labelCubeCount);
     _hasCollider = false;
@@ -2149,9 +2150,9 @@ void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
     mesh->setPosition(Vec2(s.width / 2.f, s.height / 3.f));
     mesh->setTexture("MeshRendererTest/teapot.png");
 
-    auto light1 = PointLight::create(Vec3(s.width * 0.2f, s.height * 0.8f, 100.0f), Color3B(200, 200, 200), 10000.0f);
+    auto light1 = PointLight::create(Vec3(s.width * 0.2f, s.height * 0.8f, 100.0f), Color32(200, 200, 200), 10000.0f);
     addChild(light1);
-    auto light2 = AmbientLight::create(Color3B(100, 100, 100));
+    auto light2 = AmbientLight::create(Color32(100, 100, 100));
     addChild(light2);
 
     auto animation = Animation3D::create(fileName);
@@ -2599,7 +2600,7 @@ MotionStreak3DTest::MotionStreak3DTest()
     mesh->setPosition(20.f, 0.f);
     addChild(mesh);
 
-    auto streak = MotionStreak3D::create(1.0f, 1.0f, 5.f, Color3B(255, 255, 0), "Images/Icon.png");
+    auto streak = MotionStreak3D::create(1.0f, 1.0f, 5.f, Color32(255, 255, 0), "Images/Icon.png");
     addChild(streak);
 
     setCameraMask(2);
@@ -2663,7 +2664,7 @@ MeshRendererNormalMappingTest::MeshRendererNormalMappingTest()
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
     addChild(camera);
 
-    PointLight* light = PointLight::create(Vec3(0.0, 0.0, 0.0), Color3B(255, 255, 255), 1000);
+    PointLight* light = PointLight::create(Vec3(0.0, 0.0, 0.0), Color32(255, 255, 255), 1000);
     light->setTag(100);
     addChild(light);
 

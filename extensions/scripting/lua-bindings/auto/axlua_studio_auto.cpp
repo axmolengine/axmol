@@ -1533,9 +1533,9 @@ int lua_ax_studio_ActionTintFrame_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ccs.ActionTintFrame:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "ccs.ActionTintFrame:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTintFrame_setColor'", nullptr);
@@ -1589,7 +1589,7 @@ int lua_ax_studio_ActionTintFrame_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTintFrame:getColor",argc, 0);
@@ -19279,18 +19279,14 @@ int lua_ax_studio_ColorFrame_setColor(lua_State* tolua_S)
     int argc = 0;
     cocostudio::timeline::ColorFrame* cobj = nullptr;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ColorFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
-
     cobj = (cocostudio::timeline::ColorFrame*)tolua_tousertype(tolua_S,1,0);
-
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -19298,23 +19294,40 @@ int lua_ax_studio_ColorFrame_setColor(lua_State* tolua_S)
         return 0;
     }
 #endif
-
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        ax::Color3B arg0;
+    do{
+        if (argc == 3) {
+            uint16_t arg0;
+            ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ccs.ColorFrame:setColor");
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ccs.ColorFrame:setColor");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ColorFrame_setColor'", nullptr);
-            return 0;
+            if (!ok) { break; }
+            uint16_t arg1;
+            ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ccs.ColorFrame:setColor");
+
+            if (!ok) { break; }
+            uint16_t arg2;
+            ok &= luaval_to_uint16(tolua_S, 4,&arg2, "ccs.ColorFrame:setColor");
+
+            if (!ok) { break; }
+            cobj->setColor(arg0, arg1, arg2);
+            lua_settop(tolua_S, 1);
+            return 1;
         }
-        cobj->setColor(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ColorFrame:setColor",argc, 1);
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            ax::Color32 arg0;
+            ok &=luaval_to_color32(tolua_S, 2, &arg0, "ccs.ColorFrame:setColor");
+
+            if (!ok) { break; }
+            cobj->setColor(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ColorFrame:setColor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -19358,7 +19371,7 @@ int lua_ax_studio_ColorFrame_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ColorFrame:getColor",argc, 0);

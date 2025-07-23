@@ -3,7 +3,7 @@ require "ExtensionTest/WebProxyTest"
 local LINE_SPACE = 40
 local kItemTagBasic = 1000
 
-local ExtensionTestEnum = 
+local ExtensionTestEnum =
 {
     TEST_WEBSOCKET          = 0,
     TEST_EDITBOX            = 1,
@@ -25,46 +25,46 @@ function CreateExtensionsBasicLayerMenu(pMenu)
 	local function toMainLayer()
        local pScene = ExtensionsTestMain()
        if pScene ~= nil then
-           cc.Director:getInstance():replaceScene(pScene)
+           ax.Director:getInstance():replaceScene(pScene)
        end
-    end	
+    end
     --Create BackMneu
-    cc.MenuItemFont:setFontName("Arial")
-    cc.MenuItemFont:setFontSize(24)
-   	local pMenuItemFont = cc.MenuItemFont:create("Back")
-    pMenuItemFont:setPosition(cc.p(VisibleRect:rightBottom().x - 50, VisibleRect:rightBottom().y + 25))
+    ax.MenuItemFont:setFontName("Arial")
+    ax.MenuItemFont:setFontSize(24)
+   	local pMenuItemFont = ax.MenuItemFont:create("Back")
+    pMenuItemFont:setPosition(ax.p(VisibleRect:rightBottom().x - 50, VisibleRect:rightBottom().y + 25))
     pMenuItemFont:registerScriptTapHandler(toMainLayer)
     pMenu:addChild(pMenuItemFont)
 end
 
 local function runEditBoxTest()
-	local newScene = cc.Scene:create()
-	local newLayer = cc.Layer:create()
-	local visibleOrigin = cc.Director:getInstance():getVisibleOrigin()
-    local visibleSize = cc.Director:getInstance():getVisibleSize()
-    
-    local pBg = cc.Sprite:create("Images/HelloWorld.png")
-    pBg:setPosition(cc.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/2))
+	local newScene = ax.Scene:create()
+	local newLayer = ax.Layer:create()
+	local visibleOrigin = ax.Director:getInstance():getVisibleOrigin()
+    local visibleSize = ax.Director:getInstance():getVisibleSize()
+
+    local pBg = ax.Sprite:create("Images/HelloWorld.png")
+    pBg:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/2))
     newLayer:addChild(pBg)
-    
-    local TTFShowEditReturn = cc.Label:createWithSystemFont("No edit control return!", "", 30)
-    TTFShowEditReturn:setPosition(cc.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y + visibleSize.height - 50))
+
+    local TTFShowEditReturn = ax.Label:createWithSystemFont("No edit control return!", "", 30)
+    TTFShowEditReturn:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y + visibleSize.height - 50))
     newLayer:addChild(TTFShowEditReturn)
-    
+
     -- Back Menu
-	local pToMainMenu = cc.Menu:create()
+	local pToMainMenu = ax.Menu:create()
     CreateExtensionsBasicLayerMenu(pToMainMenu)
-    pToMainMenu:setPosition(cc.p(0, 0))
+    pToMainMenu:setPosition(ax.p(0, 0))
     newLayer:addChild(pToMainMenu,10)
-    
-    local editBoxSize = cc.size(visibleSize.width - 100, 60)
+
+    local editBoxSize = ax.size(visibleSize.width - 100, 60)
     local EditName = nil
     local EditPassword = nil
     local EditEmail = nil
-	
+
 	local function editBoxTextEventHandle(strEventName,pSender)
 		local edit = pSender
-		local strFmt 
+		local strFmt
 		if strEventName == "began" then
 			strFmt = string.format("editBox %p DidBegin !", edit)
 			print(strFmt)
@@ -88,58 +88,58 @@ local function runEditBoxTest()
 	end
     -- top
     EditName = ccui.EditBox:create(editBoxSize, ccui.Scale9Sprite:create("extensions/green_edit.png"))
-    EditName:setPosition(cc.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height*3/4))
-    local targetPlatform = cc.Application:getInstance():getTargetPlatform()
+    EditName:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height*3/4))
+    local targetPlatform = ax.Application:getInstance():getTargetPlatform()
     if kTargetIphone == targetPlatform or kTargetIpad == targetPlatform then
 	   EditName:setFontName("Paint Boy")
 	else
 		EditName:setFontName("fonts/Paint Boy.ttf")
 	end
     EditName:setFontSize(25)
-    EditName:setFontColor(cc.c3b(255,0,0))
+    EditName:setFontColor(ax.color32(255,0,0))
     EditName:setPlaceHolder("Name:")
-    EditName:setPlaceholderFontColor(cc.c3b(255,255,255))
+    EditName:setPlaceholderFontColor(ax.color32(255,255,255))
     EditName:setMaxLength(8)
-    EditName:setReturnType(cc.KEYBOARD_RETURNTYPE_DONE )
+    EditName:setReturnType(ax.KEYBOARD_RETURNTYPE_DONE )
 	--Handler
 	EditName:registerScriptEditBoxHandler(editBoxTextEventHandle)
     newLayer:addChild(EditName)
-   
+
     --middle
     EditPassword = ccui.EditBox:create(editBoxSize, ccui.Scale9Sprite:create("extensions/orange_edit.png"))
-    EditPassword:setPosition(cc.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/2))
+    EditPassword:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/2))
 	if kTargetIphone == targetPlatform or kTargetIpad == targetPlatform then
 		EditPassword:setFont("American Typewriter", 30)
 	else
 		EditPassword:setFont("fonts/American Typewriter.ttf", 30)
 	end
-	
 
-    EditPassword:setFontColor(cc.c3b(0,255,0))
+
+    EditPassword:setFontColor(ax.color32(0,255,0))
     EditPassword:setPlaceHolder("Password:")
     EditPassword:setMaxLength(6)
-    EditPassword:setInputFlag(cc.EDITBOX_INPUT_FLAG_PASSWORD)
-    EditPassword:setInputMode(cc.EDITBOX_INPUT_MODE_SINGLELINE)
+    EditPassword:setInputFlag(ax.EDITBOX_INPUT_FLAG_PASSWORD)
+    EditPassword:setInputMode(ax.EDITBOX_INPUT_MODE_SINGLELINE)
 	EditPassword:registerScriptEditBoxHandler(editBoxTextEventHandle)
     newLayer:addChild(EditPassword)
-     
+
     --bottom
-    EditEmail = ccui.EditBox:create(cc.size(editBoxSize.width, editBoxSize.height), ccui.Scale9Sprite:create("extensions/yellow_edit.png"))
-    EditEmail:setPosition(cc.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/4))
-    EditEmail:setAnchorPoint(cc.p(0.5, 1.0))
+    EditEmail = ccui.EditBox:create(ax.size(editBoxSize.width, editBoxSize.height), ccui.Scale9Sprite:create("extensions/yellow_edit.png"))
+    EditEmail:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/4))
+    EditEmail:setAnchorPoint(ax.p(0.5, 1.0))
     EditEmail:setPlaceHolder("Email:")
-    EditEmail:setInputMode(cc.EDITBOX_INPUT_MODE_EMAILADDR)
+    EditEmail:setInputMode(ax.EDITBOX_INPUT_MODE_EMAILADDR)
     EditEmail:registerScriptEditBoxHandler(editBoxTextEventHandle)
-    newLayer:addChild(EditEmail)   
-    newLayer:setPosition(cc.p(10, 20))
-    
-	
+    newLayer:addChild(EditEmail)
+    newLayer:setPosition(ax.p(10, 20))
+
+
 	newScene:addChild(newLayer)
 	return newScene
 end
 
 
-local CreateExtensionsTestTable = 
+local CreateExtensionsTestTable =
 {
     runWebSocketTest,
     runEditBoxTest,
@@ -148,40 +148,40 @@ local CreateExtensionsTestTable =
 
 local function ExtensionsMainLayer()
 
-	local s = cc.Director:getInstance():getWinSize()
+	local s = ax.Director:getInstance():getWinSize()
 
 	local function CreateExtensionsTestScene(nPerformanceNo)
 	  	local pNewscene = CreateExtensionsTestTable[nPerformanceNo]()
   		return pNewscene
 	end
-	
+
 	local function menuCallback(tag, pMenuItem)
 		local scene = nil
     	local nIdx = pMenuItem:getLocalZOrder() - kItemTagBasic
 		local ExtensionsTestScene = CreateExtensionsTestScene(nIdx)
     	if nil ~= ExtensionsTestScene then
-         	cc.Director:getInstance():replaceScene(ExtensionsTestScene)
+         	ax.Director:getInstance():replaceScene(ExtensionsTestScene)
     	end
 	end
-	
-	local layer = cc.Layer:create()
-	local menu = cc.Menu:create()
-    menu:setPosition(cc.p(0, 0))
-    cc.MenuItemFont:setFontName("Arial")
-    cc.MenuItemFont:setFontSize(24)
-    local targetPlatform = cc.Application:getInstance():getTargetPlatform()
+
+	local layer = ax.Layer:create()
+	local menu = ax.Menu:create()
+    menu:setPosition(ax.p(0, 0))
+    ax.MenuItemFont:setFontName("Arial")
+    ax.MenuItemFont:setFontSize(24)
+    local targetPlatform = ax.Application:getInstance():getTargetPlatform()
     local bSupportWebSocket = false
-    if (cc.PLATFORM_OS_IPHONE == targetPlatform) or (cc.PLATFORM_OS_IPAD == targetPlatform) or (cc.PLATFORM_OS_ANDROID == targetPlatform) or (cc.PLATFORM_OS_WINDOWS == targetPlatform) or (cc.PLATFORM_OS_MAC == targetPlatform) then
+    if (ax.PLATFORM_OS_IPHONE == targetPlatform) or (ax.PLATFORM_OS_IPAD == targetPlatform) or (ax.PLATFORM_OS_ANDROID == targetPlatform) or (ax.PLATFORM_OS_WINDOWS == targetPlatform) or (ax.PLATFORM_OS_MAC == targetPlatform) then
         bSupportWebSocket = true
     end
     local bSupportEdit = false
-    if (cc.PLATFORM_OS_IPHONE == targetPlatform) or (cc.PLATFORM_OS_IPAD == targetPlatform) or 
-        (cc.PLATFORM_OS_ANDROID == targetPlatform) or (cc.PLATFORM_OS_WINDOWS == targetPlatform) or 
-        (cc.PLATFORM_OS_MAC == targetPlatform) or (cc.PLATFORM_OS_TIZEN  == targetPlatform) then
+    if (ax.PLATFORM_OS_IPHONE == targetPlatform) or (ax.PLATFORM_OS_IPAD == targetPlatform) or
+        (ax.PLATFORM_OS_ANDROID == targetPlatform) or (ax.PLATFORM_OS_WINDOWS == targetPlatform) or
+        (ax.PLATFORM_OS_MAC == targetPlatform) or (ax.PLATFORM_OS_TIZEN  == targetPlatform) then
         bSupportEdit = true
     end
     for i = 1, ExtensionTestEnum.TEST_MAX_COUNT do
-		local item = cc.MenuItemFont:create(testsName[i])
+		local item = ax.MenuItemFont:create(testsName[i])
 	    item:registerScriptTapHandler(menuCallback)
         item:setPosition(s.width / 2, s.height - i * LINE_SPACE)
         menu:addChild(item, kItemTagBasic + i)
@@ -194,8 +194,8 @@ local function ExtensionsMainLayer()
     layer:addChild(menu)
 
     -- handling touch events
-    local beginPos = {x = 0, y = 0} 
-    local function onTouchesBegan(touches, event)     
+    local beginPos = {x = 0, y = 0}
+    local function onTouchesBegan(touches, event)
          beginPos = touches[1]:getLocation()
     end
 
@@ -205,7 +205,7 @@ local function ExtensionsMainLayer()
         local nMoveY = location.y - beginPos.y
         local curPosx, curPosy = menu:getPosition()
         local nextPosy = curPosy + nMoveY
-        local winSize = cc.Director:getInstance():getWinSize()
+        local winSize = ax.Director:getInstance():getWinSize()
         if nextPosy < 0 then
             menu:setPosition(0, 0)
             return
@@ -220,9 +220,9 @@ local function ExtensionsMainLayer()
         beginPos = {x = location.x, y = location.y}
     end
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesBegan,cc.Handler.EVENT_TOUCHES_BEGAN )
-    listener:registerScriptHandler(onTouchesMoved,cc.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.EventListenerTouchAllAtOnce:create()
+    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_TOUCHES_BEGAN )
+    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
@@ -234,7 +234,7 @@ end
 --  Extensions Test
 -------------------------------------
 function ExtensionsTestMain()
-	local scene = cc.Scene:create()
+	local scene = ax.Scene:create()
 
 	scene:addChild(ExtensionsMainLayer())
 	scene:addChild(CreateBackMenuItem())

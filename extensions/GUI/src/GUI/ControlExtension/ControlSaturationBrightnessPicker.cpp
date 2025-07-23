@@ -105,8 +105,8 @@ void ControlSaturationBrightnessPicker::updateWithHSV(HSV hsv)
     hsvTemp.h = hsv.h;
     hsvTemp.v = 1;
 
-    RGBA rgb = ControlUtils::RGBfromHSV(hsvTemp);
-    _background->setColor(Color3B((uint8_t)(rgb.r * 255.0f), (uint8_t)(rgb.g * 255.0f), (uint8_t)(rgb.b * 255.0f)));
+    RGBA rgba = ControlUtils::RGBfromHSV(hsvTemp);
+    _background->setColor(Color32(rgba));
 }
 
 void ControlSaturationBrightnessPicker::updateDraggerWithHSV(HSV hsv)

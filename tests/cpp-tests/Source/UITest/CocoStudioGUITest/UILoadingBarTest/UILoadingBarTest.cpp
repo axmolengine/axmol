@@ -58,7 +58,7 @@ bool UILoadingBarTest_Left::init()
 
         // Add the alert
         Text* alert = Text::create("Test LoadingBar Change Direction", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -151,7 +151,7 @@ bool UILoadingBarTest_Right::init()
 
         // Add the alert
         Text* alert = Text::create("LoadingBar right", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -201,7 +201,7 @@ bool UILoadingBarTest_Left_Scale9::init()
 
         // Add the alert
         Text* alert = Text::create("LoadingBar left scale9 render", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 2.7f));
         _uiLayer->addChild(alert);
@@ -253,7 +253,7 @@ bool UILoadingBarTest_Right_Scale9::init()
 
         // Add the alert
         Text* alert = Text::create("LoadingBar right scale9 render", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 2.7f));
         _uiLayer->addChild(alert);
@@ -301,7 +301,7 @@ bool UILoadingBarTest_Scale9_State_Change::init()
 
         // Add the alert
         Text* alert = Text::create("LoadingBar right scale9 render", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 2.7f));
         _uiLayer->addChild(alert);
@@ -353,7 +353,7 @@ bool UILoadingBarReloadTexture::init()
 
         // Add the alert
         Text* alert = Text::create("Click button to Toggle Scale9 and switch Texture.", "fonts/Marker Felt.ttf", 20);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 2.7f));
         _uiLayer->addChild(alert);
@@ -434,7 +434,7 @@ bool UILoadingBarIssue12249::init()
 
         // Add the alert
         Text* alert = Text::create("Test LoadingBar Change Direction", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);
@@ -515,7 +515,7 @@ bool UILoadingBarTest_Direction::init()
 
         // Add the alert
         Text* alert = Text::create("Test LoadingBar Change Direction", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color3B(159, 168, 176));
+        alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 1.75f));
         _uiLayer->addChild(alert);

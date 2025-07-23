@@ -7,7 +7,7 @@
 local function RenderTextureSave()
     local ret = createTestLayer("Touch the screen",
                                 "Press 'Save Image' to create an snapshot of the render texture")
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
     local target = nil
     local counter = 0
     local brushes = {}
@@ -19,15 +19,15 @@ local function RenderTextureSave()
         local png = string.format("image-%d.png", counter)
         local jpg = string.format("image-%d.jpg", counter)
 
-        target:saveToFile(png, cc.IMAGE_FORMAT_PNG)
-        target:saveToFile(jpg, cc.IMAGE_FORMAT_JPEG)
+        target:saveToFile(png, ax.IMAGE_FORMAT_PNG)
+        target:saveToFile(jpg, ax.IMAGE_FORMAT_JPEG)
 
         local function callback(image)
-            local tex = cc.Director:getInstance():getTextureCache():addImage(image, png)
-            local sprite = cc.Sprite:createWithTexture(tex)
+            local tex = ax.Director:getInstance():getTextureCache():addImage(image, png)
+            local sprite = ax.Sprite:createWithTexture(tex)
             sprite:setScale(0.3)
             ret:addChild(sprite)
-            sprite:setPosition(cc.p(40, 40))
+            sprite:setPosition(ax.p(40, 40))
             sprite:setRotation(counter * 3)
         end
 
@@ -40,19 +40,19 @@ local function RenderTextureSave()
     local function onNodeEvent(event)
         if event == "exit" then
             target:release()
-            cc.Director:getInstance():getTextureCache():removeUnusedTextures()
+            ax.Director:getInstance():getTextureCache():removeUnusedTextures()
         end
     end
 
     ret:registerScriptHandler(onNodeEvent)
 
     -- create a render texture, this is what we are going to draw into
-    target = cc.RenderTexture:create(s.width, s.height, cc.TEXTURE_PF_RGBA8)
+    target = ax.RenderTexture:create(s.width, s.height, ax.TEXTURE_PF_RGBA8)
     target:retain()
-    target:setPosition(cc.p(s.width / 2, s.height / 2))
+    target:setPosition(ax.p(s.width / 2, s.height / 2))
 
-    -- note that the render texture is a cc.Node, and contains a sprite of its texture for convenience,
-    -- so we can just parent it to the scene like any other cc.Node
+    -- note that the render texture is a ax.Node, and contains a sprite of its texture for convenience,
+    -- so we can just parent it to the scene like any other ax.Node
     ret:addChild(target, -1)
 
     local function onTouchesMoved(touches, event)
@@ -61,7 +61,7 @@ local function RenderTextureSave()
 
         target:begin()
 
-        local distance = cc.pGetDistance(start, ended)
+        local distance = ax.pGetDistance(start, ended)
         if distance > 1 then
             brushes = {}
             local d = distance
@@ -69,8 +69,8 @@ local function RenderTextureSave()
 
             for i = 0,d -1 do
                 -- create a brush image to draw into the texture with
-                local sprite = cc.Sprite:create("Images/fire.png")
-                sprite:setColor(cc.c3b(255, 0, 0))
+                local sprite = ax.Sprite:create("Images/fire.png")
+                sprite:setColor(ax.color32(255, 0, 0))
                 sprite:setOpacity(20)
                 brushes[i + 1] = sprite
             end
@@ -79,13 +79,13 @@ local function RenderTextureSave()
                 local difx = ended.x - start.x
                 local dify = ended.y - start.y
                 local delta = i / distance
-                brushes[i + 1]:setPosition(cc.p(start.x + (difx * delta), start.y + (dify * delta)))
+                brushes[i + 1]:setPosition(ax.p(start.x + (difx * delta), start.y + (dify * delta)))
                 brushes[i + 1]:setRotation(math.random(0, 359))
                 local r = math.random(0, 49) / 50.0 + 0.25
                 brushes[i + 1]:setScale(r)
 
-                -- Use cc.RANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
-                brushes[i + 1]:setColor(cc.c3b(math.random(0, 126) + 128, 255, 255))
+                -- Use ax.RANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
+                brushes[i + 1]:setColor(ax.color32(math.random(0, 126) + 128, 255, 255))
                 -- Call visit to draw the brush, don't call draw..
                 brushes[i + 1]:visit()
             end
@@ -95,21 +95,21 @@ local function RenderTextureSave()
         target:endToLua()
     end
 
-    local listener = cc.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesMoved,cc.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.EventListenerTouchAllAtOnce:create()
+    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
     -- Save Image menu
-    cc.MenuItemFont:setFontSize(16)
-    local item1 = cc.MenuItemFont:create("Save Image")
+    ax.MenuItemFont:setFontSize(16)
+    local item1 = ax.MenuItemFont:create("Save Image")
     item1:setAnchorPoint(1, 1)
     item1:setPosition(VisibleRect:rightTop().x, VisibleRect:rightTop().y)
     item1:registerScriptTapHandler(saveImage)
-    local item2 = cc.MenuItemFont:create("Clear")
+    local item2 = ax.MenuItemFont:create("Clear")
     item2:setAnchorPoint(1, 1)
     item2:setPosition(VisibleRect:rightTop().x, VisibleRect:rightTop().y - item1:getContentSize().height)
     item2:registerScriptTapHandler(clearImage)
-    local menu = cc.Menu:create(item1, item2)
+    local menu = ax.Menu:create(item1, item2)
     ret:addChild(menu)
     menu:setPosition(0, 0)
     return ret
@@ -135,20 +135,20 @@ end
 --         *  B1: non-premulti sprite
 --         *  B2: non-premulti render
 --     */
---     local background = cc.LayerColor:create(cc.c4b(200,200,200,255))
+--     local background = ax.LayerColor:create(ax.color32(200,200,200,255))
 --     addChild(background)
 
---     local spr_premulti = cc.Sprite:create("Images/fire.png")
---     spr_premulti:setPosition(cc.p(16,48))
+--     local spr_premulti = ax.Sprite:create("Images/fire.png")
+--     spr_premulti:setPosition(ax.p(16,48))
 
---     local spr_nonpremulti = cc.Sprite:create("Images/fire.png")
---     spr_nonpremulti:setPosition(cc.p(16,16))
+--     local spr_nonpremulti = ax.Sprite:create("Images/fire.png")
+--     spr_nonpremulti:setPosition(ax.p(16,16))
 
 
 
 
 --     /* A2 & B2 setup */
---     local rend = cc.RenderTexture:create(32, 64, cc.TEXTURE_PF_RGBA8)
+--     local rend = ax.RenderTexture:create(32, 64, ax.TEXTURE_PF_RGBA8)
 
 --     if (NULL == rend)
 
@@ -163,14 +163,14 @@ end
 -- spr_nonpremulti:visit()
 -- rend:end()
 
--- local s = cc.Director:getInstance():getWinSize()
+-- local s = ax.Director:getInstance():getWinSize()
 
 -- --/* A1: setup */
--- spr_premulti:setPosition(cc.p(s.width/2-16, s.height/2+16))
+-- spr_premulti:setPosition(ax.p(s.width/2-16, s.height/2+16))
 -- --/* B1: setup */
--- spr_nonpremulti:setPosition(cc.p(s.width/2-16, s.height/2-16))
+-- spr_nonpremulti:setPosition(ax.p(s.width/2-16, s.height/2-16))
 
--- rend:setPosition(cc.p(s.width/2+16, s.height/2))
+-- rend:setPosition(ax.p(s.width/2+16, s.height/2))
 
 -- addChild(spr_nonpremulti)
 -- addChild(spr_premulti)
@@ -192,7 +192,7 @@ end
 --     local  pLayer = nextTestCase()
 --     addChild(pLayer)
 
---     cc.Director:getInstance():replaceScene(this)
+--     ax.Director:getInstance():replaceScene(this)
 -- end
 
 -- --/**
@@ -202,35 +202,35 @@ end
 -- local function RenderTextureZbuffer()
 
 --     this:setTouchEnabled(true)
---     local size = cc.Director:getInstance():getWinSize()
---     local label = cc.LabelTTF:create("vertexZ = 50", "Marker Felt", 64)
---     label:setPosition(cc.p(size.width / 2, size.height * 0.25))
+--     local size = ax.Director:getInstance():getWinSize()
+--     local label = ax.LabelTTF:create("vertexZ = 50", "Marker Felt", 64)
+--     label:setPosition(ax.p(size.width / 2, size.height * 0.25))
 --     this:addChild(label)
 
---     local label2 = cc.LabelTTF:create("vertexZ = 0", "Marker Felt", 64)
---     label2:setPosition(cc.p(size.width / 2, size.height * 0.5))
+--     local label2 = ax.LabelTTF:create("vertexZ = 0", "Marker Felt", 64)
+--     label2:setPosition(ax.p(size.width / 2, size.height * 0.5))
 --     this:addChild(label2)
 
---     local label3 = cc.LabelTTF:create("vertexZ = -50", "Marker Felt", 64)
---     label3:setPosition(cc.p(size.width / 2, size.height * 0.75))
+--     local label3 = ax.LabelTTF:create("vertexZ = -50", "Marker Felt", 64)
+--     label3:setPosition(ax.p(size.width / 2, size.height * 0.75))
 --     this:addChild(label3)
 
 --     label:setVertexZ(50)
 --     label2:setVertexZ(0)
 --     label3:setVertexZ(-50)
 
---     cc.SpriteFrameCache:getInstance():addSpriteFramesWithFile("Images/bugs/circle.plist")
---     mgr = cc.SpriteBatchNode:create("Images/bugs/circle.png", 9)
+--     ax.SpriteFrameCache:getInstance():addSpriteFramesWithFile("Images/bugs/circle.plist")
+--     mgr = ax.SpriteBatchNode:create("Images/bugs/circle.png", 9)
 --     this:addChild(mgr)
---     sp1 = cc.Sprite:createWithSpriteFrameName("circle.png")
---     sp2 = cc.Sprite:createWithSpriteFrameName("circle.png")
---     sp3 = cc.Sprite:createWithSpriteFrameName("circle.png")
---     sp4 = cc.Sprite:createWithSpriteFrameName("circle.png")
---     sp5 = cc.Sprite:createWithSpriteFrameName("circle.png")
---     sp6 = cc.Sprite:createWithSpriteFrameName("circle.png")
---     sp7 = cc.Sprite:createWithSpriteFrameName("circle.png")
---     sp8 = cc.Sprite:createWithSpriteFrameName("circle.png")
---     sp9 = cc.Sprite:createWithSpriteFrameName("circle.png")
+--     sp1 = ax.Sprite:createWithSpriteFrameName("circle.png")
+--     sp2 = ax.Sprite:createWithSpriteFrameName("circle.png")
+--     sp3 = ax.Sprite:createWithSpriteFrameName("circle.png")
+--     sp4 = ax.Sprite:createWithSpriteFrameName("circle.png")
+--     sp5 = ax.Sprite:createWithSpriteFrameName("circle.png")
+--     sp6 = ax.Sprite:createWithSpriteFrameName("circle.png")
+--     sp7 = ax.Sprite:createWithSpriteFrameName("circle.png")
+--     sp8 = ax.Sprite:createWithSpriteFrameName("circle.png")
+--     sp9 = ax.Sprite:createWithSpriteFrameName("circle.png")
 
 --     mgr:addChild(sp1, 9)
 --     mgr:addChild(sp2, 8)
@@ -253,7 +253,7 @@ end
 --     sp9:setVertexZ(-400)
 
 --     sp9:setScale(2)
---     sp9:setColor(cc.c3b::YELLOW)
+--     sp9:setColor(ax.color32::YELLOW)
 -- end
 
 -- local function title()
@@ -266,13 +266,13 @@ end
 --     return "Touch screen. It should be green"
 -- end
 
--- local function ccTouchesBegan(cocos2d:cc.Set *touches, cocos2d:cc.Event *event)
+-- local function ccTouchesBegan(cocos2d:ax.Set *touches, cocos2d:ax.Event *event)
 
---     cc.SetIterator iter
---     cc.Touch *touch
+--     ax.SetIterator iter
+--     ax.Touch *touch
 --     for (iter = touches:begin() iter != touches:end() ++iter)
 
--- touch = (cc.Touch *)(*iter)
+-- touch = (ax.Touch *)(*iter)
 -- local location = touch:getLocation()
 
 -- sp1:setPosition(location)
@@ -287,13 +287,13 @@ end
 -- end
 -- end
 
--- local function ccTouchesMoved(cc.const std::vector<Touch*>& touches, cc.Event* event)
+-- local function ccTouchesMoved(ax.const std::vector<Touch*>& touches, ax.Event* event)
 
---     cc.SetIterator iter
---     cc.Touch *touch
+--     ax.SetIterator iter
+--     ax.Touch *touch
 --     for (iter = touches:begin() iter != touches:end() ++iter)
 
--- touch = (cc.Touch *)(*iter)
+-- touch = (ax.Touch *)(*iter)
 -- local location = touch:getLocation()
 
 -- sp1:setPosition(location)
@@ -308,35 +308,35 @@ end
 -- end
 -- end
 
--- local function ccTouchesEnded(cc.const std::vector<Touch*>& touches, cc.Event* event)
+-- local function ccTouchesEnded(ax.const std::vector<Touch*>& touches, ax.Event* event)
 
 --     this:renderScreenShot()
 -- end
 
 -- local function renderScreenShot()
 
---     local texture = cc.RenderTexture:create(512, 512)
+--     local texture = ax.RenderTexture:create(512, 512)
 --     if (NULL == texture)
 
 --     return
 -- end
--- texture:setAnchorPoint(cc.p(0, 0))
+-- texture:setAnchorPoint(ax.p(0, 0))
 -- texture:begin()
 
 -- this:visit()
 
 -- texture:end()
 
--- local sprite = cc.Sprite:createWithTexture(texture:getSprite():getTexture())
+-- local sprite = ax.Sprite:createWithTexture(texture:getSprite():getTexture())
 
--- sprite:setPosition(cc.p(256, 256))
+-- sprite:setPosition(ax.p(256, 256))
 -- sprite:setOpacity(182)
 -- sprite:setFlippedY(1)
 -- this:addChild(sprite, 999999)
--- sprite:setColor(cc.c3b::GREEN)
+-- sprite:setColor(ax.color32::GREEN)
 
--- sprite:runAction(cc.Sequence:create(cc.FadeTo:create(2, 0),
---                                    cc.Hide:create(),
+-- sprite:runAction(ax.Sequence:create(ax.FadeTo:create(2, 0),
+--                                    ax.Hide:create(),
 --                                    NULL))
 -- end
 
@@ -344,12 +344,12 @@ end
 
 -- local function RenderTextureTestDepthStencil()
 
---     local s = cc.Director:getInstance():getWinSize()
+--     local s = ax.Director:getInstance():getWinSize()
 
---     local sprite = cc.Sprite:create("Images/fire.png")
---     sprite:setPosition(cc.p(s.width * 0.25, 0))
+--     local sprite = ax.Sprite:create("Images/fire.png")
+--     sprite:setPosition(ax.p(s.width * 0.25, 0))
 --     sprite:setScale(10)
---     local rend = cc.RenderTexture:create(s.width, s.height, kcc.Texture2DPixelFormat_RGBA4444, GL_DEPTH24_STENCIL8)
+--     local rend = ax.RenderTexture:create(s.width, s.height, kcc.Texture2DPixelFormat_RGBA4444, GL_DEPTH24_STENCIL8)
 
 --     glStencilMask(0xFF)
 --     rend:beginWithClear(0, 0, 0, 0, 0, 0)
@@ -362,7 +362,7 @@ end
 --     sprite:visit()
 
 --     --! move sprite half width and height, and draw only where not marked
---     sprite:setPosition(cc.p__add(sprite:getPosition(), cc.p__mul(cc.p(sprite:getContentSize().width * sprite:getScale(), sprite:getContentSize().height * sprite:getScale()), 0.5)))
+--     sprite:setPosition(ax.p__add(sprite:getPosition(), ax.p__mul(ax.p(sprite:getContentSize().width * sprite:getScale(), sprite:getContentSize().height * sprite:getScale()), 0.5)))
 --     glStencilFunc(GL_NOTEQUAL, 1, 0xFF)
 --     glColorMask(1, 1, 1, 1)
 --     sprite:visit()
@@ -371,7 +371,7 @@ end
 
 -- glDisable(GL_STENCIL_TEST)
 
--- rend:setPosition(cc.p(s.width * 0.5, s.height * 0.5))
+-- rend:setPosition(ax.p(s.width * 0.5, s.height * 0.5))
 
 -- this:addChild(rend)
 -- end
@@ -401,28 +401,28 @@ end
 --         *  B1: non-premulti sprite
 --         *  B2: non-premulti render
 --     */
---     local background = cc.LayerColor:create(cc.c4b(40,40,40,255))
+--     local background = ax.LayerColor:create(ax.color32(40,40,40,255))
 --     addChild(background)
 
 --     -- sprite 1
---     sprite1 = cc.Sprite:create("Images/fire.png")
+--     sprite1 = ax.Sprite:create("Images/fire.png")
 
 --     -- sprite 2
---     sprite2 = cc.Sprite:create("Images/fire_rgba8888.pvr")
+--     sprite2 = ax.Sprite:create("Images/fire_rgba8888.pvr")
 
---     local s = cc.Director:getInstance():getWinSize()
+--     local s = ax.Director:getInstance():getWinSize()
 
 --     /* Create the render texture */
---     local renderTexture = cc.RenderTexture:create(s.width, s.height, kcc.Texture2DPixelFormat_RGBA4444)
+--     local renderTexture = ax.RenderTexture:create(s.width, s.height, kcc.Texture2DPixelFormat_RGBA4444)
 --     this:renderTexture = renderTexture
 
---     renderTexture:setPosition(cc.p(s.width/2, s.height/2))
+--     renderTexture:setPosition(ax.p(s.width/2, s.height/2))
 --     renderTexture:setScale(2.0)
 
 --     /* add the sprites to the render texture */
 --     renderTexture:addChild(sprite1)
 --     renderTexture:addChild(sprite2)
---     renderTexture:setClearColor(cc.c4f(0, 0, 0, 0))
+--     renderTexture:setClearColor(ax.color(0, 0, 0, 0))
 --     renderTexture:setClearFlags(GL_COLOR_BUFFER_BIT)
 
 --     /* add the render texture to the scene */
@@ -433,14 +433,14 @@ end
 --     scheduleUpdate()
 
 --     -- Toggle clear on / off
---     local item = cc.MenuItemFont:create("Clear On/Off", this, menu_selector(RenderTextureTargetNode:touched))
---     local menu = cc.Menu:create(item, NULL)
+--     local item = ax.MenuItemFont:create("Clear On/Off", this, menu_selector(RenderTextureTargetNode:touched))
+--     local menu = ax.Menu:create(item, NULL)
 --     addChild(menu)
 
---     menu:setPosition(cc.p(s.width/2, s.height/2))
+--     menu:setPosition(ax.p(s.width/2, s.height/2))
 -- end
 
--- local function touched(cc.Object* sender)
+-- local function touched(ax.Object* sender)
 
 --     if (renderTexture:getClearFlags() == 0)
 
@@ -449,7 +449,7 @@ end
 -- else
 
 --     renderTexture:setClearFlags(0)
---     renderTexture:setClearColor(cc.c4f( cc.RANDOM_0_1(), cc.RANDOM_0_1(), cc.RANDOM_0_1(), 1))
+--     renderTexture:setClearColor(ax.color( ax.RANDOM_0_1(), ax.RANDOM_0_1(), ax.RANDOM_0_1(), 1))
 --     end
 -- end
 
@@ -457,8 +457,8 @@ end
 
 --     static float time = 0
 --     float r = 80
---     sprite1:setPosition(cc.p(cosf(time * 2) * r, sinf(time * 2) * r))
---     sprite2:setPosition(cc.p(sinf(time * 2) * r, cosf(time * 2) * r))
+--     sprite1:setPosition(ax.p(cosf(time * 2) * r, sinf(time * 2) * r))
+--     sprite2:setPosition(ax.p(sinf(time * 2) * r, cosf(time * 2) * r))
 
 --     time += dt
 -- end
@@ -477,7 +477,7 @@ end
 
 -- local function SimpleSprite() : rt(nullptr) {}
 
---     local function SimpleSprite* SpriteRenderTextureBug:SimpleSprite:create(const char* filename, const cc.rect &rect)
+--     local function SimpleSprite* SpriteRenderTextureBug:SimpleSprite:create(const char* filename, const ax.rect &rect)
 
 --         SimpleSprite *sprite = new SimpleSprite()
 --         if (sprite && sprite:initWithFile(filename, rect))
@@ -486,7 +486,7 @@ end
 --     end
 --     else
 
---         cc._SAFE_DELETE(sprite)
+--         ax._SAFE_DELETE(sprite)
 --         end
 
 -- return sprite
@@ -496,14 +496,14 @@ end
 
 --     if (rt == NULL)
 
---     local s = cc.Director:getInstance():getWinSize()
---     rt = new cc.RenderTexture()
---     rt:initWithWidthAndHeight(s.width, s.height, cc.TEXTURE_PF_RGBA8)
+--     local s = ax.Director:getInstance():getWinSize()
+--     rt = new ax.RenderTexture()
+--     rt:initWithWidthAndHeight(s.width, s.height, ax.TEXTURE_PF_RGBA8)
 -- end
 -- rt:beginWithClear(0.0, 0.0, 0.0, 1.0)
 -- rt:end()
 
--- cc._NODE_DRAW_SETUP()
+-- ax._NODE_DRAW_SETUP()
 
 -- BlendFunc blend = getBlendFunc()
 -- ccGLBlendFunc(blend.src, blend.dst)
@@ -538,51 +538,51 @@ end
 
 --     setTouchEnabled(true)
 
---     local s = cc.Director:getInstance():getWinSize()
---     addNewSpriteWithCoords(cc.p(s.width/2, s.height/2))
+--     local s = ax.Director:getInstance():getWinSize()
+--     addNewSpriteWithCoords(ax.p(s.width/2, s.height/2))
 -- end
 
--- local function SimpleSprite* SpriteRenderTextureBug:addNewSpriteWithCoords(const cc.p& p)
+-- local function SimpleSprite* SpriteRenderTextureBug:addNewSpriteWithCoords(const ax.p& p)
 
---     int idx = cc.RANDOM_0_1() * 1400 / 100
+--     int idx = ax.RANDOM_0_1() * 1400 / 100
 --     int x = (idx%5) * 85
 --     int y = (idx/5) * 121
 
 --     SpriteRenderTextureBug:SimpleSprite *sprite = SpriteRenderTextureBug:SimpleSprite:create("Images/grossini_dance_atlas.png",
---                                                                                              cc.rect(x,y,85,121))
+--                                                                                              ax.rect(x,y,85,121))
 --     addChild(sprite)
 
 --     sprite:setPosition(p)
 
 --     local action = NULL
---     float rd = cc.RANDOM_0_1()
+--     float rd = ax.RANDOM_0_1()
 
 --     if (rd < 0.20)
---     action = cc.ScaleBy:create(3, 2)
+--     action = ax.ScaleBy:create(3, 2)
 --     else if (rd < 0.40)
---         action = cc.RotateBy:create(3, 360)
+--         action = ax.RotateBy:create(3, 360)
 --         else if (rd < 0.60)
---             action = cc.Blink:create(1, 3)
+--             action = ax.Blink:create(1, 3)
 --             else if (rd < 0.8 )
---                 action = cc.TintBy:create(2, 0, -255, -255)
+--                 action = ax.TintBy:create(2, 0, -255, -255)
 --                 else
---                     action = cc.FadeOut:create(2)
+--                     action = ax.FadeOut:create(2)
 
 --                     local action_back = action:reverse()
---                     local seq = cc.Sequence:create(action, action_back, NULL)
+--                     local seq = ax.Sequence:create(action, action_back, NULL)
 
---                     sprite:runAction(cc.RepeatForever:create(seq))
+--                     sprite:runAction(ax.RepeatForever:create(seq))
 
 --                     --return sprite
 --                     return NULL
 --                     end
 
--- local function ccTouchesEnded(cc.const std::vector<Touch*>& touches, cc.Event* event)
+-- local function ccTouchesEnded(ax.const std::vector<Touch*>& touches, ax.Event* event)
 
---     cc.SetIterator iter = touches:begin()
+--     ax.SetIterator iter = touches:begin()
 --     for( iter != touches:end() ++iter)
 
--- local location = ((cc.Touch*)(*iter)):getLocation()
+-- local location = ((ax.Touch*)(*iter)):getLocation()
 -- addNewSpriteWithCoords(location)
 -- end
 -- end
@@ -600,7 +600,7 @@ end
 function RenderTextureTestMain()
     cclog("RenderTextureTestMain")
     Helper.index = 1
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     Helper.createFunctionTable = {
 
         RenderTextureSave,
@@ -611,7 +611,7 @@ function RenderTextureTestMain()
         -- SpriteRenderTextureBug
     }
     Helper.index = 1
-    
+
     scene:addChild(RenderTextureSave())
     scene:addChild(CreateBackMenuItem())
     return scene

@@ -465,12 +465,13 @@ void CCSlot::_updateColor()
 {
     _renderDisplay->setOpacity(_colorTransform.alphaMultiplier * 255.0f);
 
-    static ax::Color3B helpColor;
-    helpColor.r = _colorTransform.redMultiplier * 255.0f;
-    helpColor.g = _colorTransform.greenMultiplier * 255.0f;
-    helpColor.b = _colorTransform.blueMultiplier * 255.0f;
+    ax::Color32 color32;
+    color32.r = _colorTransform.redMultiplier * 255.0f;
+    color32.g = _colorTransform.greenMultiplier * 255.0f;
+    color32.b = _colorTransform.blueMultiplier * 255.0f;
+    color32.a = _colorTransform.alphaMultiplier * 255.0f;
 
-    _renderDisplay->setColor(helpColor);
+    _renderDisplay->setColor(color32);
 }
 
 DRAGONBONES_NAMESPACE_END

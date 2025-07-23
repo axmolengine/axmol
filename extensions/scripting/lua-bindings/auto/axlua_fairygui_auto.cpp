@@ -8003,7 +8003,7 @@ int lua_ax_fairygui_GImage_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GImage:getColor",argc, 0);
@@ -8044,9 +8044,9 @@ int lua_ax_fairygui_GImage_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "fgui.GImage:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GImage:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GImage_setColor'", nullptr);
@@ -9030,7 +9030,7 @@ int lua_ax_fairygui_GMovieClip_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GMovieClip:getColor",argc, 0);
@@ -9071,9 +9071,9 @@ int lua_ax_fairygui_GMovieClip_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "fgui.GMovieClip:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GMovieClip:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GMovieClip_setColor'", nullptr);
@@ -9662,7 +9662,7 @@ int lua_ax_fairygui_GTextField_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GTextField:getColor",argc, 0);
@@ -9703,9 +9703,9 @@ int lua_ax_fairygui_GTextField_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "fgui.GTextField:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GTextField:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextField_setColor'", nullptr);
@@ -9856,7 +9856,7 @@ int lua_ax_fairygui_GTextField_getOutlineColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getOutlineColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GTextField:getOutlineColor",argc, 0);
@@ -9897,9 +9897,9 @@ int lua_ax_fairygui_GTextField_setOutlineColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "fgui.GTextField:setOutlineColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GTextField:setOutlineColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextField_setOutlineColor'", nullptr);
@@ -11151,7 +11151,7 @@ int lua_ax_fairygui_GGraph_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GGraph:getColor",argc, 0);
@@ -11192,9 +11192,9 @@ int lua_ax_fairygui_GGraph_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "fgui.GGraph:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GGraph:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGraph_setColor'", nullptr);
@@ -11976,7 +11976,7 @@ int lua_ax_fairygui_GLoader_getColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GLoader:getColor",argc, 0);
@@ -12017,9 +12017,9 @@ int lua_ax_fairygui_GLoader_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "fgui.GLoader:setColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GLoader:setColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setColor'", nullptr);
@@ -20929,7 +20929,7 @@ int lua_ax_fairygui_GButton_getTitleColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getTitleColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GButton:getTitleColor",argc, 0);
@@ -20970,9 +20970,9 @@ int lua_ax_fairygui_GButton_setTitleColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "fgui.GButton:setTitleColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GButton:setTitleColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GButton_setTitleColor'", nullptr);
@@ -24357,7 +24357,7 @@ int lua_ax_fairygui_GComboBox_getTitleColor(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getTitleColor();
-        color3b_to_luaval(tolua_S, ret);
+        color32_to_luaval(tolua_S, ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GComboBox:getTitleColor",argc, 0);
@@ -24398,9 +24398,9 @@ int lua_ax_fairygui_GComboBox_setTitleColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::Color3B arg0;
+        ax::Color32 arg0;
 
-        ok &= luaval_to_color3b(tolua_S, 2, &arg0, "fgui.GComboBox:setTitleColor");
+        ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GComboBox:setTitleColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComboBox_setTitleColor'", nullptr);

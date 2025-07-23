@@ -1063,7 +1063,7 @@ void SchedulerIssueWithReschedule::onEnter()
     Size widgetSize = getContentSize();
 
     auto status_text = Text::create("Checking..", "fonts/Marker Felt.ttf", 18);
-    status_text->setColor(Color3B(255, 255, 255));
+    status_text->setColor(Color32(255, 255, 255));
     status_text->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
     addChild(status_text);
 
@@ -1090,13 +1090,13 @@ void SchedulerIssueWithReschedule::onEnter()
             {
                 AXLOGD("SchedulerIssueWithReschedule - test OK");
                 status_text->setString("OK");
-                status_text->setColor(Color3B(0, 255, 0));
+                status_text->setColor(Color32(0, 255, 0));
             }
             else
             {
                 AXLOGD("SchedulerIssueWithReschedule - test failed!");
                 status_text->setString("Failed");
-                status_text->setColor(Color3B(255, 0, 0));
+                status_text->setColor(Color32(255, 0, 0));
             }
         },
         this, 0.5f, 0, 0, false, "test_verify_timer");

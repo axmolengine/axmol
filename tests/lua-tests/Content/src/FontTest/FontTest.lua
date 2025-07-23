@@ -17,9 +17,9 @@ cclog("font count = "..fontCount)
 
 local vAlignIdx = 1
 local verticalAlignment = {
-    cc.VERTICAL_TEXT_ALIGNMENT_TOP,
-    cc.VERTICAL_TEXT_ALIGNMENT_CENTER,
-    cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM,
+    ax.VERTICAL_TEXT_ALIGNMENT_TOP,
+    ax.VERTICAL_TEXT_ALIGNMENT_CENTER,
+    ax.VERTICAL_TEXT_ALIGNMENT_BOTTOM,
 }
 
 local vAlignCount = #(verticalAlignment)
@@ -27,41 +27,41 @@ local vAlignCount = #(verticalAlignment)
 local function showFont(ret, pFont)
 
     cclog("vAlignIdx="..vAlignIdx)
-    local s = cc.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getWinSize()
 
-    local blockSize = cc.size(s.width/3, 200)
+    local blockSize = ax.size(s.width/3, 200)
     local fontSize = 26
 
-    local top = cc.Label:createWithTTF(pFont, pFont, 24)
-    local left = cc.Label:createWithTTF("alignment left", pFont, fontSize,
-                                   blockSize, cc.TEXT_ALIGNMENT_LEFT, verticalAlignment[vAlignIdx])
-    local center = cc.Label:createWithTTF("alignment center", pFont, fontSize,
-                                     blockSize, cc.TEXT_ALIGNMENT_CENTER, verticalAlignment[vAlignIdx])
-    local right = cc.Label:createWithTTF("alignment right", pFont, fontSize,
-                                    blockSize, cc.TEXT_ALIGNMENT_RIGHT, verticalAlignment[vAlignIdx])
+    local top = ax.Label:createWithTTF(pFont, pFont, 24)
+    local left = ax.Label:createWithTTF("alignment left", pFont, fontSize,
+                                   blockSize, ax.TEXT_ALIGNMENT_LEFT, verticalAlignment[vAlignIdx])
+    local center = ax.Label:createWithTTF("alignment center", pFont, fontSize,
+                                     blockSize, ax.TEXT_ALIGNMENT_CENTER, verticalAlignment[vAlignIdx])
+    local right = ax.Label:createWithTTF("alignment right", pFont, fontSize,
+                                    blockSize, ax.TEXT_ALIGNMENT_RIGHT, verticalAlignment[vAlignIdx])
 
-    local leftColor = cc.LayerColor:create(cc.c4b(100, 100, 100, 255), blockSize.width, blockSize.height)
-    local centerColor = cc.LayerColor:create(cc.c4b(200, 100, 100, 255), blockSize.width, blockSize.height)
-    local rightColor = cc.LayerColor:create(cc.c4b(100, 100, 200, 255), blockSize.width, blockSize.height)
+    local leftColor = ax.LayerColor:create(ax.color32(100, 100, 100, 255), blockSize.width, blockSize.height)
+    local centerColor = ax.LayerColor:create(ax.color32(200, 100, 100, 255), blockSize.width, blockSize.height)
+    local rightColor = ax.LayerColor:create(ax.color32(100, 100, 200, 255), blockSize.width, blockSize.height)
 
     leftColor:setIgnoreAnchorPointForPosition(false)
     centerColor:setIgnoreAnchorPointForPosition(false)
     rightColor:setIgnoreAnchorPointForPosition(false)
 
-    top:setAnchorPoint(cc.p(0.5, 1))
-    left:setAnchorPoint(cc.p(0,0.5))
-    leftColor:setAnchorPoint(cc.p(0,0.5))
-    center:setAnchorPoint(cc.p(0,0.5))
-    centerColor:setAnchorPoint(cc.p(0,0.5))
-    right:setAnchorPoint(cc.p(0,0.5))
-    rightColor:setAnchorPoint(cc.p(0,0.5))
+    top:setAnchorPoint(ax.p(0.5, 1))
+    left:setAnchorPoint(ax.p(0,0.5))
+    leftColor:setAnchorPoint(ax.p(0,0.5))
+    center:setAnchorPoint(ax.p(0,0.5))
+    centerColor:setAnchorPoint(ax.p(0,0.5))
+    right:setAnchorPoint(ax.p(0,0.5))
+    rightColor:setAnchorPoint(ax.p(0,0.5))
 
-    top:setPosition(cc.p(s.width/2,s.height-20))
-    left:setPosition(cc.p(0,s.height/2))
+    top:setPosition(ax.p(s.width/2,s.height-20))
+    left:setPosition(ax.p(0,s.height/2))
     leftColor:setPosition(left:getPosition())
-    center:setPosition(cc.p(blockSize.width, s.height/2))
+    center:setPosition(ax.p(blockSize.width, s.height/2))
     centerColor:setPosition(center:getPosition())
-    right:setPosition(cc.p(blockSize.width*2, s.height/2))
+    right:setPosition(ax.p(blockSize.width*2, s.height/2))
     rightColor:setPosition(right:getPosition())
 
     ret:addChild(leftColor, -1)
@@ -93,7 +93,7 @@ function FontTestMain()
     cclog("FontTestMain")
     Helper.index = 1
     vAlignIdx = 1
-    local scene = cc.Scene:create()
+    local scene = ax.Scene:create()
     Helper.createFunctionTable = {
         createTestLayer,
         createTestLayer,
@@ -103,7 +103,7 @@ function FontTestMain()
         createTestLayer
     }
     Helper.index = 1
-    
+
     scene:addChild(createTestLayer())
     scene:addChild(CreateBackMenuItem())
     return scene

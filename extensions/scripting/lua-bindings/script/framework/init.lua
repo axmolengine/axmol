@@ -52,12 +52,12 @@ end
 require("axmol.framework.package_support")
 
 -- register the build-in packages
-cc.register("event", require("axmol.framework.components.event"))
+ax.register("event", require("axmol.framework.components.event"))
 
 -- export global variable
 local __g = _G
-cc.exports = {}
-setmetatable(cc.exports, {
+ax.exports = {}
+setmetatable(ax.exports, {
     __newindex = function(_, name, value)
         rawset(__g, name, value)
     end,
@@ -68,14 +68,14 @@ setmetatable(cc.exports, {
 })
 
 -- disable create unexpected global variable
-function cc.disable_global()
+function ax.disable_global()
     setmetatable(__g, {
         __newindex = function(_, name, value)
-            error(string.format("USE \" cc.exports.%s = value \" INSTEAD OF SET GLOBAL VARIABLE", name), 0)
+            error(string.format("USE \" ax.exports.%s = value \" INSTEAD OF SET GLOBAL VARIABLE", name), 0)
         end
     })
 end
 
 if AX_DISABLE_GLOBAL then
-    cc.disable_global()
+    ax.disable_global()
 end

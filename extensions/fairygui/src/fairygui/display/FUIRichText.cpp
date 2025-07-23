@@ -196,12 +196,12 @@ void FUIRichText::setAnchorTextUnderline(bool enable)
     }
 }
 
-const ax::Color3B& FUIRichText::getAnchorFontColor()
+const ax::Color32& FUIRichText::getAnchorFontColor()
 {
     return _parseOptions.linkColor;
 }
 
-void FUIRichText::setAnchorFontColor(const ax::Color3B & color)
+void FUIRichText::setAnchorFontColor(const ax::Color32 & color)
 {
     _parseOptions.linkColor = color;
     _formatTextDirty = true;

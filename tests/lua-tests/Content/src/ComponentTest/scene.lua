@@ -10,7 +10,7 @@ local scene = {
     enemies = {},
 
     onEnter = function(self)
-        cc.AudioEngine:play2d("background-music-aac.mp3", true)
+        ax.AudioEngine:play2d("background-music-aac.mp3", true)
     end,
 
     update = function(self, dt)
@@ -23,8 +23,8 @@ local scene = {
 
     addNewEnemy = function(self)
         local owner = self:getOwner()
-        local enemy = cc.Sprite:create("components/Target.png")
-        local enemyLuaComponent = cc.ComponentLua:create("ComponentTest/enemy.lua")
+        local enemy = ax.Sprite:create("components/Target.png")
+        local enemyLuaComponent = ax.ComponentLua:create("ComponentTest/enemy.lua")
         enemy:addComponent(enemyLuaComponent)
         owner:addChild(enemy)
         table.insert(self.enemies, enemy)
@@ -32,14 +32,14 @@ local scene = {
 
     looseGame = function(node)
         local scene = GameOverScene.create("You Lose :[")
-        cc.Director:getInstance():replaceScene(scene)
+        ax.Director:getInstance():replaceScene(scene)
     end,
 
     inscreaseCount = function(self)
         self.numEnemyDestroyed = self.numEnemyDestroyed + 1
         if self.numEnemyDestroyed >=5 then
             local scene = GameOverScene.create("You Win!")
-            cc.Director:getInstance():replaceScene(scene)
+            ax.Director:getInstance():replaceScene(scene)
         end
     end
 }

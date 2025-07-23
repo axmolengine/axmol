@@ -750,43 +750,6 @@ bool luaval_to_color(lua_State* L, int lo, ax::Color* outValue, const char* func
     return ok;
 }
 
-bool luaval_to_color3b(lua_State* L, int lo, Color3B* outValue, const char* funcName)
-{
-    if (NULL == L || NULL == outValue)
-        return false;
-
-    bool ok = true;
-
-    tolua_Error tolua_err;
-    if (!tolua_istable(L, lo, 0, &tolua_err))
-    {
-#if _AX_DEBUG >= 1
-        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
-#endif
-        ok = false;
-    }
-
-    if (ok)
-    {
-        lua_pushstring(L, "r");
-        lua_gettable(L, lo);
-        outValue->r = lua_isnil(L, -1) ? 0 : static_cast<uint8_t>(lua_tonumber(L, -1));
-        lua_pop(L, 1);
-
-        lua_pushstring(L, "g");
-        lua_gettable(L, lo);
-        outValue->g = lua_isnil(L, -1) ? 0 : static_cast<uint8_t>(lua_tonumber(L, -1));
-        lua_pop(L, 1);
-
-        lua_pushstring(L, "b");
-        lua_gettable(L, lo);
-        outValue->b = lua_isnil(L, -1) ? 0 : static_cast<uint8_t>(lua_tonumber(L, -1));
-        lua_pop(L, 1);
-    }
-
-    return ok;
-}
-
 bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
@@ -896,7 +859,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
         outValue->_stroke._strokeEnabled = false;
 
         // white text by default
-        outValue->_fontFillColor = Color3B::WHITE;
+        outValue->_fontFillColor = Color32::WHITE;
 
         lua_pushstring(L, "fontName");
         lua_gettable(L, lo);
@@ -922,7 +885,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
-            luaval_to_color3b(L, lua_gettop(L), &outValue->_fontFillColor);
+            luaval_to_color32(L, lua_gettop(L), &outValue->_fontFillColor);
         }
         lua_pop(L, 1);
 
@@ -982,13 +945,13 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
             {
                 // default stroke values
                 outValue->_stroke._strokeSize  = 1;
-                outValue->_stroke._strokeColor = Color3B::BLUE;
+                outValue->_stroke._strokeColor = Color32::BLUE;
 
                 lua_pushstring(L, "strokeColor");
                 lua_gettable(L, lo);
                 if (!lua_isnil(L, -1))
                 {
-                    luaval_to_color3b(L, lua_gettop(L), &outValue->_stroke._strokeColor);
+                    luaval_to_color32(L, lua_gettop(L), &outValue->_stroke._strokeColor);
                 }
                 lua_pop(L, 1);
 
@@ -2410,22 +2373,6 @@ void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value) {
     lua_pushinteger(L, threadHash);
 }
 
-void color3b_to_luaval(lua_State* L, const Color3B& color)
-{
-    if (NULL == L)
-        return;
-    lua_newtable(L);                     /* L: table */
-    lua_pushstring(L, "r");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-    lua_pushstring(L, "g");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-    lua_pushstring(L, "b");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-}
-
 void affinetransform_to_luaval(lua_State* L, const AffineTransform& inValue)
 {
     if (NULL == L)
@@ -2471,7 +2418,7 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue)
     lua_pushnumber(L, (lua_Number)inValue._vertAlignment); /* L: table key value*/
     lua_rawset(L, -3);                                     /* table[key] = value, L: table */
     lua_pushstring(L, "fontFillColor");                    /* L: table key */
-    color3b_to_luaval(L, inValue._fontFillColor);          /* L: table key value*/
+    color32_to_luaval(L, inValue._fontFillColor);          /* L: table key value*/
     lua_rawset(L, -3);                                     /* table[key] = value, L: table */
     lua_pushstring(L, "fontDimensions");                   /* L: table key */
     size_to_luaval(L, inValue._dimensions);                /* L: table key value*/
@@ -2500,7 +2447,7 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue)
     lua_rawset(L, -3);                                  /* table[key] = value, L: table */
 
     lua_pushstring(L, "strokeColor");                   /* L: table key */
-    color3b_to_luaval(L, inValue._stroke._strokeColor); /* L: table key value*/
+    color32_to_luaval(L, inValue._stroke._strokeColor); /* L: table key value*/
     lua_rawset(L, -3);                                  /* table[key] = value, L: table */
 
     lua_pushstring(L, "strokeSize");                            /* L: table key */
