@@ -79,37 +79,37 @@ public:
                                 Texture2D* texture);
 
     // Overrides
-    virtual void setPosition(const Vec2& position) override;
-    virtual void setPosition(float x, float y) override;
-    virtual const Vec2& getPosition() const override;
-    virtual void getPosition(float* x, float* y) const override;
-    virtual void setPositionX(float x) override;
-    virtual void setPositionY(float y) override;
-    virtual float getPositionX() const override;
-    virtual float getPositionY() const override;
-    virtual Vec3 getPosition3D() const override;
+    void setPosition(const Vec2& position) override;
+    void setPosition(float x, float y) override;
+    const Vec2& getPosition() const override;
+    void getPosition(float* x, float* y) const override;
+    void setPositionX(float x) override;
+    void setPositionY(float y) override;
+    float getPositionX() const override;
+    float getPositionY() const override;
+    Vec3 getPosition3D() const override;
     /**
      * @lua NA
      */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     /**
      * @lua NA
      */
-    virtual void update(float delta) override;
-    virtual Texture2D* getTexture() const override;
-    virtual void setTexture(Texture2D* texture) override;
+    void update(float delta) override;
+    Texture2D* getTexture() const override;
+    void setTexture(Texture2D* texture) override;
     /**
      * @lua NA
      */
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
     /**
      * @lua NA
      */
-    virtual const BlendFunc& getBlendFunc() const override;
-    virtual uint8_t getOpacity() const override;
-    virtual void setOpacity(uint8_t opacity) override;
-    virtual void setOpacityModifyRGB(bool value) override;
-    virtual bool isOpacityModifyRGB() const override;
+    const BlendFunc& getBlendFunc() const override;
+    uint8_t getOpacity() const override;
+    void setOpacity(uint8_t opacity) override;
+    void setOpacityModifyRGB(bool value) override;
+    bool isOpacityModifyRGB() const override;
 
     /** Color used for the tint.
      *

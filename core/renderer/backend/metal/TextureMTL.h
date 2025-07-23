@@ -158,18 +158,18 @@ public:
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
+    void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
 
     /**
      * Generate mipmaps.
      */
-    virtual void generateMipmaps() override;
+    void generateMipmaps() override;
 
     /**
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index = 0) override;
+    void updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index = 0) override;
 
     int getCount() const override { return _textureInfo._maxIdx + 1; }
 
@@ -209,25 +209,25 @@ public:
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
      */
-    virtual void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
+    void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
 
     /**
      * Update texutre cube data in give slice side.
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
+    void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
 
     /**
      * Generate mipmaps.
      */
-    virtual void generateMipmaps() override;
+    void generateMipmaps() override;
 
     /**
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index = 0) override;
+    void updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index = 0) override;
 
     int getCount() const override { return _textureInfo._maxIdx + 1; }
 

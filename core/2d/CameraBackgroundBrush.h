@@ -145,12 +145,12 @@ public:
      * Get brush type. Should be BrushType::DEPTH
      * @return brush type
      */
-    virtual BrushType getBrushType() const override { return BrushType::DEPTH; }
+    BrushType getBrushType() const override { return BrushType::DEPTH; }
 
     /**
      * Draw background
      */
-    virtual void drawBackground(Camera* camera) override;
+    void drawBackground(Camera* camera) override;
 
     /**
      * Set depth
@@ -161,7 +161,7 @@ public:
     CameraBackgroundDepthBrush();
     virtual ~CameraBackgroundDepthBrush();
 
-    virtual bool init() override;
+    bool init() override;
 
 private:
     void onBeforeDraw();
@@ -198,7 +198,7 @@ public:
      * Get brush type. Should be BrushType::COLOR
      * @return brush type
      */
-    virtual BrushType getBrushType() const override { return BrushType::COLOR; }
+    BrushType getBrushType() const override { return BrushType::COLOR; }
 
     /**
      * Create a color brush
@@ -211,7 +211,7 @@ public:
     /**
      * Draw background
      */
-    virtual void drawBackground(Camera* camera) override;
+    void drawBackground(Camera* camera) override;
 
     /**
      * Set clear color
@@ -222,7 +222,7 @@ public:
     CameraBackgroundColorBrush();
     virtual ~CameraBackgroundColorBrush();
 
-    virtual bool init() override;
+    bool init() override;
 
 protected:
     Color _color;
@@ -242,7 +242,7 @@ public:
      * Get brush type. Should be BrushType::SKYBOX
      * @return brush type
      */
-    virtual BrushType getBrushType() const override { return BrushType::SKYBOX; }
+    BrushType getBrushType() const override { return BrushType::SKYBOX; }
 
     /** Creates a Skybox brush with 6 textures.
      @param positive_x texture for the right side of the texture cube face.
@@ -274,12 +274,12 @@ public:
     /**
      * Draw background
      */
-    virtual void drawBackground(Camera* camera) override;
+    void drawBackground(Camera* camera) override;
 
     bool isActived() const;
     void setActived(bool actived);
     virtual void setTextureValid(bool valid);
-    virtual bool isValid() override;
+    bool isValid() override;
 
     CameraBackgroundSkyBoxBrush();
     virtual ~CameraBackgroundSkyBoxBrush();
@@ -287,7 +287,7 @@ public:
     /**
      * init Skybox.
      */
-    virtual bool init() override;
+    bool init() override;
 
 private:
     void onBeforeDraw();

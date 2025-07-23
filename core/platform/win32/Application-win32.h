@@ -57,7 +57,7 @@ public:
     static Application* getInstance();
 
     /* override functions */
-    virtual void setAnimationInterval(float interval) override;
+    void setAnimationInterval(float interval) override;
 
     virtual LanguageType getCurrentLanguage();
 
@@ -71,7 +71,7 @@ public:
     /**
     @brief Get application version
     */
-    virtual std::string getVersion() override;
+    std::string getVersion() override;
 
     /**
      @brief Open url in default browser

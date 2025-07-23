@@ -86,8 +86,8 @@ public:
     bool isEnabled() const { return _enabled; }
 
     // override
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
     BaseLight();
     virtual ~BaseLight();
@@ -116,7 +116,7 @@ public:
     static DirectionLight* create(const Vec3& direction, const Color32& color);
 
     // get light type
-    virtual LightType getLightType() const override { return LightType::DIRECTIONAL; }
+    LightType getLightType() const override { return LightType::DIRECTIONAL; }
 
     /**
      * Sets the Direction in parent.
@@ -155,7 +155,7 @@ public:
     static PointLight* create(const Vec3& position, const Color32& color, float range);
 
     // get light type
-    virtual LightType getLightType() const override { return LightType::POINT; }
+    LightType getLightType() const override { return LightType::POINT; }
 
     /** get or set range */
     float getRange() const { return _range; }
@@ -192,7 +192,7 @@ public:
                              float range);
 
     // get light type
-    virtual LightType getLightType() const override { return LightType::SPOT; }
+    LightType getLightType() const override { return LightType::SPOT; }
 
     /**
      * Sets the Direction in parent.
@@ -279,7 +279,7 @@ public:
     static AmbientLight* create(const Color32& color);
 
     // get light type
-    virtual LightType getLightType() const override { return LightType::AMBIENT; }
+    LightType getLightType() const override { return LightType::AMBIENT; }
 
     AmbientLight();
     virtual ~AmbientLight();

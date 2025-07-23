@@ -42,8 +42,8 @@ public:
 
     static PUPlaneCollider* create();
 
-    virtual void notifyRescaled(const Vec3& scale) override;
-    virtual void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
+    void notifyRescaled(const Vec3& scale) override;
+    void updatePUAffector(PUParticle3D* particle, float deltaTime) override;
 
     /** Returns the normal of the plane
      */
@@ -57,7 +57,7 @@ public:
      */
     void calculateDirectionAfterCollision(PUParticle3D* particle, float timeElapsed);
 
-    virtual void copyAttributesTo(PUAffector* affector) override;
+    void copyAttributesTo(PUAffector* affector) override;
 
     PUPlaneCollider();
     virtual ~PUPlaneCollider();

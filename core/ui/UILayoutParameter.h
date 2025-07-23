@@ -273,8 +273,8 @@ public:
     LinearGravity getGravity() const;
 
     // override functions.
-    virtual LayoutParameter* createCloneInstance() override;
-    virtual void copyProperties(LayoutParameter* model) override;
+    LayoutParameter* createCloneInstance() override;
+    void copyProperties(LayoutParameter* model) override;
 
 protected:
     LinearGravity _linearGravity;
@@ -388,8 +388,8 @@ public:
     std::string_view getRelativeName() const;
 
     // override functions.
-    virtual LayoutParameter* createCloneInstance() override;
-    virtual void copyProperties(LayoutParameter* model) override;
+    LayoutParameter* createCloneInstance() override;
+    void copyProperties(LayoutParameter* model) override;
 
 protected:
     RelativeAlign _relativeAlign;

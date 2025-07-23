@@ -446,7 +446,7 @@ public:
      *
      * If the body it isn't enabled, it will not has simulation by world.
      */
-    virtual void setEnabled(bool enable) override;
+    void setEnabled(bool enable) override;
 
     /** Whether the body can rotation. */
     bool isRotationEnabled() const { return _rotationEnabled; }
@@ -478,16 +478,16 @@ public:
     /** Set fixed update state */
     void setFixedUpdate(bool fixedUpdate) { _fixedUpdate = fixedUpdate; }
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
-    virtual void onAdd() override;
-    virtual void onRemove() override;
+    void onEnter() override;
+    void onExit() override;
+    void onAdd() override;
+    void onRemove() override;
 
 protected:
     PhysicsBody();
     virtual ~PhysicsBody();
 
-    virtual bool init() override;
+    bool init() override;
 
     virtual void setPosition(float positionX, float positionY);
 

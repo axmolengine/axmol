@@ -66,7 +66,7 @@ class AX_EX_DLL PUParticle3DEntityRender : public PURender
 {
 public:
     void copyAttributesTo(PUParticle3DEntityRender* render);
-    virtual void reset() override;
+    void reset() override;
     PUParticle3DEntityRender();
     virtual ~PUParticle3DEntityRender();
 
@@ -154,9 +154,9 @@ public:
     void setTextureCoordsColumns(unsigned short textureCoordsColumns);
     unsigned int getNumTextureCoords();
 
-    virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
-    virtual PUParticle3DQuadRender* clone() override;
+    PUParticle3DQuadRender* clone() override;
     void copyAttributesTo(PUParticle3DQuadRender* render);
 
     PUParticle3DQuadRender();
@@ -187,12 +187,12 @@ class AX_EX_DLL PUParticle3DModelRender : public PURender
 public:
     static PUParticle3DModelRender* create(std::string_view modelFile, std::string_view texFile = "");
 
-    virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
-    virtual PUParticle3DModelRender* clone() override;
+    PUParticle3DModelRender* clone() override;
     void copyAttributesTo(PUParticle3DModelRender* render);
 
-    virtual void reset() override;
+    void reset() override;
     PUParticle3DModelRender();
     virtual ~PUParticle3DModelRender();
 
@@ -208,9 +208,9 @@ class AX_EX_DLL PUParticle3DBoxRender : public PUParticle3DEntityRender
 public:
     static PUParticle3DBoxRender* create(std::string_view texFile = "");
 
-    virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
-    virtual PUParticle3DBoxRender* clone() override;
+    PUParticle3DBoxRender* clone() override;
 
     PUParticle3DBoxRender();
     virtual ~PUParticle3DBoxRender();
@@ -224,9 +224,9 @@ class AX_EX_DLL PUSphereRender : public PUParticle3DEntityRender
 public:
     static PUSphereRender* create(std::string_view texFile = "");
 
-    virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
-    virtual PUSphereRender* clone() override;
+    PUSphereRender* clone() override;
     void copyAttributesTo(PUSphereRender* render);
 
     PUSphereRender();

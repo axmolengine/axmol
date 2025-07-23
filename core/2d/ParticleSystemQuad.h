@@ -111,26 +111,26 @@ public:
     /**
      * @lua NA
      */
-    virtual void setTexture(Texture2D* texture) override;
+    void setTexture(Texture2D* texture) override;
     /**
      * @lua NA
      */
-    virtual void updateParticleQuads() override;
+    void updateParticleQuads() override;
     /**
      * @lua NA
      */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     /**
      * @lua NA
      */
-    virtual void setBatchNode(ParticleBatchNode* batchNode) override;
+    void setBatchNode(ParticleBatchNode* batchNode) override;
     /**
      * @lua NA
      */
-    virtual void setTotalParticles(int tp) override;
+    void setTotalParticles(int tp) override;
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      */
@@ -144,7 +144,7 @@ public:
     /**
      * @lua NA
      */
-    virtual bool initWithTotalParticles(int numberOfParticles) override;
+    bool initWithTotalParticles(int numberOfParticles) override;
 
 protected:
     /** initializes the indices for the vertices*/

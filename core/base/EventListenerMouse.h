@@ -66,8 +66,8 @@ public:
     bool isSwallowMouse();
 
     /// Overrides
-    virtual EventListenerMouse* clone() override;
-    virtual bool checkAvailable() override;
+    EventListenerMouse* clone() override;
+    bool checkAvailable() override;
 
     std::function<bool(EventMouse* event)> onMouseDown;
     std::function<bool(EventMouse* event)> onMouseUp;

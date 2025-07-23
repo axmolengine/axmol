@@ -53,11 +53,11 @@ private:
 public:
     /* override functions */
     bool init() override;
-    virtual std::string getWritablePath() const override;
+    std::string getWritablePath() const override;
     std::string getNativeWritableAbsolutePath() const override;
 
 private:
-    virtual bool isFileExistInternal(std::string_view strFilePath) const override;
+    bool isFileExistInternal(std::string_view strFilePath) const override;
 
     static std::string s_exeName;
 };

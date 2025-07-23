@@ -43,7 +43,7 @@ public:
     static PUOnCollisionObserver* create();
     /**
      */
-    virtual bool observe(PUParticle3D* particle, float timeElapsed) override;
+    bool observe(PUParticle3D* particle, float timeElapsed) override;
 
     PUOnCollisionObserver() : PUObserver() {}
     virtual ~PUOnCollisionObserver(){};

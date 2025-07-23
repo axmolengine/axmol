@@ -133,7 +133,7 @@ public:
     /**
      * Clone this material.
      */
-    virtual Material* clone() const override;
+    Material* clone() const override;
 
 protected:
     MaterialType _type;

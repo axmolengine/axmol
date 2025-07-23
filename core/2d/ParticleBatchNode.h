@@ -124,16 +124,16 @@ public:
     void setTextureAtlas(TextureAtlas* atlas) { _textureAtlas = atlas; }
 
     // Overrides
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     using Node::addChild;
-    virtual void addChild(Node* child, int zOrder, int tag) override;
-    virtual void addChild(Node* child, int zOrder, std::string_view name) override;
-    virtual void removeChild(Node* child, bool cleanup) override;
-    virtual void reorderChild(Node* child, int zOrder) override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
-    virtual Texture2D* getTexture() const override;
-    virtual void setTexture(Texture2D* texture) override;
+    void addChild(Node* child, int zOrder, int tag) override;
+    void addChild(Node* child, int zOrder, std::string_view name) override;
+    void removeChild(Node* child, bool cleanup) override;
+    void reorderChild(Node* child, int zOrder) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    Texture2D* getTexture() const override;
+    void setTexture(Texture2D* texture) override;
     /**
      * @code
      * When this function bound into js or lua,the parameter will be changed
@@ -141,11 +141,11 @@ public:
      * @endcode
      * @lua NA
      */
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
     /**
      * @lua NA
      */
-    virtual const BlendFunc& getBlendFunc() const override;
+    const BlendFunc& getBlendFunc() const override;
 
     /**
      */

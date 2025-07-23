@@ -121,7 +121,7 @@ public:
     void setUserInfo(const ValueMap& userInfo) { _userInfo = userInfo; }
 
     // Overrides
-    virtual AnimationFrame* clone() const override;
+    AnimationFrame* clone() const override;
 
     /**
      */
@@ -271,7 +271,7 @@ public:
     void setLoops(unsigned int loops) { _loops = loops; };
 
     // overrides
-    virtual Animation* clone() const override;
+    Animation* clone() const override;
 
     Animation();
     virtual ~Animation();

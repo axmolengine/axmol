@@ -67,7 +67,7 @@ public:
     /**
      * Initializes an empty Bone with nothing init.
      */
-    virtual bool init() override;
+    bool init() override;
 
     /**
      * Initializes a Bone with the specified name
@@ -138,12 +138,12 @@ public:
     void updateDisplayedOpacity(uint8_t parentOpacity) override;
 
     //! Update color to render display
-    virtual void updateColor() override;
+    void updateColor() override;
 
     //! Update zorder
     void updateZOrder();
 
-    virtual void setLocalZOrder(int zOrder) override;
+    void setLocalZOrder(int zOrder) override;
 
     Tween* getTween();
 
@@ -154,7 +154,7 @@ public:
     virtual bool isTransformDirty() { return _boneTransformDirty; }
 
     virtual ax::Mat4 getNodeToArmatureTransform() const;
-    virtual ax::Mat4 getNodeToWorldTransform() const override;
+    ax::Mat4 getNodeToWorldTransform() const override;
 
     ax::Node* getDisplayRenderNode();
     DisplayType getDisplayRenderNodeType();

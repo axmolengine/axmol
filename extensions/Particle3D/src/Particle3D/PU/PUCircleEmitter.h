@@ -72,10 +72,10 @@ public:
 
     /** See ParticleEmiter
      */
-    virtual void notifyStart() override;
+    void notifyStart() override;
 
-    virtual PUCircleEmitter* clone() override;
-    virtual void copyAttributesTo(PUEmitter* emitter) override;
+    PUCircleEmitter* clone() override;
+    void copyAttributesTo(PUEmitter* emitter) override;
 
     PUCircleEmitter();
     virtual ~PUCircleEmitter(){};
@@ -83,11 +83,11 @@ public:
 protected:
     /** Determine a particle position on the circle.
      */
-    virtual void initParticlePosition(PUParticle3D* particle) override;
+    void initParticlePosition(PUParticle3D* particle) override;
 
     /** Determine the particle direction.
      */
-    virtual void initParticleDirection(PUParticle3D* particle) override;
+    void initParticleDirection(PUParticle3D* particle) override;
 
     Quaternion getRotationTo(const Vec3& src, const Vec3& dest, const Vec3& fallbackAxis = Vec3::ZERO) const;
 

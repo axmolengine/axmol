@@ -266,7 +266,7 @@ public:
 
     /**
      */
-    virtual void visit(ax::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(ax::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * Set a callback to touch vent listener.
@@ -294,7 +294,7 @@ public:
      *
      * @param pos  The position (x,y) of the widget in OpenGL coordinates
      */
-    virtual void setPosition(const Vec2& pos) override;
+    void setPosition(const Vec2& pos) override;
 
     /** Sets the position (x,y) using values between 0 and 1.
      *
@@ -373,14 +373,14 @@ public:
     virtual bool isFlippedY() const { return _flippedY; };
 
     // override the setScale function of Node
-    virtual void setScaleX(float scaleX) override;
-    virtual void setScaleY(float scaleY) override;
-    virtual void setScale(float scale) override;
-    virtual void setScale(float scalex, float scaley) override;
+    void setScaleX(float scaleX) override;
+    void setScaleY(float scaleY) override;
+    void setScale(float scale) override;
+    void setScale(float scalex, float scaley) override;
     using Node::setScaleZ;
-    virtual float getScaleX() const override;
-    virtual float getScaleY() const override;
-    virtual float getScale() const override;
+    float getScaleX() const override;
+    float getScaleY() const override;
+    float getScale() const override;
     using Node::getScaleZ;
 
     /**
@@ -413,7 +413,7 @@ public:
      * Changes the size that is widget's size
      * @param contentSize A content size in `Vec2`.
      */
-    virtual void setContentSize(const Vec2& contentSize) override;
+    void setContentSize(const Vec2& contentSize) override;
 
     /**
      * Changes the percent that is widget's percent size
@@ -573,7 +573,7 @@ public:
      * Returns the string representation of widget class name
      * @return get the class description.
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      * Create a new widget copy of the original one.
@@ -583,12 +583,12 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
 
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
 
     /**
      * Update all children's contents size and position recursively.
@@ -769,7 +769,7 @@ public:
     friend class PageView;
 
     // initializes state of widget.
-    virtual bool init() override;
+    bool init() override;
 
     /*
      * @brief Sends the touch event to widget's parent, if a widget wants to handle touch event under another widget,

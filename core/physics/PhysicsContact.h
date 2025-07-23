@@ -214,10 +214,10 @@ public:
 
      * @return True if there's one available callback function at least, false if there's no one.
      */
-    virtual bool checkAvailable() override;
+    bool checkAvailable() override;
 
     /** Clone an object from this listener.*/
-    virtual EventListenerPhysicsContact* clone() override;
+    EventListenerPhysicsContact* clone() override;
 
 protected:
     /**
@@ -267,9 +267,9 @@ public:
     /** Create the listener. */
     static EventListenerPhysicsContactWithBodies* create(PhysicsBody* bodyA, PhysicsBody* bodyB);
 
-    virtual bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
+    bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
 
-    virtual EventListenerPhysicsContactWithBodies* clone() override;
+    EventListenerPhysicsContactWithBodies* clone() override;
 
 protected:
     PhysicsBody* _a;
@@ -287,8 +287,8 @@ public:
     /** Create the listener. */
     static EventListenerPhysicsContactWithShapes* create(PhysicsCollider* shapeA, PhysicsCollider* shapeB);
 
-    virtual bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
-    virtual EventListenerPhysicsContactWithShapes* clone() override;
+    bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
+    EventListenerPhysicsContactWithShapes* clone() override;
 
 protected:
     PhysicsCollider* _a;
@@ -306,8 +306,8 @@ public:
     /** Create the listener. */
     static EventListenerPhysicsContactWithGroup* create(int group);
 
-    virtual bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
-    virtual EventListenerPhysicsContactWithGroup* clone() override;
+    bool hitTest(PhysicsCollider* shapeA, PhysicsCollider* shapeB) override;
+    EventListenerPhysicsContactWithGroup* clone() override;
 
 protected:
     int _group;

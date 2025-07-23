@@ -96,7 +96,7 @@ public:
 
     /**
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      */
@@ -161,10 +161,10 @@ public:
     void setLabel(Node* node);
 
     // Overrides
-    virtual void activate() override;
-    virtual void selected() override;
-    virtual void unselected() override;
-    virtual void setEnabled(bool enabled) override;
+    void activate() override;
+    void selected() override;
+    void unselected() override;
+    void setEnabled(bool enabled) override;
 
     /**
      */
@@ -464,11 +464,11 @@ public:
     void setSubItems(const Vector<MenuItem*>& items) { _subItems = items; }
 
     // Overrides
-    virtual void activate() override;
-    virtual void selected() override;
-    virtual void unselected() override;
-    virtual void setEnabled(bool var) override;
-    virtual void cleanup() override;
+    void activate() override;
+    void selected() override;
+    void unselected() override;
+    void setEnabled(bool var) override;
+    void cleanup() override;
 
     /**
      */
