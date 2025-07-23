@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "physics3d/Physics3D.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 

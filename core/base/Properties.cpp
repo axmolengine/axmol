@@ -32,7 +32,7 @@
 #include "math/Vec4.h"
 #include "math/Mat4.h"
 #include "math/Quaternion.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Data.h"
 
 using namespace ax;

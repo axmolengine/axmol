@@ -37,8 +37,10 @@ SOFTWARE.
 #  if !__has_attribute(format)
 #    undef __has_attribute
 #  endif
-#include "cocos2d.h"
-using namespace cocos2d;
+#include "base/Director.h"
+#include "base/Scheduler.h"
+
+using namespace ax;
 
 namespace lyasio
 {
@@ -72,7 +74,7 @@ static TIMER_ID loop(unsigned int n, float interval, vcallback_t callback)
 
     auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
-    std::string key = StringUtils::format("LSTMR#%p", timerId);
+    std::string key = fmt::format("LSTMR#{}", fmt::ptr(timerId));
 
     Director::getInstance()->getScheduler()->schedule(
         [timerObj](
@@ -93,7 +95,7 @@ static TIMER_ID delay(float delay, vcallback_t callback)
     yasio::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
     auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
-    std::string key = StringUtils::format("LSTMR#%p", timerId);
+    std::string key = fmt::format("LSTMR#{}", fmt::ptr(timerId));
     Director::getInstance()->getScheduler()->schedule(
         [timerObj](
             float /*dt*/) { // lambda expression hold the reference of timerObj automatically.
@@ -108,7 +110,7 @@ static TIMER_ID delay(float delay, vcallback_t callback)
 
 static void kill(TIMER_ID timerId)
 {
-  std::string key = StringUtils::format("LSTMR#%p", timerId);
+  std::string key = fmt::format("LSTMR#{}", fmt::ptr(timerId));
   Director::getInstance()->getScheduler()->unschedule(key, STIMER_TARGET_VALUE);
 }
 YASIO_LUA_API void clear()

@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/Scheduler.h"
 #include "base/EventDispatcher.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "2d/Camera.h"
 #include "2d/ActionManager.h"
 #include "2d/Scene.h"

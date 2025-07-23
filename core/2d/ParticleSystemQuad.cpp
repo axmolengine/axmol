@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "base/Configuration.h"
 #include "base/EventListenerCustom.h"
 #include "base/EventDispatcher.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
 #include "2d/TweenFunction.h"

@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "2d/Sprite.h"
 #include "2d/LabelAtlas.h"
 #include "2d/Label.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include <stdarg.h>
 
 namespace ax

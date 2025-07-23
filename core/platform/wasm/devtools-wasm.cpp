@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "platform/wasm/devtools-wasm.h"
 #include <emscripten.h>
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 namespace ax
 {

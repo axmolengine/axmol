@@ -59,7 +59,7 @@ THE SOFTWARE.
 #include "base/Config.h"
 #include "base/Macros.h"
 #include "base/Types.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Utils.h"
 
 // EventDispatcher

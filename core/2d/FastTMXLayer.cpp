@@ -48,7 +48,7 @@ THE SOFTWARE.
 #include "renderer/backend/DriverBase.h"
 #include "renderer/backend/Buffer.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "renderer/backend/ProgramState.h"
 
 namespace ax

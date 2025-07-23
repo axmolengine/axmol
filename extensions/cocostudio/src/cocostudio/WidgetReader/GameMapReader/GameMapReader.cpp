@@ -28,7 +28,7 @@
 #include "2d/TMXXMLParser.h"
 #include "2d/FastTMXTiledMap.h"
 #include "platform/FileUtils.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/WidgetReader/NodeReader/NodeReader.h"

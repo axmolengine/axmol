@@ -60,7 +60,7 @@ set(_AX_BASE_HEADER
   base/FPSImages.h
   base/ZipUtils.h
   base/Map.h
-  base/UTF8.h
+  base/text_utils.h
   base/ScriptSupport.h
   base/EventFocus.h
   base/Configuration.h
@@ -127,7 +127,7 @@ set(_AX_BASE_SRC
   base/FPSImages.cpp
   base/Random.cpp
   base/Types.cpp
-  base/UTF8.cpp
+  base/text_utils.cpp
   base/Utils.cpp
   base/SimpleTimer.cpp
   base/etc1.cpp

@@ -53,7 +53,7 @@ THE SOFTWARE.
 #include "base/ZipUtils.h"
 #include "base/Director.h"
 #include "base/Profiling.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Utils.h"
 #include "renderer/TextureCache.h"
 #include "platform/FileUtils.h"

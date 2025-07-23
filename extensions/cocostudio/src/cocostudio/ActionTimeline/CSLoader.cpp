@@ -29,7 +29,7 @@
 
 #include "base/ObjectFactory.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "ui/CocosGUI.h"
 #include "2d/SpriteFrameCache.h"
 #include "2d/ParticleSystemQuad.h"

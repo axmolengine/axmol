@@ -175,7 +175,7 @@ protected:
         _atlasName = fmt::format("df {} {}", params->faceSize, params->sourceFont);
 
         std::u32string utf32;
-        if (StringUtils::UTF8ToUTF32(_fontFreeType->getGlyphCollection(), utf32))
+        if (text_utils::UTF8ToUTF32(_fontFreeType->getGlyphCollection(), utf32))
             this->prepareLetterDefinitions(utf32);
 
         _pageDatas.emplace_back(_currentPageData, _currentPageData + _currentPageDataSize);

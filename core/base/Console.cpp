@@ -53,7 +53,7 @@
 #include "platform/FileUtils.h"
 #include "renderer/TextureCache.h"
 #include "base/Utils.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 #include "yasio/xxsocket.hpp"
 
@@ -747,7 +747,7 @@ void Console::performCommand(socket_native_type fd, std::string_view command)
         std::string_view cmd_arg{&*rgn.begin(), static_cast<size_t>(std::ranges::distance(rgn))};
         if (index == 0)
         {
-            it = _commands.find(StringUtils::trim(cmd_arg));
+            it = _commands.find(text_utils::trim(cmd_arg));
             if (it == _commands.end())
             {
                 AXLOGW("Unknown command {} . Type 'help' for options", command);

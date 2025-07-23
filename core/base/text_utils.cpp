@@ -25,7 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "platform/Common.h"
 #include "base/Logging.h"
 #include "ConvertUTF.h"
@@ -36,95 +36,17 @@ using namespace llvm;
 namespace ax
 {
 
-namespace StringUtils
+namespace text_utils
 {
-//#ifndef AX_CORE_PROFILE
-std::string AX_DLL format(const char* format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    auto ret = vformat(format, args);
-    va_end(args);
-    return ret;
-}
-/*--- This a C++ universal sprintf in the future.
-**  @pitfall: The behavior of vsnprintf between VS2013 and VS2015/2017 is different
-**      VS2013 or Unix-Like System will return -1 when buffer not enough, but VS2015/2017 will return the actural needed
-*length for buffer at this station
-**      The _vsnprintf behavior is compatible API which always return -1 when buffer isn't enough at VS2013/2015/2017
-**      Yes, The vsnprintf is more efficient implemented by MSVC 19.0 or later, AND it's also standard-compliant, see
-*reference: http://www.cplusplus.com/reference/cstdio/vsnprintf/
-*/
-std::string vformat(const char* format, va_list ap)
-{
-#define AX_VSNPRINTF_BUFFER_LENGTH 512
-    std::string buf(AX_VSNPRINTF_BUFFER_LENGTH, '\0');
-
-    va_list args;
-    va_copy(args, ap);
-    int nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
-    va_end(args);
-
-    if (nret >= 0)
-    {
-        if ((unsigned int)nret < buf.length())
-        {
-            buf.resize(nret);
-        }
-        else if ((unsigned int)nret > buf.length())
-        {  // handle return required length when buffer insufficient
-            buf.resize(nret);
-
-            va_copy(args, ap);
-            nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
-            va_end(args);
-        }
-        // else equals, do nothing.
-    }
-    else
-    {   // handle return -1 when buffer insufficient
-        /*
-        vs2013/older & glibc <= 2.0.6, they would return -1 when the output was truncated.
-        see: http://man7.org/linux/man-pages/man3/vsnprintf.3.html
-        */
-#if (defined(__linux__) && ((__GLIBC__ < 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ < 1)))) || \
-    (defined(_MSC_VER) && _MSC_VER < 1900)
-        enum : size_t
-        {
-            enlarge_limits = (1 << 20),  // limits the buffer cost memory less than 2MB
-        };
-        do
-        {
-            buf.resize(buf.length() << 1);
-
-            va_copy(args, ap);
-            nret = vsnprintf(&buf.front(), buf.length() + 1, format, args);
-            va_end(args);
-
-        } while (nret < 0 && buf.size() <= enlarge_limits);
-        if (nret > 0)
-            buf.resize(nret);
-        else
-            buf = "strfmt: an error is encountered!";
-#else
-        /* other standard implementation
-        see: http://www.cplusplus.com/reference/cstdio/vsnprintf/
-        */
-        buf = "strfmt: an error is encountered!";
-#endif
-    }
-
-    return buf;
-}
-//#endif
-
 
 std::string_view ltrim(std::string_view s)
 {
-    if(!s.empty()) {
+    if (!s.empty())
+    {
         auto first = s.data();
-        auto last = first + s.length();
-        while(first < last && std::isspace(*first)) {
+        auto last  = first + s.length();
+        while (first < last && std::isspace(*first))
+        {
             ++first;
         }
         return std::string_view{first, static_cast<size_t>(last - first)};
@@ -134,11 +56,13 @@ std::string_view ltrim(std::string_view s)
 
 std::string_view rtrim(std::string_view s)
 {
-    if(!s.empty()) {
-        auto first = s.data();
-        auto last = first + s.length();
+    if (!s.empty())
+    {
+        auto first  = s.data();
+        auto last   = first + s.length();
         auto rfirst = last - 1;
-        while(rfirst > first && std::isspace(*rfirst)) {
+        while (rfirst > first && std::isspace(*rfirst))
+        {
             --rfirst;
         }
         return std::string_view{first, static_cast<size_t>(rfirst + 1 - first)};
@@ -408,7 +332,7 @@ std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret)
 jstring newStringUTFJNI(JNIEnv* env, std::string_view utf8Str, bool* ret)
 {
     std::u16string utf16Str;
-    bool flag = ax::StringUtils::UTF8ToUTF16(utf8Str, utf16Str);
+    bool flag = ax::text_utils::UTF8ToUTF16(utf8Str, utf16Str);
 
     if (ret)
     {
@@ -647,6 +571,6 @@ bool StringUTF8::insert(std::size_t pos, const StringUTF8& insertStr)
     }
 }
 
-}  // namespace StringUtils
+}  // namespace text_utils
 
-}
+}  // namespace ax

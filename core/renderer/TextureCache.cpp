@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 #include "renderer/Texture2D.h"
 #include "base/Macros.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Director.h"
 #include "base/Scheduler.h"
 #include "platform/FileUtils.h"

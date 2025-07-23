@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "2d/Sprite.h"
 #include "base/Director.h"
 #include "base/Profiling.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "renderer/TextureCache.h"
 #include "renderer/Renderer.h"
 #include "renderer/QuadCommand.h"

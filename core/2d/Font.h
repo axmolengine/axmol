@@ -31,7 +31,7 @@
 
 #include <string>
 #include "base/Types.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 namespace ax
 {

@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "renderer/TextureAtlas.h"
 #include "base/TGAlib.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 namespace ax
 {

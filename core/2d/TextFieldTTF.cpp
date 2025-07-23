@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "base/Director.h"
 #include "platform/FileUtils.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "2d/Sprite.h"
 
 namespace ax
@@ -257,7 +257,7 @@ void TextFieldTTF::insertText(const char* text, size_t len)
     std::string insert(text, len);
 
     // insert \n means input end
-    int pos = static_cast<int>(insert.find(StringUtils::AsciiCharacters::NewLine));
+    int pos = static_cast<int>(insert.find(text_utils::AsciiCharacters::NewLine));
     if ((int)insert.npos != pos)
     {
         len = pos;
@@ -272,7 +272,7 @@ void TextFieldTTF::insertText(const char* text, size_t len)
             return;
         }
 
-        std::size_t countInsertChar = StringUtils::countUTF8Chars(insert);
+        std::size_t countInsertChar = text_utils::countUTF8Chars(insert);
         _charCount += countInsertChar;
 
         if (_cursorEnabled)
@@ -280,7 +280,7 @@ void TextFieldTTF::insertText(const char* text, size_t len)
             std::string sText;
             sText.reserve(_inputText.length() + insert.length());
             sText += _inputText;
-            auto pos = StringUtils::getUTF8ByteOffset(sText, _cursorPosition);
+            auto pos = text_utils::getUTF8ByteOffset(sText, _cursorPosition);
             if (pos != std::string::npos)
                 sText.insert(pos, insert);
             else
@@ -365,7 +365,7 @@ void TextFieldTTF::deleteBackward(size_t numChars)
             setCursorPosition(_cursorPosition - 1);
 
             std::string sText(_inputText);
-            auto nb = StringUtils::eraseUTF8CharAt(sText, _cursorPosition);
+            auto nb = text_utils::eraseUTF8CharAt(sText, _cursorPosition);
             if (nb)
                 --_charCount;
 
@@ -594,19 +594,19 @@ void TextFieldTTF::makeStringSupportCursor(std::string& displayText)
         {
             // \b - Next char not change x position
             if (_currentLabelType == LabelType::TTF || _currentLabelType == LabelType::BMFONT)
-                displayText.push_back(StringUtils::AsciiCharacters::NextCharNoChangeX);
+                displayText.push_back(text_utils::AsciiCharacters::NextCharNoChangeX);
             displayText.push_back(_cursorChar);
         }
         else
         {
-            auto numChars = StringUtils::countUTF8Chars(displayText);
+            auto numChars = text_utils::countUTF8Chars(displayText);
             if (_cursorPosition > numChars)
                 _cursorPosition = numChars;
 
             std::string cursorChar;
             // \b - Next char not change x position
             if (_currentLabelType == LabelType::TTF || _currentLabelType == LabelType::BMFONT)
-                cursorChar.push_back(StringUtils::AsciiCharacters::NextCharNoChangeX);
+                cursorChar.push_back(text_utils::AsciiCharacters::NextCharNoChangeX);
             cursorChar.push_back(_cursorChar);
 
             auto offset = StringUtils::getUTF8ByteOffset(displayText, _cursorPosition);
@@ -653,7 +653,7 @@ void TextFieldTTF::controlKey(EventKeyboard::KeyCode keyCode)
             if (_cursorPosition < (std::size_t)_charCount)
             {
                 std::string sText(_inputText);
-                auto nb = StringUtils::eraseUTF8CharAt(sText, _cursorPosition);
+                auto nb = text_utils::eraseUTF8CharAt(sText, _cursorPosition);
                 if (nb)
                     --_charCount;
                 setCursorPosition(_cursorPosition);

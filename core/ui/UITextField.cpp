@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "ui/UITextField.h"
 #include "platform/FileUtils.h"
 #include "ui/UIHelper.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "2d/Camera.h"
 
 namespace ax
@@ -122,7 +122,7 @@ void UICCTextField::insertText(const char* text, size_t len)
     {
         if (_maxLengthEnabled)
         {
-            int32_t text_count = StringUtils::countUTF8Chars(getString());
+            int32_t text_count = text_utils::countUTF8Chars(getString());
             if (text_count >= _maxLength)
             {
                 // password
@@ -133,7 +133,7 @@ void UICCTextField::insertText(const char* text, size_t len)
                 return;
             }
 
-            int32_t input_count = StringUtils::countUTF8Chars(text);
+            int32_t input_count = text_utils::countUTF8Chars(text);
             int32_t total       = text_count + input_count;
 
             if (total > _maxLength)
@@ -201,7 +201,7 @@ void UICCTextField::setPasswordStyleText(std::string_view styleText)
 void UICCTextField::setPasswordText(std::string_view text)
 {
     std::string tempStr = "";
-    int32_t text_count  = StringUtils::countUTF8Chars(text);
+    int32_t text_count  = text_utils::countUTF8Chars(text);
     int32_t max         = text_count;
 
     if (_maxLengthEnabled)
@@ -367,7 +367,7 @@ void TextField::setString(std::string_view text)
     if (isMaxLengthEnabled())
     {
         int max            = _textFieldRenderer->getMaxLength();
-        int32_t text_count = StringUtils::countUTF8Chars(text);
+        int32_t text_count = text_utils::countUTF8Chars(text);
         if (text_count > max)
         {
             strText = Helper::getSubStringOfUTF8String(strText, 0, max);

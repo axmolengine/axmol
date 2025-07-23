@@ -24,7 +24,7 @@
  ****************************************************************************/
 #include "AssetsManagerEx.h"
 #include "EventListenerAssetsManagerEx.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Director.h"
 
 #include <stdio.h>

@@ -29,7 +29,7 @@
 #include "platform/FileUtils.h"
 #include "lua-bindings/manual/LuaEngine.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 namespace ax
 {
@@ -226,7 +226,7 @@ void ComponentLua::storeLuaTable()
     lua_State* l = LuaEngine::getInstance()->getLuaStack()->getLuaState();
 
     _index++;
-    _strIndex.append(StringUtils::toString(_index));
+    _strIndex.append(text_utils::toString(_index));
 
     // LUA_REGISTRYINDEX["component"][strIndex] = table return from lua
     lua_pushstring(l, KEY_COMPONENT);      // stack: table_return_from_lua "component"

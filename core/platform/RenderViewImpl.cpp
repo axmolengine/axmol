@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "base/EventMouse.h"
 #include "base/IMEDispatcher.h"
 #include "base/Utils.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "2d/Camera.h"
 #if AX_ICON_SET_SUPPORT
 #    include "platform/Image.h"
@@ -1293,7 +1293,7 @@ void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*sc
 void RenderViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCode)
 {
     std::string utf8String;
-    StringUtils::UTF32ToUTF8(std::u32string_view{(char32_t*)&charCode, (size_t)1}, utf8String);
+    text_utils::UTF32ToUTF8(std::u32string_view{(char32_t*)&charCode, (size_t)1}, utf8String);
     static std::unordered_set<std::string_view> controlUnicode = {
         "\xEF\x9C\x80",  // up
         "\xEF\x9C\x81",  // down

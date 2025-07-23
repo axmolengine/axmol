@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/Touch.h"
 #include "base/EventListenerTouch.h"
 #include "base/EventDispatcher.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "platform/StdC.h"
 
 #include <vector>

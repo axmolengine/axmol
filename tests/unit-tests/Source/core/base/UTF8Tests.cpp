@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 using namespace ax;
 
@@ -54,17 +54,17 @@ TEST_SUITE("base/UTF8") {
 
         //---------------------------
         std::string utf8Str;
-        CHECK(StringUtils::UTF16ToUTF8(originalUTF16, utf8Str));
+        CHECK(text_utils::UTF16ToUTF8(originalUTF16, utf8Str));
         CHECK(memcmp(utf8Str.data(), originalUTF8.data(), originalUTF8.length() + 1) == 0);
 
         //---------------------------
         std::u16string utf16Str;
-        CHECK(StringUtils::UTF8ToUTF16(originalUTF8, utf16Str));
+        CHECK(text_utils::UTF8ToUTF16(originalUTF8, utf16Str));
         CHECK(memcmp(utf16Str.data(), originalUTF16.data(), originalUTF16.length() + 1) == 0);
         CHECK(utf16Str.length() == kUtf16TestStrLength);
 
         //---------------------------
-        auto vec1 = StringUtils::getChar16VectorFromUTF16String(originalUTF16);
+        auto vec1 = text_utils::getChar16VectorFromUTF16String(originalUTF16);
 
         CHECK(vec1.size() == originalUTF16.length());
 
@@ -76,7 +76,7 @@ TEST_SUITE("base/UTF8") {
         vec2.emplace_back(0x2009);
 
         std::vector<char16_t> vec3(vec2);
-        StringUtils::trimUTF16Vector(vec2);
+        text_utils::trimUTF16Vector(vec2);
 
         CHECK(vec1.size() == vec2.size());
 
@@ -85,21 +85,21 @@ TEST_SUITE("base/UTF8") {
             CHECK(vec1.at(i) == vec2.at(i));
         }
 
-        CHECK(StringUtils::countUTF8Chars(originalUTF8) == kUtf16TestStrLength);
+        CHECK(text_utils::countUTF8Chars(originalUTF8) == kUtf16TestStrLength);
 
-        CHECK(StringUtils::getIndexOfLastNotChar16(vec3, 0x2009) == (vec1.size() - 1));
+        CHECK(text_utils::getIndexOfLastNotChar16(vec3, 0x2009) == (vec1.size() - 1));
 
         CHECK(originalUTF16.length() == kUtf16TestStrLength);
 
         size_t whiteCodeNum = sizeof(WHITE_SPACE_CODE) / sizeof(WHITE_SPACE_CODE[0]);
         for (size_t i = 0; i < whiteCodeNum; i++)
         {
-            CHECK(StringUtils::isUnicodeSpace(WHITE_SPACE_CODE[i]));
+            CHECK(text_utils::isUnicodeSpace(WHITE_SPACE_CODE[i]));
         }
 
-        CHECK(!StringUtils::isUnicodeSpace(0xFFFF));
+        CHECK(!text_utils::isUnicodeSpace(0xFFFF));
 
-        CHECK(!StringUtils::isCJKUnicode(0xFFFF));
-        CHECK(StringUtils::isCJKUnicode(0x3100));
+        CHECK(!text_utils::isCJKUnicode(0xFFFF));
+        CHECK(text_utils::isCJKUnicode(0x3100));
     }
 }

@@ -31,7 +31,7 @@
 
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include "2d/Label.h"
-#    include "base/UTF8.h"
+#    include "base/text_utils.h"
 
 #include <dlfcn.h>
 

@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "ui/UIWidget.h"
 #include "ui/UILayoutComponent.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 namespace ax
 {
@@ -123,7 +123,7 @@ std::string Helper::getSubStringOfUTF8String(std::string_view str,
                                              std::string::size_type length)
 {
     std::u32string utf32;
-    if (!StringUtils::UTF8ToUTF32(str, utf32))
+    if (!text_utils::UTF8ToUTF32(str, utf32))
     {
         AXLOGE("Can't convert string to UTF-32: {}", str);
         return "";
@@ -134,7 +134,7 @@ std::string Helper::getSubStringOfUTF8String(std::string_view str,
         return "";
     }
     std::string result;
-    if (!StringUtils::UTF32ToUTF8(utf32.substr(start, length), result))
+    if (!text_utils::UTF32ToUTF8(utf32.substr(start, length), result))
     {
         AXLOGE("Can't convert internal UTF-32 string to UTF-8: {}", str);
         return "";

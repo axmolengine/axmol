@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "renderer/Texture2D.h"
 #include "renderer/Renderer.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "2d/Camera.h"
 #include "platform/FileUtils.h"
 #include "renderer/Shaders.h"

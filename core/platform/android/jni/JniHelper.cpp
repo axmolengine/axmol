@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include <string.h>
 #include <pthread.h>
 
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 #define LOG_TAG "JniHelper"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -307,14 +307,14 @@ std::string JniHelper::jstring2string(jstring jstr)
         return "";
     }
 
-    std::string strValue = ax::StringUtils::getStringUTFCharsJNI(env, jstr);
+    std::string strValue = ax::text_utils::getStringUTFCharsJNI(env, jstr);
 
     return strValue;
 }
 
 jstring JniHelper::convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, const char* x)
 {
-    jstring ret = ax::StringUtils::newStringUTFJNI(t.env, x ? x : "");
+    jstring ret = ax::text_utils::newStringUTFJNI(t.env, x ? x : "");
     localRefs[t.env].emplace_back(ret);
     return ret;
 }
