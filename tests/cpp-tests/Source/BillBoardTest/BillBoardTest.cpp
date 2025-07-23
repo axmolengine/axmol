@@ -30,6 +30,8 @@
 #include <algorithm>
 #include "../testResource.h"
 
+#include "base/format.h"
+
 using namespace ax;
 USING_NS_AX_EXT;
 using namespace ax::ui;
@@ -254,11 +256,11 @@ void BillBoardTest::addNewAniBillBoardWithCoords(Vec3 p)
         _layerBillBoard->addChild(billboardAni);
 
         auto animation = Animation::create();
+        char szName1[100];
         for (int i = 1; i < 15; i++)
         {
-            char szName1[100] = {0};
-            fmt::format_to(szName1, "Images/grossini_dance_{:02d}.png", i);
-            animation->addSpriteFrameWithFile(szName1);
+            auto key = fmt::format_to_z(szName1, "Images/grossini_dance_{:02d}.png", i);
+            animation->addSpriteFrameWithFile(key);
         }
         // should last 2.8 seconds. And there are 14 frames.
         animation->setDelayPerUnit(2.8f / 14.0f);
