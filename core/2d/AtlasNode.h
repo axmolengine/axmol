@@ -83,11 +83,11 @@ public:
      * @endcode
      * @lua NA
      */
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
     /**
      * @lua NA
      */
-    virtual const BlendFunc& getBlendFunc() const override;
+    const BlendFunc& getBlendFunc() const override;
 
     /** Set an buffer manager of the texture vertex. */
     void setTextureAtlas(TextureAtlas* textureAtlas);

@@ -103,7 +103,7 @@ public:
 
     CREATE_FUNC(LabelLetter);
 
-    virtual void updateTransform() override
+    void updateTransform() override
     {
         if (isDirty())
         {
@@ -153,7 +153,7 @@ public:
         Node::updateTransform();
     }
 
-    virtual void updateColor() override
+    void updateColor() override
     {
         if (_textureAtlas == nullptr)
         {

@@ -210,11 +210,11 @@ public:
     /**@{
      Implementations for interfaces in base class.
      */
-    virtual void beforeBlit() override;
-    virtual void afterBlit() override;
-    virtual void blit() override;
-    virtual void reuse() override;
-    virtual void calculateVertexPoints() override;
+    void beforeBlit() override;
+    void afterBlit() override;
+    void blit() override;
+    void reuse() override;
+    void calculateVertexPoints() override;
     /**@}*/
 
     /**@{
@@ -256,9 +256,9 @@ public:
     /**@{
      Implementations for interfaces in base class.
      */
-    virtual void blit() override;
-    virtual void reuse() override;
-    virtual void calculateVertexPoints() override;
+    void blit() override;
+    void reuse() override;
+    void calculateVertexPoints() override;
     /**@}*/
 
     /** Returns the tile at the given position.

@@ -121,12 +121,12 @@ public:
     /**
      *@brief    Open keyboard and receive input text.
      */
-    virtual bool attachWithIME() override;
+    bool attachWithIME() override;
 
     /**
      *@brief    End text input and close keyboard.
      */
-    virtual bool detachWithIME() override;
+    bool detachWithIME() override;
 
     //////////////////////////////////////////////////////////////////////////
     // properties
@@ -162,13 +162,13 @@ public:
      * Change the color of input text.
      *@param textColor The text color in Color32.
      */
-    virtual void setTextColor(const Color32& textColor) override;
+    void setTextColor(const Color32& textColor) override;
 
     /**
      * Change input text of TextField.
      *@param text The input text of TextField.
      */
-    virtual void setString(std::string_view text) override;
+    void setString(std::string_view text) override;
 
     /**
      * Append to input text of TextField.
@@ -180,7 +180,7 @@ public:
      * Query the input text of TextField.
      *@return Get the input text of TextField.
      */
-    virtual std::string_view getString() const override;
+    std::string_view getString() const override;
 
     /**
      * Change placeholder text.
@@ -210,9 +210,9 @@ public:
      */
     virtual bool isSecureTextEntry() const;
 
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-    virtual void update(float delta) override;
+    void update(float delta) override;
 
     /**
      * Set enable cursor use.
@@ -239,14 +239,14 @@ protected:
     // IMEDelegate interface
     //////////////////////////////////////////////////////////////////////////
 
-    virtual bool canAttachWithIME() override;
-    virtual bool canDetachWithIME() override;
-    virtual void didAttachWithIME() override;
-    virtual void didDetachWithIME() override;
-    virtual void insertText(const char* text, size_t len) override;
-    virtual void deleteBackward(size_t numChars) override;
-    virtual std::string_view getContentText() override;
-    virtual void controlKey(EventKeyboard::KeyCode keyCode) override;
+    bool canAttachWithIME() override;
+    bool canDetachWithIME() override;
+    void didAttachWithIME() override;
+    void didDetachWithIME() override;
+    void insertText(const char* text, size_t len) override;
+    void deleteBackward(size_t numChars) override;
+    std::string_view getContentText() override;
+    void controlKey(EventKeyboard::KeyCode keyCode) override;
 
     TextFieldDelegate* _delegate;
     std::size_t _charCount;

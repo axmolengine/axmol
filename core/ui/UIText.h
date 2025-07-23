@@ -179,10 +179,10 @@ public:
     bool isTouchScaleChangeEnabled() const;
 
     // override "getVirtualRendererSize" method of widget.
-    virtual Vec2 getVirtualRendererSize() const override;
+    Vec2 getVirtualRendererSize() const override;
 
     // override "getVirtualRenderer" method of widget.
-    virtual Node* getVirtualRenderer() override;
+    Node* getVirtualRenderer() override;
 
     /** Gets the render size in auto mode.
      *
@@ -193,7 +193,7 @@ public:
     /**
      * Returns the "class name" of widget.
      */
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      * Sets the rendering size of the text, you should call this method
@@ -329,7 +329,7 @@ public:
      * {BlendFactor::ONE, BlendFactor::ONE}, {BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA}.
      * @lua NA
      */
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
 
     /**
      * Returns the blending function that is currently being used.
@@ -337,22 +337,22 @@ public:
      * @return A BlendFunc structure with source and destination factor which specified pixel arithmetic.
      * @lua NA
      */
-    virtual const BlendFunc& getBlendFunc() const override;
+    const BlendFunc& getBlendFunc() const override;
 
-    virtual bool init() override;
+    bool init() override;
     virtual bool init(std::string_view textContent, std::string_view fontName, float fontSize);
 
 protected:
-    virtual void initRenderer() override;
-    virtual void onPressStateChangedToNormal() override;
-    virtual void onPressStateChangedToPressed() override;
-    virtual void onPressStateChangedToDisabled() override;
-    virtual void onSizeChanged() override;
+    void initRenderer() override;
+    void onPressStateChangedToNormal() override;
+    void onPressStateChangedToPressed() override;
+    void onPressStateChangedToDisabled() override;
+    void onSizeChanged() override;
 
     void labelScaleChangedWithSize();
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
-    virtual void adaptRenderers() override;
+    Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
+    void adaptRenderers() override;
 
 protected:
     bool _touchScaleChangeEnabled;

@@ -138,12 +138,12 @@ public:
     static AnchoredSprite* createWithSpriteFrameName(std::string_view spriteFrameName);
 
     /* This function will reposition the sprite's vertices itself instead of the node */
-    virtual void setAnchorPoint(const Vec2& anchor) override;
+    void setAnchorPoint(const Vec2& anchor) override;
     /* Gets the hit area of the anchored sprite, this requires special calculations for shifted vertices and should be used with touch event listeners */
     virtual Rect getTouchRect();
 
 protected:
-    virtual void setVertexCoords(const Rect& rect, V3F_T2F_C4B_Quad* outQuad) override;
+    void setVertexCoords(const Rect& rect, V3F_T2F_C4B_Quad* outQuad) override;
     Vec2 _spriteVertexAnchor = Vec2::ANCHOR_MIDDLE;
 };
 

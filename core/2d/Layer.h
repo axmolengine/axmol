@@ -225,12 +225,12 @@ public:
      */
     const Vec2& getVector() const;
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     LayerGradient();
     virtual ~LayerGradient();
 
-    virtual bool init() override;
+    bool init() override;
     /** Initializes the Layer with a gradient between start and end.
      * @lua init
      */
@@ -242,7 +242,7 @@ public:
     bool initWithColor(const Color32& start, const Color32& end, const Vec2& v);
 
 protected:
-    virtual void updateColor() override;
+    void updateColor() override;
 
     Color32 _startColor           = Color32::BLACK;
     Color32 _endColor             = Color32::BLACK;
@@ -275,8 +275,8 @@ public:
     //
     // overrides
     //
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
-    virtual void setContentSize(const Vec2& size) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void setContentSize(const Vec2& size) override;
 
     void setStartOpacity(uint8_t opacity);
     uint8_t getStartOpacity() const;
@@ -399,7 +399,7 @@ public:
      */
     void switchToAndReleaseMe(int n);
 
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      */
@@ -409,7 +409,7 @@ public:
      */
     virtual ~LayerMultiplex();
 
-    virtual bool init() override;
+    bool init() override;
     /** initializes a MultiplexLayer with one or more layers using a variable argument list.
      * @lua NA
      */

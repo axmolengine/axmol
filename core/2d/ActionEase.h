@@ -59,9 +59,9 @@ public:
     //
     // Overrides
     //
-    virtual void startWithTarget(Node* target) override;
-    virtual void stop() override;
-    virtual void update(float time) override;
+    void startWithTarget(Node* target) override;
+    void stop() override;
+    void update(float time) override;
 
     ActionEase() : _inner(nullptr) {}
 
@@ -131,9 +131,9 @@ private:
                                                           \
     public:                                               \
         static CLASSNAME* create(ActionInterval* action); \
-        virtual CLASSNAME* clone() const override;        \
-        virtual void update(float time) override;         \
-        virtual ActionEase* reverse() const override;     \
+        CLASSNAME* clone() const override;        \
+        void update(float time) override;         \
+        ActionEase* reverse() const override;     \
                                                           \
     private:                                              \
         AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);           \
@@ -382,9 +382,9 @@ EASE_TEMPLATE_DECL_CLASS(EaseCubicActionInOut);
         CLASSNAME() {}                                                \
                                                                       \
         static CLASSNAME* create(ActionInterval* action, float rate); \
-        virtual CLASSNAME* clone() const override;                    \
-        virtual void update(float time) override;                     \
-        virtual EaseRateAction* reverse() const override;             \
+        CLASSNAME* clone() const override;                    \
+        void update(float time) override;                     \
+        EaseRateAction* reverse() const override;             \
                                                                       \
     private:                                                          \
         AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);                       \
@@ -468,9 +468,9 @@ private:
         CLASSNAME() {}                                                       \
                                                                              \
         static CLASSNAME* create(ActionInterval* action, float rate = 0.3f); \
-        virtual CLASSNAME* clone() const override;                           \
-        virtual void update(float time) override;                            \
-        virtual EaseElastic* reverse() const override;                       \
+        CLASSNAME* clone() const override;                           \
+        void update(float time) override;                            \
+        EaseElastic* reverse() const override;                       \
                                                                              \
     private:                                                                 \
         AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);                              \
@@ -528,9 +528,9 @@ public:
     */
     static EaseBezierAction* create(ax::ActionInterval* action);
 
-    virtual void update(float time) override;
-    virtual EaseBezierAction* clone() const override;
-    virtual EaseBezierAction* reverse() const override;
+    void update(float time) override;
+    EaseBezierAction* clone() const override;
+    EaseBezierAction* reverse() const override;
 
     /**
      @brief Set the bezier parameters.

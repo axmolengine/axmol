@@ -48,7 +48,7 @@ public:
 
     /**
      */
-    virtual bool observe(PUParticle3D* particle, float timeElapsed) override;
+    bool observe(PUParticle3D* particle, float timeElapsed) override;
 
     /**
      */
@@ -98,7 +98,7 @@ public:
     PUComparisionOperator getComparePositionY() const { return _comparePositionY; };
     PUComparisionOperator getComparePositionZ() const { return _comparePositionZ; };
 
-    virtual void copyAttributesTo(PUObserver* observer) override;
+    void copyAttributesTo(PUObserver* observer) override;
 
     PUOnPositionObserver();
     virtual ~PUOnPositionObserver(){};

@@ -403,7 +403,7 @@ public:
     void setDetailMap(unsigned int index, DetailMap detailMap);
 
     // Overrides, internal use only
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
     /**
      * Ray-Terrain intersection.
      * @return the intersection point
@@ -492,7 +492,7 @@ protected:
     void calculateNormal();
 
     // override
-    virtual void onEnter() override;
+    void onEnter() override;
 
     /**
      * cache all uniform locations in GLSL.

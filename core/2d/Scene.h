@@ -86,7 +86,7 @@ public:
     static Scene* createWithSize(const Vec2& size);
 
     using Node::addChild;
-    virtual std::string getDescription() const override;
+    std::string getDescription() const override;
 
     /** Get all cameras.
      *
@@ -115,7 +115,7 @@ public:
     void visit() override;
 
     /** override function */
-    virtual void removeAllChildren() override;
+    void removeAllChildren() override;
 
     Scene();
     virtual ~Scene();

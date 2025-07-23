@@ -77,7 +77,7 @@ public:
 
     static ControlSaturationBrightnessPicker* create(Node* target, Vec2 pos);
 
-    virtual void setEnabled(bool enabled) override;
+    void setEnabled(bool enabled) override;
     /**
      * @lua NA
      */
@@ -91,8 +91,8 @@ protected:
     void updateSliderPosition(Vec2 location);
     bool checkSliderPosition(Vec2 location);
 
-    virtual bool onTouchBegan(Touch* touch, Event* pEvent) override;
-    virtual void onTouchMoved(Touch* pTouch, Event* pEvent) override;
+    bool onTouchBegan(Touch* touch, Event* pEvent) override;
+    void onTouchMoved(Touch* pTouch, Event* pEvent) override;
 };
 
 // end of GUI group

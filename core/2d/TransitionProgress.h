@@ -58,14 +58,14 @@ public:
     //
     // Overrides
     //
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
     TransitionProgress();
     virtual ~TransitionProgress() {}
 
 protected:
-    virtual void sceneOrder() override;
+    void sceneOrder() override;
 
 protected:
     virtual ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture);
@@ -101,7 +101,7 @@ protected:
     //
     // Overrides
     //
-    virtual ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
 };
 
 /** @class TransitionProgressRadialCW
@@ -128,7 +128,7 @@ protected:
     //
     // Overrides
     //
-    virtual ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
 };
 
 /** @class TransitionProgressHorizontal
@@ -155,7 +155,7 @@ protected:
     //
     // Overrides
     //
-    virtual ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
 };
 
 /** @class TransitionProgressVertical
@@ -181,7 +181,7 @@ protected:
     //
     // Overrides
     //
-    virtual ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
 };
 
 /** @class TransitionProgressInOut
@@ -207,9 +207,9 @@ protected:
     //
     // Overrides
     //
-    virtual ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
-    virtual void sceneOrder() override;
-    virtual void setupTransition() override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    void sceneOrder() override;
+    void setupTransition() override;
 };
 
 /** @class TransitionProgressOutIn
@@ -235,7 +235,7 @@ protected:
     //
     // Overrides
     //
-    virtual ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
+    ProgressTimer* progressTimerNodeWithRenderTexture(RenderTexture* texture) override;
 };
 
 // end of _2d group

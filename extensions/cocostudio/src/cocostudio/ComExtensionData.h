@@ -49,21 +49,21 @@ public:
     /**
      * @lua NA
      */
-    virtual void onEnter() override;
+    void onEnter() override;
     /**
      * @lua NA
      */
-    virtual void onExit() override;
+    void onExit() override;
     /**
      * @lua NA
      */
-    virtual void onAdd() override;
+    void onAdd() override;
     /**
      * @lua NA
      */
-    virtual void onRemove() override;
+    void onRemove() override;
     static ComExtensionData* create();
-    virtual bool init() override;
+    bool init() override;
 
     virtual void setCustomProperty(std::string_view customProperty) { _customProperty = customProperty; }
     virtual std::string getCustomProperty() const { return _customProperty; };

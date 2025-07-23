@@ -70,7 +70,7 @@ public:
     void setTexture(TextureCube*);
 
     /** draw Skybox object */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
     /** reload sky box after GLESContext reconstructed.*/
     void reload();
@@ -88,7 +88,7 @@ public:
     /**
      * init Skybox.
      */
-    virtual bool init() override;
+    bool init() override;
 
     /**
      * initialize with texture path

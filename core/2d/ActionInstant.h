@@ -49,29 +49,29 @@ public:
     //
     // Overrides
     //
-    virtual ActionInstant* clone() const override
+    ActionInstant* clone() const override
     {
         AX_ASSERT(0);
         return nullptr;
     }
 
-    virtual ActionInstant* reverse() const override
+    ActionInstant* reverse() const override
     {
         AX_ASSERT(0);
         return nullptr;
     }
 
-    virtual void startWithTarget(Node* target) override;
+    void startWithTarget(Node* target) override;
 
-    virtual bool isDone() const override;
+    bool isDone() const override;
     /**
      * @param dt In seconds.
      */
-    virtual void step(float dt) override;
+    void step(float dt) override;
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
+    void update(float time) override;
 
 private:
     bool _done;
@@ -95,9 +95,9 @@ public:
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
-    virtual ActionInstant* reverse() const override;
-    virtual Show* clone() const override;
+    void update(float time) override;
+    ActionInstant* reverse() const override;
+    Show* clone() const override;
 
     Show() {}
     virtual ~Show() {}
@@ -124,9 +124,9 @@ public:
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
-    virtual ActionInstant* reverse() const override;
-    virtual Hide* clone() const override;
+    void update(float time) override;
+    ActionInstant* reverse() const override;
+    Hide* clone() const override;
 
     Hide() {}
     virtual ~Hide() {}
@@ -153,9 +153,9 @@ public:
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
-    virtual ToggleVisibility* reverse() const override;
-    virtual ToggleVisibility* clone() const override;
+    void update(float time) override;
+    ToggleVisibility* reverse() const override;
+    ToggleVisibility* clone() const override;
 
     ToggleVisibility() {}
     virtual ~ToggleVisibility() {}
@@ -183,9 +183,9 @@ public:
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
-    virtual RemoveSelf* clone() const override;
-    virtual RemoveSelf* reverse() const override;
+    void update(float time) override;
+    RemoveSelf* clone() const override;
+    RemoveSelf* reverse() const override;
 
     RemoveSelf() : _isNeedCleanUp(true) {}
     virtual ~RemoveSelf() {}
@@ -220,9 +220,9 @@ public:
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
-    virtual FlipX* reverse() const override;
-    virtual FlipX* clone() const override;
+    void update(float time) override;
+    FlipX* reverse() const override;
+    FlipX* clone() const override;
 
     FlipX() : _flipX(false) {}
     virtual ~FlipX() {}
@@ -257,9 +257,9 @@ public:
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
-    virtual FlipY* reverse() const override;
-    virtual FlipY* clone() const override;
+    void update(float time) override;
+    FlipY* reverse() const override;
+    FlipY* clone() const override;
 
     FlipY() : _flipY(false) {}
     virtual ~FlipY() {}
@@ -293,9 +293,9 @@ public:
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
-    virtual Place* reverse() const override;
-    virtual Place* clone() const override;
+    void update(float time) override;
+    Place* reverse() const override;
+    Place* clone() const override;
 
     Place() {}
     virtual ~Place() {}
@@ -338,9 +338,9 @@ public:
     /**
      * @param time In seconds.
      */
-    virtual void update(float time) override;
-    virtual CallFunc* reverse() const override;
-    virtual CallFunc* clone() const override;
+    void update(float time) override;
+    CallFunc* reverse() const override;
+    CallFunc* clone() const override;
 
     CallFunc() = default;
     virtual ~CallFunc()                = default;
@@ -375,8 +375,8 @@ public:
     //
     // Overrides
     //
-    virtual CallFuncN* clone() const override;
-    virtual void execute() override;
+    CallFuncN* clone() const override;
+    void execute() override;
 
     CallFuncN() : _functionN(nullptr) {}
     virtual ~CallFuncN() {}

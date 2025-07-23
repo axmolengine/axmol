@@ -286,8 +286,8 @@ public:
     void applyZoom();
 
     // override
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
     /**
      Before rendering the scene with this camera, the background needs to be cleared.
@@ -317,7 +317,7 @@ public:
      */
     CameraBackgroundBrush* getBackgroundBrush() const { return _clearBrush; }
 
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     bool isBrushValid();
 

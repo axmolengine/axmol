@@ -43,7 +43,7 @@ namespace ax { namespace network
         DownloaderEmscripten(const DownloaderHints& hints);
         virtual ~DownloaderEmscripten();
 
-        virtual void startTask(std::shared_ptr<DownloadTask>& task) override;
+        void startTask(std::shared_ptr<DownloadTask>& task) override;
 
     protected:
         int _id;

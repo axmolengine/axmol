@@ -135,8 +135,8 @@ public:
     const char* getFontFamily() const;
     std::string_view getFontName() const { return _fontName; }
 
-    virtual FontAtlas* newFontAtlas() override;
-    virtual int getFontMaxHeight() const override { return _lineHeight; }
+    FontAtlas* newFontAtlas() override;
+    int getFontMaxHeight() const override { return _lineHeight; }
 
     std::string_view getGlyphCollection() const;
 

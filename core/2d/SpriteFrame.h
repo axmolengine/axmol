@@ -244,7 +244,7 @@ public:
     bool hasAnchorPoint() const;
 
     // Overrides
-    virtual SpriteFrame* clone() const override;
+    SpriteFrame* clone() const override;
 
     /** Set the polygon info for polygon mesh sprites
      *

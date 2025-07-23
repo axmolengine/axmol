@@ -208,12 +208,12 @@ public:
      */
     void setBounces(bool bounce);
 
-    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) override;
+    void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) override;
 
     /**
      * Toggle visibility of WebView.
      */
-    virtual void setVisible(bool visible) override;
+    void setVisible(bool visible) override;
     /**
      * SetOpacity of webview.
      */
@@ -228,8 +228,8 @@ public:
      * set the background transparent
      */
     virtual void setBackgroundTransparent();
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
     /**
      * Default constructor.
@@ -238,8 +238,8 @@ public:
     virtual ~WebView();
 
 protected:
-    virtual ax::ui::Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    ax::ui::Widget* createCloneInstance() override;
+    void copySpecialProperties(Widget* model) override;
 
     std::function<bool(WebView* sender, std::string_view url)> _onShouldStartLoading = nullptr;
     ccWebViewCallback _onDidFinishLoading                                            = nullptr;

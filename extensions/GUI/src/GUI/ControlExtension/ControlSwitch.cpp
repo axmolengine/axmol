@@ -72,7 +72,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void updateTweenAction(float value, std::string_view key) override;
+    void updateTweenAction(float value, std::string_view key) override;
 
     /** Contains the position (in x-axis) of the slider inside the receiver. */
     float _sliderXPosition;

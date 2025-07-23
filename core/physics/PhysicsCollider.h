@@ -397,14 +397,14 @@ public:
      *
      * @return A Vec2 object.
      */
-    virtual Vec2 getOffset() override;
+    Vec2 getOffset() override;
 
 protected:
     bool init(float radius,
               const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
               const Vec2& offset              = Vec2::ZERO);
-    virtual float calculateArea() override;
-    virtual void updateScale() override;
+    float calculateArea() override;
+    void updateScale() override;
 
 protected:
     PhysicsColliderCircle(PhysicsBody* body) : PhysicsCollider(body) {}
@@ -467,7 +467,7 @@ public:
      *
      * @return A Vec2 object.
      */
-    virtual Vec2 getCenter() override;
+    Vec2 getCenter() override;
 
 protected:
     bool init(const Vec2* points,
@@ -476,7 +476,7 @@ protected:
               const Vec2& offset              = Vec2::ZERO,
               float radius                    = 0.0f);
     float calculateArea() override;
-    virtual void updateScale() override;
+    void updateScale() override;
 
 protected:
     PhysicsColliderPolygon(PhysicsBody* body) : PhysicsCollider(body) {}
@@ -513,7 +513,7 @@ public:
      *
      * @return A Vec2 object.
      */
-    virtual Vec2 getOffset() override { return getCenter(); }
+    Vec2 getOffset() override { return getCenter(); }
 
 protected:
     bool init(const Vec2& size,
@@ -564,14 +564,14 @@ public:
      *
      * @return A Vec2 object.
      */
-    virtual Vec2 getCenter() override;
+    Vec2 getCenter() override;
 
 protected:
     bool init(const Vec2& a,
               const Vec2& b,
               const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
               float border                    = 1);
-    virtual void updateScale() override;
+    void updateScale() override;
 
 protected:
     PhysicsColliderEdgeSegment(PhysicsBody* body) : PhysicsCollider(body) {}
@@ -604,7 +604,7 @@ public:
      *
      * @return A Vec2 object.
      */
-    virtual Vec2 getCenter() override;
+    Vec2 getCenter() override;
 
     /**
      * Get this polygon's points array.
@@ -625,7 +625,7 @@ protected:
               int count,
               const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
               float border                    = 1);
-    virtual void updateScale() override;
+    void updateScale() override;
 
 protected:
     PhysicsColliderEdgePolygon(PhysicsBody* body) : PhysicsCollider(body) {}
@@ -658,7 +658,7 @@ public:
      *
      * @return A Vec2 object.
      */
-    virtual Vec2 getOffset() override { return getCenter(); }
+    Vec2 getOffset() override { return getCenter(); }
 
 protected:
     bool init(const Vec2& size,
@@ -697,7 +697,7 @@ public:
      *
      * @return A Vec2 object.
      */
-    virtual Vec2 getCenter() override;
+    Vec2 getCenter() override;
 
     /**
      * Get this chain's points array.
@@ -718,7 +718,7 @@ protected:
               int count,
               const PhysicsMaterial& material = PHYSICSSHAPE_MATERIAL_DEFAULT,
               float border                    = 1);
-    virtual void updateScale() override;
+    void updateScale() override;
 
 protected:
     PhysicsColliderEdgeChain(PhysicsBody* body) : PhysicsCollider(body) {}

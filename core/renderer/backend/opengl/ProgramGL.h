@@ -107,59 +107,59 @@ public:
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(std::string_view uniform) const override;
+    UniformLocation getUniformLocation(std::string_view uniform) const override;
 
     /**
      * Get uniform location by engine built-in uniform enum name.
      * @param name Specifies the engine built-in uniform enum name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(backend::Uniform name) const override;
+    UniformLocation getUniformLocation(backend::Uniform name) const override;
 
     /**
      * Get attribute location by attribute name.
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(std::string_view name) const override;
+    int getAttributeLocation(std::string_view name) const override;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(Attribute name) const override;
+    int getAttributeLocation(Attribute name) const override;
 
     /**
      * Get maximum vertex location.
      * @return Maximum vertex locaiton.
      */
-    virtual int getMaxVertexLocation() const override;
+    int getMaxVertexLocation() const override;
 
     /**
      * Get maximum fragment location.
      * @return Maximum fragment location.
      */
-    virtual int getMaxFragmentLocation() const override;
+    int getMaxFragmentLocation() const override;
 
     /**
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const override;
+    const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const override;
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
      * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
      * @return The uniform buffer size in bytes.
      */
-    virtual std::size_t getUniformBufferSize(ShaderStage stage) const override;
+    std::size_t getUniformBufferSize(ShaderStage stage) const override;
 
     /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
+    const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
 
     void bindUniformBuffers(const char* buffer, size_t bufferSize);
 
@@ -172,9 +172,9 @@ private:
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     virtual void reloadProgram();
-    virtual int getMappedLocation(int location) const override;
-    virtual int getOriginalLocation(int location) const override;
-    virtual const std::unordered_map<std::string, int> getAllUniformsLocation() const override
+    int getMappedLocation(int location) const override;
+    int getOriginalLocation(int location) const override;
+    const std::unordered_map<std::string, int> getAllUniformsLocation() const override
     {
         return _originalUniformLocations;
     }
