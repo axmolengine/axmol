@@ -317,8 +317,7 @@ public:
     Frame* clone() override;
 
     inline void setColor(const ax::Color32& color) { _color = color; }
-    inline void setColor(uint8_t r, uint8_t g, uint8_t b) { _color.r = r; _color.g = g; _color.b = b; }
-    inline ax::Color32 getColor() const { return _color; }
+    inline const ax::Color32& getColor() const { return _color; }
 
 protected:
     void onApply(float percent) override;

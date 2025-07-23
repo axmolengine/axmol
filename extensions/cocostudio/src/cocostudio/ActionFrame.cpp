@@ -326,7 +326,7 @@ ActionTintFrame::ActionTintFrame() : _color(Color32::WHITE)
 
 ActionTintFrame::~ActionTintFrame() {}
 
-void ActionTintFrame::setColor(Color32 ccolor)
+void ActionTintFrame::setColor(const Color32& ccolor)
 {
     _color = ccolor;
 }

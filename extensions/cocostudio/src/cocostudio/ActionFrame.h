@@ -423,14 +423,7 @@ public:
      *
      * @param ccolor the tint action color
      */
-    void setColor(ax::Color32 ccolor);
-
-    void setColor(uint8_t r, uint8_t g, uint8_t b)
-    {
-        _color.r = r;
-        _color.g = g;
-        _color.b = b;
-    }
+    void setColor(const ax::Color32& ccolor);
 
     /**
      * Gets the tint action color.
