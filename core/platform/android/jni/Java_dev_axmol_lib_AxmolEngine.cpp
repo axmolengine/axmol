@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "platform/android/FileUtils-android.h"
 #include "platform/android/jni/Java_dev_axmol_lib_AxmolEngine.h"
 
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 #define LOG_TAG "Java_dev_axmol_lib_AxmolEngine.cpp"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)

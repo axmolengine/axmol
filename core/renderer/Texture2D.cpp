@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "platform/Device.h"
 #include "base/Config.h"
 #include "base/Macros.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Configuration.h"
 #include "platform/PlatformMacros.h"
 #include "base/Director.h"

@@ -32,7 +32,7 @@
 #include "platform/FileUtils.h"
 #include <jni.h>
 
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 using namespace ax;
 
@@ -65,7 +65,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnResume(JNIEnv*, 
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInsertText(JNIEnv* env, jclass, jstring text)
 {
-    std::string strValue = ax::StringUtils::getStringUTFCharsJNI(env, text);
+    std::string strValue = ax::text_utils::getStringUTFCharsJNI(env, text);
     const char* pszText  = strValue.c_str();
     ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
 }
@@ -78,6 +78,6 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeDeleteBackward(JNI
 JNIEXPORT jstring JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeGetContentText(JNIEnv* env, jclass)
 {
     auto pszText = ax::IMEDispatcher::sharedDispatcher()->getContentText();
-    return ax::StringUtils::newStringUTFJNI(env, pszText);
+    return ax::text_utils::newStringUTFJNI(env, pszText);
 }
 }

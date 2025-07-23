@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "platform/wasm/Application-wasm.h"
 #include "platform/Common.h"
 #include "base/Macros.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include <unistd.h>
 
 #include "yasio/string_view.hpp"

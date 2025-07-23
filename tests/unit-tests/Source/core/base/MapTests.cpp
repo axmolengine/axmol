@@ -38,7 +38,7 @@ TEST_SUITE("base/Map") {
             {
                 auto node = Node::create();
                 node->setTag(1000 + i);
-                ret.insert(StringUtils::toString(i), node);
+                ret.insert(text_utils::toString(i), node);
             }
 
             return ret;

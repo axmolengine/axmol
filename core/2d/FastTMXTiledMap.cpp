@@ -28,7 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "2d/FastTMXTiledMap.h"
 #include "2d/FastTMXLayer.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 namespace ax
 {

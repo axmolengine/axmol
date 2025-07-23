@@ -32,7 +32,7 @@
 #include "base/Configuration.h"
 #include "base/Director.h"
 #include "base/Map.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "renderer/TextureCache.h"
 
 #include <cmath>

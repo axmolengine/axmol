@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <stdlib.h>
 
 #include "base/Macros.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/EventType.h"
 #include "base/Director.h"
 #include "base/Configuration.h"

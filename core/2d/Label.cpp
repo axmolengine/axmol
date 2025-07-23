@@ -36,7 +36,7 @@
 #include "2d/SpriteBatchNode.h"
 #include "2d/DrawNode.h"
 #include "2d/Camera.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Macros.h"
 #include "platform/FileUtils.h"
 #include "renderer/Renderer.h"
@@ -925,7 +925,7 @@ void Label::setString(std::string_view text)
         _contentDirty = true;
 
         std::u32string utf32String;
-        if (StringUtils::UTF8ToUTF32(_utf8Text, utf32String))
+        if (text_utils::UTF8ToUTF32(_utf8Text, utf32String))
         {
             _utf32Text = utf32String;
         }
@@ -1701,7 +1701,7 @@ void Label::clearTextures()
     if (_fontAtlas)
     {
         std::u32string utf32String;
-        if (StringUtils::UTF8ToUTF32(_utf8Text, utf32String))
+        if (text_utils::UTF8ToUTF32(_utf8Text, utf32String))
         {
             _utf32Text = utf32String;
         }
@@ -2347,7 +2347,7 @@ void Label::computeStringNumLines()
     size_t stringLen = _utf32Text.length();
     for (size_t i = 0; i < stringLen - 1; ++i)
     {
-        if (_utf32Text[i] == StringUtils::UnicodeCharacters::NewLine)
+        if (_utf32Text[i] == text_utils::UnicodeCharacters::NewLine)
         {
             quantityOfLines++;
         }
@@ -2765,9 +2765,9 @@ int Label::getFirstWordLen(const std::u32string& utf32Text, int startIndex, int 
     {
         char32_t character = utf32Text[index];
 
-        if (character == StringUtils::UnicodeCharacters::NewLine ||
-            (!StringUtils::isUnicodeNonBreaking(character) &&
-             (StringUtils::isUnicodeSpace(character) || StringUtils::isCJKUnicode(character))))
+        if (character == text_utils::UnicodeCharacters::NewLine ||
+            (!text_utils::isUnicodeNonBreaking(character) &&
+             (text_utils::isUnicodeSpace(character) || text_utils::isCJKUnicode(character))))
         {
             break;
         }
@@ -2798,13 +2798,13 @@ int Label::getFirstWordLen(const std::u32string& utf32Text, int startIndex, int 
 
 bool Label::getFontLetterDef(char32_t character, FontLetterDefinition& letterDef) const
 {
-    if (character == StringUtils::UnicodeCharacters::NoBreakSpace)
+    if (character == text_utils::UnicodeCharacters::NoBreakSpace)
     {
         // change no-break space to regular space
         // reason: some fonts have issue with no-break space:
         //   * no letter definition
         //   * not normal big width
-        character = StringUtils::UnicodeCharacters::Space;
+        character = text_utils::UnicodeCharacters::Space;
     }
 
     return _fontAtlas->getLetterDefinitionForChar(character, letterDef);
@@ -2859,7 +2859,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
     for (int index = 0; index < textLen;)
     {
         char32_t character = _utf32Text[index];
-        if (character == StringUtils::UnicodeCharacters::NewLine)
+        if (character == text_utils::UnicodeCharacters::NewLine)
         {
             _linesWidth.emplace_back(letterRight);
             letterRight = 0.f;
@@ -2883,11 +2883,11 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
                 (index + tokenLen) < textLen)
             {
                 auto tokenLastChar = _utf32Text[index + tokenLen - 1];
-                if (!StringUtils::isCJKUnicode(tokenLastChar) && !StringUtils::isUnicodeSpace(tokenLastChar))
+                if (!text_utils::isCJKUnicode(tokenLastChar) && !text_utils::isUnicodeSpace(tokenLastChar))
                 {
                     // Work out if this token is valid based on the desired output
                     auto nextChar = _utf32Text[index + tokenLen];
-                    if (!StringUtils::isUnicodeSpace(nextChar) && !StringUtils::isCJKUnicode(nextChar))
+                    if (!text_utils::isUnicodeSpace(nextChar) && !text_utils::isCJKUnicode(nextChar))
                     {
                         // No point continuing here
                         return false;
@@ -2906,14 +2906,14 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
         {
             int letterIndex = index + tmp;
             character       = _utf32Text[letterIndex];
-            if (character == StringUtils::UnicodeCharacters::CarriageReturn)
+            if (character == text_utils::UnicodeCharacters::CarriageReturn)
             {
                 recordPlaceholderInfo(letterIndex, character);
                 continue;
             }
 
             // \b - Next char not change x position
-            if (character == StringUtils::UnicodeCharacters::NextCharNoChangeX)
+            if (character == text_utils::UnicodeCharacters::NextCharNoChangeX)
             {
                 nextChangeSize = false;
                 recordPlaceholderInfo(letterIndex, character);
@@ -2930,7 +2930,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
 
             auto letterX = (nextLetterX + letterDef.offsetX * _fontScale) / contentScaleFactor;
             if (_enableWrap && _maxLineWidth > 0.f && nextTokenX > 0.f &&
-                letterX + letterDef.width * _fontScale > _maxLineWidth && !StringUtils::isUnicodeSpace(character) &&
+                letterX + letterDef.width * _fontScale > _maxLineWidth && !text_utils::isUnicodeSpace(character) &&
                 nextChangeSize)
             {
                 _linesWidth.emplace_back(letterRight - whitespaceWidth);
@@ -2959,7 +2959,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
                 nextLetterX += newLetterWidth;
                 tokenRight = nextLetterX / contentScaleFactor;
 
-                if (StringUtils::isUnicodeSpace(character))
+                if (text_utils::isUnicodeSpace(character))
                 {
                     nextWhitespaceWidth += newLetterWidth / contentScaleFactor;
                 }

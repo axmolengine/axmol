@@ -33,7 +33,7 @@
 #include "3d/Mesh.h"
 
 #include "base/Director.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Utils.h"
 #include "2d/Light.h"
 #include "2d/Camera.h"

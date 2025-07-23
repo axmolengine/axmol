@@ -35,7 +35,7 @@ THE SOFTWARE.
 #    include <stdio.h>
 #    include "2d/Label.h"
 #    include "base/Director.h"
-#    include "base/UTF8.h"
+#    include "base/text_utils.h"
 #    include <Commctrl.h>
 #    include <windows.h>
 #    include "ui/UIHelper.h"
@@ -241,7 +241,7 @@ void EditBoxImplWin::setNativeText(const char* pText)
 {
     std::u16string utf16Result;
     std::string text(pText);
-    ax::StringUtils::UTF8ToUTF16(text, utf16Result);
+    ax::text_utils::UTF8ToUTF16(text, utf16Result);
     this->_changedTextManually = true;
     ::SetWindowTextW(_hwndEdit, (LPCWSTR)utf16Result.c_str());
     int textLen = text.size();
@@ -401,7 +401,7 @@ std::string EditBoxImplWin::getText() const
     wstrResult.resize(inputLength);
 
     ::GetWindowTextW(_hwndEdit, (LPWSTR)&wstrResult[0], inputLength + 1);
-    bool conversionResult = ax::StringUtils::UTF16ToUTF8(wstrResult, utf8Result);
+    bool conversionResult = ax::text_utils::UTF16ToUTF8(wstrResult, utf8Result);
     if (!conversionResult)
     {
         AXLOGW("warning, editbox input text conversion error.");

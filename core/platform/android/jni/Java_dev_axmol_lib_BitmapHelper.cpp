@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "platform/Application.h"
 #include "platform/FileUtils.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 static const char* className = "dev.axmol.lib.BitmapHelper";
 

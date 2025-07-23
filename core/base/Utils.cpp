@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
 #include "base/Constants.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "renderer/CustomCommand.h"
 #include "renderer/Renderer.h"
 #include "renderer/TextureCache.h"

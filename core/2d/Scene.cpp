@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "2d/Camera.h"
 #include "base/EventDispatcher.h"
 #include "base/EventListenerCustom.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "renderer/Renderer.h"
 
 #if defined(AX_ENABLE_PHYSICS)

@@ -30,7 +30,7 @@
 #include "base/NinePatchImageParser.h"
 #include "base/NS.h"
 #include "base/Macros.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Utils.h"
 #include "base/Director.h"
 #include "renderer/Texture2D.h"

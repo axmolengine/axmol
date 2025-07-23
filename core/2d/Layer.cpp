@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "base/EventListenerKeyboard.h"
 #include "base/EventAcceleration.h"
 #include "base/EventListenerAcceleration.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "renderer/backend/Buffer.h"
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"

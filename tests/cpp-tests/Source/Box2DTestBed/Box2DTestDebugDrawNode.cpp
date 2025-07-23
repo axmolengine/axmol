@@ -268,7 +268,7 @@ void Box2DTestDebugDrawNode::DrawString(int x, int y, const char* pszFormat, ...
 {
     // va_list args;
     // va_start(args, pszFormat);
-    // auto ret = StringUtils::vformat(pszFormat, args);
+    // auto ret = text_utils::vformat(pszFormat, args);
     // va_end(args);
     //
     // _debugString.append(ret);
@@ -292,7 +292,7 @@ void Box2DTestDebugDrawNode::DrawString(b2Vec2 p, const char* pszFormat, ...)
 {
     /*va_list args;
     va_start(args, pszFormat);
-    auto ret = StringUtils::vformat(pszFormat, args);
+    auto ret = text_utils::vformat(pszFormat, args);
     va_end(args);
 
     _debugString.append(ret);

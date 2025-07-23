@@ -32,7 +32,7 @@
 #endif
 #include <algorithm>
 #include "2d/FontFreeType.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/Director.h"
 #include "base/EventListenerCustom.h"
 #include "base/EventDispatcher.h"

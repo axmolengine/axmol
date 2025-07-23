@@ -34,7 +34,7 @@
 #    include <jni.h>
 #    include "platform/android/jni/JniHelper.h"
 #    include "2d/Label.h"
-#    include "base/UTF8.h"
+#    include "base/text_utils.h"
 #    include "math/Vec2.h"
 #    include "ui/UIHelper.h"
 #    include "base/Director.h"
@@ -64,7 +64,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_EditBoxHelper_editBoxEditingChanged(JN
                                                                                          jint index,
                                                                                          jstring text)
 {
-    std::string textString = StringUtils::getStringUTFCharsJNI(env, text);
+    std::string textString = text_utils::getStringUTFCharsJNI(env, text);
     editBoxEditingDidChanged(index, textString);
 }
 
@@ -74,7 +74,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_EditBoxHelper_editBoxEditingDidEnd(JNI
                                                                                         jstring text,
                                                                                         jint action)
 {
-    std::string textString = StringUtils::getStringUTFCharsJNI(env, text);
+    std::string textString = text_utils::getStringUTFCharsJNI(env, text);
     editBoxEditingDidEnd(index, textString, action);
 }
 }

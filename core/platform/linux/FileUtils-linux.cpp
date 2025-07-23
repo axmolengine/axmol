@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "platform/linux/Application-linux.h"
 #include "platform/Common.h"
 #include "base/Macros.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include <unistd.h>
 #include <sys/stat.h>
 #include <stdio.h>

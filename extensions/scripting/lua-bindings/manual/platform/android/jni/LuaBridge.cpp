@@ -29,7 +29,7 @@
 
 #    include "lua-bindings/manual/platform/android/LuaJavaBridge.h"
 
-#    include "base/UTF8.h"
+#    include "base/text_utils.h"
 
 #    define LOG_TAG "LuaBridge_java"
 #    define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -41,7 +41,7 @@ JNIEXPORT jint JNICALL Java_dev_axmol_lib_LuaBridge_callLuaFunctionWithString(JN
                                                                                              jint functionId,
                                                                                              jstring value)
 {
-    std::string strValue = ax::StringUtils::getStringUTFCharsJNI(env, value);
+    std::string strValue = ax::text_utils::getStringUTFCharsJNI(env, value);
     int ret              = LuaJavaBridge::callLuaFunctionById(functionId, strValue.c_str());
     return ret;
 }
@@ -52,8 +52,8 @@ Java_dev_axmol_lib_LuaBridge_callLuaGlobalFunctionWithString(JNIEnv* env,
                                                                             jstring luaFunctionName,
                                                                             jstring value)
 {
-    std::string functionNameStr = ax::StringUtils::getStringUTFCharsJNI(env, luaFunctionName);
-    std::string valueStr        = ax::StringUtils::getStringUTFCharsJNI(env, value);
+    std::string functionNameStr = ax::text_utils::getStringUTFCharsJNI(env, luaFunctionName);
+    std::string valueStr        = ax::text_utils::getStringUTFCharsJNI(env, value);
 
     int ret = LuaJavaBridge::callLuaGlobalFunction(functionNameStr.c_str(), valueStr.c_str());
     return ret;

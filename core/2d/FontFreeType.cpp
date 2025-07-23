@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "2d/FontFreeType.h"
 #include "2d/FontAtlas.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/filesystem.h"
 #include "freetype/ftmodapi.h"
 #include "platform/FileUtils.h"
@@ -351,7 +351,7 @@ FontAtlas* FontFreeType::newFontAtlas()
     if (_usedGlyphs != GlyphCollection::DYNAMIC)
     {
         std::u32string utf32;
-        if (StringUtils::UTF8ToUTF32(getGlyphCollection(), utf32))
+        if (text_utils::UTF8ToUTF32(getGlyphCollection(), utf32))
         {
             fontAtlas->prepareLetterDefinitions(utf32);
         }
@@ -436,7 +436,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
         char32_t ntcs[2] = {charCode, (char32_t)0};
         std::u32string_view charUTF32(ntcs, 1);
         std::string charUTF8;
-        ax::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
+        ax::text_utils::UTF32ToUTF8(charUTF32, charUTF8);
 
         if (charUTF8 == "\n")
             charUTF8 = "\\n";

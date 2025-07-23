@@ -30,7 +30,7 @@
 
 #    include "ui/UIEditBox/UIEditBoxImpl-mac.h"
 #    include "base/Director.h"
-#    include "base/UTF8.h"
+#    include "base/text_utils.h"
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include "ui/UIEditBox/Mac/UIEditBoxMac.h"
 

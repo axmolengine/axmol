@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/ActionInterval.h"
 #include "2d/Node.h"
 #include "base/Director.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 
 namespace ax
 {

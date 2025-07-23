@@ -39,7 +39,7 @@
 #include "base/Director.h"
 #include "2d/Label.h"
 #include "2d/Sprite.h"
-#include "base/UTF8.h"
+#include "base/text_utils.h"
 #include "base/charconv.h"
 #include "ui/UIHelper.h"
 
@@ -1917,27 +1917,27 @@ void RichText::formatText(bool force)
 
 namespace
 {
-inline bool isUTF8CharWrappable(const StringUtils::StringUTF8::CharUTF8& ch)
+inline bool isUTF8CharWrappable(const text_utils::StringUTF8::CharUTF8& ch)
 {
     return (!ch.isASCII() || !std::isgraph(ch._char[0], std::locale()));
 }
 
-int getPrevWordPos(const StringUtils::StringUTF8& text, int idx)
+int getPrevWordPos(const text_utils::StringUTF8& text, int idx)
 {
     if (idx <= 0)
         return -1;
 
     // start from idx-1
-    const StringUtils::StringUTF8::CharUTF8Store& str = text.getString();
+    const text_utils::StringUTF8::CharUTF8Store& str = text.getString();
     const auto it = std::find_if(str.rbegin() + (str.size() - idx + 1), str.rend(), isUTF8CharWrappable);
     if (it == str.rend())
         return -1;
     return static_cast<int>(it.base() - str.begin());
 }
 
-int getNextWordPos(const StringUtils::StringUTF8& text, int idx)
+int getNextWordPos(const text_utils::StringUTF8& text, int idx)
 {
-    const StringUtils::StringUTF8::CharUTF8Store& str = text.getString();
+    const text_utils::StringUTF8::CharUTF8Store& str = text.getString();
     if (idx + 1 >= static_cast<int>(str.size()))
         return static_cast<int>(str.size());
 
@@ -1945,14 +1945,14 @@ int getNextWordPos(const StringUtils::StringUTF8& text, int idx)
     return static_cast<int>(it - str.begin());
 }
 
-bool isWrappable(const StringUtils::StringUTF8& text)
+bool isWrappable(const text_utils::StringUTF8& text)
 {
-    const StringUtils::StringUTF8::CharUTF8Store& str = text.getString();
+    const text_utils::StringUTF8::CharUTF8Store& str = text.getString();
     return std::any_of(str.begin(), str.end(), isUTF8CharWrappable);
 }
 
 int findSplitPositionForWord(Label* label,
-                             const StringUtils::StringUTF8& text,
+                             const text_utils::StringUTF8& text,
                              int estimatedIdx,
                              float originalLeftSpaceWidth,
                              float newLineWidth)
@@ -2012,7 +2012,7 @@ int findSplitPositionForWord(Label* label,
 }
 
 int findSplitPositionForChar(Label* label,
-                             const StringUtils::StringUTF8& text,
+                             const text_utils::StringUTF8& text,
                              int estimatedIdx,
                              float originalLeftSpaceWidth,
                              float newLineWidth)
@@ -2100,7 +2100,7 @@ void RichText::handleTextRenderer(std::string_view text,
         ++realLines;
 
         size_t splitParts = 0;
-        StringUtils::StringUTF8 utf8Text(currentText);
+        text_utils::StringUTF8 utf8Text(currentText);
         while (!currentText.empty())
         {
             if (splitParts > 0)
@@ -2175,12 +2175,12 @@ void RichText::handleTextRenderer(std::string_view text,
                 pushToContainer(textRenderer);
             }
 
-            StringUtils::StringUTF8::CharUTF8Store& str = utf8Text.getString();
+            text_utils::StringUTF8::CharUTF8Store& str = utf8Text.getString();
 
             // after the first line, skip any spaces to the left
             const auto startOfWordItr = std::find_if(
                 str.begin() + leftLength, str.end(),
-                [](const StringUtils::StringUTF8::CharUTF8& ch) { return !std::isspace(ch._char[0], std::locale()); });
+                [](const text_utils::StringUTF8::CharUTF8& ch) { return !std::isspace(ch._char[0], std::locale()); });
             if (startOfWordItr != str.end())
                 leftLength = static_cast<int>(startOfWordItr - str.begin());
 
