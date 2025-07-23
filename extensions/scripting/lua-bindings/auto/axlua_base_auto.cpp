@@ -21808,7 +21808,6 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -21817,24 +21816,47 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
     if (!tolua_isusertable(tolua_S,1,"ax.TintTo",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    argc = lua_gettop(tolua_S) - 1;
+    argc = lua_gettop(tolua_S)-1;
 
-    if (argc == 2)
+    do 
     {
-        double arg0;
-        ax::Color32 arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:create");
-        ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.TintTo:create");
-        if(!ok)
+        if (argc == 2)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TintTo_create'", nullptr);
-            return 0;
+            double arg0;
+            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:create");
+            if (!ok) { break; }
+            ax::Color32 arg1;
+            ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.TintTo:create");
+            if (!ok) { break; }
+            ax::TintTo* ret = ax::TintTo::create(arg0, arg1);
+            object_to_luaval<ax::TintTo>(tolua_S, "ax.TintTo",(ax::TintTo*)ret);
+            return 1;
         }
-        auto&& ret = ax::TintTo::create(arg0, arg1);
-        object_to_luaval<ax::TintTo>(tolua_S, "ax.TintTo",(ax::TintTo*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.TintTo:create",argc, 2);
+    } while (0);
+    ok  = true;
+    do 
+    {
+        if (argc == 4)
+        {
+            double arg0;
+            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:create");
+            if (!ok) { break; }
+            uint16_t arg1;
+            ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ax.TintTo:create");
+            if (!ok) { break; }
+            uint16_t arg2;
+            ok &= luaval_to_uint16(tolua_S, 4,&arg2, "ax.TintTo:create");
+            if (!ok) { break; }
+            uint16_t arg3;
+            ok &= luaval_to_uint16(tolua_S, 5,&arg3, "ax.TintTo:create");
+            if (!ok) { break; }
+            ax::TintTo* ret = ax::TintTo::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::TintTo>(tolua_S, "ax.TintTo",(ax::TintTo*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.TintTo:create",argc, 4);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
