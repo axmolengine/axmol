@@ -355,11 +355,11 @@ void MotionStreak::update(float delta)
         _pointState[_nuPoints]    = 1.0f;
 
         // Color assignment
-        const unsigned int offset          = _nuPoints * 2;
-        auto tmpColor                      = _displayedColor;
-        tmpColor.a                         = 255;
-        _vertices[_nuPoints * 2].color     = tmpColor;
-        _vertices[_nuPoints * 2 + 1].color = tmpColor;
+        const auto offset           = _nuPoints * 2;
+        auto tmpColor               = _displayedColor;
+        tmpColor.a                  = 255;
+        _vertices[offset].color     = tmpColor;
+        _vertices[offset + 1].color = tmpColor;
 
         // Generate polygon
         if (_nuPoints > 0 && _fastMode)
