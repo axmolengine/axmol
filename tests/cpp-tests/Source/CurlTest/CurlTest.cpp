@@ -30,6 +30,8 @@
 #include "stdlib.h"
 #include "curl/curl.h"
 
+#include "base/format.h"
+
 using namespace ax;
 
 CurlTests::CurlTests()
@@ -113,8 +115,8 @@ void CurlTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
         }
         else
         {
-            fmt::format_to(buffer, "code: {}", (int)res);
-            _label->setString(buffer);
+            auto codeText = fmt::format_to_z(buffer, "code: {}", (int)res);
+            _label->setString(codeText);
         }
     }
     else

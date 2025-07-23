@@ -27,6 +27,8 @@
 #include "Paddle.h"
 #include "../testResource.h"
 
+#include "base/format.h"
+
 using namespace ax;
 
 enum tagPlayer
@@ -180,13 +182,13 @@ void ForceTouchTest::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::
     {
         float currentForce = t->getCurrentForce();
         float maxForce     = t->getMaxForce();
-        fmt::format_to(formatBuffer, _Info_Formatter, currentForce, maxForce);
-        _infoLabel->setString(std::string(formatBuffer));
+        auto text = fmt::format_to_z(formatBuffer, _Info_Formatter, currentForce, maxForce);
+        _infoLabel->setString(text);
     }
 }
 
 void ForceTouchTest::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
-    fmt::format_to(formatBuffer, _Info_Formatter, 0.0f, 0.0f);
-    _infoLabel->setString(std::string(formatBuffer));
+    auto text = fmt::format_to_z(formatBuffer, _Info_Formatter, 0.0f, 0.0f);
+    _infoLabel->setString(text);
 }
