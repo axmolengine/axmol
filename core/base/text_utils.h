@@ -270,8 +270,8 @@ private:
     CharUTF8Store _str;
 };
 
-}  // namespace StringUtils
+}  // namespace text_utils
 
-}
+}  // namespace ax
 
 #endif /** defined(AXMOL__UTF8_H) */

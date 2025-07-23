@@ -41,10 +41,12 @@ namespace text_utils
 
 std::string_view ltrim(std::string_view s)
 {
-    if(!s.empty()) {
+    if (!s.empty())
+    {
         auto first = s.data();
-        auto last = first + s.length();
-        while(first < last && std::isspace(*first)) {
+        auto last  = first + s.length();
+        while (first < last && std::isspace(*first))
+        {
             ++first;
         }
         return std::string_view{first, static_cast<size_t>(last - first)};
@@ -54,11 +56,13 @@ std::string_view ltrim(std::string_view s)
 
 std::string_view rtrim(std::string_view s)
 {
-    if(!s.empty()) {
-        auto first = s.data();
-        auto last = first + s.length();
+    if (!s.empty())
+    {
+        auto first  = s.data();
+        auto last   = first + s.length();
         auto rfirst = last - 1;
-        while(rfirst > first && std::isspace(*rfirst)) {
+        while (rfirst > first && std::isspace(*rfirst))
+        {
             --rfirst;
         }
         return std::string_view{first, static_cast<size_t>(rfirst + 1 - first)};
@@ -507,6 +511,6 @@ bool StringUTF8::insert(std::size_t pos, const StringUTF8& insertStr)
     }
 }
 
-}  // namespace StringUtils
+}  // namespace text_utils
 
-}
+}  // namespace ax
