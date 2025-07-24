@@ -27,7 +27,7 @@ nuget=5.5.1.*
 vs=17.0+
 
 # as stable and latest as possible, @axmol-cmdline @genbindings.ps1
-llvm=19.0.0~19.1.7+
+llvm=20.1.8+
 
 # --- endregion
 
