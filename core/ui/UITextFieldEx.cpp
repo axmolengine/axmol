@@ -129,24 +129,6 @@ namespace ui
 {
 
 /// calculate the UTF-8 string's char count.
-static int _calcCharCount(const char* text)
-{
-    int n   = 0;
-    char ch = 0;
-    while ((ch = *text) != 0x0)
-    {
-        AX_BREAK_IF(!ch);
-
-        if (0x80 != (0xC0 & ch))
-        {
-            ++n;
-        }
-        ++text;
-    }
-    return n;
-}
-
-/// calculate the UTF-8 string's char count.
 static int _truncateUTF8String(const char* text, int limit, int& nb)
 {
     int n   = 0;
@@ -833,7 +815,7 @@ void TextFieldEx::setString(std::string_view text)
 
     bool bInsertAtEnd = (_insertPosUtf8 == _charCount);
 
-    _charCount = _calcCharCount(_inputText.c_str());
+    _charCount = StringUtils::countUTF8Chars(_inputText);
 
     if (bInsertAtEnd)
     {

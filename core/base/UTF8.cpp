@@ -402,7 +402,31 @@ std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16
 
 int32_t getCharacterCountInUTF8String(std::string_view utf8)
 {
-    return getUTF8StringLength((const UTF8*)utf8.data());
+    return countUTF8Chars(utf8);
+}
+
+int32_t countUTF8Chars(std::string_view utf8)
+{
+    int count = 0;
+
+    if (!utf8.empty())
+    {
+        const UTF8* source = (const UTF8*)utf8.data();
+        const UTF8* sourceEnd   = (const UTF8*)utf8.data() + utf8.length();
+        while (source != sourceEnd)
+        {
+            auto size = getUTF8SequenceSize(source, sourceEnd);
+            if (size == 0)
+            {
+                // Invalid UTF-8 sequence found
+                return 0;
+            }
+            source += size;
+            ++count;
+        }
+    }
+  
+    return count;
 }
 
 bool hasNonAsciiUTF8(const char* str, size_t len)
@@ -475,7 +499,7 @@ void StringUTF8::replace(std::string_view newStr)
     {
         UTF8* sequenceUtf8 = (UTF8*)newStr.data();
 
-        int lengthString = getUTF8StringLength(sequenceUtf8);
+        int lengthString = countUTF8Chars(newStr);
 
         if (lengthString == 0)
         {

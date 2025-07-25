@@ -91,7 +91,10 @@
 
 #include <cstddef>
 #include <string>
+
+#if defined(_WIN32)
 #include <system_error>
+#endif
 
 // Wrap everything in namespace llvm so that programs can link with llvm and
 // their own version of the unicode libraries.
@@ -122,6 +125,9 @@ typedef unsigned char   Boolean; /* 0 or 1 */
 
 #define UNI_UTF16_BYTE_ORDER_MARK_NATIVE  0xFEFF
 #define UNI_UTF16_BYTE_ORDER_MARK_SWAPPED 0xFFFE
+
+#define UNI_UTF32_BYTE_ORDER_MARK_NATIVE 0x0000FEFF
+#define UNI_UTF32_BYTE_ORDER_MARK_SWAPPED 0xFFFE0000
 
 typedef enum {
   conversionOK,           /* conversion successful */
@@ -175,10 +181,9 @@ Boolean isLegalUTF8Sequence(const UTF8 *source, const UTF8 *sourceEnd);
 
 Boolean isLegalUTF8String(const UTF8 **source, const UTF8 *sourceEnd);
 
-unsigned getNumBytesForUTF8(UTF8 firstByte);
+unsigned getUTF8SequenceSize(const UTF8 *source, const UTF8 *sourceEnd);
 
-// axis-specific
-int getUTF8StringLength(const UTF8* utf8);
+unsigned getNumBytesForUTF8(UTF8 firstByte);
 
 } /* end namespace llvm */
 

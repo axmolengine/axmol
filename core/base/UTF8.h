@@ -197,11 +197,15 @@ AX_DLL bool isCJKUnicode(char32_t ch);
 AX_DLL bool isUnicodeNonBreaking(char32_t ch);
 
 /**
- *  @brief Returns the length of the string in characters.
- *  @param utf8 An UTF-8 encoded string.
- *  @returns The length of the string in characters.
+ * @brief Calculates the number of Unicode characters (code points) in a UTF-8 encoded string.
+ * @param utf8 A UTF-8 encoded string view.
+ * @return The number of Unicode code points in the input string.
  */
-AX_DLL int32_t getCharacterCountInUTF8String(std::string_view utf8);
+AX_DLL int32_t countUTF8Chars(std::string_view utf8);
+
+#ifndef AX_CORE_PROFILE
+AX_DEPRECATED(2.8) AX_DLL int32_t getCharacterCountInUTF8String(std::string_view utf8);
+#endif
 
 /**
  *  @brief Gets the index of the last character that is not equal to the character given.

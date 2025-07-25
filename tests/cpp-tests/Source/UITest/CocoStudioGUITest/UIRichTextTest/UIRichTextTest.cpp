@@ -185,11 +185,11 @@ bool UIRichTextTest::init()
 
         std::string str1 = config->getValue("Chinese").asString();
         std::string str2 = config->getValue("Japanese").asString();
-        AXLOGD("str1:{} ascii length = {}, utf8 length = {}, substr = {}", str1,
-              static_cast<int32_t>(str1.length()), StringUtils::getCharacterCountInUTF8String(str1),
+        AXLOGD("str1:{} ascii length = {}, utf8 length = {}, substr = {}", str1, static_cast<int32_t>(str1.length()),
+               StringUtils::countUTF8Chars(str1),
               Helper::getSubStringOfUTF8String(str1, 0, 5));
         AXLOGD("str2:{} ascii length = {}, utf8 length = {}, substr = {}", str2,
-              static_cast<int32_t>(str2.length()), StringUtils::getCharacterCountInUTF8String(str2),
+              static_cast<int32_t>(str2.length()), StringUtils::countUTF8Chars(str2),
               Helper::getSubStringOfUTF8String(str2, 0, 2));
 
         // Add the alert

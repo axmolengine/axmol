@@ -85,7 +85,7 @@ TEST_SUITE("base/UTF8") {
             CHECK(vec1.at(i) == vec2.at(i));
         }
 
-        CHECK(StringUtils::getCharacterCountInUTF8String(originalUTF8) == kUtf16TestStrLength);
+        CHECK(StringUtils::countUTF8Chars(originalUTF8) == kUtf16TestStrLength);
 
         CHECK(StringUtils::getIndexOfLastNotChar16(vec3, 0x2009) == (vec1.size() - 1));
 
