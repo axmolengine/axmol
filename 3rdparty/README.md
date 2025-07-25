@@ -42,7 +42,7 @@
 
 ## ConvertUTF
 - Upstream: https://github.com/llvm/llvm-project
-- Version: git 2946cd7 without LLVM-specific wrappers of the functions
+- Version: git 20451cb (until Aug.13 2022) without LLVM-specific wrappers of the functions
 - License: Apache-2.0 WITH LLVM-exception
 
 ## curl
