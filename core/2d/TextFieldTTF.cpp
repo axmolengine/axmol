@@ -609,7 +609,7 @@ void TextFieldTTF::makeStringSupportCursor(std::string& displayText)
                 cursorChar.push_back(text_utils::AsciiCharacters::NextCharNoChangeX);
             cursorChar.push_back(_cursorChar);
 
-            auto offset = StringUtils::getUTF8ByteOffset(displayText, _cursorPosition);
+            auto offset = text_utils::getUTF8ByteOffset(displayText, _cursorPosition);
             if (offset != std::string::npos)
                 displayText.insert(offset, cursorChar);
             else

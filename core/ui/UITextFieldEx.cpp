@@ -814,7 +814,7 @@ void TextFieldEx::setString(std::string_view text)
 
     bool bInsertAtEnd = (_insertPosUtf8 == _charCount);
 
-    _charCount = StringUtils::countUTF8Chars(_inputText);
+    _charCount = text_utils::countUTF8Chars(_inputText);
 
     if (bInsertAtEnd)
     {
