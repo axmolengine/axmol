@@ -2481,8 +2481,10 @@ void Label::setTextColor(const Color32& color)
             _contentDirty = true;
             break;
         }
+
+        _textColor = color;
+        _textColor32 = color;
     }
-    _textColor = color;
 
     //  System font and TTF using setColor for Outline/Glow!");
     if (_currentLabelType != LabelType::TTF && _currentLabelType != LabelType::STRING_TEXTURE)
