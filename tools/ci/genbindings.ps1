@@ -29,7 +29,7 @@ if (($stage -band 1)) {
     if (!(Test-Path $lib_path -PathType Leaf)) {
         setup_7z
         $llvm_ver_pred = $manifest['llvm'].Split('~')
-        $llvm_ver = $llvm_ver_pred[$llvm_ver_pred.Count -ge 1].TrimLast('+')
+        $llvm_ver = $llvm_ver_pred[$llvm_ver_pred.Count -gt 1].TrimLast('+')
         $llvm_pkg = "llvm-$llvm_ver.7z"
 
         $prefix = Join-Path $AX_ROOT "cache/devtools"

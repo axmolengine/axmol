@@ -29,6 +29,8 @@
 #include "Texture2dTest.h"
 #include "../testResource.h"
 
+#include "base/format.h"
+
 using namespace ax;
 
 enum
@@ -1751,13 +1753,14 @@ TextureAsync::~TextureAsync()
 void TextureAsync::loadImages(float dt)
 {
     auto textureCache = Director::getInstance()->getTextureCache();
+    char szSpriteName[100];
+
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            char szSpriteName[100] = {0};
-            fmt::format_to(szSpriteName, "Images/sprites_test/sprite-{}-{}.png", i, j);
-            textureCache->addImageAsync(szSpriteName, AX_CALLBACK_1(TextureAsync::imageLoaded, this));
+            auto spriteName = fmt::format_to_z(szSpriteName, "Images/sprites_test/sprite-{}-{}.png", i, j);
+            textureCache->addImageAsync(spriteName, AX_CALLBACK_1(TextureAsync::imageLoaded, this));
         }
     }
 

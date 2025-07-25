@@ -30,6 +30,8 @@
 #include <sstream>
 #include <iomanip>
 
+#include "base/format.h"
+
 using namespace std;
 
 using namespace ax;
@@ -171,33 +173,33 @@ void UserDefaultTest::doTest()
 
 void UserDefaultTest::printValue()
 {
-    char strTemp[256] = "";
+    char strTemp[256];
     // print value
     std::string_view ret = UserDefault::getInstance()->getStringForKey("string");
-    fmt::format_to(strTemp, "string is {}", ret);
+    fmt::format_to_z(strTemp, "string is {}", ret);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     double d = UserDefault::getInstance()->getDoubleForKey("double");
-    fmt::format_to(strTemp, "double is %f", d);
+    fmt::format_to_z(strTemp, "double is {}", d);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     int i = UserDefault::getInstance()->getIntegerForKey("integer");
-    fmt::format_to(strTemp, "integer is %d", i);
+    fmt::format_to_z(strTemp, "integer is {}", i);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     float f = UserDefault::getInstance()->getFloatForKey("float");
-    fmt::format_to(strTemp, "float is %f", f);
+    fmt::format_to_z(strTemp, "float is {}", f);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     bool b = UserDefault::getInstance()->getBoolForKey("bool");
     if (b)
     {
-        fmt::format_to(strTemp, "{}", "bool is true");
+        fmt::format_to_z(strTemp, "{}", "bool is true");
         this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
     }
     else
     {
-        fmt::format_to(strTemp, "{}", "bool is false");
+        fmt::format_to_z(strTemp, "{}", "bool is false");
         this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
     }
 }

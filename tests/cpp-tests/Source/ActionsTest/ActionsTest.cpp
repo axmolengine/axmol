@@ -26,12 +26,13 @@ THE SOFTWARE.
 
 #include "ActionsTest.h"
 #include "../testResource.h"
-#include "axmol.h"
 #include "ui/CocosGUI.h"
 
 #include "renderer/Renderer.h"
 #include "renderer/CustomCommand.h"
 #include "renderer/GroupCommand.h"
+
+#include "base/format.h"
 
 using namespace ax;
 using namespace ax::ui;
@@ -645,12 +646,12 @@ void ActionAnimate::onEnter()
     //
     // Manual animation
     //
-    auto animation = Animation::create();
+    auto animation   = Animation::create();
+    char szName[100];
     for (int i = 1; i < 15; i++)
     {
-        char szName[100] = {0};
-        fmt::format_to(szName, "Images/grossini_dance_{:02d}.png", i);
-        animation->addSpriteFrameWithFile(szName);
+        auto key = fmt::format_to_z(szName, "Images/grossini_dance_{:02d}.png", i);
+        animation->addSpriteFrameWithFile(key);
     }
     // should last 2.8 seconds. And there are 14 frames.
     animation->setDelayPerUnit(2.8f / 14.0f);
