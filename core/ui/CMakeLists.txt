@@ -124,7 +124,6 @@ set(_AX_UI_HEADER
   ui/UIAbstractCheckButton.h
   ui/UIButton.h
   ui/UICheckBox.h
-  ui/LayoutHelper.h
   ui/UIHBox.h
   ui/UIHelper.h
   ui/UIImageView.h
@@ -160,7 +159,6 @@ set(_AX_UI_SRC
   ui/UIAbstractCheckButton.cpp
   ui/UICheckBox.cpp
   ui/UIRadioButton.cpp
-  ui/LayoutHelper.cpp
   ui/UIHBox.cpp
   ui/UIHelper.cpp
   ui/UIImageView.cpp

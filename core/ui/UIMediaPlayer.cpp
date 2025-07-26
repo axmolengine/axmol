@@ -36,7 +36,6 @@
 #    include "platform/FileUtils.h"
 #    include "ui/UIHelper.h"
 #    include "media/MediaEngine.h"
-#    include "ui/LayoutHelper.h"
 #    include "UIButton.h"
 #    include "UILayout.h"
 #    include "yasio/byte_buffer.hpp"
@@ -149,7 +148,7 @@ struct PrivateVideoDescriptor
                     }
                 }
 
-                LayoutHelper::centerNode(_vrender);
+                ui::Helper::centerNode(_vrender);
 
                 _vrender->setVisible(true);
             }
