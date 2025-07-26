@@ -252,44 +252,51 @@ AX_DLL bool detectNonAsciiUTF8(const char* str, size_t len, bool restrictUTF8, b
 AX_DLL bool isLegalUTF8String(const char* str, size_t len);
 
 /**
- * Utf8 sequence
- * Store all utf8 chars as std::string
- * Build from std::string
+ * Utf8 readonly sequence
+ * Store all utf8 chars as std::string_view
+ * Build from std::string_view
  */
-class AX_DLL StringUTF8
+class AX_DLL u8char_span
 {
 public:
-    struct CharUTF8
+    typedef struct CharUTF8
     {
-        std::string _char;
+        std::string_view _char;
         bool isASCII() const { return _char.size() == 1; }
-    };
-    typedef std::vector<CharUTF8> CharUTF8Store;
+    } value_type;
 
-    StringUTF8();
-    StringUTF8(std::string_view newStr);
-    ~StringUTF8();
+    u8char_span() = default;
+    u8char_span(std::string_view newStr);
+    ~u8char_span() = default;
 
-    std::size_t length() const;
-    void replace(std::string_view newStr);
+    void reset(std::string_view newStr);
 
-    std::string getAsCharSequence() const;
-    std::string getAsCharSequence(std::size_t pos) const;
-    std::string getAsCharSequence(std::size_t pos, std::size_t len) const;
+    std::size_t size() const { return _str.size(); }
+    std::size_t size_bytes() const { return _size_bytes; }
 
-    bool deleteChar(std::size_t pos);
-    bool insert(std::size_t pos, std::string_view insertStr);
-    bool insert(std::size_t pos, const StringUTF8& insertStr);
+    bool empty() const { return _str.empty(); }
+    
+    const value_type& at(size_t pos) const { return _str.at(pos); }
 
-    CharUTF8Store& getString() { return _str; }
-    const CharUTF8Store& getString() const { return _str; }
+    std::string_view view() const;
+    std::string_view subview(std::size_t pos) const;
+    std::string_view subview(std::size_t pos, std::size_t len) const;
+
+    std::vector<CharUTF8>::const_reverse_iterator rbegin() const { return _str.rbegin(); }
+    std::vector<CharUTF8>::const_reverse_iterator rend() const { return _str.rend(); }
+
+    std::vector<CharUTF8>::const_iterator begin() const { return _str.begin(); }
+    std::vector<CharUTF8>::const_iterator end() const { return _str.end(); }
+
+    void remove_prefix(size_t n);
 
 private:
-    CharUTF8Store _str;
+    std::vector<value_type> _str;
+    size_t _size_bytes{0};
 };
 
 }  // namespace text_utils
 
 }  // namespace ax
 
-#endif /** defined(AXMOL__UTF8_H) */
+#endif /** defined(AXMOL__TEXT_UTILS_H) */

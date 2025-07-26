@@ -467,23 +467,15 @@ bool isLegalUTF8String(const char* str, size_t len)
     return ::isLegalUTF8String((const UTF8**)&str, (const UTF8*)str + len);
 }
 
-StringUTF8::StringUTF8() {}
-
-StringUTF8::StringUTF8(std::string_view newStr)
+u8char_span::u8char_span(std::string_view newStr)
 {
-    replace(newStr);
+    reset(newStr);
 }
 
-StringUTF8::~StringUTF8() {}
-
-std::size_t StringUTF8::length() const
-{
-    return _str.size();
-}
-
-void StringUTF8::replace(std::string_view newStr)
+void u8char_span::reset(std::string_view newStr)
 {
     _str.clear();
+    _size_bytes = 0;
     if (!newStr.empty())
     {
         UTF8* sequenceUtf8 = (UTF8*)newStr.data();
@@ -501,74 +493,45 @@ void StringUTF8::replace(std::string_view newStr)
             std::size_t lengthChar = getNumBytesForUTF8(*sequenceUtf8);
 
             CharUTF8 charUTF8;
-            charUTF8._char.append((char*)sequenceUtf8, lengthChar);
+            charUTF8._char = std::string_view((char*)sequenceUtf8, lengthChar);
             sequenceUtf8 += lengthChar;
 
             _str.emplace_back(charUTF8);
         }
+
+        _size_bytes = newStr.length();
     }
 }
 
-std::string StringUTF8::getAsCharSequence() const
+std::string_view u8char_span::view() const
 {
-    return getAsCharSequence(0, std::numeric_limits<std::size_t>::max());
+    return this->subview(0, std::numeric_limits<std::size_t>::max());
 }
 
-std::string StringUTF8::getAsCharSequence(std::size_t pos) const
+std::string_view u8char_span::subview(std::size_t pos) const
 {
-    return getAsCharSequence(pos, std::numeric_limits<std::size_t>::max());
+    return this->subview(pos, std::numeric_limits<std::size_t>::max());
 }
 
-std::string StringUTF8::getAsCharSequence(std::size_t pos, std::size_t len) const
+std::string_view u8char_span::subview(std::size_t pos, std::size_t len) const
 {
-    std::string charSequence;
-    std::size_t maxLen = _str.size() - pos;
-    if (len > maxLen)
+    if (!_str.empty())
     {
-        len = maxLen;
-    }
+        const auto last_pos = std::clamp(pos + len - 1, pos, _str.size() - 1);
+        if (pos <= last_pos)
+        {
+            auto first_char = _str[pos];
+            auto last_char  = _str[last_pos];
 
-    std::size_t endPos = len + pos;
-    while (pos < endPos)
-    {
-        charSequence.append(_str[pos++]._char);
+            return std::string_view{first_char._char.data(), last_char._char.data() + last_char._char.length()};
+        }
     }
-
-    return charSequence;
+    return std::string_view{""};
 }
 
-bool StringUTF8::deleteChar(std::size_t pos)
+void u8char_span::remove_prefix(size_t n)
 {
-    if (pos < _str.size())
-    {
-        _str.erase(_str.begin() + pos);
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool StringUTF8::insert(std::size_t pos, std::string_view insertStr)
-{
-    StringUTF8 utf8(insertStr);
-
-    return insert(pos, utf8);
-}
-
-bool StringUTF8::insert(std::size_t pos, const StringUTF8& insertStr)
-{
-    if (pos <= _str.size())
-    {
-        _str.insert(_str.begin() + pos, insertStr._str.begin(), insertStr._str.end());
-
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    _str.erase(_str.begin(), _str.begin() + n);
 }
 
 }  // namespace text_utils

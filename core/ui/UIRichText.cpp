@@ -31,6 +31,7 @@
 #include <locale>
 #include <algorithm>
 #include <regex>
+#include <ranges>
 
 #include "platform/FileUtils.h"
 #include "platform/Application.h"
@@ -43,7 +44,7 @@
 #include "base/charconv.h"
 #include "ui/UIHelper.h"
 
-#include "fmt/compile.h"
+#include "base/format.h"
 #include "platform/SAXParser.h"
 
 using namespace ax;
@@ -1917,53 +1918,50 @@ void RichText::formatText(bool force)
 
 namespace
 {
-inline bool isUTF8CharWrappable(const text_utils::StringUTF8::CharUTF8& ch)
+inline bool isUTF8CharWrappable(const text_utils::u8char_span::value_type& ch)
 {
     return (!ch.isASCII() || !std::isgraph(ch._char[0], std::locale()));
 }
 
-int getPrevWordPos(const text_utils::StringUTF8& text, int idx)
+int getPrevWordPos(const text_utils::u8char_span& text, int idx)
 {
     if (idx <= 0)
         return -1;
 
     // start from idx-1
-    const text_utils::StringUTF8::CharUTF8Store& str = text.getString();
-    const auto it = std::find_if(str.rbegin() + (str.size() - idx + 1), str.rend(), isUTF8CharWrappable);
-    if (it == str.rend())
+    const auto it = std::find_if(text.rbegin() + (text.size() - idx + 1), text.rend(), isUTF8CharWrappable);
+    if (it == text.rend())
         return -1;
-    return static_cast<int>(it.base() - str.begin());
+    return static_cast<int>(it.base() - text.begin());
 }
 
-int getNextWordPos(const text_utils::StringUTF8& text, int idx)
+int getNextWordPos(const text_utils::u8char_span& text, int idx)
 {
-    const text_utils::StringUTF8::CharUTF8Store& str = text.getString();
-    if (idx + 1 >= static_cast<int>(str.size()))
-        return static_cast<int>(str.size());
+    if (idx + 1 >= static_cast<int>(text.size()))
+        return static_cast<int>(text.size());
 
-    const auto it = std::find_if(str.begin() + idx + 1, str.end(), isUTF8CharWrappable);
-    return static_cast<int>(it - str.begin());
+    const auto it = std::find_if(text.begin() + idx + 1, text.end(), isUTF8CharWrappable);
+    return static_cast<int>(it - text.begin());
 }
 
-bool isWrappable(const text_utils::StringUTF8& text)
+bool isWrappable(const text_utils::u8char_span& text)
 {
-    const text_utils::StringUTF8::CharUTF8Store& str = text.getString();
-    return std::any_of(str.begin(), str.end(), isUTF8CharWrappable);
+    return std::any_of(text.begin(), text.end(), isUTF8CharWrappable);
 }
 
 int findSplitPositionForWord(Label* label,
-                             const text_utils::StringUTF8& text,
+                             const text_utils::u8char_span& text,
                              int estimatedIdx,
                              float originalLeftSpaceWidth,
                              float newLineWidth)
 {
     const bool startingNewLine = (newLineWidth == originalLeftSpaceWidth);
     if (!isWrappable(text))
-        return (startingNewLine ? static_cast<int>(text.length()) : 0);
+        return (startingNewLine ? static_cast<int>(text.size()) : 0);
 
     // The adjustment of the new line position
-    int idx             = getNextWordPos(text, estimatedIdx);
-    std::string leftStr = text.getAsCharSequence(0, idx);
+    int idx      = getNextWordPos(text, estimatedIdx);
+    auto leftStr = text.subview(0, idx);
     label->setString(leftStr);
     float textRendererWidth = label->getContentSize().width;
     if (originalLeftSpaceWidth < textRendererWidth)  // Have protruding
@@ -1974,7 +1972,7 @@ int findSplitPositionForWord(Label* label,
             int newidx = getPrevWordPos(text, idx);
             if (newidx >= 0)
             {
-                leftStr = text.getAsCharSequence(0, newidx);
+                leftStr = text.subview(0, newidx);
                 label->setString(leftStr);
                 textRendererWidth = label->getContentSize().width;
                 if (textRendererWidth <= originalLeftSpaceWidth)  // is fitted
@@ -1992,13 +1990,13 @@ int findSplitPositionForWord(Label* label,
         {
             // try to append a word
             int newidx = getNextWordPos(text, idx);
-            leftStr    = text.getAsCharSequence(0, newidx);
+            leftStr    = text.subview(0, newidx);
             label->setString(leftStr);
             textRendererWidth = label->getContentSize().width;
             if (textRendererWidth < originalLeftSpaceWidth)
             {
                 // the whole string is tested
-                if (newidx == static_cast<int>(text.length()))
+                if (newidx == static_cast<int>(text.size()))
                     return newidx;
                 idx = newidx;
                 continue;
@@ -2012,42 +2010,52 @@ int findSplitPositionForWord(Label* label,
 }
 
 int findSplitPositionForChar(Label* label,
-                             const text_utils::StringUTF8& text,
+                             const text_utils::u8char_span& text,
                              int estimatedIdx,
                              float originalLeftSpaceWidth,
                              float newLineWidth)
 {
     bool startingNewLine = (newLineWidth == originalLeftSpaceWidth);
 
-    int stringLength = static_cast<int>(text.length());
+    int stringLength = static_cast<int>(text.size());
     int leftLength   = estimatedIdx;
 
     // The adjustment of the new line position
-    std::string leftStr = text.getAsCharSequence(0, leftLength);
+    std::string_view leftStr = text.subview(0, leftLength);
     label->setString(leftStr);
     float textRendererWidth = label->getContentSize().width;
     if (originalLeftSpaceWidth < textRendererWidth)  // Have protruding
     {
         while (leftLength-- > 0)
         {
-            // try to erase a char
-            auto& ch = text.getString().at(leftLength);
-            leftStr.erase(leftStr.end() - ch._char.length(), leftStr.end());
+            auto& ch          = text.at(leftLength);
+            size_t trimLength = ch._char.length();
+
+            if (trimLength > leftStr.size()) [[unlikely]]
+                break; 
+
+            leftStr.remove_suffix(trimLength);
+
             label->setString(leftStr);
             textRendererWidth = label->getContentSize().width;
-            if (textRendererWidth <= originalLeftSpaceWidth)  // is fitted
+            if (textRendererWidth <= originalLeftSpaceWidth)
                 break;
         }
     }
     else if (textRendererWidth < originalLeftSpaceWidth)  // A wide margin
     {
+        auto first = leftStr.data();
+        auto last  = leftStr.data() + leftStr.length();
+
         while (leftLength < stringLength)
         {
             // try to append a char
-            auto& ch = text.getString().at(leftLength);
+            auto& ch = text.at(leftLength);
             ++leftLength;
-            leftStr.append(ch._char);
-            label->setString(leftStr);
+            last += ch._char.size();
+            if (last - first > text.size_bytes()) [[unlikely]]
+                break;
+            label->setString(std::string_view{first, last});
             textRendererWidth = label->getContentSize().width;
             if (originalLeftSpaceWidth < textRendererWidth)  // protruded, undo add
             {
@@ -2085,12 +2093,12 @@ void RichText::handleTextRenderer(std::string_view text,
     RichText::WrapMode wrapMode = static_cast<RichText::WrapMode>(_defaults.at(KEY_WRAP_MODE).asInt());
 
     // split text by \n
-    std::stringstream ss;
-    ss << text;
-    std::string currentText;
     size_t realLines = 0;
     auto isFirstLabel = true;
-    while (std::getline(ss, currentText, '\n'))
+
+    text_utils::u8char_span textSpan;
+
+    for (auto&& subrgn : std::views::split(text, '\n'))
     {
         if (realLines > 0)
         {
@@ -2100,8 +2108,9 @@ void RichText::handleTextRenderer(std::string_view text,
         ++realLines;
 
         size_t splitParts = 0;
-        text_utils::StringUTF8 utf8Text(currentText);
-        while (!currentText.empty())
+        std::string_view lineText{subrgn};
+        textSpan.reset(lineText);
+        while (!textSpan.empty())
         {
             if (splitParts > 0)
             {
@@ -2110,8 +2119,9 @@ void RichText::handleTextRenderer(std::string_view text,
             }
             ++splitParts;
 
-            Label* textRenderer = fileExist ? Label::createWithTTF(currentText, fontName, fontSize)
-                                            : Label::createWithSystemFont(currentText, fontName, fontSize);
+            auto utf8Text = textSpan.view();
+            Label* textRenderer = fileExist ? Label::createWithTTF(utf8Text, fontName, fontSize)
+                                            : Label::createWithSystemFont(utf8Text, fontName, fontSize);
 
             if (flags & RichElementText::ITALICS_FLAG)
                 textRenderer->enableItalics();
@@ -2156,37 +2166,33 @@ void RichText::handleTextRenderer(std::string_view text,
             //  (_leftSpaceWidth / fontSize) means how many chars can be aligned in leftSpaceWidth.
             int estimatedIdx = 0;
             if (textRendererWidth > 0.0f)
-                estimatedIdx = static_cast<int>(_leftSpaceWidth / textRendererWidth * utf8Text.length());
+                estimatedIdx = static_cast<int>(_leftSpaceWidth / textRendererWidth * textSpan.size());
             else
                 estimatedIdx = static_cast<int>(_leftSpaceWidth / fontSize);
 
             int leftLength = 0;
             if (wrapMode == WRAP_PER_WORD)
                 leftLength =
-                    findSplitPositionForWord(textRenderer, utf8Text, estimatedIdx, _leftSpaceWidth, _customSize.width);
+                    findSplitPositionForWord(textRenderer, textSpan, estimatedIdx, _leftSpaceWidth, _customSize.width);
             else
                 leftLength =
-                    findSplitPositionForChar(textRenderer, utf8Text, estimatedIdx, _leftSpaceWidth, _customSize.width);
+                    findSplitPositionForChar(textRenderer, textSpan, estimatedIdx, _leftSpaceWidth, _customSize.width);
 
             // split string
             if (leftLength > 0)
             {
-                textRenderer->setString(utf8Text.getAsCharSequence(0, leftLength));
+                textRenderer->setString(textSpan.subview(0, leftLength));
                 pushToContainer(textRenderer);
             }
 
-            text_utils::StringUTF8::CharUTF8Store& str = utf8Text.getString();
-
             // after the first line, skip any spaces to the left
-            const auto startOfWordItr = std::find_if(
-                str.begin() + leftLength, str.end(),
-                [](const text_utils::StringUTF8::CharUTF8& ch) { return !std::isspace(ch._char[0], std::locale()); });
-            if (startOfWordItr != str.end())
-                leftLength = static_cast<int>(startOfWordItr - str.begin());
+            const auto startOfWordItr = std::find_if(textSpan.begin() + leftLength, textSpan.end(),
+                [](const text_utils::u8char_span::value_type& ch) { return !std::isspace(ch._char[0], std::locale()); });
+            if (startOfWordItr != textSpan.end())
+                leftLength = static_cast<int>(startOfWordItr - textSpan.begin());
 
             // erase the chars which are processed
-            str.erase(str.begin(), str.begin() + leftLength);
-            currentText = utf8Text.getAsCharSequence();
+            textSpan.remove_prefix(leftLength);
         }
     }
 
