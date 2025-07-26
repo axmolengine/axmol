@@ -291,12 +291,12 @@ Vec2 Helper::getNodeGroupSize(const std::vector<Node*>& nodes)
           maxX = getNodeLeft(nodes[0]) + nodes[0]->getContentSize().width /* * nodes[0]->getScaleX()*/;
     float minY = getNodeTop(nodes[0]),
           maxY = getNodeTop(nodes[0]) + nodes[0]->getContentSize().height /* * nodes[0]->getScaleY()*/;
-    float x = 0.0f, y = 0.0f;
-    // float width = 0.0f, height = 0.f;
+
     for (size_t index = 1; index < nodes.size(); ++index)
     {
         Node* child = nodes[index];
-        if (minX > (x = getNodeLeft(child)))
+        auto x = getNodeLeft(child);
+        if (minX > x)
         {
             minX = x;
         }
@@ -305,7 +305,8 @@ Vec2 Helper::getNodeGroupSize(const std::vector<Node*>& nodes)
             maxX = x + child->getContentSize().width /* * child->getScaleX()*/;
         }
 
-        if (minY > (y = getNodeTop(child)))
+        auto y = getNodeTop(child);
+        if (minY > y)
         {
             minY = y;
         }
@@ -563,13 +564,12 @@ void Helper::centerHorizontally(const std::vector<Node*>& nodes)
 
     // group nodes locators
     float minX = getNodeLeft(nodes[0]), maxX = getNodeLeft(nodes[0]) + nodes[0]->getContentSize().width;
-    float x     = 0.0f;
-    float width = 0.0f;
 
     for (size_t index = 1; index < nodes.size(); ++index)
     {
         Node* child = nodes[index];
-        if (minX > (x = getNodeLeft(child)))
+        auto x      = getNodeLeft(child);
+        if (minX > x)
         {
             minX = x;
         }
@@ -643,15 +643,11 @@ void Helper::centerToParent(const std::vector<Node*>& nodes)
 
     // group nodes locators
     float minX = getNodeLeft(nodes[0]), maxX = getNodeLeft(nodes[0]) + nodes[0]->getContentSize().width;
-    float x     = 0.0f;
-    float width = 0.0f;
-
     float minY = getNodeTop(nodes[0]), maxY = getNodeTop(nodes[0]) + nodes[0]->getContentSize().height;
-    float y      = 0.0f;
-    float height = 0.0f;
 
     std::for_each(nodes.begin() + 1, nodes.end(), [&](Node* child) -> void {
-        if (minX > (x = getNodeLeft(child)))
+        auto x = getNodeLeft(child);
+        if (minX > x)
         {
             minX = x;
         }
@@ -659,7 +655,9 @@ void Helper::centerToParent(const std::vector<Node*>& nodes)
         {
             maxX = x + child->getContentSize().width;
         }
-        if (minY > (y = getNodeTop(child)))
+
+        auto y = getNodeTop(child);
+        if (minY > y)
         {
             minY = y;
         }
@@ -779,14 +777,14 @@ void Helper::alignHorizontals(const std::vector<Node*>& nodes)
         return;
 
     size_t index = 0;
-    float minCenterY, maxCenterY, centerY;
+    float minCenterY, maxCenterY;
     Node* child = nodes[index];
     minCenterY = maxCenterY = getNodeBottom(child, 0.5f);  // child.GetX(0.5f);
 
     for (index = 1; index < nodes.size(); ++index)
     {
         child   = nodes[index];
-        centerY = getNodeBottom(child, 0.5f);  // child.GetX(0.5f);
+        auto centerY = getNodeBottom(child, 0.5f);  // child.GetX(0.5f);
         if (minCenterY > centerY)
         {
             minCenterY = centerY;
@@ -813,14 +811,14 @@ void Helper::alignVerticals(const std::vector<Node*>& nodes)
         return;
 
     size_t index = 0;
-    float minCenterX, maxCenterX, centerX;
+    float minCenterX, maxCenterX;
     Node* child = nodes[index];
     minCenterX = maxCenterX = getNodeLeft(child, 0.5f);  // child.GetX(0.5f);
 
     for (index = 1; index < nodes.size(); ++index)
     {
         child   = nodes[index];
-        centerX = getNodeLeft(child, 0.5f);  // child.GetX(0.5f);
+        auto centerX = getNodeLeft(child, 0.5f);  // child.GetX(0.5f);
         if (minCenterX > centerX)
         {
             minCenterX = centerX;
@@ -920,19 +918,15 @@ void Helper::makeHorizontalSpacingEqual(std::vector<Node*>& nodes)
     if (nodes.size() < 3)
         return;
 
-    float avgHSpacing = 0;
-    Node *child, *childNext;
-    if (nodes.size() < 3)
-        return;
-
     // sort by x firstly
     std::sort(nodes.begin(), nodes.end(),
               [](Node* const left, Node* const right) { return getNodeLeft(left) < getNodeLeft(right); });
 
+    float avgHSpacing = 0;
     for (size_t index = 0; index < nodes.size() - 1; ++index)
     {
-        child     = nodes[index];
-        childNext = nodes[index + 1];
+        auto child     = nodes[index];
+        auto childNext = nodes[index + 1];
         avgHSpacing += (getNodeLeft(childNext) - getNodeLeft(child) - child->getContentSize().width);
     }
 
