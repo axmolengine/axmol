@@ -367,15 +367,15 @@ Vec2 Helper::getNodeGroupScaledSize(const std::vector<Node*>& nodes)
           maxX = Helper::getNodeLeft(nodes[0]) + nodes[0]->getContentSize().width * scale.x;
     float minY = Helper::getNodeTop(nodes[0]),
           maxY = Helper::getNodeTop(nodes[0]) + nodes[0]->getContentSize().height * scale.y;
-    float x = 0.0f, y = 0.0f;
-    // float width = 0.0f, height = 0.f;
+
     for (size_t index = 1; index < nodes.size(); ++index)
     {
         Node* child = nodes[index];
 
         scale = getScale2D(child);
 
-        if (minX > (x = Helper::getNodeLeft(child)))
+        auto x = Helper::getNodeLeft(child);
+        if (minX > x)
         {
             minX = x;
         }
@@ -384,7 +384,8 @@ Vec2 Helper::getNodeGroupScaledSize(const std::vector<Node*>& nodes)
             maxX = x + child->getContentSize().width * scale.x;
         }
 
-        if (minY > (y = Helper::getNodeTop(child)))
+        auto y = Helper::getNodeTop(child);
+        if (minY > y)
         {
             minY = y;
         }
@@ -944,11 +945,10 @@ void Helper::makeHorizontalSpacingEqual(std::vector<Node*>& nodes)
 /// <param name="nodes"></param>
 void Helper::makeHorizontalSpacingEqual(const std::vector<Node*>& nodes, float theSpacing)
 {
-    Node *child, *childNext;
     for (size_t index = 0; index < nodes.size() - 1; ++index)
     {
-        child     = nodes[index];
-        childNext = nodes[index + 1];
+        auto child     = nodes[index];
+        auto childNext = nodes[index + 1];
         setNodeLeft(childNext, theSpacing + getNodeLeft(child) + child->getContentSize().width);
     }
 }
@@ -963,9 +963,6 @@ void Helper::makeVerticalSpacingEqual(std::vector<Node*>& nodes)
         return;
 
     float avgVSpacing = 0;
-    Node *child, *childNext;
-    if (nodes.size() < 3)
-        return;
 
     // sort by y firstly
     std::sort(nodes.begin(), nodes.end(),
@@ -973,8 +970,8 @@ void Helper::makeVerticalSpacingEqual(std::vector<Node*>& nodes)
 #
     for (size_t index = 0; index < nodes.size() - 1; ++index)
     {
-        child     = nodes[index];
-        childNext = nodes[index + 1];
+        auto child     = nodes[index];
+        auto childNext = nodes[index + 1];
         avgVSpacing += (getNodeTop(childNext) - getNodeTop(child) - child->getContentSize().height);
     }
 
@@ -1040,11 +1037,10 @@ void Helper::removeVerticalSpacing(const std::vector<Node*>& nodes)
 /// <param name="nodes"></param>
 void Helper::makeVerticalSpacingEqual(const std::vector<Node*>& nodes, float theSpacing)
 {
-    Node *child, *childNext;
     for (size_t index = 0; index < nodes.size() - 1; ++index)
     {
-        child     = nodes[index];
-        childNext = nodes[index + 1];
+        auto child     = nodes[index];
+        auto childNext = nodes[index + 1];
         setNodeTop(childNext, theSpacing + getNodeTop(child) + child->getContentSize().height);
     }
 }
