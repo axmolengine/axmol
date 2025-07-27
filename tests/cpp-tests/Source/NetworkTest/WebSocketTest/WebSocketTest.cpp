@@ -428,8 +428,8 @@ WebSocketDelayTest::WebSocketDelayTest()
     addChild(menuRequest);
 
     // Send Text
-    char cmdLabel[60] = {0};
-    snprintf(cmdLabel, 60, "Send %d Text", SEND_TEXT_TIMES);
+    char buf[60];
+    auto cmdLabel = fmt::format_to_z(buf, "Send {} Text", SEND_TEXT_TIMES);
     auto labelSendText = Label::createWithTTF(cmdLabel, "fonts/arial.ttf", 20);
     auto itemSendText =
         MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketDelayTest::onMenuSendTextClicked, this));
@@ -499,9 +499,9 @@ void WebSocketDelayTest::doSendText()
         return;
     }
 
-    char statueBuffer[80] = {0};
-    snprintf(statueBuffer, 80, "Sending #%d/%d text", _sendTextTimes, SEND_TEXT_TIMES);
-    _sendTextStatus->setString(statueBuffer);
+    char buf[80];
+    auto status = fmt::format_to_z(buf, "Sending #{}/{} text", _sendTextTimes, SEND_TEXT_TIMES);
+    _sendTextStatus->setString(status);
     _sendTimeMircoSec = getNowMircroSeconds();
     _wsiSendText->send("Hello WebSocket, I'm a text message.");
 }
@@ -532,14 +532,14 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
     if (!data.isBinary)
     {
         _receiveTextTimes++;
-        char times[100];
-        fmt::format_to_z(times, "{}", _receiveTextTimes);
-        std::string textStr = std::string("response text msg: ") + data.bytes + ", " + times;
+        char buf[100];
+        auto infoStr = fmt::format_to_z(buf, "{}", _receiveTextTimes);
+        std::string textStr = (std::string("response text msg: ") + data.bytes + ", ");
+        textStr += infoStr;
         AXLOGD("{}", textStr);
         doReceiveText();
-        memset(times, 0, 100);
-        snprintf(times, 100, "total delay %f seconds", (float)(_totalDelayMircoSec / 1000000.0));
-        _progressStatus->setString(times);
+        infoStr = fmt::format_to_z(buf, "total delay {} seconds", (float)(_totalDelayMircoSec / 1000000.0));
+        _progressStatus->setString(infoStr);
     }
 }
 

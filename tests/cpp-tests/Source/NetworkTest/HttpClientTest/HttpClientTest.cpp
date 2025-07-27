@@ -342,9 +342,9 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient* sender, HttpResponse* re
     }
 
     int32_t statusCode    = response->getResponseCode();
-    char statusString[64] = {};
-    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, tag.data());
-    _labelStatusCode->setString(statusString);
+    char tmp[64] = {};
+    auto statusStr = fmt::format_to_z(tmp, "HTTP Status Code: {}, tag = {}", statusCode, tag.data());
+    _labelStatusCode->setString(statusStr);
     AXLOGI("response code: {}", statusCode);
 
     if (response->getResponseCode() != 200)
@@ -493,14 +493,14 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient* sender, Htt
     }
 
     int32_t statusCode    = response->getResponseCode();
-    char statusString[64] = {};
-    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, tag.data());
-    _labelStatusCode->setString(statusString);
+    char tmp[64] = {};
+    auto statusStr = fmt::format_to_z(tmp, "HTTP Status Code: {}, tag = {}", statusCode, tag);
+    _labelStatusCode->setString(statusStr);
     AXLOGD("response code: {}", statusCode);
 
     _totalProcessedRequests++;
-    sprintf(statusString, "Got %d of %d expected http requests", _totalProcessedRequests, _totalExpectedRequests);
-    _labelTrakingData->setString(statusString);
+    statusStr = fmt::format_to_z(tmp, "Got {} of {} expected http requests", _totalProcessedRequests, _totalExpectedRequests);
+    _labelTrakingData->setString(statusStr);
 
     if (!response->isSucceed())
     {

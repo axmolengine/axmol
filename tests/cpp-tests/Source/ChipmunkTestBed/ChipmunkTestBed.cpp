@@ -189,12 +189,12 @@ void ChipmunkTestBed::DrawInfo()
     max_constraints = constraints > max_constraints ? constraints : max_constraints;
 
     char buffer[1024];
-    const char* format =
-        "Arbiters: %d (%d) - "
-        "Contact Points: %d (%d)\n"
-        "Other Constraints: %d, Iterations: %d\n"
-        "Constraints x Iterations: %d (%d)\n"
-        "Time:% 5.2fs, KE:% 5.2e";
+    constexpr auto format =
+        "Arbiters: {} ({}) - "
+        "Contact Points: {} ({})\n"
+        "Other Constraints: {}, Iterations: {}\n"
+        "Constraints x Iterations: {} ({})\n"
+        "Time:{:5.2f}s, KE:{:5.2e}"sv;
 
     cpArray* bodies = _space->dynamicBodies;
     cpFloat ke      = 0.0f;
@@ -207,10 +207,10 @@ void ChipmunkTestBed::DrawInfo()
         ke += body->m * cpvdot(body->v, body->v) + body->i * body->w * body->w;
     }
 
-    sprintf(buffer, format, arbiters, max_arbiters, points, max_points, _space->constraints->num, _space->iterations,
+    auto msg = fmt::format_to_z(buffer, format, arbiters, max_arbiters, points, max_points, _space->constraints->num, _space->iterations,
             constraints, max_constraints, ChipmunkDemoTime, (ke < 1e-10f ? 0.0f : ke));
 
-    drawInfo->setString(buffer);
+    drawInfo->setString(msg);
 }
 
 static char PrintStringBuffer[1024 * 8];

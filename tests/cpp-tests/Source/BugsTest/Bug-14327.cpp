@@ -79,9 +79,9 @@ void Bug14327Layer::update(float dt)
     if (delta > 0)
     {
         ldiv_t ret = ldiv(delta, 60L);
-        char str[100];
-        snprintf(str, 100, "%s%.2ld:%.2ld", "Edit control will be removed after ", ret.quot, ret.rem);
-        _TTFShowTime->setString(str);
+        char buf[100];
+        auto infoStr = fmt::fotmat_to_z(str, buf, "{}{:.2d}:{:.2d}", "Edit control will be removed after ", ret.quot, ret.rem);
+        _TTFShowTime->setString(infoStr);
     }
     else
     {

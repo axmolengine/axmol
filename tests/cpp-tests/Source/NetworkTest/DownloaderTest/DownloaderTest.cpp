@@ -120,17 +120,17 @@ struct DownloaderTest : public TestCase
         return bg;
     }
 
-    static void sbtoa(double speedInBytes, char* buf, size_t buf_len)
+    static auto format_byte_per_sec(double speedInBytes, char* buf, size_t buf_len)
     {
         double speedInBits = speedInBytes;
         if (speedInBits < 1024)
-            snprintf(buf, buf_len, "%gB", speedInBits);
+            return fmt::format_to_n(buf, buf_len, "{:g}B", speedInBits);
         else if (speedInBits < 1024 * 1024)
-            snprintf(buf, buf_len, "%.1lfKB", speedInBits / 1024);
+            return fmt::format_to_n(buf, buf_len, "{:.1f}KB", speedInBits / 1024);
         else if (speedInBits < 1024 * 1024 * 1024)
-            snprintf(buf, buf_len, "%.1lfMB", speedInBits / 1024 / 1024);
+            return fmt::format_to_n(buf, buf_len, "{:.1f}MB", speedInBits / 1024 / 1024);
         else
-            snprintf(buf, buf_len, "%.1lfGB", speedInBits / 1024 / 1024 / 1024);
+            return fmt::format_to_n(buf, buf_len, "{:.1f}GB", speedInBits / 1024 / 1024 / 1024);
     }
 
     virtual void onEnter() override
@@ -233,7 +233,8 @@ struct DownloaderTest : public TestCase
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
             status->setString(buf);
 
-            sbtoa(task.progressInfo.speedInBytes, buf, 128);
+            auto ret = format_byte_per_sec(task.progressInfo.speedInBytes, buf, 128);
+            *ret.out = '\0';
             AXLOGI("[{}%] speed: {}/s", percent, buf);
         };
 

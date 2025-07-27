@@ -259,45 +259,42 @@ void LightTest::update(float delta)
 
 void LightTest::SwitchLight(Object* sender, LightType lightType)
 {
+    char tmp[32];
     switch (lightType)
     {
     case LightType::AMBIENT:
     {
-        char str[32];
         bool isON = !_ambientLight->isEnabled();
-        sprintf(str, "Ambient Light %s", isON == true ? "ON" : "OFF");
+        auto infoStr = fmt::format_to_z(tmp, "Ambient Light {}", isON == true ? "ON" : "OFF");
         _ambientLight->setEnabled(isON);
-        _ambientLightLabel->setString(str);
+        _ambientLightLabel->setString(infoStr);
     }
     break;
 
     case LightType::DIRECTIONAL:
     {
-        char str[32];
         bool isON = !_directionalLight->isEnabled();
-        sprintf(str, "Directional Light %s", isON == true ? "ON" : "OFF");
+        auto infoStr = fmt::format_to_z(tmp, "Directional Light {}", isON == true ? "ON" : "OFF");
         _directionalLight->setEnabled(isON);
-        _directionalLightLabel->setString(str);
+        _directionalLightLabel->setString(infoStr);
     }
     break;
 
     case LightType::POINT:
     {
-        char str[32];
         bool isON = !_pointLight->isEnabled();
-        sprintf(str, "Point Light %s", isON == true ? "ON" : "OFF");
+        auto infoStr = fmt::format_to_z(tmp, "Point Light {}", isON == true ? "ON" : "OFF");
         _pointLight->setEnabled(isON);
-        _pointLightLabel->setString(str);
+        _pointLightLabel->setString(infoStr);
     }
     break;
 
     case LightType::SPOT:
     {
-        char str[32];
         bool isON = !_spotLight->isEnabled();
-        sprintf(str, "Spot Light %s", isON == true ? "ON" : "OFF");
+        auto infoStr = fmt::format_to_z(tmp, "Spot Light {}", isON == true ? "ON" : "OFF");
         _spotLight->setEnabled(isON);
-        _spotLightLabel->setString(str);
+        _spotLightLabel->setString(infoStr);
     }
     break;
 

@@ -125,8 +125,8 @@ void Particle3DTestDemo::update(float delta)
             }
         }
 
-        char str[128];
-        sprintf(str, "Particle Count: %d", count);
+        char buf[128];
+        auto str = fmt::format_to_z(buf, "Particle Count: {}", count);
         _particleLab->setString(str);
     }
 }

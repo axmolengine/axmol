@@ -754,35 +754,33 @@ void TextureCache::waitForQuit()
 
 std::string TextureCache::getCachedTextureInfo() const
 {
-    std::string buffer;
-    char buftmp[4096];
+    std::string ret;
+
+    char tmp[1024];
 
     unsigned int count      = 0;
     unsigned int totalBytes = 0;
 
     for (auto&& texture : _textures)
     {
-
-        memset(buftmp, 0, sizeof(buftmp));
-
         Texture2D* tex   = texture.second;
         unsigned int bpp = tex->getBitsPerPixelForFormat();
         // Each texture takes up width * height * bytesPerPixel bytes.
         auto bytes = tex->getPixelsWide() * tex->getPixelsHigh() * bpp / 8;
         totalBytes += bytes;
         count++;
-        snprintf(buftmp, sizeof(buftmp) - 1, "\"%s\" rc=%d id=%p %d x %d @ %d bpp => %d KB\n", texture.first.c_str(),
-                 (int32_t)tex->getReferenceCount(), tex->getBackendTexture(), (int32_t)tex->getPixelsWide(),
-                 (int32_t)tex->getPixelsHigh(), (int32_t)bpp, (int32_t)bytes / 1024);
+        auto msg = fmt::format_to_z(tmp, "\"{}\" rc={} id={} {} x {} @ {} bpp => {} KB\n", texture.first,
+                 tex->getReferenceCount(), fmt::ptr(tex->getBackendTexture()), tex->getPixelsWide(),
+                 tex->getPixelsHigh(), bpp, bytes / 1024);
 
-        buffer += buftmp;
+        ret += msg;
     }
 
-    snprintf(buftmp, sizeof(buftmp) - 1, "TextureCache dumpDebugInfo: %ld textures, for %lu KB (%.2f MB)\n",
-             (long)count, (long)totalBytes / 1024, totalBytes / (1024.0f * 1024.0f));
-    buffer += buftmp;
+    auto msg = fmt::format_to_z(tmp, "TextureCache dumpDebugInfo: {} textures, for {} KB ({:.2f} MB)\n",
+             count, totalBytes / 1024, totalBytes / (1024.0f * 1024.0f));
+    ret += msg;
 
-    return buffer;
+    return ret;
 }
 
 void TextureCache::renameTextureWithKey(std::string_view srcName, std::string_view dstName)

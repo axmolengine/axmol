@@ -40,6 +40,7 @@
 #endif
 
 #include "base/axstd.h"
+#include "base/format.h"
 #include "xxhash/xxhash.h"
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
@@ -124,13 +125,13 @@ DriverGL::DriverGL()
     if ((!_verInfo.es && (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))) ||
         (_verInfo.es && _verInfo.major < REQUIRED_GLES_MAJOR))
     {
-        char strComplain[256] = {0};
+        char strComplain[256];
 #if AX_GLES_PROFILE == 0
-        sprintf(strComplain,
-                "OpeGL 3.3+ is required (your version is %s). Please upgrade the driver of your video card.", _version);
+        fmt::format_to_z(strComplain,
+                "OpeGL 3.3+ is required (your version is {}). Please upgrade the driver of your video card.", _version);
 #else
-        sprintf(strComplain,
-                "OpeGL ES %d.%d+ is required (your version is %s). Please upgrade the driver of your video card.",
+        fmt::format_to_z(strComplain,
+                "OpeGL ES {}.{}+ is required (your version is {}). Please upgrade the driver of your video card.",
                 REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
 #endif
         messageBox(strComplain, "OpenGL version too old");

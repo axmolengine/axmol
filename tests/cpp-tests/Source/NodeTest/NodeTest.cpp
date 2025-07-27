@@ -1238,10 +1238,10 @@ void NodeNameTest::test(float dt)
     auto parent = Node::create();
 
     // setName(), getName() and getChildByName()
-    char name[20];
+    char tmp[20];
     for (int i = 0; i < 10; ++i)
     {
-        sprintf(name, "node%d", i);
+        auto name = fmt::format_to_z(tmp, "node{}", i);
         auto node = Node::create();
         node->setName(name);
         parent->addChild(node);
@@ -1249,7 +1249,7 @@ void NodeNameTest::test(float dt)
 
     for (int i = 0; i < 10; ++i)
     {
-        sprintf(name, "node%d", i);
+        auto name = fmt::format_to_z(tmp, "node{}", i);
         auto node = parent->getChildByName(name);
         AXLOGD("find child: {}", node->getName());
     }
@@ -1261,7 +1261,7 @@ void NodeNameTest::test(float dt)
     for (int i = 0; i < 100; ++i)
     {
         auto node = Node::create();
-        sprintf(name, "node%d", i);
+        auto name = fmt::format_to_z(tmp, "node{}", i);
         node->setName(name);
         parent->addChild(node);
     }
@@ -1287,7 +1287,7 @@ void NodeNameTest::test(float dt)
     for (int i = 0; i < 10; ++i)
     {
         auto node = Node::create();
-        sprintf(name, "node%d", i);
+        auto name = fmt::format_to_z(tmp, "node{}", i);
         node->setName(name);
         parent->addChild(node);
 
@@ -1318,7 +1318,7 @@ void NodeNameTest::test(float dt)
     for (int i = 0; i < 10; ++i)
     {
         auto node = Node::create();
-        sprintf(name, "node%d", i);
+        auto name = fmt::format_to_z(tmp, "node{}", i);
         node->setName(name);
         parent->addChild(node);
 
@@ -1365,14 +1365,14 @@ void NodeNameTest::test(float dt)
     for (int j = 0; j < 10; j++)
     {
         auto node = Node::create();
-        sprintf(name, "node%d", j);
+        auto name = fmt::format_to_z(tmp, "node{}", j);
         node->setName(name);
         parent->addChild(node);
 
         for (int k = 0; k < 10; ++k)
         {
             auto child = Node::create();
-            sprintf(name, "node%d", k);
+            auto name = fmt::format_to_z(tmp, "node{}", k);
             child->setName(name);
             node->addChild(child);
         }

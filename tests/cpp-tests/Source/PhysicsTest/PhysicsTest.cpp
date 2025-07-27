@@ -1436,25 +1436,25 @@ void PhysicsContactTest::resetTest()
     float prevMenuPos = getSubtitleLabel()->getPosition().y - getSubtitleLabel()->getContentSize().height;
     float menuStep    = (getSubtitleLabel()->getPosition().y - getRestartTestItem()->getPosition().y) * 0.25f;
     std::string strNum;
-    char buffer[10];
+    char buf[10];
 
-    sprintf(buffer, "%d", _yellowBoxNum);
-    auto label = Label::createWithTTF(buffer, "fonts/arial.ttf", 32);
+    auto mark = fmt::format_to_z(buf, "{}", _yellowBoxNum);
+    auto label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos));
 
-    sprintf(buffer, "%d", _blueBoxNum);
-    label = Label::createWithTTF(buffer, "fonts/arial.ttf", 32);
+    mark = fmt::format_to_z(buf, "{}", _blueBoxNum);
+    label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
 
-    sprintf(buffer, "%d", _yellowTriangleNum);
-    label = Label::createWithTTF(buffer, "fonts/arial.ttf", 32);
+    mark = fmt::format_to_z(buf, "{}", _yellowTriangleNum);
+    label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
 
-    sprintf(buffer, "%d", _blueTriangleNum);
-    label = Label::createWithTTF(buffer, "fonts/arial.ttf", 32);
+    mark = fmt::format_to_z(buf, "{}", _blueTriangleNum);
+    label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
 

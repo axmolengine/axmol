@@ -28,6 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "2d/AnchoredSprite.h"
 #include "renderer/backend/DriverBase.h"
+#include "base/format.h"
 
 namespace ax
 {
@@ -127,8 +128,8 @@ AnchoredSprite* AnchoredSprite::createWithSpriteFrameName(std::string_view sprit
     SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
 
 #if _AX_DEBUG > 0
-    char msg[256] = {0};
-    snprintf(msg, sizeof(msg), "Invalid spriteFrameName: %s", spriteFrameName.data());
+    char msg[256];
+    fmt::format_to_z(msg, "Invalid spriteFrameName: {}", spriteFrameName);
     AXASSERT(frame != nullptr, msg);
 #endif
 

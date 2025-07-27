@@ -101,8 +101,8 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Object* sender)
 {
     static int counter = 0;
 
-    char png[20];
-    sprintf(png, "image-pma-%d.png", counter);
+    char buf[20];
+    auto fileName = fmt::format_to_z(buf, "image-pma-{}.png", counter);
 
     auto callback = [this](RenderTexture* rt, std::string_view path) {
         auto sprite = Sprite::create(path);
@@ -114,10 +114,10 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Object* sender)
     };
 
     _target->retain();
-    _target->saveToFile(png, Image::Format::PNG, true, callback);
+    _target->saveToFile(fileName, Image::Format::PNG, true, callback);
     // Add this function to avoid crash if we switch to a new scene.
     Director::getInstance()->getRenderer()->render();
-    AXLOGD("Image saved {}", png);
+    AXLOGD("Image saved {}", fileName);
 
     counter++;
 }
@@ -126,8 +126,8 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Object* sender)
 {
     static int counter = 0;
 
-    char png[20];
-    sprintf(png, "image-no-pma-%d.png", counter);
+    char buf[20];
+    auto fileName = fmt::format_to_z(buf, "image-no-pma-{}.png", counter);
 
     auto callback = [this](RenderTexture* rt, std::string_view path) {
         auto sprite = Sprite::create(path);
@@ -139,11 +139,11 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Object* sender)
     };
 
     _target->retain();
-    _target->saveToFileAsNonPMA(png, Image::Format::PNG, true, callback);
+    _target->saveToFileAsNonPMA(fileName, Image::Format::PNG, true, callback);
 
     // Add this function to avoid crash if we switch to a new scene.
     Director::getInstance()->getRenderer()->render();
-    AXLOGD("Image saved {}", png);
+    AXLOGD("Image saved {}", fileName);
 
     counter++;
 }

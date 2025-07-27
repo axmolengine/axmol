@@ -814,11 +814,11 @@ void Terrain::cacheUniformAttribLocation()
     }
     else
     {
+        char str[20];
         for (int i = 0; i < _maxDetailMapValue; ++i)
         {
-            char str[20];
-            snprintf(str, sizeof(str), "u_tex%d", i);
-            _detailMapLocation[i] = _programState->getUniformLocation(str);
+            auto key = fmt::format_to_z(str, "u_tex{}", i);
+            _detailMapLocation[i] = _programState->getUniformLocation(key);
         }
 
         _detailMapSizeLocation = _programState->getUniformLocation("u_detailSize");  // float[4]

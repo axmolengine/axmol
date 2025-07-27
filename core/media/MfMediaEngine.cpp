@@ -16,6 +16,8 @@
 #    include "MFUtils.h"
 #    include "yasio/string_view.hpp"
 
+#    include "base/format.h"
+
 namespace ax
 {
 
@@ -342,7 +344,7 @@ void MfMediaEngine::OnMediaEngineEvent(uint32_t meEvent)
                 USHORT errorCode = error->GetErrorCode();
                 HRESULT hr       = error->GetExtendedErrorCode();
                 char buff[128]   = {};
-                sprintf_s(buff, "ERROR: Media Foundation Event Error %u (%08X)\n", errorCode,
+                fmt::format_to_z(buff, "ERROR: Media Foundation Event Error {} ({:08X})\n", errorCode,
                           static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
             }

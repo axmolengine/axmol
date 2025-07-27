@@ -36,7 +36,7 @@ class TestObject : public Object
 public:
     TestObject() : _name("") {}
 
-    TestObject(std::string name) : _name(name) { AXLOGD("TestObject:{} is created", _name); }
+    TestObject(std::string_view name) : _name(name) { AXLOGD("TestObject:{} is created", _name); }
 
     ~TestObject()
     {
@@ -95,10 +95,10 @@ bool ReleasePoolTest::init()
     // example of using temple autorelease pool
     {
         AutoreleasePool pool2;
-        char name[20];
+        char buf[20];
         for (int i = 0; i < 100; ++i)
         {
-            snprintf(name, 20, "object%d", i);
+            auto name = fmt::format_to_z(buf, "object{}", i);
             TestObject* tmpObj = new TestObject(name);
             tmpObj->autorelease();
         }

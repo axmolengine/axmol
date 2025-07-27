@@ -64,8 +64,8 @@ IntervalTest::IntervalTest()
         [&](float dt) {
             _time1 += dt;
 
-            char str[10] = {0};
-            sprintf(str, "%2.1f", _time1);
+            char tmp[10];
+            auto str = fmt::format_to_z(tmp, "{:2.1f}", _time1);
             _label1->setString(str);
         },
         "step_1");
@@ -74,8 +74,8 @@ IntervalTest::IntervalTest()
         [&](float dt) {
             _time2 += dt;
 
-            char str[10] = {0};
-            sprintf(str, "%2.1f", _time2);
+            char tmp[10];
+            auto str = fmt::format_to_z(tmp, "{:2.1f}", _time2);
             _label2->setString(str);
         },
         0.5, "step_2");
@@ -84,8 +84,8 @@ IntervalTest::IntervalTest()
         [&](float dt) {
             _time3 += dt;
 
-            char str[10] = {0};
-            sprintf(str, "%2.1f", _time3);
+            char tmp[10];
+            auto str = fmt::format_to_z(tmp, "{:2.1f}", _time3);
             _label3->setString(str);
         },
         1, "step_3");
@@ -94,8 +94,8 @@ IntervalTest::IntervalTest()
         [&](float dt) {
             _time4 += dt;
 
-            char str[10] = {0};
-            sprintf(str, "%2.1f", _time4);
+            char tmp[10];
+            auto str = fmt::format_to_z(tmp, "{:2.1f}", _time4);
             _label4->setString(str);
         },
         2, "step_4");
@@ -144,7 +144,7 @@ IntervalTest::~IntervalTest()
 void IntervalTest::update(float dt)
 {
     _time0 += dt;
-    char time[10] = {0};
-    sprintf(time, "%2.1f", _time0);
-    _label0->setString(time);
+    char tmp[10];
+    auto stime = fmt::format_to_z(tmp, "{:2.1f}", _time0);
+    _label0->setString(stime);
 }

@@ -547,10 +547,10 @@ void LabelKeyboardEventTest::onEnter()
 
     auto listener          = EventListenerKeyboard::create();
     listener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
-        char buf[100] = {0};
-        sprintf(buf, "Key %d was pressed!", (int)keyCode);
+        char buf[100];
+        auto infoStr = fmt::format_to_z(buf, "Key {} was pressed!", (int)keyCode);
         auto label = static_cast<Label*>(event->getCurrentTarget());
-        label->setString(buf);
+        label->setString(infoStr);
 
         switch (keyCode)
         {
@@ -587,10 +587,10 @@ void LabelKeyboardEventTest::onEnter()
     };
 
     listener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event) {
-        char buf[100] = {0};
-        sprintf(buf, "Key %d was released!", (int)keyCode);
+        char buf[100];
+        auto infoStr = fmt::format_to_z(buf, "Key {} was released!", (int)keyCode);
         auto label = static_cast<Label*>(event->getCurrentTarget());
-        label->setString(buf);
+        label->setString(infoStr);
     };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, statusLabel);
@@ -894,12 +894,12 @@ void DirectorEventTest::onEnter()
                                                  std::bind(&DirectorEventTest::onEvent2, this, std::placeholders::_1));
     _event3 = dispatcher->addCustomEventListener(Director::EVENT_AFTER_DRAW, [&](EventCustom* event) {
         char buf[20];
-        snprintf(buf, sizeof(buf) - 1, "Draw: %d", _count3++);
+        auto infoStr = fmt::format_to_z(buf, "Draw: {}", _count3++);
         _label3->setString(buf);
     });
     _event4 = dispatcher->addCustomEventListener(Director::EVENT_PROJECTION_CHANGED, [&](EventCustom* event) {
         char buf[20];
-        snprintf(buf, sizeof(buf) - 1, "Projection: %d", _count4++);
+        auto infoStr = fmt::format_to_z(buf, "Projection: {}", _count4++);
         _label4->setString(buf);
     });
 
@@ -944,15 +944,15 @@ void DirectorEventTest::onExit()
 void DirectorEventTest::onEvent1(EventCustom* event)
 {
     char buf[20];
-    snprintf(buf, sizeof(buf) - 1, "Update: %d", _count1++);
-    _label1->setString(buf);
+    auto infoStr = fmt::format_to_z(buf, "Update: {}", _count1++);
+    _label1->setString(infoStr);
 }
 
 void DirectorEventTest::onEvent2(EventCustom* event)
 {
     char buf[20];
-    snprintf(buf, sizeof(buf) - 1, "Visit: %d", _count2++);
-    _label2->setString(buf);
+    auto infoStr = fmt::format_to_z(buf, "Visit: {}", _count2++);
+    _label2->setString(infoStr);
 }
 
 std::string DirectorEventTest::title() const

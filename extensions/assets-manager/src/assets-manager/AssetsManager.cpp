@@ -39,6 +39,8 @@
 #endif
 #include <ioapi.h>
 
+#include "base/format.h"
+
 NS_AX_EXT_BEGIN
 
 using namespace std;
@@ -105,10 +107,9 @@ voidpf AssetManager_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t nu
 
     if (pos != std::string::npos && pos != 0)
     {
-        const size_t bufferSize = 5;
-        char extensionBuffer[bufferSize];
-        snprintf(&extensionBuffer[0], bufferSize, ".z%02u", number_disk + 1);
-        diskFilename.replace(pos, std::min((size_t)4, zipFileInfo->zipFileName.size() - pos), extensionBuffer);
+        char buf[5];
+        auto ext = fmt::format_to_z(buf, ".z{:02d}", number_disk + 1);
+        diskFilename.replace(pos, std::min((size_t)4, zipFileInfo->zipFileName.size() - pos), ext);
         return AssetManager_open_file_func(opaque, diskFilename.c_str(), mode);
     }
 
@@ -280,9 +281,7 @@ void AssetsManager::checkStoragePath()
 // Multiple key names
 static std::string keyWithHash(const char* prefix, std::string_view url)
 {
-    char buf[256];
-    snprintf(buf, sizeof(buf), "%s%zd", prefix, std::hash<std::string_view>()(url));
-    return buf;
+    return fmt::format("{}{}", prefix, std::hash<std::string_view>()(url));
 }
 
 // hashed version

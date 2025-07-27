@@ -103,11 +103,9 @@ ProfilingTimer::~ProfilingTimer() {}
 
 std::string ProfilingTimer::getDescription() const
 {
-    static char s_description[512] = {0};
-
-    snprintf(s_description, sizeof(s_description), "%s ::\tavg1: %u,\tavg2: %u,\tmin: %u,\tmax: %u,\ttotal: %.2fs,\tnr calls: %d",
-            _nameStr.c_str(), _averageTime1, _averageTime2, minTime, maxTime, totalTime / 1000000., numberOfCalls);
-    return s_description;
+    std::string description = fmt::format("{} ::\tavg1: {},\tavg2: {},\tmin: {},\tmax: {},\ttotal: {:.2f}s,\tnr calls: {}",
+            _nameStr, _averageTime1, _averageTime2, minTime, maxTime, totalTime / 1000000., numberOfCalls);
+    return description;
 }
 
 void ProfilingTimer::reset()

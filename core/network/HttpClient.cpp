@@ -358,12 +358,12 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
                 if (!(headerFlags & HeaderFlag::CONTENT_TYPE))
                     obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
-                char strContentLength[128] = {0};
                 auto requestData           = request->getRequestData();
                 auto requestDataSize       = request->getRequestDataSize();
-                snprintf(strContentLength, sizeof(strContentLength), "Content-Length: %d\r\n\r\n",
+                char buf[128];
+                auto strConentLen = fmt::format_to_z(buf, "Content-Length: %d\r\n\r\n",
                          static_cast<int>(requestDataSize));
-                obs.write_bytes(strContentLength);
+                obs.write_bytes(strConentLen);
 
                 if (requestData && requestDataSize > 0)
                     obs.write_bytes(cxx17::string_view{requestData, static_cast<size_t>(requestDataSize)});
