@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef _AX_LAYOUTCOMPONENT_H_
-#define _AX_LAYOUTCOMPONENT_H_
+#pragma once
+
 #include "2d/Component.h"
 #include "ui/GUIExport.h"
 
@@ -430,4 +430,3 @@ protected:
 // end of ui group
 /// @}
 }
-#endif /* defined(_AX_LAYOUTCOMPONENT_H_) */

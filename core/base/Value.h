@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_VALUE_H_
-#define _AX_VALUE_H_
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/Macros.h"
@@ -289,5 +288,3 @@ inline const ax::Value& optValue(const ValueMap& dictionary, std::string_view ke
 /** @} */
 
 }
-
-#endif /* defined(_AX_VALUE_H_) */

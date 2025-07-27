@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_FONTFNT_H_
-#define _AX_FONTFNT_H_
+#pragma once
 
 /// @cond DO_NOT_SHOW
 
@@ -186,5 +185,3 @@ protected:
 /// @endcond
 
 }
-
-#endif /* defined(_AX_FONTFNT_H_) */

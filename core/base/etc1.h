@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef __etc1_h__
-#define __etc1_h__
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #define ETC1_ENCODED_BLOCK_SIZE 8
@@ -46,6 +46,3 @@ etc1_uint32 etc1_pkm_get_width(const etc1_byte* pHeader);
 // Read the image height from a PKM header
 
 etc1_uint32 etc1_pkm_get_height(const etc1_byte* pHeader);
-
-/// @endcond
-#endif

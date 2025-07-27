@@ -24,9 +24,7 @@
  THE SOFTWARE.
 
  ****************************************************************************/
-
-#ifndef _AX_MOUSEEVENT_H_
-#define _AX_MOUSEEVENT_H_
+#pragma once
 
 #include "base/Event.h"
 #include "math/Math.h"
@@ -196,5 +194,3 @@ private:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_MOUSEEVENT_H_) */

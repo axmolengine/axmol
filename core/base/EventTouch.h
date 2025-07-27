@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_TOUCHEVENT_H_
-#define _AX_TOUCHEVENT_H_
+#pragma once
 
 #include "base/Event.h"
 #include <vector>
@@ -99,5 +98,3 @@ private:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_TOUCHEVENT_H_) */

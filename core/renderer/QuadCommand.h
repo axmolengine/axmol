@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_QUADCOMMAND_H_
-#define _AX_QUADCOMMAND_H_
+#pragma once
 
 #include <vector>
 
@@ -88,4 +87,3 @@ protected:
  end of support group
  @}
  */
-#endif  //_AX_QUADCOMMAND_H_

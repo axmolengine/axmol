@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef AXMOL_ATITC_
-#define AXMOL_ATITC_
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #include "platform/StdC.h"
@@ -42,6 +42,4 @@ void atitc_decode(uint8_t* encode_data,
                   const int pixelsWidth,
                   const int pixelsHeight,
                   ATITCDecodeFlag decodeFlag);
-
 /// @endcond
-#endif /* defined(AXMOL_ATITC_) */

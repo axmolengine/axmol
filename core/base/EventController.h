@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_EVENTCONTROLLER_H_
-#define _AX_EVENTCONTROLLER_H_
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/Event.h"
@@ -111,5 +110,3 @@ protected:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_EVENTCONTROLLER_H_) */

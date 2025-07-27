@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_ACCELEROMETERLISTENER_H_
-#define _AX_ACCELEROMETERLISTENER_H_
+#pragma once
 
 #include "base/EventListener.h"
 #include "base/Types.h"
@@ -75,5 +74,3 @@ private:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_ACCELEROMETERLISTENER_H_) */

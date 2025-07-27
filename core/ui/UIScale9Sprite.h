@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AXUI_SCALE9SPRITE_H_
-#define _AXUI_SCALE9SPRITE_H_
+#pragma once
 
 #include "2d/Sprite.h"
 #include "2d/SpriteFrame.h"
@@ -553,5 +552,3 @@ protected:
 }  // end of namespace
 // end of ui group
 /// @}
-
-#endif /* defined(_AXUI_SCALE9SPRITE_H_) */

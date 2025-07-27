@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_EVENTFOCUS_H_
-#define _AX_EVENTFOCUS_H_
+#pragma once
 
 #include "base/Event.h"
 
@@ -66,5 +65,3 @@ private:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_EVENTFOCUS_H_) */

@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_CONTROLLER_H_
-#define _AX_CONTROLLER_H_
+#pragma once
+
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
      defined(_WIN32) /* win32 & winuwp */ || \
@@ -251,4 +251,3 @@ private:
 
 }
 #endif
-#endif /* defined(_AX_CONTROLLER_H_) */

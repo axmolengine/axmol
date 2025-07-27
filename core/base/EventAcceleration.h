@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_ACCELEROMETEREVENT_H_
-#define _AX_ACCELEROMETEREVENT_H_
+#pragma once
 
 #include "base/Event.h"
 #include "base/Types.h"
@@ -58,5 +57,3 @@ private:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_ACCELEROMETEREVENT_H_) */
