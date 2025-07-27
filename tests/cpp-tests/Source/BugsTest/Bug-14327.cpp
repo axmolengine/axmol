@@ -82,7 +82,7 @@ void Bug14327Layer::update(float dt)
     {
         ldiv_t ret = ldiv(delta, 60L);
         char buf[100];
-        auto infoStr = fmt::fotmat_to_z(str, buf, "{}{:.2d}:{:.2d}", "Edit control will be removed after ", ret.quot, ret.rem);
+        auto infoStr = fmt::format_to_z(str, buf, "{}{:.2d}:{:.2d}", "Edit control will be removed after ", ret.quot, ret.rem);
         _TTFShowTime->setString(infoStr);
     }
     else
