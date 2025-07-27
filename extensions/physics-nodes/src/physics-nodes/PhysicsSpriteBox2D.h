@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#ifndef __PHYSICSNODES_CCPHYSICSSPRITEBOX2D_H__
-#define __PHYSICSNODES_CCPHYSICSSPRITEBOX2D_H__
+#pragma once
 
 #include "2d/Sprite.h"
 #include "extensions/ExtensionMacros.h"
@@ -133,5 +131,3 @@ protected:
 };
 
 NS_AX_EXT_END
-
-#endif  // __PHYSICSNODES_CCPHYSICSSPRITEBOX2D_H__

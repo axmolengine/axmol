@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_EXTENTIONS_CCCOMATTRIBUTE_H__
-#define __AX_EXTENTIONS_CCCOMATTRIBUTE_H__
+#pragma once
 
 #include "ComBase.h"
 #include "2d/Component.h"
@@ -68,5 +67,3 @@ private:
 };
 
 }  // namespace cocostudio
-
-#endif  // __AX_EXTENTIONS_CCCOMATTRIBUTE_H__

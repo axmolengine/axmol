@@ -26,8 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __SUPPORT_CCPROFILING_H__
-#define __SUPPORT_CCPROFILING_H__
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #include <string>
@@ -146,6 +146,3 @@ extern bool kProfilerCategoryParticles;
 /// @}
 
 }
-
-/// @endcond
-#endif  // __SUPPORT_CCPROFILING_H__

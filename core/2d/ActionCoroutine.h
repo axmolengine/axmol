@@ -27,8 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ACTION_CCCOROUTINE_ACTION_H__
-#define __ACTION_CCCOROUTINE_ACTION_H__
+#pragma once
 
 #include "2d/Action.h"
 
@@ -155,5 +154,3 @@ private:
 };
 
 }
-
-#endif  // __ACTION_CCCOROUTINE_ACTION_H__

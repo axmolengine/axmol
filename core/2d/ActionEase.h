@@ -26,8 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ACTION_CCEASE_ACTION_H__
-#define __ACTION_CCEASE_ACTION_H__
+#pragma once
 
 #include "2d/ActionInterval.h"
 #include "2d/TweenFunction.h"
@@ -554,5 +553,3 @@ private:
 /// @}
 
 }
-
-#endif  // __ACTION_CCEASE_ACTION_H__

@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCARMATUREDATAMANAGER_H__
-#define __CCARMATUREDATAMANAGER_H__
+#pragma once
 
 #include "ArmatureDefine.h"
 #include "Datas.h"
@@ -202,5 +201,3 @@ private:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCARMATUREDATAMANAGER_H__*/

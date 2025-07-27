@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCTIMELINE_ACTION_H__
-#define __CCTIMELINE_ACTION_H__
+#pragma once
 
 #include "TimeLine.h"
 #include "ActionTimelineData.h"
@@ -229,5 +228,3 @@ protected:
 };
 
 NS_TIMELINE_END
-
-#endif /*__CCTIMELINE_ACTION_H__*/

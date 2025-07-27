@@ -24,8 +24,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __CCVERTEX_H__
-#define __CCVERTEX_H__
+#pragma once
 
 #include "base/Types.h"
 
@@ -51,5 +50,3 @@ vertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float Cy, 
 
 // end of base group
 /// @}
-
-#endif /* __CCVERTEX_H__ */

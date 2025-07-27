@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCFRAME_H__
-#define __CCFRAME_H__
+#pragma once
 
 #include <string>
 #include "base/Object.h"
@@ -426,5 +425,3 @@ private:
     static const std::string STOP_ACT;
 };
 NS_TIMELINE_END
-
-#endif /*__CCFRAME_H__*/

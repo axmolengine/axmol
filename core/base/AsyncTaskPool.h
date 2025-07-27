@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCSYNC_TASK_POOL_H_
-#define __CCSYNC_TASK_POOL_H_
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/Director.h"
@@ -228,4 +227,3 @@ inline void AsyncTaskPool::enqueue(AsyncTaskPool::TaskType type, std::function<v
 }
 // end group
 /// @}
-#endif  //__CCSYNC_TASK_POOL_H_

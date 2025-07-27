@@ -25,8 +25,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __CCPARALLAX_NODE_H__
-#define __CCPARALLAX_NODE_H__
+#pragma once
 
 #include "2d/Node.h"
 #include "base/Vector.h"
@@ -111,5 +110,3 @@ private:
 /// @}
 
 }
-
-#endif  //__CCPARALLAX_NODE_H__

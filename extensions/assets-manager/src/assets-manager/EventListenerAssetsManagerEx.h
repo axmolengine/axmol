@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCEventListenerAssetsManagerEx__
-#define __cocos2d_libs__CCEventListenerAssetsManagerEx__
+#pragma once
 
 #include "base/EventListener.h"
 #include "base/EventListenerCustom.h"
@@ -83,5 +82,3 @@ protected:
 };
 
 NS_AX_EXT_END
-
-#endif /* defined(__cocos2d_libs__CCEventListenerAssetsManagerEx__) */

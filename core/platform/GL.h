@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __PLATFORM_CCGL_H__
-#define __PLATFORM_CCGL_H__
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #include "platform/PlatformConfig.h"
@@ -92,5 +92,3 @@ THE SOFTWARE.
 #    endif
 #endif
 
-/// @endcond
-#endif /* __PLATFORM_CCPLATFORMDEFINE_H__*/

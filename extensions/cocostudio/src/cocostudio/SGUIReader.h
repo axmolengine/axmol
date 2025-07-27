@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCSGUIREADER_H__
-#define __CCSGUIREADER_H__
+#pragma once
 
 #include "ui/UILayout.h"
 #include "DictionaryHelper.h"
@@ -230,5 +229,3 @@ public:
 };
 
 }  // namespace cocostudio
-
-#endif /* defined(__CCSGUIReader__) */

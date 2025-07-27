@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCTEXTURECUBE_H__
-#define __CCTEXTURECUBE_H__
+#pragma once
 
 #include "renderer/Texture2D.h"
 #include "renderer/backend/Texture.h"
@@ -103,5 +102,3 @@ private:
 /// @}
 
 }
-
-#endif  // __CCTEXTURECUBE_H__

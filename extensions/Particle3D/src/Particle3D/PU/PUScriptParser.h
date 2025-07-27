@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_SCRIPT_PARSER_H__
-#define __AX_PU_SCRIPT_PARSER_H__
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -86,5 +85,3 @@ private:
 };
 
 }
-
-#endif /* defined(__cocos2d_libs__CCScriptParser__) */

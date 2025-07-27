@@ -25,8 +25,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __ACTION_CCGRID3D_ACTION_H__
-#define __ACTION_CCGRID3D_ACTION_H__
+#pragma once
 
 #include "2d/ActionGrid.h"
 
@@ -637,5 +636,3 @@ private:
 /// @}
 
 }
-
-#endif  // __ACTION_CCGRID3D_ACTION_H__

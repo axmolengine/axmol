@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCDISPLAYMANAGER_H__
-#define __CCDISPLAYMANAGER_H__
+#pragma once
 
 #include "ArmatureDefine.h"
 #include "DecorativeDisplay.h"
@@ -151,5 +150,3 @@ protected:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCDISPLAYMANAGER_H__*/

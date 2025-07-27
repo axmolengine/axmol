@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCTABLEVIEW_H__
-#define __CCTABLEVIEW_H__
+#pragma once
 
 #include "ScrollView.h"
 #include "TableViewCell.h"
@@ -318,5 +317,3 @@ public:
 NS_AX_EXT_END
 // end of ui group
 /// @}
-
-#endif /* __CCTABLEVIEW_H__ */

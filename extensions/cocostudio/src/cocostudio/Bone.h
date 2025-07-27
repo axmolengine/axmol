@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCBONE_H__
-#define __CCBONE_H__
+#pragma once
 
 #include "ArmatureDefine.h"
 #include "Datas.h"
@@ -248,5 +247,3 @@ protected:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCBONE_H__*/

@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef __PHYSICSNODES_CCPHYSICSSPRITE_H__
-#define __PHYSICSNODES_CCPHYSICSSPRITE_H__
+#pragma once
 
 #include "2d/Sprite.h"
 #include "extensions/ExtensionMacros.h"
@@ -150,5 +149,3 @@ protected:
 NS_AX_EXT_END
 
 #endif  // AX_ENABLE_CHIPMUNK_INTEGRATION || AX_ENABLE_BOX2D_INTEGRATION
-
-#endif  // __PHYSICSNODES_CCPHYSICSSPRITE_H__

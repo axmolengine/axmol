@@ -26,8 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ACTIONS_CCACTION_H__
-#define __ACTIONS_CCACTION_H__
+#pragma once
 
 #include "base/Object.h"
 #include "math/Math.h"
@@ -442,5 +441,3 @@ private:
 /// @}
 
 }
-
-#endif  // __ACTIONS_CCACTION_H__

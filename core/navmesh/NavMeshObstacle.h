@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCNAV_MESH_OBSTACLE_H__
-#define __CCNAV_MESH_OBSTACLE_H__
+#pragma once
 
 #include "base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
@@ -120,5 +119,3 @@ private:
 }
 
 #endif  // AX_ENABLE_NAVMESH
-
-#endif  // __CCNAV_MESH_OBSTACLE_H__

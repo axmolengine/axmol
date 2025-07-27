@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AXMATHBASE_H__
-#define __AXMATHBASE_H__
+#pragma once
 
 #include <memory>
 #include <string.h>
@@ -76,4 +75,3 @@
  * @}
  */
 
-#endif  // __CCMATHBASE_H__

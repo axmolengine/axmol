@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_BEHAVIOUR_TRANSLATOR_H__
-#define __AX_PU_PARTICLE_3D_BEHAVIOUR_TRANSLATOR_H__
+#pragma once
 
 #include "Particle3D/PU/PUScriptTranslator.h"
 #include "Particle3D/PU/PUScriptCompiler.h"
@@ -46,5 +45,3 @@ public:
 };
 
 }
-
-#endif /* defined(__cocos2d_libs__CCParticle3DAffectorTranslator__) */

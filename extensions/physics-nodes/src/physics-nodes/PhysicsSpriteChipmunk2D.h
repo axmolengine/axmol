@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef __PHYSICSNODES_CCPhysicsSpriteChipmunk2DCHIPMUNK2D_H__
-#define __PHYSICSNODES_CCPhysicsSpriteChipmunk2DCHIPMUNK2D_H__
+#pragma once
 
 #include "2d/Sprite.h"
 #include "extensions/ExtensionMacros.h"
@@ -132,5 +131,3 @@ protected:
 };
 
 NS_AX_EXT_END
-
-#endif  // __PHYSICSNODES_CCPhysicsSpriteChipmunk2DCHIPMUNK2D_H__

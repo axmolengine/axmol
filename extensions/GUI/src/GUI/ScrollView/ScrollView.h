@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCSCROLLVIEW_H__
-#define __CCSCROLLVIEW_H__
+#pragma once
 
 #include "2d/Layer.h"
 #include "base/EventListenerTouch.h"
@@ -382,5 +381,3 @@ protected:
 NS_AX_EXT_END
 // end of ui group
 /// @}
-
-#endif /* __CCSCROLLVIEW_H__ */

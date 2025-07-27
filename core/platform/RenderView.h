@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AXRENDERVIEW_H__
-#define __AXRENDERVIEW_H__
+#pragma once
 
 #include "base/Types.h"
 #include "base/EventTouch.h"
@@ -495,5 +494,3 @@ AX_DEPRECATED(2.8) typedef RenderView GLView;
 /// @}
 
 }  // namespace ax
-
-#endif /* __CCGLVIEW_H__ */

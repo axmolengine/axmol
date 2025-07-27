@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCEVENT_H__
-#define __CCEVENT_H__
+#pragma once
 
 #include "base/Object.h"
 #include "platform/PlatformMacros.h"
@@ -104,5 +103,3 @@ protected:
 
 // end of base group
 /// @}
-
-#endif  // __CCEVENT_H__

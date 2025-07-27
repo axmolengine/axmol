@@ -26,8 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCINSTANT_ACTION_H__
-#define __CCINSTANT_ACTION_H__
+#pragma once
 
 #include <functional>
 #include "2d/Action.h"
@@ -396,5 +395,3 @@ private:
 /// @}
 
 }
-
-#endif  //__CCINSTANT_ACTION_H__

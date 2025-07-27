@@ -1,5 +1,4 @@
-#ifndef __CCCOCOSSTUDIO_H__
-#define __CCCOCOSSTUDIO_H__
+#pragma once
 
 #include "base/hlookup.h"
 #include "platform/PlatformMacros.h"
@@ -18,5 +17,3 @@
 #endif
 
 #define CCS_DLL CCS_API
-
-#endif /* __CCEXTENSIONEXPORT_H__*/

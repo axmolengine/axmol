@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __MATH_CCAFFINETRANSFORM_H__
-#define __MATH_CCAFFINETRANSFORM_H__
+#pragma once
 
 #include "platform/PlatformMacros.h"
 
@@ -61,18 +60,17 @@ struct AX_DLL AffineTransform
 /**@}*/
 
 /**Make affine transform.*/
-AX_DLL AffineTransform __CCAffineTransformMake(float a, float b, float c, float d, float tx, float ty);
-#define AffineTransformMake __CCAffineTransformMake
+AX_DLL AffineTransform AffineTransformMake(float a, float b, float c, float d, float tx, float ty);
 
 /**Multiply point (x,y,1) by a  affine transform.*/
-AX_DLL Vec2 __CCPointApplyAffineTransform(const Vec2& point, const AffineTransform& t);
-#define PointApplyAffineTransform __CCPointApplyAffineTransform
+AX_DLL Vec2 PointApplyAffineTransform(const Vec2& point, const AffineTransform& t);
 
 /**Multiply size (width,height,0) by a  affine transform.*/
-AX_DLL Vec2 __CCSizeApplyAffineTransform(const Vec2& size, const AffineTransform& t);
-#define SizeApplyAffineTransform __CCSizeApplyAffineTransform
+AX_DLL Vec2 SizeApplyAffineTransform(const Vec2& size, const AffineTransform& t);
+
 /**Make identity affine transform.*/
 AX_DLL AffineTransform AffineTransformMakeIdentity();
+
 /**Transform Rect, which will transform the four vertices of the point.*/
 AX_DLL Rect RectApplyAffineTransform(const Rect& rect, const AffineTransform& anAffineTransform);
 /**@{
@@ -117,5 +115,3 @@ extern AX_DLL const AffineTransform AffineTransformIdentity;
 
 // end of base transform
 /// @}
-
-#endif  // __MATH_CCAFFINETRANSFORM_H__

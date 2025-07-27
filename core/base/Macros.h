@@ -27,8 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __BASE_CCMACROS_H__
-#define __BASE_CCMACROS_H__
+#pragma once
 
 #ifndef _USE_MATH_DEFINES
 #    define _USE_MATH_DEFINES
@@ -378,5 +377,3 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #define AX_CALLBACK_3(__selector__, __target__, ...)                                                          \
     std::bind(&__selector__, __target__, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, \
               ##__VA_ARGS__)
-
-#endif  // __BASE_CCMACROS_H__

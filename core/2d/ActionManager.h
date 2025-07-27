@@ -28,8 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ACTION_CCACTION_MANAGER_H__
-#define __ACTION_CCACTION_MANAGER_H__
+#pragma once
 
 #include "2d/Action.h"
 #include "base/Vector.h"
@@ -215,5 +214,3 @@ protected:
 /// @}
 
 }
-
-#endif  // __ACTION_CCACTION_MANAGER_H__

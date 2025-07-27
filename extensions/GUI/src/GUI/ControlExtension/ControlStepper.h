@@ -27,8 +27,7 @@
  *
  */
 
-#ifndef __CCCONTROLSTEPPER_H__
-#define __CCCONTROLSTEPPER_H__
+#pragma once
 
 #include "Control.h"
 #include "2d/Label.h"
@@ -122,5 +121,3 @@ protected:
 /// @}
 
 NS_AX_EXT_END
-
-#endif /* __CCCONTROLSTEPPER_H__ */

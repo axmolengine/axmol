@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCDATAREADERHELPER_H__
-#define __CCDATAREADERHELPER_H__
+#pragma once
 
 #include "ArmatureDefine.h"
 #include "Datas.h"
@@ -223,5 +222,3 @@ protected:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCDATAREADERHELPER_H__*/

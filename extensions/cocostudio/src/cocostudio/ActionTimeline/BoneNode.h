@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCBONENODE_H__
-#define __CCBONENODE_H__
+#pragma once
 
 #include "base/Protocols.h"
 #include "2d/Node.h"
@@ -240,4 +239,3 @@ private:
 };
 
 NS_TIMELINE_END
-#endif  //__CCBONENODE_H__

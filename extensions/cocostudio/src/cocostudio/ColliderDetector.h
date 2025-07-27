@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCCOLLIDERDETECTOR_H__
-#define __CCCOLLIDERDETECTOR_H__
+#pragma once
 
 #include "ArmatureDefine.h"
 #include "Datas.h"
@@ -193,5 +192,3 @@ protected:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCCOLLIDERDETECTOR_H__*/

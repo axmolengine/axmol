@@ -28,8 +28,7 @@
  * Converted to c++ / cocos2d-x by Angus C
  */
 
-#ifndef __CCCONTROL_H__
-#define __CCCONTROL_H__
+#pragma once
 
 #include "ControlUtils.h"
 #include "2d/Layer.h"
@@ -278,5 +277,3 @@ AX_EX_DLL Control::EventType operator|(Control::EventType a, Control::EventType 
 /// @}
 
 NS_AX_EXT_END
-
-#endif

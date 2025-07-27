@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCTIMELINE_ACTION_CACHE_H__
-#define __CCTIMELINE_ACTION_CACHE_H__
+#pragma once
 
 #include <unordered_map>
 #include "base/Map.h"
@@ -131,5 +130,3 @@ protected:
 };
 
 NS_TIMELINE_END
-
-#endif /*__CCTIMELINE_ACTION_CACHE_H__*/

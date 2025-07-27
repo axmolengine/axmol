@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _CCFontCharMap_h_
-#define _CCFontCharMap_h_
+#pragma once
 
 /// @cond DO_NOT_SHOW
 
@@ -65,5 +64,3 @@ private:
 /// @endcond
 
 }
-
-#endif /* defined(_CCFontCharMap_h_) */

@@ -21,9 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-
-#ifndef __CCBATCHNODE_H__
-#define __CCBATCHNODE_H__
+#pragma once
 
 #include "2d/Node.h"
 #include "ArmatureDefine.h"
@@ -71,5 +69,3 @@ protected:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCBATCHNODE_H__*/

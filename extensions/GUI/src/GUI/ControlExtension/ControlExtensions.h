@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCCONTROL_EXTENSIONS_H__
-#define __CCCONTROL_EXTENSIONS_H__
+#pragma once
 
 #include "Control.h"
 #include "ControlButton.h"
@@ -33,5 +32,3 @@ THE SOFTWARE.
 #include "ControlSlider.h"
 #include "ControlStepper.h"
 #include "ControlSwitch.h"
-
-#endif

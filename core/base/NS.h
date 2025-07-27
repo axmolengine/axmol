@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __PLATFORM_CCNS_H__
-#define __PLATFORM_CCNS_H__
+#pragma once
 
 #include "math/Math.h"
 
@@ -77,5 +76,3 @@ Vec2 AX_DLL SizeFromString(std::string_view str);
 /** @} */
 
 }
-
-#endif  // __PLATFORM_CCNS_H__

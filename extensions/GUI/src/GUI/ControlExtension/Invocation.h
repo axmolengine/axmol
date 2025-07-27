@@ -30,8 +30,7 @@
  * Helper class to store targets and selectors (and eventually, params?) in the same MutableArray. Basically a very
  * crude form of a NSInvocation
  */
-#ifndef __CCINVOCATION_H__
-#define __CCINVOCATION_H__
+#pragma once
 
 #include "base/Object.h"
 #include "../../ExtensionMacros.h"
@@ -76,5 +75,3 @@ protected:
 /// @}
 
 NS_AX_EXT_END
-
-#endif

@@ -34,8 +34,7 @@
  * Adapted from cocos2d-x to cocos2d-iphone by Ricardo Quesada
  */
 
-#ifndef __CCACTION_CATMULLROM_H__
-#define __CCACTION_CATMULLROM_H__
+#pragma once
 
 #include <vector>
 
@@ -324,5 +323,3 @@ cardinalSplineAt(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec2& p3,
 /// @}
 
 }
-
-#endif  // __CCACTION_CATMULLROM_H__

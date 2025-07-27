@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCPAGE_TURN_TRANSITION_H__
-#define __CCPAGE_TURN_TRANSITION_H__
+#pragma once
 
 #include "2d/Transition.h"
 #include "renderer/CustomCommand.h"
@@ -120,5 +119,3 @@ protected:
 /// @}
 
 }
-
-#endif  // __CCPAGE_TURN_TRANSITION_H__

@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AXEVENT_TYPE_H__
-#define __AXEVENT_TYPE_H__
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 /**
@@ -56,7 +56,3 @@
 // This message is used for notifying application code of a warm start.
 // This message is posted in core/platform/android/javaactivity.cpp
 #define EVENT_APP_WARM_START "event_app_warm_start"
-
-
-/// @endcond
-#endif  // __CCEVENT_TYPE_H__

@@ -26,8 +26,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __CCTILE_MAP_ATLAS__
-#define __CCTILE_MAP_ATLAS__
+#pragma once
 
 #include "2d/AtlasNode.h"
 #include "base/Value.h"
@@ -115,5 +114,3 @@ protected:
 /// @endcond
 
 }
-
-#endif  //__CCTILE_MAP_ATLAS__

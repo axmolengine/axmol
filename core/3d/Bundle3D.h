@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCBUNDLE3D_H__
-#define __CCBUNDLE3D_H__
+#pragma once
 
 #include "base/Data.h"
 #include "3d/Bundle3DData.h"
@@ -204,5 +203,3 @@ protected:
 /// @}
 
 }
-
-#endif  // __CCBUNDLE3D_H__

@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCTWEEN_H__
-#define __CCTWEEN_H__
+#pragma once
 
 #include "ProcessBase.h"
 #include "2d/TweenFunction.h"
@@ -148,5 +147,3 @@ protected:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCTWEEN_H__*/
