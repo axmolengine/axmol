@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -82,7 +83,7 @@ void Bug14327Layer::update(float dt)
     {
         ldiv_t ret = ldiv(delta, 60L);
         char buf[100];
-        auto infoStr = fmt::format_to_z(buf, "{}{:.2d}:{:.2d}", "Edit control will be removed after ", ret.quot, ret.rem);
+        auto infoStr = fmt::format_to_z(buf, "{}{:02d}:{:02d}", "Edit control will be removed after ", ret.quot, ret.rem);
         _TTFShowTime->setString(infoStr);
     }
     else
