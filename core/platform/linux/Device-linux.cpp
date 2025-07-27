@@ -481,7 +481,7 @@ public:
 
         int lineCount = textLines.size();
 
-        auto&& textColor = Color4B(textDefinition._fontFillColor, textDefinition._fontAlpha);
+        auto&& textColor = textDefinition._fontFillColor;
         for (int line = 0; line < lineCount; line++)
         {
             int iCurXCursor = computeLineStart(face, eAlignMask, line);
