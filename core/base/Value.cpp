@@ -747,10 +747,10 @@ std::string Value::asString() const
         break;
     case Type::FLOAT:
         ret.reserve(NUMBER_MAX_DIGITS);
-        fmt::format_to(ret, ":.7g", _field.floatVal);
+        fmt::format_to(ret, "{:.7g}", _field.floatVal);
         break;
     case Type::DOUBLE:
-        fmt::format_to(ret, ":.17g", _field.doubleVal);
+        fmt::format_to(ret, "{:.17g}", _field.doubleVal);
         break;
     case Type::BOOLEAN:
         ret = (_field.boolVal ? "true" : "false");
