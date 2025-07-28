@@ -1237,15 +1237,15 @@ void Director::showStats()
 
     if (_statsDisplay && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
     {
-        char buffer[30] = {0};
+        char buffer[30];
 
         // Probably we don't need this anymore since
         // the framerate is using a low-pass filter
         // to make the FPS stable
         if (_accumDt > AX_DIRECTOR_STATS_INTERVAL)
         {
-            snprintf(buffer, sizeof(buffer), "%.1f / %.3f", _frames / _accumDt, _secondsPerFrame);
-            _FPSLabel->setString(buffer);
+            auto msg = fmt::format_to_z(buffer, "{:.1f} / {:.3f}", _frames / _accumDt, _secondsPerFrame);
+            _FPSLabel->setString(msg);
             _accumDt = 0;
             _frames  = 0;
         }
@@ -1254,15 +1254,15 @@ void Director::showStats()
         auto currentVerts = (uint32_t)_renderer->getDrawnVertices();
         if (currentCalls != prevCalls)
         {
-            snprintf(buffer, sizeof(buffer), "GL calls:%6u", currentCalls);
-            _drawnBatchesLabel->setString(buffer);
+            auto msg = fmt::format_to_z(buffer, "GL calls:{:6d}", currentCalls);
+            _drawnBatchesLabel->setString(msg);
             prevCalls = currentCalls;
         }
 
         if (currentVerts != prevVerts)
         {
-            snprintf(buffer, sizeof(buffer), "GL verts:%6u", currentVerts);
-            _drawnVerticesLabel->setString(buffer);
+            auto msg = fmt::format_to_z(buffer, "GL verts:{:6d}", currentVerts);
+            _drawnVerticesLabel->setString(msg);
             prevVerts = currentVerts;
         }
 

@@ -573,11 +573,11 @@ bool PlaySimultaneouslyTest::init()
 {
     auto ret = AudioEngineTestDemo::init();
 
-    char text[36];
-    int tmp = 81;
+    char buf[36];
+    int offset = 81;
     for (int index = 0; index < TEST_COUNT; ++index)
     {
-        sprintf(text, "audio/SoundEffectsFX009/FX0%d.mp3", tmp + index);
+        auto text = fmt::format_to_z(buf, "audio/SoundEffectsFX009/FX0{}.mp3", offset + index);
         _files[index] = text;
     }
     _playingcount = 0;
@@ -628,7 +628,7 @@ bool AudioProfileTest::init()
 {
     auto ret = AudioEngineTestDemo::init();
 
-    char text[30];
+    char buf[30];
     _files[0] = "background.mp3";
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     _files[1] = "background.caf";
@@ -647,24 +647,24 @@ bool AudioProfileTest::init()
     Vec2 pos(0.5f, 0.7f);
     for (int index = 0; index < FILE_COUNT; ++index)
     {
-        sprintf(text, "play %s", _files[index].c_str());
+        auto infoStr = fmt::format_to_z(buf, "play {}", _files[index].c_str());
 
-        auto playItem = TextButton::create(text, [&](TextButton* button) {
+        auto playItem = TextButton::create(infoStr, [this](TextButton* button) {
             int index = button->getTag();
             auto id   = AudioEngine::play2d(_files[index], false, 1.0f, &_audioProfile);
             if (id != AudioEngine::INVALID_AUDIO_ID)
             {
                 _time = _minDelay;
                 _audioCount += 1;
-                char show[30];
-                sprintf(show, "audio count:%d", _audioCount);
-                _showLabel->setString(show);
+                char buf[30];
+                auto infoStr = fmt::format_to_z(buf, "audio count:{}", _audioCount);
+                _showLabel->setString(infoStr);
 
-                AudioEngine::setFinishCallback(id, [&](int id, std::string_view filePath) {
+                AudioEngine::setFinishCallback(id, [this](int id, std::string_view filePath) {
                     _audioCount -= 1;
-                    char show[30];
-                    sprintf(show, "audio count:%d", _audioCount);
-                    _showLabel->setString(show);
+                    char buf[30];
+                    auto infoStr = fmt::format_to_z(buf, "audio count:{}", _audioCount);
+                    _showLabel->setString(infoStr);
                 });
             }
         });
@@ -802,9 +802,9 @@ bool AudioIssue18597Test::init()
         this->schedule(
             [this](float dt) {
                 _time += dt;
-                char timeString[20] = {0};
-                sprintf(timeString, "Time %2.2f", _time);
-                dynamic_cast<Label*>(this->getChildByTag(999))->setString(timeString);
+                char buf[20];
+                auto infoStr = fmt::format_to_z(buf, "Time {:2.2f}", _time);
+                dynamic_cast<Label*>(this->getChildByTag(999))->setString(infoStr);
             },
             0.05, 1000000, 0, "update label quickly");
 
@@ -835,8 +835,8 @@ bool AudioIssue11143Test::init()
             AudioEngine::stopAll();
 
             auto audioId  = AudioEngine::play2d("audio/SoundEffectsFX009/FX082.mp3", true);
-            char key[100] = {0};
-            sprintf(key, "play another sound %d", audioId);
+            char buf[100] = {0};
+            auto key = fmt::format_to_z(buf, "play another sound {}", audioId);
             button->scheduleOnce(
                 [audioId](float dt) {
                     AudioEngine::stop(audioId);

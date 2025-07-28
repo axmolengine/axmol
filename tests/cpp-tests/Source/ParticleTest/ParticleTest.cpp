@@ -2318,8 +2318,8 @@ void ParticleDemo::update(float dt)
     if (_emitter)
     {
         auto atlas  = (LabelAtlas*)getChildByTag(kTagParticleCount);
-        char str[5] = {0};
-        sprintf(str, "%04d", _emitter->getParticleCount());
+        char buf[5] = {0};
+        auto str = fmt::format_to_z(buf, "%04d", _emitter->getParticleCount());
         atlas->setString(str);
     }
 }
@@ -2689,8 +2689,8 @@ void MultipleParticleSystems::update(float dt)
         }
     }
 
-    char str[100] = {0};
-    sprintf(str, "%4d", count);
+    char buf[100];
+    auto str = fmt::format_to_z(buf, "{:4d}", count);
     atlas->setString(str);
 }
 
@@ -2739,8 +2739,8 @@ void MultipleParticleSystemsBatched::update(float dt)
         }
     }
 
-    char str[50] = {0};
-    sprintf(str, "%4d", count);
+    char buf[50] = {0};
+    auto str = fmt::format_to_z(buf, "{:4d}", count);
     atlas->setString(str);
 }
 
@@ -2827,8 +2827,8 @@ void AddAndDeleteParticleSystems::update(float dt)
         }
     }
 
-    char str[100] = {0};
-    sprintf(str, "%4d", count);
+    char buf[100];
+    auto str = fmt::format_to_z(buf, "{:4d}", count);
     atlas->setString(str);
 }
 
@@ -2957,8 +2957,8 @@ void ReorderParticleSystems::update(float dt)
             count += item->getParticleCount();
         }
     }
-    char str[100] = {0};
-    sprintf(str, "%4d", count);
+    char buf[100];
+    auto str = fmt::format_to_z(buf, "{:4d}", count);
     atlas->setString(str);
 }
 

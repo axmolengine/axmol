@@ -746,16 +746,11 @@ std::string Value::asString() const
         ret = std::to_string(_field.uint64Val);
         break;
     case Type::FLOAT:
-        ret.resize(NUMBER_MAX_DIGITS);
-        n = snprintf(&ret.front(), NUMBER_MAX_DIGITS + 1, "%.*g", 7 /*precision*/, _field.floatVal);
-        if (n > 0)
-            ret.resize(n);
+        ret.reserve(NUMBER_MAX_DIGITS);
+        fmt::format_to(ret, "{:.7g}", _field.floatVal);
         break;
     case Type::DOUBLE:
-        ret.resize(NUMBER_MAX_DIGITS);
-        n = snprintf(&ret.front(), NUMBER_MAX_DIGITS + 1, "%.*g", 17 /*precision*/, _field.doubleVal);
-        if (n > 0)
-            ret.resize(n);
+        fmt::format_to(ret, "{:.17g}", _field.doubleVal);
         break;
     case Type::BOOLEAN:
         ret = (_field.boolVal ? "true" : "false");

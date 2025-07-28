@@ -210,17 +210,17 @@ LabelFNTColorAndOpacity::LabelFNTColorAndOpacity()
 void LabelFNTColorAndOpacity::step(float dt)
 {
     _time += dt;
-    char string[15] = {0};
-    sprintf(string, "%2.2f Test j", _time);
+    char tmp[15];
+    auto msg = fmt::format_to_z(tmp, "{:2.2f} Test j", _time);
 
     auto label1 = (Label*)getChildByTag(kTagBitmapAtlas1);
-    label1->setString(string);
+    label1->setString(msg);
 
     auto label2 = (Label*)getChildByTag(kTagBitmapAtlas2);
-    label2->setString(string);
+    label2->setString(msg);
 
     auto label3 = (Label*)getChildByTag(kTagBitmapAtlas3);
-    label3->setString(string);
+    label3->setString(msg);
 }
 
 std::string LabelFNTColorAndOpacity::title() const
@@ -289,10 +289,10 @@ LabelFNTSpriteActions::LabelFNTSpriteActions()
 void LabelFNTSpriteActions::step(float dt)
 {
     _time += dt;
-    char string[10] = {0};
-    sprintf(string, "%04.1f", _time);
+    char tmp[10];
+    auto text = fmt::format_to_z(tmp, "{:04.1f}", _time);
     auto label1 = (Label*)getChildByTag(kTagBitmapAtlas2);
-    label1->setString(string);
+    label1->setString(text);
 }
 
 std::string LabelFNTSpriteActions::title() const
@@ -412,10 +412,10 @@ std::string LabelFNTOpacity::subtitle() const
 LabelFNTHundredLabels::LabelFNTHundredLabels()
 {
     // Upper Label
+    char tmp[6];
     for (int i = 0; i < 100; i++)
     {
-        char str[6] = {0};
-        sprintf(str, "-%d-", i);
+        auto str = fmt::format_to_z(tmp, "-{}-", i);
         auto label = Label::createWithBMFont("fonts/bitmapFontTest.fnt", str);
         addChild(label);
 
@@ -1497,15 +1497,15 @@ LabelCharMapTest::LabelCharMapTest()
 void LabelCharMapTest::step(float dt)
 {
     _time += dt;
-    char string[12] = {0};
-    sprintf(string, "%2.2f Test", _time);
+    char tmp[12];
+    auto text = fmt::format_to_z(tmp, "{:2.2f} Test", _time);
 
     auto label1 = (Label*)getChildByTag(kTagSprite1);
-    label1->setString(string);
+    label1->setString(text);
 
     auto label2 = (Label*)getChildByTag(kTagSprite2);
-    sprintf(string, "%d", (int)_time);
-    label2->setString(string);
+    text = fmt::format_to_z(tmp, "{}", (int)_time);
+    label2->setString(text);
 }
 
 std::string LabelCharMapTest::title() const
@@ -1557,14 +1557,14 @@ void LabelCharMapColorTest::actionFinishCallback()
 void LabelCharMapColorTest::step(float dt)
 {
     _time += dt;
-    char string[12] = {0};
-    sprintf(string, "%2.2f Test", _time);
+    char tmp[12];
+    auto info = fmt::format_to_z(tmp, "{:2.2f} Test", _time);
     auto label1 = (Label*)getChildByTag(kTagSprite1);
-    label1->setString(string);
+    label1->setString(info);
 
     auto label2 = (Label*)getChildByTag(kTagSprite2);
-    sprintf(string, "%d", (int)_time);
-    label2->setString(string);
+    info = fmt::format_to_z(tmp, "{}", _time);
+    label2->setString(info);
 }
 
 std::string LabelCharMapColorTest::title() const

@@ -40,6 +40,7 @@
 #endif
 
 #include "base/axstd.h"
+#include "base/format.h"
 #include "xxhash/xxhash.h"
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
@@ -124,16 +125,16 @@ DriverGL::DriverGL()
     if ((!_verInfo.es && (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))) ||
         (_verInfo.es && _verInfo.major < REQUIRED_GLES_MAJOR))
     {
-        char strComplain[256] = {0};
 #if AX_GLES_PROFILE == 0
-        sprintf(strComplain,
-                "OpeGL 3.3+ is required (your version is %s). Please upgrade the driver of your video card.", _version);
+        auto msg = fmt::format(
+                         "OpeGL 3.3+ is required (your version is {}). Please upgrade the driver of your video card.",
+                         _version);
 #else
-        sprintf(strComplain,
-                "OpeGL ES %d.%d+ is required (your version is %s). Please upgrade the driver of your video card.",
-                REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
+        auto msg = fmt::format(
+            "OpeGL ES {}.{}+ is required (your version is {}). Please upgrade the driver of your video card.",
+            REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
 #endif
-        messageBox(strComplain, "OpenGL version too old");
+        messageBox(msg.c_str(), "OpenGL version too old");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return;
     }
@@ -537,7 +538,16 @@ bool DriverGL::checkForFeatureSupported(FeatureType feature)
         featureSupported = hasExtension("GL_OES_depth24"sv);
         break;
     case FeatureType::ASTC:
+#if AX_TARGET_PLATFORM != AX_PLATFORM_WASM
         featureSupported = checkASTCRenderability();
+#else
+        // On WebAssembly platforms running Safari on iOS < 15, attempting to test for ASTC support
+        // via speculative ASTC texture uploads may cause uncatchable exceptions, leading to a
+        // "context lost" error. This occurs even if all GL errors are properly handled inside
+        // checkASTCRenderability(), making the approach unreliable on affected devices.
+        // see also: https://github.com/axmolengine/axmol/issues/2484
+        featureSupported = _textureCompressionAstc;
+#endif
         break;
     default:
         break;

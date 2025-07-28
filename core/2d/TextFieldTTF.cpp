@@ -271,19 +271,23 @@ void TextFieldTTF::insertText(const char* text, size_t len)
             return;
         }
 
-        std::size_t countInsertChar = _calcCharCount(insert.c_str());
+        std::size_t countInsertChar = StringUtils::countUTF8Chars(insert);
         _charCount += countInsertChar;
 
         if (_cursorEnabled)
         {
-            StringUtils::StringUTF8 stringUTF8;
-
-            stringUTF8.replace(_inputText);
-            stringUTF8.insert(_cursorPosition, insert);
+            std::string sText;
+            sText.reserve(_inputText.length() + insert.length());
+            sText += _inputText;
+            auto pos = StringUtils::getUTF8ByteOffset(sText, _cursorPosition);
+            if (pos != std::string::npos)
+                sText.insert(pos, insert);
+            else
+                sText += insert;
 
             setCursorPosition(_cursorPosition + countInsertChar);
 
-            setString(stringUTF8.getAsCharSequence());
+            setString(sText);
         }
         else
         {
@@ -359,13 +363,12 @@ void TextFieldTTF::deleteBackward(size_t numChars)
         {
             setCursorPosition(_cursorPosition - 1);
 
-            StringUtils::StringUTF8 stringUTF8;
+            std::string sText(_inputText);
+            auto nb = StringUtils::eraseUTF8CharAt(sText, _cursorPosition);
+            if (nb)
+                --_charCount;
 
-            stringUTF8.replace(_inputText);
-            stringUTF8.deleteChar(_cursorPosition);
-
-            _charCount = stringUTF8.length();
-            setString(stringUTF8.getAsCharSequence());
+            setString(sText);
         }
     }
     else
@@ -600,22 +603,21 @@ void TextFieldTTF::makeStringSupportCursor(std::string& displayText)
         }
         else
         {
-            StringUtils::StringUTF8 stringUTF8;
+            auto numChars = StringUtils::countUTF8Chars(displayText);
+            if (_cursorPosition > numChars)
+                _cursorPosition = numChars;
 
-            stringUTF8.replace(displayText);
-
-            if (_cursorPosition > stringUTF8.length())
-            {
-                _cursorPosition = stringUTF8.length();
-            }
             std::string cursorChar;
             // \b - Next char not change x position
             if (_currentLabelType == LabelType::TTF || _currentLabelType == LabelType::BMFONT)
                 cursorChar.push_back(StringUtils::AsciiCharacters::NextCharNoChangeX);
             cursorChar.push_back(_cursorChar);
-            stringUTF8.insert(_cursorPosition, cursorChar);
 
-            displayText = stringUTF8.getAsCharSequence();
+            auto offset = StringUtils::getUTF8ByteOffset(displayText, _cursorPosition);
+            if (offset != std::string::npos)
+                displayText.insert(offset, cursorChar);
+            else
+                displayText += cursorChar;
         }
     }
 }
@@ -654,13 +656,13 @@ void TextFieldTTF::controlKey(EventKeyboard::KeyCode keyCode)
         case EventKeyboard::KeyCode::KEY_KP_DELETE:
             if (_cursorPosition < (std::size_t)_charCount)
             {
-                StringUtils::StringUTF8 stringUTF8;
-
-                stringUTF8.replace(_inputText);
-                stringUTF8.deleteChar(_cursorPosition);
+                std::string sText(_inputText);
+                auto nb = StringUtils::eraseUTF8CharAt(sText, _cursorPosition);
+                if (nb)
+                    --_charCount;
                 setCursorPosition(_cursorPosition);
-                _charCount = stringUTF8.length();
-                setString(stringUTF8.getAsCharSequence());
+
+                setString(sText);
             }
             break;
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:

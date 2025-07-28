@@ -51,6 +51,8 @@ THE SOFTWARE.
 #include "pugixml/pugixml.hpp"
 #include "base/Utils.h"
 
+#include "base/format.h"
+
 #define USER_DEFAULT_PLAIN_MODE 0
 
 typedef int32_t udflen_t;
@@ -245,10 +247,9 @@ void UserDefault::setIntegerForKey(const char* pKey, int value)
 
     // format the value
     char tmp[50];
-    memset(tmp, 0, sizeof(tmp));
-    snprintf(tmp, sizeof(tmp), "%d", value);
+    auto svalue = fmt::format_to_z(tmp, "{}", value);
 
-    setStringForKey(pKey, tmp);
+    setStringForKey(pKey, svalue);
 }
 
 void UserDefault::setLargeIntForKey(const char* pKey, int64_t value)
@@ -260,10 +261,9 @@ void UserDefault::setLargeIntForKey(const char* pKey, int64_t value)
 
     // format the value
     char tmp[96];
-    memset(tmp, 0, sizeof(tmp));
-    snprintf(tmp, sizeof(tmp), "%" PRId64, value);
+    auto svalue = fmt::format_to_z(tmp, "{}", value);
 
-    setStringForKey(pKey, tmp);
+    setStringForKey(pKey, svalue);
 }
 
 void UserDefault::setFloatForKey(const char* pKey, float value)
@@ -281,10 +281,9 @@ void UserDefault::setDoubleForKey(const char* pKey, double value)
 
     // format the value
     char tmp[50];
-    memset(tmp, 0, 50);
-    snprintf(tmp, sizeof(tmp), "%f", value);
+    auto svalue = fmt::format_to_z(tmp, "{}", value);
 
-    setStringForKey(pKey, tmp);
+    setStringForKey(pKey, svalue);
 }
 
 void UserDefault::setStringForKey(const char* pKey, std::string_view value)

@@ -777,7 +777,7 @@ void SpritePolygonTestFrameAnim::initSprites()
 
     auto rotate   = RotateBy::create(10, 360);
     auto action   = RepeatForever::create(rotate);
-    char str[100] = {0};
+    char buf[100] = {0};
 
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini_dance_poly.plist");
@@ -785,8 +785,8 @@ void SpritePolygonTestFrameAnim::initSprites()
     Sprite* sprite;
     for (int i = 0; i < 10; i++)
     {
-        sprintf(str, "grossini_dance_%02d.png", i + 1);
-        sprite = Sprite::createWithSpriteFrameName(str);
+        auto name = fmt::format_to_z(buf, "grossini_dance_{:02d}.png", i + 1);
+        sprite = Sprite::createWithSpriteFrameName(name);
 
         sprite->setPosition(Vec2(screen.width / 6 * (i % 5 + 1), screen.height * 2 / 3 - screen.height * (i / 5) / 3));
 
@@ -808,8 +808,8 @@ void SpritePolygonTestFrameAnim::initSprites()
     Vector<SpriteFrame*> animFrames(5);
     for (int i = 9; i < 14; i++)
     {
-        sprintf(str, "grossini_dance_%02d.png", i + 1);
-        animFrames.pushBack(cache->getSpriteFrameByName(str));
+        auto name = fmt::format_to_z(buf, "grossini_dance_{:02d}.png", i + 1);
+        animFrames.pushBack(cache->getSpriteFrameByName(name));
     }
     auto animation = Animation::createWithSpriteFrames(animFrames, 0.3f);
     sprite->runAction(RepeatForever::create(Animate::create(animation)));

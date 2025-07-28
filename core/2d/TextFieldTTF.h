@@ -42,6 +42,11 @@ class TextFieldTTF;
 /**
  * A input protocol for TextField.
  * !!!DEPRECATED since axmol-2.1.3
+ * Why DPRECATED?
+ * 1. lack of cursor support, cursor will overlap with text due to cursor share display text with input text.
+ * 2. many memory allocations when insert,delete text
+ * 3. ui::TextField depends on this class, it's not a good design, future we should implement a new ui::TextField which is don't depend on this class
+ * 4. The ui::TextFieldEx maybe a good start point to solve these problems.
  */
 class AX_DLL TextFieldDelegate
 {

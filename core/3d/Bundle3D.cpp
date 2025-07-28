@@ -226,8 +226,8 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
         // fill data
         // convert material
         int i = 0;
-        char str[20];
-        std::string dir = "";
+        char buf[20];
+        std::string dir;
         auto last       = fullPath.rfind('/');
         if (last != std::string::npos)
             dir = fullPath.substr(0, last + 1);
@@ -241,10 +241,10 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             tex.wrapS    = backend::SamplerAddressMode::CLAMP_TO_EDGE;
             tex.wrapT    = backend::SamplerAddressMode::CLAMP_TO_EDGE;
 
-            snprintf(str, sizeof(str), "%d", ++i);
+            auto dataId = fmt::format_to_z(buf, "{}", ++i);
             materialdata.textures.emplace_back(tex);
-            materialdata.id = str;
-            material.name   = str;
+            materialdata.id = dataId;
+            material.name   = dataId;
             materialdatas.materials.emplace_back(materialdata);
         }
 
@@ -316,12 +316,12 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
                 auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(submesh.second));
                 meshdata->subMeshAABB.emplace_back(
                     calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
-                snprintf(str, sizeof(str), "%d", ++i);
-                meshdata->subMeshIds.emplace_back(str);
+                auto meshId = fmt::format_to_z(buf, "{}", ++i);
+                meshdata->subMeshIds.emplace_back(meshId);
 
                 auto modelnode        = new ModelData();
                 modelnode->materialId = submesh.first == -1 ? "" : materials[submesh.first].name;
-                modelnode->subMeshId  = str;
+                modelnode->subMeshId  = meshId;
                 node->modelNodeDatas.emplace_back(modelnode);
             }
             nodedatas.nodes.emplace_back(node);
@@ -1119,9 +1119,8 @@ bool Bundle3D::loadBinary(std::string_view path)
         return false;
     }
 
-    char version[20] = {0};
-    snprintf(version, sizeof(version), "%d.%d", ver[0], ver[1]);
-    _version = version;
+    char buf[20];
+    _version = fmt::format_to_z(buf, "{}.{}", ver[0], ver[1]);
 
     // Read ref table size
     if (_binaryReader.read(&_referenceCount, 4, 1) != 1)

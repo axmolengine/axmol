@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "platform/Application.h"
 
 #include "pugixml/pugixml.hpp"
-#include "fmt/format.h"
+#include "base/format.h"
 
 #include <winrt/Windows.ApplicationModel.h>
 #include <winrt/Windows.System.UserProfile.h>

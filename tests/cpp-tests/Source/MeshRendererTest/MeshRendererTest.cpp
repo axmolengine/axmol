@@ -1643,8 +1643,8 @@ void MeshRendererWithOBBPerformanceTest::onTouchesMoved(const std::vector<Touch*
 void MeshRendererWithOBBPerformanceTest::update(float dt)
 {
     char szText[16];
-    sprintf(szText, "%lu cubes", static_cast<unsigned long>(_obb.size()));
-    _labelCubeCount->setString(szText);
+    auto text = fmt::format_to_z(szText, "{} cubes", _obb.size());
+    _labelCubeCount->setString(text);
 
     if (_drawDebug)
     {

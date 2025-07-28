@@ -104,33 +104,33 @@ void JSONDefaultTest::doTest()
 
 void JSONDefaultTest::printValue()
 {
-    char strTemp[256] = "";
+    char strTemp[256];
     // print value
     std::string_view ret = JSONDefault::getInstance()->getStringForKey("string");
-    sprintf(strTemp, "string is %s", ret.data());
+    fmt::format_to_z(strTemp, "string is {}", ret);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     double d = JSONDefault::getInstance()->getDoubleForKey("double");
-    sprintf(strTemp, "double is %f", d);
+    fmt::format_to_z(strTemp, "double is {}", d);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     int i = JSONDefault::getInstance()->getIntegerForKey("integer");
-    sprintf(strTemp, "integer is %d", i);
+    fmt::format_to_z(strTemp, "integer is {}", i);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     float f = JSONDefault::getInstance()->getFloatForKey("float");
-    sprintf(strTemp, "float is %f", f);
+    fmt::format_to_z(strTemp, "float is {}", f);
     this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
 
     bool b = JSONDefault::getInstance()->getBoolForKey("bool");
     if (b)
     {
-        sprintf(strTemp, "bool is true");
+        fmt::format_to_z(strTemp, "bool is true");
         this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
     }
     else
     {
-        sprintf(strTemp, "bool is false");
+        fmt::format_to_z(strTemp, "bool is false");
         this->_label->setString((std::string)this->_label->getString() + "\n" + strTemp);
     }
 }

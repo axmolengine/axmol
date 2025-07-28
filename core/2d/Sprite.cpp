@@ -143,8 +143,8 @@ Sprite* Sprite::createWithSpriteFrameName(std::string_view spriteFrameName)
     SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
 
 #if _AX_DEBUG > 0
-    char msg[256] = {0};
-    snprintf(msg, sizeof(msg), "Invalid spriteFrameName: %s", spriteFrameName.data());
+    char msg[256];
+    fmt::format_to_z(msg, "Invalid spriteFrameName: {}", spriteFrameName);
     AXASSERT(frame != nullptr, msg);
 #endif
 
@@ -1696,15 +1696,16 @@ void Sprite::updateBlendFunc()
 
 std::string Sprite::getDescription() const
 {
-    char textureDescriptor[100];
+    char buf[100];
+    std::string_view desc;
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
-        snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag,
-                 _batchNode->getTextureAtlas()->getTexture()->getBackendTexture());
+        desc = fmt::format_to_z(buf, "<Sprite | Tag = {}, TextureID = {}>", _tag,
+                 fmt::ptr(_batchNode->getTextureAtlas()->getTexture()->getBackendTexture()));
     else
-        snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag,
-                 _texture->getBackendTexture());
+        desc = fmt::format_to_z(buf, "<Sprite | Tag = {}, TextureID = {}>", _tag,
+                 fmt::ptr(_texture->getBackendTexture()));
 
-    return textureDescriptor;
+    return std::string{desc};
 }
 
 const PolygonInfo& Sprite::getPolygonInfo() const

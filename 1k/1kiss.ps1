@@ -1291,29 +1291,39 @@ function setup_android_sdk() {
         $ndk_ver = $ndk_ver.Substring(0, $ndk_ver.Length - 1)
     }
 
-    $sdk_dirs = @()
-    if ($Script:preferred_sdk_dir) {
-        $1k.println("Add preferred android sdk dir: $Script:preferred_sdk_dir")
-        $sdk_dirs += $Script:preferred_sdk_dir
-    } else {
-        $__1k_sdk_root = Join-Path $install_prefix 'adt/sdk'
-        $1k.insert([ref]$sdk_dirs, $env:ANDROID_HOME)
-        $1k.insert([ref]$sdk_dirs, $env:ANDROID_SDK_ROOT)
-        $1k.insert([ref]$sdk_dirs, $__1k_sdk_root)
-    }
 
     $ndk_minor_base = [int][char]'a'
 
     # looking up require ndk installed in exists sdk roots
     $selected_sdk_root = $null
-    foreach ($sdk_dir in $sdk_dirs) {
+    if($Script:preferred_sdk_dir) {
+        $selected_sdk_root = $Script:preferred_sdk_dir
+        $1k.println("Using android sdk dir (Preferred): $selected_sdk_root")
+    }
+    elseif ($env:ANDROID_HOME) {
+        $selected_sdk_root = $env:ANDROID_HOME
+        $1k.println("Using android sdk dir from env:ANDROID_HOME: $selected_sdk_root")
+    }
+    elseif($env:ANDROID_SDK_ROOT) {
+        $selected_sdk_root = $env:ANDROID_SDK_ROOT
+        $1k.println("Using android sdk dir from env:ANDROID_SDK_ROOT: $selected_sdk_root")
+    }
+    else {
+        $selected_sdk_root = Join-Path $install_prefix 'adt/sdk'
+        $1k.println("Using android sdk dir from axmol external: $selected_sdk_root")
+    }
+
+    # C:\Users\halx99\AppData\Roaming\Google\AndroidStudio2024.3\options\android.sdk.path.xml
+    $sdk_root = $selected_sdk_root
+    $1k.mkdirs($sdk_root)
+
+    $find_ndk_in = {
+        param($sdk_dir)
         if (!$sdk_dir -or !$1k.isdir($sdk_dir)) {
-            continue
+            return $null
         }
         $1k.println("Looking require $ndk_ver$IsGraterThan in $sdk_dir")
-        $sdk_root = $sdk_dir
-        $ndk_root = $null
-
+        
         $ndk_major = ($ndk_ver -replace '[^0-9]', '')
         $ndk_minor_off = "$ndk_major".Length + 1
         $ndk_minor = if ($ndk_minor_off -lt $ndk_ver.Length) { "$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)" } else { '0' }
@@ -1321,7 +1331,7 @@ function setup_android_sdk() {
 
         $ndk_parent = Join-Path $sdk_dir 'ndk'
         if (!$1k.isdir($ndk_parent)) {
-            continue
+            return $null
         }
 
         # find ndk in sdk
@@ -1339,42 +1349,25 @@ function setup_android_sdk() {
                 }
             }
         }
+
+        $ndk_dir = $null
         if ($IsGraterThan) {
             if ($ndk_rev_max -ge $ndk_rev_base) {
-                $ndk_root = $ndks[$ndk_rev_max]
+                $ndk_dir = $ndks[$ndk_rev_max]
             }
         }
         else {
-            $ndk_root = $ndks[$ndk_rev_base]
+            $ndk_dir = $ndks[$ndk_rev_base]
         }
 
-        if ($null -ne $ndk_root) {
-            $selected_sdk_root = $sdk_root
-            $1k.println("Found $ndk_root in $sdk_root ...")
-            break
+        if ($null -ne $ndk_dir) {
+            $1k.println("Found $ndk_dir in $sdk_dir ...")
+            return $ndk_dir
         }
     }
 
-    if(!$selected_sdk_root) {
-        if($Script:preferred_sdk_dir) {
-            $selected_sdk_root = $Script:preferred_sdk_dir
-        }
-        elseif ($env:ANDROID_HOME) {
-            $selected_sdk_root = $env:ANDROID_HOME
-        }
-        elseif($env:ANDROID_SDK_ROOT) {
-            $selected_sdk_root = $env:ANDROID_SDK_ROOT
-        }
-        else {
-            $selected_sdk_root = Join-Path $install_prefix 'adt/sdk'
-        }
-        $1k.mkdirs($selected_sdk_root)
-    }
-
-    # C:\Users\halx99\AppData\Roaming\Google\AndroidStudio2024.3\options\android.sdk.path.xml
-    $sdk_root = $selected_sdk_root
-    $1k.println("Using android sdk dir: $sdk_root")
-
+    $ndk_root = &$find_ndk_in $selected_sdk_root
+    
     $sdk_comps = @()
 
     ### cmdline-tools ###

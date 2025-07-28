@@ -64,9 +64,9 @@ Data Device::getTextureDataForText(std::string_view text,
                                    int& height,
                                    bool& hasPremultipliedAlpha)
 {
-    char color[8];
-    sprintf(color, "#%02x%02x%02x", textDefinition._fontFillColor.r, textDefinition._fontFillColor.g,
-            textDefinition._fontFillColor.b);
+    char color[10];
+    fmt::format_to_z(color, "#{:02x}{:02x}{:02x}{:02x}", textDefinition._fontFillColor.r, textDefinition._fontFillColor.g,
+            textDefinition._fontFillColor.b, textDefinition._fontAlpha);
     // clang-format off
     unsigned char* ptr = (unsigned char*)EM_ASM_PTR({
         var lines = UTF8ToString($0).split("\n");
@@ -90,6 +90,17 @@ Data Device::getTextureDataForText(std::string_view text,
         var totalHeight = 0;
         var maxWidth = dimWidth > 0 ? dimWidth : 0;
 
+        var defaultAscent = 0;
+        var defaultDescent = 0;
+
+        var measureDefault = ()=> {
+            if (defaultAscent == 0 && defaultDescent == 0) {
+                var metrics = context.measureText('M'); // or Hg
+                defaultAscent = (typeof metrics.actualBoundingBoxAscent === "number") ? metrics.actualBoundingBoxAscent : fontSize * 0.8;
+                defaultDescent = (typeof metrics.actualBoundingBoxDescent === "number") ? metrics.actualBoundingBoxDescent : fontSize * 0.2;
+            }
+        };
+
         // compute per line metrics
         for (var i = 0; i < lines.length; i++) {
             var metrics = context.measureText(lines[i]);
@@ -98,6 +109,14 @@ Data Device::getTextureDataForText(std::string_view text,
             var ascent = (typeof metrics.actualBoundingBoxAscent === "number") ? metrics.actualBoundingBoxAscent : fontSize * 0.8;
             var descent = (typeof metrics.actualBoundingBoxDescent === "number") ? metrics.actualBoundingBoxDescent : fontSize * 0.2;
             var lineHeight = ascent + descent;
+			// if the line text only contains white space chars, the lineHeight will be 0, 
+			// so we re-calculate lineHeight by representative text, i.e. 'M' or 'Hg'
+            if (lineHeight == 0) {
+                measureDefault();
+                ascent = defaultAscent;
+                descent = defaultDescent;
+                lineHeight = ascent + descent;
+            }
             linesWidth.push(lineWidth);
             linesAscent.push(ascent);
             linesDescent.push(descent);

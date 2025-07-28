@@ -1065,25 +1065,24 @@ void Console::commandHelp(socket_native_type fd, std::string_view /*args*/)
 void Console::commandProjection(socket_native_type fd, std::string_view /*args*/)
 {
     auto director = Director::getInstance();
-    char buf[20];
     auto proj = director->getProjection();
+    const char* name;
     switch (proj)
     {
     case ax::Director::Projection::_2D:
-        snprintf(buf, sizeof(buf), "2d");
+        name = "2d";
         break;
     case ax::Director::Projection::_3D:
-        snprintf(buf, sizeof(buf), "3d");
+        name = "3d";
         break;
     case ax::Director::Projection::CUSTOM:
-        snprintf(buf, sizeof(buf), "custom");
+        name = "custom";
         break;
-
     default:
-        snprintf(buf, sizeof(buf), "unknown");
+        name = "unknown";
         break;
     }
-    Console::Utility::mydprintf(fd, "Current projection: %s\n", buf);
+    Console::Utility::mydprintf(fd, "Current projection: %s\n", name);
 }
 
 void Console::commandProjectionSubCommand2d(socket_native_type /*fd*/, std::string_view /*args*/)

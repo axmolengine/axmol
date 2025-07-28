@@ -2540,9 +2540,7 @@ void Label::updateColor()
 
 std::string Label::getDescription() const
 {
-    char tmp[50];
-    snprintf(tmp, sizeof(tmp), "<Label | Tag = %d, Label = >", _tag);
-    std::string ret = tmp;
+    std::string ret = fmt::format("<Label | Tag = {}, Label = >", _tag);
     ret += _utf8Text;
 
     return ret;

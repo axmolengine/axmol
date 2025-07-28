@@ -534,8 +534,8 @@ private:
         /** if server acceptRanges and local has part of file, we continue to download **/
         if (context->_totalBytesReceived > 0)
         {
-            char buf[128];
-            snprintf(buf, sizeof(buf), "%" PRId64 "-", context->_totalBytesReceived);
+            char buf[96];
+            fmt::format_to_z(buf, "{}-", context->_totalBytesReceived);
             curl_easy_setopt(handle, CURLOPT_RANGE, buf);
             curl_easy_setopt(handle, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)context->_totalBytesReceived);
         }
@@ -848,8 +848,8 @@ void DownloaderCURL::_lazyScheduleUpdate()
         _scheduler = Director::getInstance()->getScheduler();
         _scheduler->retain();
 
-        char key[128];
-        snprintf(key, sizeof(key), "DownloaderCURL(%p)", this);
+        char buf[128];
+        auto key = fmt::format_to_z(buf, "DownloaderCURL({})", fmt::ptr(this));
         _schedulerKey = key;
 
         _scheduler->schedule(std::bind(&DownloaderCURL::_onUpdate, this, std::placeholders::_1), this, 0.1f, true,

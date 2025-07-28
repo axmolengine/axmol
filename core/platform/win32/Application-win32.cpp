@@ -253,7 +253,8 @@ Application::Platform Application::getTargetPlatform()
 
 std::string Application::getVersion()
 {
-    char verString[256] = {0};
+    std::string_view version = ""sv;
+    char buf[128];
     TCHAR szVersionFile[MAX_PATH];
     GetModuleFileName(NULL, szVersionFile, MAX_PATH);
     DWORD verHandle = NULL;
@@ -278,7 +279,7 @@ std::string Application::getVersion()
                         // Doesn't matter if you are on 32 bit or 64 bit,
                         // DWORD is always 32 bits, so first two revision numbers
                         // come from dwFileVersionMS, last two come from dwFileVersionLS
-                        sprintf(verString, "%d.%d.%d.%d", (verInfo->dwFileVersionMS >> 16) & 0xffff,
+                        version = fmt::format_to_z(buf, "{}.{}.{}.{}", (verInfo->dwFileVersionMS >> 16) & 0xffff,
                                 (verInfo->dwFileVersionMS >> 0) & 0xffff, (verInfo->dwFileVersionLS >> 16) & 0xffff,
                                 (verInfo->dwFileVersionLS >> 0) & 0xffff);
                     }
@@ -287,7 +288,7 @@ std::string Application::getVersion()
         }
         delete[] verData;
     }
-    return verString;
+    return std::string{version};
 }
 
 bool Application::openURL(std::string_view url)
