@@ -27,8 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_TM_XML_PARSER__
-#define __AX_TM_XML_PARSER__
+#pragma once
 
 /// @cond DO_NOT_SHOW
 
@@ -419,4 +418,3 @@ protected:
 }
 
 /// @endcond
-#endif

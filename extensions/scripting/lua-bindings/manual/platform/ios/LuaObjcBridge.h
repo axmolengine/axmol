@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __LUA_OBJC_BRIDGE_H_
-#define __LUA_OBJC_BRIDGE_H_
+#pragma once
 
 #include "lua-bindings/manual/LuaBridge.h"
 
@@ -61,4 +60,3 @@ protected:
 
 // end group
 /// @}
-#endif  // __LUA_OBJC_BRIDGE_H_

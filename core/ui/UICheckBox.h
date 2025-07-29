@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UICHECKBOX_H__
-#define __UICHECKBOX_H__
+#pragma once
 
 #include "ui/UIAbstractCheckButton.h"
 #include "ui/GUIExport.h"
@@ -144,4 +143,3 @@ protected:
 // end of ui group
 /// @}
 
-#endif /* defined(__CocoGUI__CheckBox__) */

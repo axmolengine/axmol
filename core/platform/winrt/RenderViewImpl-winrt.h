@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_RENDERVIEWIMPL_WINRT_H__
-#define __AX_RENDERVIEWIMPL_WINRT_H__
+#pragma once
 
 #include "platform/winrt/StdC-winrt.h"
 #include "platform/Common.h"
@@ -207,4 +206,3 @@ AX_DEPRECATED(2.8) typedef RenderViewImpl GLViewImpl;
 
 }
 
-#endif  // end of __AX_EGLVIEWIMPL_WINRT_H__

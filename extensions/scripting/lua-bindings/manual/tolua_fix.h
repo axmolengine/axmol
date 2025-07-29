@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __TOLUA_FIX_H_
-#define __TOLUA_FIX_H_
+#pragma once
 
 #include "tolua++.h"
 
@@ -158,4 +157,3 @@ inline void tolua_pushsv (lua_State* L, const std::string_view& v)
 // end group
 /// @}
 
-#endif  // __TOLUA_FIX_H_

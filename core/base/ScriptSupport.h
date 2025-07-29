@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __SCRIPT_SUPPORT_H__
-#define __SCRIPT_SUPPORT_H__
+#pragma once
 
 #include "base/Config.h"
 #include "platform/Common.h"
@@ -795,4 +794,3 @@ private:
 // end group
 /// @}
 
-#endif  // __SCRIPT_SUPPORT_H__

@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_POSITION_EMITTER_H__
-#define __AX_PU_PARTICLE_3D_POSITION_EMITTER_H__
+#pragma once
 
 #include "Particle3D/PU/PUEmitter.h"
 
@@ -84,4 +83,3 @@ protected:
 };
 }
 
-#endif

@@ -17,8 +17,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef __PHYSICSNODES_DEBUGNODE_BOX2D_H__
-#define __PHYSICSNODES_DEBUGNODE_BOX2D_H__
+#pragma once
 
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
@@ -66,4 +65,3 @@ private:
 
 NS_AX_EXT_END
 
-#endif  //__PHYSICSNODES_DEBUGNODE_BOX2D_H__

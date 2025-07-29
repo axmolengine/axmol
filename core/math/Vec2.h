@@ -23,8 +23,7 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#ifndef MATH_VEC2_H
-#define MATH_VEC2_H
+#pragma once
 
 #include <algorithm>
 #include <functional>
@@ -862,4 +861,3 @@ NS_AX_MATH_END
  @}
  */
 
-#endif  // MATH_VEC2_H

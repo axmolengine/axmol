@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __WINRT_INPUT_EVENT__
-#define __WINRT_INPUT_EVENT__
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "platform/winrt/InputEventTypes.h"
@@ -178,5 +177,4 @@ protected:
 
 }
 
-#endif // #ifndef __WINRT_INPUT_EVENT__
 

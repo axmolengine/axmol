@@ -1,5 +1,4 @@
-#ifndef _SPINESKELETONDATACACHE_H_
-#define _SPINESKELETONDATACACHE_H_
+#pragma once
 
 #if defined(AX_ENABLE_EXT_SPINE)
 #include <cocos2d.h>
@@ -80,4 +79,3 @@ public:
 
 #endif // defined(AX_ENABLE_EXT_SPINE)
 
-#endif

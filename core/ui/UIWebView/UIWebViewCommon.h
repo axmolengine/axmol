@@ -21,8 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __AXMOL__UI__WEBVIEWCOMMON_H_
-#define __AXMOL__UI__WEBVIEWCOMMON_H_
+#pragma once
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -181,4 +180,3 @@ static std::string getDataURI(const ax::Data& data, std::string_view mime_type)
 
 }  // namespace webview_common
 
-#endif  // __AXMOL__UI__WEBVIEWCOMMON_H_

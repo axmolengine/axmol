@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_AABB_H__
-#define __AX_AABB_H__
+#pragma once
 
 #include "base/Macros.h"
 #include "math/Math.h"
@@ -126,4 +125,3 @@ public:
 
 }
 
-#endif

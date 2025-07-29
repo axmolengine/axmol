@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIEditBoxIMPLWINRT_H__
-#define __UIEditBoxIMPLWINRT_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
@@ -162,5 +161,4 @@ namespace ui {
 
 #endif // AX_PLATFORM_WINRT
 
-#endif // #ifdef __UIEditBoxIMPLWINRT_H__
 

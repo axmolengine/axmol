@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __BASE_AX_PLATFORM_CONFIG_H__
-#define __BASE_AX_PLATFORM_CONFIG_H__
+#pragma once
 /// @cond DO_NOT_SHOW
 
 #if __has_include(<winapifamily.h>)
@@ -186,4 +185,3 @@ typedef float32x4_t _xm128_t;
 #endif
 
 /// @endcond
-#endif  // __BASE_AX_PLATFORM_CONFIG_H__

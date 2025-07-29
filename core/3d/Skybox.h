@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __SKYBOX_H__
-#define __SKYBOX_H__
+#pragma once
 
 #include "base/Types.h"
 #include "platform/PlatformMacros.h"
@@ -129,4 +128,3 @@ private:
 
 }
 
-#endif  // __SKYBOX_H__

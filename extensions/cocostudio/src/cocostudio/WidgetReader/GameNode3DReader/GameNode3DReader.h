@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__GameNode3DReader__
-#define __cocos2d_libs__GameNode3DReader__
+#pragma once
 
 #include "2d/CameraBackgroundBrush.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -54,4 +53,3 @@ protected:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__cocos2d_libs__Node3DReader__) */

@@ -26,8 +26,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __UIEditBoxIMPLICOMMON_H__
-#define __UIEditBoxIMPLICOMMON_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 #include "2d/Label.h"
@@ -166,4 +165,3 @@ protected:
 
 }
 
-#endif /* __UIEditBoxIMPLICOMMON_H__ */

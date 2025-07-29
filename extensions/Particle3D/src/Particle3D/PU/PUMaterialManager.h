@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_MATERIAL_MANAGER_H__
-#define __AX_PU_PARTICLE_3D_MATERIAL_MANAGER_H__
+#pragma once
 #include "math/Math.h"
 #include "base/Types.h"
 #include <vector>
@@ -76,4 +75,3 @@ protected:
 
 }
 
-#endif

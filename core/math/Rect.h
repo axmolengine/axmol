@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __MATH_RECT_H__
-#define __MATH_RECT_H__
+#pragma once
 
 #include "math/Vec2.h"
 
@@ -177,4 +176,3 @@ public:
 // end of base group
 /// @}
 
-#endif  // __MATH_RECT_H__

@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_MESH_RENDERER_H__
-#define __AX_MESH_RENDERER_H__
+#pragma once
 
 #include <unordered_map>
 
@@ -402,4 +401,3 @@ protected:
 /// @}
 
 }
-#endif  // __AX_MESH_RENDERER_H__

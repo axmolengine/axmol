@@ -24,8 +24,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __AX_FILEUTILS_APPLE_H__
-#define __AX_FILEUTILS_APPLE_H__
+#pragma once
 
 #include <memory>
 #include <string>
@@ -78,4 +77,3 @@ private:
 
 }
 
-#endif  // __AX_FILEUTILS_APPLE_H__

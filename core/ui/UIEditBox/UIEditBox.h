@@ -25,8 +25,7 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIEDITTEXT_H__
-#define __UIEDITTEXT_H__
+#pragma once
 
 #include "base/IMEDelegate.h"
 #include "ui/GUIDefine.h"
@@ -705,4 +704,3 @@ protected:
 /// @}
 }
 
-#endif /* __UIEDITTEXT_H__ */

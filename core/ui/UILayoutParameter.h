@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __LAYOUTPARMETER_H__
-#define __LAYOUTPARMETER_H__
+#pragma once
 
 #include <string>
 #include "base/Object.h"
@@ -404,4 +403,3 @@ protected:
 // end of ui group
 /// @}
 
-#endif /* defined(__LayoutParameter__) */

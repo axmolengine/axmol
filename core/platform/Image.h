@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_IMAGE_H__
-#define __AX_IMAGE_H__
+#pragma once
 
 #include "base/Object.h"
 #include "renderer/Texture2D.h"
@@ -278,4 +277,3 @@ protected:
 
 }
 
-#endif  // __AX_IMAGE_H__

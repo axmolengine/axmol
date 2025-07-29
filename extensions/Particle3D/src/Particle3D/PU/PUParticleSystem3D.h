@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_SYSTEM_3D_H__
-#define __AX_PU_PARTICLE_SYSTEM_3D_H__
+#pragma once
 
 #include "2d/Node.h"
 #include "base/Protocols.h"
@@ -422,4 +421,3 @@ protected:
 
 }
 
-#endif

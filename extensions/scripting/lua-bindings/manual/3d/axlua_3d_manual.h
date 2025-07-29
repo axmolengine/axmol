@@ -22,8 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_COCOS3D_LUA_COCOS2DX_3D_MANUAL_H__
-#define COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_COCOS3D_LUA_COCOS2DX_3D_MANUAL_H__
+#pragma once
 
 #include "tolua++.h"
 /**
@@ -42,4 +41,3 @@ TOLUA_API int register_cocos3d_module(lua_State* L);
 
 // end group
 /// @}
-#endif  // #ifndef COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_3D_LUA_COCOS2DX_COCOSDENSHION_MANUAL_H__

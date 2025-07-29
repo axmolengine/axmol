@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __X365LIBS__RadioButtonReader__
-#define __X365LIBS__RadioButtonReader__
+#pragma once
 
 #include "cocostudio/WidgetReader/WidgetReader.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -49,4 +48,3 @@ public:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__TestCpp__CheckBoxReader__) */

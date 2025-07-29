@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ccRandom_H_
-#define __ccRandom_H_
+#pragma once
 
 #include <random>
 #include <cstdlib>
@@ -129,4 +128,3 @@ inline float rand_0_1()
 }
 // end group
 /// @}
-#endif  //__ccRandom_H_

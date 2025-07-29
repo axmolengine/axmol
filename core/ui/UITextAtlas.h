@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UILABELATLAS_H__
-#define __UILABELATLAS_H__
+#pragma once
 
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
@@ -169,4 +168,3 @@ protected:
 
 }
 
-#endif /* defined(__CocoGUI__LabelAtlas__) */

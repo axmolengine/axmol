@@ -23,10 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __COCOS_3D_COCOS3D_H__
-#define __COCOS_3D_COCOS3D_H__
+#pragma once
 
 // DON'T ADD FILES HERE
 // ADD THEM IN THE COCOS2D.H HEADER FILE
 
-#endif

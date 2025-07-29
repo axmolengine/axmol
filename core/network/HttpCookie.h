@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef HTTP_COOKIE_H
-#define HTTP_COOKIE_H
+#pragma once
 /// @cond DO_NOT_SHOW
 
 #include "platform/PlatformMacros.h"
@@ -110,4 +109,3 @@ private:
 }
 
 /// @endcond
-#endif /* HTTP_COOKIE_H */

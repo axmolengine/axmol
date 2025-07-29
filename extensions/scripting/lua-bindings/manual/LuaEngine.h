@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_LUA_ENGINE_H__
-#define __AX_LUA_ENGINE_H__
+#pragma once
 
 extern "C" {
 #include "lua.h"
@@ -264,4 +263,3 @@ private:
 // end group
 /// @}
 
-#endif  // __AX_LUA_ENGINE_H__

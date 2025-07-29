@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_RAY_H_
-#define __AX_RAY_H_
+#pragma once
 
 #include "math/Math.h"
 #include "3d/AABB.h"
@@ -110,4 +109,3 @@ public:
 
 }
 
-#endif

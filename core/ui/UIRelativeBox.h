@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __UIRelativeBox_H__
-#define __UIRelativeBox_H__
+#pragma once
 
 #include "ui/UILayout.h"
 #include "ui/GUIExport.h"
@@ -85,4 +84,3 @@ public:
 /// @}
 }
 
-#endif /* defined(__UIRelativeBox__) */

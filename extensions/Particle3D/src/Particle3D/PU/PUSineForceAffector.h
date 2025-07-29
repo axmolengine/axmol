@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_SINE_FORCE_AFFECTOR_H__
-#define __AX_PU_PARTICLE_3D_SINE_FORCE_AFFECTOR_H__
+#pragma once
 
 #include "PUBaseForceAffector.h"
 #include "base/Types.h"
@@ -68,4 +67,3 @@ protected:
 };
 }
 
-#endif

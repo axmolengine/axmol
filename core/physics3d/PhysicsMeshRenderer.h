@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __PHYSICS_MESH_RENDERER_H__
-#define __PHYSICS_MESH_RENDERER_H__
+#pragma once
 
 #include "base/Config.h"
 #include "3d/MeshRenderer.h"
@@ -84,4 +83,3 @@ protected:
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
 
-#endif  // __PHYSICS_MESH_RENDERER_H__

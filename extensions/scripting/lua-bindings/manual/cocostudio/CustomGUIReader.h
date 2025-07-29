@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_CUSTOM_GUI_READER_H
-#define COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_CUSTOM_GUI_READER_H
+#pragma once
 
 #include "cocostudio/SGUIReader.h"
 
@@ -52,4 +51,3 @@ private:
 };
 }  // namespace cocostudio
 
-#endif

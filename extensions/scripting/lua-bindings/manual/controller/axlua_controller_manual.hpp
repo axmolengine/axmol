@@ -22,8 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_CONTROLLER_MANUAL_H
-#define COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_CONTROLLER_MANUAL_H
+#pragma once
 
 #include "tolua++.h"
 
@@ -33,4 +32,3 @@ TOLUA_API int register_all_ax_controller_manual(lua_State* L);
 
 #endif //#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
-#endif // #ifndef COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_CONTROLLER_MANUAL_H

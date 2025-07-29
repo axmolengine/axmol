@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef __PHYSICSNODES_DEBUGNODE_H__
-#define __PHYSICSNODES_DEBUGNODE_H__
+#pragma once
 
 #include "extensions/ExtensionMacros.h"
 #include "2d/DrawNode.h"
@@ -68,4 +67,3 @@ protected:
 
 NS_AX_EXT_END
 
-#endif  // __PHYSICSNODES_DEBUGNODE_H__

@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __TestCpp__GUIDefine__
-#define __TestCpp__GUIDefine__
+#pragma once
 
 #include <string>
 #include "base/ObjectFactory.h"
@@ -116,4 +115,3 @@ struct AX_DLL ResourceData
 };
 }
 
-#endif /* defined(__TestCpp__GUIDefine__) */

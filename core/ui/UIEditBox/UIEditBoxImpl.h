@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __UIEditBoxIMPL_H__
-#define __UIEditBoxIMPL_H__
+#pragma once
 
 #include "ui/UIEditBox/UIEditBox.h"
 
@@ -118,4 +117,3 @@ extern EditBoxImpl* __createSystemEditBox(EditBox* pEditBox);
 }  // namespace ui
 }  // namespace ax
 
-#endif /* __UIEditBoxIMPL_H__ */

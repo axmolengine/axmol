@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PARTICLE_SYSTEM_3D_H__
-#define __AX_PARTICLE_SYSTEM_3D_H__
+#pragma once
 
 #include "2d/Node.h"
 #include "math/Math.h"
@@ -299,4 +298,3 @@ protected:
 
 }
 
-#endif

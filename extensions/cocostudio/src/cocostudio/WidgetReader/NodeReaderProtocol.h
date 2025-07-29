@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__NodeReaderProtocol__
-#define __cocos2d_libs__NodeReaderProtocol__
+#pragma once
 
 #include "cocostudio/CocosStudioExport.h"
 #include "cocostudio/CocosStudioExtension.h"
@@ -178,4 +177,3 @@ CCS_DLL extern ax::Node* (*aParticleSystem3D)();
 
 }  // namespace ax
 
-#endif /* defined(__cocos2d_libs__NodeReaderProtocol__) */

@@ -28,8 +28,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CPROTECTEDCNODE_H__
-#define __CPROTECTEDCNODE_H__
+#pragma once
 
 #include "2d/Node.h"
 
@@ -215,4 +214,3 @@ private:
 
 }
 
-#endif  // __CPROTECTEDCNODE_H__

@@ -20,8 +20,7 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#ifndef MATH_VEC3_H
-#define MATH_VEC3_H
+#pragma once
 
 #include <cmath>
 #include "base/Macros.h"
@@ -594,4 +593,3 @@ NS_AX_MATH_END
  @}
  */
 
-#endif  // MATH_VEC3_H

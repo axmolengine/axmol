@@ -22,8 +22,7 @@ Copyright (c) 2013-2017 Chukong Technologies
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __AX_TIMELINE_MACROS_H__
-#define __AX_TIMELINE_MACROS_H__
+#pragma once
 
 #ifdef __cplusplus
 #    define NS_TIMELINE_BEGIN \
@@ -41,4 +40,3 @@ Copyright (c) 2013-2017 Chukong Technologies
 #    define USING_NS_TIMELINE
 #endif
 
-#endif

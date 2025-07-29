@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __UIVBox_H__
-#define __UIVBox_H__
+#pragma once
 
 #include "ui/UILayout.h"
 #include "ui/GUIExport.h"
@@ -83,4 +82,3 @@ public:
 /// @}
 }
 
-#endif /* defined(__UIVBox__) */

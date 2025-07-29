@@ -19,8 +19,7 @@
  * SOFTWARE.
  */
 
-#ifndef CHIPMUNK_COMPAT_62_H
-#define CHIPMUNK_COMPAT_62_H
+#pragma once
 
 #include "chipmunk/chipmunk.h"
 
@@ -119,4 +118,3 @@ inline cpShape* cpSpaceAddStaticShape(cpSpace* space, cpShape* shape)
     return cpSpaceAddShape(space, shape);
 }
 
-#endif  // CHIPMUNK_COMPAT_62_H

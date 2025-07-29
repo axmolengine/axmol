@@ -23,8 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __Java_dev_axmol_lib_AxmolEngine_H__
-#define __Java_dev_axmol_lib_AxmolEngine_H__
+#pragma once
 
 #include <string>
 
@@ -38,4 +37,3 @@ extern void conversionEncodingJNI(const char* src,
                                   const char* fromCharset,
                                   char* dst,
                                   const char* newCharset);
-#endif /* __Java_dev_axmol_lib_AxmolEngine_H__ */

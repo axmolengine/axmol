@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_LUA_STACK_H_
-#define __AX_LUA_STACK_H_
+#pragma once
 
 extern "C" {
 #include "lua.h"
@@ -332,4 +331,3 @@ protected:
 
 // end group
 /// @}
-#endif  // __AX_LUA_STACK_H_

@@ -21,8 +21,7 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#ifndef MATH_VEC4_H
-#define MATH_VEC4_H
+#pragma once
 
 #include "base/Macros.h"
 #include "math/MathBase.h"
@@ -505,4 +504,3 @@ NS_AX_MATH_END
  @}
  */
 
-#endif  // MATH_VEC4_H

@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__Node3DReader__
-#define __cocos2d_libs__Node3DReader__
+#pragma once
 
 #include "math/Vec3.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -56,4 +55,3 @@ protected:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__cocos2d_libs__Node3DReader__) */

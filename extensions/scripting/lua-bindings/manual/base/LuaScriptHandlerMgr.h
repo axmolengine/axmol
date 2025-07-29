@@ -22,8 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __LUA_SCRIPT_HANDLER_MGR_H__
-#define __LUA_SCRIPT_HANDLER_MGR_H__
+#pragma once
 
 #include "tolua++.h"
 #include "base/Object.h"
@@ -320,4 +319,3 @@ private:
 TOLUA_API int tolua_script_handler_mgr_open(lua_State* tolua_S);
 /// @endcond
 
-#endif  //__LUA_SCRIPT_HANDLER_MGR_H__

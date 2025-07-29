@@ -8,8 +8,7 @@
 
  ******************************************************************************/
 
-#ifndef __ASTC_H__
-#define __ASTC_H__
+#pragma once
 
 #include <stdint.h>
 
@@ -46,4 +45,3 @@ int astc_decompress_image(const uint8_t* in,
                           uint32_t xblock,
                           uint32_t yblock);
 
-#endif  //__ASTC_H__

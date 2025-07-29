@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __INPUT_EVENT_TYPES__
-#define __INPUT_EVENT_TYPES__
+#pragma once
 
 
 namespace ax
@@ -43,5 +42,4 @@ enum class AxmolKeyEvent : int
 }
 
 
-#endif // #ifndef __INPUT_EVENT_TYPES__
 

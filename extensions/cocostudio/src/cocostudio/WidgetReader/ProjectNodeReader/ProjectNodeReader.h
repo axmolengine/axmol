@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__ProjectNodeReader__
-#define __cocos2d_libs__ProjectNodeReader__
+#pragma once
 
 #include "base/Object.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -49,4 +48,3 @@ public:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__cocos2d_libs__ProjectNodeReader__) */

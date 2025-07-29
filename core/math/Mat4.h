@@ -21,8 +21,7 @@
  This file was modified to fit the axmol project
  */
 
-#ifndef MATH_MAT4_H
-#define MATH_MAT4_H
+#pragma once
 
 #include "base/Macros.h"
 
@@ -1115,4 +1114,3 @@ NS_AX_MATH_END
  @}
  */
 
-#endif  // MATH_MAT4_H

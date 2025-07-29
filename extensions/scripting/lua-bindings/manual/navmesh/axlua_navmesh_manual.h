@@ -23,8 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef SCRIPTING_AXLUA_NAVMESH_MANUAL_H__
-#define SCRIPTING_AXLUA_NAVMESH_MANUAL_H__
+#pragma once
 
 #if defined(AX_ENABLE_NAVMESH)
 
@@ -49,4 +48,3 @@ TOLUA_API int register_navmesh_module(lua_State* L);
 /// @}
 
 #endif  // #if defined(AX_ENABLE_NAVMESH)
-#endif  // #ifndef COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_PHYSICS3D_LUA_COCOS2DX_NAVMESH_MANUAL_H__

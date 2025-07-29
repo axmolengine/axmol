@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef AXUITextInput_h
-#define AXUITextInput_h
+#pragma once
 
 /**
  This protocol provides a common interface for consolidating text input method calls
@@ -46,4 +45,3 @@
 
 @end
 
-#endif /* AXUITextInput_h */

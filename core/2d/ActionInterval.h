@@ -27,8 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ACTION_INTERVAL_ACTION_H__
-#define __ACTION_INTERVAL_ACTION_H__
+#pragma once
 
 #include <vector>
 
@@ -1616,4 +1615,3 @@ private:
 
 }
 
-#endif

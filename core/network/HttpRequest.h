@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __HTTP_REQUEST_H__
-#define __HTTP_REQUEST_H__
+#pragma once
 
 #include <string>
 #include <vector>
@@ -273,4 +272,3 @@ protected:
 // end group
 /// @}
 
-#endif  //__HTTP_REQUEST_H__

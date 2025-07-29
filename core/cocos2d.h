@@ -31,8 +31,7 @@ extensions use it, i.g fairygui, live2d ...
 
 ****************************************************************************/
 
-#ifndef __AX_COCOS2DX_H__
-#define __AX_COCOS2DX_H__
+#pragma once
 
 #include "axmol.h"
 
@@ -96,4 +95,3 @@ namespace cocos2d = ax;
 
 #define CC_REQUIRES_NULL_TERMINATION AX_REQUIRES_NULL_TERMINATION
 
-#endif  // __COCOS2D_H__

@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_LUA_VALUE_H_
-#define __AX_LUA_VALUE_H_
+#pragma once
 
 #include <string>
 #include <map>
@@ -281,4 +280,3 @@ inline std::string_view axlua_tosv(lua_State* L, int arg)
 
 // end group
 /// @}
-#endif  // __AX_LUA_VALUE_H_

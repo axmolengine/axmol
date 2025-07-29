@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UILABELBMFONT_H__
-#define __UILABELBMFONT_H__
+#pragma once
 
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
@@ -124,4 +123,3 @@ protected:
 // end of ui group
 /// @}
 
-#endif /* defined(__LabelBMFont__) */

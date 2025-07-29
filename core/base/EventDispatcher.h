@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_EVENT_DISPATCHER_H__
-#define __AX_EVENT_DISPATCHER_H__
+#pragma once
 
 #include <functional>
 #include <string>
@@ -368,4 +367,3 @@ protected:
 // end of base group
 /// @}
 
-#endif  // __AX_EVENT_DISPATCHER_H__
