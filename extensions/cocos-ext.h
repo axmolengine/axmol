@@ -22,9 +22,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __COCOS2D_EXT_H__
-#define __COCOS2D_EXT_H__
+#pragma once
 
 #include "axmol-ext.h"
-
-#endif /* __COCOS2D_EXT_H__ */

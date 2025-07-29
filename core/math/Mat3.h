@@ -1,3 +1,5 @@
+#pragma once
+
 #include "math/MathBase.h"
 
 NS_AX_MATH_BEGIN

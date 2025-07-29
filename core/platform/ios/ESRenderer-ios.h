@@ -29,6 +29,8 @@
 // Only compile this code on iOS. These files should NOT be included on your Mac project.
 // But in case they are included, it won't be compiled.
 
+#pragma once
+
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 

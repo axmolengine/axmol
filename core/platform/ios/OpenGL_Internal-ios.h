@@ -61,6 +61,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 */
 
+#pragma once
+
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 

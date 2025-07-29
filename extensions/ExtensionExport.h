@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __EXTENSIONEXPORT_H__
-#define __EXTENSIONEXPORT_H__
+#pragma once
 
 #include "platform/PlatformDefine.h"
 
@@ -41,5 +40,3 @@
 #endif
 
 #define AX_EX_DLL AX_EX_API
-
-#endif /* __EXTENSIONEXPORT_H__*/
