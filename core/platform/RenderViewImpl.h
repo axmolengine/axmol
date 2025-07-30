@@ -221,8 +221,4 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(RenderViewImpl);
 };
 
-#ifndef AX_CORE_PROFILE
-AX_DEPRECATED(2.8) typedef RenderViewImpl GLViewImpl;
-#endif
-
 }  // end of namespace ax

@@ -38,11 +38,6 @@ class AX_DLL RenderViewImpl : public RenderView
 {
 public:
 
-#ifndef AX_CORE_PROFILE
-    /** DEPRECATED creates a RenderViewImpl with a objective-c EARenderViewImpl instance */
-    AX_DEPRECATED(2.8) static RenderViewImpl* createWithEARenderView(void* viewHandle);
-#endif
-
     /** creates a RenderViewImpl with a title name in fullscreen mode */
     static RenderViewImpl* create(std::string_view viewName);
 
@@ -54,17 +49,15 @@ public:
 
     /** creates a RenderViewImpl with a name in fullscreen mode */
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
-#ifndef AX_CORE_PROFILE
-    AX_DEPRECATED(2.8) static void convertAttrs() { choosePixelFormats(); }
-#endif
+
     static void choosePixelFormats();
     static PixelFormat _pixelFormat;
     static PixelFormat _depthFormat;
     static int _multisamplingCount;
-    
+
     /** @since axmol-2.8.0, sets multi touch enabled */
     void setMultipleTouchEnabled(bool enabled);
-    
+
     void showWindow(void* viewController);
 
     /** sets the content scale factor */
@@ -95,9 +88,6 @@ public:
 protected:
     RenderViewImpl();
     ~RenderViewImpl() override;
-#ifndef AX_CORE_PROFILE
-    AX_DEPRECATED(2.8) bool initWithEARenderView(void* viewHandle);
-#endif
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
 
@@ -105,9 +95,5 @@ protected:
     void* _eaViewHandle;
     void* _eaWindowHandle;
 };
-
-#ifndef AX_CORE_PROFILE
-AX_DEPRECATED(2.8) typedef RenderViewImpl GLViewImpl;
-#endif
 
 }

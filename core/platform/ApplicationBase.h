@@ -102,15 +102,7 @@ public:
      *     RenderView::setGfxContextAttrs(gfxContextAttrs);
      * }
      */
-#ifndef AX_CORE_PROFILE
-    AX_DEPRECATED(2.8) virtual void initGLContextAttrs() {}
-#endif
-    virtual void initGfxContextAttrs()
-    {
-#ifndef AX_CORE_PROFILE
-        initGLContextAttrs();
-#endif
-    }
+    virtual void initGfxContextAttrs() {}
 
     /**
     @brief Get current language config.

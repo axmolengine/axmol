@@ -39,20 +39,6 @@ PixelFormat RenderViewImpl::_pixelFormat        = PixelFormat::RGB565;
 PixelFormat RenderViewImpl::_depthFormat        = PixelFormat::D24S8;
 int RenderViewImpl::_multisamplingCount = 0;
 
-#ifndef AX_CORE_PROFILE
-RenderViewImpl* RenderViewImpl::createWithEARenderView(void* viewHandle)
-{
-    auto ret = new RenderViewImpl;
-    if (ret->initWithEARenderView(viewHandle))
-    {
-        ret->autorelease();
-        return ret;
-    }
-    AX_SAFE_DELETE(ret);
-    return nullptr;
-}
-#endif
-
 RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 {
     auto ret = new RenderViewImpl;
@@ -132,20 +118,6 @@ RenderViewImpl::~RenderViewImpl()
     // auto eaView = (__bridge EARenderView*) _eaViewHandle;
     //[eaView release];
 }
-
-#ifndef AX_CORE_PROFILE
-bool RenderViewImpl::initWithEARenderView(void* viewHandle)
-{
-    _eaViewHandle          = viewHandle;
-    EARenderView* eaView  = (__bridge EARenderView*)_eaViewHandle;
-
-    _screenSize.width = _designResolutionSize.width = [eaView getWidth];
-    _screenSize.height = _designResolutionSize.height = [eaView getHeight];
-    //    _scaleX = _scaleY = [eaView contentScaleFactor];
-
-    return true;
-}
-#endif
 
 bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rect, float frameZoomFactor, bool /*resizable*/)
 {

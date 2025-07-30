@@ -200,9 +200,5 @@ private:
     ax::EventListenerKeyboard* m_backButtonListener;
 };
 
-#ifndef AX_CORE_PROFILE
-AX_DEPRECATED(2.8) typedef RenderViewImpl GLViewImpl;
-#endif
-
 }
 

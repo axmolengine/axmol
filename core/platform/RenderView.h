@@ -93,10 +93,6 @@ struct GfxContextAttrs
 #endif
 };
 
-#ifndef AX_CORE_PROFILE
-AX_DEPRECATED(2.8) typedef GfxContextAttrs GLContextAttrs;
-#endif
-
 namespace ax
 {
 
@@ -131,9 +127,6 @@ public:
     virtual void end() = 0;
 
     /** Get whether graphics context is ready, subclass must implement this method. */
-#ifndef AX_CORE_PROFILE
-    AX_DEPRECATED(2.8) bool isOpenGLReady() { return isGfxContextReady(); }
-#endif
     virtual bool isGfxContextReady() = 0;
 
     /** Exchanges the front and back buffers, subclass must implement this method. */
@@ -156,12 +149,6 @@ public:
      *
      * @param gfxContextAttrs The OpenGL context attrs.
      */
-#ifndef AX_CORE_PROFILE
-    AX_DEPRECATED(2.8) static void setGLContextAttrs(GfxContextAttrs& gfxContextAttrs)
-    {
-        setGfxContextAttrs(gfxContextAttrs);
-    }
-#endif
     static void setGfxContextAttrs(GfxContextAttrs& gfxContextAttrs);
 
     /** Return the OpenGL context attrs.
@@ -485,10 +472,6 @@ private:
 
     bool _interactive;
 };
-
-#ifndef AX_CORE_PROFILE
-AX_DEPRECATED(2.8) typedef RenderView GLView;
-#endif
 
 // end of platform group
 /// @}
