@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCSKELETONNODE_H__
-#define __CCSKELETONNODE_H__
+#pragma once
 
 #include "TimelineMacro.h"
 #include "renderer/Renderer.h"
@@ -118,5 +117,3 @@ private:
 };
 
 NS_TIMELINE_END
-
-#endif  //__CCSKELETONNODE_H__

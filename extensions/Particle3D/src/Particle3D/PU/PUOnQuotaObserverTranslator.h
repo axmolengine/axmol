@@ -23,8 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __AX_PU_PARTICLE_3D_ON_QUOTA_OBSERVER_TRANSLATOR_H__
-#define __AX_PU_PARTICLE_3D_ON_QUOTA_OBSERVER_TRANSLATOR_H__
+#pragma once
 
 #include "Particle3D/PU/PUScriptTranslator.h"
 #include "Particle3D/PU/PUScriptCompiler.h"
@@ -45,4 +44,3 @@ public:
 
 }
 
-#endif

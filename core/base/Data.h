@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCDATA_H__
-#define __CCDATA_H__
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include <stdint.h>           // for ssize_t on android
@@ -162,4 +161,3 @@ private:
 }
 
 /** @} */
-#endif  // __CCDATA_H__

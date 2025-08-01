@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef _UITEXTFIELDEX_H_
-#define _UITEXTFIELDEX_H_
+#pragma once
 
 #include "ui/UIWidget.h"
 #include "base/IMEDelegate.h"
@@ -214,4 +213,3 @@ protected:
 
 }
 
-#endif

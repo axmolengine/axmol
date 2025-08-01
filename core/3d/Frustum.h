@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_FRUSTUM_H_
-#define __AX_FRUSTUM_H_
+#pragma once
 
 #include "base/Macros.h"
 #include "math/Math.h"
@@ -86,4 +85,3 @@ protected:
 
 }
 
-#endif  //__AX_FRUSTUM_H_

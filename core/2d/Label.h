@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_LABEL_H_
-#define _AX_LABEL_H_
+#pragma once
 
 #include "2d/Node.h"
 #include "renderer/CustomCommand.h"
@@ -954,5 +953,3 @@ private:
 /// @}
 
 }
-
-#endif /*_AX_LABEL_H */

@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCANIMATE3D_H__
-#define __CCANIMATE3D_H__
+#pragma once
 
 #include <map>
 #include <unordered_map>
@@ -186,5 +185,3 @@ protected:
 /// @}
 
 }
-
-#endif  // __CCANIMATE3D_H__

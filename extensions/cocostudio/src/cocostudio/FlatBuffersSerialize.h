@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__FlatBuffersSerialize__
-#define __cocos2d_libs__FlatBuffersSerialize__
+#pragma once
 
 #include <string>
 #include <vector>
@@ -161,4 +160,3 @@ private:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__cocos2d_libs__FlatBuffersSerialize__) */

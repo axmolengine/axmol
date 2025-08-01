@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __BASE_OBJECT_H__
-#define __BASE_OBJECT_H__
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/Config.h"
@@ -188,5 +187,3 @@ struct is_ref_counted<_Ty,
 template <typename _Ty>
 inline constexpr bool is_ref_counted_v = is_ref_counted<std::remove_pointer_t<_Ty>>::value;
 }  // namespace axstd
-
-#endif  // __BASE_CCREF_H__

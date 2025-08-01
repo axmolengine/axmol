@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __SUPPORT_TRANSFORM_UTILS_H__
-#define __SUPPORT_TRANSFORM_UTILS_H__
+#pragma once
 
 #include "base/Macros.h"
 
@@ -52,4 +51,3 @@ AX_DLL void GLToCGAffine(const float* m, AffineTransform* t);
  end of base group
  @}
  */
-#endif  // __SUPPORT_TRANSFORM_UTILS_H__

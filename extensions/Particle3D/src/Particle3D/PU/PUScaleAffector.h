@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_SCALE_AFFECTOR_H__
-#define __AX_PU_PARTICLE_3D_SCALE_AFFECTOR_H__
+#pragma once
 
 #include "Particle3D/PU/PUAffector.h"
 #include "Particle3D/PU/PUDynamicAttribute.h"
@@ -102,4 +101,3 @@ protected:
 };
 }
 
-#endif

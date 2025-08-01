@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef AXMOL_S3TC_
-#define AXMOL_S3TC_
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #include "platform/StdC.h"
@@ -44,4 +44,4 @@ void s3tc_decode(uint8_t* encode_data,
                  S3TCDecodeFlag decodeFlag);
 
 /// @endcond
-#endif /* defined(AXMOL_S3TC_) */
+

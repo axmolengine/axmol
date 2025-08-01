@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ActionNODE_H__
-#define __ActionNODE_H__
+#pragma once
 
 #include "ActionFrame.h"
 #include "DictionaryHelper.h"
@@ -188,4 +187,3 @@ protected:
 
 }  // namespace cocostudio
 
-#endif

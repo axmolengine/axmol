@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_ON_COLLISION_OBSERVER_H__
-#define __AX_PU_PARTICLE_3D_ON_COLLISION_OBSERVER_H__
+#pragma once
 
 #include "base/Object.h"
 #include "math/Math.h"
@@ -51,4 +50,3 @@ public:
 
 }
 
-#endif

@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __TRIGGEREVENT_H__
-#define __TRIGGEREVENT_H__
+#pragma once
 
 #include "CocoStudio.h"
 #include "base/ObjectFactory.h"
@@ -47,4 +46,3 @@ public:                                        \
 
 void CCS_DLL sendEvent(unsigned int event);
 
-#endif

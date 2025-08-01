@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_INNER_PARTICLE_COLLIDER_H__
-#define __AX_PU_PARTICLE_3D_INNER_PARTICLE_COLLIDER_H__
+#pragma once
 
 #include "PUBaseCollider.h"
 #include "base/Types.h"
@@ -84,4 +83,3 @@ protected:
 };
 }
 
-#endif

@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_EXTENTIONS_CCCOMCONTROLLER_H__
-#define __AX_EXTENTIONS_CCCOMCONTROLLER_H__
+#pragma once
 
 #include "ComBase.h"
 #include "InputDelegate.h"
@@ -76,5 +75,3 @@ public:
 };
 
 }  // namespace cocostudio
-
-#endif  // __AX_EXTENTIONS_CCCOMCONTROLLER_H__

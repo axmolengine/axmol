@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __UIEditBoxIMPLIOS_H__
-#define __UIEditBoxIMPLIOS_H__
+#pragma once
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
@@ -89,4 +88,3 @@ private:
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */
 
-#endif /* __UIEditBoxIMPLIOS_H__ */

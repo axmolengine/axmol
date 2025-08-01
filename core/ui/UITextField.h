@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UITEXTFIELD_H__
-#define __UITEXTFIELD_H__
+#pragma once
 
 #include "ui/UIWidget.h"
 #include "2d/TextFieldTTF.h"
@@ -648,4 +647,3 @@ protected:
 /// @}
 }
 
-#endif /* defined(__TextField__) */

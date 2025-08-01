@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_LINE_AFFECTOR_H__
-#define __AX_PU_PARTICLE_3D_LINE_AFFECTOR_H__
+#pragma once
 
 #include "Particle3D/PU/PUAffector.h"
 #include "base/Types.h"
@@ -89,4 +88,3 @@ protected:
 };
 }
 
-#endif

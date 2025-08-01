@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __TestCpp__TextReader__
-#define __TestCpp__TextReader__
+#pragma once
 
 #include "cocostudio/WidgetReader/WidgetReader.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -50,4 +49,3 @@ public:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__TestCpp__TextReader__) */

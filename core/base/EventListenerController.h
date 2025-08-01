@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_EVENTLISTENERCONTROLLER_H_
-#define _AX_EVENTLISTENERCONTROLLER_H_
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/EventListener.h"
@@ -76,5 +75,3 @@ protected:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_EVENTLISTENERCONTROLLER_H_) */

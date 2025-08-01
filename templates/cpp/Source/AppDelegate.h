@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _APP_DELEGATE_H_
-#define _APP_DELEGATE_H_
+#pragma once
 
 #include "axmol.h"
 
@@ -59,4 +58,3 @@ public:
     void applicationWillEnterForeground() override;
 };
 
-#endif  // _APP_DELEGATE_H_

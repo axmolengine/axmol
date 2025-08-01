@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AXMOL_EXT_H__
-#define __AXMOL_EXT_H__
+#pragma once
 
 #include "ExtensionMacros.h"
 
@@ -48,5 +47,3 @@
 #include "Particle3D/src/Particle3D/Particle3DRender.h"
 #include "Particle3D/src/Particle3D/ParticleSystem3D.h"
 #include "Particle3D/src/Particle3D/PU/PUParticleSystem3D.h"
-
-#endif /* __AXMOL_EXT_H__ */

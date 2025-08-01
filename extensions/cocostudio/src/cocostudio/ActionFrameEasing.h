@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ActionFrameEasing_H__
-#define __ActionFrameEasing_H__
+#pragma once
 
 #include "base/Object.h"
 #include "CocosStudioExport.h"
@@ -74,4 +73,3 @@ public:
 
 }  // namespace cocostudio
 
-#endif

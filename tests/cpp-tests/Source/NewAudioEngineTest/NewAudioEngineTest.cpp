@@ -485,7 +485,7 @@ bool AudioOpusTest::init()
             if (_audioID != -1)
             {
                 _stateLabel->setString("Playing");
-                AudioEngine::setFinishCallback(_audioID, [=](int, std::string_view) {
+                AudioEngine::setFinishCallback(_audioID, [this](int, std::string_view) {
                     _audioID = -1;
                     _stateLabel->setString("Play Over");
                 });

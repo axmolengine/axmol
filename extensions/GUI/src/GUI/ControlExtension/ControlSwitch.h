@@ -27,8 +27,7 @@
  *
  */
 
-#ifndef __CCCONTROLSWITCH_H__
-#define __CCCONTROLSWITCH_H__
+#pragma once
 
 #include "Control.h"
 #include "extensions/ExtensionExport.h"
@@ -120,5 +119,3 @@ protected:
 /// @}
 
 NS_AX_EXT_END
-
-#endif /* __CCCONTROLSWITCH_H__ */

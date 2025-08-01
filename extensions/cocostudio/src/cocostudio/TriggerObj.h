@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __TRIGGEROBJ_H__
-#define __TRIGGEROBJ_H__
+#pragma once
 
 #include "CocoStudio.h"
 #include "base/Vector.h"
@@ -86,4 +85,3 @@ private:
 
 }  // namespace cocostudio
 
-#endif

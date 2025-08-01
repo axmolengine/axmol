@@ -27,8 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCSCENE_H__
-#define __CCSCENE_H__
+#pragma once
 
 #include <string>
 #include "2d/Node.h"
@@ -221,5 +220,3 @@ public:
 /// @}
 
 }
-
-#endif  // __CCSCENE_H__

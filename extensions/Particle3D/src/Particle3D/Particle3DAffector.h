@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PARTICLE_3D_AFFECTOR_H__
-#define __AX_PARTICLE_3D_AFFECTOR_H__
+#pragma once
 
 #include "base/Object.h"
 #include <vector>
@@ -59,4 +58,3 @@ protected:
 
 }
 
-#endif

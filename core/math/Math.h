@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_MATH_H__
-#define __AX_MATH_H__
+#pragma once
 
 #include "math/Vec2.h"
 #include "math/Vec3.h"
@@ -33,4 +32,3 @@
 #include "math/Quaternion.h"
 #include "math/Color.h"
 
-#endif

@@ -25,8 +25,7 @@
 
  ****************************************************************************/
 
-#ifndef _AX_TOUCHEVENTLISTENER_H_
-#define _AX_TOUCHEVENTLISTENER_H_
+#pragma once
 
 #include "base/EventListener.h"
 #include <vector>
@@ -133,5 +132,3 @@ private:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_TOUCHEVENTLISTENER_H_) */

@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __BONENODEREADER_H_
-#define __BONENODEREADER_H_
+#pragma once
 
 #include "cocostudio/WidgetReader/NodeReaderProtocol.h"
 #include "cocostudio/WidgetReader/NodeReaderDefine.h"
@@ -47,4 +46,3 @@ public:
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
 };
 
-#endif /* defined(__BONENODEREADER_H_) */

@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_SCRIPT_COMPILER_H__
-#define __AX_PU_SCRIPT_COMPILER_H__
+#pragma once
+
 #include "base/Object.h"
 #include "Particle3D/PU/PUScriptParser.h"
 
@@ -163,5 +163,3 @@ private:
 };
 
 }
-
-#endif /* defined(__ssaafsdf__CCScriptCompile__) */

@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __HTTP_RESPONSE__
-#define __HTTP_RESPONSE__
+#pragma once
 #include <ctype.h>
 #include <map>
 #include <unordered_map>
@@ -288,4 +287,3 @@ protected:
 // end group
 /// @}
 
-#endif  //__HTTP_RESPONSE_H__

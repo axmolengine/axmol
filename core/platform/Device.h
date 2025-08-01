@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCDEVICE_H__
-#define __CCDEVICE_H__
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/Macros.h"
@@ -174,5 +173,3 @@ private:
 /// @}
 
 }
-
-#endif /* __CCDEVICE_H__ */

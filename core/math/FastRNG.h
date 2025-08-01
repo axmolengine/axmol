@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __FAST_RNG_H__
-#define __FAST_RNG_H__
+#pragma once
 
 #include "base/Macros.h"
 #include "math/MathBase.h"
@@ -165,4 +164,3 @@ public:
 
 NS_AX_MATH_END
 
-#endif // __FAST_RNG_H__

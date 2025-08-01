@@ -26,8 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCTRANSITIONPROGRESS_H__
-#define __CCTRANSITIONPROGRESS_H__
+#pragma once
 
 #include "2d/Transition.h"
 
@@ -242,5 +241,3 @@ protected:
 /// @}
 
 }
-
-#endif /* __CCTRANSITIONPROGRESS_H__ */

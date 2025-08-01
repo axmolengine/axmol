@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCLIGHT_H__
-#define __CCLIGHT_H__
+#pragma once
 
 #include "2d/Node.h"
 
@@ -285,5 +284,3 @@ public:
 };
 
 }
-
-#endif

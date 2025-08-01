@@ -31,8 +31,7 @@
  * Converted to c++ / cocos2d-x by Angus C
  */
 
-#ifndef __CCCONTROL_COLOUR_PICKER_H__
-#define __CCCONTROL_COLOUR_PICKER_H__
+#pragma once
 
 #include "Control.h"
 #include "ControlUtils.h"
@@ -87,5 +86,3 @@ protected:
 /// @}
 
 NS_AX_EXT_END
-
-#endif

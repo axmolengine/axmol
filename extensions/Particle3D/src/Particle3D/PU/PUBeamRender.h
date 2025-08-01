@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_BEAM_RENDER_H__
-#define __AX_PU_PARTICLE_3D_BEAM_RENDER_H__
+#pragma once
 
 #include "base/Object.h"
 #include "math/Math.h"
@@ -148,4 +147,3 @@ protected:
 };
 
 }
-#endif

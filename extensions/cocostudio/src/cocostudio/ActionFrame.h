@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ActionFRAME_H__
-#define __ActionFRAME_H__
+#pragma once
 
 #include "math/Math.h"
 #include "2d/ActionInterval.h"
@@ -448,4 +447,3 @@ protected:
 
 }  // namespace cocostudio
 
-#endif

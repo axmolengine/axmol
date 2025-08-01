@@ -30,8 +30,8 @@
  * https://github.com/google/etc2comp
  */
 
-#ifndef __etc2_h__
-#define __etc2_h__
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 typedef unsigned char etc2_byte;
@@ -76,6 +76,4 @@ etc2_uint32 etc2_pkm_get_format(const etc2_byte* pHeader);
 /// <param name="height">pixelsWidth</param>
 /// <returns>0: success, -1: failed</returns>
 int etc2_decode_image(int format, const etc2_byte* input, etc2_byte* output, etc2_uint32 width, etc2_uint32 height);
-
 /// @endcond
-#endif

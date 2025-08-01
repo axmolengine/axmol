@@ -28,8 +28,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCNODE_H__
-#define __CCNODE_H__
+#pragma once
 
 #include <cstdint>
 #include "base/Macros.h"
@@ -2052,5 +2051,3 @@ bool AX_DLL isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4
 /// @}
 
 }
-
-#endif  // __CCNODE_H__

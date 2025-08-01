@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __xssd__RichTextReader__
-#define __xssd__RichTextReader__
+#pragma once
 
 #include "cocostudio/WidgetReader/WidgetReader.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -48,4 +47,3 @@ public:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__TestCpp__TextBMFontReader__) */

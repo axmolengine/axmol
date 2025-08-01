@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCSKELETON3D_H__
-#define __CCSKELETON3D_H__
+#pragma once
 
 #include "3d/Bundle3DData.h"
 #include "base/Object.h"
@@ -226,5 +225,3 @@ protected:
 /// @}
 
 }
-
-#endif  // __CCSKELETON3D_H__

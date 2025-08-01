@@ -21,9 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-
-#ifndef __CCSKINNODE_H__
-#define __CCSKINNODE_H__
+#pragma once
 
 #include "2d/Node.h"
 #include "TimelineMacro.h"
@@ -34,4 +32,3 @@ typedef ax::Node SkinNode;
 
 NS_TIMELINE_END
 
-#endif  //__CCSKINNODE_H__

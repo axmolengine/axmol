@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_GROUPCOMMAND_H_
-#define _AX_GROUPCOMMAND_H_
+#pragma once
 
 #include <vector>
 #include <unordered_map>
@@ -92,4 +91,3 @@ protected:
  end of support group
  @}
  */
-#endif  //_AX_GROUPCOMMAND_H_

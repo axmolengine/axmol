@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCPHYSICS_HELPER_H__
-#define __CCPHYSICS_HELPER_H__
+#pragma once
 
 #include "base/Config.h"
 #if defined(AX_ENABLE_PHYSICS)
@@ -114,4 +113,3 @@ public:
 }
 
 #endif  // AX_ENABLE_PHYSICS
-#endif  // __CCPHYSICS_HELPER_H__

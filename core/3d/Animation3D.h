@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCANIMATION3D_H__
-#define __CCANIMATION3D_H__
+#pragma once
 
 #include <unordered_map>
 
@@ -132,5 +131,3 @@ protected:
 // end of 3d group
 /// @}
 }
-
-#endif  // __CCANIMATION3D_H__

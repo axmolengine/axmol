@@ -24,8 +24,7 @@
 
  ****************************************************************************/
 
-#ifndef _AX_KEYBOARDEVENTLISTENER_H_
-#define _AX_KEYBOARDEVENTLISTENER_H_
+#pragma once
 
 #include "base/EventListener.h"
 #include "base/EventKeyboard.h"
@@ -68,5 +67,3 @@ public:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_KEYBOARDEVENTLISTENER_H_) */

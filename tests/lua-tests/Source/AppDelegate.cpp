@@ -38,7 +38,7 @@ AppDelegate::~AppDelegate() {}
 
 void AppDelegate::initGfxContextAttrs()
 {
-    GLContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+    GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     RenderView::setGfxContextAttrs(gfxContextAttrs);
 }

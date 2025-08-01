@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIHELPER_H__
-#define __UIHELPER_H__
+#pragma once
 
 #include <string>
 #include "platform/PlatformMacros.h"
@@ -130,4 +129,3 @@ public:
 /// @}
 }
 
-#endif /* defined(__CocoGUI__UISystem__) */

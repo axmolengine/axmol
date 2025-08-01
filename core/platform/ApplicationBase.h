@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_APPLICATION_BASE_H__
-#define __AX_APPLICATION_BASE_H__
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/AutoreleasePool.h"
@@ -155,4 +154,3 @@ using ApplicationProtocol = ApplicationBase;
 
 }
 
-#endif  // __AX_APPLICATION_PROTOCOL_H__

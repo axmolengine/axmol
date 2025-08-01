@@ -26,8 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef AXAPLICATION_H_
-#define AXAPLICATION_H_
+#pragma once
 
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
@@ -119,4 +118,3 @@ protected:
 
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#endif /* AXAPLICATION_H_ */

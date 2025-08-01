@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_SCRIPT_LEXER_H__
-#define __AX_PU_SCRIPT_LEXER_H__
+#pragma once
 
 #include "base/Object.h"
 #include <vector>
@@ -82,4 +81,3 @@ private:  // Private utility operations
 
 }
 
-#endif

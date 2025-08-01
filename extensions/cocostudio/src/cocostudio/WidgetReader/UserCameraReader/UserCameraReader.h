@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__UserCameraReader__
-#define __cocos2d_libs__UserCameraReader__
+#pragma once
 
 #include "math/Vec2.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -54,4 +53,3 @@ protected:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__cocos2d_libs__UserCameraReader__) */

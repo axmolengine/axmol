@@ -19,8 +19,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef _AX_FORMAT_H_
-#define _AX_FORMAT_H_
+#pragma once
 
 #include "fmt/format.h"
 
@@ -45,5 +44,3 @@ inline std::string_view format_to_z(char (&out)[_Size], format_string<_Args...> 
     return std::string_view(out, (std::min)(result.size, static_cast<size_t>(_Size - 1)));
 }
 }  // namespace fmt
-
-#endif

@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CSLoader__
-#define __cocos2d_libs__CSLoader__
+#pragma once
 
 #include "cocostudio/DictionaryHelper.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -176,4 +175,3 @@ protected:
 
 }
 
-#endif /* defined(__cocos2d_libs__CSLoader__) */

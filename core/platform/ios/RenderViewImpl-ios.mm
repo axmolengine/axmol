@@ -39,6 +39,7 @@ PixelFormat RenderViewImpl::_pixelFormat        = PixelFormat::RGB565;
 PixelFormat RenderViewImpl::_depthFormat        = PixelFormat::D24S8;
 int RenderViewImpl::_multisamplingCount = 0;
 
+#ifndef AX_CORE_PROFILE
 RenderViewImpl* RenderViewImpl::createWithEARenderView(void* viewHandle)
 {
     auto ret = new RenderViewImpl;
@@ -50,6 +51,7 @@ RenderViewImpl* RenderViewImpl::createWithEARenderView(void* viewHandle)
     AX_SAFE_DELETE(ret);
     return nullptr;
 }
+#endif
 
 RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 {
@@ -131,6 +133,7 @@ RenderViewImpl::~RenderViewImpl()
     //[eaView release];
 }
 
+#ifndef AX_CORE_PROFILE
 bool RenderViewImpl::initWithEARenderView(void* viewHandle)
 {
     _eaViewHandle          = viewHandle;
@@ -142,15 +145,16 @@ bool RenderViewImpl::initWithEARenderView(void* viewHandle)
 
     return true;
 }
+#endif
 
 bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rect, float frameZoomFactor, bool /*resizable*/)
 {
     CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     choosePixelFormats();
-    
+
     // create platform window
     _eaWindowHandle = [[UIWindow alloc] initWithFrame:r];
-    
+
     // create platform render view
     EARenderView* eaView = [EARenderView viewWithFrame:r
                                          pixelFormat:(int)_pixelFormat
@@ -205,7 +209,7 @@ void RenderViewImpl::showWindow(void* viewController)
 #endif
     auto view = (__bridge EARenderView*)_eaViewHandle;
     controller.view = view;
-    
+
     // Set RootViewController to window
     if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
     {
@@ -223,7 +227,7 @@ void RenderViewImpl::showWindow(void* viewController)
 #if !defined(AX_TARGET_OS_TVOS)
     [controller prefersStatusBarHidden];
 #endif
-    
+
     // Launching the app with the arguments -NSAllowsDefaultLineBreakStrategy NO to force back to the old behavior.
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 13.0f)
     {

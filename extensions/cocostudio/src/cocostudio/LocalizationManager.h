@@ -1,5 +1,4 @@
-#ifndef __LOCALLIZATION_MANAGER_H__
-#define __LOCALLIZATION_MANAGER_H__
+#pragma once
 
 #include <string>
 #include <unordered_map>
@@ -105,4 +104,3 @@ public:
 };
 }  // namespace cocostudio
 
-#endif  //__LOCALLIZATION_MANAGER_H__

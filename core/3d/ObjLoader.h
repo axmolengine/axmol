@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _TINY_OBJ_LOADER_H
-#define _TINY_OBJ_LOADER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -119,4 +118,3 @@ std::string LoadMtl(hlookup::string_map<int>& material_map,
                     std::istream& inStream);
 }  // namespace tinyobj
 
-#endif  // _TINY_OBJ_LOADER_H

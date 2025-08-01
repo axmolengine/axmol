@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_CUSTOMEVENT_H_
-#define _AX_CUSTOMEVENT_H_
+#pragma once
 
 #include <string>
 #include "base/Event.h"
@@ -76,5 +75,3 @@ protected:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_CUSTOMEVENT_H_) */

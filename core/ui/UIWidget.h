@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIWIDGET_H__
-#define __UIWIDGET_H__
+#pragma once
 
 #include "2d/ProtectedNode.h"
 #include "ui/UILayoutParameter.h"
@@ -907,4 +906,3 @@ private:
 // end of ui group
 /// @}
 
-#endif /* defined(__Widget__) */

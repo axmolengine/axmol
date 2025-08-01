@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __COCOSSTUDIO_CCACTIONTIMELINENODE_H__
-#define __COCOSSTUDIO_CCACTIONTIMELINENODE_H__
+#pragma once
 
 #include "ActionTimeline.h"
 #include "TimelineMacro.h"
@@ -55,5 +54,3 @@ protected:
 };
 
 NS_TIMELINE_END
-
-#endif /*__COCOSSTUDIO_CCACTIONTIMELINENODE_H__*/

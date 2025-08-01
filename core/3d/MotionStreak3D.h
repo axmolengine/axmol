@@ -22,8 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __AX_MOTION_STREAK3D_H__
-#define __AX_MOTION_STREAK3D_H__
+#pragma once
 
 #include "base/Protocols.h"
 #include "2d/Node.h"
@@ -220,4 +219,3 @@ private:
 
 }
 
-#endif  //__AX_MOTION_STREAK3D_H__

@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_EXTENTIONS_CCINPUTDELEGATE_H__
-#define __AX_EXTENTIONS_CCINPUTDELEGATE_H__
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/Touch.h"
@@ -111,5 +110,3 @@ private:
 };
 
 }  // namespace cocostudio
-
-#endif  // __AX_EXTENTIONS_CCINPUTDELEGATE_H__

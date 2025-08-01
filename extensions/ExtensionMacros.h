@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __EXTENSIONMARCROS_H__
-#define __EXTENSIONMARCROS_H__
+#pragma once
 
 #define NS_AX_EXT_BEGIN \
     namespace ax   \
@@ -35,5 +34,3 @@
     }                 \
     }
 #define USING_NS_AX_EXT using namespace ax::extension
-
-#endif /* __EXTENSIONMARCROS_H__ */

@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#pragma once
 
 #define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
 
@@ -35,4 +34,3 @@
 // C RunTime Header Files
 #include "platform/StdC.h"
 
-#endif  // __MAIN_H__

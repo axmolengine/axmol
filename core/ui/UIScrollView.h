@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UISCROLLVIEW_H__
-#define __UISCROLLVIEW_H__
+#pragma once
 
 #include "ui/UILayout.h"
 #include "ui/GUIExport.h"
@@ -723,4 +722,3 @@ protected:
 // end of ui group
 /// @}
 }
-#endif /* defined(__CocoGUI__ScrollView__) */

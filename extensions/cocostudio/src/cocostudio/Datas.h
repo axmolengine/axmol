@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCARMATURE_DATAS_H__
-#define __CCARMATURE_DATAS_H__
+#pragma once
 
 #include "base/Object.h"
 #include "base/Types.h"
@@ -507,5 +506,3 @@ public:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCARMATURE_DATAS_H__*/

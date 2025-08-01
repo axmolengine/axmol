@@ -26,8 +26,7 @@
  * THE SOFTWARE.
  *
  */
-#ifndef __CCCONTROLPOTENTIOMETER_H__
-#define __CCCONTROLPOTENTIOMETER_H__
+#pragma once
 
 #include "Control.h"
 #include "2d/ProgressTimer.h"
@@ -118,5 +117,3 @@ protected:
 /// @}
 
 NS_AX_EXT_END
-
-#endif /* __CCCONTROLPOTENTIOMETER_H__ */

@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_OBB_H__
-#define __AX_OBB_H__
+#pragma once
 
 #include "3d/AABB.h"
 
@@ -146,4 +145,3 @@ public:
 
 }
 
-#endif

@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCMESHSKIN_H__
-#define __CCMESHSKIN_H__
+#pragma once
 
 #include "3d/Bundle3DData.h"
 #include "base/Object.h"
@@ -113,5 +112,3 @@ protected:
 /// @}
 
 }
-
-#endif  // __CCSKIN_H__

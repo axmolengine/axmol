@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCMAP_H__
-#define __CCMAP_H__
+#pragma once
 
 #define USE_STD_UNORDERED_MAP 1
 #define USE_ROBIN_MAP 1
@@ -445,5 +444,3 @@ using StringMap = Map<std::string, _Valty, hlookup::string_hash, hlookup::equal_
 }
 // end group
 /// @}
-
-#endif /* __CCMAP_H__ */

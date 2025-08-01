@@ -33,8 +33,7 @@
  * Converted to c++ / cocos2d-x by Angus C
  */
 
-#ifndef __CCCONTROL_UTILS_H__
-#define __CCCONTROL_UTILS_H__
+#pragma once
 
 #include "2d/Sprite.h"
 #include "../../ExtensionMacros.h"
@@ -101,5 +100,3 @@ public:
 /// @}
 
 NS_AX_EXT_END
-
-#endif

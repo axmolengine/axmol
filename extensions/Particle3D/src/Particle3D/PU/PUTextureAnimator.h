@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_TEXTURE_ANIMATOR_H__
-#define __AX_PU_PARTICLE_3D_TEXTURE_ANIMATOR_H__
+#pragma once
 
 #include "Particle3D/PU/PUAffector.h"
 #include "base/Types.h"
@@ -108,4 +107,3 @@ protected:
 };
 }
 
-#endif

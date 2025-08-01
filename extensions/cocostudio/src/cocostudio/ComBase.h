@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_EXTENTIONS_CCCOMBASE_H__
-#define __AX_EXTENTIONS_CCCOMBASE_H__
+#pragma once
 
 #include <string>
 #include "DictionaryHelper.h"
@@ -54,5 +53,3 @@ struct CCS_DLL SerData
         _cocoLoader = NULL;
     }
 };
-
-#endif

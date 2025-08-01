@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef CCDevice_apple_hpp
-#define CCDevice_apple_hpp
+#pragma once
 
 #include "platform/Device.h"
 
@@ -36,4 +35,3 @@ NSTextAlignment _calculateTextAlignment(ax::Device::TextAlign align);
 CGFloat _calculateTextDrawStartWidth(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions);
 }
 
-#endif /* CCDevice_apple_hpp */

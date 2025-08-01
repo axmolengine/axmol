@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIPAGEVIEW_H__
-#define __UIPAGEVIEW_H__
+#pragma once
 
 #include "ui/UIListView.h"
 #include "ui/GUIExport.h"
@@ -366,4 +365,3 @@ protected:
 // end of ui group
 /// @}
 
-#endif /* defined(__PageView__) */

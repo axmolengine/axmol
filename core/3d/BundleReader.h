@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_BUNDLE_READER_H__
-#define __AX_BUNDLE_READER_H__
+#pragma once
 
 #include <string>
 #include <vector>
@@ -221,4 +220,3 @@ inline bool BundleReader::readArray<std::string>(unsigned int* length, std::vect
 
 }
 
-#endif

@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__NodeReaderDefine__
-#define __cocos2d_libs__NodeReaderDefine__
+#pragma once
 
 #include <string>
 #include "base/ObjectFactory.h"
@@ -45,4 +44,3 @@ public:                                          \
 
 #define FLATSTR_TO_BOOL(str) (str.compare("True") == 0) ? true : false
 
-#endif /* defined(__cocos2d_libs__NodeReaderDefine__) */

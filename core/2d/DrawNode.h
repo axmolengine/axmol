@@ -30,8 +30,7 @@
  *
  */
 
-#ifndef __DRAW_NODE_H__
-#define __DRAW_NODE_H__
+#pragma once
 
 #include "2d/Node.h"
 #include "base/axstd.h"
@@ -770,4 +769,3 @@ public:
 /** @} */
 }  // namespace ax
 
-#endif  // __DRAW_NODE_EX_H__

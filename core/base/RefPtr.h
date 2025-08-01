@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_REF_PTR_H__
-#define __AX_REF_PTR_H__
+#pragma once
 /// @cond DO_NOT_SHOW
 
 #include "base/Object.h"
@@ -337,4 +336,3 @@ RefPtr<T> dynamic_pointer_cast(const RefPtr<U>& r)
 }
 
 /// @endcond
-#endif  // __AX_REF_PTR_H__

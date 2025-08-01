@@ -24,8 +24,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __AX_UTILS_H__
-#define __AX_UTILS_H__
+#pragma once
 
 #include <vector>
 #include <string>
@@ -478,5 +477,3 @@ AX_DLL uint32_t fourccValue(std::string_view str);
 }  // namespace utils
 
 }
-
-#endif  // __SUPPORT_AX_UTILS_H__

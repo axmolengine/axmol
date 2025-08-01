@@ -21,8 +21,7 @@
  This file was modified to fit the axmol project
  */
 
-#ifndef MATHUTIL_H_
-#define MATHUTIL_H_
+#pragma once
 
 #include "math/MathBase.h"
 
@@ -129,4 +128,3 @@ NS_AX_MATH_END
  @}
  */
 
-#endif

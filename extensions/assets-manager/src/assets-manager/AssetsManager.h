@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AssetsManager__
-#define __AssetsManager__
+#pragma once
 
 #include <string>
 
@@ -231,4 +230,3 @@ public:
 
 NS_AX_EXT_END
 
-#endif /* defined(__AssetsManager__) */

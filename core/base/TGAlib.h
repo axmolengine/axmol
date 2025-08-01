@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __SUPPORT_DATA_SUPPORT_TGALIB_H__
-#define __SUPPORT_DATA_SUPPORT_TGALIB_H__
+#pragma once
 /// @cond DO_NOT_SHOW
 
 #include "stdint.h"
@@ -82,4 +81,3 @@ void tgaDestroy(tImageTGA* info);
 }  // namespace ax
 
 /// @endcond
-#endif  // __SUPPORT_DATA_SUPPORT_TGALIB_H__

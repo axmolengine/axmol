@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __Manifest__
-#define __Manifest__
+#pragma once
 
 #include <string>
 #include <unordered_map>
@@ -249,4 +248,3 @@ private:
 };
 
 NS_AX_EXT_END
-#endif /* defined(__Manifest__) */

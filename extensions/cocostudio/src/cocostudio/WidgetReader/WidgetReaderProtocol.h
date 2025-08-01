@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __TestCpp__WidgetReaderProtocol__
-#define __TestCpp__WidgetReaderProtocol__
+#pragma once
 
 #include "cocostudio/DictionaryHelper.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -64,4 +63,3 @@ public:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__TestCpp__WidgetReaderProtocol__) */

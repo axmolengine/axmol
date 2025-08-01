@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIPAGEVIEWINDICATOR_H__
-#define __UIPAGEVIEWINDICATOR_H__
+#pragma once
 
 #include "ui/UIPageView.h"
 #include "2d/Sprite.h"
@@ -103,4 +102,3 @@ protected:
 /// @}
 }
 
-#endif /* defined(__UIPAGEVIEWINDICATOR_H__) */

@@ -1,8 +1,7 @@
 // STIMER V2.0
 // Copyright (c) 2014-2020 x-studio - All Rights Reserved
 //
-#ifndef _SIMPLE_TIMER_H_
-#define _SIMPLE_TIMER_H_
+#pragma once
 
 #include "base/Macros.h"
 #include <functional>
@@ -20,4 +19,3 @@ AX_DLL void killAll(bool bNative = true);
 }  // namespace stimer
 }
 
-#endif

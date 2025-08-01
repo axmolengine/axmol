@@ -26,8 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCCAMERA_ACTION_H__
-#define __CCCAMERA_ACTION_H__
+#pragma once
 
 #include "2d/ActionInterval.h"
 #include "math/Math.h"
@@ -175,5 +174,3 @@ protected:
 /// @}
 
 }
-
-#endif  //__CCCAMERA_ACTION_H__

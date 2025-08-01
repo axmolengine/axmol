@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_TOUCH_H__
-#define __AX_TOUCH_H__
+#pragma once
 
 #include "base/Object.h"
 #include "math/Math.h"
@@ -171,4 +170,3 @@ private:
 
 }
 
-#endif  // __PLATFORM_TOUCH_H__

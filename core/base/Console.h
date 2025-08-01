@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCCONSOLE_H__
-#define __CCCONSOLE_H__
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
@@ -292,6 +292,3 @@ private:
 };
 
 }
-
-/// @endcond
-#endif /* defined(__CCCONSOLE_H__) */

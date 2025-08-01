@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_SYSTEM_3D_TRANSLATOR_H__
-#define __AX_PU_PARTICLE_SYSTEM_3D_TRANSLATOR_H__
+#pragma once
 
 //#include <iostream>
 #include "Particle3D/PU/PUParticleSystem3D.h"
@@ -54,4 +53,3 @@ protected:
 
 }
 
-#endif

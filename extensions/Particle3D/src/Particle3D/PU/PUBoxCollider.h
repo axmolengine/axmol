@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_BOX_COLLIDER_H__
-#define __AX_PU_PARTICLE_3D_BOX_COLLIDER_H__
+#pragma once
 
 #include "PUBaseCollider.h"
 
@@ -113,4 +112,3 @@ protected:
 };
 }
 
-#endif

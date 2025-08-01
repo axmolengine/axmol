@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __TestCpp__LoadingBarReader__
-#define __TestCpp__LoadingBarReader__
+#pragma once
 
 #include "cocostudio/WidgetReader/WidgetReader.h"
 #include "cocostudio/CocosStudioExport.h"
@@ -52,4 +51,3 @@ public:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__TestCpp__LoadingBarReader__) */

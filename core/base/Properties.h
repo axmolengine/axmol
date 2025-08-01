@@ -21,8 +21,7 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#ifndef _AX_PROPERTIES_H_
-#define _AX_PROPERTIES_H_
+#pragma once
 
 #include <string>
 #include <functional>
@@ -602,5 +601,3 @@ private:
     Properties* _parent;
 };
 }
-
-#endif  // _AX_PROPERTIES_H_

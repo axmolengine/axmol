@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AXMOL__UI__WEBVIEWIMPL_LINUX_H_
-#define __AXMOL__UI__WEBVIEWIMPL_LINUX_H_
+#pragma once
 
 #include "platform/PlatformMacros.h"
 
@@ -92,4 +91,3 @@ private:
 
 #endif
 
-#endif  // __AXMOL__UI__WEBVIEWIMPL_LINUX_H_

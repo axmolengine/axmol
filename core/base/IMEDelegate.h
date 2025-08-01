@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_IME_DELEGATE_H__
-#define __AX_IME_DELEGATE_H__
+#pragma once
 
 #include <string>
 #include "math/Math.h"
@@ -160,4 +159,3 @@ protected:
 // end of base group
 /// @}
 
-#endif  // __AX_IME_DELEGATE_H__

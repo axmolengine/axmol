@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __LUA_BRIDGE_H_
-#define __LUA_BRIDGE_H_
+#pragma once
 
 #include <string>
 #include <map>
@@ -116,4 +115,3 @@ protected:
 // end group
 /// @}
 
-#endif  // __LUA_BRIDGE_H_

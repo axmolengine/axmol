@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCSKIN_H__
-#define __CCSKIN_H__
+#pragma once
 
 #include "2d/Sprite.h"
 #include "renderer/QuadCommand.h"
@@ -82,5 +81,3 @@ protected:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCSKIN_H__*/

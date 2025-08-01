@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIRADIOBUTTON_H__
-#define __UIRADIOBUTTON_H__
+#pragma once
 
 #include "ui/UIAbstractCheckButton.h"
 #include "ui/GUIExport.h"
@@ -294,4 +293,3 @@ protected:
 // end of ui group
 /// @}
 
-#endif /* defined(__UIRADIOBUTTON_H__) */

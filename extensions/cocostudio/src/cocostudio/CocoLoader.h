@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _COCOLOADER_H
-#define _COCOLOADER_H
+#pragma once
 
 #include <stdint.h>
 #include "rapidjson/rapidjson.h"
@@ -118,4 +117,3 @@ public:
 }  // namespace cocostudio
 
 #pragma pack()
-#endif

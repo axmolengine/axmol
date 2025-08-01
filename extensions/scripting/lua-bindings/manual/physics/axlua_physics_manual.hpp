@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef COCOS2DX_SCRIPT_LUA_COCOS2DX_SUPPORT_GENERATED_LUA_COCOS2DX_PHYSICS_MANUAL_H
-#define COCOS2DX_SCRIPT_LUA_COCOS2DX_SUPPORT_GENERATED_LUA_COCOS2DX_PHYSICS_MANUAL_H
+#pragma once
 
 #if defined(AX_ENABLE_PHYSICS)
 
@@ -43,4 +42,3 @@ int register_all_ax_physics_manual(lua_State* tolua_S);
 
 #endif // defined(AX_ENABLE_PHYSICS)
 
-#endif // #ifndef COCOS2DX_SCRIPT_LUA_COCOS2DX_SUPPORT_GENERATED_LUA_COCOS2DX_PHYSICS_MANUAL_H

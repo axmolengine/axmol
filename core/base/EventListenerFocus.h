@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_EVENTLISTENERFOCUS_H_
-#define _AX_EVENTLISTENERFOCUS_H_
+#pragma once
 
 #include "base/EventListener.h"
 
@@ -79,5 +78,3 @@ public:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_EVENTLISTENERFOCUS_H_) */

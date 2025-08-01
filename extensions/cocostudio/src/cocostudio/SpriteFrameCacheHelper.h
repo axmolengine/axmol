@@ -21,8 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __CCSPRITEFRAMECACHEHELPER_H__
-#define __CCSPRITEFRAMECACHEHELPER_H__
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "ArmatureDefine.h"
@@ -69,5 +68,3 @@ private:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCSPRITEFRAMECACHEHELPER_H__*/

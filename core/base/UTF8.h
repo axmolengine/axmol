@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef AXMOL__UTF8_H
-#define AXMOL__UTF8_H
+#pragma once
 
 #include "platform/PlatformMacros.h"
 #include "base/format.h"
@@ -293,5 +292,3 @@ private:
 }  // namespace StringUtils
 
 }
-
-#endif /** defined(AXMOL__UTF8_H) */

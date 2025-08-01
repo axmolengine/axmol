@@ -23,8 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __LUA_WEBSOCKET_H__
-#define __LUA_WEBSOCKET_H__
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,4 +58,3 @@ TOLUA_API int tolua_web_socket_open(lua_State* tolua_S);
 TOLUA_API int register_web_socket_manual(lua_State* tolua_S);
 ///@endcond
 
-#endif //__LUA_WEBSOCKET_H__

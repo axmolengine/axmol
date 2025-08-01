@@ -22,8 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __SCRIPTING_AXLUA_NETWORK_MANUAL_H__
-#define __SCRIPTING_AXLUA_NETWORK_MANUAL_H__
+#pragma once
 
 #include "tolua++.h"
 
@@ -43,4 +42,3 @@ TOLUA_API int register_network_module(lua_State* L);
 
 // end group
 /// @}
-#endif  //#ifndef __SCRIPTING_AXLUA_NETWORK_MANUAL_H__

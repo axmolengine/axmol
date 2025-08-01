@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_IME_DISPATCHER_H__
-#define __AX_IME_DISPATCHER_H__
+#pragma once
 
 #include "base/IMEDelegate.h"
 
@@ -139,4 +138,3 @@ private:
 // end of base group
 /// @}
 
-#endif  // __AX_IME_DISPATCHER_H__

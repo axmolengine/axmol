@@ -24,8 +24,7 @@
 
  ****************************************************************************/
 
-#ifndef _AX_MOUSEEVENTLISTENER_H_
-#define _AX_MOUSEEVENTLISTENER_H_
+#pragma once
 
 #include "base/EventListener.h"
 #include "base/EventMouse.h"
@@ -87,5 +86,3 @@ private:
 
 // end of base group
 /// @}
-
-#endif /* defined(_AX_MOUSEEVENTLISTENER_H_) */

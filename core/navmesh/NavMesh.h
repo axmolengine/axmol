@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCNAV_MESH_H__
-#define __CCNAV_MESH_H__
+#pragma once
 
 #include "base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
@@ -133,5 +132,3 @@ protected:
 }
 
 #endif  // AX_ENABLE_NAVMESH
-
-#endif  // __CCNAV_MESH_H__

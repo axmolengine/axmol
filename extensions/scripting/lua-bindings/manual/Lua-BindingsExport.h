@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __LUABINDINGEXPROT_H__
-#define __LUABINDINGEXPROT_H__
+#pragma once
 
 /* AX_LUA_API */
 #if defined(_WIN32)
@@ -41,5 +40,3 @@
 #endif
 
 #define AX_LUA_DLL AX_LUA_API
-
-#endif /* __CCEXTENSIONEXPORT_H__*/

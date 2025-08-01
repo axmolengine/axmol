@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AXUI__WEBVIEWIMPL_WIN32_H_
-#define _AXUI__WEBVIEWIMPL_WIN32_H_
+#pragma once
 
 #include "platform/PlatformMacros.h"
 
@@ -96,5 +95,3 @@ private:
 }  // namespace ax
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-
-#endif  // _AXUI__WEBVIEWIMPL_WIN32_H_

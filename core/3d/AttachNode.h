@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCATTACHNODE_H__
-#define __CCATTACHNODE_H__
+#pragma once
 
 #include "math/Math.h"
 #include "2d/Node.h"
@@ -72,4 +71,3 @@ protected:
 /// @}
 
 }
-#endif  // __CCATTACHNODE_H__

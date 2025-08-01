@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __PHYSICS_3D_H__
-#define __PHYSICS_3D_H__
+#pragma once
 
 #include "base/Config.h"
 #include "math/Math.h"
@@ -65,4 +64,3 @@ btQuaternion convertQuatTobtQuat(const ax::Quaternion& quat);
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
 
-#endif  // __PHYSICS_3D_H__

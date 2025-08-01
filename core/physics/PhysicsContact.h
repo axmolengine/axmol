@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCPHYSICS_CONTACT_H__
-#define __CCPHYSICS_CONTACT_H__
+#pragma once
 
 #include "base/Config.h"
 #if defined(AX_ENABLE_PHYSICS)
@@ -324,4 +323,3 @@ protected:
 }
 
 #endif  // defined(AX_ENABLE_PHYSICS)
-#endif  //__CCPHYSICS_CONTACT_H__

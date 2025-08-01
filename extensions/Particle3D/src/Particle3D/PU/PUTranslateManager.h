@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_TRANSLATE_MANAGER_H__
-#define __AX_PU_PARTICLE_3D_TRANSLATE_MANAGER_H__
+#pragma once
 
 #include "base/Object.h"
 #include "Particle3D/PU/PUParticleSystem3DTranslator.h"
@@ -79,5 +78,3 @@ public:
 };
 
 }
-
-#endif /* defined(__cocos2d_libs__CCParticle3DTranslateManager__) */

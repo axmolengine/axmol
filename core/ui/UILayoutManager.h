@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_LAYOUTMANAGER_H_
-#define _AX_LAYOUTMANAGER_H_
+#pragma once
 
 #include "base/Object.h"
 #include "base/Vector.h"
@@ -168,4 +167,3 @@ private:
 }
 // end of ui group
 /// @}
-#endif /* defined(_AX_LAYOUTMANAGER_H_) */

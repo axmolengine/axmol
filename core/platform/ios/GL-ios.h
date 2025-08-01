@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __PLATFORM_IOS_CCGL_H__
-#define __PLATFORM_IOS_CCGL_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
@@ -126,5 +125,3 @@ THE SOFTWARE.
 #    endif
 
 #endif  // AX_PLATFORM_IOS
-
-#endif  // __PLATFORM_IOS_CCGL_H__

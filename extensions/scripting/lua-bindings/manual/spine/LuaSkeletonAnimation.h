@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef LUASKELETONANIMATION_H_
-#define LUASKELETONANIMATION_H_
+#pragma once
 #include "spine/spine-cocos2dx.h"
 
 /// @cond
@@ -39,4 +38,3 @@ public:
     virtual ~LuaSkeletonAnimation();
 };
 /// @endcond
-#endif /* LUASKELETONANIMATION_H_ */

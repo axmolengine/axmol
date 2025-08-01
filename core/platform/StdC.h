@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __PLATFORM_CCSTDC_H__
-#define __PLATFORM_CCSTDC_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 
@@ -42,5 +41,3 @@ THE SOFTWARE.
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/StdC-linux.h"
 #endif
-
-#endif /* __PLATFORM_CCSTDC_H__*/

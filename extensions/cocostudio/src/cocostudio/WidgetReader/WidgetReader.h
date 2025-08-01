@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __TestCpp__WidgetReader__
-#define __TestCpp__WidgetReader__
+#pragma once
 
 #include "cocostudio/WidgetReader/WidgetReaderProtocol.h"
 #include "cocostudio/SGUIReader.h"
@@ -297,4 +296,3 @@ extern const char* P_Path;
 
 }  // namespace cocostudio
 
-#endif /* defined(__TestCpp__WidgetReader__) */

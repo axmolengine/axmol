@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __UIEditBoxIMPLMAC_H__
-#define __UIEditBoxIMPLMAC_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 
@@ -88,4 +87,3 @@ private:
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#endif /* __UIEditBoxIMPLMAC_H__ */

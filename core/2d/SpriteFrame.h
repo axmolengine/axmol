@@ -27,8 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __SPRITE_CCSPRITE_FRAME_H__
-#define __SPRITE_CCSPRITE_FRAME_H__
+#pragma once
 
 #include "2d/Node.h"
 #include "2d/AutoPolygon.h"
@@ -329,5 +328,3 @@ protected:
 /// @}
 
 }
-
-#endif  //__SPRITE_CCSPRITE_FRAME_H__

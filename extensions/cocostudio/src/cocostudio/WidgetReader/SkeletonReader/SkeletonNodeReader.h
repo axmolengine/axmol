@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef _SKELETONNODEREADER_H_
-#define _SKELETONNODEREADER_H_
+#pragma once
 
 #include "BoneNodeReader.h"
 
@@ -40,4 +39,3 @@ public:
 
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
 };
-#endif  //_SKELETONNODEREADER_H_

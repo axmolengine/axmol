@@ -21,9 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-
-#ifndef __AX_EXTENTIONS_CCCOMAUDIO_H__
-#define __AX_EXTENTIONS_CCCOMAUDIO_H__
+#pragma once
 
 #include "ComBase.h"
 #include "base/Protocols.h"
@@ -122,5 +120,3 @@ private:
 };
 
 }  // namespace cocostudio
-
-#endif  // __AX_EXTENTIONS_CCCOMAUDIO_H__

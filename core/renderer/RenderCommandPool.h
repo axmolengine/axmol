@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_RENDERCOMMANDPOOL_H__
-#define __AX_RENDERCOMMANDPOOL_H__
+#pragma once
 /// @cond DO_NOT_SHOW
 
 #include <list>
@@ -99,4 +98,3 @@ private:
 }
 
 /// @endcond
-#endif

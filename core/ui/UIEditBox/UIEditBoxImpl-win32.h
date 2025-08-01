@@ -25,8 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIEditBoxIMPLWIN_H__
-#define __UIEditBoxIMPLWIN_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 
@@ -98,4 +97,3 @@ private:
 
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
 
-#endif /* __UIEditBoxIMPLWIN_H__ */

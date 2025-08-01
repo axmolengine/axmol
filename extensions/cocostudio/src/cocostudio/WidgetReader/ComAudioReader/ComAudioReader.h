@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__ComAudioReader__
-#define __cocos2d_libs__ComAudioReader__
+#pragma once
 
 #include "base/Object.h"
 #include "2d/Component.h"
@@ -51,4 +50,3 @@ public:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__cocos2d_libs__ComAudioReader__) */

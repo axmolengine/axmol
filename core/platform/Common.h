@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_COMMON_H__
-#define __AX_COMMON_H__
+#pragma once
 /// @cond DO_NOT_SHOW
 
 #include "platform/PlatformMacros.h"
@@ -77,4 +76,3 @@ enum class LanguageType
 }
 
 /// @endcond
-#endif  // __AX_COMMON_H__

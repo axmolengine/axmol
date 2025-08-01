@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_FRAMEWORK_COMPONENT_H__
-#define __AX_FRAMEWORK_COMPONENT_H__
+#pragma once
 
 /// @cond DO_NOT_SHOW
 #include <string>
@@ -87,4 +86,3 @@ protected:
 }
 
 /// @endcond
-#endif  // __AX_FRAMEWORK_COMPONENT_H__

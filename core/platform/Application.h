@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __PLATFORM_CCAPPLICATION_H__
-#define __PLATFORM_CCAPPLICATION_H__
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #include "platform/PlatformConfig.h"
@@ -45,6 +45,3 @@ THE SOFTWARE.
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 #    include "platform/wasm/Application-wasm.h"
 #endif
-
-/// @endcond
-#endif /* __PLATFORM_CCAPPLICATION_H__*/

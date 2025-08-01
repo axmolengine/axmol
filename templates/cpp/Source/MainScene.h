@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __MAIN_SCENE_H__
-#define __MAIN_SCENE_H__
+#pragma once
 
 #include "axmol.h"
 
@@ -73,4 +72,3 @@ private:
     int _sceneID                                    = 0;
 };
 
-#endif  // __MAIN_SCENE_H__

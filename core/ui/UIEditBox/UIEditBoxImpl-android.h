@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __UIEDITBOXIMPLANDROID_H__
-#define __UIEDITBOXIMPLANDROID_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 
@@ -84,4 +83,3 @@ private:
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) */
 
-#endif /* __UIEDITBOXIMPLANDROID_H__ */

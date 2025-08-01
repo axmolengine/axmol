@@ -44,8 +44,8 @@ AppDelegate::~AppDelegate() {}
 // it will affect all platforms
 void AppDelegate::initGfxContextAttrs()
 {
-    // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
-    GLContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+    // set graphics context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
+    GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
     // gfxContextAttrs.vsync = false
     RenderView::setGfxContextAttrs(gfxContextAttrs);
 }

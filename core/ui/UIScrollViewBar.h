@@ -24,8 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UISCROLLVIEWBAR_H__
-#define __UISCROLLVIEWBAR_H__
+#pragma once
 
 #include "ui/UIScrollView.h"
 
@@ -184,4 +183,3 @@ private:
 /// @}
 }
 
-#endif /* defined(__UISCROLLVIEWBAR_H__) */

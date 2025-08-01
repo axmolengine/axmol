@@ -23,13 +23,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_GAMECONTROLLER_H_
-#define _AX_GAMECONTROLLER_H_
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #include "base/Controller.h"
 #include "base/EventController.h"
 #include "base/EventListenerController.h"
-
-/// @endcond
-#endif /* defined(_AX_GAMECONTROLLER_H_) */

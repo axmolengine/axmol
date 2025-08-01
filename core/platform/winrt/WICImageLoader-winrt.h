@@ -25,8 +25,7 @@ Based upon code from the DirectX Tool Kit by Microsoft Corporation,
 obtained from https://directxtk.codeplex.com
 ****************************************************************************/
 
-#ifndef __WIC_IMAGE_LOADER_H__
-#define __WIC_IMAGE_LOADER_H__
+#pragma once
 
 #include "base/Config.h"
 
@@ -97,5 +96,4 @@ void SafeRelease(T **ppObj)
 }
 
 #endif
-#endif    // #ifndef __WIC_IMAGE_LOADER_H__
 

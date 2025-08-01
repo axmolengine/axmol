@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __UIEDITBOXIMPLLINUX_H__
-#define __UIEDITBOXIMPLLINUX_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 
@@ -84,4 +83,3 @@ private:
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) */
 
-#endif /* __UIEDITBOXIMPLLINUX_H__ */

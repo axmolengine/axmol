@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_libs__CCObjectExtensionData__
-#define __cocos2d_libs__CCObjectExtensionData__
+#pragma once
 
 #include <string>
 #include "ComBase.h"
@@ -81,4 +80,3 @@ protected:
 };
 }  // namespace cocostudio
 
-#endif /* defined(__cocos2d_libs__CCObjectExtensionData__) */

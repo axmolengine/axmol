@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PLANE_H_
-#define __AX_PLANE_H_
+#pragma once
 
 #include "base/Macros.h"
 #include "math/Math.h"
@@ -108,4 +107,3 @@ protected:
 
 }
 
-#endif

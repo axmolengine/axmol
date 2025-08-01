@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _CCFontAtlasCache_h_
-#define _CCFontAtlasCache_h_
+#pragma once
 
 /// @cond DO_NOT_SHOW
 
@@ -89,6 +88,3 @@ private:
 };
 
 }
-
-/// @endcond
-#endif

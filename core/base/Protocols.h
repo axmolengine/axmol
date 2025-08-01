@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __BASE_CCPROTOCOLS_H__
-#define __BASE_CCPROTOCOLS_H__
+#pragma once
+
 /// @cond DO_NOT_SHOW
 
 #include <string>
@@ -262,6 +262,3 @@ public:
     virtual void stop() = 0;
 };
 }
-
-/// @endcond
-#endif  // __BASE_CCPROTOCOLS_H__

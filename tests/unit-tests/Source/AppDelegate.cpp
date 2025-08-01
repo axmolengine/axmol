@@ -37,7 +37,7 @@ static Vec2 gWindowSize = Vec2(1024, 768);
 
 void AppDelegate::initGfxContextAttrs()
 {
-    // set OpenGL context attributes: red,green,blue,alpha,depth,stencil
+    // set graphics context attributes: red,green,blue,alpha,depth,stencil
     GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     RenderView::setGfxContextAttrs(gfxContextAttrs);

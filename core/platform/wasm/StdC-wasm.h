@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_STD_C_H__
-#define __AX_STD_C_H__
+#pragma once
 
 #include "platform/PlatformConfig.h"
 #include "platform/PlatformMacros.h"
@@ -46,5 +45,4 @@ THE SOFTWARE.
 #define MAX(x,y) (((x) < (y)) ? (y) : (x))
 #endif  // MAX
 
-#endif  // __AX_STD_C_H__
 

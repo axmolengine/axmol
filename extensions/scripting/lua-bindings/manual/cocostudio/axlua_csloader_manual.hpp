@@ -22,8 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_COCOSTUDIO_LUA_COCOS2DX_CSLOADER_MANUAL_H
-#define COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_COCOSTUDIO_LUA_COCOS2DX_CSLOADER_MANUAL_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,4 +37,3 @@ extern "C" {
 
 TOLUA_API int  register_all_ax_csloader_manual(lua_State* L);
 
-#endif // #ifndef COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_COCO_STUDIO_MANUAL_H

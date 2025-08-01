@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_PATH_FOLLOWER_H__
-#define __AX_PU_PARTICLE_3D_PATH_FOLLOWER_H__
+#pragma once
 
 #include "Particle3D/PU/PUAffector.h"
 #include "Particle3D/PU/PUSimpleSpline.h"
@@ -66,4 +65,3 @@ protected:
 };
 }
 
-#endif

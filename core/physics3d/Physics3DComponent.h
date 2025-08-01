@@ -24,8 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __PHYSICS_3D_COMPONENT_H__
-#define __PHYSICS_3D_COMPONENT_H__
+#pragma once
 
 #include "base/Config.h"
 #include "math/Math.h"
@@ -145,4 +144,3 @@ protected:
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
 
-#endif  // __PHYSICS_3D_COMPONENT_H__

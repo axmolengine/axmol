@@ -22,8 +22,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef SCRIPTING_AXLUA_SPINE_MANUAL_H
-#define SCRIPTING_AXLUA_SPINE_MANUAL_H
+#pragma once
 #if defined(AX_ENABLE_EXT_SPINE)
 
 #ifdef __cplusplus
@@ -57,4 +56,3 @@ TOLUA_API int register_spine_module(lua_State* L);
 
 #endif // defined(AX_ENABLE_EXT_SPINE)
 
-#endif // #ifndef COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_SPINE_MANUAL_H

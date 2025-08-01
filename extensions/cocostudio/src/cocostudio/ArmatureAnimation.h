@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCANIMATION_H__
-#define __CCANIMATION_H__
+#pragma once
 
 #include "ProcessBase.h"
 #include "Tween.h"
@@ -297,5 +296,3 @@ protected:
 };
 
 }  // namespace cocostudio
-
-#endif /*__CCANIMATION_H__*/

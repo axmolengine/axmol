@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __TRIGGERFACTORY_H__
-#define __TRIGGERFACTORY_H__
+#pragma once
 
 #include <string>
 #include <unordered_map>
@@ -71,4 +70,3 @@ protected:
 
 }
 
-#endif
