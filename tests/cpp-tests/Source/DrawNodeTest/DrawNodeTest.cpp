@@ -1905,6 +1905,7 @@ string DrawNodePictureTest::subtitle() const
     return "Actions Test";
 }
 
+// orginal source from here: https://forum.lazarus.freepascal.org/index.php/topic,71851.0.html
 void DrawNodeJellyFishTest::CalculatePoint(float x, float y, float t, float& px, float& py)
 {
     float k, d, e, c, q;
