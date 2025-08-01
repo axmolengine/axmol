@@ -114,8 +114,8 @@ public:
     // using from https://github.com/intmainreturn00/AwesomeNode/
     void generateDataPoints();
 
-    ax::PointArray *pts = nullptr;
-    ax::PointArray *pts2 = nullptr;
+    ax::PointArray* pts = nullptr;
+    ax::PointArray* pts2 = nullptr;
     float defY, defY2, dev;
     const int n = 50;
     const int grid = 10;
@@ -144,7 +144,7 @@ protected:
     // DrawNode stuff
     ax::DrawNode* drawNode = nullptr;
     ax::DrawNode* drawNodeArray[10];
- 
+
 
     // Window stuff
     ax::Vec2 origin;
@@ -162,6 +162,26 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void update(float dt) override;
+
+
+};
+
+const int NUM_POINTS = 10000;
+class DrawNodeJellyFishTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeJellyFishTest);
+
+    DrawNodeJellyFishTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt) override;
+    void CalculatePoint(float x, float y, float t, float& px, float& py);
+    void DrawFrame();
+    void UpdateJellyPoints();
+private:
+    ax::Vec2 dots[NUM_POINTS];
 };
 
 class DrawNodeMorphTest_SolidPolygon : public DrawNodeBaseTest
