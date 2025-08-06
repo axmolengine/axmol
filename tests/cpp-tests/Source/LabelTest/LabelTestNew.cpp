@@ -85,6 +85,7 @@ NewLabelTests::NewLabelTests()
 {
     ADD_TEST_CASE(LabelOutlineAndGlowTest);
     ADD_TEST_CASE(LabelTTFDistanceField);
+    ADD_TEST_CASE(LabelTitleButtonTTFDistanceField);
     ADD_TEST_CASE(LabelIssue1336);
     ADD_TEST_CASE(LabelIssue20523);
     ADD_TEST_CASE(LabelFNTGlyphDesigner);
@@ -1328,6 +1329,54 @@ std::string LabelTTFDistanceField::title() const
 std::string LabelTTFDistanceField::subtitle() const
 {
     return "Testing rendering base on DistanceField";
+}
+LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
+{
+    auto size = Director::getInstance()->getWinSize();
+    
+    FontFreeType::setShareDistanceFieldEnabled(false);
+    auto button = ax::ui::Button::create();
+    button->setTitleText("Should be the same size");
+    button->setTitleFontName("fonts/Marker Felt.ttf");
+    button->setTitleFontSize(20);
+    this->addChild(button);
+    button->setPosition(Vec2(size.width / 2, size.height * 0.7f));
+
+    FontFreeType::setShareDistanceFieldEnabled(true);
+    button = ax::ui::Button::create();
+    button->setTitleText("Should be the same size");
+    button->setTitleFontName("fonts/Marker Felt.ttf");
+    button->setTitleFontSize(20);
+    this->addChild(button);
+    button->setPosition(Vec2(size.width / 2, size.height * 0.55f));
+
+    FontFreeType::setShareDistanceFieldEnabled(false);
+    button = ax::ui::Button::create();
+    button->setTitleText("Should be the same size");
+    button->setTitleColor(Color3B::RED);
+    button->setTitleFontName("fonts/Marker Felt.ttf");
+    button->setTitleFontSize(20);
+    this->addChild(button);
+    button->setPosition(Vec2(size.width / 2, size.height * 0.4f));
+
+    FontFreeType::setShareDistanceFieldEnabled(true);
+    button = ax::ui::Button::create();
+    button->setTitleText("Should be the same size");
+    button->setTitleColor(Color3B::RED);
+    button->setTitleFontName("fonts/Marker Felt.ttf");
+    button->setTitleFontSize(20);
+    this->addChild(button);
+    button->setPosition(Vec2(size.width / 2, size.height * 0.25f));
+}
+
+std::string LabelTitleButtonTTFDistanceField::title() const
+{
+    return "Title Button + SDF + .TTF (#2623)";
+}
+
+std::string LabelTitleButtonTTFDistanceField::subtitle() const
+{
+    return "Testing rendering Title of Button on DistanceField";
 }
 
 LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()

@@ -1293,7 +1293,7 @@ bool Label::updateTTFConfigInternal()
         reset();
         return false;
     }
-
+    _contentDirty     = true;
     _currentLabelType = LabelType::TTF;
     setFontAtlas(newAtlas, _fontConfig.distanceFieldEnabled, true);
 

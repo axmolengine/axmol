@@ -351,6 +351,16 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+class LabelTitleButtonTTFDistanceField : public AtlasDemoNew
+{
+public:
+    CREATE_FUNC(LabelTitleButtonTTFDistanceField);
+
+    LabelTitleButtonTTFDistanceField();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
 
 class LabelOutlineAndGlowTest : public AtlasDemoNew
 {
