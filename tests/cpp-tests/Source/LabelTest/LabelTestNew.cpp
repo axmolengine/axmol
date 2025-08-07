@@ -85,6 +85,8 @@ NewLabelTests::NewLabelTests()
 {
     ADD_TEST_CASE(LabelOutlineAndGlowTest);
     ADD_TEST_CASE(LabelTTFDistanceField);
+    ADD_TEST_CASE(LabelTitleButtonTTFDistanceField);
+    ADD_TEST_CASE(LabelTTFSDF);
     ADD_TEST_CASE(LabelIssue1336);
     ADD_TEST_CASE(LabelIssue20523);
     ADD_TEST_CASE(LabelFNTGlyphDesigner);
@@ -1329,6 +1331,199 @@ std::string LabelTTFDistanceField::subtitle() const
 {
     return "Testing rendering base on DistanceField";
 }
+LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
+{
+    auto size = Director::getInstance()->getWinSize();
+    
+    FontFreeType::setShareDistanceFieldEnabled(false);
+    auto button = ax::ui::Button::create();
+    button->setTitleText("Should be the same size");
+    button->setTitleFontName("fonts/Marker Felt.ttf");
+    button->setTitleFontSize(20);
+    this->addChild(button);
+    button->setPosition(Vec2(size.width / 2, size.height * 0.7f));
+
+    FontFreeType::setShareDistanceFieldEnabled(true);
+    button = ax::ui::Button::create();
+    button->setTitleText("Should be the same size");
+    button->setTitleFontName("fonts/Marker Felt.ttf");
+    button->setTitleFontSize(20);
+    this->addChild(button);
+    button->setPosition(Vec2(size.width / 2, size.height * 0.55f));
+
+    FontFreeType::setShareDistanceFieldEnabled(false);
+    button = ax::ui::Button::create();
+    button->setTitleText("Should be the same size");
+    button->setTitleColor(Color3B::RED);
+    button->setTitleFontName("fonts/Marker Felt.ttf");
+    button->setTitleFontSize(20);
+    this->addChild(button);
+    button->setPosition(Vec2(size.width / 2, size.height * 0.4f));
+
+    FontFreeType::setShareDistanceFieldEnabled(true);
+    button = ax::ui::Button::create();
+    button->setTitleText("Should be the same size");
+    button->setTitleColor(Color3B::RED);
+    button->setTitleFontName("fonts/Marker Felt.ttf");
+    button->setTitleFontSize(20);
+    this->addChild(button);
+    button->setPosition(Vec2(size.width / 2, size.height * 0.25f));
+}
+
+std::string LabelTitleButtonTTFDistanceField::title() const
+{
+    return "Title Button + SDF + .TTF (#2623)";
+}
+
+std::string LabelTitleButtonTTFDistanceField::subtitle() const
+{
+    return "Testing rendering Title of Button on DistanceField";
+}
+LabelTTFSDF::LabelTTFSDF()
+{
+    auto size = Director::getInstance()->getWinSize();
+    
+    FontFreeType::setShareDistanceFieldEnabled(false);
+    Label* title = Label::createWithTTF("Normal", "fonts/Marker Felt.ttf", 20);
+    this->addChild(title);
+    title->setPosition(Vec2(size.width*3/4, size.height*0.75));
+    _labelNormal = Label::createWithTTF("Should be the same", "fonts/Marker Felt.ttf", 20);;
+    this->addChild(_labelNormal);
+    _labelNormal->setPosition(Vec2(size.width*3/4, size.height*0.7));
+    
+    FontFreeType::setShareDistanceFieldEnabled(true);
+    title = Label::createWithTTF("SDF", "fonts/Marker Felt.ttf", 20);
+    this->addChild(title);
+    title->setPosition(Vec2(size.width/4, size.height*0.75));
+    
+    _labelSDF= Label::createWithTTF("Should be the same", "fonts/Marker Felt.ttf", 20);
+    this->addChild(_labelSDF);
+    _labelSDF->setPosition(Vec2(size.width/4, size.height*0.7));
+    
+    initToggleLabel("enableGlow",Vec2(size.width*0.15, size.height*0.15),[=, this](Object*obj, ax::ui::CheckBox::EventType type){
+        if(type == ax::ui::CheckBox::EventType::SELECTED){
+            _labelSDF->enableGlow(Color4B::RED);
+            _labelNormal->enableGlow(Color4B::RED);
+        }else{
+            _labelSDF->disableEffect(ax::LabelEffect::GLOW);
+            _labelNormal->disableEffect(ax::LabelEffect::GLOW);
+        }
+    });
+    initToggleLabel("enableItalics",Vec2(size.width*0.15, size.height*0.25),[=, this](Object*obj, ax::ui::CheckBox::EventType type){
+        if(type == ax::ui::CheckBox::EventType::SELECTED){
+            _labelSDF->enableItalics();
+            _labelNormal->enableItalics();
+        }else{
+            _labelSDF->disableEffect(ax::LabelEffect::ITALICS);
+            _labelNormal->disableEffect(ax::LabelEffect::ITALICS);
+        }
+    });
+    initToggleLabel("enableOutline",Vec2(size.width*0.15, size.height*0.35),[=, this](Object*obj, ax::ui::CheckBox::EventType type){
+        if(type == ax::ui::CheckBox::EventType::SELECTED){
+            _labelSDF->enableOutline(Color4B::GREEN,1);
+            _labelNormal->enableOutline(Color4B::GREEN,1);
+        }else{
+            _labelSDF->disableEffect(ax::LabelEffect::OUTLINE);
+            _labelNormal->disableEffect(ax::LabelEffect::OUTLINE);
+        }
+    });
+    initToggleLabel("enableShadow",Vec2(size.width*0.15, size.height*0.45),[=, this](Object*obj, ax::ui::CheckBox::EventType type){
+        if(type == ax::ui::CheckBox::EventType::SELECTED){
+            _labelSDF->enableShadow(Color4B::YELLOW,Vec2(-1,-1));
+            _labelNormal->enableShadow(Color4B::YELLOW,Vec2(-1,-1));
+        }else{
+            _labelSDF->disableEffect(ax::LabelEffect::SHADOW);
+            _labelNormal->disableEffect(ax::LabelEffect::SHADOW);
+        }
+    });
+    initToggleLabel("enableBold",Vec2(size.width*0.15, size.height*0.55),[=, this](Object*obj, ax::ui::CheckBox::EventType type){
+        if(type == ax::ui::CheckBox::EventType::SELECTED){
+            _labelSDF->enableBold();
+            _labelNormal->enableBold();
+        }else{
+            _labelSDF->disableEffect(ax::LabelEffect::BOLD);
+            _labelNormal->disableEffect(ax::LabelEffect::BOLD);
+        }
+    });
+    
+    initSlider("Size",Vec2(size.width*0.5, size.height*0.20),[=, this](Object*obj, ax::ui::Slider::EventType type){
+        Slider* slider  = (Slider*)obj;
+        float size = 20 + slider->getPercent()/5.f;
+        TTFConfig config = _labelSDF->getTTFConfig();
+        config.fontSize  = size;
+        _labelSDF->setTTFConfig(config);
+
+        config = _labelNormal->getTTFConfig();
+        config.fontSize  = size;
+        _labelNormal->setTTFConfig(config);
+        
+    });
+    initSlider("Scale",Vec2(size.width*0.5, size.height*0.25),[=, this](Object*obj, ax::ui::Slider::EventType type){
+        Slider* slider  = (Slider*)obj;
+        float scale = 1 + slider->getPercent()/50.f;
+        
+        _labelSDF->setScale(scale);
+        _labelNormal->setScale(scale);
+    });
+    initSlider("Outline",Vec2(size.width*0.5, size.height*0.30),[=, this](Object*obj, ui::Slider::EventType type){
+        Slider* slider  = (Slider*)obj;
+        float size = 1 + slider->getPercent()/10;
+        
+        _labelSDF->enableOutline(Color4B::GREEN,size);
+        _labelNormal->enableOutline(Color4B::GREEN,size);
+
+    });
+}
+void LabelTTFSDF::initSlider(std::string content,Vec2 pos,std::function<void(Object*, ui::Slider::EventType)> callback){
+    
+    auto slider2 = ui::Slider::create();
+    slider2->setTag(2);
+    slider2->setTouchEnabled(true);
+    slider2->loadBarTexture("cocosui/sliderTrack.png");
+    slider2->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+    slider2->loadProgressBarTexture("cocosui/sliderProgress.png");
+    slider2->setPosition(pos);
+    slider2->setPercent(0);
+    slider2->setScale(0.6);
+    slider2->addEventListener(callback);
+    addChild(slider2, 999);
+    
+    auto label = Label::createWithSystemFont(content +": ","Arial",10);
+    label->setColor(Color3B::WHITE);
+    label->setPosition(pos - Vec2(slider2->getContentSize().width*0.3,0));
+    label->setAnchorPoint(Vec2(1,0.5));
+    this->addChild(label);
+}
+void LabelTTFSDF::initToggleLabel(std::string content, ax::Vec2 pos, std::function<void(Object*, ax::ui::CheckBox::EventType)> callback)
+{
+    auto label = Label::createWithSystemFont(content + ":", "Arial", 10);
+    label->setColor(Color3B::WHITE);
+    label->setPosition(pos);
+    label->setAnchorPoint(Vec2(1,0.5));
+    this->addChild(label);
+
+    CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+                                          "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+                                          "cocosui/check_box_active_disable.png");
+    checkBox->setPosition(pos);
+    checkBox->setScale(0.5);
+    checkBox->setName("toggleType");
+    checkBox->setSelected(true);
+    checkBox->addEventListener(callback);
+    checkBox->setAnchorPoint(Vec2(0,0.5));
+    checkBox->setSelected(false);
+    this->addChild(checkBox);
+}
+std::string LabelTTFSDF::title() const
+{
+    return "Label + SDF + .TTF (#2623)";
+}
+
+std::string LabelTTFSDF::subtitle() const
+{
+    return "Testing rendering Label on DistanceField";
+}
+
 
 LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
 {
