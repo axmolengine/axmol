@@ -1301,16 +1301,15 @@ bool Label::updateTTFConfigInternal()
     {
         _useA8Shader     = false;
         _currLabelEffect = LabelEffect::OUTLINE;
-        updateShaderProgram();
     }
     else
     {
         if(_currLabelEffect != LabelEffect::GLOW){
             _currLabelEffect = LabelEffect::NORMAL;
         }
-        updateShaderProgram();
     }
-
+    updateShaderProgram();
+    
     if (_fontConfig.italics)
         this->enableItalics();
     if (_fontConfig.bold)

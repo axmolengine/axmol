@@ -373,8 +373,9 @@ public:
     virtual std::string subtitle() const override;
     ax::Label* _labelNormal;
     ax::Label* _labelSDF;
+    ax::ui::Slider *_sliderOutline;
     void initToggleLabel(std::string content, ax::Vec2 pos, std::function<void(Object*, ax::ui::CheckBox::EventType)> callback);
-    void initSlider(std::string content,ax::Vec2 pos,std::function<void(Object*, ax::ui::Slider::EventType)> callback);
+    ax::ui::Slider* initSlider(std::string content,ax::Vec2 pos,std::function<void(Object*, ax::ui::Slider::EventType)> callback);
 };
 
 class LabelOutlineAndGlowTest : public AtlasDemoNew

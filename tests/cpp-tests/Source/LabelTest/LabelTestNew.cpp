@@ -1389,7 +1389,7 @@ LabelTTFSDF::LabelTTFSDF()
     title->setPosition(Vec2(size.width*3/4, size.height*0.75));
     _labelNormal = Label::createWithTTF("Should be the same", "fonts/Marker Felt.ttf", 20);;
     this->addChild(_labelNormal);
-    _labelNormal->setPosition(Vec2(size.width*3/4, size.height*0.7));
+    _labelNormal->setPosition(Vec2(size.width*3/4, size.height*0.65));
     
     FontFreeType::setShareDistanceFieldEnabled(true);
     title = Label::createWithTTF("SDF", "fonts/Marker Felt.ttf", 20);
@@ -1398,7 +1398,7 @@ LabelTTFSDF::LabelTTFSDF()
     
     _labelSDF= Label::createWithTTF("Should be the same", "fonts/Marker Felt.ttf", 20);
     this->addChild(_labelSDF);
-    _labelSDF->setPosition(Vec2(size.width/4, size.height*0.7));
+    _labelSDF->setPosition(Vec2(size.width/4, size.height*0.65));
     
     initToggleLabel("enableGlow",Vec2(size.width*0.15, size.height*0.15),[=, this](Object*obj, ax::ui::CheckBox::EventType type){
         if(type == ax::ui::CheckBox::EventType::SELECTED){
@@ -1422,9 +1422,14 @@ LabelTTFSDF::LabelTTFSDF()
         if(type == ax::ui::CheckBox::EventType::SELECTED){
             _labelSDF->enableOutline(Color4B::GREEN,1);
             _labelNormal->enableOutline(Color4B::GREEN,1);
+            _sliderOutline->setEnabled(true);
+            _sliderOutline->setOpacity(255);
         }else{
             _labelSDF->disableEffect(ax::LabelEffect::OUTLINE);
             _labelNormal->disableEffect(ax::LabelEffect::OUTLINE);
+            _sliderOutline->setEnabled(false);
+            _sliderOutline->setOpacity(100);
+            _sliderOutline->setPercent(0);
         }
     });
     initToggleLabel("enableShadow",Vec2(size.width*0.15, size.height*0.45),[=, this](Object*obj, ax::ui::CheckBox::EventType type){
@@ -1465,16 +1470,18 @@ LabelTTFSDF::LabelTTFSDF()
         _labelSDF->setScale(scale);
         _labelNormal->setScale(scale);
     });
-    initSlider("Outline",Vec2(size.width*0.5, size.height*0.30),[=, this](Object*obj, ui::Slider::EventType type){
+    _sliderOutline = initSlider("Outline",Vec2(size.width*0.5, size.height*0.30),[=, this](Object*obj, ui::Slider::EventType type){
         Slider* slider  = (Slider*)obj;
         float size = 1 + slider->getPercent()/10;
-        
+        if(!slider->isEnabled()) return;
         _labelSDF->enableOutline(Color4B::GREEN,size);
         _labelNormal->enableOutline(Color4B::GREEN,size);
 
     });
+    _sliderOutline->setEnabled(false);
+    _sliderOutline->setOpacity(100);
 }
-void LabelTTFSDF::initSlider(std::string content,Vec2 pos,std::function<void(Object*, ui::Slider::EventType)> callback){
+ui::Slider* LabelTTFSDF::initSlider(std::string content,Vec2 pos,std::function<void(Object*, ui::Slider::EventType)> callback){
     
     auto slider2 = ui::Slider::create();
     slider2->setTag(2);
@@ -1493,6 +1500,8 @@ void LabelTTFSDF::initSlider(std::string content,Vec2 pos,std::function<void(Obj
     label->setPosition(pos - Vec2(slider2->getContentSize().width*0.3,0));
     label->setAnchorPoint(Vec2(1,0.5));
     this->addChild(label);
+    
+    return slider2;
 }
 void LabelTTFSDF::initToggleLabel(std::string content, ax::Vec2 pos, std::function<void(Object*, ax::ui::CheckBox::EventType)> callback)
 {
