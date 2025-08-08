@@ -1301,14 +1301,15 @@ bool Label::updateTTFConfigInternal()
     {
         _useA8Shader     = false;
         _currLabelEffect = LabelEffect::OUTLINE;
+        updateShaderProgram();
     }
     else
     {
         if(_currLabelEffect != LabelEffect::GLOW){
             _currLabelEffect = LabelEffect::NORMAL;
+            updateShaderProgram();
         }
     }
-    updateShaderProgram();
     
     if (_fontConfig.italics)
         this->enableItalics();
@@ -1372,13 +1373,23 @@ void Label::enableGlow(const Color4B& glowColor)
     if (_currentLabelType == LabelType::TTF)
     {
         auto config                 = _fontConfig;
-        config.outlineSize          = 0;
-        if (_fontConfig.distanceFieldEnabled == false)
+        int mods                    = 0;
+        if (config.outlineSize > 0)
+        {
+            config.outlineSize = 0;
+            ++mods;
+        }
+        if (!_fontConfig.distanceFieldEnabled)
         {
             config.distanceFieldEnabled = true;
+            ++mods;
         }
-        setTTFConfig(config);
-        _contentDirty = true;
+        if (mods)
+        {
+            setTTFConfig(config);
+            _contentDirty = true;
+            updateShaderProgram();
+        }
         _currLabelEffect = LabelEffect::GLOW;
         _effectColorF.r  = glowColor.r / 255.0f;
         _effectColorF.g  = glowColor.g / 255.0f;

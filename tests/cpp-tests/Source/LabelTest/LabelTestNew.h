@@ -376,6 +376,8 @@ public:
     ax::ui::Slider *_sliderOutline;
     void initToggleLabel(std::string content, ax::Vec2 pos, std::function<void(Object*, ax::ui::CheckBox::EventType)> callback);
     ax::ui::Slider* initSlider(std::string content,ax::Vec2 pos,std::function<void(Object*, ax::ui::Slider::EventType)> callback);
+    void initToggleCheckboxes();
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
 };
 
 class LabelOutlineAndGlowTest : public AtlasDemoNew
