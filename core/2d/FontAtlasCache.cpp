@@ -58,23 +58,20 @@ void FontAtlasCache::preloadFontAtlas(std::string_view fontatlasFile)
     FontAtlas::loadFontAtlas(fontatlasFile, _atlasMap);
 }
 
-FontAtlas* FontAtlasCache::getFontAtlasTTF(_ttfConfig* config)
+FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
 {
     auto& realFontFilename = config->fontFilePath;
     bool useDistanceField  = config->distanceFieldEnabled;
     int outlineSize        = useDistanceField ? 0 : config->outlineSize;
 
     // underlaying font engine (freetype2) only support int type, so convert to int avoid precision issue
-    if (!config->distanceFieldEnabled)
-        config->faceSize = static_cast<int>(config->fontSize);
+    const int faceSize = config->distanceFieldEnabled ? config->faceSize : static_cast<int>(config->fontSize);
+    auto scaledFaceSize = static_cast<int>(faceSize * AX_CONTENT_SCALE_FACTOR());
 
-    auto scaledFaceSize = static_cast<int>(config->faceSize * AX_CONTENT_SCALE_FACTOR());
-
-    std::string atlasName =
-        config->distanceFieldEnabled
+    std::string atlasName = config->distanceFieldEnabled
                                 ? fmt::format("df {} {}", scaledFaceSize, realFontFilename)
                                 : fmt::format("{} {} {}", scaledFaceSize, outlineSize, realFontFilename);
-    auto it = _atlasMap.find(atlasName);
+    auto it               = _atlasMap.find(atlasName);
 
     if (it == _atlasMap.end())
     {

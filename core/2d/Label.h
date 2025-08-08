@@ -55,7 +55,7 @@ typedef struct _ttfConfig
 
     GlyphCollection glyphs;
     float fontSize; // The desired render font size
-    int faceSize; // The original face size of font
+    int faceSize; // The original face size of font, used when distanceFieldEnabled == true
     int outlineSize;
 
     bool distanceFieldEnabled;
