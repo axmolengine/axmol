@@ -46,7 +46,7 @@ public:
      * since axmol-2.1.0, must call before creating any Label
      */
     static void preloadFontAtlas(std::string_view fontatlasFile);
-    static FontAtlas* getFontAtlasTTF(_ttfConfig* config);
+    static FontAtlas* getFontAtlasTTF(const _ttfConfig* config);
 
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName);
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, std::string_view subTextureKey);

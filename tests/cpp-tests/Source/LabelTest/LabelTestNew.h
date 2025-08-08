@@ -351,6 +351,34 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+class LabelTitleButtonTTFDistanceField : public AtlasDemoNew
+{
+public:
+    CREATE_FUNC(LabelTitleButtonTTFDistanceField);
+
+    LabelTitleButtonTTFDistanceField();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class LabelTTFSDF : public AtlasDemoNew
+{
+public:
+    CREATE_FUNC(LabelTTFSDF);
+
+    LabelTTFSDF();
+    void initLabel(ax::Vec2 pos);
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    ax::Label* _labelNormal;
+    ax::Label* _labelSDF;
+    ax::ui::Slider *_sliderOutline;
+    void initToggleLabel(std::string content, ax::Vec2 pos, std::function<void(Object*, ax::ui::CheckBox::EventType)> callback);
+    ax::ui::Slider* initSlider(std::string content,ax::Vec2 pos,std::function<void(Object*, ax::ui::Slider::EventType)> callback);
+    void initToggleCheckboxes();
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+};
 
 class LabelOutlineAndGlowTest : public AtlasDemoNew
 {
