@@ -1355,7 +1355,7 @@ LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
     FontFreeType::setShareDistanceFieldEnabled(false);
     button = ax::ui::Button::create();
     button->setTitleText("Should be the same size");
-    button->setTitleColor(Color3B::RED);
+    button->setTitleColor(Color32::RED);
     button->setTitleFontName("fonts/Marker Felt.ttf");
     button->setTitleFontSize(20);
     this->addChild(button);
@@ -1364,7 +1364,7 @@ LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
     FontFreeType::setShareDistanceFieldEnabled(true);
     button = ax::ui::Button::create();
     button->setTitleText("Should be the same size");
-    button->setTitleColor(Color3B::RED);
+    button->setTitleColor(Color32::RED);
     button->setTitleFontName("fonts/Marker Felt.ttf");
     button->setTitleFontSize(20);
     this->addChild(button);
@@ -1420,8 +1420,8 @@ LabelTTFSDF::LabelTTFSDF()
                     [=, this](Object* obj, ax::ui::CheckBox::EventType type) {
         if (type == ax::ui::CheckBox::EventType::SELECTED)
         {
-            _labelSDF->enableShadow(Color4B::YELLOW, Vec2(-1, -1));
-            _labelNormal->enableShadow(Color4B::YELLOW, Vec2(-1, -1));
+            _labelSDF->enableShadow(Color32::YELLOW, Vec2(-1, -1));
+            _labelNormal->enableShadow(Color32::YELLOW, Vec2(-1, -1));
         }
         else
         {
@@ -1467,8 +1467,8 @@ LabelTTFSDF::LabelTTFSDF()
         float size     = 1 + slider->getPercent() / 10;
         if (!slider->isEnabled())
             return;
-        _labelSDF->enableOutline(Color4B::GREEN, size);
-        _labelNormal->enableOutline(Color4B::GREEN, size);
+        _labelSDF->enableOutline(Color32::GREEN, size);
+        _labelNormal->enableOutline(Color32::GREEN, size);
     });
     initToggleCheckboxes();
     _sliderOutline->setEnabled(false);
@@ -1492,7 +1492,7 @@ ui::Slider* LabelTTFSDF::initSlider(std::string content,
     addChild(slider2, 999);
 
     auto label = Label::createWithSystemFont(content + ": ", "Arial", 10);
-    label->setColor(Color3B::WHITE);
+    label->setColor(Color32::WHITE);
     label->setPosition(pos - Vec2(slider2->getContentSize().width * 0.3, 0));
     label->setAnchorPoint(Vec2(1, 0.5));
     this->addChild(label);
@@ -1551,12 +1551,12 @@ void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButt
     case 0:
         break;
     case 1:
-        _labelNormal->enableGlow(Color4B::RED);
-        _labelSDF->enableGlow(Color4B::RED);
+        _labelNormal->enableGlow(Color32::RED);
+        _labelSDF->enableGlow(Color32::RED);
         break;
     case 2:
-        _labelSDF->enableOutline(Color4B::GREEN, 1);
-        _labelNormal->enableOutline(Color4B::GREEN, 1);
+        _labelSDF->enableOutline(Color32::GREEN, 1);
+        _labelNormal->enableOutline(Color32::GREEN, 1);
         _sliderOutline->setEnabled(true);
         _sliderOutline->setOpacity(255);
         break;
@@ -1569,7 +1569,7 @@ void LabelTTFSDF::initToggleLabel(std::string content,
                                   std::function<void(Object*, ax::ui::CheckBox::EventType)> callback)
 {
     auto label = Label::createWithSystemFont(content + ":", "Arial", 10);
-    label->setColor(Color3B::WHITE);
+    label->setColor(Color32::WHITE);
     label->setPosition(pos);
     label->setAnchorPoint(Vec2(1, 0.5));
     this->addChild(label);
