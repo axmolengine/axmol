@@ -32,7 +32,7 @@
 #include "renderer/backend/opengl/MacrosGL.h"
 #include "renderer/backend/opengl/UtilsGL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 #define ISPOW2(n) (((n) & (n - 1)) == 0)
 
@@ -390,4 +390,4 @@ void TextureCubeGL::generateMipmaps()
     }
 }
 
-NS_AX_BACKEND_END
+}

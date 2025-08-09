@@ -37,7 +37,7 @@
 
 struct XXH64_state_s;
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _backend
  * @{
@@ -155,7 +155,7 @@ using ProgramCache = ProgramManager;  // for compatible
 
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}
 
 /**
  * @alias some feq use types to namespace ax

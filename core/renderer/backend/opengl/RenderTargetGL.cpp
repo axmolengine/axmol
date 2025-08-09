@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "DriverGL.h"
 #include "renderer/backend/opengl/MacrosGL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 RenderTargetGL::RenderTargetGL(bool defaultRenderTarget, DriverGL* driver) : RenderTarget(defaultRenderTarget)
 {
@@ -126,4 +126,4 @@ void RenderTargetGL::update() const
     _dirtyFlags = TargetBufferFlags::NONE;
 }
 
-NS_AX_BACKEND_END
+}

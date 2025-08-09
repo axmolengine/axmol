@@ -32,7 +32,7 @@
 #include "tsl/robin_map.h"
 #import <Metal/Metal.h>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _metal
  * @{
@@ -81,4 +81,4 @@ private:
 
 // end of _metal group
 /// @}
-NS_AX_BACKEND_END
+}

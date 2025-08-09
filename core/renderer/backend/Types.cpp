@@ -25,7 +25,7 @@
 
 #include "Types.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 bool StageUniformLocation::operator==(const StageUniformLocation& other) const
 {
@@ -42,4 +42,4 @@ std::size_t UniformLocation::operator()(const UniformLocation&) const
     return size_t(vertStage.location) ^ size_t(fragStage.location << 16);
 }
 
-NS_AX_BACKEND_END
+}

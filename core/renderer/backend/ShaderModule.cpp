@@ -24,7 +24,7 @@
 
 #include "ShaderModule.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 ShaderStage ShaderModule::getShaderStage() const
 {
@@ -35,4 +35,4 @@ ShaderModule::ShaderModule(ShaderStage stage) : _stage(stage) {}
 
 ShaderModule::~ShaderModule() {}
 
-NS_AX_BACKEND_END
+}

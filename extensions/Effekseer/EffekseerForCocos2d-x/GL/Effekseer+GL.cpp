@@ -1,5 +1,5 @@
 #include "../EffekseerForCocos2d-x.h"
-#ifndef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_GL
 
 #include "../../EffekseerRendererCommon/ModelLoader.h"
 #include "../../EffekseerRendererGL/EffekseerRendererGL.h"

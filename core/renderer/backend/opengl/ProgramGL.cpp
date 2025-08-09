@@ -35,7 +35,7 @@
 #include "renderer/backend/opengl/UtilsGL.h"
 #include "OpenGLState.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 #if AX_GLES_PROFILE == 200
 #    define DEF_TO_INT(pointer, index) (*((GLint*)(pointer) + index))
@@ -549,4 +549,4 @@ std::size_t ProgramGL::getUniformBufferSize(ShaderStage stage) const
     return _totalBufferSize;
 }
 
-NS_AX_BACKEND_END
+}

@@ -29,7 +29,7 @@
 
 #if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 /**
  * @addtogroup _opengl
@@ -54,6 +54,6 @@ public:
 
 // end of _opengl group
 /// @}
-NS_AX_BACKEND_END
+}
 
 #endif

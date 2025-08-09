@@ -32,7 +32,7 @@
 
 #include "OpenGLState.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 /**
  * Store texture information.
@@ -269,4 +269,4 @@ private:
 
 // end of _opengl group
 /// @}
-NS_AX_BACKEND_END
+}

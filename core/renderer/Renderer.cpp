@@ -203,8 +203,13 @@ void Renderer::init()
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
 
-    auto driver    = backend::DriverBase::getInstance();
-    _commandBuffer = driver->newCommandBuffer();
+    auto driver = backend::DriverBase::getInstance();
+#if AX_RENDER_API == AX_RENDER_API_D3D
+    auto mainWindowHandle = Director::getInstance()->getRenderView()->getWin32Window();
+    _commandBuffer        = driver->newCommandBuffer(mainWindowHandle);
+#else
+    _commandBuffer = driver->newCommandBuffer(nullptr);
+#endif
     _dsDesc.flags = DepthStencilFlags::ALL;
     _defaultRT    = driver->newDefaultRenderTarget();
 
@@ -309,7 +314,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
             drawBatchedTriangles();
 
             _queuedTotalIndexCount = _queuedTotalVertexCount = 0;
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
             _queuedIndexCount = _queuedVertexCount = 0;
             _triangleCommandBufferManager.prepareNextBuffer();
             _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
@@ -319,7 +324,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
 
         // queue it
         _queuedTriangleCommands.emplace_back(cmd);
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
         _queuedIndexCount += cmd->getIndexCount();
         _queuedVertexCount += cmd->getVertexCount();
 #endif
@@ -428,7 +433,7 @@ void Renderer::endFrame()
 {
     _commandBuffer->endFrame();
 
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     _triangleCommandBufferManager.putbackAllBuffers();
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
@@ -611,7 +616,7 @@ void Renderer::drawBatchedTriangles()
         return;
 
         /************** 1: Setup up vertices/indices *************/
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     unsigned int vertexBufferFillOffset = _queuedTotalVertexCount - _queuedVertexCount;
     unsigned int indexBufferFillOffset  = _queuedTotalIndexCount - _queuedIndexCount;
 #else
@@ -675,7 +680,7 @@ void Renderer::drawBatchedTriangles()
         firstCommand   = false;
     }
     batchesTotal++;
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     _vertexBuffer->updateSubData(_verts, vertexBufferFillOffset * sizeof(_verts[0]), _filledVertex * sizeof(_verts[0]));
     _indexBuffer->updateSubData(_indices, indexBufferFillOffset * sizeof(_indices[0]),
                                 _filledIndex * sizeof(_indices[0]));
@@ -708,7 +713,7 @@ void Renderer::drawBatchedTriangles()
     /************** 3: Cleanup *************/
     _queuedTriangleCommands.clear();
 
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     _queuedIndexCount  = 0;
     _queuedVertexCount = 0;
 #endif

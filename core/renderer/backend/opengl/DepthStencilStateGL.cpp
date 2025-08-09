@@ -29,7 +29,7 @@
 #include "renderer/backend/opengl/UtilsGL.h"
 #include "OpenGLState.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 void DepthStencilStateGL::reset()
 {
@@ -91,4 +91,4 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
     CHECK_GL_ERROR_DEBUG();
 }
 
-NS_AX_BACKEND_END
+}

@@ -30,7 +30,7 @@
 
 #include <string>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 // #define AX_USE_UNIFORM_FULL_NAME
 
@@ -90,4 +90,4 @@ protected:
 
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

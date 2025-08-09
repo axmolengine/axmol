@@ -38,7 +38,7 @@
 #include "DriverGL.h"
 #include <algorithm>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 #if AX_GLES_PROFILE != 200 && AX_TARGET_PLATFORM != AX_PLATFORM_WASM
 #    define AX_HAVE_MAP_BUFFER_RANGE 1
@@ -320,7 +320,9 @@ void CommandBufferGL::endRenderPass()
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
-void CommandBufferGL::endFrame() {}
+void CommandBufferGL::endFrame()
+{
+}
 
 void CommandBufferGL::prepareDrawing() const
 {
@@ -564,4 +566,4 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
         rtGL->unbindFrameBuffer();
 }
 
-NS_AX_BACKEND_END
+}

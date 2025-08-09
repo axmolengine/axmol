@@ -35,7 +35,7 @@
 #include <vector>
 #include <unordered_map>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class ShaderModule;
 class VertexLayout;
@@ -223,4 +223,4 @@ protected:
 
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

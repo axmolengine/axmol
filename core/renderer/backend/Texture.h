@@ -31,7 +31,7 @@
 
 #include <functional>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _backend
  * @{
@@ -221,4 +221,4 @@ public:
 
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

@@ -27,7 +27,7 @@
 #include <vector>
 #include "../Macros.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class BufferMTL;
 
@@ -66,4 +66,4 @@ private:
 
 // end of _metal group
 /// @}
-NS_AX_BACKEND_END
+}

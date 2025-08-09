@@ -1,6 +1,6 @@
 #include "OpenGLState.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 namespace
 {
@@ -15,4 +15,4 @@ void OpenGLState::reset()
     __gl = g_defaultOpenGLState.get();
 }
 
-NS_AX_BACKEND_END
+}

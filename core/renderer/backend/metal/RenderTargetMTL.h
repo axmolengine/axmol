@@ -2,7 +2,7 @@
 #include "../RenderTarget.h"
 #include "CommandBufferMTL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class RenderTargetMTL : public RenderTarget
 {
@@ -37,4 +37,4 @@ public:
     // MetalContext*, DriverMTL*
 };
 
-NS_AX_BACKEND_END
+}

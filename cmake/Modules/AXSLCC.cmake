@@ -118,15 +118,19 @@ function(ax_target_compile_shaders target_name)
       endif()
 
       list(APPEND SC_FLAGS "--lang=gles" "--profile=${SC_PROFILE}")
-    elseif(AX_USE_GL)
+    elseif(AX_RENDER_API STREQUAL "gl")
       # version 330
       set(OUT_LANG "GLSL")
       set(SC_PROFILE "330")
       list(APPEND SC_FLAGS "--lang=glsl" "--profile=${SC_PROFILE}")
-    elseif(AX_USE_METAL)
+    elseif(AX_RENDER_API STREQUAL "mtl")
       set(OUT_LANG "MSL")
       list(APPEND SC_FLAGS "--lang=msl")
       set(SC_DEFINES "METAL")
+    elseif(AX_RENDER_API STREQUAL "d3d")
+      set(OUT_LANG "HLSL")
+      list(APPEND SC_FLAGS "--lang=hlsl")
+      set(SC_DEFINES "HLSL")
     endif()
 
     # automap, no-suffix since 1.18.1 released by axmolengine
@@ -158,7 +162,7 @@ function(ax_target_compile_shaders target_name)
     endif()
 
     # sgs, because Apple Metal lack of shader uniform reflect so use --sgs --refelect
-    if(AX_USE_METAL)
+    if(AX_RENDER_API STREQUAL "mtl")
       list(APPEND SC_FLAGS "--sgs" "--reflect")
     endif()
 

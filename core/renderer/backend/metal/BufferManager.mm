@@ -25,7 +25,7 @@
 #include "BufferManager.h"
 #include "BufferMTL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 std::vector<BufferMTL*> BufferManager::_buffers;
 
@@ -47,4 +47,4 @@ void BufferManager::beginFrame()
         buffer->beginFrame();
 }
 
-NS_AX_BACKEND_END
+}

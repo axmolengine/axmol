@@ -26,7 +26,7 @@
 #include "../Macros.h"
 #include "BufferManager.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 BufferMTL::BufferMTL(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage)
     : Buffer(size, type, usage)
@@ -102,4 +102,4 @@ void BufferMTL::updateIndex()
     }
 }
 
-NS_AX_BACKEND_END
+}

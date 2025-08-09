@@ -164,7 +164,7 @@ void Terrain::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t f
     {
         int hasLightMap = 0;
         _programState->setUniform(_lightMapCheckLocation, &hasLightMap, sizeof(hasLightMap));
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
         _programState->setTexture(_lightMapLocation, 5, _dummyTexture->getBackendTexture());
 #endif
     }
@@ -266,7 +266,7 @@ Terrain::Terrain()
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { reload(); });
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     auto image          = new Image();
     bool AX_UNUSED isOK = image->initWithRawData(ax_2x2_white_image, sizeof(ax_2x2_white_image), 2, 2, 8);
     AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");

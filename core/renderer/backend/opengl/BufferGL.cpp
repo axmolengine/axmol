@@ -30,7 +30,7 @@
 #include "renderer/backend/opengl/MacrosGL.h"
 #include "OpenGLState.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 namespace
 {
@@ -138,4 +138,4 @@ void BufferGL::updateSubData(const void* data, std::size_t offset, std::size_t s
     }
 }
 
-NS_AX_BACKEND_END
+}

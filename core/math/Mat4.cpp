@@ -121,7 +121,7 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     dst->m[14] = -2.0f * zFarPlane * zNearPlane * f_n;
 
 // https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     dst->m[10] = -(zFarPlane)*f_n;
     dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
 #endif
@@ -158,7 +158,7 @@ void Mat4::createOrthographicOffCenter(float left,
     dst->m[15] = 1;
 
 //// https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     dst->m[10] = 1 / (zNearPlane - zFarPlane);
     dst->m[14] = zNearPlane / (zNearPlane - zFarPlane);
 #endif

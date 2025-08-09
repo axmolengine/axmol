@@ -27,7 +27,7 @@
 #include "ProgramManager.h"
 #include "VertexLayout.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 /*
  * shader vertex layout define functions
@@ -207,4 +207,4 @@ void Program::setProgramIds(uint32_t progType, uint64_t progId)
     _programType = progType;
     _programId   = progId;
 }
-NS_AX_BACKEND_END
+}

@@ -163,35 +163,10 @@ function(use_ax_compile_define target)
   # !important axmol not use double precision
   # target_compile_definitions(${target} PUBLIC CP_USE_CGTYPES=0)
   # target_compile_definitions(${target} PUBLIC CP_USE_DOUBLES=0)
-  if(APPLE)
-    target_compile_definitions(${target} PUBLIC __APPLE__)
-
-    if(AX_USE_GL)
-      target_compile_definitions(${target}
-        PUBLIC AX_USE_GL=1
-        PUBLIC GL_SILENCE_DEPRECATION=1
-      )
-
-      if(NOT _AX_USE_PREBUILT)
-        target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
-      endif()
-    endif()
-  elseif(LINUX)
+  if(LINUX)
     ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
     target_compile_definitions(${target} PUBLIC _GNU_SOURCE)
-  elseif(ANDROID)
-    if(NOT _AX_USE_PREBUILT)
-      target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
-    endif()
-
-    target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
-  elseif(EMSCRIPTEN)
-    target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
   elseif(WINDOWS)
-    if(NOT _AX_USE_PREBUILT)
-      target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
-    endif()
-
     ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
     target_compile_definitions(${target}
       PUBLIC WIN32
@@ -201,13 +176,25 @@ function(use_ax_compile_define target)
       PUBLIC _UNICODE
       PUBLIC _CRT_SECURE_NO_WARNINGS
       PUBLIC _SCL_SECURE_NO_WARNINGS
-
       # PUBLIC GLAD_GLAPI_EXPORT
     )
 
     if(BUILD_SHARED_LIBS)
       target_compile_definitions(${target} PRIVATE AX_DLLEXPORT INTERFACE AX_DLLIMPORT)
     endif()
+  endif()
+
+  # render api
+  if(AX_RENDER_API STREQUAL "gl")
+    target_compile_definitions(${target} PUBLIC AX_RENDER_API=1)
+    if(APPLE)
+      target_compile_definitions(${target} PUBLIC GL_SILENCE_DEPRECATION=1)
+    endif()
+    target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+  elseif(AX_RENDER_API STREQUAL "mtl")
+    target_compile_definitions(${target} PUBLIC AX_RENDER_API=2)
+  elseif(AX_RENDER_API STREQUAL "d3d")
+    target_compile_definitions(${target} PUBLIC AX_RENDER_API=3)
   endif()
 endfunction()
 

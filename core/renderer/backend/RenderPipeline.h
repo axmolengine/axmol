@@ -30,7 +30,7 @@
 #include "renderer/PipelineDescriptor.h"
 #include "renderer/backend/RenderPassDescriptor.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _backend
  * @{
@@ -50,4 +50,4 @@ protected:
 };
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

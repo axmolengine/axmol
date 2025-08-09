@@ -46,11 +46,11 @@ THE SOFTWARE.
 
 #include "renderer/Renderer.h"
 
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
 #    include <Metal/Metal.h>
 #    include "renderer/backend/metal/DriverMTL.h"
 #    include "renderer/backend/metal/UtilsMTL.h"
-#else
+#elif AX_RENDER_API == AX_RENDER_API_GL
 #    include "renderer/backend/opengl/DriverGL.h"
 #    include "renderer/backend/opengl/MacrosGL.h"
 #    include "renderer/backend/opengl/OpenGLState.h"
@@ -499,15 +499,20 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
 
     Vec2 windowSize = rect.size * frameZoomFactor;
 
-#if AX_GLES_PROFILE
+#if AX_RENDER_API == AX_RENDER_API_GL
+#    if AX_GLES_PROFILE
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#elif defined(AX_USE_GL)
+#    else
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
+#    endif
+#elif AX_RENDER_API == AX_RENDER_API_METAL || AX_RENDER_API == AX_RENDER_API_D3D
+    // Don't create gl context.
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
 
     glfwWindowHint(GLFW_RESIZABLE, resizable ? GL_TRUE : GL_FALSE);
@@ -522,11 +527,6 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
 
     glfwWindowHint(GLFW_VISIBLE, _gfxContextAttrs.visible);
     glfwWindowHint(GLFW_DECORATED, _gfxContextAttrs.decorated);
-
-#if defined(AX_USE_METAL)
-    // Don't create gl context.
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-#endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, _gfxContextAttrs.viewParent);
@@ -566,7 +566,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     if (static_cast<int>(windowSize.height) != actualHeight)
         windowSize.y = static_cast<float>(actualHeight);
 
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
@@ -593,7 +593,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     backend::DriverMTL::setCAMetalLayer(layer);
 #endif
 
-#if defined(AX_USE_GL)
+#if AX_RENDER_API == AX_RENDER_API_GL
     glfwMakeContextCurrent(_mainWindow);
     glfwSetWindowUserPointer(_mainWindow, backend::__gl);
 #endif
@@ -641,13 +641,15 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
+#if AX_RENDER_API == AX_RENDER_API_GL
     loadGL();
+#endif
 
     // Init driver after load GL
     backend::DriverBase::getInstance();
 #endif
 
-#if defined(AX_USE_GL)
+#if AX_RENDER_API == AX_RENDER_API_GL
 #    if !defined(__EMSCRIPTEN__)
     glfwSwapInterval(_gfxContextAttrs.vsync ? 1 : 0);
 #    endif
@@ -726,7 +728,7 @@ void RenderViewImpl::end()
 
 void RenderViewImpl::swapBuffers()
 {
-#if defined(AX_USE_GL)
+#if AX_RENDER_API == AX_RENDER_API_GL
     if (_mainWindow)
         glfwSwapBuffers(_mainWindow);
 #endif
@@ -1327,7 +1329,7 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
     {
         handleWindowSize(w, h);
 
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
         // update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
@@ -1373,7 +1375,7 @@ void RenderViewImpl::onGLFWWindowCloseCallback(GLFWwindow* window)
     }
 }
 
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
+#if AX_TARGET_PLATFORM != AX_PLATFORM_MAC && AX_RENDER_API == AX_RENDER_API_GL
 static bool loadFboExtensions()
 {
     // If the current opengl driver doesn't have framebuffers methods, check if an extension exists

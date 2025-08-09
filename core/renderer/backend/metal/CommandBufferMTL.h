@@ -29,7 +29,7 @@
 #include "DriverMTL.h"
 #include <unordered_map>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class RenderPipelineMTL;
 class DepthStencilStateMTL;
@@ -267,4 +267,4 @@ private:
 
 // end of _metal group
 /// @}
-NS_AX_BACKEND_END
+}

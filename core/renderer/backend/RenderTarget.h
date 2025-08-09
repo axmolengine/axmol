@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "Texture.h"
 #include <assert.h>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class RenderTarget : public ax::Object
 {
@@ -113,4 +113,4 @@ protected:
     mutable TargetBufferFlags _dirtyFlags{};
 };
 
-NS_AX_BACKEND_END
+}

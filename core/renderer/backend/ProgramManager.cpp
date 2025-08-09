@@ -33,7 +33,7 @@
 #include "xxhash.h"
 #include <inttypes.h>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 ProgramManager* ProgramManager::_sharedProgramManager = nullptr;
 
@@ -327,4 +327,4 @@ void ProgramManager::unloadAllPrograms()
     _cachedPrograms.clear();
 }
 
-NS_AX_BACKEND_END
+}

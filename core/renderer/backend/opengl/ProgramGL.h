@@ -40,7 +40,7 @@
 
 #include "base/axstd.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class ShaderModuleGL;
 
@@ -205,4 +205,4 @@ private:
 };
 // end of _opengl group
 /// @}
-NS_AX_BACKEND_END
+}

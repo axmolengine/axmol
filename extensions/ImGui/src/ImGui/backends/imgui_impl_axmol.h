@@ -6,7 +6,7 @@
 #include <functional>
 #include "platform/PlatformConfig.h"
 
-#ifdef AX_USE_GL
+#if AX_RENDER_API == AX_RENDER_API_GL
 #    include "renderer/backend/opengl/OpenGLState.h"
 #endif
 

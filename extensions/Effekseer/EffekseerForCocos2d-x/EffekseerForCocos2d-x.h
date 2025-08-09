@@ -5,7 +5,7 @@
 #include <Effekseer.h>
 #include <EffekseerRendererCommon/EffekseerRenderer.Renderer.h>
 
-//#ifdef AX_USE_METAL
+//#if AX_RENDER_API == AX_RENDER_API_MTL
 //#include <EffekseerRendererMetal.h>
 //#else
 //#include <EffekseerRendererGL.h>

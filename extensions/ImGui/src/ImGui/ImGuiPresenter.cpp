@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "xxhash.h"
 
 // TODO: mac metal
-#if defined(AX_USE_GL) && defined(AX_PLATFORM_PC)
+#if AX_RENDER_API == AX_RENDER_API_GL && defined(AX_PLATFORM_PC)
 #    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 1
 #else
 #    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 0

@@ -25,8 +25,8 @@
 
 #include "DriverBase.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 DriverBase* DriverBase::_instance = nullptr;
 
-NS_AX_BACKEND_END
+}

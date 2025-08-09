@@ -51,27 +51,47 @@ endif()
 include(CMakeDependentOption)
 
 # by default: use angle on win32
-cmake_dependent_option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" ${WIN32} "WIN32 OR APPLE" OFF)
+cmake_dependent_option(AX_USE_ANGLE "Whether use angle as gles API provider" ${WIN32} "WIN32 OR APPLE" OFF)
 
-# choosing render backend for all target platforms: win32, winuwp, ios, tvos, android, linux, osx
-if(APPLE AND(NOT AX_USE_COMPAT_GL))
-  set(AX_USE_METAL ON CACHE BOOL "" FORCE)
-  set(AX_USE_GL OFF CACHE BOOL "" FORCE)
-else() # win32, winuwp, android, linux: OpenGL
-  set(AX_USE_GL ON CACHE BOOL "" FORCE)
-  set(AX_USE_METAL OFF CACHE BOOL "" FORCE)
+# set(AX_RENDER_API_GL  1 CACHE INTERNAL "" FORCE)
+# set(AX_RENDER_API_MTL 2 CACHE INTERNAL "" FORCE)
+# set(AX_RENDER_API_D3D 3 CACHE INTERNAL "" FORCE)
+set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics backend API")
+
+if(AX_RENDER_API STREQUAL "auto")
+  if(APPLE)
+    set(AX_RENDER_API "mtl" CACHE INTERNAL "" FORCE)
+  else()
+    set(AX_RENDER_API "gl" CACHE INTERNAL "" FORCE)
+  endif()
+else()
+  if(AX_RENDER_API STREQUAL "mtl")
+    if(NOT APPLE) # non-apple platforms, invalid api specified, fallback to gl
+      set(AX_RENDER_API "gl" CACHE INTERNAL "" FORCE)
+    endif()
+  elseif(AX_RENDER_API STREQUAL "d3d")
+    if(NOT WIN32)
+      if(APPLE)
+        set(AX_RENDER_API "mtl" CACHE INTERNAL "" FORCE)
+      else()
+        set(AX_RENDER_API "gl" CACHE INTERNAL "" FORCE)
+      endif()
+    endif()
+  endif()
 endif()
 
-# macos, linux or (win32, ios, tvos and NOT AX_USE_COMPAT_GL) not use GLES profile
+# macos, linux or (win32, ios, tvos) not use GLES profile
 set(_GLES_PROFILE 0) # _GLES_PROFILE is the default GLES profile
 
-if(ANDROID) # android force use GLES profile
-  set(_GLES_PROFILE 200)
-elseif(WINRT OR WASM) # winuwp/wasm fore use GLES profile
-  set(_GLES_PROFILE 300)
-elseif((NOT MACOSX) AND(NOT LINUX)) # win32, ios, tvos
-  if(AX_USE_COMPAT_GL)
+if (AX_RENDER_API STREQUAL "gl")
+  if(ANDROID) # android force use GLES profile
+    set(_GLES_PROFILE 200)
+  elseif(WINRT OR WASM) # winuwp/wasm fore use GLES profile
     set(_GLES_PROFILE 300)
+  elseif((NOT MACOSX) AND(NOT LINUX)) # win32, ios, tvos
+    if((WINDOWS AND AX_USE_ANGLE) OR IOS OR TVOS)
+      set(_GLES_PROFILE 300)
+    endif()
   endif()
 endif()
 
@@ -86,7 +106,7 @@ else() # force disable GLES profile
 endif()
 
 # print renderer backend profile
-message(AUTHOR_WARNING "AX_USE_GL=${AX_USE_GL}, AX_USE_METAL=${AX_USE_METAL}, AX_GLES_PROFILE=${AX_GLES_PROFILE}")
+message(AUTHOR_WARNING "AX_RENDER_API=${AX_RENDER_API}, AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 
 if(LINUX)
   include(CheckIncludeFile)

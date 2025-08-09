@@ -30,7 +30,7 @@
 #include "renderer/backend/PixelFormatUtils.h"
 #include "platform/GL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 struct GPUTextureFormatInfo
 {
@@ -495,4 +495,4 @@ GLenum UtilsGL::toGLCullMode(CullMode mode)
         return GL_FRONT;
 }
 
-NS_AX_BACKEND_END
+}

@@ -29,7 +29,7 @@
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 enum class FeatureSet : int32_t
 {
@@ -129,7 +129,7 @@ public:
      * New a CommandBuffer object.
      * @return A CommandBuffer object.
      */
-    CommandBuffer* newCommandBuffer() override;
+    CommandBuffer* newCommandBuffer(void*) override;
 
     /**
      * New a Buffer object.
@@ -250,4 +250,4 @@ private:
 
 // end of _metal group
 /// @}
-NS_AX_BACKEND_END
+}

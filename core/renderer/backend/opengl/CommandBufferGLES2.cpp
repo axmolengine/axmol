@@ -29,7 +29,7 @@
 
 #    include "platform/GL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 CommandBufferGLES2::CommandBufferGLES2()
 {
@@ -59,6 +59,6 @@ void CommandBufferGLES2::drawElementsInstanced(PrimitiveType primitiveType,
     CommandBufferGL::drawElementsInstanced(primitiveType, indexType, count, offset, instanceCount, wireframe);
 }
 
-NS_AX_BACKEND_END
+}
 
 #endif

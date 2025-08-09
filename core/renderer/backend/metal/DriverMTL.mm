@@ -37,7 +37,7 @@
 
 #include "renderer/backend/ProgramManager.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 inline FeatureSet operator--(FeatureSet& x)
 {
@@ -458,7 +458,7 @@ DriverMTL::~DriverMTL()
     ProgramManager::destroyInstance();
 }
 
-CommandBuffer* DriverMTL::newCommandBuffer()
+CommandBuffer* DriverMTL::newCommandBuffer(void*)
 {
     return new CommandBufferMTL(this);
 }
@@ -570,4 +570,4 @@ bool DriverMTL::checkForFeatureSupported(FeatureType feature)
     return featureSupported;
 }
 
-NS_AX_BACKEND_END
+}

@@ -36,7 +36,7 @@
 
 #include <string>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class CommandBuffer;
 class Buffer;
@@ -88,9 +88,10 @@ public:
 
     /**
      * New a CommandBuffer object, not auto released.
+     * @param windowHandle, current is win32 HWND
      * @return A CommandBuffer object.
      */
-    virtual CommandBuffer* newCommandBuffer() = 0;
+    virtual CommandBuffer* newCommandBuffer(void* windowHandle) = 0;
 
     /**
      * New a Buffer object, not auto released.
@@ -229,4 +230,4 @@ private:
 
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

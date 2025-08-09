@@ -26,7 +26,7 @@
 #include "ShaderCache.h"
 #include "renderer/backend/DriverBase.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 static ShaderCache* s_instance;
 
@@ -100,4 +100,4 @@ void ShaderCache::removeUnusedShader()
     }
 }
 
-NS_AX_BACKEND_END
+}

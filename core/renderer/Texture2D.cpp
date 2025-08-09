@@ -217,7 +217,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     backend::PixelFormat imagePixelFormat = image->getPixelFormat();
     size_t tempDataLen                    = image->getDataLen();
 
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     //! override renderFormat, since some render format is not supported by metal
     switch (renderFormat)
     {
@@ -306,7 +306,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
     if (!pfd.bpp)
     {
         AXLOGW("WARNING: unsupported pixelformat: {:x}", (uint32_t)pixelFormat);
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
         AXASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
 #endif
         return false;
@@ -359,7 +359,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         {
             auto convertedFormat = backend::PixelFormatUtils::convertDataToFormat(data, dataLen, oriPixelFormat,
                                                                                   renderFormat, &outData, &outDataLen);
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
             AXASSERT(convertedFormat == renderFormat, "PixelFormat convert failed!");
 #endif
             if (convertedFormat == renderFormat)

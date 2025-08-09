@@ -29,7 +29,7 @@
 #include "base/Macros.h"
 #include "base/axstd.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 ShaderModuleGL::ShaderModuleGL(ShaderStage stage, std::string_view source) : ShaderModule(stage)
 {
@@ -85,4 +85,4 @@ void ShaderModuleGL::deleteShader()
     }
 }
 
-NS_AX_BACKEND_END
+}

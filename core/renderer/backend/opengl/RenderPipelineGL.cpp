@@ -33,7 +33,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 #include <assert.h>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 void RenderPipelineGL::update(const RenderTarget*, const PipelineDescriptor& pipelineDescriptor)
 {
@@ -80,4 +80,4 @@ RenderPipelineGL::~RenderPipelineGL()
     AX_SAFE_RELEASE(_programGL);
 }
 
-NS_AX_BACKEND_END
+}

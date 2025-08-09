@@ -38,7 +38,7 @@
 #include "renderer/backend/VertexLayout.h"
 #include "yasio/byte_buffer.hpp"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class TextureBackend;
 class VertexLayout;
@@ -331,7 +331,7 @@ protected:
      */
     void setVertexUniform(int location, const void* data, std::size_t size, int offset);
 
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     /**
      * Set the fargment uniform data.
      * @param location Specifies the uniform location.
@@ -409,4 +409,4 @@ protected:
 
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

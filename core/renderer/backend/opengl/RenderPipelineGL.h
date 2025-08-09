@@ -30,7 +30,7 @@
 
 #include <vector>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class ProgramGL;
 /**
@@ -64,4 +64,4 @@ private:
 };
 // end of _opengl group
 /// @}
-NS_AX_BACKEND_END
+}

@@ -27,7 +27,7 @@
 #include "../Program.h"
 #import <Metal/Metal.h>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class ShaderModuleMTL;
 
@@ -128,4 +128,4 @@ private:
 
 // end of _metal group
 /// @}
-NS_AX_BACKEND_END
+}

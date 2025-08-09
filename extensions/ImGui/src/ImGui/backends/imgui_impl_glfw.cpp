@@ -174,7 +174,7 @@
 #define GLFW_HAS_GETERROR               (GLFW_VERSION_COMBINED >= 3300) // 3.3+ glfwGetError()
 #define GLFW_HAS_GETPLATFORM            (GLFW_VERSION_COMBINED >= 3400) // 3.4+ glfwGetPlatform()
 
-// Map GLFWWindow* to ImGuiContext*. 
+// Map GLFWWindow* to ImGuiContext*.
 // - Would be simpler if we could use glfwSetWindowUserPointer()/glfwGetWindowUserPointer(), but this is a single and shared resource.
 // - Would be simpler if we could use e.g. std::map<> as well. But we don't.
 // - This is not particularly optimized as we expect size to be small and queries to be rare.
@@ -1274,7 +1274,7 @@ static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)
             for (int i = 0; i < IM_ARRAYSIZE(bd->KeyOwnerWindows); i++)
                 if (bd->KeyOwnerWindows[i] == vd->Window)
                     ImGui_ImplGlfw_KeyCallback(vd->Window, i, 0, GLFW_RELEASE, 0); // Later params are only used for main viewport, on which this function is never called.
-#if defined(AX_USE_GL) // axmol spec
+#if AX_RENDER_API == AX_RENDER_API_GL // axmol spec
             auto p = (ax::backend::OpenGLState*)glfwGetWindowUserPointer(vd->Window);
             if (p)
                 delete p;
@@ -1573,9 +1573,9 @@ static LRESULT CALLBACK ImGui_ImplGlfw_WndProc(HWND hWnd, UINT msg, WPARAM wPara
 // axmol spec
 IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAxmol(GLFWwindow* window, bool install_callbacks)
 {
-#if defined(AX_USE_GL)
+#if AX_RENDER_API == AX_RENDER_API_GL
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
-#else
+#elif AX_RENDER_API == AX_RENDER_API_METAL
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
 #endif
 }

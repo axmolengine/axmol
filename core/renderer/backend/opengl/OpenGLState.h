@@ -11,7 +11,7 @@
 
 // Inline opengl state set calls
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 struct BlendEquationSeparateState
 {
@@ -431,4 +431,4 @@ private:
 
 AX_DLL extern OpenGLState* __gl;
 
-NS_AX_BACKEND_END
+}

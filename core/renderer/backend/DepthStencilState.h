@@ -29,7 +29,7 @@
 
 #include "base/Object.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class RenderTarget;
 /**
@@ -88,4 +88,4 @@ protected:
 
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

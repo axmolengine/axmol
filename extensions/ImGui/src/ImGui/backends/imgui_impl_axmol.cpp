@@ -198,7 +198,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
     io.BackendRendererUserData = (void*)bd;
     io.BackendRendererName     = "imgui_impl_axmol";
 
-#if defined(AX_USE_GL) && (!defined(AX_GLES_PROFILE) || AX_GLES_PROFILE >= 300)
+#if AX_RENDER_API == AX_RENDER_API_GL && (!defined(AX_GLES_PROFILE) || AX_GLES_PROFILE >= 300)
     io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field,
                                                                 // allowing for large meshes.
 #endif
@@ -375,7 +375,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
 
-#if defined(AX_USE_GL) && !defined(__ANDROID__)
+#if AX_RENDER_API == AX_RENDER_API_GL && !defined(__ANDROID__)
         // restore context
         GLFWwindow* prev_current_context = glfwGetCurrentContext();
         ImGui_ImplAxmol_PostCommand([=]() { ImGui_ImplAxmol_MakeCurrent(prev_current_context); });
@@ -388,7 +388,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window)
 #if !defined(__ANDROID__)
     glfwMakeContextCurrent(window);
 
-#    if defined(AX_USE_GL)
+#    if AX_RENDER_API == AX_RENDER_API_GL
     auto p = glfwGetWindowUserPointer(window);
     if (!p)
     {

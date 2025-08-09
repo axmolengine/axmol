@@ -25,15 +25,6 @@
 
 #pragma once
 
-#define NS_AX_BACKEND_BEGIN \
-    namespace ax    \
-    {                    \
-    namespace backend    \
-    {
-#define NS_AX_BACKEND_END \
-    }                  \
-    }
-
 #define MAX_COLOR_ATTCHMENT 4
 
 #define MAX_INFLIGHT_BUFFER 3

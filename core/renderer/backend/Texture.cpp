@@ -26,7 +26,7 @@
 #include "Texture.h"
 #include "PixelFormatUtils.h"
 #include <cassert>
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 TextureBackend::~TextureBackend() {}
 
@@ -45,4 +45,4 @@ void TextureBackend::updateTextureDescriptor(const ax::backend::TextureDescripto
     }
 }
 
-NS_AX_BACKEND_END
+}

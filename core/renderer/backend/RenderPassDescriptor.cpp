@@ -24,7 +24,7 @@
 
 #include "RenderPassDescriptor.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 bool RenderPassDescriptor::operator==(const RenderPassDescriptor& descriptor) const
 {
@@ -37,4 +37,4 @@ bool RenderPassDescriptor::operator==(const RenderPassDescriptor& descriptor) co
             flags.discardEnd == descriptor.flags.discardEnd);
 }
 
-NS_AX_BACKEND_END
+}

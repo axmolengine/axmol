@@ -30,7 +30,7 @@
 #import <Metal/Metal.h>
 #include <array>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _metal
  * @{
@@ -251,4 +251,4 @@ private:
 
 // end of _metal group
 /// @}
-NS_AX_BACKEND_END
+}

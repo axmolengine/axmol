@@ -29,7 +29,7 @@
 #include "renderer/backend/Types.h"
 #include "renderer/backend/PixelBufferDescriptor.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _opengl
  * @{
@@ -159,4 +159,4 @@ struct UtilsGL
 };
 // end of _opengl group
 /// @}
-NS_AX_BACKEND_END
+}

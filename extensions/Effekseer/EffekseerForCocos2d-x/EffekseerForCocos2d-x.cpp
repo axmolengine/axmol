@@ -2,7 +2,7 @@
 #include "EffekseerForCocos2d-x.h"
 #include "base/Utils.h"
 
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
 #include "renderer/backend/DriverBase.h"
 #endif
 
@@ -203,7 +203,7 @@ Effekseer::TextureRef TextureLoader::Load(const EFK_CHAR* path, ::Effekseer::Tex
 
 				if(texture->getPixelsWide() > 1 || texture->getPixelsHigh() > 1)
 				{
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
 					texture->generateMipmap();
 #else
 					if (texture->getPixelsWide() == ax::utils::nextPOT(texture->getPixelsWide()) &&
@@ -701,7 +701,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
         manager->getInternalManager()->GetTotalInstanceCount() < 1)
         return; // nothing to draw
             
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
     if (!manager->isDistorted)
     {
         // allow frame buffer texture to be copied for distortion
@@ -720,7 +720,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
 		renderer2d->SetCameraMatrix(mCamera);
 		renderer2d->SetProjectionMatrix(mProj);
 
-#ifdef AX_USE_METAL
+#if AX_RENDER_API == AX_RENDER_API_MTL
         auto commandList = manager->getInternalCommandList();
         beforeRender(renderer2d, commandList);
 #endif
@@ -735,7 +735,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
 		renderer2d->ResetDrawCallCount();
 		renderer2d->ResetDrawVertexCount();
         
-        #ifdef AX_USE_METAL
+        #if AX_RENDER_API == AX_RENDER_API_MTL
         afterRender(renderer2d, commandList);
         #endif
 

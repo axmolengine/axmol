@@ -1,6 +1,6 @@
 #include "ProgramStateRegistry.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 static ProgramStateRegistry* _sharedStateRegistry = nullptr;
 /** returns the shared instance */
@@ -72,4 +72,4 @@ uint32_t ProgramStateRegistry::getProgramType(uint32_t programType, int textureS
 }
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

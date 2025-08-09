@@ -3,7 +3,7 @@
 #include "platform/GL.h"
 #include "OpenGLState.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class DriverGL;
 
@@ -28,4 +28,4 @@ public:
 #endif
 };
 
-NS_AX_BACKEND_END
+}

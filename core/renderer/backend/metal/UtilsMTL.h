@@ -31,7 +31,7 @@
 #import <Metal/Metal.h>
 #include <functional>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class TextureBackend;
 
@@ -100,4 +100,4 @@ private:
 
 // end of _metal group
 /// @}
-NS_AX_BACKEND_END
+}

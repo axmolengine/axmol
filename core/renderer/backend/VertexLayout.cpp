@@ -27,7 +27,7 @@
 #include "base/Macros.h"
 #include <cassert>
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 void VertexLayout::setAttrib(std::string_view name,
                                 std::size_t index,
@@ -53,4 +53,4 @@ void VertexLayout::setStride(std::size_t stride)
     _stride = stride;
 }
 
-NS_AX_BACKEND_END
+}

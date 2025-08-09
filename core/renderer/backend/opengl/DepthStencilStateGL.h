@@ -26,7 +26,7 @@
 
 #include "../DepthStencilState.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _opengl
  * @{
@@ -55,4 +55,4 @@ public:
 };
 // end of _opengl group
 /// @}
-NS_AX_BACKEND_END
+}

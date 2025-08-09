@@ -78,7 +78,7 @@ set(_AX_RENDERER_SRC
   renderer/backend/RenderPassDescriptor.cpp
 )
 
-if(ANDROID OR WINDOWS OR LINUX OR AX_USE_GL)
+if(AX_RENDER_API STREQUAL "gl")
   list(APPEND _AX_RENDERER_HEADER
     renderer/backend/opengl/OpenGLState.h
     renderer/backend/opengl/BufferGL.h
@@ -109,7 +109,7 @@ if(ANDROID OR WINDOWS OR LINUX OR AX_USE_GL)
     renderer/backend/opengl/UtilsGL.cpp
     renderer/backend/opengl/RenderTargetGL.cpp
   )
-else()
+elseif(AX_RENDER_API STREQUAL "mtl")
   list(APPEND _AX_RENDERER_HEADER
     renderer/backend/metal/BufferMTL.h
     renderer/backend/metal/BufferManager.h
@@ -136,5 +136,33 @@ else()
     renderer/backend/metal/TextureMTL.mm
     renderer/backend/metal/UtilsMTL.mm
     renderer/backend/metal/ProgramMTL.mm
+  )
+elseif(AX_RENDER_API STREQUAL "d3d")
+    list(APPEND _AX_RENDERER_HEADER
+    renderer/backend/d3d/BufferD3D.h
+    # renderer/backend/d3d/BufferManager.h
+    renderer/backend/d3d/CommandBufferD3D.h
+    renderer/backend/d3d/RenderTargetD3D.h
+    renderer/backend/d3d/DepthStencilStateD3D.h
+    renderer/backend/d3d/DriverD3D.h
+    renderer/backend/d3d/RenderPipelineD3D.h
+    renderer/backend/d3d/ShaderModuleD3D.h
+    renderer/backend/d3d/TextureD3D.h
+    renderer/backend/d3d/UtilsD3D.h
+    renderer/backend/d3d/ProgramD3D.h
+  )
+
+  list(APPEND _AX_RENDERER_SRC
+    renderer/backend/d3d/BufferD3D.cpp
+    # renderer/backend/d3d/BufferManager.mm
+    renderer/backend/d3d/CommandBufferD3D.cpp
+    renderer/backend/d3d/RenderTargetD3D.cpp
+    renderer/backend/d3d/DepthStencilStateD3D.cpp
+    renderer/backend/d3d/DriverD3D.cpp
+    renderer/backend/d3d/RenderPipelineD3D.cpp
+    renderer/backend/d3d/ShaderModuleD3D.cpp
+    renderer/backend/d3d/TextureD3D.cpp
+    renderer/backend/d3d/UtilsD3D.cpp
+    renderer/backend/d3d/ProgramD3D.cpp
   )
 endif()

@@ -36,7 +36,7 @@
 
 using namespace std::string_view_literals;
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept
 {
@@ -143,4 +143,4 @@ struct BlendDescriptor
     BlendFactor destinationAlphaBlendFactor = BlendFactor::ZERO;
 };
 
-NS_AX_BACKEND_END
+}

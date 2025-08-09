@@ -99,7 +99,7 @@ elseif(APPLE)
       platform/ios/InputView-ios.mm
     )
 
-    if(AX_USE_GL)
+    if(AX_RENDER_API STREQUAL "gl")
       set(_AX_PLATFORM_SPECIFIC_HEADER
         ${_AX_PLATFORM_SPECIFIC_HEADER}
         platform/ios/ES3Renderer-ios.h

@@ -51,7 +51,7 @@
 #    define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
 #endif
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 static inline uint32_t hashString(std::string_view str)
 {
@@ -187,7 +187,7 @@ GLint DriverGL::getDefaultFBO() const
     return _defaultFBO;
 }
 
-CommandBuffer* DriverGL::newCommandBuffer()
+CommandBuffer* DriverGL::newCommandBuffer(void*)
 {
 #if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     return !isGLES2Only() ? new CommandBufferGL() : new CommandBufferGLES2();
@@ -573,4 +573,4 @@ std::string DriverGL::dumpExtensions() const
     return strExts;
 }
 
-NS_AX_BACKEND_END
+}

@@ -31,7 +31,7 @@
 
 #include "axslcc/sgs-spec.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 struct SLCReflectContext
 {
@@ -325,4 +325,4 @@ int ShaderModuleMTL::getAttributeLocation(std::string_view name)
         return -1;
 }
 
-NS_AX_BACKEND_END
+}

@@ -28,7 +28,7 @@
 #include "base/Macros.h"
 #include "DriverMTL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 namespace
 {
 // constexpr std::string_view metalSpecificDefine = "#define METAL\n"sv;
@@ -129,4 +129,4 @@ const hlookup::string_map<UniformInfo>& ProgramMTL::getAllActiveUniformInfo(Shad
     }
 }
 
-NS_AX_BACKEND_END
+}

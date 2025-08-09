@@ -45,7 +45,7 @@ namespace ax
 struct PipelineDescriptor;
 }
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class RenderPass;
 class RenderPipeline;
@@ -249,4 +249,4 @@ protected:
 
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

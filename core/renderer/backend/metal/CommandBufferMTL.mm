@@ -34,7 +34,7 @@
 #include "DepthStencilStateMTL.h"
 #include "RenderTargetMTL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 namespace
 {
@@ -623,4 +623,4 @@ void CommandBufferMTL::readPixels(id<MTLTexture> texture,
     [commandBuffer waitUntilCompleted];
 }
 
-NS_AX_BACKEND_END
+}

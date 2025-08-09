@@ -106,7 +106,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto eventDispatcher = director->getEventDispatcher();
 
     // !!!Metal: needs setFrameBufferOnly before draw
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
     s_captureScreenListener =
         eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom* /*event*/) {
 #else

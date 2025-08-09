@@ -29,7 +29,7 @@
 #include "OpenGLState.h"
 #include "base/hlookup.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _opengl
  * @{
@@ -50,7 +50,7 @@ public:
      * New a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
      */
-    CommandBuffer* newCommandBuffer() override;
+    CommandBuffer* newCommandBuffer(void*) override;
 
     /**
      * New a Buffer object, not auto released.
@@ -175,4 +175,4 @@ private:
 };
 // end of _opengl group
 /// @}
-NS_AX_BACKEND_END
+}

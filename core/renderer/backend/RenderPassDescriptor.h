@@ -30,7 +30,7 @@
 #include "Macros.h"
 #include "Types.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 class TextureBackend;
 /**
@@ -76,4 +76,4 @@ struct RenderPassDescriptor
 };
 // end of _backend group
 /// @}
-NS_AX_BACKEND_END
+}

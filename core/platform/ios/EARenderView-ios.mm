@@ -69,7 +69,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import "base/IMEDispatcher.h"
 #import "platform/ios/InputView-ios.h"
 
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
 #    import <Metal/Metal.h>
 #    import "renderer/backend/metal/DriverMTL.h"
 #    import "renderer/backend/metal/UtilsMTL.h"
@@ -94,7 +94,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 @synthesize surfaceSize = size_;
 @synthesize pixelFormat = pixelformat_, depthFormat = depthFormat_;
-#if !defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_GL
 @synthesize context = context_;
 #endif
 @synthesize multiSampling            = multiSampling_;
@@ -104,7 +104,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 + (Class)layerClass
 {
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
     return [CAMetalLayer class];
 #else
     return [CAEAGLLayer class];
@@ -191,7 +191,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
             self.contentScaleFactor = [[UIScreen mainScreen] scale];
         }
 
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
         AX_UNUSED_PARAM(format);
         AX_UNUSED_PARAM(depth);
         AX_UNUSED_PARAM(sharegroup);
@@ -228,7 +228,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if ((self = [super initWithCoder:aDecoder]))
     {
         self.textInputView = [[TextInputView alloc] initWithCoder:aDecoder];
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
         size_ = [self bounds].size;
 #else
         CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
@@ -262,7 +262,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     return (int)bound.height * self.contentScaleFactor;
 }
 
-#if !defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_GL
 - (BOOL)setupSurfaceWithSharegroup:(void*)sharegroup
 {
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
@@ -304,7 +304,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
-#if !defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_GL
     [renderer_ release];
 #endif
     [self.textInputView release];
@@ -316,7 +316,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if (!ax::Director::getInstance()->isValid())
         return;
 
-#if defined(AX_USE_METAL)
+#if AX_RENDER_API == AX_RENDER_API_MTL
     size_ = [self bounds].size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
@@ -341,12 +341,9 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     }
 }
 
-#if defined(AX_USE_METAL)
-- (void)swapBuffers
-{}
-#else
 - (void)swapBuffers
 {
+#if AX_RENDER_API == AX_RENDER_API_GL
     // IMPORTANT:
     // - preconditions
     //    -> context_ MUST be the OpenGL context
@@ -404,13 +401,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     // 1st instruction of the new main loop
     if (multiSampling_)
         glBindFramebuffer(GL_FRAMEBUFFER, [renderer_ msaaFrameBuffer]);
-}
-
-- (unsigned int)convertPixelFormat:(int)pixelFormat
-{
-    return pixelFormat == (int)ax::PixelFormat::RGB565 ? GL_RGB565 : GL_RGBA8_OES;
-}
 #endif
+}
 
 #pragma mark EARenderView - Point conversion
 

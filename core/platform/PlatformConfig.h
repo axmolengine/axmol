@@ -122,6 +122,22 @@ THE SOFTWARE.
 #    endif
 #endif  // AX_PLATFORM_WIN32
 
+//////////////////////////////////////////////////////////////////////////
+// render configure
+//////////////////////////////////////////////////////////////////////////
+
+#define AX_RENDER_API_GL    1
+#define AX_RENDER_API_MTL   2
+#define AX_RENDER_API_D3D   3
+
+#ifndef AX_RENDER_API
+#    if defined(__APPLE__)
+#        define AX_RENDER_API AX_RENDER_API_MTL
+#    else
+#        define AX_RENDER_API AX_RENDER_API_GL
+#    endif
+#endif
+
 /*
 The google/angle is library which translate native graphics API to GLES3+ APIs
 repo: https://github.com/google/angle
@@ -150,16 +166,6 @@ Linux: Desktop GL/Vulkan
 #    define AX_PLATFORM_MOBILE
 #else
 #    define AX_PLATFORM_PC
-#endif
-
-#if defined(__APPLE__)
-#    if !defined(AX_USE_GL)
-#        define AX_USE_METAL 1
-#    endif
-#else  // win32,linux,winuwp,android
-#    if !defined(AX_USE_GL)
-#        define AX_USE_GL 1
-#    endif
 #endif
 
 // ## SIMD detections

@@ -28,7 +28,7 @@
 
 #include "platform/GL.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 /**
  * @addtogroup _opengl
  * @{
@@ -62,4 +62,4 @@ private:
 };
 // end of _opengl group
 /// @}
-NS_AX_BACKEND_END
+}

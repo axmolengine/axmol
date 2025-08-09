@@ -24,7 +24,7 @@
 
 #include "CommandBuffer.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 void CommandBuffer::setStencilReferenceValue(uint32_t value)
 {
@@ -37,4 +37,4 @@ void CommandBuffer::setStencilReferenceValue(unsigned int frontRef, unsigned int
     _stencilReferenceValueBack  = backRef;
 }
 
-NS_AX_BACKEND_END
+}

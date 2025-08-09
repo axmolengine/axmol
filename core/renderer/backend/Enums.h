@@ -32,7 +32,7 @@
 #include <string>
 #include "base/bitmask.h"
 
-NS_AX_BACKEND_BEGIN
+namespace ax::backend {
 
 enum class BufferUsage : uint32_t
 {
@@ -395,4 +395,4 @@ struct ProgramType
 };
 // clang-format on
 
-NS_AX_BACKEND_END
+}
