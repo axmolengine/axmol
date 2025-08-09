@@ -30,7 +30,6 @@
 //
 
 #include "Bug-DrawNode.h"
-#include "renderer/backend/Types.h"
 
 using namespace ax;
 

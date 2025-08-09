@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "renderer/CallbackCommand.h"
 #include "renderer/GroupCommand.h"
 #include "renderer/RenderState.h"
-#include "renderer/backend/Types.h"
 #include "renderer/backend/ProgramState.h"
 #include "3d/AABB.h"
 #include "3d/Ray.h"

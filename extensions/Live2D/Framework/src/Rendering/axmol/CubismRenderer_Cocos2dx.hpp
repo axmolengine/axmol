@@ -107,7 +107,7 @@ private:
      */
     void SetupClippingContext(CubismModel& model,
                               CubismRenderer_Cocos2dx* renderer,
-                              backend::TextureBackend* lastColorBuffer,
+                              backend::Texture* lastColorBuffer,
                               csmRectF lastViewport);
 
     /**
@@ -363,9 +363,9 @@ private:
     csmBool _lastDepthTest;               ///< モデル描画直前のGL_DEPTH_TESTパラメータ
     ax::CullMode _lastCullFace;                ///< モデル描画直前のGL_CULL_FACEパラメータ
     ax::Winding _lastWinding;
-    backend::TextureBackend* _lastColorBuffer;                         ///< モデル描画直前のフレームバッファ
-    backend::TextureBackend* _lastDepthBuffer;
-    backend::TextureBackend* _lastStencilBuffer;
+    backend::Texture* _lastColorBuffer;                         ///< モデル描画直前のフレームバッファ
+    backend::Texture* _lastDepthBuffer;
+    backend::Texture* _lastStencilBuffer;
     //ax::RenderTargetFlag _lastRenderTargetFlag;
     backend::RenderTarget* _lastRenderTarget;
     csmRectF _lastViewport;                 ///< モデル描画直前のビューポート

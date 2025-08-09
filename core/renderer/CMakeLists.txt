@@ -24,8 +24,7 @@ set(_AX_RENDERER_HEADER
   renderer/backend/CommandBuffer.h
   renderer/backend/DepthStencilState.h
   renderer/backend/DriverBase.h
-  renderer/backend/Enums.h
-  renderer/backend/Macros.h
+  renderer/backend/BaseDefs.h
   renderer/backend/PixelBufferDescriptor.h
   renderer/backend/PixelFormatUtils.h
   renderer/backend/Program.h
@@ -38,7 +37,6 @@ set(_AX_RENDERER_HEADER
   renderer/backend/ShaderCache.h
   renderer/backend/ShaderModule.h
   renderer/backend/Texture.h
-  renderer/backend/Types.h
   renderer/backend/VertexLayout.h
 )
 
@@ -70,7 +68,6 @@ set(_AX_RENDERER_SRC
   renderer/backend/ShaderModule.cpp
   renderer/backend/Texture.cpp
   renderer/backend/PixelFormatUtils.cpp
-  renderer/backend/Types.cpp
   renderer/backend/VertexLayout.cpp
   renderer/backend/Program.cpp
   renderer/backend/ProgramState.cpp
@@ -150,6 +147,7 @@ elseif(AX_RENDER_API STREQUAL "d3d")
     renderer/backend/d3d/TextureD3D.h
     renderer/backend/d3d/UtilsD3D.h
     renderer/backend/d3d/ProgramD3D.h
+    renderer/backend/d3d/VertexLayoutD3D.h
   )
 
   list(APPEND _AX_RENDERER_SRC
@@ -164,5 +162,6 @@ elseif(AX_RENDER_API STREQUAL "d3d")
     renderer/backend/d3d/TextureD3D.cpp
     renderer/backend/d3d/UtilsD3D.cpp
     renderer/backend/d3d/ProgramD3D.cpp
+    renderer/backend/d3d/VertexLayoutD3D.cpp
   )
 endif()

@@ -41,11 +41,11 @@ struct VertexLayoutHelper
 
         /// a_position
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
+                               program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT2, 0, false);
         /// a_texCoord
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                               program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                                 backend::VertexFormat::FLOAT2, 2 * sizeof(float), false);
 
         vertexLayout->setStride(4 * sizeof(float));
@@ -57,15 +57,16 @@ struct VertexLayoutHelper
 
         /// a_position
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
+                               program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
         /// a_texCoord
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                               program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                                 backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4F, texCoord), false);
 
         /// a_color
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR,
+                               program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4, offsetof(V3F_T2F_C4F, color), false);
         vertexLayout->setStride(sizeof(V3F_T2F_C4F));
     }
@@ -76,15 +77,15 @@ struct VertexLayoutHelper
 
         /// a_position
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
         /// a_texCoord
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                                 backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4B, texCoord), false);
 
         /// a_color
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::UBYTE4, offsetof(V3F_T2F_C4B, color), true);
         vertexLayout->setStride(sizeof(V3F_T2F_C4B));
     }
@@ -94,14 +95,14 @@ struct VertexLayoutHelper
         auto vertexLayout = program->getVertexLayout();
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT2, 0, false);
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                                 backend::VertexFormat::FLOAT2, offsetof(V2F_T2F_C4F, texCoord), false);
 
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4, offsetof(V2F_T2F_C4F, color), true);
 
         vertexLayout->setStride(sizeof(V2F_T2F_C4F));
@@ -112,10 +113,10 @@ struct VertexLayoutHelper
         auto vertexLayout = program->getVertexLayout();
 
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
 
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, color), true);
 
         vertexLayout->setStride(sizeof(V3F_C4F));
@@ -124,7 +125,7 @@ struct VertexLayoutHelper
     static void defineSkyBox(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
-        auto attrNameLoc  = program->getAttributeLocation(backend::ATTRIBUTE_NAME_POSITION);
+        auto attrNameLoc  = program->getVertexInputDesc(backend::ATTRIBUTE_NAME_POSITION);
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION, attrNameLoc, backend::VertexFormat::FLOAT3, 0, false);
         vertexLayout->setStride(sizeof(Vec3));
     }
@@ -133,7 +134,7 @@ struct VertexLayoutHelper
     {
         auto vertexLayout = program->getVertexLayout();
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT2, 0, false);
         vertexLayout->setStride(sizeof(Vec2));
     }
@@ -142,9 +143,9 @@ struct VertexLayoutHelper
     {
         auto vertexLayout = program->getVertexLayout();
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, color), false);
         vertexLayout->setStride(sizeof(V3F_C4F));
     }
@@ -153,13 +154,13 @@ struct VertexLayoutHelper
     {
         auto vertexLayout = program->getVertexLayout();
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                                 backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_N3F, texcoord), false);
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_NORMAL,
-                                program->getAttributeLocation(backend::Attribute::NORMAL),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::NORMAL),
                                 backend::VertexFormat::FLOAT3, offsetof(V3F_T2F_N3F, normal), false);
         vertexLayout->setStride(sizeof(V3F_T2F_N3F));
     }
@@ -168,7 +169,7 @@ struct VertexLayoutHelper
     {
         auto vertexLayout = program->getVertexLayout(true);
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_INSTANCE,
-                                program->getAttributeLocation(backend::Attribute::INSTANCE),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::INSTANCE),
                                 backend::VertexFormat::MAT4, 0, false);
         vertexLayout->setStride(sizeof(Mat4));
     }
@@ -179,10 +180,11 @@ std::function<void(Program*)> Program::s_vertexLayoutDefineList[static_cast<int>
     VertexLayoutHelper::defineDrawNode3D, VertexLayoutHelper::defineSkyBox,   VertexLayoutHelper::definePosColor,
     VertexLayoutHelper::defineTerrain3D,  VertexLayoutHelper::defineInstanced};
 
-Program::Program(std::string_view vs, std::string_view fs) : _vertexShader(vs), _fragmentShader(fs)
+Program::Program(std::string_view vs, std::string_view fs) : _vsSource(vs), _fsSource(fs)
 {
-    _vertexLayout[0] = new VertexLayout();
-    _vertexLayout[1] = new VertexLayout();  // instanced draw
+    auto driver = DriverBase::getInstance();
+    _vertexLayout[0] = driver->createVertexLayout();
+    _vertexLayout[1] = driver->createVertexLayout();  // instanced draw
 }
 
 Program::~Program()

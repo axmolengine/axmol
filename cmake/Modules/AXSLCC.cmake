@@ -161,8 +161,8 @@ function(ax_target_compile_shaders target_name)
       list(APPEND SC_FLAGS "--cvar=shader_rt_${FILE_NAME}")
     endif()
 
-    # sgs, because Apple Metal lack of shader uniform reflect so use --sgs --refelect
-    if(AX_RENDER_API STREQUAL "mtl")
+    # sgs, because Apple Metal lack of shader uniform reflect and d3d reflect only support semantic name, so use --sgs --refelect
+    if(AX_RENDER_API STREQUAL "mtl" OR AX_RENDER_API STREQUAL "d3d")
       list(APPEND SC_FLAGS "--sgs" "--reflect")
     endif()
 

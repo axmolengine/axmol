@@ -42,7 +42,7 @@ namespace ax
 */
 namespace backend
 {
-class TextureBackend;
+class Texture;
 class Program;
 }  // namespace backend
 
@@ -120,7 +120,7 @@ protected:
     // Cached value to determine to generate material id or not.
     BlendFunc _blendType              = BlendFunc::DISABLE;
     uint64_t _batchId                 = 0;
-    backend::TextureBackend* _texture = nullptr;
+    backend::Texture* _texture = nullptr;
 };
 
 }

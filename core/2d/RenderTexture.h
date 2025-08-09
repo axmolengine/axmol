@@ -33,14 +33,13 @@ THE SOFTWARE.
 #include "renderer/GroupCommand.h"
 #include "renderer/CustomCommand.h"
 #include "renderer/CallbackCommand.h"
-#include "renderer/backend/Types.h"
 
 namespace ax
 {
 
 namespace backend
 {
-class TextureBackend;
+class Texture;
 class RenderTarget;
 }  // namespace backend
 

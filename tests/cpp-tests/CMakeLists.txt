@@ -140,7 +140,6 @@ list(APPEND GAME_HEADER
      Source/VibrateTest/VibrateTest.h
      Source/ClippingNodeTest/ClippingNodeTest.h
      Source/UserDefaultTest/UserDefaultTest.h
-     Source/ImGuiTest/ImGuiTest.h
      Source/tests.h
      Source/DataVisitorTest/DataVisitorTest.h
      Source/NewAudioEngineTest/NewAudioEngineTest.h
@@ -360,7 +359,6 @@ list(APPEND GAME_SOURCE
      Source/UITest/CocoStudioGUITest/UITabControlTest/UITabControlTest.cpp
      Source/UITest/UITest.cpp
      Source/UserDefaultTest/UserDefaultTest.cpp
-     Source/ImGuiTest/ImGuiTest.cpp
      Source/VisibleRect.cpp
      Source/VibrateTest/VibrateTest.cpp
      Source/SpriteFrameCacheTest/SpriteFrameCacheTest.cpp
@@ -403,9 +401,13 @@ list(APPEND GAME_SOURCE
    Source/Box2DTest/Box2dTest.cpp
 )
 
-if((WINDOWS OR MACOSX OR LINUX OR WASM) AND (NOT WINRT))
-    file(GLOB_RECURSE BOX2D_TESTBED_SOURCES Source/Box2DTestBed/*.h;Source/Box2DTestBed/*.cpp;Source/Box2DTestBed/*.c)
-    list(APPEND GAME_SOURCE ${BOX2D_TESTBED_SOURCES})
+if(AX_ENABLE_EXT_IMGUI)
+    list(APPEND GAME_HEADER Source/ImGuiTest/ImGuiTest.h)
+    list(APPEND GAME_SOURCE Source/ImGuiTest/ImGuiTest.cpp)
+    if((WINDOWS OR MACOSX OR LINUX OR WASM) AND (NOT WINRT))
+        file(GLOB_RECURSE BOX2D_TESTBED_SOURCES Source/Box2DTestBed/*.h;Source/Box2DTestBed/*.cpp;Source/Box2DTestBed/*.c)
+        list(APPEND GAME_SOURCE ${BOX2D_TESTBED_SOURCES})
+    endif()
 endif()
 
 list(APPEND GAME_HEADER

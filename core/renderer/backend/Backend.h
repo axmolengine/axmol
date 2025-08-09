@@ -28,7 +28,7 @@
 #include "renderer/backend/RenderPassDescriptor.h"
 #include "renderer/backend/RenderPipeline.h"
 #include "renderer/backend/DriverBase.h"
-#include "renderer/backend/Types.h"
+#include "renderer/backend/BaseDefs.h"
 #include "renderer/backend/CommandBuffer.h"
 #include "renderer/backend/Buffer.h"
 #include "renderer/backend/VertexLayout.h"

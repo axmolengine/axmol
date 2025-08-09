@@ -24,8 +24,7 @@
 
 #pragma once
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 
 #include "base/Object.h"
 
@@ -72,8 +71,8 @@ class DepthStencilState : public ax::Object
 {
 public:
     virtual void update(const DepthStencilDescriptor& desc);
-    const DepthStencilDescriptor& getDepthStencilInfo() const { return _depthStencilInfo; }
-    bool isEnabled() const { return bitmask::any(_depthStencilInfo.flags, DepthStencilFlags::DEPTH_STENCIL_TEST); }
+    const DepthStencilDescriptor& getDepthStencilDesc() const { return _dsDesc; }
+    bool isEnabled() const { return bitmask::any(_dsDesc.flags, DepthStencilFlags::DEPTH_STENCIL_TEST); }
 
 protected:
     /**
@@ -82,7 +81,7 @@ protected:
     DepthStencilState() = default;
     virtual ~DepthStencilState();
 
-    DepthStencilDescriptor _depthStencilInfo{};  ///< depth and stencil descriptor.
+    DepthStencilDescriptor _dsDesc{};  ///< depth and stencil descriptor.
     bool _isBackFrontStencilEqual = false;       ///< Does front stencil status equals to back stencil's.
 };
 

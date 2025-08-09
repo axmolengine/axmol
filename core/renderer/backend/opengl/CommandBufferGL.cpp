@@ -46,25 +46,6 @@ namespace ax::backend {
 #    define AX_HAVE_MAP_BUFFER_RANGE 0
 #endif
 
-namespace
-{
-void applyTexture(TextureBackend* texture, int slot, int index)
-{
-    switch (texture->getTextureType())
-    {
-    case TextureType::TEXTURE_2D:
-        static_cast<Texture2DGL*>(texture)->apply(slot, index);
-        break;
-    case TextureType::TEXTURE_CUBE:
-        static_cast<TextureCubeGL*>(texture)->apply(slot, index);
-        break;
-    default:
-        assert(false);
-        return;
-    }
-}
-}  // namespace
-
 CommandBufferGL::CommandBufferGL() {}
 
 CommandBufferGL::~CommandBufferGL()
@@ -186,6 +167,24 @@ void CommandBufferGL::setWinding(Winding winding)
     __gl->winding(winding);
 }
 
+void CommandBufferGL::setProgramState(ProgramState* programState)
+{
+    AX_SAFE_RETAIN(programState);
+    AX_SAFE_RELEASE(_programState);
+    _programState = programState;
+}
+
+void CommandBufferGL::setVertexBuffer(Buffer* buffer)
+{
+    assert(buffer != nullptr);
+    if (buffer == nullptr || _vertexBuffer == buffer)
+        return;
+
+    buffer->retain();
+    AX_SAFE_RELEASE(_vertexBuffer);
+    _vertexBuffer = static_cast<BufferGL*>(buffer);
+}
+
 void CommandBufferGL::setIndexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
@@ -206,24 +205,6 @@ void CommandBufferGL::setInstanceBuffer(Buffer* buffer)
     buffer->retain();
     AX_SAFE_RELEASE(_instanceBuffer);
     _instanceBuffer = static_cast<BufferGL*>(buffer);
-}
-
-void CommandBufferGL::setVertexBuffer(Buffer* buffer)
-{
-    assert(buffer != nullptr);
-    if (buffer == nullptr || _vertexBuffer == buffer)
-        return;
-
-    buffer->retain();
-    AX_SAFE_RELEASE(_vertexBuffer);
-    _vertexBuffer = static_cast<BufferGL*>(buffer);
-}
-
-void CommandBufferGL::setProgramState(ProgramState* programState)
-{
-    AX_SAFE_RETAIN(programState);
-    AX_SAFE_RELEASE(_programState);
-    _programState = programState;
 }
 
 void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
@@ -355,7 +336,7 @@ void CommandBufferGL::bindVertexBuffer(uint32_t& usedBits) const
     {
         auto vertexLayout = _programState->getVertexLayout();
 
-        const auto& attributes = vertexLayout->getAttributes();
+        const auto& attributes = vertexLayout->getAllInputs();
         if (!vertexLayout->isValid())
             return;
 
@@ -381,7 +362,7 @@ void CommandBufferGL::bindVertexBuffer(uint32_t& usedBits) const
     if (_instanceBuffer)
     {
         auto vertexLayout      = _programState->getVertexLayout(true);
-        const auto& attributes = vertexLayout->getAttributes();
+        const auto& attributes = vertexLayout->getAllInputs();
         if (!vertexLayout->isValid())
             return;
 
@@ -450,7 +431,7 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
             int i = 0;
             for (const auto& texture : textures)
             {
-                applyTexture(texture, slots[i], indexs[i]);
+                static_cast<TextureImpl*>(texture)->apply(slots[i], indexs[i]);
                 ++i;
             }
 

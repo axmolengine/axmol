@@ -18,19 +18,19 @@ void SetMTLObjectsFromCocos2d(Effekseer::RefPtr<EffekseerRenderer::CommandList> 
     auto renderer = d->getRenderer();
     auto buffer = renderer->getCommandBuffer();
     auto bufferM = static_cast<cocos2d::backend::CommandBufferMTL*>(buffer);
-    
+
     // use render pass descriptor from Cocos and add depth test
     // auto descriptor = d->getRenderPassDescriptor();
 //    ax::backend::RenderPassDescriptor descriptor;
 //    descriptor.flags.clear = true;
     // using axmol render pass
     auto target = renderer->getRenderTarget();
-    
+
     renderer->beginRenderPass();
     auto v = renderer->getViewport();
     // important for ensuring znear and zfar are in sync with Cocos
     bufferM->setViewport(v.x, v.y, v.w, v.h);
-    
+
     // set Command Buffer and Render Encoder from Cocos
     EffekseerRendererMetal::BeginCommandList(commandList, bufferM->getRenderCommandEncoder());
 }
@@ -75,13 +75,13 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
     if(textureInternal_ == nullptr)
     {
         auto driver = static_cast<cocos2d::backend::DriverMTL*>(cocos2d::backend::DriverBase::getInstance());
-        
+
         MTLTextureDescriptor* textureDescriptor =
         [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:cocos2d::backend::UtilsMTL::getDefaultColorAttachmentPixelFormat()
                                                            width:drawable.texture.width
                                                           height:drawable.texture.height
                                                        mipmapped:NO];
-        
+
         texture = [driver->getMTLDevice() newTextureWithDescriptor:textureDescriptor];
         textureInternal_ = EffekseerRendererMetal::CreateTexture(renderer->GetGraphicsDevice(), texture);
     }
@@ -89,23 +89,23 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
     auto rendererAX = cocos2d::Director::getInstance()->getRenderer();
     auto commandBuffer = static_cast<cocos2d::backend::CommandBufferMTL*>(rendererAX->getCommandBuffer());
     commandBuffer->endEncoding();
-    
+
     EffekseerRendererMetal::EndCommandList(commandList_);
-    
+
     MTLRegion region =
     {
         {0, 0, 0},          // MTLOrigin
         {texture.width, texture.height, 1}  // MTLSize
     };
-    
+
     id<MTLBlitCommandEncoder> blitEncoder = [commandBuffer->getMTLCommandBuffer() blitCommandEncoder];
-    
+
     [blitEncoder copyFromTexture:drawable.texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:texture destinationSlice:0 destinationLevel:0 destinationOrigin:{0, 0, 0}];
     [blitEncoder endEncoding];
     cocos2d::backend::DriverBase::getInstance()->setFrameBufferOnly(true); // reset
-    
+
     SetMTLObjectsFromCocos2d(commandList_);
-    
+
     auto r = static_cast<EffekseerRendererLLGI::Renderer*>(renderer);
     r->SetBackground(textureInternal_);
 
@@ -142,10 +142,10 @@ public:
         }
 
         //creating_ = false;
-        
+
         return g_graphicsDevice;
     }
-    
+
     int Release() override
     {
         auto ret = ::EffekseerRendererLLGI::Backend::GraphicsDevice::Release();
@@ -172,10 +172,10 @@ Effekseer::ModelLoaderRef CreateModelLoader(Effekseer::FileInterfaceRef effectFi
 
 void UpdateTextureData(::Effekseer::TextureRef textureData, cocos2d::Texture2D* texture)
 {
-    auto textureMTL = static_cast<cocos2d::backend::TextureMTL*>(texture->getBackendTexture());
+    auto textureMTL = static_cast<ax::backend::TextureMTL*>(texture->getBackendTexture());
 	auto device = EffekseerGraphicsDevice::create().DownCast<::EffekseerRendererLLGI::Backend::GraphicsDevice>();
 
-    auto backend = device->CreateTexture(textureMTL->getHandler(), []() -> void {});
+    auto backend = device->CreateTexture(textureMTL->internalHandle(), []() -> void {});
 	textureData->SetBackend(backend);
 }
 
@@ -224,7 +224,7 @@ void EffectManager::newFrame()
     {
         memoryPool_->NewFrame();
     }
-    
+
     auto r = static_cast<::EffekseerRendererLLGI::RendererImplemented*>(renderer2d.Get());
     auto vb = static_cast<::EffekseerRendererLLGI::VertexBuffer*>(r->GetVertexBuffer());
 }

@@ -30,7 +30,6 @@
 #include "base/Types.h"
 #include "renderer/Material.h"
 #include "3d/Bundle3DData.h"
-#include "renderer/backend/Types.h"
 
 namespace ax
 {

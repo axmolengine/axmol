@@ -24,10 +24,9 @@
 
 #pragma once
 
-#include "Macros.h"
+#include "BaseDefs.h"
 #include "base/Object.h"
 #include "platform/PlatformMacros.h"
-#include "Types.h"
 #include "ShaderCache.h"
 
 #include <functional>
@@ -99,14 +98,14 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(std::string_view name) const = 0;
+    virtual const VertexInputDesc* getVertexInputDesc(std::string_view name) const = 0;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(backend::Attribute name) const = 0;
+    virtual const VertexInputDesc* getVertexInputDesc(backend::VertexInputSemantic name) const = 0;
 
     /**
      * Get maximum vertex location.
@@ -124,19 +123,19 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const = 0;
+    virtual const hlookup::string_map<VertexInputDesc>& getAllActiveVertexInputs() const = 0;
 
     /**
      * Get vertex shader.
      * @return Vertex shader.
      */
-    std::string_view getVertexShader() const { return _vertexShader; }
+    std::string_view getVertexShaderSource() const { return _vsSource; }
 
     /**
      * Get fragment shader.
      * @ Fragment shader.
      */
-    std::string_view getFragmentShader() const { return _fragmentShader; }
+    std::string_view getFragmentShaderSource() const { return _fsSource; }
 
     /**
     * Define the program shared vertex layout type, see: VertexLayoutType
@@ -210,8 +209,8 @@ protected:
 #endif
     friend class ProgramManager;
 
-    std::string _vertexShader;                            ///< Vertex shader.
-    std::string _fragmentShader;                          ///< Fragment shader.
+    std::string _vsSource;                            ///< Vertex shader.
+    std::string _fsSource;                          ///< Fragment shader.
     VertexLayout* _vertexLayout[2] = {};
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
     uint64_t _programId   = 0;

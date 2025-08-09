@@ -1,5 +1,7 @@
 #pragma once
-#include "cocos2d.h"
+
+#include "2d/Node.h"
+#include "base/Types.h"
 #include "FairyGUIMacros.h"
 
 NS_FGUI_BEGIN

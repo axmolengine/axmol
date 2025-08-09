@@ -29,7 +29,6 @@
 #include "Particle3D/PU/PUTranslateManager.h"
 #include "platform/FileUtils.h"
 #include "platform/PlatformMacros.h"
-#include "renderer/backend/Types.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <io.h>

@@ -24,7 +24,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "Macros.h"
+#include "BaseDefs.h"
 #include "base/Object.h"
 #include "platform/PlatformMacros.h"
 #include "renderer/backend/ShaderModule.h"
@@ -57,14 +57,14 @@ public:
      * If it is created before, then just return the cached shader module.
      * @param shaderSource The source code of the shader.
      */
-    backend::ShaderModule* newVertexShaderModule(std::string_view shaderSource);
+    backend::ShaderModule* acquireVertexShaderModule(std::string_view shaderSource);
 
     /**
      * Create a fragment shader module.
      * If it is created before, then just return the cached shader module.
      * @param shaderSource The source code of the shader.
      */
-    backend::ShaderModule* newFragmentShaderModule(std::string_view shaderSource);
+    backend::ShaderModule* acquireFragmentShaderModule(std::string_view shaderSource);
 
     /**
      * Remove all unused shaders.
@@ -80,9 +80,9 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    backend::ShaderModule* newShaderModule(backend::ShaderStage stage, std::string_view shaderSource);
+    backend::ShaderModule* acquireShaderModule(backend::ShaderStage stage, std::string_view shaderSource);
 
-    std::unordered_map<std::size_t, backend::ShaderModule*> _cachedShaders;
+    std::unordered_map<uint64_t, backend::ShaderModule*> _cachedShaders;
 };
 
 // end of _backend group

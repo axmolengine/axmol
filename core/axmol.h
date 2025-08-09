@@ -277,7 +277,7 @@ THE SOFTWARE.
 #include "3d/MeshRenderer.h"
 #include "3d/MeshMaterial.h"
 #include "3d/Terrain.h"
-#include "3d/VertexAttribBinding.h"
+#include "3d/VertexInputBinding.h"
 
 namespace ax
 {

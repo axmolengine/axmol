@@ -39,7 +39,7 @@ DepthStencilState::~DepthStencilState() {}
 
 void DepthStencilState::update(const DepthStencilDescriptor& dsDesc)
 {
-    _depthStencilInfo        = dsDesc;
+    _dsDesc        = dsDesc;
     _isBackFrontStencilEqual = dsDesc.backFaceStencil == dsDesc.frontFaceStencil;
 }
 

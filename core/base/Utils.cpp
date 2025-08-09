@@ -46,7 +46,6 @@ THE SOFTWARE.
 #include "renderer/Renderer.h"
 #include "renderer/TextureCache.h"
 #include "renderer/RenderState.h"
-#include "renderer/backend/Types.h"
 #include "renderer/backend/PixelBufferDescriptor.h"
 
 #include "platform/Image.h"

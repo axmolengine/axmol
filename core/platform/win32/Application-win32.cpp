@@ -85,8 +85,8 @@ int Application::run()
         return 1;
     }
 
-    auto director = Director::getInstance();
-    auto renderView   = director->getRenderView();
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
 
     // Retain renderView to avoid renderView being released in the while loop
     renderView->retain();
@@ -128,7 +128,6 @@ int Application::run()
         director = nullptr;
     }
     renderView->release();
-
 
     return 0;
 }

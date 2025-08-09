@@ -25,8 +25,7 @@
 
 #pragma once
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 #include "RenderPassDescriptor.h"
 #include "Texture.h"
 #include "DepthStencilState.h"
@@ -47,6 +46,7 @@ class RenderTarget;
 
 class ProgramManager;
 class Program;
+class VertexLayout;
 
 enum class FeatureType : uint32_t
 {
@@ -91,7 +91,7 @@ public:
      * @param windowHandle, current is win32 HWND
      * @return A CommandBuffer object.
      */
-    virtual CommandBuffer* newCommandBuffer(void* windowHandle) = 0;
+    virtual CommandBuffer* createCommandBuffer(void* windowHandle) = 0;
 
     /**
      * New a Buffer object, not auto released.
@@ -102,29 +102,28 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    virtual Buffer* newBuffer(size_t size, BufferType type, BufferUsage usage) = 0;
+    virtual Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage) = 0;
 
     /**
-     * New a TextureBackend object, not auto released.
+     * New a Texture object, not auto released.
      * @param descriptor Specifies texture description.
-     * @return A TextureBackend object.
+     * @return A Texture object.
      */
-    virtual TextureBackend* newTexture(const TextureDescriptor& descriptor) = 0;
+    virtual Texture* createTexture(const TextureDescriptor& descriptor) = 0;
 
-    virtual RenderTarget* newDefaultRenderTarget() = 0;
+    virtual RenderTarget* createDefaultRenderTarget() = 0;
 
-    virtual RenderTarget* newRenderTarget(TextureBackend* colorAttachment    = nullptr,
-                                          TextureBackend* depthAttachment    = nullptr,
-                                          TextureBackend* stencilAttachhment = nullptr) = 0;
+    virtual RenderTarget* createRenderTarget(Texture* colorAttachment    = nullptr,
+                                          Texture* depthStencilAttachment    = nullptr) = 0;
 
-    virtual DepthStencilState* newDepthStencilState() = 0;
+    virtual DepthStencilState* createDepthStencilState() = 0;
 
     /**
      * New a RenderPipeline object, not auto released.
      * @param descriptor Specifies render pipeline description.
      * @return A RenderPipeline object.
      */
-    virtual RenderPipeline* newRenderPipeline() = 0;
+    virtual RenderPipeline* createRenderPipeline() = 0;
 
     /**
      * This property controls whether or not the drawables'
@@ -144,7 +143,9 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) = 0;
+    virtual Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) = 0;
+
+    virtual VertexLayout* createVertexLayout();
 
     virtual void resetState() {};
 
@@ -153,21 +154,21 @@ public:
      * Get vendor device name.
      * @return Vendor device name.
      */
-    virtual const char* getVendor() const = 0;
+    virtual std::string getVendor() const = 0;
 
     /**
      * Get the full name of the vendor device.
      * @return The full name of the vendor device.
      */
-    virtual const char* getRenderer() const = 0;
+    virtual std::string getRenderer() const = 0;
 
     /**
      * Get version name.
      * @return Version name.
      */
-    virtual const char* getVersion() const = 0;
+    virtual std::string getVersion() const = 0;
 
-    virtual const char* getShaderVersion() const { return ""; }
+    virtual std::string getShaderVersion() const { return {}; }
 
     /**
      * Check does device has extension.
@@ -217,8 +218,9 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) = 0;
+    virtual ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) = 0;
 
+    // TODO: driverCaps
     int _maxAttributes     = 0;  ///< Maximum attribute count.
     int _maxTextureSize    = 0;  ///< Maximum texture size.
     int _maxTextureUnits   = 0;  ///< Maximum texture unit.

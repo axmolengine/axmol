@@ -232,22 +232,22 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool own
         _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
 
         // setup custom vertex layout for V2F_T2F_C4B
-        const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-        auto iter                 = attributeInfo.find("a_position");
+        const auto& vertexInputs = _programState->getProgram()->getAllActiveVertexInputs();
+        auto iter                = vertexInputs.find("a_position");
         auto layout               = _programState->getMutableVertexLayout();
-        if (iter != attributeInfo.end())
+        if (iter != vertexInputs.end())
         {
-            layout->setAttrib("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
+            layout->setAttrib("a_position", &iter->second, backend::VertexFormat::FLOAT2, 0, false);
         }
-        iter = attributeInfo.find("a_texCoord");
-        if (iter != attributeInfo.end())
+        iter = vertexInputs.find("a_texCoord");
+        if (iter != vertexInputs.end())
         {
-            layout->setAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, sizeof(Vec2), false);
+            layout->setAttrib("a_texCoord", &iter->second, backend::VertexFormat::FLOAT2, sizeof(Vec2), false);
         }
-        iter = attributeInfo.find("a_color");
-        if (iter != attributeInfo.end())
+        iter = vertexInputs.find("a_color");
+        if (iter != vertexInputs.end())
         {
-            layout->setAttrib("a_color", iter->second.location, backend::VertexFormat::UBYTE4, sizeof(Vec2) * 2, true);
+            layout->setAttrib("a_color", &iter->second, backend::VertexFormat::UBYTE4, sizeof(Vec2) * 2, true);
         }
 
         constexpr size_t vertexSize = sizeof(_vertices[0]);

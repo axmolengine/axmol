@@ -26,7 +26,6 @@
 #include "UtilsGL.h"
 #include "ProgramGL.h"
 #include "TextureGL.h"
-#include "renderer/backend/Types.h"
 #include "renderer/backend/PixelFormatUtils.h"
 #include "platform/GL.h"
 

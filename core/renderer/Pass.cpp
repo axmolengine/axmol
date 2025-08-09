@@ -34,7 +34,7 @@
 #include "renderer/Material.h"
 #include "renderer/backend/ProgramState.h"
 #include "3d/MeshVertexIndexData.h"
-#include "3d/VertexAttribBinding.h"
+#include "3d/VertexInputBinding.h"
 #include "base/Director.h"
 #include "renderer/Renderer.h"
 
@@ -104,7 +104,7 @@ Pass::Pass() {}
 
 Pass::~Pass()
 {
-    AX_SAFE_RELEASE(_vertexAttribBinding);
+    AX_SAFE_RELEASE(_vertexInputBinding);
     AX_SAFE_RELEASE(_programState);
 }
 
@@ -115,8 +115,8 @@ Pass* Pass::clone() const
 
     pass->setProgramState(_programState->clone());
 
-    pass->_vertexAttribBinding = _vertexAttribBinding;
-    AX_SAFE_RETAIN(pass->_vertexAttribBinding);
+    pass->_vertexInputBinding = _vertexInputBinding;
+    AX_SAFE_RETAIN(pass->_vertexInputBinding);
 
     pass->setTechnique(_technique);
 
@@ -260,27 +260,27 @@ void Pass::setTechnique(Technique* technique)
     _technique = technique;  // weak reference
 }
 
-void Pass::setVertexAttribBinding(VertexAttribBinding* binding)
+void Pass::setVertexInputBinding(VertexInputBinding* binding)
 {
-    if (_vertexAttribBinding != binding)
+    if (_vertexInputBinding != binding)
     {
-        AX_SAFE_RELEASE(_vertexAttribBinding);
-        _vertexAttribBinding = binding;
-        AX_SAFE_RETAIN(_vertexAttribBinding);
+        AX_SAFE_RELEASE(_vertexInputBinding);
+        _vertexInputBinding = binding;
+        AX_SAFE_RETAIN(_vertexInputBinding);
     }
 }
 
-VertexAttribBinding* Pass::getVertexAttributeBinding() const
+VertexInputBinding* Pass::getVertexAttributeBinding() const
 {
-    return _vertexAttribBinding;
+    return _vertexInputBinding;
 }
 
-void Pass::setUniformTexture(uint32_t slot, backend::TextureBackend* tex)
+void Pass::setUniformTexture(uint32_t slot, backend::Texture* tex)
 {
     _programState->setTexture(_locTexture, slot, tex);
 }
 
-void Pass::setUniformNormTexture(uint32_t slot, backend::TextureBackend* tex)
+void Pass::setUniformNormTexture(uint32_t slot, backend::Texture* tex)
 {
     _programState->setTexture(_locNormalTexture, slot, tex);
 }

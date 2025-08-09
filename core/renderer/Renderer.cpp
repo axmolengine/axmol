@@ -206,24 +206,24 @@ void Renderer::init()
     auto driver = backend::DriverBase::getInstance();
 #if AX_RENDER_API == AX_RENDER_API_D3D
     auto mainWindowHandle = Director::getInstance()->getRenderView()->getWin32Window();
-    _commandBuffer        = driver->newCommandBuffer(mainWindowHandle);
+    _commandBuffer        = driver->createCommandBuffer(mainWindowHandle);
 #else
-    _commandBuffer = driver->newCommandBuffer(nullptr);
+    _commandBuffer = driver->createCommandBuffer(nullptr);
 #endif
     _dsDesc.flags = DepthStencilFlags::ALL;
-    _defaultRT    = driver->newDefaultRenderTarget();
+    _defaultRT    = driver->createDefaultRenderTarget();
 
     _currentRT      = _defaultRT;
-    _renderPipeline = driver->newRenderPipeline();
+    _renderPipeline = driver->createRenderPipeline();
     _commandBuffer->setRenderPipeline(_renderPipeline);
 
-    _depthStencilState = driver->newDepthStencilState();
+    _depthStencilState = driver->createDepthStencilState();
     _commandBuffer->setDepthStencilState(_depthStencilState);
 }
 
 backend::RenderTarget* Renderer::getOffscreenRenderTarget() {
     if (_offscreenRT != nullptr) return _offscreenRT;
-    return (_offscreenRT = backend::DriverBase::getInstance()->newRenderTarget());
+    return (_offscreenRT = backend::DriverBase::getInstance()->createRenderTarget());
 }
 
 void Renderer::addCallbackCommand(std::function<void()> func, float globalZOrder)
@@ -851,10 +851,9 @@ void Renderer::beginRenderPass()
     auto depthStencil = _dsDesc;
     if (!_currentRT->isDefaultRenderTarget())
     {
-        if (!_currentRT->_depth)
-            depthStencil.removeFlag(DepthStencilFlags::DEPTH_TEST | DepthStencilFlags::DEPTH_WRITE);
-        if (!_currentRT->_stencil)
-            depthStencil.removeFlag(DepthStencilFlags::STENCIL_TEST);
+        if (!_currentRT->_depthStencil)
+            depthStencil.removeFlag(DepthStencilFlags::DEPTH_TEST | DepthStencilFlags::DEPTH_WRITE |
+                                    DepthStencilFlags::STENCIL_TEST);
     }
 
     _commandBuffer->updateDepthStencilState(depthStencil);
@@ -1010,12 +1009,12 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
     // This change does fix the Android/OpenGL ES performance problem
     // If for some reason we get reports of performance issues on OpenGL implementations,
     // then we can just add pre-processor checks for OpenGL and have the updateData() allocate the full size after buffer creation.
-    auto vertexBuffer = driver->newBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX,
+    auto vertexBuffer = driver->createBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX,
                                           backend::BufferUsage::DYNAMIC);
     if (!vertexBuffer)
         return;
 
-    auto indexBuffer = driver->newBuffer(Renderer::INDEX_VBO_SIZE * sizeof(_indices[0]), backend::BufferType::INDEX,
+    auto indexBuffer = driver->createBuffer(Renderer::INDEX_VBO_SIZE * sizeof(_indices[0]), backend::BufferType::INDEX,
                                          backend::BufferUsage::DYNAMIC);
     if (!indexBuffer)
     {

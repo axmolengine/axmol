@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "renderer/RenderState.h"
-#include "renderer/backend/Types.h"
 #include "renderer/MeshCommand.h"
 #include "renderer/CallbackCommand.h"
 #include "renderer/backend/Buffer.h"

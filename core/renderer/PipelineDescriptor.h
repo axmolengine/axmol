@@ -39,9 +39,9 @@
 namespace ax
 {
 
-struct AX_DLL PipelineDescriptor
+struct PipelineDescriptor
 {
-    backend::ProgramState* programState = nullptr;
+    backend::ProgramState* programState{nullptr};
     backend::BlendDescriptor blendDescriptor;
 };
 

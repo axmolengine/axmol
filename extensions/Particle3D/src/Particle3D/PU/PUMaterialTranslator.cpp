@@ -26,7 +26,6 @@
 
 #include "PUMaterialTranslator.h"
 #include "Particle3D/PU/PUMaterialManager.h"
-#include "renderer/backend/Types.h"
 
 namespace ax
 {

@@ -82,13 +82,13 @@ public:
      * Get vertex shader module.
      * @return Vertex shader module.
      */
-    virtual ShaderModuleMTL* getVertexShader() const { return _vertexShader; }
+    ShaderModuleMTL* getVertexShader() const { return _vertexShader; }
 
     /**
      * Get fragment shader module.
      * @ Fragment shader module.
      */
-    virtual ShaderModuleMTL* getFragmentShader() const { return _fragmentShader; }
+    ShaderModuleMTL* getFragmentShader() const { return _fragmentShader; }
 
     /**
      * Get active vertex attributes.

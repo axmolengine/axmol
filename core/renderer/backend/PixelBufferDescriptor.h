@@ -1,8 +1,7 @@
 #pragma once
 #include "base/Data.h"
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 
 namespace ax::backend {
 

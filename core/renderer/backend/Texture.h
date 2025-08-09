@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "BaseDefs.h"
 #include "base/Object.h"
 #include <cassert>
 
@@ -54,7 +54,7 @@ struct TextureDescriptor
 /**
  * A base texture
  */
-class TextureBackend : public Object
+class Texture : public Object
 {
 public:
     /**
@@ -98,36 +98,9 @@ public:
 
     virtual int getCount() const { return 1; };
 
-    virtual uintptr_t getHandler(int index = 0) const { return 0; }
-
     int getWidth() const { return _width; }
     int getHeight() const { return _height; }
 
-protected:
-    /**
-     * @param descriptor Specifies the texture descriptor.
-     */
-    TextureBackend() {}
-    virtual ~TextureBackend();
-
-    /// The bytes of all components.
-    uint8_t _bitsPerPixel = 0;
-    bool _hasMipmaps      = false;
-    bool _isCompressed    = false;
-    uint32_t _width       = 0;
-    uint32_t _height      = 0;
-
-    TextureType _textureType   = TextureType::TEXTURE_2D;
-    PixelFormat _textureFormat = PixelFormat::RGBA8;
-    TextureUsage _textureUsage = TextureUsage::READ;
-};
-
-/**
- * A 2D texture.
- */
-class Texture2DBackend : public TextureBackend
-{
-public:
     /**
      * Update a two-dimensional texture image
      * @param data Specifies a pointer to the image data in memory.
@@ -193,30 +166,29 @@ public:
                                          int index = 0) = 0;
 
     /**
-     * Get texture width.
-     * @return Texture width.
-     */
-    inline std::size_t getWidth() const { return _width; }
-
-    /**
-     * Get texture height.
-     * @return Texture height.
-     */
-    inline std::size_t getHeight() const { return _height; }
-};
-
-/**
- * A cubemap texture.
- */
-class TextureCubemapBackend : public TextureBackend
-{
-public:
-    /**
      * Update texutre cube data in give slice side.
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
     virtual void updateFaceData(TextureCubeFace side, void* data, int index = 0) = 0;
+
+protected:
+    /**
+     * @param descriptor Specifies the texture descriptor.
+     */
+    Texture() {}
+    virtual ~Texture();
+
+    /// The bytes of all components.
+    uint8_t _bitsPerPixel = 0;
+    bool _hasMipmaps      = false;
+    bool _isCompressed    = false;
+    uint32_t _width       = 0;
+    uint32_t _height      = 0;
+
+    TextureType _textureType   = TextureType::TEXTURE_2D;
+    PixelFormat _textureFormat = PixelFormat::RGBA8;
+    TextureUsage _textureUsage = TextureUsage::READ;
 };
 
 // end of _backend group

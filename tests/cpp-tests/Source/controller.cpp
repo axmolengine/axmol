@@ -28,6 +28,7 @@
 #include <chrono>
 #include "BaseTest.h"
 #include "tests.h"
+#include "feature-detect.h"
 
 using namespace ax;
 
@@ -47,7 +48,7 @@ public:
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
         addTest("Node: Scene3D", [](){return new Scene3DTests(); });
-#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
+#if AX_ENABLE_EXT_IMGUI
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
         addTest("Texture2D", []() { return new Texture2DTests(); });
@@ -58,7 +59,7 @@ public:
         addTest("Audio - NewAudioEngine", []() { return new AudioEngineTests(); });
 
         addTest("Box2D - Basic", []() { return new Box2DTests(); });
-#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
+#if AX_ENABLE_EXT_IMGUI
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });

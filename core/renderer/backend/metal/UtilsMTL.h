@@ -33,7 +33,7 @@
 
 namespace ax::backend {
 
-class TextureBackend;
+class Texture;
 
 /**
  * @addtogroup _metal

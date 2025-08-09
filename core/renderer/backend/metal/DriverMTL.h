@@ -143,16 +143,16 @@ public:
     Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
 
     /**
-     * New a TextureBackend object.
+     * New a Texture object.
      * @param descriptor Specifies texture description.
-     * @return A TextureBackend object.
+     * @return A Texture object.
      */
-    TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
+    Texture* newTexture(const TextureDescriptor& descriptor) override;
 
     RenderTarget* newDefaultRenderTarget() override;
-    RenderTarget* newRenderTarget(TextureBackend* colorAttachment,
-                                  TextureBackend* depthAttachment,
-                                  TextureBackend* stencilAttachhment) override;
+    RenderTarget* newRenderTarget(Texture* colorAttachment,
+                                  Texture* depthAttachment,
+                                  Texture* stencilAttachhment) override;
 
     /**
      * New a DepthStencilState object.

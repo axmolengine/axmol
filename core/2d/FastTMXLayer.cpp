@@ -274,7 +274,7 @@ void FastTMXLayer::updateVertexBuffer()
     unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_T2F_C4B) * _totalQuads.size() * 4);
     if (!_vertexBuffer)
     {
-        _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(vertexBufferSize, backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
+        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(vertexBufferSize, backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
     }
     _vertexBuffer->updateData(&_totalQuads[0], vertexBufferSize);
 }
@@ -284,7 +284,7 @@ void FastTMXLayer::updateIndexBuffer()
     auto indexBufferSize = (sizeof(decltype(_indices)::value_type) * _indices.size());
     if (!_indexBuffer)
     {
-        _indexBuffer = backend::DriverBase::getInstance()->newBuffer(indexBufferSize, backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
+        _indexBuffer = backend::DriverBase::getInstance()->createBuffer(indexBufferSize, backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
     }
     _indexBuffer->updateData(&_indices[0], indexBufferSize);
 }

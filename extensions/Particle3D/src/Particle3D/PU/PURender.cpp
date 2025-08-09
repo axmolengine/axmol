@@ -82,8 +82,8 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     if (_vertexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer =
-            backend::DriverBase::getInstance()->newBuffer(stride * 4 * particleSystem->getParticleQuota(),
+        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(
+            stride * 4 * particleSystem->getParticleQuota(),
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
@@ -95,7 +95,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     if (_indexBuffer == nullptr)
     {
         _indexBuffer =
-            backend::DriverBase::getInstance()->newBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
+            backend::DriverBase::getInstance()->createBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
                                                       backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
@@ -699,7 +699,7 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
     {
         size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer =
-            backend::DriverBase::getInstance()->newBuffer(stride * 8 * particleSystem->getParticleQuota(),
+            backend::DriverBase::getInstance()->createBuffer(stride * 8 * particleSystem->getParticleQuota(),
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
@@ -709,7 +709,7 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
         _vertices.resize(8 * particleSystem->getParticleQuota());
 
         _indexBuffer =
-            backend::DriverBase::getInstance()->newBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
+            backend::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
                                                       backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
@@ -890,8 +890,8 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer =
-            backend::DriverBase::getInstance()->newBuffer(stride * vertexCount * particleSystem->getParticleQuota(),
+        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(
+            stride * vertexCount * particleSystem->getParticleQuota(),
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
@@ -900,7 +900,7 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
         }
         _vertices.resize(vertexCount * particleSystem->getParticleQuota());
 
-        _indexBuffer = backend::DriverBase::getInstance()->newBuffer(
+        _indexBuffer = backend::DriverBase::getInstance()->createBuffer(
             sizeof(uint16_t) * indexCount * particleSystem->getParticleQuota(), backend::BufferType::INDEX,
             backend::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)

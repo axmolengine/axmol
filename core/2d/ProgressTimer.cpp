@@ -59,12 +59,12 @@ backend::ProgramState* initPipelineDescriptor(ax::CustomCommand& command,
 
     // set custom vertexLayout according to V2F_T2F_C4F structure
     auto vertexLayout = programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", program->getAttributeLocation(backend::Attribute::POSITION),
+    vertexLayout->setAttrib("a_position", program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                             backend::VertexFormat::FLOAT2, 0, false);
-    vertexLayout->setAttrib("a_texCoord", program->getAttributeLocation(backend::Attribute::TEXCOORD),
+    vertexLayout->setAttrib("a_texCoord", program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                             backend::VertexFormat::FLOAT2,
                              offsetof(V2F_T2F_C4F, texCoord), false);
-    vertexLayout->setAttrib("a_color", program->getAttributeLocation(backend::Attribute::COLOR),
+    vertexLayout->setAttrib("a_color", program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                   backend::VertexFormat::FLOAT4,
                                    offsetof(V2F_T2F_C4F, color), false);
     vertexLayout->setStride(sizeof(V2F_T2F_C4F));

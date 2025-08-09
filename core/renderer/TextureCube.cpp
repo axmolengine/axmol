@@ -216,7 +216,7 @@ bool TextureCube::init(std::string_view positive_x,
     textureDescriptor.samplerDescriptor.sAddressMode   = backend::SamplerAddressMode::CLAMP_TO_EDGE;
     textureDescriptor.samplerDescriptor.tAddressMode   = backend::SamplerAddressMode::CLAMP_TO_EDGE;
     _texture =
-        static_cast<backend::TextureCubemapBackend*>(backend::DriverBase::getInstance()->newTexture(textureDescriptor));
+        static_cast<backend::Texture*>(backend::DriverBase::getInstance()->createTexture(textureDescriptor));
     AXASSERT(_texture != nullptr, "TextureCubemap: texture can not be nullptr");
 
     for (int i = 0; i < 6; i++)

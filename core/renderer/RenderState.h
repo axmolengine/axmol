@@ -37,7 +37,6 @@
 #include "base/Vector.h"
 
 #include "renderer/PipelineDescriptor.h"
-#include "renderer/backend/Types.h"
 #include "renderer/MeshCommand.h"
 
 namespace ax

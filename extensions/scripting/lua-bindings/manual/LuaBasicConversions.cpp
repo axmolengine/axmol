@@ -3123,7 +3123,7 @@ void uniformLocation_to_luaval(lua_State* L, const ax::backend::UniformLocation&
     lua_rawset(L, -3);
 }
 
-void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::backend::AttributeBindInfo>& attrs)
+void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::backend::VertexInputDesc>& attrs)
 {
     if (L == nullptr)
         return;
@@ -3136,7 +3136,7 @@ void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::b
             continue;
 
         lua_newtable(L);
-        lua_pushstring(L, "attributeName");
+        lua_pushstring(L, "varName");
         lua_pushstring(L, p.first.c_str());
         lua_rawset(L, -3);
 
@@ -3144,12 +3144,12 @@ void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::b
         lua_pushinteger(L, p.second.location);
         lua_rawset(L, -3);
 
-        lua_pushstring(L, "size");
-        lua_pushinteger(L, p.second.size);
+        lua_pushstring(L, "count");
+        lua_pushinteger(L, p.second.count);
         lua_rawset(L, -3);
 
-        lua_pushstring(L, "type");
-        lua_pushinteger(L, p.second.type);
+        lua_pushstring(L, "format");
+        lua_pushinteger(L, p.second.format);
         lua_rawset(L, -3);
 
         lua_pushstring(L, p.first.c_str());

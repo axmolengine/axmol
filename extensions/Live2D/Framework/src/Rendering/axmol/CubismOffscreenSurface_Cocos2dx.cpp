@@ -22,7 +22,7 @@ CubismOffscreenFrame_Cocos2dx::CubismOffscreenFrame_Cocos2dx()
 
 
 void CubismOffscreenFrame_Cocos2dx::BeginDraw(CubismCommandBuffer_Cocos2dx* commandBuffer,
-                                              backend::TextureBackend* colorBufferOnFinishDrawing)
+                                              backend::Texture* colorBufferOnFinishDrawing)
 {
     if (!IsValid())
     {

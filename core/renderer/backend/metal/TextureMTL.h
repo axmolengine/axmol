@@ -76,7 +76,7 @@ struct TextureInfoMTL
 /**
  * A 2D texture
  */
-class TextureMTL : public backend::Texture2DBackend
+class TextureMTL : public backend::Texture
 {
 public:
     /**
@@ -195,7 +195,7 @@ private:
 /**
  * A texture cube
  */
-class TextureCubeMTL : public backend::TextureCubemapBackend
+class TextureCubeMTL : public backend::Texture
 {
 public:
     /**

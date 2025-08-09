@@ -156,17 +156,17 @@ bool DrawNode3D::init()
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
 
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
+    const auto& inputs = _programState->getProgram()->getAllActiveVertexInputs();
+    auto iter          = inputs.find("a_position");
     auto vertexLayout         = _programState->getMutableVertexLayout();
-    if (iter != attributeInfo.end())
+    if (iter != inputs.end())
     {
-        vertexLayout->setAttrib(iter->first, iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
+        vertexLayout->setAttrib(iter->first, &iter->second, backend::VertexFormat::FLOAT3, 0, false);
     }
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
+    iter = inputs.find("a_color");
+    if (iter != inputs.end())
     {
-        vertexLayout->setAttrib(iter->first, iter->second.location, backend::VertexFormat::UBYTE4, sizeof(Vec3),
+        vertexLayout->setAttrib(iter->first, &iter->second, backend::VertexFormat::UBYTE4, sizeof(Vec3),
                                       true);
     }
     vertexLayout->setStride(sizeof(V3F_C4B));

@@ -30,22 +30,31 @@
 namespace ax::backend {
 
 void VertexLayout::setAttrib(std::string_view name,
-                                std::size_t index,
+                                const VertexInputDesc* desc,
                                 VertexFormat format,
                                 std::size_t offset,
                                 bool needToBeNormallized)
 {
-    if (index == -1)
+    if (!desc)
     {
-        AXLOGW("The vertex attribute '{}' vfmt={} not exist, unused/optimized?", name, static_cast<int>(format));
+        AXLOGW("The vertex input '{}' vfmt={} not exist, unused/optimized?", name, static_cast<int>(format));
         return;
     }
 
     // FIXME 2021/12/25 TODO: store name key is enough
+#if AX_RENDER_API == AX_RENDER_API_D3D
     hlookup::set_item(
-        _attributes, name,
-        Attribute{name, index, format, offset,
+        _inputs, name,
+        InputBindingDesc{
+            desc->semantic, desc->semanticIndex, format, offset,
+                     needToBeNormallized});  // _attributes[name] = {name, index, format, offset, needToBeNormallized};
+#else
+    hlookup::set_item(
+        _inputs, name,
+        InputBindingDesc{
+            desc->semantic, desc->location, format, offset,
                   needToBeNormallized});  // _attributes[name] = {name, index, format, offset, needToBeNormallized};
+#endif
 }
 
 void VertexLayout::setStride(std::size_t stride)

@@ -5,7 +5,6 @@
 #include "base/Types.h"
 #include "platform/GL.h"
 #include "UtilsGL.h"
-#include "renderer/backend/Enums.h"
 
 #define AX_ENABLE_STATE_GUARD 1
 

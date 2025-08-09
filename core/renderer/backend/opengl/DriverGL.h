@@ -47,10 +47,10 @@ public:
     GLint getDefaultFBO() const;
 
     /**
-     * New a CommandBuffer object, not auto released.
+     * Create a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
      */
-    CommandBuffer* newCommandBuffer(void*) override;
+    CommandBuffer* createCommandBuffer(void*) override;
 
     /**
      * New a Buffer object, not auto released.
@@ -61,28 +61,27 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
+    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
 
     /**
-     * New a TextureBackend object, not auto released.
+     * New a Texture object, not auto released.
      * @param descriptor Specifies texture description.
-     * @return A TextureBackend object.
+     * @return A Texture object.
      */
-    TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
+    Texture* createTexture(const TextureDescriptor& descriptor) override;
 
-    RenderTarget* newDefaultRenderTarget() override;
-    RenderTarget* newRenderTarget(TextureBackend* colorAttachment,
-                                  TextureBackend* depthAttachment,
-                                  TextureBackend* stencilAttachhment) override;
+    RenderTarget* createDefaultRenderTarget() override;
+    RenderTarget* createRenderTarget(Texture* colorAttachment,
+                                  Texture* depthStencilAttachment) override;
 
-    DepthStencilState* newDepthStencilState() override;
+    DepthStencilState* createDepthStencilState() override;
 
     /**
      * New a RenderPipeline object, not auto released.
      * @param descriptor Specifies render pipeline description.
      * @return A RenderPipeline object.
      */
-    RenderPipeline* newRenderPipeline() override;
+    RenderPipeline* createRenderPipeline() override;
 
     /**
      * Design for metal.
@@ -95,7 +94,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
 
     void resetState() override;
 
@@ -105,21 +104,21 @@ public:
      * Get vendor device name.
      * @return Vendor device name.
      */
-    const char* getVendor() const override;
+    std::string getVendor() const override;
 
     /**
      * Get the full name of the vendor device.
      * @return The full name of the vendor device.
      */
-    const char* getRenderer() const override;
+    std::string getRenderer() const override;
 
     /**
      * Get version name.
      * @return Version name.
      */
-    const char* getVersion() const override;
+    std::string getVersion() const override;
 
-    const char* getShaderVersion() const override;
+    std::string getShaderVersion() const override;
 
     /**
      * Check does device has extension.
@@ -150,18 +149,13 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
 
     GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
     GLuint _defaultVAO = 0;
 
 private:
     std::set<uint32_t> _glExtensions;
-
-    const char* _vendor{nullptr};
-    const char* _renderer{nullptr};
-    const char* _version{nullptr};
-    const char* _shaderVer{nullptr};
 
     struct VersionInfo
     {
@@ -170,8 +164,10 @@ private:
         uint16_t minor{0};  // minor version
     } _verInfo;
 
-    bool _textureCompressionAstc = false;
-    bool _textureCompressionEtc2 = false;
+    const char* _version{nullptr};
+
+    bool _textureCompressionAstc{false};
+    bool _textureCompressionEtc2{false};
 };
 // end of _opengl group
 /// @}

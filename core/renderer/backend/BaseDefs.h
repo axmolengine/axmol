@@ -25,14 +25,20 @@
 
 #pragma once
 
-#include "Macros.h"
-
+#include <stdint.h>
 #include <assert.h>
-#include <cstdint>
 #include <string>
 #include "base/bitmask.h"
 
-namespace ax::backend {
+#define MAX_COLOR_ATTCHMENT 4
+
+#define MAX_INFLIGHT_BUFFER 3
+
+#define AX_ARRAYSIZE(A)     (sizeof(A) / sizeof((A)[0]))
+
+namespace ax::backend
+{
+using namespace std::string_view_literals;
 
 enum class BufferUsage : uint32_t
 {
@@ -395,4 +401,145 @@ struct ProgramType
 };
 // clang-format on
 
+inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept
+{
+    assert(index < 4);
+    return TargetBufferFlags(1u << index);
 }
+
+typedef TargetBufferFlags ClearFlag;
+
+/// @note In Metal, mipmap filter is derived from `magFilter` value: ie `NEAREST_MIPMAP_LINEAR` and
+///     `LINEAR_MIPMAP_LINEAR` will select `LINEAR` filter, while `NEAREST_MIPMAP_NEAREST` and
+///     `LINEAR_MIPMAP_NEAREST` will select `NEAREST` filter.
+struct SamplerDescriptor
+{
+    SamplerFilter magFilter         = SamplerFilter::LINEAR;
+    SamplerFilter minFilter         = SamplerFilter::LINEAR;
+    SamplerAddressMode sAddressMode = SamplerAddressMode::CLAMP_TO_EDGE;
+    SamplerAddressMode tAddressMode = SamplerAddressMode::CLAMP_TO_EDGE;
+
+    SamplerDescriptor() {}
+
+    SamplerDescriptor(SamplerFilter _magFilter,
+                      SamplerFilter _minFilter,
+                      SamplerAddressMode _sAddressMode,
+                      SamplerAddressMode _tAddressMode)
+        : magFilter(_magFilter), minFilter(_minFilter), sAddressMode(_sAddressMode), tAddressMode(_tAddressMode)
+    {}
+};
+
+struct UniformInfo
+{
+    int count    = 0;  // element count
+    int location = -1;
+
+    // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
+    // float
+    unsigned int type         = 0;
+    unsigned int size         = 0;  // element size
+    unsigned int bufferOffset = 0;
+};
+
+struct StageUniformLocation
+{
+    int location = -1;
+    int offset   = -1;
+
+    operator bool() const { return location != -1; }
+    bool operator==(const StageUniformLocation& other) const
+    {
+        return location == other.location && offset == other.offset;
+    }
+};
+
+struct UniformLocation
+{
+    StageUniformLocation vertStage;
+    StageUniformLocation fragStage;
+
+    operator bool() const { return vertStage or fragStage; }
+    void reset()
+    {
+        vertStage = {};
+        fragStage = {};
+    }
+    bool operator==(const UniformLocation& other) const
+    {
+        return vertStage == other.vertStage && fragStage == other.fragStage;
+    }
+    std::size_t operator()(const UniformLocation&) const  // used as a hash function
+    {
+        return size_t(vertStage.location) ^ size_t(fragStage.location << 16);
+    }
+};
+
+// vertex input descriptor in vertex shader
+struct VertexInputDesc
+{
+    std::string semantic;
+    int semanticIndex{0};
+    int location = -1;
+    int count    = 0;
+    int format   = 0;
+    bool perInstance{false};
+};
+
+/// built-in uniform name
+static constexpr auto UNIFORM_NAME_MVP_MATRIX   = "u_MVPMatrix"sv;
+static constexpr auto UNIFORM_NAME_TEXTURE      = "u_tex0"sv;
+static constexpr auto UNIFORM_NAME_TEXTURE1     = "u_tex1"sv;
+static constexpr auto UNIFORM_NAME_TEXTURE2     = "u_tex2"sv;
+static constexpr auto UNIFORM_NAME_TEXTURE3     = "u_tex3"sv;
+static constexpr auto UNIFORM_NAME_TEXT_COLOR   = "u_textColor"sv;
+static constexpr auto UNIFORM_NAME_EFFECT_COLOR = "u_effectColor"sv;
+static constexpr auto UNIFORM_NAME_EFFECT_TYPE  = "u_effectType"sv;
+
+/// built-in attribute name
+static constexpr auto ATTRIBUTE_NAME_POSITION  = "a_position"sv;
+static constexpr auto ATTRIBUTE_NAME_COLOR     = "a_color"sv;
+static constexpr auto ATTRIBUTE_NAME_TEXCOORD  = "a_texCoord"sv;
+static constexpr auto ATTRIBUTE_NAME_TEXCOORD1 = "a_texCoord1"sv;
+static constexpr auto ATTRIBUTE_NAME_TEXCOORD2 = "a_texCoord2"sv;
+static constexpr auto ATTRIBUTE_NAME_TEXCOORD3 = "a_texCoord3"sv;
+static constexpr auto ATTRIBUTE_NAME_NORMAL    = "a_normal"sv;
+static constexpr auto ATTRIBUTE_NAME_INSTANCE  = "a_instance"sv;
+
+/**
+ * @brief a structor to store blend descriptor
+ */
+struct BlendDescriptor
+{
+    ColorWriteMask writeMask = ColorWriteMask::ALL;
+
+    bool blendEnabled = false;
+
+    BlendOperation rgbBlendOperation   = BlendOperation::ADD;
+    BlendOperation alphaBlendOperation = BlendOperation::ADD;
+
+    BlendFactor sourceRGBBlendFactor        = BlendFactor::ONE;
+    BlendFactor destinationRGBBlendFactor   = BlendFactor::ZERO;
+    BlendFactor sourceAlphaBlendFactor      = BlendFactor::ONE;
+    BlendFactor destinationAlphaBlendFactor = BlendFactor::ZERO;
+};
+
+template <typename T, unsigned int N>
+inline void SafeRelease(T (&resourceBlock)[N])
+{
+    for (unsigned int i = 0; i < N; i++)
+    {
+        SafeRelease(resourceBlock[i]);
+    }
+}
+
+template <typename T>
+inline void SafeRelease(T& resource)
+{
+    if (resource)
+    {
+        resource->Release();
+        resource = nullptr;
+    }
+}
+
+}  // namespace ax::backend

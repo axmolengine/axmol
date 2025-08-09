@@ -26,7 +26,6 @@
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/Texture.h"
-#include "renderer/backend/Types.h"
 #include "base/EventDispatcher.h"
 #include "base/EventType.h"
 #include "base/Director.h"
@@ -40,13 +39,13 @@ namespace ax::backend {
 // static field
 std::vector<ProgramState::AutoBindingResolver*> ProgramState::_customAutoBindingResolvers;
 
-TextureInfo::TextureInfo(std::vector<int>&& _slots, std::vector<backend::TextureBackend*>&& _textures)
+TextureInfo::TextureInfo(std::vector<int>&& _slots, std::vector<backend::Texture*>&& _textures)
     : TextureInfo(std::move(_slots), std::vector<int>(_slots.size(), 0), std::move(_textures))
 {}
 
 TextureInfo::TextureInfo(std::vector<int>&& _slots,
                          std::vector<int>&& _indexs,
-                         std::vector<backend::TextureBackend*>&& _textures)
+                         std::vector<backend::Texture*>&& _textures)
     : slots(std::move(_slots)), indexs(std::move(_indexs)), textures(std::move(_textures))
 {
     retainTextures();
@@ -127,7 +126,7 @@ void TextureInfo::assign(TextureInfo&& other)
     }
 }
 
-void TextureInfo::assign(int slot, int index, backend::TextureBackend* texture)
+void TextureInfo::assign(int slot, int index, backend::Texture* texture)
 {
     if (textures.size() != 1 or textures[0] != texture or slots[0] != slot or indexs[0] != index)
     {
@@ -163,7 +162,7 @@ bool ProgramState::init(Program* program)
     _ownVertexLayoutInstanced = false;
     _vertexUniformBufferSize  = _program->getUniformBufferSize(ShaderStage::VERTEX);
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
 #endif
 
@@ -235,10 +234,10 @@ ProgramState* ProgramState::clone() const
     cp->_uniformBuffers       = _uniformBuffers;
 
     cp->_ownVertexLayout = _ownVertexLayout;
-    cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : new VertexLayout(*_vertexLayout);
+    cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : _vertexLayout->clone(); // OPTIMIZE ME: make VertexLayout inherit from ax::Object, and just retain
 
     cp->_ownVertexLayoutInstanced = _ownVertexLayout;
-    cp->_vertexLayoutInstanced = !_ownVertexLayout ? _vertexLayoutInstanced : new VertexLayout(*_vertexLayoutInstanced);
+    cp->_vertexLayoutInstanced    = !_ownVertexLayout ? _vertexLayoutInstanced : _vertexLayoutInstanced->clone();
 
     cp->_batchId = this->_batchId;
     cp->_isBatchable = this->_isBatchable;
@@ -264,7 +263,7 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
 {
     if (uniformLocation.vertStage)
         setVertexUniform(uniformLocation.vertStage.location, data, size, uniformLocation.vertStage.offset);
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
     if (uniformLocation.fragStage)
         setFragmentUniform(uniformLocation.fragStage.location, data, size, uniformLocation.fragStage.offset);
 #endif
@@ -284,7 +283,7 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
 #endif
 }
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, int offset)
 {
     if (location < 0 || offset < 0)
@@ -304,20 +303,22 @@ void ProgramState::ensureVertexLayoutMutable()
 {
     if (!_ownVertexLayout)
     {
-        _vertexLayout    = new VertexLayout();
+        _vertexLayout    = DriverBase::getInstance()->createVertexLayout();
         _ownVertexLayout = true;
     }
 }
 
 VertexLayout* ProgramState::getMutableVertexLayout(bool instanced)
 {
+    auto driver = DriverBase::getInstance();
+
     if (!instanced)
     {
         if (_ownVertexLayout || !_vertexLayout->isValid())
             return _vertexLayout;
 
         _ownVertexLayout     = true;
-        return _vertexLayout = new VertexLayout();
+        return _vertexLayout = driver->createVertexLayout();
     }
     else
     {
@@ -325,7 +326,7 @@ VertexLayout* ProgramState::getMutableVertexLayout(bool instanced)
             return _vertexLayoutInstanced;
 
         _ownVertexLayoutInstanced = true;
-        return _vertexLayoutInstanced = new VertexLayout();
+        return _vertexLayoutInstanced = driver->createVertexLayout();
     }
 }
 
@@ -337,7 +338,7 @@ void ProgramState::setSharedVertexLayout(VertexLayout* vertexLayout)
     _vertexLayout    = vertexLayout;
 }
 
-void ProgramState::setTexture(backend::TextureBackend* texture)
+void ProgramState::setTexture(backend::Texture* texture)
 {
     for (int slot = 0; slot < texture->getCount() && slot < AX_META_TEXTURES; ++slot)
     {
@@ -348,7 +349,7 @@ void ProgramState::setTexture(backend::TextureBackend* texture)
 
 void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
                               int slot,
-                              backend::TextureBackend* texture)
+                              backend::Texture* texture)
 {
     setTexture(uniformLocation, slot, 0, texture);
 }
@@ -356,11 +357,11 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
 void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
                               int slot,
                               int index,
-                              backend::TextureBackend* texture)
+                              backend::Texture* texture)
 {
     if (uniformLocation.vertStage)
         setTexture(uniformLocation.vertStage.location, slot, index, texture, _vertexTextureInfos);
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
     if (uniformLocation.fragStage)
         setTexture(uniformLocation.fragStage.location, slot, index, texture, _fragmentTextureInfos);
 #endif
@@ -368,11 +369,11 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
 
 void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocation,
                                    std::vector<int> slots,
-                                   std::vector<backend::TextureBackend*> textures)
+                                   std::vector<backend::Texture*> textures)
 {
     if (uniformLocation.vertStage)
         setTextureArray(uniformLocation.vertStage.location, std::move(slots), std::move(textures), _vertexTextureInfos);
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
     if (uniformLocation.fragStage)
         setTextureArray(uniformLocation.fragStage.location, std::move(slots), std::move(textures),
                         _fragmentTextureInfos);
@@ -382,7 +383,7 @@ void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocati
 void ProgramState::setTexture(int location,
                               int slot,
                               int index,
-                              backend::TextureBackend* texture,
+                              backend::Texture* texture,
                               std::unordered_map<int, TextureInfo>& textureInfo)
 {
     if (location < 0)
@@ -398,7 +399,7 @@ void ProgramState::setTexture(int location,
 
 void ProgramState::setTextureArray(int location,
                                    std::vector<int> slots,
-                                   std::vector<backend::TextureBackend*> textures,
+                                   std::vector<backend::Texture*> textures,
                                    std::unordered_map<int, TextureInfo>& textureInfo)
 {
     assert(slots.size() == textures.size());

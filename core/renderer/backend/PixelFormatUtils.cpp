@@ -24,7 +24,6 @@
  ****************************************************************************/
 
 #include "PixelFormatUtils.h"
-#include "Macros.h"
 
 namespace ax
 {

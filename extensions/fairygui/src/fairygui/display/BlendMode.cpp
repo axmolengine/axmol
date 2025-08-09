@@ -1,5 +1,4 @@
 #include "BlendMode.h"
-#include "renderer/backend/Enums.h"
 
 NS_FGUI_BEGIN
 using namespace ax;

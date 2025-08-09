@@ -221,7 +221,7 @@ protected:
      * @param pbd, the output buffer for fill texels data
      * @remark: !!!this function only can call after endFrame, then it's could be works well.
      */
-    static void readPixels(TextureBackend* texture,
+    static void readPixels(Texture* texture,
                            std::size_t origX,
                            std::size_t origY,
                            std::size_t rectWidth,
@@ -262,7 +262,7 @@ private:
     RenderPassDescriptor _currentRenderPassDesc;
     NSAutoreleasePool* _autoReleasePool         = nil;
 
-    std::vector<std::pair<TextureBackend*, std::function<void(const PixelBufferDescriptor&)>>> _captureCallbacks;
+    std::vector<std::pair<Texture*, std::function<void(const PixelBufferDescriptor&)>>> _captureCallbacks;
 };
 
 // end of _metal group

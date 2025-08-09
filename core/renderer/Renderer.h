@@ -33,7 +33,6 @@
 
 #include "platform/PlatformMacros.h"
 #include "renderer/RenderCommand.h"
-#include "renderer/backend/Types.h"
 #include "renderer/backend/ProgramManager.h"
 
 /**
@@ -53,7 +52,7 @@ class Buffer;
 class CommandBuffer;
 class RenderPipeline;
 class RenderPass;
-class TextureBackend;
+class Texture;
 class RenderTarget;
 struct PixelBufferDescriptor;
 }  // namespace backend

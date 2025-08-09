@@ -28,7 +28,7 @@
 #include "3d/MeshSkin.h"
 #include "3d/Skeleton3D.h"
 #include "3d/MeshVertexIndexData.h"
-#include "3d/VertexAttribBinding.h"
+#include "3d/VertexInputBinding.h"
 #include "2d/Light.h"
 #include "2d/Scene.h"
 #include "base/EventDispatcher.h"
@@ -396,15 +396,15 @@ void Mesh::setMaterial(Material* material)
                 if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {
                     auto program        = pass->getProgramState()->getProgram();
-                    auto& attributes     = program->getActiveAttributes();
+                    auto& vertexInputs     = program->getAllActiveVertexInputs();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
-                    //AXASSERT(attributes.size() <= attributeCount, "missing attribute data");
+                    //AXASSERT(vertexInputs.size() <= attributeCount, "missing attribute data");
                 }
 #endif
                 // TODO
-                auto vertexAttribBinding = VertexAttribBinding::create(_meshIndexData, pass, &list[i]);
-                pass->setVertexAttribBinding(vertexAttribBinding);
+                auto vertexInputBinding = VertexInputBinding::create(_meshIndexData, pass, &list[i]);
+                pass->setVertexInputBinding(vertexInputBinding);
                 i += 1;
             }
         }
@@ -450,7 +450,7 @@ void Mesh::draw(Renderer* renderer,
             AX_SAFE_RELEASE(_instanceTransformBuffer);
             AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
 
-            _instanceTransformBuffer = backend::DriverBase::getInstance()->newBuffer(
+            _instanceTransformBuffer = backend::DriverBase::getInstance()->createBuffer(
                 _instanceCount * 64, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
 
             _instanceMatrixCache = new float[_instanceCount * 16];

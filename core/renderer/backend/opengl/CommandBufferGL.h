@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "../Macros.h"
+#include "../BaseDefs.h"
 #include "../CommandBuffer.h"
 #include "base/EventListenerCustom.h"
 #include "platform/GL.h"

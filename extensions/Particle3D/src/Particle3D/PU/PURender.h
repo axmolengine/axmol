@@ -32,7 +32,6 @@
 #include "math/Math.h"
 #include "Particle3D/Particle3DRender.h"
 #include "renderer/RenderState.h"
-#include "renderer/backend/Types.h"
 #include "renderer/backend/Buffer.h"
 
 namespace ax

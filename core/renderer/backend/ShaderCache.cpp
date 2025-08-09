@@ -26,6 +26,8 @@
 #include "ShaderCache.h"
 #include "renderer/backend/DriverBase.h"
 
+#include "xxhash.h"
+
 namespace ax::backend {
 
 static ShaderCache* s_instance;
@@ -56,28 +58,33 @@ void ShaderCache::purge()
     AXLOGV("purging ShaderCache");
 }
 
-backend::ShaderModule* ShaderCache::newVertexShaderModule(std::string_view shaderSource)
+backend::ShaderModule* ShaderCache::acquireVertexShaderModule(std::string_view shaderSource)
 {
-    return newShaderModule(backend::ShaderStage::VERTEX, shaderSource);
+    return acquireShaderModule(backend::ShaderStage::VERTEX, shaderSource);
 }
 
-backend::ShaderModule* ShaderCache::newFragmentShaderModule(std::string_view shaderSource)
+backend::ShaderModule* ShaderCache::acquireFragmentShaderModule(std::string_view shaderSource)
 {
-    return newShaderModule(backend::ShaderStage::FRAGMENT, shaderSource);
+    return acquireShaderModule(backend::ShaderStage::FRAGMENT, shaderSource);
 }
 
-backend::ShaderModule* ShaderCache::newShaderModule(backend::ShaderStage stage, std::string_view shaderSource)
+backend::ShaderModule* ShaderCache::acquireShaderModule(backend::ShaderStage stage, std::string_view shaderSource)
 {
-    const std::size_t key = std::hash<std::string_view>{}(shaderSource);
+    const auto key = XXH64(shaderSource.data(), shaderSource.size(), 0);
     const auto iter       = _cachedShaders.find(key);
 
     if (_cachedShaders.end() != iter)
+    {
+        AX_SAFE_RETAIN(iter->second);
         return iter->second;
+    }
 
-    ShaderModule* const shader = backend::DriverBase::getInstance()->newShaderModule(stage, shaderSource);
+    ShaderModule* const shader = backend::DriverBase::getInstance()->createShaderModule(stage, shaderSource);
 
     shader->setHashValue(key);
     _cachedShaders.emplace(key, shader);
+
+    AX_SAFE_RETAIN(shader);
 
     return shader;
 }

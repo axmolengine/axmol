@@ -26,38 +26,38 @@
 #include "base/Configuration.h"
 #include "3d/MeshVertexIndexData.h"
 #include "3d/3DProgramInfo.h"
-#include "3d/VertexAttribBinding.h"
+#include "3d/VertexInputBinding.h"
 
 namespace ax
 {
 
-static std::vector<VertexAttribBinding*> __vertexAttribBindingCache;
+static std::vector<VertexInputBinding*> __vertexInputBindingCache;
 
-VertexAttribBinding::VertexAttribBinding() : _meshIndexData(nullptr), _programState(nullptr) {}
+VertexInputBinding::VertexInputBinding() : _meshIndexData(nullptr), _programState(nullptr) {}
 
-VertexAttribBinding::~VertexAttribBinding()
+VertexInputBinding::~VertexInputBinding()
 {
     // Delete from the vertex attribute binding cache.
-    std::vector<VertexAttribBinding*>::iterator itr =
-        std::find(__vertexAttribBindingCache.begin(), __vertexAttribBindingCache.end(), this);
-    if (itr != __vertexAttribBindingCache.end())
+    std::vector<VertexInputBinding*>::iterator itr =
+        std::find(__vertexInputBindingCache.begin(), __vertexInputBindingCache.end(), this);
+    if (itr != __vertexInputBindingCache.end())
     {
-        __vertexAttribBindingCache.erase(itr);
+        __vertexInputBindingCache.erase(itr);
     }
 
     AX_SAFE_RELEASE(_meshIndexData);
     AX_SAFE_RELEASE(_programState);
 }
 
-VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
+VertexInputBinding* VertexInputBinding::create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
 {
     AXASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid MeshIndexData and/or programState");
 
     // Search for an existing vertex attribute binding that can be used.
-    VertexAttribBinding* b;
-    for (size_t i = 0, count = __vertexAttribBindingCache.size(); i < count; ++i)
+    VertexInputBinding* b;
+    for (size_t i = 0, count = __vertexInputBindingCache.size(); i < count; ++i)
     {
-        b = __vertexAttribBindingCache[i];
+        b = __vertexInputBindingCache[i];
         AX_ASSERT(b);
         if (b->_meshIndexData == meshIndexData && b->_programState == pass->getProgramState())
         {
@@ -66,17 +66,17 @@ VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, P
         }
     }
 
-    b = new VertexAttribBinding();
+    b = new VertexInputBinding();
     if (b->init(meshIndexData, pass, command))
     {
         b->autorelease();
-        __vertexAttribBindingCache.emplace_back(b);
+        __vertexInputBindingCache.emplace_back(b);
     }
 
     return b;
 }
 
-bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
+bool VertexInputBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
 {
 
     AXASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid arguments");
@@ -96,7 +96,7 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
     for (auto k = 0; k < attributeCount; k++)
     {
         auto meshattribute = meshVertexData->getMeshVertexAttrib(k);
-        setVertexAttribPointer(vertexLayout, shaderinfos::getAttributeName(meshattribute.vertexAttrib),
+        setVertexInputPointer(vertexLayout, shaderinfos::getAttributeName(meshattribute.vertexAttrib),
                                meshattribute.type, false,
                                offset, 1 << k);
         offset += meshattribute.getAttribSizeBytes();
@@ -109,46 +109,42 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
     return true;
 }
 
-uint32_t VertexAttribBinding::getVertexAttribsFlags() const
+uint32_t VertexInputBinding::getVertexAttribsFlags() const
 {
     return _vertexAttribsFlags;
 }
 
-void VertexAttribBinding::parseAttributes()
+void VertexInputBinding::parseAttributes()
 {
     AXASSERT(_programState, "invalid glprogram");
 
     _vertexAttribsFlags = 0;
 }
 
-bool VertexAttribBinding::hasAttribute(const shaderinfos::VertexKey& key) const
+bool VertexInputBinding::hasAttribute(const shaderinfos::VertexKey& key) const
 {
     auto& name = shaderinfos::getAttributeName(key);
-    auto& attributes = _programState->getProgram()->getActiveAttributes();
-    return attributes.find(name) != attributes.end();
+    auto& vertexInputs = _programState->getProgram()->getAllActiveVertexInputs();
+    return vertexInputs.find(name) != vertexInputs.end();
 }
 
-const backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(std::string_view name)
+const backend::VertexInputDesc* VertexInputBinding::getVertexInputDesc(std::string_view name)
 {
-    auto& attributes = _programState->getProgram()->getActiveAttributes();
-    const auto itr = attributes.find(name);
-    if (itr != attributes.end())
-        return &itr->second;
-    return nullptr;
+    return _programState->getProgram()->getVertexInputDesc(name);
 }
 
-void VertexAttribBinding::setVertexAttribPointer(VertexLayout* vertexLayout,
+void VertexInputBinding::setVertexInputPointer(VertexLayout* vertexLayout,
                                                  std::string_view name,
                                                  backend::VertexFormat type,
                                                  bool normalized,
                                                  int offset,
                                                  int flag)
 {
-    auto v = getVertexAttribValue(name);
+    auto v = getVertexInputDesc(name);
     if (v)
     {
         // AXLOGD("set attribute '{}' location: {}, offset: {}", name, v->location, offset);
-        vertexLayout->setAttrib(name, v->location, type, offset, normalized);
+        vertexLayout->setAttrib(name, v, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else

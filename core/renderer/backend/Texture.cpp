@@ -28,9 +28,9 @@
 #include <cassert>
 namespace ax::backend {
 
-TextureBackend::~TextureBackend() {}
+Texture::~Texture() {}
 
-void TextureBackend::updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int /*index*/)
+void Texture::updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int /*index*/)
 {
     _bitsPerPixel  = PixelFormatUtils::getBitsPerPixel(descriptor.textureFormat);
     _textureType   = descriptor.textureType;

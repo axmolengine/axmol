@@ -126,6 +126,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     renderView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
+    director->setClearColor(Color32{0x36, 0x3B, 0x44, 0xFF});
+
     // Enable Remote Console
     auto console = director->getConsole();
     console->listenOnTCP(5678);

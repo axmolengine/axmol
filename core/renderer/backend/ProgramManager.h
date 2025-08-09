@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "Macros.h"
+#include "BaseDefs.h"
 #include "base/Object.h"
 #include "platform/PlatformMacros.h"
 #include "Program.h"

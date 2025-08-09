@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "base/Macros.h"
 #include "base/RefPtr.h"
 #include "base/Data.h"
-#include "renderer/backend/Types.h"
+#include "renderer/backend/BaseDefs.h"
 #include "math/Mat4.h"
 #include "math/Mat3.h"
 #include "base/axstd.h"

@@ -3,6 +3,7 @@ Copyright (c) 2008      Apple Inc. All Rights Reserved.
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -51,8 +52,8 @@ class Scale9Sprite;
 
 namespace backend
 {
-class Texture2DBackend;
-class TextureBackend;
+class Texture;
+class Texture;
 class ProgramState;
 }  // namespace backend
 
@@ -322,7 +323,7 @@ public:
     /** Gets the height of the texture in pixels. */
     int getPixelsHigh() const;
 
-    backend::TextureBackend* getBackendTexture() const;
+    backend::Texture* getBackendTexture() const;
 
     /** Gets max S. */
     float getMaxS() const;
@@ -396,7 +397,7 @@ protected:
     int _pixelsHigh;
 
     /** texture name */
-    backend::Texture2DBackend* _texture;
+    backend::Texture* _texture;
 
     /** texture max S */
     float _maxS;

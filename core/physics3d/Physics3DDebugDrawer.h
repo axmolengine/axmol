@@ -32,7 +32,6 @@
 #include "base/Config.h"
 #include "renderer/CustomCommand.h"
 #include "renderer/backend/ProgramState.h"
-#include "renderer/backend/Types.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 

@@ -21,15 +21,17 @@ constexpr IndexFormat IMGUI_INDEX_FORMAT = sizeof(ImDrawIdx) == 2 ? IndexFormat:
 
 struct ProgramInfoData
 {
+    ProgramInfoData() { layout = DriverBase::getInstance()->createVertexLayout(); }
+    ~ProgramInfoData() { AX_SAFE_DELETE(layout); }
     Program* program = nullptr;
     // Uniforms location
     UniformLocation texture{};
     UniformLocation projection{};
     // Vertex attributes location
-    int position = 0;
-    int uv       = 0;
-    int color    = 0;
-    VertexLayout layout{};
+    const VertexInputDesc* position{nullptr};
+    const VertexInputDesc* uv{nullptr};
+    const VertexInputDesc* color{nullptr};
+    VertexLayout* layout{nullptr};
 };
 
 struct SavedRenderStateData
@@ -278,12 +280,12 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
         // Upload vertex/index buffers
         const auto vsize = cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
         IM_ASSERT(vsize > 0);
-        auto vbuffer = backend::DriverBase::getInstance()->newBuffer(vsize, BufferType::VERTEX, BufferUsage::STATIC);
+        auto vbuffer = backend::DriverBase::getInstance()->createBuffer(vsize, BufferType::VERTEX, BufferUsage::STATIC);
         vbuffer->autorelease();
         vbuffer->updateData(cmd_list->VtxBuffer.Data, vsize);
         const auto isize = cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
         IM_ASSERT(isize > 0);
-        auto ibuffer = backend::DriverBase::getInstance()->newBuffer(isize, BufferType::INDEX, BufferUsage::STATIC);
+        auto ibuffer = backend::DriverBase::getInstance()->createBuffer(isize, BufferType::INDEX, BufferUsage::STATIC);
         ibuffer->autorelease();
         ibuffer->updateData(cmd_list->IdxBuffer.Data, isize);
 
@@ -336,7 +338,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         auto& desc        = cmd->getPipelineDescriptor();
                         desc.programState = state;
                         // setup attributes for ImDrawVert
-                        desc.programState->setSharedVertexLayout(&pinfo->layout);
+                        desc.programState->setSharedVertexLayout(pinfo->layout);
                         desc.programState->setUniform(pinfo->projection, &bd->Projection, sizeof(Mat4));
                         desc.programState->setTexture(pinfo->texture, 0, tex->getBackendTexture());
                         // In order to composite our output buffer we need to preserve alpha
@@ -436,19 +438,19 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
     auto& info      = bd->ProgramInfo;
     info.texture    = info.program->getUniformLocation(TEXTURE);
     info.projection = info.program->getUniformLocation(MVP_MATRIX);
-    info.position   = info.program->getAttributeLocation(POSITION);
-    info.uv         = info.program->getAttributeLocation(TEXCOORD);
-    info.color      = info.program->getAttributeLocation(COLOR);
+    info.position   = info.program->getVertexInputDesc(POSITION);
+    info.uv         = info.program->getVertexInputDesc(TEXCOORD);
+    info.color      = info.program->getVertexInputDesc(COLOR);
     IM_ASSERT(bool(info.texture));
     IM_ASSERT(bool(info.projection));
-    IM_ASSERT(info.position >= 0);
-    IM_ASSERT(info.uv >= 0);
-    IM_ASSERT(info.color >= 0);
-    auto& layout = info.layout;
-    layout.setAttrib("a_position", info.position, VertexFormat::FLOAT2, 0, false);
-    layout.setAttrib("a_texCoord", info.uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
-    layout.setAttrib("a_color", info.color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
-    layout.setStride(sizeof(ImDrawVert));
+    IM_ASSERT(!!info.position);
+    IM_ASSERT(!!info.uv);
+    IM_ASSERT(!!info.color);
+    auto layout = info.layout;
+    layout->setAttrib("a_position", info.position, VertexFormat::FLOAT2, 0, false);
+    layout->setAttrib("a_texCoord", info.uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
+    layout->setAttrib("a_color", info.color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
+    layout->setStride(sizeof(ImDrawVert));
 
     return true;
 }

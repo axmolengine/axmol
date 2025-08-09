@@ -42,7 +42,7 @@ namespace ax
 
 class Technique;
 class Node;
-class VertexAttribBinding;
+class VertexInputBinding;
 class MeshIndexData;
 class RenderState;
 
@@ -57,7 +57,7 @@ class AX_DLL Pass : public Object
     friend class Material;
     friend class Technique;
     friend class RenderState;
-    friend class VertexAttribBinding;
+    friend class VertexInputBinding;
 
 public:
     /** Creates a Pass with a GLProgramState.
@@ -81,19 +81,19 @@ public:
     /**
      * Sets a vertex attribute binding for this pass.
      *
-     * When a mesh binding is set, the VertexAttribBinding will be automatically
+     * When a mesh binding is set, the VertexInputBinding will be automatically
      * bound when the bind() method is called for the pass.
      *
-     * @param binding The VertexAttribBinding to set (or NULL to remove an existing binding).
+     * @param binding The VertexInputBinding to set (or NULL to remove an existing binding).
      */
-    void setVertexAttribBinding(VertexAttribBinding* binding);
+    void setVertexInputBinding(VertexInputBinding* binding);
 
     /**
      * Returns the vertex attribute binding for this pass.
      *
      * @return The vertex attribute binding for this pass.
      */
-    VertexAttribBinding* getVertexAttributeBinding() const;
+    VertexInputBinding* getVertexAttributeBinding() const;
 
     void setName(std::string_view name) { _name = name; }
     std::string_view getName() const { return _name; }
@@ -108,8 +108,8 @@ public:
 
     void updateMVPUniform(const Mat4& modelView);
 
-    void setUniformTexture(uint32_t slot, backend::TextureBackend*);      // u_tex0
-    void setUniformNormTexture(uint32_t slot, backend::TextureBackend*);  // u_normalTex
+    void setUniformTexture(uint32_t slot, backend::Texture*);      // u_tex0
+    void setUniformNormTexture(uint32_t slot, backend::Texture*);  // u_normalTex
 
     void setUniformColor(const void*, size_t);          // ucolor
     void setUniformMatrixPalette(const void*, size_t);  // u_matrixPalette
@@ -139,7 +139,7 @@ protected:
     void setProgramState(backend::ProgramState* programState);
     Node* getTarget() const;
 
-    VertexAttribBinding* _vertexAttribBinding = nullptr;
+    VertexInputBinding* _vertexInputBinding = nullptr;
     backend::ProgramState* _programState      = nullptr;
     Technique* _technique                     = nullptr;
     bool _hashDirty                           = true;

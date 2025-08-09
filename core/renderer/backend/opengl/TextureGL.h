@@ -39,8 +39,8 @@ namespace ax::backend {
  */
 struct TextureInfoGL
 {
-    void applySampler(const SamplerDescriptor& desc, bool isPow2, bool hasMipmaps, GLenum target);
-    void setCurrentTexParameters(GLenum target);
+    void applySampler(const SamplerDescriptor& desc, bool isPow2, bool hasMipmaps);
+    void setCurrentTexParameters();
 
     TextureInfoGL() { textures.fill(0); }
     ~TextureInfoGL() {}
@@ -54,12 +54,12 @@ struct TextureInfoGL
             cb(texID, idx++);
     }
 
-    GLuint ensure(int index, GLenum target);
-    void onRendererRecreated(GLenum target);
+    GLuint ensure(int index);
+    void onRendererRecreated();
 
-    void destroy(GLenum target)
+    void destroy()
     {
-        foreachTextures([=](GLuint texID, int) { __gl->deleteTexture(target, texID); });
+        foreachTextures([=](GLuint texID, int) { __gl->deleteTexture(this->target, texID); });
         textures.fill(0);
     }
 
@@ -69,7 +69,7 @@ struct TextureInfoGL
     /// <param name="slot">the slot in shader</param>
     /// <param name="index">the index in meta textrues</param>
     /// <param name="target">the target GL_TEXTURE_2D,GL_TEXTURE_CUBE_MAP</param>
-    void apply(int slot, int index, GLenum target) const;
+    void apply(int slot, int index) const;
     GLuint getName(int index) const { return textures[0]; }
 
     GLint magFilterGL    = GL_LINEAR;
@@ -81,6 +81,8 @@ struct TextureInfoGL
     GLint internalFormat = GL_RGBA;
     GLenum format        = GL_RGBA;
     GLenum type          = GL_UNSIGNED_BYTE;
+
+    GLenum target        = GL_TEXTURE_2D;
 
     std::array<GLuint, AX_META_TEXTURES + 1> textures;
     int maxIdx = 0;
@@ -94,14 +96,14 @@ struct TextureInfoGL
 /**
  * A 2D texture
  */
-class Texture2DGL : public backend::Texture2DBackend
+class TextureImpl : public backend::Texture
 {
 public:
     /**
      * @param descriptor Specifies the texture description.
      */
-    Texture2DGL(const TextureDescriptor& descriptor);
-    ~Texture2DGL();
+    TextureImpl(const TextureDescriptor& descriptor);
+    ~TextureImpl();
 
     /**
      * Update a two-dimensional texture image
@@ -171,6 +173,8 @@ public:
                                          uint8_t* data,
                                          int index = 0) override;
 
+    void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
+
     /**
      * Update sampler
      * @param sampler Specifies the sampler descriptor.
@@ -189,16 +193,17 @@ public:
     void updateTextureDescriptor(const TextureDescriptor& descriptor, int index = 0) override;
 
     /**
-     * Get texture object.
+     * Get internal texture object handle.
      * @return Texture object.
      */
-    uintptr_t getHandler(int index = 0) const override { return _textureInfo.textures[index]; }
+    GLuint internalHandle(int index = 0) const { return _textureInfo.textures[index]; }
 
     /**
      * Set texture to pipeline
      * @param index Specifies the texture image unit selector.
+     * @param target GL_TEXTURE_2D or GL_TEXTURE_CUBE_MAP
      */
-    void apply(int slot, int index) const { _textureInfo.apply(slot, index, GL_TEXTURE_2D); }
+    void apply(int slot, int index) const { _textureInfo.apply(slot, index); }
 
     int getCount() const override { return _textureInfo.maxIdx + 1; }
 
@@ -212,59 +217,6 @@ private:
     bool _generateMipmaps = false;
     bool _usedForRT = false;
 #endif
-};
-
-/**
- * Texture cube.
- */
-class TextureCubeGL : public backend::TextureCubemapBackend
-{
-public:
-    /**
-     * @param descriptor Specifies the texture description.
-     */
-    TextureCubeGL(const TextureDescriptor& descriptor);
-    ~TextureCubeGL();
-
-    /**
-     * Update sampler
-     * @param sampler Specifies the sampler descriptor.
-     */
-    void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
-
-    /**
-     * Update texutre cube data in give slice side.
-     * @param side Specifies which slice texture of cube to be update.
-     * @param data Specifies a pointer to the image data in memory.
-     */
-    void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
-
-    /// Generate mipmaps.
-    void generateMipmaps() override;
-
-    /**
-     * Update texture description.
-     * @param descriptor Specifies texture and sampler descriptor.
-     */
-    void updateTextureDescriptor(const TextureDescriptor& descriptor, int index = 0) override;
-
-    /**
-     * Get texture object.
-     * @return Texture object.
-     */
-    uintptr_t getHandler(int index = 0) const override { return _textureInfo.textures[index]; }
-
-    /**
-     * Set texture to pipeline
-     * @param index Specifies the texture image unit selector.
-     */
-    void apply(int slot, int index) const { _textureInfo.apply(slot, index, GL_TEXTURE_CUBE_MAP); }
-
-    int getCount() const override { return _textureInfo.maxIdx + 1; }
-
-private:
-    TextureInfoGL _textureInfo;
-    EventListener* _rendererRecreatedListener = nullptr;
 };
 
 // end of _opengl group

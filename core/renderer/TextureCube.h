@@ -68,7 +68,7 @@ public:
     */
     void setTexParameters(const Texture2D::TexParams&);
 
-    backend::TextureBackend* getBackendTexture() { return _texture; }
+    backend::Texture* getBackendTexture() { return _texture; }
 
     const std::vector<std::string>& getImagePaths() const { return _imgPath; }
 
@@ -95,7 +95,7 @@ protected:
 
 private:
     std::vector<std::string> _imgPath;
-    backend::TextureCubemapBackend* _texture = nullptr;
+    backend::Texture* _texture = nullptr;
 };
 
 // end of 3d group

@@ -32,9 +32,7 @@ THE SOFTWARE.
 
 #include "math/Math.h"
 #include "base/Object.h"
-#include "renderer/backend/Types.h"
-
-#include "Enums.h"
+#include "renderer/backend/BaseDefs.h"
 
 /**
  * @addtogroup base
@@ -43,6 +41,113 @@ THE SOFTWARE.
 
 namespace ax
 {
+
+/**
+ * @brief Effects used by `Label`
+ */
+enum class LabelEffect
+{
+    // FIXME: Covert them to bitwise. More than one effect should be supported
+    NORMAL,
+    OUTLINE,
+    SHADOW,
+    GLOW,
+    ITALICS,
+    BOLD,
+    UNDERLINE,
+    STRIKETHROUGH,
+    ALL
+};
+
+/**
+ * @brief Interval change reason.
+ */
+enum class SetIntervalReason : char
+{
+    BY_GAME = 0,
+    BY_ENGINE,
+    BY_SYSTEM,
+    BY_SCENE_CHANGE,
+    BY_DIRECTOR_PAUSE
+};
+
+/**
+ * @brief Texture flags.
+ */
+struct TextureFlag
+{
+    enum
+    {
+        NONE               = 0,
+        ANTIALIAS_ENABLED  = 1 << 1,
+        PREMULTIPLIEDALPHA = 1 << 2,
+        RENDERTARGET       = 1 << 3,
+    };
+};
+
+/**
+ * @brief Texture sampler flags.
+ */
+struct TextureSamplerFlag
+{
+    enum
+    {
+        DEFAULT      = 0,
+        DUAL_SAMPLER = 1 << 1,
+    };
+};
+
+/**
+ * @brief Matrix stack type.
+ */
+enum class MATRIX_STACK_TYPE
+{
+    /// Model view matrix stack
+    MATRIX_STACK_MODELVIEW,
+
+    /// projection matrix stack
+    MATRIX_STACK_PROJECTION,
+
+    /// texture matrix stack
+    MATRIX_STACK_TEXTURE
+};
+
+/**
+ * @brief Anchor presets used to position nodes in corners
+ */
+enum class AnchorPreset
+{
+    BOTTOM_LEFT   = 0,
+    BOTTOM_CENTER = 1,
+    BOTTOM_RIGHT  = 2,
+    CENTER_LEFT   = 3,
+    CENTER        = 4,
+    CENTER_RIGHT  = 5,
+    TOP_LEFT      = 6,
+    TOP_CENTER    = 7,
+    TOP_RIGHT     = 8
+};
+
+/**
+ * Particle emission shapes.
+ * Supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha emission mask
+ * @since axmol-1.0.0b8
+ */
+enum class EmissionShapeType
+{
+    // Emission shape of type point
+    POINT,
+    // Emission shape of type rectangle
+    RECT,
+    // Emission shape of type rectangular torus
+    RECTTORUS,
+    // Emission shape of type circle or cone
+    CIRCLE,
+    // Emission shape of type torus or cone torus
+    TORUS,
+    // Emission shape of type texture alpha mask
+    TEXTURE_ALPHA_MASK
+};
 
 /** @struct Tex2F
  * A TEXCOORD composed of 2 floats: u, v

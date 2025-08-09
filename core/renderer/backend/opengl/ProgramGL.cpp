@@ -25,7 +25,6 @@
 
 #include "ProgramGL.h"
 #include "ShaderModuleGL.h"
-#include "renderer/backend/Types.h"
 #include "renderer/backend/opengl/MacrosGL.h"
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
@@ -35,10 +34,11 @@
 #include "renderer/backend/opengl/UtilsGL.h"
 #include "OpenGLState.h"
 
-namespace ax::backend {
+namespace ax::backend
+{
 
 #if AX_GLES_PROFILE == 200
-#    define DEF_TO_INT(pointer, index) (*((GLint*)(pointer) + index))
+#    define DEF_TO_INT(pointer, index)   (*((GLint*)(pointer) + index))
 #    define DEF_TO_FLOAT(pointer, index) (*((GLfloat*)(pointer) + index))
 static void setUniform(bool isArray, GLuint location, unsigned int size, GLenum uniformType, void* data)
 {
@@ -121,11 +121,11 @@ static void setUniform(bool isArray, GLuint location, unsigned int size, GLenum 
 ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
-    _vertexShaderModule   = static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->newVertexShaderModule(_vertexShader));
-    _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->newFragmentShaderModule(_fragmentShader));
+    _vertexShaderModule =
+        static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->acquireVertexShaderModule(_vsSource));
+    _fragmentShaderModule =
+        static_cast<ShaderModuleGL*>(ShaderCache::getInstance()->acquireFragmentShaderModule(_fsSource));
 
-    AX_SAFE_RETAIN(_vertexShaderModule);
-    AX_SAFE_RETAIN(_fragmentShaderModule);
     compileProgram();
     computeUniformInfos();
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -141,6 +141,8 @@ ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentSha
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadProgram(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
+
+    getAllActiveVertexInputs();
 
     setBuiltinLocations();
 }
@@ -223,22 +225,22 @@ void ProgramGL::setBuiltinLocations()
 {
     /*--- Builtin Attribs ---*/
 
-    std::fill(_builtinAttributeLocation, _builtinAttributeLocation + Attribute::ATTRIBUTE_MAX, -1);
+    std::fill(_builtinAttributeLocation, _builtinAttributeLocation + VertexInputSemantic::VIS_MAX, nullptr);
 
     /// a_position
-    _builtinAttributeLocation[Attribute::POSITION] = getAttributeLocation(ATTRIBUTE_NAME_POSITION);
+    _builtinAttributeLocation[VertexInputSemantic::POSITION] = getVertexInputDesc(ATTRIBUTE_NAME_POSITION);
 
     /// a_color
-    _builtinAttributeLocation[Attribute::COLOR] = getAttributeLocation(ATTRIBUTE_NAME_COLOR);
+    _builtinAttributeLocation[VertexInputSemantic::COLOR] = getVertexInputDesc(ATTRIBUTE_NAME_COLOR);
 
     /// a_texCoord
-    _builtinAttributeLocation[Attribute::TEXCOORD] = getAttributeLocation(ATTRIBUTE_NAME_TEXCOORD);
+    _builtinAttributeLocation[VertexInputSemantic::TEXCOORD] = getVertexInputDesc(ATTRIBUTE_NAME_TEXCOORD);
 
     // a_normal
-    _builtinAttributeLocation[Attribute::NORMAL] = getAttributeLocation(ATTRIBUTE_NAME_NORMAL);
+    _builtinAttributeLocation[VertexInputSemantic::NORMAL] = getVertexInputDesc(ATTRIBUTE_NAME_NORMAL);
 
     // a_instance
-    _builtinAttributeLocation[Attribute::INSTANCE] = getAttributeLocation(ATTRIBUTE_NAME_INSTANCE);
+    _builtinAttributeLocation[VertexInputSemantic::INSTANCE] = getVertexInputDesc(ATTRIBUTE_NAME_INSTANCE);
 
     /*--- Builtin Uniforms ---*/
 
@@ -261,7 +263,7 @@ void ProgramGL::setBuiltinLocations()
     _builtinUniformLocation[Uniform::EFFECT_TYPE] = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
 }
 
-const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() const
+const hlookup::string_map<VertexInputDesc>& ProgramGL::getAllActiveVertexInputs() const
 {
     if (!_program || !_activeAttribs.empty())
         return _activeAttribs;
@@ -280,7 +282,7 @@ const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() c
     GLint attrNameLen = 0;
     GLenum attrType;
     GLint attrSize;
-    backend::AttributeBindInfo info;
+    backend::VertexInputDesc info;
 
     for (int i = 0; i < numOfActiveAttributes; i++)
     {
@@ -288,8 +290,8 @@ const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() c
         CHECK_GL_ERROR_DEBUG();
         std::string_view name{attrName.get(), static_cast<size_t>(attrNameLen)};
         info.location = glGetAttribLocation(_program, name.data());
-        info.type     = attrType;
-        info.size     = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
+        info.format   = attrType;
+        info.count    = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
         CHECK_GL_ERROR_DEBUG();
         _activeAttribs[name] = info;
     }
@@ -336,7 +338,7 @@ void ProgramGL::computeUniformInfos()
 
         // create uniform buffer object
         auto& desc = _uniformBuffers.emplace_back(
-            static_cast<BufferGL*>(driver->newBuffer(blockSize, BufferType::UNIFORM, BufferUsage::DYNAMIC)),
+            static_cast<BufferGL*>(driver->createBuffer(blockSize, BufferType::UNIFORM, BufferUsage::DYNAMIC)),
             static_cast<int>(_totalBufferSize), blockSize);
         desc._ubo->updateData(nullptr, blockSize);  // ubo data can be nullptr
 
@@ -447,14 +449,16 @@ void ProgramGL::clearUniformBuffers()
     _uniformBuffers.clear();
 }
 
-int ProgramGL::getAttributeLocation(Attribute name) const
+const VertexInputDesc* ProgramGL::getVertexInputDesc(VertexInputSemantic name) const
 {
     return _builtinAttributeLocation[name];
 }
 
-int ProgramGL::getAttributeLocation(std::string_view name) const
+const VertexInputDesc* ProgramGL::getVertexInputDesc(std::string_view name) const
 {
-    return glGetAttribLocation(_program, name.data());
+    // return glGetAttribLocation(_program, name.data());
+    auto it = _activeAttribs.find(name);
+    return it != _activeAttribs.end() ? &it->second : nullptr;
 }
 
 inline std::string_view mapLocationEnumToUBO(backend::Uniform name)
@@ -549,4 +553,4 @@ std::size_t ProgramGL::getUniformBufferSize(ShaderStage stage) const
     return _totalBufferSize;
 }
 
-}
+}  // namespace ax::backend

@@ -29,7 +29,6 @@ THE SOFTWARE.
 #include "../MeshRendererTest/DrawNode3D.h"
 
 #include "renderer/backend/ProgramState.h"
-#include "renderer/backend/Types.h"
 
 #include <string>
 

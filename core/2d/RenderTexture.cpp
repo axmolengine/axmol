@@ -213,17 +213,15 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-            _renderTarget = backend::DriverBase::getInstance()->newRenderTarget(
+            _renderTarget = backend::DriverBase::getInstance()->createRenderTarget(
                 _texture2D ? _texture2D->getBackendTexture() : nullptr,
-                _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
                 _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
         }
 
         _renderTarget->setColorAttachment(_texture2D ? _texture2D->getBackendTexture() : nullptr);
 
         auto depthStencilTexture = _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr;
-        _renderTarget->setDepthAttachment(depthStencilTexture);
-        _renderTarget->setStencilAttachment(depthStencilTexture);
+        _renderTarget->setDepthStencilAttachment(depthStencilTexture);
 
         clearColorAttachment();
 

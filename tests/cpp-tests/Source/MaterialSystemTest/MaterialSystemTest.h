@@ -26,7 +26,6 @@
 #pragma once
 
 #include "../BaseTest.h"
-#include "renderer/backend/Types.h"
 #include "renderer/backend/ProgramState.h"
 
 #include <vector>

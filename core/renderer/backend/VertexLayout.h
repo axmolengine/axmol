@@ -25,8 +25,7 @@
 
 #pragma once
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 #include "base/Object.h"
 
 #include <string>
@@ -34,7 +33,9 @@
 #include <vector>
 #include <unordered_map>
 
-namespace ax::backend {
+namespace ax::backend
+{
+class Program;
 /**
  * @addtogroup _backend
  * @{
@@ -45,27 +46,32 @@ namespace ax::backend {
  */
 class AX_DLL VertexLayout
 {
+    friend class DriverBase;
+
+protected:
+    VertexLayout() = default;
+    VertexLayout(const VertexLayout&) = default;
+
 public:
-    struct Attribute
+    struct InputBindingDesc
     {
-        Attribute() = default;
-        Attribute(std::string_view _name,
-                  std::size_t _index,
-                  VertexFormat _format,
-                  std::size_t _offset,
-                  bool needToBeNormallized)
+        InputBindingDesc() = default;
+        InputBindingDesc(std::string_view _name,
+                     int _index,
+                     VertexFormat _format,
+                     std::size_t _offset,
+                     bool needToBeNormallized)
             : name(_name), format(_format), offset(_offset), index(_index), needToBeNormallized(needToBeNormallized)
         {}
 
         std::string name;  ///< name is used in opengl
         VertexFormat format      = VertexFormat::INT3;
         std::size_t offset       = 0;
-        std::size_t index        = 0;  ///< index is used in metal
+        int index                = 0;  ///< index is used in metal
         bool needToBeNormallized = false;
     };
 
-    VertexLayout()                    = default;
-    VertexLayout(const VertexLayout&) = default;
+    virtual ~VertexLayout()           = default;
 
     /**
      * Set attribute values to name.
@@ -77,10 +83,10 @@ public:
      * directly as fixed-point values (false) when they are accessed.
      */
     void setAttrib(std::string_view name,
-                   std::size_t index,
-                   VertexFormat format,
-                   std::size_t offset,
-                   bool needNormalized);
+                  const VertexInputDesc* desc,
+                  VertexFormat format,
+                  std::size_t offset,
+                  bool needNormalized);
     /**
      * Set stride of vertices.
      * @param stride Specifies the distance between the data of two vertices, in bytes.
@@ -104,19 +110,21 @@ public:
      * Get attribute informations
      * @return Atrribute informations.
      */
-    inline const hlookup::string_map<Attribute>& getAttributes() const { return _attributes; }
+    inline const hlookup::string_map<InputBindingDesc>& getAllInputs() const { return _inputs; }
 
     /**
      * Check if vertex layout has been set.
      */
     inline bool isValid() const { return _stride != 0; }
 
-private:
-    hlookup::string_map<Attribute> _attributes;
+    virtual VertexLayout* clone() { return new VertexLayout(*this); }
+
+protected:
+    hlookup::string_map<InputBindingDesc> _inputs;
     std::size_t _stride      = 0;
     VertexStepMode _stepMode = VertexStepMode::VERTEX;
 };
 
 // end of _backend group
 /// @}
-}
+}  // namespace ax::backend

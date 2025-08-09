@@ -218,7 +218,7 @@ void TextureMTL::updateSamplerDescriptor(const SamplerDescriptor& sampler)
 
 void TextureMTL::updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index)
 {
-    TextureBackend::updateTextureDescriptor(descriptor, index);
+    Texture::updateTextureDescriptor(descriptor, index);
 
     _textureInfo._descriptor = descriptor;
     _textureInfo.ensure(index, MTL_TEXTURE_2D);
@@ -301,7 +301,7 @@ TextureCubeMTL::~TextureCubeMTL() {}
 
 void TextureCubeMTL::updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index)
 {
-    TextureBackend::updateTextureDescriptor(descriptor, index);
+    Texture::updateTextureDescriptor(descriptor, index);
 
     _textureInfo._descriptor = descriptor;
     _textureInfo.ensure(index, MTL_TEXTURE_CUBE);

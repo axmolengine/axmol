@@ -27,7 +27,6 @@
 
 #include "base/Object.h"
 #include "renderer/backend/ProgramState.h"
-#include "renderer/backend/Types.h"
 #include "renderer/Pass.h"
 #include "3d/3DProgramInfo.h"
 
@@ -54,26 +53,26 @@ class VertexAttribValue;
  * and an Effect, however this binding is actually a client-side binding and
  * should only be used when writing custom code that use client-side vertex
  * arrays, since it is slower than the server-side VAOs used by OpenGL
- * (when creating a VertexAttribBinding between a Mesh and Effect).
+ * (when creating a VertexInputBinding between a Mesh and Effect).
  */
-class AX_DLL VertexAttribBinding : public Object
+class AX_DLL VertexInputBinding : public Object
 {
 public:
     /**
-     * Creates a new VertexAttribBinding between the given MeshVertexData and GLProgramState.
+     * Creates a new VertexInputBinding between the given MeshVertexData and GLProgramState.
      *
-     * If a VertexAttribBinding matching the specified MeshVertexData and GLProgramState already
-     * exists, it will be returned. Otherwise, a new VertexAttribBinding will
+     * If a VertexInputBinding matching the specified MeshVertexData and GLProgramState already
+     * exists, it will be returned. Otherwise, a new VertexInputBinding will
      * be returned. If OpenGL VAOs are enabled, the a new VAO will be created and
-     * stored in the returned VertexAttribBinding, otherwise a client-side
+     * stored in the returned VertexInputBinding, otherwise a client-side
      * array of vertex attribute bindings will be stored.
      *
      * @param mesh The mesh.
      * @param effect The effect.
      *
-     * @return A VertexAttribBinding for the requested parameters.
+     * @return A VertexInputBinding for the requested parameters.
      */
-    static VertexAttribBinding* create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
+    static VertexInputBinding* create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
 
     /**
      * Binds this vertex array object.
@@ -96,25 +95,25 @@ private:
     /**
      * Constructor.
      */
-    VertexAttribBinding();
+    VertexInputBinding();
 
     /**
      * Destructor.
      */
-    ~VertexAttribBinding();
+    ~VertexInputBinding();
 
     /**
      * Hidden copy assignment operator.
      */
-    VertexAttribBinding& operator=(const VertexAttribBinding&);
+    VertexInputBinding& operator=(const VertexInputBinding&);
 
     bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
-    void setVertexAttribPointer(VertexLayout* vertexLayout, std::string_view name,
+    void setVertexInputPointer(VertexLayout* vertexLayout, std::string_view name,
                                 backend::VertexFormat type,
                                 bool normalized,
                                 int offset,
                                 int flag);
-    const backend::AttributeBindInfo* getVertexAttribValue(std::string_view name);
+    const backend::VertexInputDesc* getVertexInputDesc(std::string_view name);
     void parseAttributes();
 
     MeshIndexData* _meshIndexData;

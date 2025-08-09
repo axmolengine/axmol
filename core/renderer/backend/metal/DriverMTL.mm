@@ -468,7 +468,7 @@ Buffer* DriverMTL::newBuffer(std::size_t size, BufferType type, BufferUsage usag
     return new BufferMTL(_mtlDevice, size, type, usage);
 }
 
-TextureBackend* DriverMTL::newTexture(const TextureDescriptor& descriptor)
+Texture* DriverMTL::newTexture(const TextureDescriptor& descriptor)
 {
     switch (descriptor.textureType)
     {
@@ -488,9 +488,9 @@ RenderTarget* DriverMTL::newDefaultRenderTarget()
     return rtGL;
 }
 
-RenderTarget* DriverMTL::newRenderTarget(TextureBackend* colorAttachment,
-                                         TextureBackend* depthAttachment,
-                                         TextureBackend* stencilAttachhment)
+RenderTarget* DriverMTL::newRenderTarget(Texture* colorAttachment,
+                                         Texture* depthAttachment,
+                                         Texture* stencilAttachhment)
 {
     auto rtMTL = new RenderTargetMTL(false);
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
@@ -498,11 +498,6 @@ RenderTarget* DriverMTL::newRenderTarget(TextureBackend* colorAttachment,
     rtMTL->setDepthAttachment(depthAttachment);
     rtMTL->setStencilAttachment(stencilAttachhment);
     return rtMTL;
-}
-
-ShaderModule* DriverMTL::newShaderModule(ShaderStage stage, std::string_view source)
-{
-    return new ShaderModuleMTL(_mtlDevice, stage, source);
 }
 
 DepthStencilState* DriverMTL::newDepthStencilState()
@@ -518,6 +513,11 @@ RenderPipeline* DriverMTL::newRenderPipeline()
 Program* DriverMTL::newProgram(std::string_view vertexShader, std::string_view fragmentShader)
 {
     return new ProgramMTL(vertexShader, fragmentShader);
+}
+
+ShaderModule* DriverMTL::newShaderModule(ShaderStage stage, std::string_view source)
+{
+    return new ShaderModuleMTL(_mtlDevice, stage, source);
 }
 
 void DriverMTL::setFrameBufferOnly(bool frameBufferOnly)

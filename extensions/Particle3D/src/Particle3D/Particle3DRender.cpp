@@ -79,7 +79,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     {
         size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer =
-            backend::DriverBase::getInstance()->newBuffer(stride * 4 * particleSystem->getParticleQuota(),
+            backend::DriverBase::getInstance()->createBuffer(stride * 4 * particleSystem->getParticleQuota(),
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
@@ -91,7 +91,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     if (_indexBuffer == nullptr)
     {
         _indexBuffer =
-            backend::DriverBase::getInstance()->newBuffer(sizeof(uint16_t) * 6 * particleSystem->getParticleQuota(),
+            backend::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 6 * particleSystem->getParticleQuota(),
                                                       backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {

@@ -29,8 +29,7 @@
 #include "base/Object.h"
 #include "base/Data.h"
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 #include "RenderPassDescriptor.h"
 #include "PixelBufferDescriptor.h"
 #include "platform/StdC.h"
@@ -51,7 +50,7 @@ class RenderPass;
 class RenderPipeline;
 class Buffer;
 class DepthStencilState;
-class TextureBackend;
+class Texture;
 class RenderTarget;
 struct DepthStencilDescriptor;
 

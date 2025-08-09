@@ -24,8 +24,7 @@
 
 #pragma once
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 #include "base/Object.h"
 #include "renderer/PipelineDescriptor.h"
 #include "renderer/backend/RenderPassDescriptor.h"
@@ -43,7 +42,7 @@ class RenderTarget;
 class RenderPipeline : public ax::Object
 {
 public:
-    virtual void update(const RenderTarget*, const PipelineDescriptor& pipelineDescriptor) = 0;
+    virtual void update(const RenderTarget*, const PipelineDescriptor& desc) = 0;
 
 protected:
     virtual ~RenderPipeline() = default;

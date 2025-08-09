@@ -38,7 +38,7 @@ namespace ax
 
 namespace backend
 {
-class TextureBackend;
+class Texture;
 }
 
 /**

@@ -39,7 +39,6 @@ using std::max;
 
 #include "renderer/backend/DriverBase.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/Types.h"
 
 namespace spine {
 

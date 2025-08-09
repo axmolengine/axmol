@@ -116,18 +116,18 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
 #define VERTEX_TEXCOORD_SIZE 2
     uint32_t texcoordOffset   = (VERTEX_POSITION_SIZE) * sizeof(float);
     uint32_t totalSize        = (VERTEX_POSITION_SIZE + VERTEX_TEXCOORD_SIZE) * sizeof(float);
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
+    const auto& vertexInputs = _programState->getProgram()->getAllActiveVertexInputs();
+    auto iter                 = vertexInputs.find("a_position");
 
     auto layout = _programState->getMutableVertexLayout();
-    if (iter != attributeInfo.end())
+    if (iter != vertexInputs.end())
     {
-        layout->setAttrib("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
+        layout->setAttrib("a_position", &iter->second, backend::VertexFormat::FLOAT3, 0, false);
     }
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
+    iter = vertexInputs.find("a_texCoord");
+    if (iter != vertexInputs.end())
     {
-        layout->setAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, texcoordOffset,
+        layout->setAttrib("a_texCoord", &iter->second, backend::VertexFormat::FLOAT2, texcoordOffset,
                                    false);
     }
     layout->setStride(totalSize);
@@ -220,7 +220,7 @@ void GridBase::beforeDraw()
         _oldRenderTarget = renderer->getRenderTarget();
         AX_SAFE_RELEASE(_renderTarget);
         _renderTarget =
-            backend::DriverBase::getInstance()->newRenderTarget(_texture->getBackendTexture());
+            backend::DriverBase::getInstance()->createRenderTarget(_texture->getBackendTexture());
         renderer->setRenderTarget(_renderTarget);
     };
     renderer->addCallbackCommand(beforeDrawCommandFunc);

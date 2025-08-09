@@ -150,15 +150,15 @@ public:
 
     void Viewport(csmFloat32 x, csmFloat32 y, csmFloat32 w, csmFloat32 h);
 
-    void SetColorBuffer(backend::TextureBackend* colorBuffer);
-    backend::TextureBackend* GetColorBuffer();
+    void SetColorBuffer(backend::Texture* colorBuffer);
+    backend::Texture* GetColorBuffer();
 
     void AddDrawCommand(DrawCommandBuffer::DrawCommand* drawCommand);
 
 private:
     void AddCommand(const std::function<void()>& fn);
 
-    backend::TextureBackend* _currentColorBuffer;
+    backend::Texture* _currentColorBuffer;
     OperationStateData _operationStateArray[OperationType_TypeMax];
 };
 

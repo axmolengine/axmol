@@ -38,7 +38,6 @@ set(_AX_BASE_HEADER
   base/Constants.h
   base/Event.h
   base/Types.h
-  base/Enums.h
   base/Random.h
   base/Object.h
   base/Profiling.h

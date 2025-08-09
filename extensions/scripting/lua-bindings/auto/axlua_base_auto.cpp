@@ -3219,7 +3219,7 @@ int lua_ax_base_ShaderCache_purge(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_ShaderCache_newVertexShaderModule(lua_State* tolua_S)
+int lua_ax_base_ShaderCache_acquireVertexShaderModule(lua_State* tolua_S)
 {
     int argc = 0;
     ax::backend::ShaderCache* cobj = nullptr;
@@ -3239,7 +3239,7 @@ int lua_ax_base_ShaderCache_newVertexShaderModule(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShaderCache_newVertexShaderModule'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShaderCache_acquireVertexShaderModule'", nullptr);
         return 0;
     }
 #endif
@@ -3249,27 +3249,27 @@ int lua_ax_base_ShaderCache_newVertexShaderModule(lua_State* tolua_S)
     {
         std::string_view arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ShaderCache:newVertexShaderModule");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ShaderCache:acquireVertexShaderModule");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_newVertexShaderModule'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_acquireVertexShaderModule'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newVertexShaderModule(arg0);
+        auto&& ret = cobj->acquireVertexShaderModule(arg0);
         object_to_luaval<ax::backend::ShaderModule>(tolua_S, "axb.ShaderModule",(ax::backend::ShaderModule*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ShaderCache:newVertexShaderModule",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ShaderCache:acquireVertexShaderModule",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_newVertexShaderModule'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_acquireVertexShaderModule'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_ShaderCache_newFragmentShaderModule(lua_State* tolua_S)
+int lua_ax_base_ShaderCache_acquireFragmentShaderModule(lua_State* tolua_S)
 {
     int argc = 0;
     ax::backend::ShaderCache* cobj = nullptr;
@@ -3289,7 +3289,7 @@ int lua_ax_base_ShaderCache_newFragmentShaderModule(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShaderCache_newFragmentShaderModule'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ShaderCache_acquireFragmentShaderModule'", nullptr);
         return 0;
     }
 #endif
@@ -3299,22 +3299,22 @@ int lua_ax_base_ShaderCache_newFragmentShaderModule(lua_State* tolua_S)
     {
         std::string_view arg0;
 
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ShaderCache:newFragmentShaderModule");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ShaderCache:acquireFragmentShaderModule");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_newFragmentShaderModule'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShaderCache_acquireFragmentShaderModule'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->newFragmentShaderModule(arg0);
+        auto&& ret = cobj->acquireFragmentShaderModule(arg0);
         object_to_luaval<ax::backend::ShaderModule>(tolua_S, "axb.ShaderModule",(ax::backend::ShaderModule*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ShaderCache:newFragmentShaderModule",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ShaderCache:acquireFragmentShaderModule",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_newFragmentShaderModule'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ShaderCache_acquireFragmentShaderModule'.",&tolua_err);
 #endif
 
     return 0;
@@ -3447,8 +3447,8 @@ int lua_register_ax_base_ShaderCache(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"ShaderCache");
         tolua_function(tolua_S,"purge",lua_ax_base_ShaderCache_purge);
-        tolua_function(tolua_S,"newVertexShaderModule",lua_ax_base_ShaderCache_newVertexShaderModule);
-        tolua_function(tolua_S,"newFragmentShaderModule",lua_ax_base_ShaderCache_newFragmentShaderModule);
+        tolua_function(tolua_S,"acquireVertexShaderModule",lua_ax_base_ShaderCache_acquireVertexShaderModule);
+        tolua_function(tolua_S,"acquireFragmentShaderModule",lua_ax_base_ShaderCache_acquireFragmentShaderModule);
         tolua_function(tolua_S,"removeUnusedShader",lua_ax_base_ShaderCache_removeUnusedShader);
         tolua_function(tolua_S,"getInstance", lua_ax_base_ShaderCache_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_base_ShaderCache_destroyInstance);
@@ -4992,7 +4992,7 @@ int lua_ax_base_Texture2D_getBackendTexture(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getBackendTexture();
-        object_to_luaval<ax::backend::TextureBackend>(tolua_S, "axb.TextureBackend",(ax::backend::TextureBackend*)ret);
+        object_to_luaval<ax::backend::Texture>(tolua_S, "axb.Texture",(ax::backend::Texture*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:getBackendTexture",argc, 0);
@@ -97237,7 +97237,7 @@ int lua_ax_base_Pass_draw(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Pass_setVertexAttribBinding(lua_State* tolua_S)
+int lua_ax_base_Pass_setVertexInputBinding(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Pass* cobj = nullptr;
@@ -97257,7 +97257,7 @@ int lua_ax_base_Pass_setVertexAttribBinding(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setVertexAttribBinding'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Pass_setVertexInputBinding'", nullptr);
         return 0;
     }
 #endif
@@ -97265,24 +97265,24 @@ int lua_ax_base_Pass_setVertexAttribBinding(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::VertexAttribBinding* arg0;
+        ax::VertexInputBinding* arg0;
 
-        ok &= luaval_to_object<ax::VertexAttribBinding>(tolua_S, 2, "ax.VertexAttribBinding",&arg0, "ax.Pass:setVertexAttribBinding");
+        ok &= luaval_to_object<ax::VertexInputBinding>(tolua_S, 2, "ax.VertexInputBinding",&arg0, "ax.Pass:setVertexInputBinding");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setVertexAttribBinding'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setVertexInputBinding'", nullptr);
             return 0;
         }
-        cobj->setVertexAttribBinding(arg0);
+        cobj->setVertexInputBinding(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Pass:setVertexAttribBinding",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Pass:setVertexInputBinding",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Pass_setVertexAttribBinding'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Pass_setVertexInputBinding'.",&tolua_err);
 #endif
 
     return 0;
@@ -97321,7 +97321,7 @@ int lua_ax_base_Pass_getVertexAttributeBinding(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getVertexAttributeBinding();
-        object_to_luaval<ax::VertexAttribBinding>(tolua_S, "ax.VertexAttribBinding",(ax::VertexAttribBinding*)ret);
+        object_to_luaval<ax::VertexInputBinding>(tolua_S, "ax.VertexInputBinding",(ax::VertexInputBinding*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Pass:getVertexAttributeBinding",argc, 0);
@@ -97607,11 +97607,11 @@ int lua_ax_base_Pass_setUniformTexture(lua_State* tolua_S)
     if (argc == 2) 
     {
         unsigned int arg0;
-        ax::backend::TextureBackend* arg1;
+        ax::backend::Texture* arg1;
 
         ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Pass:setUniformTexture");
 
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "ax.Pass:setUniformTexture");
+        ok &= luaval_to_object<ax::backend::Texture>(tolua_S, 3, "axb.Texture",&arg1, "ax.Pass:setUniformTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformTexture'", nullptr);
@@ -97660,11 +97660,11 @@ int lua_ax_base_Pass_setUniformNormTexture(lua_State* tolua_S)
     if (argc == 2) 
     {
         unsigned int arg0;
-        ax::backend::TextureBackend* arg1;
+        ax::backend::Texture* arg1;
 
         ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Pass:setUniformNormTexture");
 
-        ok &= luaval_to_object<ax::backend::TextureBackend>(tolua_S, 3, "axb.TextureBackend",&arg1, "ax.Pass:setUniformNormTexture");
+        ok &= luaval_to_object<ax::backend::Texture>(tolua_S, 3, "axb.Texture",&arg1, "ax.Pass:setUniformNormTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformNormTexture'", nullptr);
@@ -98528,7 +98528,7 @@ int lua_register_ax_base_Pass(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"Pass");
         tolua_function(tolua_S,"getProgramState",lua_ax_base_Pass_getProgramState);
         tolua_function(tolua_S,"draw",lua_ax_base_Pass_draw);
-        tolua_function(tolua_S,"setVertexAttribBinding",lua_ax_base_Pass_setVertexAttribBinding);
+        tolua_function(tolua_S,"setVertexInputBinding",lua_ax_base_Pass_setVertexInputBinding);
         tolua_function(tolua_S,"getVertexAttributeBinding",lua_ax_base_Pass_getVertexAttributeBinding);
         tolua_function(tolua_S,"setName",lua_ax_base_Pass_setName);
         tolua_function(tolua_S,"getName",lua_ax_base_Pass_getName);

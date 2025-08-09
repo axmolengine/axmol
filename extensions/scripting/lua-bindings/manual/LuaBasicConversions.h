@@ -43,7 +43,6 @@
 #include "physics/PhysicsJoint.h"
 #include "physics/PhysicsWorld.h"
 #    endif
-#include "renderer/backend/Types.h"
 #include "renderer/backend/VertexLayout.h"
 #include "ui/GUIDefine.h"
 
@@ -1332,7 +1331,7 @@ AX_LUA_DLL bool luaval_to_uniformLocation(lua_State* L,
 AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const ax::backend::UniformLocation& desc);
 
 AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L,
-                                              const hlookup::string_map<ax::backend::AttributeBindInfo>& map);
+                                              const hlookup::string_map<ax::backend::VertexInputDesc>& map);
 
 /**
  * convert ax::ResourceData to lua object

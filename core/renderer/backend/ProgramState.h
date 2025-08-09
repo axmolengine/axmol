@@ -33,14 +33,14 @@
 #include "platform/PlatformMacros.h"
 #include "base/Object.h"
 #include "base/EventListenerCustom.h"
-#include "renderer/backend/Types.h"
+#include "renderer/backend/BaseDefs.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
 #include "yasio/byte_buffer.hpp"
 
 namespace ax::backend {
 
-class TextureBackend;
+class Texture;
 class VertexLayout;
 
 /**
@@ -53,10 +53,8 @@ class VertexLayout;
  */
 struct AX_DLL TextureInfo
 {
-    TextureInfo(std::vector<int>&& _slots, std::vector<backend::TextureBackend*>&& _textures);
-    TextureInfo(std::vector<int>&& _slots,
-                std::vector<int>&& _indexs,
-                std::vector<backend::TextureBackend*>&& _textures);
+    TextureInfo(std::vector<int>&& _slots, std::vector<backend::Texture*>&& _textures);
+    TextureInfo(std::vector<int>&& _slots, std::vector<int>&& _indexs, std::vector<backend::Texture*>&& _textures);
     TextureInfo() = default;
     TextureInfo(const TextureInfo&);
     TextureInfo(TextureInfo&& rhs);
@@ -68,14 +66,14 @@ struct AX_DLL TextureInfo
 
     void assign(const TextureInfo& other);
     void assign(TextureInfo&& other);
-    void assign(int slot, int index, backend::TextureBackend* texture);
+    void assign(int slot, int index, backend::Texture* texture);
 
     void retainTextures();
     void releaseTextures();
 
     std::vector<int> slots;
     std::vector<int> indexs;
-    std::vector<backend::TextureBackend*> textures;
+    std::vector<backend::Texture*> textures;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     int location = -1;
 #endif
@@ -138,7 +136,7 @@ public:
      * @return Attribute location.
      * @see `int getAttributeLocation(std::string_view name) const`
      */
-    inline int getAttributeLocation(std::string_view name) const { return _program->getAttributeLocation(name); }
+    inline const VertexInputDesc* getVertexInputDesc(std::string_view name) const { return _program->getVertexInputDesc(name); }
 
     /**
      * Get an attribute location by the engine built-in attribute name.
@@ -146,7 +144,10 @@ public:
      * @return Attribute location.
      * @see `int getAttributeLocation(std::string_view name) const`
      */
-    inline int getAttributeLocation(Attribute name) const { return _program->getAttributeLocation(name); }
+    inline const VertexInputDesc* getVertexInputDesc(VertexInputSemantic name) const
+    {
+        return _program->getVertexInputDesc(name);
+    }
 
     /**
      * A callback to update unifrom.
@@ -169,7 +170,7 @@ public:
      * @param uniformLocation Specifies texture location.
      * @param texture Specifies a pointer to backend texture.
      */
-    void setTexture(backend::TextureBackend* texture);
+    void setTexture(backend::Texture* texture);
 
     /**
      * Set texture.
@@ -177,7 +178,7 @@ public:
      * @param slot Specifies texture slot selector.
      * @param texture Specifies a pointer to backend texture.
      */
-    void setTexture(const backend::UniformLocation& uniformLocation, int slot, backend::TextureBackend* texture);
+    void setTexture(const backend::UniformLocation& uniformLocation, int slot, backend::Texture* texture);
 
     /**
      * Set texture.
@@ -189,7 +190,7 @@ public:
     void setTexture(const backend::UniformLocation& uniformLocation,
                     int slot,
                     int index,
-                    backend::TextureBackend* texture);
+                    backend::Texture* texture);
 
     /**
      * Set textures in array.
@@ -199,7 +200,7 @@ public:
      */
     void setTextureArray(const backend::UniformLocation& uniformLocation,
                          std::vector<int> slots,
-                         std::vector<backend::TextureBackend*> textures);
+                         std::vector<backend::Texture*> textures);
 
     /**
      * Get vertex texture informations
@@ -331,7 +332,7 @@ protected:
      */
     void setVertexUniform(int location, const void* data, std::size_t size, int offset);
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
     /**
      * Set the fargment uniform data.
      * @param location Specifies the uniform location.
@@ -351,7 +352,7 @@ protected:
     void setTexture(int location,
                     int slot,
                     int index,
-                    backend::TextureBackend* texture,
+                    backend::Texture* texture,
                     std::unordered_map<int, TextureInfo>& textureInfo);
 
     /**
@@ -363,7 +364,7 @@ protected:
      */
     void setTextureArray(int location,
                          std::vector<int> slots,
-                         std::vector<backend::TextureBackend*> textures,
+                         std::vector<backend::Texture*> textures,
                          std::unordered_map<int, TextureInfo>& textureInfo);
 
     /**

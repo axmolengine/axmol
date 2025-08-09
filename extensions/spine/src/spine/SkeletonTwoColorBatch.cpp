@@ -56,10 +56,10 @@ namespace {
 		__locPMatrix = programState->getUniformLocation("u_PMatrix");
 		__locTexture = programState->getUniformLocation("u_tex0");
 
-		auto locPosition = programState->getAttributeLocation("a_position");
-        auto locTexcoord = programState->getAttributeLocation("a_texCoord");
-		auto locColor = programState->getAttributeLocation("a_color");
-		auto locColor2 = programState->getAttributeLocation("a_color2");
+		auto locPosition = programState->getVertexInputDesc("a_position");
+        auto locTexcoord = programState->getVertexInputDesc("a_texCoord");
+        auto locColor    = programState->getVertexInputDesc("a_color");
+        auto locColor2   = programState->getVertexInputDesc("a_color2");
 
         auto vertexLayout = programState->getMutableVertexLayout();
         vertexLayout->setAttrib("a_position", locPosition, backend::VertexFormat::FLOAT3,

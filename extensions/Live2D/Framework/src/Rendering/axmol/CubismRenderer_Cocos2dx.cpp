@@ -142,7 +142,7 @@ CubismClippingContext* CubismClippingManager_Cocos2dx::FindSameClip(const csmInt
     return NULL; //見つからなかった
 }
 
-void CubismClippingManager_Cocos2dx::SetupClippingContext(CubismModel& model, CubismRenderer_Cocos2dx* renderer, backend::TextureBackend* lastColorBuffer, csmRectF lastViewport)
+void CubismClippingManager_Cocos2dx::SetupClippingContext(CubismModel& model, CubismRenderer_Cocos2dx* renderer, backend::Texture* lastColorBuffer, csmRectF lastViewport)
 {
     _currentFrameNo++;
 

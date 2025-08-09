@@ -60,7 +60,7 @@ namespace spine {
 
 		void updateCommandPipelineDescriptor(axmol::backend::ProgramState *programState);
 
-		inline axmol::backend::TextureBackend *getTexture() const { return _texture; }
+		inline axmol::backend::Texture *getTexture() const { return _texture; }
 
 		void draw(axmol::Renderer *renderer);
 
@@ -92,7 +92,7 @@ namespace spine {
 
 
 		void *_prog = nullptr;
-		axmol::backend::TextureBackend *_texture = nullptr;
+		axmol::backend::Texture *_texture = nullptr;
 		axmol::backend::ProgramState *_programState = nullptr;
 		axmol::backend::UniformLocation _locPMatrix;
 		axmol::backend::UniformLocation _locTexture;

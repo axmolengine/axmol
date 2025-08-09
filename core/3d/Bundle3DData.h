@@ -31,8 +31,6 @@
 #include "math/Math.h"
 #include "3d/AABB.h"
 
-#include "renderer/backend/Types.h"
-
 #include <vector>
 #include <map>
 #include <string>

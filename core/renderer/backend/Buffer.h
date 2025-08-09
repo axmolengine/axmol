@@ -24,8 +24,7 @@
 
 #pragma once
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 #include "base/Object.h"
 
 namespace ax

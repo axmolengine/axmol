@@ -27,7 +27,6 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  ****************************************************************************/
 
 #include "base/Types.h"
-#include "renderer/backend/Types.h"
 
 namespace ax
 {

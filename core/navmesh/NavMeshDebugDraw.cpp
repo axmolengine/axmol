@@ -46,13 +46,11 @@ NavMeshDebugDraw::NavMeshDebugDraw()
 
     // the POSITION_COLOR default vertex layout is: V3F_C4F, so we need modify it
     auto vertexLayout = _programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position",
-                                _programState->getAttributeLocation(backend::Attribute::POSITION),
+    vertexLayout->setAttrib("a_position", _programState->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3,
                                 offsetof(V3F_C4F, position),
                                 false);
-    vertexLayout->setAttrib("a_color",
-                                _programState->getAttributeLocation(backend::Attribute::COLOR),
+    vertexLayout->setAttrib("a_color", _programState->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4,
                                 offsetof(V3F_C4F, color),
                                 false);
@@ -185,7 +183,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
     if (!_vertexBuffer || _vertexBuffer->getSize() < _vertices.size() * sizeof(_vertices[0]))
     {
-        _vertexBuffer = backend::DriverBase::getInstance()->newBuffer(
+        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(
             _vertices.size() * sizeof(_vertices[0]), backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
         _dirtyBuffer = true;
     }

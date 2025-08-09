@@ -25,8 +25,7 @@
 
 #pragma once
 
-#include "../Macros.h"
-#include "../Types.h"
+#include "../BaseDefs.h"
 #include "base/Object.h"
 #include "base/EventListenerCustom.h"
 #include "platform/GL.h"
@@ -121,14 +120,14 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    int getAttributeLocation(std::string_view name) const override;
+    const VertexInputDesc* getVertexInputDesc (std::string_view name) const override;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    int getAttributeLocation(Attribute name) const override;
+    const VertexInputDesc* getVertexInputDesc(VertexInputSemantic name) const override;
 
     /**
      * Get maximum vertex location.
@@ -146,7 +145,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const override;
+    const hlookup::string_map<VertexInputDesc>& getAllActiveVertexInputs() const override;
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
@@ -188,7 +187,7 @@ private:
 
     std::vector<AttributeInfo> _attributeInfos;
     hlookup::string_map<UniformInfo> _activeUniformInfos;
-    mutable hlookup::string_map<AttributeBindInfo> _activeAttribs;
+    mutable hlookup::string_map<VertexInputDesc> _activeAttribs;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     std::unordered_map<std::string, int>
         _originalUniformLocations;  ///< record the uniform location when shader was first created.
@@ -201,7 +200,7 @@ private:
 
     int _maxLocation = -1;
     UniformLocation _builtinUniformLocation[UNIFORM_MAX];
-    int _builtinAttributeLocation[Attribute::ATTRIBUTE_MAX];
+    const VertexInputDesc* _builtinAttributeLocation[VertexInputSemantic::VIS_MAX];
 };
 // end of _opengl group
 /// @}

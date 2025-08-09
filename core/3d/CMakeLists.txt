@@ -22,7 +22,7 @@ set(_AX_3D_HEADER
   3d/Bundle3DData.h
   3d/Skeleton3D.h
   3d/AttachNode.h
-  3d/VertexAttribBinding.h
+  3d/VertexInputBinding.h
   3d/3DProgramInfo.h
 )
 
@@ -49,6 +49,6 @@ set(_AX_3D_SRC
   3d/MeshRenderer.cpp
   3d/MeshMaterial.cpp
   3d/Terrain.cpp
-  3d/VertexAttribBinding.cpp
+  3d/VertexInputBinding.cpp
   3d/3DProgramInfo.cpp
 )

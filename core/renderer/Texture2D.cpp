@@ -69,7 +69,8 @@ Texture2D::Texture2D()
 {
     backend::TextureDescriptor textureDescriptor;
     textureDescriptor.textureFormat = PixelFormat::NONE;
-    _texture = static_cast<backend::Texture2DBackend*>(backend::DriverBase::getInstance()->newTexture(textureDescriptor));
+    _texture =
+        static_cast<backend::Texture*>(backend::DriverBase::getInstance()->createTexture(textureDescriptor));
 }
 
 Texture2D::~Texture2D()
@@ -99,7 +100,7 @@ int Texture2D::getPixelsHigh() const
     return _pixelsHigh;
 }
 
-backend::TextureBackend* Texture2D::getBackendTexture() const
+backend::Texture* Texture2D::getBackendTexture() const
 {
     return _texture;
 }

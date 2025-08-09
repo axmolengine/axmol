@@ -27,12 +27,11 @@
 #include <array>
 #include <vector>
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 
 namespace ax::backend {
 
-class TextureBackend;
+class Texture;
 /**
  * @addtogroup _backend
  * @{

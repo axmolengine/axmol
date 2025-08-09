@@ -26,7 +26,7 @@
 
 #include "base/Macros.h"
 #include "platform/GL.h"
-#include "renderer/backend/Types.h"
+#include "renderer/backend/BaseDefs.h"
 #include "renderer/backend/PixelBufferDescriptor.h"
 
 namespace ax::backend {

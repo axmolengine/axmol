@@ -1218,7 +1218,7 @@ int lua_ax_3d_TextureCube_getBackendTexture(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getBackendTexture();
-        object_to_luaval<ax::backend::TextureBackend>(tolua_S, "axb.TextureBackend",(ax::backend::TextureBackend*)ret);
+        object_to_luaval<ax::backend::Texture>(tolua_S, "axb.Texture",(ax::backend::Texture*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCube:getBackendTexture",argc, 0);

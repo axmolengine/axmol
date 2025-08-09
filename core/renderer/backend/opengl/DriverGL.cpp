@@ -98,15 +98,10 @@ void DriverBase::destroyInstance()
 DriverGL::DriverGL()
 {
     /// driver info
-    // These queries work with all GL/GLES versions!
-    _vendor    = (char const*)glGetString(GL_VENDOR);
-    _renderer  = (char const*)glGetString(GL_RENDERER);
-    _version   = (char const*)glGetString(GL_VERSION);
-    _shaderVer = (char const*)glGetString(GL_SHADING_LANGUAGE_VERSION);
-
-    if (_version)
+    auto pszVersion = (char const*)glGetString(GL_VERSION);
+    if (pszVersion)
     {
-        auto hint   = strstr(_version, "OpenGL ES");
+        auto hint   = strstr(pszVersion, "OpenGL ES");
         _verInfo.es = !!hint;
         if (_verInfo.es)
         {
@@ -115,9 +110,11 @@ DriverGL::DriverGL()
         }
         else
         {
-            _verInfo.major = (_version[0] - '0');
-            _verInfo.minor = (_version[2] - '0');
+            _verInfo.major = (pszVersion[0] - '0');
+            _verInfo.minor = (pszVersion[2] - '0');
         }
+
+        _version = pszVersion;
     }
 
     // check OpenGL version at first
@@ -127,12 +124,11 @@ DriverGL::DriverGL()
     {
 #if AX_GLES_PROFILE == 0
         auto msg = fmt::format(
-                         "OpeGL 3.3+ is required (your version is {}). Please upgrade the driver of your video card.",
-                         _version);
+                         "OpeGL 3.3+ is required (your version is {}). Please upgrade the driver of your video card.", pszVersion);
 #else
         auto msg = fmt::format(
             "OpeGL ES {}.{}+ is required (your version is {}). Please upgrade the driver of your video card.",
-            REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
+            REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, pszVersion);
 #endif
         messageBox(msg.c_str(), "OpenGL version too old");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
@@ -187,7 +183,7 @@ GLint DriverGL::getDefaultFBO() const
     return _defaultFBO;
 }
 
-CommandBuffer* DriverGL::newCommandBuffer(void*)
+CommandBuffer* DriverGL::createCommandBuffer(void*)
 {
 #if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     return !isGLES2Only() ? new CommandBufferGL() : new CommandBufferGLES2();
@@ -196,59 +192,48 @@ CommandBuffer* DriverGL::newCommandBuffer(void*)
 #endif
 }
 
-Buffer* DriverGL::newBuffer(std::size_t size, BufferType type, BufferUsage usage)
+Buffer* DriverGL::createBuffer(std::size_t size, BufferType type, BufferUsage usage)
 {
     return new BufferGL(size, type, usage);
 }
 
-TextureBackend* DriverGL::newTexture(const TextureDescriptor& descriptor)
+Texture* DriverGL::createTexture(const TextureDescriptor& descriptor)
 {
-    switch (descriptor.textureType)
-    {
-    case TextureType::TEXTURE_2D:
-        return new Texture2DGL(descriptor);
-    case TextureType::TEXTURE_CUBE:
-        return new TextureCubeGL(descriptor);
-    default:
-        return nullptr;
-    }
+    return new TextureImpl(descriptor);
 }
 
-RenderTarget* DriverGL::newDefaultRenderTarget()
+RenderTarget* DriverGL::createDefaultRenderTarget()
 {
-    auto rtGL = new RenderTargetGL(true, this);
-    return rtGL;
+    return new RenderTargetGL(true, this);
 }
 
-RenderTarget* DriverGL::newRenderTarget(TextureBackend* colorAttachment,
-                                        TextureBackend* depthAttachment,
-                                        TextureBackend* stencilAttachhment)
+RenderTarget* DriverGL::createRenderTarget(Texture* colorAttachment,
+                                        Texture* depthStencilAttachment)
 {
     auto rtGL = new RenderTargetGL(false, this);
     rtGL->bindFrameBuffer();
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
     rtGL->setColorAttachment(colors);
-    rtGL->setDepthAttachment(depthAttachment);
-    rtGL->setStencilAttachment(stencilAttachhment);
+    rtGL->setDepthStencilAttachment(depthStencilAttachment);
     return rtGL;
 }
 
-ShaderModule* DriverGL::newShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DriverGL::createShaderModule(ShaderStage stage, std::string_view source)
 {
     return new ShaderModuleGL(stage, source);
 }
 
-DepthStencilState* DriverGL::newDepthStencilState()
+DepthStencilState* DriverGL::createDepthStencilState()
 {
     return new DepthStencilStateGL();
 }
 
-RenderPipeline* DriverGL::newRenderPipeline()
+RenderPipeline* DriverGL::createRenderPipeline()
 {
     return new RenderPipelineGL();
 }
 
-Program* DriverGL::newProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DriverGL::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
 {
     return new ProgramGL(vertexShader, fragmentShader);
 }
@@ -474,23 +459,23 @@ bool DriverGL::isGLES2Only() const
     return _verInfo.es && _verInfo.major == 2;
 }
 
-const char* DriverGL::getVendor() const
+std::string DriverGL::getVendor() const
 {
-    return _vendor;
+    return (char const*)glGetString(GL_VENDOR);
 }
-const char* DriverGL::getRenderer() const
+std::string DriverGL::getRenderer() const
 {
-    return _renderer;
+    return (char const*)glGetString(GL_RENDERER);
 }
 
-const char* DriverGL::getVersion() const
+std::string DriverGL::getVersion() const
 {
     return _version;
 }
 
-const char* DriverGL::getShaderVersion() const
+std::string DriverGL::getShaderVersion() const
 {
-    return _shaderVer;
+    return (char const*)glGetString(GL_SHADING_LANGUAGE_VERSION);
 }
 
 bool DriverGL::checkForFeatureSupported(FeatureType feature)

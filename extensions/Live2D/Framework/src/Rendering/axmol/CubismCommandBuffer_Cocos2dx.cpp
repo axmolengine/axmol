@@ -224,7 +224,7 @@ void CubismCommandBuffer_Cocos2dx::Viewport(csmFloat32 x, csmFloat32 y, csmFloat
     );
 }
 
-void CubismCommandBuffer_Cocos2dx::SetColorBuffer(backend::TextureBackend* colorBuffer)
+void CubismCommandBuffer_Cocos2dx::SetColorBuffer(backend::Texture* colorBuffer)
 {
     _currentColorBuffer = colorBuffer;
 
@@ -244,7 +244,7 @@ void CubismCommandBuffer_Cocos2dx::SetColorBuffer(backend::TextureBackend* color
     });
 }
 
-backend::TextureBackend* CubismCommandBuffer_Cocos2dx::GetColorBuffer()
+backend::Texture* CubismCommandBuffer_Cocos2dx::GetColorBuffer()
 {
     return _currentColorBuffer;
 }

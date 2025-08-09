@@ -231,7 +231,7 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     auto fragFile   = fileUtils->fullPathForFilename(fsName);
     auto vertSource = fileUtils->getStringFromFile(vertFile);
     auto fragSource = fileUtils->getStringFromFile(fragFile);
-    auto program    = backend::DriverBase::getInstance()->newProgram(vertSource, fragSource);
+    auto program    = backend::DriverBase::getInstance()->createProgram(vertSource, fragSource);
 
     if (program)
     {

@@ -31,7 +31,6 @@
 
 #    include "renderer/RenderState.h"
 #    include "renderer/backend/ProgramState.h"
-#    include "renderer/backend/Types.h"
 #    include "renderer/backend/Buffer.h"
 #    include "math/Vec3.h"
 #    include "recast/DebugDraw.h"

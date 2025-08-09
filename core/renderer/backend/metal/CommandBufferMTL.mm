@@ -135,12 +135,12 @@ static MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt
     return mtlDescritpor;
 }
 
-static id<MTLTexture> getMTLTexture(TextureBackend* texture, int index)
+static id<MTLTexture> getMTLTexture(Texture* texture, int index)
 {
     return reinterpret_cast<id<MTLTexture>>(texture->getHandler(index));
 }
 
-static id<MTLSamplerState> getMTLSamplerState(TextureBackend* texture)
+static id<MTLSamplerState> getMTLSamplerState(Texture* texture)
 {
     switch (texture->getTextureType())
     {
@@ -556,7 +556,7 @@ void CommandBufferMTL::setScissorRect(bool isEnabled, float x, float y, float wi
     [_mtlRenderEncoder setScissorRect:scissorRect];
 }
 
-void CommandBufferMTL::readPixels(TextureBackend* texture,
+void CommandBufferMTL::readPixels(Texture* texture,
                                   std::size_t origX,
                                   std::size_t origY,
                                   std::size_t rectWidth,

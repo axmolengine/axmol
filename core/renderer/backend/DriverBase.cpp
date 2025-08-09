@@ -25,8 +25,16 @@
 
 #include "DriverBase.h"
 
-namespace ax::backend {
+#include "VertexLayout.h"
+
+namespace ax::backend
+{
 
 DriverBase* DriverBase::_instance = nullptr;
 
+VertexLayout* DriverBase::createVertexLayout()
+{
+    return new VertexLayout();
 }
+
+}  // namespace ax::backend

@@ -24,8 +24,7 @@
 
 #pragma once
 
-#include "Macros.h"
-#include "Types.h"
+#include "BaseDefs.h"
 #include "base/Object.h"
 
 #include <string>
@@ -52,7 +51,7 @@ enum Uniform : uint32_t
     UNIFORM_MAX  // Maximum uniforms
 };
 
-enum Attribute : uint32_t
+enum VertexInputSemantic : uint32_t
 {
     POSITION,
     COLOR,
@@ -62,7 +61,7 @@ enum Attribute : uint32_t
     TEXCOORD3,
     NORMAL,
     INSTANCE,
-    ATTRIBUTE_MAX  // Maximum attributes
+    VIS_MAX  // 
 };
 /**
  * Create shader.
@@ -76,16 +75,16 @@ public:
      */
     ShaderStage getShaderStage() const;
 
-    std::size_t getHashValue() const { return _hash; }
+    uint64_t getHashValue() const { return _hash; }
 
 protected:
     ShaderModule(ShaderStage stage);
     virtual ~ShaderModule();
-    void setHashValue(std::size_t hash) { _hash = hash; }
+    void setHashValue(uint64_t hash) { _hash = hash; }
 
     friend class ShaderCache;
     ShaderStage _stage = ShaderStage::VERTEX;
-    std::size_t _hash  = 0;
+    uint64_t _hash  = 0;
 };
 
 // end of _backend group
