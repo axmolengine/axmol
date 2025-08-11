@@ -24,17 +24,17 @@
 
 #include "CommandBuffer.h"
 
-namespace ax::backend {
+namespace ax::backend
+{
 
 void CommandBuffer::setStencilReferenceValue(uint32_t value)
 {
-    _stencilReferenceValueBack = _stencilReferenceValueFront = value;
+    _stencilReferenceValue = value;
 }
 
-void CommandBuffer::setStencilReferenceValue(unsigned int frontRef, unsigned int backRef)
+bool CommandBuffer::resizeSwapChain(uint32_t /*width*/, uint32_t /*height*/)
 {
-    _stencilReferenceValueFront = frontRef;
-    _stencilReferenceValueBack  = backRef;
+    return true;
 }
 
-}
+}  // namespace ax::backend

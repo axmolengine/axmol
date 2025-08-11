@@ -37,7 +37,7 @@ void DepthStencilStateGL::reset()
     __gl->disableStencilTest();
 }
 
-void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigned int stencilReferenceValueBack) const
+void DepthStencilStateGL::apply(unsigned int stencilReferenceValue) const
 {
     const auto dsFlags = _dsDesc.flags;
     // depth test
@@ -57,7 +57,7 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
         if (_isBackFrontStencilEqual)
         {
             __gl->stencilFunc(UtilsGL::toGLComareFunction(_dsDesc.frontFaceStencil.stencilCompareFunction),
-                             (GLint)stencilReferenceValueFront, _dsDesc.frontFaceStencil.readMask);
+                              (GLint)stencilReferenceValue, _dsDesc.frontFaceStencil.readMask);
 
             __gl->stencilOp(UtilsGL::toGLStencilOperation(_dsDesc.frontFaceStencil.stencilFailureOperation),
                            UtilsGL::toGLStencilOperation(_dsDesc.frontFaceStencil.depthFailureOperation),
@@ -68,9 +68,9 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
         else
         {
             __gl->stencilFuncFront(UtilsGL::toGLComareFunction(_dsDesc.backFaceStencil.stencilCompareFunction),
-                                  (GLint)stencilReferenceValueBack, _dsDesc.backFaceStencil.readMask);
+                                   (GLint)stencilReferenceValue, _dsDesc.backFaceStencil.readMask);
             __gl->stencilFuncBack(UtilsGL::toGLComareFunction(_dsDesc.frontFaceStencil.stencilCompareFunction),
-                                 (GLint)stencilReferenceValueFront, _dsDesc.frontFaceStencil.readMask);
+                                  (GLint)stencilReferenceValue, _dsDesc.frontFaceStencil.readMask);
 
             __gl->stencilOpFront(
                 UtilsGL::toGLStencilOperation(_dsDesc.backFaceStencil.stencilFailureOperation),

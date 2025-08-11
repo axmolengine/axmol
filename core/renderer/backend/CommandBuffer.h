@@ -232,18 +232,12 @@ public:
      */
     void setStencilReferenceValue(unsigned int value);
 
-    /**
-     * Update stencil reference value.
-     * @param frontRef Specifies front stencil reference value.
-     * @param backRef Specifies back stencil reference value.
-     */
-    void setStencilReferenceValue(unsigned int frontRef, unsigned int backRef);
+    virtual bool resizeSwapChain(uint32_t width, uint32_t height);
 
 protected:
     virtual ~CommandBuffer() = default;
 
-    unsigned int _stencilReferenceValueFront = 0;  ///< front stencil reference value.
-    unsigned int _stencilReferenceValueBack  = 0;  ///< back stencil reference value.
+    unsigned int _stencilReferenceValue = 0;  ///< front stencil reference value
 };
 
 // end of _backend group

@@ -4,7 +4,7 @@ namespace ax::backend::d3d
 {
 
 // BufferUsage -> D3D11_USAGE / CPU flags
-static void mapUsage(BufferUsage in, D3D11_USAGE& outUsage, UINT& outCpu)
+static void translateUsage(BufferUsage in, D3D11_USAGE& outUsage, UINT& outCpu)
 {
     switch (in)
     {
@@ -25,7 +25,7 @@ static void mapUsage(BufferUsage in, D3D11_USAGE& outUsage, UINT& outCpu)
 }
 
 // BufferType -> BindFlag
-static D3D11_BIND_FLAG mapBindFlag(BufferType t)
+static D3D11_BIND_FLAG translateBindFlag(BufferType t)
 {
     switch (t)
     {
@@ -48,6 +48,12 @@ static D3D11_BIND_FLAG mapBindFlag(BufferType t)
     }
 }
 
+static inline std::size_t alignTo(std::size_t value, std::size_t alignment)
+{
+    return (value + alignment - 1) & ~(alignment - 1);
+}
+
+
 /* -------------------------------------------------- ctor */
 BufferImpl::BufferImpl(ID3D11Device* device,
                        ID3D11DeviceContext* context,
@@ -57,8 +63,10 @@ BufferImpl::BufferImpl(ID3D11Device* device,
                        const void* initial)
     : Buffer(size, type, usage), _device(device), _context(context)
 {
-    mapUsage(usage, _nativeUsage, _cpuAccess);
-    _bindFlag = mapBindFlag(type);
+    translateUsage(usage, _nativeUsage, _cpuAccess);
+    _bindFlag = translateBindFlag(type);
+
+    _capacity = _bindFlag == D3D11_BIND_CONSTANT_BUFFER ? alignTo(size, 16) : size;
 
     if (initial && size)
         _defaultData.assign(static_cast<const uint8_t*>(initial), static_cast<const uint8_t*>(initial) + size);
@@ -70,7 +78,7 @@ BufferImpl::BufferImpl(ID3D11Device* device,
 void BufferImpl::createNativeBuffer(const void* initial)
 {
     D3D11_BUFFER_DESC desc{};
-    desc.ByteWidth      = static_cast<UINT>(_size);
+    desc.ByteWidth      = static_cast<UINT>(_capacity);
     desc.Usage          = _nativeUsage;
     desc.BindFlags      = _bindFlag;
     desc.CPUAccessFlags = _cpuAccess;
@@ -81,7 +89,12 @@ void BufferImpl::createNativeBuffer(const void* initial)
 
     HRESULT hr = _device->CreateBuffer(&desc, initial ? &initData : nullptr, &_buffer);
 
-    assert(SUCCEEDED(hr) && "Failed to create ID3D11Buffer");
+    if (FAILED(hr))
+    {
+        AXLOGE("Failed to create ID3D11Buffer, size={}, alignedSize={}, hr=0x{:08X}", _size, _capacity,
+               static_cast<unsigned int>(hr));
+        assert(false && "Failed to create ID3D11Buffer");
+    }
 }
 
 /* -------------------------------------------------- updateData */

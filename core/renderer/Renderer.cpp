@@ -843,6 +843,12 @@ void Renderer::readPixels(backend::RenderTarget* rt,
     _commandBuffer->readPixels(rt, std::move(callback));
 }
 
+void Renderer::resizeSwapChain(uint32_t width, uint32_t height)
+{
+    if (_commandBuffer)
+        _commandBuffer->resizeSwapChain(width, height);
+}
+
 void Renderer::beginRenderPass()
 {
     _commandBuffer->beginRenderPass(_currentRT, _renderPassDesc);

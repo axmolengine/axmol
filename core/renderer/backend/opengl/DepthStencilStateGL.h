@@ -51,7 +51,7 @@ public:
      * @param stencilReferenceValueFront Specifies front stencil reference value.
      * @param stencilReferenceValueBack Specifies back stencil reference value.
      */
-    void apply(unsigned int stencilReferenceValueFront, unsigned int stencilReferenceValueBack) const;
+    void apply(unsigned int stencilReferenceValue) const;
 };
 // end of _opengl group
 /// @}

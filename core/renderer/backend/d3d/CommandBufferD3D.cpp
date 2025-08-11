@@ -171,7 +171,7 @@ CommandBufferImpl::~CommandBufferImpl()
     }
 }
 
-bool CommandBufferImpl::ResizeSwapChain(uint32_t width, uint32_t height)
+bool CommandBufferImpl::resizeSwapChain(uint32_t width, uint32_t height)
 {
     if (!_swapChain || !_driverImpl)
         return false;
@@ -183,8 +183,9 @@ bool CommandBufferImpl::ResizeSwapChain(uint32_t width, uint32_t height)
         _renderTargetHeight = height;
         return true;
     }
-    ID3D11RenderTargetView* nullRTV = nullptr;
-    _driverImpl->getContext()->OMSetRenderTargets(1, &nullRTV, nullptr);
+
+    if (!_renderTarget)
+        return false;
 
     // 2) Resize swapchain buffers
     UINT flags = 0;
@@ -195,6 +196,9 @@ bool CommandBufferImpl::ResizeSwapChain(uint32_t width, uint32_t height)
     HRESULT hr         = _swapChain->ResizeBuffers(0, width, height, format, flags);
     if (FAILED(hr))
         return false;
+
+    ID3D11RenderTargetView* nullRTV = nullptr;
+    _driverImpl->getContext()->OMSetRenderTargets(1, &nullRTV, nullptr);
 
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
 
@@ -550,6 +554,12 @@ void CommandBufferImpl::prepareDrawing()
             ++i;
         }
     }
+
+    // depth stencil
+    if (_depthStencilState->isEnabled())
+        _depthStencilState->apply(context, _stencilReferenceValue);
+    else
+        _depthStencilState->reset(context);
 }
 
 void CommandBufferImpl::endFrame()

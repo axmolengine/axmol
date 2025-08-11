@@ -103,4 +103,23 @@ void DepthStencilStateImpl::apply(ID3D11DeviceContext* ctx, UINT stencilRef) con
     if (ctx && _state)
         ctx->OMSetDepthStencilState(_state.Get(), stencilRef);
 }
+
+void DepthStencilStateImpl::reset(ID3D11DeviceContext* ctx)
+{
+    if (!_disableState)
+    {
+        D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+        dsDesc.DepthEnable              = FALSE;
+        dsDesc.DepthWriteMask           = D3D11_DEPTH_WRITE_MASK_ZERO;
+        dsDesc.DepthFunc                = D3D11_COMPARISON_ALWAYS;
+
+        dsDesc.StencilEnable = FALSE;
+
+        ID3D11DepthStencilState* pDSStateDisable = nullptr;
+        _device->CreateDepthStencilState(&dsDesc, _disableState.GetAddressOf());
+    }
+
+    if (_disableState)
+        ctx->OMSetDepthStencilState(_disableState.Get(), 0);
+}
 }  // namespace ax::backend::d3d

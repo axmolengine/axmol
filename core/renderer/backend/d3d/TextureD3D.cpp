@@ -39,7 +39,7 @@ static void toD3DSamplerDesc(const SamplerDescriptor& in, D3D11_SAMPLER_DESC& ou
     out.AddressV       = toAddrMode(in.tAddressMode);
     out.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;  // SamplerDescriptor
     out.MipLODBias     = 0.0f;
-    out.MaxAnisotropy  = 1; 
+    out.MaxAnisotropy  = 1;
     out.ComparisonFunc = D3D11_COMPARISON_NEVER;
     out.BorderColor[0] = 0.f;
     out.BorderColor[1] = 0.f;
@@ -85,10 +85,10 @@ static UINT getBindFlags(TextureUsage usage)
 
 static void toD3DTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC& d3dDesc)
 {
-    d3dDesc.Width     = desc.width;
-    d3dDesc.Height    = desc.height;
-    d3dDesc.MipLevels = 1;
-    d3dDesc.ArraySize = 1; 
+    d3dDesc.Width              = desc.width;
+    d3dDesc.Height             = desc.height;
+    d3dDesc.MipLevels          = 1;
+    d3dDesc.ArraySize          = 1;
     d3dDesc.SampleDesc.Count   = 1;
     d3dDesc.SampleDesc.Quality = 0;
     d3dDesc.Usage              = D3D11_USAGE_DEFAULT;
@@ -98,7 +98,7 @@ static void toD3DTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC& d3
     // d3dDesc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
     // d3dDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
-    d3dDesc.CPUAccessFlags = 0; // No CPU Access, if need map, set to 1
+    d3dDesc.CPUAccessFlags = 0;  // No CPU Access, if need map, set to 1
 
     if (desc.textureType == TextureType::TEXTURE_CUBE)
     {
@@ -190,8 +190,8 @@ TextureHandle TextureResource::ensure(int index)
 
 void TextureResource::recreateSampler(const SamplerDescriptor& desc)
 {
-    D3D11_SAMPLER_DESC d3dDesc{};
-    toD3DSamplerDesc(desc, d3dDesc);
+    D3D11_SAMPLER_DESC sd{};
+    toD3DSamplerDesc(desc, sd);
 
     if (_samplerState)
     {
@@ -199,7 +199,7 @@ void TextureResource::recreateSampler(const SamplerDescriptor& desc)
         _samplerState = nullptr;
     }
 
-    HRESULT hr = _device->CreateSamplerState(&d3dDesc, &_samplerState);
+    HRESULT hr = _device->CreateSamplerState(&sd, &_samplerState);
     if (FAILED(hr))
     {
         return;
@@ -209,8 +209,7 @@ void TextureResource::recreateSampler(const SamplerDescriptor& desc)
 // ------------------------------------------------------------
 // ctor / dtor
 // ------------------------------------------------------------
-TextureImpl::TextureImpl(ID3D11Device* device, const TextureDescriptor& descriptor)
-    : _textureRes(device)
+TextureImpl::TextureImpl(ID3D11Device* device, const TextureDescriptor& descriptor) : _textureRes(device)
 {
     updateTextureDescriptor(descriptor);
     // TODO:
@@ -307,8 +306,7 @@ void TextureImpl::updateCompressedData(uint8_t* data,
     AX_ASSERT(index <= _textureRes._maxIdx);
 
     auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
-    context->UpdateSubresource(_textureRes._textures[index].tex2d, static_cast<UINT>(level), nullptr, data, 0,
-                               0);
+    context->UpdateSubresource(_textureRes._textures[index].tex2d, static_cast<UINT>(level), nullptr, data, 0, 0);
 }
 
 void TextureImpl::updateSubData(std::size_t xoffset,
@@ -372,22 +370,21 @@ void TextureImpl::updateFaceData(TextureCubeFace side, void* data, int index)
 
     auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
 
-    auto& texHandle = _textureRes.getTexture(index); 
+    auto& texHandle = _textureRes.getTexture(index);
 
     //-------------------------------------------------------------------
     // 1. compute SubResource： = 6 * (mip-levels)
     //-------------------------------------------------------------------
-    const uint32_t mipLevels  = 0; // texHandle.tex2d->getMipLevels();
-    const uint32_t mipLevel   = 0;
-    const uint32_t arraySlice = static_cast<uint32_t>(side) 
-                                + index * 6;                 
+    const uint32_t mipLevels   = 0;  // texHandle.tex2d->getMipLevels();
+    const uint32_t mipLevel    = 0;
+    const uint32_t arraySlice  = static_cast<uint32_t>(side) + index * 6;
     const uint32_t subresource = ::D3D11CalcSubresource(mipLevel, arraySlice, mipLevels);
 
     //-------------------------------------------------------------------
     // 2. compute RowPitch / SlicePitch
     //-------------------------------------------------------------------
     const uint32_t pixelSize        = PixelFormatUtils::getBitsPerPixel(_textureRes._descriptor.textureFormat) / 8;
-    const uint32_t rowPitchVerified = _textureRes._descriptor.width * pixelSize; 
+    const uint32_t rowPitchVerified = _textureRes._descriptor.width * pixelSize;
     const uint32_t rowPitch =
         PixelFormatUtils::computeRowPitch(_textureFormat, static_cast<uint32_t>(_textureRes._descriptor.width));
     const uint32_t slicePitch = _textureRes._descriptor.height * rowPitch;

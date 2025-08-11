@@ -5,7 +5,7 @@
 
 namespace ax::backend::d3d
 {
-
+using namespace Microsoft::WRL;
 class DepthStencilStateImpl : public DepthStencilState
 {
 public:
@@ -15,10 +15,14 @@ public:
 
     void apply(ID3D11DeviceContext* ctx, UINT stencilRef = 0) const;
 
+    void reset(ID3D11DeviceContext* ctx);
+
     ID3D11DepthStencilState* internalHandle() const { return _state.Get(); }
 
 private:
     ID3D11Device* _device = nullptr;  // weak ref
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilState> _state;
+    ComPtr<ID3D11DepthStencilState> _state;
+
+    ComPtr<ID3D11DepthStencilState> _disableState;
 };
 }  // namespace ax::backend::d3d

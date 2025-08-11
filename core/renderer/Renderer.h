@@ -419,6 +419,8 @@ public:
 
     CallbackCommand* nextCallbackCommand();
 
+    void resizeSwapChain(uint32_t width, uint32_t height);
+
 protected:
     friend class Director;
     friend class GroupCommand;

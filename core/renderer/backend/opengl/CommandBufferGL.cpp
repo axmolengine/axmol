@@ -319,7 +319,7 @@ void CommandBufferGL::prepareDrawing() const
 
     // Set depth/stencil state.
     if (_depthStencilStateGL->isEnabled())
-        _depthStencilStateGL->apply(_stencilReferenceValueFront, _stencilReferenceValueBack);
+        _depthStencilStateGL->apply(_stencilReferenceValue);
     else
         DepthStencilStateGL::reset();
 

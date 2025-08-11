@@ -98,11 +98,14 @@ static uint64_t hashBlendDesc(const BlendDescriptor& bd)
     return XXH64(&pod, sizeof(pod), 0);
 }
 
+static bool debugPremultipliedAlpha = true;  // 调试开关
+
 void RenderPipelineImpl::update(const RenderTarget*, const PipelineDescriptor& desc)
 {
+    ComPtr<ID3D11BlendState> blendState;
+
     uint64_t key = hashBlendDesc(desc.blendDescriptor);
     auto it      = _blendCache.find(key);
-    ComPtr<ID3D11BlendState> blendState;
 
     if (it != _blendCache.end())
     {
@@ -111,15 +114,24 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDescriptor& d
     else
     {
         D3D11_BLEND_DESC bd{};
-        bd.AlphaToCoverageEnable  = FALSE;
-        bd.IndependentBlendEnable = FALSE;
+        // bd.AlphaToCoverageEnable  = TRUE;
+        // bd.IndependentBlendEnable = FALSE;
 
-        auto& bd0 = bd.RenderTarget[0];
+        auto& bd0                 = bd.RenderTarget[0];
         bd0.RenderTargetWriteMask = toD3DColorWriteMask(desc.blendDescriptor.writeMask);
 
         if (desc.blendDescriptor.blendEnabled)
         {
             bd0.BlendEnable    = TRUE;
+            bd0.SrcBlend       = toD3DBlend(desc.blendDescriptor.sourceRGBBlendFactor);
+            bd0.DestBlend      = toD3DBlend(desc.blendDescriptor.destinationRGBBlendFactor);
+            bd0.BlendOp        = toD3DBlendOp(desc.blendDescriptor.rgbBlendOperation);
+            bd0.SrcBlendAlpha  = toD3DBlend(desc.blendDescriptor.sourceAlphaBlendFactor);
+            bd0.DestBlendAlpha = toD3DBlend(desc.blendDescriptor.destinationAlphaBlendFactor);
+            bd0.BlendOpAlpha   = toD3DBlendOp(desc.blendDescriptor.alphaBlendOperation);
+
+            bd0.BlendEnable = TRUE;
+
             bd0.SrcBlend       = toD3DBlend(desc.blendDescriptor.sourceRGBBlendFactor);
             bd0.DestBlend      = toD3DBlend(desc.blendDescriptor.destinationRGBBlendFactor);
             bd0.BlendOp        = toD3DBlendOp(desc.blendDescriptor.rgbBlendOperation);
@@ -147,13 +159,17 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDescriptor& d
     if (!blendState)
         return;
 
+    constexpr UINT sampleMask = 0xFFFFFFFF;
+
     if (desc.blendDescriptor.blendEnabled)
     {
-        FLOAT blendFactor[4] = {0.f, 0.f, 0.f, 0.f};
-        _context->OMSetBlendState(blendState.Get(), blendFactor, 0xFFFFFFFF);
+        // axmol don't call glBlendColor, so the default blendFactor shoud be transparent
+        const FLOAT blendColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+        _context->OMSetBlendState(blendState.Get(), blendColor, sampleMask);
     }
-    else {
-        _context->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFF);
+    else
+    {
+        _context->OMSetBlendState(nullptr, nullptr, sampleMask);
     }
 }
 }  // namespace ax::backend::d3d
