@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -1334,7 +1335,7 @@ std::string LabelTTFDistanceField::subtitle() const
 LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
 {
     auto size = Director::getInstance()->getWinSize();
-    
+
     FontFreeType::setShareDistanceFieldEnabled(false);
     auto button = ax::ui::Button::create();
     button->setTitleText("Should be the same size");
@@ -1382,85 +1383,102 @@ std::string LabelTitleButtonTTFDistanceField::subtitle() const
 LabelTTFSDF::LabelTTFSDF()
 {
     auto size = Director::getInstance()->getWinSize();
-    
+
     FontFreeType::setShareDistanceFieldEnabled(false);
     Label* title = Label::createWithTTF("Normal", "fonts/Marker Felt.ttf", 20);
     this->addChild(title);
-    title->setPosition(Vec2(size.width*3/4, size.height*0.75));
-    _labelNormal = Label::createWithTTF("Should be the same", "fonts/Marker Felt.ttf", 20);;
+    title->setPosition(Vec2(size.width * 3 / 4, size.height * 0.75));
+    _labelNormal = Label::createWithTTF("Should be the same", "fonts/Marker Felt.ttf", 20);
     this->addChild(_labelNormal);
-    _labelNormal->setPosition(Vec2(size.width*3/4, size.height*0.65));
-    
+    _labelNormal->setPosition(Vec2(size.width * 3 / 4, size.height * 0.65));
+
     FontFreeType::setShareDistanceFieldEnabled(true);
     title = Label::createWithTTF("SDF", "fonts/Marker Felt.ttf", 20);
     this->addChild(title);
-    title->setPosition(Vec2(size.width/4, size.height*0.75));
-    _labelSDF= Label::createWithTTF("Should be the same", "fonts/Marker Felt.ttf", 20);
+    title->setPosition(Vec2(size.width / 4, size.height * 0.75));
+    _labelSDF = Label::createWithTTF("Should be the same", "fonts/Marker Felt.ttf", 20);
     this->addChild(_labelSDF);
-    _labelSDF->setPosition(Vec2(size.width/4, size.height*0.65));
-    auto config = _labelSDF->getTTFConfig();
+    _labelSDF->setPosition(Vec2(size.width / 4, size.height * 0.65));
+    auto config                 = _labelSDF->getTTFConfig();
     config.distanceFieldEnabled = true;
     _labelSDF->setTTFConfig(config);
-    
-    initToggleLabel("enableItalics", Vec2(size.width*0.15, size.height*0.25), [=, this](Object*obj, ax::ui::CheckBox::EventType type){
-        if(type == ax::ui::CheckBox::EventType::SELECTED){
+
+    initToggleLabel("enableItalics", Vec2(size.width * 0.15, size.height * 0.25),
+                    [=, this](Object* obj, ax::ui::CheckBox::EventType type) {
+        if (type == ax::ui::CheckBox::EventType::SELECTED)
+        {
             _labelSDF->enableItalics();
             _labelNormal->enableItalics();
-        }else{
+        }
+        else
+        {
             _labelSDF->disableEffect(ax::LabelEffect::ITALICS);
             _labelNormal->disableEffect(ax::LabelEffect::ITALICS);
         }
     });
-    initToggleLabel("enableShadow", Vec2(size.width*0.15, size.height*0.35), [=, this](Object*obj, ax::ui::CheckBox::EventType type){
-        if(type == ax::ui::CheckBox::EventType::SELECTED){
-            _labelSDF->enableShadow(Color4B::YELLOW,Vec2(-1,-1));
-            _labelNormal->enableShadow(Color4B::YELLOW,Vec2(-1,-1));
-        }else{
+    initToggleLabel("enableShadow", Vec2(size.width * 0.15, size.height * 0.35),
+                    [=, this](Object* obj, ax::ui::CheckBox::EventType type) {
+        if (type == ax::ui::CheckBox::EventType::SELECTED)
+        {
+            _labelSDF->enableShadow(Color4B::YELLOW, Vec2(-1, -1));
+            _labelNormal->enableShadow(Color4B::YELLOW, Vec2(-1, -1));
+        }
+        else
+        {
             _labelSDF->disableEffect(ax::LabelEffect::SHADOW);
             _labelNormal->disableEffect(ax::LabelEffect::SHADOW);
         }
     });
-    initToggleLabel("enableBold", Vec2(size.width*0.15, size.height*0.45), [=, this](Object*obj, ax::ui::CheckBox::EventType type){
-        if(type == ax::ui::CheckBox::EventType::SELECTED){
+    initToggleLabel("enableBold", Vec2(size.width * 0.15, size.height * 0.45),
+                    [=, this](Object* obj, ax::ui::CheckBox::EventType type) {
+        if (type == ax::ui::CheckBox::EventType::SELECTED)
+        {
             _labelSDF->enableBold();
             _labelNormal->enableBold();
-        }else{
+        }
+        else
+        {
             _labelSDF->disableEffect(ax::LabelEffect::BOLD);
             _labelNormal->disableEffect(ax::LabelEffect::BOLD);
         }
     });
-    
-    initSlider("Size", Vec2(size.width*0.5, size.height*0.20), [=, this](Object*obj, ax::ui::Slider::EventType type){
-        Slider* slider  = (Slider*)obj;
-        float size = 20 + slider->getPercent()/5.f;
+
+    initSlider("Size", Vec2(size.width * 0.5, size.height * 0.20),
+               [=, this](Object* obj, ax::ui::Slider::EventType type) {
+        Slider* slider   = (Slider*)obj;
+        float size       = 20 + slider->getPercent() / 5.f;
         TTFConfig config = _labelSDF->getTTFConfig();
         config.fontSize  = size;
         _labelSDF->setTTFConfig(config);
-        config = _labelNormal->getTTFConfig();
-        config.fontSize  = size;
+        config          = _labelNormal->getTTFConfig();
+        config.fontSize = size;
         _labelNormal->setTTFConfig(config);
-        
     });
-    initSlider("Scale", Vec2(size.width*0.5, size.height*0.25), [=, this](Object*obj, ax::ui::Slider::EventType type){
-        Slider* slider  = (Slider*)obj;
-        float scale = 1 + slider->getPercent()/50.f;
+    initSlider("Scale", Vec2(size.width * 0.5, size.height * 0.25),
+               [=, this](Object* obj, ax::ui::Slider::EventType type) {
+        Slider* slider = (Slider*)obj;
+        float scale    = 1 + slider->getPercent() / 50.f;
         _labelSDF->setScale(scale);
         _labelNormal->setScale(scale);
     });
-    _sliderOutline = initSlider("Outline", Vec2(size.width*0.5, size.height*0.30),[=, this](Object*obj, ui::Slider::EventType type){
-        Slider* slider  = (Slider*)obj;
-        float size = 1 + slider->getPercent()/10;
-        if(!slider->isEnabled()) return;
-        _labelSDF->enableOutline(Color4B::GREEN,size);
-        _labelNormal->enableOutline(Color4B::GREEN,size);
-        
+    _sliderOutline = initSlider("Outline", Vec2(size.width * 0.5, size.height * 0.30),
+                                [=, this](Object* obj, ui::Slider::EventType type) {
+        Slider* slider = (Slider*)obj;
+        float size     = 1 + slider->getPercent() / 10;
+        if (!slider->isEnabled())
+            return;
+        _labelSDF->enableOutline(Color4B::GREEN, size);
+        _labelNormal->enableOutline(Color4B::GREEN, size);
     });
     initToggleCheckboxes();
     _sliderOutline->setEnabled(false);
     _sliderOutline->setOpacity(100);
 }
-ui::Slider* LabelTTFSDF::initSlider(std::string content,Vec2 pos,std::function<void(Object*, ui::Slider::EventType)> callback){
-    
+ui::Slider* LabelTTFSDF::initSlider(std::string content,
+                                    Vec2 pos,
+                                    std::function<void(Object*, ui::Slider::EventType)> callback)
+{
+
     auto slider2 = ui::Slider::create();
     slider2->setTag(2);
     slider2->setTouchEnabled(true);
@@ -1472,19 +1490,19 @@ ui::Slider* LabelTTFSDF::initSlider(std::string content,Vec2 pos,std::function<v
     slider2->setScale(0.6);
     slider2->addEventListener(callback);
     addChild(slider2, 999);
-    
-    auto label = Label::createWithSystemFont(content +": ","Arial",10);
+
+    auto label = Label::createWithSystemFont(content + ": ", "Arial", 10);
     label->setColor(Color3B::WHITE);
-    label->setPosition(pos - Vec2(slider2->getContentSize().width*0.3,0));
-    label->setAnchorPoint(Vec2(1,0.5));
+    label->setPosition(pos - Vec2(slider2->getContentSize().width * 0.3, 0));
+    label->setAnchorPoint(Vec2(1, 0.5));
     this->addChild(label);
-    
+
     return slider2;
 }
 void LabelTTFSDF::initToggleCheckboxes()
 {
-    float startPosY          = 0;
-    Size winSize             = Director::getInstance()->getVisibleSize();
+    float startPosY = 0;
+    Size winSize    = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();
@@ -1492,15 +1510,15 @@ void LabelTTFSDF::initToggleCheckboxes()
 
     // Create the radio buttons
     static const int NUMBER_OF_BUTTONS  = 3;
-    startPosY = winSize.height*0.25;
+    startPosY                           = winSize.height * 0.25;
     std::vector<std::string> labelTypes = {"Normal", "Glow", "OutLine"};
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
     {
 
         RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
-        float posY               = startPosY + (radioButton->getContentSize().height +5) * i;
-        radioButton->setPosition(Vec2(winSize.width*0.8, posY));
+        float posY               = startPosY + (radioButton->getContentSize().height + 5) * i;
+        radioButton->setPosition(Vec2(winSize.width * 0.8, posY));
         radioButton->addEventListener(AX_CALLBACK_2(LabelTTFSDF::onChangedRadioButtonSelect, this));
         radioButton->setTag(i);
         radioButtonGroup->addRadioButton(radioButton);
@@ -1508,16 +1526,17 @@ void LabelTTFSDF::initToggleCheckboxes()
 
         auto label = Label::createWithSystemFont(labelTypes.at(i), "Arial", 15);
         label->setPosition(radioButton->getPosition() + Vec2(radioButton->getContentSize().width + 1, 0.0f));
-        label->setAnchorPoint(Vec2(0,0.5));
+        label->setAnchorPoint(Vec2(0, 0.5));
         this->addChild(label);
     }
 }
-void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButton::EventType type){
+void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButton::EventType type)
+{
     if (radioButton == nullptr)
     {
         return;
     }
-    
+
     if (type != RadioButton::EventType::SELECTED)
         return;
     _labelNormal->disableEffect(LabelEffect::OUTLINE);
@@ -1529,29 +1548,30 @@ void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButt
     _sliderOutline->setPercent(0);
     switch (radioButton->getTag())
     {
-        case 0:
-            break;
-        case 1:
-            _labelNormal->enableGlow(Color4B::RED);
-            _labelSDF->enableGlow(Color4B::RED);
-            break;
-        case 2:
-            _labelSDF->enableOutline(Color4B::GREEN,1);
-            _labelNormal->enableOutline(Color4B::GREEN,1);
-            _sliderOutline->setEnabled(true);
-            _sliderOutline->setOpacity(255);
-            break;
-        default:
-            break;
+    case 0:
+        break;
+    case 1:
+        _labelNormal->enableGlow(Color4B::RED);
+        _labelSDF->enableGlow(Color4B::RED);
+        break;
+    case 2:
+        _labelSDF->enableOutline(Color4B::GREEN, 1);
+        _labelNormal->enableOutline(Color4B::GREEN, 1);
+        _sliderOutline->setEnabled(true);
+        _sliderOutline->setOpacity(255);
+        break;
+    default:
+        break;
     }
-    
 }
-void LabelTTFSDF::initToggleLabel(std::string content, ax::Vec2 pos, std::function<void(Object*, ax::ui::CheckBox::EventType)> callback)
+void LabelTTFSDF::initToggleLabel(std::string content,
+                                  ax::Vec2 pos,
+                                  std::function<void(Object*, ax::ui::CheckBox::EventType)> callback)
 {
     auto label = Label::createWithSystemFont(content + ":", "Arial", 10);
     label->setColor(Color3B::WHITE);
     label->setPosition(pos);
-    label->setAnchorPoint(Vec2(1,0.5));
+    label->setAnchorPoint(Vec2(1, 0.5));
     this->addChild(label);
 
     CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
@@ -1562,7 +1582,7 @@ void LabelTTFSDF::initToggleLabel(std::string content, ax::Vec2 pos, std::functi
     checkBox->setName("toggleType");
     checkBox->setSelected(true);
     checkBox->addEventListener(callback);
-    checkBox->setAnchorPoint(Vec2(0,0.5));
+    checkBox->setAnchorPoint(Vec2(0, 0.5));
     checkBox->setSelected(false);
     this->addChild(checkBox);
 }

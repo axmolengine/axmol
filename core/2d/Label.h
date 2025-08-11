@@ -765,7 +765,7 @@ protected:
 
     void clearTextures();
 
-    virtual void setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled = false, bool useA8Shader = false);
+    virtual bool setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled = false, bool useA8Shader = false);
     bool getFontLetterDef(char32_t character, FontLetterDefinition& letterDef) const;
 
     void computeStringNumLines();
@@ -805,7 +805,7 @@ protected:
 #endif
     void scaleFontSize(float fontSize);
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
-    bool updateTTFConfigInternal();
+    bool updateTTFConfigInternal(unsigned int mods = 0);
     void setBMFontSizeInternal(float fontSize);
     bool isLetterHorizontallyClamped(float letterPositionX, float letterWidth, int lineIndex, float offsetX);
     void restoreFontSize();

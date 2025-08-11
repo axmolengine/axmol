@@ -778,7 +778,7 @@ void Label::updateUniformLocations()
     _effectTypeLocation  = _programState->getUniformLocation(backend::Uniform::EFFECT_TYPE);
 }
 
-void Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
+bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
 {
     if (atlas)
     {
@@ -786,7 +786,7 @@ void Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false 
     }
 
     if (atlas == _fontAtlas)
-        return;
+        return false;
 
     AX_SAFE_RETAIN(atlas);
     if (_fontAtlas)
@@ -818,6 +818,8 @@ void Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false 
         _currLabelEffect = LabelEffect::NORMAL;
         updateShaderProgram();
     }
+
+    return true;
 }
 
 bool Label::setTTFConfig(const TTFConfig& ttfConfig)
@@ -1280,11 +1282,14 @@ bool Label::updateQuads()
 
 bool Label::setTTFConfigInternal(const TTFConfig& ttfConfig)
 {
+    unsigned int mods = 0;
+    mods |= (ttfConfig.fontSize != _fontConfig.fontSize);
+    mods |= (ttfConfig.outlineSize != _fontConfig.outlineSize);
     _fontConfig = ttfConfig;
-    return updateTTFConfigInternal();
+    return updateTTFConfigInternal(mods);
 }
 
-bool Label::updateTTFConfigInternal()
+bool Label::updateTTFConfigInternal(unsigned int mods)
 {
     FontAtlas* newAtlas = FontAtlasCache::getFontAtlasTTF(&_fontConfig);
 
@@ -1293,9 +1298,17 @@ bool Label::updateTTFConfigInternal()
         reset();
         return false;
     }
-    _contentDirty     = true;
+
     _currentLabelType = LabelType::TTF;
-    setFontAtlas(newAtlas, _fontConfig.distanceFieldEnabled, true);
+    bool atlasUpdated = setFontAtlas(newAtlas, _fontConfig.distanceFieldEnabled, true);
+
+    /*
+     * In distance field text rendering, different font sizes share the same `fontAtlas`, so we need to additionally
+     * check if `fontSize` has changed in order to set `contentDirty`. The same applies to `outlineSize`. See
+     * `FontAtlasCache` for details.
+     */
+    if (!atlasUpdated && mods && _fontConfig.distanceFieldEnabled)
+        _contentDirty = true;
 
     if (_fontConfig.outlineSize > 0)
     {
@@ -1305,7 +1318,8 @@ bool Label::updateTTFConfigInternal()
     }
     else
     {
-        if(_currLabelEffect != LabelEffect::GLOW){
+        if (_currLabelEffect != LabelEffect::GLOW)
+        {
             _currLabelEffect = LabelEffect::NORMAL;
             updateShaderProgram();
         }
@@ -1379,6 +1393,7 @@ void Label::enableGlow(const Color4B& glowColor)
             config.outlineSize = 0;
             ++mods;
         }
+        // Note: axmol only support Glow effect in SDF rendering mode
         if (!_fontConfig.distanceFieldEnabled)
         {
             config.distanceFieldEnabled = true;
