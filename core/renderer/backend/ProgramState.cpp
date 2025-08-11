@@ -157,9 +157,7 @@ bool ProgramState::init(Program* program)
     _program = program;
 
     _vertexLayout             = program->getVertexLayout();
-    _vertexLayoutInstanced    = program->getVertexLayout(true);
     _ownVertexLayout          = false;
-    _ownVertexLayoutInstanced = false;
     _vertexUniformBufferSize  = _program->getUniformBufferSize(ShaderStage::VERTEX);
 
 #if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
@@ -221,9 +219,6 @@ ProgramState::~ProgramState()
 
     if (_ownVertexLayout)
         AX_SAFE_DELETE(_vertexLayout);
-
-    if (_ownVertexLayoutInstanced)
-        AX_SAFE_DELETE(_vertexLayoutInstanced);
 }
 
 ProgramState* ProgramState::clone() const
@@ -235,9 +230,6 @@ ProgramState* ProgramState::clone() const
 
     cp->_ownVertexLayout = _ownVertexLayout;
     cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : _vertexLayout->clone(); // OPTIMIZE ME: make VertexLayout inherit from ax::Object, and just retain
-
-    cp->_ownVertexLayoutInstanced = _ownVertexLayout;
-    cp->_vertexLayoutInstanced    = !_ownVertexLayout ? _vertexLayoutInstanced : _vertexLayoutInstanced->clone();
 
     cp->_batchId = this->_batchId;
     cp->_isBatchable = this->_isBatchable;
@@ -303,31 +295,25 @@ void ProgramState::ensureVertexLayoutMutable()
 {
     if (!_ownVertexLayout)
     {
-        _vertexLayout    = DriverBase::getInstance()->createVertexLayout();
+        if(_vertexLayout)
+            _vertexLayout = _vertexLayout->clone();
+        else
+            _vertexLayout    = DriverBase::getInstance()->createVertexLayout();
         _ownVertexLayout = true;
     }
 }
 
-VertexLayout* ProgramState::getMutableVertexLayout(bool instanced)
+VertexLayout* ProgramState::getMutableVertexLayout()
 {
     auto driver = DriverBase::getInstance();
 
-    if (!instanced)
-    {
-        if (_ownVertexLayout || !_vertexLayout->isValid())
-            return _vertexLayout;
+    if (_ownVertexLayout || !_vertexLayout->isValid())
+        return _vertexLayout;
 
-        _ownVertexLayout     = true;
-        return _vertexLayout = driver->createVertexLayout();
-    }
-    else
-    {
-        if (_ownVertexLayoutInstanced || !_vertexLayoutInstanced->isValid())
-            return _vertexLayoutInstanced;
-
-        _ownVertexLayoutInstanced = true;
-        return _vertexLayoutInstanced = driver->createVertexLayout();
-    }
+    assert(_vertexLayout);
+    _vertexLayout        = _vertexLayout->clone();
+    _ownVertexLayout     = true;
+    return _vertexLayout;
 }
 
 void ProgramState::setSharedVertexLayout(VertexLayout* vertexLayout)

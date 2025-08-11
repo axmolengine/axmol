@@ -167,7 +167,7 @@ public:
      */
     virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const = 0;
 
-    inline VertexLayout* getVertexLayout(bool instanced = false) const { return !instanced ? _vertexLayout[0] : _vertexLayout[1]; }
+    inline VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
 protected:
 
@@ -211,7 +211,7 @@ protected:
 
     std::string _vsSource;                            ///< Vertex shader.
     std::string _fsSource;                          ///< Fragment shader.
-    VertexLayout* _vertexLayout[2] = {};
+    VertexLayout* _vertexLayout{nullptr};
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
     uint64_t _programId   = 0;
 

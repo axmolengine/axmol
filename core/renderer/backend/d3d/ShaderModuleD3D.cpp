@@ -6,7 +6,7 @@
 #include "axslcc/sgs-spec.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
-//#pragma comment(lib, "dxguid.lib")
+// #pragma comment(lib, "dxguid.lib")
 
 namespace ax::backend::d3d
 {
@@ -256,6 +256,9 @@ void ShaderModuleImpl::setBuiltinLocations()
     // a_normal
     _builtinVertexInputs[VertexInputSemantic::NORMAL] = getVertexInputDesc(ATTRIBUTE_NAME_NORMAL);
 
+    // a_instance
+    _builtinVertexInputs[VertexInputSemantic::INSTANCE] = getVertexInputDesc(ATTRIBUTE_NAME_INSTANCE);
+
     /*--- Builtin Uniforms ---*/
 
     /// u_MVPMatrix
@@ -290,10 +293,10 @@ void ShaderModuleImpl::parseAttibute(SLCReflectContext* context)
         auto format               = ibs->read<uint32_t>();
 
         VertexInputDesc desc;
-        desc.location      = loc;
-        desc.semantic      = semantic;
-        desc.semanticIndex = semantic_index;
-        desc.format        = format;
+        // desc.location = loc;
+        desc.semantic = semantic;
+        desc.location = semantic_index;
+        desc.format   = format;
         // desc.count =
         _allVertexInputs.emplace(name, desc);
     }

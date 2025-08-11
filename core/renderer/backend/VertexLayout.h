@@ -49,29 +49,36 @@ class AX_DLL VertexLayout
     friend class DriverBase;
 
 protected:
-    VertexLayout() = default;
-    VertexLayout(const VertexLayout&) = default;
+    VertexLayout()                    = default;
+    VertexLayout(const VertexLayout& rhs) = default;
 
 public:
     struct InputBindingDesc
     {
         InputBindingDesc() = default;
         InputBindingDesc(std::string_view _name,
-                     int _index,
-                     VertexFormat _format,
-                     std::size_t _offset,
-                     bool needToBeNormallized)
-            : name(_name), format(_format), offset(_offset), index(_index), needToBeNormallized(needToBeNormallized)
+                         int _index,
+                         VertexFormat _format,
+                         std::size_t _offset,
+                         bool needToBeNormallized,
+                         uint8_t instanceStepRate)
+            : name(_name)
+            , format(_format)
+            , offset(_offset)
+            , index(_index)
+            , needToBeNormallized(needToBeNormallized)
+            , instanceStepRate(instanceStepRate)
         {}
 
         std::string name;  ///< name is used in opengl
         VertexFormat format      = VertexFormat::INT3;
-        std::size_t offset       = 0;
+        unsigned int offset      = 0;
         int index                = 0;  ///< index is used in metal
         bool needToBeNormallized = false;
+        uint8_t instanceStepRate = 0;
     };
 
-    virtual ~VertexLayout()           = default;
+    virtual ~VertexLayout() = default;
 
     /**
      * Set attribute values to name.
@@ -83,21 +90,42 @@ public:
      * directly as fixed-point values (false) when they are accessed.
      */
     void setAttrib(std::string_view name,
-                  const VertexInputDesc* desc,
-                  VertexFormat format,
-                  std::size_t offset,
-                  bool needNormalized);
+                   const VertexInputDesc* desc,
+                   VertexFormat format,
+                   std::size_t offset,
+                   bool needNormalized,
+                   uint8_t instanceStepRate = 0);
     /**
      * Set stride of vertices.
      * @param stride Specifies the distance between the data of two vertices, in bytes.
      */
-    void setStride(std::size_t stride);
+    inline void setStride(std::size_t stride) { _strides[0] = stride; }
 
     /**
      * Get the distance between the data of two vertices, in bytes.
      * @return The distance between the data of two vertices, in bytes.
      */
-    inline std::size_t getStride() const { return _stride; }
+    inline std::size_t getStride() const { return _strides[0]; }
+
+    /**
+     * Set stride of vertices.
+     * @param stride Specifies the distance between the data of two vertices, in bytes.
+     */
+    inline void setInstanceStride(std::size_t stride) { _strides[1] = stride; }
+
+    /**
+     * Get the distance between the data of two vertices, in bytes.
+     * @return The distance between the data of two vertices, in bytes.
+     */
+    inline std::size_t getInstanceStride() const { return _strides[1]; }
+
+    /**
+     * Get attribute informations
+     * @return Atrribute informations.
+     */
+    inline const hlookup::string_map<InputBindingDesc>& getBindings() const { return _bindings; }
+
+    inline const hlookup::string_map<InputBindingDesc>& getInstanceBindings() const { return _instanceBindings; }
 
     /**
      * Get vertex step function. Default value is VERTEX.
@@ -107,21 +135,16 @@ public:
     inline VertexStepMode getVertexStepMode() const { return _stepMode; }
 
     /**
-     * Get attribute informations
-     * @return Atrribute informations.
-     */
-    inline const hlookup::string_map<InputBindingDesc>& getAllInputs() const { return _inputs; }
-
-    /**
      * Check if vertex layout has been set.
      */
-    inline bool isValid() const { return _stride != 0; }
+    inline bool isValid() const { return _strides[0] != 0; }
 
     virtual VertexLayout* clone() { return new VertexLayout(*this); }
 
 protected:
-    hlookup::string_map<InputBindingDesc> _inputs;
-    std::size_t _stride      = 0;
+    hlookup::string_map<InputBindingDesc> _bindings;
+    hlookup::string_map<InputBindingDesc> _instanceBindings;
+    uint32_t _strides[2]     = {}; // 0: normal verts, 1: instance verts
     VertexStepMode _stepMode = VertexStepMode::VERTEX;
 };
 

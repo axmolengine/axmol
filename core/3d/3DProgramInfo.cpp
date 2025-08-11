@@ -102,9 +102,9 @@ const std::vector<std::pair<const char*, VertexKey>>& getPredefinedAttributes()
     return locations;
 }
 
-const std::string getAttributeName(const VertexKey& key)
+const std::string_view getAttributeName(const VertexKey& key)
 {
-    static std::string s_attributeNames[] = {
+    static std::string_view s_attributeNames[] = {
         shaderinfos::attribute::ATTRIBUTE_NAME_POSITION,    shaderinfos::attribute::ATTRIBUTE_NAME_COLOR,
         shaderinfos::attribute::ATTRIBUTE_NAME_TEX_COORD,   shaderinfos::attribute::ATTRIBUTE_NAME_TEX_COORD1,
         shaderinfos::attribute::ATTRIBUTE_NAME_TEX_COORD2,  shaderinfos::attribute::ATTRIBUTE_NAME_TEX_COORD3,

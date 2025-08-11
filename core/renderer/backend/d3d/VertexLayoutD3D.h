@@ -16,6 +16,6 @@ public:
 
 private:
 
-    mutable ID3D11InputLayout* _inputLayout{nullptr};
+    mutable ID3D11InputLayout* _d3dVL{nullptr};
 };
 }  // namespace ax::backend::d3d

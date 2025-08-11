@@ -167,11 +167,11 @@ struct VertexLayoutHelper
 
     static void defineInstanced(Program* program)
     {
-        auto vertexLayout = program->getVertexLayout(true);
+        auto vertexLayout = program->getVertexLayout();
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_INSTANCE,
                                 program->getVertexInputDesc(backend::VertexInputSemantic::INSTANCE),
-                                backend::VertexFormat::MAT4, 0, false);
-        vertexLayout->setStride(sizeof(Mat4));
+                                backend::VertexFormat::MAT4, 0, false, 1);
+        vertexLayout->setInstanceStride(sizeof(Mat4));
     }
 };
 std::function<void(Program*)> Program::s_vertexLayoutDefineList[static_cast<int>(VertexLayoutType::Count)] = {
@@ -183,14 +183,12 @@ std::function<void(Program*)> Program::s_vertexLayoutDefineList[static_cast<int>
 Program::Program(std::string_view vs, std::string_view fs) : _vsSource(vs), _fsSource(fs)
 {
     auto driver = DriverBase::getInstance();
-    _vertexLayout[0] = driver->createVertexLayout();
-    _vertexLayout[1] = driver->createVertexLayout();  // instanced draw
+    _vertexLayout = driver->createVertexLayout();
 }
 
 Program::~Program()
 {
-    delete _vertexLayout[0];
-    delete _vertexLayout[1];
+    delete _vertexLayout;
 }
 
 void Program::defineVertexLayout(VertexLayoutType vlt)

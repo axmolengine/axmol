@@ -27,13 +27,15 @@
 #include "base/Macros.h"
 #include <cassert>
 
-namespace ax::backend {
+namespace ax::backend
+{
 
 void VertexLayout::setAttrib(std::string_view name,
-                                const VertexInputDesc* desc,
-                                VertexFormat format,
-                                std::size_t offset,
-                                bool needToBeNormallized)
+                             const VertexInputDesc* desc,
+                             VertexFormat format,
+                             std::size_t offset,
+                             bool needToBeNormallized,
+                             uint8_t instanceStepRate)
 {
     if (!desc)
     {
@@ -41,25 +43,14 @@ void VertexLayout::setAttrib(std::string_view name,
         return;
     }
 
-    // FIXME 2021/12/25 TODO: store name key is enough
-#if AX_RENDER_API == AX_RENDER_API_D3D
-    hlookup::set_item(
-        _inputs, name,
-        InputBindingDesc{
-            desc->semantic, desc->semanticIndex, format, offset,
-                     needToBeNormallized});  // _attributes[name] = {name, index, format, offset, needToBeNormallized};
-#else
-    hlookup::set_item(
-        _inputs, name,
-        InputBindingDesc{
-            desc->semantic, desc->location, format, offset,
-                  needToBeNormallized});  // _attributes[name] = {name, index, format, offset, needToBeNormallized};
-#endif
+    if (!instanceStepRate)
+        hlookup::set_item(
+            _bindings, name,
+            InputBindingDesc{desc->semantic, desc->location, format, offset, needToBeNormallized, instanceStepRate});
+    else
+        hlookup::set_item(
+            _instanceBindings, name,
+            InputBindingDesc{desc->semantic, desc->location, format, offset, needToBeNormallized, instanceStepRate});
 }
 
-void VertexLayout::setStride(std::size_t stride)
-{
-    _stride = stride;
-}
-
-}
+}  // namespace ax::backend

@@ -44,8 +44,11 @@ struct TextureResource
     void foreachTextures(const _Fty& cb)
     {
         int idx = 0;
-        for (auto&& h = _textures[idx]; h ; ++idx)
-            cb(h, idx);
+        while (_textures[idx])
+        {
+            auto& h = _textures[idx];
+            cb(h, idx++);
+        }
     }
 
     TextureHandle ensure(int index);

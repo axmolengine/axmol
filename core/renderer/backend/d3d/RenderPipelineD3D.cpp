@@ -98,8 +98,6 @@ static uint64_t hashBlendDesc(const BlendDescriptor& bd)
     return XXH64(&pod, sizeof(pod), 0);
 }
 
-static bool debugPremultipliedAlpha = true;  // 调试开关
-
 void RenderPipelineImpl::update(const RenderTarget*, const PipelineDescriptor& desc)
 {
     ComPtr<ID3D11BlendState> blendState;
@@ -114,8 +112,6 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDescriptor& d
     else
     {
         D3D11_BLEND_DESC bd{};
-        // bd.AlphaToCoverageEnable  = TRUE;
-        // bd.IndependentBlendEnable = FALSE;
 
         auto& bd0                 = bd.RenderTarget[0];
         bd0.RenderTargetWriteMask = toD3DColorWriteMask(desc.blendDescriptor.writeMask);

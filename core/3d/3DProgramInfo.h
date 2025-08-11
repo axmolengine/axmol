@@ -276,7 +276,7 @@ end of Built Attribute names
 }  // namespace attribute
 
 const std::vector<std::pair<const char*, VertexKey>>& getPredefinedAttributes();
-const std::string getAttributeName(const VertexKey& key);
+const std::string_view getAttributeName(const VertexKey& key);
 };  // namespace shaderinfos
 
 }

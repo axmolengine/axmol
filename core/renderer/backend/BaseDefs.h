@@ -479,11 +479,9 @@ struct UniformLocation
 struct VertexInputDesc
 {
     std::string semantic;
-    int semanticIndex{0};
-    int location = -1;
+    int location = -1; // gl: location, d3d: semantic_index, metal: index
     int count    = 0;
     int format   = 0;
-    bool perInstance{false};
 };
 
 /// built-in uniform name

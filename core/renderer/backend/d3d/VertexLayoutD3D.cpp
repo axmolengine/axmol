@@ -45,61 +45,69 @@ static DXGI_FORMAT toDXGIFormat(VertexFormat format, bool unorm)
 
 VertexLayoutImpl::~VertexLayoutImpl()
 {
-    SafeRelease(_inputLayout);
+    SafeRelease(_d3dVL);
 }
 
 void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) const
 {
-    if (!_inputLayout)
+    if (!_d3dVL)
     {
         auto progImpl = static_cast<ProgramImpl*>(program);
         auto device   = static_cast<DriverImpl*>(DriverBase::getInstance())->getDevice();
 
         axstd::pod_vector<D3D11_INPUT_ELEMENT_DESC> inputElements;
-        inputElements.reserve(_inputs.size());
+        inputElements.reserve(_bindings.size() + _instanceBindings.size());
 
-        for (auto& [_, inputDesc] : _inputs)
-        {
+        auto appendElement = [&inputElements](const InputBindingDesc& inputDesc) {
+            const auto inputSlot = inputDesc.instanceStepRate ? 1 : 0;
+            const auto inputSlotClass =
+                inputDesc.instanceStepRate ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
             if (inputDesc.format != VertexFormat::MAT4)
             {
                 D3D11_INPUT_ELEMENT_DESC desc{};
 
-                desc.SemanticName          = inputDesc.name.c_str();  // attributeInfo.semanticName.c_str();
-                desc.SemanticIndex         = inputDesc.index;         // attributeInfo.semanticIndex;
-                desc.Format                = toDXGIFormat(inputDesc.format, inputDesc.needToBeNormallized);
-                desc.InputSlot             = 0,  // attributeInfo.inputSlot;
-                    desc.AlignedByteOffset = inputDesc.offset;
-                // attributeInfo.perInstance ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA
-                desc.InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
-                desc.InstanceDataStepRate = 0;  // attributeInfo.perInstance ? 1 : 0;
+                desc.SemanticName         = inputDesc.name.c_str();
+                desc.SemanticIndex        = inputDesc.index;
+                desc.Format               = toDXGIFormat(inputDesc.format, inputDesc.needToBeNormallized);
+                desc.InputSlot            = inputSlot;
+                desc.AlignedByteOffset    = inputDesc.offset;
+                desc.InputSlotClass       = inputSlotClass;
+                desc.InstanceDataStepRate = inputDesc.instanceStepRate;
 
                 inputElements.push_back(desc);
             }
-            else {
+            else
+            {
                 for (UINT i = 0; i < 4; ++i)
                 {
                     D3D11_INPUT_ELEMENT_DESC desc{};
                     desc.SemanticName         = inputDesc.name.c_str();
                     desc.SemanticIndex        = inputDesc.index + i;
                     desc.Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
-                    desc.InputSlot            = 0;
+                    desc.InputSlot            = inputSlot;
                     desc.AlignedByteOffset    = inputDesc.offset + sizeof(float) * 4 * i;
-                    desc.InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
-                    desc.InstanceDataStepRate = 0;
+                    desc.InputSlotClass       = inputSlotClass;
+                    desc.InstanceDataStepRate = inputDesc.instanceStepRate;
 
                     inputElements.push_back(desc);
                 }
             }
-        }
+        };
+
+        for (auto& [_, inputDesc] : _bindings)
+            appendElement(inputDesc);
+
+        for (auto& [_, inputDesc] : _instanceBindings)
+            appendElement(inputDesc);
 
         ID3DBlob* vsBlob = progImpl->getVSBlob();
-        HRESULT hr = device->CreateInputLayout(inputElements.data(), static_cast<UINT>(inputElements.size()),
-                                               vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_inputLayout);
+        HRESULT hr       = device->CreateInputLayout(inputElements.data(), static_cast<UINT>(inputElements.size()),
+                                                     vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_d3dVL);
     }
 
-    if (_inputLayout)
+    if (_d3dVL)
     {
-        context->IASetInputLayout(_inputLayout);
+        context->IASetInputLayout(_d3dVL);
     }
     else
     {
@@ -110,8 +118,8 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
 VertexLayoutImpl* VertexLayoutImpl::clone()
 {
     auto vl = new VertexLayoutImpl(*this);
-    if (vl->_inputLayout)
-        vl->_inputLayout->AddRef();
+    if (vl->_d3dVL)
+        vl->_d3dVL->AddRef();
     return vl;
 }
 

@@ -291,12 +291,12 @@ public:
      */
     void setParameterAutoBinding(std::string_view uniformName, std::string_view autoBinding);
 
-    inline const VertexLayout* getVertexLayout(bool instanced = false) const
+    inline const VertexLayout* getVertexLayout() const
     {
-        return !instanced ? _vertexLayout : _vertexLayoutInstanced;
+        return _vertexLayout;
     }
 
-    VertexLayout* getMutableVertexLayout(bool instanced = false);
+    VertexLayout* getMutableVertexLayout();
 
     void setSharedVertexLayout(VertexLayout* vertexLayout);
 
@@ -396,9 +396,7 @@ protected:
 
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
     VertexLayout* _vertexLayout          = nullptr;
-    VertexLayout* _vertexLayoutInstanced = nullptr;
     bool _ownVertexLayout                = false;
-    bool _ownVertexLayoutInstanced       = false;
 
     uint64_t _batchId    = -1;
     bool _isBatchable = false;

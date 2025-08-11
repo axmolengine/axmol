@@ -154,7 +154,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
 
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
 
-    _screenWidth = width;
+    _screenWidth  = width;
     _screenHeight = height;
 }
 
@@ -190,8 +190,8 @@ bool CommandBufferImpl::resizeSwapChain(uint32_t width, uint32_t height)
 
     auto impl = static_cast<RenderTargetImpl*>(const_cast<RenderTarget*>(_screenRT));
     impl->invalidate();
-    
-    HRESULT hr         = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, flags);
+
+    HRESULT hr = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, flags);
 
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
 
@@ -468,6 +468,8 @@ void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
                                               int instanceCount,
                                               bool wireframe)
 {
+    prepareDrawing();
+
     const DXGI_FORMAT dxgiFmt = (indexType == IndexFormat::U_SHORT) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
     const UINT indexSize      = (indexType == IndexFormat::U_SHORT) ? 2u : 4u;
 
@@ -486,6 +488,9 @@ void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
 void CommandBufferImpl::endRenderPass()
 {
     AX_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_indexBuffer);
+    AX_SAFE_RELEASE_NULL(_vertexBuffer);
+    AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
 void CommandBufferImpl::prepareDrawing()
@@ -509,10 +514,21 @@ void CommandBufferImpl::prepareDrawing()
     vertexLayout->apply(context, program);
 
     // bind vertexBuffer
-    ID3D11Buffer* vbs[] = {_vertexBuffer->internalHandle()};
-    UINT strides[]      = {static_cast<UINT>(vertexLayout->getStride())};
-    UINT offsets[]      = {0};
-    context->IASetVertexBuffers(0, 1, vbs, strides, offsets);
+    if (!_instanceBuffer)
+    {
+        ID3D11Buffer* vbs[] = {_vertexBuffer->internalHandle()};
+        UINT strides[]      = {static_cast<UINT>(vertexLayout->getStride())};
+        UINT offsets[]      = {0};
+        context->IASetVertexBuffers(0, 1, vbs, strides, offsets);
+    }
+    else
+    {
+        ID3D11Buffer* vbs[] = {_vertexBuffer->internalHandle(), _instanceBuffer->internalHandle()};
+        UINT strides[]      = {static_cast<UINT>(vertexLayout->getStride()),
+                               static_cast<UINT>(vertexLayout->getInstanceStride())};
+        UINT offsets[]      = {0, 0};
+        context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
+    }
 
     // bind uniform buffer: glsl-optimizer is bound to index 1, axslcc: bound to 0
     constexpr int bindingIndex = DriverImpl::VBO_BINDING_INDEX_START;
