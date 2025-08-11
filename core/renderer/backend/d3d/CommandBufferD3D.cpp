@@ -65,6 +65,8 @@ static BOOL _axmolIsWindows10BuildOrGreaterWin32(WORD build)
     return RtlVerifyVersionInfo(&osvi, mask, cond) == 0;
 }
 
+static constexpr DXGI_FORMAT _AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
+
 CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
 {
     _driverImpl = driver;
@@ -79,14 +81,14 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
 
-    IDXGIDevice* dxgiDevice = nullptr;
-    device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
+    ComPtr<IDXGIDevice> dxgiDevice;
+    device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.GetAddressOf());
 
-    IDXGIAdapter* adapter = nullptr;
-    dxgiDevice->GetAdapter(&adapter);
+    ComPtr<IDXGIAdapter> dxgiAdapter;
+    dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf());
 
-    IDXGIFactory* factory = nullptr;
-    adapter->GetParent(__uuidof(IDXGIFactory), (void**)&factory);
+    ComPtr<IDXGIFactory> factory;
+    dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)factory.GetAddressOf());
 
     // create swapchain
     ComPtr<IDXGISwapChain> swapChain;
@@ -100,7 +102,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
         DXGI_SWAP_CHAIN_DESC1 desc1 = {};
         desc1.Width                 = width;
         desc1.Height                = height;
-        desc1.Format                = DXGI_FORMAT_R8G8B8A8_UNORM;
+        desc1.Format                = _AX_SWAPCHAIN_FORMAT;
         desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
         desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc1.BufferCount           = 2;
@@ -135,7 +137,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
         scDesc.BufferCount                        = 1;
         scDesc.BufferDesc.Width                   = width;
         scDesc.BufferDesc.Height                  = height;
-        scDesc.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
+        scDesc.BufferDesc.Format                  = _AX_SWAPCHAIN_FORMAT;
         scDesc.BufferDesc.RefreshRate.Numerator   = 60;
         scDesc.BufferDesc.RefreshRate.Denominator = 1;
         scDesc.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -150,60 +152,54 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
 
     _swapChain = swapChain.Detach();
 
-    dxgiDevice->Release();
-    adapter->Release();
-    factory->Release();
-
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
+
+    _screenWidth = width;
+    _screenHeight = height;
 }
 
 CommandBufferImpl::~CommandBufferImpl()
 {
     // unbind rtv
-    ID3D11RenderTargetView* nullRTV = nullptr;
-    _driverImpl->getContext()->OMSetRenderTargets(1, &nullRTV, nullptr);
+    _driverImpl->getContext()->OMSetRenderTargets(0, nullptr, nullptr);
 
     SafeRelease(_swapChain);
 
     if (_rasterState)
-    {
         _rasterState.Reset();
-    }
 }
 
 bool CommandBufferImpl::resizeSwapChain(uint32_t width, uint32_t height)
 {
-    if (!_swapChain || !_driverImpl)
+    if (!_swapChain || !_driverImpl || !_screenRT)
         return false;
 
     // Since the window size can be zero when minimized, delay rebuilding until it returns to normal state
     if (width == 0 || height == 0)
     {
-        _renderTargetWidth  = width;
-        _renderTargetHeight = height;
         return true;
     }
 
-    if (!_renderTarget)
-        return false;
+    if (width == _screenWidth && height == _screenHeight)
+        return true;
 
     // 2) Resize swapchain buffers
     UINT flags = 0;
     // if (_allowTearing)
     //     flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 
-    DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    HRESULT hr         = _swapChain->ResizeBuffers(0, width, height, format, flags);
-    if (FAILED(hr))
-        return false;
-
-    ID3D11RenderTargetView* nullRTV = nullptr;
-    _driverImpl->getContext()->OMSetRenderTargets(1, &nullRTV, nullptr);
+    auto impl = static_cast<RenderTargetImpl*>(const_cast<RenderTarget*>(_screenRT));
+    impl->invalidate();
+    
+    HRESULT hr         = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, flags);
 
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
 
-    _renderTargetWidth  = width;
-    _renderTargetHeight = height;
+    if (FAILED(hr))
+        return false;
+
+    _screenWidth  = width;
+    _screenHeight = height;
 
     return true;
 }
@@ -227,23 +223,22 @@ void CommandBufferImpl::beginRenderPass(const RenderTarget* renderTarget, const 
 {
     auto context = _driverImpl->getContext();
 
-    auto implRT = static_cast<const RenderTargetImpl*>(renderTarget);
-    if (_renderPassDesc == renderPassDesc && _renderTarget == implRT && !implRT->isDirty())
+    auto activeRT = static_cast<const RenderTargetImpl*>(renderTarget);
+    if (_renderPassDesc == renderPassDesc && _currentRT == activeRT && !activeRT->isDirty())
     {
         ;
     }
     else
     {
 
-        _renderTarget   = implRT;
+        _currentRT      = activeRT;
         _renderPassDesc = renderPassDesc;
-
-        _renderTarget->update(context);
     }
 
-    _renderTarget->apply(context);
+    activeRT->update(context);
+    activeRT->apply(context);
 
-    auto colorAttachment = _renderTarget->getColorAttachment(0);
+    auto colorAttachment = activeRT->getColorAttachment(0);
     _renderTargetWidth   = colorAttachment.desc.width;
     _renderTargetHeight  = colorAttachment.desc.height;
 
@@ -251,11 +246,11 @@ void CommandBufferImpl::beginRenderPass(const RenderTarget* renderTarget, const 
 
     // clear color
     if (bitmask::any(clearFlags, TargetBufferFlags::COLOR))
-        context->ClearRenderTargetView(_renderTarget->getRTV(0), renderPassDesc.clearColorValue.data());
+        context->ClearRenderTargetView(activeRT->getRTV(0), renderPassDesc.clearColorValue.data());
 
     // clear depth & stencil
-    if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH_AND_STENCIL) && _renderTarget->getDSV())
-        context->ClearDepthStencilView(_renderTarget->getDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+    if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH_AND_STENCIL) && activeRT->getDSV())
+        context->ClearDepthStencilView(activeRT->getDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
                                        renderPassDesc.clearDepthValue,
                                        static_cast<UINT8>(renderPassDesc.clearStencilValue));
 }

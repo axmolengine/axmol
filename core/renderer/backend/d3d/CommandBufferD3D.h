@@ -209,15 +209,16 @@ protected:
     ID3D11Texture2D* _depthStencilTexture {nullptr};
     ComPtr<ID3D11RasterizerState> _rasterState{nullptr};
     RasterStateDesc _rasterDesc{};
-    const RenderTargetImpl* _renderTarget{nullptr};
     ProgramState* _programState{nullptr};
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};
     DepthStencilStateImpl* _depthStencilState{nullptr};
     RenderPipelineImpl* _renderPipeline{nullptr};
-    int _renderTargetWidth{0};
-    int _renderTargetHeight{0};
+    UINT _renderTargetWidth{0};
+    UINT _renderTargetHeight{0};
+    UINT _screenWidth{0};
+    UINT _screenHeight{0};
     RenderPassDescriptor _renderPassDesc{};
 };
 

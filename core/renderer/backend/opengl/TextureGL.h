@@ -32,7 +32,8 @@
 
 #include "OpenGLState.h"
 
-namespace ax::backend {
+namespace ax::backend
+{
 
 /**
  * Store texture information.
@@ -48,10 +49,9 @@ struct TextureInfoGL
     template <typename _Fty>
     void foreachTextures(const _Fty& cb) const
     {
-        GLuint texID;
         int idx = 0;
-        while ((texID = textures[idx]))
-            cb(texID, idx++);
+        for (auto&& h = _textures[idx]; h; ++idx)
+            cb(h, idx);
     }
 
     GLuint ensure(int index);
@@ -82,7 +82,7 @@ struct TextureInfoGL
     GLenum format        = GL_RGBA;
     GLenum type          = GL_UNSIGNED_BYTE;
 
-    GLenum target        = GL_TEXTURE_2D;
+    GLenum target = GL_TEXTURE_2D;
 
     std::array<GLuint, AX_META_TEXTURES + 1> textures;
     int maxIdx = 0;
@@ -215,10 +215,10 @@ private:
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     bool _generateMipmaps = false;
-    bool _usedForRT = false;
+    bool _usedForRT       = false;
 #endif
 };
 
 // end of _opengl group
 /// @}
-}
+}  // namespace ax::backend

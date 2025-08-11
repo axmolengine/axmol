@@ -154,10 +154,10 @@ void UtilsD3D::updateDefaultRenderTargetAttachments(DriverImpl* driverImpl, IDXG
         auto context = driverImpl->getContext();
 
         // swap chain only contains color attachment
-        ID3D11RenderTargetView* rtv{nullptr};
-        ComPtr<ID3D11Texture2D> backBuffer = nullptr;
+        ComPtr<ID3D11RenderTargetView> rtv;
+        ComPtr<ID3D11Texture2D> backBuffer;
         HRESULT hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backBuffer.GetAddressOf());
-        hr         = device->CreateRenderTargetView(backBuffer.Get(), nullptr, &rtv);
+        hr         = device->CreateRenderTargetView(backBuffer.Get(), nullptr, rtv.GetAddressOf());
         s_defaultColorAttachment = new TextureImpl(device, backBuffer.Get());
 
         UINT fmtSupport = 0;
@@ -182,7 +182,7 @@ void UtilsD3D::updateDefaultRenderTargetAttachments(DriverImpl* driverImpl, IDXG
         ComPtr<ID3D11DepthStencilView> depthStencilView = nullptr;
         hr = device->CreateDepthStencilView(depthStencilTexture.Get(), nullptr, depthStencilView.GetAddressOf());
 
-        context->OMSetRenderTargets(1, &rtv, depthStencilView.Get());
+        context->OMSetRenderTargets(1, rtv.GetAddressOf(), depthStencilView.Get());
 
         s_defaultDepthStencilAttachment = new TextureImpl(device, depthStencilTexture.Get());
     }

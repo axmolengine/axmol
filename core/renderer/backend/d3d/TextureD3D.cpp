@@ -5,7 +5,6 @@
 
 namespace ax::backend::d3d
 {
-
 static void toD3DSamplerDesc(const SamplerDescriptor& in, D3D11_SAMPLER_DESC& out)
 {
     bool minLinear = in.minFilter == SamplerFilter::LINEAR;
@@ -158,8 +157,8 @@ TextureHandle TextureResource::ensure(int index)
     bool isCompresd;
     UtilsD3D::toD3DTypes(_descriptor.textureFormat, texDesc.Format, isCompresd);
 
-    ID3D11Texture2D* texture = nullptr;
-    HRESULT hr               = _device->CreateTexture2D(&texDesc, nullptr, &texture);
+    ComPtr<ID3D11Texture2D> texture;
+    HRESULT hr               = _device->CreateTexture2D(&texDesc, nullptr, texture.GetAddressOf());
     if (FAILED(hr) || !texture)
     {
         return TextureHandle{};
@@ -172,17 +171,15 @@ TextureHandle TextureResource::ensure(int index)
     srvDesc.Texture2D.MipLevels       = texDesc.MipLevels;
     srvDesc.Texture2D.MostDetailedMip = 0;
 
-    ID3D11ShaderResourceView* srv = nullptr;
-    hr                            = _device->CreateShaderResourceView(texture, &srvDesc, &srv);
-
-    texture->Release();
+    ComPtr<ID3D11ShaderResourceView> srv;
+    hr                            = _device->CreateShaderResourceView(texture.Get(), &srvDesc, srv.GetAddressOf());
 
     if (FAILED(hr) || !srv)
     {
         return TextureHandle{};
     }
 
-    _textures[index] = TextureHandle{texture, srv};
+    _textures[index] = TextureHandle{texture.Detach(), srv.Detach()};
     _maxIdx          = (std::max)(_maxIdx, index + 1);
 
     return _textures[index];
@@ -193,12 +190,7 @@ void TextureResource::recreateSampler(const SamplerDescriptor& desc)
     D3D11_SAMPLER_DESC sd{};
     toD3DSamplerDesc(desc, sd);
 
-    if (_samplerState)
-    {
-        _samplerState->Release();
-        _samplerState = nullptr;
-    }
-
+    SafeRelease(_samplerState);
     HRESULT hr = _device->CreateSamplerState(&sd, &_samplerState);
     if (FAILED(hr))
     {

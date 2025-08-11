@@ -211,9 +211,9 @@ void Renderer::init()
     _commandBuffer = driver->createCommandBuffer(nullptr);
 #endif
     _dsDesc.flags = DepthStencilFlags::ALL;
-    _defaultRT    = driver->createDefaultRenderTarget();
+    _currentRT = _defaultRT = driver->createDefaultRenderTarget();
+    _commandBuffer->setScreenRenderTarget(_defaultRT);
 
-    _currentRT      = _defaultRT;
     _renderPipeline = driver->createRenderPipeline();
     _commandBuffer->setRenderPipeline(_renderPipeline);
 

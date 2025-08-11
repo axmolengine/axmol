@@ -12,20 +12,20 @@
 
 namespace ax::backend::d3d
 {
+using namespace Microsoft::WRL;
 
 struct TextureHandle
 {
-    explicit operator bool() const { return srv != nullptr; }
+    explicit operator bool() const { return tex2d != nullptr; }
 
     void Release()
     {
-        srv->Release();
-        srv   = nullptr;
-        tex2d = nullptr;
+        SafeRelease(srv);
+        SafeRelease(tex2d);
     }
 
     ID3D11Texture2D* tex2d{};
-    ID3D11ShaderResourceView* srv{};
+    ID3D11ShaderResourceView* srv{}; // Note: default color attachment not create srv yet.
 };
 
 /**
@@ -44,8 +44,8 @@ struct TextureResource
     void foreachTextures(const _Fty& cb)
     {
         int idx = 0;
-        while (_textures[idx])
-            cb(_textures[idx], idx++);
+        for (auto&& h = _textures[idx]; h ; ++idx)
+            cb(h, idx);
     }
 
     TextureHandle ensure(int index);

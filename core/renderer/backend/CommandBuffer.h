@@ -66,6 +66,8 @@ struct DepthStencilDescriptor;
 class CommandBuffer : public ax::Object
 {
 public:
+    void setScreenRenderTarget(RenderTarget* rt) { _screenRT = rt; }
+
     /**
      * Set depthStencil status once
      * @param depthStencilState Specifies the depth and stencil status
@@ -237,6 +239,8 @@ public:
 protected:
     virtual ~CommandBuffer() = default;
 
+    const RenderTarget* _screenRT{nullptr}; // weak ref (managed by Renderer)
+    const RenderTarget* _currentRT{nullptr};  // weak ref (managed by Renderer)
     unsigned int _stencilReferenceValue = 0;  ///< front stencil reference value
 };
 

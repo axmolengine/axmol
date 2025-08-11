@@ -13,14 +13,20 @@ RenderTargetImpl::RenderTargetImpl(ID3D11Device* device, bool defaultRenderTarge
 
 RenderTargetImpl::~RenderTargetImpl()
 {
-    if (_srv)
-        _srv->Release();
+    invalidate();
+}
+
+void RenderTargetImpl::invalidate()
+{
     for (auto& rtv : _rtvs)
-    {
-        if (rtv)
-            rtv->Release();
-        rtv = nullptr;
-    }
+        SafeRelease(rtv);
+
+    SafeRelease(_dsv);
+
+    if (_defaultRenderTarget)  // release default render target attachments
+        UtilsD3D::updateDefaultRenderTargetAttachments(nullptr, nullptr);
+
+    _dirtyFlags = TargetBufferFlags::ALL;
 }
 
 void RenderTargetImpl::update(ID3D11DeviceContext* context) const
@@ -48,8 +54,7 @@ void RenderTargetImpl::update(ID3D11DeviceContext* context) const
                     }
                     else if (_rtvs[i])
                     {
-                        _rtvs[i]->Release();
-                        _rtvs[i] = nullptr;
+                        SafeRelease(_rtvs[i]);
                     }
                 }
             }
@@ -61,10 +66,7 @@ void RenderTargetImpl::update(ID3D11DeviceContext* context) const
                 _device->CreateDepthStencilView(
                     static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle().tex2d, nullptr, &_dsv);
             else if (_dsv)
-            {
-                _dsv->Release();
-                _dsv = nullptr;
-            }
+                SafeRelease(_dsv);
         }
     }
 
@@ -74,7 +76,8 @@ void RenderTargetImpl::update(ID3D11DeviceContext* context) const
 RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) const
 {
 
-    auto textureImpl = _defaultRenderTarget ? UtilsD3D::getDefaultColorAttachment() : static_cast<TextureImpl*>(_color[index].texture);
+    auto textureImpl =
+        _defaultRenderTarget ? UtilsD3D::getDefaultColorAttachment() : static_cast<TextureImpl*>(_color[index].texture);
     return textureImpl
                ? RenderTargetImpl::Attachment{static_cast<ID3D11Texture2D*>(textureImpl->internalHandle().tex2d),
                                               textureImpl->getDesc()}
@@ -83,8 +86,8 @@ RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) con
 
 RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment(int index) const
 {
-    auto textureImpl = _defaultRenderTarget ? UtilsD3D::getDefaultColorAttachment()
-                                            : static_cast<TextureImpl*>(_depthStencil.texture);
+    auto textureImpl =
+        _defaultRenderTarget ? UtilsD3D::getDefaultColorAttachment() : static_cast<TextureImpl*>(_depthStencil.texture);
 
     return textureImpl
                ? RenderTargetImpl::Attachment{static_cast<ID3D11Texture2D*>(textureImpl->internalHandle().tex2d),
@@ -95,11 +98,6 @@ RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment(int ind
 void RenderTargetImpl::apply(ID3D11DeviceContext* context) const
 {
     context->OMSetRenderTargets(_rtvs.size(), _rtvs.data(), _dsv);
-}
-
-ID3D11ShaderResourceView* RenderTargetImpl::getShaderResourceView() const
-{
-    return _srv;
 }
 
 }  // namespace ax::backend::d3d

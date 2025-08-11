@@ -17,11 +17,11 @@ public:
     RenderTargetImpl(ID3D11Device* device, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
+    void invalidate();
+
     void update(ID3D11DeviceContext*) const;
 
     void apply(ID3D11DeviceContext*) const;
-
-    ID3D11ShaderResourceView* getShaderResourceView() const;
 
     ID3D11RenderTargetView* getRTV(size_t idx) const { return _rtvs[idx]; }
     ID3D11DepthStencilView* getDSV() const { return _dsv; }
@@ -33,6 +33,5 @@ private:
     ID3D11Device* _device = nullptr;
     mutable std::array<ID3D11RenderTargetView*, MAX_COLOR_ATTCHMENT> _rtvs{};
     mutable ID3D11DepthStencilView* _dsv = nullptr;
-    mutable ID3D11ShaderResourceView* _srv = nullptr;  // indicate which color attachment if MRT enabled
 };
 }

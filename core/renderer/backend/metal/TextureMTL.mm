@@ -120,9 +120,8 @@ void TextureInfoMTL::destroy()
 {
     if (_maxIdx == -1)
         return;
-    id<MTLTexture> texture;
-    int i = 0;
-    while ((texture = _mtlTextures[i++]))
+
+    for(auto&& texture = _mtlTextures[idx]; texture; ++idx)
         [texture release];
 
     if (_mtlSamplerState)
