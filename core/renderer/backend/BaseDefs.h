@@ -43,7 +43,8 @@ using namespace std::string_view_literals;
 enum class BufferUsage : uint32_t
 {
     STATIC,
-    DYNAMIC
+    DYNAMIC,
+    IMMUTABLE,  // d3d only
 };
 
 enum class BufferType : uint32_t

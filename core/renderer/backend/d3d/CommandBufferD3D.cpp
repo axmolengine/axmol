@@ -254,7 +254,7 @@ void CommandBufferImpl::beginRenderPass(const RenderTarget* renderTarget, const 
         context->ClearRenderTargetView(_renderTarget->getRTV(0), renderPassDesc.clearColorValue.data());
 
     // clear depth & stencil
-    if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
+    if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH_AND_STENCIL) && _renderTarget->getDSV())
         context->ClearDepthStencilView(_renderTarget->getDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
                                        renderPassDesc.clearDepthValue,
                                        static_cast<UINT8>(renderPassDesc.clearStencilValue));

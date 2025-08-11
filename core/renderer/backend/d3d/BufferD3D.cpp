@@ -4,22 +4,23 @@ namespace ax::backend::d3d
 {
 
 // BufferUsage -> D3D11_USAGE / CPU flags
+// https://learn.microsoft.com/en-us/windows/win32/api/d3d11/ne-d3d11-d3d11_usage
 static void translateUsage(BufferUsage in, D3D11_USAGE& outUsage, UINT& outCpu)
 {
     switch (in)
     {
-    case BufferUsage::STATIC:
-        outUsage = D3D11_USAGE_IMMUTABLE;
-        outCpu   = 0;
-        break;
-    case BufferUsage::DYNAMIC:
+
+    case BufferUsage::DYNAMIC: // GPU read, CPU write
         outUsage = D3D11_USAGE_DYNAMIC;
         outCpu   = D3D11_CPU_ACCESS_WRITE;
         break;
-    // case BufferUsage::STREAM:
-    default:
-        outUsage = D3D11_USAGE_STAGING;  // FIXME:
-        outCpu   = D3D11_CPU_ACCESS_WRITE;
+    case BufferUsage::STATIC: // GPU read/write, can use d3d API: UpdateSubresource to update data
+        outUsage = D3D11_USAGE_DEFAULT;
+        outCpu   = 0;
+        break;
+    case BufferUsage::IMMUTABLE: // GPU read, must provide inital data, axmol do delay create when first updateData called
+        outUsage = D3D11_USAGE_IMMUTABLE;
+        outCpu   = 0;
         break;
     }
 }
@@ -53,7 +54,6 @@ static inline std::size_t alignTo(std::size_t value, std::size_t alignment)
     return (value + alignment - 1) & ~(alignment - 1);
 }
 
-
 /* -------------------------------------------------- ctor */
 BufferImpl::BufferImpl(ID3D11Device* device,
                        ID3D11DeviceContext* context,
@@ -68,10 +68,12 @@ BufferImpl::BufferImpl(ID3D11Device* device,
 
     _capacity = _bindFlag == D3D11_BIND_CONSTANT_BUFFER ? alignTo(size, 16) : size;
 
+
     if (initial && size)
         _defaultData.assign(static_cast<const uint8_t*>(initial), static_cast<const uint8_t*>(initial) + size);
 
-    createNativeBuffer(initial);
+    if (usage != BufferUsage::IMMUTABLE || initial)
+        createNativeBuffer(initial);
 }
 
 /* -------------------------------------------------- createNativeBuffer */
@@ -110,8 +112,13 @@ void BufferImpl::updateData(const void* data, std::size_t size)
         std::memcpy(mapped.pData, data, size);
         _context->Unmap(_buffer.Get(), 0);
     }
-    else
-    {
+    else if (_nativeUsage == D3D11_USAGE_IMMUTABLE) {
+        if (!_buffer && size == _capacity)
+            createNativeBuffer(data);
+        else
+            AXLOGE("immutable buffer must update whole data one-time");
+    }
+    else {
         _context->UpdateSubresource(_buffer.Get(), 0, nullptr, data, 0, 0);
     }
 
@@ -130,6 +137,13 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
         _context->Map(_buffer.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mapped);
         std::memcpy(static_cast<uint8_t*>(mapped.pData) + offset, data, size);
         _context->Unmap(_buffer.Get(), 0);
+    }
+    else if (_nativeUsage == D3D11_USAGE_IMMUTABLE)
+    {
+        if (!_buffer && size == _capacity && offset == 0)
+            createNativeBuffer(data);
+        else
+            AXLOGE("immutable buffer must update whole data one-time");
     }
     else
     {
@@ -160,5 +174,4 @@ void BufferImpl::usingDefaultStoredData(bool needDefaultStoredData)
     }
 }
 
-}  // namespace ax::d3d
-
+}  // namespace ax::backend::d3d
