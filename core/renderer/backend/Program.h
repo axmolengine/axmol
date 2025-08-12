@@ -52,6 +52,7 @@ enum class VertexLayoutType
     Texture,     // T2F
     PosUvColor,  // V3F_T2F_C4F
     Sprite,      // V3F_T2F_C4B
+    Sprite2D,    // V2F_T2F_C4B
     DrawNode,    // V2F_T2F_C4F
     DrawNode3D,  // V3F_C4F
     SkyBox,      // V3F

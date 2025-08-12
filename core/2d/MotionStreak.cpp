@@ -217,7 +217,7 @@ void MotionStreak::setTexture(Texture2D* texture)
         AX_SAFE_RELEASE(_texture);
         _texture = texture;
 
-        setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, _texture);
+        setProgramStateWithRegistry(backend::ProgramType::TRAIL_2D, _texture);
     }
 }
 
@@ -231,6 +231,7 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool own
 
         _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
 
+        #if 0
         // setup custom vertex layout for V2F_T2F_C4B
         const auto& vertexInputs = _programState->getProgram()->getAllActiveVertexInputs();
         auto iter                = vertexInputs.find("a_position");
@@ -252,6 +253,7 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool own
 
         constexpr size_t vertexSize = sizeof(_vertices[0]);
         layout->setStride(vertexSize);
+        #endif
 
         updateProgramStateTexture(_texture);
         return true;

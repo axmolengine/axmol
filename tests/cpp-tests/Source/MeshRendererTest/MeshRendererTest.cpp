@@ -2349,7 +2349,7 @@ void Issue9767::menuCallback_SwitchShader(ax::Object* sender)
     else
     {
         _shaderType   = Issue9767::ShaderType::SHADER_TEX;
-        auto program  = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_3D);
+        auto program  = backend::Program::getBuiltinProgram(backend::ProgramType::UNLIT);
         _programState = new backend::ProgramState(program);
     }
     _mesh->setProgramState(_programState);

@@ -374,8 +374,8 @@ struct ProgramType
         SKINPOSITION_NORMAL_TEXTURE_3D,       // skinPositionNormalTexture_vert,  colorNormalTexture_frag
         POSITION_NORMAL_TEXTURE_3D,           // positionNormalTexture_vert,      colorNormalTexture_frag
         POSITION_NORMAL_3D,                   // positionNormalTexture_vert,      colorNormal_frag
-        POSITION_TEXTURE_3D,                  // positionTexture3D_vert,          colorTexture_frag
-        POSITION_TEXTURE_3D_INSTANCE,         // positionTextureInstance_vert,    colorTexture_frag
+        UNLIT,                                // unlit_vert,                      colorTexture_frag
+        UNLIT_INSTANCE,                       // unlitInstance_vert,              colorTexture_frag
         POSITION_3D,                          // positionTexture_vert,            color_frag
         POSITION_BUMPEDNORMAL_TEXTURE_3D,     // positionNormalTexture_vert,      colorNormalTexture_frag
         SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D, // skinPositionNormalTexture_vert,  colorNormalTexture_frag
@@ -393,6 +393,8 @@ struct ProgramType
         VIDEO_TEXTURE_NV12,
         VIDEO_TEXTURE_I420, // For some android 11 and older devices
         VIDEO_TEXTURE_BGR32,
+
+        TRAIL_2D,
 
         BUILTIN_COUNT,
 

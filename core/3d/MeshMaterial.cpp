@@ -99,7 +99,7 @@ void MeshMaterial::createBuiltInMaterial()
         _diffuseMaterial->_type = MeshMaterial::MaterialType::DIFFUSE;
     }
 
-    program                 = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_3D);
+    program                 = backend::Program::getBuiltinProgram(backend::ProgramType::UNLIT);
     _unLitMaterialProgState = new backend::ProgramState(program);
     _unLitMaterial          = new MeshMaterial();
     if (_unLitMaterial && _unLitMaterial->initWithProgramState(_unLitMaterialProgState))
@@ -107,7 +107,7 @@ void MeshMaterial::createBuiltInMaterial()
         _unLitMaterial->_type = MeshMaterial::MaterialType::UNLIT;
     }
 
-    program                         = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_3D_INSTANCE);
+    program                         = backend::Program::getBuiltinProgram(backend::ProgramType::UNLIT_INSTANCE);
     _unLitInstanceMaterialProgState = new backend::ProgramState(program);
     _unLitInstanceMaterial  = new MeshMaterial();
     if (_unLitInstanceMaterial && _unLitInstanceMaterial->initWithProgramState(_unLitInstanceMaterialProgState))

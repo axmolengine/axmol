@@ -78,6 +78,8 @@ extern AX_DLL const std::string_view videoTextureYUY2_frag;
 extern AX_DLL const std::string_view videoTextureNV12_frag;
 extern AX_DLL const std::string_view videoTextureI420_frag;
 
+extern AX_DLL const std::string_view trail_2d_vert;
+
 /* below is 3d shaders */
 extern AX_DLL const std::string_view lineColor_frag;
 extern AX_DLL const std::string_view lineColor_vert;
@@ -91,8 +93,8 @@ extern AX_DLL const std::string_view particleColor_frag;
 extern AX_DLL const std::string_view particle_vert;
 extern AX_DLL const std::string_view positionNormalTexture_vert;
 extern AX_DLL const std::string_view skinPositionNormalTexture_vert;
-extern AX_DLL const std::string_view positionTexture3D_vert;
-extern AX_DLL const std::string_view positionTextureInstance_vert;
+extern AX_DLL const std::string_view unlit_vert;
+extern AX_DLL const std::string_view unlit_instance_vert;
 extern AX_DLL const std::string_view skinPositionTexture_vert;
 extern AX_DLL const std::string_view skybox_frag;
 extern AX_DLL const std::string_view skybox_vert;

@@ -93,7 +93,8 @@ static void translateTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC
         outDesc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
         break;
     default:
-        outDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+        if (desc.textureUsage == TextureUsage::RENDER_TARGET)
+            outDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
         break;
     }
 }

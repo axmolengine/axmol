@@ -27,7 +27,8 @@
 #include "ProgramManager.h"
 #include "VertexLayout.h"
 
-namespace ax::backend {
+namespace ax::backend
+{
 
 /*
  * shader vertex layout define functions
@@ -41,11 +42,11 @@ struct VertexLayoutHelper
 
         /// a_position
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                               program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT2, 0, false);
         /// a_texCoord
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                               program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                                 backend::VertexFormat::FLOAT2, 2 * sizeof(float), false);
 
         vertexLayout->setStride(4 * sizeof(float));
@@ -57,16 +58,16 @@ struct VertexLayoutHelper
 
         /// a_position
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                               program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
         /// a_texCoord
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                               program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                                 backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4F, texCoord), false);
 
         /// a_color
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR,
-                               program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
+                                program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4, offsetof(V3F_T2F_C4F, color), false);
         vertexLayout->setStride(sizeof(V3F_T2F_C4F));
     }
@@ -85,9 +86,30 @@ struct VertexLayoutHelper
                                 backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4B, texCoord), false);
 
         /// a_color
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR,
+                                program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::UBYTE4, offsetof(V3F_T2F_C4B, color), true);
         vertexLayout->setStride(sizeof(V3F_T2F_C4B));
+    }
+
+    static void defineSprite2D(Program* program)
+    {
+        auto vertexLayout = program->getVertexLayout();
+
+        /// a_position
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
+                                program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
+                                backend::VertexFormat::FLOAT2, 0, false);
+        /// a_texCoord
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
+                                program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
+                                backend::VertexFormat::FLOAT2, offsetof(V2F_T2F_C4B, texCoord), false);
+
+        /// a_color
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR,
+                                program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
+                                backend::VertexFormat::UBYTE4, offsetof(V2F_T2F_C4B, color), true);
+        vertexLayout->setStride(sizeof(V2F_T2F_C4B));
     }
 
     static void defineDrawNode(Program* program)
@@ -102,7 +124,8 @@ struct VertexLayoutHelper
                                 program->getVertexInputDesc(backend::VertexInputSemantic::TEXCOORD),
                                 backend::VertexFormat::FLOAT2, offsetof(V2F_T2F_C4F, texCoord), false);
 
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR,
+                                program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4, offsetof(V2F_T2F_C4F, color), true);
 
         vertexLayout->setStride(sizeof(V2F_T2F_C4F));
@@ -116,7 +139,8 @@ struct VertexLayoutHelper
                                 program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
 
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR,
+                                program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, color), true);
 
         vertexLayout->setStride(sizeof(V3F_C4F));
@@ -145,7 +169,8 @@ struct VertexLayoutHelper
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
                                 program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
                                 backend::VertexFormat::FLOAT3, 0, false);
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
+        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR,
+                                program->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
                                 backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, color), false);
         vertexLayout->setStride(sizeof(V3F_C4F));
     }
@@ -175,14 +200,14 @@ struct VertexLayoutHelper
     }
 };
 std::function<void(Program*)> Program::s_vertexLayoutDefineList[static_cast<int>(VertexLayoutType::Count)] = {
-    VertexLayoutHelper::defineDummy,      VertexLayoutHelper::definePos,      VertexLayoutHelper::defineTexture,
-    VertexLayoutHelper::definePosUvColor,     VertexLayoutHelper::defineSprite,   VertexLayoutHelper::defineDrawNode,
-    VertexLayoutHelper::defineDrawNode3D, VertexLayoutHelper::defineSkyBox,   VertexLayoutHelper::definePosColor,
-    VertexLayoutHelper::defineTerrain3D,  VertexLayoutHelper::defineInstanced};
+    VertexLayoutHelper::defineDummy,      VertexLayoutHelper::definePos,        VertexLayoutHelper::defineTexture,
+    VertexLayoutHelper::definePosUvColor, VertexLayoutHelper::defineSprite,     VertexLayoutHelper::defineSprite2D,
+    VertexLayoutHelper::defineDrawNode,   VertexLayoutHelper::defineDrawNode3D, VertexLayoutHelper::defineSkyBox,
+    VertexLayoutHelper::definePosColor,   VertexLayoutHelper::defineTerrain3D,  VertexLayoutHelper::defineInstanced};
 
 Program::Program(std::string_view vs, std::string_view fs) : _vsSource(vs), _fsSource(fs)
 {
-    auto driver = DriverBase::getInstance();
+    auto driver   = DriverBase::getInstance();
     _vertexLayout = driver->createVertexLayout();
 }
 
@@ -207,4 +232,4 @@ void Program::setProgramIds(uint32_t progType, uint64_t progId)
     _programType = progType;
     _programId   = progId;
 }
-}
+}  // namespace ax::backend
