@@ -106,7 +106,7 @@ public:
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    virtual const VertexInputDesc* getVertexInputDesc(backend::VertexInputSemantic name) const = 0;
+    virtual const VertexInputDesc* getVertexInputDesc(backend::VertexInputKind name) const = 0;
 
     /**
      * Get maximum vertex location.
@@ -124,7 +124,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const hlookup::string_map<VertexInputDesc>& getAllActiveVertexInputs() const = 0;
+    virtual const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const = 0;
 
     /**
      * Get vertex shader.
@@ -166,7 +166,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const = 0;
+    virtual const hlookup::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const = 0;
 
     inline VertexLayout* getVertexLayout() const { return _vertexLayout; }
 

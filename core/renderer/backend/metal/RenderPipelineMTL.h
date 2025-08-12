@@ -65,7 +65,6 @@ private:
     void setBlendStateAndFormat(const BlendDescriptor&);
     void chooseAttachmentFormat(const RenderTarget* renderTarget,
                                 PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
-                                PixelFormat&,
                                 PixelFormat&);
 
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
@@ -73,8 +72,7 @@ private:
 
     MTLRenderPipelineDescriptor* _mtlRenderPipelineDescriptor = nil;
     PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT]  = {PixelFormat::NONE};
-    PixelFormat _depthAttachmentFormat                        = PixelFormat::NONE;
-    PixelFormat _stencilAttachmentFormat                      = PixelFormat::NONE;
+    PixelFormat _depthStencilPF                        = PixelFormat::NONE;
 
     tsl::robin_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };

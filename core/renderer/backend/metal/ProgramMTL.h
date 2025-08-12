@@ -29,7 +29,7 @@
 
 namespace ax::backend {
 
-class ShaderModuleMTL;
+class ShaderModuleImpl;
 
 /**
  * @addtogroup _metal
@@ -39,7 +39,7 @@ class ShaderModuleMTL;
 /**
  * A metal Program
  */
-class ProgramMTL : public Program
+class ProgramImpl : public Program
 {
 public:
     /// @name Constructor, Destructor and Initializers
@@ -47,8 +47,8 @@ public:
      * @param vertexShader Specifes the vertex shader source.
      * @param fragmentShader Specifes the fragment shader source.
      */
-    ProgramMTL(std::string_view vertexShader, std::string_view fragmentShader);
-    virtual ~ProgramMTL();
+    ProgramImpl(std::string_view vertexShader, std::string_view fragmentShader);
+    virtual ~ProgramImpl();
 
     /**
      * Get uniform location by name.
@@ -69,32 +69,32 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    int getAttributeLocation(std::string_view name) const override;
+    const VertexInputDesc* getVertexInputDesc(std::string_view name) const override;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    int getAttributeLocation(Attribute name) const override;
-
-    /**
-     * Get vertex shader module.
-     * @return Vertex shader module.
-     */
-    ShaderModuleMTL* getVertexShader() const { return _vertexShader; }
-
-    /**
-     * Get fragment shader module.
-     * @ Fragment shader module.
-     */
-    ShaderModuleMTL* getFragmentShader() const { return _fragmentShader; }
+    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const override;
 
     /**
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const override;
+    const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
+
+    /**
+     * Get vertex shader module.
+     * @return Vertex shader module.
+     */
+    ShaderModuleImpl* getVertexShader() const { return _vertexShader; }
+
+    /**
+     * Get fragment shader module.
+     * @ Fragment shader module.
+     */
+    ShaderModuleImpl* getFragmentShader() const { return _fragmentShader; }
 
     /**
      * Get maximum vertex location.
@@ -119,11 +119,11 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
+    const hlookup::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
 
 private:
-    ShaderModuleMTL* _vertexShader   = nullptr;
-    ShaderModuleMTL* _fragmentShader = nullptr;
+    ShaderModuleImpl* _vertexShader   = nullptr;
+    ShaderModuleImpl* _fragmentShader = nullptr;
 };
 
 // end of _metal group

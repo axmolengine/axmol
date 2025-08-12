@@ -156,7 +156,7 @@ bool DrawNode3D::init()
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
 
-    const auto& inputs = _programState->getProgram()->getAllActiveVertexInputs();
+    const auto& inputs = _programState->getProgram()->getActiveVertexInputs();
     auto iter          = inputs.find("a_position");
     auto vertexLayout         = _programState->getMutableVertexLayout();
     if (iter != inputs.end())

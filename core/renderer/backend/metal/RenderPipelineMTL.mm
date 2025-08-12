@@ -170,8 +170,7 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
         size_t fragmentShaderHash;
         unsigned int vertexLayoutInfo[32];
         backend::PixelFormat colorAttachment[MAX_COLOR_ATTCHMENT];
-        backend::PixelFormat depthAttachment;
-        backend::PixelFormat stencilAttachment;
+        backend::PixelFormat depthStencilPF;
         bool blendEnabled;
         unsigned int writeMask;
         unsigned int rgbBlendOperation;
@@ -184,13 +183,12 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
 
     memset(&hashMe, 0, sizeof(hashMe));
     const auto& blendDescriptor = pipelineDescriptor.blendDescriptor;
-    chooseAttachmentFormat(renderTarget, _colorAttachmentsFormat, _depthAttachmentFormat, _stencilAttachmentFormat);
-    auto program              = static_cast<ProgramMTL*>(pipelineDescriptor.programState->getProgram());
+    chooseAttachmentFormat(renderTarget, _colorAttachmentsFormat, _depthStencilPF);
+    auto program              = static_cast<ProgramImpl*>(pipelineDescriptor.programState->getProgram());
     hashMe.vertexShaderHash   = program->getVertexShader()->getHashValue();
     hashMe.fragmentShaderHash = program->getFragmentShader()->getHashValue();
     memcpy(&hashMe.colorAttachment, &_colorAttachmentsFormat, sizeof(_colorAttachmentsFormat));
-    hashMe.depthAttachment             = _depthAttachmentFormat;
-    hashMe.stencilAttachment           = _stencilAttachmentFormat;
+    hashMe.depthStencilPF             = _depthStencilPF;
     hashMe.blendEnabled                = blendDescriptor.blendEnabled;
     hashMe.writeMask                   = (unsigned int)blendDescriptor.writeMask;
     hashMe.rgbBlendOperation           = (unsigned int)blendDescriptor.rgbBlendOperation;
@@ -201,18 +199,16 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
     hashMe.destinationAlphaBlendFactor = (unsigned int)blendDescriptor.destinationAlphaBlendFactor;
     int index                          = 0;
     auto vertexLayout                  = pipelineDescriptor.programState->getVertexLayout();
-    const auto& attributes             = vertexLayout->getAttributes();
-    for (const auto& it : attributes)
+    for (const auto& [_, bindingDesc] : vertexLayout->getBindings())
     {
-        auto& attribute = it.second;
         /*
          stepFunction:1     stride:15       offest:10       format:5        needNormalized:1
          bit31           bit30 ~ bit16   bit15 ~ bit6    bit5 ~ bit1     bit0
          */
         hashMe.vertexLayoutInfo[index++] =
             ((unsigned int)vertexLayout->getVertexStepMode() & 0x1) << 31 |
-            ((unsigned int)(vertexLayout->getStride() & 0x7FFF)) << 16 | ((unsigned int)attribute.offset & 0x3FF) << 6 |
-            ((unsigned int)attribute.format & 0x1F) << 1 | ((unsigned int)attribute.needToBeNormallized & 0x1);
+            ((unsigned int)(vertexLayout->getStride() & 0x7FFF)) << 16 | ((unsigned int)bindingDesc.offset & 0x3FF) << 6 |
+            ((unsigned int)bindingDesc.format & 0x1F) << 1 | ((unsigned int)bindingDesc.needToBeNormallized & 0x1);
     }
 
     unsigned int hash = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
@@ -260,18 +256,13 @@ void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescript
     vertexDesc.layouts[DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction =
         toMTLVertexStepFunction(vertexLayout->getVertexStepMode());
 
-    const auto& attributes = vertexLayout->getAttributes();
-
-
-    for (const auto& it : attributes)
+    for (const auto& [_, bindingDesc] : vertexLayout->getBindings())
     {
-        auto attribute = it.second;
-
-        vertexDesc.attributes[attribute.index].format =
-            toMTLVertexFormat(attribute.format, attribute.needToBeNormallized);
-        vertexDesc.attributes[attribute.index].offset = attribute.offset;
+        vertexDesc.attributes[bindingDesc.index].format =
+            toMTLVertexFormat(bindingDesc.format, bindingDesc.needToBeNormallized);
+        vertexDesc.attributes[bindingDesc.index].offset = bindingDesc.offset;
         // Buffer index will always be 0;
-        vertexDesc.attributes[attribute.index].bufferIndex = DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX;
+        vertexDesc.attributes[bindingDesc.index].bufferIndex = DriverMTL::DEFAULT_ATTRIBS_BINDING_INDEX;
 
     }
 }
@@ -294,25 +285,23 @@ void RenderPipelineMTL::setBlendState(MTLRenderPipelineColorAttachmentDescriptor
 
 void RenderPipelineMTL::setShaderModules(const PipelineDescriptor& descriptor)
 {
-    auto vertexShaderModule = static_cast<ProgramMTL*>(descriptor.programState->getProgram())->getVertexShader();
+    auto vertexShaderModule = static_cast<ProgramImpl*>(descriptor.programState->getProgram())->getVertexShader();
     _mtlRenderPipelineDescriptor.vertexFunction = vertexShaderModule->getMTLFunction();
 
-    auto fragShaderModule = static_cast<ProgramMTL*>(descriptor.programState->getProgram())->getFragmentShader();
+    auto fragShaderModule = static_cast<ProgramImpl*>(descriptor.programState->getProgram())->getFragmentShader();
     _mtlRenderPipelineDescriptor.fragmentFunction = fragShaderModule->getMTLFunction();
 }
 
 void RenderPipelineMTL::chooseAttachmentFormat(const RenderTarget* renderTarget,
                                                PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
-                                               PixelFormat& depthFormat,
-                                               PixelFormat& stencilFormat)
+                                               PixelFormat& depthStencilFormat)
 {
     // Choose color attachment format
     auto rtMTL   = static_cast<const RenderTargetMTL*>(renderTarget);
     for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
         colorAttachmentsFormat[i] = rtMTL->getColorAttachmentPixelFormat(i);
 
-    depthFormat   = rtMTL->getDepthAttachmentPixelFormat();
-    stencilFormat = rtMTL->getStencilAttachmentPixelFormat();
+    depthStencilFormat   = rtMTL->getDepthStencilAttachmentPixelFormat();
 }
 
 void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescriptor)
@@ -329,8 +318,10 @@ void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescr
             UtilsMTL::toMTLPixelFormat(_colorAttachmentsFormat[i]);
         setBlendState(_mtlRenderPipelineDescriptor.colorAttachments[i], blendDescriptor);
     }
-    _mtlRenderPipelineDescriptor.depthAttachmentPixelFormat   = UtilsMTL::toMTLPixelFormat(_depthAttachmentFormat);
-    _mtlRenderPipelineDescriptor.stencilAttachmentPixelFormat = UtilsMTL::toMTLPixelFormat(_stencilAttachmentFormat);
+    
+    auto nativePF = UtilsMTL::toMTLPixelFormat(_depthStencilPF);
+    _mtlRenderPipelineDescriptor.depthAttachmentPixelFormat   = nativePF;
+    _mtlRenderPipelineDescriptor.stencilAttachmentPixelFormat = nativePF;
 }
 
 }

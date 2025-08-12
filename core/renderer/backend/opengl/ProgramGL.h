@@ -127,7 +127,7 @@ public:
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    const VertexInputDesc* getVertexInputDesc(VertexInputSemantic name) const override;
+    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const override;
 
     /**
      * Get maximum vertex location.
@@ -145,7 +145,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    const hlookup::string_map<VertexInputDesc>& getAllActiveVertexInputs() const override;
+    const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
@@ -158,7 +158,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
+    const hlookup::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
 
     void bindUniformBuffers(const char* buffer, size_t bufferSize);
 
@@ -200,7 +200,7 @@ private:
 
     int _maxLocation = -1;
     UniformLocation _builtinUniformLocation[UNIFORM_MAX];
-    const VertexInputDesc* _builtinAttributeLocation[VertexInputSemantic::VIS_MAX];
+    const VertexInputDesc* _builtinAttributeLocation[VertexInputKind::VIK_COUNT];
 };
 // end of _opengl group
 /// @}

@@ -144,7 +144,7 @@ public:
      * @return Attribute location.
      * @see `int getAttributeLocation(std::string_view name) const`
      */
-    inline const VertexInputDesc* getVertexInputDesc(VertexInputSemantic name) const
+    inline const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const
     {
         return _program->getVertexInputDesc(name);
     }

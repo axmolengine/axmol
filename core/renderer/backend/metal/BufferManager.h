@@ -25,7 +25,7 @@
 #pragma once
 
 #include <vector>
-#include "../Macros.h"
+#include "../BaseDefs.h"
 
 namespace ax::backend {
 

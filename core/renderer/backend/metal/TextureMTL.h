@@ -36,12 +36,6 @@ namespace ax::backend {
  * @{
  */
 
-enum
-{
-    MTL_TEXTURE_2D = 1,
-    MTL_TEXTURE_CUBE,
-};
-
 struct TextureInfoMTL
 {
     TextureInfoMTL(id<MTLDevice> mtlDevice)
@@ -51,10 +45,10 @@ struct TextureInfoMTL
     }
     ~TextureInfoMTL() { destroy(); }
 
-    id<MTLTexture> ensure(int index, int target);
+    id<MTLTexture> ensure(int index);
     void destroy();
 
-    id<MTLTexture> createTexture(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor, int target);
+    id<MTLTexture> createTexture(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor);
     void recreateSampler(const SamplerDescriptor& descriptor);
 
     MTLSamplerAddressMode _sAddressMode;
@@ -63,28 +57,28 @@ struct TextureInfoMTL
     MTLSamplerMinMagFilter _magFilter;
     MTLSamplerMipFilter _mipFilter;
 
-    TextureDescriptor _descriptor;
-
     id<MTLDevice> _mtlDevice;
     std::array<id<MTLTexture>, AX_META_TEXTURES + 1> _mtlTextures;
     int _maxIdx = -1;
+    
+    TextureDescriptor _descriptor;
 
     id<MTLSamplerState> _mtlSamplerState = nil;
     unsigned int _bytesPerRow            = 0;
 };
 
 /**
- * A 2D texture
+ * TextureImpl
  */
-class TextureMTL : public backend::Texture
+class TextureImpl : public backend::Texture
 {
 public:
     /**
      * @param mtlDevice The device for which MTLTexture and MTLSamplerState object was created.
      * @param descriptor Specify texture and sampler description.
      */
-    TextureMTL(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor);
-    ~TextureMTL();
+    TextureImpl(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor);
+    ~TextureImpl();
 
     /**
      * Update a two-dimensional texture image
@@ -170,47 +164,7 @@ public:
      * @param descriptor Specifies texture and sampler descriptor.
      */
     void updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index = 0) override;
-
-    int getCount() const override { return _textureInfo._maxIdx + 1; }
-
-    /**
-     * Get MTLTexture object. reinterpret_cast<id<MTLTexture>>(handler);
-     * @return A MTLTexture object.
-     */
-    uintptr_t getHandler(int index = 0) const override
-    {
-        return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
-    }
-
-    /**
-     * Get MTLSamplerState object
-     * @return A MTLSamplerState object.
-     */
-    inline id<MTLSamplerState> getMTLSamplerState() const { return _textureInfo._mtlSamplerState; }
-
-private:
-    TextureInfoMTL _textureInfo;
-};
-
-/**
- * A texture cube
- */
-class TextureCubeMTL : public backend::Texture
-{
-public:
-    /**
-     * @param mtlDevice The device for which MTLTexture and MTLSamplerState object was created.
-     * @param descriptor Specify texture and sampler description.
-     */
-    TextureCubeMTL(id<MTLDevice> mtlDevice, const TextureDescriptor& descriptor);
-    ~TextureCubeMTL();
-
-    /**
-     * Update sampler
-     * @param sampler Specifies the sampler descriptor.
-     */
-    void updateSamplerDescriptor(const SamplerDescriptor& sampler) override;
-
+    
     /**
      * Update texutre cube data in give slice side.
      * @param side Specifies which slice texture of cube to be update.
@@ -218,35 +172,27 @@ public:
      */
     void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
 
-    /**
-     * Generate mipmaps.
-     */
-    void generateMipmaps() override;
-
-    /**
-     * Update texture description.
-     * @param descriptor Specifies texture and sampler descriptor.
-     */
-    void updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index = 0) override;
-
     int getCount() const override { return _textureInfo._maxIdx + 1; }
 
-    uintptr_t getHandler(int index = 0) const override
+    /**
+     * Get MTLTexture object. reinterpret_cast<id<MTLTexture>>(handler);
+     * @return A MTLTexture object.
+     */
+    id<MTLTexture> internalHandle(int index = 0) const
     {
-        return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
+        return _textureInfo._mtlTextures[index];
     }
 
     /**
      * Get MTLSamplerState object
      * @return A MTLSamplerState object.
      */
-    inline id<MTLSamplerState> getMTLSamplerState() const { return _textureInfo._mtlSamplerState; }
+    inline id<MTLSamplerState> internalSampler() const { return _textureInfo._mtlSamplerState; }
 
 private:
     TextureInfoMTL _textureInfo;
-
+    
     MTLRegion _region;
-    std::size_t _bytesPerImage = 0;
 };
 
 // end of _metal group

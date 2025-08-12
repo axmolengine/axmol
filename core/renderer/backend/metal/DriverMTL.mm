@@ -192,58 +192,58 @@ int getMaxTextureWidthHeight(FeatureSet featureSet)
     return maxTextureSize;
 }
 
-const char* featureSetToString(FeatureSet featureSet)
+std::string_view featureSetToString(FeatureSet featureSet)
 {
     switch (featureSet)
     {
     case FeatureSet::FeatureSet_iOS_GPUFamily1_v1:
-        return "iOS_GPUFamily1_v1";
+        return "iOS_GPUFamily1_v1"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily2_v1:
-        return "iOS_GPUFamily2_v1";
+        return "iOS_GPUFamily2_v1"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily1_v2:
-        return "iOS_GPUFamily1_v2";
+        return "iOS_GPUFamily1_v2"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily2_v2:
-        return "iOS_GPUFamily2_v2";
+        return "iOS_GPUFamily2_v2"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily1_v3:
-        return "iOS_GPUFamily1_v3";
+        return "iOS_GPUFamily1_v3"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily2_v3:
-        return "iOS_GPUFamily2_v3";
+        return "iOS_GPUFamily2_v3"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily1_v4:
-        return "iOS_GPUFamily1_v4";
+        return "iOS_GPUFamily1_v4"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily2_v4:
-        return "iOS_GPUFamily2_v4";
+        return "iOS_GPUFamily2_v4"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily1_v5:
-        return "iOS_GPUFamily1_v5";
+        return "iOS_GPUFamily1_v5"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily2_v5:
-        return "iOS_GPUFamily2_v5";
+        return "iOS_GPUFamily2_v5"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily3_v1:
-        return "iOS_GPUFamily3_v1";
+        return "iOS_GPUFamily3_v1"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily3_v2:
-        return "iOS_GPUFamily3_v2";
+        return "iOS_GPUFamily3_v2"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily3_v3:
-        return "iOS_GPUFamily3_v3";
+        return "iOS_GPUFamily3_v3"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily4_v1:
-        return "iOS_GPUFamily4_v1";
+        return "iOS_GPUFamily4_v1"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily3_v4:
-        return "iOS_GPUFamily3_v4";
+        return "iOS_GPUFamily3_v4"sv;
     case FeatureSet::FeatureSet_iOS_GPUFamily4_v2:
-        return "iOS_GPUFamily4_v2";
+        return "iOS_GPUFamily4_v2"sv;
     case FeatureSet::FeatureSet_macOS_GPUFamily1_v1:
-        return "macOS_GPUFamily1_v1";
+        return "macOS_GPUFamily1_v1"sv;
     case FeatureSet::FeatureSet_macOS_GPUFamily1_v2:
-        return "macOS_GPUFamily1_v2";
+        return "macOS_GPUFamily1_v2"sv;
     case FeatureSet::FeatureSet_macOS_ReadWriteTextureTier2:
-        return "macOS_ReadWriteTextureTier2";
+        return "macOS_ReadWriteTextureTier2"sv;
     case FeatureSet::FeatureSet_macOS_GPUFamily1_v3:
-        return "macOS_GPUFamily1_v3";
+        return "macOS_GPUFamily1_v3"sv;
     case FeatureSet::FeatureSet_macOS_GPUFamily1_v4:
-        return "macOS_GPUFamily1_v4";
+        return "macOS_GPUFamily1_v4"sv;
     case FeatureSet::FeatureSet_macOS_GPUFamily2_v1:
-        return "macOS_GPUFamily2_v1";
+        return "macOS_GPUFamily2_v1"sv;
     default:
         break;
     }
-    return "";
+    return ""sv;
 }
 
 bool supportPVRTC(FeatureSet featureSet)
@@ -458,66 +458,54 @@ DriverMTL::~DriverMTL()
     ProgramManager::destroyInstance();
 }
 
-CommandBuffer* DriverMTL::newCommandBuffer(void*)
+CommandBuffer* DriverMTL::createCommandBuffer(void*)
 {
     return new CommandBufferMTL(this);
 }
 
-Buffer* DriverMTL::newBuffer(std::size_t size, BufferType type, BufferUsage usage)
+Buffer* DriverMTL::createBuffer(std::size_t size, BufferType type, BufferUsage usage)
 {
     return new BufferMTL(_mtlDevice, size, type, usage);
 }
 
-Texture* DriverMTL::newTexture(const TextureDescriptor& descriptor)
+Texture* DriverMTL::createTexture(const TextureDescriptor& descriptor)
 {
-    switch (descriptor.textureType)
-    {
-    case TextureType::TEXTURE_2D:
-        return new TextureMTL(_mtlDevice, descriptor);
-    case TextureType::TEXTURE_CUBE:
-        return new TextureCubeMTL(_mtlDevice, descriptor);
-    default:
-        AXASSERT(false, "invalidate texture type");
-        return nullptr;
-    }
+    return new TextureImpl(_mtlDevice, descriptor);
 }
 
-RenderTarget* DriverMTL::newDefaultRenderTarget()
+RenderTarget* DriverMTL::createDefaultRenderTarget()
 {
-    auto rtGL = new RenderTargetMTL(true);
-    return rtGL;
+    return new RenderTargetMTL(true);
 }
 
-RenderTarget* DriverMTL::newRenderTarget(Texture* colorAttachment,
-                                         Texture* depthAttachment,
-                                         Texture* stencilAttachhment)
+RenderTarget* DriverMTL::createRenderTarget(Texture* colorAttachment,
+                                         Texture* depthStencilAttachment)
 {
     auto rtMTL = new RenderTargetMTL(false);
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
     rtMTL->setColorAttachment(colors);
-    rtMTL->setDepthAttachment(depthAttachment);
-    rtMTL->setStencilAttachment(stencilAttachhment);
+    rtMTL->setDepthStencilAttachment(depthStencilAttachment);
     return rtMTL;
 }
 
-DepthStencilState* DriverMTL::newDepthStencilState()
+DepthStencilState* DriverMTL::createDepthStencilState()
 {
     return new DepthStencilStateMTL(_mtlDevice);
 }
 
-RenderPipeline* DriverMTL::newRenderPipeline()
+RenderPipeline* DriverMTL::createRenderPipeline()
 {
     return new RenderPipelineMTL(_mtlDevice);
 }
 
-Program* DriverMTL::newProgram(std::string_view vertexShader, std::string_view fragmentShader)
+Program* DriverMTL::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
 {
-    return new ProgramMTL(vertexShader, fragmentShader);
+    return new ProgramImpl(vertexShader, fragmentShader);
 }
 
-ShaderModule* DriverMTL::newShaderModule(ShaderStage stage, std::string_view source)
+ShaderModule* DriverMTL::createShaderModule(ShaderStage stage, std::string_view source)
 {
-    return new ShaderModuleMTL(_mtlDevice, stage, source);
+    return new ShaderModuleImpl(_mtlDevice, stage, source);
 }
 
 void DriverMTL::setFrameBufferOnly(bool frameBufferOnly)
@@ -525,19 +513,19 @@ void DriverMTL::setFrameBufferOnly(bool frameBufferOnly)
     [DriverMTL::_metalLayer setFramebufferOnly:frameBufferOnly];
 }
 
-const char* DriverMTL::getVendor() const
+std::string DriverMTL::getVendor() const
 {
-    return "";
+    return "Apple Inc.";
 }
 
-const char* DriverMTL::getRenderer() const
+std::string DriverMTL::getRenderer() const
 {
     return _deviceName.c_str();
 }
 
-const char* DriverMTL::getVersion() const
+std::string DriverMTL::getVersion() const
 {
-    return featureSetToString(_featureSet);
+    return std::string{featureSetToString(_featureSet)};
 }
 
 bool DriverMTL::checkForFeatureSupported(FeatureType feature)

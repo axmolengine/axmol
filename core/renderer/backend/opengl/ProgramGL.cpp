@@ -142,7 +142,7 @@ ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentSha
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 
-    getAllActiveVertexInputs();
+    getActiveVertexInputs();
 
     setBuiltinLocations();
 }
@@ -225,22 +225,22 @@ void ProgramGL::setBuiltinLocations()
 {
     /*--- Builtin Attribs ---*/
 
-    std::fill(_builtinAttributeLocation, _builtinAttributeLocation + VertexInputSemantic::VIS_MAX, nullptr);
+    std::fill(_builtinAttributeLocation, _builtinAttributeLocation + VertexInputKind::VIK_COUNT, nullptr);
 
     /// a_position
-    _builtinAttributeLocation[VertexInputSemantic::POSITION] = getVertexInputDesc(ATTRIBUTE_NAME_POSITION);
+    _builtinAttributeLocation[VertexInputKind::POSITION] = getVertexInputDesc(VERTEX_INPUT_NAME_POSITION);
 
     /// a_color
-    _builtinAttributeLocation[VertexInputSemantic::COLOR] = getVertexInputDesc(ATTRIBUTE_NAME_COLOR);
+    _builtinAttributeLocation[VertexInputKind::COLOR] = getVertexInputDesc(VERTEX_INPUT_NAME_COLOR);
 
     /// a_texCoord
-    _builtinAttributeLocation[VertexInputSemantic::TEXCOORD] = getVertexInputDesc(ATTRIBUTE_NAME_TEXCOORD);
+    _builtinAttributeLocation[VertexInputKind::TEXCOORD] = getVertexInputDesc(VERTEX_INPUT_NAME_TEXCOORD);
 
     // a_normal
-    _builtinAttributeLocation[VertexInputSemantic::NORMAL] = getVertexInputDesc(ATTRIBUTE_NAME_NORMAL);
+    _builtinAttributeLocation[VertexInputKind::NORMAL] = getVertexInputDesc(VERTEX_INPUT_NAME_NORMAL);
 
     // a_instance
-    _builtinAttributeLocation[VertexInputSemantic::INSTANCE] = getVertexInputDesc(ATTRIBUTE_NAME_INSTANCE);
+    _builtinAttributeLocation[VertexInputKind::INSTANCE] = getVertexInputDesc(VERTEX_INPUT_NAME_INSTANCE);
 
     /*--- Builtin Uniforms ---*/
 
@@ -263,7 +263,7 @@ void ProgramGL::setBuiltinLocations()
     _builtinUniformLocation[Uniform::EFFECT_TYPE] = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
 }
 
-const hlookup::string_map<VertexInputDesc>& ProgramGL::getAllActiveVertexInputs() const
+const hlookup::string_map<VertexInputDesc>& ProgramGL::getActiveVertexInputs() const
 {
     if (!_program || !_activeAttribs.empty())
         return _activeAttribs;
@@ -276,8 +276,8 @@ const hlookup::string_map<VertexInputDesc>& ProgramGL::getAllActiveVertexInputs(
 
     _activeAttribs.reserve(numOfActiveAttributes);
 
-    int MAX_ATTRIBUTE_NAME_LENGTH = 255;
-    auto attrName                 = axstd::make_unique_for_overwrite<char[]>(MAX_ATTRIBUTE_NAME_LENGTH + 1);
+    int MAX_VERTEX_INPUT_NAME_LENGTH = 255;
+    auto attrName                 = axstd::make_unique_for_overwrite<char[]>(MAX_VERTEX_INPUT_NAME_LENGTH + 1);
 
     GLint attrNameLen = 0;
     GLenum attrType;
@@ -286,7 +286,7 @@ const hlookup::string_map<VertexInputDesc>& ProgramGL::getAllActiveVertexInputs(
 
     for (int i = 0; i < numOfActiveAttributes; i++)
     {
-        glGetActiveAttrib(_program, i, MAX_ATTRIBUTE_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.get());
+        glGetActiveAttrib(_program, i, MAX_VERTEX_INPUT_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.get());
         CHECK_GL_ERROR_DEBUG();
         std::string_view name{attrName.get(), static_cast<size_t>(attrNameLen)};
         info.location = glGetAttribLocation(_program, name.data());
@@ -449,7 +449,7 @@ void ProgramGL::clearUniformBuffers()
     _uniformBuffers.clear();
 }
 
-const VertexInputDesc* ProgramGL::getVertexInputDesc(VertexInputSemantic name) const
+const VertexInputDesc* ProgramGL::getVertexInputDesc(VertexInputKind name) const
 {
     return _builtinAttributeLocation[name];
 }
@@ -544,7 +544,7 @@ int ProgramGL::getOriginalLocation(int location) const
 }
 #endif
 
-const hlookup::string_map<UniformInfo>& ProgramGL::getAllActiveUniformInfo(ShaderStage stage) const
+const hlookup::string_map<UniformInfo>& ProgramGL::getActiveUniformInfos(ShaderStage stage) const
 {
     return _activeUniformInfos;
 }

@@ -223,7 +223,7 @@ const UniformInfo& ShaderModuleImpl::getUniformInfo(std::string_view name) const
     return none;
 }
 
-const VertexInputDesc* ShaderModuleImpl::getVertexInputDesc(VertexInputSemantic name) const
+const VertexInputDesc* ShaderModuleImpl::getVertexInputDesc(VertexInputKind name) const
 {
     return _builtinVertexInputs[name];
 }
@@ -242,19 +242,19 @@ void ShaderModuleImpl::setBuiltinLocations()
     /*--- Builtin Attribs ---*/
 
     /// a_position
-    _builtinVertexInputs[VertexInputSemantic::POSITION] = getVertexInputDesc(ATTRIBUTE_NAME_POSITION);
+    _builtinVertexInputs[VertexInputKind::POSITION] = getVertexInputDesc(VERTEX_INPUT_NAME_POSITION);
 
     /// a_color
-    _builtinVertexInputs[VertexInputSemantic::COLOR] = getVertexInputDesc(ATTRIBUTE_NAME_COLOR);
+    _builtinVertexInputs[VertexInputKind::COLOR] = getVertexInputDesc(VERTEX_INPUT_NAME_COLOR);
 
     /// a_texCoord
-    _builtinVertexInputs[VertexInputSemantic::TEXCOORD] = getVertexInputDesc(ATTRIBUTE_NAME_TEXCOORD);
+    _builtinVertexInputs[VertexInputKind::TEXCOORD] = getVertexInputDesc(VERTEX_INPUT_NAME_TEXCOORD);
 
     // a_normal
-    _builtinVertexInputs[VertexInputSemantic::NORMAL] = getVertexInputDesc(ATTRIBUTE_NAME_NORMAL);
+    _builtinVertexInputs[VertexInputKind::NORMAL] = getVertexInputDesc(VERTEX_INPUT_NAME_NORMAL);
 
     // a_instance
-    _builtinVertexInputs[VertexInputSemantic::INSTANCE] = getVertexInputDesc(ATTRIBUTE_NAME_INSTANCE);
+    _builtinVertexInputs[VertexInputKind::INSTANCE] = getVertexInputDesc(VERTEX_INPUT_NAME_INSTANCE);
 
     /*--- Builtin Uniforms ---*/
 

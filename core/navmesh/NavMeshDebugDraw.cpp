@@ -46,11 +46,11 @@ NavMeshDebugDraw::NavMeshDebugDraw()
 
     // the POSITION_COLOR default vertex layout is: V3F_C4F, so we need modify it
     auto vertexLayout = _programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", _programState->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
+    vertexLayout->setAttrib("a_position", _programState->getVertexInputDesc(backend::VertexInputKind::POSITION),
                                 backend::VertexFormat::FLOAT3,
                                 offsetof(V3F_C4F, position),
                                 false);
-    vertexLayout->setAttrib("a_color", _programState->getVertexInputDesc(backend::VertexInputSemantic::COLOR),
+    vertexLayout->setAttrib("a_color", _programState->getVertexInputDesc(backend::VertexInputKind::COLOR),
                                 backend::VertexFormat::FLOAT4,
                                 offsetof(V3F_C4F, color),
                                 false);

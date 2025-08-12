@@ -497,14 +497,14 @@ static constexpr auto UNIFORM_NAME_EFFECT_COLOR = "u_effectColor"sv;
 static constexpr auto UNIFORM_NAME_EFFECT_TYPE  = "u_effectType"sv;
 
 /// built-in attribute name
-static constexpr auto ATTRIBUTE_NAME_POSITION  = "a_position"sv;
-static constexpr auto ATTRIBUTE_NAME_COLOR     = "a_color"sv;
-static constexpr auto ATTRIBUTE_NAME_TEXCOORD  = "a_texCoord"sv;
-static constexpr auto ATTRIBUTE_NAME_TEXCOORD1 = "a_texCoord1"sv;
-static constexpr auto ATTRIBUTE_NAME_TEXCOORD2 = "a_texCoord2"sv;
-static constexpr auto ATTRIBUTE_NAME_TEXCOORD3 = "a_texCoord3"sv;
-static constexpr auto ATTRIBUTE_NAME_NORMAL    = "a_normal"sv;
-static constexpr auto ATTRIBUTE_NAME_INSTANCE  = "a_instance"sv;
+static constexpr auto VERTEX_INPUT_NAME_POSITION  = "a_position"sv;
+static constexpr auto VERTEX_INPUT_NAME_COLOR     = "a_color"sv;
+static constexpr auto VERTEX_INPUT_NAME_TEXCOORD  = "a_texCoord"sv;
+static constexpr auto VERTEX_INPUT_NAME_TEXCOORD1 = "a_texCoord1"sv;
+static constexpr auto VERTEX_INPUT_NAME_TEXCOORD2 = "a_texCoord2"sv;
+static constexpr auto VERTEX_INPUT_NAME_TEXCOORD3 = "a_texCoord3"sv;
+static constexpr auto VERTEX_INPUT_NAME_NORMAL    = "a_normal"sv;
+static constexpr auto VERTEX_INPUT_NAME_INSTANCE  = "a_instance"sv;
 
 /**
  * @brief a structor to store blend descriptor

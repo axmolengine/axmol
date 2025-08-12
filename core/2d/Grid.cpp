@@ -116,7 +116,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
 #define VERTEX_TEXCOORD_SIZE 2
     uint32_t texcoordOffset   = (VERTEX_POSITION_SIZE) * sizeof(float);
     uint32_t totalSize        = (VERTEX_POSITION_SIZE + VERTEX_TEXCOORD_SIZE) * sizeof(float);
-    const auto& vertexInputs = _programState->getProgram()->getAllActiveVertexInputs();
+    const auto& vertexInputs = _programState->getProgram()->getActiveVertexInputs();
     auto iter                 = vertexInputs.find("a_position");
 
     auto layout = _programState->getMutableVertexLayout();

@@ -29,7 +29,6 @@
 #include "RenderPipelineMTL.h"
 #include "TextureMTL.h"
 #include "UtilsMTL.h"
-#include "../Macros.h"
 #include "BufferManager.h"
 #include "DepthStencilStateMTL.h"
 #include "RenderTargetMTL.h"
@@ -137,21 +136,12 @@ static MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt
 
 static id<MTLTexture> getMTLTexture(Texture* texture, int index)
 {
-    return reinterpret_cast<id<MTLTexture>>(texture->getHandler(index));
+    return static_cast<TextureImpl*>(texture)->internalHandle(index);
 }
 
 static id<MTLSamplerState> getMTLSamplerState(Texture* texture)
 {
-    switch (texture->getTextureType())
-    {
-    case TextureType::TEXTURE_2D:
-        return static_cast<TextureMTL*>(texture)->getMTLSamplerState();
-    case TextureType::TEXTURE_CUBE:
-        return static_cast<TextureCubeMTL*>(texture)->getMTLSamplerState();
-    default:
-        assert(false);
-        return nil;
-    }
+    return static_cast<TextureImpl*>(texture)->internalSampler();
 }
 
 inline int clamp(int value, int min, int max)
@@ -563,7 +553,7 @@ void CommandBufferMTL::readPixels(Texture* texture,
                                   std::size_t rectHeight,
                                   PixelBufferDescriptor& pbd)
 {
-    CommandBufferMTL::readPixels(reinterpret_cast<id<MTLTexture>>(texture->getHandler()), origX, origY, rectWidth,
+    CommandBufferMTL::readPixels(static_cast<TextureImpl*>(texture)->internalHandle(), origX, origY, rectWidth,
                                  rectHeight, pbd);
 }
 

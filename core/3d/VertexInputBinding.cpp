@@ -124,7 +124,7 @@ void VertexInputBinding::parseAttributes()
 bool VertexInputBinding::hasAttribute(const shaderinfos::VertexKey& key) const
 {
     auto& name = shaderinfos::getAttributeName(key);
-    auto& vertexInputs = _programState->getProgram()->getAllActiveVertexInputs();
+    auto& vertexInputs = _programState->getProgram()->getActiveVertexInputs();
     return vertexInputs.find(name) != vertexInputs.end();
 }
 

@@ -250,25 +250,25 @@ namespace attribute
 @{
 */
 /**Attribute color.*/
-extern const char* ATTRIBUTE_NAME_COLOR;
+extern const char* VERTEX_INPUT_NAME_COLOR;
 /**Attribute position.*/
-extern const char* ATTRIBUTE_NAME_POSITION;
+extern const char* VERTEX_INPUT_NAME_POSITION;
 /**@{ Attribute Texcoord 0-3.*/
-extern const char* ATTRIBUTE_NAME_TEX_COORD;
-extern const char* ATTRIBUTE_NAME_TEX_COORD1;
-extern const char* ATTRIBUTE_NAME_TEX_COORD2;
-extern const char* ATTRIBUTE_NAME_TEX_COORD3;
+extern const char* VERTEX_INPUT_NAME_TEX_COORD;
+extern const char* VERTEX_INPUT_NAME_TEX_COORD1;
+extern const char* VERTEX_INPUT_NAME_TEX_COORD2;
+extern const char* VERTEX_INPUT_NAME_TEX_COORD3;
 /**@}*/
 /**Attribute normal.*/
-extern const char* ATTRIBUTE_NAME_NORMAL;
+extern const char* VERTEX_INPUT_NAME_NORMAL;
 /**Attribute blend weight.*/
-extern const char* ATTRIBUTE_NAME_BLEND_WEIGHT;
+extern const char* VERTEX_INPUT_NAME_BLEND_WEIGHT;
 /**Attribute blend index.*/
-extern const char* ATTRIBUTE_NAME_BLEND_INDEX;
+extern const char* VERTEX_INPUT_NAME_BLEND_INDEX;
 /**Attribute blend tangent.*/
-extern const char* ATTRIBUTE_NAME_TANGENT;
+extern const char* VERTEX_INPUT_NAME_TANGENT;
 /**Attribute blend binormal.*/
-extern const char* ATTRIBUTE_NAME_BINORMAL;
+extern const char* VERTEX_INPUT_NAME_BINORMAL;
 /**
 end of Built Attribute names
 @}

@@ -233,7 +233,7 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool own
 
         #if 0
         // setup custom vertex layout for V2F_T2F_C4B
-        const auto& vertexInputs = _programState->getProgram()->getAllActiveVertexInputs();
+        const auto& vertexInputs = _programState->getProgram()->getActiveVertexInputs();
         auto iter                = vertexInputs.find("a_position");
         auto layout               = _programState->getMutableVertexLayout();
         if (iter != vertexInputs.end())

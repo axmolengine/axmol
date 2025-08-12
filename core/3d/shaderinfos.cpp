@@ -74,27 +74,27 @@ const char* UNIFORM_NAME_ALPHA_TEST_VALUE     = "AX_alpha_value";
 namespace attribute
 {
 // Attribute names
-const char* ATTRIBUTE_NAME_COLOR        = "a_color";
-const char* ATTRIBUTE_NAME_POSITION     = "a_position";
-const char* ATTRIBUTE_NAME_TEX_COORD    = "a_texCoord";
-const char* ATTRIBUTE_NAME_TEX_COORD1   = "a_texCoord1";
-const char* ATTRIBUTE_NAME_TEX_COORD2   = "a_texCoord2";
-const char* ATTRIBUTE_NAME_TEX_COORD3   = "a_texCoord3";
-const char* ATTRIBUTE_NAME_NORMAL       = "a_normal";
-const char* ATTRIBUTE_NAME_BLEND_WEIGHT = "a_blendWeight";
-const char* ATTRIBUTE_NAME_BLEND_INDEX  = "a_blendIndex";
-const char* ATTRIBUTE_NAME_TANGENT      = "a_tangent";
-const char* ATTRIBUTE_NAME_BINORMAL     = "a_binormal";
+const char* VERTEX_INPUT_NAME_COLOR        = "a_color";
+const char* VERTEX_INPUT_NAME_POSITION     = "a_position";
+const char* VERTEX_INPUT_NAME_TEX_COORD    = "a_texCoord";
+const char* VERTEX_INPUT_NAME_TEX_COORD1   = "a_texCoord1";
+const char* VERTEX_INPUT_NAME_TEX_COORD2   = "a_texCoord2";
+const char* VERTEX_INPUT_NAME_TEX_COORD3   = "a_texCoord3";
+const char* VERTEX_INPUT_NAME_NORMAL       = "a_normal";
+const char* VERTEX_INPUT_NAME_BLEND_WEIGHT = "a_blendWeight";
+const char* VERTEX_INPUT_NAME_BLEND_INDEX  = "a_blendIndex";
+const char* VERTEX_INPUT_NAME_TANGENT      = "a_tangent";
+const char* VERTEX_INPUT_NAME_BINORMAL     = "a_binormal";
 }  // namespace attribute
 
 static std::vector<std::pair<const char*, VertexKey>> locations = {
-    {attribute::ATTRIBUTE_NAME_POSITION, VertexKey::VERTEX_ATTRIB_POSITION},
-    {attribute::ATTRIBUTE_NAME_COLOR, VertexKey::VERTEX_ATTRIB_COLOR},
-    {attribute::ATTRIBUTE_NAME_TEX_COORD, VertexKey::VERTEX_ATTRIB_TEX_COORD},
-    {attribute::ATTRIBUTE_NAME_TEX_COORD1, VertexKey::VERTEX_ATTRIB_TEX_COORD1},
-    {attribute::ATTRIBUTE_NAME_TEX_COORD2, VertexKey::VERTEX_ATTRIB_TEX_COORD2},
-    {attribute::ATTRIBUTE_NAME_TEX_COORD3, VertexKey::VERTEX_ATTRIB_TEX_COORD3},
-    {attribute::ATTRIBUTE_NAME_NORMAL, VertexKey::VERTEX_ATTRIB_NORMAL},
+    {attribute::VERTEX_INPUT_NAME_POSITION, VertexKey::VERTEX_ATTRIB_POSITION},
+    {attribute::VERTEX_INPUT_NAME_COLOR, VertexKey::VERTEX_ATTRIB_COLOR},
+    {attribute::VERTEX_INPUT_NAME_TEX_COORD, VertexKey::VERTEX_ATTRIB_TEX_COORD},
+    {attribute::VERTEX_INPUT_NAME_TEX_COORD1, VertexKey::VERTEX_ATTRIB_TEX_COORD1},
+    {attribute::VERTEX_INPUT_NAME_TEX_COORD2, VertexKey::VERTEX_ATTRIB_TEX_COORD2},
+    {attribute::VERTEX_INPUT_NAME_TEX_COORD3, VertexKey::VERTEX_ATTRIB_TEX_COORD3},
+    {attribute::VERTEX_INPUT_NAME_NORMAL, VertexKey::VERTEX_ATTRIB_NORMAL},
 };
 
 const std::vector<std::pair<const char*, VertexKey>>& getPredefinedAttributes()
@@ -105,12 +105,12 @@ const std::vector<std::pair<const char*, VertexKey>>& getPredefinedAttributes()
 const std::string_view getAttributeName(const VertexKey& key)
 {
     static std::string_view s_attributeNames[] = {
-        shaderinfos::attribute::ATTRIBUTE_NAME_POSITION,    shaderinfos::attribute::ATTRIBUTE_NAME_COLOR,
-        shaderinfos::attribute::ATTRIBUTE_NAME_TEX_COORD,   shaderinfos::attribute::ATTRIBUTE_NAME_TEX_COORD1,
-        shaderinfos::attribute::ATTRIBUTE_NAME_TEX_COORD2,  shaderinfos::attribute::ATTRIBUTE_NAME_TEX_COORD3,
-        shaderinfos::attribute::ATTRIBUTE_NAME_NORMAL,      shaderinfos::attribute::ATTRIBUTE_NAME_BLEND_WEIGHT,
-        shaderinfos::attribute::ATTRIBUTE_NAME_BLEND_INDEX, shaderinfos::attribute::ATTRIBUTE_NAME_TANGENT,
-        shaderinfos::attribute::ATTRIBUTE_NAME_BINORMAL};
+        shaderinfos::attribute::VERTEX_INPUT_NAME_POSITION,    shaderinfos::attribute::VERTEX_INPUT_NAME_COLOR,
+        shaderinfos::attribute::VERTEX_INPUT_NAME_TEX_COORD,   shaderinfos::attribute::VERTEX_INPUT_NAME_TEX_COORD1,
+        shaderinfos::attribute::VERTEX_INPUT_NAME_TEX_COORD2,  shaderinfos::attribute::VERTEX_INPUT_NAME_TEX_COORD3,
+        shaderinfos::attribute::VERTEX_INPUT_NAME_NORMAL,      shaderinfos::attribute::VERTEX_INPUT_NAME_BLEND_WEIGHT,
+        shaderinfos::attribute::VERTEX_INPUT_NAME_BLEND_INDEX, shaderinfos::attribute::VERTEX_INPUT_NAME_TANGENT,
+        shaderinfos::attribute::VERTEX_INPUT_NAME_BINORMAL};
 
     static int max = sizeof(s_attributeNames) / sizeof(s_attributeNames[0]);
     auto idx       = static_cast<int>(key);

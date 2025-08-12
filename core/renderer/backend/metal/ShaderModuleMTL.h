@@ -26,7 +26,6 @@
 #pragma once
 
 #include "../ShaderModule.h"
-#include "../Types.h"
 #include <stdint.h>
 #include <string>
 #include <vector>
@@ -45,7 +44,7 @@ struct SLCReflectContext;
 /**
  * To Create a vertex or fragment shader.
  */
-class ShaderModuleMTL : public ShaderModule
+class ShaderModuleImpl : public ShaderModule
 {
 public:
     /**
@@ -53,8 +52,8 @@ public:
      * @param stage Specify what kinds of shader to be created.
      * @param source Specify the shader source.
      */
-    ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source);
-    ~ShaderModuleMTL();
+    ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source);
+    ~ShaderModuleImpl();
 
     /**
      * Get MTLFunction object.
@@ -66,19 +65,13 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo() const { return _activeUniformInfos; }
+    inline const hlookup::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
 
     /**
      * Get maximum uniform location.
      * @return Maximum uniform location.
      */
     inline const int getMaxLocation() const { return _maxLocation; }
-
-    /**
-     * Get active attribute informations.
-     * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
-     */
-    inline const hlookup::string_map<AttributeBindInfo>& getAttributeInfo() const { return _attributeInfo; }
 
     /**
      * Get uniform info by engine built-in uniform enum name.
@@ -95,18 +88,24 @@ public:
     const UniformInfo& getUniformInfo(std::string_view name) const;
 
     /**
-     * Get attribute location by engine built-in attribute enum name.
-     * @param name Specifies the engine built-in attribute enum name.
-     * @return The attribute location.
-     */
-    int getAttributeLocation(Attribute name) const;
-
-    /**
      * Get attribute location by attribute name.
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    int getAttributeLocation(std::string_view name);
+    const VertexInputDesc* getVertexInputDesc(std::string_view name) const;
+
+    /**
+     * Get attribute location by engine built-in attribute enum name.
+     * @param name Specifies the engine built-in attribute enum name.
+     * @return The attribute location.
+     */
+    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const;
+
+        /**
+     * Get active attribute informations.
+     * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
+     */
+    inline const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
 
     /**
      * Get uniform buffer size in bytes that holds all the uniforms.
@@ -123,9 +122,9 @@ private:
     id<MTLFunction> _mtlFunction = nil;
 
     hlookup::string_map<UniformInfo> _activeUniformInfos;
-    hlookup::string_map<AttributeBindInfo> _attributeInfo;
+    hlookup::string_map<VertexInputDesc> _activeVertexInputs;
 
-    int _attributeLocation[ATTRIBUTE_MAX];
+    const VertexInputDesc* _builtinVertexInputs[VIK_COUNT];
 
     int _maxLocation = -1;
     UniformInfo _builtinUniforms[UNIFORM_MAX];

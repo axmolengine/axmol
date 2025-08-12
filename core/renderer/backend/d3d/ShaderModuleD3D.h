@@ -36,7 +36,7 @@ public:
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    const VertexInputDesc* getVertexInputDesc(VertexInputSemantic name) const;
+    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const;
 
     /**
      * Get attribute location by attribute name.
@@ -55,13 +55,13 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo() const { return _activeUniformInfos; }
+    inline const hlookup::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
 
     /**
      * Get active attribute informations.
      * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
      */
-    inline const hlookup::string_map<VertexInputDesc>& getAllActiveVertexInputs() const { return _allVertexInputs; }
+    inline const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _allVertexInputs; }
 
     /**
      * Get maximum uniform location.
@@ -83,7 +83,7 @@ private:
     hlookup::string_map<VertexInputDesc> _allVertexInputs;
     hlookup::string_map<UniformInfo> _activeUniformInfos;
     
-    const VertexInputDesc* _builtinVertexInputs[VIS_MAX];
+    const VertexInputDesc* _builtinVertexInputs[VIK_COUNT];
 
     int _maxLocation = -1;
     UniformInfo _builtinUniforms[UNIFORM_MAX];

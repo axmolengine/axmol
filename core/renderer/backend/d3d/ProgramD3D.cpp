@@ -20,7 +20,7 @@ ProgramImpl ::~ProgramImpl()
     AX_SAFE_RELEASE(_fsUniformBuffer);
 }
 
-const VertexInputDesc* ProgramImpl::getVertexInputDesc(VertexInputSemantic name) const
+const VertexInputDesc* ProgramImpl::getVertexInputDesc(VertexInputKind name) const
 {
     return _vertexShader->getVertexInputDesc(name);
 }
@@ -28,6 +28,11 @@ const VertexInputDesc* ProgramImpl::getVertexInputDesc(VertexInputSemantic name)
 const VertexInputDesc* ProgramImpl::getVertexInputDesc(std::string_view name) const
 {
     return _vertexShader->getVertexInputDesc(name);
+}
+
+const hlookup::string_map<VertexInputDesc>& ProgramImpl::getActiveVertexInputs() const
+{
+    return _vertexShader->getActiveVertexInputs();
 }
 
 UniformLocation ProgramImpl::getUniformLocation(backend::Uniform name) const
@@ -62,11 +67,6 @@ int ProgramImpl::getMaxFragmentLocation() const
     return _fragmentShader->getMaxLocation();
 }
 
-const hlookup::string_map<VertexInputDesc>& ProgramImpl::getAllActiveVertexInputs() const
-{
-    return _vertexShader->getAllActiveVertexInputs();
-}
-
 std::size_t ProgramImpl::getUniformBufferSize(ShaderStage stage) const
 {
     switch (stage)
@@ -82,10 +82,10 @@ std::size_t ProgramImpl::getUniformBufferSize(ShaderStage stage) const
     return 0;
 }
 
-const hlookup::string_map<UniformInfo>& ProgramImpl::getAllActiveUniformInfo(ShaderStage stage) const
+const hlookup::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage stage) const
 {
-    return stage == ShaderStage::VERTEX ? _vertexShader->getAllActiveUniformInfo()
-                                        : _fragmentShader->getAllActiveUniformInfo();
+    return stage == ShaderStage::VERTEX ? _vertexShader->getActiveUniformInfos()
+                                        : _fragmentShader->getActiveUniformInfos();
 }
 
 ID3DBlob* ProgramImpl::getVSBlob() const

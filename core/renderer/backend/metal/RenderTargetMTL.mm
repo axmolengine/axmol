@@ -1,5 +1,6 @@
 #include "RenderTargetMTL.h"
 #include "UtilsMTL.h"
+#include "TextureMTL.h"
 
 namespace ax::backend {
 
@@ -78,23 +79,21 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
 
     // Sets descriptor depth and stencil params, should match RenderTargetMTL::chooseAttachmentFormat
     {
-        auto depthAttachment = getDepthAttachment();
-        if (depthAttachment)
+        auto depthStencilAttachment = getDepthStencilAttachment();
+        if (depthStencilAttachment)
         {
-            descriptor.depthAttachment.texture = depthAttachment.texture;
-            descriptor.depthAttachment.level   = depthAttachment.level;
+            // depth
+            descriptor.depthAttachment.texture = depthStencilAttachment.texture;
+            descriptor.depthAttachment.level   = depthStencilAttachment.level;
             // descriptor.depthAttachment.slice = depthAttachment.layer;
             descriptor.depthAttachment.loadAction  = getLoadAction(params, TargetBufferFlags::DEPTH);
             descriptor.depthAttachment.storeAction = getStoreAction(params, TargetBufferFlags::DEPTH);
             if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
                 descriptor.depthAttachment.clearDepth = params.clearDepthValue;
-        }
-
-        auto stencilAttachment = getStencilAttachment();
-        if (stencilAttachment)
-        {
-            descriptor.stencilAttachment.texture = stencilAttachment.texture;
-            descriptor.stencilAttachment.level   = stencilAttachment.level;
+            
+            // depth
+            descriptor.stencilAttachment.texture = depthStencilAttachment.texture;
+            descriptor.stencilAttachment.level   = depthStencilAttachment.level;
             // descriptor.stencilAttachment.slice = depthAttachment.layer;
             descriptor.stencilAttachment.loadAction  = getLoadAction(params, TargetBufferFlags::STENCIL);
             descriptor.stencilAttachment.storeAction = getStoreAction(params, TargetBufferFlags::STENCIL);
@@ -130,24 +129,16 @@ RenderTargetMTL::Attachment RenderTargetMTL::getColorAttachment(int index) const
     if (isDefaultRenderTarget() && index == 0)
         return {DriverMTL::getCurrentDrawable().texture, 0};
     auto& rb = this->_color[index];
-    return RenderTargetMTL::Attachment{static_cast<bool>(rb) ? (id<MTLTexture>)(rb.texture->getHandler()) : nil,
+    return RenderTargetMTL::Attachment{static_cast<bool>(rb) ? static_cast<TextureImpl*>(rb.texture)->internalHandle() : nil,
                                        rb.level};
 }
 
-RenderTargetMTL::Attachment RenderTargetMTL::getDepthAttachment() const
+RenderTargetMTL::Attachment RenderTargetMTL::getDepthStencilAttachment() const
 {
     if (isDefaultRenderTarget())
         return {UtilsMTL::getDefaultDepthStencilTexture(), 0};
-    auto& rb = this->_depth;
-    return RenderTargetMTL::Attachment{!!rb ? (id<MTLTexture>)(rb.texture->getHandler()) : nil, rb.level};
-}
-
-RenderTargetMTL::Attachment RenderTargetMTL::getStencilAttachment() const
-{
-    if (isDefaultRenderTarget())
-        return RenderTargetMTL::Attachment{UtilsMTL::getDefaultDepthStencilTexture(), 0};
-    auto& rb = this->_stencil;
-    return RenderTargetMTL::Attachment{!!rb ? (id<MTLTexture>)(rb.texture->getHandler()) : nil, rb.level};
+    auto& rb = this->_depthStencil;
+    return RenderTargetMTL::Attachment{!!rb ? static_cast<TextureImpl*>(rb.texture)->internalHandle() : nil, rb.level};
 }
 
 PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
@@ -160,21 +151,12 @@ PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const
     return rb ? rb.texture->getTextureFormat() : PixelFormat::NONE;
 }
 
-PixelFormat RenderTargetMTL::getDepthAttachmentPixelFormat() const
+PixelFormat RenderTargetMTL::getDepthStencilAttachmentPixelFormat() const
 {  // FIXME: axmol only support D24S8
     if (isDefaultRenderTarget())
         return PixelFormat::D24S8;
-    if (_depth)
-        return _depth.texture->getTextureFormat();
-    return PixelFormat::NONE;
-}
-
-PixelFormat RenderTargetMTL::getStencilAttachmentPixelFormat() const
-{  // FIXME: axmol only support D24S8
-    if (isDefaultRenderTarget())
-        return PixelFormat::D24S8;
-    if (_stencil)
-        return _stencil.texture->getTextureFormat();
+    if (_depthStencil)
+        return _depthStencil.texture->getTextureFormat();
     return PixelFormat::NONE;
 }
 

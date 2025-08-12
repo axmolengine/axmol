@@ -401,7 +401,7 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
         for (auto&& cb : callbacks)
             cb.second(_programState, cb.first);
 
-        auto& uniformInfos = program->getAllActiveUniformInfo(ShaderStage::VERTEX);
+        auto& uniformInfos = program->getActiveUniformInfos(ShaderStage::VERTEX);
 
         std::size_t bufferSize = 0;
         auto buffer            = _programState->getVertexUniformBuffer(bufferSize);

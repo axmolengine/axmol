@@ -25,8 +25,7 @@
 
 #pragma once
 
-#include "../Macros.h"
-#include "../Types.h"
+#include "../BaseDefs.h"
 #include "../PixelBufferDescriptor.h"
 #import <Metal/Metal.h>
 #include <functional>

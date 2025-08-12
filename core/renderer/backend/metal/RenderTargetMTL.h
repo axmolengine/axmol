@@ -23,12 +23,10 @@ public:
     void applyRenderPassAttachments(const RenderPassDescriptor&, MTLRenderPassDescriptor*) const;
 
     Attachment getColorAttachment(int index) const;
-    Attachment getDepthAttachment() const;
-    Attachment getStencilAttachment() const;
+    Attachment getDepthStencilAttachment() const;
 
     PixelFormat getColorAttachmentPixelFormat(int index) const;
-    PixelFormat getDepthAttachmentPixelFormat() const;
-    PixelFormat getStencilAttachmentPixelFormat() const;
+    PixelFormat getDepthStencilAttachmentPixelFormat() const;
 
 public:
     // "Sidecar" textures used to implement automatic MSAA resolve.

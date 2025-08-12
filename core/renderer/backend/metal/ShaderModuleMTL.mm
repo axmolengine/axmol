@@ -48,7 +48,7 @@ static inline std::string_view _sgs_read_name(yasio::fast_ibstream_view* ibs) {
     return name;
 }
 
-ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source)
+ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source)
     : ShaderModule(stage)
 {
     yasio::fast_ibstream_view ibs(source.data(), source.length());
@@ -184,12 +184,12 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
     [library release];
 }
 
-ShaderModuleMTL::~ShaderModuleMTL()
+ShaderModuleImpl::~ShaderModuleImpl()
 {
     [_mtlFunction release];
 }
 
-void ShaderModuleMTL::parseAttibute(SLCReflectContext* context)
+void ShaderModuleImpl::parseAttibute(SLCReflectContext* context)
 {
     auto ibs = context->ibs;
 
@@ -200,13 +200,13 @@ void ShaderModuleMTL::parseAttibute(SLCReflectContext* context)
 
         ibs->advance(sizeof(sgs_refl_input) - offsetof(sgs_refl_input, semantic));
 
-        AttributeBindInfo attributeInfo;
-        attributeInfo.location = loc;
-        _attributeInfo[name]   = attributeInfo;
+        VertexInputDesc vid;
+        vid.location = loc;
+        _activeVertexInputs[name]   = vid;
     }
 }
 
-void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
+void ShaderModuleImpl::parseUniform(SLCReflectContext* context)
 {
     _uniformBufferSize = 0;
     auto ibs = context->ibs;
@@ -243,7 +243,7 @@ void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
     }
 }
 
-void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
+void ShaderModuleImpl::parseTexture(SLCReflectContext* context)
 {
     auto ibs = context->ibs;
     for (int i = 0; i < context->refl->num_textures; ++i)
@@ -260,12 +260,12 @@ void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
     }
 }
 
-const UniformInfo& ShaderModuleMTL::getUniformInfo(Uniform name) const
+const UniformInfo& ShaderModuleImpl::getUniformInfo(Uniform name) const
 {
     return _builtinUniforms[name];
 }
 
-const UniformInfo& ShaderModuleMTL::getUniformInfo(std::string_view name) const
+const UniformInfo& ShaderModuleImpl::getUniformInfo(std::string_view name) const
 {
     static UniformInfo none;
     auto iter = _activeUniformInfos.find(name);
@@ -274,21 +274,35 @@ const UniformInfo& ShaderModuleMTL::getUniformInfo(std::string_view name) const
     return none;
 }
 
-void ShaderModuleMTL::setBuiltinLocations()
+const VertexInputDesc* ShaderModuleImpl::getVertexInputDesc(VertexInputKind name) const
+{
+    return _builtinVertexInputs[name];
+}
+
+const VertexInputDesc* ShaderModuleImpl::getVertexInputDesc(std::string_view name) const
+{
+    auto it = _activeVertexInputs.find(name);
+    if (it != _activeVertexInputs.end())
+        return &it->second;
+    else
+        return nullptr;
+}
+
+void ShaderModuleImpl::setBuiltinLocations()
 {
     /*--- Builtin Attribs ---*/
 
     /// a_position
-    _attributeLocation[Attribute::POSITION] = getAttributeLocation(ATTRIBUTE_NAME_POSITION);
+    _builtinVertexInputs[VertexInputKind::POSITION] = getVertexInputDesc(VERTEX_INPUT_NAME_POSITION);
 
     /// a_color
-    _attributeLocation[Attribute::COLOR] = getAttributeLocation(ATTRIBUTE_NAME_COLOR);
+    _builtinVertexInputs[VertexInputKind::COLOR] = getVertexInputDesc(VERTEX_INPUT_NAME_COLOR);
 
     /// a_texCoord
-    _attributeLocation[Attribute::TEXCOORD] = getAttributeLocation(ATTRIBUTE_NAME_TEXCOORD);
+    _builtinVertexInputs[VertexInputKind::TEXCOORD] = getVertexInputDesc(VERTEX_INPUT_NAME_TEXCOORD);
 
     // a_normal
-    _attributeLocation[Attribute::NORMAL] = getAttributeLocation(ATTRIBUTE_NAME_NORMAL);
+    _builtinVertexInputs[VertexInputKind::NORMAL] = getVertexInputDesc(VERTEX_INPUT_NAME_NORMAL);
 
     /*--- Builtin Uniforms ---*/
 
@@ -309,20 +323,6 @@ void ShaderModuleMTL::setBuiltinLocations()
 
     /// u_effectType
     _builtinUniforms[Uniform::EFFECT_TYPE] = getUniformInfo(UNIFORM_NAME_EFFECT_TYPE);
-}
-
-int ShaderModuleMTL::getAttributeLocation(Attribute name) const
-{
-    return _attributeLocation[name];
-}
-
-int ShaderModuleMTL::getAttributeLocation(std::string_view name)
-{
-    auto iter = _attributeInfo.find(name);
-    if (iter != _attributeInfo.end())
-        return _attributeInfo[name].location;
-    else
-        return -1;
 }
 
 }

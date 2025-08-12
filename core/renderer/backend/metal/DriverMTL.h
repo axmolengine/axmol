@@ -129,7 +129,7 @@ public:
      * New a CommandBuffer object.
      * @return A CommandBuffer object.
      */
-    CommandBuffer* newCommandBuffer(void*) override;
+    CommandBuffer* createCommandBuffer(void*) override;
 
     /**
      * New a Buffer object.
@@ -140,31 +140,30 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
+    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
 
     /**
      * New a Texture object.
      * @param descriptor Specifies texture description.
      * @return A Texture object.
      */
-    Texture* newTexture(const TextureDescriptor& descriptor) override;
+    Texture* createTexture(const TextureDescriptor& descriptor) override;
 
-    RenderTarget* newDefaultRenderTarget() override;
-    RenderTarget* newRenderTarget(Texture* colorAttachment,
-                                  Texture* depthAttachment,
-                                  Texture* stencilAttachhment) override;
+    RenderTarget* createDefaultRenderTarget() override;
+    RenderTarget* createRenderTarget(Texture* colorAttachment,
+                                  Texture* depthStencilAttachment) override;
 
     /**
      * New a DepthStencilState object.
      */
-    DepthStencilState* newDepthStencilState() override;
+    DepthStencilState* createDepthStencilState() override;
 
     /**
      * New a RenderPipeline object.
      * @param descriptor Specifies render pipeline description.
      * @return A RenderPipeline object.
      */
-    RenderPipeline* newRenderPipeline() override;
+    RenderPipeline* createRenderPipeline() override;
 
     /**
      * This property controls whether or not the drawables'
@@ -183,7 +182,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+    Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
 
     /**
      * Get a MTLDevice object.
@@ -204,19 +203,19 @@ public:
      * Get vendor device name.
      * @return Vendor device name.
      */
-    const char* getVendor() const override;
+    std::string getVendor() const override;
 
     /**
      * Get the full name of the vendor device.
      * @return The full name of the vendor device.
      */
-    const char* getRenderer() const override;
+    std::string getRenderer() const override;
 
     /**
      * Get featureSet name.
      * @return FeatureSet name.
      */
-    const char* getVersion() const override;
+    std::string getVersion() const override;
 
     /**
      * Check if feature supported by Metal.
@@ -234,7 +233,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    ShaderModule* newShaderModule(ShaderStage stage, std::string_view source) override;
+    ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
 
 private:
     static CAMetalLayer* _metalLayer;

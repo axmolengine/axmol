@@ -44,7 +44,13 @@ public:
      * @param name Specifies the engine built-in attribute enum name.
      * @return The attribute location.
      */
-    const VertexInputDesc* getVertexInputDesc(VertexInputSemantic name) const override;
+    const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const override;
+
+    /**
+     * Get active vertex attributes.
+     * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
+     */
+    const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
 
     /**
      * Get vertex shader module.
@@ -57,12 +63,6 @@ public:
      * @ Fragment shader module.
      */
     ShaderModuleImpl* getFragmentShader() const { return _fragmentShader; }
-
-    /**
-     * Get active vertex attributes.
-     * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
-     */
-    const hlookup::string_map<VertexInputDesc>& getAllActiveVertexInputs() const override;
 
     /**
      * Get maximum vertex location.
@@ -87,7 +87,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
+    const hlookup::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
 
     ID3DBlob* getVSBlob() const;
 

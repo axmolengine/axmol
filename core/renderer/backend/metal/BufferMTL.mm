@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "BufferMTL.h"
-#include "../Macros.h"
+#include "../BaseDefs.h"
 #include "BufferManager.h"
 
 namespace ax::backend {

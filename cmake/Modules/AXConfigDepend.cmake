@@ -74,7 +74,7 @@ macro(ax_depend)
         ${COREAUDIO_LIBRARY}
         ${SYSTEMCONFIGURATION_LIBRARY}
       )
-      if(AX_USE_COMPAT_GL)
+      if(AX_RENDER_API STREQUAL "gl")
         find_library(OPENGL_LIBRARY OpenGL)
         list(APPEND PLATFORM_SPECIFIC_LIBS ${OPENGL_LIBRARY})
       endif()
@@ -101,7 +101,7 @@ macro(ax_depend)
         ${_AX_APPLE_LIBS}
       )
 
-      if(AX_USE_COMPAT_GL)
+      if(AX_RENDER_API STREQUAL "gl")
         find_library(OPENGLES_LIBRARY OpenGLES)
         list(APPEND PLATFORM_SPECIFIC_LIBS ${OPENGLES_LIBRARY})
       endif()

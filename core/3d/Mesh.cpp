@@ -396,7 +396,7 @@ void Mesh::setMaterial(Material* material)
                 if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {
                     auto program        = pass->getProgramState()->getProgram();
-                    auto& vertexInputs     = program->getAllActiveVertexInputs();
+                    auto& vertexInputs     = program->getActiveVertexInputs();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
                     //AXASSERT(vertexInputs.size() <= attributeCount, "missing attribute data");

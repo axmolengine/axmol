@@ -143,7 +143,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) = 0;
+    virtual Program* createProgram(std::string_view vsSource, std::string_view fsSource) = 0;
 
     virtual VertexLayout* createVertexLayout();
 

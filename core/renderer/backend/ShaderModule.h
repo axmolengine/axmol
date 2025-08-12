@@ -51,7 +51,7 @@ enum Uniform : uint32_t
     UNIFORM_MAX  // Maximum uniforms
 };
 
-enum VertexInputSemantic : uint32_t
+enum VertexInputKind : uint32_t
 {
     POSITION,
     COLOR,
@@ -61,7 +61,7 @@ enum VertexInputSemantic : uint32_t
     TEXCOORD3,
     NORMAL,
     INSTANCE,
-    VIS_MAX  // 
+    VIK_COUNT  // 
 };
 /**
  * Create shader.
