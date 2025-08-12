@@ -245,8 +245,8 @@ private:
     struct CubismShaderSet
     {
         ax::backend::Program* ShaderProgram;               ///< シェーダプログラムのアドレス
-        unsigned int AttributePositionLocation;   ///< シェーダプログラムに渡す変数のアドレス(Position)
-        unsigned int AttributeTexCoordLocation;   ///< シェーダプログラムに渡す変数のアドレス(TexCoord)
+        const ax::backend::VertexInputDesc* AttributePositionLocation{nullptr};   ///< シェーダプログラムに渡す変数のアドレス(Position)
+        const ax::backend::VertexInputDesc* AttributeTexCoordLocation{nullptr};   ///< シェーダプログラムに渡す変数のアドレス(TexCoord)
         ax::backend::UniformLocation UniformMatrixLocation;        ///< シェーダプログラムに渡す変数のアドレス(Matrix)
         ax::backend::UniformLocation UniformClipMatrixLocation;    ///< シェーダプログラムに渡す変数のアドレス(ClipMatrix)
         ax::backend::UniformLocation SamplerTexture0Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture0)

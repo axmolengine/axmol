@@ -55,7 +55,7 @@ public:
     * @brief テクスチャIDを指定して描画する
     *
     */
-    void RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer, backend::TextureBackend* texture, float uvVertex[8]) const;
+    void RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer, backend::Texture* texture, float uvVertex[8]) const;
 
     /**
      * @brief 色設定

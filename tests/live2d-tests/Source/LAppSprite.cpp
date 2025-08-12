@@ -21,7 +21,7 @@ LAppSprite::~LAppSprite()
 }
 
 void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer,
-                                 backend::TextureBackend* texture,
+                                 backend::Texture* texture,
                                  float uvVertex[8]) const
 {
     Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer* drawCommandBuffer = CSM_NEW Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer();
@@ -64,8 +64,8 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     auto layout = programState->getMutableVertexLayout();
     // attribute属性を登録
-    layout->setAttrib("a_position", _program->getAttributeLocation("a_position"), backend::VertexFormat::FLOAT2, 0, false);
-    layout->setAttrib("a_texCoord", _program->getAttributeLocation("a_texCoord"), backend::VertexFormat::FLOAT2,
+    layout->setAttrib("a_position", _program->getVertexInputDesc("a_position"), backend::VertexFormat::FLOAT2, 0, false);
+    layout->setAttrib("a_texCoord", _program->getVertexInputDesc("a_texCoord"), backend::VertexFormat::FLOAT2,
                             sizeof(float) * 2, false);
 
     // uniform属性の登録
