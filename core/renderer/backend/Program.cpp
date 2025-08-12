@@ -159,8 +159,8 @@ struct VertexLayoutHelper
         auto vertexLayout = program->getVertexLayout();
         vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
                                 program->getVertexInputDesc(backend::VertexInputSemantic::POSITION),
-                                backend::VertexFormat::FLOAT2, 0, false);
-        vertexLayout->setStride(sizeof(Vec2));
+                                backend::VertexFormat::FLOAT3, 0, false);
+        vertexLayout->setStride(sizeof(Vec3));
     }
 
     static void definePosColor(Program* program)

@@ -104,14 +104,14 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
     setAnchorPoint(Vec2(0.5f, 0.5f));
 
     // init custom command
-    auto attrPosLoc = _programState->getVertexInputDesc("a_position");
+    auto inputDesc = _programState->getVertexInputDesc("a_position");
 
-    auto vertexLayout = _programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", attrPosLoc, backend::VertexFormat::FLOAT2, 0, false);
+    //auto vertexLayout = _programState->getMutableVertexLayout();
+    //vertexLayout->setAttrib("a_position", attrPosLoc, backend::VertexFormat::FLOAT4, 0, false);
 
     float w = SIZE_X, h = SIZE_Y;
-    Vec2 vertices[6] = {Vec2(0.0f, 0.0f), Vec2(w, 0.0f), Vec2(w, h), Vec2(0.0f, 0.0f), Vec2(0.0f, h), Vec2(w, h)};
-    vertexLayout->setStride(sizeof(Vec2));
+    Vec3 vertices[6] = {Vec3(0.0f, 0.0f, 1.0f), Vec3(w, 0.0f, 1.0f), Vec3(w, h, 1.0f),
+                        Vec3(0.0f, 0.0f, 1.0f), Vec3(0.0f, h, 1.0f), Vec3(w, h, 1.0f)};
 
     /*
      * TODO: the Y-coordinate of subclasses are flipped in metal
@@ -119,7 +119,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
      * keywords: AX_USE_METAL , AX_USE_GL
      */
 
-    _customCommand.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(Vec3), 6, CustomCommand::BufferUsage::STATIC);
     _customCommand.updateVertexBuffer(vertices, sizeof(vertices));
 
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
@@ -129,7 +129,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
 
 void ShaderNode::loadShaderVertex(std::string_view vert, std::string_view frag)
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(vert, frag, VertexLayoutType::Sprite);
+    auto program      = ProgramManager::getInstance()->loadProgram(vert, frag, VertexLayoutType::Pos);
     auto programState = new backend::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);

@@ -146,6 +146,7 @@ TextureHandle TextureResource::createTexture(UINT mipLevels)
     if (mipLevels == 0)
     {
         texDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+        texDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
     }
 
     auto fmtInfo = UtilsD3D::toDxgiFormatInfo(_descriptor.textureFormat);

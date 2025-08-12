@@ -19,6 +19,80 @@ static D3D11_BLEND_OP toD3DBlendOp(BlendOperation op)
     }
 }
 
+static D3D11_BLEND toD3DBlendRGB(BlendFactor f)
+{
+    switch (f)
+    {
+    case BlendFactor::ZERO:
+        return D3D11_BLEND_ZERO;
+    case BlendFactor::ONE:
+        return D3D11_BLEND_ONE;
+    case BlendFactor::SRC_COLOR:
+        return D3D11_BLEND_SRC_COLOR;
+    case BlendFactor::ONE_MINUS_SRC_COLOR:
+        return D3D11_BLEND_INV_SRC_COLOR;
+    case BlendFactor::SRC_ALPHA:
+        return D3D11_BLEND_SRC_ALPHA;
+    case BlendFactor::ONE_MINUS_SRC_ALPHA:
+        return D3D11_BLEND_INV_SRC_ALPHA;
+    case BlendFactor::DST_COLOR:
+        return D3D11_BLEND_DEST_COLOR;
+    case BlendFactor::ONE_MINUS_DST_COLOR:
+        return D3D11_BLEND_INV_DEST_COLOR;
+    case BlendFactor::DST_ALPHA:
+        return D3D11_BLEND_DEST_ALPHA;
+    case BlendFactor::ONE_MINUS_DST_ALPHA:
+        return D3D11_BLEND_INV_DEST_ALPHA;
+    case BlendFactor::CONSTANT_ALPHA:
+        return D3D11_BLEND_BLEND_FACTOR;  // same wiht BLEND_COLOR
+    case BlendFactor::SRC_ALPHA_SATURATE:
+        return D3D11_BLEND_SRC_ALPHA_SAT;
+    case BlendFactor::ONE_MINUS_CONSTANT_ALPHA:
+        return D3D11_BLEND_INV_BLEND_FACTOR;
+    case BlendFactor::BLEND_COLOR:
+        return D3D11_BLEND_BLEND_FACTOR;  // blendColor.xyz
+    default:
+        return D3D11_BLEND_ONE;
+    }
+}
+
+static D3D11_BLEND toD3DBlendAlpha(BlendFactor f)
+{
+    switch (f)
+    {
+    case BlendFactor::ZERO:
+        return D3D11_BLEND_ZERO;
+    case BlendFactor::ONE:
+        return D3D11_BLEND_ONE;
+    case BlendFactor::SRC_COLOR:
+        return D3D11_BLEND_SRC_ALPHA;
+    case BlendFactor::ONE_MINUS_SRC_COLOR:
+        return D3D11_BLEND_INV_SRC_ALPHA;
+    case BlendFactor::DST_COLOR:
+        return D3D11_BLEND_DEST_ALPHA;
+    case BlendFactor::ONE_MINUS_DST_COLOR:
+        return D3D11_BLEND_INV_DEST_ALPHA;
+    case BlendFactor::SRC_ALPHA:
+        return D3D11_BLEND_SRC_ALPHA;
+    case BlendFactor::ONE_MINUS_SRC_ALPHA:
+        return D3D11_BLEND_INV_SRC_ALPHA;
+    case BlendFactor::DST_ALPHA:
+        return D3D11_BLEND_DEST_ALPHA;
+    case BlendFactor::ONE_MINUS_DST_ALPHA:
+        return D3D11_BLEND_INV_DEST_ALPHA;
+    case BlendFactor::CONSTANT_ALPHA:
+        return D3D11_BLEND_BLEND_FACTOR;  // blendColor.w
+    case BlendFactor::SRC_ALPHA_SATURATE:
+        return D3D11_BLEND_ONE;  // alpha factor is one
+    case BlendFactor::ONE_MINUS_CONSTANT_ALPHA:
+        return D3D11_BLEND_INV_BLEND_FACTOR;  // 1 - blendColor.w
+    case BlendFactor::BLEND_COLOR:
+        return D3D11_BLEND_BLEND_FACTOR;  // Alpha = blendColor.w
+    default:
+        return D3D11_BLEND_ONE;
+    }
+}
+
 static D3D11_BLEND toD3DBlend(BlendFactor factor)
 {
     switch (factor)
@@ -50,7 +124,7 @@ static D3D11_BLEND toD3DBlend(BlendFactor factor)
     case BlendFactor::ONE_MINUS_CONSTANT_ALPHA:
         return D3D11_BLEND_INV_BLEND_FACTOR;
     case BlendFactor::BLEND_COLOR:
-        return D3D11_BLEND_BLEND_FACTOR;  // 根据需求映射
+        return D3D11_BLEND_BLEND_FACTOR;
     default:
         return D3D11_BLEND_ONE;
     }
@@ -118,22 +192,16 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDescriptor& d
 
         if (desc.blendDescriptor.blendEnabled)
         {
-            bd0.BlendEnable    = TRUE;
-            bd0.SrcBlend       = toD3DBlend(desc.blendDescriptor.sourceRGBBlendFactor);
-            bd0.DestBlend      = toD3DBlend(desc.blendDescriptor.destinationRGBBlendFactor);
-            bd0.BlendOp        = toD3DBlendOp(desc.blendDescriptor.rgbBlendOperation);
-            bd0.SrcBlendAlpha  = toD3DBlend(desc.blendDescriptor.sourceAlphaBlendFactor);
-            bd0.DestBlendAlpha = toD3DBlend(desc.blendDescriptor.destinationAlphaBlendFactor);
-            bd0.BlendOpAlpha   = toD3DBlendOp(desc.blendDescriptor.alphaBlendOperation);
-
             bd0.BlendEnable = TRUE;
 
-            bd0.SrcBlend       = toD3DBlend(desc.blendDescriptor.sourceRGBBlendFactor);
-            bd0.DestBlend      = toD3DBlend(desc.blendDescriptor.destinationRGBBlendFactor);
-            bd0.BlendOp        = toD3DBlendOp(desc.blendDescriptor.rgbBlendOperation);
-            bd0.SrcBlendAlpha  = toD3DBlend(desc.blendDescriptor.sourceAlphaBlendFactor);
-            bd0.DestBlendAlpha = toD3DBlend(desc.blendDescriptor.destinationAlphaBlendFactor);
-            bd0.BlendOpAlpha   = toD3DBlendOp(desc.blendDescriptor.alphaBlendOperation);
+            bd0.SrcBlend  = toD3DBlendRGB(desc.blendDescriptor.sourceRGBBlendFactor);
+            bd0.DestBlend = toD3DBlendRGB(desc.blendDescriptor.destinationRGBBlendFactor);
+
+            bd0.SrcBlendAlpha  = toD3DBlendAlpha(desc.blendDescriptor.sourceAlphaBlendFactor);
+            bd0.DestBlendAlpha = toD3DBlendAlpha(desc.blendDescriptor.destinationAlphaBlendFactor);
+
+            bd0.BlendOp      = toD3DBlendOp(desc.blendDescriptor.rgbBlendOperation);
+            bd0.BlendOpAlpha = toD3DBlendOp(desc.blendDescriptor.alphaBlendOperation);
         }
         else
         {
@@ -149,6 +217,10 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDescriptor& d
         if (SUCCEEDED(_device->CreateBlendState(&bd, &blendState)))
         {
             _blendCache.emplace(key, blendState);
+        }
+        else
+        {
+            AXLOGW("create blend state fail");
         }
     }
 
