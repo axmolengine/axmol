@@ -109,17 +109,14 @@ void ShaderModuleImpl::compileShader(ShaderStage stage, std::string_view source,
 
         assert(ref_stage == stage);
 
-        int code_size = 0;
         fourccId      = ibs.read<uint32_t>();
         if (fourccId == SGS_CHUNK_CODE)
         {
-            code_size = ibs.read<int>();
-            hlslCode  = ibs.read_bytes(code_size);
+            hlslCode  = ibs.read_bytes(ibs.read<int>());
         }
         else if (fourccId == SGS_CHUNK_DATA)
         {
-            code_size = ibs.read<int>();
-            hlslCode  = ibs.read_bytes(code_size);
+            hlslCode  = ibs.read_bytes(ibs.read<int>());
         }
         else
         {
@@ -127,7 +124,6 @@ void ShaderModuleImpl::compileShader(ShaderStage stage, std::string_view source,
             assert(false);
         }
 
-        size_t refl_size = 0;
         if (!ibs.eof())
         {  // try read reflect info
             fourccId = ibs.read<uint32_t>();
@@ -195,10 +191,11 @@ void ShaderModuleImpl::compileShader(ShaderStage stage, std::string_view source,
                             flags, 0, &_blob, &errorBlob);
     if (FAILED(hr))
     {
-        std::string msg = errorBlob
-                              ? std::string((const char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize())
-                              : "Unknown compile error";
-        assert(false && "Shader compile failed");
+        std::string_view errorDetail = errorBlob
+                              ? std::string_view((const char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize())
+                              : "Unknown compile error"sv;
+        AXLOGE("axmol:ERROR: Failed to compile shader, hr:{},{}", hr, errorDetail);
+        AXASSERT(false, "Shader compile failed!");
         return;
     }
 
