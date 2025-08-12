@@ -28,7 +28,6 @@
 #include <chrono>
 #include "BaseTest.h"
 #include "tests.h"
-#include "feature-detect.h"
 
 using namespace ax;
 
@@ -59,7 +58,7 @@ public:
         addTest("Audio - NewAudioEngine", []() { return new AudioEngineTests(); });
 
         addTest("Box2D - Basic", []() { return new Box2DTests(); });
-#if AX_ENABLE_EXT_IMGUI
+#if AX_ENABLE_EXT_IMGUI && defined(AX_PLATFORM_PC)
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });

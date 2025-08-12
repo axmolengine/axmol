@@ -50,17 +50,17 @@ static void translateSamplerDesc(const SamplerDescriptor& in, D3D11_SAMPLER_DESC
 
 static void translateUsage(TextureUsage usage, D3D11_TEXTURE2D_DESC& outDesc)
 {
-    outDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+    outDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
     switch (usage)
     {
     case TextureUsage::READ:
     case TextureUsage::RENDER_TARGET:
-        outDesc.Usage = D3D11_USAGE_DEFAULT;
+        outDesc.Usage          = D3D11_USAGE_DEFAULT;
         outDesc.CPUAccessFlags = 0;
         break;
     case TextureUsage::WRITE:
-        outDesc.Usage = D3D11_USAGE_DYNAMIC;
+        outDesc.Usage          = D3D11_USAGE_DYNAMIC;
         outDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         outDesc.BindFlags |= (UINT)D3D11_BIND_UNORDERED_ACCESS;
         break;
@@ -77,8 +77,6 @@ static void translateTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC
 
     translateUsage(desc.textureUsage, outDesc);
 
-    outDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
-
     switch (desc.textureType)
     {
     case TextureType::TEXTURE_2D:
@@ -87,6 +85,18 @@ static void translateTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC
     case TextureType::TEXTURE_CUBE:
         outDesc.ArraySize = 6;
         outDesc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
+        break;
+    }
+
+    // depth-stencil
+    switch (desc.textureFormat)
+    {
+    case PixelFormat::D24S8:
+        outDesc.BindFlags |= D3D11_BIND_DEPTH_STENCIL;
+        break;
+    default:
+        outDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+        outDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
         break;
     }
 }
@@ -139,13 +149,15 @@ TextureHandle TextureResource::ensure(int index)
     D3D11_TEXTURE2D_DESC texDesc{};
     translateTexDesc(_descriptor, texDesc);
 
-    bool isCompresd;
-    UtilsD3D::toD3DTypes(_descriptor.textureFormat, texDesc.Format, isCompresd);
-    if (texDesc.Format == DXGI_FORMAT_UNKNOWN)
+    auto fmtInfo = UtilsD3D::toDxgiFormatInfo(_descriptor.textureFormat);
+    assert(fmtInfo);
+    if (fmtInfo->format == DXGI_FORMAT_UNKNOWN)
     {
         AXLOGE("axmol: D3D not support pixel format: {}", (int)_descriptor.textureFormat);
         return TextureHandle{};
     }
+
+    texDesc.Format = fmtInfo->format;
 
     ComPtr<ID3D11Texture2D> texture;
     HRESULT hr = _device->CreateTexture2D(&texDesc, nullptr, texture.GetAddressOf());
@@ -156,7 +168,7 @@ TextureHandle TextureResource::ensure(int index)
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
     ZeroMemory(&srvDesc, sizeof(srvDesc));
-    srvDesc.Format                    = texDesc.Format;
+    srvDesc.Format                    = fmtInfo->fmtSrv;
     srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Texture2D.MipLevels       = texDesc.MipLevels;
     srvDesc.Texture2D.MostDetailedMip = 0;

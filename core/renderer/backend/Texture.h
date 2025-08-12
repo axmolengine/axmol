@@ -182,7 +182,6 @@ protected:
     /// The bytes of all components.
     uint8_t _bitsPerPixel = 0;
     bool _hasMipmaps      = false;
-    bool _isCompressed    = false;
     uint32_t _width       = 0;
     uint32_t _height      = 0;
 

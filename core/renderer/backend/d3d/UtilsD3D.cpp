@@ -68,79 +68,68 @@ namespace ax::backend::d3d
 #define DXGI_FORMAT_ASTC_12X12_UNORM      DXGI_FORMAT(186)
 #define DXGI_FORMAT_ASTC_12X12_UNORM_SRGB DXGI_FORMAT(187)
 
-struct GPUTextureFormatInfo
-{
-    DXGI_FORMAT internalFmt;      // Creation format
-    DXGI_FORMAT internalFmtSrgb;  // Creation format (sRGB)
-    DXGI_FORMAT srvFmt;           // View format for SRV/UAV
-    DXGI_FORMAT srvFmtSrgb;       // View format for SRV/UAV (sRGB)
-    DXGI_FORMAT typelessFmt;      // Typeless fallback for Copy/DSV/RTV aliasing
-};
-
 // clang-format off
-static GPUTextureFormatInfo s_textureFormatsD3D[] =
+static PixelFormatInfo s_pixelFormatInfos[] =
 {
+    /* ---- format ----------------------- fmtSvr -----------------------fmtDsv --------------------- fmtSrgb -------------------*/
     /* pvrtc v1 ------------------------------------------------------------ */
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,       DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN }, // PVRTC4
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,       DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN }, // PVRTC4A
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,       DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN }, // PVRTC2
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,       DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN }, // PVRTC2A
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // PVRTC4  (NA)
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // PVRTC4A (NA)
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // PVRTC2  (NA)
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // PVRTC2A (NA)
 
     /* etc ----------------------------------------------------------------- */
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN }, // ETC1
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN }, // ETC2
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN }, // ETC2A
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // ETC1  (NA)
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // ETC2  (NA)
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // ETC2A (NA)
 
     /* s3tc / bc ----------------------------------------------------------- */
-    { DXGI_FORMAT_BC1_UNORM,            DXGI_FORMAT_BC1_UNORM_SRGB,            DXGI_FORMAT_BC1_UNORM,               DXGI_FORMAT_BC1_UNORM,               DXGI_FORMAT_UNKNOWN }, // S3TC_DXT1
-    { DXGI_FORMAT_BC2_UNORM,            DXGI_FORMAT_BC2_UNORM_SRGB,            DXGI_FORMAT_BC2_UNORM,               DXGI_FORMAT_BC2_UNORM,               DXGI_FORMAT_UNKNOWN }, // S3TC_DXT3
-    { DXGI_FORMAT_BC3_UNORM,            DXGI_FORMAT_BC3_UNORM_SRGB,            DXGI_FORMAT_BC3_UNORM,               DXGI_FORMAT_BC3_UNORM,               DXGI_FORMAT_UNKNOWN }, // S3TC_DXT5
+    { DXGI_FORMAT_BC1_UNORM,          DXGI_FORMAT_BC1_UNORM,             DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_BC1_UNORM_SRGB        }, // S3TC_DXT1
+    { DXGI_FORMAT_BC2_UNORM,          DXGI_FORMAT_BC2_UNORM,             DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_BC2_UNORM_SRGB        }, // S3TC_DXT3
+    { DXGI_FORMAT_BC3_UNORM,          DXGI_FORMAT_BC3_UNORM,             DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_BC3_UNORM_SRGB        }, // S3TC_DXT5
 
     /* atc ----------------------------------------------------------------- */
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN }, // ATC
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN }, // ATCE
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN }, // ATCI
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // ATC  (NA)
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // ATCE (NA)
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // ATCI (NA)
 
     /* astc ---------------------------------------------------------------- */
-    { DXGI_FORMAT_ASTC_4X4_UNORM,       DXGI_FORMAT_ASTC_4X4_UNORM_SRGB,            DXGI_FORMAT_ASTC_4X4_UNORM,               DXGI_FORMAT_ASTC_4X4_UNORM,               DXGI_FORMAT_UNKNOWN }, // ASTC4×4
-    { DXGI_FORMAT_ASTC_5X5_UNORM,       DXGI_FORMAT_ASTC_5X5_UNORM_SRGB,            DXGI_FORMAT_ASTC_5X5_UNORM,               DXGI_FORMAT_ASTC_5X5_UNORM,               DXGI_FORMAT_UNKNOWN }, // ASTC5×5
-    { DXGI_FORMAT_ASTC_6X6_UNORM,       DXGI_FORMAT_ASTC_6X6_UNORM_SRGB,            DXGI_FORMAT_ASTC_6X6_UNORM,               DXGI_FORMAT_ASTC_6X6_UNORM,               DXGI_FORMAT_UNKNOWN }, // ASTC6×6
-    { DXGI_FORMAT_ASTC_8X5_UNORM,       DXGI_FORMAT_ASTC_8X5_UNORM_SRGB,            DXGI_FORMAT_ASTC_8X5_UNORM,               DXGI_FORMAT_ASTC_8X5_UNORM,               DXGI_FORMAT_UNKNOWN }, // ASTC8×5
-    { DXGI_FORMAT_ASTC_8X6_UNORM,       DXGI_FORMAT_ASTC_8X6_UNORM_SRGB,            DXGI_FORMAT_ASTC_8X6_UNORM,               DXGI_FORMAT_ASTC_8X6_UNORM,               DXGI_FORMAT_UNKNOWN }, // ASTC8×6
-    { DXGI_FORMAT_ASTC_8X8_UNORM,       DXGI_FORMAT_ASTC_8X8_UNORM_SRGB,            DXGI_FORMAT_ASTC_8X8_UNORM,               DXGI_FORMAT_ASTC_8X8_UNORM,               DXGI_FORMAT_UNKNOWN }, // ASTC8×8
-    { DXGI_FORMAT_ASTC_10X5_UNORM,      DXGI_FORMAT_ASTC_10X5_UNORM_SRGB,           DXGI_FORMAT_ASTC_10X5_UNORM,              DXGI_FORMAT_ASTC_10X5_UNORM,              DXGI_FORMAT_UNKNOWN }, // ASTC10×5
+    { DXGI_FORMAT_ASTC_4X4_UNORM,     DXGI_FORMAT_ASTC_4X4_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_ASTC_4X4_UNORM_SRGB   }, // ASTC4×4
+    { DXGI_FORMAT_ASTC_5X5_UNORM,     DXGI_FORMAT_ASTC_5X5_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_ASTC_5X5_UNORM_SRGB   }, // ASTC5×5
+    { DXGI_FORMAT_ASTC_6X6_UNORM,     DXGI_FORMAT_ASTC_6X6_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_ASTC_6X6_UNORM_SRGB   }, // ASTC6×6
+    { DXGI_FORMAT_ASTC_8X5_UNORM,     DXGI_FORMAT_ASTC_8X5_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_ASTC_8X5_UNORM_SRGB   }, // ASTC8×5
+    { DXGI_FORMAT_ASTC_8X6_UNORM,     DXGI_FORMAT_ASTC_8X6_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_ASTC_8X6_UNORM_SRGB   }, // ASTC8×6
+    { DXGI_FORMAT_ASTC_8X8_UNORM,     DXGI_FORMAT_ASTC_8X8_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_ASTC_8X8_UNORM_SRGB   }, // ASTC8×8
+    { DXGI_FORMAT_ASTC_10X5_UNORM,    DXGI_FORMAT_ASTC_10X5_UNORM,       DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_ASTC_10X5_UNORM_SRGB  }, // ASTC10×5
 
     /* uncompressed -------------------------------------------------------- */
-    { DXGI_FORMAT_R8G8B8A8_UNORM,       DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,       DXGI_FORMAT_R8G8B8A8_UNORM,          DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,     DXGI_FORMAT_R8G8B8A8_TYPELESS }, // RGBA8
-    { DXGI_FORMAT_B8G8R8A8_UNORM,       DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,       DXGI_FORMAT_B8G8R8A8_UNORM,          DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,     DXGI_FORMAT_B8G8R8A8_TYPELESS }, // BGRA8
-    { DXGI_FORMAT_UNKNOWN,              DXGI_FORMAT_UNKNOWN,       DXGI_FORMAT_UNKNOWN,          DXGI_FORMAT_UNKNOWN,     DXGI_FORMAT_UNKNOWN }, // RGB8 (no native 24-bit; report as UNKNOWN)
-    { DXGI_FORMAT_B5G6R5_UNORM,         DXGI_FORMAT_B5G6R5_UNORM,              DXGI_FORMAT_B5G6R5_UNORM,            DXGI_FORMAT_B5G6R5_UNORM,            DXGI_FORMAT_UNKNOWN             }, // RGB565
-    { DXGI_FORMAT_B4G4R4A4_UNORM,       DXGI_FORMAT_B4G4R4A4_UNORM,            DXGI_FORMAT_B4G4R4A4_UNORM,          DXGI_FORMAT_B4G4R4A4_UNORM,          DXGI_FORMAT_UNKNOWN             }, // RGBA4
-    { DXGI_FORMAT_B5G5R5A1_UNORM,       DXGI_FORMAT_B5G5R5A1_UNORM,            DXGI_FORMAT_B5G5R5A1_UNORM,          DXGI_FORMAT_B5G5R5A1_UNORM,          DXGI_FORMAT_UNKNOWN             }, // RGB5A1
+    { DXGI_FORMAT_R8G8B8A8_UNORM,     DXGI_FORMAT_R8G8B8A8_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_R8G8B8A8_UNORM_SRGB   }, // RGBA8
+    { DXGI_FORMAT_B8G8R8A8_UNORM,     DXGI_FORMAT_R8G8B8A8_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_B8G8R8A8_UNORM_SRGB   }, // BGRA8
+    { DXGI_FORMAT_UNKNOWN,            DXGI_FORMAT_UNKNOWN,               DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // RGB8 (NA)
+    { DXGI_FORMAT_B5G6R5_UNORM,       DXGI_FORMAT_B5G6R5_UNORM,          DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // RGB565
+    { DXGI_FORMAT_B4G4R4A4_UNORM,     DXGI_FORMAT_B4G4R4A4_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // RGBA4
+    { DXGI_FORMAT_B5G5R5A1_UNORM,     DXGI_FORMAT_B5G5R5A1_UNORM,        DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // RGB5A1
 
-    { DXGI_FORMAT_R8_UNORM,             DXGI_FORMAT_R8_UNORM,                  DXGI_FORMAT_R8_UNORM,                DXGI_FORMAT_R8_UNORM,                DXGI_FORMAT_R8_TYPELESS }, // R8
-    { DXGI_FORMAT_R8G8_UNORM,           DXGI_FORMAT_R8G8_UNORM,                DXGI_FORMAT_R8G8_UNORM,              DXGI_FORMAT_R8G8_UNORM,              DXGI_FORMAT_R8G8_TYPELESS }, // RG8
-    { DXGI_FORMAT_R32G32B32A32_FLOAT,   DXGI_FORMAT_R32G32B32A32_FLOAT,        DXGI_FORMAT_R32G32B32A32_FLOAT,      DXGI_FORMAT_R32G32B32A32_FLOAT,      DXGI_FORMAT_R32G32B32A32_FLOAT }, // RGBA32F
+    { DXGI_FORMAT_R8_UNORM,           DXGI_FORMAT_R8_UNORM,              DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN,              }, // R8
+    { DXGI_FORMAT_R8G8_UNORM,         DXGI_FORMAT_R8G8_UNORM,            DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN,              }, // RG8
+    { DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R32G32B32A32_FLOAT,    DXGI_FORMAT_UNKNOWN,           DXGI_FORMAT_UNKNOWN               }, // RGBA32F
 
     /* depth-stencil ------------------------------------------------------- */
-    { DXGI_FORMAT_D24_UNORM_S8_UINT,    DXGI_FORMAT_D24_UNORM_S8_UINT,         DXGI_FORMAT_D24_UNORM_S8_UINT,       DXGI_FORMAT_D24_UNORM_S8_UINT,       DXGI_FORMAT_R24G8_TYPELESS }, // D24S8
+    { DXGI_FORMAT_R24G8_TYPELESS,     DXGI_FORMAT_R24_UNORM_X8_TYPELESS, DXGI_FORMAT_D24_UNORM_S8_UINT, DXGI_FORMAT_UNKNOWN               }, // D24S8
 };
 // clang-format on
 
-static_assert(AX_ARRAYSIZE(s_textureFormatsD3D) == static_cast<int>(PixelFormat::COUNT),
+static_assert(AX_ARRAYSIZE(s_pixelFormatInfos) == static_cast<int>(PixelFormat::COUNT),
               "The Direct3D GPU texture format info table is incomplete!");
 
 static TextureImpl* s_defaultColorAttachment;
 static TextureImpl* s_defaultDepthStencilAttachment;
 
-void UtilsD3D::toD3DTypes(PixelFormat pf, DXGI_FORMAT& dxgiFormat, bool& isCompressed)
+const PixelFormatInfo* UtilsD3D::toDxgiFormatInfo(PixelFormat pf)
 {
-    if (AX_LIKELY(pf < PixelFormat::COUNT))
-    {
-        auto& info   = s_textureFormatsD3D[(int)pf];
-        dxgiFormat   = info.internalFmt;
-        isCompressed = PixelFormatUtils::isCompressed(pf);
-    }
+    if (pf < PixelFormat::COUNT) [[likely]]
+        return &s_pixelFormatInfos[(int)pf];
+    return nullptr;
 }
 
 void UtilsD3D::updateDefaultRenderTargetAttachments(DriverImpl* driverImpl, IDXGISwapChain* swapChain)

@@ -57,7 +57,7 @@ struct TextureResource
 
     void destroy()
     {
-        foreachTextures([=](TextureHandle& tex, int) {
+        foreachTextures([this](TextureHandle& tex, int) {
             if (tex)
                 tex.Release();
         });

@@ -234,8 +234,8 @@ DriverImpl::DriverImpl()
 
 DriverImpl::~DriverImpl()
 {
-    _context->Release();
-    _device->Release();
+    SafeRelease(_context);
+    SafeRelease(_device);
 }
 
 CommandBuffer* DriverImpl::createCommandBuffer(void* hwnd)

@@ -157,8 +157,7 @@ void TextureImpl::updateTextureDescriptor(const ax::backend::TextureDescriptor& 
 
     Texture::updateTextureDescriptor(descriptor, index);
 
-    UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type,
-                       _isCompressed);
+    UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type);
 
     updateSamplerDescriptor(descriptor.samplerDescriptor);
 
