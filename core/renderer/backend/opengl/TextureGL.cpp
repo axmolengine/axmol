@@ -141,7 +141,7 @@ TextureImpl::TextureImpl(const TextureDescriptor& descriptor)
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on GLES.
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-        _textureInfo.onRendererRecreated(GL_TEXTURE_2D);
+        _textureInfo.onRendererRecreated();
         if (_usedForRT)
             this->ensureTexStorageForRT();
     });

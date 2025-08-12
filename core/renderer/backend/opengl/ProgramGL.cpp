@@ -167,8 +167,8 @@ void ProgramGL::reloadProgram()
     _activeUniformInfos.clear();
     _mapToCurrentActiveLocation.clear();
     _mapToOriginalLocation.clear();
-    static_cast<ShaderModuleGL*>(_vertexShaderModule)->compileShader(backend::ShaderStage::VERTEX, _vertexShader);
-    static_cast<ShaderModuleGL*>(_fragmentShaderModule)->compileShader(backend::ShaderStage::FRAGMENT, _fragmentShader);
+    static_cast<ShaderModuleGL*>(_vertexShaderModule)->compileShader(backend::ShaderStage::VERTEX, _vsSource);
+    static_cast<ShaderModuleGL*>(_fragmentShaderModule)->compileShader(backend::ShaderStage::FRAGMENT, _fsSource);
     compileProgram();
     computeUniformInfos();
 
@@ -489,6 +489,7 @@ inline std::string_view mapLocationEnumToUBO(backend::Uniform name)
     case Uniform::EFFECT_TYPE:
         return UNIFORM_NAME_EFFECT_TYPE;
         break;
+    default:;
     }
     return ""sv;
 }

@@ -62,7 +62,7 @@ struct TextureInfoGL
 
     void destroy()
     {
-        foreachTextures([=](GLuint& texID, int) {
+        foreachTextures([this](GLuint& texID, int) {
             __gl->deleteTexture(this->target, texID);
             texID = 0;
         });
