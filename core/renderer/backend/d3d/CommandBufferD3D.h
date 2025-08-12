@@ -220,6 +220,9 @@ protected:
     UINT _screenWidth{0};
     UINT _screenHeight{0};
     RenderPassDescriptor _renderPassDesc{};
+
+    axstd::pod_vector<ID3D11ShaderResourceView*> _nullSRVs;
+    UINT _textureBounds{0};
 };
 
 // end of _metal group

@@ -152,6 +152,8 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
     _swapChain = swapChain.Detach();
 
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
+
+    _nullSRVs.reserve(8);
 }
 
 CommandBufferImpl::~CommandBufferImpl()
@@ -487,6 +489,13 @@ void CommandBufferImpl::endRenderPass()
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
+
+    // clean bound SRVs to resolve: D3D11 WARNING: ID3D11DeviceContext::OMSetRenderTargets: Resource being set to OM RenderTarget slot 0 is still bound on input!
+    if (_textureBounds) {
+        _nullSRVs.resize(_textureBounds, nullptr);
+        _driverImpl->getContext()->PSSetShaderResources(0, _textureBounds, _nullSRVs.data());
+        _textureBounds = 0;
+    }
 }
 
 void CommandBufferImpl::prepareDrawing()
@@ -543,6 +552,7 @@ void CommandBufferImpl::prepareDrawing()
     }
 
     // bind texture
+    _textureBounds = 0;
     const auto& textureInfo = _programState->getFragmentTextureInfos();
     for (const auto& texBinding : textureInfo)
     {
@@ -559,6 +569,7 @@ void CommandBufferImpl::prepareDrawing()
             auto samplerState = textureImpl->getSamplerState();
             context->PSSetSamplers(slots[i], 1, &samplerState);
             ++i;
+            ++_textureBounds;
         }
     }
 
