@@ -42,7 +42,7 @@ using namespace ax;
 #include "base/EventType.h"
 #include "2d/Camera.h"
 #include "platform/Image.h"
-#include "3d/3DProgramInfo.h"
+#include "3d/shaderinfos.h"
 #include "base/Utils.h"
 
 namespace ax

@@ -1,4 +1,4 @@
-#include "3DProgramInfo.h"
+#include "shaderinfos.h"
 
 namespace ax
 {

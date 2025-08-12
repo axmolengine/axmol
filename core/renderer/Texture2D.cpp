@@ -237,6 +237,17 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     default:
         break;
     }
+#elif AX_RENDER_API == AX_RENDER_API_D3D
+    //! override renderFormat, since some render format is not supported by d3d
+    switch (renderFormat)
+    {
+    case PixelFormat::RGB8:
+        // Note: conversion to RGBA8 will happends
+        renderFormat = PixelFormat::RGBA8;
+        break;
+    default:
+        break;
+    }
 #endif
 
     if (image->getNumberOfMipmaps() > 1)

@@ -25,7 +25,7 @@
 #include "renderer/Pass.h"
 #include "base/Configuration.h"
 #include "3d/MeshVertexIndexData.h"
-#include "3d/3DProgramInfo.h"
+#include "3d/shaderinfos.h"
 #include "3d/VertexInputBinding.h"
 
 namespace ax

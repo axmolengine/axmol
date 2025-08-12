@@ -28,7 +28,7 @@
 #include "base/Object.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/Pass.h"
-#include "3d/3DProgramInfo.h"
+#include "3d/shaderinfos.h"
 
 namespace ax
 {

@@ -12,7 +12,6 @@
 
 namespace ax::backend::d3d
 {
-
 static D3D11_PRIMITIVE_TOPOLOGY toD3DPrimitiveTopology(PrimitiveType type, bool wireframe)
 {
     switch (type)
@@ -75,8 +74,8 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
 
     RECT clientRect;
     GetClientRect(hwnd, &clientRect);
-    UINT width  = clientRect.right - clientRect.left;
-    UINT height = clientRect.bottom - clientRect.top;
+    _screenWidth  = clientRect.right - clientRect.left;
+    _screenHeight = clientRect.bottom - clientRect.top;
 
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
@@ -100,8 +99,8 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
     {
         // DXGI 1.2+ support Flip mode
         DXGI_SWAP_CHAIN_DESC1 desc1 = {};
-        desc1.Width                 = width;
-        desc1.Height                = height;
+        desc1.Width                 = _screenWidth;
+        desc1.Height                = _screenHeight;
         desc1.Format                = _AX_SWAPCHAIN_FORMAT;
         desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
         desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -135,8 +134,8 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
     {
         DXGI_SWAP_CHAIN_DESC scDesc               = {};
         scDesc.BufferCount                        = 1;
-        scDesc.BufferDesc.Width                   = width;
-        scDesc.BufferDesc.Height                  = height;
+        scDesc.BufferDesc.Width                   = _screenWidth;
+        scDesc.BufferDesc.Height                  = _screenHeight;
         scDesc.BufferDesc.Format                  = _AX_SWAPCHAIN_FORMAT;
         scDesc.BufferDesc.RefreshRate.Numerator   = 60;
         scDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -153,14 +152,12 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
     _swapChain = swapChain.Detach();
 
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
-
-    _screenWidth  = width;
-    _screenHeight = height;
 }
 
 CommandBufferImpl::~CommandBufferImpl()
 {
-    // unbind rtv
+    // cleanup GPU resources
+    UtilsD3D::updateDefaultRenderTargetAttachments(nullptr, nullptr);
     _driverImpl->getContext()->OMSetRenderTargets(0, nullptr, nullptr);
 
     SafeRelease(_swapChain);
@@ -280,7 +277,6 @@ void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h
 
 void CommandBufferImpl::setCullMode(CullMode mode)
 {
-
     if (_rasterDesc.cullMode != mode)
     {
         _rasterDesc.cullMode = mode;

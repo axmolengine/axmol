@@ -156,6 +156,10 @@ TextureHandle TextureResource::ensure(int index)
 
     bool isCompresd;
     UtilsD3D::toD3DTypes(_descriptor.textureFormat, texDesc.Format, isCompresd);
+    if (texDesc.Format == DXGI_FORMAT_UNKNOWN) {
+        AXLOGE("axmol: D3D not support pixel format: {}", (int)_descriptor.textureFormat);
+        return TextureHandle{};
+    }
 
     ComPtr<ID3D11Texture2D> texture;
     HRESULT hr               = _device->CreateTexture2D(&texDesc, nullptr, texture.GetAddressOf());

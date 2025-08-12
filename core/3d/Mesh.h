@@ -30,7 +30,7 @@
 
 #include "3d/Bundle3DData.h"
 #include "3d/AABB.h"
-#include "3d/3DProgramInfo.h"
+#include "3d/shaderinfos.h"
 
 #include "base/Object.h"
 #include "math/Math.h"
