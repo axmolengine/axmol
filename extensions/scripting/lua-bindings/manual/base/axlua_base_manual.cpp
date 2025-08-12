@@ -8345,7 +8345,7 @@ int register_all_ax_shaders_manual(lua_State* tolua_S)
     set_lua_field(particle_vert);
     set_lua_field(positionNormalTexture_vert);
     set_lua_field(skinPositionNormalTexture_vert);
-    set_lua_field(positionTexture3D_vert);
+    set_lua_field(unlit_vert);
     set_lua_field(skinPositionTexture_vert);
     set_lua_field(skybox_frag);
     set_lua_field(skybox_vert);
