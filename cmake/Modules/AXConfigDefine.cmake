@@ -135,7 +135,8 @@ else() # others
 endif()
 
 if(APPLE)
-  list(APPEND _ax_compile_options -Werror=objc-method-access)
+  add_compile_options("$<$<COMPILE_LANGUAGE:OBJC>:-Werror=objc-method-access>")
+  add_compile_options("$<$<COMPILE_LANGUAGE:OBJCXX>:-Werror=objc-method-access>")
 endif()
 
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
