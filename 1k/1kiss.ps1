@@ -772,7 +772,7 @@ function download_and_expand($url, $out, $dest) {
         $1k.mkdirs($dest)
         if ($out.EndsWith('.zip')) {
             if ($IsWin) {
-                Expand-Archive -Path $out -DestinationPath $dest
+                Expand-Archive -Path $out -DestinationPath $dest -Force
             }
             else {
                 unzip -d $dest $out | Out-Null
@@ -1211,7 +1211,7 @@ function setup_unzip() {
     $unzip_cmd_info = Get-Command 'unzip' -ErrorAction SilentlyContinue
     if (!$unzip_cmd_info) {
         if ($IsLinux) {
-            if ($(which dpkg)) { 
+            if ($(which dpkg)) {
                 sudo apt install unzip
             }
             elseif($(which pacman)) {
@@ -1323,7 +1323,7 @@ function setup_android_sdk() {
             return $null
         }
         $1k.println("Looking require $ndk_ver$IsGraterThan in $sdk_dir")
-        
+
         $ndk_major = ($ndk_ver -replace '[^0-9]', '')
         $ndk_minor_off = "$ndk_major".Length + 1
         $ndk_minor = if ($ndk_minor_off -lt $ndk_ver.Length) { "$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)" } else { '0' }
@@ -1367,7 +1367,7 @@ function setup_android_sdk() {
     }
 
     $ndk_root = &$find_ndk_in $selected_sdk_root
-    
+
     $sdk_comps = @()
 
     ### cmdline-tools ###
