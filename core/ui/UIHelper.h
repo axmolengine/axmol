@@ -124,7 +124,8 @@ public:
      */
     static Rect convertBoundingBoxToScreen(Node* node);
 
-#pragma region x-studio spec
+#ifndef _AX_GEN_SCRIPT_BINDINGS
+#    pragma region x-studio spec
 
     // Follow APIs used by x-studio UI Editor to layout UI elements
     // It's very useful for programer to operate UI elements in runtime,
@@ -527,7 +528,8 @@ public:
         {
             achorY = pNode->getAnchorPoint().y;
         }
-        return reverseAdjustCoordNegative(parentSize.height, size.height, achorY, pNode->getPositionY()) + size.height * anchor;
+        return reverseAdjustCoordNegative(parentSize.height, size.height, achorY, pNode->getPositionY()) +
+               size.height * anchor;
     }
 
     static void setNodeRight(ax::Node* pNode, const Vec2& parentSize, float right)
@@ -553,7 +555,8 @@ public:
         {
             achorX = pNode->getAnchorPoint().x;
         }
-        return reverseAdjustCoordNegative(parentSize.width, size.width, achorX, pNode->getPositionX()) + anchor * size.width;
+        return reverseAdjustCoordNegative(parentSize.width, size.width, achorX, pNode->getPositionX()) +
+               anchor * size.width;
     }
 
     static void setNodeBottom(ax::Node* pNode, const Vec2& parentSize, float bottom, float anchor = 0.0f)
@@ -592,8 +595,8 @@ public:
         {
             achorPoint = pNode->getAnchorPoint();
         }
-        pNode->setPosition(
-            ax::Vec2(adjustCoordByAnchor(size.width, achorPoint.x, p.x), adjustCoordByAnchor(size.height, achorPoint.y, p.y)));
+        pNode->setPosition(ax::Vec2(adjustCoordByAnchor(size.width, achorPoint.x, p.x),
+                                    adjustCoordByAnchor(size.height, achorPoint.y, p.y)));
     }
 
     static void setNodeRB(ax::Node* pNode, const Vec2& parentSize, const ax::Point& p)
@@ -939,11 +942,11 @@ public:
         static void lazyInit();
         static ax::Rect s_ScreenVisibleRect;
     };
-#pragma endregion
+#    pragma endregion
+#endif
 };
 }  // namespace ui
 
 // end of ui group
 /// @}
-}
-
+}  // namespace ax

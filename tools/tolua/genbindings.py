@@ -123,7 +123,7 @@ def main():
     if (g_ndk_root == None or not os.path.isdir(g_ndk_root)):
         g_ndk_root = _check_ndk_root_env()
 
-    if not os.path.isdir(g_ndk_root): 
+    if not os.path.isdir(g_ndk_root):
         print("The ndk-r23c root not specified, please specifiy via --ndk_root '/path/to/ndk'")
         sys.exit(1)
 
@@ -181,6 +181,7 @@ def main():
 
     # extra flags
     extra_flags = '-DAX_ENABLE_MEDIA=1'
+    extra_flags += ' -D_AX_GEN_SCRIPT_BINDINGS=1'
     extra_flags += ' -D__cpp_coroutines=201703'
     extra_flags += ' -D__builtin_neon_vbslq_f16(...)=(float16x8_t{})'
     extra_flags += ' -D__builtin_neon_vbsl_f16(...)=(float16x4_t{})'
@@ -192,9 +193,9 @@ def main():
     extra_flags += ' -D__builtin_neon_vzip_f16(...)'
 
     # save config to file
-    
+
     config = configparser.ConfigParser()
-    
+
     config.set('DEFAULT', 'androidndkdir', g_ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
     config.set('DEFAULT', 'axdir', ax_root)

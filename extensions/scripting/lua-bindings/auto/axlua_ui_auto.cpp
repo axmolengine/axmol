@@ -26845,46 +26845,6 @@ int lua_ax_ui_Helper_seekActionWidgetByActionTag(lua_State* tolua_S)
 #endif
     return 0;
 }
-int lua_ax_ui_Helper_getSubStringOfUTF8String(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axui.Helper",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 3)
-    {
-        std::string_view arg0;
-        unsigned int arg1;
-        unsigned int arg2;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Helper:getSubStringOfUTF8String");
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "axui.Helper:getSubStringOfUTF8String");
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "axui.Helper:getSubStringOfUTF8String");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_getSubStringOfUTF8String'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::ui::Helper::getSubStringOfUTF8String(arg0, arg1, arg2);
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Helper:getSubStringOfUTF8String",argc, 3);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Helper_getSubStringOfUTF8String'.",&tolua_err);
-#endif
-    return 0;
-}
 int lua_ax_ui_Helper_doLayout(lua_State* tolua_S)
 {
     int argc = 0;
@@ -27046,7 +27006,6 @@ int lua_register_ax_ui_Helper(lua_State* tolua_S)
         tolua_function(tolua_S,"seekWidgetByTag", lua_ax_ui_Helper_seekWidgetByTag);
         tolua_function(tolua_S,"seekWidgetByName", lua_ax_ui_Helper_seekWidgetByName);
         tolua_function(tolua_S,"seekActionWidgetByActionTag", lua_ax_ui_Helper_seekActionWidgetByActionTag);
-        tolua_function(tolua_S,"getSubStringOfUTF8String", lua_ax_ui_Helper_getSubStringOfUTF8String);
         tolua_function(tolua_S,"doLayout", lua_ax_ui_Helper_doLayout);
         tolua_function(tolua_S,"changeLayoutSystemActiveState", lua_ax_ui_Helper_changeLayoutSystemActiveState);
         tolua_function(tolua_S,"restrictCapInsetRect", lua_ax_ui_Helper_restrictCapInsetRect);
