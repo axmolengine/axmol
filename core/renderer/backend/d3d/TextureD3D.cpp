@@ -71,10 +71,8 @@ static void translateTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC
 {
     outDesc.Width              = desc.width;
     outDesc.Height             = desc.height;
-    outDesc.MipLevels          = 1;
     outDesc.SampleDesc.Count   = 1;
     outDesc.SampleDesc.Quality = 0;
-
     translateUsage(desc.textureUsage, outDesc);
 
     switch (desc.textureType)
@@ -96,7 +94,6 @@ static void translateTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC
         break;
     default:
         outDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
-        outDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
         break;
     }
 }
@@ -138,16 +135,15 @@ static void fromD3DTexDesc(TextureDescriptor& td, const D3D11_TEXTURE2D_DESC& de
     // td.samplerDescriptor.addressW = SamplerAddressMode::CLAMP;
 }
 
-TextureHandle TextureResource::ensure(int index)
-{
-    if (index < 0 || index >= _textures.size())
-        return TextureHandle{};
-
-    if (_textures[index])
-        return _textures[index];
-
+TextureHandle TextureResource::createTexture(UINT mipLevels) {
     D3D11_TEXTURE2D_DESC texDesc{};
     translateTexDesc(_descriptor, texDesc);
+
+    texDesc.MipLevels = mipLevels;
+
+    if (mipLevels == 0) {
+        texDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+    }
 
     auto fmtInfo = UtilsD3D::toDxgiFormatInfo(_descriptor.textureFormat);
     assert(fmtInfo);
@@ -167,10 +163,9 @@ TextureHandle TextureResource::ensure(int index)
     }
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-    ZeroMemory(&srvDesc, sizeof(srvDesc));
     srvDesc.Format                    = fmtInfo->fmtSrv;
     srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
-    srvDesc.Texture2D.MipLevels       = texDesc.MipLevels;
+    srvDesc.Texture2D.MipLevels       = -1;
     srvDesc.Texture2D.MostDetailedMip = 0;
 
     ComPtr<ID3D11ShaderResourceView> srv;
@@ -181,7 +176,20 @@ TextureHandle TextureResource::ensure(int index)
         return TextureHandle{};
     }
 
-    _textures[index] = TextureHandle{texture.Detach(), srv.Detach()};
+    return TextureHandle{texture.Detach(), srv.Detach()};
+}
+
+TextureHandle TextureResource::ensure(int index)
+{
+    if (index < 0 || index >= _textures.size())
+        return TextureHandle{};
+
+    if (_textures[index])
+        return _textures[index];
+
+    
+
+    _textures[index] = createTexture(1);
     _maxIdx          = (std::max)(_maxIdx, index + 1);
 
     return _textures[index];
@@ -267,9 +275,30 @@ void TextureImpl::generateMipmaps()
     {
         _hasMipmaps  = true;
         auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
-        for (int i = 0; i <= _textureRes._maxIdx; ++i)
-            if (_textureRes._textures[i])
-                context->GenerateMips(_textureRes._textures[i].srv);
+
+        // FIXME: consider add a member mipLevels to backend::TextureDescriptor to avoid recreate texture
+        // 
+        _textureRes.foreachTextures([context, this](TextureHandle& h, int) {
+            if (h && h.srv)
+            {
+                // recreate texture with mip
+                auto tmp = _textureRes.createTexture(0);
+                if (tmp)
+                {
+                    context->CopySubresourceRegion(tmp.tex2d, 0, 0, 0, 0, h.tex2d, 0, nullptr);
+                    context->GenerateMips(tmp.srv);
+                    h.Release();
+                    h = tmp;
+                }
+            }
+        });
+
+        auto mainTexture = _textureRes._textures[0];
+        if (mainTexture.srv) {
+            D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+            mainTexture.srv->GetDesc(&srvDesc);
+            _textureRes._mipLevels = srvDesc.Texture2D.MipLevels;
+        }
     }
 }
 

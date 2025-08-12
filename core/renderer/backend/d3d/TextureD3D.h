@@ -51,6 +51,8 @@ struct TextureResource
         }
     }
 
+    TextureHandle createTexture(UINT mipLevels);
+
     TextureHandle ensure(int index);
 
     void recreateSampler(const SamplerDescriptor& desc);
@@ -73,6 +75,7 @@ struct TextureResource
     std::array<TextureHandle, AX_META_TEXTURES + 1> _textures;
     ID3D11SamplerState* _samplerState = nullptr;
     int _maxIdx                       = 0;
+    UINT _mipLevels                   = -1; // means only 1 layer
 };
 
 /**
