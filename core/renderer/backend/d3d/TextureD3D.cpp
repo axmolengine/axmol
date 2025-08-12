@@ -135,13 +135,15 @@ static void fromD3DTexDesc(TextureDescriptor& td, const D3D11_TEXTURE2D_DESC& de
     // td.samplerDescriptor.addressW = SamplerAddressMode::CLAMP;
 }
 
-TextureHandle TextureResource::createTexture(UINT mipLevels) {
+TextureHandle TextureResource::createTexture(UINT mipLevels)
+{
     D3D11_TEXTURE2D_DESC texDesc{};
     translateTexDesc(_descriptor, texDesc);
 
     texDesc.MipLevels = mipLevels;
 
-    if (mipLevels == 0) {
+    if (mipLevels == 0)
+    {
         texDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
     }
 
@@ -163,10 +165,19 @@ TextureHandle TextureResource::createTexture(UINT mipLevels) {
     }
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-    srvDesc.Format                    = fmtInfo->fmtSrv;
-    srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
-    srvDesc.Texture2D.MipLevels       = -1;
-    srvDesc.Texture2D.MostDetailedMip = 0;
+    srvDesc.Format = fmtInfo->fmtSrv;
+    switch (_descriptor.textureType)
+    {
+    case TextureType::TEXTURE_CUBE:
+        srvDesc.ViewDimension               = D3D11_SRV_DIMENSION_TEXTURECUBE;
+        srvDesc.TextureCube.MipLevels       = -1;
+        srvDesc.TextureCube.MostDetailedMip = 0;
+        break;
+    default:
+        srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MipLevels       = -1;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+    }
 
     ComPtr<ID3D11ShaderResourceView> srv;
     hr = _device->CreateShaderResourceView(texture.Get(), &srvDesc, srv.GetAddressOf());
@@ -186,8 +197,6 @@ TextureHandle TextureResource::ensure(int index)
 
     if (_textures[index])
         return _textures[index];
-
-    
 
     _textures[index] = createTexture(1);
     _maxIdx          = (std::max)(_maxIdx, index + 1);
@@ -277,7 +286,7 @@ void TextureImpl::generateMipmaps()
         auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
 
         // FIXME: consider add a member mipLevels to backend::TextureDescriptor to avoid recreate texture
-        // 
+        //
         _textureRes.foreachTextures([context, this](TextureHandle& h, int) {
             if (h && h.srv)
             {
@@ -294,7 +303,8 @@ void TextureImpl::generateMipmaps()
         });
 
         auto mainTexture = _textureRes._textures[0];
-        if (mainTexture.srv) {
+        if (mainTexture.srv)
+        {
             D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
             mainTexture.srv->GetDesc(&srvDesc);
             _textureRes._mipLevels = srvDesc.Texture2D.MipLevels;
@@ -398,7 +408,7 @@ void TextureImpl::updateFaceData(TextureCubeFace side, void* data, int index)
     //-------------------------------------------------------------------
     // 1. compute SubResource： = 6 * (mip-levels)
     //-------------------------------------------------------------------
-    const uint32_t mipLevels   = 0;  // texHandle.tex2d->getMipLevels();
+    const uint32_t mipLevels   = 1;  // texHandle.tex2d->getMipLevels();
     const uint32_t mipLevel    = 0;
     const uint32_t arraySlice  = static_cast<uint32_t>(side) + index * 6;
     const uint32_t subresource = ::D3D11CalcSubresource(mipLevel, arraySlice, mipLevels);
