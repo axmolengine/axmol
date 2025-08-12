@@ -63,8 +63,17 @@ void RenderTargetImpl::update(ID3D11DeviceContext* context) const
         if (bitmask::any(_dirtyFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
         {
             if (_depthStencil)
+            {
+                auto fmtInfo = UtilsD3D::toDxgiFormatInfo(_depthStencil.texture->getTextureFormat());
+                D3D11_DEPTH_STENCIL_VIEW_DESC desc{};
+                desc.Format = fmtInfo->fmtDsv;
+                desc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
+                // desc.Flags              = 0;
+                // desc.Texture2D.MipSlice = 0;
+
                 _device->CreateDepthStencilView(
-                    static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle().tex2d, nullptr, &_dsv);
+                    static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle().tex2d, &desc, &_dsv);
+            }
             else if (_dsv)
                 SafeRelease(_dsv);
         }

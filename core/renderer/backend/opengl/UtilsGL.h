@@ -98,8 +98,7 @@ struct UtilsGL
     static void toGLTypes(PixelFormat textureFormat,
                           GLint& internalFormat,
                           GLuint& format,
-                          GLenum& type,
-                          bool& isCompressed);
+                          GLenum& type);
 
     /**
      * Convert compare function to GLenum. i.e. convert CompareFunction::NEVER to GL_NEVER.
