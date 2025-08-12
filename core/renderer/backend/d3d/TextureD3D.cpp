@@ -5,7 +5,7 @@
 
 namespace ax::backend::d3d
 {
-static void toD3DSamplerDesc(const SamplerDescriptor& in, D3D11_SAMPLER_DESC& out)
+static void translateSamplerDesc(const SamplerDescriptor& in, D3D11_SAMPLER_DESC& out)
 {
     bool minLinear = in.minFilter == SamplerFilter::LINEAR;
     bool magLinear = in.magFilter == SamplerFilter::LINEAR;
@@ -48,61 +48,46 @@ static void toD3DSamplerDesc(const SamplerDescriptor& in, D3D11_SAMPLER_DESC& ou
     out.MaxLOD         = D3D11_FLOAT32_MAX;
 }
 
-static DXGI_FORMAT toDXGIFormat(PixelFormat format)
+static void translateUsage(TextureUsage usage, D3D11_TEXTURE2D_DESC& outDesc)
 {
-    switch (format)
-    {
-    case PixelFormat::RGBA8:
-        return DXGI_FORMAT_R8G8B8A8_UNORM;
-    case PixelFormat::RGB8:
-        return DXGI_FORMAT_B8G8R8X8_UNORM;
-    case PixelFormat::R8:
-        return DXGI_FORMAT_R8_UNORM;
-    case PixelFormat::D24S8:
-        return DXGI_FORMAT_D24_UNORM_S8_UINT;
-    default:
-        return DXGI_FORMAT_UNKNOWN;
-    }
-}
+    outDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
-static UINT getBindFlags(TextureUsage usage)
-{
     switch (usage)
     {
     case TextureUsage::READ:
-        return D3D11_BIND_SHADER_RESOURCE;
     case TextureUsage::RENDER_TARGET:
-        return D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-    // case TextureUsage::RENDER_TARGET:
-    //     return D3D11_BIND_DEPTH_STENCIL;
-    case TextureUsage::WRITE:  // 读写
-        return D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
-    default:
-        return D3D11_BIND_SHADER_RESOURCE;
+        outDesc.Usage = D3D11_USAGE_DEFAULT;
+        outDesc.CPUAccessFlags = 0;
+        break;
+    case TextureUsage::WRITE:
+        outDesc.Usage = D3D11_USAGE_DYNAMIC;
+        outDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        outDesc.BindFlags |= (UINT)D3D11_BIND_UNORDERED_ACCESS;
+        break;
     }
 }
 
-static void toD3DTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC& d3dDesc)
+static void translateTexDesc(const TextureDescriptor& desc, D3D11_TEXTURE2D_DESC& outDesc)
 {
-    d3dDesc.Width              = desc.width;
-    d3dDesc.Height             = desc.height;
-    d3dDesc.MipLevels          = 1;
-    d3dDesc.ArraySize          = 1;
-    d3dDesc.SampleDesc.Count   = 1;
-    d3dDesc.SampleDesc.Quality = 0;
-    d3dDesc.Usage              = D3D11_USAGE_DEFAULT;
-    d3dDesc.BindFlags          = getBindFlags(desc.textureUsage);
+    outDesc.Width              = desc.width;
+    outDesc.Height             = desc.height;
+    outDesc.MipLevels          = 1;
+    outDesc.SampleDesc.Count   = 1;
+    outDesc.SampleDesc.Quality = 0;
 
-    // d3dDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
-    // d3dDesc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
-    // d3dDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+    translateUsage(desc.textureUsage, outDesc);
 
-    d3dDesc.CPUAccessFlags = 0;  // No CPU Access, if need map, set to 1
+    outDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
-    if (desc.textureType == TextureType::TEXTURE_CUBE)
+    switch (desc.textureType)
     {
-        d3dDesc.ArraySize = 6;
-        d3dDesc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
+    case TextureType::TEXTURE_2D:
+        outDesc.ArraySize = 1;
+        break;
+    case TextureType::TEXTURE_CUBE:
+        outDesc.ArraySize = 6;
+        outDesc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
+        break;
     }
 }
 
@@ -152,17 +137,18 @@ TextureHandle TextureResource::ensure(int index)
         return _textures[index];
 
     D3D11_TEXTURE2D_DESC texDesc{};
-    toD3DTexDesc(_descriptor, texDesc);
+    translateTexDesc(_descriptor, texDesc);
 
     bool isCompresd;
     UtilsD3D::toD3DTypes(_descriptor.textureFormat, texDesc.Format, isCompresd);
-    if (texDesc.Format == DXGI_FORMAT_UNKNOWN) {
+    if (texDesc.Format == DXGI_FORMAT_UNKNOWN)
+    {
         AXLOGE("axmol: D3D not support pixel format: {}", (int)_descriptor.textureFormat);
         return TextureHandle{};
     }
 
     ComPtr<ID3D11Texture2D> texture;
-    HRESULT hr               = _device->CreateTexture2D(&texDesc, nullptr, texture.GetAddressOf());
+    HRESULT hr = _device->CreateTexture2D(&texDesc, nullptr, texture.GetAddressOf());
     if (FAILED(hr) || !texture)
     {
         return TextureHandle{};
@@ -176,7 +162,7 @@ TextureHandle TextureResource::ensure(int index)
     srvDesc.Texture2D.MostDetailedMip = 0;
 
     ComPtr<ID3D11ShaderResourceView> srv;
-    hr                            = _device->CreateShaderResourceView(texture.Get(), &srvDesc, srv.GetAddressOf());
+    hr = _device->CreateShaderResourceView(texture.Get(), &srvDesc, srv.GetAddressOf());
 
     if (FAILED(hr) || !srv)
     {
@@ -192,7 +178,7 @@ TextureHandle TextureResource::ensure(int index)
 void TextureResource::recreateSampler(const SamplerDescriptor& desc)
 {
     D3D11_SAMPLER_DESC sd{};
-    toD3DSamplerDesc(desc, sd);
+    translateSamplerDesc(desc, sd);
 
     SafeRelease(_samplerState);
     HRESULT hr = _device->CreateSamplerState(&sd, &_samplerState);
