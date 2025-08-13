@@ -38,11 +38,11 @@ namespace ax
 
 bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
 {
-    // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
-    if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
+    // only support for rhi::PixelFormat::RGB8 or rhi::PixelFormat::RGBA8 uncompressed data
+    if (isCompressed() || (_pixelFormat != rhi::PixelFormat::RGB8 && _pixelFormat != rhi::PixelFormat::RGBA8))
     {
-        AXLOGW("Image: saveToFile is only support for backend::PixelFormat::RGB8 or "
-              "backend::PixelFormat::RGBA8 uncompressed data for now");
+        AXLOGW("Image: saveToFile is only support for rhi::PixelFormat::RGB8 or "
+              "rhi::PixelFormat::RGBA8 uncompressed data for now");
         return false;
     }
     bool saveToPNG        = false;

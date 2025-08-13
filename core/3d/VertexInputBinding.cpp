@@ -21,7 +21,7 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#include "renderer/backend/Program.h"
+#include "rhi/Program.h"
 #include "renderer/Pass.h"
 #include "base/Configuration.h"
 #include "3d/MeshVertexIndexData.h"
@@ -128,14 +128,14 @@ bool VertexInputBinding::hasAttribute(const shaderinfos::VertexKey& key) const
     return vertexInputs.find(name) != vertexInputs.end();
 }
 
-const backend::VertexInputDesc* VertexInputBinding::getVertexInputDesc(std::string_view name)
+const rhi::VertexInputDesc* VertexInputBinding::getVertexInputDesc(std::string_view name)
 {
     return _programState->getProgram()->getVertexInputDesc(name);
 }
 
 void VertexInputBinding::setVertexInputPointer(VertexLayout* vertexLayout,
                                                  std::string_view name,
-                                                 backend::VertexFormat type,
+                                                 rhi::VertexFormat type,
                                                  bool normalized,
                                                  int offset,
                                                  int flag)

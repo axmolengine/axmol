@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "renderer/Renderer.h"
 #include "base/Utils.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 namespace ax
 {
@@ -46,26 +46,26 @@ const char kProgressTextureCoords = 0x4b;
 
 namespace
 {
-backend::ProgramState* initPipelineDescriptor(ax::CustomCommand& command,
+rhi::ProgramState* initPipelineDescriptor(ax::CustomCommand& command,
                                               bool ridal,
-                                              backend::UniformLocation& locMVP,
-                                              backend::UniformLocation& locTexture)
+                                              rhi::UniformLocation& locMVP,
+                                              rhi::UniformLocation& locTexture)
 {
     auto& pipelieDescriptor = command.getPipelineDescriptor();
-    auto* program           = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    auto programState       = new backend::ProgramState(program);
+    auto* program           = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+    auto programState       = new rhi::ProgramState(program);
     AX_SAFE_RELEASE(pipelieDescriptor.programState);
     pipelieDescriptor.programState = programState;
 
     // set custom vertexLayout according to V2F_T2F_C4F structure
     auto vertexLayout = programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", program->getVertexInputDesc(backend::VertexInputKind::POSITION),
-                            backend::VertexFormat::FLOAT2, 0, false);
-    vertexLayout->setAttrib("a_texCoord", program->getVertexInputDesc(backend::VertexInputKind::TEXCOORD),
-                            backend::VertexFormat::FLOAT2,
+    vertexLayout->setAttrib("a_position", program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
+                            rhi::VertexFormat::FLOAT2, 0, false);
+    vertexLayout->setAttrib("a_texCoord", program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
+                            rhi::VertexFormat::FLOAT2,
                              offsetof(V2F_T2F_C4F, texCoord), false);
-    vertexLayout->setAttrib("a_color", program->getVertexInputDesc(backend::VertexInputKind::COLOR),
-                                  backend::VertexFormat::FLOAT4,
+    vertexLayout->setAttrib("a_color", program->getVertexInputDesc(rhi::VertexInputKind::COLOR),
+                                  rhi::VertexFormat::FLOAT4,
                                    offsetof(V2F_T2F_C4F, color), false);
     vertexLayout->setStride(sizeof(V2F_T2F_C4F));
 

@@ -159,7 +159,7 @@ struct PrivateVideoDescriptor
         _scaleDirty = false;
     }
 
-    static void updateColorTransform(backend::ProgramState* ps, bool bFullColorRange)
+    static void updateColorTransform(rhi::ProgramState* ps, bool bFullColorRange)
     {
         // clang-format off
         // 1.16438356 ~= 255/219.0
@@ -948,16 +948,16 @@ MediaPlayer::MediaPlayer()
                 switch (pixelFormat)
                 {
                 case MEVideoPixelFormat::YUY2:
-                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_YUY2);
+                    pvd->_vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_YUY2);
                     break;
                 case MEVideoPixelFormat::NV12:
-                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_NV12);
+                    pvd->_vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_NV12);
                     break;
                 case MEVideoPixelFormat::I420:
-                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_I420);
+                    pvd->_vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_I420);
                     break;
                 default:
-                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_RGB32);
+                    pvd->_vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_RGB32);
                 }
             }
 

@@ -64,13 +64,13 @@ public:
      * get define data type
      * @param str The type in string
      */
-    static backend::VertexFormat parseGLDataType(std::string_view str, int size);
+    static rhi::VertexFormat parseGLDataType(std::string_view str, int size);
 
     /**
      * get define data type
      * @param str The type in string
      */
-    static backend::SamplerAddressMode parseSamplerAddressMode(std::string_view str);
+    static rhi::SamplerAddressMode parseSamplerAddressMode(std::string_view str);
 
     /**
      * load a file. You must load a file first, then call loadMeshData, loadSkinData, and so on

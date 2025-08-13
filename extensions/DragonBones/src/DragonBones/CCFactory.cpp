@@ -30,32 +30,32 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
             auto texture            = textureCache->getTextureForKey(textureAtlasData->imagePath);
             if (texture == nullptr)
             {
-                ax::backend::PixelFormat pixelFormat =
-                    ax::backend::PixelFormat::NONE;
+                ax::rhi::PixelFormat pixelFormat =
+                    ax::rhi::PixelFormat::NONE;
                 switch (textureAtlasData->format)
                 {
                 case TextureFormat::RGBA8888:
-                    pixelFormat = ax::backend::PixelFormat::RGBA8;
+                    pixelFormat = ax::rhi::PixelFormat::RGBA8;
                     break;
 
                 case TextureFormat::BGRA8888:
-                    pixelFormat = ax::backend::PixelFormat::BGRA8;
+                    pixelFormat = ax::rhi::PixelFormat::BGRA8;
                     break;
 
                 case TextureFormat::RGBA4444:
-                    pixelFormat = ax::backend::PixelFormat::RGBA4;
+                    pixelFormat = ax::rhi::PixelFormat::RGBA4;
                     break;
 
                 case TextureFormat::RGB888:
-                    pixelFormat = ax::backend::PixelFormat::RGB8;
+                    pixelFormat = ax::rhi::PixelFormat::RGB8;
                     break;
 
                 case TextureFormat::RGB565:
-                    pixelFormat = ax::backend::PixelFormat::RGB565;
+                    pixelFormat = ax::rhi::PixelFormat::RGB565;
                     break;
 
                 case TextureFormat::RGBA5551:
-                    pixelFormat = ax::backend::PixelFormat::RGB5A1;
+                    pixelFormat = ax::rhi::PixelFormat::RGB5A1;
                     break;
 
                 case TextureFormat::DEFAULT:

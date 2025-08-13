@@ -27,7 +27,7 @@
 #include "base/Director.h"
 #include "renderer/Renderer.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 namespace ax
 {
@@ -37,8 +37,8 @@ int StencilStateManager::s_layer = -1;
 StencilStateManager::StencilStateManager()
 {
     auto& pipelineDescriptor        = _customCommand.getPipelineDescriptor();
-    auto* program                   = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_UCOLOR);
-    _programState                   = new backend::ProgramState(program);
+    auto* program                   = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_UCOLOR);
+    _programState                   = new rhi::ProgramState(program);
     pipelineDescriptor.programState = _programState;
 
     _mvpMatrixLocaiton    = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
@@ -150,18 +150,18 @@ void StencilStateManager::onBeforeDrawQuadCmd()
     //     never draw it into the frame buffer
     //     if not in inverted mode: set the current layer value to 0 in the stencil buffer
     //     if in inverted mode: set the current layer value to 1 in the stencil buffer
-    renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, _currentLayerMask, _currentLayerMask);
-    renderer->setStencilOperation(!_inverted ? backend::StencilOperation::ZERO : backend::StencilOperation::REPLACE,
-                                  backend::StencilOperation::KEEP, backend::StencilOperation::KEEP);
+    renderer->setStencilCompareFunction(rhi::CompareFunction::NEVER, _currentLayerMask, _currentLayerMask);
+    renderer->setStencilOperation(!_inverted ? rhi::StencilOperation::ZERO : rhi::StencilOperation::REPLACE,
+                                  rhi::StencilOperation::KEEP, rhi::StencilOperation::KEEP);
 }
 
 void StencilStateManager::onAfterDrawQuadCmd()
 {
     auto renderer = Director::getInstance()->getRenderer();
-    renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, _currentLayerMask, _currentLayerMask);
+    renderer->setStencilCompareFunction(rhi::CompareFunction::NEVER, _currentLayerMask, _currentLayerMask);
 
-    renderer->setStencilOperation(!_inverted ? backend::StencilOperation::REPLACE : backend::StencilOperation::ZERO,
-                                  backend::StencilOperation::KEEP, backend::StencilOperation::KEEP);
+    renderer->setStencilOperation(!_inverted ? rhi::StencilOperation::REPLACE : rhi::StencilOperation::ZERO,
+                                  rhi::StencilOperation::KEEP, rhi::StencilOperation::KEEP);
 }
 
 void StencilStateManager::onAfterDrawStencil()
@@ -183,10 +183,10 @@ void StencilStateManager::onAfterDrawStencil()
     //         draw the pixel and keep the current layer in the stencil buffer
     //     else
     //         do not draw the pixel but keep the current layer in the stencil buffer
-    renderer->setStencilCompareFunction(backend::CompareFunction::EQUAL, _mask_layer_le, _mask_layer_le);
+    renderer->setStencilCompareFunction(rhi::CompareFunction::EQUAL, _mask_layer_le, _mask_layer_le);
 
-    renderer->setStencilOperation(backend::StencilOperation::KEEP, backend::StencilOperation::KEEP,
-                                  backend::StencilOperation::KEEP);
+    renderer->setStencilOperation(rhi::StencilOperation::KEEP, rhi::StencilOperation::KEEP,
+                                  rhi::StencilOperation::KEEP);
 
     // draw (according to the stencil test function) this node and its children
 }

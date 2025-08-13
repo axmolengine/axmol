@@ -33,9 +33,9 @@ THE SOFTWARE.
 #include "renderer/Renderer.h"
 #include "renderer/Texture2D.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
-#include "renderer/backend/DriverBase.h"
-#include "renderer/backend/RenderTarget.h"
+#include "rhi/ProgramState.h"
+#include "rhi/DriverBase.h"
+#include "rhi/RenderTarget.h"
 #include "2d/Camera.h"
 
 namespace ax
@@ -57,11 +57,11 @@ bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
 
     Texture2D* texture = new Texture2D();
 
-    backend::TextureDescriptor descriptor;
+    rhi::TextureDescriptor descriptor;
     descriptor.width         = POTWide;
     descriptor.height        = POTHigh;
-    descriptor.textureUsage  = backend::TextureUsage::RENDER_TARGET;
-    descriptor.textureFormat = backend::PixelFormat::RGBA8;
+    descriptor.textureUsage  = rhi::TextureUsage::RENDER_TARGET;
+    descriptor.textureFormat = rhi::PixelFormat::RGBA8;
     texture->updateTextureDescriptor(descriptor);
 
     initWithSize(gridSize, texture, false, rect);
@@ -106,8 +106,8 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
 
     auto& pipelineDescriptor = _drawCommand.getPipelineDescriptor();
     AX_SAFE_RELEASE(_programState);
-    auto* program                   = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
-    _programState                   = new backend::ProgramState(program);
+    auto* program                   = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
+    _programState                   = new rhi::ProgramState(program);
     pipelineDescriptor.programState = _programState;
     _mvpMatrixLocation              = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _textureLocation                = pipelineDescriptor.programState->getUniformLocation("u_tex0");
@@ -122,12 +122,12 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     auto layout = _programState->getMutableVertexLayout();
     if (iter != vertexInputs.end())
     {
-        layout->setAttrib("a_position", &iter->second, backend::VertexFormat::FLOAT3, 0, false);
+        layout->setAttrib("a_position", &iter->second, rhi::VertexFormat::FLOAT3, 0, false);
     }
     iter = vertexInputs.find("a_texCoord");
     if (iter != vertexInputs.end())
     {
-        layout->setAttrib("a_texCoord", &iter->second, backend::VertexFormat::FLOAT2, texcoordOffset,
+        layout->setAttrib("a_texCoord", &iter->second, rhi::VertexFormat::FLOAT2, texcoordOffset,
                                    false);
     }
     layout->setStride(totalSize);
@@ -220,7 +220,7 @@ void GridBase::beforeDraw()
         _oldRenderTarget = renderer->getRenderTarget();
         AX_SAFE_RELEASE(_renderTarget);
         _renderTarget =
-            backend::DriverBase::getInstance()->createRenderTarget(_texture->getBackendTexture());
+            rhi::DriverBase::getInstance()->createRenderTarget(_texture->getBackendTexture());
         renderer->setRenderTarget(_renderTarget);
     };
     renderer->addCallbackCommand(beforeDrawCommandFunc);

@@ -78,7 +78,7 @@ enum class Uniformkey
     UNIFORM_SAMPLER2,
     UNIFORM_SAMPLER3,
     /**@}*/
-    UNIFORM_MAX,
+    UNIFORM_COUNT,
 };
 
 namespace shader

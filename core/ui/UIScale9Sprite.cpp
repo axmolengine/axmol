@@ -295,10 +295,10 @@ void Scale9Sprite::setState(Scale9Sprite::State state)
         switch (state)
         {
         case State::NORMAL:
-            Sprite::setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+            Sprite::setProgramState(rhi::ProgramType::POSITION_TEXTURE_COLOR);
             break;
         case State::GRAY:
-            Sprite::setProgramState(backend::ProgramType::GRAY_SCALE);
+            Sprite::setProgramState(rhi::ProgramType::GRAY_SCALE);
         default:
             break;
         }

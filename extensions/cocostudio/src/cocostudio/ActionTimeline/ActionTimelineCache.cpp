@@ -899,8 +899,8 @@ Frame* ActionTimelineCache::loadBlendFrameWithFlatBuffers(const flatbuffers::Ble
 {
     BlendFuncFrame* frame = BlendFuncFrame::create();
     ax::BlendFunc blend;
-    blend.src = backend::BlendFactor::ONE;
-    blend.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+    blend.src = rhi::BlendFactor::ONE;
+    blend.dst = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     if (nullptr != flatbuffers->blendFunc())
     {
         blend.src = utils::toBackendBlendFactor(flatbuffers->blendFunc()->src());

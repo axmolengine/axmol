@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "testResource.h"
 #include "ui/UISlider.h"
 #include "platform/FileUtils.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 #include "base/format.h"
 
 using namespace ax;
@@ -1255,8 +1255,8 @@ void FogTestDemo::onEnter()
     AX_SAFE_RELEASE_NULL(_programState2);
 
     auto program      = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
-    _programState1    = new backend::ProgramState(program);
-    _programState2    = new backend::ProgramState(program);
+    _programState1    = new rhi::ProgramState(program);
+    _programState2    = new rhi::ProgramState(program);
 
     _mesh1 = MeshRenderer::create("MeshRendererTest/teapot.c3b");
     _mesh2 = MeshRenderer::create("MeshRendererTest/teapot.c3b");
@@ -1302,8 +1302,8 @@ void FogTestDemo::onEnter()
         AX_SAFE_RELEASE_NULL(_programState2);
 
         auto program      = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
-        _programState1    = new backend::ProgramState(program);
-        _programState2    = new backend::ProgramState(program);
+        _programState1    = new rhi::ProgramState(program);
+        _programState2    = new rhi::ProgramState(program);
 
         _mesh1->setProgramState(_programState1);
         _mesh2->setProgramState(_programState2);

@@ -236,8 +236,8 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             NTextureData tex;
             tex.filename = material.diffuse_texname.empty() ? material.diffuse_texname : dir + material.diffuse_texname;
             tex.type     = NTextureData::Usage::Diffuse;
-            tex.wrapS    = backend::SamplerAddressMode::CLAMP_TO_EDGE;
-            tex.wrapT    = backend::SamplerAddressMode::CLAMP_TO_EDGE;
+            tex.wrapS    = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+            tex.wrapT    = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
 
             auto dataId = fmt::format_to_z(buf, "{}", ++i);
             materialdata.textures.emplace_back(tex);
@@ -399,7 +399,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
         for (unsigned int i = 0; i < meshSize; ++i)
         {
             unsigned int attribSize = _binaryReader.read<unsigned int>();
-            
+
             // read mesh data
             if (attribSize < 1)
             {
@@ -2013,15 +2013,15 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
     return nullptr;
 }
 
-backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
+rhi::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
 {
-    backend::VertexFormat ret = backend::VertexFormat::INT;
+    rhi::VertexFormat ret = rhi::VertexFormat::INT;
     if (str == "GL_BYTE")
     {
         switch (size)
         {
         case 4:
-            return backend::VertexFormat::UBYTE4;
+            return rhi::VertexFormat::UBYTE4;
         default:
             AXLOGE("parseVertexType GL_BYTE x {} error", size);
         }
@@ -2031,7 +2031,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         switch (size)
         {
         case 4:
-            return backend::VertexFormat::UBYTE4;
+            return rhi::VertexFormat::UBYTE4;
         default:
             AXLOGE("parseVertexType GL_UNSIGNED_BYTE x {} error", size);
         }
@@ -2041,9 +2041,9 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         switch (size)
         {
         case 2:
-            return backend::VertexFormat::USHORT2;
+            return rhi::VertexFormat::USHORT2;
         case 4:
-            return backend::VertexFormat::USHORT4;
+            return rhi::VertexFormat::USHORT4;
         default:
             AXLOGE("parseVertexType GL_SHORT x {} error", size);
         }
@@ -2053,9 +2053,9 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         switch (size)
         {
         case 2:
-            return backend::VertexFormat::USHORT2;
+            return rhi::VertexFormat::USHORT2;
         case 4:
-            return backend::VertexFormat::USHORT4;
+            return rhi::VertexFormat::USHORT4;
         default:
             AXLOGE("parseVertexType GL_UNSIGNED_SHORT x {} error", size);
         }
@@ -2065,13 +2065,13 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         switch (size)
         {
         case 1:
-            return backend::VertexFormat::INT;
+            return rhi::VertexFormat::INT;
         case 2:
-            return backend::VertexFormat::INT2;
+            return rhi::VertexFormat::INT2;
         case 3:
-            return backend::VertexFormat::INT3;
+            return rhi::VertexFormat::INT3;
         case 4:
-            return backend::VertexFormat::INT4;
+            return rhi::VertexFormat::INT4;
         default:
             AXLOGE("parseVertexType GL_INT x {} error", size);
         }
@@ -2081,13 +2081,13 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         switch (size)
         {
         case 1:
-            return backend::VertexFormat::INT;
+            return rhi::VertexFormat::INT;
         case 2:
-            return backend::VertexFormat::INT2;
+            return rhi::VertexFormat::INT2;
         case 3:
-            return backend::VertexFormat::INT3;
+            return rhi::VertexFormat::INT3;
         case 4:
-            return backend::VertexFormat::INT4;
+            return rhi::VertexFormat::INT4;
         default:
             AXLOGE("parseVertexType GL_UNSIGNED_INT x {} error", size);
         }
@@ -2097,13 +2097,13 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
         switch (size)
         {
         case 1:
-            return backend::VertexFormat::FLOAT;
+            return rhi::VertexFormat::FLOAT;
         case 2:
-            return backend::VertexFormat::FLOAT2;
+            return rhi::VertexFormat::FLOAT2;
         case 3:
-            return backend::VertexFormat::FLOAT3;
+            return rhi::VertexFormat::FLOAT3;
         case 4:
-            return backend::VertexFormat::FLOAT4;
+            return rhi::VertexFormat::FLOAT4;
         default:
             AXLOGE("parseVertexType GL_UNSIGNED_INT x {} error", size);
         }
@@ -2112,21 +2112,21 @@ backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
     return ret;
 }
 
-backend::SamplerAddressMode Bundle3D::parseSamplerAddressMode(std::string_view str)
+rhi::SamplerAddressMode Bundle3D::parseSamplerAddressMode(std::string_view str)
 {
 
     if (str == "REPEAT")
     {
-        return backend::SamplerAddressMode::REPEAT;
+        return rhi::SamplerAddressMode::REPEAT;
     }
     else if (str == "CLAMP")
     {
-        return backend::SamplerAddressMode::CLAMP_TO_EDGE;
+        return rhi::SamplerAddressMode::CLAMP_TO_EDGE;
     }
     else
     {
         AXASSERT(false, "Invalid GL type");
-        return backend::SamplerAddressMode::REPEAT;
+        return rhi::SamplerAddressMode::REPEAT;
     }
 }
 

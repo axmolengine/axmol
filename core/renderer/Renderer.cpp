@@ -21,7 +21,7 @@
  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE. 
+ THE SOFTWARE.
  ****************************************************************************/
 #include "renderer/Renderer.h"
 
@@ -46,8 +46,8 @@
 #include "2d/Scene.h"
 #include "xxhash.h"
 
-#include "renderer/backend/Backend.h"
-#include "renderer/backend/RenderTarget.h"
+#include "rhi/axmol-rhi.h"
+#include "rhi/RenderTarget.h"
 
 namespace ax
 {
@@ -203,7 +203,7 @@ void Renderer::init()
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
 
-    auto driver = backend::DriverBase::getInstance();
+    auto driver = rhi::DriverBase::getInstance();
 #if AX_RENDER_API == AX_RENDER_API_D3D
     auto mainWindowHandle = Director::getInstance()->getRenderView()->getWin32Window();
     _commandBuffer        = driver->createCommandBuffer(mainWindowHandle);
@@ -221,9 +221,9 @@ void Renderer::init()
     _commandBuffer->setDepthStencilState(_depthStencilState);
 }
 
-backend::RenderTarget* Renderer::getOffscreenRenderTarget() {
+rhi::RenderTarget* Renderer::getOffscreenRenderTarget() {
     if (_offscreenRT != nullptr) return _offscreenRT;
-    return (_offscreenRT = backend::DriverBase::getInstance()->createRenderTarget());
+    return (_offscreenRT = rhi::DriverBase::getInstance()->createRenderTarget());
 }
 
 void Renderer::addCallbackCommand(std::function<void()> func, float globalZOrder)
@@ -362,7 +362,7 @@ void Renderer::visitRenderQueue(RenderQueue& queue)
     // Apply default state for all render queues
     setDepthTest(false);
     setDepthWrite(false);
-    setCullMode(backend::CullMode::NONE);
+    setCullMode(rhi::CullMode::NONE);
 
     //
     // Process Global-Z < 0 Objects
@@ -375,7 +375,7 @@ void Renderer::visitRenderQueue(RenderQueue& queue)
     pushStateBlock();
     setDepthTest(true);  // enable depth test in 3D queue by default
     setDepthWrite(true);
-    setCullMode(backend::CullMode::BACK);
+    setCullMode(rhi::CullMode::BACK);
     doVisitRenderQueue(queue.getSubQueue(RenderQueue::QUEUE_GROUP::OPAQUE_3D));
 
     //
@@ -483,12 +483,12 @@ void Renderer::setDepthWrite(bool value)
         _dsDesc.removeFlag(DepthStencilFlags::DEPTH_WRITE);
 }
 
-void Renderer::setDepthCompareFunction(backend::CompareFunction func)
+void Renderer::setDepthCompareFunction(rhi::CompareFunction func)
 {
     _dsDesc.depthCompareFunction = func;
 }
 
-backend::CompareFunction Renderer::getDepthCompareFunction() const
+rhi::CompareFunction Renderer::getDepthCompareFunction() const
 {
     return _dsDesc.depthCompareFunction;
 }
@@ -508,7 +508,7 @@ bool Renderer::getDepthWrite() const
     return bitmask::any(_dsDesc.flags, DepthStencilFlags::DEPTH_WRITE);
 }
 
-void Renderer::setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)
+void Renderer::setStencilCompareFunction(rhi::CompareFunction func, unsigned int ref, unsigned int readMask)
 {
     _dsDesc.frontFaceStencil.stencilCompareFunction = func;
     _dsDesc.backFaceStencil.stencilCompareFunction  = func;
@@ -519,9 +519,9 @@ void Renderer::setStencilCompareFunction(backend::CompareFunction func, unsigned
     _stencilRef = ref;
 }
 
-void Renderer::setStencilOperation(backend::StencilOperation stencilFailureOp,
-                                   backend::StencilOperation depthFailureOp,
-                                   backend::StencilOperation stencilDepthPassOp)
+void Renderer::setStencilOperation(rhi::StencilOperation stencilFailureOp,
+                                   rhi::StencilOperation depthFailureOp,
+                                   rhi::StencilOperation stencilDepthPassOp)
 {
     _dsDesc.frontFaceStencil.stencilFailureOperation = stencilFailureOp;
     _dsDesc.backFaceStencil.stencilFailureOperation  = stencilFailureOp;
@@ -539,22 +539,22 @@ void Renderer::setStencilWriteMask(unsigned int mask)
     _dsDesc.backFaceStencil.writeMask  = mask;
 }
 
-backend::StencilOperation Renderer::getStencilFailureOperation() const
+rhi::StencilOperation Renderer::getStencilFailureOperation() const
 {
     return _dsDesc.frontFaceStencil.stencilFailureOperation;
 }
 
-backend::StencilOperation Renderer::getStencilPassDepthFailureOperation() const
+rhi::StencilOperation Renderer::getStencilPassDepthFailureOperation() const
 {
     return _dsDesc.frontFaceStencil.depthFailureOperation;
 }
 
-backend::StencilOperation Renderer::getStencilDepthPassOperation() const
+rhi::StencilOperation Renderer::getStencilDepthPassOperation() const
 {
     return _dsDesc.frontFaceStencil.depthStencilPassOperation;
 }
 
-backend::CompareFunction Renderer::getStencilCompareFunction() const
+rhi::CompareFunction Renderer::getStencilCompareFunction() const
 {
     return _dsDesc.depthCompareFunction;
 }
@@ -574,12 +574,12 @@ unsigned int Renderer::getStencilReferenceValue() const
     return _stencilRef;
 }
 
-void Renderer::setDepthStencilDesc(const backend::DepthStencilDescriptor& dsDesc)
+void Renderer::setDepthStencilDesc(const rhi::DepthStencilDescriptor& dsDesc)
 {
     _dsDesc = dsDesc;
 }
 
-const backend::DepthStencilDescriptor& Renderer::getDepthStencilDesc() const
+const rhi::DepthStencilDescriptor& Renderer::getDepthStencilDesc() const
 {
     return _dsDesc;
 }
@@ -701,7 +701,7 @@ void Renderer::drawBatchedTriangles()
         _commandBuffer->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDescriptor());
         auto& pipelineDescriptor = drawInfo.cmd->getPipelineDescriptor();
         _commandBuffer->setProgramState(pipelineDescriptor.programState);
-        _commandBuffer->drawElements(backend::PrimitiveType::TRIANGLE, backend::IndexFormat::U_SHORT,
+        _commandBuffer->drawElements(rhi::PrimitiveType::TRIANGLE, rhi::IndexFormat::U_SHORT,
                                      drawInfo.indicesToDraw, drawInfo.offset * sizeof(_indices[0]));
 
         _drawnBatches++;
@@ -832,13 +832,13 @@ bool Renderer::checkVisibility(const Mat4& transform, const Vec2& size)
     return ret;
 }
 
-void Renderer::readPixels(backend::RenderTarget* rt,
-                          std::function<void(const backend::PixelBufferDescriptor&)> callback)
+void Renderer::readPixels(rhi::RenderTarget* rt,
+                          std::function<void(const rhi::PixelBufferDescriptor&)> callback)
 {
     assert(!!rt);
     if (rt ==
         _defaultRT)  // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
-        backend::DriverBase::getInstance()->setFrameBufferOnly(false);
+        rhi::DriverBase::getInstance()->setFrameBufferOnly(false);
 
     _commandBuffer->readPixels(rt, std::move(callback));
 }
@@ -885,7 +885,7 @@ void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned 
     command->init(globalOrder);
     command->func = [this, flags, color, depth, stencil]() -> void {
 
-        backend::RenderPassDescriptor descriptor;
+        rhi::RenderPassDescriptor descriptor;
 
         descriptor.flags.clear = flags;
         if (bitmask::any(flags, ClearFlag::COLOR))
@@ -997,31 +997,31 @@ void Renderer::TriangleCommandBufferManager::prepareNextBuffer()
     ++_currentBufferIndex;
 }
 
-backend::Buffer* Renderer::TriangleCommandBufferManager::getVertexBuffer() const
+rhi::Buffer* Renderer::TriangleCommandBufferManager::getVertexBuffer() const
 {
     return _vertexBufferPool[_currentBufferIndex];
 }
 
-backend::Buffer* Renderer::TriangleCommandBufferManager::getIndexBuffer() const
+rhi::Buffer* Renderer::TriangleCommandBufferManager::getIndexBuffer() const
 {
     return _indexBufferPool[_currentBufferIndex];
 }
 
 void Renderer::TriangleCommandBufferManager::createBuffer()
 {
-    auto driver = backend::DriverBase::getInstance();
+    auto driver = rhi::DriverBase::getInstance();
 
     // Not initializing the buffer before passing it to updateData for Android/OpenGL ES.
     // This change does fix the Android/OpenGL ES performance problem
     // If for some reason we get reports of performance issues on OpenGL implementations,
     // then we can just add pre-processor checks for OpenGL and have the updateData() allocate the full size after buffer creation.
-    auto vertexBuffer = driver->createBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX,
-                                          backend::BufferUsage::DYNAMIC);
+    auto vertexBuffer = driver->createBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), rhi::BufferType::VERTEX,
+                                          rhi::BufferUsage::DYNAMIC);
     if (!vertexBuffer)
         return;
 
-    auto indexBuffer = driver->createBuffer(Renderer::INDEX_VBO_SIZE * sizeof(_indices[0]), backend::BufferType::INDEX,
-                                         backend::BufferUsage::DYNAMIC);
+    auto indexBuffer = driver->createBuffer(Renderer::INDEX_VBO_SIZE * sizeof(_indices[0]), rhi::BufferType::INDEX,
+                                         rhi::BufferUsage::DYNAMIC);
     if (!indexBuffer)
     {
         vertexBuffer->release();

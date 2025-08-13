@@ -682,13 +682,13 @@ void Slider::onPressStateChangedToNormal()
     _slidBallPressedRenderer->setVisible(false);
     _slidBallDisabledRenderer->setVisible(false);
 
-    _slidBallNormalRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    _slidBallNormalRenderer->setProgramState(rhi::ProgramType::POSITION_TEXTURE_COLOR);
     _slidBallNormalRenderer->setScale(_sliderBallNormalTextureScaleX, _sliderBallNormalTextureScaleY);
 }
 
 void Slider::onPressStateChangedToPressed()
 {
-    _slidBallNormalRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    _slidBallNormalRenderer->setProgramState(rhi::ProgramType::POSITION_TEXTURE_COLOR);
 
     if (!_isSliderBallPressedTextureLoaded)
     {
@@ -707,7 +707,7 @@ void Slider::onPressStateChangedToDisabled()
 {
     if (!_isSliderBallDisabledTexturedLoaded)
     {
-        _slidBallNormalRenderer->setProgramState(backend::ProgramType::GRAY_SCALE);
+        _slidBallNormalRenderer->setProgramState(rhi::ProgramType::GRAY_SCALE);
         _slidBallNormalRenderer->setVisible(true);
     }
     else

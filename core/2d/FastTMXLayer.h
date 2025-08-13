@@ -43,7 +43,7 @@ class TMXTileAnimManager;
 class Texture2D;
 class Sprite;
 
-namespace backend
+namespace rhi
 {
 class Buffer;
 }
@@ -377,15 +377,15 @@ protected:
     std::unordered_map<int /*vertexZ*/, int /*number to quads*/> _indicesVertexZNumber;
     bool _dirty = true;
 
-    backend::Buffer* _vertexBuffer = nullptr;
-    backend::Buffer* _indexBuffer  = nullptr;
+    rhi::Buffer* _vertexBuffer = nullptr;
+    rhi::Buffer* _indexBuffer  = nullptr;
 
     float _alphaFuncValue = 0.f;
     std::unordered_map<int, CustomCommand*> _customCommands;
 
-    backend::UniformLocation _mvpMatrixLocaiton;
-    backend::UniformLocation _textureLocation;
-    backend::UniformLocation _alphaValueLocation;
+    rhi::UniformLocation _mvpMatrixLocaiton;
+    rhi::UniformLocation _textureLocation;
+    rhi::UniformLocation _alphaValueLocation;
 };
 
 /** @brief TMXTileAnimTask represents the frame-tick task of an animated tile.

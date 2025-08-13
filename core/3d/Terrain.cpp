@@ -33,9 +33,9 @@ using namespace ax;
 #include <stddef.h>  // offsetof
 #include "renderer/Renderer.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/DriverBase.h"
-#include "renderer/backend/Program.h"
-#include "renderer/backend/Buffer.h"
+#include "rhi/DriverBase.h"
+#include "rhi/Program.h"
+#include "rhi/Buffer.h"
 #include "base/Director.h"
 #include "base/Types.h"
 #include "base/axstd.h"
@@ -95,9 +95,9 @@ void ax::Terrain::setLightMap(std::string_view fileName)
     _lightMap->initWithImage(image);
 
     Texture2D::TexParams tRepeatParams;  // set texture parameters
-    tRepeatParams.magFilter = tRepeatParams.minFilter = backend::SamplerFilter::LINEAR;
-    tRepeatParams.sAddressMode                        = backend::SamplerAddressMode::REPEAT;
-    tRepeatParams.tAddressMode                        = backend::SamplerAddressMode::REPEAT;
+    tRepeatParams.magFilter = tRepeatParams.minFilter = rhi::SamplerFilter::LINEAR;
+    tRepeatParams.sAddressMode                        = rhi::SamplerAddressMode::REPEAT;
+    tRepeatParams.tAddressMode                        = rhi::SamplerAddressMode::REPEAT;
     _lightMap->setTexParameters(tRepeatParams);
 }
 
@@ -112,7 +112,7 @@ bool Terrain::initProperties()
 
     _stateBlock.depthWrite = true;
     _stateBlock.depthTest  = true;
-    _stateBlock.cullFace   = backend::CullMode::FRONT;
+    _stateBlock.cullFace   = rhi::CullMode::FRONT;
 
     setDrawWire(false);
     setIsEnableFrustumCull(true);
@@ -365,13 +365,13 @@ float Terrain::getImageHeight(int pixel_x, int pixel_y) const
     int byte_stride = 1;
     switch (_heightMapImage->getPixelFormat())
     {
-    case backend::PixelFormat::BGRA8:
+    case rhi::PixelFormat::BGRA8:
         byte_stride = 4;
         break;
-    case backend::PixelFormat::RGB8:
+    case rhi::PixelFormat::RGB8:
         byte_stride = 3;
         break;
-    case backend::PixelFormat::R8:
+    case rhi::PixelFormat::R8:
         byte_stride = 1;
         break;
     default:
@@ -736,8 +736,8 @@ Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod,
     lodIndices._relativeLod[4]     = selfLod;
     lodIndices._chunkIndices._size = size;
 
-    auto buffer = backend::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX,
-                                                            backend::BufferUsage::STATIC);
+    auto buffer = rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX,
+                                                            rhi::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
     AX_SAFE_RELEASE_NULL(lodIndices._chunkIndices._indexBuffer);
@@ -774,8 +774,8 @@ Terrain::ChunkIndices Terrain::insertIndicesLODSkirt(int selfLod, uint16_t* indi
     skirtIndices._selfLod            = selfLod;
     skirtIndices._chunkIndices._size = size;
 
-    auto buffer = backend::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * size, backend::BufferType::INDEX,
-                                                            backend::BufferUsage::STATIC);
+    auto buffer = rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX,
+                                                            rhi::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
     AX_SAFE_RELEASE_NULL(skirtIndices._chunkIndices._indexBuffer);
@@ -838,8 +838,8 @@ bool Terrain::initTextures()
     }
 
     Texture2D::TexParams texParam;
-    texParam.sAddressMode = backend::SamplerAddressMode::REPEAT;
-    texParam.tAddressMode = backend::SamplerAddressMode::REPEAT;
+    texParam.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+    texParam.tAddressMode = rhi::SamplerAddressMode::REPEAT;
     if (_terrainData._alphaMapSrc.empty())
     {
         auto textImage = new Image();
@@ -848,8 +848,8 @@ bool Terrain::initTextures()
         texture->initWithImage(textImage);
         texture->generateMipmap();
         _detailMapTextures[0] = texture;
-        texParam.minFilter    = backend::SamplerFilter::LINEAR;
-        texParam.magFilter    = backend::SamplerFilter::LINEAR;
+        texParam.minFilter    = rhi::SamplerFilter::LINEAR;
+        texParam.magFilter    = rhi::SamplerFilter::LINEAR;
         texture->setTexParameters(texParam);
         delete textImage;
     }
@@ -860,10 +860,10 @@ bool Terrain::initTextures()
         image->initWithImageFile(_terrainData._alphaMapSrc);
         _alphaMap = new Texture2D();
         _alphaMap->initWithImage(image);
-        texParam.sAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
-        texParam.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
-        texParam.minFilter    = backend::SamplerFilter::LINEAR;
-        texParam.magFilter    = backend::SamplerFilter::LINEAR;
+        texParam.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+        texParam.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+        texParam.minFilter    = rhi::SamplerFilter::LINEAR;
+        texParam.magFilter    = rhi::SamplerFilter::LINEAR;
         _alphaMap->setTexParameters(texParam);
         delete image;
 
@@ -877,10 +877,10 @@ bool Terrain::initTextures()
             texture->generateMipmap();
             _detailMapTextures[i] = texture;
 
-            texParam.sAddressMode = backend::SamplerAddressMode::REPEAT;
-            texParam.tAddressMode = backend::SamplerAddressMode::REPEAT;
-            texParam.minFilter    = backend::SamplerFilter::LINEAR;
-            texParam.magFilter    = backend::SamplerFilter::LINEAR;
+            texParam.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+            texParam.tAddressMode = rhi::SamplerAddressMode::REPEAT;
+            texParam.minFilter    = rhi::SamplerFilter::LINEAR;
+            texParam.magFilter    = rhi::SamplerFilter::LINEAR;
             texture->setTexParameters(texParam);
         }
     }
@@ -913,8 +913,8 @@ void Terrain::Chunk::finish()
     // frequently
 
     AX_SAFE_RELEASE_NULL(_buffer);
-    _buffer = backend::DriverBase::getInstance()->createBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
-                                                        backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+    _buffer = rhi::DriverBase::getInstance()->createBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
+                                                        rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
     _buffer->updateData(&_originalVertices[0], sizeof(TerrainVertexData) * _originalVertices.size());
 
@@ -953,7 +953,7 @@ void Terrain::Chunk::bindAndDraw()
 
     auto* renderer = Director::getInstance()->getRenderer();
     AXASSERT(_buffer && _chunkIndices._indexBuffer, "buffer should not be nullptr");
-    _command.setIndexBuffer(_chunkIndices._indexBuffer, backend::IndexFormat::U_SHORT);
+    _command.setIndexBuffer(_chunkIndices._indexBuffer, rhi::IndexFormat::U_SHORT);
     _command.setVertexBuffer(_buffer);
     _command.getPipelineDescriptor().programState = _terrain->_programState;
     _command.setIndexDrawInfo(0, _chunkIndices._size);

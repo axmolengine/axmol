@@ -95,9 +95,9 @@ protected:
 
     BlendFunc _blendFunc;
     ax::CustomCommand _customCommand;
-    backend::ProgramState* _programStateLine                 = nullptr;
-    backend::DepthStencilDescriptor* _depthstencilDescriptor = nullptr;
-    backend::UniformLocation _locMVPMatrix;
+    rhi::ProgramState* _programStateLine                 = nullptr;
+    rhi::DepthStencilDescriptor* _depthstencilDescriptor = nullptr;
+    rhi::UniformLocation _locMVPMatrix;
     axstd::pod_vector<V3F_C4F> _bufferLines;
 
 private:

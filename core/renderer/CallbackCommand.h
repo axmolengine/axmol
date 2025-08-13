@@ -24,7 +24,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "renderer/backend/PixelBufferDescriptor.h"
+#include "rhi/PixelBufferDescriptor.h"
 #include "renderer/RenderCommand.h"
 #include "base/RefPtr.h"
 
@@ -36,7 +36,7 @@
 namespace ax
 {
 
-namespace backend
+namespace rhi
 {
 class Texture;
 }

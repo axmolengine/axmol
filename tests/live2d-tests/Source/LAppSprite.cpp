@@ -9,7 +9,7 @@
 #include "base/Director.h"
 #include "LAppPal.hpp"
 
-LAppSprite::LAppSprite(backend::Program* program)
+LAppSprite::LAppSprite(rhi::Program* program)
 {
     _program = program;
 
@@ -21,16 +21,16 @@ LAppSprite::~LAppSprite()
 }
 
 void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer,
-                                 backend::Texture* texture,
+                                 rhi::Texture* texture,
                                  float uvVertex[8]) const
 {
     Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer* drawCommandBuffer = CSM_NEW Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer();
     PipelineDescriptor* pipelineDescriptor = drawCommandBuffer->GetCommandDraw()->GetPipelineDescriptor();
-    backend::BlendDescriptor* blendDescriptor = drawCommandBuffer->GetCommandDraw()->GetBlendDescriptor();
-    backend::ProgramState* programState = pipelineDescriptor->programState;
+    rhi::BlendDescriptor* blendDescriptor = drawCommandBuffer->GetCommandDraw()->GetBlendDescriptor();
+    rhi::ProgramState* programState = pipelineDescriptor->programState;
 
     drawCommandBuffer->GetCommandDraw()->GetCommand()->setDrawType(ax::CustomCommand::DrawType::ELEMENT);
-    drawCommandBuffer->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::backend::PrimitiveType::TRIANGLE);
+    drawCommandBuffer->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::rhi::PrimitiveType::TRIANGLE);
     drawCommandBuffer->CreateVertexBuffer(sizeof(float) * 2, 4 * 2);
     drawCommandBuffer->CreateIndexBuffer(6);
 
@@ -59,13 +59,13 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     if (!programState)
     {
-        programState = new ax::backend::ProgramState(_program);
+        programState = new ax::rhi::ProgramState(_program);
     }
 
     auto layout = programState->getMutableVertexLayout();
     // attribute属性を登録
-    layout->setAttrib("a_position", _program->getVertexInputDesc("a_position"), backend::VertexFormat::FLOAT2, 0, false);
-    layout->setAttrib("a_texCoord", _program->getVertexInputDesc("a_texCoord"), backend::VertexFormat::FLOAT2,
+    layout->setAttrib("a_position", _program->getVertexInputDesc("a_position"), rhi::VertexFormat::FLOAT2, 0, false);
+    layout->setAttrib("a_texCoord", _program->getVertexInputDesc("a_texCoord"), rhi::VertexFormat::FLOAT2,
                             sizeof(float) * 2, false);
 
     // uniform属性の登録
@@ -75,10 +75,10 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     layout->setStride(sizeof(float) * 4);
 
-    blendDescriptor->sourceRGBBlendFactor = ax::backend::BlendFactor::ONE;
-    blendDescriptor->destinationRGBBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-    blendDescriptor->sourceAlphaBlendFactor = ax::backend::BlendFactor::ONE;
-    blendDescriptor->destinationAlphaBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+    blendDescriptor->sourceRGBBlendFactor = ax::rhi::BlendFactor::ONE;
+    blendDescriptor->destinationRGBBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
+    blendDescriptor->sourceAlphaBlendFactor = ax::rhi::BlendFactor::ONE;
+    blendDescriptor->destinationAlphaBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     blendDescriptor->blendEnabled = true;
 
     pipelineDescriptor->programState = programState;

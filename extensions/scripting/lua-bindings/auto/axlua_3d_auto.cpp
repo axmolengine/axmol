@@ -1218,7 +1218,7 @@ int lua_ax_3d_TextureCube_getBackendTexture(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getBackendTexture();
-        object_to_luaval<ax::backend::Texture>(tolua_S, "axb.Texture",(ax::backend::Texture*)ret);
+        object_to_luaval<ax::rhi::Texture>(tolua_S, "axrhi.Texture",(ax::rhi::Texture*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCube:getBackendTexture",argc, 0);
@@ -2120,7 +2120,7 @@ int lua_ax_3d_Mesh_getProgramState(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getProgramState();
-        object_to_luaval<ax::backend::ProgramState>(tolua_S, "axb.ProgramState",(ax::backend::ProgramState*)ret);
+        object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axrhi.ProgramState",(ax::rhi::ProgramState*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:getProgramState",argc, 0);
@@ -2305,7 +2305,7 @@ int lua_ax_3d_Mesh_setIndexFormat(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::backend::IndexFormat arg0;
+        ax::rhi::IndexFormat arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Mesh:setIndexFormat");
         if(!ok)
@@ -2355,9 +2355,9 @@ int lua_ax_3d_Mesh_setProgramState(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::backend::ProgramState* arg0;
+        ax::rhi::ProgramState* arg0;
 
-        ok &= luaval_to_object<ax::backend::ProgramState>(tolua_S, 2, "axb.ProgramState",&arg0, "ax.Mesh:setProgramState");
+        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.Mesh:setProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setProgramState'", nullptr);
@@ -4080,8 +4080,8 @@ int lua_ax_3d_MeshMaterial_createWithProgramState(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        ax::backend::ProgramState* arg0;
-        ok &= luaval_to_object<ax::backend::ProgramState>(tolua_S, 2, "axb.ProgramState",&arg0, "ax.MeshMaterial:createWithProgramState");
+        ax::rhi::ProgramState* arg0;
+        ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.MeshMaterial:createWithProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_createWithProgramState'", nullptr);
@@ -4857,7 +4857,7 @@ int lua_ax_3d_MeshRenderer_setCullFace(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        ax::backend::CullMode arg0;
+        ax::rhi::CullMode arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:setCullFace");
         if(!ok)

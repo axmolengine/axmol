@@ -52,14 +52,14 @@ inline constexpr bool is_index_format_type_v =
 class IndexArray
 {
 public:
-    static constexpr unsigned int formatToStride(backend::IndexFormat format) { return 1 << (int)format; }
-    static constexpr backend::IndexFormat strideToFormat(unsigned int stride)
+    static constexpr unsigned int formatToStride(rhi::IndexFormat format) { return 1 << (int)format; }
+    static constexpr rhi::IndexFormat strideToFormat(unsigned int stride)
     {
-        return (backend::IndexFormat)(stride >> 1);
+        return (rhi::IndexFormat)(stride >> 1);
     }
 
-    IndexArray() : _stride(formatToStride(backend::IndexFormat::U_SHORT)) {}
-    IndexArray(backend::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
+    IndexArray() : _stride(formatToStride(rhi::IndexFormat::U_SHORT)) {}
+    IndexArray(rhi::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     IndexArray(std::initializer_list<_Ty> rhs) : _stride(sizeof(_Ty))
@@ -91,13 +91,13 @@ public:
     }
 
     /** Returns the format of the index array. */
-    backend::IndexFormat format() const { return strideToFormat(_stride); }
+    rhi::IndexFormat format() const { return strideToFormat(_stride); }
 
     /** Clears the internal byte buffer. */
     void clear() { _buffer.clear(); }
 
     /** Clears the internal byte buffer and sets the format specified. */
-    void clear(backend::IndexFormat format)
+    void clear(rhi::IndexFormat format)
     {
         clear();
         _stride = formatToStride(format);
@@ -220,7 +220,7 @@ protected:
  */
 struct AX_DLL MeshVertexAttrib
 {
-    backend::VertexFormat type;
+    rhi::VertexFormat type;
     shaderinfos::VertexKey vertexAttrib;
     int getAttribSizeBytes() const;
 };
@@ -463,8 +463,8 @@ struct NTextureData
     std::string id;
     std::string filename;
     Usage type;
-    backend::SamplerAddressMode wrapS;
-    backend::SamplerAddressMode wrapT;
+    rhi::SamplerAddressMode wrapS;
+    rhi::SamplerAddressMode wrapT;
 };
 struct NMaterialData
 {

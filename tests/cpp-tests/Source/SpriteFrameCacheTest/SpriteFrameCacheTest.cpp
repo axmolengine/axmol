@@ -52,27 +52,27 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     addChild(infoLabel);
 
     // load atlas definition with specified PixelFormat and check that it matches to expected format
-    loadSpriteFrames("Images/sprite_frames_test/test_A8.plist", backend::PixelFormat::R8);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
-    loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", backend::PixelFormat::RG8);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGB565.plist", backend::PixelFormat::RGB565);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGB888.plist", backend::PixelFormat::RGB8);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA4444.plist", backend::PixelFormat::RGBA4);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA5551.plist", backend::PixelFormat::RGB5A1);
+    loadSpriteFrames("Images/sprite_frames_test/test_A8.plist", rhi::PixelFormat::R8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", rhi::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_AI88.plist", rhi::PixelFormat::RG8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGB565.plist", rhi::PixelFormat::RGB565);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGB888.plist", rhi::PixelFormat::RGB8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA4444.plist", rhi::PixelFormat::RGBA4);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA5551.plist", rhi::PixelFormat::RGB5A1);
 
     if (Configuration::getInstance()->supportsPVRTC())
     {
-        loadSpriteFrames("Images/sprite_frames_test/test_PVRTC2.plist", backend::PixelFormat::PVRTC2A);
-        loadSpriteFrames("Images/sprite_frames_test/test_PVRTC4.plist", backend::PixelFormat::PVRTC4A);
-        loadSpriteFrames("Images/sprite_frames_test/test_PVRTC2_NOALPHA.plist", backend::PixelFormat::PVRTC2);
+        loadSpriteFrames("Images/sprite_frames_test/test_PVRTC2.plist", rhi::PixelFormat::PVRTC2A);
+        loadSpriteFrames("Images/sprite_frames_test/test_PVRTC4.plist", rhi::PixelFormat::PVRTC4A);
+        loadSpriteFrames("Images/sprite_frames_test/test_PVRTC2_NOALPHA.plist", rhi::PixelFormat::PVRTC2);
     }
 
     // test loading atlases without PixelFormat specified
-    loadSpriteFrames("Images/sprite_frames_test/test_NoFormat.plist", backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_NoFormat.plist", rhi::PixelFormat::RGBA8);
 }
 
 void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
-                                                       ax::backend::PixelFormat expectedFormat)
+                                                       ax::rhi::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
@@ -94,14 +94,14 @@ SpriteFrameCacheLoadMultipleTimes::SpriteFrameCacheLoadMultipleTimes()
     const Size screenSize = Director::getInstance()->getWinSize();
 
     // load atlas definition with specified PixelFormat and check that it matches to expected format
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
-    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", rhi::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", rhi::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", rhi::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", rhi::PixelFormat::RGBA8);
 }
 
 void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file,
-                                                         ax::backend::PixelFormat expectedFormat)
+                                                         ax::rhi::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
@@ -115,10 +115,10 @@ SpriteFrameCacheFullCheck::SpriteFrameCacheFullCheck()
 {
     const Size screenSize = Director::getInstance()->getWinSize();
     // load atlas definition with specified PixelFormat and check that it matches to expected format
-    loadSpriteFrames("Images/test_polygon.plist", backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/test_polygon.plist", rhi::PixelFormat::RGBA8);
 }
 
-void SpriteFrameCacheFullCheck::loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat)
+void SpriteFrameCacheFullCheck::loadSpriteFrames(std::string_view file, ax::rhi::PixelFormat expectedFormat)
 {
     auto cache = SpriteFrameCache::getInstance();
 
@@ -438,7 +438,7 @@ SpriteFrameCacheJsonAtlasTest::SpriteFrameCacheJsonAtlasTest()
     infoLabel->setPosition(screenSize.width * 0.5f, screenSize.height * 0.7f);
     addChild(infoLabel);
 
-    loadSpriteFrames("Images/sprite_frames_test/test_RGB8888_generic.json"sv, backend::PixelFormat::RGBA8);
+    loadSpriteFrames("Images/sprite_frames_test/test_RGB8888_generic.json"sv, rhi::PixelFormat::RGBA8);
 }
 
 SpriteFrameCacheJsonAtlasTest::~SpriteFrameCacheJsonAtlasTest()
@@ -448,7 +448,7 @@ SpriteFrameCacheJsonAtlasTest::~SpriteFrameCacheJsonAtlasTest()
 }
 
 void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
-                                                     ax::backend::PixelFormat expectedFormat)
+                                                     ax::rhi::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::FORMAT);
     SpriteFrame* spriteFrame =

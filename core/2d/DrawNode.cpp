@@ -35,7 +35,7 @@
 #include "2d/ActionCatmullRom.h"
 #include "base/Utils.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "poly2tri/poly2tri.h"
 
 namespace ax
@@ -133,13 +133,13 @@ bool DrawNode::init()
 
 void DrawNode::updateShader()
 {
-    updateShaderInternal(_customCommandTriangle, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
+    updateShaderInternal(_customCommandTriangle, rhi::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
                          CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::TRIANGLE);
 
-    updateShaderInternal(_customCommandPoint, backend::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE,
+    updateShaderInternal(_customCommandPoint, rhi::ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE,
                          CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::POINT);
 
-    updateShaderInternal(_customCommandLine, backend::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
+    updateShaderInternal(_customCommandLine, rhi::ProgramType::POSITION_COLOR_LENGTH_TEXTURE,
                          CustomCommand::DrawType::ARRAY, CustomCommand::PrimitiveType::LINE);
 }
 
@@ -151,8 +151,8 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE(pipelinePS);
 
-    auto program = backend::Program::getBuiltinProgram(programType);
-    pipelinePS   = new backend::ProgramState(program);
+    auto program = axpm->getBuiltinProgram(programType);
+    pipelinePS   = new rhi::ProgramState(program);
     setVertexLayout(cmd);
     cmd.setPrimitiveType(primitiveType);
     cmd.setDrawType(drawType);
@@ -161,7 +161,7 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
 void DrawNode::setVertexLayout(CustomCommand& cmd)
 {
     auto* programState = cmd.getPipelineDescriptor().programState;
-    programState->validateSharedVertexLayout(backend::VertexLayoutType::DrawNode);
+    programState->validateSharedVertexLayout(rhi::VertexLayoutType::DrawNode);
 }
 
 void DrawNode::freeShaderInternal(CustomCommand& cmd)
@@ -172,14 +172,14 @@ void DrawNode::freeShaderInternal(CustomCommand& cmd)
 
 void DrawNode::updateBlendState(CustomCommand& cmd)
 {
-    backend::BlendDescriptor& blendDescriptor = cmd.getPipelineDescriptor().blendDescriptor;
+    rhi::BlendDescriptor& blendDescriptor = cmd.getPipelineDescriptor().blendDescriptor;
     blendDescriptor.blendEnabled              = true;
     if (_blendFunc == BlendFunc::ALPHA_NON_PREMULTIPLIED)
     {
-        blendDescriptor.sourceRGBBlendFactor        = backend::BlendFactor::SRC_ALPHA;
-        blendDescriptor.destinationRGBBlendFactor   = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-        blendDescriptor.sourceAlphaBlendFactor      = backend::BlendFactor::SRC_ALPHA;
-        blendDescriptor.destinationAlphaBlendFactor = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blendDescriptor.sourceRGBBlendFactor        = rhi::BlendFactor::SRC_ALPHA;
+        blendDescriptor.destinationRGBBlendFactor   = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blendDescriptor.sourceAlphaBlendFactor      = rhi::BlendFactor::SRC_ALPHA;
+        blendDescriptor.destinationAlphaBlendFactor = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
         setOpacityModifyRGB(false);
     }
     else
@@ -1609,7 +1609,7 @@ void DrawNode::Properties::setDefaultValues()
 {
     auto fac = Director::getInstance()->getContentScaleFactor();
     factor   = fac;
-    
+
     scale     = Vec2(1.0f, 1.0f);
     center    = Vec2(0.0f, 0.0f);
     rotation  = 0.0f;

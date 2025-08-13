@@ -10,7 +10,7 @@
 #include "Type/csmVector.hpp"
 #include "Model/CubismModel.hpp"
 #include <float.h>
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 
 using namespace ax;
 
@@ -142,7 +142,7 @@ CubismClippingContext* CubismClippingManager_Cocos2dx::FindSameClip(const csmInt
     return NULL; //見つからなかった
 }
 
-void CubismClippingManager_Cocos2dx::SetupClippingContext(CubismModel& model, CubismRenderer_Cocos2dx* renderer, backend::Texture* lastColorBuffer, csmRectF lastViewport)
+void CubismClippingManager_Cocos2dx::SetupClippingContext(CubismModel& model, CubismRenderer_Cocos2dx* renderer, rhi::Texture* lastColorBuffer, csmRectF lastViewport)
 {
     _currentFrameNo++;
 
@@ -581,7 +581,7 @@ CubismClippingContext::CubismClippingContext(CubismClippingManager_Cocos2dx* man
 
         drawCommandBuffer = CSM_NEW CubismCommandBuffer_Cocos2dx::DrawCommandBuffer();
         drawCommandBuffer->GetCommandDraw()->GetCommand()->setDrawType(ax::CustomCommand::DrawType::ELEMENT);
-        drawCommandBuffer->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::backend::PrimitiveType::TRIANGLE);
+        drawCommandBuffer->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::rhi::PrimitiveType::TRIANGLE);
         drawCommandBuffer->CreateVertexBuffer(vertexSize, drawableVertexCount * 2);      // Vertices + UVs
         drawCommandBuffer->CreateIndexBuffer(drawableVertexIndexCount);
 
@@ -650,9 +650,9 @@ void CubismRendererProfile_Cocos2dx::Save()
 
 
     // モデル描画直前のFBOとビューポートを保存
-    // _lastColorBuffer = GetCocos2dRenderer()->getRenderTargetAttachment(backend::TargetBufferFlags::COLOR);
-    // _lastDepthBuffer      = GetCocos2dRenderer()->getRenderTargetAttachment(backend::TargetBufferFlags::DEPTH);
-    // _lastStencilBuffer    = GetCocos2dRenderer()->getRenderTargetAttachment(backend::TargetBufferFlags::STENCIL);
+    // _lastColorBuffer = GetCocos2dRenderer()->getRenderTargetAttachment(rhi::TargetBufferFlags::COLOR);
+    // _lastDepthBuffer      = GetCocos2dRenderer()->getRenderTargetAttachment(rhi::TargetBufferFlags::DEPTH);
+    // _lastStencilBuffer    = GetCocos2dRenderer()->getRenderTargetAttachment(rhi::TargetBufferFlags::STENCIL);
     // _lastRenderTargetFlag = GetCocos2dRenderer()->getRenderTargetFlag();
     // _lastColorBuffer  = nullptr; // unused
     _lastRenderTarget = GetCocos2dRenderer()->getRenderTarget();
@@ -1092,10 +1092,10 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         GenerateShaders();
     }
 
-    ax::backend::BlendDescriptor* blendDescriptor = drawCommand->GetBlendDescriptor();
+    ax::rhi::BlendDescriptor* blendDescriptor = drawCommand->GetBlendDescriptor();
     ax::PipelineDescriptor* pipelineDescriptor = drawCommand->GetPipelineDescriptor();
 
-    ax::backend::ProgramState* programState = pipelineDescriptor->programState;
+    ax::rhi::ProgramState* programState = pipelineDescriptor->programState;
     VertexLayout* layout                    = nullptr;
 
     if (renderer->GetClippingContextBufferForMask() != NULL) // マスク生成時
@@ -1104,7 +1104,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
 
         if (!programState)
         {
-            programState = new ax::backend::ProgramState(shaderSet->ShaderProgram);
+            programState = new ax::rhi::ProgramState(shaderSet->ShaderProgram);
         }
 
         layout = programState->getMutableVertexLayout();
@@ -1113,9 +1113,9 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         programState->setTexture(shaderSet->SamplerTexture0Location, 0, texture->getBackendTexture());
 
         // 頂点配列の設定
-        layout->setAttrib("a_position", shaderSet->AttributePositionLocation, ax::backend::VertexFormat::FLOAT2, 0, false);
+        layout->setAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0, false);
         // テクスチャ頂点の設定
-        layout->setAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::backend::VertexFormat::FLOAT2,
+        layout->setAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2,
                           sizeof(csmFloat32) * 2, false);
 
         // チャンネル
@@ -1136,10 +1136,10 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
                                     rect->GetBottom() * 2.0f - 1.0f };
         programState->setUniform(shaderSet->UniformBaseColorLocation, base, sizeof(float) * 4);
 
-        blendDescriptor->sourceRGBBlendFactor = ax::backend::BlendFactor::ZERO;
-        blendDescriptor->destinationRGBBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_COLOR;
-        blendDescriptor->sourceAlphaBlendFactor = ax::backend::BlendFactor::ZERO;
-        blendDescriptor->destinationAlphaBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blendDescriptor->sourceRGBBlendFactor = ax::rhi::BlendFactor::ZERO;
+        blendDescriptor->destinationRGBBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_COLOR;
+        blendDescriptor->sourceAlphaBlendFactor = ax::rhi::BlendFactor::ZERO;
+        blendDescriptor->destinationAlphaBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     }
     else // マスク生成以外の場合
     {
@@ -1152,40 +1152,40 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         case CubismRenderer::CubismBlendMode_Normal:
         default:
             shaderSet = _shaderSets[ShaderNames_Normal + offset];
-            blendDescriptor->sourceRGBBlendFactor = ax::backend::BlendFactor::ONE;
-            blendDescriptor->destinationRGBBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-            blendDescriptor->sourceAlphaBlendFactor = ax::backend::BlendFactor::ONE;
-            blendDescriptor->destinationAlphaBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+            blendDescriptor->sourceRGBBlendFactor = ax::rhi::BlendFactor::ONE;
+            blendDescriptor->destinationRGBBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
+            blendDescriptor->sourceAlphaBlendFactor = ax::rhi::BlendFactor::ONE;
+            blendDescriptor->destinationAlphaBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
             break;
 
         case CubismRenderer::CubismBlendMode_Additive:
             shaderSet = _shaderSets[ShaderNames_Add + offset];
-            blendDescriptor->sourceRGBBlendFactor = ax::backend::BlendFactor::ONE;
-            blendDescriptor->destinationRGBBlendFactor = ax::backend::BlendFactor::ONE;
-            blendDescriptor->sourceAlphaBlendFactor = ax::backend::BlendFactor::ZERO;
-            blendDescriptor->destinationAlphaBlendFactor = ax::backend::BlendFactor::ONE;
+            blendDescriptor->sourceRGBBlendFactor = ax::rhi::BlendFactor::ONE;
+            blendDescriptor->destinationRGBBlendFactor = ax::rhi::BlendFactor::ONE;
+            blendDescriptor->sourceAlphaBlendFactor = ax::rhi::BlendFactor::ZERO;
+            blendDescriptor->destinationAlphaBlendFactor = ax::rhi::BlendFactor::ONE;
             break;
 
         case CubismRenderer::CubismBlendMode_Multiplicative:
             shaderSet = _shaderSets[ShaderNames_Mult + offset];
-            blendDescriptor->sourceRGBBlendFactor = ax::backend::BlendFactor::DST_COLOR;
-            blendDescriptor->destinationRGBBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-            blendDescriptor->sourceAlphaBlendFactor = ax::backend::BlendFactor::ZERO;
-            blendDescriptor->destinationAlphaBlendFactor = ax::backend::BlendFactor::ONE;
+            blendDescriptor->sourceRGBBlendFactor = ax::rhi::BlendFactor::DST_COLOR;
+            blendDescriptor->destinationRGBBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
+            blendDescriptor->sourceAlphaBlendFactor = ax::rhi::BlendFactor::ZERO;
+            blendDescriptor->destinationAlphaBlendFactor = ax::rhi::BlendFactor::ONE;
             break;
         }
 
         if (!programState)
         {
-            programState = new ax::backend::ProgramState(shaderSet->ShaderProgram);
+            programState = new ax::rhi::ProgramState(shaderSet->ShaderProgram);
         }
         layout = programState->getMutableVertexLayout();
 
         // 頂点配列の設定
-        layout->setAttrib("a_position", shaderSet->AttributePositionLocation, ax::backend::VertexFormat::FLOAT2, 0,
+        layout->setAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0,
                           false);
         // テクスチャ頂点の設定
-        layout->setAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::backend::VertexFormat::FLOAT2,
+        layout->setAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2,
                           sizeof(csmFloat32) * 2, false);
 
         if (masked)
@@ -1224,7 +1224,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
     pipelineDescriptor->programState = programState;
 }
 
-ax::backend::Program* CubismShader_Cocos2dx::LoadShaderProgram(const csmChar* vertShaderPath,
+ax::rhi::Program* CubismShader_Cocos2dx::LoadShaderProgram(const csmChar* vertShaderPath,
                                                                const csmChar* fragShaderPath)
 {
     // cocos2dx対応
@@ -1313,7 +1313,7 @@ void CubismRenderer_Cocos2dx::Initialize(CubismModel* model)
 
         _drawableDrawCommandBuffer[i] = CSM_NEW CubismCommandBuffer_Cocos2dx::DrawCommandBuffer();
         _drawableDrawCommandBuffer[i]->GetCommandDraw()->GetCommand()->setDrawType(ax::CustomCommand::DrawType::ELEMENT);
-        _drawableDrawCommandBuffer[i]->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::backend::PrimitiveType::TRIANGLE);
+        _drawableDrawCommandBuffer[i]->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::rhi::PrimitiveType::TRIANGLE);
         _drawableDrawCommandBuffer[i]->CreateVertexBuffer(vertexSize, drawableVertexCount * 2);      // Vertices + UVs
 
         if (drawableVertexIndexCount > 0)

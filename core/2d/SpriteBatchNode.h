@@ -211,7 +211,7 @@ public:
      */
     std::string getDescription() const override;
 
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(rhi::ProgramState* programState, bool ownPS = false) override;
 
     /** Inserts a quad at a certain index into the texture atlas. The Sprite won't be added into the children array.
      * This method should be called only when you are dealing with very big AtlasSprite and when most of the Sprite
@@ -265,7 +265,7 @@ protected:
     BlendFunc _blendFunc;
     QuadCommand _quadCommand;
 
-    backend::UniformLocation _mvpMatrixLocaiton;
+    rhi::UniformLocation _mvpMatrixLocaiton;
 
     // all descendants: children, grand children, etc...
     // There is not need to retain/release these objects, since they are already retained by _children

@@ -26,7 +26,7 @@
 #include <unordered_map>
 
 #include "base/Object.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "renderer/Pass.h"
 #include "3d/shaderinfos.h"
 
@@ -77,7 +77,7 @@ public:
     /**
      * Binds this vertex array object.
      */
-    // void bind(backend::VertexLayout &layout);
+    // void bind(rhi::VertexLayout &layout);
 
     /**
      * Unbinds this vertex array object.
@@ -109,15 +109,15 @@ private:
 
     bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
     void setVertexInputPointer(VertexLayout* vertexLayout, std::string_view name,
-                                backend::VertexFormat type,
+                                rhi::VertexFormat type,
                                 bool normalized,
                                 int offset,
                                 int flag);
-    const backend::VertexInputDesc* getVertexInputDesc(std::string_view name);
+    const rhi::VertexInputDesc* getVertexInputDesc(std::string_view name);
     void parseAttributes();
 
     MeshIndexData* _meshIndexData;
-    backend::ProgramState* _programState;
+    rhi::ProgramState* _programState;
     uint32_t _vertexAttribsFlags;
 };
 

@@ -39,8 +39,8 @@
 #include "renderer/Technique.h"
 #include "renderer/Pass.h"
 #include "renderer/Renderer.h"
-#include "renderer/backend/Buffer.h"
-#include "renderer/backend/Program.h"
+#include "rhi/Buffer.h"
+#include "rhi/Program.h"
 #include "renderer/RenderConsts.h"
 #include "math/Mat4.h"
 
@@ -167,7 +167,7 @@ void Mesh::setDynamicInstancing(bool dynamic)
     _dynamicInstancing = dynamic;
 }
 
-backend::Buffer* Mesh::getVertexBuffer() const
+rhi::Buffer* Mesh::getVertexBuffer() const
 {
     return _meshIndexData->getVertexBuffer();
 }
@@ -202,7 +202,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     axstd::pod_vector<MeshVertexAttrib> attribs;
 
     MeshVertexAttrib att;
-    att.type = backend::VertexFormat::FLOAT3;
+    att.type = rhi::VertexFormat::FLOAT3;
 
     attribs.reserve(3);
 
@@ -224,7 +224,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     if (!texs.empty())
     {
         perVertexSizeInFloat += 2;
-        att.type         = backend::VertexFormat::FLOAT2;
+        att.type         = rhi::VertexFormat::FLOAT2;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
         attribs.emplace_back(att);
         hasTexCoord = 1;
@@ -450,8 +450,8 @@ void Mesh::draw(Renderer* renderer,
             AX_SAFE_RELEASE(_instanceTransformBuffer);
             AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
 
-            _instanceTransformBuffer = backend::DriverBase::getInstance()->createBuffer(
-                _instanceCount * 64, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+            _instanceTransformBuffer = rhi::DriverBase::getInstance()->createBuffer(
+                _instanceCount * 64, rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
             _instanceMatrixCache = new float[_instanceCount * 16];
             for (int i = 0; i < _instanceCount; i++)
@@ -572,7 +572,7 @@ void Mesh::setMeshIndexData(MeshIndexData* subMesh)
     }
 }
 
-void Mesh::setProgramState(backend::ProgramState* programState)
+void Mesh::setProgramState(rhi::ProgramState* programState)
 {
     auto material = Material::createWithProgramState(programState);
     if (_material)
@@ -582,7 +582,7 @@ void Mesh::setProgramState(backend::ProgramState* programState)
     setMaterial(material);
 }
 
-backend::ProgramState* Mesh::getProgramState() const
+rhi::ProgramState* Mesh::getProgramState() const
 {
     return _material ? _material->_currentTechnique->_passes.at(0)->getProgramState() : nullptr;
 }
@@ -633,7 +633,7 @@ void Mesh::bindMeshCommand()
         auto& stateBlock = _material->getStateBlock();
         stateBlock.setCullFace(true);
         stateBlock.setDepthTest(true);
-        if (_blend.src != backend::BlendFactor::ONE && _blend.dst != backend::BlendFactor::ONE)
+        if (_blend.src != rhi::BlendFactor::ONE && _blend.dst != rhi::BlendFactor::ONE)
             stateBlock.setBlend(true);
     }
 }
@@ -851,7 +851,7 @@ void Mesh::setIndexFormat(CustomCommand::IndexFormat indexFormat)
     meshIndexFormat = indexFormat;
 }
 
-backend::Buffer* Mesh::getIndexBuffer() const
+rhi::Buffer* Mesh::getIndexBuffer() const
 {
     return _meshIndexData->getIndexBuffer();
 }

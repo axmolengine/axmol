@@ -226,7 +226,7 @@ def main():
 
         cmd_args = {
                     'ax_base.ini' : ('ax_base', 'axlua_base_auto'), \
-                    'ax_backend.ini' : ('ax_backend', 'axlua_backend_auto'), \
+                    'ax_rhi.ini' : ('ax_rhi', 'axlua_rhi_auto'), \
                     'ax_extension.ini' : ('ax_extension', 'axlua_extension_auto'), \
                     'ax_ui.ini' : ('ax_ui', 'axlua_ui_auto'), \
                     'ax_studio.ini' : ('ax_studio', 'axlua_studio_auto'), \

@@ -658,7 +658,7 @@ public:
      */
     float getAdditionalKerning() const;
 
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(rhi::ProgramState* programState, bool ownPS = false) override;
 
     FontAtlas* getFontAtlas() { return _fontAtlas; }
 
@@ -730,7 +730,7 @@ protected:
         BatchCommand& operator=(const BatchCommand& rhs) = delete;
         BatchCommand& operator=(BatchCommand&& rhs) = default;
 
-        void setProgramState(backend::ProgramState* state);
+        void setProgramState(rhi::ProgramState* state);
 
         std::array<CustomCommand*, 3> getCommandArray();
 
@@ -911,11 +911,11 @@ protected:
     DrawNode* _debugDrawNode;
 #endif
 
-    backend::UniformLocation _mvpMatrixLocation;
-    backend::UniformLocation _textureLocation;
-    backend::UniformLocation _textColorLocation;
-    backend::UniformLocation _effectColorLocation;
-    backend::UniformLocation _effectTypeLocation;
+    rhi::UniformLocation _mvpMatrixLocation;
+    rhi::UniformLocation _textureLocation;
+    rhi::UniformLocation _textColorLocation;
+    rhi::UniformLocation _effectColorLocation;
+    rhi::UniformLocation _effectTypeLocation;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Label);

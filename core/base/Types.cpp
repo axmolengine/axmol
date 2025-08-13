@@ -34,11 +34,11 @@ namespace ax
 const std::string STD_STRING_EMPTY{};
 const ssize_t AX_INVALID_INDEX = -1;
 
-const BlendFunc BlendFunc::DISABLE             = {backend::BlendFactor::ONE, backend::BlendFactor::ZERO};
-const BlendFunc BlendFunc::ALPHA_PREMULTIPLIED = {backend::BlendFactor::ONE, backend::BlendFactor::ONE_MINUS_SRC_ALPHA};
-const BlendFunc BlendFunc::ALPHA_NON_PREMULTIPLIED = {backend::BlendFactor::SRC_ALPHA,
-                                                      backend::BlendFactor::ONE_MINUS_SRC_ALPHA};
-const BlendFunc BlendFunc::ADDITIVE                = {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE};
+const BlendFunc BlendFunc::DISABLE             = {rhi::BlendFactor::ONE, rhi::BlendFactor::ZERO};
+const BlendFunc BlendFunc::ALPHA_PREMULTIPLIED = {rhi::BlendFactor::ONE, rhi::BlendFactor::ONE_MINUS_SRC_ALPHA};
+const BlendFunc BlendFunc::ALPHA_NON_PREMULTIPLIED = {rhi::BlendFactor::SRC_ALPHA,
+                                                      rhi::BlendFactor::ONE_MINUS_SRC_ALPHA};
+const BlendFunc BlendFunc::ADDITIVE                = {rhi::BlendFactor::SRC_ALPHA, rhi::BlendFactor::ONE};
 
 }
 

@@ -95,9 +95,9 @@ protected:
 
     BlendFunc _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     CustomCommand _customCommand;
-    backend::ProgramState* _programState = nullptr;
+    rhi::ProgramState* _programState = nullptr;
     bool _dirty                          = false;
-    backend::UniformLocation _locMVPMatrix;
+    rhi::UniformLocation _locMVPMatrix;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);
@@ -145,8 +145,8 @@ bool DrawNode3D::init()
 {
 
     _blendFunc    = BlendFunc::ALPHA_PREMULTIPLIED;
-    auto program  = backend::Program::getBuiltinProgram(backend::ProgramType::LINE_COLOR_3D);
-    _programState = new backend::ProgramState(program);
+    auto program  = axpm->getBuiltinProgram(rhi::ProgramType::LINE_COLOR_3D);
+    _programState = new rhi::ProgramState(program);
 
     _locMVPMatrix = _programState->getUniformLocation("u_MVPMatrix");
 
@@ -161,12 +161,12 @@ bool DrawNode3D::init()
     auto vertexLayout         = _programState->getMutableVertexLayout();
     if (iter != inputs.end())
     {
-        vertexLayout->setAttrib(iter->first, &iter->second, backend::VertexFormat::FLOAT3, 0, false);
+        vertexLayout->setAttrib(iter->first, &iter->second, rhi::VertexFormat::FLOAT3, 0, false);
     }
     iter = inputs.find("a_color");
     if (iter != inputs.end())
     {
-        vertexLayout->setAttrib(iter->first, &iter->second, backend::VertexFormat::UBYTE4, sizeof(Vec3),
+        vertexLayout->setAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3),
                                       true);
     }
     vertexLayout->setStride(sizeof(V3F_C4B));

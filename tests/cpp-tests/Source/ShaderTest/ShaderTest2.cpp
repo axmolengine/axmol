@@ -27,7 +27,7 @@
 #include "ShaderTest.h"
 #include "../testResource.h"
 #include "axmol.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 #include <tuple>
 
 using namespace ax;
@@ -63,7 +63,7 @@ static int tuple_sort(const std::tuple<ssize_t, Effect*, QuadCommand>& tuple1,
     return std::get<0>(tuple1) < std::get<0>(tuple2);
 }
 
-static void updateUniforms(backend::ProgramState* programState)
+static void updateUniforms(rhi::ProgramState* programState)
 {
     float time = Director::getInstance()->getTotalFrames() * Director::getInstance()->getAnimationInterval();
     Vec4 uTime(time / 10.0f, time, time * 2.0f, time * 4.0f);
@@ -184,7 +184,7 @@ protected:
 bool Effect::initProgramState(std::string_view fragmentFilename)
 {
     auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, fragmentFilename, VertexLayoutType::Sprite);
-    auto programState = new backend::ProgramState(program);
+    auto programState = new rhi::ProgramState(program);
     AX_SAFE_RELEASE(_programState);
     _programState = programState;
 

@@ -35,7 +35,7 @@
 #include <spine/Extension.h>
 #include <stddef.h>// offsetof
 
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 #include "renderer/Shaders.h"
 #include "xxhash.h"
 
@@ -48,11 +48,11 @@ using std::max;
 
 namespace {
 
-	std::shared_ptr<backend::ProgramState> __twoColorProgramState = nullptr;
-	backend::UniformLocation __locPMatrix;
-	backend::UniformLocation __locTexture;
+	std::shared_ptr<rhi::ProgramState> __twoColorProgramState = nullptr;
+	rhi::UniformLocation __locPMatrix;
+	rhi::UniformLocation __locTexture;
 
-	static void updateProgramStateLayout(backend::ProgramState *programState) {
+	static void updateProgramStateLayout(rhi::ProgramState *programState) {
 		__locPMatrix = programState->getUniformLocation("u_PMatrix");
 		__locTexture = programState->getUniformLocation("u_tex0");
 
@@ -62,13 +62,13 @@ namespace {
         auto locColor2   = programState->getVertexInputDesc("a_color2");
 
         auto vertexLayout = programState->getMutableVertexLayout();
-        vertexLayout->setAttrib("a_position", locPosition, backend::VertexFormat::FLOAT3,
+        vertexLayout->setAttrib("a_position", locPosition, rhi::VertexFormat::FLOAT3,
                                      offsetof(spine::V3F_C4B_C4B_T2F, position), false);
-        vertexLayout->setAttrib("a_color", locColor, backend::VertexFormat::UBYTE4,
+        vertexLayout->setAttrib("a_color", locColor, rhi::VertexFormat::UBYTE4,
                                      offsetof(spine::V3F_C4B_C4B_T2F, color), true);
-        vertexLayout->setAttrib("a_color2", locColor2, backend::VertexFormat::UBYTE4,
+        vertexLayout->setAttrib("a_color2", locColor2, rhi::VertexFormat::UBYTE4,
                                      offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
-        vertexLayout->setAttrib("a_texCoord", locTexcoord, backend::VertexFormat::FLOAT2,
+        vertexLayout->setAttrib("a_texCoord", locTexcoord, rhi::VertexFormat::FLOAT2,
                                      offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
         vertexLayout->setStride(sizeof(spine::V3F_C4B_C4B_T2F));
 	}
@@ -79,10 +79,10 @@ namespace {
 		}
 		auto program       = ProgramManager::getInstance()->loadProgram("custom/spineTwoColorTint_vs",
                                                                                       "custom/spineTwoColorTint_fs");
-		auto *programState = new backend::ProgramState(program);
+		auto *programState = new rhi::ProgramState(program);
 		updateProgramStateLayout(programState);
 
-		__twoColorProgramState = std::shared_ptr<backend::ProgramState>(programState);
+		__twoColorProgramState = std::shared_ptr<rhi::ProgramState>(programState);
 	}
 
 }// namespace
@@ -93,7 +93,7 @@ namespace spine {
 		_type = RenderCommand::Type::CUSTOM_COMMAND;
 	}
 
-	void TwoColorTrianglesCommand::init(float globalOrder, axmol::Texture2D *texture, axmol::backend::ProgramState *programState, BlendFunc blendType, const TwoColorTriangles &triangles, const Mat4 &mv, uint32_t flags) {
+	void TwoColorTrianglesCommand::init(float globalOrder, axmol::Texture2D *texture, axmol::rhi::ProgramState *programState, BlendFunc blendType, const TwoColorTriangles &triangles, const Mat4 &mv, uint32_t flags) {
 
 		updateCommandPipelineDescriptor(programState);
 		const axmol::Mat4 &projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
@@ -132,7 +132,7 @@ namespace spine {
 	}
 
 
-	void TwoColorTrianglesCommand::updateCommandPipelineDescriptor(axmol::backend::ProgramState *programState) {
+	void TwoColorTrianglesCommand::updateCommandPipelineDescriptor(axmol::rhi::ProgramState *programState) {
 		// OPTIMIZE ME: all commands belong a same Node should share a same programState like SkeletonBatch
 		if (!__twoColorProgramState) {
 			initTwoColorProgramState();
@@ -175,8 +175,8 @@ namespace spine {
 		{
 			void *texture;
 			void *prog;
-			backend::BlendFactor src;
-			backend::BlendFactor dst;
+			rhi::BlendFactor src;
+			rhi::BlendFactor dst;
 		} hashMe;
 
 		// NOTE: Initialize hashMe struct to make the value of padding bytes be filled with zero.
@@ -299,7 +299,7 @@ namespace spine {
 		_indices.setSize(_indices.size() - numIndices, 0);
 	}
 
-	TwoColorTrianglesCommand *SkeletonTwoColorBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, backend::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
+	TwoColorTrianglesCommand *SkeletonTwoColorBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, rhi::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
 		TwoColorTrianglesCommand *command = nextFreeCommand();
 		command->init(globalOrder, texture, programState, blendType, triangles, mv, flags);
 		command->updateVertexAndIndexBuffer(renderer, triangles.verts, triangles.vertCount, triangles.indices, triangles.indexCount);

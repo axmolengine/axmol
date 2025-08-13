@@ -43,7 +43,7 @@
 #include "physics/PhysicsJoint.h"
 #include "physics/PhysicsWorld.h"
 #    endif
-#include "renderer/backend/VertexLayout.h"
+#include "rhi/VertexLayout.h"
 #include "ui/GUIDefine.h"
 
 #include "yasio/string_view.hpp"
@@ -1306,7 +1306,7 @@ AX_LUA_DLL extern void node_to_luaval(lua_State* L, const char* type, ax::Node* 
  */
 AX_LUA_DLL bool luaval_to_vertexLayout(lua_State* L,
                                        int pos,
-                                       ax::backend::VertexLayout& outLayout,
+                                       ax::rhi::VertexLayout& outLayout,
                                        const char* message);
 
 /**
@@ -1314,24 +1314,24 @@ AX_LUA_DLL bool luaval_to_vertexLayout(lua_State* L,
  */
 AX_LUA_DLL bool luaval_to_samplerDescriptor(lua_State* L,
                                             int pos,
-                                            ax::backend::SamplerDescriptor& desc,
+                                            ax::rhi::SamplerDescriptor& desc,
                                             const char* message);
 
 /**
- * convert lua object to ax::backend::UniformLocation
+ * convert lua object to ax::rhi::UniformLocation
  */
 AX_LUA_DLL bool luaval_to_uniformLocation(lua_State* L,
                                           int pos,
-                                          ax::backend::UniformLocation& desc,
+                                          ax::rhi::UniformLocation& desc,
                                           const char* message);
 
 /**
- * convert ax::backend::UniformLocation to lua object
+ * convert ax::rhi::UniformLocation to lua object
  */
-AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const ax::backend::UniformLocation& desc);
+AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& desc);
 
 AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L,
-                                              const hlookup::string_map<ax::backend::VertexInputDesc>& map);
+                                              const hlookup::string_map<ax::rhi::VertexInputDesc>& map);
 
 /**
  * convert ax::ResourceData to lua object

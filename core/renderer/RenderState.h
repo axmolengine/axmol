@@ -46,9 +46,9 @@ class Texture2D;
 class Pass;
 class MeshCommand;
 
-using CullFaceSide  = backend::CullMode;
-using FrontFace     = backend::Winding;
-using DepthFunction = backend::CompareFunction;
+using CullFaceSide  = rhi::CullMode;
+using FrontFace     = rhi::Winding;
+using DepthFunction = rhi::CompareFunction;
 
 /**
  * Defines the rendering state of the graphics device.
@@ -123,7 +123,7 @@ public:
          *
          * @param blend Specifies how the source blending factors are computed.
          */
-        void setBlendSrc(backend::BlendFactor blend);
+        void setBlendSrc(rhi::BlendFactor blend);
 
         /**
          * Explicitly sets the source used in the blend function for this render state.
@@ -132,7 +132,7 @@ public:
          *
          * @param blend Specifies how the destination blending factors are computed.
          */
-        void setBlendDst(backend::BlendFactor blend);
+        void setBlendDst(rhi::BlendFactor blend);
 
         /**
          * Explicitly enables or disables backface culling.
@@ -232,8 +232,8 @@ public:
         bool _depthWriteEnabled        = false;
         DepthFunction _depthFunction   = DepthFunction::LESS;
         bool _blendEnabled             = true;
-        backend::BlendFactor _blendSrc = backend::BlendFactor::ONE;
-        backend::BlendFactor _blendDst = backend::BlendFactor::ZERO;
+        rhi::BlendFactor _blendSrc = rhi::BlendFactor::ONE;
+        rhi::BlendFactor _blendDst = rhi::BlendFactor::ZERO;
         CullFaceSide _cullFaceSide     = CullFaceSide::BACK;
         FrontFace _frontFace           = FrontFace::COUNTER_CLOCK_WISE;
         int32_t _modifiedBits          = 0L;

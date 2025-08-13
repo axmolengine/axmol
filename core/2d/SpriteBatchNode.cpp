@@ -38,8 +38,8 @@ THE SOFTWARE.
 #include "renderer/Renderer.h"
 #include "renderer/QuadCommand.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/ProgramState.h"
+#include "rhi/DriverBase.h"
 
 namespace ax
 {
@@ -104,7 +104,7 @@ bool SpriteBatchNode::initWithTexture(Texture2D* tex, ssize_t capacity /* = DEFA
 
     _textureAtlas->initWithTexture(tex, capacity);
 
-    setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, tex);
+    setProgramStateWithRegistry(rhi::ProgramType::POSITION_TEXTURE_COLOR, tex);
 
     updateBlendFunc();
 
@@ -124,10 +124,10 @@ void SpriteBatchNode::setUniformLocation()
 void SpriteBatchNode::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    _programState->validateSharedVertexLayout(backend::VertexLayoutType::Sprite);
+    _programState->validateSharedVertexLayout(rhi::VertexLayoutType::Sprite);
 }
 
-bool SpriteBatchNode::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
+bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
 {
     AXASSERT(programState, "programState should not be nullptr");
     if (Node::setProgramState(programState, ownPS))
@@ -700,7 +700,7 @@ Texture2D* SpriteBatchNode::getTexture() const
 void SpriteBatchNode::setTexture(Texture2D* texture)
 {
     _textureAtlas->setTexture(texture);
-    setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, texture);
+    setProgramStateWithRegistry(rhi::ProgramType::POSITION_TEXTURE_COLOR, texture);
     updateBlendFunc();
 }
 

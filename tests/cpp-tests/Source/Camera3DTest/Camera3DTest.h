@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "../BaseTest.h"
 #include "../MeshRendererTest/DrawNode3D.h"
 
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 #include <string>
 
@@ -260,8 +260,8 @@ protected:
     ax::Camera* _camera                       = nullptr;
     ax::MeshRenderer* _mesh1                  = nullptr;
     ax::MeshRenderer* _mesh2                  = nullptr;
-    ax::backend::ProgramState* _programState1 = nullptr;
-    ax::backend::ProgramState* _programState2 = nullptr;
+    ax::rhi::ProgramState* _programState1 = nullptr;
+    ax::rhi::ProgramState* _programState2 = nullptr;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     ax::EventListenerCustom* _backToForegroundListener;

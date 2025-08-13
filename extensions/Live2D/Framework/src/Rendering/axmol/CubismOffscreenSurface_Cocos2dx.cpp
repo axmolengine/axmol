@@ -22,7 +22,7 @@ CubismOffscreenFrame_Cocos2dx::CubismOffscreenFrame_Cocos2dx()
 
 
 void CubismOffscreenFrame_Cocos2dx::BeginDraw(CubismCommandBuffer_Cocos2dx* commandBuffer,
-                                              backend::Texture* colorBufferOnFinishDrawing)
+                                              rhi::Texture* colorBufferOnFinishDrawing)
 {
     if (!IsValid())
     {
@@ -94,10 +94,10 @@ csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBuf
 
             _renderTexture->getSprite()->getTexture()->setTexParameters(
                 ax::Texture2D::TexParams(
-                    ax::backend::SamplerFilter::LINEAR,                    // MagFilter
-                    ax::backend::SamplerFilter::LINEAR,                    // MinFilter
-                    ax::backend::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
-                    ax::backend::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
+                    ax::rhi::SamplerFilter::LINEAR,                    // MagFilter
+                    ax::rhi::SamplerFilter::LINEAR,                    // MinFilter
+                    ax::rhi::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
+                    ax::rhi::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
                 )
             );
 

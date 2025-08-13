@@ -144,7 +144,7 @@ FontAtlas::FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scale
         if (outlineSize > 0)
         {
             _strideShift         = 1;
-            _pixelFormat         = backend::PixelFormat::RG8;
+            _pixelFormat         = rhi::PixelFormat::RG8;
             _currentPageDataSize = _width * _height << _strideShift;
 
             _lineHeight += 2 * outlineSize;
@@ -152,7 +152,7 @@ FontAtlas::FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scale
         else
         {
             _strideShift         = 0;
-            _pixelFormat         = backend::PixelFormat::R8;
+            _pixelFormat         = rhi::PixelFormat::R8;
             _currentPageDataSize = _width * _height;
         }
 
@@ -460,7 +460,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
     return true;
 }
 
-void FontAtlas::updateTextureContent(backend::PixelFormat format, int startY)
+void FontAtlas::updateTextureContent(rhi::PixelFormat format, int startY)
 {
     auto data = _currentPageData + (_width * (int)startY << _strideShift);
     _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, _width,

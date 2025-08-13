@@ -491,7 +491,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
-            outValue->src = static_cast<ax::backend::BlendFactor>(lua_tointeger(L, -1));
+            outValue->src = static_cast<ax::rhi::BlendFactor>(lua_tointeger(L, -1));
         }
         lua_pop(L, 1);
 
@@ -499,7 +499,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
-            outValue->dst = static_cast<ax::backend::BlendFactor>(lua_tointeger(L, -1));
+            outValue->dst = static_cast<ax::rhi::BlendFactor>(lua_tointeger(L, -1));
         }
         lua_pop(L, 1);
     }
@@ -1645,7 +1645,7 @@ bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* re
 
         lua_pushstring(L, "type"); /* L: paramStack key */
         lua_gettable(L, lo);       /* L: paramStack paramStack[lo][key] */
-        ret->type = (backend::VertexFormat)(int)lua_tonumber(L, -1);
+        ret->type = (rhi::VertexFormat)(int)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
         lua_pushstring(L, "vertexAttrib"); /* L: paramStack key */
@@ -1796,22 +1796,22 @@ bool luaval_to_texparams(lua_State* L, int lo, ax::Texture2D::TexParams* outValu
     {
         lua_pushstring(L, "minFilter");
         lua_gettable(L, lo);
-        outValue->minFilter = static_cast<backend::SamplerFilter>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
+        outValue->minFilter = static_cast<rhi::SamplerFilter>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
         lua_pop(L, 1);
 
         lua_pushstring(L, "magFilter");
         lua_gettable(L, lo);
-        outValue->magFilter = static_cast<backend::SamplerFilter>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
+        outValue->magFilter = static_cast<rhi::SamplerFilter>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
         lua_pop(L, 1);
 
         lua_pushstring(L, "wrapS");
         lua_gettable(L, lo);
-        outValue->sAddressMode = static_cast<backend::SamplerAddressMode>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
+        outValue->sAddressMode = static_cast<rhi::SamplerAddressMode>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
         lua_pop(L, 1);
 
         lua_pushstring(L, "wrapT");
         lua_gettable(L, lo);
-        outValue->tAddressMode = static_cast<backend::SamplerAddressMode>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
+        outValue->tAddressMode = static_cast<rhi::SamplerAddressMode>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
         lua_pop(L, 1);
     }
     return ok;
@@ -2978,13 +2978,13 @@ void node_to_luaval(lua_State* L, const char* type, ax::Node* node)
     object_to_luaval<ax::Node>(L, type, node);
 }
 
-bool luaval_to_vertexLayout(lua_State* L, int pos, ax::backend::VertexLayout& outLayout, const char* message)
+bool luaval_to_vertexLayout(lua_State* L, int pos, ax::rhi::VertexLayout& outLayout, const char* message)
 {
     if (L == nullptr)
         return false;
 
-    ax::backend::VertexLayout* tmp = nullptr;
-    auto ret = luaval_to_object<ax::backend::VertexLayout>(L, pos, "ax.VertexLayout", &tmp, message);
+    ax::rhi::VertexLayout* tmp = nullptr;
+    auto ret = luaval_to_object<ax::rhi::VertexLayout>(L, pos, "ax.VertexLayout", &tmp, message);
     if (!tmp)
     {
         return false;
@@ -2995,7 +2995,7 @@ bool luaval_to_vertexLayout(lua_State* L, int pos, ax::backend::VertexLayout& ou
 
 bool luaval_to_samplerDescriptor(lua_State* L,
                                  int pos,
-                                 ax::backend::SamplerDescriptor& output,
+                                 ax::rhi::SamplerDescriptor& output,
                                  const char* message)
 {
     if (L == nullptr)
@@ -3005,7 +3005,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.magFilter = static_cast<ax::backend::SamplerFilter>(lua_tointeger(L, -1));
+        output.magFilter = static_cast<ax::rhi::SamplerFilter>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3013,7 +3013,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.minFilter = static_cast<ax::backend::SamplerFilter>(lua_tointeger(L, -1));
+        output.minFilter = static_cast<ax::rhi::SamplerFilter>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3021,7 +3021,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.sAddressMode = static_cast<ax::backend::SamplerAddressMode>(lua_tointeger(L, -1));
+        output.sAddressMode = static_cast<ax::rhi::SamplerAddressMode>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3029,14 +3029,14 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.tAddressMode = static_cast<ax::backend::SamplerAddressMode>(lua_tointeger(L, -1));
+        output.tAddressMode = static_cast<ax::rhi::SamplerAddressMode>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
     return true;
 }
 
-bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::backend::StageUniformLocation& loc, const char* message)
+bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::rhi::StageUniformLocation& loc, const char* message)
 {
     if (L == nullptr)
         return false;
@@ -3065,7 +3065,7 @@ bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::backend::StageUni
     return true;
 }
 
-void stageUniformLocation_to_luaval(lua_State* L, const ax::backend::StageUniformLocation& loc)
+void stageUniformLocation_to_luaval(lua_State* L, const ax::rhi::StageUniformLocation& loc)
 {
     if (L == nullptr)
         return;
@@ -3081,7 +3081,7 @@ void stageUniformLocation_to_luaval(lua_State* L, const ax::backend::StageUnifor
     lua_rawset(L, -3);
 }
 
-bool luaval_to_uniformLocation(lua_State* L, int pos, ax::backend::UniformLocation& loc, const char* message)
+bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& loc, const char* message)
 {
     if (L == nullptr)
         return false;
@@ -3107,7 +3107,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::backend::UniformLocati
     return true;
 }
 
-void uniformLocation_to_luaval(lua_State* L, const ax::backend::UniformLocation& loc)
+void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc)
 {
     if (L == nullptr)
         return;
@@ -3123,7 +3123,7 @@ void uniformLocation_to_luaval(lua_State* L, const ax::backend::UniformLocation&
     lua_rawset(L, -3);
 }
 
-void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::backend::VertexInputDesc>& attrs)
+void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::rhi::VertexInputDesc>& attrs)
 {
     if (L == nullptr)
         return;

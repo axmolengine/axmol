@@ -37,8 +37,8 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-#include "renderer/backend/ProgramManager.h"
-#include "renderer/backend/ProgramState.h"
+#include "renderer/ProgramManager.h"
+#include "rhi/ProgramState.h"
 
 using namespace ax;
 using namespace flatbuffers;
@@ -320,7 +320,7 @@ void SpriteReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
         if (hsv != nullptr && filter != nullptr)
         {
             auto prog = ProgramManager::getInstance()->getBuiltinProgram(ProgramType::HSV);
-            auto ps   = new backend::ProgramState(prog);
+            auto ps   = new rhi::ProgramState(prog);
             sprite->setProgramState(ps, true);
             Vec3 axhsv{hsv->x(), hsv->y(), hsv->z()};
             ps->setUniform(ps->getUniformLocation("u_hsv"), &axhsv, sizeof(axhsv));

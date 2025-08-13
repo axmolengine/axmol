@@ -6,18 +6,18 @@ using namespace ax;
 namespace
 {
 std::vector<BlendFunc> blendModes {
-    {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE_MINUS_SRC_ALPHA},  // normal
-    {backend::BlendFactor::ONE, backend::BlendFactor::ONE},                        // none
-    {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE},                  // add
-    {backend::BlendFactor::DST_COLOR, backend::BlendFactor::ONE_MINUS_SRC_ALPHA},  // mul
-    {backend::BlendFactor::ONE, backend::BlendFactor::ONE_MINUS_SRC_COLOR},        // screen
-    {backend::BlendFactor::ZERO, backend::BlendFactor::ONE_MINUS_SRC_ALPHA},       // erase
-    {backend::BlendFactor::ZERO, backend::BlendFactor::SRC_ALPHA},                 // mask
-    {backend::BlendFactor::ONE_MINUS_DST_ALPHA, backend::BlendFactor::DST_ALPHA},  // below
-    {backend::BlendFactor::ONE, backend::BlendFactor::ZERO},                       // off
-    {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE_MINUS_SRC_ALPHA},  // custom1
-    {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE_MINUS_SRC_ALPHA},  // custom2
-    {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE_MINUS_SRC_ALPHA},  // custom2
+    {rhi::BlendFactor::SRC_ALPHA, rhi::BlendFactor::ONE_MINUS_SRC_ALPHA},  // normal
+    {rhi::BlendFactor::ONE, rhi::BlendFactor::ONE},                        // none
+    {rhi::BlendFactor::SRC_ALPHA, rhi::BlendFactor::ONE},                  // add
+    {rhi::BlendFactor::DST_COLOR, rhi::BlendFactor::ONE_MINUS_SRC_ALPHA},  // mul
+    {rhi::BlendFactor::ONE, rhi::BlendFactor::ONE_MINUS_SRC_COLOR},        // screen
+    {rhi::BlendFactor::ZERO, rhi::BlendFactor::ONE_MINUS_SRC_ALPHA},       // erase
+    {rhi::BlendFactor::ZERO, rhi::BlendFactor::SRC_ALPHA},                 // mask
+    {rhi::BlendFactor::ONE_MINUS_DST_ALPHA, rhi::BlendFactor::DST_ALPHA},  // below
+    {rhi::BlendFactor::ONE, rhi::BlendFactor::ZERO},                       // off
+    {rhi::BlendFactor::SRC_ALPHA, rhi::BlendFactor::ONE_MINUS_SRC_ALPHA},  // custom1
+    {rhi::BlendFactor::SRC_ALPHA, rhi::BlendFactor::ONE_MINUS_SRC_ALPHA},  // custom2
+    {rhi::BlendFactor::SRC_ALPHA, rhi::BlendFactor::ONE_MINUS_SRC_ALPHA},  // custom2
 };
 }
 
@@ -57,8 +57,8 @@ void BlendModeUtils::apply(ax::Node* node, const ax::BlendFunc& blendFunc)
 }
 
 void BlendModeUtils::overrideBlendMode(BlendMode blendMode,
-                              ax::backend::BlendFactor srcFactor,
-                              ax::backend::BlendFactor dstFactor)
+                              ax::rhi::BlendFactor srcFactor,
+                              ax::rhi::BlendFactor dstFactor)
 {
     auto blendIndex = static_cast<size_t>(blendMode);
     if (blendIndex >= blendModes.size())

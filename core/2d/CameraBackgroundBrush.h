@@ -44,11 +44,11 @@ class CameraBackgroundDepthBrush;
 class CameraBackgroundSkyBoxBrush;
 class Camera;
 
-namespace backend
+namespace rhi
 {
 class ProgramState;
 class Buffer;
-}  // namespace backend
+}  // namespace rhi
 
 /**
  * Defines a brush to clear the background of camera.
@@ -126,7 +126,7 @@ public:
     virtual bool init() { return true; }
 
 protected:
-    backend::ProgramState* _programState = nullptr;
+    rhi::ProgramState* _programState = nullptr;
 };
 
 /**
@@ -176,7 +176,7 @@ protected:
 
 protected:
     float _depth;
-    backend::UniformLocation _locDepth;
+    rhi::UniformLocation _locDepth;
     CustomCommand _customCommand;
 
     bool _clearColor;
@@ -185,7 +185,7 @@ protected:
     {
         uint32_t stencilWriteMask            = 0;
         bool depthTest                       = true;
-        backend::CompareFunction compareFunc = backend::CompareFunction::ALWAYS;
+        rhi::CompareFunction compareFunc = rhi::CompareFunction::ALWAYS;
     } _stateBlock;
 };
 
@@ -309,16 +309,16 @@ private:
 
     CustomCommand _customCommand;
 
-    backend::UniformLocation _uniformColorLoc;
-    backend::UniformLocation _uniformCameraRotLoc;
-    backend::UniformLocation _uniformEnvLoc;
+    rhi::UniformLocation _uniformColorLoc;
+    rhi::UniformLocation _uniformCameraRotLoc;
+    rhi::UniformLocation _uniformEnvLoc;
 
     struct
     {
         bool depthTest                     = true;
         bool depthWrite                    = true;
-        backend::CompareFunction depthFunc = backend::CompareFunction::ALWAYS;
-        backend::CullMode cullMode         = backend::CullMode::BACK;
+        rhi::CompareFunction depthFunc = rhi::CompareFunction::ALWAYS;
+        rhi::CullMode cullMode         = rhi::CullMode::BACK;
     } _stateBlock;
 };
 

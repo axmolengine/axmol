@@ -942,19 +942,19 @@ public:
         auto sprite = new MySprite;
         sprite->initWithFile(spritefilename);
         sprite->autorelease();
-        auto program      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-        auto programState = new backend::ProgramState(program);
+        auto program      = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+        auto programState = new rhi::ProgramState(program);
         sprite->setProgramState(programState, true);
         return sprite;
     }
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(rhi::ProgramState* programState, bool ownPS = false) override;
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
 protected:
     CustomCommand _customCommand;
 };
 
-bool MySprite::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
+bool MySprite::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
 {
     if (Sprite::setProgramState(programState, ownPS))
     {

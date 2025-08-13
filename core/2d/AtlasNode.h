@@ -101,7 +101,7 @@ public:
     void setQuadsToDraw(ssize_t quadsToDraw);
     size_t getQuadsToDraw() const;
 
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(rhi::ProgramState* programState, bool ownPS = false) override;
 
     AtlasNode() = default;
     virtual ~AtlasNode();
@@ -146,7 +146,7 @@ protected:
     bool _ignoreContentScaleFactor = false;
 
     QuadCommand _quadCommand;
-    backend::UniformLocation _mvpMatrixLocation;
+    rhi::UniformLocation _mvpMatrixLocation;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(AtlasNode);

@@ -130,7 +130,7 @@ public:
 
     // overrides
     /** Sets ProgramState, attributes should be bound by the user */
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(rhi::ProgramState* programState, bool ownPS = false) override;
 
     /*
      * Get AABB
@@ -352,7 +352,7 @@ public:
     struct MeshRenderData
     {
         Vector<MeshVertexData*> meshVertexDatas;
-        Vector<backend::ProgramState*> programStates;
+        Vector<rhi::ProgramState*> programStates;
         NodeDatas* nodedatas;
         MaterialDatas* materialdatas;
         ~MeshRenderData()

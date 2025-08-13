@@ -37,7 +37,7 @@ USING_NS_AX;
 using std::max;
 #define INITIAL_SIZE (10000)
 
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 #include "renderer/Shaders.h"
 
 namespace spine {
@@ -58,8 +58,8 @@ namespace spine {
 
 	SkeletonBatch::SkeletonBatch() {
 
-		auto program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-		_programState = new backend::ProgramState(program);// new default program state
+		auto program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+		_programState = new rhi::ProgramState(program);// new default program state
 		for (unsigned int i = 0; i < INITIAL_SIZE; i++) {
 			_commandsPool.push_back(newCommand());
 		}
@@ -83,7 +83,7 @@ namespace spine {
 		AX_SAFE_RELEASE(_programState);
 	}
 
-	backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command, backend::ProgramState* programState)
+	rhi::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command, rhi::ProgramState* programState)
 	{
 		auto& currentState = command->getPipelineDescriptor().programState;
 	#if defined(AX_VERSION)
@@ -95,9 +95,9 @@ namespace spine {
 	#endif
 			AX_SAFE_RELEASE(currentState);
 			currentState = programState->clone();
-		
-			command->_locMVP     = currentState->getUniformLocation(backend::UNIFORM_NAME_MVP_MATRIX);
-	        command->_locTexture = currentState->getUniformLocation(backend::UNIFORM_NAME_TEXTURE);
+
+			command->_locMVP     = currentState->getUniformLocation(rhi::UNIFORM_NAME_MVP_MATRIX);
+	        command->_locTexture = currentState->getUniformLocation(rhi::UNIFORM_NAME_TEXTURE);
 	}
 		return currentState;
 	}
@@ -153,7 +153,7 @@ namespace spine {
 	}
 
 
-	axmol::TrianglesCommand *SkeletonBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, backend::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
+	axmol::TrianglesCommand *SkeletonBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, rhi::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
 		SkeletonCommand *command = nextFreeCommand();
 		const axmol::Mat4 &projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 

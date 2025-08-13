@@ -90,8 +90,8 @@ void TrianglesCommand::generateMaterialID()
     {
         void* texture;
         uint64_t batchId;
-        backend::BlendFactor src;
-        backend::BlendFactor dst;
+        rhi::BlendFactor src;
+        rhi::BlendFactor dst;
     } hashMe;
 
     // NOTE: Initialize hashMe struct to make the value of padding bytes be filled with zero.

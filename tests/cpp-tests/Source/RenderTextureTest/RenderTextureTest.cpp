@@ -48,7 +48,7 @@ RenderTextureSave::RenderTextureSave()
     auto s = Director::getInstance()->getWinSize();
 
     // create a render texture, this is what we are going to draw into
-    _target = RenderTexture::create(s.width, s.height, backend::PixelFormat::RGBA8);
+    _target = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA8);
     _target->retain();
     _target->setPosition(Vec2(s.width / 2, s.height / 2));
     _target->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -244,7 +244,7 @@ RenderTextureIssue937::RenderTextureIssue937()
     spr_nonpremulti->setPosition(Vec2(s.width / 2 - 16, s.height / 2 - 16));
 
     /* A2 & B2 setup */
-    auto rend = RenderTexture::create(32, 64, backend::PixelFormat::RGBA8);
+    auto rend = RenderTexture::create(32, 64, rhi::PixelFormat::RGBA8);
 
     if (nullptr == rend)
     {
@@ -446,7 +446,7 @@ RenderTexturePartTest::RenderTexturePartTest()
     addChild(sprite2);
     addChild(sprite22);
 
-    _rend = RenderTexture::create(200, 200, backend::PixelFormat::RGBA8);
+    _rend = RenderTexture::create(200, 200, rhi::PixelFormat::RGBA8);
     _rend->retain();
     _rend->setKeepMatrix(true);
     Size pixelSize = Director::getInstance()->getWinSizeInPixels();
@@ -508,7 +508,7 @@ RenderTextureTestDepthStencil::RenderTextureTestDepthStencil()
                              Vec2(_spriteDraw->getContentSize().width * _spriteDraw->getScale() * 0.5f,
                                   _spriteDraw->getContentSize().height * _spriteDraw->getScale() * 0.5f));
 
-    _rtx = RenderTexture::create(s.width, s.height, backend::PixelFormat::RGBA4, PixelFormat::D24S8);
+    _rtx = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA4, PixelFormat::D24S8);
 
     _rtx->setPosition(Vec2(s.width * 0.5f, s.height * 0.5f));
     _rtx->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -564,14 +564,14 @@ void RenderTextureTestDepthStencil::onBeforeStencil()
 {
     //! mark sprite quad into stencil buffer
     _renderer->setStencilTest(true);
-    _renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, 1, 0xFF);
-    _renderer->setStencilOperation(backend::StencilOperation::REPLACE, backend::StencilOperation::REPLACE,
-                                   backend::StencilOperation::REPLACE);
+    _renderer->setStencilCompareFunction(rhi::CompareFunction::NEVER, 1, 0xFF);
+    _renderer->setStencilOperation(rhi::StencilOperation::REPLACE, rhi::StencilOperation::REPLACE,
+                                   rhi::StencilOperation::REPLACE);
 }
 
 void RenderTextureTestDepthStencil::onBeforeDraw()
 {
-    _renderer->setStencilCompareFunction(backend::CompareFunction::NOT_EQUAL, 1, 0xFF);
+    _renderer->setStencilCompareFunction(rhi::CompareFunction::NOT_EQUAL, 1, 0xFF);
 }
 
 void RenderTextureTestDepthStencil::onAfterDraw()
@@ -616,7 +616,7 @@ RenderTextureTargetNode::RenderTextureTargetNode()
     auto s = Director::getInstance()->getWinSize();
 
     /* Create the render texture */
-    renderTexture = RenderTexture::create(s.width, s.height, backend::PixelFormat::RGBA4);
+    renderTexture = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA4);
 
     renderTexture->setPosition(Vec2(s.width / 2, s.height / 2));
     renderTexture->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -713,7 +713,7 @@ void SpriteRenderTextureBug::SimpleSprite::draw(Renderer* renderer, const Mat4& 
     if (_rt == nullptr)
     {
         auto s = Director::getInstance()->getWinSize();
-        _rt    = RenderTexture::create(s.width, s.height, backend::PixelFormat::RGBA8);
+        _rt    = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA8);
         _rt->retain();
     }
     _rt->beginWithClear(0.0f, 0.0f, 0.0f, 1.0f);
@@ -798,7 +798,7 @@ Issue16113Test::Issue16113Test()
         auto winSize = Director::getInstance()->getVisibleSize();
         auto text    = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 40);
         text->setTextColor(Color32::RED);
-        auto target = RenderTexture::create(winSize.width, winSize.height, backend::PixelFormat::RGBA8);
+        auto target = RenderTexture::create(winSize.width, winSize.height, rhi::PixelFormat::RGBA8);
         target->beginWithClear(0, 0, 0, 0);
         text->setPosition(winSize.width / 2, winSize.height / 2);
         text->Node::visit();

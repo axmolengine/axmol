@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "axmol.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 
 using namespace ax;
 USING_NS_AX_EXT;
@@ -107,7 +107,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
     auto inputDesc = _programState->getVertexInputDesc("a_position");
 
     //auto vertexLayout = _programState->getMutableVertexLayout();
-    //vertexLayout->setAttrib("a_position", attrPosLoc, backend::VertexFormat::FLOAT4, 0, false);
+    //vertexLayout->setAttrib("a_position", attrPosLoc, rhi::VertexFormat::FLOAT4, 0, false);
 
     float w = SIZE_X, h = SIZE_Y;
     Vec3 vertices[6] = {Vec3(0.0f, 0.0f, 1.0f), Vec3(w, 0.0f, 1.0f), Vec3(w, h, 1.0f),
@@ -130,7 +130,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
 void ShaderNode::loadShaderVertex(std::string_view vert, std::string_view frag)
 {
     auto program      = ProgramManager::getInstance()->loadProgram(vert, frag, VertexLayoutType::Pos);
-    auto programState = new backend::ProgramState(program);
+    auto programState = new rhi::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
 }
@@ -435,7 +435,7 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
 void SpriteBlur::initProgram()
 {
     auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs", VertexLayoutType::Sprite);
-    auto programState = new backend::ProgramState(program);
+    auto programState = new rhi::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
 
@@ -567,7 +567,7 @@ bool ShaderRetroEffect::init()
         char* fragSource = (char*)fragStr.c_str();
 
         auto program  = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_HorizontalColor_fs", VertexLayoutType::Sprite);
-        auto p        = new backend::ProgramState(program);
+        auto p        = new rhi::ProgramState(program);
         auto director = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
         const auto& frameSize          = director->getRenderView()->getFrameSize();
@@ -746,7 +746,7 @@ bool ShaderMultiTexture::init()
         _sprite->setPosition(Vec2(s.width / 2, s.height / 2));
 
         auto program        = ProgramManager::getInstance()->loadProgram("custom/example_MultiTexture_vs", "custom/example_MultiTexture_fs", VertexLayoutType::Sprite);
-        auto programState   = new backend::ProgramState(program);
+        auto programState   = new rhi::ProgramState(program);
         _sprite->setProgramState(programState);
 
         SET_TEXTURE(programState, "u_tex1", 1, right->getTexture()->getBackendTexture());

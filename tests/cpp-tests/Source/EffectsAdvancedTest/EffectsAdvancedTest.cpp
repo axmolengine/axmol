@@ -269,7 +269,7 @@ void Issue631::onEnter()
     auto layer2         = LayerColor::create(Color32(0, 255, 0, 255));
     auto fog            = Sprite::create("Images/Fog.png");
 
-    BlendFunc bf = {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE_MINUS_SRC_ALPHA};
+    BlendFunc bf = {rhi::BlendFactor::SRC_ALPHA, rhi::BlendFactor::ONE_MINUS_SRC_ALPHA};
     fog->setBlendFunc(bf);
     layer2->addChild(fog, 1);
     addChild(layer2BaseGrid, 1);

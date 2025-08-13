@@ -59,10 +59,10 @@ PUMaterial::PUMaterial()
     , shininess(0.0f)
     , depthTest(true)
     , depthWrite(true)
-    , wrapMode(backend::SamplerAddressMode::CLAMP_TO_EDGE)
+    , wrapMode(rhi::SamplerAddressMode::CLAMP_TO_EDGE)
 {
-    blendFunc.src = backend::BlendFactor::ONE;
-    blendFunc.dst = backend::BlendFactor::ZERO;
+    blendFunc.src = rhi::BlendFactor::ONE;
+    blendFunc.dst = rhi::BlendFactor::ZERO;
 }
 
 PUMaterialCache::PUMaterialCache() {}

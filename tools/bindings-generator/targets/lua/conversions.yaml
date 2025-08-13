@@ -23,7 +23,7 @@ conversions:
     "cocostudio::timeline::": "ccs."
     "cocostudio::": "ccs."
     "ax::tweenfunc::": "ax."
-    "ax::backend::": "axb."
+    "ax::rhi::": "axrhi."
     "tsl::": "tsl."
     "hlookup::": "hlookup."
     "fairygui::": "fgui."

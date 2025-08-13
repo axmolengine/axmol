@@ -156,7 +156,7 @@ public:
         _startingPositionInitialized = bStartingPositionInitialized;
     }
 
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(rhi::ProgramState* programState, bool ownPS = false) override;
 
     MotionStreak();
     virtual ~MotionStreak();
@@ -193,7 +193,7 @@ protected:
 
     CustomCommand _customCommand;
 
-    backend::UniformLocation _mvpMatrixLocaiton;
+    rhi::UniformLocation _mvpMatrixLocaiton;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(MotionStreak);

@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "ui/UIAbstractCheckButton.h"
 #include "2d/Sprite.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramStateRegistry.h"
+#include "renderer/ProgramStateRegistry.h"
 
 namespace ax
 {
@@ -312,8 +312,8 @@ void AbstractCheckButton::onPressStateChangedToNormal()
     _backGroundBoxDisabledRenderer->setVisible(false);
     _frontCrossDisabledRenderer->setVisible(false);
 
-    _backGroundBoxRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    _frontCrossRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    _backGroundBoxRenderer->setProgramState(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+    _frontCrossRenderer->setProgramState(rhi::ProgramType::POSITION_TEXTURE_COLOR);
 
     _backGroundBoxRenderer->setScale(_backgroundTextureScaleX, _backgroundTextureScaleY);
     _frontCrossRenderer->setScale(_backgroundTextureScaleX, _backgroundTextureScaleY);
@@ -327,8 +327,8 @@ void AbstractCheckButton::onPressStateChangedToNormal()
 
 void AbstractCheckButton::onPressStateChangedToPressed()
 {
-    _backGroundBoxRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    _frontCrossRenderer->setProgramState(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    _backGroundBoxRenderer->setProgramState(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+    _frontCrossRenderer->setProgramState(rhi::ProgramType::POSITION_TEXTURE_COLOR);
 
     if (!_isBackgroundSelectedTextureLoaded)
     {
@@ -348,9 +348,9 @@ void AbstractCheckButton::onPressStateChangedToDisabled()
 {
     if (!_isBackgroundDisabledTextureLoaded || !_isFrontCrossDisabledTextureLoaded)
     {
-        _backGroundBoxRenderer->setProgramState(backend::ProgramType::GRAY_SCALE);
+        _backGroundBoxRenderer->setProgramState(rhi::ProgramType::GRAY_SCALE);
 
-        _frontCrossRenderer->setProgramState(backend::ProgramType::GRAY_SCALE);
+        _frontCrossRenderer->setProgramState(rhi::ProgramType::GRAY_SCALE);
     }
     else
     {

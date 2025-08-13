@@ -1276,9 +1276,11 @@ static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)
                 if (bd->KeyOwnerWindows[i] == vd->Window)
                     ImGui_ImplGlfw_KeyCallback(vd->Window, i, 0, GLFW_RELEASE, 0); // Later params are only used for main viewport, on which this function is never called.
 #if AX_RENDER_API == AX_RENDER_API_GL // axmol spec
-            auto p = (ax::backend::OpenGLState*)glfwGetWindowUserPointer(vd->Window);
-            if (p)
-                delete p;
+            using namespace ax::rhi;
+            // destroy imgui multi-viewport window gl state
+            auto isolated = (gl::OpenGLState*)glfwGetWindowUserPointer(vd->Window);
+            if (isolated)
+                delete isolated;
 #endif
             ImGui_ImplGlfw_ContextMap_Remove(vd->Window);
             glfwDestroyWindow(vd->Window);

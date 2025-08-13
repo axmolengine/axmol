@@ -22,11 +22,11 @@ endmacro()
 function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   # stupid: exclude CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG to avoid cmake generate
   # .vcxproj with incorrect debug msvc runtime, should be /MDd but got /MD
-  set(AXSLCC_OUT_DIR_PROJ "${AXSLCC_OUT_DIR}")
+  set(AXSCC_OUT_DIR_PROJ "${AXSCC_OUT_DIR}")
   load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" EXCLUDE thirdparty_LIB_DEPENDS CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG)
-  set(AXSLCC_OUT_DIR_ENGINE ${AXSLCC_OUT_DIR})
-  set(AXSLCC_OUT_DIR "${AXSLCC_OUT_DIR_PROJ}" CACHE STRING "" FORCE)
-  unset(AXSLCC_OUT_DIR_PROJ)
+  set(AXSCC_OUT_DIR_ENGINE ${AXSCC_OUT_DIR})
+  set(AXSCC_OUT_DIR "${AXSCC_OUT_DIR_PROJ}" CACHE STRING "" FORCE)
+  unset(AXSCC_OUT_DIR_PROJ)
 
   message(STATUS "AX_ENABLE_OPUS=${AX_ENABLE_OPUS}")
   message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
@@ -280,9 +280,9 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     endif()
   endif()
 
-  # prebuilt, need copy axslc folder to target output directory
+  # prebuilt, need copy axsc folder to target output directory
   get_target_property(rt_output ${APP_NAME} RUNTIME_OUTPUT_DIRECTORY)
-  ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${AXSLCC_OUT_DIR_ENGINE} SYNC_TARGET_ID axslc-builtin)
+  ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axsc" FOLDERS ${AXSCC_OUT_DIR_ENGINE} SYNC_TARGET_ID axsc-builtin)
 endfunction(ax_link_cxx_prebuilt)
 
 function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)

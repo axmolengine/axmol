@@ -24,8 +24,8 @@
  ****************************************************************************/
 #include "renderer/CustomCommand.h"
 #include "renderer/TextureAtlas.h"
-#include "renderer/backend/Buffer.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/Buffer.h"
+#include "rhi/DriverBase.h"
 #include "base/Utils.h"
 #include <stddef.h>
 
@@ -144,19 +144,19 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
     _vertexDrawCount = capacity;
 
     _vertexBuffer =
-        backend::DriverBase::getInstance()->createBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
+        rhi::DriverBase::getInstance()->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
 }
 
 void CustomCommand::createInstanceBuffer(std::size_t vertexSize, int capacity, BufferUsage usage)
 {
     AX_SAFE_RELEASE(_instanceBuffer);
     _instanceBuffer =
-        backend::DriverBase::getInstance()->createBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
+        rhi::DriverBase::getInstance()->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
     _instanceCapacity = capacity;
     _instanceCount    = capacity;
 }
 
-void CustomCommand::setInstanceBuffer(backend::Buffer* instanceBuffer, int count)
+void CustomCommand::setInstanceBuffer(rhi::Buffer* instanceBuffer, int count)
 {
     if (_instanceBuffer != instanceBuffer)
     {
@@ -178,7 +178,7 @@ void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, 
     _indexDrawCount = capacity;
 
     _indexBuffer =
-        backend::DriverBase::getInstance()->createBuffer(_indexSize * capacity, backend::BufferType::INDEX, usage);
+        rhi::DriverBase::getInstance()->createBuffer(_indexSize * capacity, rhi::BufferType::INDEX, usage);
 }
 
 void CustomCommand::updateVertexBuffer(const void* data, std::size_t offset, std::size_t length)
@@ -193,7 +193,7 @@ void CustomCommand::updateIndexBuffer(const void* data, std::size_t offset, std:
     _indexBuffer->updateSubData(data, offset, length);
 }
 
-void CustomCommand::setVertexBuffer(backend::Buffer* vertexBuffer)
+void CustomCommand::setVertexBuffer(rhi::Buffer* vertexBuffer)
 {
     if (_vertexBuffer == vertexBuffer)
         return;
@@ -206,7 +206,7 @@ void CustomCommand::setVertexBuffer(backend::Buffer* vertexBuffer)
         _vertexCapacity = _vertexDrawCount = 0;
 }
 
-void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat format)
+void CustomCommand::setIndexBuffer(rhi::Buffer* indexBuffer, IndexFormat format)
 {
     if (_indexBuffer == indexBuffer && _indexFormat == format)
         return;

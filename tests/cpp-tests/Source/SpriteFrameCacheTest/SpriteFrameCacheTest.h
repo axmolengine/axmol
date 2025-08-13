@@ -41,7 +41,7 @@ public:
     SpriteFrameCachePixelFormatTest();
 
 private:
-    void loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, ax::rhi::PixelFormat expectedFormat);
 
 private:
     ax::Label* infoLabel;
@@ -58,7 +58,7 @@ public:
     SpriteFrameCacheLoadMultipleTimes();
 
 private:
-    void loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, ax::rhi::PixelFormat expectedFormat);
 };
 
 class SpriteFrameCacheFullCheck : public TestCase
@@ -72,7 +72,7 @@ public:
     SpriteFrameCacheFullCheck();
 
 private:
-    void loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, ax::rhi::PixelFormat expectedFormat);
 };
 
 class SpriteFrameCacheJsonAtlasTest : public TestCase
@@ -87,7 +87,7 @@ public:
     ~SpriteFrameCacheJsonAtlasTest() override;
 
 private:
-    void loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, ax::rhi::PixelFormat expectedFormat);
 
     ax::Label* infoLabel;
 };

@@ -177,7 +177,7 @@ AutoPolygon::AutoPolygon(std::string_view filename)
     _filename = filename;
     _image    = new Image();
     _image->initWithImageFile(filename);
-    AXASSERT(_image->getPixelFormat() == backend::PixelFormat::RGBA8,
+    AXASSERT(_image->getPixelFormat() == rhi::PixelFormat::RGBA8,
              "unsupported format, currently only supports rgba8888");
     _data        = _image->getData();
     _width       = _image->getWidth();

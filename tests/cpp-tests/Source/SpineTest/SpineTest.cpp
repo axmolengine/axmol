@@ -41,7 +41,7 @@ using namespace spine;
         decltype(value) __v = value;                          \
         auto __loc          = (ps)->getUniformLocation(name); \
         (ps)->setUniform(__loc, &__v, sizeof(__v));           \
-    } while (false) 
+    } while (false)
 
 #define NUM_SKELETONS 50
 #define SPINE_NODE_SCALE_FACTOR 0.4
@@ -132,7 +132,7 @@ bool SpineTestLayer::init()
             skeletonNode->setTimeScale(0.3f);
 
             // refer issue: https://github.com/axmolengine/axmol/issues/482
-            // Get Spine node PS and update uniforms 
+            // Get Spine node PS and update uniforms
             auto skeleton1PS = skeletonNode->getProgramState();
 
             if (skeleton1PS)
@@ -146,7 +146,7 @@ bool SpineTestLayer::init()
                 SET_UNIFORM(skeleton1PS, "blurRadius", blurRadius);
                 SET_UNIFORM(skeleton1PS, "sampleNum", sampleNum);
             }
-    
+
         }
         return true;
     };
@@ -366,8 +366,8 @@ bool MixAndMatchExample::init()
 
     // load hsv as custom, we don't want batch draw
     auto hsvProg = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, hsv_frag, VertexLayoutType::Sprite);
-    
-    auto ps1     = new backend::ProgramState(hsvProg);
+
+    auto ps1     = new rhi::ProgramState(hsvProg);
     SET_UNIFORM(ps1, "u_hsv", Vec3(92.0f, 1.0f, 1.2f));
     ps1->updateBatchId();
     skeletonNode->setProgramState(ps1, true);
@@ -398,7 +398,7 @@ bool MixAndMatchExample::init()
 
     SCALE_SKELETON_NODE(skeletonNode2);
 
-    auto ps2 = new backend::ProgramState(hsvProg);
+    auto ps2 = new rhi::ProgramState(hsvProg);
     SET_UNIFORM(ps2, "u_hsv", Vec3(-45.0f, 1.0f, 1.2f));
     ps2->updateBatchId();
     skeletonNode2->setProgramState(ps2, true);
@@ -539,7 +539,7 @@ bool SpineboyExample::init()
 
     auto program = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs",
                                                                     VertexLayoutType::Sprite);
-    skeletonNode->setProgramState(new backend::ProgramState(program), true);
+    skeletonNode->setProgramState(new rhi::ProgramState(program), true);
 
     //auto skeleton1PS = skeletonNode->getProgramState();
 

@@ -26,7 +26,7 @@
 #pragma once
 
 #include "renderer/Texture2D.h"
-#include "renderer/backend/Texture.h"
+#include "rhi/Texture.h"
 
 #include <string>
 #include <unordered_map>
@@ -68,7 +68,7 @@ public:
     */
     void setTexParameters(const Texture2D::TexParams&);
 
-    backend::Texture* getBackendTexture() { return _texture; }
+    rhi::Texture* getBackendTexture() { return _texture; }
 
     const std::vector<std::string>& getImagePaths() const { return _imgPath; }
 
@@ -95,7 +95,7 @@ protected:
 
 private:
     std::vector<std::string> _imgPath;
-    backend::Texture* _texture = nullptr;
+    rhi::Texture* _texture = nullptr;
 };
 
 // end of 3d group

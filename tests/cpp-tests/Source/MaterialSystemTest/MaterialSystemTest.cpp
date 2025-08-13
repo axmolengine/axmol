@@ -178,17 +178,17 @@ void Material_2DEffects::updateCCTimeUniforms(float)
 /*
  * Custom material auto-binding resolver for terrain.
  */
-class EffectAutoBindingResolver : public backend::ProgramState::AutoBindingResolver
+class EffectAutoBindingResolver : public rhi::ProgramState::AutoBindingResolver
 {
-    virtual bool resolveAutoBinding(backend::ProgramState* programState,
+    virtual bool resolveAutoBinding(rhi::ProgramState* programState,
                                     /* Node* node,*/ std::string_view uniform,
                                     std::string_view autoBinding) override;
 
-    void callbackRadius(backend::ProgramState* programState, backend::UniformLocation uniform);
-    void callbackColor(backend::ProgramState* programState, backend::UniformLocation uniform);
+    void callbackRadius(rhi::ProgramState* programState, rhi::UniformLocation uniform);
+    void callbackColor(rhi::ProgramState* programState, rhi::UniformLocation uniform);
 };
 
-bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* programState,
+bool EffectAutoBindingResolver::resolveAutoBinding(rhi::ProgramState* programState,
                                                    /*Node* node,*/ std::string_view uniform,
                                                    std::string_view autoBinding)
 {
@@ -207,13 +207,13 @@ bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* progra
     return false;
 }
 
-void EffectAutoBindingResolver::callbackRadius(backend::ProgramState* programState, backend::UniformLocation uniform)
+void EffectAutoBindingResolver::callbackRadius(rhi::ProgramState* programState, rhi::UniformLocation uniform)
 {
     float f = AXRANDOM_0_1() * 10;
     programState->setUniform(uniform, &f, sizeof(f));
 }
 
-void EffectAutoBindingResolver::callbackColor(backend::ProgramState* programState, backend::UniformLocation uniform)
+void EffectAutoBindingResolver::callbackColor(rhi::ProgramState* programState, rhi::UniformLocation uniform)
 {
     float r = AXRANDOM_0_1();
     float g = AXRANDOM_0_1();

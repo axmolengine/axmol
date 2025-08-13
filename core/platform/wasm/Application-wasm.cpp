@@ -61,7 +61,7 @@ void axmol_webglcontextrestored()
     AXLOGI("receive event: webglcontextrestored");
 
     auto director = ax::Director::getInstance();
-    ax::backend::DriverBase::getInstance()->resetState();
+    ax::rhi::DriverBase::getInstance()->resetState();
     director->resetMatrixStack();
     ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
     director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);

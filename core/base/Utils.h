@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "base/Macros.h"
 #include "base/RefPtr.h"
 #include "base/Data.h"
-#include "renderer/backend/BaseDefs.h"
+#include "rhi/RHITypes.h"
 #include "math/Mat4.h"
 #include "math/Mat3.h"
 #include "base/axstd.h"
@@ -238,13 +238,13 @@ AX_DLL std::string computeFileDigest(std::string_view filename,
 */
 AX_DLL LanguageType getLanguageTypeByISO2(const char* code);
 
-AX_DLL backend::BlendFactor toBackendBlendFactor(int factor);
+AX_DLL rhi::BlendFactor toBackendBlendFactor(int factor);
 
-AX_DLL int toGLBlendFactor(backend::BlendFactor blendFactor);
+AX_DLL int toGLBlendFactor(rhi::BlendFactor blendFactor);
 
-AX_DLL backend::SamplerFilter toBackendSamplerFilter(int mode);
+AX_DLL rhi::SamplerFilter toBackendSamplerFilter(int mode);
 
-AX_DLL backend::SamplerAddressMode toBackendAddressMode(int mode);
+AX_DLL rhi::SamplerAddressMode toBackendAddressMode(int mode);
 
 // Adjust matrix for metal.
 AX_DLL const Mat4& getAdjustMatrix();

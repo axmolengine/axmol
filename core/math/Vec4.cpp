@@ -17,7 +17,7 @@
 
  Original file from GamePlay3D: http://gameplay3d.org
 
- This file was modified to fit the cocos2d-x project
+ This file was modified to fit the axmol project
  */
 
 #include "math/Vec4.h"

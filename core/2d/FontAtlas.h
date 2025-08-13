@@ -142,7 +142,7 @@ protected:
      */
     void scaleFontLetterDefinition(float scaleFactor);
 
-    void updateTextureContent(backend::PixelFormat format, int startY);
+    void updateTextureContent(rhi::PixelFormat format, int startY);
 
     std::unordered_map<unsigned int, Texture2D*> _atlasTextures;
     std::unordered_map<char32_t, FontLetterDefinition> _letterDefinitions;
@@ -161,7 +161,7 @@ protected:
 
     // Dynamic GlyphCollection related stuff
     int _currentPage                  = -1;
-    backend::PixelFormat _pixelFormat = backend::PixelFormat::NONE;
+    rhi::PixelFormat _pixelFormat = rhi::PixelFormat::NONE;
     int _strideShift                  = 0;
     uint8_t* _currentPageData         = nullptr;
     int _currentPageDataSize          = 0;

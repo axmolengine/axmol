@@ -863,20 +863,20 @@ namespace spine {
 			BlendFunc blendFunc;
 			switch (blendMode) {
 				case BlendMode_Additive:
-					blendFunc.src = premultipliedAlpha ? backend::BlendFactor::ONE : backend::BlendFactor::SRC_ALPHA;
-					blendFunc.dst = backend::BlendFactor::ONE;
+					blendFunc.src = premultipliedAlpha ? rhi::BlendFactor::ONE : rhi::BlendFactor::SRC_ALPHA;
+					blendFunc.dst = rhi::BlendFactor::ONE;
 					break;
 				case BlendMode_Multiply:
-					blendFunc.src = backend::BlendFactor::DST_COLOR;
-					blendFunc.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+					blendFunc.src = rhi::BlendFactor::DST_COLOR;
+					blendFunc.dst = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
 					break;
 				case BlendMode_Screen:
-					blendFunc.src = backend::BlendFactor::ONE;
-					blendFunc.dst = backend::BlendFactor::ONE_MINUS_SRC_COLOR;
+					blendFunc.src = rhi::BlendFactor::ONE;
+					blendFunc.dst = rhi::BlendFactor::ONE_MINUS_SRC_COLOR;
 					break;
 				default:
-					blendFunc.src = premultipliedAlpha ? backend::BlendFactor::ONE : backend::BlendFactor::SRC_ALPHA;
-					blendFunc.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+					blendFunc.src = premultipliedAlpha ? rhi::BlendFactor::ONE : rhi::BlendFactor::SRC_ALPHA;
+					blendFunc.dst = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
 			}
 			return blendFunc;
 		}

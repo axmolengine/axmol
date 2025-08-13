@@ -181,8 +181,8 @@ private:
 
     CustomCommand _customCommand;
 
-    backend::UniformLocation _mvpMatrixLocaiton;
-    backend::UniformLocation _textureLocation;
+    rhi::UniformLocation _mvpMatrixLocaiton;
+    rhi::UniformLocation _textureLocation;
 };
 
 // end of _2d group

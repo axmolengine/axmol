@@ -41,30 +41,30 @@ AxmolAtlasAttachmentLoader::~AxmolAtlasAttachmentLoader() {}
 void AxmolAtlasAttachmentLoader::configureAttachment(Attachment *attachment) {
 }
 
-backend::SamplerAddressMode wrap(TextureWrap wrap) {
-	return wrap == TextureWrap_ClampToEdge ? backend::SamplerAddressMode::CLAMP_TO_EDGE : backend::SamplerAddressMode::REPEAT;
+rhi::SamplerAddressMode wrap(TextureWrap wrap) {
+	return wrap == TextureWrap_ClampToEdge ? rhi::SamplerAddressMode::CLAMP_TO_EDGE : rhi::SamplerAddressMode::REPEAT;
 }
 
-backend::SamplerFilter filter(TextureFilter filter) {
+rhi::SamplerFilter filter(TextureFilter filter) {
 	switch (filter) {
 		case TextureFilter_Unknown:
 			break;
 		case TextureFilter_Nearest:
-			return backend::SamplerFilter::NEAREST;
+			return rhi::SamplerFilter::NEAREST;
 		case TextureFilter_Linear:
-			return backend::SamplerFilter::LINEAR;
+			return rhi::SamplerFilter::LINEAR;
 		case TextureFilter_MipMap:
-			return backend::SamplerFilter::LINEAR;
+			return rhi::SamplerFilter::LINEAR;
 		case TextureFilter_MipMapNearestNearest:
-			return backend::SamplerFilter::NEAREST;
+			return rhi::SamplerFilter::NEAREST;
 		case TextureFilter_MipMapLinearNearest:
-			return backend::SamplerFilter::NEAREST;
+			return rhi::SamplerFilter::NEAREST;
 		case TextureFilter_MipMapNearestLinear:
-			return backend::SamplerFilter::LINEAR;
+			return rhi::SamplerFilter::LINEAR;
 		case TextureFilter_MipMapLinearLinear:
-			return backend::SamplerFilter::LINEAR;
+			return rhi::SamplerFilter::LINEAR;
 	}
-	return backend::SamplerFilter::LINEAR;
+	return rhi::SamplerFilter::LINEAR;
 }
 
 AxmolTextureLoader::AxmolTextureLoader() : TextureLoader() {}

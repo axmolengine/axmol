@@ -33,7 +33,7 @@
 
 #include "platform/PlatformMacros.h"
 #include "renderer/RenderCommand.h"
-#include "renderer/backend/ProgramManager.h"
+#include "renderer/ProgramManager.h"
 
 /**
  * @addtogroup renderer
@@ -43,10 +43,10 @@
 namespace ax
 {
 
-using CullMode = backend::CullMode;
-using Winding  = backend::Winding;
+using CullMode = rhi::CullMode;
+using Winding  = rhi::Winding;
 
-namespace backend
+namespace rhi
 {
 class Buffer;
 class CommandBuffer;
@@ -55,7 +55,7 @@ class RenderPass;
 class Texture;
 class RenderTarget;
 struct PixelBufferDescriptor;
-}  // namespace backend
+}  // namespace rhi
 
 class EventListenerCustom;
 class TrianglesCommand;
@@ -193,13 +193,13 @@ public:
      @stencilAttachment The value to replace stencil attachment. Depth attachment and stencil attachment
                         can be the same value.
      */
-    backend::RenderTarget* getRenderTarget() const { return _currentRT; }
-    void setRenderTarget(backend::RenderTarget* rt) { _currentRT = rt; };
+    rhi::RenderTarget* getRenderTarget() const { return _currentRT; }
+    void setRenderTarget(rhi::RenderTarget* rt) { _currentRT = rt; };
 
-    backend::RenderTarget* getDefaultRenderTarget() const { return _defaultRT; }
+    rhi::RenderTarget* getDefaultRenderTarget() const { return _defaultRT; }
 
     /* The offscreen render target for RenderTexture to share it */
-    backend::RenderTarget* getOffscreenRenderTarget();
+    rhi::RenderTarget* getOffscreenRenderTarget();
 
     /**
     Set clear values for each attachment.
@@ -252,7 +252,7 @@ public:
      * Set depth compare function.
      * @param func Specifies the value used for depth buffer comparisons.
      */
-    void setDepthCompareFunction(backend::CompareFunction func);
+    void setDepthCompareFunction(rhi::CompareFunction func);
 
     /**
      * Get whether depth test state is enabled or disabled.
@@ -270,7 +270,7 @@ public:
      * Get depth compare function.
      * @return Depth compare function.
      */
-    backend::CompareFunction getDepthCompareFunction() const;
+    rhi::CompareFunction getDepthCompareFunction() const;
 
     /**
      * Enable/disable stencil test.
@@ -285,7 +285,7 @@ public:
      * @readMask Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test
      * is done.
      */
-    void setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask);
+    void setStencilCompareFunction(rhi::CompareFunction func, unsigned int ref, unsigned int readMask);
 
     /**
      * Set front and back stencil test actions.
@@ -294,9 +294,9 @@ public:
      * @param stencilDepthPassOp Specifies the stencil action when both the stencil test and the depth test pass, or
      * when the stencil test passes and either there is no depth buffer or depth testing is not enabled.
      */
-    void setStencilOperation(backend::StencilOperation stencilFailureOp,
-                             backend::StencilOperation depthFailureOp,
-                             backend::StencilOperation stencilDepthPassOp);
+    void setStencilOperation(rhi::StencilOperation stencilFailureOp,
+                             rhi::StencilOperation depthFailureOp,
+                             rhi::StencilOperation stencilDepthPassOp);
 
     /**
      * Control the front and back writing of individual bits in the stencil planes.
@@ -311,22 +311,22 @@ public:
     bool getStencilTest() const;
 
     /// Get the action to take when the stencil test fails.
-    backend::StencilOperation getStencilFailureOperation() const;
+    rhi::StencilOperation getStencilFailureOperation() const;
 
     /// Get the stencil action when the stencil test passes, but the depth test fails.
-    backend::StencilOperation getStencilPassDepthFailureOperation() const;
+    rhi::StencilOperation getStencilPassDepthFailureOperation() const;
 
     /// Get the stencil action when both the stencil test and the depth test pass, or when the stencil test passes and
     /// either there is no depth buffer or depth testing is not enabled.
-    backend::StencilOperation getStencilDepthPassOperation() const;
+    rhi::StencilOperation getStencilDepthPassOperation() const;
 
     /// Get the stencil test function.
-    backend::CompareFunction getStencilCompareFunction() const;
+    rhi::CompareFunction getStencilCompareFunction() const;
 
     /**
      * Get the stencil readMask.
      * @return Stencil read mask.
-     * @see `setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)`
+     * @see `setStencilCompareFunction(rhi::CompareFunction func, unsigned int ref, unsigned int readMask)`
      */
     unsigned int getStencilReadMask() const;
 
@@ -340,19 +340,19 @@ public:
     /**
      * Get stencil reference value set by `setStencilCompareFunction`.
      * @return Stencil reference value.
-     * @see `setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)`
+     * @see `setStencilCompareFunction(rhi::CompareFunction func, unsigned int ref, unsigned int readMask)`
      */
     unsigned int getStencilReferenceValue() const;
 
     /**
      * Sets depth stencil descriptor
      */
-    void setDepthStencilDesc(const backend::DepthStencilDescriptor& dsDesc);
+    void setDepthStencilDesc(const rhi::DepthStencilDescriptor& dsDesc);
 
     /**
      * Gets depth stencil descriptor
      */
-    const backend::DepthStencilDescriptor& getDepthStencilDesc() const;
+    const rhi::DepthStencilDescriptor& getDepthStencilDesc() const;
 
     /**
      * Fixed-function state
@@ -406,13 +406,13 @@ public:
     bool getScissorTest() const;                ///< Get whether scissor test is enabled or not.
     const ScissorRect& getScissorRect() const;  ///< Get scissor rectangle.
 
-    backend::CommandBuffer* getCommandBuffer() const { return _commandBuffer ; }
+    rhi::CommandBuffer* getCommandBuffer() const { return _commandBuffer ; }
 
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Vec2& size);
 
     /** read pixels from RenderTarget or screen framebuffer */
-    void readPixels(backend::RenderTarget* rt, std::function<void(const backend::PixelBufferDescriptor&)> callback);
+    void readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDescriptor&)> callback);
 
     void beginRenderPass();  /// Begin a render pass.
     void endRenderPass();
@@ -453,15 +453,15 @@ protected:
          */
         void prepareNextBuffer();
 
-        backend::Buffer* getVertexBuffer() const;  ///< Get the vertex buffer.
-        backend::Buffer* getIndexBuffer() const;   ///< Get the index buffer.
+        rhi::Buffer* getVertexBuffer() const;  ///< Get the vertex buffer.
+        rhi::Buffer* getIndexBuffer() const;   ///< Get the index buffer.
 
     private:
         void createBuffer();
 
         int _currentBufferIndex = 0;
-        std::vector<backend::Buffer*> _vertexBufferPool;
-        std::vector<backend::Buffer*> _indexBufferPool;
+        std::vector<rhi::Buffer*> _vertexBufferPool;
+        std::vector<rhi::Buffer*> _indexBufferPool;
     };
 
     inline GroupCommandManager* getGroupCommandManager() const { return _groupCommandManager; }
@@ -492,7 +492,7 @@ protected:
 
     void popStateBlock();
 
-    backend::RenderPipeline* _renderPipeline = nullptr;
+    rhi::RenderPipeline* _renderPipeline = nullptr;
 
     Viewport _viewport;
     CullMode _cullMode = CullMode::NONE;
@@ -512,15 +512,15 @@ protected:
     // for TrianglesCommand
     V3F_T2F_C4B _verts[VBO_SIZE];
     unsigned short _indices[INDEX_VBO_SIZE];
-    backend::Buffer* _vertexBuffer = nullptr;
-    backend::Buffer* _indexBuffer  = nullptr;
+    rhi::Buffer* _vertexBuffer = nullptr;
+    rhi::Buffer* _indexBuffer  = nullptr;
     TriangleCommandBufferManager _triangleCommandBufferManager;
 
-    backend::CommandBuffer* _commandBuffer = nullptr;
-    backend::RenderPassDescriptor _renderPassDesc;
+    rhi::CommandBuffer* _commandBuffer = nullptr;
+    rhi::RenderPassDescriptor _renderPassDesc;
 
-    backend::DepthStencilState* _depthStencilState = nullptr;
-    backend::DepthStencilDescriptor _dsDesc;
+    rhi::DepthStencilState* _depthStencilState = nullptr;
+    rhi::DepthStencilDescriptor _dsDesc;
 
     // Internal structure that has the information for the batches
     struct TriBatchToDraw
@@ -552,10 +552,10 @@ protected:
 
     unsigned int _stencilRef = 0;
 
-    backend::RenderTarget* _defaultRT = nullptr;
-    backend::RenderTarget* _currentRT = nullptr;  // weak ref
+    rhi::RenderTarget* _defaultRT = nullptr;
+    rhi::RenderTarget* _currentRT = nullptr;  // weak ref
 
-    backend::RenderTarget* _offscreenRT = nullptr;
+    rhi::RenderTarget* _offscreenRT = nullptr;
 
     Color _clearColor = Color::BLACK;
     ClearFlag _clearFlag;
@@ -571,7 +571,7 @@ protected:
     {
         bool depthTest             = false;
         bool depthWrite            = false;
-        backend::CullMode cullMode = backend::CullMode::NONE;
+        rhi::CullMode cullMode = rhi::CullMode::NONE;
     };
 
     std::deque<StateBlock> _stateBlockStack;

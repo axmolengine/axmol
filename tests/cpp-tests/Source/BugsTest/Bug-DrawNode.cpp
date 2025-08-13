@@ -40,8 +40,8 @@ bool BugDrawNodeLayer::init()
         auto size       = Director::getInstance()->getWinSize();
         auto testSprite = Sprite::create("Images/close.png");
         BlendFunc blend;
-        blend.src = backend::BlendFactor::ZERO;
-        blend.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blend.src = rhi::BlendFactor::ZERO;
+        blend.dst = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
         testSprite->setBlendFunc(blend);
         testSprite->setPosition(Vec2(size.width / 2, size.height / 2));
         testSprite->setScale(10);

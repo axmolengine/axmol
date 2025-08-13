@@ -27,8 +27,8 @@
 #if defined(AX_ENABLE_NAVMESH)
 #    include <stddef.h>  // offsetof
 #    include "base/Types.h"
-#    include "renderer/backend/ProgramState.h"
-#    include "renderer/backend/DriverBase.h"
+#    include "rhi/ProgramState.h"
+#    include "rhi/DriverBase.h"
 #    include "renderer/Renderer.h"
 #    include "renderer/RenderState.h"
 #    include "renderer/Shaders.h"
@@ -40,18 +40,18 @@ namespace ax
 
 NavMeshDebugDraw::NavMeshDebugDraw()
 {
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
-    _programState = new backend::ProgramState(program);
+    auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_COLOR);
+    _programState = new rhi::ProgramState(program);
     _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
 
     // the POSITION_COLOR default vertex layout is: V3F_C4F, so we need modify it
     auto vertexLayout = _programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", _programState->getVertexInputDesc(backend::VertexInputKind::POSITION),
-                                backend::VertexFormat::FLOAT3,
+    vertexLayout->setAttrib("a_position", _programState->getVertexInputDesc(rhi::VertexInputKind::POSITION),
+                                rhi::VertexFormat::FLOAT3,
                                 offsetof(V3F_C4F, position),
                                 false);
-    vertexLayout->setAttrib("a_color", _programState->getVertexInputDesc(backend::VertexInputKind::COLOR),
-                                backend::VertexFormat::FLOAT4,
+    vertexLayout->setAttrib("a_color", _programState->getVertexInputDesc(rhi::VertexInputKind::COLOR),
+                                rhi::VertexFormat::FLOAT4,
                                 offsetof(V3F_C4F, color),
                                 false);
     vertexLayout->setStride(sizeof(V3F_C4F));
@@ -145,18 +145,18 @@ Vec4 NavMeshDebugDraw::getColor(unsigned int col)
     return Vec4(r, g, b, a) * factor;
 }
 
-backend::PrimitiveType NavMeshDebugDraw::getPrimitiveType(duDebugDrawPrimitives prim)
+rhi::PrimitiveType NavMeshDebugDraw::getPrimitiveType(duDebugDrawPrimitives prim)
 {
     switch (prim)
     {
     case DU_DRAW_POINTS:
-        return backend::PrimitiveType::POINT;
+        return rhi::PrimitiveType::POINT;
     case DU_DRAW_LINES:
-        return backend::PrimitiveType::LINE;
+        return rhi::PrimitiveType::LINE;
     case DU_DRAW_TRIS:
-        return backend::PrimitiveType::TRIANGLE;
+        return rhi::PrimitiveType::TRIANGLE;
     default:
-        return backend::PrimitiveType::POINT;
+        return rhi::PrimitiveType::POINT;
     }
 }
 
@@ -183,8 +183,8 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
     if (!_vertexBuffer || _vertexBuffer->getSize() < _vertices.size() * sizeof(_vertices[0]))
     {
-        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(
-            _vertices.size() * sizeof(_vertices[0]), backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
+        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+            _vertices.size() * sizeof(_vertices[0]), rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
         _dirtyBuffer = true;
     }
 
@@ -200,7 +200,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
     }
     for (auto&& iter : _primitiveList)
     {
-        if (iter->type == backend::PrimitiveType::POINT)
+        if (iter->type == rhi::PrimitiveType::POINT)
             continue;
         if (iter->end - iter->start <= 0)
             continue;
@@ -234,7 +234,7 @@ void NavMeshDebugDraw::onBeforeVisitCmd()
     _rendererDepthWrite = renderer->getDepthWrite();
     _rendererWinding    = renderer->getWinding();
 
-    renderer->setCullMode(backend::CullMode::NONE);
+    renderer->setCullMode(rhi::CullMode::NONE);
     renderer->setDepthTest(true);
 }
 

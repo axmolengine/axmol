@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 #include "math/Math.h"
 #include "base/Object.h"
-#include "renderer/backend/BaseDefs.h"
+#include "rhi/RHITypes.h"
 
 /**
  * @addtogroup base
@@ -315,20 +315,15 @@ struct V3F_T2F_Quad
     V3F_T2F tr;
 };
 
-namespace backend
-{
-enum class BlendFactor : uint32_t;
-}
-
 /** @struct BlendFunc
  * Blend Function used for textures.
  */
 struct AX_DLL BlendFunc
 {
     /** source blend function */
-    backend::BlendFactor src;
+    rhi::BlendFactor src;
     /** destination blend function */
-    backend::BlendFactor dst;
+    rhi::BlendFactor dst;
 
     /** Blending disabled. Uses {BlendFactor::ONE, BlendFactor::ZERO} */
     static const BlendFunc DISABLE;
@@ -528,12 +523,12 @@ struct RectI
 using Viewport    = RectI;
 using ScissorRect = RectI;  // both GL & Metal is integer type, GL: int, Metal: NSUInteger
 
-using TextureUsage = backend::TextureUsage;
-using PixelFormat  = backend::PixelFormat;
+using TextureUsage = rhi::TextureUsage;
+using PixelFormat  = rhi::PixelFormat;
 
-using TargetBufferFlags = backend::TargetBufferFlags;
-using DepthStencilFlags = backend::DepthStencilFlags;
-using ClearFlag         = backend::ClearFlag;
+using TargetBufferFlags = rhi::TargetBufferFlags;
+using DepthStencilFlags = rhi::DepthStencilFlags;
+using ClearFlag         = rhi::ClearFlag;
 
 typedef void (*AsyncOperation)(void* param);
 

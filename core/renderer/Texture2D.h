@@ -50,12 +50,12 @@ namespace ui
 class Scale9Sprite;
 }
 
-namespace backend
+namespace rhi
 {
 class Texture;
 class Texture;
 class ProgramState;
-}  // namespace backend
+}  // namespace rhi
 
 /**
  * @addtogroup _2d
@@ -90,7 +90,7 @@ public:
     /**
      * Extension to set the Min / Mag filter
      */
-    using TexParams = backend::SamplerDescriptor;
+    using TexParams = rhi::SamplerDescriptor;
 
 public:
     /**
@@ -114,7 +114,7 @@ public:
      */
     bool initWithData(const void* data,
                       ssize_t dataLen,
-                      backend::PixelFormat pixelFormat,
+                      rhi::PixelFormat pixelFormat,
                       int pixelsWide,
                       int pixelsHigh,
                       bool preMultipliedAlpha = false)
@@ -137,8 +137,8 @@ public:
      */
     bool initWithData(const void* data,
                       ssize_t dataLen,
-                      backend::PixelFormat pixelFormat,
-                      backend::PixelFormat renderFormat,
+                      rhi::PixelFormat pixelFormat,
+                      rhi::PixelFormat renderFormat,
                       int pixelsWide,
                       int pixelsHigh,
                       bool preMultipliedAlpha = false);
@@ -154,8 +154,8 @@ public:
      */
     bool initWithMipmaps(MipmapInfo* mipmaps,
                          int mipmapsNum,
-                         backend::PixelFormat pixelFormat,
-                         backend::PixelFormat renderFormat,
+                         rhi::PixelFormat pixelFormat,
+                         rhi::PixelFormat renderFormat,
                          int pixelsWide,
                          int pixelsHigh,
                          bool preMultipliedAlpha = false);
@@ -169,19 +169,19 @@ public:
     @param height Specifies the height of the texture subimage.
     */
     bool updateWithImage(Image* image, int index = 0);
-    bool updateWithImage(Image* image, backend::PixelFormat format, int index = 0);
+    bool updateWithImage(Image* image, rhi::PixelFormat format, int index = 0);
     bool updateWithData(const void* data,
                         ssize_t dataLen,
-                        backend::PixelFormat pixelFormat,
-                        backend::PixelFormat renderFormat,
+                        rhi::PixelFormat pixelFormat,
+                        rhi::PixelFormat renderFormat,
                         int pixelsWide,
                         int pixelsHigh,
                         bool preMultipliedAlpha,
                         int index = 0);
     bool updateWithMipmaps(MipmapInfo* mipmaps,
                            int mipmapsNum,
-                           backend::PixelFormat pixelFormat,
-                           backend::PixelFormat renderFormat,
+                           rhi::PixelFormat pixelFormat,
+                           rhi::PixelFormat renderFormat,
                            int pixelsWide,
                            int pixelsHigh,
                            bool preMultipliedAlpha = false,
@@ -254,7 +254,7 @@ public:
     bool initWithString(std::string_view text, const FontDefinition& textDefinition);
 
     //!!Used for render buffer, such depth stencil attachment
-    bool updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha = false);
+    bool updateTextureDescriptor(const rhi::TextureDescriptor& descriptor, bool preMultipliedAlpha = false);
 
     void setRenderTarget(bool renderTarget);
     inline bool isRenderTarget() const { return _flags & TextureFlag::RENDERTARGET; }
@@ -300,7 +300,7 @@ public:
     /** Helper functions that returns bits per pixels for a given format.
      @since v2.0
      */
-    unsigned int getBitsPerPixelForFormat(backend::PixelFormat format) const;
+    unsigned int getBitsPerPixelForFormat(rhi::PixelFormat format) const;
 
     /** Get content size. */
     const Vec2& getContentSizeInPixels();
@@ -313,7 +313,7 @@ public:
     bool hasMipmaps() const;
 
     /** Gets the pixel format of the texture. */
-    backend::PixelFormat getPixelFormat() const;
+    rhi::PixelFormat getPixelFormat() const;
 
     int getSamplerFlags() const { return _samplerFlags; }
 
@@ -323,7 +323,7 @@ public:
     /** Gets the height of the texture in pixels. */
     int getPixelsHigh() const;
 
-    backend::Texture* getBackendTexture() const;
+    rhi::Texture* getBackendTexture() const;
 
     /** Gets max S. */
     float getMaxS() const;
@@ -388,7 +388,7 @@ private:
 
 protected:
     /** pixel format of the texture */
-    backend::PixelFormat _pixelFormat;
+    rhi::PixelFormat _pixelFormat;
 
     /** width in pixels */
     int _pixelsWide;
@@ -397,7 +397,7 @@ protected:
     int _pixelsHigh;
 
     /** texture name */
-    backend::Texture* _texture;
+    rhi::Texture* _texture;
 
     /** texture max S */
     float _maxS;
@@ -419,9 +419,9 @@ protected:
     bool _valid;
     std::string _filePath;
 
-    backend::ProgramState* _programState = nullptr;
-    backend::UniformLocation _mvpMatrixLocation;
-    backend::UniformLocation _textureLocation;
+    rhi::ProgramState* _programState = nullptr;
+    rhi::UniformLocation _mvpMatrixLocation;
+    rhi::UniformLocation _textureLocation;
     CustomCommand _customCommand;
 };
 

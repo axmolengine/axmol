@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "DrawNode3D.h"
-#include "renderer/backend/Buffer.h"
+#include "rhi/Buffer.h"
 namespace ax
 {
 
@@ -74,8 +74,8 @@ bool DrawNode3D::init()
 {
     _blendFunc        = BlendFunc::ALPHA_PREMULTIPLIED;
     auto& pd          = _customCommand.getPipelineDescriptor();
-    auto program      = backend::Program::getBuiltinProgram(backend::ProgramType::LINE_COLOR_3D);
-    _programStateLine = new backend::ProgramState(program);
+    auto program      = axpm->getBuiltinProgram(rhi::ProgramType::LINE_COLOR_3D);
+    _programStateLine = new rhi::ProgramState(program);
     pd.programState   = _programStateLine;
 
     _locMVPMatrix = _programStateLine->getUniformLocation("u_MVPMatrix");

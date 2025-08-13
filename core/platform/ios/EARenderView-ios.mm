@@ -71,8 +71,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
 #    import <Metal/Metal.h>
-#    import "renderer/backend/metal/DriverMTL.h"
-#    import "renderer/backend/metal/UtilsMTL.h"
+#    import "rhi/metal/DriverMTL.h"
+#    import "rhi/metal/UtilsMTL.h"
 #else
 #    import "platform/ios/RenderViewImpl-ios.h"
 #    import "platform/ios/ES3Renderer-ios.h"
@@ -205,7 +205,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         metalLayer.device          = device;
         metalLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
         metalLayer.framebufferOnly = YES;
-        ax::backend::DriverMTL::setCAMetalLayer(metalLayer);
+        ax::rhi::DriverMTL::setCAMetalLayer(metalLayer);
 #else
         pixelformat_        = format;
         depthFormat_        = depth;
@@ -266,7 +266,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (BOOL)setupSurfaceWithSharegroup:(void*)sharegroup
 {
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
-    
+
     NSString* platformPF = pixelformat_ == (int)ax::PixelFormat::RGB565 ? kEAGLColorFormatRGB565 : kEAGLColorFormatRGBA8;
 
     eaglLayer.opaque = YES;
@@ -320,7 +320,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     size_ = [self bounds].size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
-    ax::backend::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
+    ax::rhi::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
 #else
     [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     size_ = [renderer_ backingSize];
@@ -354,7 +354,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if (multiSampling_)
     {
         /* Resolve from msaaFramebuffer to resolveFramebuffer */
-        // __gl.disableStencilTest();
+        // __state.disableStencilTest();
         glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, [renderer_ msaaFrameBuffer]);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, [renderer_ defaultFrameBuffer]);
         glResolveMultisampleFramebufferAPPLE();

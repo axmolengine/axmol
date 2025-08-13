@@ -25,9 +25,9 @@ $manifest['cmdlinetools'] = $build_profiles['cmdlinetools']
 $Global:build_profiles = $build_profiles
 
 $Global:download_path = $1k.realpath("$PSScriptRoot/../cache")
-	
+
 # add or overwrite tool version like follow
 if ($Global:is_axmol_app -or $Global:is_axmol_engine) {
-    $manifest['axslcc'] = $build_profiles['axslcc']
+    $manifest['axscc'] = $build_profiles['axscc']
     $manifest['nuget'] = $build_profiles['nuget']
 }

@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace ax
 {
-namespace backend
+namespace rhi
 {
 class ProgramState;
 }
@@ -212,7 +212,7 @@ protected:
 
 protected:
     ax::CustomCommand _customCommand;
-    ax::backend::UniformLocation _mvpLocation;
+    ax::rhi::UniformLocation _mvpLocation;
 
     ax::BlendFunc _blendFunc = ax::BlendFunc::ALPHA_NON_PREMULTIPLIED;
 

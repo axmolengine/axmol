@@ -158,7 +158,7 @@ public:
     virtual bool init(Node* stencil);
 
 protected:
-    void setProgramStateRecursively(Node* node, backend::ProgramState* programState);
+    void setProgramStateRecursively(Node* node, rhi::ProgramState* programState);
     void restoreAllProgramStates();
 
     bool _uniqueChildStencils                 = false;
@@ -167,7 +167,7 @@ protected:
 
     //CallbackCommand _afterDrawStencilCmd;
     //CallbackCommand _afterVisitCmd;
-    std::unordered_map<Node*, backend::ProgramState*> _originalStencilProgramState;
+    std::unordered_map<Node*, rhi::ProgramState*> _originalStencilProgramState;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(ClippingNode);

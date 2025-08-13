@@ -43,7 +43,7 @@ THE SOFTWARE.
 #include "base/EventDispatcher.h"
 #include "base/text_utils.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "2d/TweenFunction.h"
 
 namespace ax
@@ -210,7 +210,7 @@ void ParticleSystemQuad::updateTexCoords()
 void ParticleSystemQuad::setTextureWithRect(Texture2D* texture, const Rect& rect)
 {
     bool needsUpdatePS =
-        ((!_programState || _programState->getProgram()->getProgramType() < backend::ProgramType::CUSTOM_PROGRAM) &&
+        ((!_programState || _programState->getProgram()->getProgramType() < rhi::ProgramType::CUSTOM_PROGRAM) &&
          (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags() ||
           _texture->getPixelFormat() != texture->getPixelFormat()));
 
@@ -557,7 +557,7 @@ void ParticleSystemQuad::updateParticleQuads()
                     quad->br.color = col;
                     quad->tl.color = col;
                     quad->tr.color = col;
-                                  
+
                 }
             }
             else

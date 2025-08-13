@@ -98,7 +98,7 @@ LAppLive2DManager::LAppLive2DManager()
     }
 
 #ifdef CSM_TARGET_ANDROID_ES2
-    char *exts = (char*)backend::DriverBase::getInstance()->getExtension();
+    char *exts = (char*)rhi::DriverBase::getInstance()->getExtension();
     if(strstr(exts, "GL_NV_shader_framebuffer_fetch ")){
         Rendering::CubismRenderer_Cocos2dx::SetExtShaderMode( true , true );
     }

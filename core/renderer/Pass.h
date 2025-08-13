@@ -46,11 +46,11 @@ class VertexInputBinding;
 class MeshIndexData;
 class RenderState;
 
-namespace backend
+namespace rhi
 {
 class ProgramState;
 class Buffer;
-}  // namespace backend
+}  // namespace rhi
 
 class AX_DLL Pass : public Object
 {
@@ -62,17 +62,17 @@ class AX_DLL Pass : public Object
 public:
     /** Creates a Pass with a GLProgramState.
      */
-    static Pass* createWithProgramState(Technique* parent, backend::ProgramState* programState);
+    static Pass* createWithProgramState(Technique* parent, rhi::ProgramState* programState);
 
     static Pass* create(Technique* parent);
 
     /** Returns the ProgramState */
-    backend::ProgramState* getProgramState() const;
+    rhi::ProgramState* getProgramState() const;
 
     void draw(MeshCommand* meshCommand,
               float globalZOrder,
-              backend::Buffer* vertexBuffer,
-              backend::Buffer* indexBuffer,
+              rhi::Buffer* vertexBuffer,
+              rhi::Buffer* indexBuffer,
               MeshCommand::PrimitiveType primitive,
               MeshCommand::IndexFormat indexFormat,
               unsigned int indexCount,
@@ -108,8 +108,8 @@ public:
 
     void updateMVPUniform(const Mat4& modelView);
 
-    void setUniformTexture(uint32_t slot, backend::Texture*);      // u_tex0
-    void setUniformNormTexture(uint32_t slot, backend::Texture*);  // u_normalTex
+    void setUniformTexture(uint32_t slot, rhi::Texture*);      // u_tex0
+    void setUniformNormTexture(uint32_t slot, rhi::Texture*);  // u_normalTex
 
     void setUniformColor(const void*, size_t);          // ucolor
     void setUniformMatrixPalette(const void*, size_t);  // u_matrixPalette
@@ -134,13 +134,13 @@ protected:
     Pass();
     ~Pass();
     bool init(Technique* parent);
-    bool initWithProgramState(Technique* parent, backend::ProgramState* glProgramState);
+    bool initWithProgramState(Technique* parent, rhi::ProgramState* glProgramState);
 
-    void setProgramState(backend::ProgramState* programState);
+    void setProgramState(rhi::ProgramState* programState);
     Node* getTarget() const;
 
     VertexInputBinding* _vertexInputBinding = nullptr;
-    backend::ProgramState* _programState      = nullptr;
+    rhi::ProgramState* _programState      = nullptr;
     Technique* _technique                     = nullptr;
     bool _hashDirty                           = true;
     RenderState _renderState;
@@ -151,38 +151,38 @@ private:
     void onBeforeVisitCmd(MeshCommand*);
     void onAfterVisitCmd(MeshCommand*);
 
-    backend::UniformLocation _locMVPMatrix;
-    backend::UniformLocation _locMVMatrix;
-    backend::UniformLocation _locPMatrix;
-    backend::UniformLocation _locNormalMatrix;
+    rhi::UniformLocation _locMVPMatrix;
+    rhi::UniformLocation _locMVMatrix;
+    rhi::UniformLocation _locPMatrix;
+    rhi::UniformLocation _locNormalMatrix;
 
-    backend::UniformLocation _locTexture;        // u_tex0
-    backend::UniformLocation _locNormalTexture;  // u_normalTex
+    rhi::UniformLocation _locTexture;        // u_tex0
+    rhi::UniformLocation _locNormalTexture;  // u_normalTex
 
-    backend::UniformLocation _locColor;          // ucolor
-    backend::UniformLocation _locMatrixPalette;  // u_matrixPalette
+    rhi::UniformLocation _locColor;          // ucolor
+    rhi::UniformLocation _locMatrixPalette;  // u_matrixPalette
 
-    backend::UniformLocation _locDirLightColor;
-    backend::UniformLocation _locDirLightDir;
+    rhi::UniformLocation _locDirLightColor;
+    rhi::UniformLocation _locDirLightDir;
 
-    backend::UniformLocation _locPointLightColor;
-    backend::UniformLocation _locPointLightPosition;
-    backend::UniformLocation _locPointLightRangeInverse;
+    rhi::UniformLocation _locPointLightColor;
+    rhi::UniformLocation _locPointLightPosition;
+    rhi::UniformLocation _locPointLightRangeInverse;
 
-    backend::UniformLocation _locSpotLightColor;
-    backend::UniformLocation _locSpotLightPosition;
-    backend::UniformLocation _locSpotLightDir;
-    backend::UniformLocation _locSpotLightInnerAngleCos;
-    backend::UniformLocation _locSpotLightOuterAngleCos;
-    backend::UniformLocation _locSpotLightRangeInverse;
+    rhi::UniformLocation _locSpotLightColor;
+    rhi::UniformLocation _locSpotLightPosition;
+    rhi::UniformLocation _locSpotLightDir;
+    rhi::UniformLocation _locSpotLightInnerAngleCos;
+    rhi::UniformLocation _locSpotLightOuterAngleCos;
+    rhi::UniformLocation _locSpotLightRangeInverse;
 
-    backend::UniformLocation _locAmbientLigthColor;
+    rhi::UniformLocation _locAmbientLigthColor;
 
     // renderer state cache variables
     bool _rendererDepthTestEnabled                 = true;
-    backend::CompareFunction _rendererDepthCmpFunc = backend::CompareFunction::LESS;
-    backend::CullMode _rendererCullMode            = backend::CullMode::BACK;
-    backend::Winding _rendererWinding              = backend::Winding::COUNTER_CLOCK_WISE;
+    rhi::CompareFunction _rendererDepthCmpFunc = rhi::CompareFunction::LESS;
+    rhi::CullMode _rendererCullMode            = rhi::CullMode::BACK;
+    rhi::Winding _rendererWinding              = rhi::Winding::COUNTER_CLOCK_WISE;
     bool _rendererDepthWrite                       = false;
 };
 

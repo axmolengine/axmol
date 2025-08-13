@@ -7,7 +7,7 @@
 #include "platform/PlatformConfig.h"
 
 #if AX_RENDER_API == AX_RENDER_API_GL
-#    include "renderer/backend/opengl/OpenGLState.h"
+#    include "rhi/opengl/OpenGLState.h"
 #endif
 
 extern "C" {

@@ -37,11 +37,11 @@ THE SOFTWARE.
 namespace ax
 {
 
-namespace backend
+namespace rhi
 {
 class Texture;
 class RenderTarget;
-}  // namespace backend
+}  // namespace rhi
 
 class EventCustom;
 
@@ -74,8 +74,8 @@ public:
      */
     static RenderTexture* create(int w,
                                  int h,
-                                 backend::PixelFormat format,
-                                 backend::PixelFormat depthStencilFormat,
+                                 rhi::PixelFormat format,
+                                 rhi::PixelFormat depthStencilFormat,
                                  bool sharedRenderTarget = false);
 
     /** Creates a RenderTexture object with width and height in Points and a pixel format, only RGB and RGBA formats are
@@ -86,7 +86,7 @@ public:
      * @param format In Points and a pixel format( only RGB and RGBA formats are valid ).
      * @param sharedRenderTarget Select whether to use a new or shared render target.
      */
-    static RenderTexture* create(int w, int h, backend::PixelFormat format, bool sharedRenderTarget = false);
+    static RenderTexture* create(int w, int h, rhi::PixelFormat format, bool sharedRenderTarget = false);
 
     /** Creates a RenderTexture object with width and height in Points, pixel format is RGBA8888.
      *
@@ -310,7 +310,7 @@ public:
      */
     inline Sprite* getSprite() const { return _sprite; }
 
-    inline backend::RenderTarget* getRenderTarget() const { return _renderTarget; }
+    inline rhi::RenderTarget* getRenderTarget() const { return _renderTarget; }
 
     /** Flag: Use stack matrix computed from scene hierarchy or generate new modelView and projection matrix.
      *
@@ -351,7 +351,7 @@ public:
      * @param sharedRenderTarget Select whether to use a new or shared render target.
      * @return If succeed, it will return true.
      */
-    bool initWithWidthAndHeight(int w, int h, backend::PixelFormat format, bool sharedRenderTarget = true);
+    bool initWithWidthAndHeight(int w, int h, rhi::PixelFormat format, bool sharedRenderTarget = true);
     /** Initializes a RenderTexture object with width and height in Points and a pixel format( only RGB and RGBA formats
      * are valid ) and depthStencil format.
      *
@@ -364,8 +364,8 @@ public:
      */
     bool initWithWidthAndHeight(int w,
                                 int h,
-                                backend::PixelFormat format,
-                                backend::PixelFormat depthStencilFormat,
+                                rhi::PixelFormat format,
+                                rhi::PixelFormat depthStencilFormat,
                                 bool sharedRenderTarget = true);
 
     /**
@@ -414,11 +414,11 @@ protected:
     Texture2D* _texture2D           = nullptr;
     Texture2D* _depthStencilTexture = nullptr;
 
-    backend::RenderTarget* _renderTarget    = nullptr;
-    backend::RenderTarget* _oldRenderTarget = nullptr;
+    rhi::RenderTarget* _renderTarget    = nullptr;
+    rhi::RenderTarget* _oldRenderTarget = nullptr;
 
     RefPtr<Image> _UITextureImage     = nullptr;
-    backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8;
+    rhi::PixelFormat _pixelFormat = rhi::PixelFormat::RGBA8;
 
     Color _clearColor;
     float _clearDepth     = 1.f;

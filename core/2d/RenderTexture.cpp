@@ -37,11 +37,11 @@ THE SOFTWARE.
 #include "renderer/Renderer.h"
 #include "2d/Camera.h"
 #include "renderer/TextureCache.h"
-#include "renderer/backend/DriverBase.h"
-#include "renderer/backend/Texture.h"
-#include "renderer/backend/RenderTarget.h"
+#include "rhi/DriverBase.h"
+#include "rhi/Texture.h"
+#include "rhi/RenderTarget.h"
 #if AX_RENDER_API == AX_RENDER_API_GL
-#    include "renderer/backend/opengl/CommandBufferGL.h"
+#    include "rhi/opengl/CommandBufferGL.h"
 #endif
 
 namespace ax
@@ -85,7 +85,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
             _UITextureImage = uiTextureImage;
             const Vec2& s   = _texture2D->getContentSizeInPixels();
             VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4,
-                                               backend::PixelFormat::RGBA8, s);
+                                               rhi::PixelFormat::RGBA8, s);
         }
         else
         {
@@ -104,7 +104,7 @@ void RenderTexture::listenToForeground(EventCustom* /*event*/)
 #endif
 }
 
-RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat, bool sharedRenderTarget)
+RenderTexture* RenderTexture::create(int w, int h, rhi::PixelFormat eFormat, bool sharedRenderTarget)
 {
     RenderTexture* ret = new RenderTexture();
 
@@ -119,7 +119,7 @@ RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat,
 
 RenderTexture* RenderTexture::create(int w,
                                      int h,
-                                     backend::PixelFormat eFormat,
+                                     rhi::PixelFormat eFormat,
                                      PixelFormat uDepthStencilFormat,
                                      bool sharedRenderTarget)
 {
@@ -138,7 +138,7 @@ RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
 {
     RenderTexture* ret = new RenderTexture();
 
-    if (ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8, PixelFormat::NONE, sharedRenderTarget))
+    if (ret->initWithWidthAndHeight(w, h, rhi::PixelFormat::RGBA8, PixelFormat::NONE, sharedRenderTarget))
     {
         ret->autorelease();
         return ret;
@@ -147,18 +147,18 @@ RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
     return nullptr;
 }
 
-bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat eFormat, bool sharedRenderTarget)
+bool RenderTexture::initWithWidthAndHeight(int w, int h, rhi::PixelFormat eFormat, bool sharedRenderTarget)
 {
     return initWithWidthAndHeight(w, h, eFormat, PixelFormat::NONE, sharedRenderTarget);
 }
 
 bool RenderTexture::initWithWidthAndHeight(int w,
                                            int h,
-                                           backend::PixelFormat format,
+                                           rhi::PixelFormat format,
                                            PixelFormat depthStencilFormat,
                                            bool sharedRenderTarget)
 {
-    AXASSERT(format == backend::PixelFormat::RGBA8 || format == PixelFormat::RGB8 || format == PixelFormat::RGBA4,
+    AXASSERT(format == rhi::PixelFormat::RGBA8 || format == PixelFormat::RGB8 || format == PixelFormat::RGBA4,
              "only RGB and RGBA formats are valid for a render texture");
 
     bool ret = false;
@@ -186,7 +186,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             powH = utils::nextPOT(h);
         }
 
-        backend::TextureDescriptor descriptor;
+        rhi::TextureDescriptor descriptor;
         descriptor.width         = powW;
         descriptor.height        = powH;
         descriptor.textureUsage  = TextureUsage::RENDER_TARGET;
@@ -213,7 +213,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-            _renderTarget = backend::DriverBase::getInstance()->createRenderTarget(
+            _renderTarget = rhi::DriverBase::getInstance()->createRenderTarget(
                 _texture2D ? _texture2D->getBackendTexture() : nullptr,
                 _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
         }
@@ -525,7 +525,7 @@ void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNo
 /* get buffer as Image */
 void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, bool eglCacheHint)
 {
-    AXASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "only RGBA8888 can be saved as image");
+    AXASSERT(_pixelFormat == rhi::PixelFormat::RGBA8, "only RGBA8888 can be saved as image");
 
     if ((nullptr == _texture2D))
     {
@@ -541,7 +541,7 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
     int savedBufferHeight      = (int)s.height;
     bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
 
-    auto callback = [hasPremultipliedAlpha, imageCallback](const backend::PixelBufferDescriptor& pbd) {
+    auto callback = [hasPremultipliedAlpha, imageCallback](const rhi::PixelBufferDescriptor& pbd) {
         if (pbd)
         {
             auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(), pbd._data.getSize(),
@@ -557,8 +557,8 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
         auto colorAttachment = _renderTarget->_color[0].texture;
         if (colorAttachment)
         {
-            backend::PixelBufferDescriptor pbd;
-            static_cast<backend::CommandBufferGL*>(_director->getRenderer()->getCommandBuffer())
+            rhi::PixelBufferDescriptor pbd;
+            static_cast<rhi::gl::CommandBufferImpl*>(_director->getRenderer()->getCommandBuffer())
                 ->readPixels(_renderTarget, 0, 0, colorAttachment->getWidth(), colorAttachment->getHeight(),
                              colorAttachment->getWidth() * 4, true, pbd);
             callback(pbd);

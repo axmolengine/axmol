@@ -27,14 +27,14 @@
 #include "renderer/TextureCube.h"
 #include "platform/Image.h"
 #include "platform/FileUtils.h"
-#include "renderer/backend/Texture.h"
-#include "renderer/backend/DriverBase.h"
-#include "renderer/backend/PixelFormatUtils.h"
+#include "rhi/Texture.h"
+#include "rhi/DriverBase.h"
+#include "rhi/PixelFormatUtils.h"
 
 namespace ax
 {
 
-unsigned char* getImageData(Image* img, backend::PixelFormat& ePixFmt)
+unsigned char* getImageData(Image* img, rhi::PixelFormat& ePixFmt)
 {
     unsigned char* pTmpData    = img->getData();
     unsigned int* inPixel32    = nullptr;
@@ -49,24 +49,24 @@ unsigned char* getImageData(Image* img, backend::PixelFormat& ePixFmt)
     // compute pixel format
     if (bHasAlpha)
     {
-        ePixFmt = backend::PixelFormat::RGBA8;
+        ePixFmt = rhi::PixelFormat::RGBA8;
     }
     else
     {
         if (uBPP >= 8)
         {
-            ePixFmt = backend::PixelFormat::RGB8;
+            ePixFmt = rhi::PixelFormat::RGB8;
         }
         else
         {
-            ePixFmt = backend::PixelFormat::RGB565;
+            ePixFmt = rhi::PixelFormat::RGB565;
         }
     }
 
     // Repack the pixel data into the right format
     unsigned int uLen = nWidth * nHeight;
 
-    if (ePixFmt == backend::PixelFormat::RGB565)
+    if (ePixFmt == rhi::PixelFormat::RGB565)
     {
         if (bHasAlpha)
         {
@@ -102,7 +102,7 @@ unsigned char* getImageData(Image* img, backend::PixelFormat& ePixFmt)
         }
     }
 
-    if (bHasAlpha && ePixFmt == backend::PixelFormat::RGB8)
+    if (bHasAlpha && ePixFmt == rhi::PixelFormat::RGB8)
     {
         // Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRRRRGGGGGGGGBBBBBBBB"
         inPixel32 = (unsigned int*)img->getData();
@@ -208,32 +208,32 @@ bool TextureCube::init(std::string_view positive_x,
         }
     }
 
-    backend::TextureDescriptor textureDescriptor;
+    rhi::TextureDescriptor textureDescriptor;
     textureDescriptor.width = textureDescriptor.height = imageSize;
-    textureDescriptor.textureType                      = backend::TextureType::TEXTURE_CUBE;
-    textureDescriptor.samplerDescriptor.minFilter      = backend::SamplerFilter::LINEAR;
-    textureDescriptor.samplerDescriptor.magFilter      = backend::SamplerFilter::LINEAR;
-    textureDescriptor.samplerDescriptor.sAddressMode   = backend::SamplerAddressMode::CLAMP_TO_EDGE;
-    textureDescriptor.samplerDescriptor.tAddressMode   = backend::SamplerAddressMode::CLAMP_TO_EDGE;
+    textureDescriptor.textureType                      = rhi::TextureType::TEXTURE_CUBE;
+    textureDescriptor.samplerDescriptor.minFilter      = rhi::SamplerFilter::LINEAR;
+    textureDescriptor.samplerDescriptor.magFilter      = rhi::SamplerFilter::LINEAR;
+    textureDescriptor.samplerDescriptor.sAddressMode   = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+    textureDescriptor.samplerDescriptor.tAddressMode   = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
     _texture =
-        static_cast<backend::Texture*>(backend::DriverBase::getInstance()->createTexture(textureDescriptor));
+        static_cast<rhi::Texture*>(rhi::DriverBase::getInstance()->createTexture(textureDescriptor));
     AXASSERT(_texture != nullptr, "TextureCubemap: texture can not be nullptr");
 
     for (int i = 0; i < 6; i++)
     {
         Image* img = images[i];
 
-        backend::PixelFormat ePixelFmt;
+        rhi::PixelFormat ePixelFmt;
         unsigned char* pData = getImageData(img, ePixelFmt);
         uint8_t* cData       = nullptr;
         uint8_t* useData     = pData;
 
         // convert pixel format to RGBA
-        if (ePixelFmt != backend::PixelFormat::RGBA8)
+        if (ePixelFmt != rhi::PixelFormat::RGBA8)
         {
             size_t len = 0;
-            backend::PixelFormatUtils::convertDataToFormat(pData, img->getDataLen(), ePixelFmt,
-                                                           backend::PixelFormat::RGBA8, &cData, &len);
+            rhi::PixelFormatUtils::convertDataToFormat(pData, img->getDataLen(), ePixelFmt,
+                                                           rhi::PixelFormat::RGBA8, &cData, &len);
             if (cData != pData)  // convert error
             {
                 useData = cData;
@@ -245,7 +245,7 @@ bool TextureCube::init(std::string_view positive_x,
             }
         }
 
-        _texture->updateFaceData(static_cast<backend::TextureCubeFace>(i), useData);
+        _texture->updateFaceData(static_cast<rhi::TextureCubeFace>(i), useData);
 
         if (cData != pData)
             free(cData);

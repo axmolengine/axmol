@@ -426,18 +426,18 @@ void LayerTestBlend::newBlend(float dt)
 {
     auto layer = (LayerColor*)getChildByTag(kTagLayer);
 
-    backend::BlendFactor src;
-    backend::BlendFactor dst;
+    rhi::BlendFactor src;
+    rhi::BlendFactor dst;
 
-    if (layer->getBlendFunc().dst == backend::BlendFactor::ZERO)
+    if (layer->getBlendFunc().dst == rhi::BlendFactor::ZERO)
     {
-        src = backend::BlendFactor::SRC_ALPHA;
-        dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        src = rhi::BlendFactor::SRC_ALPHA;
+        dst = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     }
     else
     {
-        src = backend::BlendFactor::ONE_MINUS_DST_COLOR;
-        dst = backend::BlendFactor::ZERO;
+        src = rhi::BlendFactor::ONE_MINUS_DST_COLOR;
+        dst = rhi::BlendFactor::ZERO;
     }
 
     BlendFunc bf = {src, dst};

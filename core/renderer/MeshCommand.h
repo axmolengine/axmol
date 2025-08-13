@@ -29,7 +29,7 @@
 #include <unordered_map>
 #include "renderer/RenderCommand.h"
 #include "renderer/RenderState.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "renderer/CustomCommand.h"
 #include "math/Math.h"
 
@@ -45,17 +45,17 @@ class Material;
 class AX_DLL MeshCommand : public CustomCommand
 {
 public:
-    // using PrimitiveType = backend::PrimitiveType;
+    // using PrimitiveType = rhi::PrimitiveType;
     /**
     Buffer usage of vertex/index buffer. If the contents is not updated every frame,
     then use STATIC, other use DYNAMIC.
     */
-    using BufferUsage = backend::BufferUsage;
+    using BufferUsage = rhi::BufferUsage;
     /**
     The index format determine the size for index data. U_SHORT is enough for most
     cases.
     */
-    using IndexFormat = backend::IndexFormat;
+    using IndexFormat = rhi::IndexFormat;
 
     MeshCommand();
     virtual ~MeshCommand();

@@ -5,17 +5,17 @@
 #if !defined(__ANDROID__)
 #    include "platform/RenderViewImpl.h"
 #endif
-#include "renderer/backend/Program.h"
-#include "renderer/backend/ProgramState.h"
-#include "renderer/backend/ProgramManager.h"
+#include "rhi/Program.h"
+#include "rhi/ProgramState.h"
+#include "renderer/ProgramManager.h"
 #include "renderer/Shaders.h"
 #include "renderer/Renderer.h"
 #include "renderer/CallbackCommand.h"
-#include "renderer/backend/DriverBase.h"
-#include "renderer/backend/Buffer.h"
+#include "rhi/DriverBase.h"
+#include "rhi/Buffer.h"
 
 using namespace ax;
-using namespace ax::backend;
+using namespace ax::rhi;
 
 constexpr IndexFormat IMGUI_INDEX_FORMAT = sizeof(ImDrawIdx) == 2 ? IndexFormat::U_SHORT : IndexFormat::U_INT;
 
@@ -36,7 +36,7 @@ struct ProgramInfoData
 
 struct SavedRenderStateData
 {
-    backend::CullMode cull{};
+    rhi::CullMode cull{};
     Viewport vp{};
     ScissorRect scissorRect{};
     bool scissorTest{};
@@ -97,13 +97,13 @@ static void ImGui_ImplAxmol_UpdateTexture(ImTextureData* tex)
         const void* pixels = tex->GetPixels();
 
         auto texture = new Texture2D();
-        texture->initWithData(pixels, tex->Width * tex->Height * 4, backend::PixelFormat::RGBA8, tex->Width,
+        texture->initWithData(pixels, tex->Width * tex->Height * 4, rhi::PixelFormat::RGBA8, tex->Width,
                               tex->Height, true);
 
-        backend::SamplerDescriptor descriptor(backend::SamplerFilter::LINEAR,              // magFilter
-                                              backend::SamplerFilter::LINEAR,              // minFilter
-                                              backend::SamplerAddressMode::CLAMP_TO_EDGE,  // sAddressMode
-                                              backend::SamplerAddressMode::CLAMP_TO_EDGE   // tAddressMode
+        rhi::SamplerDescriptor descriptor(rhi::SamplerFilter::LINEAR,              // magFilter
+                                              rhi::SamplerFilter::LINEAR,              // minFilter
+                                              rhi::SamplerAddressMode::CLAMP_TO_EDGE,  // sAddressMode
+                                              rhi::SamplerAddressMode::CLAMP_TO_EDGE   // tAddressMode
         );
         texture->getBackendTexture()->updateSamplerDescriptor(descriptor);
 
@@ -136,7 +136,7 @@ static void ImGui_ImplAxmol_UpdateTexture(ImTextureData* tex)
 static void ImGui_ImplAxmol_SetupRenderState(ax::Renderer* renderer, ImDrawData* draw_data, int fb_width, int fb_height)
 {
     ImGui_ImplAxmol_PostCommand([=]() {
-        renderer->setCullMode(backend::CullMode::NONE);
+        renderer->setCullMode(rhi::CullMode::NONE);
         renderer->setDepthTest(false);
         renderer->setScissorTest(true);
         renderer->setViewPort(0, 0, fb_width, fb_height);
@@ -211,7 +211,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
 
     ImGuiPlatformIO& platform_io         = ImGui::GetPlatformIO();
     platform_io.Renderer_TextureMaxWidth = platform_io.Renderer_TextureMaxHeight =
-        backend::DriverBase::getInstance()->getMaxTextureSize();
+        rhi::DriverBase::getInstance()->getMaxTextureSize();
 
     io.IniFilename = nullptr;
 
@@ -280,12 +280,12 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
         // Upload vertex/index buffers
         const auto vsize = cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
         IM_ASSERT(vsize > 0);
-        auto vbuffer = backend::DriverBase::getInstance()->createBuffer(vsize, BufferType::VERTEX, BufferUsage::STATIC);
+        auto vbuffer = rhi::DriverBase::getInstance()->createBuffer(vsize, BufferType::VERTEX, BufferUsage::STATIC);
         vbuffer->autorelease();
         vbuffer->updateData(cmd_list->VtxBuffer.Data, vsize);
         const auto isize = cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
         IM_ASSERT(isize > 0);
-        auto ibuffer = backend::DriverBase::getInstance()->createBuffer(isize, BufferType::INDEX, BufferUsage::STATIC);
+        auto ibuffer = rhi::DriverBase::getInstance()->createBuffer(isize, BufferType::INDEX, BufferUsage::STATIC);
         ibuffer->autorelease();
         ibuffer->updateData(cmd_list->IdxBuffer.Data, isize);
 
@@ -391,17 +391,18 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window)
     glfwMakeContextCurrent(window);
 
 #    if AX_RENDER_API == AX_RENDER_API_GL
-    auto p = glfwGetWindowUserPointer(window);
-    if (!p)
-    {
-        p = new OpenGLState();
-        glfwSetWindowUserPointer(window, p);
+    auto currentState = glfwGetWindowUserPointer(window);
+    if (!currentState)
+    { // create gl state for imgui mutli-viewport window
+        currentState = new gl::OpenGLState();
+        glfwSetWindowUserPointer(window, currentState);
     }
 
-    if (backend::__gl != p)
+    // switch state for current gl context
+    if (gl::__state != currentState)
     {
-        backend::__gl->resetVAO();
-        backend::__gl = (OpenGLState*)p;
+        gl::__state->resetVAO();
+        gl::__state = (rhi::gl::OpenGLState*)currentState;
     }
 #    endif
 #endif
@@ -451,7 +452,7 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_DestroyDeviceObjects()
 {
-    auto pm = ProgramManager::getInstance();
+    auto pm = ax::ProgramManager::getInstance();
 
     auto bd = ImGui_ImplAxmol_GetBackendData();
 

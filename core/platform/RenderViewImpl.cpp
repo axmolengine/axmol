@@ -48,12 +48,12 @@ THE SOFTWARE.
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
 #    include <Metal/Metal.h>
-#    include "renderer/backend/metal/DriverMTL.h"
-#    include "renderer/backend/metal/UtilsMTL.h"
+#    include "rhi/metal/DriverMTL.h"
+#    include "rhi/metal/UtilsMTL.h"
 #elif AX_RENDER_API == AX_RENDER_API_GL
-#    include "renderer/backend/opengl/DriverGL.h"
-#    include "renderer/backend/opengl/MacrosGL.h"
-#    include "renderer/backend/opengl/OpenGLState.h"
+#    include "rhi/opengl/DriverGL.h"
+#    include "rhi/opengl/MacrosGL.h"
+#    include "rhi/opengl/OpenGLState.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
 /** glfw3native.h */
@@ -589,12 +589,12 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     [layer setDrawableSize:size];
     layer.displaySyncEnabled = _gfxContextAttrs.vsync;
     [contentView setLayer:layer];
-    backend::DriverMTL::setCAMetalLayer(layer);
+    rhi::mtl::DriverImpl::setCAMetalLayer(layer);
 #endif
 
 #if AX_RENDER_API == AX_RENDER_API_GL
     glfwMakeContextCurrent(_mainWindow);
-    glfwSetWindowUserPointer(_mainWindow, backend::__gl);
+    glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
 #endif
 
 #if !defined(__APPLE__)
@@ -645,7 +645,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
 #endif
 
     // Init driver after load GL
-    backend::DriverBase::getInstance();
+    rhi::DriverBase::getInstance();
 #endif
 
 #if AX_RENDER_API == AX_RENDER_API_GL
@@ -1332,7 +1332,11 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
         // update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
-        backend::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
+        rhi::mtl::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
+#elif AX_RENDER_API == AX_RENDER_API_D3D
+        int fbWidth, fbHeight;
+        glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
+        Director::getInstance()->getRenderer()->resizeSwapChain(width, height);
 #endif
 
         Size size(w, h);
@@ -1380,7 +1384,7 @@ static bool loadFboExtensions()
     // If the current opengl driver doesn't have framebuffers methods, check if an extension exists
     if (glGenFramebuffers == nullptr)
     {
-        auto driver = backend::DriverGL::getInstance();
+        auto driver = rhi::DriverBase::getInstance();
         AXLOGW("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
         if (driver->hasExtension("ARB_framebuffer_object"sv))
         {

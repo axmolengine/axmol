@@ -31,7 +31,7 @@
 #include "base/Director.h"
 #include "base/EventType.h"
 #include "base/Configuration.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "renderer/Shaders.h"
 #include "renderer/Pass.h"
 
@@ -57,90 +57,90 @@ MeshMaterial* MeshMaterial::_bumpedDiffuseMaterialSkin = nullptr;
 MeshMaterial* MeshMaterial::_quadTextureMaterial = nullptr;
 MeshMaterial* MeshMaterial::_quadColorMaterial = nullptr;
 
-backend::ProgramState* MeshMaterial::_unLitMaterialProgState         = nullptr;
-backend::ProgramState* MeshMaterial::_unLitInstanceMaterialProgState = nullptr;
-backend::ProgramState* MeshMaterial::_unLitNoTexMaterialProgState    = nullptr;
-backend::ProgramState* MeshMaterial::_vertexLitMaterialProgState     = nullptr;
-backend::ProgramState* MeshMaterial::_diffuseMaterialProgState       = nullptr;
-backend::ProgramState* MeshMaterial::_diffuseNoTexMaterialProgState  = nullptr;
-backend::ProgramState* MeshMaterial::_bumpedDiffuseMaterialProgState = nullptr;
+rhi::ProgramState* MeshMaterial::_unLitMaterialProgState         = nullptr;
+rhi::ProgramState* MeshMaterial::_unLitInstanceMaterialProgState = nullptr;
+rhi::ProgramState* MeshMaterial::_unLitNoTexMaterialProgState    = nullptr;
+rhi::ProgramState* MeshMaterial::_vertexLitMaterialProgState     = nullptr;
+rhi::ProgramState* MeshMaterial::_diffuseMaterialProgState       = nullptr;
+rhi::ProgramState* MeshMaterial::_diffuseNoTexMaterialProgState  = nullptr;
+rhi::ProgramState* MeshMaterial::_bumpedDiffuseMaterialProgState = nullptr;
 
-backend::ProgramState* MeshMaterial::_unLitMaterialSkinProgState         = nullptr;
-backend::ProgramState* MeshMaterial::_vertexLitMaterialSkinProgState     = nullptr;
-backend::ProgramState* MeshMaterial::_diffuseMaterialSkinProgState       = nullptr;
-backend::ProgramState* MeshMaterial::_bumpedDiffuseMaterialSkinProgState = nullptr;
+rhi::ProgramState* MeshMaterial::_unLitMaterialSkinProgState         = nullptr;
+rhi::ProgramState* MeshMaterial::_vertexLitMaterialSkinProgState     = nullptr;
+rhi::ProgramState* MeshMaterial::_diffuseMaterialSkinProgState       = nullptr;
+rhi::ProgramState* MeshMaterial::_bumpedDiffuseMaterialSkinProgState = nullptr;
 
-backend::ProgramState* MeshMaterial::_quadTextureMaterialProgState            = nullptr;
-backend::ProgramState* MeshMaterial::_quadColorMaterialProgState            = nullptr;
+rhi::ProgramState* MeshMaterial::_quadTextureMaterialProgState            = nullptr;
+rhi::ProgramState* MeshMaterial::_quadColorMaterialProgState            = nullptr;
 
 void MeshMaterial::createBuiltInMaterial()
 {
-    auto* program               = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_TEXTURE_3D);
-    _unLitMaterialSkinProgState = new backend::ProgramState(program);
+    auto* program               = axpm->getBuiltinProgram(rhi::ProgramType::SKINPOSITION_TEXTURE_3D);
+    _unLitMaterialSkinProgState = new rhi::ProgramState(program);
     _unLitMaterialSkin          = new MeshMaterial();
     if (_unLitMaterialSkin && _unLitMaterialSkin->initWithProgramState(_unLitMaterialSkinProgState))
     {
         _unLitMaterialSkin->_type = MeshMaterial::MaterialType::UNLIT;
     }
 
-    program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
-    _diffuseMaterialSkinProgState = new backend::ProgramState(program);
+    program = axpm->getBuiltinProgram(rhi::ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
+    _diffuseMaterialSkinProgState = new rhi::ProgramState(program);
     _diffuseMaterialSkin          = new MeshMaterial();
     if (_diffuseMaterialSkin && _diffuseMaterialSkin->initWithProgramState(_diffuseMaterialSkinProgState))
     {
         _diffuseMaterialSkin->_type = MeshMaterial::MaterialType::DIFFUSE;
     }
 
-    program                   = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_NORMAL_TEXTURE_3D);
-    _diffuseMaterialProgState = new backend::ProgramState(program);
+    program                   = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_NORMAL_TEXTURE_3D);
+    _diffuseMaterialProgState = new rhi::ProgramState(program);
     _diffuseMaterial          = new MeshMaterial();
     if (_diffuseMaterial && _diffuseMaterial->initWithProgramState(_diffuseMaterialProgState))
     {
         _diffuseMaterial->_type = MeshMaterial::MaterialType::DIFFUSE;
     }
 
-    program                 = backend::Program::getBuiltinProgram(backend::ProgramType::UNLIT);
-    _unLitMaterialProgState = new backend::ProgramState(program);
+    program                 = axpm->getBuiltinProgram(rhi::ProgramType::UNLIT);
+    _unLitMaterialProgState = new rhi::ProgramState(program);
     _unLitMaterial          = new MeshMaterial();
     if (_unLitMaterial && _unLitMaterial->initWithProgramState(_unLitMaterialProgState))
     {
         _unLitMaterial->_type = MeshMaterial::MaterialType::UNLIT;
     }
 
-    program                         = backend::Program::getBuiltinProgram(backend::ProgramType::UNLIT_INSTANCE);
-    _unLitInstanceMaterialProgState = new backend::ProgramState(program);
+    program                         = axpm->getBuiltinProgram(rhi::ProgramType::UNLIT_INSTANCE);
+    _unLitInstanceMaterialProgState = new rhi::ProgramState(program);
     _unLitInstanceMaterial  = new MeshMaterial();
     if (_unLitInstanceMaterial && _unLitInstanceMaterial->initWithProgramState(_unLitInstanceMaterialProgState))
     {
         _unLitInstanceMaterial->_type = MeshMaterial::MaterialType::UNLIT_INSTANCE;
     }
 
-    program                      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_3D);
-    _unLitNoTexMaterialProgState = new backend::ProgramState(program);
+    program                      = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_3D);
+    _unLitNoTexMaterialProgState = new rhi::ProgramState(program);
     _unLitNoTexMaterial          = new MeshMaterial();
     if (_unLitNoTexMaterial && _unLitNoTexMaterial->initWithProgramState(_unLitNoTexMaterialProgState))
     {
         _unLitNoTexMaterial->_type = MeshMaterial::MaterialType::UNLIT_NOTEX;
     }
 
-    program                        = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_NORMAL_3D);
-    _diffuseNoTexMaterialProgState = new backend::ProgramState(program);
+    program                        = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_NORMAL_3D);
+    _diffuseNoTexMaterialProgState = new rhi::ProgramState(program);
     _diffuseNoTexMaterial          = new MeshMaterial();
     if (_diffuseNoTexMaterial && _diffuseNoTexMaterial->initWithProgramState(_diffuseNoTexMaterialProgState))
     {
         _diffuseNoTexMaterial->_type = MeshMaterial::MaterialType::DIFFUSE_NOTEX;
     }
 
-    program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D);
-    _bumpedDiffuseMaterialProgState = new backend::ProgramState(program);
+    program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D);
+    _bumpedDiffuseMaterialProgState = new rhi::ProgramState(program);
     _bumpedDiffuseMaterial          = new MeshMaterial();
     if (_bumpedDiffuseMaterial && _bumpedDiffuseMaterial->initWithProgramState(_bumpedDiffuseMaterialProgState))
     {
         _bumpedDiffuseMaterial->_type = MeshMaterial::MaterialType::BUMPED_DIFFUSE;
     }
 
-    program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D);
-    _bumpedDiffuseMaterialSkinProgState = new backend::ProgramState(program);
+    program = axpm->getBuiltinProgram(rhi::ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D);
+    _bumpedDiffuseMaterialSkinProgState = new rhi::ProgramState(program);
     _bumpedDiffuseMaterialSkin          = new MeshMaterial();
     if (_bumpedDiffuseMaterialSkin &&
         _bumpedDiffuseMaterialSkin->initWithProgramState(_bumpedDiffuseMaterialSkinProgState))
@@ -148,16 +148,16 @@ void MeshMaterial::createBuiltInMaterial()
         _bumpedDiffuseMaterialSkin->_type = MeshMaterial::MaterialType::BUMPED_DIFFUSE;
     }
 
-    program = backend::Program::getBuiltinProgram(backend::ProgramType::QUAD_TEXTURE_2D);
-    _quadTextureMaterialProgState = new backend::ProgramState(program);
+    program = axpm->getBuiltinProgram(rhi::ProgramType::QUAD_TEXTURE_2D);
+    _quadTextureMaterialProgState = new rhi::ProgramState(program);
     _quadTextureMaterial          = new MeshMaterial();
     if (_quadTextureMaterial && _quadTextureMaterial->initWithProgramState(_quadTextureMaterialProgState))
     {
         _quadTextureMaterial->_type = MeshMaterial::MaterialType::QUAD_TEXTURE;
     }
 
-    program = backend::Program::getBuiltinProgram(backend::ProgramType::QUAD_COLOR_2D);
-    _quadColorMaterialProgState = new backend::ProgramState(program);
+    program = axpm->getBuiltinProgram(rhi::ProgramType::QUAD_COLOR_2D);
+    _quadColorMaterialProgState = new rhi::ProgramState(program);
     _quadColorMaterial          = new MeshMaterial();
     if (_quadColorMaterial && _quadColorMaterial->initWithProgramState(_quadColorMaterialProgState))
     {
@@ -305,7 +305,7 @@ MeshMaterial* MeshMaterial::createWithFilename(std::string_view path)
     return nullptr;
 }
 
-MeshMaterial* MeshMaterial::createWithProgramState(backend::ProgramState* programState)
+MeshMaterial* MeshMaterial::createWithProgramState(rhi::ProgramState* programState)
 {
     AXASSERT(programState, "Invalid program state.");
 

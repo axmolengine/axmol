@@ -97,7 +97,7 @@ void AxmolRenderer::DeviceLost()
     auto director = ax::Director::getInstance();
     if (director->getRenderView())
     {
-        backend::DriverBase::getInstance()->resetState();
+        rhi::DriverBase::getInstance()->resetState();
         ax::Director::getInstance()->resetMatrixStack();
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);

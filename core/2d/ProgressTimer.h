@@ -192,13 +192,13 @@ protected:
     CustomCommand _customCommand;
     CustomCommand _customCommand2;
 
-    backend::ProgramState* _programState2 = nullptr;
+    rhi::ProgramState* _programState2 = nullptr;
 
-    backend::UniformLocation _locMVP1;
-    backend::UniformLocation _locTex1;
+    rhi::UniformLocation _locMVP1;
+    rhi::UniformLocation _locTex1;
 
-    backend::UniformLocation _locMVP2;
-    backend::UniformLocation _locTex2;
+    rhi::UniformLocation _locMVP2;
+    rhi::UniformLocation _locTex2;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(ProgressTimer);

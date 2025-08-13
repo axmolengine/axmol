@@ -65,7 +65,7 @@ bool Skybox::init()
     _customCommand.setAfterCallback(AX_CALLBACK_0(Skybox::onAfterDraw, this));
 
     // create and set our custom shader
-    setProgramStateByProgramId(backend::ProgramType::SKYBOX_3D);
+    setProgramStateByProgramId(rhi::ProgramType::SKYBOX_3D);
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
 
@@ -180,7 +180,7 @@ void Skybox::onBeforeDraw()
     _rendererCullMode         = renderer->getCullMode();
 
     renderer->setDepthTest(true);
-    renderer->setDepthCompareFunction(backend::CompareFunction::LESS_EQUAL);
+    renderer->setDepthCompareFunction(rhi::CompareFunction::LESS_EQUAL);
     renderer->setCullMode(CullMode::BACK);
 }
 

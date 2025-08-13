@@ -40,11 +40,11 @@ namespace ax
  Every TrianglesCommand will have generate material ID by give textureID, glProgramState, Blend function
  if the material id is the same, these TrianglesCommands could be batched to save draw call.
 */
-namespace backend
+namespace rhi
 {
 class Texture;
 class Program;
-}  // namespace backend
+}  // namespace rhi
 
 class Texture2D;
 
@@ -120,7 +120,7 @@ protected:
     // Cached value to determine to generate material id or not.
     BlendFunc _blendType              = BlendFunc::DISABLE;
     uint64_t _batchId                 = 0;
-    backend::Texture* _texture = nullptr;
+    rhi::Texture* _texture = nullptr;
 };
 
 }

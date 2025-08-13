@@ -41,8 +41,8 @@
 #include "base/EventType.h"
 #include "base/Director.h"
 
-#include "renderer/backend/Buffer.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/Buffer.h"
+#include "rhi/DriverBase.h"
 
 using namespace std;
 
@@ -52,7 +52,7 @@ namespace ax
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 MeshIndexData* MeshIndexData::create(std::string_view id,
                                      MeshVertexData* vertexData,
-                                     backend::Buffer* indexbuffer,
+                                     rhi::Buffer* indexbuffer,
                                      const AABB& aabb)
 {
     auto meshindex = new MeshIndexData();
@@ -67,7 +67,7 @@ MeshIndexData* MeshIndexData::create(std::string_view id,
     return meshindex;
 }
 
-backend::Buffer* MeshIndexData::getVertexBuffer() const
+rhi::Buffer* MeshIndexData::getVertexBuffer() const
 {
     return _vertexData->getVertexBuffer();
 }
@@ -112,8 +112,8 @@ void MeshVertexData::setVertexData(const std::vector<float>& vertexData)
 MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::IndexFormat format)
 {
     auto vertexdata           = new MeshVertexData();
-    vertexdata->_vertexBuffer = backend::DriverBase::getInstance()->createBuffer(
-        meshdata.vertex.size() * sizeof(meshdata.vertex[0]), backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
+    vertexdata->_vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+        meshdata.vertex.size() * sizeof(meshdata.vertex[0]), rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
     // AX_SAFE_RETAIN(vertexdata->_vertexBuffer);
 
     vertexdata->_sizePerVertex = meshdata.getPerVertexSize();
@@ -134,8 +134,8 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
     for (size_t i = 0, size = meshdata.subMeshIndices.size(); i < size; ++i)
     {
         auto& indices = meshdata.subMeshIndices[i];
-        auto indexBuffer = backend::DriverBase::getInstance()->createBuffer(
-            indices.bsize(), backend::BufferType::INDEX, backend::BufferUsage::STATIC);
+        auto indexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+            indices.bsize(), rhi::BufferType::INDEX, rhi::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if AX_ENABLE_CACHE_TEXTURE_DATA
         indexBuffer->usingDefaultStoredData(false);

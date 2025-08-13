@@ -434,7 +434,7 @@ void CCSlot::_updateBlendMode()
             if (texture && texture->hasPremultipliedAlpha())
             {
 #if COCOS2D_VERSION >= 0x00040000
-                ax::BlendFunc blendFunc = {ax::backend::BlendFactor::ONE, ax::backend::BlendFactor::ONE};
+                ax::BlendFunc blendFunc = {ax::rhi::BlendFactor::ONE, ax::rhi::BlendFactor::ONE};
 #else
                 ax::BlendFunc blendFunc = {GL_ONE, GL_ONE};
 #endif

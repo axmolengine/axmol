@@ -15,7 +15,7 @@
       "kcp": "skywind3000/kcp.git",
       "lz4": "lz4/lz4.git",
       "sample-assets": "axmolengine/axmol-sample-assets.git",
-      "axslcc": "axmolengine/axslcc/releases/download"
+      "axscc": "axmolengine/axscc/releases/download"
     },
     "gitee":
     {
@@ -25,7 +25,7 @@
       "kcp": "simdsoft/kcp.git",
       "lz4": "simdsoft/lz4.git",
       "sample-assets": "simdsoft/axmol-sample-assets.git",
-      "axslcc": "simdsoft/axslcc/releases/download"
+      "axscc": "simdsoft/axscc/releases/download"
     }
   }
 }

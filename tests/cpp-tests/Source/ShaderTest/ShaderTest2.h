@@ -44,14 +44,14 @@ class EffectSprite;
 class Effect : public ax::Object
 {
 public:
-    ax::backend::ProgramState* getProgramState() const { return _programState; }
+    ax::rhi::ProgramState* getProgramState() const { return _programState; }
     virtual void setTarget(EffectSprite* sprite) {}
 
 protected:
     bool initProgramState(std::string_view fragmentFilename);
     Effect();
     virtual ~Effect();
-    ax::backend::ProgramState* _programState = nullptr;
+    ax::rhi::ProgramState* _programState = nullptr;
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     std::string _fragSource;
     ax::EventListenerCustom* _backgroundListener;

@@ -96,8 +96,8 @@ extern bool AX_DLL ax_assert_script_compatible(const char* msg);
 /** @def AX_BLEND_SRC
 default gl blend src function. Compatible with premultiplied alpha images.
 */
-#define AX_BLEND_SRC ax::backend::BlendFactor::ONE
-#define AX_BLEND_DST ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA
+#define AX_BLEND_SRC ax::rhi::BlendFactor::ONE
+#define AX_BLEND_DST ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA
 
 /** @def AX_NODE_DRAW_SETUP [DEPRECATED]
  Helpful macro that setups the GL server state, the correct GL program and sets the Model View Projection matrix

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "math/Math.h"
 #include "base/Director.h"
 #include "base/Utils.h"
-#include "renderer/backend/metal/DriverMTL.h"
+#include "rhi/metal/DriverMTL.h"
 
 namespace ax
 {

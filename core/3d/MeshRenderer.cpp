@@ -403,8 +403,8 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata,
                 if (tex)
                 {
                     Texture2D::TexParams texParams;
-                    texParams.minFilter    = backend::SamplerFilter::LINEAR;
-                    texParams.magFilter    = backend::SamplerFilter::LINEAR;
+                    texParams.minFilter    = rhi::SamplerFilter::LINEAR;
+                    texParams.magFilter    = rhi::SamplerFilter::LINEAR;
                     texParams.sAddressMode = textureData->wrapS;
                     texParams.tAddressMode = textureData->wrapT;
                     tex->setTexParameters(texParams);
@@ -419,8 +419,8 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata,
                 if (tex)
                 {
                     Texture2D::TexParams texParams;
-                    texParams.minFilter    = backend::SamplerFilter::LINEAR;
-                    texParams.magFilter    = backend::SamplerFilter::LINEAR;
+                    texParams.minFilter    = rhi::SamplerFilter::LINEAR;
+                    texParams.magFilter    = rhi::SamplerFilter::LINEAR;
                     texParams.sAddressMode = textureData->wrapS;
                     texParams.tAddressMode = textureData->wrapT;
                     tex->setTexParameters(texParams);
@@ -570,8 +570,8 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                                 if (tex)
                                 {
                                     Texture2D::TexParams texParams;
-                                    texParams.minFilter    = backend::SamplerFilter::LINEAR;
-                                    texParams.magFilter    = backend::SamplerFilter::LINEAR;
+                                    texParams.minFilter    = rhi::SamplerFilter::LINEAR;
+                                    texParams.magFilter    = rhi::SamplerFilter::LINEAR;
                                     texParams.sAddressMode = textureData->wrapS;
                                     texParams.tAddressMode = textureData->wrapT;
                                     tex->setTexParameters(texParams);
@@ -586,8 +586,8 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                                 if (tex)
                                 {
                                     Texture2D::TexParams texParams;
-                                    texParams.minFilter    = backend::SamplerFilter::LINEAR;
-                                    texParams.magFilter    = backend::SamplerFilter::LINEAR;
+                                    texParams.minFilter    = rhi::SamplerFilter::LINEAR;
+                                    texParams.magFilter    = rhi::SamplerFilter::LINEAR;
                                     texParams.sAddressMode = textureData->wrapS;
                                     texParams.tAddressMode = textureData->wrapT;
                                     tex->setTexParameters(texParams);
@@ -899,7 +899,7 @@ void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     }
 }
 
-bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool ownPS /* = false*/)
+bool MeshRenderer::setProgramState(rhi::ProgramState* programState, bool ownPS /* = false*/)
 {
     if (Node::setProgramState(programState, ownPS))
     {

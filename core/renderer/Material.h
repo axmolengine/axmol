@@ -54,7 +54,7 @@ class Node;
 class Properties;
 class RenderState;
 
-namespace backend
+namespace rhi
 {
 class ProgramState;
 }
@@ -86,7 +86,7 @@ public:
      It will only contain one Technique and one Pass.
      Added in order to support legacy code.
      */
-    static Material* createWithProgramState(backend::ProgramState* programState);
+    static Material* createWithProgramState(rhi::ProgramState* programState);
 
     /**
      * Creates a material from the specified properties object.
@@ -99,8 +99,8 @@ public:
 
     void draw(MeshCommand* meshCommand,
               float globalZOrder,
-              backend::Buffer* vertexBuffer,
-              backend::Buffer* indexBuffer,
+              rhi::Buffer* vertexBuffer,
+              rhi::Buffer* indexBuffer,
               CustomCommand::PrimitiveType primitive,
               CustomCommand::IndexFormat indexFormat,
               unsigned int indexCount,
@@ -149,13 +149,13 @@ public:
      * Set material primitive draw type
      * @param primitive Primitive draw type
      */
-    void setPrimitiveType(ax::backend::PrimitiveType primitive) { _drawPrimitive = primitive; }
+    void setPrimitiveType(ax::rhi::PrimitiveType primitive) { _drawPrimitive = primitive; }
 
     /**
      * Get material primitive draw type
      * @return Primitive draw type
      */
-    ax::backend::PrimitiveType getPrimitiveType() const { return _drawPrimitive; }
+    ax::rhi::PrimitiveType getPrimitiveType() const { return _drawPrimitive; }
 
     /**
      * Enable material transparent rendering.
@@ -181,7 +181,7 @@ public:
 protected:
     Material();
     ~Material();
-    bool initWithProgramState(backend::ProgramState* state);
+    bool initWithProgramState(rhi::ProgramState* state);
     bool initWithFile(std::string_view file);
     bool initWithProperties(Properties* materialProperties);
 
@@ -191,8 +191,8 @@ protected:
     bool parseTechnique(Properties* properties);
     bool parsePass(Technique* technique, Properties* properties);
     bool parseShader(Pass* pass, Properties* properties);
-    bool parseSampler(backend::ProgramState* programState, Properties* properties);
-    bool parseUniform(backend::ProgramState* programState, Properties* properties, const char* uniformName);
+    bool parseSampler(rhi::ProgramState* programState, Properties* properties);
+    bool parseUniform(rhi::ProgramState* programState, Properties* properties, const char* uniformName);
     bool parseRenderState(RenderState::StateBlock* state, Properties* properties);
 
     // material name
@@ -215,8 +215,8 @@ protected:
     bool _isTransparent = false;  // is this mesh transparent.
     bool _force2DQueue = false;   // render meshes using this material in 2D render queue.
 
-    ax::backend::PrimitiveType _drawPrimitive =
-        ax::backend::PrimitiveType::TRIANGLE;  // primitive draw type for meshes
+    ax::rhi::PrimitiveType _drawPrimitive =
+        ax::rhi::PrimitiveType::TRIANGLE;  // primitive draw type for meshes
 };
 
 }

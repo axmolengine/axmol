@@ -255,7 +255,7 @@ void Director::setGLDefaultValues()
     AXASSERT(_renderView, "opengl view should not be null");
 
     _renderer->setDepthTest(false);
-    _renderer->setDepthCompareFunction(backend::CompareFunction::LESS_EQUAL);
+    _renderer->setDepthCompareFunction(rhi::CompareFunction::LESS_EQUAL);
     setProjection(_projection);
 }
 
@@ -1048,8 +1048,8 @@ void Director::reset()
     SpriteFrameCache::destroyInstance();
     FileUtils::destroyInstance();
 
-    backend::ProgramStateRegistry::destroyInstance();
-    backend::ProgramManager::destroyInstance();
+    ProgramStateRegistry::destroyInstance();
+    ProgramManager::destroyInstance();
 
     // axmol specific data structures
     UserDefault::destroyInstance();
@@ -1065,7 +1065,8 @@ void Director::cleanupDirector()
     // If any graphics resources not cleanup or leaked, will crash on linux when destroy graphics context,
     // so we should cleanup any graphics resources.
     AX_SAFE_DELETE(_renderer);
-    backend::DriverBase::destroyInstance();
+    ProgramManager::destroyInstance();
+    rhi::DriverBase::destroyInstance();
 
     // OpenGL view
     if (_renderView)

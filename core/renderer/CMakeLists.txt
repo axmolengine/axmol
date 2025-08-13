@@ -11,33 +11,15 @@ set(_AX_RENDERER_HEADER
   renderer/RenderCommandPool.h
   renderer/Renderer.h
   renderer/RenderState.h
-  renderer/Shaders.h
   renderer/Technique.h
   renderer/Texture2D.h
   renderer/TextureAtlas.h
   renderer/TextureCache.h
   renderer/TextureCube.h
   renderer/TrianglesCommand.h
-
-  renderer/backend/Backend.h
-  renderer/backend/Buffer.h
-  renderer/backend/CommandBuffer.h
-  renderer/backend/DepthStencilState.h
-  renderer/backend/DriverBase.h
-  renderer/backend/BaseDefs.h
-  renderer/backend/PixelBufferDescriptor.h
-  renderer/backend/PixelFormatUtils.h
-  renderer/backend/Program.h
-  renderer/backend/ProgramManager.h
-  renderer/backend/ProgramState.h
-  renderer/backend/ProgramStateRegistry.h
-  renderer/backend/RenderPassDescriptor.h
-  renderer/backend/RenderPipeline.h
-  renderer/backend/RenderTarget.h
-  renderer/backend/ShaderCache.h
-  renderer/backend/ShaderModule.h
-  renderer/backend/Texture.h
-  renderer/backend/VertexLayout.h
+  renderer/ProgramManager.h
+  renderer/ProgramStateRegistry.h
+  renderer/Shaders.h
 )
 
 set(_AX_RENDERER_SRC
@@ -57,109 +39,7 @@ set(_AX_RENDERER_SRC
   renderer/TextureCache.cpp
   renderer/TextureCube.cpp
   renderer/TrianglesCommand.cpp
+  renderer/ProgramManager.cpp
+  renderer/ProgramStateRegistry.cpp
   renderer/Shaders.cpp
-
-  renderer/backend/ProgramManager.cpp
-  renderer/backend/ProgramStateRegistry.cpp
-
-  renderer/backend/CommandBuffer.cpp
-  renderer/backend/DepthStencilState.cpp
-  renderer/backend/DriverBase.cpp
-  renderer/backend/ShaderModule.cpp
-  renderer/backend/Texture.cpp
-  renderer/backend/PixelFormatUtils.cpp
-  renderer/backend/VertexLayout.cpp
-  renderer/backend/Program.cpp
-  renderer/backend/ProgramState.cpp
-  renderer/backend/ShaderCache.cpp
-  renderer/backend/RenderPassDescriptor.cpp
 )
-
-if(AX_RENDER_API STREQUAL "gl")
-  list(APPEND _AX_RENDERER_HEADER
-    renderer/backend/opengl/OpenGLState.h
-    renderer/backend/opengl/BufferGL.h
-    renderer/backend/opengl/CommandBufferGL.h
-    renderer/backend/opengl/DepthStencilStateGL.h
-    renderer/backend/opengl/DriverGL.h
-    renderer/backend/opengl/MacrosGL.h
-    renderer/backend/opengl/ProgramGL.h
-    renderer/backend/opengl/RenderPipelineGL.h
-    renderer/backend/opengl/RenderTargetGL.h
-    renderer/backend/opengl/ShaderModuleGL.h
-    renderer/backend/opengl/TextureGL.h
-    renderer/backend/opengl/UtilsGL.h
-  )
-
-  list(APPEND _AX_RENDERER_SRC
-    renderer/backend/opengl/OpenGLState.cpp
-    renderer/backend/opengl/BufferGL.cpp
-    renderer/backend/opengl/CommandBufferGL.cpp
-    renderer/backend/opengl/DepthStencilStateGL.cpp
-    renderer/backend/opengl/DriverGL.cpp
-    renderer/backend/opengl/ProgramGL.cpp
-    renderer/backend/opengl/RenderPipelineGL.cpp
-    renderer/backend/opengl/ShaderModuleGL.cpp
-    renderer/backend/opengl/TextureGL.cpp
-    renderer/backend/opengl/UtilsGL.cpp
-    renderer/backend/opengl/RenderTargetGL.cpp
-  )
-elseif(AX_RENDER_API STREQUAL "mtl")
-  list(APPEND _AX_RENDERER_HEADER
-    renderer/backend/metal/BufferMTL.h
-    renderer/backend/metal/BufferManager.h
-    renderer/backend/metal/CommandBufferMTL.h
-    renderer/backend/metal/RenderTargetMTL.h
-    renderer/backend/metal/DepthStencilStateMTL.h
-    renderer/backend/metal/DriverMTL.h
-    renderer/backend/metal/RenderPipelineMTL.h
-    renderer/backend/metal/ShaderModuleMTL.h
-    renderer/backend/metal/TextureMTL.h
-    renderer/backend/metal/UtilsMTL.h
-    renderer/backend/metal/ProgramMTL.h
-  )
-
-  list(APPEND _AX_RENDERER_SRC
-    renderer/backend/metal/BufferMTL.mm
-    renderer/backend/metal/BufferManager.mm
-    renderer/backend/metal/CommandBufferMTL.mm
-    renderer/backend/metal/RenderTargetMTL.mm
-    renderer/backend/metal/DepthStencilStateMTL.mm
-    renderer/backend/metal/DriverMTL.mm
-    renderer/backend/metal/RenderPipelineMTL.mm
-    renderer/backend/metal/ShaderModuleMTL.mm
-    renderer/backend/metal/TextureMTL.mm
-    renderer/backend/metal/UtilsMTL.mm
-    renderer/backend/metal/ProgramMTL.mm
-  )
-elseif(AX_RENDER_API STREQUAL "d3d")
-    list(APPEND _AX_RENDERER_HEADER
-    renderer/backend/d3d/BufferD3D.h
-    # renderer/backend/d3d/BufferManager.h
-    renderer/backend/d3d/CommandBufferD3D.h
-    renderer/backend/d3d/RenderTargetD3D.h
-    renderer/backend/d3d/DepthStencilStateD3D.h
-    renderer/backend/d3d/DriverD3D.h
-    renderer/backend/d3d/RenderPipelineD3D.h
-    renderer/backend/d3d/ShaderModuleD3D.h
-    renderer/backend/d3d/TextureD3D.h
-    renderer/backend/d3d/UtilsD3D.h
-    renderer/backend/d3d/ProgramD3D.h
-    renderer/backend/d3d/VertexLayoutD3D.h
-  )
-
-  list(APPEND _AX_RENDERER_SRC
-    renderer/backend/d3d/BufferD3D.cpp
-    # renderer/backend/d3d/BufferManager.mm
-    renderer/backend/d3d/CommandBufferD3D.cpp
-    renderer/backend/d3d/RenderTargetD3D.cpp
-    renderer/backend/d3d/DepthStencilStateD3D.cpp
-    renderer/backend/d3d/DriverD3D.cpp
-    renderer/backend/d3d/RenderPipelineD3D.cpp
-    renderer/backend/d3d/ShaderModuleD3D.cpp
-    renderer/backend/d3d/TextureD3D.cpp
-    renderer/backend/d3d/UtilsD3D.cpp
-    renderer/backend/d3d/ProgramD3D.cpp
-    renderer/backend/d3d/VertexLayoutD3D.cpp
-  )
-endif()

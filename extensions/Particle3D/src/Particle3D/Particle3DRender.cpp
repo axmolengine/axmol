@@ -29,9 +29,9 @@
 #include "renderer/MeshCommand.h"
 #include "renderer/Renderer.h"
 #include "renderer/TextureCache.h"
-#include "renderer/backend/ProgramState.h"
-#include "renderer/backend/Buffer.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/ProgramState.h"
+#include "rhi/Buffer.h"
+#include "rhi/DriverBase.h"
 #include "renderer/Shaders.h"
 #include "base/Director.h"
 #include "3d/MeshRenderer.h"
@@ -79,8 +79,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     {
         size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer =
-            backend::DriverBase::getInstance()->createBuffer(stride * 4 * particleSystem->getParticleQuota(),
-                                                      backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+            rhi::DriverBase::getInstance()->createBuffer(stride * 4 * particleSystem->getParticleQuota(),
+                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("Particle3DQuadRender::render create vertex buffer failed");
@@ -91,8 +91,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     if (_indexBuffer == nullptr)
     {
         _indexBuffer =
-            backend::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 6 * particleSystem->getParticleQuota(),
-                                                      backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
+            rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 6 * particleSystem->getParticleQuota(),
+                                                      rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("Particle3DQuadRender::render create index buffer failed");
@@ -202,15 +202,15 @@ bool Particle3DQuadRender::initQuadRender(std::string_view texFile)
         if (tex)
         {
             _texture      = tex;
-            auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::PARTICLE_TEXTURE_3D);
-            _programState = new backend::ProgramState(program);
+            auto* program = axpm->getBuiltinProgram(rhi::ProgramType::PARTICLE_TEXTURE_3D);
+            _programState = new rhi::ProgramState(program);
         }
     }
 
     if (!_programState)
     {
-        auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::PARTICLE_COLOR_3D);
-        _programState = new backend::ProgramState(program);
+        auto* program = axpm->getBuiltinProgram(rhi::ProgramType::PARTICLE_COLOR_3D);
+        _programState = new rhi::ProgramState(program);
     }
 
     auto& pipelineDescriptor        = _meshCommand.getPipelineDescriptor();
@@ -225,7 +225,7 @@ bool Particle3DQuadRender::initQuadRender(std::string_view texFile)
 
     _stateBlock.setDepthTest(true);
     _stateBlock.setDepthWrite(false);
-    _stateBlock.setCullFaceSide(backend::CullMode::BACK);
+    _stateBlock.setCullFaceSide(rhi::CullMode::BACK);
     _stateBlock.setCullFace(true);
 
     return true;
@@ -343,7 +343,7 @@ Particle3DRender::Particle3DRender()
     : _particleSystem(nullptr), _isVisible(true), _rendererScale(Vec3::ONE), _depthTest(true), _depthWrite(false)
 {
     _stateBlock.setCullFace(false);
-    _stateBlock.setCullFaceSide(backend::CullMode::BACK);
+    _stateBlock.setCullFaceSide(rhi::CullMode::BACK);
     _stateBlock.setDepthTest(false);
     _stateBlock.setDepthWrite(false);
     _stateBlock.setBlend(true);

@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "base/Utils.h"
 #include "renderer/Shaders.h"
 #include "renderer/Renderer.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 namespace ax
 {
@@ -82,7 +82,7 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
 
     _textureAtlas->initWithTexture(texture, itemsToRender);
 
-    setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, texture);
+    setProgramStateWithRegistry(rhi::ProgramType::POSITION_TEXTURE_COLOR, texture);
 
     this->updateBlendFunc();
     this->updateOpacityModifyRGB();
@@ -94,7 +94,7 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
     return true;
 }
 
-bool AtlasNode::setProgramState(backend::ProgramState* programState, bool ownPS /*= false*/)
+bool AtlasNode::setProgramState(rhi::ProgramState* programState, bool ownPS /*= false*/)
 {
     if (Node::setProgramState(programState, ownPS))
     {

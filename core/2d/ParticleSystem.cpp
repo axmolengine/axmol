@@ -1912,7 +1912,7 @@ void ParticleSystem::setBlendAdditive(bool additive)
 
 bool ParticleSystem::isBlendAdditive() const
 {
-    return (_blendFunc.src == backend::BlendFactor::SRC_ALPHA && _blendFunc.dst == backend::BlendFactor::ONE);
+    return (_blendFunc.src == rhi::BlendFactor::SRC_ALPHA && _blendFunc.dst == rhi::BlendFactor::ONE);
 }
 
 // ParticleSystem - Properties of Gravity Mode

@@ -3,7 +3,7 @@
 #include "base/Director.h"
 #include "base/EventListenerTouch.h"
 #include "base/IMEDelegate.h"
-#include "renderer/backend/Backend.h"
+#include "rhi/axmol-rhi.h"
 #include <functional>
 #include <android/native_window.h>
 #include <android/input.h>
@@ -14,7 +14,7 @@
 #include "base/EventDispatcher.h"
 
 using namespace ax;
-using namespace backend;
+using namespace ax::rhi;
 
 // Clang warnings with -Weverything
 #if defined(__clang__)

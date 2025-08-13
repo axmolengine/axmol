@@ -326,12 +326,12 @@ private:
 
     BlendFunc _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
 
-    backend::UniformLocation _mvpMatrixLocation;
-    backend::UniformLocation _startColorLocation;
-    backend::UniformLocation _endColorLocation;
-    backend::UniformLocation _centerLocation;
-    backend::UniformLocation _radiusLocation;
-    backend::UniformLocation _expandLocation;
+    rhi::UniformLocation _mvpMatrixLocation;
+    rhi::UniformLocation _startColorLocation;
+    rhi::UniformLocation _endColorLocation;
+    rhi::UniformLocation _centerLocation;
+    rhi::UniformLocation _radiusLocation;
+    rhi::UniformLocation _expandLocation;
 };
 
 /** @class LayerMultiplex

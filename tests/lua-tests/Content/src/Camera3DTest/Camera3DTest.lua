@@ -722,7 +722,7 @@ function FogTestDemo:createLayer3D()
     self:addChild(layer3D,0)
     self._layer3D = layer3D
 
-    local program = axb.ProgramManager:getInstance():loadProgram('custom/fog_vs', 'custom/fog_fs')
+    local program = axrhi.ProgramManager:getInstance():loadProgram('custom/fog_vs', 'custom/fog_fs')
     self._shader1 = ccb.ProgramState:new(program)
     self._shader2 = self._shader1:clone()
 

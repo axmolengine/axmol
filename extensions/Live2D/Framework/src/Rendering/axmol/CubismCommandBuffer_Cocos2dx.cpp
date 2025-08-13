@@ -7,7 +7,7 @@
 
 #include "CubismCommandBuffer_Cocos2dx.hpp"
 #include "CubismFramework.hpp"
-#include "renderer/backend/RenderTarget.h"
+#include "rhi/RenderTarget.h"
 
 //------------ LIVE2D NAMESPACE ------------
 namespace Live2D { namespace Cubism { namespace Framework { namespace Rendering {
@@ -20,7 +20,7 @@ CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::~DrawCommand()
 {
 }
 
-ax::backend::BlendDescriptor* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetBlendDescriptor()
+ax::rhi::BlendDescriptor* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetBlendDescriptor()
 {
     return &_command.getPipelineDescriptor().blendDescriptor;
 }
@@ -58,7 +58,7 @@ void CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::CreateVertexBuffer(csmSize
 void CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::CreateIndexBuffer(csmSizeInt count)
 {
     _ibCount = count;
-    _drawCommandDraw.GetCommand()->createIndexBuffer(ax::backend::IndexFormat::U_SHORT, count, ax::CustomCommand::BufferUsage::DYNAMIC);
+    _drawCommandDraw.GetCommand()->createIndexBuffer(ax::rhi::IndexFormat::U_SHORT, count, ax::CustomCommand::BufferUsage::DYNAMIC);
 }
 
 void CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::UpdateVertexBuffer(void* data, void* uvData, csmSizeInt count)
@@ -224,12 +224,12 @@ void CubismCommandBuffer_Cocos2dx::Viewport(csmFloat32 x, csmFloat32 y, csmFloat
     );
 }
 
-void CubismCommandBuffer_Cocos2dx::SetColorBuffer(backend::Texture* colorBuffer)
+void CubismCommandBuffer_Cocos2dx::SetColorBuffer(rhi::Texture* colorBuffer)
 {
     _currentColorBuffer = colorBuffer;
 
     AddCommand([=]() -> void {
-        backend::RenderTarget* rt = nullptr;
+        rhi::RenderTarget* rt = nullptr;
         if (colorBuffer)
         {
             rt = GetCocos2dRenderer()->getOffscreenRenderTarget();
@@ -244,7 +244,7 @@ void CubismCommandBuffer_Cocos2dx::SetColorBuffer(backend::Texture* colorBuffer)
     });
 }
 
-backend::Texture* CubismCommandBuffer_Cocos2dx::GetColorBuffer()
+rhi::Texture* CubismCommandBuffer_Cocos2dx::GetColorBuffer()
 {
     return _currentColorBuffer;
 }

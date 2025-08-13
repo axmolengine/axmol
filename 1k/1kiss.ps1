@@ -986,18 +986,18 @@ function setup_python3() {
     }
 }
 
-# setup axslcc, not add to path
-function setup_axslcc() {
-    if (!$manifest['axslcc']) { return $null }
-    $axslcc_bin = Join-Path $install_prefix 'axslcc'
-    $axslcc_prog, $axslcc_ver = find_prog -name 'axslcc' -path $axslcc_bin -mode 'BOTH'
-    if ($axslcc_prog) {
-        return $axslcc_prog
+# setup axscc, not add to path
+function setup_axscc() {
+    if (!$manifest['axscc']) { return $null }
+    $axscc_bin = Join-Path $install_prefix 'axscc'
+    $axscc_prog, $axscc_ver = find_prog -name 'axscc' -path $axscc_bin -mode 'BOTH'
+    if ($axscc_prog) {
+        return $axscc_prog
     }
 
     $suffix = @('win64.zip', 'linux.tar.gz', 'osx{0}.tar.gz')[$HOST_OS_INT]
     if ($IsMacOS) {
-        if ([System.VersionEx]$axslcc_ver -ge [System.VersionEx]'1.9.4.1') {
+        if ([System.VersionEx]$axscc_ver -ge [System.VersionEx]'1.9.4.1') {
             $suffix = $suffix -f "-$HOST_CPU"
         }
         else {
@@ -1005,14 +1005,14 @@ function setup_axslcc() {
         }
     }
 
-    $glscc_base_url = $mirror_current.axslcc
-    fetch_pkg "$mirror_url_base$glscc_base_url/v$axslcc_ver/axslcc-$axslcc_ver-$suffix" -exrep "axslcc"
+    $glscc_base_url = $mirror_current.axscc
+    fetch_pkg "$mirror_url_base$glscc_base_url/v$axscc_ver/axscc-$axscc_ver-$suffix" -exrep "axscc"
 
-    $axslcc_prog = (Join-Path $axslcc_bin "axslcc$EXE_SUFFIX")
-    if ($1k.isfile($axslcc_prog)) {
-        $1k.println("Using axslcc: $axslcc_prog, version: $axslcc_ver")
+    $axscc_prog = (Join-Path $axscc_bin "axscc$EXE_SUFFIX")
+    if ($1k.isfile($axscc_prog)) {
+        $1k.println("Using axscc: $axscc_prog, version: $axscc_ver")
     } else {
-        throw "Install axslcc fail"
+        throw "Install axscc fail"
     }
 }
 
@@ -1810,7 +1810,7 @@ validHostAndToolchain
 
 ########## setup build tools if not installed #######
 setup_unzip
-setup_axslcc
+setup_axscc
 $cmake_prog, $Script:cmake_ver = setup_cmake
 
 if ($Global:is_win_family) {

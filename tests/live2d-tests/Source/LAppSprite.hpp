@@ -44,7 +44,7 @@ public:
     * @param[in]       textureId    テクスチャID
     * @param[in]       programId    シェーダID
     */
-    LAppSprite(backend::Program* program);
+    LAppSprite(rhi::Program* program);
 
     /**
     * @brief デストラクタ
@@ -55,7 +55,7 @@ public:
     * @brief テクスチャIDを指定して描画する
     *
     */
-    void RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer, backend::Texture* texture, float uvVertex[8]) const;
+    void RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer, rhi::Texture* texture, float uvVertex[8]) const;
 
     /**
      * @brief 色設定
@@ -71,6 +71,6 @@ private:
 
     float _spriteColor[4];  ///< 表示カラー
 
-    ax::backend::Program* _program;
+    ax::rhi::Program* _program;
 };
 

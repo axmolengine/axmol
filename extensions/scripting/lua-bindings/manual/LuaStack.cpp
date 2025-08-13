@@ -51,7 +51,7 @@ extern "C" {
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include "lua-bindings/auto/axlua_physics_auto.hpp"
 #include "lua-bindings/manual/physics/axlua_physics_manual.hpp"
-#include "lua-bindings/auto/axlua_backend_auto.hpp"
+#include "lua-bindings/auto/axlua_rhi_auto.hpp"
 #include "base/ZipUtils.h"
 #include "platform/FileUtils.h"
 
@@ -214,7 +214,7 @@ bool LuaStack::init()
 
     g_luaType.clear();
     register_all_ax_base(_state);
-    register_all_ax_backend(_state);
+    register_all_ax_rhi(_state);
     register_all_ax_manual(_state);
     register_all_ax_module_manual(_state);
     register_all_ax_math_manual(_state);

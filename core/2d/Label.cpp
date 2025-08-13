@@ -48,30 +48,30 @@
 #include "base/Utils.h"
 #include "2d/FontFNT.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
-#include "renderer/backend/ProgramStateRegistry.h"
+#include "rhi/ProgramState.h"
+#include "renderer/ProgramStateRegistry.h"
 
 namespace ax
 {
 
 namespace
 {
-void updateBlend(backend::BlendDescriptor& blendDescriptor, BlendFunc blendFunc)
+void updateBlend(rhi::BlendDescriptor& blendDescriptor, BlendFunc blendFunc)
 {
     blendDescriptor.blendEnabled = true;
     if (blendFunc == BlendFunc::ALPHA_NON_PREMULTIPLIED)
     {
-        blendDescriptor.sourceRGBBlendFactor        = backend::BlendFactor::SRC_ALPHA;
-        blendDescriptor.destinationRGBBlendFactor   = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-        blendDescriptor.sourceAlphaBlendFactor      = backend::BlendFactor::SRC_ALPHA;
-        blendDescriptor.destinationAlphaBlendFactor = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blendDescriptor.sourceRGBBlendFactor        = rhi::BlendFactor::SRC_ALPHA;
+        blendDescriptor.destinationRGBBlendFactor   = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blendDescriptor.sourceAlphaBlendFactor      = rhi::BlendFactor::SRC_ALPHA;
+        blendDescriptor.destinationAlphaBlendFactor = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     }
     else
     {
-        blendDescriptor.sourceRGBBlendFactor        = backend::BlendFactor::ONE;
-        blendDescriptor.destinationRGBBlendFactor   = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-        blendDescriptor.sourceAlphaBlendFactor      = backend::BlendFactor::ONE;
-        blendDescriptor.destinationAlphaBlendFactor = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blendDescriptor.sourceRGBBlendFactor        = rhi::BlendFactor::ONE;
+        blendDescriptor.destinationRGBBlendFactor   = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        blendDescriptor.sourceAlphaBlendFactor      = rhi::BlendFactor::ONE;
+        blendDescriptor.destinationAlphaBlendFactor = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     }
 }
 }  // namespace
@@ -209,7 +209,7 @@ Label::BatchCommand::~BatchCommand()
     AX_SAFE_RELEASE(outLineCommand.getPipelineDescriptor().programState);
 }
 
-void Label::BatchCommand::setProgramState(backend::ProgramState* programState)
+void Label::BatchCommand::setProgramState(rhi::ProgramState* programState)
 {
     assert(programState);
 
@@ -671,10 +671,10 @@ static Texture2D* _getTexture(Label* label)
 
 void Label::setVertexLayout()
 {
-    _programState->validateSharedVertexLayout(backend::VertexLayoutType::Sprite);
+    _programState->validateSharedVertexLayout(rhi::VertexLayoutType::Sprite);
 }
 
-bool Label::setProgramState(backend::ProgramState* programState, bool ownPS /*= false*/)
+bool Label::setProgramState(rhi::ProgramState* programState, bool ownPS /*= false*/)
 {
     if (Node::setProgramState(programState, ownPS))
     {
@@ -696,14 +696,14 @@ bool Label::setProgramState(backend::ProgramState* programState, bool ownPS /*= 
 
 void Label::updateShaderProgram()
 {
-    uint32_t programType = backend::ProgramType::POSITION_TEXTURE_COLOR;
+    uint32_t programType = rhi::ProgramType::POSITION_TEXTURE_COLOR;
     if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP)
     {
         auto texture = _getTexture(this);
         if (texture)
         {
             programType =
-                backend::ProgramStateRegistry::getInstance()->getProgramType(programType, texture->getSamplerFlags());
+                ProgramStateRegistry::getInstance()->getProgramType(programType, texture->getSamplerFlags());
         }
     }
     else
@@ -712,26 +712,26 @@ void Label::updateShaderProgram()
         {
         case ax::LabelEffect::NORMAL:
             if (_useDistanceField)
-                programType = backend::ProgramType::LABEL_DISTANCE_NORMAL;
+                programType = rhi::ProgramType::LABEL_DISTANCE_NORMAL;
             else if (_useA8Shader)
-                programType = backend::ProgramType::LABEL_NORMAL;
+                programType = rhi::ProgramType::LABEL_NORMAL;
             else
             {
                 auto texture = _getTexture(this);
                 if (texture)
                 {
-                    programType = backend::ProgramStateRegistry::getInstance()->getProgramType(
+                    programType = ProgramStateRegistry::getInstance()->getProgramType(
                         programType, texture->getSamplerFlags());
                 }
             }
             break;
         case ax::LabelEffect::OUTLINE:
             programType =
-                _useDistanceField ? backend::ProgramType::LABEL_DISTANCE_OUTLINE : backend::ProgramType::LABLE_OUTLINE;
+                _useDistanceField ? rhi::ProgramType::LABEL_DISTANCE_OUTLINE : rhi::ProgramType::LABLE_OUTLINE;
             break;
         case ax::LabelEffect::GLOW:
             if (_useDistanceField)
-                programType = backend::ProgramType::LABLE_DISTANCE_GLOW;
+                programType = rhi::ProgramType::LABLE_DISTANCE_GLOW;
             break;
         default:
             return;
@@ -757,11 +757,11 @@ void Label::updateBatchCommand(Label::BatchCommand& batch)
 
 void Label::updateUniformLocations()
 {
-    _mvpMatrixLocation   = _programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
-    _textureLocation     = _programState->getUniformLocation(backend::Uniform::TEXTURE);
-    _textColorLocation   = _programState->getUniformLocation(backend::Uniform::TEXT_COLOR);
-    _effectColorLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_COLOR);
-    _effectTypeLocation  = _programState->getUniformLocation(backend::Uniform::EFFECT_TYPE);
+    _mvpMatrixLocation   = _programState->getUniformLocation(rhi::Uniform::MVP_MATRIX);
+    _textureLocation     = _programState->getUniformLocation(rhi::Uniform::TEXTURE);
+    _textColorLocation   = _programState->getUniformLocation(rhi::Uniform::TEXT_COLOR);
+    _effectColorLocation = _programState->getUniformLocation(rhi::Uniform::EFFECT_COLOR);
+    _effectTypeLocation  = _programState->getUniformLocation(rhi::Uniform::EFFECT_TYPE);
 }
 
 bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
@@ -1305,7 +1305,7 @@ bool Label::updateTTFConfigInternal(unsigned int mods)
             updateShaderProgram();
         }
     }
-    
+
     if (_fontConfig.italics)
         this->enableItalics();
     if (_fontConfig.bold)
@@ -1411,7 +1411,7 @@ void Label::enableOutline(const Color32& outlineColor, int outlineSize /* = -1 *
 
             if (outlineSize > 0 && _fontConfig.outlineSize != outlineSize)
             {
-                
+
                 _fontConfig.outlineSize = outlineSize;
                 setTTFConfig(_fontConfig);
             }

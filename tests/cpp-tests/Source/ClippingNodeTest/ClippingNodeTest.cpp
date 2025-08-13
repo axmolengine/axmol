@@ -33,7 +33,7 @@
 #include "ClippingNodeTest.h"
 #include "../testResource.h"
 #include "renderer/Renderer.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "renderer/Shaders.h"
 
 using namespace ax;
@@ -564,8 +564,8 @@ void RawStencilBufferTest::initCommands()
 //    _disableStencilCallback.func = [=]() { renderer->setStencilTest(false); };
 //    _disableStencilCallback.init(_globalZOrder);
 
-    auto program              = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_UCOLOR);
-    _programState             = new backend::ProgramState(program);
+    auto program              = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_UCOLOR);
+    _programState             = new rhi::ProgramState(program);
     _locColor                 = _programState->getProgram()->getUniformLocation("u_color");
     _locMVPMatrix             = _programState->getProgram()->getUniformLocation("u_MVPMatrix");
     const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
@@ -576,8 +576,8 @@ void RawStencilBufferTest::initCommands()
     auto winPoint  = Vec2(Director::getInstance()->getWinSize());
     auto planeSize = winPoint * (1.0 / _planeCount);
     BlendFunc blend;
-    blend.src = backend::BlendFactor::ONE;
-    blend.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+    blend.src = rhi::BlendFactor::ONE;
+    blend.dst = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     for (int i = 0, cmdIndex = 0; i < _planeCount; i++)
     {
         auto stencilPoint = planeSize * (_planeCount - i);
@@ -589,9 +589,9 @@ void RawStencilBufferTest::initCommands()
         cmd.setBeforeCallback(AX_CALLBACK_0(RawStencilBufferTest::onBeforeDrawClip, this, i));
         Vec2 vertices[]          = {Vec2::ZERO, Vec2(stencilPoint.x, 0.0f), stencilPoint, Vec2(0.0f, stencilPoint.y)};
         unsigned short indices[] = {0, 2, 1, 0, 3, 2};
-        cmd.createVertexBuffer(sizeof(Vec2), 4, backend::BufferUsage::STATIC);
+        cmd.createVertexBuffer(sizeof(Vec2), 4, rhi::BufferUsage::STATIC);
         cmd.updateVertexBuffer(vertices, sizeof(vertices));
-        cmd.createIndexBuffer(backend::IndexFormat::U_SHORT, 6, backend::BufferUsage::STATIC);
+        cmd.createIndexBuffer(rhi::IndexFormat::U_SHORT, 6, rhi::BufferUsage::STATIC);
         cmd.updateIndexBuffer(indices, sizeof(indices));
         cmd.getPipelineDescriptor().programState = _programState;
 
@@ -600,9 +600,9 @@ void RawStencilBufferTest::initCommands()
         cmd2.init(_globalZOrder, blend);
         cmd2.setBeforeCallback(AX_CALLBACK_0(RawStencilBufferTest::onBeforeDrawSprite, this, i));
         Vec2 vertices2[] = {Vec2::ZERO, Vec2(winPoint.x, 0.0f), winPoint, Vec2(0.0f, winPoint.y)};
-        cmd2.createVertexBuffer(sizeof(Vec2), 4, backend::BufferUsage::STATIC);
+        cmd2.createVertexBuffer(sizeof(Vec2), 4, rhi::BufferUsage::STATIC);
         cmd2.updateVertexBuffer(vertices2, sizeof(vertices2));
-        cmd2.createIndexBuffer(backend::IndexFormat::U_SHORT, 6, backend::BufferUsage::STATIC);
+        cmd2.createIndexBuffer(rhi::IndexFormat::U_SHORT, 6, rhi::BufferUsage::STATIC);
         cmd2.updateIndexBuffer(indices, sizeof(indices));
         cmd2.getPipelineDescriptor().programState = _programState;
     }
@@ -667,18 +667,18 @@ void RawStencilBufferTest::setupStencilForClippingOnPlane(int plane)
     auto renderer          = Director::getInstance()->getRenderer();
     unsigned int planeMask = 0x1 << plane;
     renderer->setStencilWriteMask(planeMask);
-    renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, planeMask, planeMask);
-    renderer->setStencilOperation(backend::StencilOperation::REPLACE, backend::StencilOperation::KEEP,
-                                  backend::StencilOperation::KEEP);
+    renderer->setStencilCompareFunction(rhi::CompareFunction::NEVER, planeMask, planeMask);
+    renderer->setStencilOperation(rhi::StencilOperation::REPLACE, rhi::StencilOperation::KEEP,
+                                  rhi::StencilOperation::KEEP);
 }
 
 void RawStencilBufferTest::setupStencilForDrawingOnPlane(int plane)
 {
     auto renderer          = Director::getInstance()->getRenderer();
     unsigned int planeMask = 0x1 << plane;
-    renderer->setStencilCompareFunction(backend::CompareFunction::EQUAL, planeMask, planeMask);
-    renderer->setStencilOperation(backend::StencilOperation::KEEP, backend::StencilOperation::KEEP,
-                                  backend::StencilOperation::KEEP);
+    renderer->setStencilCompareFunction(rhi::CompareFunction::EQUAL, planeMask, planeMask);
+    renderer->setStencilOperation(rhi::StencilOperation::KEEP, rhi::StencilOperation::KEEP,
+                                  rhi::StencilOperation::KEEP);
 }
 
 //@implementation RawStencilBufferTest2
@@ -726,8 +726,8 @@ void RawStencilBufferTestAlphaTest::setup()
     RawStencilBufferTest::setup();
     for (int i = 0; i < _planeCount; ++i)
     {
-        auto program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-        auto programState = new backend::ProgramState(program);
+        auto program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
+        auto programState = new rhi::ProgramState(program);
         programState->setUniform(programState->getUniformLocation("u_alpha_value"), &_alphaThreshold,
                                  sizeof(_alphaThreshold));
         _spritesStencil.at(i)->setProgramState(programState);
@@ -792,9 +792,9 @@ void RawStencilBufferTest6::setupStencilForClippingOnPlane(int plane)
 {
     int planeMask = 0x1 << plane;
     auto renderer = Director::getInstance()->getRenderer();
-    renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, planeMask, planeMask);
-    renderer->setStencilOperation(backend::StencilOperation::REPLACE, backend::StencilOperation::KEEP,
-                                  backend::StencilOperation::KEEP);
+    renderer->setStencilCompareFunction(rhi::CompareFunction::NEVER, planeMask, planeMask);
+    renderer->setStencilOperation(rhi::StencilOperation::REPLACE, rhi::StencilOperation::KEEP,
+                                  rhi::StencilOperation::KEEP);
     renderer->setDepthTest(false);
     renderer->setDepthWrite(false);
 }
@@ -934,7 +934,7 @@ void ClippingToRenderTextureTest::reproduceBug()
     // container rendered on Texture the size of the screen and because Clipping node use stencil buffer so we need to
     // create RenderTexture with depthStencil format parameter
     RenderTexture* rt =
-        RenderTexture::create(visibleSize.width, visibleSize.height, backend::PixelFormat::RGBA8, PixelFormat::D24S8);
+        RenderTexture::create(visibleSize.width, visibleSize.height, rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
     rt->setPosition(visibleSize.width / 2, visibleSize.height / 2);
     this->addChild(rt);
 

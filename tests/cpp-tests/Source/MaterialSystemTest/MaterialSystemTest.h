@@ -26,7 +26,7 @@
 #pragma once
 
 #include "../BaseTest.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 #include <vector>
 
@@ -68,12 +68,12 @@ public:
 private:
     struct Locations
     {
-        Locations(ax::backend::ProgramState* ps, ax::backend::UniformLocation loc)
+        Locations(ax::rhi::ProgramState* ps, ax::rhi::UniformLocation loc)
             : programState(ps), location(loc)
         {}
 
-        ax::backend::ProgramState* programState = nullptr;
-        ax::backend::UniformLocation location;
+        ax::rhi::ProgramState* programState = nullptr;
+        ax::rhi::UniformLocation location;
     };
     std::vector<Locations> timeUniforms;
 };
@@ -93,9 +93,9 @@ public:
     void updateUniformTime(float);
 
 private:
-    ax::backend::UniformLocation _locationTime;
+    ax::rhi::UniformLocation _locationTime;
     EffectAutoBindingResolver* _resolver               = nullptr;
-    ax::backend::ProgramState* _noiseProgramState = nullptr;
+    ax::rhi::ProgramState* _noiseProgramState = nullptr;
 };
 
 class Material_setTechnique : public MaterialSystemBaseTest

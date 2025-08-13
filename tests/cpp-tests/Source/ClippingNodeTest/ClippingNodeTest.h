@@ -198,8 +198,8 @@ protected:
 //    ax::CallbackCommand _disableStencilCallback;
     ax::Vector<ax::Sprite*> _sprites;
     ax::Vector<ax::Sprite*> _spritesStencil;
-    ax::backend::UniformLocation _locColor;
-    ax::backend::UniformLocation _locMVPMatrix;
+    ax::rhi::UniformLocation _locColor;
+    ax::rhi::UniformLocation _locMVPMatrix;
 };
 
 class RawStencilBufferTest2 : public RawStencilBufferTest
@@ -238,7 +238,7 @@ public:
     virtual void setupStencilForDrawingOnPlane(int plane) override;
 
 private:
-    ax::backend::UniformLocation _alphaMVPMatrix;
+    ax::rhi::UniformLocation _alphaMVPMatrix;
 };
 
 class RawStencilBufferTest5 : public RawStencilBufferTestAlphaTest

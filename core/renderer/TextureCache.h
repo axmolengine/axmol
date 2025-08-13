@@ -278,7 +278,7 @@ protected:
     void* _textureData;
     int _dataLen;
     Vec2 _textureSize;
-    backend::PixelFormat _pixelFormat;
+    rhi::PixelFormat _pixelFormat;
 
     std::string _fileName;
 
@@ -294,7 +294,7 @@ public:
     static void addDataTexture(Texture2D* tt,
                                void* data,
                                int dataLen,
-                               backend::PixelFormat pixelFormat,
+                               rhi::PixelFormat pixelFormat,
                                const Vec2& contentSize);
     static void addImage(Texture2D* tt, Image* image);
     static void removeTexture(Texture2D* t);
@@ -310,7 +310,7 @@ public:
     static VolatileTexture* getOrAddVolatileTexture(Texture2D* tt);
 
 private:
-    static void reloadTexture(Texture2D* texture, std::string_view filename, backend::PixelFormat pixelFormat);
+    static void reloadTexture(Texture2D* texture, std::string_view filename, rhi::PixelFormat pixelFormat);
 };
 
 #endif

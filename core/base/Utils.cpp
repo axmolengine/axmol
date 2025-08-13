@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "renderer/Renderer.h"
 #include "renderer/TextureCache.h"
 #include "renderer/RenderState.h"
-#include "renderer/backend/PixelBufferDescriptor.h"
+#include "rhi/PixelBufferDescriptor.h"
 
 #include "platform/Image.h"
 #include "platform/FileUtils.h"
@@ -115,7 +115,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
         eventDispatcher->removeEventListener(s_captureScreenListener);
         s_captureScreenListener = nullptr;
         // !!!GL: AFTER_DRAW and BEFORE_END_FRAME
-        renderer->readPixels(renderer->getDefaultRenderTarget(), [=](const backend::PixelBufferDescriptor& pbd) {
+        renderer->readPixels(renderer->getDefaultRenderTarget(), [=](const rhi::PixelBufferDescriptor& pbd) {
             if (pbd)
             {
                 auto image = utils::makeInstance<Image>(&Image::initWithRawData, pbd._data.getBytes(),
@@ -149,7 +149,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
         RenderTexture* finalRtx = nullptr;
 
         auto rtx =
-            RenderTexture::create(size.width, size.height, backend::PixelFormat::RGBA8, PixelFormat::D24S8, false);
+            RenderTexture::create(size.width, size.height, rhi::PixelFormat::RGBA8, PixelFormat::D24S8, false);
         // rtx->setKeepMatrix(true);
         Point savedPos = startNode->getPosition();
         Point anchor;
@@ -172,7 +172,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
             Sprite* sprite = Sprite::createWithTexture(rtx->getSprite()->getTexture(), finalRect);
             sprite->setAnchorPoint(Point(0, 0));
             sprite->setFlippedY(true);
-            finalRtx = RenderTexture::create(size.width * scale, size.height * scale, backend::PixelFormat::RGBA8,
+            finalRtx = RenderTexture::create(size.width * scale, size.height * scale, rhi::PixelFormat::RGBA8,
                                              PixelFormat::D24S8, false);
 
             sprite->setScale(scale);  // or use finalRtx->setKeepMatrix(true);
@@ -576,84 +576,84 @@ LanguageType getLanguageTypeByISO2(const char* code)
     return ret;
 }
 
-backend::BlendFactor toBackendBlendFactor(int factor)
+rhi::BlendFactor toBackendBlendFactor(int factor)
 {
     switch (factor)
     {
     case GLBlendConst::ONE:
-        return backend::BlendFactor::ONE;
+        return rhi::BlendFactor::ONE;
     case GLBlendConst::ZERO:
-        return backend::BlendFactor::ZERO;
+        return rhi::BlendFactor::ZERO;
     case GLBlendConst::SRC_COLOR:
-        return backend::BlendFactor::SRC_COLOR;
+        return rhi::BlendFactor::SRC_COLOR;
     case GLBlendConst::ONE_MINUS_SRC_COLOR:
-        return backend::BlendFactor::ONE_MINUS_SRC_COLOR;
+        return rhi::BlendFactor::ONE_MINUS_SRC_COLOR;
     case GLBlendConst::SRC_ALPHA:
-        return backend::BlendFactor::SRC_ALPHA;
+        return rhi::BlendFactor::SRC_ALPHA;
     case GLBlendConst::ONE_MINUS_SRC_ALPHA:
-        return backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        return rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     case GLBlendConst::DST_COLOR:
-        return backend::BlendFactor::DST_COLOR;
+        return rhi::BlendFactor::DST_COLOR;
     case GLBlendConst::ONE_MINUS_DST_COLOR:
-        return backend::BlendFactor::ONE_MINUS_DST_COLOR;
+        return rhi::BlendFactor::ONE_MINUS_DST_COLOR;
     case GLBlendConst::DST_ALPHA:
-        return backend::BlendFactor::DST_ALPHA;
+        return rhi::BlendFactor::DST_ALPHA;
     case GLBlendConst::ONE_MINUS_DST_ALPHA:
-        return backend::BlendFactor::ONE_MINUS_DST_ALPHA;
+        return rhi::BlendFactor::ONE_MINUS_DST_ALPHA;
     case GLBlendConst::SRC_ALPHA_SATURATE:
-        return backend::BlendFactor::SRC_ALPHA_SATURATE;
+        return rhi::BlendFactor::SRC_ALPHA_SATURATE;
     case GLBlendConst::BLEND_COLOR:
-        return backend::BlendFactor::BLEND_COLOR;
+        return rhi::BlendFactor::BLEND_COLOR;
     case GLBlendConst::CONSTANT_ALPHA:
-        return backend::BlendFactor::CONSTANT_ALPHA;
+        return rhi::BlendFactor::CONSTANT_ALPHA;
     case GLBlendConst::ONE_MINUS_CONSTANT_ALPHA:
-        return backend::BlendFactor::ONE_MINUS_CONSTANT_ALPHA;
+        return rhi::BlendFactor::ONE_MINUS_CONSTANT_ALPHA;
     default:
         assert(false);
         break;
     }
-    return backend::BlendFactor::ONE;
+    return rhi::BlendFactor::ONE;
 }
 
-int toGLBlendFactor(backend::BlendFactor blendFactor)
+int toGLBlendFactor(rhi::BlendFactor blendFactor)
 {
     int ret = GLBlendConst::ONE;
     switch (blendFactor)
     {
-    case backend::BlendFactor::ZERO:
+    case rhi::BlendFactor::ZERO:
         ret = GLBlendConst::ZERO;
         break;
-    case backend::BlendFactor::ONE:
+    case rhi::BlendFactor::ONE:
         ret = GLBlendConst::ONE;
         break;
-    case backend::BlendFactor::SRC_COLOR:
+    case rhi::BlendFactor::SRC_COLOR:
         ret = GLBlendConst::SRC_COLOR;
         break;
-    case backend::BlendFactor::ONE_MINUS_SRC_COLOR:
+    case rhi::BlendFactor::ONE_MINUS_SRC_COLOR:
         ret = GLBlendConst::ONE_MINUS_SRC_COLOR;
         break;
-    case backend::BlendFactor::SRC_ALPHA:
+    case rhi::BlendFactor::SRC_ALPHA:
         ret = GLBlendConst::SRC_ALPHA;
         break;
-    case backend::BlendFactor::ONE_MINUS_SRC_ALPHA:
+    case rhi::BlendFactor::ONE_MINUS_SRC_ALPHA:
         ret = GLBlendConst::ONE_MINUS_SRC_ALPHA;
         break;
-    case backend::BlendFactor::DST_COLOR:
+    case rhi::BlendFactor::DST_COLOR:
         ret = GLBlendConst::DST_COLOR;
         break;
-    case backend::BlendFactor::ONE_MINUS_DST_COLOR:
+    case rhi::BlendFactor::ONE_MINUS_DST_COLOR:
         ret = GLBlendConst::ONE_MINUS_DST_COLOR;
         break;
-    case backend::BlendFactor::DST_ALPHA:
+    case rhi::BlendFactor::DST_ALPHA:
         ret = GLBlendConst::DST_ALPHA;
         break;
-    case backend::BlendFactor::ONE_MINUS_DST_ALPHA:
+    case rhi::BlendFactor::ONE_MINUS_DST_ALPHA:
         ret = GLBlendConst::ONE_MINUS_DST_ALPHA;
         break;
-    case backend::BlendFactor::SRC_ALPHA_SATURATE:
+    case rhi::BlendFactor::SRC_ALPHA_SATURATE:
         ret = GLBlendConst::SRC_ALPHA_SATURATE;
         break;
-    case backend::BlendFactor::BLEND_COLOR:
+    case rhi::BlendFactor::BLEND_COLOR:
         ret = GLBlendConst::BLEND_COLOR;
         break;
     default:
@@ -662,7 +662,7 @@ int toGLBlendFactor(backend::BlendFactor blendFactor)
     return ret;
 }
 
-backend::SamplerFilter toBackendSamplerFilter(int mode)
+rhi::SamplerFilter toBackendSamplerFilter(int mode)
 {
     switch (mode)
     {
@@ -670,30 +670,30 @@ backend::SamplerFilter toBackendSamplerFilter(int mode)
     case GLTexParamConst::LINEAR_MIPMAP_LINEAR:
     case GLTexParamConst::LINEAR_MIPMAP_NEAREST:
     case GLTexParamConst::NEAREST_MIPMAP_LINEAR:
-        return backend::SamplerFilter::LINEAR;
+        return rhi::SamplerFilter::LINEAR;
     case GLTexParamConst::NEAREST:
     case GLTexParamConst::NEAREST_MIPMAP_NEAREST:
-        return backend::SamplerFilter::NEAREST;
+        return rhi::SamplerFilter::NEAREST;
     default:
         AXASSERT(false, "invalid GL sampler filter!");
-        return backend::SamplerFilter::LINEAR;
+        return rhi::SamplerFilter::LINEAR;
     }
 }
 
-backend::SamplerAddressMode toBackendAddressMode(int mode)
+rhi::SamplerAddressMode toBackendAddressMode(int mode)
 {
     switch (mode)
     {
     case GLTexParamConst::REPEAT:
-        return backend::SamplerAddressMode::REPEAT;
+        return rhi::SamplerAddressMode::REPEAT;
     case GLTexParamConst::CLAMP:
     case GLTexParamConst::CLAMP_TO_EDGE:
-        return backend::SamplerAddressMode::CLAMP_TO_EDGE;
+        return rhi::SamplerAddressMode::CLAMP_TO_EDGE;
     case GLTexParamConst::MIRROR_REPEAT:
-        return backend::SamplerAddressMode::MIRROR_REPEAT;
+        return rhi::SamplerAddressMode::MIRROR_REPEAT;
     default:
         AXASSERT(false, "invalid GL address mode");
-        return backend::SamplerAddressMode::REPEAT;
+        return rhi::SamplerAddressMode::REPEAT;
     }
 }
 

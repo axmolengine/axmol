@@ -26,7 +26,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "platform/Image.h"
-#include "renderer/backend/PixelFormatUtils.h"
+#include "rhi/PixelFormatUtils.h"
 
 #include <string>
 #include <ctype.h>
@@ -231,21 +231,21 @@ enum class PVR3TexturePixelFormat : uint64_t
 };
 
 // v2
-typedef const std::map<PVR2TexturePixelFormat, backend::PixelFormat> _pixel2_formathash;
+typedef const std::map<PVR2TexturePixelFormat, rhi::PixelFormat> _pixel2_formathash;
 
 static const _pixel2_formathash::value_type v2_pixel_formathash_value[] = {
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::BGRA8888, backend::PixelFormat::BGRA8),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA8888, backend::PixelFormat::RGBA8),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA4444, backend::PixelFormat::RGBA4),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA5551, backend::PixelFormat::RGB5A1),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB565, backend::PixelFormat::RGB565),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB888, backend::PixelFormat::RGB8),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::A8, backend::PixelFormat::R8),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::I8, backend::PixelFormat::R8),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::AI88, backend::PixelFormat::RG8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::BGRA8888, rhi::PixelFormat::BGRA8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA8888, rhi::PixelFormat::RGBA8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA4444, rhi::PixelFormat::RGBA4),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGBA5551, rhi::PixelFormat::RGB5A1),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB565, rhi::PixelFormat::RGB565),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::RGB888, rhi::PixelFormat::RGB8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::A8, rhi::PixelFormat::R8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::I8, rhi::PixelFormat::R8),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::AI88, rhi::PixelFormat::RG8),
 
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC2BPP_RGBA, backend::PixelFormat::PVRTC2A),
-    _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC4BPP_RGBA, backend::PixelFormat::PVRTC4A),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC2BPP_RGBA, rhi::PixelFormat::PVRTC2A),
+    _pixel2_formathash::value_type(PVR2TexturePixelFormat::PVRTC4BPP_RGBA, rhi::PixelFormat::PVRTC4A),
 };
 
 static const int PVR2_MAX_TABLE_ELEMENTS = sizeof(v2_pixel_formathash_value) / sizeof(v2_pixel_formathash_value[0]);
@@ -253,26 +253,26 @@ static const _pixel2_formathash v2_pixel_formathash(v2_pixel_formathash_value,
                                                     v2_pixel_formathash_value + PVR2_MAX_TABLE_ELEMENTS);
 
 // v3
-typedef const std::map<PVR3TexturePixelFormat, backend::PixelFormat> _pixel3_formathash;
+typedef const std::map<PVR3TexturePixelFormat, rhi::PixelFormat> _pixel3_formathash;
 static _pixel3_formathash::value_type v3_pixel_formathash_value[] = {
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::BGRA8888, backend::PixelFormat::BGRA8),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA8888, backend::PixelFormat::RGBA8),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA4444, backend::PixelFormat::RGBA4),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA5551, backend::PixelFormat::RGB5A1),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB565, backend::PixelFormat::RGB565),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB888, backend::PixelFormat::RGB8),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::A8, backend::PixelFormat::R8),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::L8, backend::PixelFormat::R8),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::LA88, backend::PixelFormat::RG8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::BGRA8888, rhi::PixelFormat::BGRA8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA8888, rhi::PixelFormat::RGBA8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA4444, rhi::PixelFormat::RGBA4),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGBA5551, rhi::PixelFormat::RGB5A1),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB565, rhi::PixelFormat::RGB565),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::RGB888, rhi::PixelFormat::RGB8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::A8, rhi::PixelFormat::R8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::L8, rhi::PixelFormat::R8),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::LA88, rhi::PixelFormat::RG8),
 
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGB, backend::PixelFormat::PVRTC2),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGBA, backend::PixelFormat::PVRTC2A),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC4BPP_RGB, backend::PixelFormat::PVRTC4),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC4BPP_RGBA, backend::PixelFormat::PVRTC4A),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGB, rhi::PixelFormat::PVRTC2),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC2BPP_RGBA, rhi::PixelFormat::PVRTC2A),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC4BPP_RGB, rhi::PixelFormat::PVRTC4),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC4BPP_RGBA, rhi::PixelFormat::PVRTC4A),
 
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC1, backend::PixelFormat::ETC1),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC2_RGB, backend::PixelFormat::ETC2_RGB),
-    _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC2_RGBA, backend::PixelFormat::ETC2_RGBA),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC1, rhi::PixelFormat::ETC1),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC2_RGB, rhi::PixelFormat::ETC2_RGB),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC2_RGBA, rhi::PixelFormat::ETC2_RGBA),
 };
 
 static const int PVR3_MAX_TABLE_ELEMENTS = sizeof(v3_pixel_formathash_value) / sizeof(v3_pixel_formathash_value[0]);
@@ -463,25 +463,25 @@ static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t leng
  * Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and axmol only support pvrtc and etc1
  * see: https://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
  */
-static backend::PixelFormat getDevicePVRPixelFormat(backend::PixelFormat format)
+static rhi::PixelFormat getDevicePVRPixelFormat(rhi::PixelFormat format)
 {
     switch (format)
     {
-    case backend::PixelFormat::PVRTC4:
-    case backend::PixelFormat::PVRTC4A:
-    case backend::PixelFormat::PVRTC2:
-    case backend::PixelFormat::PVRTC2A:
+    case rhi::PixelFormat::PVRTC4:
+    case rhi::PixelFormat::PVRTC4A:
+    case rhi::PixelFormat::PVRTC2:
+    case rhi::PixelFormat::PVRTC2A:
         if (Configuration::getInstance()->supportsPVRTC())
             return format;
         else
-            return backend::PixelFormat::RGBA8;
-    case backend::PixelFormat::ETC1:
+            return rhi::PixelFormat::RGBA8;
+    case rhi::PixelFormat::ETC1:
         if (Configuration::getInstance()->supportsETC1())
             return format;
         else if (Configuration::getInstance()->supportsETC2())
-            return backend::PixelFormat::ETC2_RGB;
+            return rhi::PixelFormat::ETC2_RGB;
         else
-            return backend::PixelFormat::RGBA8;
+            return rhi::PixelFormat::RGBA8;
     default:
         return format;
     }
@@ -567,7 +567,7 @@ Image::Image()
     , _height(0)
     , _unpack(false)
     , _fileType(Format::UNKNOWN)
-    , _pixelFormat(backend::PixelFormat::NONE)
+    , _pixelFormat(rhi::PixelFormat::NONE)
     , _numberOfMipmaps(0)
     , _hasPremultipliedAlpha(false)
 {}
@@ -733,7 +733,7 @@ bool Image::initWithRawData(const uint8_t* data,
         _height                = height;
         _width                 = width;
         _hasPremultipliedAlpha = preMulti;
-        _pixelFormat           = backend::PixelFormat::RGBA8;
+        _pixelFormat           = rhi::PixelFormat::RGBA8;
 
         // only RGBA8888 supported
         int bytesPerComponent = 4;
@@ -750,8 +750,8 @@ bool Image::initWithRawData(const uint8_t* data,
 
 void Image::flipRawData()
 {
-    AXASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "only RGBA8888 can be flipped");
-    if (_pixelFormat != backend::PixelFormat::RGBA8)
+    AXASSERT(_pixelFormat == rhi::PixelFormat::RGBA8, "only RGBA8888 can be flipped");
+    if (_pixelFormat != rhi::PixelFormat::RGBA8)
     {
         AXLOGE("Cannot flip image. Unsupported pixel format.");
         return;
@@ -924,17 +924,17 @@ Image::Format Image::detectFormat(const uint8_t* data, ssize_t dataLen)
 
 int Image::getBitPerPixel()
 {
-    return backend::PixelFormatUtils::getFormatDescriptor(_pixelFormat).bpp;
+    return rhi::PixelFormatUtils::getFormatDescriptor(_pixelFormat).bpp;
 }
 
 bool Image::hasAlpha()
 {
-    return backend::PixelFormatUtils::getFormatDescriptor(_pixelFormat).alpha;
+    return rhi::PixelFormatUtils::getFormatDescriptor(_pixelFormat).alpha;
 }
 
 bool Image::isCompressed()
 {
-    return backend::PixelFormatUtils::isCompressed(_pixelFormat);
+    return rhi::PixelFormatUtils::isCompressed(_pixelFormat);
 }
 
 #if AX_USE_WIC
@@ -952,27 +952,27 @@ bool Image::decodeWithWIC(const unsigned char* data, ssize_t dataLen)
 
         if (memcmp(&format, &GUID_WICPixelFormat8bppGray, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::R8;
+            _pixelFormat = rhi::PixelFormat::R8;
         }
 
         if (memcmp(&format, &GUID_WICPixelFormat8bppAlpha, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::RG8;
+            _pixelFormat = rhi::PixelFormat::RG8;
         }
 
         if (memcmp(&format, &GUID_WICPixelFormat24bppRGB, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::RGB8;
+            _pixelFormat = rhi::PixelFormat::RGB8;
         }
 
         if (memcmp(&format, &GUID_WICPixelFormat32bppRGBA, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::RGBA8;
+            _pixelFormat = rhi::PixelFormat::RGBA8;
         }
 
         if (memcmp(&format, &GUID_WICPixelFormat32bppBGRA, sizeof(WICPixelFormatGUID)) == 0)
         {
-            _pixelFormat = backend::PixelFormat::BGRA8;
+            _pixelFormat = rhi::PixelFormat::BGRA8;
         }
 
         _dataLen = img.getImageDataSize();
@@ -982,7 +982,7 @@ bool Image::decodeWithWIC(const unsigned char* data, ssize_t dataLen)
         _data = new (std::nothrow) unsigned char[_dataLen];
         bRet  = (img.getImageData(_data, _dataLen) > 0);
 
-        if (_pixelFormat == backend::PixelFormat::RGBA8)
+        if (_pixelFormat == rhi::PixelFormat::RGBA8)
         {
             premultiplyAlpha();
         }
@@ -999,7 +999,7 @@ bool Image::encodeWithWIC(std::string_view filePath, bool isToRGB, GUID containe
     int saveLen                     = _dataLen;
     int bpp                         = 4;
 
-    if (targetFormat == GUID_WICPixelFormat24bppBGR && _pixelFormat == backend::PixelFormat::RGBA8)
+    if (targetFormat == GUID_WICPixelFormat24bppBGR && _pixelFormat == rhi::PixelFormat::RGBA8)
     {
         bpp       = 3;
         saveLen   = _width * _height * bpp;
@@ -1142,12 +1142,12 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
         // we only support RGB or grayscale
         if (cinfo.jpeg_color_space == JCS_GRAYSCALE)
         {
-            _pixelFormat = backend::PixelFormat::R8;
+            _pixelFormat = rhi::PixelFormat::R8;
         }
         else
         {
             cinfo.out_color_space = JCS_RGB;
-            _pixelFormat          = backend::PixelFormat::RGB8;
+            _pixelFormat          = rhi::PixelFormat::RGB8;
         }
 
         /* Start decompression jpeg here */
@@ -1273,16 +1273,16 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
         switch (color_type)
         {
         case PNG_COLOR_TYPE_GRAY:
-            _pixelFormat = backend::PixelFormat::R8;
+            _pixelFormat = rhi::PixelFormat::R8;
             break;
         case PNG_COLOR_TYPE_GRAY_ALPHA:
-            _pixelFormat = backend::PixelFormat::RG8;
+            _pixelFormat = rhi::PixelFormat::RG8;
             break;
         case PNG_COLOR_TYPE_RGB:
-            _pixelFormat = backend::PixelFormat::RGB8;
+            _pixelFormat = rhi::PixelFormat::RGB8;
             break;
         case PNG_COLOR_TYPE_RGB_ALPHA:
-            _pixelFormat = backend::PixelFormat::RGBA8;
+            _pixelFormat = rhi::PixelFormat::RGBA8;
             break;
         default:
             break;
@@ -1356,7 +1356,7 @@ bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
     {
         _dataLen     = _width * _height * nrChannels;
         _fileType    = Format::BMP;
-        _pixelFormat = backend::PixelFormat::RGBA8;
+        _pixelFormat = rhi::PixelFormat::RGBA8;
         return true;
     }
     return false;
@@ -1378,7 +1378,7 @@ bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
             break;
 
         config.output.colorspace = config.input.has_alpha ? MODE_rgbA : MODE_RGB;
-        _pixelFormat             = config.input.has_alpha ? backend::PixelFormat::RGBA8 : backend::PixelFormat::RGB8;
+        _pixelFormat             = config.input.has_alpha ? rhi::PixelFormat::RGBA8 : rhi::PixelFormat::RGB8;
         _width                   = config.input.width;
         _height                  = config.input.height;
 
@@ -1424,15 +1424,15 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
             // unsupported RGB555
             if (tgaData->pixelDepth == 16)
             {
-                _pixelFormat = backend::PixelFormat::RGB5A1;
+                _pixelFormat = rhi::PixelFormat::RGB5A1;
             }
             else if (tgaData->pixelDepth == 24)
             {
-                _pixelFormat = backend::PixelFormat::RGB8;
+                _pixelFormat = rhi::PixelFormat::RGB8;
             }
             else if (tgaData->pixelDepth == 32)
             {
-                _pixelFormat = backend::PixelFormat::RGBA8;
+                _pixelFormat = rhi::PixelFormat::RGBA8;
             }
             else
             {
@@ -1445,7 +1445,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
             // gray
             if (8 == tgaData->pixelDepth)
             {
-                _pixelFormat = backend::PixelFormat::R8;
+                _pixelFormat = rhi::PixelFormat::R8;
             }
             else
             {
@@ -1535,7 +1535,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     }
 
     auto pixelFormat = getDevicePVRPixelFormat(v2_pixel_formathash.at(formatFlags));
-    auto& info       = backend::PixelFormatUtils::getFormatDescriptor(pixelFormat);
+    auto& info       = rhi::PixelFormatUtils::getFormatDescriptor(pixelFormat);
     int bpp          = info.bpp;
     if (!bpp)
     {
@@ -1687,7 +1687,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     }
 
     auto finalPixelFormat = getDevicePVRPixelFormat(v3_pixel_formathash.at(pixelFormat));
-    auto& info            = backend::PixelFormatUtils::getFormatDescriptor(finalPixelFormat);
+    auto& info            = rhi::PixelFormatUtils::getFormatDescriptor(finalPixelFormat);
     int bpp               = info.bpp;
     if (!info.bpp)
     {
@@ -1858,15 +1858,15 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
     // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
     // format is forwards compatible so just use the ETC2 format.
-    backend::PixelFormat compressedFormat;
+    rhi::PixelFormat compressedFormat;
     if (Configuration::getInstance()->supportsETC1())
-        compressedFormat = backend::PixelFormat::ETC1;
+        compressedFormat = rhi::PixelFormat::ETC1;
     else if (Configuration::getInstance()->supportsETC2())
-        compressedFormat = backend::PixelFormat::ETC2_RGB;
+        compressedFormat = rhi::PixelFormat::ETC2_RGB;
     else
-        compressedFormat = backend::PixelFormat::NONE;
+        compressedFormat = rhi::PixelFormat::NONE;
 
-    if (compressedFormat != backend::PixelFormat::NONE)
+    if (compressedFormat != rhi::PixelFormat::NONE)
     {
         _pixelFormat = compressedFormat;
         forwardPixels(data, dataLen, pixelOffset, ownData);
@@ -1882,7 +1882,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
                               static_cast<etc2_byte*>(_data), _width, _height) == 0)
         {  // if it is not gles or device do not support ETC1, decode texture by software
            // directly decode ETC1_RGB to RGBA8888
-            _pixelFormat = backend::PixelFormat::RGBA8;
+            _pixelFormat = rhi::PixelFormat::RGBA8;
             return true;
         }
 
@@ -1933,7 +1933,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         if (Configuration::getInstance()->supportsETC2())
         {
             _pixelFormat =
-                format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
+                format == ETC2_RGBA_NO_MIPMAPS ? rhi::PixelFormat::ETC2_RGBA : rhi::PixelFormat::ETC2_RGB;
 
             forwardPixels(data, dataLen, pixelOffset, ownData);
         }
@@ -1953,7 +1953,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
                 _dataLen = 0;
                 break;
             }
-            _pixelFormat = backend::PixelFormat::RGBA8;
+            _pixelFormat = rhi::PixelFormat::RGBA8;
         }
 
         _hasPremultipliedAlpha = isCompressedImageHavePMA(CompressedImagePMAFlag::ETC2);
@@ -1995,31 +1995,31 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
         {
             if (block_x == 4 && block_y == 4)
             {
-                _pixelFormat = backend::PixelFormat::ASTC4x4;
+                _pixelFormat = rhi::PixelFormat::ASTC4x4;
             }
             else if (block_x == 5 && block_y == 5)
             {
-                _pixelFormat = backend::PixelFormat::ASTC5x5;
+                _pixelFormat = rhi::PixelFormat::ASTC5x5;
             }
             else if (block_x == 6 && block_y == 6)
             {
-                _pixelFormat = backend::PixelFormat::ASTC6x6;
+                _pixelFormat = rhi::PixelFormat::ASTC6x6;
             }
             else if (block_x == 8 && block_y == 5)
             {
-                _pixelFormat = backend::PixelFormat::ASTC8x5;
+                _pixelFormat = rhi::PixelFormat::ASTC8x5;
             }
             else if (block_x == 8 && block_y == 6)
             {
-                _pixelFormat = backend::PixelFormat::ASTC8x6;
+                _pixelFormat = rhi::PixelFormat::ASTC8x6;
             }
             else if (block_x == 8 && block_y == 8)
             {
-                _pixelFormat = backend::PixelFormat::ASTC8x8;
+                _pixelFormat = rhi::PixelFormat::ASTC8x8;
             }
             else if (block_x == 10 && block_y == 5)
             {
-                _pixelFormat = backend::PixelFormat::ASTC10x5;
+                _pixelFormat = rhi::PixelFormat::ASTC10x5;
             }
 
             forwardPixels(data, dataLen, ASTC_HEAD_SIZE, ownData);
@@ -2039,7 +2039,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
                 break;
             }
 
-            _pixelFormat = backend::PixelFormat::RGBA8;
+            _pixelFormat = rhi::PixelFormat::RGBA8;
         }
 
         _hasPremultipliedAlpha = isCompressedImageHavePMA(CompressedImagePMAFlag::ASTC);
@@ -2083,20 +2083,20 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         if (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC)
         {
-            _pixelFormat = backend::PixelFormat::S3TC_DXT1;
+            _pixelFormat = rhi::PixelFormat::S3TC_DXT1;
         }
         else if (FOURCC_DXT3 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC)
         {
-            _pixelFormat = backend::PixelFormat::S3TC_DXT3;
+            _pixelFormat = rhi::PixelFormat::S3TC_DXT3;
         }
         else if (FOURCC_DXT5 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC)
         {
-            _pixelFormat = backend::PixelFormat::S3TC_DXT5;
+            _pixelFormat = rhi::PixelFormat::S3TC_DXT5;
         }
     }
     else
     {  // will software decode
-        _pixelFormat = backend::PixelFormat::RGBA8;
+        _pixelFormat = rhi::PixelFormat::RGBA8;
 
         // prepare data for software decompress
         for (int i = 0; i < _numberOfMipmaps && (width || height); ++i)
@@ -2217,13 +2217,13 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
         switch (header->glInternalFormat)
         {
         case KTXv1Header::InternalFormat::ATC_RGB_AMD:
-            _pixelFormat = backend::PixelFormat::ATC_RGB;
+            _pixelFormat = rhi::PixelFormat::ATC_RGB;
             break;
         case KTXv1Header::InternalFormat::ATC_RGBA_EXPLICIT_ALPHA_AMD:
-            _pixelFormat = backend::PixelFormat::ATC_EXPLICIT_ALPHA;
+            _pixelFormat = rhi::PixelFormat::ATC_EXPLICIT_ALPHA;
             break;
         case KTXv1Header::InternalFormat::ATC_RGBA_INTERPOLATED_ALPHA_AMD:
-            _pixelFormat = backend::PixelFormat::ATC_INTERPOLATED_ALPHA;
+            _pixelFormat = rhi::PixelFormat::ATC_INTERPOLATED_ALPHA;
             break;
         default:
             break;
@@ -2234,7 +2234,7 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         AXLOGW("Hardware ATITC decoder not present. Using software decoder");
 
-        _pixelFormat = backend::PixelFormat::RGBA8;
+        _pixelFormat = rhi::PixelFormat::RGBA8;
 
         for (int i = 0; i < _numberOfMipmaps && (width || height); ++i)
         {
@@ -2339,11 +2339,11 @@ void Image::forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownDa
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
 bool Image::saveToFile(std::string_view filename, bool isToRGB)
 {
-    // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
-    if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
+    // only support for rhi::PixelFormat::RGB8 or rhi::PixelFormat::RGBA8 uncompressed data
+    if (isCompressed() || (_pixelFormat != rhi::PixelFormat::RGB8 && _pixelFormat != rhi::PixelFormat::RGBA8))
     {
         AXLOGW(
-            "Image: saveToFile is only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 "
+            "Image: saveToFile is only support for rhi::PixelFormat::RGB8 or rhi::PixelFormat::RGBA8 "
             "uncompressed data for now");
         return false;
     }
@@ -2618,11 +2618,11 @@ bool Image::saveImageToJPG(std::string_view filePath)
 void Image::premultiplyAlpha()
 {
 #if AX_ENABLE_PREMULTIPLIED_ALPHA
-    AXASSERT((_pixelFormat == backend::PixelFormat::RGBA8)
-             || (_pixelFormat == backend::PixelFormat::RG8),
+    AXASSERT((_pixelFormat == rhi::PixelFormat::RGBA8)
+             || (_pixelFormat == rhi::PixelFormat::RG8),
               "The pixel format should be RGBA8888 or RG88.");
 
-    if (_pixelFormat ==  backend::PixelFormat::RGBA8) {
+    if (_pixelFormat ==  rhi::PixelFormat::RGBA8) {
         unsigned int* fourBytes = (unsigned int*)_data;
         for (int i = 0; i < _width * _height; i++)
         {
@@ -2653,7 +2653,7 @@ static inline uint8_t clamp(int x)
 
 void Image::reversePremultipliedAlpha()
 {
-    AXASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "The pixel format should be RGBA8888!");
+    AXASSERT(_pixelFormat == rhi::PixelFormat::RGBA8, "The pixel format should be RGBA8888!");
 
     unsigned int* fourBytes = (unsigned int*)_data;
     for (int i = 0; i < _width * _height; i++)

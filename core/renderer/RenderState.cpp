@@ -150,8 +150,8 @@ void RenderState::StateBlock::restoreUnmodifiedStates(int32_t overrideBits, Pipe
 
     if (!(overrideBits & RS_BLEND_FUNC))
     {
-        blend.sourceAlphaBlendFactor = blend.sourceRGBBlendFactor = backend::BlendFactor::ONE;
-        blend.destinationAlphaBlendFactor = blend.destinationRGBBlendFactor = backend::BlendFactor::ZERO;
+        blend.sourceAlphaBlendFactor = blend.sourceRGBBlendFactor = rhi::BlendFactor::ONE;
+        blend.destinationAlphaBlendFactor = blend.destinationRGBBlendFactor = rhi::BlendFactor::ZERO;
     }
 
     if (!(overrideBits & RS_CULL_FACE))
@@ -190,42 +190,42 @@ static bool parseBoolean(std::string_view value)
     return (value.compare("true") == 0);
 }
 
-static backend::BlendFactor parseBlend(std::string_view value)
+static rhi::BlendFactor parseBlend(std::string_view value)
 {
     // Convert the string to uppercase for comparison.
     std::string upper(value);
     std::transform(upper.begin(), upper.end(), upper.begin(), (int (*)(int))toupper);
     if (upper == "ZERO")
-        return backend::BlendFactor::ZERO;
+        return rhi::BlendFactor::ZERO;
     else if (upper == "ONE")
-        return backend::BlendFactor::ONE;
+        return rhi::BlendFactor::ONE;
     else if (upper == "SRC_COLOR")
-        return backend::BlendFactor::SRC_COLOR;
+        return rhi::BlendFactor::SRC_COLOR;
     else if (upper == "ONE_MINUS_SRC_COLOR")
-        return backend::BlendFactor::ONE_MINUS_SRC_COLOR;
+        return rhi::BlendFactor::ONE_MINUS_SRC_COLOR;
     else if (upper == "DST_COLOR")
-        return backend::BlendFactor::DST_COLOR;
+        return rhi::BlendFactor::DST_COLOR;
     else if (upper == "ONE_MINUS_DST_COLOR")
-        return backend::BlendFactor::ONE_MINUS_DST_COLOR;
+        return rhi::BlendFactor::ONE_MINUS_DST_COLOR;
     else if (upper == "SRC_ALPHA")
-        return backend::BlendFactor::SRC_ALPHA;
+        return rhi::BlendFactor::SRC_ALPHA;
     else if (upper == "ONE_MINUS_SRC_ALPHA")
-        return backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+        return rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     else if (upper == "DST_ALPHA")
-        return backend::BlendFactor::DST_ALPHA;
+        return rhi::BlendFactor::DST_ALPHA;
     else if (upper == "ONE_MINUS_DST_ALPHA")
-        return backend::BlendFactor::ONE_MINUS_DST_ALPHA;
+        return rhi::BlendFactor::ONE_MINUS_DST_ALPHA;
     else if (upper == "CONSTANT_ALPHA")
-        return backend::BlendFactor::CONSTANT_ALPHA;
+        return rhi::BlendFactor::CONSTANT_ALPHA;
     else if (upper == "ONE_MINUS_CONSTANT_ALPHA")
-        return backend::BlendFactor::ONE_MINUS_CONSTANT_ALPHA;
+        return rhi::BlendFactor::ONE_MINUS_CONSTANT_ALPHA;
     else if (upper == "SRC_ALPHA_SATURATE")
-        return backend::BlendFactor::SRC_ALPHA_SATURATE;
+        return rhi::BlendFactor::SRC_ALPHA_SATURATE;
     else
     {
         AXLOGW("Unsupported blend value ({}). (Will default to BLEND_ONE if errors are treated as warnings)",
               value);
-        return backend::BlendFactor::ONE;
+        return rhi::BlendFactor::ONE;
     }
 }
 
@@ -363,13 +363,13 @@ void RenderState::StateBlock::setBlendFunc(const BlendFunc& blendFunc)
     setBlendDst(blendFunc.dst);
 }
 
-void RenderState::StateBlock::setBlendSrc(backend::BlendFactor blend)
+void RenderState::StateBlock::setBlendSrc(rhi::BlendFactor blend)
 {
     _blendSrc = blend;
     _modifiedBits |= RS_BLEND_FUNC;
 }
 
-void RenderState::StateBlock::setBlendDst(backend::BlendFactor blend)
+void RenderState::StateBlock::setBlendDst(rhi::BlendFactor blend)
 {
     _blendDst = blend;
     _modifiedBits |= RS_BLEND_FUNC;

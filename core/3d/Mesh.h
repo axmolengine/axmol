@@ -36,7 +36,7 @@
 #include "math/Math.h"
 #include "renderer/MeshCommand.h"
 #include "renderer/CustomCommand.h"
-#include "renderer/backend/Backend.h"
+#include "rhi/axmol-rhi.h"
 
 namespace ax
 {
@@ -54,7 +54,7 @@ class Renderer;
 class Scene;
 class Pass;
 
-namespace backend
+namespace rhi
 {
 class Buffer;
 }
@@ -93,7 +93,7 @@ public:
      *
      * @lua NA
      */
-    backend::Buffer* getVertexBuffer() const;
+    rhi::Buffer* getVertexBuffer() const;
     /**
      * has vertex attribute?
      *
@@ -168,7 +168,7 @@ public:
      *
      * @lua NA
      */
-    backend::ProgramState* getProgramState() const;
+    rhi::ProgramState* getProgramState() const;
 
     /**name getter */
     std::string_view getName() const { return _name; }
@@ -205,7 +205,7 @@ public:
      *
      * @lua NA
      */
-    backend::Buffer* getIndexBuffer() const;
+    rhi::Buffer* getIndexBuffer() const;
 
     /**get AABB*/
     const AABB& getAABB() const { return _aabb; }
@@ -213,7 +213,7 @@ public:
     /**  Sets a new ProgramState for the Mesh
      * A new Material will be created for it
      */
-    void setProgramState(backend::ProgramState* programState);
+    void setProgramState(rhi::ProgramState* programState);
 
     /** Sets a new Material to the Mesh */
     void setMaterial(Material* material);
@@ -288,7 +288,7 @@ protected:
     bool _visible;                                        // is the submesh visible
 
     bool _instancing;
-    backend::Buffer* _instanceTransformBuffer;
+    rhi::Buffer* _instanceTransformBuffer;
     bool _instanceTransformDirty;
     bool _instanceTransformBufferDirty;
     int _instanceCount;

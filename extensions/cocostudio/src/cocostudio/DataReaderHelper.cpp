@@ -950,20 +950,20 @@ FrameData* DataReaderHelper::decodeFrame(pugi::xml_node& frameXML,
         break;
         case BLEND_ADD:
         {
-            frameData->blendFunc.src = backend::BlendFactor::SRC_ALPHA;
-            frameData->blendFunc.dst = backend::BlendFactor::ONE;
+            frameData->blendFunc.src = rhi::BlendFactor::SRC_ALPHA;
+            frameData->blendFunc.dst = rhi::BlendFactor::ONE;
         }
         break;
         case BLEND_MULTIPLY:
         {
-            frameData->blendFunc.src = backend::BlendFactor::DST_COLOR;
-            frameData->blendFunc.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+            frameData->blendFunc.src = rhi::BlendFactor::DST_COLOR;
+            frameData->blendFunc.dst = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
         }
         break;
         case BLEND_SCREEN:
         {
-            frameData->blendFunc.src = backend::BlendFactor::ONE;
-            frameData->blendFunc.dst = backend::BlendFactor::ONE_MINUS_SRC_COLOR;
+            frameData->blendFunc.src = rhi::BlendFactor::ONE;
+            frameData->blendFunc.dst = rhi::BlendFactor::ONE_MINUS_SRC_COLOR;
         }
         break;
         default:

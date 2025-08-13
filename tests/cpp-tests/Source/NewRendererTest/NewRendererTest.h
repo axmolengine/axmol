@@ -224,8 +224,8 @@ public:
 protected:
     RendererUniformBatch();
 
-    ax::backend::ProgramState* createBlurProgramState();
-    ax::backend::ProgramState* createSepiaProgramState();
+    ax::rhi::ProgramState* createBlurProgramState();
+    ax::rhi::ProgramState* createSepiaProgramState();
 };
 
 class RendererUniformBatch2 : public MultiSceneTest
@@ -238,8 +238,8 @@ public:
 protected:
     RendererUniformBatch2();
 
-    ax::backend::ProgramState* createBlurProgramState();
-    ax::backend::ProgramState* createSepiaProgramState();
+    ax::rhi::ProgramState* createBlurProgramState();
+    ax::rhi::ProgramState* createSepiaProgramState();
 };
 
 class NonBatchSprites : public MultiSceneTest

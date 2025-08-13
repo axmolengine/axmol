@@ -32,8 +32,8 @@
 #include "renderer/MeshCommand.h"
 #include "renderer/Renderer.h"
 #include "renderer/TextureCache.h"
-#include "renderer/backend/Buffer.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/Buffer.h"
+#include "rhi/DriverBase.h"
 #include "2d/Camera.h"
 #include "3d/MeshRenderer.h"
 
@@ -76,7 +76,7 @@ PUBillboardChain::PUBillboardChain(std::string_view /*name*/,
 {
 
     _stateBlock.setCullFace(false);
-    _stateBlock.setCullFaceSide(backend::CullMode::BACK);
+    _stateBlock.setCullFaceSide(rhi::CullMode::BACK);
     _stateBlock.setDepthTest(false);
     _stateBlock.setDepthWrite(false);
     _stateBlock.setBlend(true);
@@ -157,14 +157,14 @@ void PUBillboardChain::setupBuffers()
         AX_SAFE_RELEASE_NULL(_indexBuffer);
 
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(
-            stride * _chainElementList.size() * 2, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+            stride * _chainElementList.size() * 2, rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::WHITE};
         _vertices.resize(_chainElementList.size() * 2, vi);
 
-        _indexBuffer = backend::DriverBase::getInstance()->createBuffer(
+        _indexBuffer = rhi::DriverBase::getInstance()->createBuffer(
             _chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
-                                                      backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
         _indices.resize(_chainCount * _maxElementsPerChain * 6, 0);
 
@@ -637,15 +637,15 @@ void PUBillboardChain::init(std::string_view texFile)
         if (tex)
         {
             _texture      = tex;
-            auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::PARTICLE_TEXTURE_3D);
-            _programState = new backend::ProgramState(program);
+            auto* program = axpm->getBuiltinProgram(rhi::ProgramType::PARTICLE_TEXTURE_3D);
+            _programState = new rhi::ProgramState(program);
         }
     }
 
     if (!_programState)
     {
-        auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::PARTICLE_COLOR_3D);
-        _programState = new backend::ProgramState(program);
+        auto* program = axpm->getBuiltinProgram(rhi::ProgramType::PARTICLE_COLOR_3D);
+        _programState = new rhi::ProgramState(program);
     }
 
     auto& pipelineDescriptor        = _meshCommand.getPipelineDescriptor();
@@ -660,7 +660,7 @@ void PUBillboardChain::init(std::string_view texFile)
 
     _stateBlock.setDepthTest(true);
     _stateBlock.setDepthWrite(false);
-    _stateBlock.setCullFaceSide(backend::CullMode::BACK);
+    _stateBlock.setCullFaceSide(rhi::CullMode::BACK);
     _stateBlock.setCullFace(true);
 
     _meshCommand.setBeforeCallback(AX_CALLBACK_0(PUBillboardChain::onBeforeDraw, this));

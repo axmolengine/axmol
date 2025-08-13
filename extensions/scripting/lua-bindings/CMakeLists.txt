@@ -80,7 +80,7 @@ set(lua_bindings_auto_headers
   auto/axlua_ui_auto.hpp
   auto/axlua_physics_auto.hpp
   auto/axlua_extension_auto.hpp
-  auto/axlua_backend_auto.hpp
+  auto/axlua_rhi_auto.hpp
   auto/axlua_fairygui_auto.hpp
 )
 
@@ -97,7 +97,7 @@ set(lua_bindings_auto_files
   auto/axlua_audioengine_auto.cpp
   auto/axlua_physics3d_auto.cpp
   auto/axlua_navmesh_auto.cpp
-  auto/axlua_backend_auto.cpp
+  auto/axlua_rhi_auto.cpp
   auto/axlua_fairygui_auto.cpp
 )
 

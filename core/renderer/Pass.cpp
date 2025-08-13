@@ -32,7 +32,7 @@
 #include "renderer/Texture2D.h"
 #include "renderer/Technique.h"
 #include "renderer/Material.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "3d/MeshVertexIndexData.h"
 #include "3d/VertexInputBinding.h"
 #include "base/Director.h"
@@ -75,7 +75,7 @@ Pass* Pass::create(Technique* technique)
     return nullptr;
 }
 
-Pass* Pass::createWithProgramState(Technique* technique, backend::ProgramState* programState)
+Pass* Pass::createWithProgramState(Technique* technique, rhi::ProgramState* programState)
 {
     auto pass = new Pass();
     if (pass->initWithProgramState(technique, programState))
@@ -93,7 +93,7 @@ bool Pass::init(Technique* technique)
     return true;
 }
 
-bool Pass::initWithProgramState(Technique* technique, backend::ProgramState* programState)
+bool Pass::initWithProgramState(Technique* technique, rhi::ProgramState* programState)
 {
     _technique = technique;
     setProgramState(programState);
@@ -125,12 +125,12 @@ Pass* Pass::clone() const
     return pass;
 }
 
-backend::ProgramState* Pass::getProgramState() const
+rhi::ProgramState* Pass::getProgramState() const
 {
     return _programState;
 }
 
-void Pass::setProgramState(backend::ProgramState* programState)
+void Pass::setProgramState(rhi::ProgramState* programState)
 {
     if (_programState != programState)
     {
@@ -176,8 +176,8 @@ void Pass::initUniformLocations()
 
 void Pass::draw(MeshCommand* meshCommand,
                 float globalZOrder,
-                backend::Buffer* vertexBuffer,
-                backend::Buffer* indexBuffer,
+                rhi::Buffer* vertexBuffer,
+                rhi::Buffer* indexBuffer,
                 MeshCommand::PrimitiveType primitive,
                 MeshCommand::IndexFormat indexFormat,
                 unsigned int indexCount,
@@ -275,12 +275,12 @@ VertexInputBinding* Pass::getVertexAttributeBinding() const
     return _vertexInputBinding;
 }
 
-void Pass::setUniformTexture(uint32_t slot, backend::Texture* tex)
+void Pass::setUniformTexture(uint32_t slot, rhi::Texture* tex)
 {
     _programState->setTexture(_locTexture, slot, tex);
 }
 
-void Pass::setUniformNormTexture(uint32_t slot, backend::Texture* tex)
+void Pass::setUniformNormTexture(uint32_t slot, rhi::Texture* tex)
 {
     _programState->setTexture(_locNormalTexture, slot, tex);
 }

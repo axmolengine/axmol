@@ -1123,7 +1123,7 @@ function Sprite3DCubeMapTest:addNewSpriteWithCoords(pos)
     --create a teapot
     self._teapot = ax.Sprite3D:create("MeshRendererTest/teapot.c3b")
 
-    local program = axb.ProgramManager:getInstance():loadProgram('custom/cube_map_vs', 'custom/cube_map_fs')
+    local program = axrhi.ProgramManager:getInstance():loadProgram('custom/cube_map_vs', 'custom/cube_map_fs')
     local programState = ccb.ProgramState:new(program)
 
     self._textureCube = ax.TextureCube:create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",

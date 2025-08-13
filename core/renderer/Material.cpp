@@ -33,7 +33,7 @@
 #include "renderer/Pass.h"
 #include "renderer/TextureCache.h"
 #include "renderer/Texture2D.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 #include "base/Properties.h"
 #include "base/Director.h"
 #include "platform/FileUtils.h"
@@ -98,7 +98,7 @@ Material* Material::createWithProperties(Properties* materialProperties)
     return nullptr;
 }
 
-Material* Material::createWithProgramState(backend::ProgramState* programState)
+Material* Material::createWithProgramState(rhi::ProgramState* programState)
 {
     AXASSERT(programState, "Invalid Program State");
 
@@ -112,7 +112,7 @@ Material* Material::createWithProgramState(backend::ProgramState* programState)
     return nullptr;
 }
 
-bool Material::initWithProgramState(backend::ProgramState* state)
+bool Material::initWithProgramState(rhi::ProgramState* state)
 {
     auto technique = Technique::createWithProgramState(this, state);
     if (technique)
@@ -146,8 +146,8 @@ bool Material::initWithProperties(Properties* materialProperties)
 
 void Material::draw(MeshCommand* meshCommands,
                     float globalZOrder,
-                    backend::Buffer* vertexBuffer,
-                    backend::Buffer* indexBuffer,
+                    rhi::Buffer* vertexBuffer,
+                    rhi::Buffer* indexBuffer,
                     CustomCommand::PrimitiveType primitive,
                     CustomCommand::IndexFormat indexFormat,
                     unsigned int indexCount,
@@ -257,7 +257,7 @@ bool Material::parsePass(Technique* technique, Properties* passProperties)
 }
 
 // axmol doesn't support Samplers yet.
-bool Material::parseSampler(backend::ProgramState* programState, Properties* samplerProperties)
+bool Material::parseSampler(rhi::ProgramState* programState, Properties* samplerProperties)
 {
     AXASSERT(!samplerProperties->getId().empty(), "Sampler must have an id. The id is the uniform name");
 
@@ -287,18 +287,18 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
         // valid options: REPEAT, CLAMP
         const char* wrapS = getOptionalString(samplerProperties, "wrapS", "CLAMP_TO_EDGE");
         if (strcasecmp(wrapS, "REPEAT") == 0)
-            texParams.sAddressMode = backend::SamplerAddressMode::REPEAT;
+            texParams.sAddressMode = rhi::SamplerAddressMode::REPEAT;
         else if (strcasecmp(wrapS, "CLAMP_TO_EDGE") == 0)
-            texParams.sAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
+            texParams.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
         else
             AXLOGW("Invalid wrapS: {}", wrapS);
 
         // valid options: REPEAT, CLAMP
         const char* wrapT = getOptionalString(samplerProperties, "wrapT", "CLAMP_TO_EDGE");
         if (strcasecmp(wrapT, "REPEAT") == 0)
-            texParams.tAddressMode = backend::SamplerAddressMode::REPEAT;
+            texParams.tAddressMode = rhi::SamplerAddressMode::REPEAT;
         else if (strcasecmp(wrapT, "CLAMP_TO_EDGE") == 0)
-            texParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
+            texParams.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
         else
             AXLOGW("Invalid wrapT: {}", wrapT);
 
@@ -307,26 +307,26 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
         const char* minFilter =
             getOptionalString(samplerProperties, "minFilter", usemipmap ? "LINEAR_MIPMAP_NEAREST" : "LINEAR");
         if (strcasecmp(minFilter, "NEAREST") == 0)
-            texParams.minFilter = backend::SamplerFilter::NEAREST;
+            texParams.minFilter = rhi::SamplerFilter::NEAREST;
         else if (strcasecmp(minFilter, "LINEAR") == 0)
-            texParams.minFilter = backend::SamplerFilter::LINEAR;
+            texParams.minFilter = rhi::SamplerFilter::LINEAR;
         else if (strcasecmp(minFilter, "NEAREST_MIPMAP_NEAREST") == 0)
-            texParams.minFilter = backend::SamplerFilter::NEAREST;
+            texParams.minFilter = rhi::SamplerFilter::NEAREST;
         else if (strcasecmp(minFilter, "LINEAR_MIPMAP_NEAREST") == 0)
-            texParams.minFilter = backend::SamplerFilter::LINEAR;
+            texParams.minFilter = rhi::SamplerFilter::LINEAR;
         else if (strcasecmp(minFilter, "NEAREST_MIPMAP_LINEAR") == 0)
-            texParams.minFilter = backend::SamplerFilter::LINEAR;
+            texParams.minFilter = rhi::SamplerFilter::LINEAR;
         else if (strcasecmp(minFilter, "LINEAR_MIPMAP_LINEAR") == 0)
-            texParams.minFilter = backend::SamplerFilter::LINEAR;
+            texParams.minFilter = rhi::SamplerFilter::LINEAR;
         else
             AXLOGW("Invalid minFilter: {}", minFilter);
 
         // valid options: NEAREST, LINEAR
         const char* magFilter = getOptionalString(samplerProperties, "magFilter", "LINEAR");
         if (strcasecmp(magFilter, "NEAREST") == 0)
-            texParams.magFilter = backend::SamplerFilter::NEAREST;
+            texParams.magFilter = rhi::SamplerFilter::NEAREST;
         else if (strcasecmp(magFilter, "LINEAR") == 0)
-            texParams.magFilter = backend::SamplerFilter::LINEAR;
+            texParams.magFilter = rhi::SamplerFilter::LINEAR;
         else
             AXLOGW("Invalid magFilter: {}", magFilter);
 
@@ -369,7 +369,7 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
     if (vertShader && fragShader)
     {
         auto program      = ProgramManager::getInstance()->loadProgram(vertShader, fragShader);
-        auto programState = new backend::ProgramState(program);
+        auto programState = new rhi::ProgramState(program);
         pass->setProgramState(programState);
 
         // Parse uniforms only if the GLProgramState was created
@@ -400,13 +400,13 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
     return true;
 }
 
-bool Material::parseUniform(backend::ProgramState* programState, Properties* properties, const char* uniformName)
+bool Material::parseUniform(rhi::ProgramState* programState, Properties* properties, const char* uniformName)
 {
     bool ret = true;
 
     auto type = properties->getType(uniformName);
 
-    backend::UniformLocation location;
+    rhi::UniformLocation location;
     location = programState->getUniformLocation(uniformName);
 
     switch (type)

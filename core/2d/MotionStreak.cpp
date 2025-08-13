@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "renderer/Texture2D.h"
 #include "renderer/Renderer.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 namespace ax
 {
@@ -217,11 +217,11 @@ void MotionStreak::setTexture(Texture2D* texture)
         AX_SAFE_RELEASE(_texture);
         _texture = texture;
 
-        setProgramStateWithRegistry(backend::ProgramType::TRAIL_2D, _texture);
+        setProgramStateWithRegistry(rhi::ProgramType::TRAIL_2D, _texture);
     }
 }
 
-bool MotionStreak::setProgramState(backend::ProgramState* programState, bool ownPS /*= false*/)
+bool MotionStreak::setProgramState(rhi::ProgramState* programState, bool ownPS /*= false*/)
 {
     if (Node::setProgramState(programState, ownPS))
     {
@@ -238,17 +238,17 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool own
         auto layout               = _programState->getMutableVertexLayout();
         if (iter != vertexInputs.end())
         {
-            layout->setAttrib("a_position", &iter->second, backend::VertexFormat::FLOAT2, 0, false);
+            layout->setAttrib("a_position", &iter->second, rhi::VertexFormat::FLOAT2, 0, false);
         }
         iter = vertexInputs.find("a_texCoord");
         if (iter != vertexInputs.end())
         {
-            layout->setAttrib("a_texCoord", &iter->second, backend::VertexFormat::FLOAT2, sizeof(Vec2), false);
+            layout->setAttrib("a_texCoord", &iter->second, rhi::VertexFormat::FLOAT2, sizeof(Vec2), false);
         }
         iter = vertexInputs.find("a_color");
         if (iter != vertexInputs.end())
         {
-            layout->setAttrib("a_color", &iter->second, backend::VertexFormat::UBYTE4, sizeof(Vec2) * 2, true);
+            layout->setAttrib("a_color", &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec2) * 2, true);
         }
 
         constexpr size_t vertexSize = sizeof(_vertices[0]);

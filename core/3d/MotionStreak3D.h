@@ -198,13 +198,13 @@ private:
 
     //CallbackCommand _beforeCommand;
     //CallbackCommand _afterCommand;
-    backend::UniformLocation _locMVP;
-    backend::UniformLocation _locTexture;
+    rhi::UniformLocation _locMVP;
+    rhi::UniformLocation _locTexture;
 
     void onBeforeDraw();
     void onAfterDraw();
 
-    backend::CullMode _rendererCullface;
+    rhi::CullMode _rendererCullface;
     bool _rendererDepthTest;
 };
 

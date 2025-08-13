@@ -42,7 +42,7 @@ class Texture2D;
 // class GLProgram;
 class Node;
 
-namespace backend
+namespace rhi
 {
 class RenderTarget;
 }
@@ -159,12 +159,12 @@ protected:
     //CallbackCommand _afterBlitCommand;
 
     // New
-    backend::RenderTarget* _oldRenderTarget = nullptr;
-    backend::RenderTarget* _renderTarget    = nullptr;
+    rhi::RenderTarget* _oldRenderTarget = nullptr;
+    rhi::RenderTarget* _renderTarget    = nullptr;
 
-    backend::UniformLocation _mvpMatrixLocation;
-    backend::UniformLocation _textureLocation;
-    backend::ProgramState* _programState = nullptr;
+    rhi::UniformLocation _mvpMatrixLocation;
+    rhi::UniformLocation _textureLocation;
+    rhi::ProgramState* _programState = nullptr;
 
     BlendFunc _blendFunc;
 };

@@ -35,7 +35,7 @@
 namespace ax
 {
 
-namespace backend
+namespace rhi
 {
 class Buffer;
 }
@@ -55,18 +55,18 @@ public:
         ELEMENT_INSTANCED
     };
 
-    using PrimitiveType = backend::PrimitiveType;
+    using PrimitiveType = rhi::PrimitiveType;
     /**
     Buffer usage of vertex/index buffer. If the contents are not updated every frame,
     then STATIC should be used. Otherwise, DYNAMIC should be used.
     This flag is not improtant because most GPU drivers ignore it, so it's best left to STATIC.
     */
-    using BufferUsage = backend::BufferUsage;
+    using BufferUsage = rhi::BufferUsage;
     /**
     The index format that determines the size of index data. U_SHORT (65535 vertices) is enough for most
     cases, But support for U_INT (4294967295 vertices) has been added.
     */
-    using IndexFormat = backend::IndexFormat;
+    using IndexFormat = rhi::IndexFormat;
 
     typedef std::function<void()> CallBackFunc;
 
@@ -180,14 +180,14 @@ TODO: should remove it.
     /**
     Set the vertex buffer. The existing vertex buffer will be replaced if exist.
     */
-    void setVertexBuffer(backend::Buffer* vertexBuffer);
-    inline backend::Buffer* getVertexBuffer() const { return _vertexBuffer; }
+    void setVertexBuffer(rhi::Buffer* vertexBuffer);
+    inline rhi::Buffer* getVertexBuffer() const { return _vertexBuffer; }
 
     /**
     Set the index buffer. The existing index buffer will be replaced if exist.
     */
-    void setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat indexFormat);
-    inline backend::Buffer* getIndexBuffer() const { return _indexBuffer; }
+    void setIndexBuffer(rhi::Buffer* indexBuffer, IndexFormat indexFormat);
+    inline rhi::Buffer* getIndexBuffer() const { return _indexBuffer; }
 
     /**
     Set the drawing information if the drawing type is ARRAY.
@@ -232,8 +232,8 @@ TODO: should remove it.
      */
     void setAfterCallback(const CallBackFunc& after) { _afterCallback = after; }
 
-    void setInstanceBuffer(backend::Buffer* instanceBuffer, int count);
-    backend::Buffer* getInstanceBuffer() const { return _instanceBuffer; }
+    void setInstanceBuffer(rhi::Buffer* instanceBuffer, int count);
+    rhi::Buffer* getInstanceBuffer() const { return _instanceBuffer; }
     int getInstanceCount() const { return _instanceCount; }
 
     const CallBackFunc& getBeforeCallback() { return _beforeCallback; }
@@ -243,10 +243,10 @@ TODO: should remove it.
 protected:
     std::size_t computeIndexSize() const;
 
-    backend::Buffer* _vertexBuffer = nullptr;
-    backend::Buffer* _indexBuffer  = nullptr;
+    rhi::Buffer* _vertexBuffer = nullptr;
+    rhi::Buffer* _indexBuffer  = nullptr;
 
-    backend::Buffer* _instanceBuffer = nullptr;
+    rhi::Buffer* _instanceBuffer = nullptr;
     int _instanceCount               = 0;
     int _instanceCapacity            = 0;
 

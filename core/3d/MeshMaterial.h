@@ -41,7 +41,7 @@ namespace ax
 
 class Texture2D;
 
-namespace backend
+namespace rhi
 {
 class ProgramState;
 }
@@ -110,7 +110,7 @@ public:
      * @param programState GLProgramState instance
      * @return An autorelease material object
      */
-    static MeshMaterial* createWithProgramState(backend::ProgramState* programState);
+    static MeshMaterial* createWithProgramState(rhi::ProgramState* programState);
 
     void setTexture(Texture2D* tex, NTextureData::Usage usage);
 
@@ -153,21 +153,21 @@ protected:
     static MeshMaterial* _quadTextureMaterial;
     static MeshMaterial* _quadColorMaterial;
 
-    static backend::ProgramState* _unLitMaterialProgState;
-    static backend::ProgramState* _unLitInstanceMaterialProgState;
-    static backend::ProgramState* _unLitNoTexMaterialProgState;
-    static backend::ProgramState* _vertexLitMaterialProgState;
-    static backend::ProgramState* _diffuseMaterialProgState;
-    static backend::ProgramState* _diffuseNoTexMaterialProgState;
-    static backend::ProgramState* _bumpedDiffuseMaterialProgState;
+    static rhi::ProgramState* _unLitMaterialProgState;
+    static rhi::ProgramState* _unLitInstanceMaterialProgState;
+    static rhi::ProgramState* _unLitNoTexMaterialProgState;
+    static rhi::ProgramState* _vertexLitMaterialProgState;
+    static rhi::ProgramState* _diffuseMaterialProgState;
+    static rhi::ProgramState* _diffuseNoTexMaterialProgState;
+    static rhi::ProgramState* _bumpedDiffuseMaterialProgState;
 
-    static backend::ProgramState* _unLitMaterialSkinProgState;
-    static backend::ProgramState* _vertexLitMaterialSkinProgState;
-    static backend::ProgramState* _diffuseMaterialSkinProgState;
-    static backend::ProgramState* _bumpedDiffuseMaterialSkinProgState;
+    static rhi::ProgramState* _unLitMaterialSkinProgState;
+    static rhi::ProgramState* _vertexLitMaterialSkinProgState;
+    static rhi::ProgramState* _diffuseMaterialSkinProgState;
+    static rhi::ProgramState* _bumpedDiffuseMaterialSkinProgState;
 
-    static backend::ProgramState* _quadTextureMaterialProgState;
-    static backend::ProgramState* _quadColorMaterialProgState;
+    static rhi::ProgramState* _quadTextureMaterialProgState;
+    static rhi::ProgramState* _quadColorMaterialProgState;
 };
 
 /**

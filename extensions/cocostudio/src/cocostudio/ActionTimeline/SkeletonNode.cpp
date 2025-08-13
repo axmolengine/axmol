@@ -51,9 +51,8 @@ bool SkeletonNode::init()
 
     // init _customCommand
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    auto* program =
-        ax::backend::Program::getBuiltinProgram(ax::backend::ProgramType::POSITION_COLOR);  // TODO: noMVP?
-    setProgramState(new ax::backend::ProgramState(program), true);
+    auto* program = axpm->getBuiltinProgram(ax::rhi::ProgramType::POSITION_COLOR);  // TODO: noMVP?
+    setProgramState(new ax::rhi::ProgramState(program), true);
     pipelineDescriptor.programState = _programState;
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix");

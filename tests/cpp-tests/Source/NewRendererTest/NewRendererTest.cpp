@@ -27,7 +27,7 @@
 #include "NewRendererTest.h"
 #include <chrono>
 #include <sstream>
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 
 namespace
 {
@@ -852,13 +852,13 @@ RendererUniformBatch::RendererUniformBatch()
     }
 }
 
-ax::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
+ax::rhi::ProgramState* RendererUniformBatch::createBlurProgramState()
 {
     auto programState =
-        new backend::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
+        new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
     programState->autorelease();
 
-    backend::UniformLocation loc = programState->getUniformLocation("resolution");
+    rhi::UniformLocation loc = programState->getUniformLocation("resolution");
     auto resolution              = Vec2(85, 121);
     programState->setUniform(loc, &resolution, sizeof(resolution));
 
@@ -873,9 +873,9 @@ ax::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
     return programState;
 }
 
-ax::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
+ax::rhi::ProgramState* RendererUniformBatch::createSepiaProgramState()
 {
-    auto programState = new backend::ProgramState(ProgramManager::getInstance()->loadProgram(s_sepia_program_id));
+    auto programState = new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_sepia_program_id));
     programState->autorelease();
     return programState;
 }
@@ -924,12 +924,12 @@ RendererUniformBatch2::RendererUniformBatch2()
     }
 }
 
-backend::ProgramState* RendererUniformBatch2::createBlurProgramState()
+rhi::ProgramState* RendererUniformBatch2::createBlurProgramState()
 {
     auto programState =
-        new backend::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
+        new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
 
-    backend::UniformLocation loc = programState->getUniformLocation("resolution");
+    rhi::UniformLocation loc = programState->getUniformLocation("resolution");
     auto resolution              = Vec2(85, 121);
     programState->setUniform(loc, &resolution, sizeof(resolution));
 
@@ -944,10 +944,10 @@ backend::ProgramState* RendererUniformBatch2::createBlurProgramState()
     return programState;
 }
 
-backend::ProgramState* RendererUniformBatch2::createSepiaProgramState()
+rhi::ProgramState* RendererUniformBatch2::createSepiaProgramState()
 {
     auto programState =
-        new backend::ProgramState(ProgramManager::getInstance()->loadProgram(s_sepia_program_id));
+        new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_sepia_program_id));
     programState->autorelease();
     return programState;
 }

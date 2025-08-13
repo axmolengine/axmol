@@ -111,7 +111,7 @@ static Sprite* engine_inj_create_lump(const Color32& color, int height, int widt
     // create cursor by pixels
     Texture2D* texture = new Texture2D();
 
-    texture->initWithData(pixels, height * width * sizeof(unsigned int), backend::PixelFormat::RGBA8, width, height);
+    texture->initWithData(pixels, height * width * sizeof(unsigned int), rhi::PixelFormat::RGBA8, width, height);
 
     auto cursor = Sprite::createWithTexture(texture);
 

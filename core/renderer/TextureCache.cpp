@@ -42,7 +42,7 @@ THE SOFTWARE.
 #include "platform/FileUtils.h"
 #include "base/Utils.h"
 #include "base/NinePatchImageParser.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 
 using namespace std;
 
@@ -96,7 +96,7 @@ public:
     std::string callbackKey;
     Image image;
     Image imageAlpha;
-    backend::PixelFormat pixelFormat;
+    rhi::PixelFormat pixelFormat;
     bool loadSuccess;
 };
 
@@ -819,7 +819,7 @@ VolatileTexture::VolatileTexture(Texture2D* t)
     , _uiImage(nullptr)
     , _cashedImageType(kInvalid)
     , _textureData(nullptr)
-    , _pixelFormat(backend::PixelFormat::RGBA8)
+    , _pixelFormat(rhi::PixelFormat::RGBA8)
     , _fileName("")
     , _text("")
 {}
@@ -884,7 +884,7 @@ VolatileTexture* VolatileTextureMgr::getOrAddVolatileTexture(Texture2D* tt)
 void VolatileTextureMgr::addDataTexture(Texture2D* tt,
                                         void* data,
                                         int dataLen,
-                                        backend::PixelFormat pixelFormat,
+                                        rhi::PixelFormat pixelFormat,
                                         const Vec2& contentSize)
 {
     if (_isReloading)
@@ -976,7 +976,7 @@ void VolatileTextureMgr::reloadAllTextures()
     _isReloading = false;
 }
 
-void VolatileTextureMgr::reloadTexture(Texture2D* texture, std::string_view filename, backend::PixelFormat pixelFormat)
+void VolatileTextureMgr::reloadTexture(Texture2D* texture, std::string_view filename, rhi::PixelFormat pixelFormat)
 {
     if (!texture)
         return;

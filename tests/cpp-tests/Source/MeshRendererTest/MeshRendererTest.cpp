@@ -545,7 +545,7 @@ MeshRendererFakeShadowTest::MeshRendererFakeShadowTest()
         auto mat = MeshMaterial::createWithFilename("MeshRendererTest/FakeShadow.material");
         _state   = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
         _plane->setMaterial(mat);
-        backend::UniformLocation loc = _state->getUniformLocation("u_model_matrix");
+        rhi::UniformLocation loc = _state->getUniformLocation("u_model_matrix");
         auto trans                   = _plane->getNodeToWorldTransform();
         _state->setUniform(loc, &trans, sizeof(trans));
         loc      = _state->getUniformLocation("u_target_pos");
@@ -2236,10 +2236,10 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 
     // set texture parameters
     Texture2D::TexParams tRepeatParams;
-    tRepeatParams.magFilter    = backend::SamplerFilter::LINEAR;
-    tRepeatParams.minFilter    = backend::SamplerFilter::LINEAR;
-    tRepeatParams.sAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
-    tRepeatParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
+    tRepeatParams.magFilter    = rhi::SamplerFilter::LINEAR;
+    tRepeatParams.minFilter    = rhi::SamplerFilter::LINEAR;
+    tRepeatParams.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+    tRepeatParams.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
     _textureCube->setTexParameters(tRepeatParams);
 
     auto mat   = MeshMaterial::createWithFilename("MeshRendererTest/CubeMap.material");
@@ -2279,10 +2279,10 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
         _textureCube->retain();
         // set texture parameters
         Texture2D::TexParams tRepeatParams;
-        tRepeatParams.magFilter    = backend::SamplerFilter::LINEAR;
-        tRepeatParams.minFilter    = backend::SamplerFilter::LINEAR;
-        tRepeatParams.sAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
-        tRepeatParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
+        tRepeatParams.magFilter    = rhi::SamplerFilter::LINEAR;
+        tRepeatParams.minFilter    = rhi::SamplerFilter::LINEAR;
+        tRepeatParams.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+        tRepeatParams.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
         _textureCube->setTexParameters(tRepeatParams);
 
         auto mat   = MeshMaterial::createWithFilename("MeshRendererTest/CubeMap.material");
@@ -2343,14 +2343,14 @@ void Issue9767::menuCallback_SwitchShader(ax::Object* sender)
     if (_shaderType == Issue9767::ShaderType::SHADER_TEX)
     {
         _shaderType   = Issue9767::ShaderType::SHADER_COLOR;
-        auto program  = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_3D);
-        _programState = new backend::ProgramState(program);
+        auto program  = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_3D);
+        _programState = new rhi::ProgramState(program);
     }
     else
     {
         _shaderType   = Issue9767::ShaderType::SHADER_TEX;
-        auto program  = backend::Program::getBuiltinProgram(backend::ProgramType::UNLIT);
-        _programState = new backend::ProgramState(program);
+        auto program  = axpm->getBuiltinProgram(rhi::ProgramType::UNLIT);
+        _programState = new rhi::ProgramState(program);
     }
     _mesh->setProgramState(_programState);
 }

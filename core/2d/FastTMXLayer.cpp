@@ -45,11 +45,11 @@ THE SOFTWARE.
 #include "renderer/TextureCache.h"
 #include "renderer/Renderer.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/DriverBase.h"
-#include "renderer/backend/Buffer.h"
+#include "rhi/DriverBase.h"
+#include "rhi/Buffer.h"
 #include "base/Director.h"
 #include "base/text_utils.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 namespace ax
 {
@@ -274,7 +274,7 @@ void FastTMXLayer::updateVertexBuffer()
     unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_T2F_C4B) * _totalQuads.size() * 4);
     if (!_vertexBuffer)
     {
-        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(vertexBufferSize, backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
+        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(vertexBufferSize, rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
     }
     _vertexBuffer->updateData(&_totalQuads[0], vertexBufferSize);
 }
@@ -284,7 +284,7 @@ void FastTMXLayer::updateIndexBuffer()
     auto indexBufferSize = (sizeof(decltype(_indices)::value_type) * _indices.size());
     if (!_indexBuffer)
     {
-        _indexBuffer = backend::DriverBase::getInstance()->createBuffer(indexBufferSize, backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
+        _indexBuffer = rhi::DriverBase::getInstance()->createBuffer(indexBufferSize, rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
     }
     _indexBuffer->updateData(&_indices[0], indexBufferSize);
 }
@@ -452,8 +452,8 @@ void FastTMXLayer::updatePrimitives()
             {
                 AX_SAFE_RELEASE(pipelineDescriptor.programState);
                 auto* program =
-                    backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-                auto programState               = new backend::ProgramState(program);
+                    axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
+                auto programState               = new rhi::ProgramState(program);
                 pipelineDescriptor.programState = programState;
                 _alphaValueLocation             = pipelineDescriptor.programState->getUniformLocation("u_alpha_value");
                 pipelineDescriptor.programState->setUniform(_alphaValueLocation, &_alphaFuncValue,
@@ -462,8 +462,8 @@ void FastTMXLayer::updatePrimitives()
             else
             {
                 AX_SAFE_RELEASE(pipelineDescriptor.programState);
-                auto* program     = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-                auto programState = new backend::ProgramState(program);
+                auto* program     = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+                auto programState = new rhi::ProgramState(program);
                 pipelineDescriptor.programState = programState;
             }
 

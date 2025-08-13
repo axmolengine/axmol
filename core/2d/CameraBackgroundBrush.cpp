@@ -124,8 +124,8 @@ CameraBackgroundDepthBrush* CameraBackgroundDepthBrush::create(float depth)
 bool CameraBackgroundDepthBrush::init()
 {
     AX_SAFE_RELEASE_NULL(_programState);
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::CAMERA_CLEAR);
-    _programState = new backend::ProgramState(program);
+    auto* program = ProgramManager::getInstance()->getBuiltinProgram(rhi::ProgramType::CAMERA_CLEAR);
+    _programState = new rhi::ProgramState(program);
 
     _locDepth = _programState->getUniformLocation("dpeth");
 
@@ -176,7 +176,7 @@ void CameraBackgroundDepthBrush::drawBackground(Camera* /*camera*/)
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto& blend              = pipelineDescriptor.blendDescriptor;
-    blend.writeMask          = _clearColor ? backend::ColorWriteMask::ALL : backend::ColorWriteMask::NONE;
+    blend.writeMask          = _clearColor ? rhi::ColorWriteMask::ALL : rhi::ColorWriteMask::NONE;
 
     // draw
     _programState->setUniform(_locDepth, &_depth, sizeof(_depth));
@@ -195,7 +195,7 @@ void CameraBackgroundDepthBrush::onBeforeDraw()
 
     renderer->setStencilWriteMask(0);
     renderer->setDepthTest(true);
-    renderer->setDepthCompareFunction(backend::CompareFunction::ALWAYS);
+    renderer->setDepthCompareFunction(rhi::CompareFunction::ALWAYS);
 }
 
 void CameraBackgroundDepthBrush::onAfterDraw()
@@ -298,10 +298,10 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(std::string_vie
     {
 
         Texture2D::TexParams tRepeatParams;
-        tRepeatParams.magFilter    = backend::SamplerFilter::LINEAR;
-        tRepeatParams.minFilter    = backend::SamplerFilter::LINEAR;
-        tRepeatParams.sAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
-        tRepeatParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
+        tRepeatParams.magFilter    = rhi::SamplerFilter::LINEAR;
+        tRepeatParams.minFilter    = rhi::SamplerFilter::LINEAR;
+        tRepeatParams.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+        tRepeatParams.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
         texture->setTexParameters(tRepeatParams);
 
         ret = new CameraBackgroundSkyBoxBrush;
@@ -377,8 +377,8 @@ bool CameraBackgroundSkyBoxBrush::init()
     _customCommand.setAfterCallback(AX_CALLBACK_0(CameraBackgroundSkyBoxBrush::onAfterDraw, this));
 
     AX_SAFE_RELEASE_NULL(_programState);
-    auto* program        = backend::Program::getBuiltinProgram(backend::ProgramType::SKYBOX_3D);
-    _programState        = new backend::ProgramState(program);
+    auto* program        = axpm->getBuiltinProgram(rhi::ProgramType::SKYBOX_3D);
+    _programState        = new rhi::ProgramState(program);
     _uniformColorLoc     = _programState->getUniformLocation("u_color");
     _uniformCameraRotLoc = _programState->getUniformLocation("u_cameraRot");
     _uniformEnvLoc       = _programState->getUniformLocation("u_Env");

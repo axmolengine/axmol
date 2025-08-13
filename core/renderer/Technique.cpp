@@ -35,7 +35,7 @@
 namespace ax
 {
 
-Technique* Technique::createWithProgramState(Material* parent, backend::ProgramState* state)
+Technique* Technique::createWithProgramState(Material* parent, rhi::ProgramState* state)
 {
     auto technique = new Technique();
     if (technique->init(parent))

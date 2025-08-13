@@ -3665,10 +3665,10 @@ static int toaxlua_Texture2D_setTexParameters(lua_State* tolua_S)
 
     int argc        = 0;
     Texture2D* self = nullptr;
-    backend::SamplerFilter arg1;
-    backend::SamplerFilter arg2;
-    backend::SamplerAddressMode arg3;
-    backend::SamplerAddressMode arg4;
+    rhi::SamplerFilter arg1;
+    rhi::SamplerFilter arg2;
+    rhi::SamplerAddressMode arg3;
+    rhi::SamplerAddressMode arg4;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3698,10 +3698,10 @@ static int toaxlua_Texture2D_setTexParameters(lua_State* tolua_S)
         }
 #endif
 
-        arg1 = (backend::SamplerFilter)(int)tolua_tonumber(tolua_S, 2, 0);
-        arg2 = (backend::SamplerFilter)(int)tolua_tonumber(tolua_S, 3, 0);
-        arg3 = (backend::SamplerAddressMode)(int)tolua_tonumber(tolua_S, 4, 0);
-        arg4 = (backend::SamplerAddressMode)(int)tolua_tonumber(tolua_S, 5, 0);
+        arg1 = (rhi::SamplerFilter)(int)tolua_tonumber(tolua_S, 2, 0);
+        arg2 = (rhi::SamplerFilter)(int)tolua_tonumber(tolua_S, 3, 0);
+        arg3 = (rhi::SamplerAddressMode)(int)tolua_tonumber(tolua_S, 4, 0);
+        arg4 = (rhi::SamplerAddressMode)(int)tolua_tonumber(tolua_S, 5, 0);
 
         Texture2D::TexParams param(arg1, arg2, arg3, arg4);
 
@@ -6877,8 +6877,8 @@ int axlua_set_PipelineDescriptor_programState(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        ax::backend::ProgramState* programState = nullptr;
-        luaval_to_object<ax::backend::ProgramState>(tolua_S, 2, "axb.ProgramState", &programState,
+        ax::rhi::ProgramState* programState = nullptr;
+        luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axb.ProgramState", &programState,
                                                          "axlua_set_PipelineDescriptor_programState");
         self->programState = programState;
         return 0;
@@ -6928,7 +6928,7 @@ static void extendPipelineDescriptor(lua_State* tolua_S)
 static int axlua_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
 {
     int argc                             = 0;
-    ax::backend::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* cobj = nullptr;
     bool ok                              = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6938,7 +6938,7 @@ static int axlua_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "axb.ProgramState", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -6961,20 +6961,20 @@ static int axlua_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
                 {
                     break;
                 }
-                ax::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
+                ax::rhi::UniformLocation ret = cobj->getUniformLocation(arg0);
                 uniformLocation_to_luaval(tolua_S, ret);
                 return 1;
             }
             else if (lua_isnumber(tolua_S, -1))
             {
-                ax::backend::Uniform arg0;
+                ax::rhi::Uniform arg0;
                 ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "axb.ProgramState:getUniformLocation");
 
                 if (!ok)
                 {
                     break;
                 }
-                ax::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
+                ax::rhi::UniformLocation ret = cobj->getUniformLocation(arg0);
                 uniformLocation_to_luaval(tolua_S, ret);
                 return 1;
             }
@@ -6997,7 +6997,7 @@ static int axlua_ProgramState_setUniform(lua_State* tolua_S)
 {
     bool ok                              = true;
     int argc                             = 0;
-    ax::backend::ProgramState* self = nullptr;
+    ax::rhi::ProgramState* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -7005,7 +7005,7 @@ static int axlua_ProgramState_setUniform(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (ax::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -7018,7 +7018,7 @@ static int axlua_ProgramState_setUniform(lua_State* tolua_S)
 
     if (2 == argc)
     {
-        ax::backend::UniformLocation location;
+        ax::rhi::UniformLocation location;
 
         if (lua_isstring(tolua_S, 2))
         {
@@ -7064,7 +7064,7 @@ static void extendProgramState(lua_State* tolua_S)
     // lua_pushstring(tolua_S, "axb.ProgramState");
     // lua_rawget(tolua_S, LUA_REGISTRYINDEX);
 
-    tolua_beginmodule(tolua_S, "axb");
+    tolua_beginmodule(tolua_S, "axrhi");
     tolua_beginmodule(tolua_S, "ProgramState");
     if (lua_istable(tolua_S, -1))
     {

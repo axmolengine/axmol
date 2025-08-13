@@ -30,7 +30,7 @@
 #include "renderer/RenderState.h"
 #include "renderer/MeshCommand.h"
 #include "renderer/CallbackCommand.h"
-#include "renderer/backend/Buffer.h"
+#include "rhi/Buffer.h"
 #include "base/Object.h"
 #include "math/Math.h"
 #include "extensions/ExtensionExport.h"
@@ -114,23 +114,23 @@ protected:
     //CallbackCommand _beforeCommand;
     //CallbackCommand _afterCommand;
     Texture2D* _texture                  = nullptr;
-    backend::ProgramState* _programState = nullptr;
-    backend::Buffer* _indexBuffer        = nullptr;  // index buffer
-    backend::Buffer* _vertexBuffer       = nullptr;  // vertex buffer
+    rhi::ProgramState* _programState = nullptr;
+    rhi::Buffer* _indexBuffer        = nullptr;  // index buffer
+    rhi::Buffer* _vertexBuffer       = nullptr;  // vertex buffer
 
     std::vector<ax::V3F_T2F_C4F> _posuvcolors;  // vertex data
     std::vector<uint16_t> _indexData;      // index data
     std::string _texFile;
 
-    backend::UniformLocation _locColor;
-    backend::UniformLocation _locTexture;
-    backend::UniformLocation _locPMatrix;
+    rhi::UniformLocation _locColor;
+    rhi::UniformLocation _locTexture;
+    rhi::UniformLocation _locPMatrix;
 
     // renderer state cache variables
     bool _rendererDepthTestEnabled                 = true;
-    backend::CompareFunction _rendererDepthCmpFunc = backend::CompareFunction::LESS;
-    backend::CullMode _rendererCullMode            = backend::CullMode::BACK;
-    backend::Winding _rendererWinding              = backend::Winding::COUNTER_CLOCK_WISE;
+    rhi::CompareFunction _rendererDepthCmpFunc = rhi::CompareFunction::LESS;
+    rhi::CullMode _rendererCullMode            = rhi::CullMode::BACK;
+    rhi::Winding _rendererWinding              = rhi::Winding::COUNTER_CLOCK_WISE;
     bool _rendererDepthWrite                       = false;
 };
 

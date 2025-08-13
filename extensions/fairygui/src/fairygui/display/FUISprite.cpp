@@ -101,7 +101,7 @@ void FUISprite::setScaleByTile(bool value)
 void FUISprite::setGrayed(bool value)
 {
 #if defined(AX_VERSION)
-    Sprite::setProgramState(value ? backend::ProgramType::GRAY_SCALE : backend::ProgramType::POSITION_TEXTURE_COLOR);
+    Sprite::setProgramState(value ? rhi::ProgramType::GRAY_SCALE : rhi::ProgramType::POSITION_TEXTURE_COLOR);
 #elif COCOS2D_VERSION >= 0x00040000
     auto isETC1 = getTexture() && getTexture()->getAlphaTextureName();
     if (value) {
@@ -352,7 +352,7 @@ void FUISprite::updateRadial(void)
     {
         triangleCount = _vertexDataCount - 2;
     }
-    
+
     updateColor();
 
     if (!sameIndexCount)
@@ -377,13 +377,13 @@ void FUISprite::updateRadial(void)
     //    hitpoint will go last
     _vertexData[_vertexDataCount - 1].texCoord = textureCoordFromAlphaPoint(hit);
     _vertexData[_vertexDataCount - 1].position = vertexFromAlphaPoint(hit);
-    
+
     for (int i = 0; i < triangleCount; i++) {
         _vertexIndex[i * 3] = 0;
         _vertexIndex[i * 3 + 1] = i + 1;
         _vertexIndex[i * 3 + 2] = i + 2;
     }
-    
+
     _fillTriangles.verts = _vertexData;
     _fillTriangles.vertCount = _vertexDataCount;
     _fillTriangles.indices = _vertexIndex;
@@ -452,14 +452,14 @@ void FUISprite::updateBar(void)
     //    BOTRIGHT
     _vertexData[3].texCoord = textureCoordFromAlphaPoint(Vec2(max.x, min.y));
     _vertexData[3].position = vertexFromAlphaPoint(Vec2(max.x, min.y));
-    
+
     _vertexIndex[0] = 0;
     _vertexIndex[1] = 1;
     _vertexIndex[2] = 2;
     _vertexIndex[3] = 2;
     _vertexIndex[4] = 1;
     _vertexIndex[5] = 3;
-    
+
     _fillTriangles.verts = _vertexData;
     _fillTriangles.vertCount = 4;
     _fillTriangles.indices = _vertexIndex;

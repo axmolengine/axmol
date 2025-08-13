@@ -31,7 +31,7 @@
 #include "base/Types.h"
 #include "base/Config.h"
 #include "renderer/CustomCommand.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
@@ -77,11 +77,11 @@ protected:
 
 protected:
     std::vector<V3F_C4F> _buffer;
-    ax::backend::UniformLocation _locMVP;
+    ax::rhi::UniformLocation _locMVP;
 
     ax::BlendFunc _blendFunc = BlendFunc::DISABLE;
     ax::CustomCommand _customCommand;
-    ax::backend::ProgramState* _programState = nullptr;
+    ax::rhi::ProgramState* _programState = nullptr;
 
     bool _dirty    = true;
     int _debugMode = DBG_DrawWireframe | DBG_DrawConstraints | DBG_DrawConstraintLimits;

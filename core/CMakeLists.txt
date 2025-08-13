@@ -56,7 +56,7 @@ cmake_dependent_option(AX_USE_ANGLE "Whether use angle as gles API provider" ${W
 # set(AX_RENDER_API_GL  1 CACHE INTERNAL "" FORCE)
 # set(AX_RENDER_API_MTL 2 CACHE INTERNAL "" FORCE)
 # set(AX_RENDER_API_D3D 3 CACHE INTERNAL "" FORCE)
-set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics backend API")
+set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics render API")
 
 if(AX_RENDER_API STREQUAL "auto")
   if(APPLE)
@@ -226,6 +226,7 @@ if(AX_ENABLE_NAVMESH)
   include(navmesh/CMakeLists.txt)
 endif()
 
+include(rhi/CMakeLists.txt)
 include(renderer/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(ui/CMakeLists.txt)
@@ -249,6 +250,7 @@ set(_AX_HEADER axmol.h
   ${_AX_2D_HEADER}
   ${_AX_PLATFORM_HEADER}
   ${_AX_MATH_HEADER}
+  ${_AX_RHI_HEADER}
   ${_AX_RENDERER_HEADER}
   ${_AX_BASE_HEADER}
   ${_AX_UI_HEADER}
@@ -259,6 +261,7 @@ set(_AX_SRC axmol.cpp
   ${_AX_2D_SRC}
   ${_AX_PLATFORM_SRC}
   ${_AX_MATH_SRC}
+  ${_AX_RHI_SRC}
   ${_AX_RENDERER_SRC}
   ${_AX_BASE_SRC}
   ${_AX_UI_SRC}
@@ -349,14 +352,14 @@ set_source_files_properties(
   ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
   ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
   ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
-  PROPERTIES AXSLCC_DEFINES
+  PROPERTIES AXSCC_DEFINES
   "MAX_DIRECTIONAL_LIGHT_NUM=${AX_MAX_DIRECTIONAL_LIGHT},MAX_POINT_LIGHT_NUM=${AX_MAX_POINT_LIGHT},MAX_SPOT_LIGHT_NUM=${AX_MAX_SPOT_LIGHT}"
 )
 set_source_files_properties(
   ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
   ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
   ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
-  PROPERTIES AXSLCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
+  PROPERTIES AXSCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
 )
 ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
 

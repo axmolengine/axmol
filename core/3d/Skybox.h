@@ -29,7 +29,7 @@
 #include "platform/PlatformMacros.h"
 #include "renderer/CustomCommand.h"
 #include "2d/Node.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 namespace ax
 {
@@ -111,16 +111,16 @@ protected:
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Skybox);
 
-    backend::UniformLocation _uniformColorLoc;
-    backend::UniformLocation _uniformCameraRotLoc;
-    backend::UniformLocation _uniformEnvLoc;
+    rhi::UniformLocation _uniformColorLoc;
+    rhi::UniformLocation _uniformCameraRotLoc;
+    rhi::UniformLocation _uniformEnvLoc;
 
     void onBeforeDraw();
     void onAfterDraw();
 
     bool _rendererDepthTestEnabled;
-    backend::CompareFunction _rendererDepthCmpFunc;
-    backend::CullMode _rendererCullMode;
+    rhi::CompareFunction _rendererDepthCmpFunc;
+    rhi::CullMode _rendererCullMode;
 };
 
 // end of 3d group

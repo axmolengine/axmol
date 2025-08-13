@@ -33,7 +33,7 @@
 #include "renderer/Renderer.h"
 #include "renderer/RenderState.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/Buffer.h"
+#include "rhi/Buffer.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
@@ -128,8 +128,8 @@ Physics3DDebugDrawer::~Physics3DDebugDrawer()
 void Physics3DDebugDrawer::init()
 {
     AX_SAFE_RELEASE_NULL(_programState);
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
-    _programState = new backend::ProgramState(program);
+    auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_COLOR);
+    _programState = new rhi::ProgramState(program);
     _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
 
     _buffer.reserve(512);

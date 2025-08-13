@@ -163,7 +163,7 @@ protected:
 
     QuadCommand _quadCommand;  // quad command
 
-    backend::UniformLocation _mvpMatrixLocaiton;
+    rhi::UniformLocation _mvpMatrixLocaiton;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(ParticleSystemQuad);

@@ -532,7 +532,7 @@ function(ax_setup_app_config app_name)
     )
   endif()
 
-  # auto looking app shaders source dir and add to axslcc compile-list
+  # auto looking app shaders source dir and add to axscc compile-list
   get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
   set(app_shaders_dir "${_APP_SOURCE_DIR}/Source/shaders")
 
@@ -542,26 +542,26 @@ function(ax_setup_app_config app_name)
     list(LENGTH app_shaders app_shaders_count)
     message(STATUS "${app_shaders_count} shader sources found in ${app_shaders_dir}")
 
-    # compile app shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/
+    # compile app shader to ${CMAKE_BINARY_DIR}/runtime/axsc/custom/
     ax_target_compile_shaders(${app_name} FILES ${app_shaders} CUSTOM)
     source_group("Source Files/Source/shaders" FILES ${app_shaders})
   endif()
 
-  if(IS_DIRECTORY ${AXSLCC_OUT_DIR})
+  if(IS_DIRECTORY ${AXSCC_OUT_DIR})
     get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
 
     if((WIN32 AND(NOT WINRT)) OR LINUX)
       if(NOT DEFINED AX_PREBUILT_DIR)
-        ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${AXSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
+        ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axsc" FOLDERS ${AXSCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axsc)
       else() # linking with prebuilt, can't use symlink
-        ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${AXSLCC_OUT_DIR} SYNC_TARGET_ID axslc)
+        ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axsc" FOLDERS ${AXSCC_OUT_DIR} SYNC_TARGET_ID axsc)
       endif()
     elseif(APPLE)
       if(CMAKE_GENERATOR MATCHES "Xcode")
-        set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES ${AXSLCC_OUT_DIR})
+        set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES ${AXSCC_OUT_DIR})
       else()
         get_target_compiled_shaders(shaders ${app_name})
-        ax_mark_resources(FILES ${shaders} BASEDIR ${AXSLCC_OUT_DIR} RESOURCEBASE "Resources/axslc")
+        ax_mark_resources(FILES ${shaders} BASEDIR ${AXSCC_OUT_DIR} RESOURCEBASE "Resources/axsc")
         target_sources(${app_name} PRIVATE ${shaders})
       endif()
     elseif(WINRT OR WASM)
@@ -574,7 +574,7 @@ function(ax_setup_app_config app_name)
       else()
         # --preload-file
         # refer to: https://emscripten.org/docs/porting/files/packaging_files.html
-        target_link_options(${app_name} PRIVATE "--preload-file" ${AXSLCC_OUT_DIR}@axslc/)
+        target_link_options(${app_name} PRIVATE "--preload-file" ${AXSCC_OUT_DIR}@axsc/)
       endif()
     endif()
   endif()

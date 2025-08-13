@@ -3,7 +3,7 @@
 #include "base/Utils.h"
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 #endif
 
 namespace efk
@@ -700,17 +700,17 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
     if (!manager->getInternalManager()->GetShown(handle) ||
         manager->getInternalManager()->GetTotalInstanceCount() < 1)
         return; // nothing to draw
-            
+
 #if AX_RENDER_API == AX_RENDER_API_MTL
     if (!manager->isDistorted)
     {
         // allow frame buffer texture to be copied for distortion
-        cocos2d::backend::DriverBase::getInstance()->setFrameBufferOnly(false);
+        cocos2d::rhi::DriverBase::getInstance()->setFrameBufferOnly(false);
     }
 #endif
 
     auto renderCommand = renderer->nextCallbackCommand();
-    
+
 	renderCommand->init(_globalZOrder);
 
 	auto renderer2d = manager->getInternalRenderer();
@@ -734,7 +734,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
 		renderer->addDrawnVertices(renderer2d->GetDrawVertexCount());
 		renderer2d->ResetDrawCallCount();
 		renderer2d->ResetDrawVertexCount();
-        
+
         #if AX_RENDER_API == AX_RENDER_API_MTL
         afterRender(renderer2d, commandList);
         #endif
@@ -892,7 +892,7 @@ void EffectManager::begin(cocos2d::Renderer* renderer, float globalZOrder)
 		manager2d->Draw();
 
 	};
-	
+
 
 
 

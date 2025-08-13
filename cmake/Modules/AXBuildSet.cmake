@@ -24,25 +24,25 @@ endif()
 # hold the extensions list to auto link to app
 set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
 
-# configure android AXSLCC compile output, this is the first include cmake module
+# configure android AXSCC compile output, this is the first include cmake module
 if(ANDROID)
-  file(TO_NATIVE_PATH "${_AX_ANDROID_PROJECT_DIR}/build/runtime/axslc" _AXSLCC_OUT_DIR)
-  set(AXSLCC_OUT_DIR "${_AXSLCC_OUT_DIR}" CACHE STRING "" FORCE)
-  message(AUTHOR_WARNING "Set AXSLCC_OUT_DIR to ${AXSLCC_OUT_DIR} for android")
+  file(TO_NATIVE_PATH "${_AX_ANDROID_PROJECT_DIR}/build/runtime/axsc" _AXSCC_OUT_DIR)
+  set(AXSCC_OUT_DIR "${_AXSCC_OUT_DIR}" CACHE STRING "" FORCE)
+  message(AUTHOR_WARNING "Set AXSCC_OUT_DIR to ${AXSCC_OUT_DIR} for android")
 endif()
 
-# import minimal axslcc.cmake for shader compiler support
+# import minimal axscc.cmake for shader compiler support
 # the function: ax_target_compile_shaders avaiable from it
-file(TO_CMAKE_PATH "${_AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH)
-file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH_ENV)
-set(AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH}")
+file(TO_CMAKE_PATH "${_AX_ROOT}/tools/external/axscc" _AXSCC_PATH)
+file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axscc" _AXSCC_PATH_ENV)
+set(AXSCC_FIND_PROG_ROOT "${_AXSCC_PATH}")
 
-if(NOT _AXSLCC_PATH STREQUAL _AXSLCC_PATH_ENV)
-  message(AUTHOR_WARNING "Add engine ${_AXSLCC_PATH_ENV} as additional path to find axlscc for isolate project")
-  list(APPEND AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH_ENV}")
+if(NOT _AXSCC_PATH STREQUAL _AXSCC_PATH_ENV)
+  message(AUTHOR_WARNING "Add engine ${_AXSCC_PATH_ENV} as additional path to find axlscc for isolate project")
+  list(APPEND AXSCC_FIND_PROG_ROOT "${_AXSCC_PATH_ENV}")
 endif()
 
-include(AXSLCC)
+include(AXSCC)
 
 # include helper functions
 include(AXBuildHelpers)

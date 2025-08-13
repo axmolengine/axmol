@@ -431,7 +431,7 @@ public:
     /**
      * Set or Attach new ProgramState
      */
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(rhi::ProgramState* programState, bool ownPS = false) override;
 
     /**
      * Sets the weak reference of the TextureAtlas when the sprite is rendered using via SpriteBatchNode.
@@ -687,7 +687,7 @@ protected:
     SpriteFrame* _spriteFrame = nullptr;
     TrianglesCommand _trianglesCommand;
 
-    backend::UniformLocation _mvpMatrixLocation;
+    rhi::UniformLocation _mvpMatrixLocation;
 #if AX_SPRITE_DEBUG_DRAW
     DrawNode* _debugDrawNode = nullptr;
 #endif  // AX_SPRITE_DEBUG_DRAW

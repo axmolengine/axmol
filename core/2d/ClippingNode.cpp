@@ -29,7 +29,7 @@
 #include "2d/ClippingNode.h"
 #include "renderer/Renderer.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "base/Director.h"
 #include "base/StencilStateManager.h"
 
@@ -166,8 +166,8 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
     auto alphaThreshold = this->getAlphaThreshold();
     if (alphaThreshold < 1)
     {
-        auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-        auto programState  = new backend::ProgramState(program);
+        auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
+        auto programState  = new rhi::ProgramState(program);
         auto alphaLocation = programState->getUniformLocation("u_alpha_value");
         programState->setUniform(alphaLocation, &alphaThreshold, sizeof(alphaThreshold));
         setProgramStateRecursively(_stencil, programState);
@@ -349,7 +349,7 @@ void ClippingNode::setInverted(bool inverted)
     _stencilStateManager->setInverted(inverted);
 }
 
-void ClippingNode::setProgramStateRecursively(Node* node, backend::ProgramState* programState)
+void ClippingNode::setProgramStateRecursively(Node* node, rhi::ProgramState* programState)
 {
     if (_originalStencilProgramState.find(node) == _originalStencilProgramState.end())
     {

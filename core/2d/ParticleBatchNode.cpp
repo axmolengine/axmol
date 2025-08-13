@@ -42,7 +42,7 @@
 #include "base/text_utils.h"
 #include "base/Utils.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 namespace ax
 {
@@ -50,10 +50,10 @@ namespace ax
 ParticleBatchNode::ParticleBatchNode()
 {
     auto& pipelinePS = _customCommand.getPipelineDescriptor().programState;
-    auto* program    = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
+    auto* program    = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
     //!!! ParticleBatchNode private programState don't want affect by Node::_programState, so store at _customCommand
     //!!! support etc1 with alpha?
-    pipelinePS = new backend::ProgramState(program);
+    pipelinePS = new rhi::ProgramState(program);
 
     _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
     _textureLocation   = pipelinePS->getUniformLocation("u_tex0");

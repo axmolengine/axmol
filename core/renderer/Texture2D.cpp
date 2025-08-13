@@ -43,10 +43,10 @@ THE SOFTWARE.
 #include "platform/PlatformMacros.h"
 #include "base/Director.h"
 #include "base/NinePatchImageParser.h"
-#include "renderer/backend/DriverBase.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/DriverBase.h"
+#include "rhi/ProgramState.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/PixelFormatUtils.h"
+#include "rhi/PixelFormatUtils.h"
 #include "renderer/Renderer.h"
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -57,7 +57,7 @@ namespace ax
 {
 
 Texture2D::Texture2D()
-    : _pixelFormat(backend::PixelFormat::NONE)
+    : _pixelFormat(rhi::PixelFormat::NONE)
     , _pixelsWide(0)
     , _pixelsHigh(0)
     , _maxS(0.0)
@@ -67,10 +67,10 @@ Texture2D::Texture2D()
     , _ninePatchInfo(nullptr)
     , _valid(true)
 {
-    backend::TextureDescriptor textureDescriptor;
+    rhi::TextureDescriptor textureDescriptor;
     textureDescriptor.textureFormat = PixelFormat::NONE;
     _texture =
-        static_cast<backend::Texture*>(backend::DriverBase::getInstance()->createTexture(textureDescriptor));
+        static_cast<rhi::Texture*>(rhi::DriverBase::getInstance()->createTexture(textureDescriptor));
 }
 
 Texture2D::~Texture2D()
@@ -85,7 +85,7 @@ Texture2D::~Texture2D()
     AX_SAFE_RELEASE(_programState);
 }
 
-backend::PixelFormat Texture2D::getPixelFormat() const
+rhi::PixelFormat Texture2D::getPixelFormat() const
 {
     return _pixelFormat;
 }
@@ -100,7 +100,7 @@ int Texture2D::getPixelsHigh() const
     return _pixelsHigh;
 }
 
-backend::Texture* Texture2D::getBackendTexture() const
+rhi::Texture* Texture2D::getBackendTexture() const
 {
     return _texture;
 }
@@ -154,8 +154,8 @@ void Texture2D::setPremultipliedAlpha(bool premultipliedAlpha)
 
 bool Texture2D::initWithData(const void* data,
                              ssize_t dataLen,
-                             backend::PixelFormat pixelFormat,
-                             backend::PixelFormat renderFormat,
+                             rhi::PixelFormat pixelFormat,
+                             rhi::PixelFormat renderFormat,
                              int pixelsWide,
                              int pixelsHigh,
                              bool preMultipliedAlpha)
@@ -171,8 +171,8 @@ bool Texture2D::initWithData(const void* data,
 
 bool Texture2D::initWithMipmaps(MipmapInfo* mipmaps,
                                 int mipmapsNum,
-                                backend::PixelFormat pixelFormat,
-                                backend::PixelFormat renderFormat,
+                                rhi::PixelFormat pixelFormat,
+                                rhi::PixelFormat renderFormat,
                                 int pixelsWide,
                                 int pixelsHigh,
                                 bool preMultipliedAlpha)
@@ -188,7 +188,7 @@ bool Texture2D::updateWithImage(Image* image, int index)
     return updateWithImage(image, image->getPixelFormat(), index);
 }
 
-bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int index)
+bool Texture2D::updateWithImage(Image* image, rhi::PixelFormat format, int index)
 {
     if (image == nullptr)
     {
@@ -214,8 +214,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 
     unsigned char* tempData               = image->getData();
     // Vec2 imageSize                        = Vec2((float)imageWidth, (float)imageHeight);
-    backend::PixelFormat renderFormat     = (PixelFormat::NONE == format) ? image->getPixelFormat() : format;
-    backend::PixelFormat imagePixelFormat = image->getPixelFormat();
+    rhi::PixelFormat renderFormat     = (PixelFormat::NONE == format) ? image->getPixelFormat() : format;
+    rhi::PixelFormat imagePixelFormat = image->getPixelFormat();
     size_t tempDataLen                    = image->getDataLen();
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
@@ -279,8 +279,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 
 bool Texture2D::updateWithData(const void* data,
                                ssize_t dataLen,
-                               backend::PixelFormat pixelFormat,
-                               backend::PixelFormat renderFormat,
+                               rhi::PixelFormat pixelFormat,
+                               rhi::PixelFormat renderFormat,
                                int pixelsWide,
                                int pixelsHigh,
                                bool preMultipliedAlpha,
@@ -297,8 +297,8 @@ bool Texture2D::updateWithData(const void* data,
 
 bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
                                   int mipmapsNum,
-                                  backend::PixelFormat pixelFormat,
-                                  backend::PixelFormat renderFormat,
+                                  rhi::PixelFormat pixelFormat,
+                                  rhi::PixelFormat renderFormat,
                                   int pixelsWide,
                                   int pixelsHigh,
                                   bool preMultipliedAlpha,
@@ -314,7 +314,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         return false;
     }
 
-    auto& pfd = backend::PixelFormatUtils::getFormatDescriptor(pixelFormat);
+    auto& pfd = rhi::PixelFormatUtils::getFormatDescriptor(pixelFormat);
     if (!pfd.bpp)
     {
         AXLOGW("WARNING: unsupported pixelformat: {:x}", (uint32_t)pixelFormat);
@@ -324,7 +324,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         return false;
     }
 
-    bool compressed = backend::PixelFormatUtils::isCompressed(pixelFormat);
+    bool compressed = rhi::PixelFormatUtils::isCompressed(pixelFormat);
 
     if (compressed && !Configuration::getInstance()->supportsPVRTC() && !Configuration::getInstance()->supportsETC1() &&
         !Configuration::getInstance()->supportsETC2() && !Configuration::getInstance()->supportsS3TC() &&
@@ -338,28 +338,28 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
     VolatileTextureMgr::getOrAddVolatileTexture(this);
 #endif
 
-    backend::TextureDescriptor textureDescriptor;
+    rhi::TextureDescriptor textureDescriptor;
     textureDescriptor.width  = pixelsWide;
     textureDescriptor.height = pixelsHigh;
 
     textureDescriptor.samplerDescriptor.magFilter =
-        (_flags & TextureFlag::ANTIALIAS_ENABLED) ? backend::SamplerFilter::LINEAR : backend::SamplerFilter::NEAREST;
+        (_flags & TextureFlag::ANTIALIAS_ENABLED) ? rhi::SamplerFilter::LINEAR : rhi::SamplerFilter::NEAREST;
     if (mipmapsNum == 1)
     {
         textureDescriptor.samplerDescriptor.minFilter = (_flags & TextureFlag::ANTIALIAS_ENABLED)
-                                                            ? backend::SamplerFilter::LINEAR
-                                                            : backend::SamplerFilter::NEAREST;
+                                                            ? rhi::SamplerFilter::LINEAR
+                                                            : rhi::SamplerFilter::NEAREST;
     }
     else
     {
         textureDescriptor.samplerDescriptor.minFilter = (_flags & TextureFlag::ANTIALIAS_ENABLED)
-                                                            ? backend::SamplerFilter::LINEAR_MIPMAP_NEAREST
-                                                            : backend::SamplerFilter::NEAREST_MIPMAP_NEAREST;
+                                                            ? rhi::SamplerFilter::LINEAR_MIPMAP_NEAREST
+                                                            : rhi::SamplerFilter::NEAREST_MIPMAP_NEAREST;
     }
 
     int width                           = pixelsWide;
     int height                          = pixelsHigh;
-    backend::PixelFormat oriPixelFormat = pixelFormat;
+    rhi::PixelFormat oriPixelFormat = pixelFormat;
     for (int i = 0; i < mipmapsNum; ++i)
     {
         unsigned char* data    = mipmaps[i].address;
@@ -369,7 +369,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
 
         if (renderFormat != oriPixelFormat && !compressed)  // need conversion
         {
-            auto convertedFormat = backend::PixelFormatUtils::convertDataToFormat(data, dataLen, oriPixelFormat,
+            auto convertedFormat = rhi::PixelFormatUtils::convertDataToFormat(data, dataLen, oriPixelFormat,
                                                                                   renderFormat, &outData, &outDataLen);
 #if AX_RENDER_API == AX_RENDER_API_MTL
             AXASSERT(convertedFormat == renderFormat, "PixelFormat convert failed!");
@@ -379,7 +379,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         }
 
         textureDescriptor.textureFormat = pixelFormat;
-        AXASSERT(textureDescriptor.textureFormat != backend::PixelFormat::NONE, "PixelFormat should not be NONE");
+        AXASSERT(textureDescriptor.textureFormat != rhi::PixelFormat::NONE, "PixelFormat should not be NONE");
 
         if (_texture->getTextureFormat() != textureDescriptor.textureFormat)
             _texture->updateTextureDescriptor(textureDescriptor, index);
@@ -458,7 +458,7 @@ bool Texture2D::initWithImage(Image* image)
     return initWithImage(image, image->getPixelFormat());
 }
 
-bool Texture2D::initWithImage(Image* image, backend::PixelFormat format)
+bool Texture2D::initWithImage(Image* image, rhi::PixelFormat format)
 {
     if (image == nullptr)
     {
@@ -554,7 +554,7 @@ bool Texture2D::initWithString(std::string_view text, const FontDefinition& text
     if (outData.isNull())
         return false;
 
-    const auto maxTextureSize = backend::DriverBase::getInstance()->getMaxTextureSize();
+    const auto maxTextureSize = rhi::DriverBase::getInstance()->getMaxTextureSize();
     if (imageWidth > maxTextureSize || imageHeight > maxTextureSize)
     {
         AXLOGW("Texture2D::initWithString fail, the texture size:{}x{} too large, max texture size:{}", imageWidth,
@@ -572,7 +572,7 @@ bool Texture2D::initWithString(std::string_view text, const FontDefinition& text
     return ret;
 }
 
-bool Texture2D::updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha)
+bool Texture2D::updateTextureDescriptor(const rhi::TextureDescriptor& descriptor, bool preMultipliedAlpha)
 {
     AX_ASSERT(_texture);
 
@@ -612,11 +612,11 @@ void Texture2D::setAliasTexParameters()
 
     _flags &= ~TextureFlag::ANTIALIAS_ENABLED;
 
-    backend::SamplerDescriptor descriptor(backend::SamplerFilter::NEAREST,  // magFilter
-                                          (_texture->hasMipmaps()) ? backend::SamplerFilter::NEAREST_MIPMAP_NEAREST
-                                                                   : backend::SamplerFilter::NEAREST,  // minFilter
-                                          backend::SamplerAddressMode::DONT_CARE,                      // sAddressMode
-                                          backend::SamplerAddressMode::DONT_CARE                       // tAddressMode
+    rhi::SamplerDescriptor descriptor(rhi::SamplerFilter::NEAREST,  // magFilter
+                                          (_texture->hasMipmaps()) ? rhi::SamplerFilter::NEAREST_MIPMAP_NEAREST
+                                                                   : rhi::SamplerFilter::NEAREST,  // minFilter
+                                          rhi::SamplerAddressMode::DONT_CARE,                      // sAddressMode
+                                          rhi::SamplerAddressMode::DONT_CARE                       // tAddressMode
     );
     _texture->updateSamplerDescriptor(descriptor);
 }
@@ -630,23 +630,23 @@ void Texture2D::setAntiAliasTexParameters()
     }
     _flags |= TextureFlag::ANTIALIAS_ENABLED;
 
-    backend::SamplerDescriptor descriptor(backend::SamplerFilter::LINEAR,  // magFilter
-                                          (_texture->hasMipmaps()) ? backend::SamplerFilter::LINEAR_MIPMAP_NEAREST
-                                                                   : backend::SamplerFilter::LINEAR,  // minFilter
-                                          backend::SamplerAddressMode::DONT_CARE,                     // sAddressMode
-                                          backend::SamplerAddressMode::DONT_CARE                      // tAddressMode
+    rhi::SamplerDescriptor descriptor(rhi::SamplerFilter::LINEAR,  // magFilter
+                                          (_texture->hasMipmaps()) ? rhi::SamplerFilter::LINEAR_MIPMAP_NEAREST
+                                                                   : rhi::SamplerFilter::LINEAR,  // minFilter
+                                          rhi::SamplerAddressMode::DONT_CARE,                     // sAddressMode
+                                          rhi::SamplerAddressMode::DONT_CARE                      // tAddressMode
     );
     _texture->updateSamplerDescriptor(descriptor);
 }
 
 const char* Texture2D::getStringForFormat() const
 {
-    return backend::PixelFormatUtils::getFormatDescriptor(_pixelFormat).name;
+    return rhi::PixelFormatUtils::getFormatDescriptor(_pixelFormat).name;
 }
 
-unsigned int Texture2D::getBitsPerPixelForFormat(backend::PixelFormat format) const
+unsigned int Texture2D::getBitsPerPixelForFormat(rhi::PixelFormat format) const
 {
-    return backend::PixelFormatUtils::getFormatDescriptor(format).bpp;
+    return rhi::PixelFormatUtils::getFormatDescriptor(format).bpp;
 }
 
 unsigned int Texture2D::getBitsPerPixelForFormat() const
@@ -729,8 +729,8 @@ void Texture2D::initProgram()
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     // create program state
-    auto* program      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
-    _programState      = new ax::backend::ProgramState(program);
+    auto* program      = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
+    _programState      = new ax::rhi::ProgramState(program);
     _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
     _textureLocation   = _programState->getUniformLocation("u_tex0");
 

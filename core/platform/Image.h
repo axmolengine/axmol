@@ -165,12 +165,12 @@ public:
 
     // only RGBA8888 supported
     void flipRawData();
-    
+
     // Getters
     uint8_t* getData() { return _data + _offset; }
     ssize_t getDataLen() { return _dataLen - _offset; }
     Format getFileType() { return _fileType; }
-    backend::PixelFormat getPixelFormat() { return _pixelFormat; }
+    rhi::PixelFormat getPixelFormat() { return _pixelFormat; }
     int getWidth() { return _width; }
     int getHeight() { return _height; }
     int getNumberOfMipmaps() { return _numberOfMipmaps; }
@@ -239,7 +239,7 @@ protected:
     int _height;
     bool _unpack;
     Format _fileType;
-    backend::PixelFormat _pixelFormat;
+    rhi::PixelFormat _pixelFormat;
     MipmapInfo _mipmaps[MIPMAP_MAX];  // pointer to mipmap images
     int _numberOfMipmaps;
     // false if we can't auto detect the image is premultiplied or not.

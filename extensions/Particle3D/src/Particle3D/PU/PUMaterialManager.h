@@ -52,7 +52,7 @@ public:
     bool depthWrite;
 
     std::string textureFile;
-    backend::SamplerAddressMode wrapMode;
+    rhi::SamplerAddressMode wrapMode;
 };
 
 class AX_EX_DLL PUMaterialCache

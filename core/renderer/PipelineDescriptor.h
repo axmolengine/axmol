@@ -24,11 +24,11 @@
 #pragma once
 
 #include "platform/PlatformMacros.h"
-#include "renderer/backend/DepthStencilState.h"
-#include "renderer/backend/Texture.h"
-#include "renderer/backend/VertexLayout.h"
-#include "renderer/backend/RenderPassDescriptor.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/DepthStencilState.h"
+#include "rhi/Texture.h"
+#include "rhi/VertexLayout.h"
+#include "rhi/RenderPassDescriptor.h"
+#include "rhi/ProgramState.h"
 
 #include <string>
 
@@ -41,8 +41,8 @@ namespace ax
 
 struct PipelineDescriptor
 {
-    backend::ProgramState* programState{nullptr};
-    backend::BlendDescriptor blendDescriptor;
+    rhi::ProgramState* programState{nullptr};
+    rhi::BlendDescriptor blendDescriptor;
 };
 
 // end of renderer group

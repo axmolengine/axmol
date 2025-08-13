@@ -42,9 +42,9 @@ THE SOFTWARE.
 #include "base/EventAcceleration.h"
 #include "base/EventListenerAcceleration.h"
 #include "base/text_utils.h"
-#include "renderer/backend/Buffer.h"
+#include "rhi/Buffer.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 
 namespace ax
 {
@@ -370,9 +370,9 @@ LayerRadialGradient* LayerRadialGradient::create()
 LayerRadialGradient::LayerRadialGradient()
 {
     auto& pipelinePS = _customCommand.getPipelineDescriptor().programState;
-    auto* program    = backend::Program::getBuiltinProgram(backend::ProgramType::LAYER_RADIA_GRADIENT);
+    auto* program    = axpm->getBuiltinProgram(rhi::ProgramType::LAYER_RADIA_GRADIENT);
     //!!! LayerRadialGradient private programState don't want affect by Node::_programState, so store at _customCommand
-    pipelinePS          = new backend::ProgramState(program);
+    pipelinePS          = new rhi::ProgramState(program);
     _mvpMatrixLocation  = pipelinePS->getUniformLocation("u_MVPMatrix");
     _startColorLocation = pipelinePS->getUniformLocation("u_startColor");
     _endColorLocation   = pipelinePS->getUniformLocation("u_endColor");

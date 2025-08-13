@@ -26,7 +26,7 @@
 #define _RENDERTEXTURE_TEST_H_
 
 #include "axmol.h"
-#include "renderer/backend/DepthStencilState.h"
+#include "rhi/DepthStencilState.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(RenderTextureTests);
@@ -110,7 +110,7 @@ private:
 
 private:
     ax::Renderer* _renderer;
-    ax::backend::DepthStencilDescriptor _dsDesc;
+    ax::rhi::DepthStencilDescriptor _dsDesc;
     ax::RenderTexture* _rtx;
     ax::Sprite* _spriteDS;
     ax::Sprite* _spriteDraw;

@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "renderer/CallbackCommand.h"
 #include "renderer/GroupCommand.h"
 #include "renderer/RenderState.h"
-#include "renderer/backend/ProgramState.h"
+#include "rhi/ProgramState.h"
 #include "3d/AABB.h"
 #include "3d/Ray.h"
 #include "base/EventListenerCustom.h"
@@ -188,7 +188,7 @@ private:
         ChunkIndices(const ChunkIndices&);
         ChunkIndices& operator=(const ChunkIndices& o);
         ~ChunkIndices();
-        backend::Buffer* _indexBuffer = nullptr;
+        rhi::Buffer* _indexBuffer = nullptr;
         unsigned short _size          = 0;
     };
 
@@ -291,7 +291,7 @@ private:
 
         std::vector<Triangle> _trianglesList;
 
-        backend::Buffer* _buffer = nullptr;
+        rhi::Buffer* _buffer = nullptr;
         MeshCommand _command;
     };
 
@@ -550,8 +550,8 @@ protected:
         // bool blend;
         bool depthWrite            = true;
         bool depthTest             = true;
-        backend::CullMode cullFace = backend::CullMode::FRONT;
-        backend::Winding winding   = backend::Winding::CLOCK_WISE;
+        rhi::CullMode cullFace = rhi::CullMode::FRONT;
+        rhi::Winding winding   = rhi::Winding::CLOCK_WISE;
         void apply();
         void save();
     };
@@ -561,15 +561,15 @@ protected:
 
 private:
     // uniform locations
-    backend::UniformLocation _detailMapLocation[4];
-    backend::UniformLocation _alphaMapLocation;
-    backend::UniformLocation _alphaIsHasAlphaMapLocation;
-    backend::UniformLocation _lightMapCheckLocation;
-    backend::UniformLocation _lightMapLocation;
-    backend::UniformLocation _detailMapSizeLocation;
-    backend::UniformLocation _lightDirLocation;
+    rhi::UniformLocation _detailMapLocation[4];
+    rhi::UniformLocation _alphaMapLocation;
+    rhi::UniformLocation _alphaIsHasAlphaMapLocation;
+    rhi::UniformLocation _lightMapCheckLocation;
+    rhi::UniformLocation _lightMapLocation;
+    rhi::UniformLocation _detailMapSizeLocation;
+    rhi::UniformLocation _lightDirLocation;
 
-    backend::UniformLocation _mvpMatrixLocation;
+    rhi::UniformLocation _mvpMatrixLocation;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener;
 #endif

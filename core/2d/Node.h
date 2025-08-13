@@ -63,7 +63,7 @@ class Material;
 class Camera;
 class PhysicsBody;
 
-namespace backend
+namespace rhi
 {
 class ProgramState;
 }
@@ -1816,16 +1816,16 @@ public:
      * Sets ProgramState with retain
      * @param programState
      */
-    virtual bool setProgramState(backend::ProgramState* programState, bool ownPS = false);
+    virtual bool setProgramState(rhi::ProgramState* programState, bool ownPS = false);
 
     /**
     * Sets ProgramState by programId
     * @param progId the program id or programType used to create programState
     * @return ProgramState* (nullable)
     */
-    backend::ProgramState* setProgramStateByProgramId(uint64_t progId);
+    rhi::ProgramState* setProgramStateByProgramId(uint64_t progId);
 
-    backend::ProgramState* getProgramState() const;
+    rhi::ProgramState* getProgramState() const;
 
     void updateProgramStateTexture(Texture2D* texture);
 
@@ -2001,7 +2001,7 @@ protected:
     std::function<void()> _onEnterTransitionDidFinishCallback;
     std::function<void()> _onExitTransitionDidStartCallback;
 
-    backend::ProgramState* _programState = nullptr;
+    rhi::ProgramState* _programState = nullptr;
 
 // Physics:remaining backwardly compatible
 #if defined(AX_ENABLE_PHYSICS)

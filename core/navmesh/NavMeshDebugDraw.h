@@ -30,8 +30,8 @@
 #if defined(AX_ENABLE_NAVMESH)
 
 #    include "renderer/RenderState.h"
-#    include "renderer/backend/ProgramState.h"
-#    include "renderer/backend/Buffer.h"
+#    include "rhi/ProgramState.h"
+#    include "rhi/Buffer.h"
 #    include "math/Vec3.h"
 #    include "recast/DebugDraw.h"
 #    include "renderer/GroupCommand.h"
@@ -73,7 +73,7 @@ public:
 
 private:
     void initCustomCommand(CustomCommand& command);
-    backend::PrimitiveType getPrimitiveType(duDebugDrawPrimitives prim);
+    rhi::PrimitiveType getPrimitiveType(duDebugDrawPrimitives prim);
     static Vec4 getColor(unsigned int col);
 
     void onBeforeVisitCmd();
@@ -89,7 +89,7 @@ private:
 
     struct Primitive
     {
-        backend::PrimitiveType type = backend::PrimitiveType::LINE;
+        rhi::PrimitiveType type = rhi::PrimitiveType::LINE;
         bool depthMask              = false;
         unsigned short start        = 0;
         unsigned short end          = 0;
@@ -97,15 +97,15 @@ private:
     };
 
     Primitive* _currentPrimitive         = nullptr;
-    backend::ProgramState* _programState = nullptr;
+    rhi::ProgramState* _programState = nullptr;
     bool _currentDepthMask               = true;
     bool _dirtyBuffer                    = true;
-    backend::Buffer* _vertexBuffer       = nullptr;
+    rhi::Buffer* _vertexBuffer       = nullptr;
 
     // RenderState::StateBlock     _stateBlock;
     std::vector<V3F_C4F> _vertices;
     std::vector<Primitive*> _primitiveList;
-    backend::UniformLocation _locMVP;
+    rhi::UniformLocation _locMVP;
     std::vector<CustomCommand> _commands;
 
     //CallbackCommand _beforeCommand;
@@ -113,9 +113,9 @@ private:
 
     // renderer state cache variables
     bool _rendererDepthTestEnabled                 = true;
-    backend::CompareFunction _rendererDepthCmpFunc = backend::CompareFunction::LESS;
-    backend::CullMode _rendererCullMode            = backend::CullMode::BACK;
-    backend::Winding _rendererWinding              = backend::Winding::COUNTER_CLOCK_WISE;
+    rhi::CompareFunction _rendererDepthCmpFunc = rhi::CompareFunction::LESS;
+    rhi::CullMode _rendererCullMode            = rhi::CullMode::BACK;
+    rhi::Winding _rendererWinding              = rhi::Winding::COUNTER_CLOCK_WISE;
     bool _rendererDepthWrite                       = false;
 };
 

@@ -33,8 +33,8 @@
 #include "renderer/Renderer.h"
 #include "renderer/TextureCache.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/DriverBase.h"
-#include "renderer/backend/Buffer.h"
+#include "rhi/DriverBase.h"
+#include "rhi/Buffer.h"
 #include "base/Director.h"
 #include "3d/MeshRenderer.h"
 #include "3d/Mesh.h"
@@ -82,9 +82,9 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     if (_vertexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(
+        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
             stride * 4 * particleSystem->getParticleQuota(),
-                                                      backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DQuadRender::render create vertex buffer failed");
@@ -95,8 +95,8 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     if (_indexBuffer == nullptr)
     {
         _indexBuffer =
-            backend::DriverBase::getInstance()->createBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
-                                                      backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
+            rhi::DriverBase::getInstance()->createBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
+                                                      rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DQuadRender::render create index buffer failed");
@@ -597,7 +597,7 @@ PUParticle3DEntityRender::PUParticle3DEntityRender()
     : _texture(nullptr), _programState(nullptr), _indexBuffer(nullptr), _vertexBuffer(nullptr)
 {
     _stateBlock.setCullFace(false);
-    _stateBlock.setCullFaceSide(backend::CullMode::BACK);
+    _stateBlock.setCullFaceSide(rhi::CullMode::BACK);
     _stateBlock.setDepthTest(false);
     _stateBlock.setDepthWrite(false);
     _stateBlock.setBlend(true);
@@ -621,15 +621,15 @@ bool PUParticle3DEntityRender::initRender(std::string_view texFile)
         if (tex)
         {
             _texture      = tex;
-            auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::PARTICLE_TEXTURE_3D);
-            _programState = new backend::ProgramState(program);
+            auto* program = axpm->getBuiltinProgram(rhi::ProgramType::PARTICLE_TEXTURE_3D);
+            _programState = new rhi::ProgramState(program);
         }
     }
 
     if (!_programState)
     {
-        auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::PARTICLE_COLOR_3D);
-        _programState = new backend::ProgramState(program);
+        auto* program = axpm->getBuiltinProgram(rhi::ProgramType::PARTICLE_COLOR_3D);
+        _programState = new rhi::ProgramState(program);
     }
 
     auto& pipelineDescriptor        = _meshCommand.getPipelineDescriptor();
@@ -644,7 +644,7 @@ bool PUParticle3DEntityRender::initRender(std::string_view texFile)
 
     _stateBlock.setDepthTest(true);
     _stateBlock.setDepthWrite(false);
-    _stateBlock.setCullFaceSide(backend::CullMode::BACK);
+    _stateBlock.setCullFaceSide(rhi::CullMode::BACK);
     _stateBlock.setCullFace(true);
 
     _meshCommand.setBeforeCallback(AX_CALLBACK_0(PUParticle3DEntityRender::onBeforeDraw, this));
@@ -699,8 +699,8 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
     {
         size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer =
-            backend::DriverBase::getInstance()->createBuffer(stride * 8 * particleSystem->getParticleQuota(),
-                                                      backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+            rhi::DriverBase::getInstance()->createBuffer(stride * 8 * particleSystem->getParticleQuota(),
+                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DBoxRender::render create vertex buffer failed");
@@ -709,8 +709,8 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
         _vertices.resize(8 * particleSystem->getParticleQuota());
 
         _indexBuffer =
-            backend::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
-                                                      backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
+            rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
+                                                      rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DBoxRender::render create index buffer failed");
@@ -890,9 +890,9 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = backend::DriverBase::getInstance()->createBuffer(
+        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
             stride * vertexCount * particleSystem->getParticleQuota(),
-                                                      backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUSphereRender::render create vertex buffer failed");
@@ -900,9 +900,9 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
         }
         _vertices.resize(vertexCount * particleSystem->getParticleQuota());
 
-        _indexBuffer = backend::DriverBase::getInstance()->createBuffer(
-            sizeof(uint16_t) * indexCount * particleSystem->getParticleQuota(), backend::BufferType::INDEX,
-            backend::BufferUsage::DYNAMIC);
+        _indexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+            sizeof(uint16_t) * indexCount * particleSystem->getParticleQuota(), rhi::BufferType::INDEX,
+            rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("PUSphereRender::render create index buffer failed");

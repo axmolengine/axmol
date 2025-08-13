@@ -41,7 +41,7 @@ namespace ax
 class Pass;
 class Material;
 
-namespace backend
+namespace rhi
 {
 class ProgramState;
 }
@@ -60,7 +60,7 @@ public:
     /** Creates a new Technique with a GLProgramState.
      Method added to support legacy code
      */
-    static Technique* createWithProgramState(Material* parent, backend::ProgramState* state);
+    static Technique* createWithProgramState(Material* parent, rhi::ProgramState* state);
     static Technique* create(Material* parent);
 
     /** Adds a new pass to the Technique.

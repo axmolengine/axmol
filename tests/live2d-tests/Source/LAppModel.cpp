@@ -29,7 +29,7 @@ using namespace Csm;
 using namespace Csm::Constant;
 using namespace Csm::DefaultParameterId;
 using namespace LAppDefine;
-using namespace ax::backend;
+using namespace ax::rhi;
 
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
@@ -772,7 +772,7 @@ void LAppModel::MakeRenderingTarget()
         Size visibleSize = Director::getInstance()->getVisibleSize();
         Point origin = Director::getInstance()->getVisibleOrigin();
 
-        _renderSprite = RenderTexture::create(frameW, frameH, ax::backend::PixelFormat::RGBA8);
+        _renderSprite = RenderTexture::create(frameW, frameH, ax::rhi::PixelFormat::RGBA8);
         _renderSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
         _renderSprite->getSprite()->getTexture()->setAntiAliasTexParameters();
         _renderSprite->getSprite()->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
@@ -784,10 +784,10 @@ void LAppModel::MakeRenderingTarget()
         // _renderSpriteのテクスチャを作成する
         _renderSprite->getSprite()->getTexture()->setTexParameters(
           ax::Texture2D::TexParams(
-            ax::backend::SamplerFilter::LINEAR,                    // MagFilter
-            ax::backend::SamplerFilter::LINEAR,                    // MinFilter
-            ax::backend::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
-            ax::backend::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
+            ax::rhi::SamplerFilter::LINEAR,                    // MagFilter
+            ax::rhi::SamplerFilter::LINEAR,                    // MinFilter
+            ax::rhi::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
+            ax::rhi::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
           )
         );
 

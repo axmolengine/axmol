@@ -34,7 +34,7 @@
 #include <OpenGL/gl.h>
 #endif
 
-#include "renderer/backend/Texture.h"
+#include "rhi/Texture.h"
 
 using namespace ax;
 
@@ -57,7 +57,7 @@ public:
             DrawCommand();
             virtual ~DrawCommand();
 
-            ax::backend::BlendDescriptor* GetBlendDescriptor();
+            ax::rhi::BlendDescriptor* GetBlendDescriptor();
             ax::PipelineDescriptor* GetPipelineDescriptor();
             ax::CustomCommand* GetCommand();
 
@@ -150,15 +150,15 @@ public:
 
     void Viewport(csmFloat32 x, csmFloat32 y, csmFloat32 w, csmFloat32 h);
 
-    void SetColorBuffer(backend::Texture* colorBuffer);
-    backend::Texture* GetColorBuffer();
+    void SetColorBuffer(rhi::Texture* colorBuffer);
+    rhi::Texture* GetColorBuffer();
 
     void AddDrawCommand(DrawCommandBuffer::DrawCommand* drawCommand);
 
 private:
     void AddCommand(const std::function<void()>& fn);
 
-    backend::Texture* _currentColorBuffer;
+    rhi::Texture* _currentColorBuffer;
     OperationStateData _operationStateArray[OperationType_TypeMax];
 };
 

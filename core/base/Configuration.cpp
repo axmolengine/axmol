@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/EventCustom.h"
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/DriverBase.h"
 
 namespace ax
 {
@@ -127,7 +127,7 @@ std::string Configuration::getInfo() const
 
 void Configuration::gatherGPUInfo()
 {
-    auto driver = backend::DriverBase::getInstance();
+    auto driver = rhi::DriverBase::getInstance();
 
     _valueDict["vendor"]   = Value(driver->getVendor());
     _valueDict["renderer"] = Value(driver->getRenderer());
@@ -142,40 +142,40 @@ void Configuration::gatherGPUInfo()
     _supportsNPOT               = true;
     _valueDict["supports_NPOT"] = Value(_supportsNPOT);
 
-    _supportsETC1               = driver->checkForFeatureSupported(backend::FeatureType::ETC1);
+    _supportsETC1               = driver->checkForFeatureSupported(rhi::FeatureType::ETC1);
     _valueDict["supports_ETC1"] = Value(_supportsETC1);
 
-    _supportsETC2               = driver->checkForFeatureSupported(backend::FeatureType::ETC2);
+    _supportsETC2               = driver->checkForFeatureSupported(rhi::FeatureType::ETC2);
     _valueDict["supports_ETC2"] = Value(_supportsETC2);
 
-    _supportsS3TC               = driver->checkForFeatureSupported(backend::FeatureType::S3TC);
+    _supportsS3TC               = driver->checkForFeatureSupported(rhi::FeatureType::S3TC);
     _valueDict["supports_S3TC"] = Value(_supportsS3TC);
 
-    _supportsATITC               = driver->checkForFeatureSupported(backend::FeatureType::AMD_COMPRESSED_ATC);
+    _supportsATITC               = driver->checkForFeatureSupported(rhi::FeatureType::AMD_COMPRESSED_ATC);
     _valueDict["supports_ATITC"] = Value(_supportsATITC);
 
-    _supportsASTC               = driver->checkForFeatureSupported(backend::FeatureType::ASTC);
+    _supportsASTC               = driver->checkForFeatureSupported(rhi::FeatureType::ASTC);
     _valueDict["supports_ASTC"] = Value(_supportsASTC);
 
-    _supportsPVRTC               = driver->checkForFeatureSupported(backend::FeatureType::PVRTC);
+    _supportsPVRTC               = driver->checkForFeatureSupported(rhi::FeatureType::PVRTC);
     _valueDict["supports_PVRTC"] = Value(_supportsPVRTC);
 
-    _supportsBGRA8888               = driver->checkForFeatureSupported(backend::FeatureType::IMG_FORMAT_BGRA8888);
+    _supportsBGRA8888               = driver->checkForFeatureSupported(rhi::FeatureType::IMG_FORMAT_BGRA8888);
     _valueDict["supports_BGRA8888"] = Value(_supportsBGRA8888);
 
-    _supportsDiscardFramebuffer = driver->checkForFeatureSupported(backend::FeatureType::DISCARD_FRAMEBUFFER);
+    _supportsDiscardFramebuffer = driver->checkForFeatureSupported(rhi::FeatureType::DISCARD_FRAMEBUFFER);
     _valueDict["supports_discard_framebuffer"] = Value(_supportsDiscardFramebuffer);
 
-    _supportsOESPackedDepthStencil = driver->checkForFeatureSupported(backend::FeatureType::PACKED_DEPTH_STENCIL);
+    _supportsOESPackedDepthStencil = driver->checkForFeatureSupported(rhi::FeatureType::PACKED_DEPTH_STENCIL);
     _valueDict["supports_OES_packed_depth_stencil"] = Value(_supportsOESPackedDepthStencil);
 
-    _supportsShareableVAO                      = driver->checkForFeatureSupported(backend::FeatureType::VAO);
+    _supportsShareableVAO                      = driver->checkForFeatureSupported(rhi::FeatureType::VAO);
     _valueDict["supports_vertex_array_object"] = Value(_supportsShareableVAO);
 
-    _supportsOESMapBuffer                 = driver->checkForFeatureSupported(backend::FeatureType::MAPBUFFER);
+    _supportsOESMapBuffer                 = driver->checkForFeatureSupported(rhi::FeatureType::MAPBUFFER);
     _valueDict["supports_OES_map_buffer"] = Value(_supportsOESMapBuffer);
 
-    _supportsOESDepth24                = driver->checkForFeatureSupported(backend::FeatureType::DEPTH24);
+    _supportsOESDepth24                = driver->checkForFeatureSupported(rhi::FeatureType::DEPTH24);
     _valueDict["supports_OES_depth24"] = Value(_supportsOESDepth24);
 }
 
@@ -201,7 +201,7 @@ void Configuration::destroyInstance()
 //
 int Configuration::getMaxTextureSize() const
 {
-    return backend::DriverBase::getInstance()->getMaxTextureSize();
+    return rhi::DriverBase::getInstance()->getMaxTextureSize();
 }
 
 int Configuration::getMaxModelviewStackDepth() const
@@ -211,7 +211,7 @@ int Configuration::getMaxModelviewStackDepth() const
 
 int Configuration::getMaxTextureUnits() const
 {
-    return backend::DriverBase::getInstance()->getMaxTextureUnits();
+    return rhi::DriverBase::getInstance()->getMaxTextureUnits();
 }
 
 bool Configuration::supportsNPOT() const
@@ -414,7 +414,7 @@ void Configuration::loadConfigFile(std::string_view filename)
 
 int Configuration::getMaxAttributes() const
 {
-    return backend::DriverBase::getInstance()->getMaxAttributes();
+    return rhi::DriverBase::getInstance()->getMaxAttributes();
 }
 
 }

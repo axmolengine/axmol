@@ -107,7 +107,7 @@ private:
      */
     void SetupClippingContext(CubismModel& model,
                               CubismRenderer_Cocos2dx* renderer,
-                              backend::Texture* lastColorBuffer,
+                              rhi::Texture* lastColorBuffer,
                               csmRectF lastViewport);
 
     /**
@@ -244,15 +244,15 @@ private:
     */
     struct CubismShaderSet
     {
-        ax::backend::Program* ShaderProgram;               ///< シェーダプログラムのアドレス
-        const ax::backend::VertexInputDesc* AttributePositionLocation{nullptr};   ///< シェーダプログラムに渡す変数のアドレス(Position)
-        const ax::backend::VertexInputDesc* AttributeTexCoordLocation{nullptr};   ///< シェーダプログラムに渡す変数のアドレス(TexCoord)
-        ax::backend::UniformLocation UniformMatrixLocation;        ///< シェーダプログラムに渡す変数のアドレス(Matrix)
-        ax::backend::UniformLocation UniformClipMatrixLocation;    ///< シェーダプログラムに渡す変数のアドレス(ClipMatrix)
-        ax::backend::UniformLocation SamplerTexture0Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture0)
-        ax::backend::UniformLocation SamplerTexture1Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture1)
-        ax::backend::UniformLocation UniformBaseColorLocation;     ///< シェーダプログラムに渡す変数のアドレス(BaseColor)
-        ax::backend::UniformLocation UnifromChannelFlagLocation;   ///< シェーダプログラムに渡す変数のアドレス(ChannelFlag)
+        ax::rhi::Program* ShaderProgram;               ///< シェーダプログラムのアドレス
+        const ax::rhi::VertexInputDesc* AttributePositionLocation{nullptr};   ///< シェーダプログラムに渡す変数のアドレス(Position)
+        const ax::rhi::VertexInputDesc* AttributeTexCoordLocation{nullptr};   ///< シェーダプログラムに渡す変数のアドレス(TexCoord)
+        ax::rhi::UniformLocation UniformMatrixLocation;        ///< シェーダプログラムに渡す変数のアドレス(Matrix)
+        ax::rhi::UniformLocation UniformClipMatrixLocation;    ///< シェーダプログラムに渡す変数のアドレス(ClipMatrix)
+        ax::rhi::UniformLocation SamplerTexture0Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture0)
+        ax::rhi::UniformLocation SamplerTexture1Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture1)
+        ax::rhi::UniformLocation UniformBaseColorLocation;     ///< シェーダプログラムに渡す変数のアドレス(BaseColor)
+        ax::rhi::UniformLocation UnifromChannelFlagLocation;   ///< シェーダプログラムに渡す変数のアドレス(ChannelFlag)
     };
 
     /**
@@ -306,7 +306,7 @@ private:
      *
      * @return  シェーダプログラムのアドレス
      */
-    ax::backend::Program* LoadShaderProgram(const csmChar* vertShaderPath, const csmChar* fragShaderPath);
+    ax::rhi::Program* LoadShaderProgram(const csmChar* vertShaderPath, const csmChar* fragShaderPath);
 
 #ifdef CSM_TARGET_ANDROID_ES2
 public:
@@ -363,11 +363,11 @@ private:
     csmBool _lastDepthTest;               ///< モデル描画直前のGL_DEPTH_TESTパラメータ
     ax::CullMode _lastCullFace;                ///< モデル描画直前のGL_CULL_FACEパラメータ
     ax::Winding _lastWinding;
-    backend::Texture* _lastColorBuffer;                         ///< モデル描画直前のフレームバッファ
-    backend::Texture* _lastDepthBuffer;
-    backend::Texture* _lastStencilBuffer;
+    rhi::Texture* _lastColorBuffer;                         ///< モデル描画直前のフレームバッファ
+    rhi::Texture* _lastDepthBuffer;
+    rhi::Texture* _lastStencilBuffer;
     //ax::RenderTargetFlag _lastRenderTargetFlag;
-    backend::RenderTarget* _lastRenderTarget;
+    rhi::RenderTarget* _lastRenderTarget;
     csmRectF _lastViewport;                 ///< モデル描画直前のビューポート
 };
 

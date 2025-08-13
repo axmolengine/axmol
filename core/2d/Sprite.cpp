@@ -42,8 +42,8 @@ THE SOFTWARE.
 #include "2d/Camera.h"
 #include "platform/FileUtils.h"
 #include "renderer/Shaders.h"
-#include "renderer/backend/ProgramState.h"
-#include "renderer/backend/DriverBase.h"
+#include "rhi/ProgramState.h"
+#include "rhi/DriverBase.h"
 
 namespace ax
 {
@@ -378,7 +378,7 @@ void Sprite::setTexture(std::string_view filename)
 void Sprite::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    _programState->validateSharedVertexLayout(backend::VertexLayoutType::Sprite);
+    _programState->validateSharedVertexLayout(rhi::VertexLayoutType::Sprite);
 }
 
 void Sprite::setProgramState(uint32_t type)
@@ -386,7 +386,7 @@ void Sprite::setProgramState(uint32_t type)
     setProgramStateWithRegistry(type, _texture);
 }
 
-bool Sprite::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
+bool Sprite::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
 {
     AXASSERT(programState, "argument should not be nullptr");
     if (Node::setProgramState(programState, ownPS))
@@ -394,7 +394,7 @@ bool Sprite::setProgramState(backend::ProgramState* programState, bool ownPS/* =
         auto& pipelineDescriptor        = _trianglesCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;
 
-        _mvpMatrixLocation = _programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
+        _mvpMatrixLocation = _programState->getUniformLocation(rhi::Uniform::MVP_MATRIX);
 
         setVertexLayout();
         updateProgramStateTexture(_texture);
@@ -416,7 +416,7 @@ void Sprite::setTexture(Texture2D* texture)
 
     bool needsUpdatePS =
         _autoUpdatePS &&
-        ((!_programState || _programState->getProgram()->getProgramType() < backend::ProgramType::CUSTOM_PROGRAM) &&
+        ((!_programState || _programState->getProgram()->getProgramType() < rhi::ProgramType::CUSTOM_PROGRAM) &&
          (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags() ||
           _texture->getPixelFormat() != texture->getPixelFormat()));
 
@@ -1678,7 +1678,7 @@ void Sprite::updateBlendFunc()
              "Sprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
 
     // it is possible to have an untextured sprite
-    backend::BlendDescriptor& blendDescriptor = _trianglesCommand.getPipelineDescriptor().blendDescriptor;
+    rhi::BlendDescriptor& blendDescriptor = _trianglesCommand.getPipelineDescriptor().blendDescriptor;
     blendDescriptor.blendEnabled              = true;
 
     if (!_texture || !_texture->hasPremultipliedAlpha())

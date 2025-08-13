@@ -8,20 +8,20 @@ int MeshVertexAttrib::getAttribSizeBytes() const
     int ret = 0;
     switch (type)
     {
-    case backend::VertexFormat::FLOAT4:
-    case backend::VertexFormat::INT4:
+    case rhi::VertexFormat::FLOAT4:
+    case rhi::VertexFormat::INT4:
         return 16;
-    case backend::VertexFormat::FLOAT3:
-    case backend::VertexFormat::INT3:
+    case rhi::VertexFormat::FLOAT3:
+    case rhi::VertexFormat::INT3:
         return 12;
-    case backend::VertexFormat::FLOAT2:
-    case backend::VertexFormat::INT2:
-    case backend::VertexFormat::USHORT4:
+    case rhi::VertexFormat::FLOAT2:
+    case rhi::VertexFormat::INT2:
+    case rhi::VertexFormat::USHORT4:
         return 8;
-    case backend::VertexFormat::FLOAT:
-    case backend::VertexFormat::INT:
-    case backend::VertexFormat::UBYTE4:
-    case backend::VertexFormat::USHORT2:
+    case rhi::VertexFormat::FLOAT:
+    case rhi::VertexFormat::INT:
+    case rhi::VertexFormat::UBYTE4:
+    case rhi::VertexFormat::USHORT2:
         return 4;
     default:
         AXASSERT(false, "VertexFormat convert to size error");

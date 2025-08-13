@@ -204,8 +204,6 @@ void RenderView::setFrameSize(float width, float height)
 {
     _screenSize = Vec2(width, height);
 
-    Director::getInstance()->getRenderer()->resizeSwapChain(width, height);
-
     // Github issue #16003 and #16485
     // only update the designResolution if it wasn't previously set
     if (_designResolutionSize.equals(Vec2::ZERO))

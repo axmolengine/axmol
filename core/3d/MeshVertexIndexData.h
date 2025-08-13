@@ -57,14 +57,14 @@ public:
     /** create  */
     static MeshIndexData* create(std::string_view id,
                                  MeshVertexData* vertexData,
-                                 backend::Buffer* indexbuffer,
+                                 rhi::Buffer* indexbuffer,
                                  const AABB& aabb);
 
     /**get index buffer*/
-    backend::Buffer* getIndexBuffer() const { return _indexBuffer; }
+    rhi::Buffer* getIndexBuffer() const { return _indexBuffer; }
 
     /**get vertex buffer*/
-    backend::Buffer* getVertexBuffer() const;
+    rhi::Buffer* getVertexBuffer() const;
 
     /**get vertex data*/
     const MeshVertexData* getMeshVertexData() const { return _vertexData; }
@@ -87,7 +87,7 @@ public:
     virtual ~MeshIndexData();
 
 protected:
-    backend::Buffer* _indexBuffer = nullptr;  // index buffer
+    rhi::Buffer* _indexBuffer = nullptr;  // index buffer
     MeshVertexData* _vertexData   = nullptr;  // vertex buffer, weak ref
     AABB _aabb;                               // original aabb of the submesh
     std::string _id;                          // id
@@ -115,7 +115,7 @@ public:
     static MeshVertexData* create(const MeshData& meshdata, CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
 
     /** get vertexbuffer */
-    backend::Buffer* getVertexBuffer() const { return _vertexBuffer; }
+    rhi::Buffer* getVertexBuffer() const { return _vertexBuffer; }
 
     /** get attributes count */
     ssize_t getMeshVertexAttribCount() const { return _attribs.size(); }
@@ -142,7 +142,7 @@ public:
     virtual ~MeshVertexData();
 
 protected:
-    backend::Buffer* _vertexBuffer = nullptr;  // vertex buffer
+    rhi::Buffer* _vertexBuffer = nullptr;  // vertex buffer
     ssize_t _sizePerVertex         = -1;
     Vector<MeshIndexData*> _indices;           // index data
     axstd::pod_vector<MeshVertexAttrib> _attribs;    // vertex attributes

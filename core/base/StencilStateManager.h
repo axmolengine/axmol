@@ -66,12 +66,12 @@ private:
 
     bool _currentStencilEnabled                            = false;
     unsigned int _currentStencilWriteMask                  = ~0;
-    backend::CompareFunction _currentStencilFunc           = backend::CompareFunction::ALWAYS;
+    rhi::CompareFunction _currentStencilFunc           = rhi::CompareFunction::ALWAYS;
     unsigned int _currentStencilRef                        = 0;
     unsigned int _currentStencilReadMask                   = ~0;
-    backend::StencilOperation _currentStencilFail          = backend::StencilOperation::KEEP;
-    backend::StencilOperation _currentStencilPassDepthFail = backend::StencilOperation::KEEP;
-    backend::StencilOperation _currentStencilPassDepthPass = backend::StencilOperation::KEEP;
+    rhi::StencilOperation _currentStencilFail          = rhi::StencilOperation::KEEP;
+    rhi::StencilOperation _currentStencilPassDepthFail = rhi::StencilOperation::KEEP;
+    rhi::StencilOperation _currentStencilPassDepthPass = rhi::StencilOperation::KEEP;
     bool _currentDepthWriteMask                            = true;
 
     unsigned int _mask_layer_le = 0;
@@ -81,9 +81,9 @@ private:
     //CallbackCommand _afterDrawStencilCmd;
     //CallbackCommand _afterVisitCmd;
 
-    backend::UniformLocation _mvpMatrixLocaiton;
-    backend::UniformLocation _colorUniformLocation;
-    backend::ProgramState* _programState = nullptr;
+    rhi::UniformLocation _mvpMatrixLocaiton;
+    rhi::UniformLocation _colorUniformLocation;
+    rhi::ProgramState* _programState = nullptr;
 };
 
 }
