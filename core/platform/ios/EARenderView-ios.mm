@@ -205,7 +205,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         metalLayer.device          = device;
         metalLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
         metalLayer.framebufferOnly = YES;
-        ax::rhi::DriverMTL::setCAMetalLayer(metalLayer);
+        ax::rhi::mtl::DriverImpl::setCAMetalLayer(metalLayer);
 #else
         pixelformat_        = format;
         depthFormat_        = depth;
@@ -320,7 +320,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     size_ = [self bounds].size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
-    ax::rhi::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
+    ax::rhi::mtl::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
 #else
     [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     size_ = [renderer_ backingSize];
