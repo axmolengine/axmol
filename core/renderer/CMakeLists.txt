@@ -80,7 +80,6 @@ if(AX_RENDER_API STREQUAL "gl")
     renderer/backend/opengl/OpenGLState.h
     renderer/backend/opengl/BufferGL.h
     renderer/backend/opengl/CommandBufferGL.h
-    renderer/backend/opengl/CommandBufferGLES2.h
     renderer/backend/opengl/DepthStencilStateGL.h
     renderer/backend/opengl/DriverGL.h
     renderer/backend/opengl/MacrosGL.h
@@ -96,7 +95,6 @@ if(AX_RENDER_API STREQUAL "gl")
     renderer/backend/opengl/OpenGLState.cpp
     renderer/backend/opengl/BufferGL.cpp
     renderer/backend/opengl/CommandBufferGL.cpp
-    renderer/backend/opengl/CommandBufferGLES2.cpp
     renderer/backend/opengl/DepthStencilStateGL.cpp
     renderer/backend/opengl/DriverGL.cpp
     renderer/backend/opengl/ProgramGL.cpp

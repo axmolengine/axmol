@@ -83,23 +83,17 @@ endif()
 # macos, linux or (win32, ios, tvos) not use GLES profile
 set(_GLES_PROFILE 0) # _GLES_PROFILE is the default GLES profile
 
-if (AX_RENDER_API STREQUAL "gl")
-  if(ANDROID) # android force use GLES profile
-    set(_GLES_PROFILE 200)
-  elseif(WINRT OR WASM) # winuwp/wasm fore use GLES profile
+if(AX_RENDER_API STREQUAL "gl")
+  if(ANDROID OR WINRT OR WASM OR (WINDOWS AND AX_USE_ANGLE) OR IOS OR TVOS)
     set(_GLES_PROFILE 300)
-  elseif((NOT MACOSX) AND(NOT LINUX)) # win32, ios, tvos
-    if((WINDOWS AND AX_USE_ANGLE) OR IOS OR TVOS)
-      set(_GLES_PROFILE 300)
-    endif()
   endif()
 endif()
 
 if(_GLES_PROFILE)
   set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "")
 
-  if(NOT(AX_GLES_PROFILE EQUAL 200 OR AX_GLES_PROFILE EQUAL 300))
-    message(FATAL_ERROR "${MACOSX} Invalid GLES profile ${AX_GLES_PROFILE}, must be 200 or 300, default ${_GLES_PROFILE}")
+  if(AX_GLES_PROFILE LESS 300)
+    message(FATAL_ERROR "${MACOSX} Invalid GLES profile ${AX_GLES_PROFILE}, must be 300 or later, default ${_GLES_PROFILE}")
   endif()
 else() # force disable GLES profile
   set(AX_GLES_PROFILE 0 CACHE STRING "" FORCE)

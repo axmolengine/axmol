@@ -37,87 +37,6 @@
 namespace ax::backend
 {
 
-#if AX_GLES_PROFILE == 200
-#    define DEF_TO_INT(pointer, index)   (*((GLint*)(pointer) + index))
-#    define DEF_TO_FLOAT(pointer, index) (*((GLfloat*)(pointer) + index))
-static void setUniform(bool isArray, GLuint location, unsigned int size, GLenum uniformType, void* data)
-{
-    GLsizei count = size;
-    switch (uniformType)
-    {
-    case GL_INT:
-    case GL_BOOL:
-    case GL_SAMPLER_2D:
-    case GL_SAMPLER_CUBE:
-        if (isArray)
-            glUniform1iv(location, count, (GLint*)data);
-        else
-            glUniform1i(location, DEF_TO_INT(data, 0));
-        break;
-    case GL_INT_VEC2:
-    case GL_BOOL_VEC2:
-        if (isArray)
-            glUniform2iv(location, count, (GLint*)data);
-        else
-            glUniform2i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1));
-        break;
-    case GL_INT_VEC3:
-    case GL_BOOL_VEC3:
-        if (isArray)
-            glUniform3iv(location, count, (GLint*)data);
-        else
-            glUniform3i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1), DEF_TO_INT(data, 2));
-        break;
-    case GL_INT_VEC4:
-    case GL_BOOL_VEC4:
-        if (isArray)
-            glUniform4iv(location, count, (GLint*)data);
-        else
-            glUniform4i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1), DEF_TO_INT(data, 2), DEF_TO_INT(data, 4));
-        break;
-    case GL_FLOAT:
-        if (isArray)
-            glUniform1fv(location, count, (GLfloat*)data);
-        else
-            glUniform1f(location, DEF_TO_FLOAT(data, 0));
-        break;
-    case GL_FLOAT_VEC2:
-        if (isArray)
-            glUniform2fv(location, count, (GLfloat*)data);
-        else
-            glUniform2f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1));
-        break;
-    case GL_FLOAT_VEC3:
-        if (isArray)
-            glUniform3fv(location, count, (GLfloat*)data);
-        else
-            glUniform3f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1), DEF_TO_FLOAT(data, 2));
-        break;
-    case GL_FLOAT_VEC4:
-        if (isArray)
-            glUniform4fv(location, count, (GLfloat*)data);
-        else
-            glUniform4f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1), DEF_TO_FLOAT(data, 2),
-                        DEF_TO_FLOAT(data, 3));
-        break;
-    case GL_FLOAT_MAT2:
-        glUniformMatrix2fv(location, count, GL_FALSE, (GLfloat*)data);
-        break;
-    case GL_FLOAT_MAT3:
-        glUniformMatrix3fv(location, count, GL_FALSE, (GLfloat*)data);
-        break;
-    case GL_FLOAT_MAT4:
-        glUniformMatrix4fv(location, count, GL_FALSE, (GLfloat*)data);
-        break;
-        break;
-
-    default:
-        AXASSERT(false, "invalidate Uniform data type");
-        break;
-    }
-}
-#endif
-
 ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
@@ -316,7 +235,6 @@ void ProgramGL::computeUniformInfos()
     /* Query uniform blocks */
     clearUniformBuffers();
 
-#if AX_GLES_PROFILE != 200
     GLint numblocks{0};
     glGetProgramiv(_program, GL_ACTIVE_UNIFORM_BLOCKS, &numblocks);
 
@@ -347,7 +265,6 @@ void ProgramGL::computeUniformInfos()
         // increase _totalBufferSize
         _totalBufferSize += blockSize;
     }
-#endif
 
     /*
      * construct _activeUniformInfos: uniformName-->UniformInfo
@@ -378,7 +295,6 @@ void ProgramGL::computeUniformInfos()
         if (dot != std::string::npos)
             uniformName.remove_prefix(dot + 1);  // trim uniformName
 
-#if AX_GLES_PROFILE != 200
         GLint blockIndex{-1};
         glGetActiveUniformsiv(_program, 1, reinterpret_cast<const GLuint*>(&i), GL_UNIFORM_BLOCK_INDEX, &blockIndex);
         if (blockIndex != -1)
@@ -395,19 +311,6 @@ void ProgramGL::computeUniformInfos()
             uniform.location     = glGetUniformLocation(_program, uniformName.data());
             uniform.bufferOffset = -1;
         }
-#else
-        if (uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE)
-        {
-            uniform.location     = glGetUniformLocation(_program, uniformName.data());
-            uniform.bufferOffset = -1;
-        }
-        else
-        {  // GLES2.0: GLSL100
-            uniform.location     = glGetUniformLocation(_program, uniformFullName.data());
-            uniform.bufferOffset = (uniform.size == 0) ? 0 : _totalBufferSize;
-            _totalBufferSize += uniform.size * uniform.count;
-        }
-#endif
 
         _activeUniformInfos[uniformName] = uniform;
 
@@ -417,25 +320,12 @@ void ProgramGL::computeUniformInfos()
 
 void ProgramGL::bindUniformBuffers(const char* buffer, size_t bufferSize)
 {
-#if AX_GLES_PROFILE != 200
     for (GLuint blockIdx = 0; blockIdx < static_cast<GLuint>(_uniformBuffers.size()); ++blockIdx)
     {
         auto& desc = _uniformBuffers[blockIdx];
         desc._ubo->updateData(buffer + desc._location, desc._size);
         __gl->bindUniformBufferBase(blockIdx, desc._ubo->getHandler());
     }
-#else
-    for (auto&& iter : _activeUniformInfos)
-    {
-        auto& uniformInfo = iter.second;
-        if (uniformInfo.size <= 0)
-            continue;
-
-        int elementCount = uniformInfo.count;
-        setUniform(uniformInfo.count > 1, uniformInfo.location, elementCount, uniformInfo.type,
-                   (void*)(buffer + uniformInfo.bufferOffset));
-    }
-#endif
 
     CHECK_GL_ERROR_DEBUG();
 }

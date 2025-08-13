@@ -396,12 +396,6 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window)
     {
         p = new OpenGLState();
         glfwSetWindowUserPointer(window, p);
-#        if AX_GLES_PROFILE != 200
-        // this is a new OpenGLContext, create default VAO for it when core profile enabled
-        GLuint vao;
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-#        endif
     }
 
     if (backend::__gl != p)

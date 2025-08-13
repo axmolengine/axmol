@@ -35,9 +35,6 @@
 #include "RenderTargetGL.h"
 #include "MacrosGL.h"
 #include "renderer/backend/ProgramManager.h"
-#if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
-#    include "CommandBufferGLES2.h"
-#endif
 
 #include "base/axstd.h"
 #include "base/format.h"
@@ -61,7 +58,6 @@ static inline uint32_t hashString(std::string_view str)
 template <typename _Fty>
 static void GL_EnumAllExtensions(_Fty&& func)
 {
-#if AX_GLES_PROFILE != 200  // NOT GLES2.0
     GLint NumberOfExtensions{0};
     glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
     for (GLint i = 0; i < NumberOfExtensions; ++i)
@@ -70,16 +66,6 @@ static void GL_EnumAllExtensions(_Fty&& func)
         if (extName)
             func(std::string_view{extName});
     }
-#else
-    auto extensions = (const char*)glGetString(GL_EXTENSIONS);
-    if (extensions)
-    {
-        axstd::split_of_cb(extensions, " \f\n\r\t\v", [&func](const char* start, const char* end, char /*delim*/) {
-            if (start != end)
-                func(std::string_view{start, static_cast<size_t>(end - start)});
-        });
-    }
-#endif
 }
 
 DriverBase* DriverBase::getInstance()
@@ -166,11 +152,9 @@ DriverGL::DriverGL()
 
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
 
-#if AX_GLES_PROFILE != 200
-    glGenVertexArrays(1, &_defaultVAO);
-    glBindVertexArray(_defaultVAO);
+    resetState();
+
     CHECK_GL_ERROR_DEBUG();
-#endif
 }
 
 DriverGL::~DriverGL()
@@ -185,11 +169,7 @@ GLint DriverGL::getDefaultFBO() const
 
 CommandBuffer* DriverGL::createCommandBuffer(void*)
 {
-#if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
-    return !isGLES2Only() ? new CommandBufferGL() : new CommandBufferGLES2();
-#else
     return new CommandBufferGL();
-#endif
 }
 
 Buffer* DriverGL::createBuffer(std::size_t size, BufferType type, BufferUsage usage)

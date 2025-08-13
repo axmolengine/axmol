@@ -101,13 +101,12 @@ void RenderTargetGL::update() const
                         textureInfo.texture ? static_cast<backend::TextureImpl*>(textureInfo.texture)->internalHandle() : 0,
                         textureInfo.level);
             }
-#if AX_GLES_PROFILE != 200
+
             glDrawBuffers(MAX_COLOR_ATTCHMENT, bufs);
-#endif
+
             CHECK_GL_ERROR_DEBUG();
         }
 
-#if AX_GLES_PROFILE != 200
         if (bitmask::any(_dirtyFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
         {
             // depth stencil attachment
@@ -118,30 +117,6 @@ void RenderTargetGL::update() const
                                    _depthStencil.level);
             CHECK_GL_ERROR_DEBUG();
         }
-#else
-
-        if (bitmask::any(_dirtyFlags, TargetBufferFlags::DEPTH))
-        {
-            // depth attacmhemt
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
-                                   _depthStencil.texture != nullptr
-                                       ? static_cast<backend::TextureImpl*>(_depthStencil.texture)->internalHandle()
-                                       : 0,
-                                   _depthStencil.level);
-            CHECK_GL_ERROR_DEBUG();
-        }
-
-        if (bitmask::any(_dirtyFlags, TargetBufferFlags::STENCIL))
-        {
-            // stencil attachment
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D,
-                                   _depthStencil.texture != nullptr
-                                       ? static_cast<backend::TextureImpl*>(_depthStencil.texture)->internalHandle()
-                                       : 0,
-                                   _depthStencil.level);
-            CHECK_GL_ERROR_DEBUG();
-        }
-#endif
     }
 
     _dirtyFlags = TargetBufferFlags::NONE;

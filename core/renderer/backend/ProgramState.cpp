@@ -266,13 +266,8 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
     if (location < 0 || offset < 0)
         return;
 
-#if AX_GLES_PROFILE != 200
     assert(location + offset + size <= _vertexUniformBufferSize);
     memcpy(_uniformBuffers.data() + location + offset, data, size);
-#else
-    assert(offset + size <= _vertexUniformBufferSize);
-    memcpy(_uniformBuffers.data() + offset, data, size);
-#endif
 }
 
 #if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D

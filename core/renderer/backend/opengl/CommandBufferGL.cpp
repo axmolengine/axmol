@@ -40,7 +40,8 @@
 
 namespace ax::backend {
 
-#if AX_GLES_PROFILE != 200 && AX_TARGET_PLATFORM != AX_PLATFORM_WASM
+// !!Note: WebGL 2.0 on (Open GELS 3.0) not support map buffer range
+#if AX_TARGET_PLATFORM != AX_PLATFORM_WASM
 #    define AX_HAVE_MAP_BUFFER_RANGE 1
 #else
 #    define AX_HAVE_MAP_BUFFER_RANGE 0

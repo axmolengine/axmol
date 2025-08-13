@@ -109,11 +109,7 @@ public:
 		if (g_deviceObjectCollection == nullptr)
 		{
 #if AX_GLES_PROFILE
-#if AX_GLES_PROFILE == 300
             g_deviceObjectCollection = Effekseer::MakeRefPtr<EffekseerGraphicsDevice>(EffekseerRendererGL::OpenGLDeviceType::OpenGLES3);
-#else
-			g_deviceObjectCollection = Effekseer::MakeRefPtr<EffekseerGraphicsDevice>(EffekseerRendererGL::OpenGLDeviceType::OpenGLES2);
-#endif
 #else
 			g_deviceObjectCollection = Effekseer::MakeRefPtr<EffekseerGraphicsDevice>(EffekseerRendererGL::OpenGLDeviceType::OpenGL3);
 #endif

@@ -126,9 +126,9 @@ THE SOFTWARE.
 // render configure
 //////////////////////////////////////////////////////////////////////////
 
-#define AX_RENDER_API_GL    1
-#define AX_RENDER_API_MTL   2
-#define AX_RENDER_API_D3D   3
+#define AX_RENDER_API_GL  1
+#define AX_RENDER_API_MTL 2
+#define AX_RENDER_API_D3D 3
 
 #ifndef AX_RENDER_API
 #    if defined(__APPLE__)
@@ -150,9 +150,9 @@ Linux: Desktop GL/Vulkan
 // mac/iOS/android use system builtin GL/GLES, not ANGLE
 // Windows: use ANGLE GLES
 #ifndef AX_GLES_PROFILE
-#    if defined(__ANDROID__)
-#        define AX_GLES_PROFILE 200
-#    elif (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
+#    if defined(__ANDROID__) || defined(_WIN32) || \
+        (AX_RENDER_API == AX_RENDER_API_GL &&      \
+         (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_TVOS))
 #        define AX_GLES_PROFILE 300
 #    else
 #        define AX_GLES_PROFILE 0

@@ -4,10 +4,17 @@ namespace ax::backend {
 
 namespace
 {
-auto g_defaultOpenGLState = std::make_unique<OpenGLState>();
+std::unique_ptr<OpenGLState> g_defaultOpenGLState;
 }
 
-OpenGLState* __gl = g_defaultOpenGLState.get();
+AX_DLL OpenGLState* __gl{nullptr};
+
+OpenGLState::OpenGLState()
+{
+    // NOT GLES2.0, need generate VAO clearly
+    glGenVertexArrays(1, &_defaultVAO);
+    glBindVertexArray(_defaultVAO);
+}
 
 void OpenGLState::reset()
 {

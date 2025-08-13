@@ -151,8 +151,6 @@ protected:
     static ProgramManager* _sharedProgramManager;  ///< A shared instance of the program cache.
 };
 
-using ProgramCache = ProgramManager;  // for compatible
-
 // end of _backend group
 /// @}
 }

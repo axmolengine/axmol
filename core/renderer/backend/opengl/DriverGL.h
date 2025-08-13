@@ -152,7 +152,6 @@ protected:
     ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
 
     GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
-    GLuint _defaultVAO = 0;
 
 private:
     std::set<uint32_t> _glExtensions;
