@@ -21,13 +21,13 @@ layout(location = SV_Target0) out vec4 FragColor;
 void main(void)
 {
 	float time = u_Time[1];
-#ifdef METAL
+#ifdef AXSC_TARGET_MSL
 	vec2 fragCoord = vec2(gl_FragCoord.x, u_screenSize.y - gl_FragCoord.y);
 #else
 	vec2 fragCoord = gl_FragCoord.xy;
 #endif
 	vec2 p = 2.0 * (fragCoord - center.xy) / resolution.xy;
-	
+
 	float a = atan(p.x,p.y);
 	float r = length(p)*.75;
 
@@ -38,7 +38,7 @@ void main(void)
 	float rd = 1.0-r/d;
 	float col = 0.0;
 	if(rd > 0.0)
-	    col = u( d-r ) * sqrt(rd)*r*2.5;	
+	    col = u( d-r ) * sqrt(rd)*r*2.5;
 	col *= 1.25+0.25*cos((12.0*a-w*7.0+r*8.0)/2.0);
 	col *= 1.0 - 0.35*(0.5+0.5*sin(r*30.0))*(0.5+0.5*cos(12.0*a-w*7.0+r*8.0));
 	FragColor = vec4(

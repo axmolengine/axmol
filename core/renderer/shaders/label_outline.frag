@@ -21,11 +21,7 @@ void main()
     // fontAlpha == 1 means the area of solid text (without edge)
     // fontAlpha == 0 means the area outside text, including outline area
     // fontAlpha == (0, 1) means the edge of text
-#ifndef GLES2
     float fontAlpha = texColor.y;
-#else
-    float fontAlpha = texColor.w;
-#endif
 
     // outlineAlpha == 1 means the area of 'solid text' and 'solid outline'
     // outlineAlpha == 0 means the transparent area outside text and outline

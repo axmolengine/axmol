@@ -2,7 +2,7 @@
 
 layout (location = POSITION) in vec4 a_position;
 layout (location = TEXCOORD0) in vec2 a_texCoord;
-#if !defined(METAL)
+#if !defined(AXSC_TARGET_MSL)
 layout (location = TEXCOORD1) in mat4 a_instance;
 #endif
 layout (location = TEXCOORD0) out vec2 v_texCoord;
@@ -11,7 +11,7 @@ layout(std140, binding = 0) uniform vs_ub {
     mat4 u_MVPMatrix;
 };
 
-#if defined(METAL)
+#if defined(AXSC_TARGET_MSL)
 layout(std140, binding = 1) buffer vs_inst {
     mat4 u_instance[];
 };
@@ -19,7 +19,7 @@ layout(std140, binding = 1) buffer vs_inst {
 
 void main(void)
 {
-#if defined(METAL)
+#if defined(AXSC_TARGET_MSL)
     gl_Position = u_MVPMatrix * u_instance[gl_InstanceIndex] * a_position;
 #else
     gl_Position = u_MVPMatrix * a_instance * a_position;

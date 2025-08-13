@@ -107,30 +107,32 @@ function(ax_target_compile_shaders target_name)
 
     if(AX_GLES_PROFILE)
       # version 300 es
-      if(AX_GLES_PROFILE EQUAL 300)
-        set(OUT_LANG "ESSL")
+      set(OUT_LANG "ESSL")
+      if(AX_GLES_PROFILE GREATER_EQUAL 300)
         set(SC_PROFILE "300")
+        set(SC_DEFINES "AXSC_TARGET_GLES")
       else()
-        # GLSL2 use glsl100 syntax es profile alka essl100
-        set(OUT_LANG "ESSL")
+        # GLSL2 use glsl100 syntax es profile aka essl100
         set(SC_PROFILE "100")
-        set(SC_DEFINES "GLES2")
+        set(SC_DEFINES "AXSC_TARGET_GLES2")
       endif()
-
+      set(SC_DEFINES "AXSC_TARGET_GLSL,${SC_DEFINES}")
       list(APPEND SC_FLAGS "--lang=gles" "--profile=${SC_PROFILE}")
     elseif(AX_RENDER_API STREQUAL "gl")
       # version 330
       set(OUT_LANG "GLSL")
       set(SC_PROFILE "330")
+      set(SC_DEFINES "AXSC_TARGET_GLSL")
       list(APPEND SC_FLAGS "--lang=glsl" "--profile=${SC_PROFILE}")
-    elseif(AX_RENDER_API STREQUAL "mtl")
-      set(OUT_LANG "MSL")
-      list(APPEND SC_FLAGS "--lang=msl")
-      set(SC_DEFINES "METAL")
     elseif(AX_RENDER_API STREQUAL "d3d")
       set(OUT_LANG "HLSL")
-      list(APPEND SC_FLAGS "--lang=hlsl")
-      set(SC_DEFINES "HLSL")
+      set(SC_PROFILE "50") # D3D11 HLSL 5.0
+      set(SC_DEFINES "AXSC_TARGET_HLSL")
+      list(APPEND SC_FLAGS "--lang=hlsl" "--profile=${SC_PROFILE}")
+    elseif(AX_RENDER_API STREQUAL "mtl")
+      set(OUT_LANG "MSL")
+      set(SC_DEFINES "AXSC_TARGET_MSL")
+      list(APPEND SC_FLAGS "--lang=msl")
     endif()
 
     # automap, no-suffix since 1.18.1 released by axmolengine
@@ -190,7 +192,7 @@ function(ax_target_compile_shaders target_name)
 
     set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
 
-    set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} ...")
+    set(SC_COMMENT "Compiling shader ${SC_FILE} to ${OUT_LANG}${SC_PROFILE} ...")
 
     get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} AXSLCC_OUTPUT1)
 

@@ -18,7 +18,7 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {
-#ifdef METAL
+#ifdef AXSC_TARGET_MSL
 	vec2 fragCoord = vec2(gl_FragCoord.x, u_screenSize.y - gl_FragCoord.y);
 #else
 	vec2 fragCoord = gl_FragCoord.xy;

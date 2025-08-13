@@ -17,7 +17,7 @@ layout(location = SV_Target0) out vec4 FragColor;
 void main(void)
 {
 	vec4 optColor;
-#ifdef METAL
+#ifdef AXSC_TARGET_MSL
 	float fragCoordY = u_screenSize.y - gl_FragCoord.y;
 #else
 	float fragCoordY = gl_FragCoord.y;
@@ -33,7 +33,7 @@ void main(void)
 	else if(y == 7) optColor = vec4(1,0.5,0,1);
 	else if(y == 8) optColor = vec4(1,0.5,0.5,1);
 	else if(y == 9) optColor = vec4(0.5,0.5,1,1);
-	
+
 	// inline to prevent "float" loss and keep using lowp
 	FragColor = optColor * texture(u_tex0, v_texCoord);
 }
