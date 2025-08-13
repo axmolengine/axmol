@@ -19,7 +19,7 @@ layout(std140) uniform fs_ub {
 vec3 noise(vec2 uv)
 {
 	vec2 p = abs(sin(uv * 13.0 + uv.x * u_Time[1] * sin(uv.y)));
-	
+
 	return vec3(sin (0.2 * u_Time[1] + sin(p * 0.5) * u_Time[1] / cos(50.0)) * 10.0,0.3+0.5 * abs(sin(u_Time[1] * tan(5.0))));
 
 }
@@ -28,7 +28,7 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {
-#ifdef METAL
+#ifdef AXSC_TARGET_MSL
 	vec2 fragCoord = vec2(gl_FragCoord.x, u_screenSize.y - gl_FragCoord.y);
 #else
 	vec2 fragCoord = gl_FragCoord.xy;

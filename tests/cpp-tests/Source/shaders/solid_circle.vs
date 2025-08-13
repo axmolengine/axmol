@@ -2,7 +2,7 @@
 
 layout(location = 0) in vec2 a_localPosition;
 
-#if !defined(METAL)
+#if !defined(AXSC_TARGET_MSL)
 layout(location = 1) in vec4 a_instanceTransform;
 layout(location = 2) in vec4 a_instanceColor;
 // radius: x, due to metal alignment is 16
@@ -18,7 +18,7 @@ layout(std140) uniform vs_ub {
     mat4 u_MVPMatrix;
 };
 
-#if defined(METAL)
+#if defined(AXSC_TARGET_MSL)
 struct instance_data_st {
     vec4 trans;
     vec4 color;
@@ -33,7 +33,7 @@ void main()
 {
     v_position = a_localPosition;
 
-#if !defined(METAL)
+#if !defined(AXSC_TARGET_MSL)
     v_color = a_instanceColor;
     float radius = a_instanceRadius.x;
     float x = a_instanceTransform.x;
