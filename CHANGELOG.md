@@ -1,3 +1,40 @@
+# axmol-2.8.0 ?? 2025
+
+## Bug fixes
+
+- Fix incorrect FontAtlas when switching label rendering mode from normal to SDF by @halx99 in https://github.com/axmolengine/axmol/pull/2629
+- Fix wasm Device::getTextureDataForText will report exception when process whitespace text by @halx99
+- Fix linux label color incorrect when LabelType is STRING_TEXTURE by @halx99
+- Fix incorrect fmt::format_to use case by @halx99 in https://github.com/axmolengine/axmol/pull/2612
+- Fix llvm ver trim in genbindings.ps1 by @halx99
+- Fix Label SDF rendering issues with font resizing and other bugs by @halx99 in https://github.com/axmolengine/axmol/pull/2625
+
+## Improvements
+
+- Improve apple ios platform render view creation by @halx99 in https://github.com/axmolengine/axmol/pull/2600
+- Rename GLView to RenderView by @halx99 in https://github.com/axmolengine/axmol/pull/2602
+- Mention emsdk downgrading notice in version 2.6.0 release notes by @halx99
+- Improve wasm dev setup description by @halx99
+- Rename `GLContextAttrs` to `GfxContextAttrs` by @halx99
+- Update pull_request_template.md by @aismann in https://github.com/axmolengine/axmol/pull/2609
+- Improve utf8 chars counting, remove strlen call by @halx99 in https://github.com/axmolengine/axmol/pull/2614
+- Improve utf8 text processing by @halx99
+- Remove sprintf/snprintf stubs by @halx99 in https://github.com/axmolengine/axmol/pull/2615
+- Improve android sdk setup, axmol spec android sdk dir priority:  `android project local properties` > `ANDROID_HOME` > `ANDROID_SDK_ROOT` > `axmol/tools/external/adt/sdk` by @halx99
+- Use pragma once for more header files by @halx99 in https://github.com/axmolengine/axmol/pull/2616
+- Add support set window size limits by @NgVThangBz in https://github.com/axmolengine/axmol/pull/2618
+- Renamed cpp-tests "Node: Label - New API" to "Node: Label" by @aismann in https://github.com/axmolengine/axmol/pull/2627
+
+## SDK & Tools updates
+
+- agp: 8.11.0 => 8.11.1
+- gradle: 8.14.3 => 9.0.0
+- cmake: 4.0.3 => 4.1.0
+
+## 3rdparty updates
+
+- curl: 8.13.0 => 8.15.0
+
 # axmol-2.7.1 Jul.15 2025
 
 ## Bug fixes

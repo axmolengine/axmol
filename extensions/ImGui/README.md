@@ -75,9 +75,9 @@ More about use imgui widgets, please see: https://github.com/ocornut/imgui
 * macOS
 * Android
 
-## Known issues
+## Notes
 
-- ~Can't enable muti-viewports on macOS, so we disable this feature for macOS.~ , since axmol-2.7.1, multi-viewports on macOS works
+- multi-viewports only support with GL backend on win32 or macOS
 
 ## Other resources of ImGui
 
