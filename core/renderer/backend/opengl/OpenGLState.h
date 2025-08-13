@@ -106,7 +106,7 @@ struct UniformBufferBaseBindState
     GLuint handle;
 };
 
-struct OpenGLState
+struct AX_DLL OpenGLState
 {
     constexpr static GLenum BufferTargets[] = {
         GL_ARRAY_BUFFER,          // VERTEX of VAO
