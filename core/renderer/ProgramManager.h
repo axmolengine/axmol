@@ -118,7 +118,7 @@ protected:
     /**
      * Pre-load programs into cache.
      */
-    bool init();
+    void init();
 
     /**
      * register a program

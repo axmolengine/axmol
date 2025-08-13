@@ -10,11 +10,6 @@ ProgramStateRegistry* ProgramStateRegistry::getInstance()
         return _sharedStateRegistry;
 
     _sharedStateRegistry = new ProgramStateRegistry();
-    if (!_sharedStateRegistry->init())
-    {
-        AX_SAFE_DELETE(_sharedStateRegistry);
-    }
-
     return _sharedStateRegistry;
 }
 
@@ -22,11 +17,6 @@ ProgramStateRegistry* ProgramStateRegistry::getInstance()
 void ProgramStateRegistry::destroyInstance()
 {
     AX_SAFE_DELETE(_sharedStateRegistry);
-}
-
-bool ProgramStateRegistry::init()
-{
-    return true;
 }
 
 void ProgramStateRegistry::registerProgram(uint32_t programType, int textureSamplerFlags, uint32_t builtinProgramType)

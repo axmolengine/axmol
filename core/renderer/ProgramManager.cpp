@@ -41,10 +41,7 @@ ProgramManager* ProgramManager::getInstance()
     if (!_instance)
     {
         _instance = new ProgramManager();
-        if (!_instance->init())
-        {
-            AX_SAFE_DELETE(_instance);
-        }
+        _instance->init();
     }
     return _instance;
 }
@@ -97,7 +94,7 @@ static std::string joinPath(std::string_view path, std::string_view childPath)
     return ret;
 }
 
-bool ProgramManager::init()
+void ProgramManager::init()
 {
     auto fileUtils = FileUtils::getInstance();
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
@@ -186,7 +183,6 @@ bool ProgramManager::init()
 
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::HSV, TextureSamplerFlag::DUAL_SAMPLER,
                                                          ProgramType::HSV_DUAL_SAMPLER);
-    return true;
 }
 
 Program* ProgramManager::getBuiltinProgram(uint32_t type)

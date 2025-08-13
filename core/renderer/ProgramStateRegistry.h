@@ -23,7 +23,6 @@ public:
     /** purges the cache. It releases the retained instance. */
     static void destroyInstance();
 
-    bool init();
     void clearPrograms();
 
     void registerProgram(uint32_t programType, int textureSamplerFlags, uint32_t builtinProgramType);
