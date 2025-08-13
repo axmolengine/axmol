@@ -1,37 +1,51 @@
+/****************************************************************************
+Copyright (c) 2014-2020 Simdsoft Limited - All Rights Reserved
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+https://axmol.dev/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+
 //
-// Copyright (c) 2014-2020 Simdsoft Limited - All Rights Reserved
-// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
-
-
 // This module is used by x-studio UI Editor to layout UI elements
-// It's very useful for programer to operate UI elements in runtime,
-// so, we publish it to here.
-// usage:
+// It's very useful for programer to operate UI elements in runtime, so, we publish it to here.
+// Usage:
 //      #include "ui/LayoutHelper.h"
-//      LayoutHelper::centerNode(node); // the node should be already have parent.
+//      LayoutHelper::centerNode(node);                // the node should be already have parent.
 //      LayoutHelper::makeVerticalSpacingEqual(nodes); // all the nodes shoud be in the same parent.
 //
-#pragma once
-#ifndef _LAYOUTHELPER_H_
-#    define _LAYOUTHELPER_H_
 
-#    include "axmol.h"
-#    include "base/Macros.h"
+#pragma once
+
+#include "base/Macros.h"
 
 // f(x) = s * a + x
-#    define adjust_coord(__sz__, __achor__, __coord__) ((__sz__) * (__achor__) + (__coord__))
-
+#define adjust_coord(__sz__, __achor__, __coord__) ((__sz__) * (__achor__) + (__coord__))
 // f(y) = y - s * a
-#    define adjust_coord_r(__sz__, __achor__, __coord__) ((__coord__) - (__sz__) * (__achor__))
-
+#define adjust_coord_r(__sz__, __achor__, __coord__) ((__coord__) - (__sz__) * (__achor__))
 // f(x) = S - (s - s * a + x)
-#    define adjust_coord_neg(__SZ__, __sz__, __achor__, __coord__) \
+#define adjust_coord_neg(__SZ__, __sz__, __achor__, __coord__) \
         ((__SZ__) - ((__sz__) - (__sz__) * (__achor__) + (__coord__)))
-
 // f(y) = S - (s - s * a + y)
-#    define adjust_coord_neg_r adjust_coord_neg
-
-#    define center_coord(__SZ__, __sz__, __achor__) (((__SZ__) - (__sz__) + 2 * (__sz__) * (__achor__)) * 0.5f)
+#define adjust_coord_neg_r adjust_coord_neg
+#define center_coord(__SZ__, __sz__, __achor__) (((__SZ__) - (__sz__) + 2 * (__sz__) * (__achor__)) * 0.5f)
 
 using namespace ax;
 
@@ -64,17 +78,17 @@ struct AX_DLL LayoutHelper
     /// align type defination
     enum AlignType
     {
-        ALIGN_NONE    = 1 >> 1,
+        ALIGN_NONE = 1 >> 1,
         ALIGN_XCENTER = 1,
         ALIGN_YCENTER = 1 << 1,
-        ALIGN_LEFT    = 1 << 2,
-        ALIGN_RIGHT   = 1 << 3,
-        ALIGN_TOP     = 1 << 4,
-        ALIGN_BOTTOM  = 1 << 5,
+        ALIGN_LEFT = 1 << 2,
+        ALIGN_RIGHT = 1 << 3,
+        ALIGN_TOP = 1 << 4,
+        ALIGN_BOTTOM = 1 << 5,
 
         ALIGN_CENTER = ALIGN_XCENTER | ALIGN_YCENTER,
-        ALIGN_CT     = ALIGN_XCENTER | ALIGN_TOP,     // center top
-        ALIGN_CB     = ALIGN_XCENTER | ALIGN_BOTTOM,  // center bottom
+        ALIGN_CT = ALIGN_XCENTER | ALIGN_TOP,     // center top
+        ALIGN_CB = ALIGN_XCENTER | ALIGN_BOTTOM,  // center bottom
 
         ALIGN_LC = ALIGN_LEFT | ALIGN_YCENTER,  // left center
         ALIGN_LT = ALIGN_LEFT | ALIGN_TOP,      // left top
@@ -102,13 +116,13 @@ struct AX_DLL LayoutHelper
     static float getNodeRightX(ax::Node* pNode)
     {
         return pNode->getPositionX() +
-               (1 - pNode->getAnchorPoint().x) * pNode->getContentSize().width * pNode->getScaleX();
+            (1 - pNode->getAnchorPoint().x) * pNode->getContentSize().width * pNode->getScaleX();
     }
 
     static float getNodeTopY(ax::Node* pNode)
     {
         return pNode->getPositionY() +
-               (1 - pNode->getAnchorPoint().y) * pNode->getContentSize().height * pNode->getScaleY();
+            (1 - pNode->getAnchorPoint().y) * pNode->getContentSize().height * pNode->getScaleY();
     }
 
     static float getNodeBottomY(ax::Node* pNode)
@@ -172,10 +186,10 @@ struct AX_DLL LayoutHelper
     **
     */
     static void setNodePosition(ax::Node* pNode,
-                                const ax::Point& anchorPoint,
-                                const int align,
-                                float x,
-                                float y)
+        const ax::Point& anchorPoint,
+        const int align,
+        float x,
+        float y)
     {
         pNode->setAnchorPoint(anchorPoint);
         setNodePosition(pNode, align, x, y);
@@ -187,9 +201,9 @@ struct AX_DLL LayoutHelper
     }
 
     static void setNodePosition(ax::Node* pNode,
-                                const ax::Point& anchorPoint,
-                                const int align,
-                                float value = 0.0f)
+        const ax::Point& anchorPoint,
+        const int align,
+        float value = 0.0f)
     {  // ignore x or y
         setNodePosition(pNode, anchorPoint, align, value, value);
     }
@@ -227,7 +241,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -240,7 +254,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -253,14 +267,14 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         ax::Point achor = ax::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achor = pNode->getAnchorPoint();
         }
         pNode->setPosition(ax::Vec2(center_coord(parentSize.width, size.width, achor.x),
-                                         center_coord(parentSize.height, size.height, achor.y)));
+            center_coord(parentSize.height, size.height, achor.y)));
     }
 
     // @version 1
@@ -380,7 +394,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -392,7 +406,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -405,7 +419,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -417,7 +431,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -430,7 +444,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -443,7 +457,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -456,7 +470,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -469,7 +483,7 @@ struct AX_DLL LayoutHelper
     {
         AX_ASSERT(pNode);
 
-        Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -482,7 +496,7 @@ struct AX_DLL LayoutHelper
     {  // left bottom
         AX_ASSERT(pNode);
 
-        Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         ax::Point achorPoint = ax::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
@@ -496,42 +510,42 @@ struct AX_DLL LayoutHelper
     {  // right bottom
         AX_ASSERT(pNode);
 
-        Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         ax::Point achorPoint = ax::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achorPoint = pNode->getAnchorPoint();
         }
         pNode->setPosition(ax::Vec2(adjust_coord_neg(parentSize.width, size.width, achorPoint.x, p.x),
-                                         adjust_coord(size.height, achorPoint.y, p.y)));
+            adjust_coord(size.height, achorPoint.y, p.y)));
     }
 
     static void setNodeLT(ax::Node* pNode, const Vec2& parentSize, const ax::Point& p)
     {  // left top
         AX_ASSERT(pNode);
 
-        Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         ax::Point achorPoint = ax::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achorPoint = pNode->getAnchorPoint();
         }
         pNode->setPosition(ax::Vec2(adjust_coord(size.width, achorPoint.x, p.x),
-                                         adjust_coord_neg(parentSize.height, size.height, achorPoint.y, p.y)));
+            adjust_coord_neg(parentSize.height, size.height, achorPoint.y, p.y)));
     }
 
     static void setNodeRT(ax::Node* pNode, const Vec2& parentSize, const ax::Point& p)
     {  // right top
         AX_ASSERT(pNode);
 
-        Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
+        Vec2 size = pNode->getContentSize() * getScale2D(pNode);
         ax::Point achorPoint = ax::Vec2::ZERO;
         if (!pNode->isIgnoreAnchorPointForPosition())
         {
             achorPoint = pNode->getAnchorPoint();
         }
         pNode->setPosition(ax::Vec2(adjust_coord_neg(parentSize.width, size.width, achorPoint.x, p.x),
-                                         adjust_coord_neg(parentSize.height, size.height, achorPoint.y, p.y)));
+            adjust_coord_neg(parentSize.height, size.height, achorPoint.y, p.y)));
     }
 
     /* set node position as normalized: @version 1 */
@@ -797,7 +811,7 @@ struct AX_DLL LayoutHelper
         static void setNodePosition(ax::Node* pNode, const ax::Point& p)
         {
             setNodeNormalizedPosition(pNode, ax::Vec2(p.x / s_designSize.width * s_adjustedScale,
-                                                           p.y / s_designSize.height * s_adjustedScale));
+                p.y / s_designSize.height * s_adjustedScale));
         }
         static void centerNode(ax::Node* pNode) { setNodeNormalizedPosition(pNode, ax::Vec2(.5f, .5f)); }
         static void centerNodeX(ax::Node* pNode) { setNodeNormalizedPositionX(pNode, .5f); }
@@ -836,5 +850,3 @@ struct AX_DLL LayoutHelper
         static ax::Rect s_ScreenVisibleRect;
     };
 };
-
-#endif
