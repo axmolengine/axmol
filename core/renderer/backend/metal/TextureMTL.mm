@@ -226,8 +226,8 @@ void TextureImpl::updateTextureDescriptor(const ax::backend::TextureDescriptor& 
     updateSamplerDescriptor(descriptor.samplerDescriptor);
 
     _textureInfo._bytesPerRow = PixelFormatUtils::computeRowPitch(descriptor.textureFormat, descriptor.width);
-    
-    if (descriptor.textureType == TextureType::TEXTURE_2D) {
+
+    if (descriptor.textureType == TextureType::TEXTURE_CUBE) {
         _region                   = MTLRegionMake2D(0, 0, descriptor.width, descriptor.height);
     }
 }
@@ -303,7 +303,7 @@ void TextureImpl::updateFaceData(TextureCubeFace side, void* data, int index)
     if (!mtlTexture)
         return;
 
-    auto slicePitch = _textureInfo._bytesPerRow * _textureInfo._descriptor.width;
+    auto slicePitch = _textureInfo._bytesPerRow * _textureInfo._descriptor.height;
     [mtlTexture replaceRegion:_region
                   mipmapLevel:0
                         slice:slice

@@ -510,8 +510,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
 #    endif
-#elif AX_RENDER_API == AX_RENDER_API_METAL || AX_RENDER_API == AX_RENDER_API_D3D
-    // Don't create gl context.
+#else // Other Graphics driver, don't create gl context.
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
 

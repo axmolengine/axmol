@@ -1576,10 +1576,13 @@ IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAxmol(GLFWwindow* window, bool install
 {
 #if AX_RENDER_API == AX_RENDER_API_GL
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
-#elif AX_RENDER_API == AX_RENDER_API_METAL
+#elif AX_RENDER_API == AX_RENDER_API_MTL
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
 #elif AX_RENDER_API == AX_RENDER_API_D3D
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_D3D);
+#else
+#error "imgui glfw backend not support current render API"
+    return false;
 #endif
 }
 

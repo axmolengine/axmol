@@ -483,7 +483,7 @@ int lua_ax_backend_Program_getVertexInputDesc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            ax::backend::VertexInputSemantic arg0;
+            ax::backend::VertexInputKind arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.Program:getVertexInputDesc");
 
             if (!ok) { break; }
@@ -1387,7 +1387,7 @@ int lua_ax_backend_ProgramState_getVertexInputDesc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            ax::backend::VertexInputSemantic arg0;
+            ax::backend::VertexInputKind arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.ProgramState:getVertexInputDesc");
 
             if (!ok) { break; }
