@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "audio/AudioDecoder.h"
+#include "axmol/audio/AudioDecoder.h"
 #include <memory>
 
 #if !defined(MAKE_FOURCC)

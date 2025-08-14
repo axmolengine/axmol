@@ -31,10 +31,10 @@ THE SOFTWARE.
 
 #include <vector>
 
-#include "2d/Action.h"
-#include "2d/Animation.h"
-#include "base/Protocols.h"
-#include "base/Vector.h"
+#include "axmol/2d/Action.h"
+#include "axmol/2d/Animation.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/base/Vector.h"
 
 namespace ax
 {

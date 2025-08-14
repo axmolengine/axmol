@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "ArmatureDataManager.h"
 #include "TransformHelp.h"
 
-#include "2d/ParticleSystemQuad.h"
+#include "axmol/2d/ParticleSystemQuad.h"
 
 using namespace ax;
 

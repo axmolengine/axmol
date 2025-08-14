@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/JobSystem.h"
-#include "base/Director.h"
+#include "axmol/base/JobSystem.h"
+#include "axmol/base/Director.h"
 #include "yasio/thread_name.hpp"
 
 #include <queue>

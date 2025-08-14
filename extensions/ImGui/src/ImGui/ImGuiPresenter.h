@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include <stdint.h>
 #include <tuple>
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "extensions/ExtensionMacros.h"
 
 #include "imgui.h"

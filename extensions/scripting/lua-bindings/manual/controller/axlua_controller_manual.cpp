@@ -32,7 +32,7 @@
 #    include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #    include "lua-bindings/manual/LuaValue.h"
 #    include "lua-bindings/manual/LuaEngine.h"
-#    include "base/GameController.h"
+#    include "axmol/base/GameController.h"
 
 static void cloneEventListenerControllerHandler(const ax::EventListenerController* src,
                                                 ax::EventListenerController* dst,

@@ -32,10 +32,10 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <functional>
 #include <type_traits>
-#include "platform/PlatformMacros.h"
-#include "math/Vec3.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/math/Vec3.h"
 #include "jni/jni.hpp"
-#include "base/axstd.h"
+#include "axmol/base/axstd.h"
 
 namespace jni
 {

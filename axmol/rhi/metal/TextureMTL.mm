@@ -23,10 +23,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "TextureMTL.h"
-#include "UtilsMTL.h"
-#include "base/Macros.h"
-#include "../PixelFormatUtils.h"
+#include "axmol/rhi/metal/TextureMTL.h"
+#include "axmol/rhi/metal/UtilsMTL.h"
+#include "axmol/base/Macros.h"
+#include "axmol/rhi/PixelFormatUtils.h"
 
 namespace ax::rhi::mtl {
 

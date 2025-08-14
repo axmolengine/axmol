@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "base/Macros.h"
-#include "math/MathBase.h"
+#include "axmol/base/Macros.h"
+#include "axmol/math/MathBase.h"
 #include <type_traits>
 #include <stdint.h>
 

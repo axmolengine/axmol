@@ -28,15 +28,15 @@ THE SOFTWARE.
 #pragma once
 /// @cond DO_NOT_SHOW
 
-#include "platform/PlatformMacros.h"
-#include "platform/FileUtils.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/platform/FileUtils.h"
 #include <string>
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    include "platform/android/FileUtils-android.h"
+#    include "axmol/platform/android/FileUtils-android.h"
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 // for import ssize_t on win32 platform
-#    include "platform/StdC.h"
+#    include "axmol/platform/StdC.h"
 #endif
 
 #include "yasio/byte_buffer.hpp"

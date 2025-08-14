@@ -22,22 +22,22 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "MediaEngine.h"
+#include "axmol/media/MediaEngine.h"
 
 #if defined(WINAPI_FAMILY)
 #    if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP && !defined(AXME_USE_IMFME)
-#        include "media/WmfMediaEngine.h"
+#        include "axmol/media/WmfMediaEngine.h"
 #    else
-#        include "media/MfMediaEngine.h"
+#        include "axmol/media/MfMediaEngine.h"
 #    endif
 #elif defined(__APPLE__)
-#    include "media/AvfMediaEngine.h"
+#    include "axmol/media/AvfMediaEngine.h"
 #elif defined(__ANDROID__)
-#    include "media/AndroidMediaEngine.h"
+#    include "axmol/media/AndroidMediaEngine.h"
 #endif
 
 #if defined(AX_ENABLE_VLC_MEDIA)
-#    include "media/VlcMediaEngine.h"
+#    include "axmol/media/VlcMediaEngine.h"
 #endif
 
 namespace axstd

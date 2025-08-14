@@ -28,13 +28,13 @@
 // Only compile this code on iOS. These files should NOT be included on your Mac project.
 // But in case they are included, it won't be compiled.
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
-#import "platform/ios/ES3Renderer-ios.h"
+#import "axmol/platform/ios/ES3Renderer-ios.h"
 // #import "platform/PlatformMacros.h"
-#import "platform/ios/OpenGL_Internal-ios.h"
+#import "axmol/platform/ios/OpenGL_Internal-ios.h"
 
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0
 #define NSLog(...)       do {} while (0)

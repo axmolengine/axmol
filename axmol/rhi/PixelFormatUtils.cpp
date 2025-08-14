@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "PixelFormatUtils.h"
+#include "axmol/rhi/PixelFormatUtils.h"
 
 namespace ax::rhi
 {

@@ -23,15 +23,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "platform/PlatformConfig.h"
-#include "base/Config.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_3D_PHYSICS)
 #    include "lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
 #    include "lua-bindings/auto/axlua_physics3d_auto.hpp"
 #    include "lua-bindings/manual/tolua_fix.h"
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/LuaEngine.h"
-#    include "physics3d/Physics3D.h"
+#    include "axmol/physics3d/Physics3D.h"
 
 bool luaval_to_Physics3DRigidBodyDes(lua_State* L,
                                      int lo,

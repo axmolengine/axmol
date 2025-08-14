@@ -26,17 +26,17 @@
 
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
 
-#    include "renderer/RenderState.h"
-#    include "rhi/ProgramState.h"
-#    include "rhi/Buffer.h"
-#    include "math/Vec3.h"
+#    include "axmol/renderer/RenderState.h"
+#    include "axmol/rhi/ProgramState.h"
+#    include "axmol/rhi/Buffer.h"
+#    include "axmol/math/Vec3.h"
 #    include "recast/DebugDraw.h"
-#    include "renderer/GroupCommand.h"
-#    include "renderer/CallbackCommand.h"
-#    include "renderer/CustomCommand.h"
+#    include "axmol/renderer/GroupCommand.h"
+#    include "axmol/renderer/CallbackCommand.h"
+#    include "axmol/renderer/CustomCommand.h"
 #    include <string>
 #    include <vector>
 

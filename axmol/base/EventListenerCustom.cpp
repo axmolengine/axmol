@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventListenerCustom.h"
-#include "base/EventCustom.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventCustom.h"
 
 namespace ax
 {

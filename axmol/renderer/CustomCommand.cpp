@@ -22,11 +22,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "renderer/CustomCommand.h"
-#include "renderer/TextureAtlas.h"
-#include "rhi/Buffer.h"
-#include "rhi/DriverBase.h"
-#include "base/Utils.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/TextureAtlas.h"
+#include "axmol/rhi/Buffer.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/base/Utils.h"
 #include <stddef.h>
 
 namespace ax

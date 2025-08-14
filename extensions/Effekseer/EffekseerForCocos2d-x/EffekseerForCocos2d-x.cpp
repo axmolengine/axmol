@@ -1,9 +1,8 @@
 
 #include "EffekseerForCocos2d-x.h"
-#include "base/Utils.h"
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
-#include "rhi/DriverBase.h"
+#include "axmol/rhi/DriverBase.h"
 #endif
 
 namespace efk

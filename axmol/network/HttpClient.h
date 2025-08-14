@@ -33,13 +33,13 @@
 #include <condition_variable>
 #include <deque>
 
-#include "base/Scheduler.h"
-#include "network/HttpRequest.h"
-#include "network/HttpResponse.h"
-#include "network/HttpCookie.h"
-#include "network/Uri.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/network/HttpRequest.h"
+#include "axmol/network/HttpResponse.h"
+#include "axmol/network/HttpCookie.h"
+#include "axmol/network/Uri.h"
 #include "yasio/yasio_fwd.hpp"
-#include "base/ConcurrentDeque.h"
+#include "axmol/base/ConcurrentDeque.h"
 
 /**
  * @addtogroup network
@@ -255,6 +255,6 @@ private:
 
 #else
 
-#include "network/HttpClient-wasm.h"
+#include "axmol/network/HttpClient-wasm.h"
 
 #endif

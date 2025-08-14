@@ -27,11 +27,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/Action.h"
-#include "2d/ActionInterval.h"
-#include "2d/Node.h"
-#include "base/Director.h"
-#include "base/text_utils.h"
+#include "axmol/2d/Action.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/text_utils.h"
 
 namespace ax
 {

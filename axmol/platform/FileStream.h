@@ -1,12 +1,12 @@
 // Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
 #pragma once
 
-#include "platform/IFileStream.h"
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/IFileStream.h"
+#include "axmol/platform/PlatformConfig.h"
 #include <string>
 #include <functional>
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include <android/asset_manager.h>

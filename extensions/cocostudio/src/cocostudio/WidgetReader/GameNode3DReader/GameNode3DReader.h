@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "2d/CameraBackgroundBrush.h"
+#include "axmol/2d/CameraBackgroundBrush.h"
 #include "cocostudio/CocosStudioExport.h"
 #include "cocostudio/WidgetReader/NodeReaderProtocol.h"
 #include "cocostudio/WidgetReader/NodeReaderDefine.h"

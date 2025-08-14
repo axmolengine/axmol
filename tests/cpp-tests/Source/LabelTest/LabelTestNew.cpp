@@ -25,8 +25,8 @@
 
 #include "LabelTestNew.h"
 #include "../testResource.h"
-#include "renderer/Renderer.h"
-#include "2d/FontAtlasCache.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/2d/FontAtlasCache.h"
 
 using namespace ax;
 using namespace ui;

@@ -27,7 +27,7 @@
 #include <array>
 #include <vector>
 
-#include "RHITypes.h"
+#include "axmol/rhi/RHITypes.h"
 
 namespace ax::rhi {
 

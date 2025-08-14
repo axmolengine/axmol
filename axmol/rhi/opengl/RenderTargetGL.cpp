@@ -23,10 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "RenderTargetGL.h"
-#include "DriverGL.h"
-#include "rhi/opengl/MacrosGL.h"
-#include "rhi/opengl/TextureGL.h"
+#include "axmol/rhi/opengl/RenderTargetGL.h"
+#include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/rhi/opengl/TextureGL.h"
 
 namespace ax::rhi::gl {
 

@@ -26,8 +26,8 @@
  ****************************************************************************/
 #pragma once
 
-#include "base/Event.h"
-#include "math/Math.h"
+#include "axmol/base/Event.h"
+#include "axmol/math/Math.h"
 
 /**
  * @addtogroup base

@@ -2,7 +2,7 @@
 #define __GEARCOLOR_H__
 
 #include "FairyGUIMacros.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "GearBase.h"
 
 NS_FGUI_BEGIN

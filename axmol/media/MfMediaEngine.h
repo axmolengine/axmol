@@ -14,7 +14,7 @@
 
 #if defined(_WIN32)
 #include <winapifamily.h>
-#include "media/MediaEngine.h"
+#include "axmol/media/MediaEngine.h"
 
 #    if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP || defined(AXME_USE_IMFME))
 
@@ -25,7 +25,7 @@
 #include <wincodec.h>
 #include <wrl/client.h>
 
-#include "media/MFUtils.h"
+#include "axmol/media/MFUtils.h"
 
 namespace ax
 {

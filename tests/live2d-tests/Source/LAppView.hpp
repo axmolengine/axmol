@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -11,8 +11,8 @@
 #include <Math/CubismMatrix44.hpp>
 #include <Math/CubismViewMatrix.hpp>
 #include "TouchManager.h"
-#include "2d/Sprite.h"
-#include "cocos2d.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/cocos2d.h"
 #include <vector>
 #include "LAppLive2DManager.hpp"
 

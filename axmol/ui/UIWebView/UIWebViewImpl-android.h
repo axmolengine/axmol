@@ -32,7 +32,7 @@
 #include <string>
 #include <string_view>
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 namespace ax
 {

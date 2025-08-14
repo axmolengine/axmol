@@ -28,7 +28,7 @@
 
 #include <vector>
 
-#include "renderer/TrianglesCommand.h"
+#include "axmol/renderer/TrianglesCommand.h"
 
 /**
  * @addtogroup renderer

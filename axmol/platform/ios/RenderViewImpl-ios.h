@@ -25,9 +25,9 @@
  ****************************************************************************/
 #pragma once
 
-#include "base/Object.h"
-#include "platform/Common.h"
-#include "platform/RenderView.h"
+#include "axmol/base/Object.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/RenderView.h"
 
 namespace ax
 {

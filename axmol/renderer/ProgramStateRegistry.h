@@ -1,8 +1,8 @@
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "rhi/Program.h"
-#include "rhi/ProgramState.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/rhi/Program.h"
+#include "axmol/rhi/ProgramState.h"
 
 #include <string>
 #include <unordered_map>

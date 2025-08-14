@@ -26,11 +26,11 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "2d/ProtectedNode.h"
-#include "ui/UILayoutParameter.h"
-#include "ui/GUIDefine.h"
-#include "ui/GUIExport.h"
-#include "base/Map.h"
+#include "axmol/2d/ProtectedNode.h"
+#include "axmol/ui/UILayoutParameter.h"
+#include "axmol/ui/GUIDefine.h"
+#include "axmol/ui/GUIExport.h"
+#include "axmol/base/Map.h"
 
 /**
  * @addtogroup ui

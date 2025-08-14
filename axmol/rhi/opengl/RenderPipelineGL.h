@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "../RenderPipeline.h"
+#include "axmol/rhi/RenderPipeline.h"
 
-#include "platform/GL.h"
+#include "axmol/platform/GL.h"
 
 #include <vector>
 

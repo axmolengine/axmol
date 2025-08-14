@@ -23,11 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "UtilsMTL.h"
-#include "DriverMTL.h"
-#include "TextureMTL.h"
-#include "../PixelFormatUtils.h"
-#include "base/Configuration.h"
+#include "axmol/rhi/metal/UtilsMTL.h"
+#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/metal/TextureMTL.h"
+#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/base/Configuration.h"
 
 namespace ax::rhi::mtl {
 

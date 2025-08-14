@@ -6,7 +6,7 @@
 #include "Margin.h"
 #include "ScrollPane.h"
 #include "Transition.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "display/FUIContainer.h"
 #include "event/HitTest.h"
 

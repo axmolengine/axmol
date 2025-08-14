@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventCustom.h"
-#include "base/Event.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/Event.h"
 
 namespace ax
 {

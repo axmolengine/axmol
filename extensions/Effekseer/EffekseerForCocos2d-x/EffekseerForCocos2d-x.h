@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include <Effekseer.h>
 #include <EffekseerRendererCommon/EffekseerRenderer.Renderer.h>
 

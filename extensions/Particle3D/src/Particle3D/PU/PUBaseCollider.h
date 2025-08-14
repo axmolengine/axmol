@@ -27,7 +27,7 @@
 #pragma once
 
 #include "Particle3D/PU/PUAffector.h"
-#include "3d/AABB.h"
+#include "axmol/3d/AABB.h"
 
 namespace ax
 {

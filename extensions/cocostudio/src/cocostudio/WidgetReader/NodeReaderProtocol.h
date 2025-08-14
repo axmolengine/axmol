@@ -26,7 +26,7 @@
 
 #include "cocostudio/CocosStudioExport.h"
 #include "cocostudio/CocosStudioExtension.h"
-#include "ui/GUIDefine.h"
+#include "axmol/ui/GUIDefine.h"
 
 #include "pugixml/pugixml.hpp"
 #include "pugixml/pugiext.hpp"

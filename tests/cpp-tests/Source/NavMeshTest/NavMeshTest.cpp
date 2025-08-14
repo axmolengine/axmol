@@ -26,10 +26,10 @@
  ****************************************************************************/
 
 #include "NavMeshTest.h"
-#include "physics3d/Physics3DWorld.h"
-#include "physics3d/Physics3D.h"
-#include "3d/Bundle3D.h"
-#include "2d/Light.h"
+#include "axmol/physics3d/Physics3DWorld.h"
+#include "axmol/physics3d/Physics3D.h"
+#include "axmol/3d/Bundle3D.h"
+#include "axmol/2d/Light.h"
 
 USING_NS_AX_EXT;
 using namespace ax;

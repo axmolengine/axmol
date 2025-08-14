@@ -24,10 +24,10 @@
 
 #include "ParticleReader.h"
 
-#include "base/Types.h"
-#include "base/Utils.h"
-#include "2d/ParticleSystemQuad.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Utils.h"
+#include "axmol/2d/ParticleSystemQuad.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/WidgetReader/NodeReader/NodeReader.h"
 

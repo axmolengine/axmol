@@ -24,10 +24,10 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "CocoStudio.h"
-#include "ui/CocosGUI.h"
-#include "base/ObjectFactory.h"
-#include "base/Utils.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/CocosGUI.h"
+#include "axmol/base/ObjectFactory.h"
+#include "axmol/base/Utils.h"
+#include "axmol/platform/FileUtils.h"
 
 using namespace ax;
 using namespace ui;

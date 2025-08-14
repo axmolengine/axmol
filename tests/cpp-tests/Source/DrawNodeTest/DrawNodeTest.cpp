@@ -24,8 +24,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "DrawNodeTest.h"
-#include "renderer/Renderer.h"
-#include "renderer/CustomCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/CustomCommand.h"
 
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")

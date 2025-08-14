@@ -1,7 +1,7 @@
 #pragma once
-#include "base/Data.h"
+#include "axmol/base/Data.h"
 
-#include "RHITypes.h"
+#include "axmol/rhi/RHITypes.h"
 
 namespace ax::rhi {
 

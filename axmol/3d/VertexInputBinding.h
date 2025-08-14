@@ -25,10 +25,10 @@
 
 #include <unordered_map>
 
-#include "base/Object.h"
-#include "rhi/ProgramState.h"
-#include "renderer/Pass.h"
-#include "3d/shaderinfos.h"
+#include "axmol/base/Object.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/Pass.h"
+#include "axmol/3d/shaderinfos.h"
 
 namespace ax
 {

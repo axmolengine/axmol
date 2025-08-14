@@ -2,9 +2,9 @@
 
 #include <optional>
 
-#include "base/Types.h"
-#include "platform/GL.h"
-#include "UtilsGL.h"
+#include "axmol/base/Types.h"
+#include "axmol/platform/GL.h"
+#include "axmol/rhi/opengl/UtilsGL.h"
 
 #define AX_ENABLE_STATE_GUARD 1
 

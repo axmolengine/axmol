@@ -28,10 +28,10 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "base/Object.h"
-#include "base/Map.h"
-#include "base/Value.h"
-#include "2d/Animation.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Map.h"
+#include "axmol/base/Value.h"
+#include "axmol/2d/Animation.h"
 
 #include <string>
 

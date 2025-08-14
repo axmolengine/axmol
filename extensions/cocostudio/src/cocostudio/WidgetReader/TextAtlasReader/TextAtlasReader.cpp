@@ -2,8 +2,8 @@
 
 #include "TextAtlasReader.h"
 
-#include "ui/UITextAtlas.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UITextAtlas.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"

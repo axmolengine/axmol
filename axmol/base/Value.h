@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "base/Macros.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Macros.h"
 #include <string>
 #include <vector>
 #include <unordered_map>

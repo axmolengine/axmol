@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "lua-bindings/manual/tolua_fix.h"
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include <stdlib.h>
 

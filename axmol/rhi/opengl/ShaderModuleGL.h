@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "../ShaderModule.h"
+#include "axmol/rhi/ShaderModule.h"
 
-#include "platform/GL.h"
+#include "axmol/platform/GL.h"
 
 namespace ax::rhi::gl {
 /**

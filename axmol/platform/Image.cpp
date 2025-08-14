@@ -25,14 +25,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/Image.h"
-#include "rhi/PixelFormatUtils.h"
+#include "axmol/platform/Image.h"
+#include "axmol/rhi/PixelFormatUtils.h"
 
 #include <string>
 #include <ctype.h>
 
-#include "base/axstd.h"
-#include "base/Config.h"  // AX_USE_JPEG, AX_USE_WEBP
+#include "axmol/base/axstd.h"
+#include "axmol/base/Config.h"  // AX_USE_JPEG, AX_USE_WEBP
 
 #define STBI_NO_JPEG
 #define STBI_NO_PNG
@@ -103,36 +103,36 @@ struct dirent* readdir$INODE64(DIR* dir)
 #endif  // AX_USE_JPEG
 } /* extern "C" */
 
-#include "base/ktxspec_v1.h"
+#include "axmol/base/ktxspec_v1.h"
 
-#include "base/s3tc.h"
-#include "base/atitc.h"
-#include "base/pvr.h"
-#include "base/TGAlib.h"
+#include "axmol/base/s3tc.h"
+#include "axmol/base/atitc.h"
+#include "axmol/base/pvr.h"
+#include "axmol/base/TGAlib.h"
 
-#include "base/etc1.h"
-#include "base/etc2.h"
+#include "axmol/base/etc1.h"
+#include "axmol/base/etc2.h"
 
-#include "base/astc.h"
+#include "axmol/base/astc.h"
 
 #if AX_USE_WEBP
 #    include "decode.h"
 #endif  // AX_USE_WEBP
 
-#include "base/Macros.h"
-#include "platform/Common.h"
-#include "platform/StdC.h"
-#include "platform/FileUtils.h"
-#include "base/Configuration.h"
-#include "base/Utils.h"
-#include "base/ZipUtils.h"
+#include "axmol/base/Macros.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/StdC.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/ZipUtils.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    include "platform/android/FileUtils-android.h"
-#    include "platform/GL.h"
+#    include "axmol/platform/android/FileUtils-android.h"
+#    include "axmol/platform/GL.h"
 #endif
 
 #if AX_USE_WIC
-#    include "platform/winrt/WICImageLoader-winrt.h"
+#    include "axmol/platform/winrt/WICImageLoader-winrt.h"
 #endif
 
 namespace ax

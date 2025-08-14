@@ -27,9 +27,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "base/AutoreleasePool.h"
-#include "base/Types.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/AutoreleasePool.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

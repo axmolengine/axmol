@@ -22,8 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DepthStencilState.h"
-#include "RenderTarget.h"
+#include "axmol/rhi/DepthStencilState.h"
+#include "axmol/rhi/RenderTarget.h"
 
 namespace ax::rhi {
 

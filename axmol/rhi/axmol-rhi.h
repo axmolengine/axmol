@@ -25,12 +25,12 @@
 
 #pragma once
 
-#include "rhi/RenderPassDescriptor.h"
-#include "rhi/RenderPipeline.h"
-#include "rhi/DriverBase.h"
-#include "rhi/RHITypes.h"
-#include "rhi/CommandBuffer.h"
-#include "rhi/Buffer.h"
-#include "rhi/VertexLayout.h"
-#include "rhi/Texture.h"
-#include "rhi/DepthStencilState.h"
+#include "axmol/rhi/RenderPassDescriptor.h"
+#include "axmol/rhi/RenderPipeline.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/CommandBuffer.h"
+#include "axmol/rhi/Buffer.h"
+#include "axmol/rhi/VertexLayout.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/rhi/DepthStencilState.h"

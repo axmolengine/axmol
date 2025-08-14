@@ -28,9 +28,9 @@
 #include "tolua++.h"
 
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "base/EventListenerAcceleration.h"
-#include "base/EventListenerCustom.h"
-#include "2d/Node.h"
+#include "axmol/base/EventListenerAcceleration.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/2d/Node.h"
 
 namespace ax
 {

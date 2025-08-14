@@ -32,9 +32,9 @@
 #include "lua-bindings/manual/extension/axlua_extension_manual.h"
 #include "lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
 #include "lua-bindings/manual/ui/axlua_ui_manual.hpp"
-#include "2d/MenuItem.h"
-#include "base/Director.h"
-#include "base/EventCustom.h"
+#include "axmol/2d/MenuItem.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventCustom.h"
 
 namespace ax
 {

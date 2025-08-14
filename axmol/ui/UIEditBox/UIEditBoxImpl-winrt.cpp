@@ -27,12 +27,12 @@
 //THE SOFTWARE.
 //****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
-#include "ui/UIEditBox/UIEditBoxImpl-winrt.h"
-#include "platform/winrt/WinRTUtils.h"
-#include "platform/winrt/RenderViewImpl-winrt.h"
-#include "2d/FontFreeType.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-winrt.h"
+#include "axmol/platform/winrt/WinRTUtils.h"
+#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/2d/FontFreeType.h"
 
 #include <winrt/Windows.UI.Xaml.Input.h>
 #include <winrt/Windows.UI.ViewManagement.h>

@@ -22,9 +22,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Director.h"
-#include "2d/Camera.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/WidgetReader/UserCameraReader/UserCameraReader.h"
 
 #include "cocostudio/CSParseBinary_generated.h"

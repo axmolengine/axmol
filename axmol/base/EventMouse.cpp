@@ -24,8 +24,8 @@
 
  ****************************************************************************/
 
-#include "base/EventMouse.h"
-#include "base/Director.h"
+#include "axmol/base/EventMouse.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

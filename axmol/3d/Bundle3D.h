@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "base/Data.h"
-#include "3d/Bundle3DData.h"
-#include "base/json.h"
+#include "axmol/base/Data.h"
+#include "axmol/3d/Bundle3DData.h"
+#include "axmol/base/json.h"
 #include "yasio/ibstream.hpp"
 
 namespace ax

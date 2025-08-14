@@ -29,8 +29,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/ParticleSystem.h"
-#include "renderer/QuadCommand.h"
+#include "axmol/2d/ParticleSystem.h"
+#include "axmol/renderer/QuadCommand.h"
 
 namespace ax
 {

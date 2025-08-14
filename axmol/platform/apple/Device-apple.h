@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "platform/Device.h"
+#include "axmol/platform/Device.h"
 
 namespace FontUtils
 {

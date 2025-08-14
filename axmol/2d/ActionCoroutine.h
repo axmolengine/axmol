@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "2d/Action.h"
+#include "axmol/2d/Action.h"
 
 #if __has_include(<coroutine>)
 #    include <coroutine>

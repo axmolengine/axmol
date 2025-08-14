@@ -25,13 +25,13 @@
 
 #pragma once
 
-#include "RHITypes.h"
-#include "RenderPassDescriptor.h"
-#include "Texture.h"
-#include "DepthStencilState.h"
-#include "ShaderCache.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/RenderPassDescriptor.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/rhi/DepthStencilState.h"
+#include "axmol/rhi/ShaderCache.h"
 
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 
 #include <string>
 

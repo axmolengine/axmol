@@ -24,12 +24,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "3d/Bundle3D.h"
-#include "3d/ObjLoader.h"
+#include "axmol/3d/Bundle3D.h"
+#include "axmol/3d/ObjLoader.h"
 
-#include "base/Macros.h"
-#include "platform/FileUtils.h"
-#include "base/Data.h"
+#include "axmol/base/Macros.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Data.h"
 
 #define BUNDLE_TYPE_SCENE             1
 #define BUNDLE_TYPE_NODE              2

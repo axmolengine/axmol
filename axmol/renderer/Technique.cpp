@@ -28,9 +28,9 @@
  - Qt3D: http://qt-project.org/
  ****************************************************************************/
 
-#include "renderer/Technique.h"
-#include "renderer/Material.h"
-#include "renderer/Pass.h"
+#include "axmol/renderer/Technique.h"
+#include "axmol/renderer/Material.h"
+#include "axmol/renderer/Pass.h"
 
 namespace ax
 {

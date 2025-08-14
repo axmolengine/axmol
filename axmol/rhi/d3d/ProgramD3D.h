@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Program.h"
+#include "axmol/rhi/Program.h"
 
-#include "ShaderModuleD3D.h"
+#include "axmol/rhi/d3d/ShaderModuleD3D.h"
 
 namespace ax::rhi::d3d
 {

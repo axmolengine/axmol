@@ -24,7 +24,7 @@
 #define DRAGONBONES_AX_ARMATURE_DISPLAY_CONTAINER_H
 
 #include "DragonBones/DragonBonesHeaders.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**

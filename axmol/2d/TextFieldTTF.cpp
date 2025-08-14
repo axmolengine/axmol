@@ -27,12 +27,12 @@ THE SOFTWARE.
 
 #include <algorithm>
 
-#include "2d/TextFieldTTF.h"
+#include "axmol/2d/TextFieldTTF.h"
 
-#include "base/Director.h"
-#include "platform/FileUtils.h"
-#include "base/text_utils.h"
-#include "2d/Sprite.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/2d/Sprite.h"
 
 namespace ax
 {

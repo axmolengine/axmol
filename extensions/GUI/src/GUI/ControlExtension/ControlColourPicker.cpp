@@ -32,8 +32,8 @@
  */
 
 #include "ControlColourPicker.h"
-#include "2d/SpriteFrameCache.h"
-#include "2d/SpriteBatchNode.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/2d/SpriteBatchNode.h"
 
 NS_AX_EXT_BEGIN
 

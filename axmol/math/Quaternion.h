@@ -22,9 +22,9 @@
 
 #pragma once
 
-#include "base/Macros.h"
-#include "math/Vec3.h"
-#include "math/Mat4.h"
+#include "axmol/base/Macros.h"
+#include "axmol/math/Vec3.h"
+#include "axmol/math/Mat4.h"
 //#include "Plane.h"
 
 /**

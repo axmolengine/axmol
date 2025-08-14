@@ -27,7 +27,7 @@
 #include "NewRendererTest.h"
 #include <chrono>
 #include <sstream>
-#include "rhi/DriverBase.h"
+#include "axmol/rhi/DriverBase.h"
 
 namespace
 {

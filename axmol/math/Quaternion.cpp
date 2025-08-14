@@ -19,10 +19,10 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#include "math/Quaternion.h"
+#include "axmol/math/Quaternion.h"
 
 #include <cmath>
-#include "base/Macros.h"
+#include "axmol/base/Macros.h"
 
 NS_AX_MATH_BEGIN
 

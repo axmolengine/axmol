@@ -32,8 +32,8 @@ THE SOFTWARE.
 
 #include <string>
 #include <vector>
-#include "platform/Image.h"
-#include "renderer/TrianglesCommand.h"
+#include "axmol/platform/Image.h"
+#include "axmol/renderer/TrianglesCommand.h"
 
 namespace ax
 {

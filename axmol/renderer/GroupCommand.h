@@ -28,8 +28,8 @@
 #include <vector>
 #include <unordered_map>
 
-#include "base/Object.h"
-#include "renderer/RenderCommand.h"
+#include "axmol/base/Object.h"
+#include "axmol/renderer/RenderCommand.h"
 
 /**
  * @addtogroup renderer

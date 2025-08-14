@@ -26,14 +26,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Controller.h"
+#include "axmol/base/Controller.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <functional>
-#    include "base/Macros.h"
-#    include "base/Director.h"
-#    include "base/Scheduler.h"
-#    include "base/EventController.h"
+#    include "axmol/base/Macros.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/base/Scheduler.h"
+#    include "axmol/base/EventController.h"
 #    include "glfw3.h"
 
 namespace ax

@@ -25,17 +25,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/ProgressTimer.h"
+#include "axmol/2d/ProgressTimer.h"
 #include <algorithm>
 #include <stddef.h>  // offsetof
-#include "base/Types.h"
-#include "base/Macros.h"
-#include "base/Director.h"
-#include "2d/Sprite.h"
-#include "renderer/Renderer.h"
-#include "base/Utils.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/base/Utils.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
 
 namespace ax
 {

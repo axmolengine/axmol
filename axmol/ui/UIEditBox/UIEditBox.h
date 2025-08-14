@@ -27,10 +27,10 @@
 
 #pragma once
 
-#include "base/IMEDelegate.h"
-#include "ui/GUIDefine.h"
-#include "ui/UIWidget.h"
-#include "ui/UIScale9Sprite.h"
+#include "axmol/base/IMEDelegate.h"
+#include "axmol/ui/GUIDefine.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/UIScale9Sprite.h"
 
 namespace ax
 {

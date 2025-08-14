@@ -29,7 +29,7 @@
 #define USE_AUDIO_ENGINE 1
 
 #if USE_AUDIO_ENGINE
-#    include "audio/AudioEngine.h"
+#    include "axmol/audio/AudioEngine.h"
 #endif
 
 using namespace ax;

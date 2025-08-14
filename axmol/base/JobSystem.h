@@ -39,8 +39,8 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 #include <memory>
 #include <string>
 #include <span>
-#include "base/Config.h"
-#include "platform/PlatformDefine.h"
+#include "axmol/base/Config.h"
+#include "axmol/platform/PlatformDefine.h"
 
 namespace ax
 {

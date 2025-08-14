@@ -30,12 +30,12 @@
 #include <unordered_map>
 #include <cstdint>
 #include <functional>
-#include "platform/PlatformMacros.h"
-#include "base/Object.h"
-#include "base/EventListenerCustom.h"
-#include "rhi/RHITypes.h"
-#include "rhi/Program.h"
-#include "rhi/VertexLayout.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/Program.h"
+#include "axmol/rhi/VertexLayout.h"
 #include "yasio/byte_buffer.hpp"
 
 namespace ax::rhi {

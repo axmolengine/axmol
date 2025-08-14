@@ -32,13 +32,13 @@
 #include <string>
 #include <unordered_map>
 
-#include "platform/PlatformMacros.h"
-#include "base/Object.h"
-#include "platform/StdC.h"  // ssize_t on windows
-#include "renderer/Texture2D.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Object.h"
+#include "axmol/platform/StdC.h"  // ssize_t on windows
+#include "axmol/renderer/Texture2D.h"
 
-#include "base/Map.h"
-#include "2d/FontFreeType.h"
+#include "axmol/base/Map.h"
+#include "axmol/2d/FontFreeType.h"
 
 namespace ax
 {

@@ -26,10 +26,10 @@
 
 #pragma once
 
-#include "base/Config.h"
-#include "math/Math.h"
+#include "axmol/base/Config.h"
+#include "axmol/math/Math.h"
 
-#include "2d/Component.h"
+#include "axmol/2d/Component.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 

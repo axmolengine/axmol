@@ -23,8 +23,8 @@
  ****************************************************************************/
 
 
-#include "platform/FileUtils.h"
-#include "network/Downloader-wasm.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/network/Downloader-wasm.h"
 #include <emscripten.h>
 
 using namespace std;

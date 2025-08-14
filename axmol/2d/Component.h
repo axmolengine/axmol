@@ -27,8 +27,8 @@ THE SOFTWARE.
 
 /// @cond DO_NOT_SHOW
 #include <string>
-#include "base/Object.h"
-#include "base/ScriptSupport.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/ScriptSupport.h"
 
 namespace ax
 {

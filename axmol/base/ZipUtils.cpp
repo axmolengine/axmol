@@ -25,7 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/ZipUtils.h"
+#include "axmol/base/ZipUtils.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
 #    include <minizip/unzip.h>
@@ -42,9 +42,9 @@
 #include <stdlib.h>
 #include <set>
 
-#include "base/Data.h"
-#include "base/Macros.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Data.h"
+#include "axmol/base/Macros.h"
+#include "axmol/platform/FileUtils.h"
 #include <map>
 #include <mutex>
 

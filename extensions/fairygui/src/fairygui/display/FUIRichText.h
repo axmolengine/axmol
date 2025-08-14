@@ -1,7 +1,7 @@
 #ifndef __FUIRICHTEXT_H__
 #define __FUIRICHTEXT_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "TextFormat.h"
 #include "utils/html/HtmlParser.h"

@@ -31,7 +31,7 @@ THE SOFTWARE.
 typedef SSIZE_T ssize_t;
 #endif  // __SSIZE_T
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 #include <float.h>
 
 // for math.h on win32 platform

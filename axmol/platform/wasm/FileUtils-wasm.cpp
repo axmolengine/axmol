@@ -25,14 +25,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/wasm/FileUtils-wasm.h"
-#include "platform/wasm/Application-wasm.h"
-#include "platform/Common.h"
-#include "base/Macros.h"
-#include "base/text_utils.h"
+#include "axmol/platform/wasm/FileUtils-wasm.h"
+#include "axmol/platform/wasm/Application-wasm.h"
+#include "axmol/platform/Common.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/text_utils.h"
 #include <unistd.h>
 
 #include "yasio/string_view.hpp"

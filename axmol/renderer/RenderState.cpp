@@ -26,17 +26,17 @@
 
  ****************************************************************************/
 
-#include "renderer/RenderState.h"
+#include "axmol/renderer/RenderState.h"
 
 #include <string>
 #include <cassert>
 
-#include "renderer/Texture2D.h"
-#include "renderer/Pass.h"
-#include "base/Utils.h"
-#include "base/Director.h"
-#include "renderer/Renderer.h"
-#include "renderer/Material.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/renderer/Pass.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Material.h"
 
 namespace ax
 {

@@ -24,13 +24,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIScrollView.h"
-#include "base/Director.h"
-#include "base/Utils.h"
-#include "platform/Device.h"
-#include "ui/UIScrollViewBar.h"
-#include "2d/TweenFunction.h"
-#include "2d/Camera.h"
+#include "axmol/ui/UIScrollView.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Utils.h"
+#include "axmol/platform/Device.h"
+#include "axmol/ui/UIScrollViewBar.h"
+#include "axmol/2d/TweenFunction.h"
+#include "axmol/2d/Camera.h"
 namespace ax
 {
 

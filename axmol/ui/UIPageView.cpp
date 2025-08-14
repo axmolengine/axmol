@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIPageView.h"
-#include "ui/UIPageViewIndicator.h"
+#include "axmol/ui/UIPageView.h"
+#include "axmol/ui/UIPageViewIndicator.h"
 
 namespace ax
 {

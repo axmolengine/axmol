@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
-#include "platform/Device.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/platform/Device.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 
@@ -39,8 +39,8 @@
 
 #endif
 
-#include "base/Types.h"
-#include "platform/apple/Device-apple.h"
+#include "axmol/base/Types.h"
+#include "axmol/platform/apple/Device-apple.h"
 
 namespace FontUtils
 {

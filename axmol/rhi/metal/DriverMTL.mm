@@ -23,17 +23,17 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DriverMTL.h"
-#include "CommandBufferMTL.h"
-#include "BufferMTL.h"
-#include "RenderPipelineMTL.h"
-#include "ShaderModuleMTL.h"
-#include "DepthStencilStateMTL.h"
-#include "TextureMTL.h"
-#include "ProgramMTL.h"
-#include "RenderTargetMTL.h"
-#include "UtilsMTL.h"
-#include "base/Macros.h"
+#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/metal/CommandBufferMTL.h"
+#include "axmol/rhi/metal/BufferMTL.h"
+#include "axmol/rhi/metal/RenderPipelineMTL.h"
+#include "axmol/rhi/metal/ShaderModuleMTL.h"
+#include "axmol/rhi/metal/DepthStencilStateMTL.h"
+#include "axmol/rhi/metal/TextureMTL.h"
+#include "axmol/rhi/metal/ProgramMTL.h"
+#include "axmol/rhi/metal/RenderTargetMTL.h"
+#include "axmol/rhi/metal/UtilsMTL.h"
+#include "axmol/base/Macros.h"
 
 namespace ax::rhi {
 DriverBase* DriverBase::getInstance()

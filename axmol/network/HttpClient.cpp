@@ -28,11 +28,11 @@
 
 #if !defined(__EMSCRIPTEN__)
 
-#include "network/HttpClient.h"
+#include "axmol/network/HttpClient.h"
 #include <errno.h>
-#include "base/Utils.h"
-#include "base/Director.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
 #include "yasio/yasio.hpp"
 
 using namespace yasio;

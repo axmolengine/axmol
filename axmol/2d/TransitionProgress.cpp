@@ -26,12 +26,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/TransitionProgress.h"
-#include "base/Director.h"
-#include "2d/RenderTexture.h"
-#include "2d/ProgressTimer.h"
-#include "2d/ActionInstant.h"
-#include "2d/ActionProgressTimer.h"
+#include "axmol/2d/TransitionProgress.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/RenderTexture.h"
+#include "axmol/2d/ProgressTimer.h"
+#include "axmol/2d/ActionInstant.h"
+#include "axmol/2d/ActionProgressTimer.h"
 
 namespace ax
 {

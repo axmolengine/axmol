@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "rhi/ShaderModule.h"
+#include "axmol/rhi/ShaderModule.h"
 #include <d3d11.h>
 #include <d3dcompiler.h>
 

@@ -24,8 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "math/Math.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/math/Math.h"
 
 namespace ax
 {

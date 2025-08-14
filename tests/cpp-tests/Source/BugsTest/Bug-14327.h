@@ -29,7 +29,7 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 
-#    include "ui/UIEditBox/UIEditBox.h"
+#    include "axmol/ui/UIEditBox/UIEditBox.h"
 
 class Bug14327Layer : public BugsTestBase, public ax::ui::EditBoxDelegate
 {

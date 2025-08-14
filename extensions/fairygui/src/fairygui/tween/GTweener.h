@@ -2,7 +2,7 @@
 #define __GTWEENER_H__
 
 #include "FairyGUIMacros.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "EaseType.h"
 #include "TweenValue.h"
 #include "TweenPropType.h"

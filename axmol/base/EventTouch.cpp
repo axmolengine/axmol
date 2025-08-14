@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventTouch.h"
-#include "base/Touch.h"
+#include "axmol/base/EventTouch.h"
+#include "axmol/base/Touch.h"
 
 namespace ax
 {

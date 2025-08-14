@@ -29,7 +29,7 @@
 /// @cond DO_NOT_SHOW
 
 #include <unordered_map>
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

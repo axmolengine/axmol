@@ -24,11 +24,11 @@ THE SOFTWARE.
 
 #include "ActionNode.h"
 #include "ActionFrameEasing.h"
-#include "ui/UIWidget.h"
-#include "ui/UIHelper.h"
-#include "ui/UILayout.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/UIHelper.h"
+#include "axmol/ui/UILayout.h"
 #include "CocoLoader.h"
-#include "base/Utils.h"
+#include "axmol/base/Utils.h"
 #include "ActionManagerEx.h"
 
 using namespace ax;

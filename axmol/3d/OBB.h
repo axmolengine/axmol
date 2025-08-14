@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "3d/AABB.h"
+#include "axmol/3d/AABB.h"
 
 namespace ax
 {

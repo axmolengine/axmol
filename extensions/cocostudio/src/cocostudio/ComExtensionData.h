@@ -26,7 +26,7 @@
 
 #include <string>
 #include "ComBase.h"
-#include "2d/Component.h"
+#include "axmol/2d/Component.h"
 #include "CocosStudioExport.h"
 
 namespace cocostudio

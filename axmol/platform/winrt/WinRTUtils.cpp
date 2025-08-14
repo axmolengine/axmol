@@ -24,11 +24,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/winrt/WinRTUtils.h"
-#include "base/Macros.h"
-#include "platform/PlatformMacros.h"
-#include "platform/FileUtils.h"
-#include "base/UserDefault.h"
+#include "axmol/platform/winrt/WinRTUtils.h"
+#include "axmol/base/Macros.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/UserDefault.h"
 #include "ntcvt/ntcvt.hpp"
 
 #include <winrt/Windows.Networking.Connectivity.h>

@@ -32,7 +32,7 @@ extern "C" {
 }
 #endif
 
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 #include <string>
 
 TOLUA_API int  register_all_ax_coco_studio_manual(lua_State* L);

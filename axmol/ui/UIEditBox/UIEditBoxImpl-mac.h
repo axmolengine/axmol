@@ -27,11 +27,11 @@
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#    include "ui/UIEditBox/UIEditBoxImpl-common.h"
+#    include "axmol/ui/UIEditBox/UIEditBoxImpl-common.h"
 
 @class UIEditBoxImplMac;
 @class NSFont;

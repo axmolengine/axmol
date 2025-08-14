@@ -26,9 +26,9 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "JSONDefault.h"
-#include "base/Utils.h"
-#include "platform/Common.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Utils.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/reader.h"

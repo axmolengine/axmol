@@ -23,13 +23,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ShaderModuleMTL.h"
-#include "DriverMTL.h"
+#include "axmol/rhi/metal/ShaderModuleMTL.h"
+#include "axmol/rhi/metal/DriverMTL.h"
 
 #include "yasio/ibstream.hpp"
 #include "yasio/sz.hpp"
 
-#include "rhi/axslc-spec.h"
+#include "axmol/rhi/axslc-spec.h"
 
 namespace ax::rhi::mtl {
 

@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "RHITypes.h"
-#include "base/Object.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/base/Object.h"
 
 #include <string>
 #include <cstdint>

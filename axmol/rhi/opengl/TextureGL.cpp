@@ -23,14 +23,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "TextureGL.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventDispatcher.h"
-#include "base/EventType.h"
-#include "base/Director.h"
-#include "platform/PlatformConfig.h"
-#include "rhi/opengl/MacrosGL.h"
-#include "rhi/opengl/UtilsGL.h"
+#include "axmol/rhi/opengl/TextureGL.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/rhi/opengl/UtilsGL.h"
 
 namespace ax::rhi::gl {
 

@@ -30,7 +30,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "base/Logging.h"
+#include "axmol/base/Logging.h"
 
 namespace ax
 {

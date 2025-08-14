@@ -24,7 +24,7 @@
  ****************************************************************************/
 #include "lua-bindings/manual/ui/axlua_video_manual.hpp"
 
-#include "ui/UIMediaPlayer.h"
+#include "axmol/ui/UIMediaPlayer.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include "lua-bindings/manual/LuaValue.h"

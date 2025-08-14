@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "network/IDownloaderImpl.h"
-#include "network/Downloader.h"
+#include "axmol/network/IDownloaderImpl.h"
+#include "axmol/network/Downloader.h"
 #include <emscripten/fetch.h>
 
 namespace ax {

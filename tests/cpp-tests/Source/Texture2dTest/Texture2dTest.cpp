@@ -29,7 +29,7 @@
 #include "Texture2dTest.h"
 #include "../testResource.h"
 
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 using namespace ax;
 

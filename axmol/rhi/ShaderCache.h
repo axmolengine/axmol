@@ -24,10 +24,10 @@
  ****************************************************************************/
 #pragma once
 
-#include "RHITypes.h"
-#include "base/Object.h"
-#include "platform/PlatformMacros.h"
-#include "rhi/ShaderModule.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/base/Object.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/rhi/ShaderModule.h"
 
 #include <string>
 #include <unordered_map>

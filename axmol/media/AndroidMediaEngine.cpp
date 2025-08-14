@@ -23,8 +23,8 @@
  ****************************************************************************/
 
 #if defined(__ANDROID__)
-#    include "AndroidMediaEngine.h"
-#    include "platform/android/jni/JniHelper.h"
+#    include "axmol/media/AndroidMediaEngine.h"
+#    include "axmol/platform/android/jni/JniHelper.h"
 
 extern "C" {
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolMediaEngine_nativeFireEvent(JNIEnv* env, jclass, jlong pME, int arg1)

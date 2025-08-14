@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "2d/Node.h"
-#include "base/Protocols.h"
-#include "math/Math.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/math/Math.h"
 #include "Particle3D/ParticleSystem3D.h"
 #include <vector>
 #include <map>

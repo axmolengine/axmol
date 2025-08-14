@@ -30,8 +30,8 @@
 #include <spine/spine-cocos2dx.h>
 
 #include "../testResource.h"
-#include "axmol.h"
-#include "ui/CocosGUI.h"
+#include "axmol/axmol.h"
+#include "axmol/ui/CocosGUI.h"
 
 using namespace ax;
 

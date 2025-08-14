@@ -25,8 +25,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Data.h"
-#include "base/Logging.h"
+#include "axmol/base/Data.h"
+#include "axmol/base/Logging.h"
 
 namespace ax
 {

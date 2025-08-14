@@ -4,10 +4,10 @@
 #pragma once
 #include "imgui.h"
 #include <functional>
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #if AX_RENDER_API == AX_RENDER_API_GL
-#    include "rhi/opengl/OpenGLState.h"
+#    include "axmol/rhi/opengl/OpenGLState.h"
 #endif
 
 extern "C" {

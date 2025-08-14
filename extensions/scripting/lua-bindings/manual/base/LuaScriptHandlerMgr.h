@@ -25,9 +25,9 @@
 #pragma once
 
 #include "tolua++.h"
-#include "base/Object.h"
-#include "base/Macros.h"
-#include "2d/ActionInstant.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Macros.h"
+#include "axmol/2d/ActionInstant.h"
 #include <vector>
 #include <map>
 

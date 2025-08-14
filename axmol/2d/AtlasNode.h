@@ -28,10 +28,10 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/Node.h"
-#include "base/Protocols.h"
-#include "base/Types.h"
-#include "renderer/QuadCommand.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/base/Types.h"
+#include "axmol/renderer/QuadCommand.h"
 
 namespace ax
 {

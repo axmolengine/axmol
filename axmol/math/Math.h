@@ -24,11 +24,11 @@
 
 #pragma once
 
-#include "math/Vec2.h"
-#include "math/Vec3.h"
-#include "math/Vec4.h"
-#include "math/Mat4.h"
-#include "math/Rect.h"
-#include "math/Quaternion.h"
-#include "math/Color.h"
+#include "axmol/math/Vec2.h"
+#include "axmol/math/Vec3.h"
+#include "axmol/math/Vec4.h"
+#include "axmol/math/Mat4.h"
+#include "axmol/math/Rect.h"
+#include "axmol/math/Quaternion.h"
+#include "axmol/math/Color.h"
 

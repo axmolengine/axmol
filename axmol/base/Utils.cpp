@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "base/Utils.h"
+#include "axmol/base/Utils.h"
 
 #include <cmath>
 #include <stdlib.h>
@@ -38,24 +38,24 @@ THE SOFTWARE.
 
 #include "openssl/evp.h"
 
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "base/Constants.h"
-#include "base/text_utils.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/Renderer.h"
-#include "renderer/TextureCache.h"
-#include "renderer/RenderState.h"
-#include "rhi/PixelBufferDescriptor.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/Constants.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/rhi/PixelBufferDescriptor.h"
 
-#include "platform/Image.h"
-#include "platform/FileUtils.h"
-#include "2d/Sprite.h"
-#include "2d/RenderTexture.h"
+#include "axmol/platform/Image.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/RenderTexture.h"
 
-#include "base/base64.h"
-#include "base/axstd.h"
-#include "base/charconv.h"
+#include "axmol/base/base64.h"
+#include "axmol/base/axstd.h"
+#include "axmol/base/charconv.h"
 #include "yasio/string_view.hpp"
 
 using namespace std::string_view_literals;

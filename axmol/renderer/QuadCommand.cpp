@@ -24,14 +24,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "renderer/QuadCommand.h"
+#include "axmol/renderer/QuadCommand.h"
 
-#include "renderer/Material.h"
-#include "renderer/Technique.h"
-#include "renderer/Renderer.h"
-#include "renderer/Pass.h"
-#include "renderer/Texture2D.h"
-#include "base/Utils.h"
+#include "axmol/renderer/Material.h"
+#include "axmol/renderer/Technique.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Pass.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/base/Utils.h"
 
 namespace ax
 {

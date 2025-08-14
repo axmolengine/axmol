@@ -33,8 +33,8 @@ THE SOFTWARE.
 #    define _USE_MATH_DEFINES
 #endif
 
-#include "base/Logging.h"
-#include "platform/StdC.h"
+#include "axmol/base/Logging.h"
+#include "axmol/platform/StdC.h"
 
 #ifndef AXASSERT
 #    if defined(_AX_DEBUG) && _AX_DEBUG > 0
@@ -62,9 +62,9 @@ extern bool AX_DLL ax_assert_script_compatible(const char* msg);
 #    define CCAssert AXASSERT
 #endif  // AXASSERT
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 
-#include "base/Random.h"
+#include "axmol/base/Random.h"
 
 #define AX_HALF_PI   (M_PI * 0.5f)
 

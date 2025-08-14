@@ -27,8 +27,8 @@
 #pragma once
 
 #include <string>
-#include "base/Object.h"
-#include "ui/GUIExport.h"
+#include "axmol/base/Object.h"
+#include "axmol/ui/GUIExport.h"
 
 /**
  * @addtogroup ui

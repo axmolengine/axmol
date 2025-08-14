@@ -23,16 +23,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/IMEDispatcher.h"
-#include "base/Director.h"
-#include "base/EventType.h"
-#include "base/EventCustom.h"
-#include "base/EventDispatcher.h"
-#include "platform/Application.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/IMEDispatcher.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/platform/Application.h"
+#include "axmol/platform/FileUtils.h"
 #include <jni.h>
 
-#include "base/text_utils.h"
+#include "axmol/base/text_utils.h"
 
 using namespace ax;
 

@@ -30,7 +30,7 @@ extern "C" {
 #include "lua.h"
 }
 
-#include "base/ScriptSupport.h"
+#include "axmol/base/ScriptSupport.h"
 #include "lua-bindings/manual/LuaStack.h"
 #include "lua-bindings/manual/LuaValue.h"
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"

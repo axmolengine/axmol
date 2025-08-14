@@ -20,21 +20,21 @@ Original file from GamePlay3D: http://gameplay3d.org
 This file was modified to fit the axmol project
 */
 
-#include "math/MathUtil.h"
-#include "math/Mat4.h"
-#include "base/Macros.h"
+#include "axmol/math/MathUtil.h"
+#include "axmol/math/Mat4.h"
+#include "axmol/base/Macros.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <cpu-features.h>
 #endif
 
 #if defined(AX_SSE_INTRINSICS)
-#    include "math/MathUtilSSE.inl"
+#    include "axmol/math/MathUtilSSE.inl"
 #elif defined(AX_NEON_INTRINSICS)
-#    include "math/MathUtilNeon.inl"
+#    include "axmol/math/MathUtilNeon.inl"
 #endif
 
-#include "math/MathUtil.inl"
+#include "axmol/math/MathUtil.inl"
 
 NS_AX_MATH_BEGIN
 

@@ -34,36 +34,36 @@
 #    include <sys/socket.h>
 #endif
 
-#include "2d/ActionCamera.h"
-#include "2d/ActionCatmullRom.h"
-#include "2d/ActionGrid.h"
-#include "2d/ActionInterval.h"
-#include "2d/AtlasNode.h"
-#include "2d/Camera.h"
-#include "2d/Menu.h"
-#include "2d/MenuItem.h"
-#include "2d/MotionStreak.h"
-#include "2d/ParticleBatchNode.h"
-#include "2d/ParticleSystem.h"
-#include "2d/Scene.h"
-#include "2d/SpriteBatchNode.h"
-#include "2d/FastTMXLayer.h"
-#include "2d/FastTMXTiledMap.h"
-#include "2d/RenderTexture.h"
-#include "base/EventDispatcher.h"
-#include "base/EventListenerKeyboard.h"
-#include "base/EventListenerMouse.h"
-#include "base/EventListenerTouch.h"
-#include "base/Properties.h"
-#include "base/Scheduler.h"
-#include "base/UserDefault.h"
-#include "base/Utils.h"
-#include "platform/Application.h"
-#include "platform/Device.h"
-#include "platform/FileUtils.h"
-#include "platform/RenderView.h"
-#include "renderer/TextureCache.h"
-#include "renderer/Shaders.h"
+#include "axmol/2d/ActionCamera.h"
+#include "axmol/2d/ActionCatmullRom.h"
+#include "axmol/2d/ActionGrid.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/2d/AtlasNode.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/2d/Menu.h"
+#include "axmol/2d/MenuItem.h"
+#include "axmol/2d/MotionStreak.h"
+#include "axmol/2d/ParticleBatchNode.h"
+#include "axmol/2d/ParticleSystem.h"
+#include "axmol/2d/Scene.h"
+#include "axmol/2d/SpriteBatchNode.h"
+#include "axmol/2d/FastTMXLayer.h"
+#include "axmol/2d/FastTMXTiledMap.h"
+#include "axmol/2d/RenderTexture.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventListenerKeyboard.h"
+#include "axmol/base/EventListenerMouse.h"
+#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/Properties.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/UserDefault.h"
+#include "axmol/base/Utils.h"
+#include "axmol/platform/Application.h"
+#include "axmol/platform/Device.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/platform/RenderView.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/Shaders.h"
 
 void LuaNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
@@ -2440,7 +2440,7 @@ tolua_lerror:
 }
 
 #if defined(AX_ENABLE_NAVMESH)
-#    include "navmesh/NavMesh.h"
+#    include "axmol/navmesh/NavMesh.h"
 int axlua_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
     int argc             = 0;
@@ -3788,7 +3788,7 @@ tolua_lerror:
 }
 
 #if defined(AX_ENABLE_3D_PHYSICS)
-#    include "physics3d/Physics3DWorld.h"
+#    include "axmol/physics3d/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
     int argc             = 0;

@@ -18,8 +18,8 @@
  * Uri class is based on the original file here https://github.com/facebook/folly/blob/master/folly/Uri.cpp
  */
 
-#include "network/Uri.h"
-#include "base/Logging.h"
+#include "axmol/network/Uri.h"
+#include "axmol/base/Logging.h"
 
 #include <regex>
 #include <sstream>

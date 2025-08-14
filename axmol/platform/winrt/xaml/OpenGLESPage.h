@@ -21,14 +21,14 @@
 
 #include "OpenGLESPage.g.h"
 
-#include "OpenGLES.h"
+#include "axmol/platform/winrt/xaml/OpenGLES.h"
 #include <memory>
 #include <condition_variable>
 #include <mutex>
 #include <concrt.h>
 #include <concurrent_queue.h>
 
-#include "AxmolRenderer.h"
+#include "axmol/platform/winrt/xaml/AxmolRenderer.h"
 
 #include <winrt/Windows.UI.Xaml.h>
 #include <winrt/Windows.UI.Xaml.Input.h>

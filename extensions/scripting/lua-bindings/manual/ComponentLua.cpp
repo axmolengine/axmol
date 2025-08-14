@@ -25,11 +25,11 @@
 
 #include "ComponentLua.h"
 #include <string>
-#include "base/ScriptSupport.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/ScriptSupport.h"
+#include "axmol/platform/FileUtils.h"
 #include "lua-bindings/manual/LuaEngine.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
-#include "base/text_utils.h"
+#include "axmol/base/text_utils.h"
 
 namespace ax
 {

@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "base/EventListener.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/EventListener.h"
 
 /**
  * @addtogroup base

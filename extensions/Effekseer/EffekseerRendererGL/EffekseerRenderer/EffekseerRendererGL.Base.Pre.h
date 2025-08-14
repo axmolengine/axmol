@@ -56,7 +56,7 @@
 // #if _WIN32
 // #pragma comment(lib, "opengl32.lib")
 // #endif
-#include "platform/GL.h"
+#include "axmol/platform/GL.h"
 
 namespace EffekseerRendererGL
 {

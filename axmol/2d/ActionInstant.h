@@ -29,7 +29,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <functional>
-#include "2d/Action.h"
+#include "axmol/2d/Action.h"
 
 namespace ax
 {

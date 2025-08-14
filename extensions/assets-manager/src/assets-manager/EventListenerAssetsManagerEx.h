@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "base/EventListener.h"
-#include "base/EventListenerCustom.h"
+#include "axmol/base/EventListener.h"
+#include "axmol/base/EventListenerCustom.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 

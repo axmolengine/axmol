@@ -27,7 +27,7 @@
 
 #    include "JNITest.h"
 
-#    include "platform/android/jni/JniHelper.h"
+#    include "axmol/platform/android/jni/JniHelper.h"
 
 #    include <string>
 

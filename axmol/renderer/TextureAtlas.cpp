@@ -27,20 +27,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "renderer/TextureAtlas.h"
+#include "axmol/renderer/TextureAtlas.h"
 
 #include <stdlib.h>
 
-#include "base/Macros.h"
-#include "base/text_utils.h"
-#include "base/EventType.h"
-#include "base/Director.h"
-#include "base/Configuration.h"
-#include "base/EventDispatcher.h"
-#include "base/EventListenerCustom.h"
-#include "renderer/TextureCache.h"
-#include "renderer/Renderer.h"
-#include "renderer/Texture2D.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Texture2D.h"
 
 // According to some tests GL_TRIANGLE_STRIP is slower, MUCH slower. Probably I'm doing something very wrong
 

@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "2d/Node.h"
+#include "axmol/2d/Node.h"
 
 namespace ax
 {

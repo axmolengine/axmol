@@ -25,8 +25,8 @@ THE SOFTWARE.
 #pragma once
 
 #include <unordered_map>
-#include "base/Map.h"
-#include "base/Data.h"
+#include "axmol/base/Map.h"
+#include "axmol/base/Data.h"
 
 #include "cocostudio/DictionaryHelper.h"
 #include "TimelineMacro.h"

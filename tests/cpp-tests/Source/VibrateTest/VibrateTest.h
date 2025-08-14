@@ -23,12 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #ifndef __VIBRATE_TEST_H_
 #    define __VIBRATE_TEST_H_
 
-#    include "axmol.h"
+#    include "axmol/axmol.h"
 #    include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(VibrateTests);

@@ -23,9 +23,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#import "platform/Image.h"
-#import "platform/Common.h"
-#import "platform/FileUtils.h"
+#import "axmol/platform/Image.h"
+#import "axmol/platform/Common.h"
+#import "axmol/platform/FileUtils.h"
 #import <string>
 
 #import <Foundation/Foundation.h>

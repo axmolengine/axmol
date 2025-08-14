@@ -1,7 +1,7 @@
 #ifndef __FAIRYGUIMACROS_H__
 #define __FAIRYGUIMACROS_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 #define NS_FGUI_BEGIN                     namespace fairygui {
 #define NS_FGUI_END                       }

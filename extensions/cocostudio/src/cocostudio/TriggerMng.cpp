@@ -25,10 +25,10 @@ THE SOFTWARE.
 #include "TriggerMng.h"
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/stringbuffer.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "base/Utils.h"
-#include "base/EventCustom.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/EventCustom.h"
 
 using namespace ax;
 

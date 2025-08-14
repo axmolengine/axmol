@@ -24,12 +24,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "navmesh/NavMeshObstacle.h"
+#include "axmol/navmesh/NavMeshObstacle.h"
 #if defined(AX_ENABLE_NAVMESH)
 
-#    include "navmesh/NavMesh.h"
-#    include "2d/Node.h"
-#    include "2d/Scene.h"
+#    include "axmol/navmesh/NavMesh.h"
+#    include "axmol/2d/Node.h"
+#    include "axmol/2d/Scene.h"
 #    include "recast/DetourTileCache.h"
 
 namespace ax

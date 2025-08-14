@@ -51,8 +51,8 @@ gen/
 assets/
 local.properties
 
-/core/axmolver.h
-/core/renderer/RenderConsts.h
+/axmol/axmolver.h
+/axmol/renderer/RenderConsts.h
 
 # Ignore python compiled files
 *.pyc

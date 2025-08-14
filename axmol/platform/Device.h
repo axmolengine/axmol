@@ -27,9 +27,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "base/Macros.h"
-#include "base/Data.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Data.h"
 
 namespace ax
 {

@@ -28,12 +28,12 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "base/Protocols.h"
-#include "2d/Node.h"
-#include "base/Value.h"
-#include "2d/SpriteFrame.h"
-#include "2d/SpriteFrameCache.h"
-#include "math/FastRNG.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/Value.h"
+#include "axmol/2d/SpriteFrame.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/math/FastRNG.h"
 
 namespace ax
 {

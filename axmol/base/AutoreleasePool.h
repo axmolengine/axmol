@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include <vector>
 #include <string>
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 
 /**
  * @addtogroup base

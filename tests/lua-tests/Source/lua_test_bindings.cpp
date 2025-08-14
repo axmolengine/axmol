@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "lua_test_bindings.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 
 namespace ax

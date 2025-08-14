@@ -32,11 +32,11 @@
 
 #pragma once
 
-#include "2d/Node.h"
-#include "base/axstd.h"
-#include "base/Types.h"
-#include "renderer/CustomCommand.h"
-#include "math/Math.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/axstd.h"
+#include "axmol/base/Types.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/math/Math.h"
 
 namespace ax
 {

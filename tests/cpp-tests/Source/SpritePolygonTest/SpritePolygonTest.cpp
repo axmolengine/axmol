@@ -24,7 +24,7 @@
 
 #include "SpritePolygonTest.h"
 #include "../testResource.h"
-#include "ui/CocosGUI.h"
+#include "axmol/ui/CocosGUI.h"
 #include <chrono>
 #include <sstream>
 

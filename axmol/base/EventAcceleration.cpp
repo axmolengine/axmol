@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventAcceleration.h"
+#include "axmol/base/EventAcceleration.h"
 
 namespace ax
 {

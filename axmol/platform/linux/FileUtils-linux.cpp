@@ -24,11 +24,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/linux/FileUtils-linux.h"
-#include "platform/linux/Application-linux.h"
-#include "platform/Common.h"
-#include "base/Macros.h"
-#include "base/text_utils.h"
+#include "axmol/platform/linux/FileUtils-linux.h"
+#include "axmol/platform/linux/Application-linux.h"
+#include "axmol/platform/Common.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/text_utils.h"
 #include <unistd.h>
 #include <sys/stat.h>
 #include <stdio.h>

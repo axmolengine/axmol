@@ -24,12 +24,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/ScriptSupport.h"
+#include "axmol/base/ScriptSupport.h"
 
 #if AX_ENABLE_SCRIPT_BINDING
 
-#    include "base/Scheduler.h"
-#    include "2d/Node.h"
+#    include "axmol/base/Scheduler.h"
+#    include "axmol/2d/Node.h"
 
 bool AX_DLL ax_assert_script_compatible(const char* msg)
 {

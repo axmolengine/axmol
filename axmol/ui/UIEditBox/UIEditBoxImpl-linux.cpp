@@ -25,13 +25,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIEditBox/UIEditBoxImpl-linux.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-linux.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
-#    include "ui/UIEditBox/UIEditBox.h"
-#    include "2d/Label.h"
-#    include "base/text_utils.h"
+#    include "axmol/ui/UIEditBox/UIEditBox.h"
+#    include "axmol/2d/Label.h"
+#    include "axmol/base/text_utils.h"
 
 #include <dlfcn.h>
 

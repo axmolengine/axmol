@@ -31,8 +31,8 @@ THE SOFTWARE.
 
 #include <string>
 
-#include "base/Types.h"
-#include "renderer/Texture2D.h"
+#include "axmol/base/Types.h"
+#include "axmol/renderer/Texture2D.h"
 
 namespace ax
 {

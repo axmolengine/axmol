@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ShaderCache.h"
-#include "rhi/DriverBase.h"
+#include "axmol/rhi/ShaderCache.h"
+#include "axmol/rhi/DriverBase.h"
 
 #include "xxhash.h"
 

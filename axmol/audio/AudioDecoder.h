@@ -28,7 +28,7 @@
 
 #include <stdint.h>
 #include <string>
-#include "platform/IFileStream.h"
+#include "axmol/platform/IFileStream.h"
 
 namespace ax
 {

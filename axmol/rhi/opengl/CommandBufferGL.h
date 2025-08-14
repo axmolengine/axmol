@@ -25,12 +25,12 @@
 
 #pragma once
 
-#include "../RHITypes.h"
-#include "../CommandBuffer.h"
-#include "base/EventListenerCustom.h"
-#include "platform/GL.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/CommandBuffer.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/platform/GL.h"
 
-#include "StdC.h"
+#include "axmol/platform/StdC.h"
 
 #include <vector>
 

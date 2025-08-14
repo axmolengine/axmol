@@ -30,7 +30,7 @@
      defined(_WIN32) /* win32 & winuwp */ || \
 AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 
-#    include "platform/PlatformMacros.h"
+#    include "axmol/platform/PlatformMacros.h"
 #    include <string>
 #    include <vector>
 #    include <unordered_map>

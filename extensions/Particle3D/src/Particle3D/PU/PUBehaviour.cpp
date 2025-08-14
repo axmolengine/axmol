@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "Particle3D/PU/PUBehaviour.h"
-#include "base/Macros.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

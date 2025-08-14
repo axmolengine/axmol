@@ -25,14 +25,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#    include "ui/UIEditBox/UIEditBoxImpl-mac.h"
-#    include "base/Director.h"
-#    include "base/text_utils.h"
-#    include "ui/UIEditBox/UIEditBox.h"
-#    include "ui/UIEditBox/Mac/UIEditBoxMac.h"
+#    include "axmol/ui/UIEditBox/UIEditBoxImpl-mac.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/base/text_utils.h"
+#    include "axmol/ui/UIEditBox/UIEditBox.h"
+#    include "axmol/ui/UIEditBox/Mac/UIEditBoxMac.h"
 
 namespace ax
 {

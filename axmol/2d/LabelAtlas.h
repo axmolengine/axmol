@@ -27,10 +27,10 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/AtlasNode.h"
+#include "axmol/2d/AtlasNode.h"
 #if AX_LABELATLAS_DEBUG_DRAW
-#    include "renderer/CustomCommand.h"
-#    include "2d/DrawNode.h"
+#    include "axmol/renderer/CustomCommand.h"
+#    include "axmol/2d/DrawNode.h"
 #endif
 namespace ax
 {

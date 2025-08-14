@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "../DepthStencilState.h"
+#include "axmol/rhi/DepthStencilState.h"
 
 namespace ax::rhi::gl {
 /**

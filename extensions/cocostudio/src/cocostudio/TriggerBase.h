@@ -25,7 +25,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "CocoStudio.h"
-#include "base/ObjectFactory.h"
+#include "axmol/base/ObjectFactory.h"
 #include "TriggerObj.h"
 #include "TriggerMng.h"
 #include "CocosStudioExport.h"

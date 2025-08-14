@@ -27,10 +27,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "renderer/TextureCache.h"
-#include "2d/SpriteFrame.h"
-#include "base/Director.h"
-#include "platform/FileUtils.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/2d/SpriteFrame.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace ax
 {

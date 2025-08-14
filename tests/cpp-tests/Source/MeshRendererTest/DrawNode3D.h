@@ -26,7 +26,7 @@
 #ifndef __DRAW_NODE_3D_H__
 #define __DRAW_NODE_3D_H__
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 namespace ax
 {

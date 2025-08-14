@@ -23,31 +23,31 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "renderer/Renderer.h"
+#include "axmol/renderer/Renderer.h"
 
 #include <algorithm>
 
-#include "renderer/TrianglesCommand.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/CallbackCommand.h"
-#include "renderer/GroupCommand.h"
-#include "renderer/MeshCommand.h"
-#include "renderer/Material.h"
-#include "renderer/Technique.h"
-#include "renderer/Pass.h"
-#include "renderer/Texture2D.h"
+#include "axmol/renderer/TrianglesCommand.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/MeshCommand.h"
+#include "axmol/renderer/Material.h"
+#include "axmol/renderer/Technique.h"
+#include "axmol/renderer/Pass.h"
+#include "axmol/renderer/Texture2D.h"
 
-#include "base/Configuration.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventType.h"
-#include "2d/Camera.h"
-#include "2d/Scene.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventType.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/2d/Scene.h"
 #include "xxhash.h"
 
-#include "rhi/axmol-rhi.h"
-#include "rhi/RenderTarget.h"
+#include "axmol/rhi/axmol-rhi.h"
+#include "axmol/rhi/RenderTarget.h"
 
 namespace ax
 {

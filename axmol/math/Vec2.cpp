@@ -19,9 +19,9 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#include "math/Vec2.h"
-#include "math/MathUtil.h"
-#include "base/Macros.h"
+#include "axmol/math/Vec2.h"
+#include "axmol/math/MathUtil.h"
+#include "axmol/base/Macros.h"
 
 NS_AX_MATH_BEGIN
 

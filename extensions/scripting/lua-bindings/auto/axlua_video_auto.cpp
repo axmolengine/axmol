@@ -1,6 +1,6 @@
 #include "lua-bindings/auto/axlua_video_auto.hpp"
 #if defined(AX_ENABLE_MEDIA)
-#include "ui/UIMediaPlayer.h"
+#include "axmol/ui/UIMediaPlayer.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 

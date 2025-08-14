@@ -2,16 +2,16 @@
 
 #include "LayoutReader.h"
 
-#include "ui/UILayout.h"
+#include "axmol/ui/UILayout.h"
 #include "cocostudio/CocoLoader.h"
-#include "ui/UIScrollView.h"
-#include "ui/UIPageView.h"
-#include "ui/UIListView.h"
+#include "axmol/ui/UIScrollView.h"
+#include "axmol/ui/UIPageView.h"
+#include "axmol/ui/UIListView.h"
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/FlatBuffersSerialize.h"
-#include "base/Director.h"
-#include "platform/FileUtils.h"
-#include "2d/SpriteFrameCache.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/SpriteFrameCache.h"
 
 #include "flatbuffers/flatbuffers.h"
 

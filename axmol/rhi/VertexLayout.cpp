@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "VertexLayout.h"
-#include "base/Macros.h"
+#include "axmol/rhi/VertexLayout.h"
+#include "axmol/base/Macros.h"
 #include <cassert>
 
 namespace ax::rhi

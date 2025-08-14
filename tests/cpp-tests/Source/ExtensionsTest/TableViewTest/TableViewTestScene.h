@@ -25,7 +25,7 @@
 #ifndef __TABLEVIEWTESTSCENE_H__
 #define __TABLEVIEWTESTSCENE_H__
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "extensions/axmol-ext.h"
 #include "BaseTest.h"
 

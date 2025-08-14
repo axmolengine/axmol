@@ -26,9 +26,9 @@ THE SOFTWARE.
 
 #include "TimeLine.h"
 #include "ActionTimelineData.h"
-#include "base/Protocols.h"
+#include "axmol/base/Protocols.h"
 #include "cocostudio/CocosStudioExport.h"
-#include "2d/Action.h"
+#include "axmol/2d/Action.h"
 
 NS_TIMELINE_BEGIN
 

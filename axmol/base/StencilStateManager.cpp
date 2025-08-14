@@ -23,11 +23,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "base/StencilStateManager.h"
-#include "base/Director.h"
-#include "renderer/Renderer.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
+#include "axmol/base/StencilStateManager.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
 
 namespace ax
 {

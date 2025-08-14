@@ -28,7 +28,7 @@
 
 #include "Particle3D/PU/PUAffector.h"
 #include "Particle3D/PU/PUSimpleSpline.h"
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

@@ -22,9 +22,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 ****************************************************************************/
-#include "base/NinePatchImageParser.h"
-#include "platform/Image.h"
-#include "base/Director.h"
+#include "axmol/base/NinePatchImageParser.h"
+#include "axmol/platform/Image.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

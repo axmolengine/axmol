@@ -26,17 +26,17 @@
 
 #pragma once
 
-#include "base/Object.h"
-#include "base/Types.h"
-#include "math/Math.h"
-#include "3d/AABB.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Types.h"
+#include "axmol/math/Math.h"
+#include "axmol/3d/AABB.h"
 
 #include <vector>
 #include <map>
 #include <string>
 
-#include "3d/shaderinfos.h"
-#include "base/axstd.h"
+#include "axmol/3d/shaderinfos.h"
+#include "axmol/base/axstd.h"
 
 namespace ax
 {

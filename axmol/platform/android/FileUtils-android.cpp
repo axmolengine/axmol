@@ -24,11 +24,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/android/FileUtils-android.h"
-#include "platform/Common.h"
-#include "platform/android/jni/JniHelper.h"
-#include "platform/android/jni/Java_dev_axmol_lib_AxmolEngine.h"
-#include "base/ZipUtils.h"
+#include "axmol/platform/android/FileUtils-android.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/android/jni/JniHelper.h"
+#include "axmol/platform/android/jni/Java_dev_axmol_lib_AxmolEngine.h"
+#include "axmol/base/ZipUtils.h"
 
 #include <stdlib.h>
 #include <sys/types.h>

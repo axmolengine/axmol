@@ -24,11 +24,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/Mac/UIEditBoxMac.h"
-#include "base/Director.h"
-#include "ui/UIEditBox/Mac/UISingleLineTextField.h"
-#include "ui/UIEditBox/Mac/UIPasswordTextField.h"
-#include "ui/UIEditBox/Mac/UIMultilineTextField.h"
+#import "axmol/ui/UIEditBox/Mac/UIEditBoxMac.h"
+#include "axmol/base/Director.h"
+#include "axmol/ui/UIEditBox/Mac/UISingleLineTextField.h"
+#include "axmol/ui/UIEditBox/Mac/UIPasswordTextField.h"
+#include "axmol/ui/UIEditBox/Mac/UIMultilineTextField.h"
 
 #define getEditBoxImplMac() ((ax::ui::EditBoxImplMac*)_editBox)
 

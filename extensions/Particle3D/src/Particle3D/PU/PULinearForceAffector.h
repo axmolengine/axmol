@@ -27,7 +27,7 @@
 #pragma once
 
 #include "PUBaseForceAffector.h"
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

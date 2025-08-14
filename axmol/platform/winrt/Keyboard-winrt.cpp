@@ -27,12 +27,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/winrt/Keyboard-winrt.h"
-#include "base/EventKeyboard.h"
-#include "platform/winrt/RenderViewImpl-winrt.h"
-#include "base/IMEDispatcher.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
+#include "axmol/platform/winrt/Keyboard-winrt.h"
+#include "axmol/base/EventKeyboard.h"
+#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/base/IMEDispatcher.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
 
 #include <winrt/Windows.System.h>
 #include <winrt/Windows.System.Threading.h>

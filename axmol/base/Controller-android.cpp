@@ -25,14 +25,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Controller.h"
+#include "axmol/base/Controller.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <functional>
-#    include "base/Macros.h"
-#    include "base/Director.h"
-#    include "platform/android/jni/JniHelper.h"
-#    include "base/EventController.h"
+#    include "axmol/base/Macros.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/platform/android/jni/JniHelper.h"
+#    include "axmol/base/EventController.h"
 
 namespace ax
 {

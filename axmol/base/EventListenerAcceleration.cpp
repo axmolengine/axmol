@@ -24,9 +24,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventListenerAcceleration.h"
-#include "base/EventAcceleration.h"
-#include "base/Logging.h"
+#include "axmol/base/EventListenerAcceleration.h"
+#include "axmol/base/EventAcceleration.h"
+#include "axmol/base/Logging.h"
 
 namespace ax
 {

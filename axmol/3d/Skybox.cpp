@@ -22,15 +22,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "3d/Skybox.h"
-#include "base/Macros.h"
-#include "base/Configuration.h"
-#include "base/Director.h"
-#include "renderer/Renderer.h"
-#include "renderer/RenderState.h"
-#include "renderer/TextureCube.h"
-#include "renderer/Shaders.h"
-#include "2d/Camera.h"
+#include "axmol/3d/Skybox.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/renderer/TextureCube.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/2d/Camera.h"
 
 namespace ax
 {

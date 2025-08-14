@@ -1,7 +1,7 @@
 #ifndef __FUISPRITE_H__
 #define __FUISPRITE_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 
 NS_FGUI_BEGIN

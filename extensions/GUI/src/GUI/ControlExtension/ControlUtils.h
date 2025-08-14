@@ -35,7 +35,7 @@
 
 #pragma once
 
-#include "2d/Sprite.h"
+#include "axmol/2d/Sprite.h"
 #include "../../ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 

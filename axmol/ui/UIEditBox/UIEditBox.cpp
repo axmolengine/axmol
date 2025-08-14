@@ -25,9 +25,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIEditBox/UIEditBox.h"
-#include "ui/UIEditBox/UIEditBoxImpl.h"
-#include "ui/UIHelper.h"
+#include "axmol/ui/UIEditBox/UIEditBox.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl.h"
+#include "axmol/ui/UIHelper.h"
 
 namespace ax
 {

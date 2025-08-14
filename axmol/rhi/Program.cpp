@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "Program.h"
-#include "VertexLayout.h"
+#include "axmol/rhi/Program.h"
+#include "axmol/rhi/VertexLayout.h"
 
 namespace ax::rhi
 {

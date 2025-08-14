@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "UIWebViewImpl-linux.h"
+#include "axmol/ui/UIWebView/UIWebViewImpl-linux.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
@@ -34,12 +34,12 @@
 #    include <gtk/gtk.h>
 #    include <webkit2/webkit2.h>
 
-#    include "UIWebView.h"
-#    include "base/Director.h"
-#    include "platform/FileUtils.h"
-#    include "platform/RenderView.h"
-#    include "ui/UIHelper.h"
-#    include "UIWebViewCommon.h"
+#    include "axmol/ui/UIWebView/UIWebView.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/platform/FileUtils.h"
+#    include "axmol/platform/RenderView.h"
+#    include "axmol/ui/UIHelper.h"
+#    include "axmol/ui/UIWebView/UIWebViewCommon.h"
 
 #    if !defined(AX_PLATFORM_LINUX_WAYLAND)
 #        include <X11/Xlib.h>

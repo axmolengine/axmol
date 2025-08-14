@@ -31,17 +31,17 @@
 #pragma once
 
 #include <cstdint>
-#include "base/Macros.h"
-#include "base/Vector.h"
-#include "base/Protocols.h"
-#include "base/ScriptSupport.h"
-#include "math/AffineTransform.h"
-#include "math/Math.h"
-#include "2d/ComponentContainer.h"
-#include "2d/Component.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Vector.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/base/ScriptSupport.h"
+#include "axmol/math/AffineTransform.h"
+#include "axmol/math/Math.h"
+#include "axmol/2d/ComponentContainer.h"
+#include "axmol/2d/Component.h"
 
 #if defined(AX_ENABLE_PHYSICS)
-#    include "physics/PhysicsBody.h"
+#    include "axmol/physics/PhysicsBody.h"
 #endif
 
 namespace ax

@@ -30,8 +30,8 @@
 /// @cond DO_NOT_SHOW
 
 #include <string>
-#include "base/Types.h"
-#include "base/text_utils.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/text_utils.h"
 
 namespace ax
 {

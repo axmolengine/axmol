@@ -25,7 +25,7 @@
 #ifndef _BOX2D_TESTBED_H_
 #define _BOX2D_TESTBED_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
 #include "Box2DTestDebugDrawNode.h"

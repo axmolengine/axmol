@@ -1,4 +1,4 @@
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #include "ImGuiTest.h"
 
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)

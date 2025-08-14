@@ -26,10 +26,10 @@ THE SOFTWARE.
 
 #include "Camera3DTest.h"
 #include "testResource.h"
-#include "ui/UISlider.h"
-#include "platform/FileUtils.h"
-#include "rhi/DriverBase.h"
-#include "base/format.h"
+#include "axmol/ui/UISlider.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/base/format.h"
 
 using namespace ax;
 

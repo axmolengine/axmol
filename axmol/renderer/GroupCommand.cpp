@@ -23,9 +23,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "renderer/GroupCommand.h"
-#include "renderer/Renderer.h"
-#include "base/Director.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

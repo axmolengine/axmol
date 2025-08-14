@@ -30,18 +30,18 @@
  Check whether applyForce need invoke phlppixelsToMeters
 
  ****************************************************************************/
-#include "physics/PhysicsBody.h"
+#include "axmol/physics/PhysicsBody.h"
 #if defined(AX_ENABLE_PHYSICS)
 
 #    include <climits>
 #    include <algorithm>
 #    include <cmath>
 
-#    include "2d/Scene.h"
-#    include "physics/PhysicsCollider.h"
-#    include "physics/PhysicsJoint.h"
-#    include "physics/PhysicsWorld.h"
-#    include "physics/PhysicsHelper.h"
+#    include "axmol/2d/Scene.h"
+#    include "axmol/physics/PhysicsCollider.h"
+#    include "axmol/physics/PhysicsJoint.h"
+#    include "axmol/physics/PhysicsWorld.h"
+#    include "axmol/physics/PhysicsHelper.h"
 
 #    if 0
 static void internalBodyUpdateVelocity(cpBody* body, b2Vec2 gravity, float damping, float dt)

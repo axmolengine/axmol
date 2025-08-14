@@ -30,9 +30,9 @@
 
 #if defined(AX_ENABLE_OPUS)
 
-#    include "audio/AudioDecoderOpus.h"
-#    include "audio/AudioMacros.h"
-#    include "platform/FileUtils.h"
+#    include "axmol/audio/AudioDecoderOpus.h"
+#    include "axmol/audio/AudioMacros.h"
+#    include "axmol/platform/FileUtils.h"
 
 #    include "opus/opusfile.h"
 

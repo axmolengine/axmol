@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "math/Vec2.h"
+#include "axmol/math/Vec2.h"
 
 /**
  * @addtogroup base

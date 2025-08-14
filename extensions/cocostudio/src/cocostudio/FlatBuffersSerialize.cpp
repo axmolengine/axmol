@@ -26,10 +26,10 @@
 
 #include "FlatBuffersSerialize.h"
 
-#include "base/ObjectFactory.h"
-#include "base/Constants.h"
-#include "ui/CocosGUI.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/ObjectFactory.h"
+#include "axmol/base/Constants.h"
+#include "axmol/ui/CocosGUI.h"
+#include "axmol/platform/FileUtils.h"
 #include "CSLanguageDataBinary_generated.h"
 #include "CSParseBinary_generated.h"
 

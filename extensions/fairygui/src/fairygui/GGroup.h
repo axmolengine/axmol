@@ -1,7 +1,7 @@
 #ifndef __GGROUP_H__
 #define __GGROUP_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "GObject.h"
 

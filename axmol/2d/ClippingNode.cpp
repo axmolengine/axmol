@@ -26,12 +26,12 @@
  * THE SOFTWARE.
  *
  */
-#include "2d/ClippingNode.h"
-#include "renderer/Renderer.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
-#include "base/Director.h"
-#include "base/StencilStateManager.h"
+#include "axmol/2d/ClippingNode.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/StencilStateManager.h"
 
 namespace ax
 {

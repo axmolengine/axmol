@@ -24,9 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIPageViewIndicator.h"
-#include "2d/Sprite.h"
-#include "base/Utils.h"
+#include "axmol/ui/UIPageViewIndicator.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/base/Utils.h"
 
 static const char* CIRCLE_IMAGE =
     "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAA8ElEQVRIx62VyRGCQBBF+6gWRCEmYDIQkhiBCgHhSclC8YqWzOV5oVzKAYZp3r1/"

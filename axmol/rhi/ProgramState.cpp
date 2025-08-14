@@ -23,12 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "rhi/ProgramState.h"
-#include "rhi/Program.h"
-#include "rhi/Texture.h"
-#include "base/EventDispatcher.h"
-#include "base/EventType.h"
-#include "base/Director.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/rhi/Program.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Director.h"
 #include <algorithm>
 #include "xxhash/xxhash.h"
 

@@ -26,8 +26,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/ActionInterval.h"
-#include "2d/ActionInstant.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/2d/ActionInstant.h"
 
 namespace ax
 {

@@ -26,7 +26,7 @@
 
 #include "PUScriptCompiler.h"
 #include "Particle3D/PU/PUTranslateManager.h"
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 namespace ax
 {
 

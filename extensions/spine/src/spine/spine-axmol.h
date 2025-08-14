@@ -30,7 +30,7 @@
 #ifndef SPINE_AXMOL_H_
 #define SPINE_AXMOL_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include <spine/spine.h>
 
 #include <spine/SkeletonRenderer.h>

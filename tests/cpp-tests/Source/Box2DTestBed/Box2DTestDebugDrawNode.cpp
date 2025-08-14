@@ -1,6 +1,6 @@
 #include "Box2DTestDebugDrawNode.h"
 #include "VisibleRect.h"
-#include "physics/PhysicsHelper.h"
+#include "axmol/physics/PhysicsHelper.h"
 #include "imgui.h"
 
 using namespace ax;

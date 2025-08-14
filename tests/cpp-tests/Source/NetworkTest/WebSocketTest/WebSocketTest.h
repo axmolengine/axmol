@@ -34,9 +34,9 @@
 #ifndef __TestCpp__WebSocketTest__
 #define __TestCpp__WebSocketTest__
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "extensions/axmol-ext.h"
-#include "network/WebSocket.h"
+#include "axmol/network/WebSocket.h"
 #include "BaseTest.h"
 
 DEFINE_TEST_SUITE(WebSocketTests);

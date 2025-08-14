@@ -27,7 +27,7 @@
 
 #include <memory>
 #include <string.h>
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 /**
  * @addtogroup base

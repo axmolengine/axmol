@@ -24,8 +24,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "math/Math.h"
-#include "2d/ActionInterval.h"
+#include "axmol/math/Math.h"
+#include "axmol/2d/ActionInterval.h"
 #include "CocosStudioExport.h"
 
 namespace cocostudio

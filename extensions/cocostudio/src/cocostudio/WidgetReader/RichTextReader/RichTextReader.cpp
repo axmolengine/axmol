@@ -2,9 +2,9 @@
 
 #include "RichTextReader.h"
 
-#include "2d/FontAtlasCache.h"
-#include "ui/UIRichText.h"
-#include "platform/FileUtils.h"
+#include "axmol/2d/FontAtlasCache.h"
+#include "axmol/ui/UIRichText.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/LocalizationManager.h"

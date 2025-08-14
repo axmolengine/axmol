@@ -24,7 +24,7 @@ THE SOFTWARE.
 #include "lua_downloader.h"
 #include "lua-bindings/manual/LuaValue.h"
 
-#include "network/Downloader.h"
+#include "axmol/network/Downloader.h"
 #include <iostream>
 
 #include <unordered_map>

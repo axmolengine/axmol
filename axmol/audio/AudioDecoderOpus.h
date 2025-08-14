@@ -25,7 +25,7 @@
 #pragma once
 
 #if defined(AX_ENABLE_OPUS)
-#    include "audio/AudioDecoder.h"
+#    include "axmol/audio/AudioDecoder.h"
 
 #    include <memory>
 

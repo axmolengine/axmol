@@ -2,7 +2,7 @@
 #define __BYTEBUFFER_H_
 
 #include "FairyGUIMacros.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 NS_FGUI_BEGIN
 

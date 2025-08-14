@@ -24,9 +24,9 @@
  ****************************************************************************/
 
 #include <jni.h>
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "base/EventAcceleration.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventAcceleration.h"
 
 #define TG3_GRAVITY_EARTH (9.80665f)
 

@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "../Buffer.h"
+#include "axmol/rhi/Buffer.h"
 #import <Metal/Metal.h>
 
 namespace ax::rhi::mtl {

@@ -28,7 +28,7 @@
 
 #include "PUBaseCollider.h"
 #include "Particle3D/PU/PUPlane.h"
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

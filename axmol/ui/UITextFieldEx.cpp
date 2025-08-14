@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "UITextFieldEx.h"
-#include "base/Director.h"
+#include "axmol/ui/UITextFieldEx.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

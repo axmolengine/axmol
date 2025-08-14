@@ -26,13 +26,13 @@ THE SOFTWARE.
 
 #include "ActionsTest.h"
 #include "../testResource.h"
-#include "ui/CocosGUI.h"
+#include "axmol/ui/CocosGUI.h"
 
-#include "renderer/Renderer.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/GroupCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/GroupCommand.h"
 
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 using namespace ax;
 using namespace ax::ui;

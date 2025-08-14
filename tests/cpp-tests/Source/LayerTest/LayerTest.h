@@ -26,8 +26,8 @@
 #define _LAYER_TEST_H_
 
 #include "../BaseTest.h"
-#include "ui/UISlider.h"
-#include "ui/UIListView.h"
+#include "axmol/ui/UISlider.h"
+#include "axmol/ui/UIListView.h"
 
 DEFINE_TEST_SUITE(LayerTests);
 

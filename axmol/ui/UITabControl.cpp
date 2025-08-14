@@ -24,11 +24,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/FileUtils.h"
-#include "2d/Sprite.h"
-#include "2d/Label.h"
-#include "ui/UILayout.h"
-#include "ui/UITabControl.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/Label.h"
+#include "axmol/ui/UILayout.h"
+#include "axmol/ui/UITabControl.h"
 
 namespace ax
 {

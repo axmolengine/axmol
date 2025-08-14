@@ -28,11 +28,11 @@
 
 #include <vector>
 
-#include "base/Object.h"
-#include "math/Math.h"
+#include "axmol/base/Object.h"
+#include "axmol/math/Math.h"
 #include "Particle3D/Particle3DRender.h"
-#include "renderer/RenderState.h"
-#include "rhi/Buffer.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/rhi/Buffer.h"
 
 namespace ax
 {

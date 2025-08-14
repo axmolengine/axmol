@@ -23,12 +23,12 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "InputDelegate.h"
-#include "base/Director.h"
-#include "platform/Device.h"
-#include "base/EventListenerTouch.h"
-#include "base/EventListenerAcceleration.h"
-#include "base/EventListenerKeyboard.h"
-#include "base/EventDispatcher.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/Device.h"
+#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/EventListenerAcceleration.h"
+#include "axmol/base/EventListenerKeyboard.h"
+#include "axmol/base/EventDispatcher.h"
 
 using namespace ax;
 

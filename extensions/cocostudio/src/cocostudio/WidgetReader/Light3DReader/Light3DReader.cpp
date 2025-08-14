@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "cocostudio/WidgetReader/Light3DReader/Light3DReader.h"
-#include "2d/Light.h"
+#include "axmol/2d/Light.h"
 
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/CSParse3DBinary_generated.h"

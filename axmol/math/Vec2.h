@@ -29,8 +29,8 @@
 #include <functional>
 #include <cmath>
 
-#include "base/Macros.h"
-#include "math/MathBase.h"
+#include "axmol/base/Macros.h"
+#include "axmol/math/MathBase.h"
 
 /**
  * @addtogroup base

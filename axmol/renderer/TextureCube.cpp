@@ -24,12 +24,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "renderer/TextureCube.h"
-#include "platform/Image.h"
-#include "platform/FileUtils.h"
-#include "rhi/Texture.h"
-#include "rhi/DriverBase.h"
-#include "rhi/PixelFormatUtils.h"
+#include "axmol/renderer/TextureCube.h"
+#include "axmol/platform/Image.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/PixelFormatUtils.h"
 
 namespace ax
 {

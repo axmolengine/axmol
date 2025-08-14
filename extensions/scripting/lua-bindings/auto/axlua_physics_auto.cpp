@@ -1,6 +1,6 @@
 #include "lua-bindings/auto/axlua_physics_auto.hpp"
 #if defined(AX_ENABLE_PHYSICS)
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 

@@ -26,12 +26,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "base/Configuration.h"
-#include "platform/FileUtils.h"
-#include "base/EventCustom.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "rhi/DriverBase.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/rhi/DriverBase.h"
 
 namespace ax
 {

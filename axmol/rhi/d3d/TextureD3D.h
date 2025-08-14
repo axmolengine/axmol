@@ -2,8 +2,8 @@
 #pragma once
 
 #include <array>
-#include "../Texture.h"
-#include "base/EventListenerCustom.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/base/EventListenerCustom.h"
 
 #include <d3d11.h>
 #include <dxgi.h>

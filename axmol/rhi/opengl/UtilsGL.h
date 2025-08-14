@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include "base/Macros.h"
-#include "platform/GL.h"
-#include "rhi/RHITypes.h"
-#include "rhi/PixelBufferDescriptor.h"
+#include "axmol/base/Macros.h"
+#include "axmol/platform/GL.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/PixelBufferDescriptor.h"
 
 namespace ax::rhi::gl {
 /**

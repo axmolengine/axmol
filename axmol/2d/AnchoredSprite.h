@@ -29,7 +29,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
-#include "2d/Sprite.h"
+#include "axmol/2d/Sprite.h"
 
 namespace ax
 {

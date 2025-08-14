@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEERRENDERER_GL_BASE_PRE_H__
 #define __EFFEKSEERRENDERER_GL_BASE_PRE_H__
 
@@ -54,7 +54,7 @@
 
 // #endif
 
-#include "platform/GL.h"
+#include "axmol/platform/GL.h"
 
 namespace EffekseerRendererGL
 {

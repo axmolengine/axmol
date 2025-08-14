@@ -384,15 +384,6 @@ use_ax_depend(${_AX_CORE_LIB})
 target_include_directories(${_AX_CORE_LIB}
   PUBLIC ${_AX_ROOT}
   PUBLIC ${_AX_ROOT}/3rdparty
-  PUBLIC ${_AX_ROOT}/extensions/scripting
-  PUBLIC ${_AX_ROOT}/axmol
-  PUBLIC ${_AX_ROOT}/axmol/platform
-
-  INTERFACE ${_AX_ROOT}/3rdparty
-  INTERFACE ${_AX_ROOT}/extensions/scripting
-  INTERFACE ${_AX_ROOT}/axmol/base
-  INTERFACE ${_AX_ROOT}/axmol/audio
-  INTERFACE ${_AX_ROOT}/axmol/platform/${PLATFORM_NAME}
 )
 
 set_target_properties(${_AX_CORE_LIB}
@@ -410,7 +401,7 @@ endif()
 
 message(STATUS "CMake precompile headers for ${_AX_CORE_LIB}")
 target_precompile_headers(${_AX_CORE_LIB} PRIVATE
-  "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
+  "$<$<COMPILE_LANGUAGE:CXX>:axmol/axmol.h>"
 )
 
 if(WINDOWS)

@@ -26,9 +26,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/AnchoredSprite.h"
-#include "rhi/DriverBase.h"
-#include "base/format.h"
+#include "axmol/2d/AnchoredSprite.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/base/format.h"
 
 namespace ax
 {

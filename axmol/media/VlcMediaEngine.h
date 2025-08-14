@@ -4,7 +4,7 @@
 
 #pragma once
 
-#    include "MediaEngine.h"
+#    include "axmol/media/MediaEngine.h"
 
 #if defined(AX_ENABLE_VLC_MEDIA)
 

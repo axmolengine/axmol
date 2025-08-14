@@ -31,8 +31,8 @@
 
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
-#include "network/Downloader.h"
-#include "platform/FileUtils.h"
+#include "axmol/network/Downloader.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/document.h"

@@ -23,19 +23,19 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "CommandBufferGL.h"
-#include "BufferGL.h"
-#include "RenderPipelineGL.h"
-#include "TextureGL.h"
-#include "DepthStencilStateGL.h"
-#include "ProgramGL.h"
-#include "base/EventDispatcher.h"
-#include "base/EventType.h"
-#include "base/Director.h"
-#include "MacrosGL.h"
-#include "UtilsGL.h"
-#include "RenderTargetGL.h"
-#include "DriverGL.h"
+#include "axmol/rhi/opengl/CommandBufferGL.h"
+#include "axmol/rhi/opengl/BufferGL.h"
+#include "axmol/rhi/opengl/RenderPipelineGL.h"
+#include "axmol/rhi/opengl/TextureGL.h"
+#include "axmol/rhi/opengl/DepthStencilStateGL.h"
+#include "axmol/rhi/opengl/ProgramGL.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Director.h"
+#include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/rhi/opengl/UtilsGL.h"
+#include "axmol/rhi/opengl/RenderTargetGL.h"
+#include "axmol/rhi/opengl/DriverGL.h"
 #include <algorithm>
 
 namespace ax::rhi::gl {

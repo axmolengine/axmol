@@ -23,9 +23,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DriverBase.h"
+#include "axmol/rhi/DriverBase.h"
 
-#include "VertexLayout.h"
+#include "axmol/rhi/VertexLayout.h"
 
 namespace ax::rhi
 {

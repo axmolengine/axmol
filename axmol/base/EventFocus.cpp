@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventFocus.h"
+#include "axmol/base/EventFocus.h"
 
 namespace ax
 {

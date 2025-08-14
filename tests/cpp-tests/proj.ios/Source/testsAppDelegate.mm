@@ -26,8 +26,8 @@
 
 #import "testsAppDelegate.h"
 
-#import "platform/ios/EARenderView-ios.h"
-#import "axmol.h"
+#import "axmol/platform/ios/EARenderView-ios.h"
+#import "axmol/axmol.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
 

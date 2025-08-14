@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 #include "DictionaryHelper.h"
 
 namespace cocostudio

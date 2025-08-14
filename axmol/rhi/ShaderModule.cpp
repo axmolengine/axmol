@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ShaderModule.h"
+#include "axmol/rhi/ShaderModule.h"
 
 namespace ax::rhi {
 

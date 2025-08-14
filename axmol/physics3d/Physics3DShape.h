@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "base/Object.h"
-#include "base/Config.h"
-#include "math/Math.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Config.h"
+#include "axmol/math/Math.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 

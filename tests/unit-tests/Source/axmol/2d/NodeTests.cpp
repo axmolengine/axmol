@@ -24,7 +24,7 @@
 
 #include <doctest.h>
 #include <float.h>
-#include "2d/Node.h"
+#include "axmol/2d/Node.h"
 
 using namespace ax;
 

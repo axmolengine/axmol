@@ -23,12 +23,12 @@
  ****************************************************************************/
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "rhi/DepthStencilState.h"
-#include "rhi/Texture.h"
-#include "rhi/VertexLayout.h"
-#include "rhi/RenderPassDescriptor.h"
-#include "rhi/ProgramState.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/rhi/DepthStencilState.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/rhi/VertexLayout.h"
+#include "axmol/rhi/RenderPassDescriptor.h"
+#include "axmol/rhi/ProgramState.h"
 
 #include <string>
 

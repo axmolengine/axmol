@@ -25,12 +25,12 @@
  ****************************************************************************/
 
 #include "BillBoardTest.h"
-#include "3d/BillBoard.h"
+#include "axmol/3d/BillBoard.h"
 
 #include <algorithm>
 #include "../testResource.h"
 
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 using namespace ax;
 USING_NS_AX_EXT;

@@ -25,7 +25,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "ActionNode.h"
-#include "2d/ActionInstant.h"
+#include "axmol/2d/ActionInstant.h"
 #include "DictionaryHelper.h"
 #include "CocosStudioExport.h"
 

@@ -23,16 +23,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ProgramGL.h"
-#include "ShaderModuleGL.h"
-#include "rhi/opengl/MacrosGL.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "base/EventType.h"
-#include "base/axstd.h"
+#include "axmol/rhi/opengl/ProgramGL.h"
+#include "axmol/rhi/opengl/ShaderModuleGL.h"
+#include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/axstd.h"
 #include "yasio/byte_buffer.hpp"
-#include "rhi/opengl/UtilsGL.h"
-#include "rhi/opengl/OpenGLState.h"
+#include "axmol/rhi/opengl/UtilsGL.h"
+#include "axmol/rhi/opengl/OpenGLState.h"
 
 namespace ax::rhi::gl
 {

@@ -2,7 +2,7 @@
 #define __GCONTROLLER_H__
 
 #include "FairyGUIMacros.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "event/UIEventDispatcher.h"
 
 NS_FGUI_BEGIN

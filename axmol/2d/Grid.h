@@ -27,12 +27,12 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "base/Object.h"
-#include "base/Types.h"
-#include "base/Director.h"
-#include "renderer/GroupCommand.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/CallbackCommand.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
 
 namespace ax
 {

@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/Mac/UIPasswordTextField.h"
-#include "ui/UIEditBox/Mac/UITextFieldFormatter.h"
+#import "axmol/ui/UIEditBox/Mac/UIPasswordTextField.h"
+#include "axmol/ui/UIEditBox/Mac/UITextFieldFormatter.h"
 
 @interface RSVerticallyCenteredSecureTextFieldCell : NSSecureTextFieldCell
 {

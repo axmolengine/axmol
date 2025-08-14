@@ -2,9 +2,9 @@
 
 #include "ListViewReader.h"
 
-#include "ui/UIListView.h"
-#include "platform/FileUtils.h"
-#include "2d/SpriteFrameCache.h"
+#include "axmol/ui/UIListView.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/SpriteFrameCache.h"
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/FlatBuffersSerialize.h"

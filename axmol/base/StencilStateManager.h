@@ -25,10 +25,10 @@
  ****************************************************************************/
 #pragma once
 
-#include "base/Config.h"
-#include "platform/PlatformMacros.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/CallbackCommand.h"
+#include "axmol/base/Config.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
 
 /**
  * @addtogroup base

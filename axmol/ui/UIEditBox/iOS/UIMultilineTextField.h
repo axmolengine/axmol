@@ -27,7 +27,7 @@
 #pragma once
 
 #import <UIKit/UIKit.h>
-#import "ui/UIEditBox/iOS/UITextView+UITextInput.h"
+#import "axmol/ui/UIEditBox/iOS/UITextView+UITextInput.h"
 
 #pragma mark - UIMultilineTextField implementation
 

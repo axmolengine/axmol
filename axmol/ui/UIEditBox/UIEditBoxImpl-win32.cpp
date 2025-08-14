@@ -25,20 +25,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "ui/UIEditBox/UIEditBoxImpl-win32.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-win32.h"
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 
-#    include "ui/UIEditBox/UIEditBox.h"
+#    include "axmol/ui/UIEditBox/UIEditBox.h"
 #    include <tchar.h>
 #    include <stdio.h>
-#    include "2d/Label.h"
-#    include "base/Director.h"
-#    include "base/text_utils.h"
+#    include "axmol/2d/Label.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/base/text_utils.h"
 #    include <Commctrl.h>
 #    include <windows.h>
-#    include "ui/UIHelper.h"
+#    include "axmol/ui/UIHelper.h"
 
 namespace ax
 {

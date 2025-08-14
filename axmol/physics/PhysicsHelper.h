@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/Math.h"
+#include "axmol/math/Math.h"
 #include "box2d/box2d.h"
 
 namespace ax

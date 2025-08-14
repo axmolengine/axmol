@@ -27,15 +27,15 @@ THE SOFTWARE.
 ****************************************************************************/
 #import <Foundation/Foundation.h>
 
-#include "platform/apple/FileUtils-apple.h"
+#include "axmol/platform/apple/FileUtils-apple.h"
 
 #include <ftw.h>
 
 #include <string>
 #include <stack>
 
-#include "base/Director.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace ax
 {

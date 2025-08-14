@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "ui/UIScrollView.h"
+#include "axmol/ui/UIScrollView.h"
 
 namespace ax
 {

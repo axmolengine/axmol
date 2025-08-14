@@ -24,8 +24,8 @@ THE SOFTWARE.
 
 #include "TransformHelp.h"
 
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
 
 using namespace ax;
 

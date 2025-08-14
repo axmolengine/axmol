@@ -26,14 +26,14 @@
 
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_PHYSICS)
 
-#    include "base/Object.h"
-#    include "math/Math.h"
-#    include "base/EventListenerCustom.h"
-#    include "base/Event.h"
-#    include "base/EventCustom.h"
+#    include "axmol/base/Object.h"
+#    include "axmol/math/Math.h"
+#    include "axmol/base/EventListenerCustom.h"
+#    include "axmol/base/Event.h"
+#    include "axmol/base/EventCustom.h"
 
 namespace ax
 {

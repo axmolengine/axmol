@@ -25,7 +25,7 @@
 #pragma once
 
 #include <string>
-#include "base/ObjectFactory.h"
+#include "axmol/base/ObjectFactory.h"
 
 //
 //// Reader macro

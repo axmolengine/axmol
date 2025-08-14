@@ -36,20 +36,20 @@ THE SOFTWARE.
  It was rewritten again, and only a small part of the original HK ideas/code remains in this implementation
 
  */
-#include "2d/FastTMXLayer.h"
+#include "axmol/2d/FastTMXLayer.h"
 #include <stddef.h>  // offsetof
-#include "base/Types.h"
-#include "2d/FastTMXTiledMap.h"
-#include "2d/Sprite.h"
-#include "2d/Camera.h"
-#include "renderer/TextureCache.h"
-#include "renderer/Renderer.h"
-#include "renderer/Shaders.h"
-#include "rhi/DriverBase.h"
-#include "rhi/Buffer.h"
-#include "base/Director.h"
-#include "base/text_utils.h"
-#include "rhi/ProgramState.h"
+#include "axmol/base/Types.h"
+#include "axmol/2d/FastTMXTiledMap.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/Buffer.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/rhi/ProgramState.h"
 
 namespace ax
 {

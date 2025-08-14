@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/WidgetReader/Particle3DReader/Particle3DReader.h"
 #if defined(AX_ENABLE_EXT_PARTICLE3D)
 

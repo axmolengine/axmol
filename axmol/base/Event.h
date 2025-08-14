@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "base/Object.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/base/Object.h"
+#include "axmol/platform/PlatformMacros.h"
 
 /**
  * @addtogroup base

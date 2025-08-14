@@ -27,9 +27,9 @@
 
 #include <string>
 #include <unordered_map>
-#include "base/Types.h"
-#include "renderer/Material.h"
-#include "3d/Bundle3DData.h"
+#include "axmol/base/Types.h"
+#include "axmol/renderer/Material.h"
+#include "axmol/3d/Bundle3DData.h"
 
 namespace ax
 {

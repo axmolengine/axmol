@@ -32,9 +32,9 @@ THE SOFTWARE.
 
 #include <string>
 #include <chrono>
-#include "base/Config.h"
-#include "base/Object.h"
-#include "base/Map.h"
+#include "axmol/base/Config.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Map.h"
 
 namespace ax
 {

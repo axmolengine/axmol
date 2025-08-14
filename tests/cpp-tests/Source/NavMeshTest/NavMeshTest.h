@@ -28,7 +28,7 @@
 #define _NAVMESH_TEST_H_
 
 #include "../BaseTest.h"
-#include "navmesh/NavMesh.h"
+#include "axmol/navmesh/NavMesh.h"
 #include <string>
 
 DEFINE_TEST_SUITE(NavMeshTests);

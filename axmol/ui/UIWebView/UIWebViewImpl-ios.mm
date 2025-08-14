@@ -27,13 +27,13 @@
 #import <WebKit/WKUIDelegate.h>
 #import <WebKit/WKNavigationDelegate.h>
 
-#include "ui/UIWebView/UIWebViewImpl-ios.h"
-#include "ui/UIWebView/UIWebView.h"
-#include "renderer/Renderer.h"
-#include "base/Director.h"
-#include "platform/RenderView.h"
-#include "platform/ios/EARenderView-ios.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UIWebView/UIWebViewImpl-ios.h"
+#include "axmol/ui/UIWebView/UIWebView.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/RenderView.h"
+#include "axmol/platform/ios/EARenderView-ios.h"
+#include "axmol/platform/FileUtils.h"
 
 @interface UIWebViewWrapper : NSObject
 @property(nonatomic) std::function<bool(std::string url)> shouldStartLoading;

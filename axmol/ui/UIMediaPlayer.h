@@ -27,15 +27,15 @@
 
 #if defined(AX_ENABLE_MEDIA)
 
-#    include "UIButton.h"
-#    include "ui/UIWidget.h"
-#    include "ui/UILayout.h"
-#    include "2d/Sprite.h"
+#    include "axmol/ui/UIButton.h"
+#    include "axmol/ui/UIWidget.h"
+#    include "axmol/ui/UILayout.h"
+#    include "axmol/2d/Sprite.h"
 #    include <chrono>
 
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
-#        include "2d/DrawNode.h"
+#        include "axmol/2d/DrawNode.h"
 #    endif
 
 #    undef ERROR

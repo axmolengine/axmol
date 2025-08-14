@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "CommandBuffer.h"
+#include "axmol/rhi/CommandBuffer.h"
 
 namespace ax::rhi
 {

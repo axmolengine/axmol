@@ -32,10 +32,10 @@ THE SOFTWARE.
 #include <map>
 #include <unordered_map>
 
-#include "base/Object.h"
-#include "math/Math.h"
-#include "base/Types.h"
-#include "renderer/CustomCommand.h"
+#include "axmol/base/Object.h"
+#include "axmol/math/Math.h"
+#include "axmol/base/Types.h"
+#include "axmol/renderer/CustomCommand.h"
 
 namespace ax
 {

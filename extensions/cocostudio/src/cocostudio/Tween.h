@@ -25,7 +25,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "ProcessBase.h"
-#include "2d/TweenFunction.h"
+#include "axmol/2d/TweenFunction.h"
 #include "CocosStudioExport.h"
 
 namespace cocostudio

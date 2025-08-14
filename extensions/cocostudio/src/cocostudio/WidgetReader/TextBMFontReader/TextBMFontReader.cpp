@@ -2,9 +2,9 @@
 
 #include "TextBMFontReader.h"
 
-#include "2d/FontAtlasCache.h"
-#include "ui/UITextBMFont.h"
-#include "platform/FileUtils.h"
+#include "axmol/2d/FontAtlasCache.h"
+#include "axmol/ui/UITextBMFont.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/LocalizationManager.h"

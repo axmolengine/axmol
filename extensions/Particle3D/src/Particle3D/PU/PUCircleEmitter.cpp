@@ -27,7 +27,7 @@
 #include "PUCircleEmitter.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUUtil.h"
-#include "base/Random.h"
+#include "axmol/base/Random.h"
 
 namespace ax
 {

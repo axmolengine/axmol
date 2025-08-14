@@ -5,9 +5,9 @@
 #include "../../EffekseerRendererMetal/EffekseerRendererMetal.h"
 #include "../../3rdParty/LLGI/src/Metal/LLGI.GraphicsMetal.h"
 #include "../../EffekseerRendererCommon/ModelLoader.h"
-#include "rhi/metal/TextureMTL.h"
-#include "rhi/metal/CommandBufferMTL.h"
-#include "rhi/metal/UtilsMTL.h"
+#include "axmol/rhi/metal/TextureMTL.h"
+#include "axmol/rhi/metal/CommandBufferMTL.h"
+#include "axmol/rhi/metal/UtilsMTL.h"
 #include <Metal/LLGI.TextureMetal.h>
 
 namespace efk {

@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "RenderPassDescriptor.h"
+#include "axmol/rhi/RenderPassDescriptor.h"
 
 namespace ax::rhi {
 

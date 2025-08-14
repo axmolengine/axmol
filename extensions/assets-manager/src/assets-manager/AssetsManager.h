@@ -29,7 +29,7 @@
 
 #include <mutex>
 
-#include "2d/Node.h"
+#include "axmol/2d/Node.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 

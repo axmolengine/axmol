@@ -26,12 +26,12 @@
 
 #pragma once
 
-#include "math/Math.h"
-#include "base/Object.h"
-#include "base/Types.h"
-#include "base/Config.h"
-#include "renderer/CustomCommand.h"
-#include "rhi/ProgramState.h"
+#include "axmol/math/Math.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Config.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/rhi/ProgramState.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 

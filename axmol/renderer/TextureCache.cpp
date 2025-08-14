@@ -27,22 +27,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "renderer/TextureCache.h"
+#include "axmol/renderer/TextureCache.h"
 
 #include <errno.h>
 #include <stack>
 #include <cctype>
 #include <list>
 
-#include "renderer/Texture2D.h"
-#include "base/Macros.h"
-#include "base/text_utils.h"
-#include "base/Director.h"
-#include "base/Scheduler.h"
-#include "platform/FileUtils.h"
-#include "base/Utils.h"
-#include "base/NinePatchImageParser.h"
-#include "rhi/DriverBase.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/NinePatchImageParser.h"
+#include "axmol/rhi/DriverBase.h"
 
 using namespace std;
 

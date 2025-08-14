@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 #include <stdlib.h>
 #include <stdio.h>

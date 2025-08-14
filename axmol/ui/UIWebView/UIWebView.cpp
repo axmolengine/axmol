@@ -23,21 +23,21 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
-#    include "ui/UIWebView/UIWebViewImpl-android.h"
-#    include "ui/UIWebView/UIWebView-inl.h"
+#    include "axmol/ui/UIWebView/UIWebViewImpl-android.h"
+#    include "axmol/ui/UIWebView/UIWebView-inl.h"
 
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 
-#    include "ui/UIWebView/UIWebViewImpl-win32.h"
-#    include "ui/UIWebView/UIWebView-inl.h"
+#    include "axmol/ui/UIWebView/UIWebViewImpl-win32.h"
+#    include "axmol/ui/UIWebView/UIWebView-inl.h"
 
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
-#    include "ui/UIWebView/UIWebViewImpl-linux.h"
-#    include "ui/UIWebView/UIWebView-inl.h"
+#    include "axmol/ui/UIWebView/UIWebViewImpl-linux.h"
+#    include "axmol/ui/UIWebView/UIWebView-inl.h"
 
 #endif

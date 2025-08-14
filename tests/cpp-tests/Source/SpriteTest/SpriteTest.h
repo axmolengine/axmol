@@ -26,7 +26,7 @@
 #ifndef _SPRITE_TEST_H_
 #define _SPRITE_TEST_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "../BaseTest.h"
 #include <string>
 

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -20,9 +20,9 @@
 #include "SampleScene.h"
 
 //cocos2d
-#include "base/Director.h"
-#include "renderer/Texture2D.h"
-#include "renderer/TextureCache.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/renderer/TextureCache.h"
 
 using namespace std;
 using namespace Csm;

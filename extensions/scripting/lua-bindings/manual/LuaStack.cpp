@@ -52,8 +52,8 @@ extern "C" {
 #include "lua-bindings/auto/axlua_physics_auto.hpp"
 #include "lua-bindings/manual/physics/axlua_physics_manual.hpp"
 #include "lua-bindings/auto/axlua_rhi_auto.hpp"
-#include "base/ZipUtils.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/ZipUtils.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace
 {

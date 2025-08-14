@@ -25,7 +25,7 @@
 #pragma once
 
 #include "../BaseTest.h"
-#include "renderer/CustomCommand.h"
+#include "axmol/renderer/CustomCommand.h"
 #include <list>
 
 namespace ax

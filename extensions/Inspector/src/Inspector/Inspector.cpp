@@ -1,6 +1,6 @@
 #include "Inspector.h"
 #include "ImGuiPresenter.h"
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 #if __has_include(<cxxabi.h>)
 #    define AX_HAS_CXXABI 1

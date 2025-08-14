@@ -24,5 +24,5 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIWebView/UIWebViewImpl-ios.h"
-#include "ui/UIWebView/UIWebView-inl.h"
+#include "axmol/ui/UIWebView/UIWebViewImpl-ios.h"
+#include "axmol/ui/UIWebView/UIWebView-inl.h"

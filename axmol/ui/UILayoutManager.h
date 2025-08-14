@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "base/Object.h"
-#include "base/Vector.h"
-#include "ui/GUIExport.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Vector.h"
+#include "axmol/ui/GUIExport.h"
 
 /**
  * @addtogroup ui

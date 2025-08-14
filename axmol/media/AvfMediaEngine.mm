@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "AvfMediaEngine.h"
+#include "axmol/media/AvfMediaEngine.h"
 
 #if defined(__APPLE__)
 

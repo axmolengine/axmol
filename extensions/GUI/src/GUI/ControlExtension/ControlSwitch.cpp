@@ -28,12 +28,12 @@
  */
 
 #include "ControlSwitch.h"
-#include "2d/Sprite.h"
-#include "2d/ActionTween.h"
-#include "2d/Label.h"
-#include "2d/ClippingNode.h"
-#include "renderer/Shaders.h"
-#include "2d/RenderTexture.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/ActionTween.h"
+#include "axmol/2d/Label.h"
+#include "axmol/2d/ClippingNode.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/2d/RenderTexture.h"
 
 NS_AX_EXT_BEGIN
 // ControlSwitchSprite

@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventListener.h"
-#include "base/Logging.h"
+#include "axmol/base/EventListener.h"
+#include "axmol/base/Logging.h"
 
 namespace ax
 {

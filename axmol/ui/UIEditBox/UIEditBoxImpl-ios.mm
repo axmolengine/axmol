@@ -25,21 +25,21 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "ui/UIEditBox/UIEditBoxImpl-ios.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-ios.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
 #    define kLabelZOrder 9999
 
-#    include "ui/UIEditBox/UIEditBox.h"
-#    include "base/Director.h"
-#    include "2d/Label.h"
-#    import "platform/ios/EARenderView-ios.h"
+#    include "axmol/ui/UIEditBox/UIEditBox.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/2d/Label.h"
+#    import "axmol/platform/ios/EARenderView-ios.h"
 
 #    import <Foundation/Foundation.h>
 #    import <UIKit/UIKit.h>
 
-#    import "ui/UIEditBox/iOS/UIEditBoxIOS.h"
+#    import "axmol/ui/UIEditBox/iOS/UIEditBoxIOS.h"
 
 #    define getEditBoxImplIOS() ((ax::ui::EditBoxImplIOS*)_editBox)
 

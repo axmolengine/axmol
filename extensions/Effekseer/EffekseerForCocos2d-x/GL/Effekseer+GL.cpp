@@ -4,7 +4,7 @@
 #include "../../EffekseerRendererCommon/ModelLoader.h"
 #include "../../EffekseerRendererGL/EffekseerRendererGL.h"
 #include "../../EffekseerRendererGL/EffekseerRenderer/EffekseerRendererGL.MaterialLoader.h"
-#include "rhi/opengl/TextureGL.h"
+#include "axmol/rhi/opengl/TextureGL.h"
 
 namespace efk {
 

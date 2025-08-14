@@ -26,11 +26,11 @@
 
 #pragma once
 
-#include "base/Config.h"
-#include "platform/Common.h"
-#include "base/Touch.h"
-#include "base/EventTouch.h"
-#include "base/EventKeyboard.h"
+#include "axmol/base/Config.h"
+#include "axmol/platform/Common.h"
+#include "axmol/base/Touch.h"
+#include "axmol/base/EventTouch.h"
+#include "axmol/base/EventKeyboard.h"
 #include <map>
 #include <string>
 #include <list>

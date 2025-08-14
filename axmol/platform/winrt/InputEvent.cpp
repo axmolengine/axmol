@@ -24,13 +24,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/winrt/InputEvent.h"
-#include "platform/winrt/WinRTUtils.h"
-#include "platform/winrt/RenderViewImpl-winrt.h"
-#include "base/EventAcceleration.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "base/IMEDispatcher.h"
+#include "axmol/platform/winrt/InputEvent.h"
+#include "axmol/platform/winrt/WinRTUtils.h"
+#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/base/EventAcceleration.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/IMEDispatcher.h"
 
 namespace ax
 {

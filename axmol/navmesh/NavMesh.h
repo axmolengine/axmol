@@ -26,11 +26,11 @@
 
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
 
-#    include "base/Object.h"
-#    include "math/Vec3.h"
+#    include "axmol/base/Object.h"
+#    include "axmol/math/Vec3.h"
 #    include "recast/DetourNavMesh.h"
 #    include "recast/DetourNavMeshQuery.h"
 #    include "recast/DetourCrowd.h"
@@ -38,10 +38,10 @@
 #    include <string>
 #    include <vector>
 
-#    include "navmesh/NavMeshAgent.h"
-#    include "navmesh/NavMeshDebugDraw.h"
-#    include "navmesh/NavMeshObstacle.h"
-#    include "navmesh/NavMeshUtils.h"
+#    include "axmol/navmesh/NavMeshAgent.h"
+#    include "axmol/navmesh/NavMeshDebugDraw.h"
+#    include "axmol/navmesh/NavMeshObstacle.h"
+#    include "axmol/navmesh/NavMeshUtils.h"
 
 namespace ax
 {

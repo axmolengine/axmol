@@ -28,7 +28,7 @@ THE SOFTWARE.
 /// @cond DO_NOT_SHOW
 
 #include "stdint.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 namespace ax
 {

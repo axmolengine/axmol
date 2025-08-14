@@ -24,11 +24,11 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "ui/UIWidget.h"
-#include "base/IMEDelegate.h"
-#include "base/SimpleTimer.h"
-#include "2d/Label.h"
-#include "base/EventListenerKeyboard.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/base/IMEDelegate.h"
+#include "axmol/base/SimpleTimer.h"
+#include "axmol/2d/Label.h"
+#include "axmol/base/EventListenerKeyboard.h"
 
 namespace ax
 {

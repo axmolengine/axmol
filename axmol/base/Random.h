@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include <random>
 #include <cstdlib>
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 /**
  * @addtogroup base

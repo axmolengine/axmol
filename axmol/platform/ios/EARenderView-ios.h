@@ -66,13 +66,13 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #import <CoreFoundation/CoreFoundation.h>
 
-#import "platform/PlatformConfig.h"
+#import "axmol/platform/PlatformConfig.h"
 #if AX_GLES_PROFILE
 #    import <OpenGLES/EAGL.h>
 #    import <OpenGLES/EAGLDrawable.h>
 #    import <OpenGLES/ES2/gl.h>
 #    import <OpenGLES/ES2/glext.h>
-#    import "platform/ios/ESRenderer-ios.h"
+#    import "axmol/platform/ios/ESRenderer-ios.h"
 #endif
 
 // CLASS INTERFACE:

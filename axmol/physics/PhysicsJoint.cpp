@@ -24,13 +24,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "physics/PhysicsJoint.h"
+#include "axmol/physics/PhysicsJoint.h"
 #if defined(AX_ENABLE_PHYSICS)
 
-#    include "physics/PhysicsBody.h"
-#    include "physics/PhysicsWorld.h"
-#    include "physics/PhysicsHelper.h"
-#    include "2d/Node.h"
+#    include "axmol/physics/PhysicsBody.h"
+#    include "axmol/physics/PhysicsWorld.h"
+#    include "axmol/physics/PhysicsHelper.h"
+#    include "axmol/2d/Node.h"
 
 #    include <numbers>
 

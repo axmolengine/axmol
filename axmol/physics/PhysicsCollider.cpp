@@ -24,16 +24,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "physics/PhysicsCollider.h"
+#include "axmol/physics/PhysicsCollider.h"
 #if defined(AX_ENABLE_PHYSICS)
 
 #    include <climits>
 #    include <cmath>
 #    include <unordered_map>
 
-#    include "physics/PhysicsBody.h"
-#    include "physics/PhysicsWorld.h"
-#    include "physics/PhysicsHelper.h"
+#    include "axmol/physics/PhysicsBody.h"
+#    include "axmol/physics/PhysicsWorld.h"
+#    include "axmol/physics/PhysicsHelper.h"
 
 namespace ax
 {

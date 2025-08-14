@@ -30,9 +30,9 @@ THE SOFTWARE.
 
 #include <string>
 
-#include "base/Types.h"
-#include "base/Object.h"
-#include "base/Config.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Config.h"
 
 namespace ax
 {

@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "UIPageViewTest.h"
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 using namespace ax;
 using namespace ax::ui;

@@ -1,7 +1,7 @@
 #ifndef __BAG_SCENE_H__
 #define __BAG_SCENE_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "DemoScene.h"
 #include "BagWindow.h"
 

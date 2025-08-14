@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "math/Color.h"
+#include "axmol/math/Color.h"
 
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")

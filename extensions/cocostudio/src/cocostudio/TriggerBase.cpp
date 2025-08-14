@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "TriggerBase.h"
-#include "base/EventCustom.h"
+#include "axmol/base/EventCustom.h"
 
 using namespace ax;
 using namespace cocostudio;

@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "2d/Transition.h"
+#include "axmol/2d/Transition.h"
 
 namespace ax
 {

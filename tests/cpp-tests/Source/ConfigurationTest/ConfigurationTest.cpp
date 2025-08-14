@@ -24,7 +24,7 @@
 
 #include "ConfigurationTest.h"
 #include "../testResource.h"
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 using namespace ax;
 

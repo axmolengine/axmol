@@ -26,11 +26,11 @@
 
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
 
-#    include "platform/PlatformMacros.h"
-#    include "math/Math.h"
+#    include "axmol/platform/PlatformMacros.h"
+#    include "axmol/math/Math.h"
 
 #    include "recast/DetourCommon.h"
 #    include "recast/DetourNavMesh.h"

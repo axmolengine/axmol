@@ -17,11 +17,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-#include "AxmolRenderer.h"
+#include "axmol/platform/winrt/xaml/AxmolRenderer.h"
 #include "AppDelegate.h"
-#include "platform/winrt/RenderViewImpl-winrt.h"
-#include "platform/Application.h"
-#include "renderer/TextureCache.h"
+#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/platform/Application.h"
+#include "axmol/renderer/TextureCache.h"
 
 // These are used by the shader compilation methods.
 #include <vector>

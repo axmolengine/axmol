@@ -30,8 +30,8 @@
  */
 
 #include "ControlSlider.h"
-#include "base/Touch.h"
-#include "base/Director.h"
+#include "axmol/base/Touch.h"
+#include "axmol/base/Director.h"
 
 NS_AX_EXT_BEGIN
 

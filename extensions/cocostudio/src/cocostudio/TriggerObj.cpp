@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "TriggerObj.h"
-#include "base/EventListenerCustom.h"
+#include "axmol/base/EventListenerCustom.h"
 
 using namespace ax;
 

@@ -30,7 +30,7 @@
 #ifndef SPINE_SKELETONRENDERER_H_
 #define SPINE_SKELETONRENDERER_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include <spine/spine.h>
 
 namespace spine {

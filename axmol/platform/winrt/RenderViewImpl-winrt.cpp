@@ -25,16 +25,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/winrt/RenderViewImpl-winrt.h"
-#include "base/Macros.h"
-#include "base/Director.h"
-#include "base/Touch.h"
-#include "base/IMEDispatcher.h"
-#include "base/EventListenerKeyboard.h"
-#include "platform/winrt/Application-winrt.h"
-#include "platform/winrt/WinRTUtils.h"
-#include "base/EventDispatcher.h"
-#include "base/EventMouse.h"
+#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Touch.h"
+#include "axmol/base/IMEDispatcher.h"
+#include "axmol/base/EventListenerKeyboard.h"
+#include "axmol/platform/winrt/Application-winrt.h"
+#include "axmol/platform/winrt/WinRTUtils.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventMouse.h"
 #include <map>
 
 #include <winrt/Windows.UI.Xaml.Controls.h>

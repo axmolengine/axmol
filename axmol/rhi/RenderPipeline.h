@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include "RHITypes.h"
-#include "base/Object.h"
-#include "renderer/PipelineDescriptor.h"
-#include "rhi/RenderPassDescriptor.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/base/Object.h"
+#include "axmol/renderer/PipelineDescriptor.h"
+#include "axmol/rhi/RenderPassDescriptor.h"
 
 namespace ax::rhi {
 /**

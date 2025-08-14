@@ -27,7 +27,7 @@
 
 /// @cond DO_NOT_SHOW
 
-#include "platform/StdC.h"
+#include "axmol/platform/StdC.h"
 
 enum class S3TCDecodeFlag
 {

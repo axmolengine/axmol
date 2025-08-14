@@ -26,9 +26,9 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "platform/StdC.h"
-#include "platform/Common.h"
-#include "platform/ApplicationBase.h"
+#include "axmol/platform/StdC.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/ApplicationBase.h"
 #include <string>
 
 namespace ax

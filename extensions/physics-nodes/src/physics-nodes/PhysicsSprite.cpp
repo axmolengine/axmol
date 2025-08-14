@@ -23,8 +23,8 @@
  */
 
 #include "PhysicsSprite.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
 
 NS_AX_EXT_BEGIN
 

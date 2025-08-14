@@ -24,8 +24,8 @@
  ****************************************************************************/
 #include "AssetsManagerEx.h"
 #include "EventListenerAssetsManagerEx.h"
-#include "base/text_utils.h"
-#include "base/Director.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/Director.h"
 
 #include <stdio.h>
 

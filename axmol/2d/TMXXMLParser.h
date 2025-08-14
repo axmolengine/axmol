@@ -31,12 +31,12 @@ THE SOFTWARE.
 
 /// @cond DO_NOT_SHOW
 
-#include "math/Math.h"
-#include "platform/SAXParser.h"
-#include "base/Vector.h"
-#include "base/Map.h"
-#include "base/Value.h"
-#include "2d/TMXObjectGroup.h"  // needed for Vector<TMXObjectGroup*> for binding
+#include "axmol/math/Math.h"
+#include "axmol/platform/SAXParser.h"
+#include "axmol/base/Vector.h"
+#include "axmol/base/Map.h"
+#include "axmol/base/Value.h"
+#include "axmol/2d/TMXObjectGroup.h"  // needed for Vector<TMXObjectGroup*> for binding
 
 #include <string>
 

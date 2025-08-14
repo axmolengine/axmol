@@ -2,10 +2,10 @@
 
 #include "ButtonReader.h"
 
-#include "ui/UIButton.h"
-#include "2d/SpriteFrameCache.h"
-#include "2d/Label.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UIButton.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/2d/Label.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/FlatBuffersSerialize.h"

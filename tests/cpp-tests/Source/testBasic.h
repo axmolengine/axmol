@@ -25,7 +25,7 @@
 #ifndef _TEST_BASIC_H_
 #define _TEST_BASIC_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "VisibleRect.h"
 
 /**

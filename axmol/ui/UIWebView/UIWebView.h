@@ -25,9 +25,9 @@
  ****************************************************************************/
 #pragma once
 
-#include "ui/UIWidget.h"
-#include "ui/GUIExport.h"
-#include "base/Data.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/GUIExport.h"
+#include "axmol/base/Data.h"
 
 #if (defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                             \
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \

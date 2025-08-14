@@ -27,12 +27,12 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/Node.h"
-#include "2d/Sprite.h"
-#include "platform/Image.h"
-#include "renderer/GroupCommand.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/CallbackCommand.h"
+#include "axmol/2d/Node.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/platform/Image.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
 
 namespace ax
 {

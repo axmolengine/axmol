@@ -24,10 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIAbstractCheckButton.h"
-#include "2d/Sprite.h"
-#include "renderer/Shaders.h"
-#include "renderer/ProgramStateRegistry.h"
+#include "axmol/ui/UIAbstractCheckButton.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/renderer/ProgramStateRegistry.h"
 
 namespace ax
 {

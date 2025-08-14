@@ -25,12 +25,12 @@
 
 #pragma once
 
-#include "renderer/Texture2D.h"
-#include "rhi/Texture.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/rhi/Texture.h"
 
 #include <string>
 #include <unordered_map>
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

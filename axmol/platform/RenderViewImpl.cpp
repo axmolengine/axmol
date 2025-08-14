@@ -25,35 +25,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/RenderViewImpl.h"
+#include "axmol/platform/RenderViewImpl.h"
 
 #include <cmath>
 #include <unordered_map>
 
-#include "platform/Application.h"
-#include "base/Director.h"
-#include "base/Touch.h"
-#include "base/EventDispatcher.h"
-#include "base/EventKeyboard.h"
-#include "base/EventMouse.h"
-#include "base/IMEDispatcher.h"
-#include "base/Utils.h"
-#include "base/text_utils.h"
-#include "2d/Camera.h"
+#include "axmol/platform/Application.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Touch.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventKeyboard.h"
+#include "axmol/base/EventMouse.h"
+#include "axmol/base/IMEDispatcher.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/2d/Camera.h"
 #if AX_ICON_SET_SUPPORT
-#    include "platform/Image.h"
+#    include "axmol/platform/Image.h"
 #endif /* AX_ICON_SET_SUPPORT */
 
-#include "renderer/Renderer.h"
+#include "axmol/renderer/Renderer.h"
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
 #    include <Metal/Metal.h>
-#    include "rhi/metal/DriverMTL.h"
-#    include "rhi/metal/UtilsMTL.h"
+#    include "axmol/rhi/metal/DriverMTL.h"
+#    include "axmol/rhi/metal/UtilsMTL.h"
 #elif AX_RENDER_API == AX_RENDER_API_GL
-#    include "rhi/opengl/DriverGL.h"
-#    include "rhi/opengl/MacrosGL.h"
-#    include "rhi/opengl/OpenGLState.h"
+#    include "axmol/rhi/opengl/DriverGL.h"
+#    include "axmol/rhi/opengl/MacrosGL.h"
+#    include "axmol/rhi/opengl/OpenGLState.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
 /** glfw3native.h */

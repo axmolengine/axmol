@@ -24,8 +24,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "2d/Sprite.h"
-#include "renderer/QuadCommand.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/renderer/QuadCommand.h"
 
 #include "ArmatureDefine.h"
 #include "Bone.h"

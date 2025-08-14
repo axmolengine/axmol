@@ -26,11 +26,11 @@
 
 #include <thread>
 
-#include "base/Director.h"
-#include "base/Scheduler.h"
-#include "base/UserDefault.h"
-#include "network/Downloader.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/UserDefault.h"
+#include "axmol/network/Downloader.h"
+#include "axmol/platform/FileUtils.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
 #    include <minizip/unzip.h>
@@ -39,7 +39,7 @@
 #endif
 #include <ioapi.h>
 
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 NS_AX_EXT_BEGIN
 

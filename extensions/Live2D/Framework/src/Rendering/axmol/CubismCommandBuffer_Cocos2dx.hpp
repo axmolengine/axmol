@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -8,7 +8,7 @@
 #pragma once
 
 #include "CubismFramework.hpp"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 #ifdef CSM_TARGET_ANDROID_ES2
 #include <jni.h>
@@ -34,7 +34,7 @@
 #include <OpenGL/gl.h>
 #endif
 
-#include "rhi/Texture.h"
+#include "axmol/rhi/Texture.h"
 
 using namespace ax;
 

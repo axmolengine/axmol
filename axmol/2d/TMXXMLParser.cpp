@@ -28,15 +28,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/TMXXMLParser.h"
+#include "axmol/2d/TMXXMLParser.h"
 #include <unordered_map>
 #include <sstream>
 #include <regex>
 
-#include "base/ZipUtils.h"
-#include "base/Director.h"
-#include "base/Utils.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/ZipUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Utils.h"
+#include "axmol/platform/FileUtils.h"
 #include <ranges>
 #include <charconv>
 

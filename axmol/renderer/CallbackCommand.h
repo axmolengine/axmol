@@ -24,9 +24,9 @@
  ****************************************************************************/
 #pragma once
 
-#include "rhi/PixelBufferDescriptor.h"
-#include "renderer/RenderCommand.h"
-#include "base/RefPtr.h"
+#include "axmol/rhi/PixelBufferDescriptor.h"
+#include "axmol/renderer/RenderCommand.h"
+#include "axmol/base/RefPtr.h"
 
 /**
  * @addtogroup renderer

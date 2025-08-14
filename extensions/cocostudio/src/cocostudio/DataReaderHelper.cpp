@@ -22,10 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/FileUtils.h"
-#include "base/Director.h"
-#include "base/Scheduler.h"
-#include "base/Utils.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/Utils.h"
 
 #include "pugixml/pugixml.hpp"
 

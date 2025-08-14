@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIHBox.h"
+#include "axmol/ui/UIHBox.h"
 
 namespace ax
 {

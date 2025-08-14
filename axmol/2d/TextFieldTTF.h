@@ -27,8 +27,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "2d/Label.h"
-#include "base/IMEDelegate.h"
+#include "axmol/2d/Label.h"
+#include "axmol/base/IMEDelegate.h"
 
 /**
  * @addtogroup ui

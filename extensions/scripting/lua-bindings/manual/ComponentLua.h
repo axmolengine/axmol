@@ -27,7 +27,7 @@
 
 #include <string>
 #include <unordered_map>
-#include "2d/Component.h"
+#include "axmol/2d/Component.h"
 
 namespace ax
 {

@@ -23,19 +23,19 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DriverGL.h"
-#include "RenderPipelineGL.h"
-#include "BufferGL.h"
-#include "ShaderModuleGL.h"
-#include "CommandBufferGL.h"
-#include "TextureGL.h"
-#include "DepthStencilStateGL.h"
-#include "ProgramGL.h"
-#include "RenderTargetGL.h"
-#include "MacrosGL.h"
+#include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/rhi/opengl/RenderPipelineGL.h"
+#include "axmol/rhi/opengl/BufferGL.h"
+#include "axmol/rhi/opengl/ShaderModuleGL.h"
+#include "axmol/rhi/opengl/CommandBufferGL.h"
+#include "axmol/rhi/opengl/TextureGL.h"
+#include "axmol/rhi/opengl/DepthStencilStateGL.h"
+#include "axmol/rhi/opengl/ProgramGL.h"
+#include "axmol/rhi/opengl/RenderTargetGL.h"
+#include "axmol/rhi/opengl/MacrosGL.h"
 
-#include "base/axstd.h"
-#include "base/format.h"
+#include "axmol/base/axstd.h"
+#include "axmol/base/format.h"
 #include "xxhash/xxhash.h"
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)

@@ -24,13 +24,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/Device.h"
+#include "axmol/platform/Device.h"
 #include <string.h>
 #include <android/log.h>
 #include <jni.h>
-#include "base/Types.h"
-#include "platform/android/jni/JniHelper.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Types.h"
+#include "axmol/platform/android/jni/JniHelper.h"
+#include "axmol/platform/FileUtils.h"
 #include "yasio/string_view.hpp"
 
 static const char* deviceHelperClassName = "dev.axmol.lib.AxmolEngine";

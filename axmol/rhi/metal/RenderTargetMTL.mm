@@ -1,6 +1,6 @@
-#include "RenderTargetMTL.h"
-#include "UtilsMTL.h"
-#include "TextureMTL.h"
+#include "axmol/rhi/metal/RenderTargetMTL.h"
+#include "axmol/rhi/metal/UtilsMTL.h"
+#include "axmol/rhi/metal/TextureMTL.h"
 
 namespace ax::rhi::mtl {
 

@@ -27,11 +27,11 @@
 
 #include <unordered_map>
 
-#include "3d/AnimationCurve.h"
+#include "axmol/3d/AnimationCurve.h"
 
-#include "base/Macros.h"
-#include "base/Object.h"
-#include "3d/Bundle3DData.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Object.h"
+#include "axmol/3d/Bundle3DData.h"
 
 namespace ax
 {

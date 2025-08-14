@@ -23,9 +23,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/MeshSkin.h"
-#include "3d/Bundle3D.h"
-#include "3d/Skeleton3D.h"
+#include "axmol/3d/MeshSkin.h"
+#include "axmol/3d/Bundle3D.h"
+#include "axmol/3d/Skeleton3D.h"
 
 namespace ax
 {

@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIListView.h"
-#include "ui/UIHelper.h"
+#include "axmol/ui/UIListView.h"
+#include "axmol/ui/UIHelper.h"
 
 namespace ax
 {

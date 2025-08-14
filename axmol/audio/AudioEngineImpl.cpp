@@ -23,20 +23,20 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
-#include "audio/AudioEngineImpl.h"
-#include "audio/AudioDecoderManager.h"
+#include "axmol/audio/AudioEngineImpl.h"
+#include "axmol/audio/AudioDecoderManager.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    import <AVFoundation/AVFoundation.h>
 #endif
 
-#include "audio/AudioEngine.h"
-#include "platform/FileUtils.h"
-#include "base/Director.h"
-#include "base/Scheduler.h"
-#include "base/Utils.h"
+#include "axmol/audio/AudioEngine.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/Utils.h"
 
 #if AX_USE_ALSOFT
 #    include "alc/inprogext.h"

@@ -27,8 +27,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "base/Macros.h"
-#include "base/Object.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Object.h"
 #include <vector>
 #include <functional>
 #include <algorithm>  // for std::find

@@ -27,8 +27,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "base/Config.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Config.h"
 
 #define AX_OBJECT_LEAK_DETECTION 0
 

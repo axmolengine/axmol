@@ -502,7 +502,7 @@ endif()
 if((NOT IOS) AND (NOT WINRT))
     message(STATUS "CMake precompile headers for ${APP_NAME}")
     target_precompile_headers(${APP_NAME} PRIVATE 
-      "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
+      "$<$<COMPILE_LANGUAGE:CXX>:axmol/axmol.h>"
     )
 endif()
 

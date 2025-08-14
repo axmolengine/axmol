@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UILayoutParameter.h"
-#include "ui/UILayout.h"
+#include "axmol/ui/UILayoutParameter.h"
+#include "axmol/ui/UILayout.h"
 
 namespace ax
 {

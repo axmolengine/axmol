@@ -23,11 +23,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "renderer/TrianglesCommand.h"
+#include "axmol/renderer/TrianglesCommand.h"
 #include "xxhash.h"
-#include "renderer/Renderer.h"
-#include "renderer/Texture2D.h"
-#include "base//Utils.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/base/Utils.h"
 
 namespace ax
 {

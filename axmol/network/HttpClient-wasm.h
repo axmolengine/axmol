@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include "base/Vector.h"
-#include "network/HttpRequest.h"
-#include "network/HttpResponse.h"
-#include "network/HttpCookie.h"
+#include "axmol/base/Vector.h"
+#include "axmol/network/HttpRequest.h"
+#include "axmol/network/HttpResponse.h"
+#include "axmol/network/HttpCookie.h"
 
 struct emscripten_fetch_t;
 

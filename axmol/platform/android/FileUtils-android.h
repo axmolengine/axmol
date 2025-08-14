@@ -25,9 +25,9 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  ****************************************************************************/
 #pragma once
 
-#include "platform/FileUtils.h"
-#include "platform/PlatformMacros.h"
-#include "base/Types.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Types.h"
 #include <string>
 #include <vector>
 #include <unordered_map>

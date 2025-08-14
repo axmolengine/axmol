@@ -33,8 +33,8 @@ THE SOFTWARE.
  * by http://github.com/NikhilK
  */
 
-#include "2d/ActionEase.h"
-#include "2d/TweenFunction.h"
+#include "axmol/2d/ActionEase.h"
+#include "axmol/2d/TweenFunction.h"
 
 namespace ax
 {

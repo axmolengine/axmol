@@ -24,16 +24,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/PlatformConfig.h"
-#include "platform/winrt/RenderViewImpl-winrt.h"
-#include "base/Director.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/base/Director.h"
 #include <algorithm>
-#include "platform/FileUtils.h"
-#include "platform/winrt/WinRTUtils.h"
-#include "platform/Application.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/platform/winrt/WinRTUtils.h"
+#include "axmol/platform/Application.h"
 
 #include "pugixml/pugixml.hpp"
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 #include <winrt/Windows.ApplicationModel.h>
 #include <winrt/Windows.System.UserProfile.h>

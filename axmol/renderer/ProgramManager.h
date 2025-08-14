@@ -25,12 +25,12 @@
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 #include <string>
 #include <unordered_map>
 #include <string_view>
-#include "rhi/Program.h"
-#include "ProgramStateRegistry.h"
+#include "axmol/rhi/Program.h"
+#include "axmol/renderer/ProgramStateRegistry.h"
 
 struct XXH64_state_s;
 

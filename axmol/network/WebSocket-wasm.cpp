@@ -22,8 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "network/WebSocket-wasm.h"
-#include "base/Logging.h"
+#include "axmol/network/WebSocket-wasm.h"
+#include "axmol/base/Logging.h"
 
 namespace ax
 {

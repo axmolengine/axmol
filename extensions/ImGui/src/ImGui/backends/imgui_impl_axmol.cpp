@@ -1,18 +1,18 @@
 #include "imgui_impl_axmol.h"
 
-#include "base/Director.h"
-#include "base/Data.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Data.h"
 #if !defined(__ANDROID__)
-#    include "platform/RenderViewImpl.h"
+#    include "axmol/platform/RenderViewImpl.h"
 #endif
-#include "rhi/Program.h"
-#include "rhi/ProgramState.h"
-#include "renderer/ProgramManager.h"
-#include "renderer/Shaders.h"
-#include "renderer/Renderer.h"
-#include "renderer/CallbackCommand.h"
-#include "rhi/DriverBase.h"
-#include "rhi/Buffer.h"
+#include "axmol/rhi/Program.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/ProgramManager.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/CallbackCommand.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/Buffer.h"
 
 using namespace ax;
 using namespace ax::rhi;

@@ -28,9 +28,9 @@
 #include "cocostudio/WidgetReader/TabControlReader/TabControlReader.h"
 #include "cocostudio/FlatBuffersSerialize.h"
 #include "cocostudio/ActionTimeline/CSLoader.h"
-#include "ui/UITabControl.h"
-#include "platform/FileUtils.h"
-#include "2d/SpriteFrameCache.h"
+#include "axmol/ui/UITabControl.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/SpriteFrameCache.h"
 
 using namespace ax;
 using namespace cocostudio;

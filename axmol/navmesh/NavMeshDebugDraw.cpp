@@ -23,17 +23,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "navmesh/NavMeshDebugDraw.h"
+#include "axmol/navmesh/NavMeshDebugDraw.h"
 #if defined(AX_ENABLE_NAVMESH)
 #    include <stddef.h>  // offsetof
-#    include "base/Types.h"
-#    include "rhi/ProgramState.h"
-#    include "rhi/DriverBase.h"
-#    include "renderer/Renderer.h"
-#    include "renderer/RenderState.h"
-#    include "renderer/Shaders.h"
-#    include "base/Director.h"
-#    include "base/Macros.h"
+#    include "axmol/base/Types.h"
+#    include "axmol/rhi/ProgramState.h"
+#    include "axmol/rhi/DriverBase.h"
+#    include "axmol/renderer/Renderer.h"
+#    include "axmol/renderer/RenderState.h"
+#    include "axmol/renderer/Shaders.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/base/Macros.h"
 
 namespace ax
 {

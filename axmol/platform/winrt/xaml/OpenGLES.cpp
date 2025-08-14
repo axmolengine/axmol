@@ -17,7 +17,7 @@
 * See the License for the specific language governing permissions and limitations under the License.
 */
 
-#include "OpenGLES.h"
+#include "axmol/platform/winrt/xaml/OpenGLES.h"
 
 #include <winrt/windows.foundation.collections.h>
 

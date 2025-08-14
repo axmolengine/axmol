@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "base/IMEDelegate.h"
+#include "axmol/base/IMEDelegate.h"
 
 /**
  * @addtogroup base

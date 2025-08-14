@@ -33,16 +33,16 @@
 #include <string>
 #include <unordered_map>
 
-#include "renderer/RenderState.h"
-#include "renderer/Technique.h"
-#include "renderer/CustomCommand.h"
-#include "base/Object.h"
-#include "base/Vector.h"
-#include "math/Vec2.h"
-#include "math/Vec3.h"
-#include "math/Vec4.h"
-#include "math/Mat4.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/renderer/Technique.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Vector.h"
+#include "axmol/math/Vec2.h"
+#include "axmol/math/Vec3.h"
+#include "axmol/math/Vec4.h"
+#include "axmol/math/Mat4.h"
+#include "axmol/platform/PlatformMacros.h"
 
 namespace ax
 {

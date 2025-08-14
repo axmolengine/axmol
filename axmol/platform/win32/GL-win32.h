@@ -26,7 +26,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && AX_RENDER_API == AX_RENDER_API_GL
 
 #    include "glad/gl.h"

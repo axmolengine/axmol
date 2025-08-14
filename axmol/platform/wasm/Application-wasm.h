@@ -28,11 +28,11 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/Common.h"
-#include "platform/ApplicationBase.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/ApplicationBase.h"
 #include <string>
 
 namespace ax

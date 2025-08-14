@@ -1,7 +1,7 @@
 #pragma once
 
 #if defined(AX_ENABLE_EXT_SPINE)
-#include <cocos2d.h>
+#include "axmol/cocos2d.h"
 #include "spine/spine.h"
 #include "spine/spine-cocos2dx.h"
 #include "CocosStudioExport.h"

@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "../Program.h"
+#include "axmol/rhi/Program.h"
 #import <Metal/Metal.h>
 
 namespace ax::rhi::mtl {

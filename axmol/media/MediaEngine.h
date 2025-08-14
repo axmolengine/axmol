@@ -25,8 +25,8 @@
 #pragma once
 
 #if !defined(AXME_NO_AXMOL)
-#    include "base/Logging.h"
-#    include "platform/PlatformMacros.h"
+#    include "axmol/base/Logging.h"
+#    include "axmol/platform/PlatformMacros.h"
 #    define AXME_TRACE AXLOGD
 #else
 #    define AXME_TRACE printf

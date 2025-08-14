@@ -24,7 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Console.h"
+#include "axmol/base/Console.h"
+#include "axmol/base/charconv.h"
 
 #include <thread>
 #include <algorithm>
@@ -38,22 +39,22 @@
 #include <time.h>
 #include <fcntl.h>
 #include <ranges>
-#include <base/charconv.h>
+
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <io.h>
 #    define bzero(a, b) memset(a, 0, b)
 #endif
 
-#include "base/Director.h"
-#include "base/Scheduler.h"
-#include "platform/PlatformConfig.h"
-#include "base/Configuration.h"
-#include "2d/Scene.h"
-#include "platform/FileUtils.h"
-#include "renderer/TextureCache.h"
-#include "base/Utils.h"
-#include "base/text_utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/2d/Scene.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/text_utils.h"
 
 #include "yasio/xxsocket.hpp"
 

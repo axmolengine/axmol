@@ -45,13 +45,13 @@
 #    include <condition_variable>
 #    include <future>
 
-#    include "platform/PlatformMacros.h"
-#    include "platform/StdC.h"
-#    include "base/Scheduler.h"
-#    include "base/ConcurrentDeque.h"
+#    include "axmol/platform/PlatformMacros.h"
+#    include "axmol/platform/StdC.h"
+#    include "axmol/base/Scheduler.h"
+#    include "axmol/base/ConcurrentDeque.h"
 #    include "yasio/yasio_fwd.hpp"
 #    include "yasio/byte_buffer.hpp"
-#    include "network/Uri.h"
+#    include "axmol/network/Uri.h"
 #    include "llhttp.h"
 #    include "websocket_parser.h"
 
@@ -442,5 +442,5 @@ protected:
 
 }
 #else
-#    include "network/WebSocket-wasm.h"
+#    include "axmol/network/WebSocket-wasm.h"
 #endif

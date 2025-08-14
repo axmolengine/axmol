@@ -24,20 +24,20 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIMediaPlayer.h"
+#include "axmol/ui/UIMediaPlayer.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
 #if defined(AX_ENABLE_MEDIA)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>
-#    include "base/Director.h"
-#    include "base/EventListenerKeyboard.h"
-#    include "platform/FileUtils.h"
-#    include "ui/UIHelper.h"
-#    include "media/MediaEngine.h"
-#    include "UIButton.h"
-#    include "UILayout.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/base/EventListenerKeyboard.h"
+#    include "axmol/platform/FileUtils.h"
+#    include "axmol/ui/UIHelper.h"
+#    include "axmol/media/MediaEngine.h"
+#    include "axmol/ui/UIButton.h"
+#    include "axmol/ui/UILayout.h"
 #    include "yasio/byte_buffer.hpp"
 //-----------------------------------------------------------------------------------------------------------
 

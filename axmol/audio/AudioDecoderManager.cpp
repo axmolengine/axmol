@@ -24,18 +24,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "audio/AudioDecoderManager.h"
-#include "audio/AudioDecoderVorbis.h"
-#include "audio/AudioDecoderOpus.h"
-#include "audio/AudioMacros.h"
-#include "platform/FileUtils.h"
-#include "base/Logging.h"
+#include "axmol/audio/AudioDecoderManager.h"
+#include "axmol/audio/AudioDecoderVorbis.h"
+#include "axmol/audio/AudioDecoderOpus.h"
+#include "axmol/audio/AudioMacros.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Logging.h"
 
 #if !defined(__APPLE__)
-#    include "audio/AudioDecoderMp3.h"
-#    include "audio/AudioDecoderWav.h"
+#    include "axmol/audio/AudioDecoderMp3.h"
+#    include "axmol/audio/AudioDecoderWav.h"
 #else
-#    include "audio/AudioDecoderEXT.h"
+#    include "axmol/audio/AudioDecoderEXT.h"
 #endif
 
 #include "yasio/string_view.hpp"

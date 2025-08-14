@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "PlatformMacros.h"
-#include "renderer/Texture2D.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/renderer/Texture2D.h"
 
 namespace ax::rhi
 {

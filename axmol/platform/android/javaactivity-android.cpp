@@ -23,15 +23,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/android/Application-android.h"
-#include "platform/android/RenderViewImpl-android.h"
-#include "base/Director.h"
-#include "base/EventCustom.h"
-#include "base/EventType.h"
-#include "base/EventDispatcher.h"
-#include "rhi/DriverBase.h"
-#include "renderer/TextureCache.h"
-#include "platform/android/jni/JniHelper.h"
+#include "axmol/platform/android/Application-android.h"
+#include "axmol/platform/android/RenderViewImpl-android.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/platform/android/jni/JniHelper.h"
 
 #include <android/log.h>
 #include <android/api-level.h>

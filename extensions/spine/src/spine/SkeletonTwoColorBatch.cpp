@@ -29,14 +29,14 @@
 
 #include <spine/spine-axmol.h>
 
-#include "base/Types.h"
-#include "base/Utils.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Utils.h"
 #include <algorithm>
 #include <spine/Extension.h>
 #include <stddef.h>// offsetof
 
-#include "rhi/DriverBase.h"
-#include "renderer/Shaders.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/renderer/Shaders.h"
 #include "xxhash.h"
 
 USING_NS_AX;

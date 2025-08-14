@@ -26,10 +26,10 @@
 
 #pragma once
 
-#include "base/Config.h"
-#include "3d/MeshRenderer.h"
-#include "physics3d/Physics3DObject.h"
-#include "physics3d/Physics3DComponent.h"
+#include "axmol/base/Config.h"
+#include "axmol/3d/MeshRenderer.h"
+#include "axmol/physics3d/Physics3DObject.h"
+#include "axmol/physics3d/Physics3DComponent.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 

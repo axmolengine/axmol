@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "../Buffer.h"
-#include "platform/GL.h"
-#include "base/EventListenerCustom.h"
+#include "axmol/rhi/Buffer.h"
+#include "axmol/platform/GL.h"
+#include "axmol/base/EventListenerCustom.h"
 
 #include <vector>
 

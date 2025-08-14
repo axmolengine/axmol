@@ -23,26 +23,26 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "base/EventDispatcher.h"
+#include "axmol/base/EventDispatcher.h"
 #include <algorithm>
 
-#include "base/EventCustom.h"
-#include "base/EventListenerTouch.h"
-#include "base/EventListenerAcceleration.h"
-#include "base/EventListenerMouse.h"
-#include "base/EventListenerKeyboard.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventListenerFocus.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/EventListenerAcceleration.h"
+#include "axmol/base/EventListenerMouse.h"
+#include "axmol/base/EventListenerKeyboard.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventListenerFocus.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
      AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    include "base/EventListenerController.h"
+#    include "axmol/base/EventListenerController.h"
 #endif
-#include "2d/Scene.h"
-#include "base/Director.h"
-#include "base/EventType.h"
-#include "2d/Camera.h"
-#include "2d/ProtectedNode.h"
+#include "axmol/2d/Scene.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventType.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/2d/ProtectedNode.h"
 
 #define DUMP_LISTENER_ITEM_PRIORITY_INFO 0
 

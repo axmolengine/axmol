@@ -24,10 +24,10 @@
  ****************************************************************************/
 #pragma once
 
-#include "../DriverBase.h"
-#include "platform/GL.h"
-#include "OpenGLState.h"
-#include "base/hlookup.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/platform/GL.h"
+#include "axmol/rhi/opengl/OpenGLState.h"
+#include "axmol/base/hlookup.h"
 
 namespace ax::rhi::gl {
 /**

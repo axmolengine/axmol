@@ -25,7 +25,7 @@
 #ifndef __APP_DELEGATE_H__
 #define __APP_DELEGATE_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 /**
 @brief    The cocos2d Application.

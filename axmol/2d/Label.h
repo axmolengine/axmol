@@ -27,12 +27,12 @@
 
 #pragma once
 
-#include "2d/Node.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/QuadCommand.h"
-#include "2d/FontAtlas.h"
-#include "2d/FontFreeType.h"
-#include "base/Types.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/QuadCommand.h"
+#include "axmol/2d/FontAtlas.h"
+#include "axmol/2d/FontFreeType.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

@@ -24,7 +24,7 @@
 #pragma once
 
 #include <string_view>
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 
 /* freetype fwd decls */
 

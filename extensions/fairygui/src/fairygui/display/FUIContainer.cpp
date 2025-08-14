@@ -1,5 +1,5 @@
 #include "FUIContainer.h"
-#include "base/StencilStateManager.h"
+#include "axmol/base/StencilStateManager.h"
 #include "utils/ToolSet.h"
 #include "GComponent.h"
 

@@ -28,7 +28,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <string>
-#include "base/bitmask.h"
+#include "axmol/base/bitmask.h"
 
 #define MAX_COLOR_ATTCHMENT 4
 

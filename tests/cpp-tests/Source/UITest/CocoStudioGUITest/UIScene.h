@@ -26,9 +26,9 @@
 #ifndef __TestCpp__UIScene__
 #define __TestCpp__UIScene__
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "extensions/axmol-ext.h"
-#include "ui/CocosGUI.h"
+#include "axmol/ui/CocosGUI.h"
 #include "BaseTest.h"
 
 class UIScene : public TestCase

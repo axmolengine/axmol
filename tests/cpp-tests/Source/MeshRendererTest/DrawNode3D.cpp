@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "DrawNode3D.h"
-#include "rhi/Buffer.h"
+#include "axmol/rhi/Buffer.h"
 namespace ax
 {
 

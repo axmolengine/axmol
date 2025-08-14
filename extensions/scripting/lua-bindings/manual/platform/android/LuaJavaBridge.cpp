@@ -24,9 +24,9 @@
 
 #include "LuaJavaBridge.h"
 #if defined(__ANDROID__)
-#    include "platform/android/jni/JniHelper.h"
+#    include "axmol/platform/android/jni/JniHelper.h"
 #    include <android/log.h>
-#    include "base/text_utils.h"
+#    include "axmol/base/text_utils.h"
 
 #    define LOG_TAG "luajc"
 #    define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)

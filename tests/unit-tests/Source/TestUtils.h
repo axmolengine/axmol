@@ -1,8 +1,8 @@
 #pragma once
 
 #include <future>
-#include "base/Director.h"
-#include "base/Scheduler.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
 #include "doctest.h"
 
 

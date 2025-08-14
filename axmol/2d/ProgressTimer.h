@@ -27,11 +27,11 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "renderer/CustomCommand.h"
-#include "2d/Node.h"
-#include "renderer/PipelineDescriptor.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/PipelineDescriptor.h"
 
-#include "base/axstd.h"
+#include "axmol/base/axstd.h"
 
 namespace ax
 {

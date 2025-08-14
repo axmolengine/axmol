@@ -30,9 +30,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "2d/Action.h"
-#include "base/Vector.h"
-#include "base/Object.h"
+#include "axmol/2d/Action.h"
+#include "axmol/base/Vector.h"
+#include "axmol/base/Object.h"
 
 namespace ax
 {

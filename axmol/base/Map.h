@@ -28,8 +28,8 @@
 #define USE_STD_UNORDERED_MAP 1
 #define USE_ROBIN_MAP 1
 
-#include "base/Macros.h"
-#include "base/Object.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Object.h"
 #include <vector>
 
 #if USE_STD_UNORDERED_MAP

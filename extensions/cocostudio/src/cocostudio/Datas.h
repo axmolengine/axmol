@@ -24,14 +24,14 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "base/Object.h"
-#include "base/Types.h"
-#include "base/Vector.h"
-#include "base/Map.h"
-#include "math/AffineTransform.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Vector.h"
+#include "axmol/base/Map.h"
+#include "axmol/math/AffineTransform.h"
 
 #include "ArmatureDefine.h"
-#include "2d/TweenFunction.h"
+#include "axmol/2d/TweenFunction.h"
 #include "CocosStudioExport.h"
 
 #define AX_CREATE_NO_PARAM_NO_INIT(varType) \

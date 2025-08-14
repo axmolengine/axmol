@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -7,7 +7,7 @@
 
 #include "CubismCommandBuffer_Cocos2dx.hpp"
 #include "CubismFramework.hpp"
-#include "rhi/RenderTarget.h"
+#include "axmol/rhi/RenderTarget.h"
 
 //------------ LIVE2D NAMESPACE ------------
 namespace Live2D { namespace Cubism { namespace Framework { namespace Rendering {

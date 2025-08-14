@@ -26,9 +26,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
-#include "math/Math.h"
+#include "axmol/math/Math.h"
 
 /**
  * @addtogroup base

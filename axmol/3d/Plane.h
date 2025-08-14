@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "base/Macros.h"
-#include "math/Math.h"
+#include "axmol/base/Macros.h"
+#include "axmol/math/Math.h"
 
 namespace ax
 {

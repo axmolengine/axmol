@@ -26,13 +26,13 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 #include <string>
 
 #include <unordered_map>
 #include "mio/mio.hpp"
 #include "yasio/string_view.hpp"
-#include "platform/FileStream.h"
+#include "axmol/platform/FileStream.h"
 
 /**
  * @addtogroup base

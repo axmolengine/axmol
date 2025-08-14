@@ -20,9 +20,9 @@
  This file was modified to fit the axmol project
  */
 
-#include "math/Vec3.h"
-#include "math/MathUtil.h"
-#include "base/Macros.h"
+#include "axmol/math/Vec3.h"
+#include "axmol/math/MathUtil.h"
+#include "axmol/base/Macros.h"
 
 NS_AX_MATH_BEGIN
 

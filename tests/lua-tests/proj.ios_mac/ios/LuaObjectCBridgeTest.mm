@@ -24,7 +24,7 @@
 
 #import "LuaObjectCBridgeTest.h"
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "lua-bindings/manual/LuaEngine.h"
 #include "lua-bindings/manual/LuaBridge.h"
 

@@ -23,10 +23,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ProgramMTL.h"
-#include "ShaderModuleMTL.h"
-#include "base/Macros.h"
-#include "DriverMTL.h"
+#include "axmol/rhi/metal/ProgramMTL.h"
+#include "axmol/rhi/metal/ShaderModuleMTL.h"
+#include "axmol/base/Macros.h"
+#include "axmol/rhi/metal/DriverMTL.h"
 
 namespace ax::rhi::mtl {
 namespace

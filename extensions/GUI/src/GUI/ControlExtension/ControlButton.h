@@ -33,8 +33,8 @@
 
 #include "Control.h"
 #include "Invocation.h"
-#include "base/Map.h"
-#include "ui/UIScale9Sprite.h"
+#include "axmol/base/Map.h"
+#include "axmol/ui/UIScale9Sprite.h"
 
 NS_AX_EXT_BEGIN
 

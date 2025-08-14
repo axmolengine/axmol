@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UITabControl.h"
+#include "axmol/ui/UITabControl.h"
 #include "UITabControlTest.h"
 
 using namespace ax;

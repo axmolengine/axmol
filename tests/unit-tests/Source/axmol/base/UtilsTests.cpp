@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "base/Utils.h"
+#include "axmol/base/Utils.h"
 
 using namespace ax;
 

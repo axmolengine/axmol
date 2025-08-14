@@ -25,19 +25,19 @@
 
 #pragma once
 
-#include "../RHITypes.h"
-#include "base/Object.h"
-#include "base/EventListenerCustom.h"
-#include "platform/GL.h"
-#include "../Program.h"
-#include "rhi/DriverBase.h"
-#include "rhi/opengl/BufferGL.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/platform/GL.h"
+#include "axmol/rhi/Program.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/opengl/BufferGL.h"
 
 #include <string>
 #include <vector>
 #include <unordered_map>
 
-#include "base/axstd.h"
+#include "axmol/base/axstd.h"
 
 namespace ax::rhi::gl {
 

@@ -28,16 +28,16 @@
 
 #include <unordered_map>
 
-#include "base/Vector.h"
-#include "base/Types.h"
-#include "base/Protocols.h"
-#include "2d/Node.h"
-#include "renderer/MeshCommand.h"
-#include "3d/Skeleton3D.h"  // needs to be included for lua-bindings
-#include "3d/AABB.h"
-#include "3d/Bundle3DData.h"
-#include "3d/MeshVertexIndexData.h"
-#include "3d/MeshMaterial.h"
+#include "axmol/base/Vector.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/MeshCommand.h"
+#include "axmol/3d/Skeleton3D.h"  // needs to be included for lua-bindings
+#include "axmol/3d/AABB.h"
+#include "axmol/3d/Bundle3DData.h"
+#include "axmol/3d/MeshVertexIndexData.h"
+#include "axmol/3d/MeshMaterial.h"
 
 namespace ax
 {

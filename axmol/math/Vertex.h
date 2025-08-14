@@ -26,7 +26,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 
 /**
  * @addtogroup base

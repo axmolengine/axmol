@@ -26,19 +26,19 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIEditBox/UIEditBoxImpl-android.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-android.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
-#    include "ui/UIEditBox/UIEditBox.h"
+#    include "axmol/ui/UIEditBox/UIEditBox.h"
 #    include <jni.h>
-#    include "platform/android/jni/JniHelper.h"
-#    include "2d/Label.h"
-#    include "base/text_utils.h"
-#    include "math/Vec2.h"
-#    include "ui/UIHelper.h"
-#    include "base/Director.h"
-#    include "platform/FileUtils.h"
+#    include "axmol/platform/android/jni/JniHelper.h"
+#    include "axmol/2d/Label.h"
+#    include "axmol/base/text_utils.h"
+#    include "axmol/math/Vec2.h"
+#    include "axmol/ui/UIHelper.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/platform/FileUtils.h"
 #    include "yasio/string_view.hpp"
 
 namespace ax

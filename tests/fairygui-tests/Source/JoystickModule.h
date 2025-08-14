@@ -1,7 +1,7 @@
 #ifndef __JOYSTICK_MODULE_H__
 #define __JOYSTICK_MODULE_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUI.h"
 
 USING_NS_FGUI;

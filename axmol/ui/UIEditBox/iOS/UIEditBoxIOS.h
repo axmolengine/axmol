@@ -28,8 +28,8 @@
 #pragma once
 
 #import <UIKit/UIKit.h>
-#import "ui/UIEditBox/iOS/UITextInput.h"
-#include "ui/UIEditBox/UIEditBoxImpl-ios.h"
+#import "axmol/ui/UIEditBox/iOS/UITextInput.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-ios.h"
 
 @interface UIEditBoxImplIOS_objc : NSObject <UITextFieldDelegate, UITextViewDelegate>
 

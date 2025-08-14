@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "../DepthStencilState.h"
+#include "axmol/rhi/DepthStencilState.h"
 #import <Metal/Metal.h>
 
 #include "tsl/robin_map.h"

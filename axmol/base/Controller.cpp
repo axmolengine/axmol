@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Controller.h"
+#include "axmol/base/Controller.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
      defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 
-#    include "base/EventDispatcher.h"
-#    include "base/EventController.h"
-#    include "base/Director.h"
+#    include "axmol/base/EventDispatcher.h"
+#    include "axmol/base/EventController.h"
+#    include "axmol/base/Director.h"
 
 namespace ax
 {

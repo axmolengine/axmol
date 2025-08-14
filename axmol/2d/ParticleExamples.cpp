@@ -26,10 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/ParticleExamples.h"
-#include "base/Director.h"
-#include "base/firePngData.h"
-#include "renderer/TextureCache.h"
+#include "axmol/2d/ParticleExamples.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/firePngData.h"
+#include "axmol/renderer/TextureCache.h"
 
 namespace ax
 {

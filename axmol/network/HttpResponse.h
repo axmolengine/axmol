@@ -29,8 +29,8 @@
 #include <ctype.h>
 #include <map>
 #include <unordered_map>
-#include "network/HttpRequest.h"
-#include "network/Uri.h"
+#include "axmol/network/HttpRequest.h"
+#include "axmol/network/Uri.h"
 #include "llhttp.h"
 
 /**

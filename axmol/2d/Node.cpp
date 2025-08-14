@@ -28,25 +28,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/Node.h"
+#include "axmol/2d/Node.h"
 
 #include <algorithm>
 #include <string>
 #include <regex>
 
 #include "xxhash.h"
-#include "base/Director.h"
-#include "base/Scheduler.h"
-#include "base/EventDispatcher.h"
-#include "base/text_utils.h"
-#include "2d/Camera.h"
-#include "2d/ActionManager.h"
-#include "2d/Scene.h"
-#include "2d/Component.h"
-#include "renderer/Material.h"
-#include "math/TransformUtils.h"
-#include "renderer/ProgramManager.h"
-#include "renderer/ProgramStateRegistry.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/2d/ActionManager.h"
+#include "axmol/2d/Scene.h"
+#include "axmol/2d/Component.h"
+#include "axmol/renderer/Material.h"
+#include "axmol/math/TransformUtils.h"
+#include "axmol/renderer/ProgramManager.h"
+#include "axmol/renderer/ProgramStateRegistry.h"
 
 #if AX_NODE_RENDER_SUBPIXEL
 #    define RENDER_IN_SUBPIXEL

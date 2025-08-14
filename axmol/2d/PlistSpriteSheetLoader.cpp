@@ -22,19 +22,19 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "2d/PlistSpriteSheetLoader.h"
+#include "axmol/2d/PlistSpriteSheetLoader.h"
 
-#include "platform/FileUtils.h"
-#include "2d/AutoPolygon.h"
-#include "2d/SpriteFrameCache.h"
-#include "base/NinePatchImageParser.h"
-#include "base/NS.h"
-#include "base/Macros.h"
-#include "base/text_utils.h"
-#include "base/Utils.h"
-#include "base/Director.h"
-#include "renderer/Texture2D.h"
-#include "renderer/TextureCache.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/AutoPolygon.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/base/NinePatchImageParser.h"
+#include "axmol/base/NS.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/renderer/TextureCache.h"
 
 #include <vector>
 

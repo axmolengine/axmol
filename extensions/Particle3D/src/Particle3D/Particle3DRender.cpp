@@ -24,18 +24,18 @@
  ****************************************************************************/
 #include "Particle3D/ParticleSystem3D.h"
 #include <stddef.h>  // offsetof
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 #include "Particle3D/Particle3DRender.h"
-#include "renderer/MeshCommand.h"
-#include "renderer/Renderer.h"
-#include "renderer/TextureCache.h"
-#include "rhi/ProgramState.h"
-#include "rhi/Buffer.h"
-#include "rhi/DriverBase.h"
-#include "renderer/Shaders.h"
-#include "base/Director.h"
-#include "3d/MeshRenderer.h"
-#include "2d/Camera.h"
+#include "axmol/renderer/MeshCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/rhi/Buffer.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/base/Director.h"
+#include "axmol/3d/MeshRenderer.h"
+#include "axmol/2d/Camera.h"
 
 namespace ax
 {

@@ -27,7 +27,7 @@
 #include <string>
 #include "AppDelegate.h"
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "controller.h"
 #include "BaseTest.h"
 #include "extensions/axmol-ext.h"

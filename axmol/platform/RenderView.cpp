@@ -25,14 +25,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/RenderView.h"
+#include "axmol/platform/RenderView.h"
 
-#include "base/Touch.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "2d/Camera.h"
-#include "2d/Scene.h"
-#include "renderer/Renderer.h"
+#include "axmol/base/Touch.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/2d/Scene.h"
+#include "axmol/renderer/Renderer.h"
 
 namespace ax
 {

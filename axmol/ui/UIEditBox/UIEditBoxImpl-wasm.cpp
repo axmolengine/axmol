@@ -27,10 +27,10 @@ THE SOFTWARE.
 
 ****************************************************************************/
 
-#include "ui/UIEditBox/UIEditBoxImpl-wasm.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-wasm.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
-#    include "ui/UIHelper.h"
+#    include "axmol/ui/UIHelper.h"
 #    include <emscripten/emscripten.h>
 namespace ax
 {

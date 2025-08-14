@@ -22,12 +22,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DepthStencilStateGL.h"
-#include "platform/GL.h"
+#include "axmol/rhi/opengl/DepthStencilStateGL.h"
+#include "axmol/platform/GL.h"
 
-#include "rhi/opengl/MacrosGL.h"
-#include "rhi/opengl/UtilsGL.h"
-#include "OpenGLState.h"
+#include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/rhi/opengl/UtilsGL.h"
+#include "axmol/rhi/opengl/OpenGLState.h"
 
 namespace ax::rhi::gl {
 

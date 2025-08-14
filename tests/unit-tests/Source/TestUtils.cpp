@@ -1,5 +1,5 @@
 #include <doctest.h>
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 #include "TestUtils.h"
 
 namespace ax

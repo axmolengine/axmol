@@ -2,9 +2,9 @@
 
 #include "LoadingBarReader.h"
 
-#include "ui/UILoadingBar.h"
-#include "2d/SpriteFrameCache.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UILoadingBar.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"

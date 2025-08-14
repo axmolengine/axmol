@@ -29,18 +29,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/SpriteFrameCache.h"
+#include "axmol/2d/SpriteFrameCache.h"
 
 #include <vector>
 
-#include "2d/Sprite.h"
-#include "2d/AutoPolygon.h"
-#include "2d/PlistSpriteSheetLoader.h"
-#include "platform/FileUtils.h"
-#include "base/Macros.h"
-#include "base/Director.h"
-#include "renderer/Texture2D.h"
-#include "base/NinePatchImageParser.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/AutoPolygon.h"
+#include "axmol/2d/PlistSpriteSheetLoader.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/base/NinePatchImageParser.h"
 #include "xxhash.h"
 
 using namespace std;

@@ -24,7 +24,7 @@
 
  ****************************************************************************/
 
-#include "base/EventKeyboard.h"
+#include "axmol/base/EventKeyboard.h"
 
 namespace ax
 {

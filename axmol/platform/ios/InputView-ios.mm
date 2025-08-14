@@ -21,9 +21,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#import "platform/ios/InputView-ios.h"
-#import "base/IMEDispatcher.h"
-#import "base/Director.h"
+#import "axmol/platform/ios/InputView-ios.h"
+#import "axmol/base/IMEDispatcher.h"
+#import "axmol/base/Director.h"
 
 @interface TextInputView ()
 

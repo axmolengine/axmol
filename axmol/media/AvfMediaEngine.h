@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "MediaEngine.h"
+#include "axmol/media/MediaEngine.h"
 
 #if defined(__APPLE__)
 

@@ -46,8 +46,8 @@ typedef SSIZE_T ssize_t;
 #include <stdarg.h>
 #include "yasio/io_watcher.hpp"
 
-#include "base/Object.h"
-#include "base/Macros.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

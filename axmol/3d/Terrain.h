@@ -27,18 +27,18 @@ THE SOFTWARE.
 
 #include <vector>
 
-#include "2d/Node.h"
-#include "2d/Camera.h"
-#include "renderer/Texture2D.h"
-#include "renderer/MeshCommand.h"
-#include "renderer/CallbackCommand.h"
-#include "renderer/GroupCommand.h"
-#include "renderer/RenderState.h"
-#include "rhi/ProgramState.h"
-#include "3d/AABB.h"
-#include "3d/Ray.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventDispatcher.h"
+#include "axmol/2d/Node.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/renderer/MeshCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/3d/AABB.h"
+#include "axmol/3d/Ray.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventDispatcher.h"
 
 namespace ax
 {

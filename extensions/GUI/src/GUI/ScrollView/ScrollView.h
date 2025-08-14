@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "2d/Layer.h"
-#include "base/EventListenerTouch.h"
-#include "2d/ActionTween.h"
+#include "axmol/2d/Layer.h"
+#include "axmol/base/EventListenerTouch.h"
+#include "axmol/2d/ActionTween.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 

@@ -24,9 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIText.h"
-#include "2d/Label.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UIText.h"
+#include "axmol/2d/Label.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace ax
 {

@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "platform/PlatformConfig.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/platform/PlatformMacros.h"
 
 namespace ax
 {

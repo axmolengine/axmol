@@ -1,7 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include <wrl/client.h>
-#include "../DepthStencilState.h"
+#include "axmol/rhi/DepthStencilState.h"
 
 namespace ax::rhi::d3d
 {

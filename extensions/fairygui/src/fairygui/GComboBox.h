@@ -1,7 +1,7 @@
 #ifndef __GCOMBOBOX_H__
 #define __GCOMBOBOX_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "GComponent.h"
 #include "GList.h"

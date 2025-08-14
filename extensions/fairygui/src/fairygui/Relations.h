@@ -1,7 +1,7 @@
 #ifndef __RELATIONS_H__
 #define __RELATIONS_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "RelationItem.h"
 

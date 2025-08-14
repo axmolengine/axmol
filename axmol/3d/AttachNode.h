@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "math/Math.h"
-#include "2d/Node.h"
+#include "axmol/math/Math.h"
+#include "axmol/2d/Node.h"
 
 namespace ax
 {

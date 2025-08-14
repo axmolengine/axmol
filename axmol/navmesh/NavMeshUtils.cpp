@@ -23,7 +23,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "navmesh/NavMeshUtils.h"
+#include "axmol/navmesh/NavMeshUtils.h"
 #if defined(AX_ENABLE_NAVMESH)
 
 #    include "recast/DetourCommon.h"

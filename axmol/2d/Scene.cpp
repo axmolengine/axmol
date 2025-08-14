@@ -27,25 +27,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/Scene.h"
-#include "base/Director.h"
-#include "2d/Camera.h"
-#include "base/EventDispatcher.h"
-#include "base/EventListenerCustom.h"
-#include "base/text_utils.h"
-#include "renderer/Renderer.h"
+#include "axmol/2d/Scene.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/renderer/Renderer.h"
 
 #if defined(AX_ENABLE_PHYSICS)
-#    include "physics/PhysicsWorld.h"
+#    include "axmol/physics/PhysicsWorld.h"
 #endif
 
 #if defined(AX_ENABLE_3D_PHYSICS)
-#    include "physics3d/Physics3DWorld.h"
-#    include "physics3d/Physics3DComponent.h"
+#    include "axmol/physics3d/Physics3DWorld.h"
+#    include "axmol/physics3d/Physics3DComponent.h"
 #endif
 
 #if defined(AX_ENABLE_NAVMESH)
-#    include "navmesh/NavMesh.h"
+#    include "axmol/navmesh/NavMesh.h"
 #endif
 
 namespace ax

@@ -25,17 +25,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 
 #include <stack>
 #include <sstream>
 #include <algorithm>
 
-#include "base/Data.h"
-#include "base/Macros.h"
-#include "base/Director.h"
-#include "platform/SAXParser.h"
-#include "platform/FileStream.h"
+#include "axmol/base/Data.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/SAXParser.h"
+#include "axmol/platform/FileStream.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
 #    include <minizip/unzip.h>
@@ -51,7 +51,7 @@ THE SOFTWARE.
 
 #include "pugixml/pugixml.hpp"
 
-#include "base/filesystem.h"
+#include "axmol/base/filesystem.h"
 
 #if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)

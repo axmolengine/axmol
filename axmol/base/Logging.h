@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "base/bitmask.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/base/bitmask.h"
+#include "axmol/platform/PlatformMacros.h"
 
 #include "fmt/compile.h"
 

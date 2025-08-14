@@ -28,9 +28,9 @@
  */
 
 #include "ControlButton.h"
-#include "2d/Label.h"
-#include "2d/Action.h"
-#include "2d/ActionInterval.h"
+#include "axmol/2d/Label.h"
+#include "axmol/2d/Action.h"
+#include "axmol/2d/ActionInterval.h"
 
 using namespace std;
 

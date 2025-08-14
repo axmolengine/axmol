@@ -25,10 +25,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/iOS/UISingleLineTextField.h"
-#import "ui/UIEditBox/iOS/UITextInput.h"
+#import "axmol/ui/UIEditBox/iOS/UISingleLineTextField.h"
+#import "axmol/ui/UIEditBox/iOS/UITextInput.h"
 
-#include "base/Director.h"
+#include "axmol/base/Director.h"
 
 /**
  * http://stackoverflow.com/questions/18244790/changing-uitextfield-placeholder-font

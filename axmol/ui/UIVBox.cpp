@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIVBox.h"
+#include "axmol/ui/UIVBox.h"
 
 namespace ax
 {

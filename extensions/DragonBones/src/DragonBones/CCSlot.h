@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -24,7 +24,7 @@
 #define DRAGONBONES_AX_SLOT_H
 
 #include "DragonBonesHeaders.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**

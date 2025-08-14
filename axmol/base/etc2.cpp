@@ -31,7 +31,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/etc2.h"
+#include "axmol/base/etc2.h"
 #include <stdint.h>
 #include <string.h>
 #include <assert.h>

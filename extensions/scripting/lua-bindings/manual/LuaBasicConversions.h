@@ -33,18 +33,18 @@
 #include "lua-bindings/manual/tolua_fix.h"
 
 #include "lua-bindings/manual/Lua-BindingsExport.h"
-#include "2d/Label.h"
-#include "2d/Sprite.h"
-#include "3d/Bundle3D.h"
-#include "base/Value.h"
-#include "base/Types.h"
+#include "axmol/2d/Label.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/3d/Bundle3D.h"
+#include "axmol/base/Value.h"
+#include "axmol/base/Types.h"
 #    if defined(AX_ENABLE_PHYSICS)
-#include "physics/PhysicsContact.h"
-#include "physics/PhysicsJoint.h"
-#include "physics/PhysicsWorld.h"
+#include "axmol/physics/PhysicsContact.h"
+#include "axmol/physics/PhysicsJoint.h"
+#include "axmol/physics/PhysicsWorld.h"
 #    endif
-#include "rhi/VertexLayout.h"
-#include "ui/GUIDefine.h"
+#include "axmol/rhi/VertexLayout.h"
+#include "axmol/ui/GUIDefine.h"
 
 #include "yasio/string_view.hpp"
 #include <thread>

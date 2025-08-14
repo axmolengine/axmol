@@ -44,19 +44,19 @@ THE SOFTWARE.
 //  axmol uses a another approach, but the results are almost identical.
 //
 
-#include "2d/ParticleSystem.h"
+#include "axmol/2d/ParticleSystem.h"
 
 #include <string>
 
-#include "2d/ParticleBatchNode.h"
-#include "renderer/TextureAtlas.h"
-#include "base/ZipUtils.h"
-#include "base/Director.h"
-#include "base/Profiling.h"
-#include "base/text_utils.h"
-#include "base/Utils.h"
-#include "renderer/TextureCache.h"
-#include "platform/FileUtils.h"
+#include "axmol/2d/ParticleBatchNode.h"
+#include "axmol/renderer/TextureAtlas.h"
+#include "axmol/base/ZipUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Profiling.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/Utils.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/platform/FileUtils.h"
 
 using namespace std;
 

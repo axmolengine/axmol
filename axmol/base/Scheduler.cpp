@@ -27,10 +27,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "base/Scheduler.h"
-#include "base/Macros.h"
-#include "base/Director.h"
-#include "base/ScriptSupport.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/ScriptSupport.h"
 
 namespace ax
 {

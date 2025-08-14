@@ -27,11 +27,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/AutoPolygon.h"
+#include "axmol/2d/AutoPolygon.h"
 #include "poly2tri/poly2tri.h"
-#include "base/Director.h"
-#include "base/axstd.h"
-#include "renderer/TextureCache.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/axstd.h"
+#include "axmol/renderer/TextureCache.h"
 #include "clipper2/clipper.h"
 #include <algorithm>
 #include <math.h>

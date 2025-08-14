@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "../ShaderModule.h"
+#include "axmol/rhi/ShaderModule.h"
 #include <stdint.h>
 #include <string>
 #include <vector>

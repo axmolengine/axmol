@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -8,7 +8,7 @@
 #ifndef  _APP_DELEGATE_H_
 #define  _APP_DELEGATE_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "LAppAllocator.hpp"
 #include <CubismFramework.hpp>
 

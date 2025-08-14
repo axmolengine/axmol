@@ -24,12 +24,12 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "base/Touch.h"
-#include "base/Event.h"
-#include "base/Types.h"
-#include "base/EventKeyboard.h"
-#include "base/EventListener.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Touch.h"
+#include "axmol/base/Event.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/EventKeyboard.h"
+#include "axmol/base/EventListener.h"
 #include "CocosStudioExport.h"
 
 namespace ax

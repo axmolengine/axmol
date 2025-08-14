@@ -10,7 +10,7 @@
 #pragma once
 
 #include <utility>
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 namespace ax
 {

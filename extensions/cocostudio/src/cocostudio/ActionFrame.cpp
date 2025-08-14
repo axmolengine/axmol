@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ActionFrame.h"
-#include "2d/ActionEase.h"
+#include "axmol/2d/ActionEase.h"
 
 using namespace ax;
 

@@ -28,14 +28,14 @@ THE SOFTWARE.
 
 #include <vector>
 #include <string>
-#include "2d/Node.h"
-#include "base/Macros.h"
-#include "base/RefPtr.h"
-#include "base/Data.h"
-#include "rhi/RHITypes.h"
-#include "math/Mat4.h"
-#include "math/Mat3.h"
-#include "base/axstd.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/RefPtr.h"
+#include "axmol/base/Data.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/math/Mat4.h"
+#include "axmol/math/Mat3.h"
+#include "axmol/base/axstd.h"
 
 /** @file ccUtils.h
 Misc free functions

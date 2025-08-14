@@ -26,18 +26,18 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#    include "platform/mac/StdC-mac.h"
+#    include "axmol/platform/mac/StdC-mac.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
-#    include "platform/ios/StdC-ios.h"
+#    include "axmol/platform/ios/StdC-ios.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include "platform/android/StdC-android.h"
+#    include "axmol/platform/android/StdC-android.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-#    include "platform/win32/StdC-win32.h"
+#    include "axmol/platform/win32/StdC-win32.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#    include "platform/winrt/StdC-winrt.h"
+#    include "axmol/platform/winrt/StdC-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-#    include "platform/linux/StdC-linux.h"
+#    include "axmol/platform/linux/StdC-linux.h"
 #endif

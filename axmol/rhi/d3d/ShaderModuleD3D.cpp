@@ -22,11 +22,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 // refer: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics
-#include "ShaderModuleD3D.h"
+#include "axmol/rhi/d3d/ShaderModuleD3D.h"
 #include <wrl/client.h>
-#include "base/Logging.h"
+#include "axmol/base/Logging.h"
 #include "yasio/ibstream.hpp"
-#include "rhi/axslc-spec.h"
+#include "axmol/rhi/axslc-spec.h"
 
 #pragma comment(lib, "d3dcompiler.lib")
 // #pragma comment(lib, "dxguid.lib")

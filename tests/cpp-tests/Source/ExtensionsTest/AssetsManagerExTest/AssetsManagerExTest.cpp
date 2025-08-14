@@ -24,7 +24,7 @@
 
 #include "AssetsManagerExTest.h"
 #include "../../testResource.h"
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 using namespace ax;
 USING_NS_AX_EXT;

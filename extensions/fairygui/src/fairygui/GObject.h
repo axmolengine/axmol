@@ -4,7 +4,7 @@
 #include "Controller.h"
 #include "FairyGUIMacros.h"
 #include "Relations.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "display/BlendMode.h"
 #include "event/UIEventDispatcher.h"
 #include "gears/GearBase.h"

@@ -28,11 +28,11 @@
 
 #include "../../testResource.h"
 
-#include "ui/UILoadingBar.h"
-#include "ui/UIButton.h"
-#include "network/Downloader.h"
+#include "axmol/ui/UILoadingBar.h"
+#include "axmol/ui/UIButton.h"
+#include "axmol/network/Downloader.h"
 
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 using namespace ax;
 

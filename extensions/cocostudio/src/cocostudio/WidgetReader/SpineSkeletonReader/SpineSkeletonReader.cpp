@@ -27,9 +27,9 @@
 #if defined(AX_ENABLE_EXT_SPINE)
 #    include "cocostudio/SpineSkeletonDataCache.h"
 
-#    include "2d/Sprite.h"
-#    include "2d/SpriteFrameCache.h"
-#    include "platform/FileUtils.h"
+#    include "axmol/2d/Sprite.h"
+#    include "axmol/2d/SpriteFrameCache.h"
+#    include "axmol/platform/FileUtils.h"
 
 #    include "cocostudio/CSParseBinary_generated.h"
 #    include "cocostudio/FlatBuffersSerialize.h"

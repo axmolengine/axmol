@@ -25,15 +25,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "2d/FontFNT.h"
-#include "2d/FontAtlas.h"
-#include "2d/SpriteFrameCache.h"
-#include "platform/FileUtils.h"
-#include "base/Configuration.h"
-#include "base/Director.h"
-#include "base/Map.h"
-#include "base/text_utils.h"
-#include "renderer/TextureCache.h"
+#include "axmol/2d/FontFNT.h"
+#include "axmol/2d/FontAtlas.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Map.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/renderer/TextureCache.h"
 
 #include <cmath>
 

@@ -31,9 +31,9 @@
 #include <deque>
 #include <optional>
 
-#include "platform/PlatformMacros.h"
-#include "renderer/RenderCommand.h"
-#include "renderer/ProgramManager.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/renderer/RenderCommand.h"
+#include "axmol/renderer/ProgramManager.h"
 
 /**
  * @addtogroup renderer

@@ -18,7 +18,7 @@
 #endif
 
 //cocos2d
-#include "base/Director.h"
+#include "axmol/base/Director.h"
 #include "renderer/backend/DriverBase.h"
 
 using namespace Csm;

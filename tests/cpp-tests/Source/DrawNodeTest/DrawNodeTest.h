@@ -24,10 +24,10 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "axmol.h"
-#include "ui/CocosGUI.h"
+#include "axmol/axmol.h"
+#include "axmol/ui/CocosGUI.h"
 #include "../BaseTest.h"
-#include "2d/DrawNode.h"
+#include "axmol/2d/DrawNode.h"
 
 DEFINE_TEST_SUITE(DrawNodeTests);
 

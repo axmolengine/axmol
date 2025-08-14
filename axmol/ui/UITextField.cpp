@@ -24,11 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UITextField.h"
-#include "platform/FileUtils.h"
-#include "ui/UIHelper.h"
-#include "base/text_utils.h"
-#include "2d/Camera.h"
+#include "axmol/ui/UITextField.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/ui/UIHelper.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/2d/Camera.h"
 
 namespace ax
 {

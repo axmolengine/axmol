@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIRichText.h"
+#include "axmol/ui/UIRichText.h"
 
 #include <sstream>
 #include <vector>
@@ -33,19 +33,19 @@
 #include <regex>
 #include <ranges>
 
-#include "platform/FileUtils.h"
-#include "platform/Application.h"
-#include "base/EventListenerTouch.h"
-#include "base/EventDispatcher.h"
-#include "base/Director.h"
-#include "2d/Label.h"
-#include "2d/Sprite.h"
-#include "base/text_utils.h"
-#include "base/charconv.h"
-#include "ui/UIHelper.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/platform/Application.h"
+#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/Label.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/charconv.h"
+#include "axmol/ui/UIHelper.h"
 
-#include "base/format.h"
-#include "platform/SAXParser.h"
+#include "axmol/base/format.h"
+#include "axmol/platform/SAXParser.h"
 
 using namespace ax;
 using namespace ax::ui;

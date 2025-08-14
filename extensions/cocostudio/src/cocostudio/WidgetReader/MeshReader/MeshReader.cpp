@@ -23,11 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "2d/Light.h"
-#include "3d/MeshRenderer.h"
-#include "3d/Animate3D.h"
-#include "3d/Animation3D.h"
-#include "platform/FileUtils.h"
+#include "axmol/2d/Light.h"
+#include "axmol/3d/MeshRenderer.h"
+#include "axmol/3d/Animate3D.h"
+#include "axmol/3d/Animation3D.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/WidgetReader/MeshReader/MeshReader.h"
 
 #include "cocostudio/CSParseBinary_generated.h"

@@ -27,8 +27,8 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
-#include "math/Math.h"
-#include "base/EventKeyboard.h"
+#include "axmol/math/Math.h"
+#include "axmol/base/EventKeyboard.h"
 
 /**
  * @addtogroup base

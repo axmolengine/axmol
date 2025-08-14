@@ -25,7 +25,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 
 /// @cond DO_NOT_SHOW
 

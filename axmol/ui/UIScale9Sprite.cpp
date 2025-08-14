@@ -24,10 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIScale9Sprite.h"
-#include "2d/Sprite.h"
-#include "base/Vector.h"
-#include "base/Director.h"
+#include "axmol/ui/UIScale9Sprite.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/base/Vector.h"
+#include "axmol/base/Director.h"
 
 using namespace ax::ui;
 

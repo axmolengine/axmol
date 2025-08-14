@@ -25,7 +25,7 @@
 #pragma once
 
 #include <vector>
-#include "../RHITypes.h"
+#include "axmol/rhi/RHITypes.h"
 
 namespace ax::rhi::mtl {
 

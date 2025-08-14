@@ -25,11 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/TransitionPageTurn.h"
-#include "base/Director.h"
-#include "2d/ActionPageTurn3D.h"
-#include "2d/NodeGrid.h"
-#include "renderer/Renderer.h"
+#include "axmol/2d/TransitionPageTurn.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/ActionPageTurn3D.h"
+#include "axmol/2d/NodeGrid.h"
+#include "axmol/renderer/Renderer.h"
 
 namespace ax
 {

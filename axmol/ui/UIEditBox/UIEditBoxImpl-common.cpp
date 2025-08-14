@@ -25,14 +25,14 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "ui/UIEditBox/UIEditBoxImpl-common.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-common.h"
 
 #define kLabelZOrder 9999
 
-#include "ui/UIEditBox/UIEditBox.h"
-#include "base/Director.h"
-#include "2d/Label.h"
-#include "ui/UIHelper.h"
+#include "axmol/ui/UIEditBox/UIEditBox.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/Label.h"
+#include "axmol/ui/UIHelper.h"
 
 static const int AX_EDIT_BOX_PADDING = 5;
 

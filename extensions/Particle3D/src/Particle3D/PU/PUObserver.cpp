@@ -27,7 +27,7 @@
 #include "Particle3D/PU/PUObserver.h"
 #include "Particle3D/PU/PUEventHandler.h"
 #include "Particle3D/PU/PUEventHandlerManager.h"
-#include "base/Macros.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

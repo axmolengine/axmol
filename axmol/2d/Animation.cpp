@@ -26,10 +26,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/Animation.h"
-#include "renderer/TextureCache.h"
-#include "renderer/Texture2D.h"
-#include "base/Director.h"
+#include "axmol/2d/Animation.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

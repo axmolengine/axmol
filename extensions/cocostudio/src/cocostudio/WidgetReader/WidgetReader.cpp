@@ -3,16 +3,16 @@
 #include "WidgetReader.h"
 
 #include "cocostudio/CocoLoader.h"
-#include "ui/UIButton.h"
+#include "axmol/ui/UIButton.h"
 #include "cocostudio/ActionTimeline/ActionTimeline.h"
 #include "cocostudio/ComExtensionData.h"
 #include "cocostudio/CSParseBinary_generated.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "ui/UILayoutComponent.h"
+#include "axmol/ui/UILayoutComponent.h"
 #include "cocostudio/ActionTimeline/CSLoader.h"
-#include "base/Utils.h"
-#include "base/Director.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/Director.h"
 
 using namespace ax;
 using namespace ui;

@@ -23,11 +23,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "ui/UIPageView.h"
-#include "ui/UILayoutComponent.h"
-#include "2d/Node.h"
-#include "ui/GUIDefine.h"
-#include "ui/UIHelper.h"
+#include "axmol/ui/UIPageView.h"
+#include "axmol/ui/UILayoutComponent.h"
+#include "axmol/2d/Node.h"
+#include "axmol/ui/GUIDefine.h"
+#include "axmol/ui/UIHelper.h"
 
 namespace ax
 {

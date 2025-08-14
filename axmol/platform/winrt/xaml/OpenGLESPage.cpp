@@ -17,11 +17,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-#include "OpenGLESPage.h"
+#include "axmol/platform/winrt/xaml/OpenGLESPage.h"
 #include "OpenGLESPage.g.cpp"
 
-#include "platform/winrt/RenderViewImpl-winrt.h"
-#include "platform/Application.h"
+#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/platform/Application.h"
 
 #include "yasio/wtimer_hres.hpp"
 

@@ -28,10 +28,10 @@
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
-#include "2d/Label.h"
-#include "ui/UIEditBox/UIEditBoxImpl-common.h"
-#include "ui/UIEditBox/UIEditBoxImpl.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/2d/Label.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-common.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl.h"
 
 namespace ax
 {

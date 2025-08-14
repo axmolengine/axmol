@@ -25,11 +25,11 @@
 
 #pragma once
 
-#include "base/Types.h"
-#include "platform/PlatformMacros.h"
-#include "renderer/CustomCommand.h"
-#include "2d/Node.h"
-#include "rhi/ProgramState.h"
+#include "axmol/base/Types.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/2d/Node.h"
+#include "axmol/rhi/ProgramState.h"
 
 namespace ax
 {

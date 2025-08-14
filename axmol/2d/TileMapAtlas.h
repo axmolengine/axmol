@@ -28,8 +28,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/AtlasNode.h"
-#include "base/Value.h"
+#include "axmol/2d/AtlasNode.h"
+#include "axmol/base/Value.h"
 
 namespace ax
 {

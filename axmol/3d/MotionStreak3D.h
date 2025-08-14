@@ -25,10 +25,10 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "base/Protocols.h"
-#include "2d/Node.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/CallbackCommand.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
 
 #include <vector>
 

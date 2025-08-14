@@ -17,7 +17,7 @@
  */
 
 #include "PhysicsDebugNode.h"
-#include "physics/PhysicsHelper.h"
+#include "axmol/physics/PhysicsHelper.h"
 
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")

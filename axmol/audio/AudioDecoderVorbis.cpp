@@ -24,9 +24,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "audio/AudioDecoderVorbis.h"
-#include "audio/AudioMacros.h"
-#include "platform/FileUtils.h"
+#include "axmol/audio/AudioDecoderVorbis.h"
+#include "axmol/audio/AudioMacros.h"
+#include "axmol/platform/FileUtils.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include <unistd.h>

@@ -26,16 +26,16 @@
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #include <string>
 #include <mutex>
 #include <vector>
 #include <memory>
 
-#include "platform/PlatformMacros.h"
-#include "audio/AudioMacros.h"
-#include "audio/alconfig.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/audio/AudioMacros.h"
+#include "axmol/audio/alconfig.h"
 
 namespace ax
 {

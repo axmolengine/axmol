@@ -28,13 +28,13 @@ THE SOFTWARE.
  ****************************************************************************/
 #pragma once
 
-#include "2d/Node.h"
+#include "axmol/2d/Node.h"
 #if defined(AX_ENABLE_3D)
-#include "3d/Frustum.h"
+#include "axmol/3d/Frustum.h"
 #endif
-#include "renderer/QuadCommand.h"
-#include "renderer/CustomCommand.h"
-#include "base/Director.h"
+#include "axmol/renderer/QuadCommand.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

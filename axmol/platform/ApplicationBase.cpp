@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ApplicationBase.h"
-#include "base/Director.h"
+#include "axmol/platform/ApplicationBase.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

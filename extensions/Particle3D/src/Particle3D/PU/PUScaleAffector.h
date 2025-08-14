@@ -28,7 +28,7 @@
 
 #include "Particle3D/PU/PUAffector.h"
 #include "Particle3D/PU/PUDynamicAttribute.h"
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

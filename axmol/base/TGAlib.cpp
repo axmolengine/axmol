@@ -27,9 +27,9 @@ THE SOFTWARE.
 #include <string.h>
 #include <stdlib.h>
 
-#include "base/TGAlib.h"
-#include "base/Data.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/TGAlib.h"
+#include "axmol/base/Data.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace ax
 {

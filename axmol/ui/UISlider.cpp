@@ -24,12 +24,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UISlider.h"
-#include "ui/UIScale9Sprite.h"
-#include "ui/UIHelper.h"
-#include "2d/Sprite.h"
-#include "2d/Camera.h"
-#include "renderer/Shaders.h"
+#include "axmol/ui/UISlider.h"
+#include "axmol/ui/UIScale9Sprite.h"
+#include "axmol/ui/UIHelper.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/renderer/Shaders.h"
 namespace ax
 {
 

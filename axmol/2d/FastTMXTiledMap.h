@@ -28,8 +28,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/Node.h"
-#include "2d/TMXObjectGroup.h"
+#include "axmol/2d/Node.h"
+#include "axmol/2d/TMXObjectGroup.h"
 
 namespace ax
 {

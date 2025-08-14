@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Event.h"
+#include "axmol/base/Event.h"
 
 namespace ax
 {

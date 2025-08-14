@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "2d/Scene.h"
+#include "axmol/2d/Scene.h"
 
 namespace ax
 {

@@ -30,9 +30,9 @@ THE SOFTWARE.
 #include "Datas.h"
 #include "Skin.h"
 
-#include "renderer/Renderer.h"
-#include "renderer/GroupCommand.h"
-#include "base/Director.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/base/Director.h"
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
 #    include "box2d/box2d.h"

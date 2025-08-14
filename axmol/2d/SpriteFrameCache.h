@@ -34,12 +34,12 @@ THE SOFTWARE.
 #include <set>
 #include <unordered_map>
 #include <string>
-#include "2d/SpriteFrame.h"
-#include "2d/SpriteSheetLoader.h"
-#include "base/Object.h"
-#include "base/Value.h"
-#include "base/Map.h"
-#include "base/Data.h"
+#include "axmol/2d/SpriteFrame.h"
+#include "axmol/2d/SpriteSheetLoader.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Value.h"
+#include "axmol/base/Map.h"
+#include "axmol/base/Data.h"
 
 namespace ax
 {

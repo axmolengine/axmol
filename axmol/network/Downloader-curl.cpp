@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #if !defined(__EMSCRIPTEN__)
-#    include "network/Downloader-curl.h"
+#    include "axmol/network/Downloader-curl.h"
 
 #    include <cinttypes>
 #    include <set>
@@ -33,13 +33,13 @@
 #    include <curl/curl.h>
 #    include <thread>
 #    include <atomic>
-#    include "base/Utils.h"
-#    include "base/text_utils.h"
-#    include "base/Director.h"
-#    include "base/Scheduler.h"
-#    include "platform/FileUtils.h"
-#    include "network/Downloader.h"
-#    include "platform/FileStream.h"
+#    include "axmol/base/Utils.h"
+#    include "axmol/base/text_utils.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/base/Scheduler.h"
+#    include "axmol/platform/FileUtils.h"
+#    include "axmol/network/Downloader.h"
+#    include "axmol/platform/FileStream.h"
 #    include "openssl/md5.h"
 #    include "yasio/xxsocket.hpp"
 #    include "yasio/thread_name.hpp"

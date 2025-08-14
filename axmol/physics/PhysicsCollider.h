@@ -26,14 +26,14 @@
 
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_PHYSICS)
 
-#    include "base/Object.h"
-#    include "math/Math.h"
+#    include "axmol/base/Object.h"
+#    include "axmol/math/Math.h"
 #    include "box2d/box2d.h"
 
-#    include "base/axstd.h"
+#    include "axmol/base/axstd.h"
 
 namespace ax
 {

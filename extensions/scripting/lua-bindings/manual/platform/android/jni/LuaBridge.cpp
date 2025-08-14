@@ -29,7 +29,7 @@
 
 #    include "lua-bindings/manual/platform/android/LuaJavaBridge.h"
 
-#    include "base/text_utils.h"
+#    include "axmol/base/text_utils.h"
 
 #    define LOG_TAG "LuaBridge_java"
 #    define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)

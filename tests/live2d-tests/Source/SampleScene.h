@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -8,7 +8,7 @@
 #ifndef __SAMPLE_SCENE_H__
 #define __SAMPLE_SCENE_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include <Rendering/axmol/CubismOffscreenSurface_Cocos2dx.hpp>
 
 class LAppView;

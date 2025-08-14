@@ -26,9 +26,9 @@
 #ifndef __HTTP_CLIENT_H__
 #define __HTTP_CLIENT_H__
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "extensions/axmol-ext.h"
-#include "network/HttpClient.h"
+#include "axmol/network/HttpClient.h"
 #include "BaseTest.h"
 
 DEFINE_TEST_SUITE(HttpClientTests);

@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "audio/AudioDecoder.h"
+#include "axmol/audio/AudioDecoder.h"
 #include <memory>
 
 #if !defined(AX_USE_MPG123)

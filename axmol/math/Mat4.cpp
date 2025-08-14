@@ -20,12 +20,12 @@
  This file was modified to fit the axmol project
  */
 
-#include "math/Mat4.h"
+#include "axmol/math/Mat4.h"
 
 #include <cmath>
-#include "math/Quaternion.h"
-#include "math/MathUtil.h"
-#include "base/Macros.h"
+#include "axmol/math/Quaternion.h"
+#include "axmol/math/MathUtil.h"
+#include "axmol/base/Macros.h"
 
 NS_AX_MATH_BEGIN
 

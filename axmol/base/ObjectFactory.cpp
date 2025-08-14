@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include <functional>
-#include "base/ObjectFactory.h"
+#include "axmol/base/ObjectFactory.h"
 
 namespace ax
 {

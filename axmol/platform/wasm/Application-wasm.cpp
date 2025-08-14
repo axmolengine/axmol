@@ -25,17 +25,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#    include "platform/wasm/Application-wasm.h"
-#    include "platform/wasm/devtools-wasm.h"
+#    include "axmol/platform/wasm/Application-wasm.h"
+#    include "axmol/platform/wasm/devtools-wasm.h"
 #    include <unistd.h>
 #    include <sys/time.h>
 #    include <string>
-#    include "base/Director.h"
-#    include "base/Utils.h"
-#    include "platform/FileUtils.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/base/Utils.h"
+#    include "axmol/platform/FileUtils.h"
 #    include "yasio/utils.hpp"
 #    include <emscripten/emscripten.h>
 

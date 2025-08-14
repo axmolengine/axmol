@@ -1,9 +1,9 @@
 #ifndef __FUIINPUT_H__
 #define __FUIINPUT_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
-#include "ui/UIEditBox/UIEditBox.h"
+#include "axmol/ui/UIEditBox/UIEditBox.h"
 #include "TextFormat.h"
 
 NS_FGUI_BEGIN

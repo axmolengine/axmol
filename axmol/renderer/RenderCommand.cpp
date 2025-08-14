@@ -23,9 +23,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "renderer/RenderCommand.h"
-#include "2d/Camera.h"
-#include "2d/Node.h"
+#include "axmol/renderer/RenderCommand.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/2d/Node.h"
 
 namespace ax
 {

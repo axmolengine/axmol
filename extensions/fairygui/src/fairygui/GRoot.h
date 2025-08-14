@@ -5,7 +5,7 @@
 #include "GComponent.h"
 #include "GGraph.h"
 #include "Window.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "event/InputProcessor.h"
 
 NS_FGUI_BEGIN

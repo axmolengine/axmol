@@ -24,8 +24,8 @@
  ****************************************************************************/
 #import <UIKit/UIKit.h>
 #import "AppController.h"
-#import "axmol.h"
-#import "platform/ios/EARenderView-ios.h"
+#import "axmol/axmol.h"
+#import "axmol/platform/ios/EARenderView-ios.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
 

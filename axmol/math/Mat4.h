@@ -23,10 +23,10 @@
 
 #pragma once
 
-#include "base/Macros.h"
+#include "axmol/base/Macros.h"
 
-#include "math/Vec3.h"
-#include "math/Vec4.h"
+#include "axmol/math/Vec3.h"
+#include "axmol/math/Vec4.h"
 
 /**
  * @addtogroup base

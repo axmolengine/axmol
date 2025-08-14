@@ -24,8 +24,8 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "2d/Node.h"
-#include "base/Map.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/Map.h"
 
 using namespace ax;
 

@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "GRoot.h"
-#include "AudioEngine.h"
+#include "axmol/audio/AudioEngine.h"
 #include "UIConfig.h"
 #include "UIPackage.h"
 

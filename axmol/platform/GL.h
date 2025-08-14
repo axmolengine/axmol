@@ -29,27 +29,27 @@ THE SOFTWARE.
 
 /// @cond DO_NOT_SHOW
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include "platform/android/GL-android.h"
+#    include "axmol/platform/android/GL-android.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    if AX_RENDER_API == AX_RENDER_API_GL
-#        include "platform/win32/GL-win32.h"
+#        include "axmol/platform/win32/GL-win32.h"
 #    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#    include "platform/winrt/GL-winrt.h"
+#    include "axmol/platform/winrt/GL-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-#    include "platform/linux/GL-linux.h"
+#    include "axmol/platform/linux/GL-linux.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM
-#    include "platform/wasm/GL-wasm.h"
+#    include "axmol/platform/wasm/GL-wasm.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 #    if AX_RENDER_API == AX_RENDER_API_GL
-#        include "platform/ios/GL-ios.h"
+#        include "axmol/platform/ios/GL-ios.h"
 #    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    if AX_RENDER_API == AX_RENDER_API_GL
-#        include "platform/mac/GL-mac.h"
+#        include "axmol/platform/mac/GL-mac.h"
 #    endif
 #endif
 

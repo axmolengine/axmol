@@ -27,18 +27,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/Transition.h"
-#include "2d/ActionInterval.h"
-#include "2d/ActionInstant.h"
-#include "2d/ActionEase.h"
-#include "2d/ActionCamera.h"
-#include "2d/ActionTiledGrid.h"
-#include "2d/ActionGrid.h"
-#include "2d/Layer.h"
-#include "2d/RenderTexture.h"
-#include "2d/NodeGrid.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
+#include "axmol/2d/Transition.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/2d/ActionInstant.h"
+#include "axmol/2d/ActionEase.h"
+#include "axmol/2d/ActionCamera.h"
+#include "axmol/2d/ActionTiledGrid.h"
+#include "axmol/2d/ActionGrid.h"
+#include "axmol/2d/Layer.h"
+#include "axmol/2d/RenderTexture.h"
+#include "axmol/2d/NodeGrid.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
 
 namespace ax
 {

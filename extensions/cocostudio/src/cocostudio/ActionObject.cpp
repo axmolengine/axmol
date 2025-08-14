@@ -25,10 +25,10 @@ THE SOFTWARE.
 #include "ActionObject.h"
 #include "CocoLoader.h"
 
-#include "base/Director.h"
-#include "base/Scheduler.h"
-#include "2d/ActionInstant.h"
-#include "base/Utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/2d/ActionInstant.h"
+#include "axmol/base/Utils.h"
 
 using namespace ax;
 

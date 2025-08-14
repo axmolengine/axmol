@@ -24,12 +24,12 @@
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 #    include <string>
-#    include "StdC.h"
+#    include "axmol/platform/StdC.h"
 
 namespace ax
 {

@@ -25,7 +25,7 @@
 #ifndef _SCHEDULER_TEST_H_
 #define _SCHEDULER_TEST_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "extensions/axmol-ext.h"
 #include "../BaseTest.h"
 

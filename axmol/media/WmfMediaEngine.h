@@ -44,12 +44,12 @@
 
 // Safe string functions
 #    include <strsafe.h>
-#    include "MFUtils.h"
+#    include "axmol/media/MFUtils.h"
 
 #    include <functional>
 #    include <string>
 
-#    include "MediaEngine.h"
+#    include "axmol/media/MediaEngine.h"
 
 #    include <atomic>
 #    include <mutex>

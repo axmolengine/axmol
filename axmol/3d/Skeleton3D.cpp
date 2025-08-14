@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/Skeleton3D.h"
+#include "axmol/3d/Skeleton3D.h"
 
 namespace ax
 {

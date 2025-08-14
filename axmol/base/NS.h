@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "math/Math.h"
+#include "axmol/math/Math.h"
 
 namespace ax
 {

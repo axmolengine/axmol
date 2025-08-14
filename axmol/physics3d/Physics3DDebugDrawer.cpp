@@ -23,17 +23,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "physics3d/Physics3D.h"
+#include "axmol/physics3d/Physics3D.h"
 #include <stddef.h>  // offsetof
-#include "base/Types.h"
-#include "base/Configuration.h"
-#include "base/Macros.h"
-#include "base/Director.h"
-#include "base/Utils.h"
-#include "renderer/Renderer.h"
-#include "renderer/RenderState.h"
-#include "renderer/Shaders.h"
-#include "rhi/Buffer.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Utils.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/Buffer.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 

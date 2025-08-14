@@ -32,8 +32,8 @@
 #include <list>
 #include <map>
 
-#include "base/Logging.h"
-#include "base/Object.h"
+#include "axmol/base/Logging.h"
+#include "axmol/base/Object.h"
 #include "Particle3D/PU/PUScriptLexer.h"
 
 namespace ax

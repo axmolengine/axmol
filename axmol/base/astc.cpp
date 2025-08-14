@@ -11,7 +11,7 @@
 
  ******************************************************************************/
 
-#include "base/astc.h"
+#include "axmol/base/astc.h"
 
 #include <thread>
 #include <mutex>
@@ -22,7 +22,7 @@
 #include "astcenc/astcenc_internal_entry.h"
 #include "yasio/utils.hpp"
 
-#include "base/Director.h"
+#include "axmol/base/Director.h"
 
 #if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
 

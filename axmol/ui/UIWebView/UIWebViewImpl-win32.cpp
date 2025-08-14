@@ -27,14 +27,14 @@
 
 #if defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)
 
-#    include "UIWebViewImpl-win32.h"
-#    include "UIWebView.h"
-#    include "UIWebViewCommon.h"
-#    include "base/Director.h"
-#    include "platform/FileUtils.h"
-#    include "platform/RenderView.h"
-#    include "ui/UIHelper.h"
-#    include "base/Utils.h"
+#    include "axmol/ui/UIWebView/UIWebViewImpl-win32.h"
+#    include "axmol/ui/UIWebView/UIWebView.h"
+#    include "axmol/ui/UIWebView/UIWebViewCommon.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/platform/FileUtils.h"
+#    include "axmol/platform/RenderView.h"
+#    include "axmol/ui/UIHelper.h"
+#    include "axmol/base/Utils.h"
 
 #    define WIN32_LEAN_AND_MEAN
 #    include <Shlwapi.h>
@@ -51,7 +51,7 @@
 #    pragma comment(lib, "ole32.lib")
 #    pragma comment(lib, "oleaut32.lib")
 
-#    include "platform/PlatformConfig.h"
+#    include "axmol/platform/PlatformConfig.h"
 
 #    include "ntcvt/ntcvt.hpp"
 

@@ -25,9 +25,9 @@ THE SOFTWARE.
 #include "Armature.h"
 #include "Skin.h"
 
-#include "renderer/Renderer.h"
-#include "renderer/GroupCommand.h"
-#include "base/Director.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/base/Director.h"
 
 using namespace ax;
 namespace cocostudio

@@ -28,7 +28,7 @@ THE SOFTWARE.
 #pragma once
 /// @cond DO_NOT_SHOW
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #include <string.h>
 #include <assert.h>

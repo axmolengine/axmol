@@ -29,20 +29,20 @@
  * THE SOFTWARE.
  *
  */
-#include "2d/ParticleBatchNode.h"
+#include "axmol/2d/ParticleBatchNode.h"
 #include <stddef.h>  // offsetof
-#include "base/Types.h"
-#include "2d/Grid.h"
-#include "2d/ParticleSystem.h"
-#include "renderer/TextureCache.h"
-#include "renderer/QuadCommand.h"
-#include "renderer/Renderer.h"
-#include "renderer/TextureAtlas.h"
-#include "base/Profiling.h"
-#include "base/text_utils.h"
-#include "base/Utils.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
+#include "axmol/base/Types.h"
+#include "axmol/2d/Grid.h"
+#include "axmol/2d/ParticleSystem.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/QuadCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/TextureAtlas.h"
+#include "axmol/base/Profiling.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/Utils.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
 
 namespace ax
 {

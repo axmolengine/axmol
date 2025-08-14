@@ -1,7 +1,7 @@
 #ifndef __GLOADER3D_H__
 #define __GLOADER3D_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "GObject.h"
 

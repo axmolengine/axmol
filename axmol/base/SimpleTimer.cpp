@@ -22,11 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "SimpleTimer.h"
+#include "axmol/base/SimpleTimer.h"
 #include "yasio/object_pool.hpp"
 #include "yasio/ref_ptr.hpp"
-#include "base/Director.h"
-#include "base/Scheduler.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
 
 #define STIMER_DEFINE_REFERENCE_CLASS    \
 private:                                 \

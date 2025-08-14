@@ -33,7 +33,7 @@ extern "C" {
 }
 #endif
 
-#include "network/WebSocket.h"
+#include "axmol/network/WebSocket.h"
 
 ///@cond
 class LuaWebSocket: public ax::network::WebSocket, public ax::network::WebSocket::Delegate

@@ -2,12 +2,12 @@
 
 #include <memory>
 #include "extensions/ExtensionMacros.h"
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 #include <string>
 #include <unordered_map>
-#include "EventListenerCustom.h"
-#include "RefPtr.h"
-#include "2d/Node.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/RefPtr.h"
+#include "axmol/2d/Node.h"
 
 namespace ax
 {

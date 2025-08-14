@@ -28,7 +28,7 @@
 #if defined(AX_ENABLE_NAVMESH)
 
 #    include "lua-bindings/manual/tolua_fix.h"
-#    include "platform/PlatformMacros.h"
+#    include "axmol/platform/PlatformMacros.h"
 
 namespace ax
 {

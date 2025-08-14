@@ -37,9 +37,9 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <functional>
 
-#include "base/Object.h"
-#include "renderer/Texture2D.h"
-#include "platform/Image.h"
+#include "axmol/base/Object.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/platform/Image.h"
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
 #    include <list>

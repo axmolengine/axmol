@@ -23,24 +23,24 @@
  THE SOFTWARE.
 
  ****************************************************************************/
-#include "2d/CameraBackgroundBrush.h"
+#include "axmol/2d/CameraBackgroundBrush.h"
 #include <stddef.h>  // offsetof
-#include "base/Types.h"
-#include "2d/Camera.h"
-#include "base/Macros.h"
-#include "base/Utils.h"
-#include "base/Configuration.h"
-#include "base/Director.h"
-#include "renderer/Renderer.h"
-#include "renderer/RenderState.h"
-#include "renderer/TextureCube.h"
-#include "renderer/Shaders.h"
+#include "axmol/base/Types.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/renderer/TextureCube.h"
+#include "axmol/renderer/Shaders.h"
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-#    include "base/EventCustom.h"
-#    include "base/EventListenerCustom.h"
-#    include "base/EventType.h"
-#    include "base/EventDispatcher.h"
+#    include "axmol/base/EventCustom.h"
+#    include "axmol/base/EventListenerCustom.h"
+#    include "axmol/base/EventType.h"
+#    include "axmol/base/EventDispatcher.h"
 #endif
 
 namespace ax

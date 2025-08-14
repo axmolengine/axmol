@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "EventAssetsManagerEx.h"
-#include "base/Macros.h"
+#include "axmol/base/Macros.h"
 #include <functional>
 #include "AssetsManagerEx.h"
 

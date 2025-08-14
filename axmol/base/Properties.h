@@ -28,11 +28,11 @@
 #include <cstdint>
 #include <vector>
 
-#include "renderer/Texture2D.h"
-#include "platform/PlatformMacros.h"
-#include "base/Object.h"
-#include "base/Types.h"
-#include "base/Vector.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Vector.h"
 
 namespace ax
 {

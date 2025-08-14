@@ -25,7 +25,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 #include "Particle3D/PU/PUScriptTranslator.h"
 #include "Particle3D/PU/PUEventHandler.h"
 #include "Particle3D/PU/PUDoAffectorEventHandlerTranslator.h"

@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #include <string>
 #include <condition_variable>
@@ -34,9 +34,9 @@
 #include <thread>
 #include <atomic>
 
-#include "audio/AudioMacros.h"
-#include "platform/PlatformMacros.h"
-#include "audio/alconfig.h"
+#include "axmol/audio/AudioMacros.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/audio/alconfig.h"
 
 namespace ax
 {

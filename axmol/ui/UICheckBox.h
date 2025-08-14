@@ -26,8 +26,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "ui/UIAbstractCheckButton.h"
-#include "ui/GUIExport.h"
+#include "axmol/ui/UIAbstractCheckButton.h"
+#include "axmol/ui/GUIExport.h"
 
 /**
  * @addtogroup ui

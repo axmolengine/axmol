@@ -24,11 +24,11 @@
  THE SOFTWARE.
 ****************************************************************************/
 
-#include "base/Value.h"
+#include "axmol/base/Value.h"
 #include <cmath>
 #include <sstream>
 #include <iomanip>
-#include "base/Utils.h"
+#include "axmol/base/Utils.h"
 
 namespace ax
 {

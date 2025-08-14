@@ -60,23 +60,23 @@ APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 */
-#import "platform/ios/EARenderView-ios.h"
+#import "axmol/platform/ios/EARenderView-ios.h"
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "base/Director.h"
-#import "base/Touch.h"
-#import "base/IMEDispatcher.h"
-#import "platform/ios/InputView-ios.h"
+#import "axmol/base/Director.h"
+#import "axmol/base/Touch.h"
+#import "axmol/base/IMEDispatcher.h"
+#import "axmol/platform/ios/InputView-ios.h"
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
 #    import <Metal/Metal.h>
-#    import "rhi/metal/DriverMTL.h"
-#    import "rhi/metal/UtilsMTL.h"
+#    import "axmol/rhi/metal/DriverMTL.h"
+#    import "axmol/rhi/metal/UtilsMTL.h"
 #else
-#    import "platform/ios/RenderViewImpl-ios.h"
-#    import "platform/ios/ES3Renderer-ios.h"
-#    import "platform/ios/OpenGL_Internal-ios.h"
+#    import "axmol/platform/ios/RenderViewImpl-ios.h"
+#    import "axmol/platform/ios/ES3Renderer-ios.h"
+#    import "axmol/platform/ios/OpenGL_Internal-ios.h"
 #endif
 
 // CLASS IMPLEMENTATIONS:

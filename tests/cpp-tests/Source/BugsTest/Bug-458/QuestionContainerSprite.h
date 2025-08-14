@@ -25,7 +25,7 @@
 #ifndef __QUESTION_CONTAINER_SPRITE_H__
 #define __QUESTION_CONTAINER_SPRITE_H__
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 class QuestionContainerSprite : public ax::Sprite
 {

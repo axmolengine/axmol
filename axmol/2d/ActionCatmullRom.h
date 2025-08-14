@@ -38,8 +38,8 @@
 
 #include <vector>
 
-#include "2d/ActionInterval.h"
-#include "math/Math.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/math/Math.h"
 
 namespace ax
 {

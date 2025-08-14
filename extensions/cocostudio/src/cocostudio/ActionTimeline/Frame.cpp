@@ -26,8 +26,8 @@ THE SOFTWARE.
 #include "Frame.h"
 #include "TimeLine.h"
 #include "ActionTimeline.h"
-#include "2d/SpriteFrameCache.h"
-#include "2d/SpriteFrame.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/2d/SpriteFrame.h"
 #include <exception>
 #include <iostream>
 

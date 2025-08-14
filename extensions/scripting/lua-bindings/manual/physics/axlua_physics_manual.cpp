@@ -30,7 +30,7 @@
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/LuaValue.h"
 #    include "lua-bindings/manual/LuaEngine.h"
-#    include "2d/Scene.h"
+#    include "axmol/2d/Scene.h"
 
 #    ifndef AX_SAFE_DELETE_ARRAY
 #        define do                 \

@@ -33,10 +33,10 @@
 #include <map>
 #include <fstream>
 #include <sstream>
-#include "platform/FileUtils.h"
-#include "base/Utils.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Utils.h"
 
-#include "3d/ObjLoader.h"
+#include "axmol/3d/ObjLoader.h"
 
 namespace tinyobj
 {

@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include <math.h>
 #include "ActionFrameEasing.h"
 #include "DictionaryHelper.h"
-#include "platform/StdC.h"
+#include "axmol/platform/StdC.h"
 
 namespace cocostudio
 {

@@ -1,14 +1,14 @@
-#include "CommandBufferD3D.h"
-#include "RenderTargetD3D.h"
-#include "RenderPipelineD3D.h"
-#include "DepthStencilStateD3D.h"
-#include "BufferD3D.h"
-#include "UtilsD3D.h"
-#include "ProgramD3D.h"
-#include "VertexLayoutD3D.h"
+#include "axmol/rhi/d3d/CommandBufferD3D.h"
+#include "axmol/rhi/d3d/RenderTargetD3D.h"
+#include "axmol/rhi/d3d/RenderPipelineD3D.h"
+#include "axmol/rhi/d3d/DepthStencilStateD3D.h"
+#include "axmol/rhi/d3d/BufferD3D.h"
+#include "axmol/rhi/d3d/UtilsD3D.h"
+#include "axmol/rhi/d3d/ProgramD3D.h"
+#include "axmol/rhi/d3d/VertexLayoutD3D.h"
 #include <dxgi1_2.h>
 #include <VersionHelpers.h>
-#include "base/Logging.h"
+#include "axmol/base/Logging.h"
 
 namespace ax::rhi::d3d
 {

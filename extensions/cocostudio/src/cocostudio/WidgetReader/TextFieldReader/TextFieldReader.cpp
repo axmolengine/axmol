@@ -2,8 +2,8 @@
 
 #include "cocostudio/WidgetReader/TextFieldReader/TextFieldReader.h"
 
-#include "ui/UITextField.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UITextField.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/LocalizationManager.h"

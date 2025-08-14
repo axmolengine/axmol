@@ -26,12 +26,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/TileMapAtlas.h"
-#include "platform/FileUtils.h"
-#include "renderer/TextureAtlas.h"
-#include "base/TGAlib.h"
-#include "base/Director.h"
-#include "base/text_utils.h"
+#include "axmol/2d/TileMapAtlas.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/renderer/TextureAtlas.h"
+#include "axmol/base/TGAlib.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/text_utils.h"
 
 namespace ax
 {

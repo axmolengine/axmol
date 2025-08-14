@@ -25,11 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#    include "platform/Device.h"
-#    include "platform/FileUtils.h"
+#    include "axmol/platform/Device.h"
+#    include "axmol/platform/FileUtils.h"
 
 #    include <emscripten/emscripten.h>
 #    include <emscripten/html5.h>

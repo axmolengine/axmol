@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "../Texture.h"
-#include "DriverMTL.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/rhi/metal/DriverMTL.h"
 #import <Metal/Metal.h>
 #include <array>
 

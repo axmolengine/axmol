@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventController.h"
+#include "axmol/base/EventController.h"
 
 namespace ax
 {

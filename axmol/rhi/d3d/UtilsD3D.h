@@ -1,8 +1,8 @@
 #pragma once
 
-#include "rhi/RHITypes.h"
-#include "rhi/PixelBufferDescriptor.h"
-#include "rhi/d3d/TextureD3D.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/PixelBufferDescriptor.h"
+#include "axmol/rhi/d3d/TextureD3D.h"
 #include <dxgi.h>
 
 namespace ax::rhi::d3d

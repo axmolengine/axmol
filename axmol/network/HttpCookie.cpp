@@ -24,9 +24,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "network/HttpCookie.h"
-#include "network/Uri.h"
-#include "platform/FileUtils.h"
+#include "axmol/network/HttpCookie.h"
+#include "axmol/network/Uri.h"
+#include "axmol/platform/FileUtils.h"
 #include "yasio/utils.hpp"
 #include "yasio/string_view.hpp"
 
@@ -36,7 +36,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "base/axstd.h"
+#include "axmol/base/axstd.h"
 #include "fmt/compile.h"
 
 namespace ax

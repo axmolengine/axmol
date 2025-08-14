@@ -30,9 +30,9 @@ THE SOFTWARE.
 
 #include <string>
 
-#include "math/Math.h"
-#include "base/Object.h"
-#include "rhi/RHITypes.h"
+#include "axmol/math/Math.h"
+#include "axmol/base/Object.h"
+#include "axmol/rhi/RHITypes.h"
 
 /**
  * @addtogroup base

@@ -27,7 +27,7 @@ obtained from https://directxtk.codeplex.com
 
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 
 
 #if AX_USE_WIC
@@ -37,7 +37,7 @@ obtained from https://directxtk.codeplex.com
 #include <stdint.h>
 #include <wincodec.h>
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 namespace ax
 {

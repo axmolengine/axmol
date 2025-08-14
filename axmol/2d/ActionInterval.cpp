@@ -27,19 +27,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/ActionInterval.h"
+#include "axmol/2d/ActionInterval.h"
 
 #include <stdarg.h>
 
-#include "2d/Sprite.h"
-#include "2d/Node.h"
-#include "2d/SpriteFrame.h"
-#include "2d/ActionInstant.h"
-#include "base/Director.h"
-#include "base/EventCustom.h"
-#include "base/EventDispatcher.h"
-#include "platform/StdC.h"
-#include "base/ScriptSupport.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/Node.h"
+#include "axmol/2d/SpriteFrame.h"
+#include "axmol/2d/ActionInstant.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/platform/StdC.h"
+#include "axmol/base/ScriptSupport.h"
 
 namespace ax
 {

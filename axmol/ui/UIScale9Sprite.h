@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "2d/Sprite.h"
-#include "2d/SpriteFrame.h"
-#include "ui/GUIExport.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/SpriteFrame.h"
+#include "axmol/ui/GUIExport.h"
 
 /**
  * @addtogroup ui

@@ -1,6 +1,6 @@
-#include "RenderTargetD3D.h"
-#include "TextureD3D.h"
-#include "UtilsD3D.h"
+#include "axmol/rhi/d3d/RenderTargetD3D.h"
+#include "axmol/rhi/d3d/TextureD3D.h"
+#include "axmol/rhi/d3d/UtilsD3D.h"
 
 namespace ax::rhi::d3d
 {

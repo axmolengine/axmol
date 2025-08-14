@@ -26,13 +26,13 @@
 
 #include "Particle3D/PU/PURibbonTrail.h"
 #include "Particle3D/PU/PUParticleSystem3D.h"
-#include "base/Director.h"
-#include "renderer/MeshCommand.h"
-#include "renderer/Renderer.h"
-#include "renderer/TextureCache.h"
-#include "rhi/ProgramState.h"
-#include "2d/Camera.h"
-#include "3d/MeshRenderer.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/MeshCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/3d/MeshRenderer.h"
 
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")

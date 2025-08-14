@@ -6,7 +6,7 @@
  */
 
 #include "LAppSprite.hpp"
-#include "base/Director.h"
+#include "axmol/base/Director.h"
 #include "LAppPal.hpp"
 
 LAppSprite::LAppSprite(rhi::Program* program)

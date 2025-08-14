@@ -37,8 +37,9 @@ SOFTWARE.
 #  if !__has_attribute(format)
 #    undef __has_attribute
 #  endif
-#include "base/Director.h"
-#include "base/Scheduler.h"
+
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
 
 using namespace ax;
 

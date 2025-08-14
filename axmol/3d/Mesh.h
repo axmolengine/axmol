@@ -28,15 +28,15 @@
 #include <string>
 #include <map>
 
-#include "3d/Bundle3DData.h"
-#include "3d/AABB.h"
-#include "3d/shaderinfos.h"
+#include "axmol/3d/Bundle3DData.h"
+#include "axmol/3d/AABB.h"
+#include "axmol/3d/shaderinfos.h"
 
-#include "base/Object.h"
-#include "math/Math.h"
-#include "renderer/MeshCommand.h"
-#include "renderer/CustomCommand.h"
-#include "rhi/axmol-rhi.h"
+#include "axmol/base/Object.h"
+#include "axmol/math/Math.h"
+#include "axmol/renderer/MeshCommand.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/rhi/axmol-rhi.h"
 
 namespace ax
 {

@@ -26,12 +26,12 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/FileUtils.h"
-#include "platform/PlatformMacros.h"
-#include "base/Types.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Types.h"
 #include <string>
 #include <vector>
 

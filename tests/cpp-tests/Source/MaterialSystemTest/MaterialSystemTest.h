@@ -26,7 +26,7 @@
 #pragma once
 
 #include "../BaseTest.h"
-#include "rhi/ProgramState.h"
+#include "axmol/rhi/ProgramState.h"
 
 #include <vector>
 

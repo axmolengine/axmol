@@ -25,7 +25,7 @@
  * THE SOFTWARE.
  */
 
-#include "base/FPSImages.h"
+#include "axmol/base/FPSImages.h"
 
 #if !AX_STRIP_FPS
 

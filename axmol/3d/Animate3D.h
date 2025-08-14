@@ -29,10 +29,10 @@
 #include <map>
 #include <unordered_map>
 
-#include "3d/Animation3D.h"
-#include "base/Macros.h"
-#include "base/Object.h"
-#include "2d/ActionInterval.h"
+#include "axmol/3d/Animation3D.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Object.h"
+#include "axmol/2d/ActionInterval.h"
 
 namespace ax
 {

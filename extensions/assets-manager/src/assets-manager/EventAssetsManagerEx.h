@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "base/Event.h"
-#include "base/EventCustom.h"
+#include "axmol/base/Event.h"
+#include "axmol/base/EventCustom.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 

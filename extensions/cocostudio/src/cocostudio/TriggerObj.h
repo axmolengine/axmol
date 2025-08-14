@@ -25,8 +25,8 @@ THE SOFTWARE.
 #pragma once
 
 #include "CocoStudio.h"
-#include "base/Vector.h"
-#include "base/EventListenerCustom.h"
+#include "axmol/base/Vector.h"
+#include "axmol/base/EventListenerCustom.h"
 
 namespace cocostudio
 {

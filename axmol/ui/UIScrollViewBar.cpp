@@ -24,10 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIScrollViewBar.h"
-#include "platform/Image.h"
-#include "2d/Sprite.h"
-#include "base/Utils.h"
+#include "axmol/ui/UIScrollViewBar.h"
+#include "axmol/platform/Image.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/base/Utils.h"
 
 namespace ax
 {

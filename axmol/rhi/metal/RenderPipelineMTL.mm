@@ -23,13 +23,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "RenderPipelineMTL.h"
-#include "DriverMTL.h"
-#include "RenderTargetMTL.h"
-#include "ShaderModuleMTL.h"
-#include "DepthStencilStateMTL.h"
-#include "UtilsMTL.h"
-#include "ProgramMTL.h"
+#include "axmol/rhi/metal/RenderPipelineMTL.h"
+#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/metal/RenderTargetMTL.h"
+#include "axmol/rhi/metal/ShaderModuleMTL.h"
+#include "axmol/rhi/metal/DepthStencilStateMTL.h"
+#include "axmol/rhi/metal/UtilsMTL.h"
+#include "axmol/rhi/metal/ProgramMTL.h"
 #include "xxhash.h"
 
 namespace ax::rhi::mtl {

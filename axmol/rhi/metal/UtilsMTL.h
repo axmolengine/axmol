@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "../RHITypes.h"
-#include "../PixelBufferDescriptor.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/PixelBufferDescriptor.h"
 #import <Metal/Metal.h>
 #include <functional>
 

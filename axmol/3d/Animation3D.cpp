@@ -24,10 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/Animation3D.h"
-#include "3d/Bundle3D.h"
-#include "platform/FileUtils.h"
-#include "base/axstd.h"
+#include "axmol/3d/Animation3D.h"
+#include "axmol/3d/Bundle3D.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/axstd.h"
 
 namespace ax
 {

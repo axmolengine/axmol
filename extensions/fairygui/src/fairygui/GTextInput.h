@@ -1,7 +1,7 @@
 #ifndef __GTEXTINPUT_H__
 #define __GTEXTINPUT_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "GTextField.h"
 #include "display/FUIInput.h"

@@ -24,12 +24,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/android/jni/JniHelper.h"
+#include "axmol/platform/android/jni/JniHelper.h"
 #include <string.h>
-#include "base/Director.h"
-#include "platform/Application.h"
-#include "platform/FileUtils.h"
-#include "base/text_utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/Application.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/text_utils.h"
 
 static const char* className = "dev.axmol.lib.BitmapHelper";
 

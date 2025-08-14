@@ -28,8 +28,8 @@
 #ifndef AXMOL__TEXT_UTILS_H
 #define AXMOL__TEXT_UTILS_H
 
-#include "platform/PlatformMacros.h"
-#include "base/format.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/format.h"
 #include <vector>
 #include <string>
 #include <sstream>

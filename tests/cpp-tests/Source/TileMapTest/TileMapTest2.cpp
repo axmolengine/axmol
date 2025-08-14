@@ -25,8 +25,8 @@
 #include "TileMapTest2.h"
 #include "../testResource.h"
 
-#include "2d/FastTMXLayer.h"
-#include "2d/FastTMXTiledMap.h"
+#include "axmol/2d/FastTMXLayer.h"
+#include "axmol/2d/FastTMXTiledMap.h"
 
 using namespace ax;
 

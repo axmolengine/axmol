@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include "2d/Sprite.h"
+#include "axmol/2d/Sprite.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
-#include "base/EventListenerCustom.h"
+#include "axmol/base/EventListenerCustom.h"
 
 #include "box2d/box2d.h"
 

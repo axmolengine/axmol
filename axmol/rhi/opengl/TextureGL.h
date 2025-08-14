@@ -26,11 +26,11 @@
 #pragma once
 
 #include <array>
-#include "../Texture.h"
-#include "platform/GL.h"
-#include "base/EventListenerCustom.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/platform/GL.h"
+#include "axmol/base/EventListenerCustom.h"
 
-#include "OpenGLState.h"
+#include "axmol/rhi/opengl/OpenGLState.h"
 
 namespace ax::rhi::gl
 {

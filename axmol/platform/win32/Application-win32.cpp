@@ -24,10 +24,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/Application.h"
-#include "base/Director.h"
+#include "axmol/platform/Application.h"
+#include "axmol/base/Director.h"
 #include <algorithm>
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 #include <shellapi.h>
 #include <WinVer.h>
 #include <timeapi.h>

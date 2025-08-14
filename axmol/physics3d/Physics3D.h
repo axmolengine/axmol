@@ -25,18 +25,18 @@
 
 #pragma once
 
-#include "base/Config.h"
-#include "math/Math.h"
+#include "axmol/base/Config.h"
+#include "axmol/math/Math.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#    include "physics3d/Physics3DShape.h"
-#    include "physics3d/PhysicsMeshRenderer.h"
-#    include "physics3d/Physics3DWorld.h"
-#    include "physics3d/Physics3DDebugDrawer.h"
-#    include "physics3d/Physics3DObject.h"
-#    include "physics3d/Physics3DComponent.h"
-#    include "physics3d/Physics3DConstraint.h"
+#    include "axmol/physics3d/Physics3DShape.h"
+#    include "axmol/physics3d/PhysicsMeshRenderer.h"
+#    include "axmol/physics3d/Physics3DWorld.h"
+#    include "axmol/physics3d/Physics3DDebugDrawer.h"
+#    include "axmol/physics3d/Physics3DObject.h"
+#    include "axmol/physics3d/Physics3DComponent.h"
+#    include "axmol/physics3d/Physics3DConstraint.h"
 
 namespace ax
 {

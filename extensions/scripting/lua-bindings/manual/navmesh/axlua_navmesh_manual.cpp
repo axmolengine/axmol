@@ -23,15 +23,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "platform/PlatformConfig.h"
-#include "base/Config.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
 #    include "axlua_navmesh_manual.h"
 #    include "lua-bindings/auto/axlua_navmesh_auto.hpp"
 #    include "lua-bindings/manual/tolua_fix.h"
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/LuaEngine.h"
-#    include "navmesh/NavMesh.h"
+#    include "axmol/navmesh/NavMesh.h"
 
 int axlua_navmesh_NavMeshAgent_move(lua_State* tolua_S)
 {

@@ -27,12 +27,12 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/winrt/StdC-winrt.h"
-#include "platform/Common.h"
-#include "platform/winrt/Keyboard-winrt.h"
-#include "platform/RenderView.h"
-#include "base/EventKeyboard.h"
-#include "base/EventMouse.h"
+#include "axmol/platform/winrt/StdC-winrt.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/winrt/Keyboard-winrt.h"
+#include "axmol/platform/RenderView.h"
+#include "axmol/base/EventKeyboard.h"
+#include "axmol/base/EventMouse.h"
 
 #include <concurrent_queue.h>
 #include <string>

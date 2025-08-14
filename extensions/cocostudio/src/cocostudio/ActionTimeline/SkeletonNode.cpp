@@ -23,11 +23,11 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "SkeletonNode.h"
 
-#include "base/Director.h"
-#include "math/TransformUtils.h"
-#include "renderer/Renderer.h"
-#include "renderer/Shaders.h"
-#include "base/Utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/math/TransformUtils.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/base/Utils.h"
 #include <stack>
 
 NS_TIMELINE_BEGIN

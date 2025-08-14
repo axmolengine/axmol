@@ -25,7 +25,7 @@
 #ifndef _EFFEKSEERTEST_H_
 #define _EFFEKSEERTEST_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "../BaseTest.h"
 #include "EffekseerForCocos2d-x.h"
 

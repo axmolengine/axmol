@@ -25,8 +25,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/platform/PlatformMacros.h"
 #include <float.h>
 #include <math.h>
 #include <string.h>

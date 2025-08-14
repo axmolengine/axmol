@@ -1,7 +1,7 @@
 #pragma once
-#include "../RenderTarget.h"
-#include "platform/GL.h"
-#include "OpenGLState.h"
+#include "axmol/rhi/RenderTarget.h"
+#include "axmol/platform/GL.h"
+#include "axmol/rhi/opengl/OpenGLState.h"
 
 namespace ax::rhi::gl {
 

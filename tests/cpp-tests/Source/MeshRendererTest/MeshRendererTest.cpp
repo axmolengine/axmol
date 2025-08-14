@@ -27,9 +27,9 @@
 
 #include "MeshRendererTest.h"
 #include "DrawNode3D.h"
-#include "2d/CameraBackgroundBrush.h"
-#include "3d/MeshMaterial.h"
-#include "3d/MotionStreak3D.h"
+#include "axmol/2d/CameraBackgroundBrush.h"
+#include "axmol/3d/MeshMaterial.h"
+#include "axmol/3d/MotionStreak3D.h"
 
 #include "Particle3D/PU/PUParticleSystem3D.h"
 

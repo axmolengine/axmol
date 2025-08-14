@@ -26,12 +26,12 @@
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 #if defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)
 
 #    include <string>
-#    include "StdC.h"
+#    include "axmol/platform/StdC.h"
 
 namespace ax
 {

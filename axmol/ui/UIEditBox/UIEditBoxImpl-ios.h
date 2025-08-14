@@ -29,7 +29,7 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
-#    include "ui/UIEditBox/UIEditBoxImpl-common.h"
+#    include "axmol/ui/UIEditBox/UIEditBoxImpl-common.h"
 
 @class UIEditBoxImplIOS_objc;
 @class UIFont;

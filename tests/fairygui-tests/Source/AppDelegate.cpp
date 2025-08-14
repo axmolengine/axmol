@@ -1,7 +1,7 @@
 #include "AppDelegate.h"
 #include "MenuScene.h"
 
-#include "audio/AudioEngine.h"
+#include "axmol/audio/AudioEngine.h"
 
 using namespace ax;
 

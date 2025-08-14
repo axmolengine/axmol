@@ -28,10 +28,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "2d/ProtectedNode.h"
+#include "axmol/2d/ProtectedNode.h"
 
-#include "base/Director.h"
-#include "2d/Scene.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/Scene.h"
 
 namespace ax
 {

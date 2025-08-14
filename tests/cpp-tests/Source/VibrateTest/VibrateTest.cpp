@@ -23,10 +23,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #include "VibrateTest.h"
-#include "ui/CocosGUI.h"
+#include "axmol/ui/CocosGUI.h"
 
 using namespace ax;
 using namespace ax::ui;

@@ -1,7 +1,7 @@
 #ifndef __HTMLOBJECT_H__
 #define __HTMLOBJECT_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "../../FairyGUIMacros.h"
 #include "../../GObjectPool.h"
 

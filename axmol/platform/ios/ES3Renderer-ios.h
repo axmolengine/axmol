@@ -31,10 +31,10 @@
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
-#    import "platform/ios/ESRenderer-ios.h"
+#    import "axmol/platform/ios/ESRenderer-ios.h"
 
 #    import <OpenGLES/ES3/gl.h>
 #    import <OpenGLES/ES3/glext.h>

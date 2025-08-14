@@ -27,7 +27,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "network/IDownloaderImpl.h"
+#include "axmol/network/IDownloaderImpl.h"
 
 namespace ax
 {

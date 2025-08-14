@@ -1,10 +1,10 @@
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "base/Scheduler.h"
-#include "base/Director.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

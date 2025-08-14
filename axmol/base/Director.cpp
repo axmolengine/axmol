@@ -28,43 +28,43 @@ THE SOFTWARE.
 ****************************************************************************/
 
 // axmol includes
-#include "base/Director.h"
+#include "axmol/base/Director.h"
 
 // standard includes
 #include <string>
 
-#include "2d/SpriteFrameCache.h"
-#include "platform/FileUtils.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/platform/FileUtils.h"
 
-#include "2d/ActionManager.h"
-#include "2d/FontFNT.h"
-#include "2d/FontAtlasCache.h"
-#include "2d/AnimationCache.h"
-#include "2d/Transition.h"
-#include "2d/FontFreeType.h"
-#include "2d/LabelAtlas.h"
-#include "renderer/TextureCache.h"
-#include "renderer/Renderer.h"
-#include "renderer/RenderState.h"
-#include "2d/Camera.h"
-#include "base/UserDefault.h"
-#include "base/Utils.h"
-#include "base/FPSImages.h"
-#include "base/Scheduler.h"
-#include "base/Macros.h"
-#include "base/EventDispatcher.h"
-#include "base/EventCustom.h"
-#include "base/Logging.h"
-#include "base/AutoreleasePool.h"
-#include "base/Configuration.h"
-#include "base/ObjectFactory.h"
-#include "platform/Application.h"
+#include "axmol/2d/ActionManager.h"
+#include "axmol/2d/FontFNT.h"
+#include "axmol/2d/FontAtlasCache.h"
+#include "axmol/2d/AnimationCache.h"
+#include "axmol/2d/Transition.h"
+#include "axmol/2d/FontFreeType.h"
+#include "axmol/2d/LabelAtlas.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/base/UserDefault.h"
+#include "axmol/base/Utils.h"
+#include "axmol/base/FPSImages.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/Logging.h"
+#include "axmol/base/AutoreleasePool.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/ObjectFactory.h"
+#include "axmol/platform/Application.h"
 #if defined(AX_ENABLE_AUDIO)
-#    include "audio/AudioEngine.h"
+#    include "axmol/audio/AudioEngine.h"
 #endif
 
 #if AX_ENABLE_SCRIPT_BINDING
-#    include "base/ScriptSupport.h"
+#    include "axmol/base/ScriptSupport.h"
 #endif
 
 using namespace std;

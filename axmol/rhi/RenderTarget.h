@@ -25,8 +25,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "base/Object.h"
-#include "Texture.h"
+#include "axmol/base/Object.h"
+#include "axmol/rhi/Texture.h"
 #include <assert.h>
 
 namespace ax::rhi {

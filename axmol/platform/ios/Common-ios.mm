@@ -23,15 +23,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "platform/Common.h"
+#include "axmol/platform/Common.h"
 
 #include <stdarg.h>
 #include <stdio.h>
 
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UIWindow.h>
-#include "base/Director.h"
-#include "base/Logging.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Logging.h"
 
 namespace ax
 {

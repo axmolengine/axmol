@@ -23,10 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/SpriteFrame.h"
-#include "2d/SpriteFrameCache.h"
-#include "base/Director.h"
-#include "renderer/Renderer.h"
+#include "axmol/2d/SpriteFrame.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Renderer.h"
 
 #include "Skin.h"
 #include "TransformHelp.h"

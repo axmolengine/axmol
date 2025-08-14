@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "ui/UILayout.h"
-#include "ui/GUIExport.h"
+#include "axmol/ui/UILayout.h"
+#include "axmol/ui/GUIExport.h"
 
 namespace ax
 {

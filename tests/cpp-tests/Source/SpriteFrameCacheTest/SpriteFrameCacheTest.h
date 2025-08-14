@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(SpriteFrameCacheTests);

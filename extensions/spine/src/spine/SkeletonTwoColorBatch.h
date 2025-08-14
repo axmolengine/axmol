@@ -30,8 +30,8 @@
 #ifndef SPINE_SKELETONTWOCOLORBATCH_H_
 #define SPINE_SKELETONTWOCOLORBATCH_H_
 
-#include "axmol.h"
-#include "rhi/ProgramState.h"
+#include "axmol/axmol.h"
+#include "axmol/rhi/ProgramState.h"
 #include <spine/spine.h>
 #include <vector>
 

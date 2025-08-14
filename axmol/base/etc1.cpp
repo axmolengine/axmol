@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "base/etc1.h"
+#include "axmol/base/etc1.h"
 
 #include <string.h>
 

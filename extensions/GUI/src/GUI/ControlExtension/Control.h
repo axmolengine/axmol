@@ -31,7 +31,7 @@
 #pragma once
 
 #include "ControlUtils.h"
-#include "2d/Layer.h"
+#include "axmol/2d/Layer.h"
 #include "extensions/ExtensionExport.h"
 
 NS_AX_EXT_BEGIN

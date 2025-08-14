@@ -26,8 +26,8 @@
  ****************************************************************************/
 #pragma once
 
-#include "2d/Font.h"
-#include "2d/IFontEngine.h"
+#include "axmol/2d/Font.h"
+#include "axmol/2d/IFontEngine.h"
 #include <string>
 
 namespace ax

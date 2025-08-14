@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "lua-bindings/manual/LuaStack.h"
 #include "lua-bindings/manual/LuaEngine.h"
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 #include "yasio/string_view.hpp"
 
 using namespace ax;

@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "PUSimpleSpline.h"
-#include "base/Macros.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

@@ -26,13 +26,13 @@
  ****************************************************************************/
 #pragma once
 
-#include "base/Types.h"
-#include "base/Object.h"
-#include "base/EventListenerCustom.h"
-#include "3d/Frustum.h"
-#include "renderer/QuadCommand.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/GroupCommand.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/3d/Frustum.h"
+#include "axmol/renderer/QuadCommand.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/GroupCommand.h"
 
 #include <vector>
 

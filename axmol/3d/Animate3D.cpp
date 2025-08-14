@@ -24,14 +24,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/Animate3D.h"
-#include "3d/MeshRenderer.h"
-#include "3d/Skeleton3D.h"
-#include "platform/FileUtils.h"
-#include "base/Configuration.h"
-#include "base/EventCustom.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
+#include "axmol/3d/Animate3D.h"
+#include "axmol/3d/MeshRenderer.h"
+#include "axmol/3d/Skeleton3D.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
 
 namespace ax
 {

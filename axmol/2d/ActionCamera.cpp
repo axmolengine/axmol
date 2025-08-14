@@ -26,9 +26,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/ActionCamera.h"
-#include "2d/Node.h"
-#include "platform/StdC.h"
+#include "axmol/2d/ActionCamera.h"
+#include "axmol/2d/Node.h"
+#include "axmol/platform/StdC.h"
 
 namespace ax
 {

@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 #include "CocosStudioExport.h"
 
 namespace cocostudio

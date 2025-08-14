@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/OBB.h"
+#include "axmol/3d/OBB.h"
 
 namespace ax
 {

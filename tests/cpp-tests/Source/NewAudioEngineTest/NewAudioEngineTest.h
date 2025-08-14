@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #ifndef __NEWAUDIOENGINE_TEST_H_
 #    define __NEWAUDIOENGINE_TEST_H_
 
-#    include "axmol.h"
+#    include "axmol/axmol.h"
 #    include "../BaseTest.h"
 
-#    include "audio/AudioEngine.h"
+#    include "axmol/audio/AudioEngine.h"
 
 DEFINE_TEST_SUITE(AudioEngineTests);
 

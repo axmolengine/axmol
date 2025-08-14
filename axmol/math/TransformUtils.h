@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "base/Macros.h"
+#include "axmol/base/Macros.h"
 
 /**
  * @addtogroup base

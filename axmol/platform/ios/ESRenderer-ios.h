@@ -31,7 +31,7 @@
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
 // #    include "platform/PlatformMacros.h"

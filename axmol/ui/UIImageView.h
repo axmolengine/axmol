@@ -26,8 +26,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "ui/UIWidget.h"
-#include "ui/GUIExport.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/GUIExport.h"
 
 /**
  * @addtogroup ui

@@ -26,7 +26,7 @@
  ****************************************************************************/
 
 #import "AppController.h"
-#import "axmol.h"
+#import "axmol/axmol.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
 

@@ -22,8 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "BufferManager.h"
-#include "BufferMTL.h"
+#include "axmol/rhi/metal/BufferManager.h"
+#include "axmol/rhi/metal/BufferMTL.h"
 
 namespace ax::rhi::mtl {
 

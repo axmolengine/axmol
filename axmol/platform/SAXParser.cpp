@@ -27,11 +27,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/SAXParser.h"
+#include "axmol/platform/SAXParser.h"
 
 #include <vector>  // because its based on windows 8 build :P
 
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 #include "xsxml/xsxml.hpp"
 
 namespace ax

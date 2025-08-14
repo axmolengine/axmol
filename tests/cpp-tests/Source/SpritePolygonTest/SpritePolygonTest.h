@@ -25,7 +25,7 @@
 #ifndef __cocos2d_tests__SpritePolygonTest__
 
 #    include "../BaseTest.h"
-#    include "ui/CocosGUI.h"
+#    include "axmol/ui/CocosGUI.h"
 
 DEFINE_TEST_SUITE(SpritePolygonTest);
 

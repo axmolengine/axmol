@@ -25,9 +25,9 @@
 #ifndef _JSONDEFAULT_TEST_H_
 #define _JSONDEFAULT_TEST_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "BaseTest.h"
-#include "2d/Label.h"
+#include "axmol/2d/Label.h"
 
 DEFINE_TEST_SUITE(JSONDefaultTests);
 

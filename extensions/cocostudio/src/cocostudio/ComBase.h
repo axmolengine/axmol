@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include <string>
 #include "DictionaryHelper.h"
 #include "CocosStudioExport.h"
-#include "base/ObjectFactory.h"
+#include "axmol/base/ObjectFactory.h"
 #include "CocoLoader.h"
 
 #define DECLARE_CLASS_COMPONENT_INFO           \

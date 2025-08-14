@@ -24,18 +24,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UILayout.h"
-#include "ui/UIHelper.h"
-#include "ui/UIScale9Sprite.h"
-#include "renderer/RenderState.h"
-#include "base/Director.h"
-#include "renderer/Renderer.h"
-#include "ui/UILayoutManager.h"
-#include "2d/DrawNode.h"
-#include "2d/Layer.h"
-#include "2d/Sprite.h"
-#include "base/EventFocus.h"
-#include "base/StencilStateManager.h"
+#include "axmol/ui/UILayout.h"
+#include "axmol/ui/UIHelper.h"
+#include "axmol/ui/UIScale9Sprite.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/ui/UILayoutManager.h"
+#include "axmol/2d/DrawNode.h"
+#include "axmol/2d/Layer.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/base/EventFocus.h"
+#include "axmol/base/StencilStateManager.h"
 #include <algorithm>
 
 namespace ax

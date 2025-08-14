@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include "platform/GL.h"
+#include "axmol/platform/GL.h"
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>

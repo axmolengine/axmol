@@ -26,11 +26,11 @@
  ****************************************************************************/
 #import <UIKit/UIKit.h>
 
-#include "platform/ios/EARenderView-ios.h"
-#include "platform/ios/DirectorCaller-ios.h"
-#include "platform/ios/RenderViewImpl-ios.h"
-#include "base/Touch.h"
-#include "base/Director.h"
+#include "axmol/platform/ios/EARenderView-ios.h"
+#include "axmol/platform/ios/DirectorCaller-ios.h"
+#include "axmol/platform/ios/RenderViewImpl-ios.h"
+#include "axmol/base/Touch.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

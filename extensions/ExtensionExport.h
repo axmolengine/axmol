@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "platform/PlatformDefine.h"
+#include "axmol/platform/PlatformDefine.h"
 
 #if defined(_WIN32)
 #  if defined(AX_EX_DLLEXPORT)

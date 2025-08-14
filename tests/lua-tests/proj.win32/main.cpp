@@ -25,7 +25,7 @@
 
 #include "main.h"
 #include "AppDelegate.h"
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 // Uncomment to enable win32 console
 // #define USE_WIN32_CONSOLE
@@ -46,7 +46,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
     // create the application instance
 #ifdef USE_WIN32_CONSOLE
-#    include "platform/win32/EmbedConsole.h"
+#    include "axmol/platform/win32/EmbedConsole.h"
 #endif
 
     // create the application instance

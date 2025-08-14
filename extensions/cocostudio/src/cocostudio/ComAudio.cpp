@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ComAudio.h"
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace cocostudio
 {

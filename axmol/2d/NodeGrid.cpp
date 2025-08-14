@@ -22,9 +22,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "2d/NodeGrid.h"
-#include "2d/Grid.h"
-#include "renderer/Renderer.h"
+#include "axmol/2d/NodeGrid.h"
+#include "axmol/2d/Grid.h"
+#include "axmol/renderer/Renderer.h"
 
 namespace ax
 {

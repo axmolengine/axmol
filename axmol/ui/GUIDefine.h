@@ -27,7 +27,7 @@
 #pragma once
 
 #include <string>
-#include "base/ObjectFactory.h"
+#include "axmol/base/ObjectFactory.h"
 
 ///@cond DO_NOT_SHOW
 //

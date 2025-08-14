@@ -28,12 +28,12 @@ THE SOFTWARE.
 #include <algorithm>
 #include <thread>
 
-#include "platform/Application.h"
-#include "platform/FileUtils.h"
-#include "math/Math.h"
-#include "base/Director.h"
-#include "base/Utils.h"
-#include "rhi/metal/DriverMTL.h"
+#include "axmol/platform/Application.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/math/Math.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Utils.h"
+#include "axmol/rhi/metal/DriverMTL.h"
 
 namespace ax
 {

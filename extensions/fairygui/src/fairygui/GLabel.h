@@ -1,7 +1,7 @@
 #ifndef __GLABEL_H__
 #define __GLABEL_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "GComponent.h"
 

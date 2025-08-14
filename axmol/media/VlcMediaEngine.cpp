@@ -30,9 +30,9 @@ sudo apt install ubuntu-restricted-extras
  ****************************************************************************/
 
 #if defined(AX_ENABLE_VLC_MEDIA)
-#    include "VlcMediaEngine.h"
+#    include "axmol/media/VlcMediaEngine.h"
 
-#    include "VlcMediaEngine.h"
+#    include "axmol/media/VlcMediaEngine.h"
 
 namespace ax
 {

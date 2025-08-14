@@ -30,7 +30,7 @@ THE SOFTWARE.
 #pragma once
 
 #include <winrt/Windows.UI.Xaml.h>
-#include "platform/winrt/InputEvent.h"
+#include "axmol/platform/winrt/InputEvent.h"
 
 namespace ax
 {

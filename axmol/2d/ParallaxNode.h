@@ -27,8 +27,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/Node.h"
-#include "base/Vector.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/Vector.h"
 
 namespace ax
 {

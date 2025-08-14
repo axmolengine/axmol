@@ -27,11 +27,11 @@
 #pragma once
 
 #include <unordered_map>
-#include "renderer/RenderCommand.h"
-#include "renderer/RenderState.h"
-#include "rhi/ProgramState.h"
-#include "renderer/CustomCommand.h"
-#include "math/Math.h"
+#include "axmol/renderer/RenderCommand.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/math/Math.h"
 
 namespace ax
 {

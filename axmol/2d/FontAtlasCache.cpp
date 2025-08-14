@@ -24,16 +24,16 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "2d/FontAtlasCache.h"
+#include "axmol/2d/FontAtlasCache.h"
 
-#include "base/Director.h"
-#include "2d/FontFNT.h"
-#include "2d/FontFreeType.h"
-#include "2d/FontAtlas.h"
-#include "2d/FontCharMap.h"
-#include "2d/Label.h"
-#include "platform/FileUtils.h"
-#include "base/format.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/FontFNT.h"
+#include "axmol/2d/FontFreeType.h"
+#include "axmol/2d/FontAtlas.h"
+#include "axmol/2d/FontCharMap.h"
+#include "axmol/2d/Label.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/format.h"
 
 namespace ax
 {

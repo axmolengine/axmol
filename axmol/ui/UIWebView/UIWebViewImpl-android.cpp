@@ -23,18 +23,18 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "ui/UIWebView/UIWebViewImpl-android.h"
+#include "axmol/ui/UIWebView/UIWebViewImpl-android.h"
 
 #include <unordered_map>
 #include <stdlib.h>
 #include <string>
-#include "platform/android/jni/JniHelper.h"
+#include "axmol/platform/android/jni/JniHelper.h"
 
-#include "ui/UIWebView/UIWebView.h"
-#include "platform/RenderView.h"
-#include "base/Director.h"
-#include "platform/FileUtils.h"
-#include "ui/UIHelper.h"
+#include "axmol/ui/UIWebView/UIWebView.h"
+#include "axmol/platform/RenderView.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/ui/UIHelper.h"
 #include "yasio/string_view.hpp"
 
 static const char* className = "dev.axmol.lib.WebViewHelper";

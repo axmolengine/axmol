@@ -25,9 +25,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/iOS/UIMultilineTextField.h"
+#import "axmol/ui/UIEditBox/iOS/UIMultilineTextField.h"
 
-#include "base/Director.h"
+#include "axmol/base/Director.h"
 
 /**
  * http://stackoverflow.com/questions/1328638/placeholder-in-uitextview

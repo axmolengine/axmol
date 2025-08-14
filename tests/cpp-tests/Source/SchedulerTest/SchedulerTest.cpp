@@ -24,7 +24,7 @@
 
 #include "SchedulerTest.h"
 #include "../testResource.h"
-#include "ui/UIText.h"
+#include "axmol/ui/UIText.h"
 #include "controller.h"
 
 using namespace ax;

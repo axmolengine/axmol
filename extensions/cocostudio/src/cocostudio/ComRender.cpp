@@ -25,10 +25,10 @@ THE SOFTWARE.
 #include "ComRender.h"
 #include "CocoStudio.h"
 
-#include "platform/FileUtils.h"
-#include "2d/FastTMXTiledMap.h"
-#include "2d/ParticleSystemQuad.h"
-#include "2d/SpriteFrameCache.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/FastTMXTiledMap.h"
+#include "axmol/2d/ParticleSystemQuad.h"
+#include "axmol/2d/SpriteFrameCache.h"
 
 using namespace ax;
 

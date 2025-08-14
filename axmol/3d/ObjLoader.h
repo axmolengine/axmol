@@ -27,7 +27,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "base/hlookup.h"
+#include "axmol/base/hlookup.h"
 
 namespace tinyobj
 {

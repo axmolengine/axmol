@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../VertexLayout.h"
-#include "../RHITypes.h"
+#include "axmol/rhi/VertexLayout.h"
+#include "axmol/rhi/RHITypes.h"
 #include <d3d11.h>
 
 namespace ax::rhi::d3d

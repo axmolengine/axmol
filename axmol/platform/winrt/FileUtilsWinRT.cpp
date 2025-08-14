@@ -24,10 +24,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/winrt/FileUtilsWinRT.h"
+#include "axmol/platform/winrt/FileUtilsWinRT.h"
 #include <regex>
-#include "platform/winrt/WinRTUtils.h"
-#include "platform/Common.h"
+#include "axmol/platform/winrt/WinRTUtils.h"
+#include "axmol/platform/Common.h"
 #include "ntcvt/ntcvt.hpp"
 
 #include <winrt/Windows.Storage.h>

@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DepthStencilStateMTL.h"
-#include "../RenderTarget.h"
+#include "axmol/rhi/metal/DepthStencilStateMTL.h"
+#include "axmol/rhi/RenderTarget.h"
 #include "xxhash.h"
 
 namespace ax::rhi::mtl {

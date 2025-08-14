@@ -32,20 +32,20 @@ THE SOFTWARE.
 #include <thread>
 #include <chrono>
 
-#include "platform/PlatformMacros.h"
-#include "base/Object.h"
-#include "base/Vector.h"
-#include "2d/Scene.h"
-#include "math/Math.h"
-#include "platform/RenderView.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Vector.h"
+#include "axmol/2d/Scene.h"
+#include "axmol/math/Math.h"
+#include "axmol/platform/RenderView.h"
 #if defined(AX_PLATFORM_PC)
 #    include "concurrentqueue/concurrentqueue.h"
 #endif
 #ifdef AX_ENABLE_CONSOLE
-#include "base/Console.h"
+#include "axmol/base/Console.h"
 #endif
 
-#include "base/JobSystem.h"
+#include "axmol/base/JobSystem.h"
 
 namespace ax
 {

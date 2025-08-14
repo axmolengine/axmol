@@ -27,7 +27,7 @@
 #pragma once
 /// @cond DO_NOT_SHOW
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 #include <string.h>
 #include <string>

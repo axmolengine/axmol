@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "network/Uri.h"
+#include "axmol/network/Uri.h"
 
 using namespace ax;
 using namespace ax::network;

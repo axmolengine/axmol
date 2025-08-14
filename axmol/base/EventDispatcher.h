@@ -32,10 +32,10 @@
 #include <vector>
 #include <set>
 
-#include "platform/PlatformMacros.h"
-#include "base/EventListener.h"
-#include "base/Event.h"
-#include "platform/StdC.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/EventListener.h"
+#include "axmol/base/Event.h"
+#include "axmol/platform/StdC.h"
 
 /**
  * @addtogroup base

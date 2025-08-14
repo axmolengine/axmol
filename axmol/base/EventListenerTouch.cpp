@@ -24,10 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventListenerTouch.h"
-#include "base/EventDispatcher.h"
-#include "base/EventTouch.h"
-#include "base/Touch.h"
+#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventTouch.h"
+#include "axmol/base/Touch.h"
 
 #include <algorithm>
 

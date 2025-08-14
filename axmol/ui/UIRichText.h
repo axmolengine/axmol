@@ -25,9 +25,9 @@
  ****************************************************************************/
 #pragma once
 
-#include "ui/UIWidget.h"
-#include "ui/GUIExport.h"
-#include "base/Value.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/GUIExport.h"
+#include "axmol/base/Value.h"
 
 namespace ax
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../CommandBuffer.h"
-#include "DriverD3D.h"
+#include "axmol/rhi/CommandBuffer.h"
+#include "axmol/rhi/d3d/DriverD3D.h"
 #include <wrl/client.h>
 
 namespace ax::rhi::d3d

@@ -23,13 +23,13 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "RenderPipelineGL.h"
-#include "ShaderModuleGL.h"
-#include "DepthStencilStateGL.h"
-#include "ProgramGL.h"
-#include "UtilsGL.h"
-#include "MacrosGL.h"
-#include "OpenGLState.h"
+#include "axmol/rhi/opengl/RenderPipelineGL.h"
+#include "axmol/rhi/opengl/ShaderModuleGL.h"
+#include "axmol/rhi/opengl/DepthStencilStateGL.h"
+#include "axmol/rhi/opengl/ProgramGL.h"
+#include "axmol/rhi/opengl/UtilsGL.h"
+#include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/rhi/opengl/OpenGLState.h"
 
 #include <assert.h>
 

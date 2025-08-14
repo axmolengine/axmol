@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "lua-bindings/manual/ui/axlua_webview_manual.hpp"
 
-#include "ui/UIWebView/UIWebView.h"
+#include "axmol/ui/UIWebView/UIWebView.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include "lua-bindings/manual/LuaValue.h"

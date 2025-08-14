@@ -24,9 +24,9 @@
 
 #include "ShaderTest.h"
 #include "../testResource.h"
-#include "axmol.h"
-#include "renderer/Shaders.h"
-#include "rhi/DriverBase.h"
+#include "axmol/axmol.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/DriverBase.h"
 
 using namespace ax;
 USING_NS_AX_EXT;

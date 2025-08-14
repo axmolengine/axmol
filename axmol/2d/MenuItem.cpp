@@ -27,12 +27,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/MenuItem.h"
-#include "2d/ActionInterval.h"
-#include "2d/Sprite.h"
-#include "2d/LabelAtlas.h"
-#include "2d/Label.h"
-#include "base/text_utils.h"
+#include "axmol/2d/MenuItem.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/LabelAtlas.h"
+#include "axmol/2d/Label.h"
+#include "axmol/base/text_utils.h"
 #include <stdarg.h>
 
 namespace ax

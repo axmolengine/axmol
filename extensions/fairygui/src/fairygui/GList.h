@@ -4,7 +4,7 @@
 #include "FairyGUIMacros.h"
 #include "GComponent.h"
 #include "GObjectPool.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 NS_FGUI_BEGIN
 

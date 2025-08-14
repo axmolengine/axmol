@@ -21,19 +21,19 @@
  This file was modified to fit the cocos2d-x project
  */
 
-#include "base/Properties.h"
+#include "axmol/base/Properties.h"
 
 #include <string.h>
 
-#include "platform/PlatformMacros.h"
-#include "platform/FileUtils.h"
-#include "math/Vec2.h"
-#include "math/Vec3.h"
-#include "math/Vec4.h"
-#include "math/Mat4.h"
-#include "math/Quaternion.h"
-#include "base/text_utils.h"
-#include "base/Data.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/math/Vec2.h"
+#include "axmol/math/Vec3.h"
+#include "axmol/math/Vec4.h"
+#include "axmol/math/Mat4.h"
+#include "axmol/math/Quaternion.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/Data.h"
 
 using namespace ax;
 

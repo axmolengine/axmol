@@ -26,13 +26,13 @@ THE SOFTWARE.
 ****************************************************************************/
 // Implement RenderView based on GLFW for targets: win32,osx,web(wasm)
 #pragma once
-#include "platform/GL.h"
-#include "base/Object.h"
-#include "platform/Common.h"
-#include "platform/RenderView.h"
+#include "axmol/platform/GL.h"
+#include "axmol/base/Object.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/RenderView.h"
 #include "GLFW/glfw3.h"
 #if defined(__EMSCRIPTEN__)
-#    include "base/axstd.h"
+#    include "axmol/base/axstd.h"
 struct EmscriptenMouseEvent;
 struct EmscriptenTouchEvent;
 #endif

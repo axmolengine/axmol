@@ -28,21 +28,21 @@
 #include <iostream>
 #include <sstream>
 
-#include "3d/MeshVertexIndexData.h"
-#include "3d/ObjLoader.h"
-#include "3d/MeshMaterial.h"
-#include "3d/Mesh.h"
-#include "3d/Bundle3D.h"
+#include "axmol/3d/MeshVertexIndexData.h"
+#include "axmol/3d/ObjLoader.h"
+#include "axmol/3d/MeshMaterial.h"
+#include "axmol/3d/Mesh.h"
+#include "axmol/3d/Bundle3D.h"
 
-#include "base/Macros.h"
-#include "base/EventCustom.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventDispatcher.h"
-#include "base/EventType.h"
-#include "base/Director.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/EventCustom.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Director.h"
 
-#include "rhi/Buffer.h"
-#include "rhi/DriverBase.h"
+#include "axmol/rhi/Buffer.h"
+#include "axmol/rhi/DriverBase.h"
 
 using namespace std;
 

@@ -221,6 +221,7 @@ setup_ax_extension_config(${_AX_LUA_LIB} DNTLINK)
 target_include_directories(${_AX_LUA_LIB}
   PRIVATE ${ax_root}/3rdparty
   PUBLIC ${ax_root}/3rdparty/lua
+  PUBLIC ${ax_root}/extensions/scripting
   PRIVATE manual/platform/android
   PRIVATE manual/platform/android/jni
   PRIVATE ${ax_root}/extensions/spine/runtime/include
@@ -236,10 +237,8 @@ if(BUILD_SHARED_LIBS)
   target_compile_definitions(${_AX_LUA_LIB} PRIVATE CCS_DLLIMPORT)
 endif()
 
-if(WINDOWS)
-  if(WINRT)
+if(WINRT)
     target_compile_options(${_AX_LUA_LIB} PUBLIC /wd4700)
-  endif()
 endif()
 
 set_target_properties(${_AX_LUA_LIB}

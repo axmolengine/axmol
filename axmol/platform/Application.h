@@ -28,20 +28,20 @@ THE SOFTWARE.
 
 /// @cond DO_NOT_SHOW
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#    include "platform/mac/Application-mac.h"
+#    include "axmol/platform/mac/Application-mac.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
-#    include "platform/ios/Application-ios.h"
+#    include "axmol/platform/ios/Application-ios.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include "platform/android/Application-android.h"
+#    include "axmol/platform/android/Application-android.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-#    include "platform/win32/Application-win32.h"
+#    include "axmol/platform/win32/Application-win32.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#    include "platform/winrt/Application-winrt.h"
+#    include "axmol/platform/winrt/Application-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-#    include "platform/linux/Application-linux.h"
+#    include "axmol/platform/linux/Application-linux.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM
-#    include "platform/wasm/Application-wasm.h"
+#    include "axmol/platform/wasm/Application-wasm.h"
 #endif

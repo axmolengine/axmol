@@ -25,15 +25,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/FontFreeType.h"
-#include "2d/FontAtlas.h"
-#include "base/Director.h"
-#include "base/text_utils.h"
-#include "base/filesystem.h"
+#include "axmol/2d/FontFreeType.h"
+#include "axmol/2d/FontAtlas.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/filesystem.h"
 #include "freetype/ftmodapi.h"
-#include "platform/FileUtils.h"
-#include "platform/FileStream.h"
-#include "platform/Application.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/platform/FileStream.h"
+#include "axmol/platform/Application.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H

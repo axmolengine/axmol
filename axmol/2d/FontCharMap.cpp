@@ -25,11 +25,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "2d/FontCharMap.h"
-#include "2d/FontAtlas.h"
-#include "platform/FileUtils.h"
-#include "base/Director.h"
-#include "renderer/TextureCache.h"
+#include "axmol/2d/FontCharMap.h"
+#include "axmol/2d/FontAtlas.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/TextureCache.h"
 
 namespace ax
 {

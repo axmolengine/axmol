@@ -23,15 +23,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "CommandBufferMTL.h"
-#include "BufferMTL.h"
-#include "DriverMTL.h"
-#include "RenderPipelineMTL.h"
-#include "TextureMTL.h"
-#include "UtilsMTL.h"
-#include "BufferManager.h"
-#include "DepthStencilStateMTL.h"
-#include "RenderTargetMTL.h"
+#include "axmol/rhi/metal/CommandBufferMTL.h"
+#include "axmol/rhi/metal/BufferMTL.h"
+#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/metal/RenderPipelineMTL.h"
+#include "axmol/rhi/metal/TextureMTL.h"
+#include "axmol/rhi/metal/UtilsMTL.h"
+#include "axmol/rhi/metal/BufferManager.h"
+#include "axmol/rhi/metal/DepthStencilStateMTL.h"
+#include "axmol/rhi/metal/RenderTargetMTL.h"
 
 namespace ax::rhi::mtl {
 

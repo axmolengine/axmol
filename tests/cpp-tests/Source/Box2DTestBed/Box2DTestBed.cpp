@@ -22,16 +22,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #include "extensions/axmol-ext.h"
 #include "ImGui/ImGuiPresenter.h"
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 #include "Box2DTestBed.h"
 #include "samples/sample.h"
 #include "samples/settings.h"
 #include "samples/TaskScheduler.h"
-#include "platform/RenderView.h"
+#include "axmol/platform/RenderView.h"
 
 using namespace ax;
 USING_NS_AX_EXT;

@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
-#include "platform/PlatformMacros.h"
-#include "audio/AudioMacros.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/audio/AudioMacros.h"
 #include <functional>
 #include <list>
 #include <string>

@@ -26,9 +26,9 @@
 
 #include <string>
 
-#include "2d/SpriteSheetLoader.h"
-#include "base/Value.h"
-#include "base/Data.h"
+#include "axmol/2d/SpriteSheetLoader.h"
+#include "axmol/base/Value.h"
+#include "axmol/base/Data.h"
 
 namespace ax
 {

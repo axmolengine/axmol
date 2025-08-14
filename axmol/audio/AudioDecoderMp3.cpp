@@ -24,11 +24,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "audio/AudioDecoderMp3.h"
-#include "audio/AudioMacros.h"
-#include "platform/FileUtils.h"
+#include "axmol/audio/AudioDecoderMp3.h"
+#include "axmol/audio/AudioMacros.h"
+#include "axmol/platform/FileUtils.h"
 
-#include "base/Logging.h"
+#include "axmol/base/Logging.h"
 
 #if !AX_USE_MPG123
 #    define MINIMP3_IMPLEMENTATION

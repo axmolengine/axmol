@@ -26,9 +26,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "ui/UIWidget.h"
-#include "2d/TextFieldTTF.h"
-#include "ui/GUIExport.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/2d/TextFieldTTF.h"
+#include "axmol/ui/GUIExport.h"
 
 namespace ax
 {

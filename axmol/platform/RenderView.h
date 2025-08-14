@@ -27,8 +27,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "base/Types.h"
-#include "base/EventTouch.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/EventTouch.h"
 
 #include <functional>
 #include <vector>

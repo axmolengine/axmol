@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 
 #    include <dwrite.h>
@@ -34,11 +34,11 @@ THE SOFTWARE.
 #    include <Shlwapi.h>
 #    include <shellapi.h>
 #    include "ntcvt/ntcvt.hpp"
-#    include "platform/Device.h"
-#    include "platform/FileUtils.h"
-#    include "platform/winrt/WinRTUtils.h"
-#    include "platform/StdC.h"
-#    include "platform/winrt/RenderViewImpl-winrt.h"
+#    include "axmol/platform/Device.h"
+#    include "axmol/platform/FileUtils.h"
+#    include "axmol/platform/winrt/WinRTUtils.h"
+#    include "axmol/platform/StdC.h"
+#    include "axmol/platform/winrt/RenderViewImpl-winrt.h"
 
 #    include <winrt/Windows.Devices.Sensors.h>
 

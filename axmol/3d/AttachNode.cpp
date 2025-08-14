@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/AttachNode.h"
-#include "3d/Skeleton3D.h"
+#include "axmol/3d/AttachNode.h"
+#include "axmol/3d/Skeleton3D.h"
 
 namespace ax
 {

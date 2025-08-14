@@ -27,8 +27,8 @@
 
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
-#include "ui/UIEditBox/UIEditBoxImpl-mac.h"
-#include "ui/UIEditBox/Mac/UITextInput.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-mac.h"
+#include "axmol/ui/UIEditBox/Mac/UITextInput.h"
 
 #pragma mark - UIEditBox mac implementation
 

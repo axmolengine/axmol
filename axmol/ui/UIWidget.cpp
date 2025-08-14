@@ -24,19 +24,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIWidget.h"
-#include "ui/UILayout.h"
-#include "ui/UIHelper.h"
-#include "base/EventListenerTouch.h"
-#include "base/EventListenerKeyboard.h"
-#include "base/Director.h"
-#include "base/EventFocus.h"
-#include "base/EventDispatcher.h"
-#include "ui/UILayoutComponent.h"
-#include "renderer/Shaders.h"
-#include "2d/Camera.h"
-#include "2d/Sprite.h"
-#include "ui/UIScale9Sprite.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/UILayout.h"
+#include "axmol/ui/UIHelper.h"
+#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/EventListenerKeyboard.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventFocus.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/ui/UILayoutComponent.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/ui/UIScale9Sprite.h"
 
 namespace ax
 {

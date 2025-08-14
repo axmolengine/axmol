@@ -29,7 +29,7 @@
 #include "cocostudio/ComExtensionData.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "ui/UILayoutComponent.h"
+#include "axmol/ui/UILayoutComponent.h"
 
 using namespace ax;
 using namespace flatbuffers;

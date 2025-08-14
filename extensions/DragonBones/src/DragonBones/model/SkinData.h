@@ -24,7 +24,7 @@
 #define DRAGONBONES_SKIN_DATA_H
 
 #include "../core/BaseObject.h"
-#include "base/hlookup.h"
+#include "axmol/base/hlookup.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**

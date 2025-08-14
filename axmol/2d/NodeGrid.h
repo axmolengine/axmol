@@ -24,9 +24,9 @@
  ****************************************************************************/
 #pragma once
 
-#include "2d/Node.h"
-#include "renderer/GroupCommand.h"
-#include "renderer/CustomCommand.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/CustomCommand.h"
 
 namespace ax
 {

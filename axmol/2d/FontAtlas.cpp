@@ -25,24 +25,24 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "2d/FontAtlas.h"
+#include "axmol/2d/FontAtlas.h"
 #if AX_TARGET_PLATFORM != AX_PLATFORM_WIN32 && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include "platform/android/jni/Java_dev_axmol_lib_AxmolEngine.h"
+#    include "axmol/platform/android/jni/Java_dev_axmol_lib_AxmolEngine.h"
 #endif
 #include <algorithm>
-#include "2d/FontFreeType.h"
-#include "base/text_utils.h"
-#include "base/Director.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventDispatcher.h"
-#include "base/EventType.h"
+#include "axmol/2d/FontFreeType.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventType.h"
 
 #include "simdjson/simdjson.h"
 #include "zlib.h"
-#include "base/ZipUtils.h"
+#include "axmol/base/ZipUtils.h"
 
-#include "base/json.h"
+#include "axmol/base/json.h"
 
 namespace ax
 {

@@ -1,7 +1,7 @@
 #ifndef __GBUTTON_H
 #define __GBUTTON_H
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "GComponent.h"
 

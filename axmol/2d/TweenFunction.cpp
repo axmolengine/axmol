@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/TweenFunction.h"
+#include "axmol/2d/TweenFunction.h"
 
 #define _USE_MATH_DEFINES  // needed for M_PI and M_PI2
 #include <math.h>          // M_PI

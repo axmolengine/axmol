@@ -26,8 +26,8 @@
 
 /// @cond DO_NOT_SHOW
 
-#include "platform/PlatformConfig.h"
-#include "platform/Common.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/platform/Common.h"
 #include <string>
 
 namespace ax

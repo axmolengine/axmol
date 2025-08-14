@@ -31,11 +31,11 @@
 
 #include <stdio.h>
 
-#include "platform/PlatformMacros.h"
-#include "renderer/RenderState.h"
-#include "renderer/MeshCommand.h"
-#include "renderer/GroupCommand.h"
-#include "renderer/CallbackCommand.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/renderer/MeshCommand.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
 
 namespace ax
 {

@@ -26,7 +26,7 @@
 
 #include "cocostudio/WidgetReader/WidgetReaderProtocol.h"
 #include "cocostudio/SGUIReader.h"
-#include "ui/GUIDefine.h"
+#include "axmol/ui/GUIDefine.h"
 #include "cocostudio/CocosStudioExport.h"
 #include "cocostudio/WidgetReader/NodeReaderProtocol.h"
 #include "cocostudio/WidgetReader/NodeReaderDefine.h"

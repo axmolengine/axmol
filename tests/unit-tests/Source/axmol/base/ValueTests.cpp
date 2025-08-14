@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "base/Value.h"
+#include "axmol/base/Value.h"
 
 using namespace ax;
 

@@ -25,9 +25,9 @@
 
 #include "yasio/yasio.hpp"
 
-#include "network/WebSocket.h"
+#include "axmol/network/WebSocket.h"
 
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 using namespace yasio;
 

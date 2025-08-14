@@ -11,14 +11,14 @@
 // set to `DXGI_FORMAT_UNKNOWN`.
 //
 
-#include "UtilsD3D.h"
-#include "DriverD3D.h"
+#include "axmol/rhi/d3d/UtilsD3D.h"
+#include "axmol/rhi/d3d/DriverD3D.h"
 #include <dxgiformat.h>
 #include <wrl/client.h>
 
-#include "base/Logging.h"
+#include "axmol/base/Logging.h"
 
-#include "rhi/PixelFormatUtils.h"
+#include "axmol/rhi/PixelFormatUtils.h"
 
 using namespace Microsoft::WRL;
 

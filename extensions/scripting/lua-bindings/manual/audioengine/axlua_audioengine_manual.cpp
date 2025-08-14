@@ -27,7 +27,7 @@
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include "lua-bindings/manual/LuaEngine.h"
-#include "audio/AudioEngine.h"
+#include "axmol/audio/AudioEngine.h"
 
 static int lua_get_AudioProfile_name(lua_State* L)
 {

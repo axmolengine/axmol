@@ -37,8 +37,8 @@ USING_NS_AX;
 using std::max;
 #define INITIAL_SIZE (10000)
 
-#include "rhi/DriverBase.h"
-#include "renderer/Shaders.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/renderer/Shaders.h"
 
 namespace spine {
 

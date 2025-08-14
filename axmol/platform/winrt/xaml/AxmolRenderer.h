@@ -18,8 +18,8 @@
 */
 #pragma once
 
-#include "platform/winrt/InputEvent.h"
-#include "base/Types.h"
+#include "axmol/platform/winrt/InputEvent.h"
+#include "axmol/base/Types.h"
 
 #include <winrt/Windows.Graphics.Display.h>
 #include <winrt/Windows.Graphics.h>

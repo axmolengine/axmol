@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIEditBox/UIEditBox.h"
+#include "axmol/ui/UIEditBox/UIEditBox.h"
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS) && \
     (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32) && (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)

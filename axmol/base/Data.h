@@ -27,11 +27,11 @@
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 #include <stdint.h>           // for ssize_t on android
 #include <string>             // for ssize_t on linux
-#include "platform/StdC.h"  // for ssize_t on window
-#include "base/axstd.h"
+#include "axmol/platform/StdC.h"  // for ssize_t on window
+#include "axmol/base/axstd.h"
 
 /**
  * @addtogroup base

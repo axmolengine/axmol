@@ -25,8 +25,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "math/Vertex.h"
-#include "base/Macros.h"
+#include "axmol/math/Vertex.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

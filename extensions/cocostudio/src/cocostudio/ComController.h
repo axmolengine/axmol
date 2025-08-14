@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "ComBase.h"
 #include "InputDelegate.h"
 #include "CocosStudioExport.h"
-#include "2d/Component.h"
+#include "axmol/2d/Component.h"
 
 namespace cocostudio
 {

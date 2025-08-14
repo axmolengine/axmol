@@ -24,9 +24,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "audio/AudioDecoderEXT.h"
-#include "audio/AudioMacros.h"
-#include "platform/FileUtils.h"
+#include "axmol/audio/AudioDecoderEXT.h"
+#include "axmol/audio/AudioMacros.h"
+#include "axmol/platform/FileUtils.h"
 
 #import <Foundation/Foundation.h>
 

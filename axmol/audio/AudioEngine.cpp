@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
-#include "audio/AudioEngine.h"
+#include "axmol/audio/AudioEngine.h"
 #include <condition_variable>
 #include <queue>
-#include "platform/FileUtils.h"
-#include "base/Utils.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Utils.h"
 
-#include "audio/AudioEngineImpl.h"
+#include "axmol/audio/AudioEngineImpl.h"
 
 #define TIME_DELAY_PRECISION 0.0001
 

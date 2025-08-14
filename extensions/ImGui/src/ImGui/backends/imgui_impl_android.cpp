@@ -1,17 +1,17 @@
 #include "imgui_impl_android.h"
 #include "imgui_impl_axmol.h"
-#include "base/Director.h"
-#include "base/EventListenerTouch.h"
-#include "base/IMEDelegate.h"
-#include "rhi/axmol-rhi.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/IMEDelegate.h"
+#include "axmol/rhi/axmol-rhi.h"
 #include <functional>
 #include <android/native_window.h>
 #include <android/input.h>
 #include <android/keycodes.h>
 #include <android/log.h>
 #include <imgui_internal.h>
-#include "base/IMEDelegate.h"
-#include "base/EventDispatcher.h"
+#include "axmol/base/IMEDelegate.h"
+#include "axmol/base/EventDispatcher.h"
 
 using namespace ax;
 using namespace ax::rhi;

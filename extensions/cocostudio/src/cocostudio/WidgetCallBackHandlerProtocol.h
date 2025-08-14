@@ -25,7 +25,7 @@
 #pragma once
 
 #include "CocosStudioExport.h"
-#include "ui/UIWidget.h"
+#include "axmol/ui/UIWidget.h"
 
 namespace cocostudio
 {

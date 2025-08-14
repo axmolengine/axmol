@@ -26,10 +26,10 @@
 
 #include "cocostudio/WidgetReader/SpriteReader/SpriteReader.h"
 
-#include "base/Utils.h"
-#include "2d/Sprite.h"
-#include "2d/SpriteFrameCache.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Utils.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/FlatBuffersSerialize.h"
@@ -37,8 +37,8 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-#include "renderer/ProgramManager.h"
-#include "rhi/ProgramState.h"
+#include "axmol/renderer/ProgramManager.h"
+#include "axmol/rhi/ProgramState.h"
 
 using namespace ax;
 using namespace flatbuffers;

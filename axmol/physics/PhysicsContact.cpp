@@ -23,12 +23,12 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "physics/PhysicsContact.h"
+#include "axmol/physics/PhysicsContact.h"
 #if defined(AX_ENABLE_PHYSICS)
 
-#    include "physics/PhysicsBody.h"
-#    include "physics/PhysicsHelper.h"
-#    include "base/EventCustom.h"
+#    include "axmol/physics/PhysicsBody.h"
+#    include "axmol/physics/PhysicsHelper.h"
+#    include "axmol/base/EventCustom.h"
 
 namespace ax
 {

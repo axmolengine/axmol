@@ -30,12 +30,12 @@
  */
 
 #include "Control.h"
-#include "base/Director.h"
-#include "2d/Menu.h"
-#include "base/Touch.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/Menu.h"
+#include "axmol/base/Touch.h"
 #include "Invocation.h"
-#include "base/EventDispatcher.h"
-#include "base/EventListenerTouch.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventListenerTouch.h"
 
 NS_AX_EXT_BEGIN
 

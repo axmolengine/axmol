@@ -2,7 +2,7 @@
 #define __DRAGDROPMANAGER_H__
 
 #include "FairyGUIMacros.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "GLoader.h"
 
 NS_FGUI_BEGIN

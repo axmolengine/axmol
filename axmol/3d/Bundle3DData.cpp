@@ -1,4 +1,4 @@
-#include "3d/Bundle3DData.h"
+#include "axmol/3d/Bundle3DData.h"
 
 namespace ax
 {

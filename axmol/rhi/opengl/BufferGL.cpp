@@ -22,13 +22,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "BufferGL.h"
+#include "axmol/rhi/opengl/BufferGL.h"
 #include <cassert>
-#include "base/Director.h"
-#include "base/EventType.h"
-#include "base/EventDispatcher.h"
-#include "rhi/opengl/MacrosGL.h"
-#include "OpenGLState.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/rhi/opengl/OpenGLState.h"
 
 namespace ax::rhi::gl {
 

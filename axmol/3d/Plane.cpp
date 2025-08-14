@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/Plane.h"
+#include "axmol/3d/Plane.h"
 
 namespace ax
 {

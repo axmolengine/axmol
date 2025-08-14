@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "math/MathBase.h"
+#include "axmol/math/MathBase.h"
 
 
 namespace ax

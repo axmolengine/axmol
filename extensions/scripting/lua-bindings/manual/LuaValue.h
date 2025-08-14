@@ -34,8 +34,8 @@ extern "C" {
 #include "lua.h"
 }
 
-#include "base/Types.h"
-#include "base/Object.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Object.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_BLACKBERRY
 using std::memcpy;

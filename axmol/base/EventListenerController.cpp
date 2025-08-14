@@ -24,10 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventListenerController.h"
-#include "base/EventController.h"
-#include "base/Macros.h"
-#include "base/Controller.h"
+#include "axmol/base/EventListenerController.h"
+#include "axmol/base/EventController.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Controller.h"
 
 namespace ax
 {

@@ -25,9 +25,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/EventListenerFocus.h"
-#include "base/EventFocus.h"
-#include "base/Macros.h"
+#include "axmol/base/EventListenerFocus.h"
+#include "axmol/base/EventFocus.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

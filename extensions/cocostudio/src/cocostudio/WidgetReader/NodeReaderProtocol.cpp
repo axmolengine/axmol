@@ -8,8 +8,8 @@
 
 #include "NodeReaderProtocol.h"
 #include "cocostudio/CSParseBinary_generated.h"  // flatbuffers::ResourceData, it's ok for all revision of loaders
-#include "cocos2d.h"
-#include "ui/CocosGUI.h"
+#include "axmol/cocos2d.h"
+#include "axmol/ui/CocosGUI.h"
 #include "cocostudio/Armature.h"
 #include "cocostudio/ActionTimeline/SkeletonNode.h"
 

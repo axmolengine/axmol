@@ -29,9 +29,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "base/EventDispatcher.h"
-#include "platform/FileUtils.h"
-#include "network/Downloader.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/network/Downloader.h"
 
 #include "EventAssetsManagerEx.h"
 

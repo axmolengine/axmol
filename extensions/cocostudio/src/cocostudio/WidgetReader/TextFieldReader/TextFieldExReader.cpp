@@ -2,8 +2,8 @@
 
 #include "TextFieldExReader.h"
 
-#include "ui/UITextFieldEx.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UITextFieldEx.h"
+#include "axmol/platform/FileUtils.h"
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"
 #include "cocostudio/LocalizationManager.h"

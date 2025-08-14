@@ -32,9 +32,9 @@
 
 #include "ClippingNodeTest.h"
 #include "../testResource.h"
-#include "renderer/Renderer.h"
-#include "rhi/ProgramState.h"
-#include "renderer/Shaders.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/Shaders.h"
 
 using namespace ax;
 

@@ -24,8 +24,8 @@
 
  ****************************************************************************/
 
-#include "base/EventListenerKeyboard.h"
-#include "base/Macros.h"
+#include "axmol/base/EventListenerKeyboard.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/iOS/UITextField+UITextInput.h"
+#import "axmol/ui/UIEditBox/iOS/UITextField+UITextInput.h"
 
 @implementation UITextField (AXUITextInput)
 

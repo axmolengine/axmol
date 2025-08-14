@@ -26,15 +26,15 @@
 
 #include <cstdint>
 
-#include "base/Object.h"
-#include "base/Data.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Data.h"
 
-#include "RHITypes.h"
-#include "RenderPassDescriptor.h"
-#include "PixelBufferDescriptor.h"
-#include "platform/StdC.h"
-#include "ProgramState.h"
-#include "VertexLayout.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/rhi/RenderPassDescriptor.h"
+#include "axmol/rhi/PixelBufferDescriptor.h"
+#include "axmol/platform/StdC.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/rhi/VertexLayout.h"
 
 #include <memory>
 #include <vector>

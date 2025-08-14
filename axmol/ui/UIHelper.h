@@ -28,9 +28,9 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
-#include "platform/PlatformMacros.h"
-#include "ui/GUIExport.h"
-#include "2d/Node.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/ui/GUIExport.h"
+#include "axmol/2d/Node.h"
 
 namespace ax
 {

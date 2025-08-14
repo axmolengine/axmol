@@ -26,9 +26,9 @@
 #include "lua-bindings/auto/axlua_3d_auto.hpp"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include "lua-bindings/manual/LuaEngine.h"
-#include "3d/Bundle3D.h"
-#include "3d/MeshRenderer.h"
-#include "3d/Terrain.h"
+#include "axmol/3d/Bundle3D.h"
+#include "axmol/3d/MeshRenderer.h"
+#include "axmol/3d/Terrain.h"
 
 int axlua_3d_MeshRenderer_getAABB(lua_State* L)
 {

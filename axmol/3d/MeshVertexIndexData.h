@@ -27,14 +27,14 @@
 #include <string>
 #include <vector>
 
-#include "3d/Bundle3DData.h"
-#include "3d/AABB.h"
-#include "3d/shaderinfos.h"
+#include "axmol/3d/Bundle3DData.h"
+#include "axmol/3d/AABB.h"
+#include "axmol/3d/shaderinfos.h"
 
-#include "base/Object.h"
-#include "base/Vector.h"
-#include "math/Math.h"
-#include "renderer/MeshCommand.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Vector.h"
+#include "axmol/math/Math.h"
+#include "axmol/renderer/MeshCommand.h"
 
 namespace ax
 {

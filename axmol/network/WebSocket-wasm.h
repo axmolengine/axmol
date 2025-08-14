@@ -24,9 +24,9 @@
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 #include <string>
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 #include "yasio/byte_buffer.hpp"
 
 #include <emscripten/websocket.h>

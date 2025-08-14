@@ -29,7 +29,7 @@
 
 /// @cond DO_NOT_SHOW
 
-#include "2d/Font.h"
+#include "axmol/2d/Font.h"
 
 namespace ax
 {

@@ -27,7 +27,7 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
-#    include "cocos2d.h"
+#    include "axmol/cocos2d.h"
 #    include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(JNITests);

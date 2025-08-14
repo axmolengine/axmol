@@ -1,6 +1,6 @@
-#include "ProgramD3D.h"
-#include "BufferD3D.h"
-#include "../ShaderCache.h"
+#include "axmol/rhi/d3d/ProgramD3D.h"
+#include "axmol/rhi/d3d/BufferD3D.h"
+#include "axmol/rhi/ShaderCache.h"
 
 namespace ax::rhi::d3d
 {

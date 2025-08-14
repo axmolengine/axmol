@@ -18,7 +18,7 @@
 #include <string.h>
 #include <assert.h>
 #include <cstdint>
-#include "base/pvr.h"
+#include "axmol/base/pvr.h"
 
 #define PVRT_MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define PVRT_MAX(a, b) (((a) > (b)) ? (a) : (b))

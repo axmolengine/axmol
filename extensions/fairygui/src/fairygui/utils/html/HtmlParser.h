@@ -1,7 +1,7 @@
 #ifndef __HTMLPARSER_H__
 #define __HTMLPARSER_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "display/TextFormat.h"
 

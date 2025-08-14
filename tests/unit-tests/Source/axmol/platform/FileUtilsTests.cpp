@@ -25,7 +25,7 @@
 
 #include <doctest.h>
 #include "TestUtils.h"
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 
 using namespace ax;
 

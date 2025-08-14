@@ -25,18 +25,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/Grid.h"
+#include "axmol/2d/Grid.h"
 
-#include "base/Macros.h"
-#include "base/Utils.h"
-#include "2d/Node.h"
-#include "renderer/Renderer.h"
-#include "renderer/Texture2D.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
-#include "rhi/DriverBase.h"
-#include "rhi/RenderTarget.h"
-#include "2d/Camera.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Utils.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/RenderTarget.h"
+#include "axmol/2d/Camera.h"
 
 namespace ax
 {

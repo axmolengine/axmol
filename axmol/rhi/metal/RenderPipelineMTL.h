@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "../RenderPipeline.h"
+#include "axmol/rhi/RenderPipeline.h"
 #include <string>
 #include <vector>
 #include <memory>

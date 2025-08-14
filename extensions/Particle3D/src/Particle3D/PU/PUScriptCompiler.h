@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 #include "Particle3D/PU/PUScriptParser.h"
 
 #include <list>

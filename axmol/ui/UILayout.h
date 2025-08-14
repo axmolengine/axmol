@@ -26,11 +26,11 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "ui/UIWidget.h"
-#include "ui/GUIExport.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/GroupCommand.h"
-#include "renderer/CallbackCommand.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/GUIExport.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
 
 /**
  * @addtogroup ui

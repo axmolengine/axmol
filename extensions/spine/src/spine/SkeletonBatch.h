@@ -30,9 +30,9 @@
 #ifndef SPINE_SKELETONBATCH_H_
 #define SPINE_SKELETONBATCH_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 
-#include "rhi/ProgramState.h"
+#include "axmol/rhi/ProgramState.h"
 #include <spine/spine.h>
 #include <vector>
 

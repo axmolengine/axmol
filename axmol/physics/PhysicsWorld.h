@@ -26,13 +26,13 @@
 
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_PHYSICS)
 
 #    include <list>
-#    include "base/Vector.h"
-#    include "math/Math.h"
-#    include "physics/PhysicsBody.h"
+#    include "axmol/base/Vector.h"
+#    include "axmol/math/Math.h"
+#    include "axmol/physics/PhysicsBody.h"
 
 struct cpSpace;
 

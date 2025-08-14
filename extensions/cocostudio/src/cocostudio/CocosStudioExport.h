@@ -1,7 +1,7 @@
 #pragma once
 
-#include "base/hlookup.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/base/hlookup.h"
+#include "axmol/platform/PlatformMacros.h"
 
 #if defined(_WIN32)
 #  if defined(CCS_DLLEXPORT)

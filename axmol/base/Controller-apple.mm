@@ -25,16 +25,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Controller.h"
-#include "platform/PlatformConfig.h"
+#include "axmol/base/Controller.h"
+#include "axmol/platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#    include "base/Macros.h"
-#    include "base/EventDispatcher.h"
-#    include "base/EventController.h"
-#    include "base/EventListenerController.h"
-#    include "base/Director.h"
-#    include "2d/Label.h"
+#    include "axmol/base/Macros.h"
+#    include "axmol/base/EventDispatcher.h"
+#    include "axmol/base/EventController.h"
+#    include "axmol/base/EventListenerController.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/2d/Label.h"
 
 #    import <GameController/GameController.h>
 

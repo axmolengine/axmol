@@ -24,12 +24,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
-#include "audio/AudioPlayer.h"
-#include "audio/AudioCache.h"
-#include "platform/FileUtils.h"
-#include "audio/AudioDecoder.h"
-#include "audio/AudioDecoderManager.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/audio/AudioPlayer.h"
+#include "axmol/audio/AudioCache.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/audio/AudioDecoder.h"
+#include "axmol/audio/AudioDecoderManager.h"
 
 #include "yasio/thread_name.hpp"
 

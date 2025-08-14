@@ -23,14 +23,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/linux/Application-linux.h"
+#include "axmol/platform/linux/Application-linux.h"
 #include <unistd.h>
 #include <sys/time.h>
 #include <string>
 #include <thread>
-#include "base/Director.h"
-#include "base/Utils.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Utils.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace ax
 {

@@ -26,7 +26,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Types.h"
+#include "axmol/base/Types.h"
 
 namespace ax
 {

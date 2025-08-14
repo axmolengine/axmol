@@ -29,8 +29,8 @@
 
 #include "extensions/ExtensionMacros.h"
 #include "CocosStudioExport.h"
-#include "platform/PlatformMacros.h"
-#include "ui/UIWidget.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/ui/UIWidget.h"
 
 #include "pugixml/pugixml.hpp"
 

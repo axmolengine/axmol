@@ -23,11 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/BillBoard.h"
-#include "2d/SpriteFrameCache.h"
-#include "base/Director.h"
-#include "2d/Camera.h"
-#include "renderer/Renderer.h"
+#include "axmol/3d/BillBoard.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/base/Director.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/renderer/Renderer.h"
 
 namespace ax
 {

@@ -24,12 +24,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/Device.h"
+#include "axmol/platform/Device.h"
 #include <Foundation/Foundation.h>
 #include <Cocoa/Cocoa.h>
 #include <string>
-#include "base/Types.h"
-#include "platform/apple/Device-apple.h"
+#include "axmol/base/Types.h"
+#include "axmol/platform/apple/Device-apple.h"
 
 namespace ax
 {

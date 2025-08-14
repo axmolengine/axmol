@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 
-#include "2d/DrawNode.h"
+#include "axmol/2d/DrawNode.h"
 #include <stddef.h>
-#include "base/Types.h"
-#include "base/EventType.h"
-#include "base/Configuration.h"
-#include "renderer/Renderer.h"
-#include "base/Director.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventDispatcher.h"
-#include "2d/ActionCatmullRom.h"
-#include "base/Utils.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/2d/ActionCatmullRom.h"
+#include "axmol/base/Utils.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
 #include "poly2tri/poly2tri.h"
 
 namespace ax

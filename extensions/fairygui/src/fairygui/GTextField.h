@@ -1,7 +1,7 @@
 #ifndef __GTEXTFIELD_H__
 #define __GTEXTFIELD_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
 #include "GObject.h"
 #include "display/FUILabel.h"

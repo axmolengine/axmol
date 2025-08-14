@@ -24,9 +24,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "base/Protocols.h"
-#include "2d/Node.h"
-#include "renderer/CustomCommand.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/CustomCommand.h"
 #include "TimelineMacro.h"
 #include "cocostudio/CocosStudioExport.h"
 #include "SkinNode.h"

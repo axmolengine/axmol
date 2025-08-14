@@ -29,9 +29,9 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "math/Math.h"
-#include "base/Value.h"
-#include "base/Object.h"
+#include "axmol/math/Math.h"
+#include "axmol/base/Value.h"
+#include "axmol/base/Object.h"
 
 namespace ax
 {

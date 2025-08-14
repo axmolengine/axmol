@@ -25,15 +25,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/MotionStreak.h"
-#include "math/Vertex.h"
-#include "base/Director.h"
-#include "base/Utils.h"
-#include "renderer/TextureCache.h"
-#include "renderer/Texture2D.h"
-#include "renderer/Renderer.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
+#include "axmol/2d/MotionStreak.h"
+#include "axmol/math/Vertex.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Utils.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
 
 namespace ax
 {

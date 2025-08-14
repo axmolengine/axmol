@@ -58,7 +58,7 @@
 
 // #endif
 
-#include "platform/GL.h"
+#include "axmol/platform/GL.h"
 
 #include "EffekseerRendererGL.Base.Pre.h"
 #include <stddef.h>

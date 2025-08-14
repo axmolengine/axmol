@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "math/Math.h"
+#include "axmol/math/Math.h"
 #include "Particle3D/PU/PUAffector.h"
 
 namespace ax

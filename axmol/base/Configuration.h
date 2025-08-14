@@ -30,9 +30,9 @@ THE SOFTWARE.
 
 #include <string>
 
-#include "base/Object.h"
-#include "base/Value.h"
-#include "3d/Animate3D.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Value.h"
+#include "axmol/3d/Animate3D.h"
 
 /**
  * @addtogroup base

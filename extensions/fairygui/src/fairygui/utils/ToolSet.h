@@ -1,7 +1,7 @@
 #ifndef __TOOLSET_H__
 #define __TOOLSET_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "FairyGUI.h"
 
 NS_FGUI_BEGIN

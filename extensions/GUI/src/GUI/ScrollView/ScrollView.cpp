@@ -25,13 +25,13 @@
  ****************************************************************************/
 
 #include "ScrollView.h"
-#include "platform/Device.h"
-#include "2d/ActionInstant.h"
-#include "2d/ActionInterval.h"
-#include "2d/ActionTween.h"
-#include "base/Director.h"
-#include "base/EventDispatcher.h"
-#include "renderer/Renderer.h"
+#include "axmol/platform/Device.h"
+#include "axmol/2d/ActionInstant.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/2d/ActionTween.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/renderer/Renderer.h"
 
 #include <algorithm>
 

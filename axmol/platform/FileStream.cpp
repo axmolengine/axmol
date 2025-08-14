@@ -1,9 +1,9 @@
 // Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
-#include "platform/FileStream.h"
+#include "axmol/platform/FileStream.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include "platform/android/FileUtils-android.h"
-#    include "base/ZipUtils.h"
+#    include "axmol/platform/android/FileUtils-android.h"
+#    include "axmol/base/ZipUtils.h"
 #endif
 
 #include <sys/stat.h>

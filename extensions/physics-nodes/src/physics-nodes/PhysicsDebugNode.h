@@ -21,9 +21,9 @@
 
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
-#include "2d/DrawNode.h"
+#include "axmol/2d/DrawNode.h"
 #include "box2d/box2d.h"
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 NS_AX_EXT_BEGIN
 

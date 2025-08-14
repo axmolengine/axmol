@@ -24,8 +24,8 @@ THE SOFTWARE.
 #pragma once
 
 #include "ComBase.h"
-#include "base/Protocols.h"
-#include "2d/Component.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/2d/Component.h"
 #include "CocosStudioExport.h"
 
 namespace cocostudio

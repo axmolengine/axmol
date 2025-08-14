@@ -23,10 +23,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/Common.h"
-#include "platform/StdC.h"
-#include "platform/winrt/RenderViewImpl-winrt.h"
-#include "platform/winrt/WinRTUtils.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/StdC.h"
+#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#include "axmol/platform/winrt/WinRTUtils.h"
 
 #if defined(VLD_DEBUG_MEMORY)
 #include <vld.h>

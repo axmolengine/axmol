@@ -27,7 +27,7 @@
 #pragma once
 
 #include "extensions/ExtensionMacros.h"
-#include "2d/Node.h"
+#include "axmol/2d/Node.h"
 #include "extensions/ExtensionExport.h"
 
 /**

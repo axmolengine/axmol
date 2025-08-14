@@ -28,8 +28,8 @@
 #pragma once
 /// @cond DO_NOT_SHOW
 
-#include "base/Object.h"
-#include "base/Macros.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Macros.h"
 #include <functional>
 #include <type_traits>
 

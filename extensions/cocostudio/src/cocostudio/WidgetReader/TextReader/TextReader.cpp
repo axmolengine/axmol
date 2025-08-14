@@ -2,9 +2,9 @@
 
 #include "cocostudio/WidgetReader/TextReader/TextReader.h"
 
-#include "ui/UIText.h"
-#include "2d/Label.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UIText.h"
+#include "axmol/2d/Label.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"

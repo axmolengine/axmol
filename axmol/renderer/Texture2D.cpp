@@ -31,26 +31,26 @@ THE SOFTWARE.
  * https://devforums.apple.com/message/37855#37855 by a1studmuffin
  */
 
-#include "renderer/Texture2D.h"
-#include "platform/Image.h"
-#include "platform/GL.h"
-#include "base/Utils.h"
-#include "platform/Device.h"
-#include "base/Config.h"
-#include "base/Macros.h"
-#include "base/text_utils.h"
-#include "base/Configuration.h"
-#include "platform/PlatformMacros.h"
-#include "base/Director.h"
-#include "base/NinePatchImageParser.h"
-#include "rhi/DriverBase.h"
-#include "rhi/ProgramState.h"
-#include "renderer/Shaders.h"
-#include "rhi/PixelFormatUtils.h"
-#include "renderer/Renderer.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/platform/Image.h"
+#include "axmol/platform/GL.h"
+#include "axmol/base/Utils.h"
+#include "axmol/platform/Device.h"
+#include "axmol/base/Config.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/NinePatchImageParser.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/renderer/Renderer.h"
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-#    include "renderer/TextureCache.h"
+#    include "axmol/renderer/TextureCache.h"
 #endif
 
 namespace ax

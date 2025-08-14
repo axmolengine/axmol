@@ -26,11 +26,11 @@ THE SOFTWARE.
 
 #include <fstream>
 #include <iostream>
-#include "ui/CocosGUI.h"
-#include "platform/FileUtils.h"
-#include "2d/SpriteFrameCache.h"
-#include "base/Director.h"
-#include "base/Utils.h"
+#include "axmol/ui/CocosGUI.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Utils.h"
 
 #include "ActionManagerEx.h"
 #include "WidgetReader/ButtonReader/ButtonReader.h"

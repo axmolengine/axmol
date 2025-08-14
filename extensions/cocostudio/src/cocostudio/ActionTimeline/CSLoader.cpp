@@ -27,14 +27,14 @@
 
 #include "CSLoader.h"
 
-#include "base/ObjectFactory.h"
-#include "base/Director.h"
-#include "base/text_utils.h"
-#include "ui/CocosGUI.h"
-#include "2d/SpriteFrameCache.h"
-#include "2d/ParticleSystemQuad.h"
-#include "2d/FastTMXTiledMap.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/ObjectFactory.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/ui/CocosGUI.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/2d/ParticleSystemQuad.h"
+#include "axmol/2d/FastTMXTiledMap.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "ActionTimelineCache.h"
 #include "ActionTimeline.h"

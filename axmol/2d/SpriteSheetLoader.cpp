@@ -1,5 +1,5 @@
-#include "2d/SpriteSheetLoader.h"
-#include "base/Director.h"
+#include "axmol/2d/SpriteSheetLoader.h"
+#include "axmol/base/Director.h"
 #include <vector>
 
 using namespace std;

@@ -24,22 +24,22 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "physics/PhysicsWorld.h"
+#include "axmol/physics/PhysicsWorld.h"
 #if defined(AX_ENABLE_PHYSICS)
 #    include <algorithm>
 #    include <climits>
 
-#    include "physics/PhysicsBody.h"
-#    include "physics/PhysicsCollider.h"
-#    include "physics/PhysicsContact.h"
-#    include "physics/PhysicsJoint.h"
-#    include "physics/PhysicsHelper.h"
+#    include "axmol/physics/PhysicsBody.h"
+#    include "axmol/physics/PhysicsCollider.h"
+#    include "axmol/physics/PhysicsContact.h"
+#    include "axmol/physics/PhysicsJoint.h"
+#    include "axmol/physics/PhysicsHelper.h"
 
-#    include "2d/DrawNode.h"
-#    include "2d/Scene.h"
-#    include "base/Director.h"
-#    include "base/EventDispatcher.h"
-#    include "base/EventCustom.h"
+#    include "axmol/2d/DrawNode.h"
+#    include "axmol/2d/Scene.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/base/EventDispatcher.h"
+#    include "axmol/base/EventCustom.h"
 
 namespace ax
 {

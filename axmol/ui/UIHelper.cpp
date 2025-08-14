@@ -25,11 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIHelper.h"
-#include "ui/UIWidget.h"
-#include "ui/UILayoutComponent.h"
-#include "base/Director.h"
-#include "base/text_utils.h"
+#include "axmol/ui/UIHelper.h"
+#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/UILayoutComponent.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/text_utils.h"
 
 namespace ax
 {

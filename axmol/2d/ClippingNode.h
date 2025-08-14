@@ -28,10 +28,10 @@
  */
 #pragma once
 
-#include "2d/Node.h"
-#include "renderer/GroupCommand.h"
-#include "renderer/CustomCommand.h"
-#include "renderer/CallbackCommand.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/GroupCommand.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/CallbackCommand.h"
 #include <unordered_map>
 namespace ax
 {

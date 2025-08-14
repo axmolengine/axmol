@@ -28,8 +28,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "2d/ActionInterval.h"
-#include "2d/TweenFunction.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/2d/TweenFunction.h"
 
 namespace ax
 {

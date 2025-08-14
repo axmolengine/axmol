@@ -23,11 +23,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "navmesh/NavMesh.h"
+#include "axmol/navmesh/NavMesh.h"
 #if defined(AX_ENABLE_NAVMESH)
 
-#    include "platform/FileUtils.h"
-#    include "renderer/Renderer.h"
+#    include "axmol/platform/FileUtils.h"
+#    include "axmol/renderer/Renderer.h"
 #    include "recast/DetourCommon.h"
 #    include "recast/DetourDebugDraw.h"
 #    include <sstream>

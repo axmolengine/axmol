@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "Texture.h"
-#include "PixelFormatUtils.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/rhi/PixelFormatUtils.h"
 #include <cassert>
 namespace ax::rhi {
 

@@ -24,9 +24,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "audio/AudioDecoder.h"
-#include "audio/AudioMacros.h"
-#include "platform/FileUtils.h"
+#include "axmol/audio/AudioDecoder.h"
+#include "axmol/audio/AudioMacros.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace ax
 {

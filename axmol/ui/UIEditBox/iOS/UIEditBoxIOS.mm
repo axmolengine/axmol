@@ -26,12 +26,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/iOS/UIEditBoxIOS.h"
-#import "ui/UIEditBox/iOS/UISingleLineTextField.h"
-#import "ui/UIEditBox/iOS/UIMultilineTextField.h"
+#import "axmol/ui/UIEditBox/iOS/UIEditBoxIOS.h"
+#import "axmol/ui/UIEditBox/iOS/UISingleLineTextField.h"
+#import "axmol/ui/UIEditBox/iOS/UIMultilineTextField.h"
 
-#import "platform/ios/EARenderView-ios.h"
-#include "base/Director.h"
+#import "axmol/platform/ios/EARenderView-ios.h"
+#include "axmol/base/Director.h"
 
 #define getEditBoxImplIOS() ((ax::ui::EditBoxImplIOS*)_editBox)
 

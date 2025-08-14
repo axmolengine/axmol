@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ComAttribute.h"
-#include "platform/FileUtils.h"
+#include "axmol/platform/FileUtils.h"
 
 using namespace ax;
 

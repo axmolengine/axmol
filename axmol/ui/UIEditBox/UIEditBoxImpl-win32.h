@@ -27,10 +27,10 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    include "ui/UIEditBox/UIEditBoxImpl-common.h"
+#    include "axmol/ui/UIEditBox/UIEditBoxImpl-common.h"
 
 namespace ax
 {

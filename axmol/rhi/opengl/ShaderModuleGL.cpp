@@ -23,11 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ShaderModuleGL.h"
+#include "axmol/rhi/opengl/ShaderModuleGL.h"
 
-#include "platform/PlatformMacros.h"
-#include "base/Macros.h"
-#include "base/axstd.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/axstd.h"
 
 namespace ax::rhi::gl {
 

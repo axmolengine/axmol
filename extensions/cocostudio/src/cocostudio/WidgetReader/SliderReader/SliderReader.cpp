@@ -2,9 +2,9 @@
 
 #include "SliderReader.h"
 
-#include "ui/UISlider.h"
-#include "2d/SpriteFrameCache.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UISlider.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "cocostudio/CocoLoader.h"
 #include "cocostudio/CSParseBinary_generated.h"

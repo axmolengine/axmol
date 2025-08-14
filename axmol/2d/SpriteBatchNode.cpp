@@ -27,19 +27,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/SpriteBatchNode.h"
+#include "axmol/2d/SpriteBatchNode.h"
 #include <stddef.h>  // offsetof
-#include "base/Types.h"
-#include "2d/Sprite.h"
-#include "base/Director.h"
-#include "base/Profiling.h"
-#include "base/text_utils.h"
-#include "renderer/TextureCache.h"
-#include "renderer/Renderer.h"
-#include "renderer/QuadCommand.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
-#include "rhi/DriverBase.h"
+#include "axmol/base/Types.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Profiling.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/QuadCommand.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/rhi/DriverBase.h"
 
 namespace ax
 {

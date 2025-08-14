@@ -29,7 +29,7 @@
 #pragma once
 
 #include "Control.h"
-#include "2d/ProgressTimer.h"
+#include "axmol/2d/ProgressTimer.h"
 #include "extensions/ExtensionExport.h"
 
 NS_AX_EXT_BEGIN

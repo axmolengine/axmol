@@ -3,8 +3,8 @@
 
 #include "FairyGUIMacros.h"
 #include "GObject.h"
-#include "cocos2d.h"
-#include "ui/UIScale9Sprite.h"
+#include "axmol/cocos2d.h"
+#include "axmol/ui/UIScale9Sprite.h"
 
 NS_FGUI_BEGIN
 

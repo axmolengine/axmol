@@ -26,8 +26,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "ui/UIPageView.h"
-#include "2d/Sprite.h"
+#include "axmol/ui/UIPageView.h"
+#include "axmol/2d/Sprite.h"
 
 namespace ax
 {

@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/Logging.h"
+#include "axmol/base/Logging.h"
 
 #include "yasio/utils.hpp"
 #include "fmt/color.h"

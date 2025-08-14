@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 #include <stdlib.h>
 #include <stdio.h>

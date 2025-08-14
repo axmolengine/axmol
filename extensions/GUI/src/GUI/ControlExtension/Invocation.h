@@ -32,7 +32,7 @@
  */
 #pragma once
 
-#include "base/Object.h"
+#include "axmol/base/Object.h"
 #include "../../ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 #include "Control.h"

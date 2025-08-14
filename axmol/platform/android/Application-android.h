@@ -26,8 +26,8 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "platform/Common.h"
-#include "platform/ApplicationBase.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/ApplicationBase.h"
 
 namespace ax
 {

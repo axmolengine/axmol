@@ -25,9 +25,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/text_utils.h"
-#include "platform/Common.h"
-#include "base/Logging.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/platform/Common.h"
+#include "axmol/base/Logging.h"
 #include "ConvertUTF.h"
 #include <limits>
 

@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "Armature.h"
 #include "Skin.h"
 
-#include "2d/ParticleSystemQuad.h"
+#include "axmol/2d/ParticleSystemQuad.h"
 
 using namespace ax;
 

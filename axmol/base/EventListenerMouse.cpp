@@ -24,7 +24,7 @@
 
  ****************************************************************************/
 
-#include "base/EventListenerMouse.h"
+#include "axmol/base/EventListenerMouse.h"
 
 namespace ax
 {

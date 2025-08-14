@@ -23,13 +23,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#import "Application.h"
+#import "axmol/platform/Application.h"
 
 #import <UIKit/UIKit.h>
 
-#import "math/Math.h"
-#import "platform/ios/DirectorCaller-ios.h"
-#import "base/Utils.h"
+#import "axmol/math/Math.h"
+#import "axmol/platform/ios/DirectorCaller-ios.h"
+#import "axmol/base/Utils.h"
 
 namespace ax
 {

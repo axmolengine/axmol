@@ -25,12 +25,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/Common.h"
-#include "platform/wasm/StdC-wasm.h"
-#include "base/Logging.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/wasm/StdC-wasm.h"
+#include "axmol/base/Logging.h"
 #include <emscripten/emscripten.h>
 
 namespace ax

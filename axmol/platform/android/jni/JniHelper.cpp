@@ -24,12 +24,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/android/jni/JniHelper.h"
+#include "axmol/platform/android/jni/JniHelper.h"
 #include <android/log.h>
 #include <string.h>
 #include <pthread.h>
 
-#include "base/text_utils.h"
+#include "axmol/base/text_utils.h"
 
 #define LOG_TAG "JniHelper"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)

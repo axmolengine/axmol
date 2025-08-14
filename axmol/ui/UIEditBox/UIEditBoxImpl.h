@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "ui/UIEditBox/UIEditBox.h"
+#include "axmol/ui/UIEditBox/UIEditBox.h"
 
 namespace ax
 {

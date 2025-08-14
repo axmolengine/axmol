@@ -27,13 +27,13 @@
 #include "PUMaterialManager.h"
 #include "Particle3D/PU/PUScriptCompiler.h"
 #include "Particle3D/PU/PUTranslateManager.h"
-#include "platform/FileUtils.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/platform/PlatformMacros.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <io.h>
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    include "platform/android/FileUtils-android.h"
+#    include "axmol/platform/android/FileUtils-android.h"
 #    include <android/asset_manager.h>
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 #    include <ftw.h>
@@ -42,7 +42,7 @@
 #    include <sys/stat.h>
 #    include <dirent.h>
 #else
-#    include "base/filesystem.h"
+#    include "axmol/base/filesystem.h"
 #endif
 
 #include "yasio/string_view.hpp"

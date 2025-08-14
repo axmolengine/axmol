@@ -28,10 +28,10 @@
 #if defined(AX_ENABLE_PHYSICS)
 
 #    include <cmath>
-#    include "ui/CocosGUI.h"
+#    include "axmol/ui/CocosGUI.h"
 #    include "../testResource.h"
 
-#    include "physics/PhysicsHelper.h"
+#    include "axmol/physics/PhysicsHelper.h"
 #    include "physics-nodes/PhysicsDebugNode.h"
 
 using namespace ax;

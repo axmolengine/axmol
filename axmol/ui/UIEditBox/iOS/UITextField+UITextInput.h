@@ -25,7 +25,7 @@
 #pragma once
 
 #import <UIKit/UIKit.h>
-#import "ui/UIEditBox/iOS/UITextInput.h"
+#import "axmol/ui/UIEditBox/iOS/UITextInput.h"
 
 @interface UITextField (AXUITextInput) <AXUITextInput>
 @end

@@ -25,8 +25,8 @@
  ****************************************************************************/
 
 #pragma once
-#include "math/Math.h"
-#include "base/Types.h"
+#include "axmol/math/Math.h"
+#include "axmol/base/Types.h"
 #include <vector>
 #include "extensions/ExtensionExport.h"
 

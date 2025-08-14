@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "math/Vec4.h"
+#include "axmol/math/Vec4.h"
 
 #if defined(_WIN32)
 #    pragma push_macro("TRANSPARENT")

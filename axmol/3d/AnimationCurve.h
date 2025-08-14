@@ -27,9 +27,9 @@
 #include <cmath>
 #include <functional>
 
-#include "platform/PlatformMacros.h"
-#include "base/Object.h"
-#include "math/Math.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Object.h"
+#include "axmol/math/Math.h"
 
 namespace ax
 {
@@ -101,4 +101,4 @@ protected:
 
 }
 
-#include "3d/AnimationCurve.inl"
+#include "axmol/3d/AnimationCurve.inl"

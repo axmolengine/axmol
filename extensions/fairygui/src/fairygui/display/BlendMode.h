@@ -1,7 +1,7 @@
 #pragma once
 
-#include "2d/Node.h"
-#include "base/Types.h"
+#include "axmol/2d/Node.h"
+#include "axmol/base/Types.h"
 #include "FairyGUIMacros.h"
 
 NS_FGUI_BEGIN

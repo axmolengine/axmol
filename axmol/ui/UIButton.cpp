@@ -24,13 +24,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIButton.h"
-#include "ui/UIScale9Sprite.h"
-#include "2d/Label.h"
-#include "2d/Sprite.h"
-#include "2d/ActionInterval.h"
-#include "platform/FileUtils.h"
-#include "ui/UIHelper.h"
+#include "axmol/ui/UIButton.h"
+#include "axmol/ui/UIScale9Sprite.h"
+#include "axmol/2d/Label.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/ActionInterval.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/ui/UIHelper.h"
 #include <algorithm>
 
 namespace ax

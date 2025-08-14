@@ -45,13 +45,13 @@ THE SOFTWARE.
 #include "yasio/obstream.hpp"
 #include "yasio/sz.hpp"
 
-#include "base/UserDefault.h"
-#include "platform/Common.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/UserDefault.h"
+#include "axmol/platform/Common.h"
+#include "axmol/platform/FileUtils.h"
 #include "pugixml/pugixml.hpp"
-#include "base/Utils.h"
+#include "axmol/base/Utils.h"
 
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 #define USER_DEFAULT_PLAIN_MODE 0
 

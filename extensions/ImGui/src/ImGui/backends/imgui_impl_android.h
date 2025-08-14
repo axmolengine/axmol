@@ -1,6 +1,6 @@
 #pragma once
 #include "imgui.h"
-#include "platform/RenderView.h"
+#include "axmol/platform/RenderView.h"
 
 struct ANativeWindow;
 struct AInputEvent;

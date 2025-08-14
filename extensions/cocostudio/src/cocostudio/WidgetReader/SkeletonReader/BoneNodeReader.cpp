@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "cocostudio/WidgetReader/SkeletonReader/CSBoneBinary_generated.h"
 #include "cocostudio/WidgetReader/SkeletonReader/BoneNodeReader.h"
 #include "cocostudio/ActionTimeline/BoneNode.h"
-#include "base/Utils.h"
+#include "axmol/base/Utils.h"
 
 using namespace ax;
 USING_NS_TIMELINE;

@@ -25,10 +25,10 @@
 
 #pragma once
 
-#include "RHITypes.h"
-#include "base/Object.h"
-#include "platform/PlatformMacros.h"
-#include "ShaderCache.h"
+#include "axmol/rhi/RHITypes.h"
+#include "axmol/base/Object.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/rhi/ShaderCache.h"
 
 #include <functional>
 #include <string>

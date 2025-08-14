@@ -27,9 +27,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "base/Object.h"
-#include "renderer/Texture2D.h"
-#include "base/Data.h"
+#include "axmol/base/Object.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/base/Data.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 #    define AX_USE_WIC 1

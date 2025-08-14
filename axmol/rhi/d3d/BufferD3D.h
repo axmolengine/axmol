@@ -9,7 +9,7 @@
 #include <d3d11.h>
 #include <wrl/client.h>
 
-#include "../Buffer.h"
+#include "axmol/rhi/Buffer.h"
 
 namespace ax::rhi::d3d
 {

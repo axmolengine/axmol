@@ -1,7 +1,7 @@
 #ifndef __JOYSTICK_SCENE_H__
 #define __JOYSTICK_SCENE_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "DemoScene.h"
 #include "JoystickModule.h"
 

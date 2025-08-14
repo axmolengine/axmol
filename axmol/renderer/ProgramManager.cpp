@@ -23,12 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ProgramManager.h"
-#include "rhi/DriverBase.h"
-#include "rhi/ShaderModule.h"
-#include "Shaders.h"
-#include "base/Macros.h"
-#include "base/Configuration.h"
+#include "axmol/renderer/ProgramManager.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/ShaderModule.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/Configuration.h"
 
 #include "xxhash.h"
 

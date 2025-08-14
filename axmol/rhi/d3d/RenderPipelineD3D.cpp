@@ -1,5 +1,5 @@
-#include "RenderPipelineD3D.h"
-#include "ProgramD3D.h"
+#include "axmol/rhi/d3d/RenderPipelineD3D.h"
+#include "axmol/rhi/d3d/ProgramD3D.h"
 #include "xxhash.h"
 
 namespace ax::rhi::d3d

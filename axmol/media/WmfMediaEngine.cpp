@@ -14,12 +14,12 @@
 // https://axmol.dev/
 //////////////////////////////////////////////////////////////////////////
 
-#include "WmfMediaEngine.h"
+#include "axmol/media/WmfMediaEngine.h"
 
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 
 #    include <Shlwapi.h>
-#    include "MFUtils.h"
+#    include "axmol/media/MFUtils.h"
 
 #    include "ntcvt/ntcvt.hpp"
 #    include "yasio/sz.hpp"

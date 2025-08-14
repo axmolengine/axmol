@@ -1,7 +1,7 @@
 #ifndef  _APP_DELEGATE_H_
 #define  _APP_DELEGATE_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 /**
 @brief    The axmol Application.

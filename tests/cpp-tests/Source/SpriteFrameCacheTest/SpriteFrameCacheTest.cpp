@@ -29,7 +29,7 @@
 
 #include <cassert>
 
-#include "NinePatchImageParser.h"
+#include "axmol/base/NinePatchImageParser.h"
 
 using namespace ax;
 

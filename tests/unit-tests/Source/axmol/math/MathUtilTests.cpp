@@ -24,9 +24,9 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "base/Config.h"
-#include "base/Types.h"
-#include "math/MathBase.h"
+#include "axmol/base/Config.h"
+#include "axmol/base/Types.h"
+#include "axmol/math/MathBase.h"
 #include "TestUtils.h"
 
 #define INCLUDE_SSE
@@ -44,12 +44,12 @@ namespace UnitTest
 {
 
 #ifdef AX_NEON_INTRINSICS
-#    include "math/MathUtilNeon.inl"
+#    include "axmol/math/MathUtilNeon.inl"
 #elif defined(AX_SSE_INTRINSICS)
-#    include "math/MathUtilSSE.inl"
+#    include "axmol/math/MathUtilSSE.inl"
 #endif
 
-#include "math/MathUtil.inl"
+#include "axmol/math/MathUtil.inl"
 
 }  // namespace UnitTest
 

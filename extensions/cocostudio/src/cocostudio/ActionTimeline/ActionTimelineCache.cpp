@@ -30,10 +30,10 @@ THE SOFTWARE.
 #include "Frame.h"
 #include "TimeLine.h"
 #include "ActionTimeline.h"
-#include "platform/FileUtils.h"
-#include "2d/SpriteFrameCache.h"
-#include "2d/SpriteFrame.h"
-#include "base/Utils.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/2d/SpriteFrameCache.h"
+#include "axmol/2d/SpriteFrame.h"
+#include "axmol/base/Utils.h"
 
 #include "cocostudio/CSParseBinary_generated.h"
 

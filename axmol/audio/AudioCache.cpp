@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 
-#include "audio/AudioCache.h"
+#include "axmol/audio/AudioCache.h"
 #include <thread>
-#include "base/Director.h"
-#include "base/Scheduler.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Scheduler.h"
 
-#include "audio/AudioDecoderManager.h"
-#include "audio/AudioDecoder.h"
+#include "axmol/audio/AudioDecoderManager.h"
+#include "axmol/audio/AudioDecoder.h"
 
 namespace
 {

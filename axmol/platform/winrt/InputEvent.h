@@ -26,9 +26,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
-#include "platform/winrt/InputEventTypes.h"
-#include "base/Types.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/platform/winrt/InputEventTypes.h"
+#include "axmol/base/Types.h"
 
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.UI.Core.h>

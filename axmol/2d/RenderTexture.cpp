@@ -25,23 +25,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/RenderTexture.h"
+#include "axmol/2d/RenderTexture.h"
 
-#include "base/Utils.h"
-#include "platform/FileUtils.h"
-#include "base/EventType.h"
-#include "base/Configuration.h"
-#include "base/Director.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventDispatcher.h"
-#include "renderer/Renderer.h"
-#include "2d/Camera.h"
-#include "renderer/TextureCache.h"
-#include "rhi/DriverBase.h"
-#include "rhi/Texture.h"
-#include "rhi/RenderTarget.h"
+#include "axmol/base/Utils.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/Texture.h"
+#include "axmol/rhi/RenderTarget.h"
 #if AX_RENDER_API == AX_RENDER_API_GL
-#    include "rhi/opengl/CommandBufferGL.h"
+#    include "axmol/rhi/opengl/CommandBufferGL.h"
 #endif
 
 namespace ax

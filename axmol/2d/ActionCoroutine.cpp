@@ -27,7 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ActionCoroutine.h"
+#include "axmol/2d/ActionCoroutine.h"
 
 namespace ax
 {

@@ -27,7 +27,7 @@
 #define __cocos2d_tests__UIWebViewTest__
 
 #include "../UIScene.h"
-#include "ui/UIWebView/UIWebView.h"
+#include "axmol/ui/UIWebView/UIWebView.h"
 
 DEFINE_TEST_SUITE(WebViewTests);
 

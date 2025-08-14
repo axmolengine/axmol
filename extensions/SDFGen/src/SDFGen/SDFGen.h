@@ -1,6 +1,6 @@
 #pragma once
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "extensions/ExtensionMacros.h"
 
 NS_AX_EXT_BEGIN

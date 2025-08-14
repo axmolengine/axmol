@@ -25,8 +25,8 @@
 #ifndef _RENDERTEXTURE_TEST_H_
 #define _RENDERTEXTURE_TEST_H_
 
-#include "axmol.h"
-#include "rhi/DepthStencilState.h"
+#include "axmol/axmol.h"
+#include "axmol/rhi/DepthStencilState.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(RenderTextureTests);

@@ -25,7 +25,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "renderer/RenderCommand.h"
+#include "axmol/renderer/RenderCommand.h"
 
 /**
  * @addtogroup renderer

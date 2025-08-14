@@ -25,7 +25,7 @@
 #ifndef __NewRendererTest_H_
 #define __NewRendererTest_H_
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "../BaseTest.h"
 
 #define kTagSpriteBatchNode 100

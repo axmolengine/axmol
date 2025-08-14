@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "base/Vector.h"
+#include "axmol/base/Vector.h"
 
 using namespace ax;
 

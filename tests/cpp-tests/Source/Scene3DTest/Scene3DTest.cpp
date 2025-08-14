@@ -25,8 +25,8 @@
 
 #include "Scene3DTest.h"
 
-#include "ui/CocosGUI.h"
-#include "renderer/RenderState.h"
+#include "axmol/ui/CocosGUI.h"
+#include "axmol/renderer/RenderState.h"
 #include <spine/spine-axmol.h>
 
 #include "../testResource.h"

@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "base/EventListener.h"
-#include "base/Types.h"
+#include "axmol/base/EventListener.h"
+#include "axmol/base/Types.h"
 
 /**
  * @addtogroup base

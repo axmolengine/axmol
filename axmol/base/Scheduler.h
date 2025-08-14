@@ -32,9 +32,9 @@ THE SOFTWARE.
 #include <functional>
 #include <mutex>
 #include <set>
-#include "base/axstd.h"
-#include "base/Object.h"
-#include "base/Vector.h"
+#include "axmol/base/axstd.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Vector.h"
 
 namespace ax
 {

@@ -26,13 +26,13 @@
 
 #pragma once
 
-#include "base/Config.h"
+#include "axmol/base/Config.h"
 #if defined(AX_ENABLE_NAVMESH)
 
-#    include "2d/Component.h"
+#    include "axmol/2d/Component.h"
 
-#    include "base/Object.h"
-#    include "math/Vec3.h"
+#    include "axmol/base/Object.h"
+#    include "axmol/math/Vec3.h"
 #    include "recast/DetourNavMesh.h"
 #    include "recast/DetourTileCache.h"
 

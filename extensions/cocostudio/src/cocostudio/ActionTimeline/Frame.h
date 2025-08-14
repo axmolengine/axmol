@@ -26,11 +26,11 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
-#include "base/Object.h"
-#include "base/Vector.h"
-#include "2d/Node.h"
-#include "2d/Sprite.h"
-#include "2d/TweenFunction.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Vector.h"
+#include "axmol/2d/Node.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/2d/TweenFunction.h"
 #include "TimelineMacro.h"
 #include "cocostudio/CocosStudioExport.h"
 

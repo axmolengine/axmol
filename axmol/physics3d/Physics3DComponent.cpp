@@ -24,9 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "physics3d/Physics3D.h"
-#include "2d/Node.h"
-#include "2d/Scene.h"
+#include "axmol/physics3d/Physics3D.h"
+#include "axmol/2d/Node.h"
+#include "axmol/2d/Scene.h"
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 

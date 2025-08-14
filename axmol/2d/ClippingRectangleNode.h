@@ -27,8 +27,8 @@
  */
 #pragma once
 
-#include "2d/Node.h"
-#include "renderer/CallbackCommand.h"
+#include "axmol/2d/Node.h"
+#include "axmol/renderer/CallbackCommand.h"
 
 namespace ax
 {

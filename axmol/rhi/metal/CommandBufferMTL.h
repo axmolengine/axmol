@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "../CommandBuffer.h"
-#include "DriverMTL.h"
+#include "axmol/rhi/CommandBuffer.h"
+#include "axmol/rhi/metal/DriverMTL.h"
 #include <unordered_map>
 
 namespace ax::rhi::mtl {

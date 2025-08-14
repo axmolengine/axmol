@@ -24,16 +24,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/MeshMaterial.h"
-#include "3d/Mesh.h"
-#include "platform/FileUtils.h"
-#include "renderer/Texture2D.h"
-#include "base/Director.h"
-#include "base/EventType.h"
-#include "base/Configuration.h"
-#include "rhi/ProgramState.h"
-#include "renderer/Shaders.h"
-#include "renderer/Pass.h"
+#include "axmol/3d/MeshMaterial.h"
+#include "axmol/3d/Mesh.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/renderer/Pass.h"
 
 namespace ax
 {

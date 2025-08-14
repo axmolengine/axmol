@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "../BaseTest.h"
 #include "../MeshRendererTest/DrawNode3D.h"
 
-#include "rhi/ProgramState.h"
+#include "axmol/rhi/ProgramState.h"
 
 #include <string>
 

@@ -26,10 +26,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "network/HttpClient-wasm.h"
+#include "axmol/network/HttpClient-wasm.h"
 #include <queue>
-#include "base/Director.h"
-#include "platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
 #include "yasio/string_view.hpp"
 
 #if EMSCRIPTEN

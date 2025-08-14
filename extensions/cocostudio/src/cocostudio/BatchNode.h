@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/Node.h"
+#include "axmol/2d/Node.h"
 #include "ArmatureDefine.h"
 #include "CocosStudioExport.h"
 

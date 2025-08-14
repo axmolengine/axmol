@@ -32,9 +32,9 @@
  *
  * Adapted from cocos2d-x to cocos2d-iphone by Ricardo Quesada
  */
-#include "base/Macros.h"
-#include "2d/ActionCatmullRom.h"
-#include "2d/Node.h"
+#include "axmol/base/Macros.h"
+#include "axmol/2d/ActionCatmullRom.h"
+#include "axmol/2d/Node.h"
 
 #include <iterator>
 

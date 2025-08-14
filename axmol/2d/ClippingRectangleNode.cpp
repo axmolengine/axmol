@@ -21,11 +21,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "2d/ClippingRectangleNode.h"
-#include "base/Director.h"
-#include "renderer/Renderer.h"
-#include "math/Vec2.h"
-#include "platform/RenderView.h"
+#include "axmol/2d/ClippingRectangleNode.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/math/Vec2.h"
+#include "axmol/platform/RenderView.h"
 
 namespace ax
 {

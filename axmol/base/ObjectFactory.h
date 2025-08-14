@@ -28,8 +28,8 @@ THE SOFTWARE.
 #include <string>
 #include <unordered_map>
 #include <functional>
-#include "base/Object.h"
-#include "platform/PlatformMacros.h"
+#include "axmol/base/Object.h"
+#include "axmol/platform/PlatformMacros.h"
 
 namespace ax
 {

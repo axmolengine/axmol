@@ -26,7 +26,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/ActionGrid.h"
+#include "axmol/2d/ActionGrid.h"
 
 namespace ax
 {

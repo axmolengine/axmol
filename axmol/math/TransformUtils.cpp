@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "math/TransformUtils.h"
-#include "math/AffineTransform.h"
+#include "axmol/math/TransformUtils.h"
+#include "axmol/math/AffineTransform.h"
 
 namespace ax
 {

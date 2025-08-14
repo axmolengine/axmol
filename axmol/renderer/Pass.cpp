@@ -27,20 +27,20 @@
  - OGRE3D: http://www.ogre3d.org/
  - Qt3D: http://qt-project.org/
  ****************************************************************************/
-#include "renderer/Pass.h"
+#include "axmol/renderer/Pass.h"
 #include <xxhash.h>
-#include "renderer/Texture2D.h"
-#include "renderer/Technique.h"
-#include "renderer/Material.h"
-#include "rhi/ProgramState.h"
-#include "3d/MeshVertexIndexData.h"
-#include "3d/VertexInputBinding.h"
-#include "base/Director.h"
-#include "renderer/Renderer.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/renderer/Technique.h"
+#include "axmol/renderer/Material.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/3d/MeshVertexIndexData.h"
+#include "axmol/3d/VertexInputBinding.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/Renderer.h"
 
-#include "base/Types.h"
-#include "base/Utils.h"
-#include "2d/Node.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Utils.h"
+#include "axmol/2d/Node.h"
 
 namespace ax
 {

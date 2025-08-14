@@ -24,26 +24,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "3d/Terrain.h"
+#include "axmol/3d/Terrain.h"
 
 using namespace ax;
 #include <stdlib.h>
 #include <float.h>
 #include <set>
 #include <stddef.h>  // offsetof
-#include "renderer/Renderer.h"
-#include "renderer/Shaders.h"
-#include "rhi/DriverBase.h"
-#include "rhi/Program.h"
-#include "rhi/Buffer.h"
-#include "base/Director.h"
-#include "base/Types.h"
-#include "base/axstd.h"
-#include "base/EventType.h"
-#include "2d/Camera.h"
-#include "platform/Image.h"
-#include "3d/shaderinfos.h"
-#include "base/Utils.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/Program.h"
+#include "axmol/rhi/Buffer.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/axstd.h"
+#include "axmol/base/EventType.h"
+#include "axmol/2d/Camera.h"
+#include "axmol/platform/Image.h"
+#include "axmol/3d/shaderinfos.h"
+#include "axmol/base/Utils.h"
 
 namespace ax
 {

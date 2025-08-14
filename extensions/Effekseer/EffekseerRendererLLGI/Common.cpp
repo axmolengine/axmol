@@ -1,4 +1,4 @@
-#include "Common.h"
+#include "axmol/platform/Common.h"
 #include "EffekseerRendererLLGI.RendererImplemented.h"
 #include "GraphicsDevice.h"
 

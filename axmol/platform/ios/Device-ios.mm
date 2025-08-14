@@ -26,12 +26,12 @@
  ****************************************************************************/
 #import <UIKit/UIKit.h>
 
-#include "platform/Device.h"
-#include "base/Types.h"
-#include "base/EventDispatcher.h"
-#include "base/EventAcceleration.h"
-#include "base/Director.h"
-#include "platform/apple/Device-apple.h"
+#include "axmol/platform/Device.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/EventAcceleration.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/apple/Device-apple.h"
 
 // Accelerometer
 #if !defined(AX_TARGET_OS_TVOS)

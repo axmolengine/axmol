@@ -28,23 +28,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/ParticleSystemQuad.h"
+#include "axmol/2d/ParticleSystemQuad.h"
 #include <algorithm>
 #include <stddef.h>  // offsetof
-#include "base/Types.h"
-#include "2d/SpriteFrame.h"
-#include "2d/ParticleBatchNode.h"
-#include "renderer/TextureAtlas.h"
-#include "renderer/Renderer.h"
-#include "base/Director.h"
-#include "base/EventType.h"
-#include "base/Configuration.h"
-#include "base/EventListenerCustom.h"
-#include "base/EventDispatcher.h"
-#include "base/text_utils.h"
-#include "renderer/Shaders.h"
-#include "rhi/ProgramState.h"
-#include "2d/TweenFunction.h"
+#include "axmol/base/Types.h"
+#include "axmol/2d/SpriteFrame.h"
+#include "axmol/2d/ParticleBatchNode.h"
+#include "axmol/renderer/TextureAtlas.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventType.h"
+#include "axmol/base/Configuration.h"
+#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/text_utils.h"
+#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/ProgramState.h"
+#include "axmol/2d/TweenFunction.h"
 
 namespace ax
 {

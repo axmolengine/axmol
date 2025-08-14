@@ -25,10 +25,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "base/Object.h"
-#include "base/AutoreleasePool.h"
-#include "base/Macros.h"
-#include "base/ScriptSupport.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/AutoreleasePool.h"
+#include "axmol/base/Macros.h"
+#include "axmol/base/ScriptSupport.h"
 
 #if AX_OBJECT_LEAK_DETECTION
 #    include <algorithm>  // std::find

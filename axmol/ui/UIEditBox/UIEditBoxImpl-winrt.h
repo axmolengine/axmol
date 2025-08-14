@@ -26,9 +26,9 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformConfig.h"
+#include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#include "ui/UIEditBox/UIEditBoxImpl-common.h"
+#include "axmol/ui/UIEditBox/UIEditBoxImpl-common.h"
 
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.UI.Xaml.h>

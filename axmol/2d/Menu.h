@@ -27,9 +27,9 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/MenuItem.h"
-#include "2d/Layer.h"
-#include "base/Value.h"
+#include "axmol/2d/MenuItem.h"
+#include "axmol/2d/Layer.h"
+#include "axmol/base/Value.h"
 
 namespace ax
 {

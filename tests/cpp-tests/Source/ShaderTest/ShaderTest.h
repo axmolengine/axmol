@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "ui/CocosGUI.h"
+#include "axmol/ui/CocosGUI.h"
 
 #include "extensions/axmol-ext.h"
 #include "../BaseTest.h"

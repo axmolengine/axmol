@@ -24,11 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "math/Rect.h"
+#include "axmol/math/Rect.h"
 
 #include <algorithm>
 #include <cmath>
-#include "base/Macros.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

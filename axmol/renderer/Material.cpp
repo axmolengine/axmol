@@ -28,16 +28,16 @@
  - OGRE3D: http://www.ogre3d.org/
  - Qt3D: http://qt-project.org/
  ****************************************************************************/
-#include "renderer/Material.h"
-#include "renderer/Technique.h"
-#include "renderer/Pass.h"
-#include "renderer/TextureCache.h"
-#include "renderer/Texture2D.h"
-#include "rhi/DriverBase.h"
-#include "base/Properties.h"
-#include "base/Director.h"
-#include "platform/FileUtils.h"
-#include "base/Logging.h"
+#include "axmol/renderer/Material.h"
+#include "axmol/renderer/Technique.h"
+#include "axmol/renderer/Pass.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/renderer/Texture2D.h"
+#include "axmol/rhi/DriverBase.h"
+#include "axmol/base/Properties.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Logging.h"
 
 #include <sstream>
 

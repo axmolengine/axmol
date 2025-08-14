@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include <doctest.h>
-#include "ui/UIHelper.h"
+#include "axmol/ui/UIHelper.h"
 
 using namespace ax;
 using ax::ui::Helper;

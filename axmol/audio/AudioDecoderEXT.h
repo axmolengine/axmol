@@ -28,8 +28,8 @@
 
 #include <stdint.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
-#include "audio/AudioDecoder.h"
-#include "platform/IFileStream.h"
+#include "axmol/audio/AudioDecoder.h"
+#include "axmol/platform/IFileStream.h"
 
 namespace ax
 {

@@ -25,7 +25,7 @@
 
 #include <doctest.h>
 #include <float.h>
-#include "math/FastRNG.h"
+#include "axmol/math/FastRNG.h"
 
 
 TEST_SUITE("math/FastRNG") {

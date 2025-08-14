@@ -33,13 +33,13 @@ THE SOFTWARE.
 #include <mutex>
 #include <memory>
 
-#include "platform/IFileStream.h"
-#include "platform/PlatformMacros.h"
-#include "base/Types.h"
-#include "base/Value.h"
-#include "base/Data.h"
-#include "base/Scheduler.h"
-#include "base/Director.h"
+#include "axmol/platform/IFileStream.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Types.h"
+#include "axmol/base/Value.h"
+#include "axmol/base/Data.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/Director.h"
 
 #define AX_CONTENT_DIR "Content/"
 #define AX_CONTENT_DIR_LEN (sizeof("Content/") - 1)

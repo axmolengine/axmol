@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "base/EventListener.h"
-#include "base/EventMouse.h"
+#include "axmol/base/EventListener.h"
+#include "axmol/base/EventMouse.h"
 
 /**
  * @addtogroup base

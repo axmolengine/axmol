@@ -24,8 +24,8 @@
 
 #include "FontTest.h"
 #include "../testResource.h"
-#include "2d/FontAtlasCache.h"
-#include "2d/FontFreeType.h"
+#include "axmol/2d/FontAtlasCache.h"
+#include "axmol/2d/FontFreeType.h"
 
 using namespace ax;
 

@@ -8,7 +8,7 @@
 #endif
 #include "utils/ByteBuffer.h"
 
-#include "base/format.h"
+#include "axmol/base/format.h"
 
 using namespace ax;
 NS_FGUI_BEGIN

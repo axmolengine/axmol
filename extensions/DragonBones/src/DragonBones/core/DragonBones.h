@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -33,7 +33,7 @@
 #include <functional>
 #include <sstream>
 #include <assert.h>
-#include "base/hlookup.h"
+#include "axmol/base/hlookup.h"
 // dragonBones assert
 #define DRAGONBONES_ASSERT(cond, msg) \
     do                                \

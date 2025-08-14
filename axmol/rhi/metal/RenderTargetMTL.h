@@ -1,6 +1,6 @@
 #pragma once
-#include "../RenderTarget.h"
-#include "CommandBufferMTL.h"
+#include "axmol/rhi/RenderTarget.h"
+#include "axmol/rhi/metal/CommandBufferMTL.h"
 
 namespace ax::rhi::mtl {
 

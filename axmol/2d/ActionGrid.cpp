@@ -25,11 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "2d/ActionGrid.h"
+#include "axmol/2d/ActionGrid.h"
 
-#include "2d/Grid.h"
-#include "2d/NodeGrid.h"
-#include "base/Director.h"
+#include "axmol/2d/Grid.h"
+#include "axmol/2d/NodeGrid.h"
+#include "axmol/base/Director.h"
 
 namespace ax
 {

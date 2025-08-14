@@ -28,11 +28,11 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "platform/PlatformConfig.h"
-#include "base/Object.h"
-#include "base/Value.h"
-#include "base/Vector.h"
-#include "2d/SpriteFrame.h"
+#include "axmol/platform/PlatformConfig.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Value.h"
+#include "axmol/base/Vector.h"
+#include "axmol/2d/SpriteFrame.h"
 
 #include <string>
 

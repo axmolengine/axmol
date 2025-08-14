@@ -24,11 +24,11 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "ui/UILayout.h"
+#include "axmol/ui/UILayout.h"
 #include "DictionaryHelper.h"
 #include "WidgetReader/WidgetReaderProtocol.h"
-#include "base/ObjectFactory.h"
-#include "base/Value.h"
+#include "axmol/base/ObjectFactory.h"
+#include "axmol/base/Value.h"
 #include "CocosStudioExport.h"
 
 namespace protocolbuffers

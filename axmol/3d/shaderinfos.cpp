@@ -1,4 +1,4 @@
-#include "shaderinfos.h"
+#include "axmol/3d/shaderinfos.h"
 
 namespace ax
 {

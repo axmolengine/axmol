@@ -26,8 +26,8 @@
 #include "ShaderTest2.h"
 #include "ShaderTest.h"
 #include "../testResource.h"
-#include "axmol.h"
-#include "rhi/DriverBase.h"
+#include "axmol/axmol.h"
+#include "axmol/rhi/DriverBase.h"
 #include <tuple>
 
 using namespace ax;

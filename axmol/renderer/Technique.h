@@ -30,10 +30,10 @@
 #pragma once
 
 #include <string>
-#include "renderer/RenderState.h"
-#include "base/Object.h"
-#include "platform/PlatformMacros.h"
-#include "base/Vector.h"
+#include "axmol/renderer/RenderState.h"
+#include "axmol/base/Object.h"
+#include "axmol/platform/PlatformMacros.h"
+#include "axmol/base/Vector.h"
 
 namespace ax
 {

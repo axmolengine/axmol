@@ -25,10 +25,10 @@
 
 #pragma once
 
-#include "3d/Bundle3DData.h"
-#include "base/Object.h"
-#include "base/Vector.h"
-#include "math/Math.h"
+#include "axmol/3d/Bundle3DData.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Vector.h"
+#include "axmol/math/Math.h"
 #include <vector>
 
 namespace ax

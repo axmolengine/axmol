@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #pragma once
 
-#include "platform/PlatformMacros.h"
+#include "axmol/platform/PlatformMacros.h"
 
 #include <string>
 

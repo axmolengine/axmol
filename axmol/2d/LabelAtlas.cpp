@@ -25,14 +25,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "2d/LabelAtlas.h"
-#include "renderer/TextureAtlas.h"
-#include "platform/FileUtils.h"
-#include "base/Director.h"
-#include "renderer/TextureCache.h"
+#include "axmol/2d/LabelAtlas.h"
+#include "axmol/renderer/TextureAtlas.h"
+#include "axmol/platform/FileUtils.h"
+#include "axmol/base/Director.h"
+#include "axmol/renderer/TextureCache.h"
 
 #if AX_LABELATLAS_DEBUG_DRAW
-#    include "renderer/Renderer.h"
+#    include "axmol/renderer/Renderer.h"
 #endif
 
 namespace ax

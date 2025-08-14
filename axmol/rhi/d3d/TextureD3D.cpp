@@ -1,7 +1,7 @@
-#include "TextureD3D.h"
-#include "DriverD3D.h"
-#include "UtilsD3D.h"
-#include "../PixelFormatUtils.h"
+#include "axmol/rhi/d3d/TextureD3D.h"
+#include "axmol/rhi/d3d/DriverD3D.h"
+#include "axmol/rhi/d3d/UtilsD3D.h"
+#include "axmol/rhi/PixelFormatUtils.h"
 
 namespace ax::rhi::d3d
 {

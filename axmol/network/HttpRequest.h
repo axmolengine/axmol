@@ -32,12 +32,12 @@
 #include <memory>
 #include <future>
 #include <atomic>
-#include "base/Object.h"
-#include "base/Macros.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Macros.h"
 
 #include "yasio/byte_buffer.hpp"
 
-#include "ConcurrentRefCountedBase.h"
+#include "axmol/network/ConcurrentRefCountedBase.h"
 
 /**
  * @addtogroup network

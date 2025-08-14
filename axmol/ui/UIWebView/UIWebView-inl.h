@@ -31,10 +31,10 @@
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
-#include "ui/UIWebView/UIWebView.h"
-#include "platform/RenderView.h"
-#include "base/Director.h"
-#include "platform/FileUtils.h"
+#include "axmol/ui/UIWebView/UIWebView.h"
+#include "axmol/platform/RenderView.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/FileUtils.h"
 
 namespace ax
 {

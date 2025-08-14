@@ -26,10 +26,10 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-#include "2d/Node.h"
-#include "2d/Sprite.h"
-#include "base/Protocols.h"
-#include "renderer/CustomCommand.h"
+#include "axmol/2d/Node.h"
+#include "axmol/2d/Sprite.h"
+#include "axmol/base/Protocols.h"
+#include "axmol/renderer/CustomCommand.h"
 
 #include <vector>
 

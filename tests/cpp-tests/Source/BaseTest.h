@@ -26,7 +26,7 @@
 #ifndef _CPPTESTS_BASETEST_H__
 #define _CPPTESTS_BASETEST_H__
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 #include "extensions/axmol-ext.h"
 #include "GUI/ControlExtension/ControlExtensions.h"
 #include "GUI/ScrollView/ScrollView.h"

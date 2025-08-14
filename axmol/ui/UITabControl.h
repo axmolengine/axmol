@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "ui/UIAbstractCheckButton.h"
-#include "ui/UIWidget.h"
+#include "axmol/ui/UIAbstractCheckButton.h"
+#include "axmol/ui/UIWidget.h"
 
 /**
  * @addtogroup ui

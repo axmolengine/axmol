@@ -51,9 +51,9 @@
 #include "lua-bindings/manual/LuaBasicConversions.h"
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #include "lua-bindings/manual/LuaValue.h"
-#include "ui/CocosGUI.h"
+#include "axmol/ui/CocosGUI.h"
 #include "lua-bindings/manual/LuaEngine.h"
-#include "base/EventListenerFocus.h"
+#include "axmol/base/EventListenerFocus.h"
 
 using namespace ui;
 

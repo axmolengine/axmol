@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "SpriteFrameCacheHelper.h"
 #include "ArmatureDataManager.h"
 #include "CocosStudioExport.h"
-#include "math/Math.h"
+#include "axmol/math/Math.h"
 
 class b2Body;
 struct cpBody;

@@ -26,8 +26,8 @@
  ****************************************************************************/
 
 #import "RootViewController.h"
-#import "axmol.h"
-#import "platform/ios/EARenderView-ios.h"
+#import "axmol/axmol.h"
+#import "axmol/platform/ios/EARenderView-ios.h"
 
 @implementation RootViewController
 

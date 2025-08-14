@@ -1,5 +1,5 @@
 #include "EaseManager.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 NS_FGUI_BEGIN
 using namespace ax;

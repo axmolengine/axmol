@@ -25,9 +25,9 @@ THE SOFTWARE.
 #pragma once
 
 #include "TimelineMacro.h"
-#include "renderer/Renderer.h"
+#include "axmol/renderer/Renderer.h"
 #include "cocostudio/CocosStudioExport.h"
-#include "base/Map.h"
+#include "axmol/base/Map.h"
 
 #include "BoneNode.h"
 

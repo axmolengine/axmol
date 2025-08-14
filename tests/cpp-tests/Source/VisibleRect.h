@@ -25,7 +25,7 @@
 #ifndef __VISIBLERECT_H__
 #define __VISIBLERECT_H__
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 class VisibleRect
 {

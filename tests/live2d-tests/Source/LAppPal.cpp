@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -7,7 +7,7 @@
 
 #include "LAppPal.hpp"
 #include <Model/CubismMoc.hpp>
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 
 using namespace Csm;
 using namespace ax;

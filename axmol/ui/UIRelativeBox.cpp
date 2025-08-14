@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIRelativeBox.h"
+#include "axmol/ui/UIRelativeBox.h"
 
 namespace ax
 {

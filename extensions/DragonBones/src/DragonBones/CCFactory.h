@@ -24,7 +24,7 @@
 #define DRAGONBONES_AX_FACTORY_H
 
 #include "DragonBonesHeaders.h"
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "CCArmatureDisplay.h"
 
 DRAGONBONES_NAMESPACE_BEGIN

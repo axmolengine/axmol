@@ -33,7 +33,7 @@ extensions use it, i.g fairygui, live2d ...
 
 #pragma once
 
-#include "axmol.h"
+#include "axmol/axmol.h"
 
 #define COCOS2D_VERSION 0x00040000
 

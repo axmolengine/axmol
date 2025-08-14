@@ -30,7 +30,7 @@
 #include "lua-bindings/manual/LuaEngine.h"
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
-#include "network/HttpClient.h"
+#include "axmol/network/HttpClient.h"
 
 #include <unordered_map>
 #include <string>

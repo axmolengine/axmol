@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "2d/Light.h"
-#include "2d/Scene.h"
+#include "axmol/2d/Light.h"
+#include "axmol/2d/Scene.h"
 
 namespace ax
 {

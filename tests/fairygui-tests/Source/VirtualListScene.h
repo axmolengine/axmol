@@ -1,7 +1,7 @@
 #ifndef __VIRTUALLIST_SCENE_H__
 #define __VIRTUALLIST_SCENE_H__
 
-#include "cocos2d.h"
+#include "axmol/cocos2d.h"
 #include "DemoScene.h"
 
 USING_NS_FGUI;
