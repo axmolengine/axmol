@@ -32,27 +32,27 @@
  */
 
 // The application will come to foreground.
-// This message is posted in core/platform/android/jni/Java_dev_axmol_lib_AxmolRenderer.cpp.
+// This message is posted in axmol/platform/android/jni/Java_dev_axmol_lib_AxmolRenderer.cpp.
 #define EVENT_COME_TO_FOREGROUND "event_come_to_foreground"
 
 // The renderer[android:GLSurfaceView.Renderer  WP8:Cocos2dRenderer] was recreated.
 // This message is used for reloading resources before renderer is recreated on Android/WP8.
-// This message is posted in core/platform/android/javaactivity.cpp and
+// This message is posted in axmol/platform/android/javaactivity.cpp and
 // cocos\platform\wp8-xaml\cpp\Cocos2dRenderer.cpp.
 #define EVENT_RENDERER_RECREATED "event_renderer_recreated"
 
 // The application will come to background.
 // This message is used for doing something before coming to background, such as save RenderTexture.
-// This message is posted in core/platform/android/jni/Java_dev_axmol_lib_AxmolRenderer.cpp and
+// This message is posted in axmol/platform/android/jni/Java_dev_axmol_lib_AxmolRenderer.cpp and
 // cocos\platform\wp8-xaml\cpp\Cocos2dRenderer.cpp.
 #define EVENT_COME_TO_BACKGROUND "event_come_to_background"
 
 // The application will be restarted.
 // This message is used for notifying application code of a pending application restart.
-// This message is posted in core/platform/android/javaactivity.cpp
+// This message is posted in axmol/platform/android/javaactivity.cpp
 #define EVENT_APP_RESTARTING "event_app_restarting"
 
 // The application has made a warm start, creating a new Activity, Surface View and Renderer
 // This message is used for notifying application code of a warm start.
-// This message is posted in core/platform/android/javaactivity.cpp
+// This message is posted in axmol/platform/android/javaactivity.cpp
 #define EVENT_APP_WARM_START "event_app_warm_start"

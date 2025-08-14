@@ -29,7 +29,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
     include(AXBuildSet)
-    add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
+    add_subdirectory(${_AX_ROOT}/axmol ${ENGINE_BINARY_PATH}/axmol)
 endif()
 
 _1kfetch(sample-assets)

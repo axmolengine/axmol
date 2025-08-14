@@ -18,7 +18,7 @@ $myRoot = $PSScriptRoot
 
 # parse engine version
 $AX_ROOT = (Resolve-Path $myRoot/../..).Path
-$axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
+$axver_file = (Resolve-Path $AX_ROOT/axmol/axmolver.h.in).Path
 $content = $(Get-Content -Path $axver_file)
 
 function parse_axver($part) {

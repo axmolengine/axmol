@@ -41,10 +41,10 @@ Let's say you want to write unit tests for `ax::Node` class. To add a new test f
 
 1. Find or create a source file to hold your tests. For easier navigation test source files follow
     the same layout and naming as the engine source files, and only add a `Tests` postfix. For
-    example `ax::Node` in engine is in `core/2d/Node.h`, so the test file should be in
-    `tests/unit-tests/Source/core/2d/NodeTests.cpp`.
+    example `ax::Node` in engine is in `axmol/2d/Node.h`, so the test file should be in
+    `tests/unit-tests/Source/axmol/2d/NodeTests.cpp`.
 2. If the file doesn't exist, then create a new file, in this case
-    `tests/unit-tests/Source/core/2d/NodeTests.cpp`.
+    `tests/unit-tests/Source/axmol/2d/NodeTests.cpp`.
 3. Register new file in `tests/unit-tests/CMakeLists.txt`.
 
 4. For the test file use the following structure:

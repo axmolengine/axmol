@@ -51,7 +51,7 @@ define_property(SOURCE PROPERTY AXSLCC_OUTPUT
 # Find shader sources in specified directory
 # syntax: ax_find_shaders(dir shader_sources [RECURSE])
 # examples:
-# - ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/core/renderer/shaders" runtime_shader_sources)
+# - ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/axmol/renderer/shaders" runtime_shader_sources)
 # - ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Source" custom_shader_sources RECURSE)
 function(ax_find_shaders dir varName)
   set(options RECURSE)
@@ -156,7 +156,7 @@ function(ax_target_compile_shaders target_name)
       set(INC_DIRS "")
     endif()
 
-    list(APPEND INC_DIRS "${_AX_ROOT}/core/renderer/shaders")
+    list(APPEND INC_DIRS "${_AX_ROOT}/axmol/renderer/shaders")
     list(APPEND SC_FLAGS "--include-dirs=${INC_DIRS}")
 
     if(opt_CVAR)

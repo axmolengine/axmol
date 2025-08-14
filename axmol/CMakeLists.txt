@@ -35,7 +35,7 @@
 set(_AX_VERSION 2.7)
 
 if(NOT DEFINED _AX_CORE_LIB)
-  set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name")
+  set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol engine lib name")
 endif()
 
 cmake_policy(SET CMP0127 NEW)
@@ -322,7 +322,7 @@ elseif(AX_ENABLE_MFMEDIA AND NOT WINRT)
   endif()
 endif()
 
-ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+ax_find_shaders(${_AX_ROOT}/axmol/renderer/shaders BUILTIN_SHADER_SOURCES)
 set(ax_builtin_shaders ${BUILTIN_SHADER_SOURCES} CACHE STATIC "" FORCE)
 
 # configure engine builtin light num
@@ -348,17 +348,17 @@ configure_file(
 # POSITION_BUMPEDNORMAL_TEXTURE_3D:     positionNormalTexture.vert,         colorNormalTexture.frag, lightNormMapDef
 # SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D: skinPositionNormalTexture_vert,     colorNormalTexture.frag, lightNormMapDef
 set_source_files_properties(
-  ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
-  ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
-  ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
-  ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+  ${_AX_ROOT}/axmol/renderer/shaders/colorNormal.frag
+  ${_AX_ROOT}/axmol/renderer/shaders/colorNormalTexture.frag
+  ${_AX_ROOT}/axmol/renderer/shaders/positionNormalTexture.vert
+  ${_AX_ROOT}/axmol/renderer/shaders/skinPositionNormalTexture.vert
   PROPERTIES AXSLCC_DEFINES
   "MAX_DIRECTIONAL_LIGHT_NUM=${AX_MAX_DIRECTIONAL_LIGHT},MAX_POINT_LIGHT_NUM=${AX_MAX_POINT_LIGHT},MAX_SPOT_LIGHT_NUM=${AX_MAX_SPOT_LIGHT}"
 )
 set_source_files_properties(
-  ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
-  ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
-  ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+  ${_AX_ROOT}/axmol/renderer/shaders/colorNormalTexture.frag
+  ${_AX_ROOT}/axmol/renderer/shaders/positionNormalTexture.vert
+  ${_AX_ROOT}/axmol/renderer/shaders/skinPositionNormalTexture.vert
   PROPERTIES AXSLCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
 )
 ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
@@ -385,14 +385,14 @@ target_include_directories(${_AX_CORE_LIB}
   PUBLIC ${_AX_ROOT}
   PUBLIC ${_AX_ROOT}/3rdparty
   PUBLIC ${_AX_ROOT}/extensions/scripting
-  PUBLIC ${_AX_ROOT}/core
-  PUBLIC ${_AX_ROOT}/core/platform
+  PUBLIC ${_AX_ROOT}/axmol
+  PUBLIC ${_AX_ROOT}/axmol/platform
 
   INTERFACE ${_AX_ROOT}/3rdparty
   INTERFACE ${_AX_ROOT}/extensions/scripting
-  INTERFACE ${_AX_ROOT}/core/base
-  INTERFACE ${_AX_ROOT}/core/audio
-  INTERFACE ${_AX_ROOT}/core/platform/${PLATFORM_NAME}
+  INTERFACE ${_AX_ROOT}/axmol/base
+  INTERFACE ${_AX_ROOT}/axmol/audio
+  INTERFACE ${_AX_ROOT}/axmol/platform/${PLATFORM_NAME}
 )
 
 set_target_properties(${_AX_CORE_LIB}
@@ -627,7 +627,7 @@ if(MSVC)
 endif()
 
 if(ANDROID)
-  add_subdirectory(${_AX_ROOT}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
+  add_subdirectory(${_AX_ROOT}/axmol/platform/android ${ENGINE_BINARY_PATH}/axmol/cpp-android)
 
   if(BUILD_SHARED_LIBS)
     # whole archive for jni

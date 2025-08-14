@@ -23,7 +23,7 @@
 # ****************************************************************************/
 
 if(ANDROID)
-  # refer to target: core/platform/android/CMakeLists.txt
+  # refer to target: axmol/platform/android/CMakeLists.txt
   set(_AX_PLATFORM_SPECIFIC_SRC
     platform/android/Application-android.cpp
     platform/android/Common-android.cpp
@@ -140,7 +140,7 @@ elseif(LINUX)
 elseif(EMSCRIPTEN)
   include_directories(
     PUBLIC "${_AX_ROOT}/3rdparty/angle/_x/include"
-    PUBLIC "${_AX_ROOT}/core"
+    PUBLIC "${_AX_ROOT}/axmol"
   )
   set(_AX_PLATFORM_SPECIFIC_HEADER
     platform/wasm/Application-wasm.h

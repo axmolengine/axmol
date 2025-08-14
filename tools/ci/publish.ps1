@@ -12,7 +12,7 @@ if ($commitish) {
 $prerelease = 'false'
 if (!$version -or ($version -eq 'auto')) {
     $prerelease = 'true'
-    $axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
+    $axver_file = (Resolve-Path $AX_ROOT/axmol/axmolver.h.in).Path
     $axver_content = $(Get-Content -Path $axver_file)
     function parse_axver($part) {
         return ($axver_content | Select-String "#define AX_VERSION_$part").Line.Split(' ')[2]
@@ -51,8 +51,8 @@ $excludes = @(
     '.vscode'
     'build_*'
     'build'
-    'core/axmolver.h'
-    'core/renderer/RenderConsts.h'
+    'axmol/axmolver.h'
+    'axmol/renderer/RenderConsts.h'
     '.github'
     'tmp'
     'temp'
@@ -77,7 +77,7 @@ $main_pkg_compress_args = @{
 $bs_pkg_file_name = "axmol-bs-$version.zip"
 $bs_pkg_file_path = $(Join-Path $AX_ROOT $bs_pkg_file_name)
 $bs_pkg_compress_args = @{
-    Path             = @("$AX_ROOT/1k", "$AX_ROOT/setup.ps1", "$AX_ROOT/core/axmolver.h.in", "$AX_ROOT/tools/cmdline")
+    Path             = @("$AX_ROOT/1k", "$AX_ROOT/setup.ps1", "$AX_ROOT/axmol/axmolver.h.in", "$AX_ROOT/tools/cmdline")
     CompressionLevel = 'Optimal'
     DestinationPath  = $bs_pkg_file_path
     RelativeBasePath = $AX_ROOT

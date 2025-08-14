@@ -580,7 +580,7 @@ function(ax_setup_app_config app_name)
   endif()
 endfunction()
 
-set(AX_WASM_SHELL_FILE "${_AX_ROOT}/core/platform/wasm/shell_minimal.html" CACHE STRING "The path of wasm shell file")
+set(AX_WASM_SHELL_FILE "${_AX_ROOT}/axmol/platform/wasm/shell_minimal.html" CACHE STRING "The path of wasm shell file")
 
 option(AX_WASM_ENABLE_DEVTOOLS "Enable wasm devtools" ON)
 
@@ -678,14 +678,14 @@ macro(ax_setup_winrt_sources)
     proj.winrt/App.h
     proj.winrt/App.cpp
     proj.winrt/Package.appxmanifest
-    ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml
-    ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.idl
-    ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.h
-    ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.cpp
-    ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLES.h
-    ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLES.cpp
-    ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.h
-    ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.cpp
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.xaml
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.idl
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.h
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.cpp
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLES.h
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLES.cpp
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/AxmolRenderer.h
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/AxmolRenderer.cpp
   )
 
   file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/proj.winrt/App.xaml" APP_XAML_FULL_PATH)
@@ -694,14 +694,14 @@ macro(ax_setup_winrt_sources)
     PROPERTY VS_SETTINGS
     "DependentUpon=${APP_XAML_FULL_PATH}"
   )
-  file(TO_NATIVE_PATH "${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml" MAINPAGE_XAML_FULL_PATH)
+  file(TO_NATIVE_PATH "${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.xaml" MAINPAGE_XAML_FULL_PATH)
   set_property(
-    SOURCE ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.h ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.cpp ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.idl
+    SOURCE ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.h ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.cpp ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.idl
     PROPERTY VS_SETTINGS
     "DependentUpon=${MAINPAGE_XAML_FULL_PATH}"
   )
 
-  list(APPEND GAME_INC_DIRS ${_AX_ROOT}/core/platform/winrt/xaml)
+  list(APPEND GAME_INC_DIRS ${_AX_ROOT}/axmol/platform/winrt/xaml)
 
   list(APPEND GAME_HEADER
     ${PLATFORM_HEADERS}

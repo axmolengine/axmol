@@ -80,11 +80,11 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     PRIVATE ${AX_ROOT_DIR}
     PRIVATE ${AX_ROOT_DIR}/3rdparty
     PRIVATE ${AX_ROOT_DIR}/extensions
-    PRIVATE ${AX_ROOT_DIR}/core
-    PRIVATE ${AX_ROOT_DIR}/core/platform
-    PRIVATE ${AX_ROOT_DIR}/core/base
-    PRIVATE ${AX_ROOT_DIR}/core/audio
-    PRIVATE ${AX_ROOT_DIR}/core/platform/win32
+    PRIVATE ${AX_ROOT_DIR}/axmol
+    PRIVATE ${AX_ROOT_DIR}/axmol/platform
+    PRIVATE ${AX_ROOT_DIR}/axmol/base
+    PRIVATE ${AX_ROOT_DIR}/axmol/audio
+    PRIVATE ${AX_ROOT_DIR}/axmol/platform/win32
     PRIVATE ${AX_ROOT_DIR}/3rdparty/fmt/include
     PRIVATE ${AX_ROOT_DIR}/3rdparty/robin-map/include
     PRIVATE ${AX_ROOT_DIR}/3rdparty/freetype/include

@@ -52,7 +52,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     endif()
 
     if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
+        add_subdirectory(${_AX_ROOT}/axmol ${ENGINE_BINARY_PATH}/axmol)
     endif()
 endif()
 

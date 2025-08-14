@@ -44,12 +44,12 @@ if (($stage -band 1)) {
         Copy-Item "$prefix/llvm-$llvm_ver/lib/$suffix" -Destination $lib_path
     }
 
-    ## ensure $env:AX_ROOT/core/axmolver.h exists
+    ## ensure $env:AX_ROOT/axmol/axmolver.h exists
     echo "AX_ROOT=$AX_ROOT"
-    if (!(Test-Path "$AX_ROOT/core/axmolver.h" -PathType Leaf)) {
-        $content = [System.IO.File]::ReadAllText("$AX_ROOT/core/axmolver.h.in")
+    if (!(Test-Path "$AX_ROOT/axmol/axmolver.h" -PathType Leaf)) {
+        $content = [System.IO.File]::ReadAllText("$AX_ROOT/axmol/axmolver.h.in")
         $content = $content.Replace('@AX_GIT_PRESENT@', '0')
-        [System.IO.File]::WriteAllText("$AX_ROOT/core/axmolver.h")
+        [System.IO.File]::WriteAllText("$AX_ROOT/axmol/axmolver.h")
     }
 
     ## run genbindings.py

@@ -107,7 +107,7 @@ bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view 
 
     // chrome/edge can't connect
     // firefox works with "Sec-Fetch-Site: cross-site" in request header
-    // refer: https://github.com/emscripten-core/emscripten/issues/19100
+    // refer: https://github.com/emscripten-axmol/emscripten/issues/19100
     // wasm websocket callback thread same with axmol render thread
     emscripten_websocket_set_onopen_callback(_wsfd, this, em_ws_onopen);
     emscripten_websocket_set_onerror_callback(_wsfd, this, em_ws_onerror);

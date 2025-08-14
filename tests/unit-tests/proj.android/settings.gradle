@@ -11,7 +11,7 @@ else {
     ENGINE_ROOT = settingsDir.getPath() + "/../../.."
 }
 
-def ENGINE_JAVA_LIBPATH = ENGINE_ROOT + '/core/platform/android/libaxmol';
+def ENGINE_JAVA_LIBPATH = ENGINE_ROOT + '/axmol/platform/android/libaxmol';
 
 include ':libaxmol'
 project(':libaxmol').projectDir = new File(ENGINE_JAVA_LIBPATH)

@@ -21,7 +21,7 @@ target_include_directories(${target_name}
   PRIVATE ../manual/platform/android
   PRIVATE ${lua_header}
   PRIVATE ${tolua_header}
-  PRIVATE ../../../../core
+  PRIVATE ../../../../axmol
   PRIVATE ../../../../3rdparty
   PRIVATE ../../../../3rdparty/fmt/include
   PRIVATE ../../../../3rdparty/robin-map/include

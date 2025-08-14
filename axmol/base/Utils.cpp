@@ -494,7 +494,7 @@ std::string computeFileDigest(std::string_view filename,
 LanguageType getLanguageTypeByISO2(const char* code)
 {
     // this function is used by all platforms to get system language
-    // except windows: core/platform/win32/CCApplication-win32.cpp
+    // except windows: axmol/platform/win32/CCApplication-win32.cpp
     LanguageType ret = LanguageType::ENGLISH;
 
     if (strncmp(code, "zh", 2) == 0)

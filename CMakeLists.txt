@@ -47,9 +47,9 @@ include(AXBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
 
-add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
+add_subdirectory(${_AX_ROOT}/axmol ${ENGINE_BINARY_PATH}/axmol)
 
-# prevent tests project to build "axmol/core" again
+# prevent tests project to build axmol engine again
 set(BUILD_ENGINE_DONE ON)
 
 if(AX_BUILD_TESTS)

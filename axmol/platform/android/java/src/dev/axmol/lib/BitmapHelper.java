@@ -47,7 +47,7 @@ public final class BitmapHelper {
     // Constants
     // ===========================================================
 
-    /* The values are the same as core/platform/Image.h. */
+    /* The values are the same as axmol/platform/Image.h. */
     private static final int HORIZONTAL_ALIGN_LEFT = 1;
     private static final int HORIZONTAL_ALIGN_RIGHT = 2;
     private static final int HORIZONTAL_ALIGN_CENTER = 3;

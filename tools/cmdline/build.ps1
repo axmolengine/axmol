@@ -81,7 +81,7 @@ if ($options.xc -isnot [array]) {
 
 $AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
 $workDir = $(Get-Location).Path
-if (Test-Path (Join-Path $AX_ROOT 'core/axmolver.h.in') -PathType Leaf) {
+if (Test-Path (Join-Path $AX_ROOT 'axmol/axmolver.h.in') -PathType Leaf) {
     $env:AX_ROOT = $AX_ROOT
 }
 else {

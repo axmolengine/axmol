@@ -81,7 +81,7 @@ setup_doxygen
 
 Write-Host "Using doxygen $(doxygen --version)"
 
-$axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
+$axver_file = (Resolve-Path $AX_ROOT/axmol/axmolver.h.in).Path
 $axver_content = $(Get-Content -Path $axver_file)
 function parse_axver($part) {
     return ($axver_content | Select-String "#define AX_VERSION_$part").Line.Split(' ')[2]

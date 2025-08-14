@@ -24,7 +24,7 @@
 
 #include "LayerTest.h"
 #include "../testResource.h"
-#include "../core/ui/UIText.h"
+#include "ui/UIText.h"
 
 using namespace ax;
 
