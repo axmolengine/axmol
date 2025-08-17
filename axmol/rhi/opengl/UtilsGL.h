@@ -61,33 +61,6 @@ struct UtilsGL
     static GLsizei getGLDataTypeSize(GLenum size);
 
     /**
-     * Convert magnification filter to GLint. i.e. convert SamplerFilter::LINEAR to GL_LINEAR.
-     * @param magFilter Specifies the magnification filter to convert.
-     * @return Magnification filter.
-     */
-    static GLint toGLMagFilter(SamplerFilter magFilter);
-
-    /**
-     * Convert minifying filter to GLint. i.e. convert SamplerFilter::LINEAR to GL_LINEAR.
-     * If mipmaps is enabled and texture width and height are not power of two, then if minFilter is
-     * SamplerFilter::LINEAR, GL_LINEAR is returned, otherwise return GL_NEAREST.
-     * @param minFilter Specifies minifying filter.
-     * @param hasMipmaps Specifies whether mipmap is enabled.
-     * @param isPow2 Specifies if texture width and height are power of two.
-     * @return Minifying filter
-     */
-    static GLint toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps, bool isPow2);
-
-    /**
-     * Convert wrap parameter for texture coordinate to GLint. i.e. convert SamplerAddressMode::REPEAT to GL_REPEAT.
-     * If texture width and height are not power of 2, then GL_CLAMP_TO_EDGE is returned.
-     * @param addressMode Specifies wrapping mode.
-     * @param isPow2 Specifies if texture width and height are power of two.
-     * @return Wrap mode.
-     */
-    static GLint toGLAddressMode(SamplerAddressMode addressMode, bool isPow2);
-
-    /**
      * Get textrue parameters from texture pixle format.
      * @param in textureFormat Specifies texture pixel format.
      * @param out internalFormat Specifies the internal format of the texture.

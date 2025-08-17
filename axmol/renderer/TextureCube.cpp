@@ -208,13 +208,9 @@ bool TextureCube::init(std::string_view positive_x,
         }
     }
 
-    rhi::TextureDesc textureDesc;
+    rhi::TextureDesc textureDesc{};
     textureDesc.width = textureDesc.height = imageSize;
-    textureDesc.textureType                      = rhi::TextureType::TEXTURE_CUBE;
-    textureDesc.samplerDesc.minFilter      = rhi::SamplerFilter::LINEAR;
-    textureDesc.samplerDesc.magFilter      = rhi::SamplerFilter::LINEAR;
-    textureDesc.samplerDesc.sAddressMode   = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
-    textureDesc.samplerDesc.tAddressMode   = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+    textureDesc.textureType                = rhi::TextureType::TEXTURE_CUBE;
     _texture =
         static_cast<rhi::Texture*>(rhi::DriverBase::getInstance()->createTexture(textureDesc));
     AXASSERT(_texture != nullptr, "TextureCubemap: texture can not be nullptr");

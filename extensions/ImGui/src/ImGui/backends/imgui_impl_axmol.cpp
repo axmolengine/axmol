@@ -100,12 +100,8 @@ static void ImGui_ImplAxmol_UpdateTexture(ImTextureData* tex)
         texture->initWithData(pixels, tex->Width * tex->Height * 4, rhi::PixelFormat::RGBA8, tex->Width,
                               tex->Height, true);
 
-        rhi::SamplerDesc descriptor(rhi::SamplerFilter::LINEAR,              // magFilter
-                                              rhi::SamplerFilter::LINEAR,              // minFilter
-                                              rhi::SamplerAddressMode::CLAMP_TO_EDGE,  // sAddressMode
-                                              rhi::SamplerAddressMode::CLAMP_TO_EDGE   // tAddressMode
-        );
-        texture->getBackendTexture()->updateSamplerDesc(descriptor);
+        rhi::SamplerDesc desc{};
+        texture->getBackendTexture()->updateSamplerDesc(desc);
 
         // Store identifiers
         tex->SetTexID((ImTextureID)(intptr_t)texture);

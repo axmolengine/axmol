@@ -201,6 +201,147 @@ ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view
     return new ShaderModuleImpl(stage, source);
 }
 
+
+SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+{
+    GLuint sampler = 0;
+    glGenSamplers(1, &sampler);
+
+    // --- Minification filter (min + mip) ---
+    GLenum minFilterGL{GL_LINEAR};
+    if (desc.minFilter != SamplerFilter::MIN_NEAREST)
+    {
+        switch (desc.mipFilter)
+        {
+        case SamplerFilter::MIP_NEAREST:
+            minFilterGL = GL_LINEAR_MIPMAP_NEAREST;
+            break;
+        case SamplerFilter::MIP_LINEAR:
+            minFilterGL = GL_LINEAR_MIPMAP_LINEAR;
+            break;
+        }
+    }
+    else
+    {
+        switch (desc.mipFilter)
+        {
+        case SamplerFilter::MIP_NEAREST:
+            minFilterGL = GL_NEAREST_MIPMAP_NEAREST;
+            break;
+        case SamplerFilter::MIP_LINEAR:
+            minFilterGL = GL_NEAREST_MIPMAP_LINEAR;
+            break;
+        default: // MIP_NONE
+            minFilterGL = GL_NEAREST;
+        }
+    }
+
+    // --- Magnification filter ---
+    GLenum magFilterGL = (desc.magFilter == SamplerFilter::MAG_LINEAR) ? GL_LINEAR : GL_NEAREST;
+
+    glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, minFilterGL);
+    glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, magFilterGL);
+
+    // --- Address modes ---
+    auto toGLWrap = [](SamplerAddressMode mode) -> GLint {
+        switch (mode)
+        {
+        case SamplerAddressMode::REPEAT:
+            return GL_REPEAT;
+        case SamplerAddressMode::MIRROR:
+            return GL_MIRRORED_REPEAT;
+        case SamplerAddressMode::CLAMP:
+            return GL_CLAMP_TO_EDGE;
+#if defined(GL_CLAMP_TO_BORDER_EXT)
+        case SamplerAddressMode::BORDER:
+            return GL_CLAMP_TO_BORDER_EXT;
+#endif
+        }
+        return GL_REPEAT;
+    };
+
+    glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, toGLWrap(desc.sAddressMode));
+    glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, toGLWrap(desc.tAddressMode));
+    glSamplerParameteri(sampler, GL_TEXTURE_WRAP_R, toGLWrap(desc.wAddressMode));
+
+#if defined(GL_TEXTURE_BORDER_COLOR_EXT)
+    // --- Border color ---
+    if (desc.sAddressMode == SamplerAddressMode::BORDER || desc.tAddressMode == SamplerAddressMode::BORDER ||
+        desc.wAddressMode == SamplerAddressMode::BORDER)
+    {
+        GLfloat borderColor[4] = {0.f, 0.f, 0.f, 0.f};
+        glSamplerParameterfv(sampler, GL_TEXTURE_BORDER_COLOR_EXT, borderColor);
+    }
+#endif
+
+    // --- Comparison mode (shadow samplers) ---
+    if (desc.compareFunc != CompareFunc::NEVER)
+    {
+        glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+
+        GLenum funcGL = GL_LEQUAL;
+        switch (desc.compareFunc)
+        {
+        case CompareFunc::LESS:
+            funcGL = GL_LESS;
+            break;
+        case CompareFunc::EQUAL:
+            funcGL = GL_EQUAL;
+            break;
+        case CompareFunc::LESS_EQUAL:
+            funcGL = GL_LEQUAL;
+            break;
+        case CompareFunc::GREATER:
+            funcGL = GL_GREATER;
+            break;
+        case CompareFunc::NOT_EQUAL:
+            funcGL = GL_NOTEQUAL;
+            break;
+        case CompareFunc::GREATER_EQUAL:
+            funcGL = GL_GEQUAL;
+            break;
+        case CompareFunc::ALWAYS:
+            funcGL = GL_ALWAYS;
+            break;
+        default:
+            funcGL = GL_NEVER;
+            break;
+        }
+        glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, funcGL);
+    }
+    else
+    {
+        glSamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+    }
+
+    // --- Anisotropy ---
+#ifdef GL_TEXTURE_MAX_ANISOTROPY_EXT
+    if (desc.anisotropy > 1)
+    {
+        GLfloat aniso    = static_cast<GLfloat>(desc.anisotropy);
+        GLfloat maxAniso = 0.0f;
+        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAniso);
+        if (maxAniso > 0.0f)
+        {
+            if (aniso > maxAniso)
+                aniso = maxAniso;
+            glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
+        }
+    }
+#endif
+
+    return reinterpret_cast<SamplerHandle>(static_cast<uintptr_t>(sampler));
+}
+
+void DriverImpl::destroySampler(SamplerHandle& h)
+{
+    if (h)
+    {
+        GLuint sampler = reinterpret_cast<uintptr_t>(h);
+        __state->deleteSampler(sampler);
+    }
+}
+
 DepthStencilState* DriverImpl::createDepthStencilState()
 {
     return new DepthStencilStateImpl();

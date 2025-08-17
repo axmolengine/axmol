@@ -1,52 +1,34 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #include "axmol/rhi/d3d/TextureD3D.h"
 #include "axmol/rhi/d3d/DriverD3D.h"
 #include "axmol/rhi/d3d/UtilsD3D.h"
 #include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/SamplerCache.h"
 
 namespace ax::rhi::d3d
 {
-static void translateSamplerDesc(const SamplerDesc& in, D3D11_SAMPLER_DESC& out)
-{
-    bool minLinear = in.minFilter == SamplerFilter::LINEAR;
-    bool magLinear = in.magFilter == SamplerFilter::LINEAR;
-
-    if (minLinear && magLinear)
-        out.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    else if (minLinear)
-        out.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-    else if (magLinear)
-        out.Filter = D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
-    else
-        out.Filter = D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-
-    auto toAddrMode = [](SamplerAddressMode mode) -> D3D11_TEXTURE_ADDRESS_MODE {
-        switch (mode)
-        {
-        case SamplerAddressMode::REPEAT:
-            return D3D11_TEXTURE_ADDRESS_WRAP;
-        case SamplerAddressMode::MIRROR_REPEAT:
-            return D3D11_TEXTURE_ADDRESS_MIRROR;
-        case SamplerAddressMode::CLAMP_TO_EDGE:
-            return D3D11_TEXTURE_ADDRESS_CLAMP;
-        case SamplerAddressMode::DONT_CARE:
-        default:
-            return D3D11_TEXTURE_ADDRESS_WRAP;
-        }
-    };
-
-    out.AddressU       = toAddrMode(in.sAddressMode);
-    out.AddressV       = toAddrMode(in.tAddressMode);
-    out.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;  // SamplerDesc
-    out.MipLODBias     = 0.0f;
-    out.MaxAnisotropy  = 1;
-    out.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    out.BorderColor[0] = 0.f;
-    out.BorderColor[1] = 0.f;
-    out.BorderColor[2] = 0.f;
-    out.BorderColor[3] = 0.f;
-    out.MinLOD         = 0.f;
-    out.MaxLOD         = D3D11_FLOAT32_MAX;
-}
 
 static void translateUsage(TextureUsage usage, D3D11_TEXTURE2D_DESC& outDesc)
 {
@@ -128,12 +110,6 @@ static void fromD3DTexDesc(TextureDesc& td, const D3D11_TEXTURE2D_DESC& desc)
         td.textureUsage = TextureUsage::RENDER_TARGET;
     else if (desc.BindFlags & D3D11_BIND_SHADER_RESOURCE)
         td.textureUsage = TextureUsage::READ;
-
-    // TODO:
-    // td.samplerDesc.filter   = SamplerFilter::LINEAR;
-    // td.samplerDesc.addressU = SamplerAddressMode::CLAMP;
-    // td.samplerDesc.addressV = SamplerAddressMode::CLAMP;
-    // td.samplerDesc.addressW = SamplerAddressMode::CLAMP;
 }
 
 TextureHandle TextureResource::createTexture(UINT mipLevels)
@@ -206,19 +182,6 @@ TextureHandle TextureResource::ensure(int index)
     return _textures[index];
 }
 
-void TextureResource::recreateSampler(const SamplerDesc& desc)
-{
-    D3D11_SAMPLER_DESC sd{};
-    translateSamplerDesc(desc, sd);
-
-    SafeRelease(_samplerState);
-    HRESULT hr = _device->CreateSamplerState(&sd, &_samplerState);
-    if (FAILED(hr))
-    {
-        return;
-    }
-}
-
 // ------------------------------------------------------------
 // ctor / dtor
 // ------------------------------------------------------------
@@ -253,9 +216,9 @@ TextureImpl::~TextureImpl()
 // ------------------------------------------------------------
 // updateSamplerDesc
 // ------------------------------------------------------------
-void TextureImpl::updateSamplerDesc(const SamplerDesc& sampler)
+void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {
-    _textureRes.recreateSampler(sampler);
+    _textureRes._samplerState = static_cast<ID3D11SamplerState*>(SamplerCache::getInstance()->getSampler(desc));
 }
 
 // ------------------------------------------------------------

@@ -151,6 +151,9 @@ protected:
      */
     ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
 
+    SamplerHandle createSampler(const SamplerDesc& desc) override;
+    void destroySampler(SamplerHandle&) override;
+
     GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
 
 private:

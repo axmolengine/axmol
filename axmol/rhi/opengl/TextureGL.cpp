@@ -31,6 +31,7 @@
 #include "axmol/platform/PlatformConfig.h"
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/UtilsGL.h"
+#include "axmol/rhi/SamplerCache.h"
 
 namespace ax::rhi::gl {
 
@@ -55,47 +56,16 @@ bool isMipmapEnabled(GLint filter)
 }  // namespace
 
 /// CLASS TextureInfoGL
-void TextureInfoGL::applySampler(const SamplerDesc& descriptor, bool isPow2, bool hasMipmaps)
+void TextureInfoGL::applySampler(const SamplerDesc& desc, bool isPow2, bool hasMipmaps)
 {
-    if (descriptor.magFilter != SamplerFilter::DONT_CARE)
-    {
-        magFilterGL = UtilsGL::toGLMagFilter(descriptor.magFilter);
-    }
-
-    if (descriptor.minFilter != SamplerFilter::DONT_CARE)
-    {
-        minFilterGL = UtilsGL::toGLMinFilter(descriptor.minFilter, hasMipmaps, isPow2);
-    }
-
-    if (descriptor.sAddressMode != SamplerAddressMode::DONT_CARE)
-    {
-        sAddressModeGL = UtilsGL::toGLAddressMode(descriptor.sAddressMode, isPow2);
-    }
-
-    if (descriptor.tAddressMode != SamplerAddressMode::DONT_CARE)
-    {
-        tAddressModeGL = UtilsGL::toGLAddressMode(descriptor.tAddressMode, isPow2);
-    }
-
-    // apply sampler for all internal textures
-    foreachTextures([this](GLuint& texID, int index) {
-        __state->bindTexture(this->target, textures[index]);
-        setCurrentTexParameters();
-    });
-}
-
-void TextureInfoGL::setCurrentTexParameters()
-{
-    glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, minFilterGL);
-    glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, magFilterGL);
-    glTexParameteri(this->target, GL_TEXTURE_WRAP_S, sAddressModeGL);
-    glTexParameteri(this->target, GL_TEXTURE_WRAP_T, tAddressModeGL);
+    this->sampler = static_cast<GLuint>(reinterpret_cast<uintptr_t>(SamplerCache::getInstance()->getSampler(desc)));
 }
 
 void TextureInfoGL::apply(int slot, int index) const
 {
     __state->activeTexture(GL_TEXTURE0 + slot);
     __state->bindTexture(this->target, index < AX_META_TEXTURES ? textures[index] : textures[0]);
+    __state->bindSampler(slot, this->sampler);
 }
 
 GLuint TextureInfoGL::ensure(int index)
@@ -107,8 +77,6 @@ GLuint TextureInfoGL::ensure(int index)
     if (!texID)
         glGenTextures(1, &texID);
     __state->bindTexture(this->target, texID);
-
-    setCurrentTexParameters();  // set once
 
     if (this->maxIdx < index)
         this->maxIdx = index;
@@ -202,7 +170,7 @@ void TextureImpl::updateData(uint8_t* data, std::size_t width, std::size_t heigh
         return;
 
     // Set the row align only when mipmapsNum == 1 and the data is uncompressed
-    auto mipmapEnabled = isMipmapEnabled(_textureInfo.minFilterGL) || isMipmapEnabled(_textureInfo.magFilterGL);
+    auto mipmapEnabled = _hasMipmaps; // TODO: mipLevels
     if (!mipmapEnabled)
     {
         unsigned int bytesPerRow = width * _bitsPerPixel / 8;

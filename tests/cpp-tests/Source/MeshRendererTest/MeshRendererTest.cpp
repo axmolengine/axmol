@@ -2235,11 +2235,7 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
     _textureCube->retain();
 
     // set texture parameters
-    Texture2D::TexParams tRepeatParams;
-    tRepeatParams.magFilter    = rhi::SamplerFilter::LINEAR;
-    tRepeatParams.minFilter    = rhi::SamplerFilter::LINEAR;
-    tRepeatParams.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
-    tRepeatParams.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+    Texture2D::TexParams tRepeatParams{};
     _textureCube->setTexParameters(tRepeatParams);
 
     auto mat   = MeshMaterial::createWithFilename("MeshRendererTest/CubeMap.material");
@@ -2278,11 +2274,7 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 
         _textureCube->retain();
         // set texture parameters
-        Texture2D::TexParams tRepeatParams;
-        tRepeatParams.magFilter    = rhi::SamplerFilter::LINEAR;
-        tRepeatParams.minFilter    = rhi::SamplerFilter::LINEAR;
-        tRepeatParams.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
-        tRepeatParams.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+        Texture2D::TexParams tRepeatParams{};
         _textureCube->setTexParameters(tRepeatParams);
 
         auto mat   = MeshMaterial::createWithFilename("MeshRendererTest/CubeMap.material");

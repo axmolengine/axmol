@@ -1,3 +1,26 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #include "axmol/rhi/d3d/DriverD3D.h"
 #include "axmol/rhi/d3d/CommandBufferD3D.h"
 #include "axmol/rhi/d3d/BufferD3D.h"
@@ -309,6 +332,69 @@ Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_vi
 ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view source)
 {
     return new ShaderModuleImpl(_device, stage, source);
+}
+
+SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+{
+    D3D11_SAMPLER_DESC sd = {};
+
+    // --- Filter ---
+    if (desc.minFilter == SamplerFilter::MIN_ANISOTROPIC)
+    {
+        sd.Filter        = D3D11_FILTER_ANISOTROPIC;
+        sd.MaxAnisotropy = desc.anisotropy ? desc.anisotropy : 1;
+    }
+    else
+    {
+        const int minL = static_cast<int>(desc.minFilter) & 1;
+        const int magL = static_cast<int>(desc.magFilter) & 1;
+        const int mipL = static_cast<int>(desc.mipFilter) & 1;
+
+        if (!minL && !magL && !mipL)
+            sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+        else if (!minL && !magL && mipL)
+            sd.Filter = D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+        else if (!minL && magL && !mipL)
+            sd.Filter = D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+        else if (!minL && magL && mipL)
+            sd.Filter = D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+        else if (minL && !magL && !mipL)
+            sd.Filter = D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+        else if (minL && !magL && mipL)
+            sd.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+        else if (minL && magL && !mipL)
+            sd.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+        else
+            sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+
+        sd.MaxAnisotropy = 1;
+    }
+
+    // --- Wrap ---
+    static const D3D11_TEXTURE_ADDRESS_MODE wrapTbl[4] = {
+        D3D11_TEXTURE_ADDRESS_WRAP,    // REPEAT
+        D3D11_TEXTURE_ADDRESS_MIRROR,  // MIRROR
+        D3D11_TEXTURE_ADDRESS_CLAMP,   // CLAMP
+        D3D11_TEXTURE_ADDRESS_BORDER   // BORDER
+    };
+    sd.AddressU = wrapTbl[static_cast<int>(desc.sAddressMode)];
+    sd.AddressV = wrapTbl[static_cast<int>(desc.tAddressMode)];
+    sd.AddressW = wrapTbl[static_cast<int>(desc.wAddressMode)];
+
+    // --- Compare ---
+    sd.ComparisonFunc = static_cast<D3D11_COMPARISON_FUNC>(D3D11_COMPARISON_NEVER + static_cast<int>(desc.compareFunc));
+
+    sd.MinLOD = 0;
+    sd.MaxLOD = D3D11_FLOAT32_MAX;
+
+    ID3D11SamplerState* sampler{nullptr};
+    _device->CreateSamplerState(&sd, &sampler);
+    return sampler;
+}
+
+void DriverImpl::destroySampler(SamplerHandle& h) {
+
+    SafeRelease(reinterpret_cast<ID3D11SamplerState*&>(h));
 }
 
 VertexLayout* DriverImpl::createVertexLayout()

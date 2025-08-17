@@ -17,6 +17,7 @@ set(_AX_RHI_HEADER
   rhi/ShaderModule.h
   rhi/Texture.h
   rhi/VertexLayout.h
+  rhi/SamplerCache.h
 )
 
 set(_AX_RHI_SRC
@@ -31,6 +32,7 @@ set(_AX_RHI_SRC
   rhi/ProgramState.cpp
   rhi/ShaderCache.cpp
   rhi/RenderPassDesc.cpp
+  rhi/SamplerCache.cpp
 )
 
 if(AX_RENDER_API STREQUAL "gl")

@@ -507,6 +507,100 @@ ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view
     return new ShaderModuleImpl(_mtlDevice, stage, source);
 }
 
+SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+{
+    MTLSamplerDescriptor* samplerDesc = [[MTLSamplerDescriptor alloc] init];
+
+    // --- Min & Mag Filter ---
+    switch (desc.minFilter)
+    {
+        case SamplerFilter::MIN_NEAREST:
+            samplerDesc.minFilter = MTLSamplerMinMagFilterNearest;
+            break;
+        case SamplerFilter::MIN_LINEAR:
+        case SamplerFilter::MIN_ANISOTROPIC:
+            samplerDesc.minFilter = MTLSamplerMinMagFilterLinear;
+            break;
+    }
+
+    samplerDesc.magFilter = (desc.magFilter == SamplerFilter::MAG_NEAREST)
+                            ? MTLSamplerMinMagFilterNearest
+                            : MTLSamplerMinMagFilterLinear;
+
+    // --- Mip Filter ---
+    switch (desc.mipFilter)
+    {
+        case SamplerFilter::MIP_NONE:
+            samplerDesc.mipFilter = MTLSamplerMipFilterNotMipmapped;
+            break;
+        case SamplerFilter::MIP_NEAREST:
+            samplerDesc.mipFilter = MTLSamplerMipFilterNearest;
+            break;
+        case SamplerFilter::MIP_LINEAR:
+            samplerDesc.mipFilter = MTLSamplerMipFilterLinear;
+            break;
+    }
+
+    // --- Address Modes ---
+    auto toMTLAddressMode = [](SamplerAddressMode mode) -> MTLSamplerAddressMode {
+        switch (mode)
+        {
+            case SamplerAddressMode::REPEAT: return MTLSamplerAddressModeRepeat;
+            case SamplerAddressMode::MIRROR: return MTLSamplerAddressModeMirrorRepeat;
+            case SamplerAddressMode::CLAMP: return MTLSamplerAddressModeClampToEdge;
+            case SamplerAddressMode::BORDER: return MTLSamplerAddressModeClampToBorderColor;
+        }
+        return MTLSamplerAddressModeRepeat;
+    };
+
+    samplerDesc.sAddressMode = toMTLAddressMode(desc.sAddressMode);
+    samplerDesc.tAddressMode = toMTLAddressMode(desc.tAddressMode);
+    samplerDesc.rAddressMode = toMTLAddressMode(desc.wAddressMode);
+
+    // --- Border Color ---
+    if (desc.sAddressMode == SamplerAddressMode::BORDER ||
+        desc.tAddressMode == SamplerAddressMode::BORDER ||
+        desc.wAddressMode == SamplerAddressMode::BORDER)
+    {
+        samplerDesc.borderColor = MTLSamplerBorderColorTransparentBlack;
+    }
+
+    // --- Compare Function ---
+    auto toMTLCompareFunc = [](CompareFunc func) ->MTLCompareFunction {
+        if(func == CompareFunc::NEVER)
+            return MTLCompareFunctionNever;
+        switch (func)
+        {
+            case CompareFunc::LESS:          return MTLCompareFunctionLess;
+            case CompareFunc::EQUAL:         return MTLCompareFunctionEqual;
+            case CompareFunc::LESS_EQUAL:    return MTLCompareFunctionLessEqual;
+            case CompareFunc::GREATER:       return MTLCompareFunctionGreater;
+            case CompareFunc::NOT_EQUAL:     return MTLCompareFunctionNotEqual;
+            case CompareFunc::GREATER_EQUAL: return MTLCompareFunctionGreaterEqual;
+            case CompareFunc::ALWAYS:        return MTLCompareFunctionAlways;
+            default:                         return MTLCompareFunctionNever;
+        }
+    };
+    samplerDesc.compareFunction = toMTLCompareFunc(desc.compareFunc);
+
+    // --- Anisotropy ---
+    samplerDesc.maxAnisotropy = desc.anisotropy;
+
+    // --- Create Sampler ---
+    id<MTLSamplerState> sampler = [_mtlDevice newSamplerStateWithDescriptor:samplerDesc];
+    [samplerDesc release];
+
+    return (__bridge SamplerHandle)sampler;
+}
+
+void DriverImpl::destroySampler(SamplerHandle& sampler)
+{
+    if(sampler) {
+        [reinterpret_cast<id<MTLSamplerState>>(sampler) release];
+        sampler = nullptr;
+    }
+}
+
 void DriverImpl::setFrameBufferOnly(bool frameBufferOnly)
 {
     [DriverImpl::_metalLayer setFramebufferOnly:frameBufferOnly];

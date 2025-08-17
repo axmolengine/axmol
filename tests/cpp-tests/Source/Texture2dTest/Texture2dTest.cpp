@@ -542,9 +542,7 @@ void TextureMipMap::onEnter()
 
     auto texture0 = Director::getInstance()->getTextureCache()->addImage("Images/grossini_dance_atlas.png");
     texture0->generateMipmap();
-    Texture2D::TexParams texParams = {rhi::SamplerFilter::LINEAR_MIPMAP_LINEAR, rhi::SamplerFilter::LINEAR,
-                                      rhi::SamplerAddressMode::CLAMP_TO_EDGE,
-                                      rhi::SamplerAddressMode::CLAMP_TO_EDGE};
+    Texture2D::TexParams texParams{};
     texture0->setTexParameters(texParams);
 
     auto texture1 = Director::getInstance()->getTextureCache()->addImage("Images/grossini_dance_atlas_nomipmap.png");
@@ -599,9 +597,7 @@ void TexturePVRMipMap::onEnter()
         addChild(imgMipMap);
 
         // support mipmap filtering
-        Texture2D::TexParams texParams = {rhi::SamplerFilter::LINEAR_MIPMAP_LINEAR, rhi::SamplerFilter::LINEAR,
-                                          rhi::SamplerAddressMode::CLAMP_TO_EDGE,
-                                          rhi::SamplerAddressMode::CLAMP_TO_EDGE};
+        Texture2D::TexParams texParams{};
         imgMipMap->getTexture()->setTexParameters(texParams);
     }
 
@@ -647,9 +643,7 @@ void TexturePVRMipMap2::onEnter()
     addChild(imgMipMap);
 
     // support mipmap filtering
-    Texture2D::TexParams texParams = {rhi::SamplerFilter::LINEAR_MIPMAP_LINEAR, rhi::SamplerFilter::LINEAR,
-                                      rhi::SamplerAddressMode::CLAMP_TO_EDGE,
-                                      rhi::SamplerAddressMode::CLAMP_TO_EDGE};
+    Texture2D::TexParams texParams{};
     imgMipMap->getTexture()->setTexParameters(texParams);
 
     auto img = Sprite::create("Images/test_image.png");
@@ -1820,9 +1814,7 @@ void TextureGlClamp::onEnter()
     auto sprite = Sprite::create("Images/pattern1.png", Rect(0, 0, 512, 256));
     addChild(sprite, -1, kTagSprite1);
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
-    Texture2D::TexParams texParams(rhi::SamplerFilter::LINEAR, rhi::SamplerFilter::LINEAR,
-                                   rhi::SamplerAddressMode::CLAMP_TO_EDGE,
-                                   rhi::SamplerAddressMode::CLAMP_TO_EDGE);
+    Texture2D::TexParams texParams{};
     sprite->getTexture()->setTexParameters(texParams);
     auto rotate = RotateBy::create(4, 360);
     sprite->runAction(rotate);
@@ -1858,9 +1850,8 @@ void TextureGlRepeat::onEnter()
     auto sprite = Sprite::create("Images/pattern1.png", Rect(0, 0, 4096, 4096));
     addChild(sprite, -1, kTagSprite1);
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
-    Texture2D::TexParams descriptor = {rhi::SamplerFilter::LINEAR, rhi::SamplerFilter::LINEAR,
-                                       rhi::SamplerAddressMode::REPEAT, rhi::SamplerAddressMode::REPEAT};
-    sprite->getTexture()->setTexParameters(descriptor);
+    Texture2D::TexParams desc{.sAddressMode = rhi::SamplerAddressMode::REPEAT, .tAddressMode = rhi::SamplerAddressMode::REPEAT};
+    sprite->getTexture()->setTexParameters(desc);
 
     auto rotate = RotateBy::create(4, 360);
     sprite->runAction(rotate);

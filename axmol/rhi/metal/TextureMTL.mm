@@ -27,63 +27,12 @@
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/base/Macros.h"
 #include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/SamplerCache.h"
 
 namespace ax::rhi::mtl {
 
 namespace
 {
-static MTLSamplerAddressMode toMTLSamplerAddressMode(SamplerAddressMode mode)
-{
-    MTLSamplerAddressMode ret = MTLSamplerAddressModeRepeat;
-    switch (mode)
-    {
-    case SamplerAddressMode::REPEAT:
-        ret = MTLSamplerAddressModeRepeat;
-        break;
-    case SamplerAddressMode::MIRROR_REPEAT:
-        ret = MTLSamplerAddressModeMirrorRepeat;
-        break;
-    case SamplerAddressMode::CLAMP_TO_EDGE:
-        ret = MTLSamplerAddressModeClampToEdge;
-        break;
-    default:
-        AXASSERT(false, "Not supported sampler address mode!");
-        break;
-    }
-    return ret;
-}
-
-static MTLSamplerMinMagFilter toMTLSamplerMinMagFilter(SamplerFilter mode)
-{
-    switch (mode)
-    {
-    case SamplerFilter::NEAREST:
-    case SamplerFilter::NEAREST_MIPMAP_LINEAR:
-    case SamplerFilter::NEAREST_MIPMAP_NEAREST:
-        return MTLSamplerMinMagFilterNearest;
-    case SamplerFilter::LINEAR:
-    case SamplerFilter::LINEAR_MIPMAP_LINEAR:
-    case SamplerFilter::LINEAR_MIPMAP_NEAREST:
-        return MTLSamplerMinMagFilterLinear;
-    case SamplerFilter::DONT_CARE:
-        return MTLSamplerMinMagFilterNearest;
-    }
-}
-
-static MTLSamplerMipFilter toMTLSamplerMipFilter(SamplerFilter mode)
-{
-    switch (mode)
-    {
-    case SamplerFilter::NEAREST_MIPMAP_LINEAR:
-    case SamplerFilter::LINEAR_MIPMAP_LINEAR:
-        return MTLSamplerMipFilterLinear;
-    case SamplerFilter::NEAREST_MIPMAP_NEAREST:
-    case SamplerFilter::LINEAR_MIPMAP_NEAREST:
-        return MTLSamplerMipFilterNearest;
-    default:
-        return MTLSamplerMipFilterNotMipmapped;
-    }
-}
 
 static bool isColorRenderable(PixelFormat textureFormat)
 {
@@ -126,11 +75,8 @@ void TextureInfoMTL::destroy()
     while ((texture = _mtlTextures[i++]))
         [texture release];
 
-    if (_mtlSamplerState)
-    {
-        [_mtlSamplerState release];
-        _mtlSamplerState = nil;
-    }
+    _mtlSamplerState = nil;
+
     _maxIdx = -1;
 }
 
@@ -170,38 +116,9 @@ id<MTLTexture> TextureInfoMTL::createTexture(id<MTLDevice> mtlDevice, const Text
     return [mtlDevice newTextureWithDescriptor:textureDesc];
 }
 
-void TextureInfoMTL::recreateSampler(const SamplerDesc& descriptor)
+void TextureInfoMTL::recreateSampler(const SamplerDesc& desc)
 {
-    MTLSamplerDescriptor* mtlDesc = [MTLSamplerDescriptor new];
-    mtlDesc.sAddressMode          = descriptor.sAddressMode == SamplerAddressMode::DONT_CARE
-                                              ? _sAddressMode
-                                              : toMTLSamplerAddressMode(descriptor.sAddressMode);
-    mtlDesc.tAddressMode          = descriptor.tAddressMode == SamplerAddressMode::DONT_CARE
-                                              ? _tAddressMode
-                                              : toMTLSamplerAddressMode(descriptor.tAddressMode);
-
-    mtlDesc.minFilter =
-        descriptor.minFilter == SamplerFilter::DONT_CARE ? _minFilter : toMTLSamplerMinMagFilter(descriptor.minFilter);
-    mtlDesc.magFilter =
-        descriptor.magFilter == SamplerFilter::DONT_CARE ? _magFilter : toMTLSamplerMinMagFilter(descriptor.magFilter);
-    mtlDesc.mipFilter =
-        descriptor.magFilter == SamplerFilter::DONT_CARE ? _mipFilter : toMTLSamplerMipFilter(descriptor.magFilter);
-
-    if (_mtlSamplerState)
-    {
-        [_mtlSamplerState release];
-        _mtlSamplerState = nil;
-    }
-
-    _sAddressMode = mtlDesc.sAddressMode;
-    _tAddressMode = mtlDesc.tAddressMode;
-    _minFilter    = mtlDesc.minFilter;
-    _magFilter    = mtlDesc.magFilter;
-    _mipFilter    = mtlDesc.mipFilter;
-
-    _mtlSamplerState = [_mtlDevice newSamplerStateWithDescriptor:mtlDesc];
-
-    [mtlDesc release];
+    _mtlSamplerState = (id<MTLSamplerState>)SamplerCache::getInstance()->getSampler(desc);
 }
 
 /// CLASS TextureImpl

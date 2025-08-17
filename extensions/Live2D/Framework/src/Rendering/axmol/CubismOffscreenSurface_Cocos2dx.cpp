@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -92,14 +92,7 @@ csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBuf
             _renderTexture->retain();
 
 
-            _renderTexture->getSprite()->getTexture()->setTexParameters(
-                ax::Texture2D::TexParams(
-                    ax::rhi::SamplerFilter::LINEAR,                    // MagFilter
-                    ax::rhi::SamplerFilter::LINEAR,                    // MinFilter
-                    ax::rhi::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
-                    ax::rhi::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
-                )
-            );
+            _renderTexture->getSprite()->getTexture()->setTexParameters(ax::Texture2D::TexParams{});
 
             texture2d                 = _renderTexture->getSprite()->getTexture();
             _colorBuffer              = texture2d->getBackendTexture();

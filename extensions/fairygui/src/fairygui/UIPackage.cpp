@@ -692,11 +692,12 @@ void UIPackage::loadImage(PackageItem* item)
     }
     if (item->scaleByTile)
     {
-#if COCOS2D_VERSION >= 0x00040000
-        Texture2D::TexParams tp(rhi::SamplerFilter::LINEAR, rhi::SamplerFilter::LINEAR,
-            rhi::SamplerAddressMode::REPEAT, rhi::SamplerAddressMode::REPEAT);
+#if AX_VERSION >= 0x00030000
+        Texture2D::TexParams tp{.sAddressMode = rhi::SamplerAddressMode::REPEAT,
+                                .tAddressMode = rhi::SamplerAddressMode::REPEAT};
 #else
-        Texture2D::TexParams tp = { GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT };
+        Texture2D::TexParams tp(SamplerFilter::LINEAR, SamplerFilter::LINEAR, SamplerAddressMode::REPEAT,
+                                SamplerAddressMode::REPEAT);
 #endif
         item->spriteFrame->getTexture()->setTexParameters(tp);
 }

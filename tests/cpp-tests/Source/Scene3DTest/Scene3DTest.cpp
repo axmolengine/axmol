@@ -372,11 +372,9 @@ void Scene3DTestScene::createWorld3D()
                                        "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
                                        "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
     // set texture parameters
-    Texture2D::TexParams tRepeatParams;
-    tRepeatParams.magFilter    = rhi::SamplerFilter::LINEAR;
-    tRepeatParams.minFilter    = rhi::SamplerFilter::LINEAR;
-    tRepeatParams.sAddressMode = rhi::SamplerAddressMode::MIRROR_REPEAT;
-    tRepeatParams.tAddressMode = rhi::SamplerAddressMode::MIRROR_REPEAT;
+    Texture2D::TexParams tRepeatParams{};
+    tRepeatParams.sAddressMode = rhi::SamplerAddressMode::MIRROR;
+    tRepeatParams.tAddressMode = rhi::SamplerAddressMode::MIRROR;
     _textureCube->setTexParameters(tRepeatParams);
 
     // add skybox

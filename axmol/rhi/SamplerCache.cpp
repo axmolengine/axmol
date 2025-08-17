@@ -1,5 +1,4 @@
 /****************************************************************************
- Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -22,28 +21,48 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/DriverBase.h"
+#include "yasio/singleton.hpp"
 
-#include "axmol/rhi/Texture.h"
-#include "axmol/rhi/PixelFormatUtils.h"
-#include <cassert>
 namespace ax::rhi
 {
-
-Texture::~Texture() {}
-
-void Texture::updateTextureDesc(const TextureDesc& descriptor, int /*index*/)
+SamplerCache* SamplerCache::getInstance()
 {
-    _bitsPerPixel  = PixelFormatUtils::getBitsPerPixel(descriptor.textureFormat);
-    _textureType   = descriptor.textureType;
-    _textureFormat = descriptor.textureFormat;
-    _textureUsage  = descriptor.textureUsage;
-    _width         = (std::max)(descriptor.width, (uint32_t)1);
-    _height        = (std::max)(descriptor.height, (uint32_t)1);
+    return yasio::singleton<SamplerCache>::instance();
+}
+void SamplerCache::destroyInstance()
+{
+    yasio::singleton<SamplerCache>::destroy();
+}
 
-    if (_bitsPerPixel == 0)
+SamplerCache::~SamplerCache()
+{
+    removeAllSamplers();
+}
+
+void SamplerCache::removeAllSamplers()
+{
+    auto driver = DriverBase::getInstance();
+    for (auto& [_, sampler] : _samplers)
     {
-        _bitsPerPixel = (uint8_t)(8 * 4);
+        driver->destroySampler(sampler);
     }
+    _samplers.clear();
+}
+
+SamplerHandle SamplerCache::getSampler(const SamplerDesc& desc)
+{
+    auto key = *reinterpret_cast<const uint32_t*>(&desc);
+    auto it  = _samplers.find(key);
+    if (it != _samplers.end())
+        return it->second;
+
+    auto sampler = DriverBase::getInstance()->createSampler(desc);
+
+    _samplers.emplace(key, sampler);
+
+    return sampler;
 }
 
 }  // namespace ax::rhi

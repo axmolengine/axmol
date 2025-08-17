@@ -289,7 +289,7 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
         if (strcasecmp(wrapS, "REPEAT") == 0)
             texParams.sAddressMode = rhi::SamplerAddressMode::REPEAT;
         else if (strcasecmp(wrapS, "CLAMP_TO_EDGE") == 0)
-            texParams.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+            texParams.sAddressMode = rhi::SamplerAddressMode::CLAMP;
         else
             AXLOGW("Invalid wrapS: {}", wrapS);
 
@@ -298,7 +298,7 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
         if (strcasecmp(wrapT, "REPEAT") == 0)
             texParams.tAddressMode = rhi::SamplerAddressMode::REPEAT;
         else if (strcasecmp(wrapT, "CLAMP_TO_EDGE") == 0)
-            texParams.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+            texParams.tAddressMode = rhi::SamplerAddressMode::CLAMP;
         else
             AXLOGW("Invalid wrapT: {}", wrapT);
 
@@ -307,17 +307,25 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
         const char* minFilter =
             getOptionalString(samplerProperties, "minFilter", usemipmap ? "LINEAR_MIPMAP_NEAREST" : "LINEAR");
         if (strcasecmp(minFilter, "NEAREST") == 0)
-            texParams.minFilter = rhi::SamplerFilter::NEAREST;
+            texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
         else if (strcasecmp(minFilter, "LINEAR") == 0)
+            texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
+        else if (strcasecmp(minFilter, "NEAREST_MIPMAP_NEAREST") == 0) {
+            texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
+            texParams.mipFilter = rhi::SamplerFilter::MIP_NEAREST;
+        }
+        else if (strcasecmp(minFilter, "LINEAR_MIPMAP_NEAREST") == 0) {
+            texParams.minFilter = rhi::SamplerFilter::MIN_LINEAR;
+            texParams.mipFilter = rhi::SamplerFilter::MIP_NEAREST;
+        }
+        else if (strcasecmp(minFilter, "NEAREST_MIPMAP_LINEAR") == 0) {
+            texParams.minFilter = rhi::SamplerFilter::MIN_NEAREST;
+            texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
+        }
+        else if (strcasecmp(minFilter, "LINEAR_MIPMAP_LINEAR") == 0) {
             texParams.minFilter = rhi::SamplerFilter::LINEAR;
-        else if (strcasecmp(minFilter, "NEAREST_MIPMAP_NEAREST") == 0)
-            texParams.minFilter = rhi::SamplerFilter::NEAREST;
-        else if (strcasecmp(minFilter, "LINEAR_MIPMAP_NEAREST") == 0)
-            texParams.minFilter = rhi::SamplerFilter::LINEAR;
-        else if (strcasecmp(minFilter, "NEAREST_MIPMAP_LINEAR") == 0)
-            texParams.minFilter = rhi::SamplerFilter::LINEAR;
-        else if (strcasecmp(minFilter, "LINEAR_MIPMAP_LINEAR") == 0)
-            texParams.minFilter = rhi::SamplerFilter::LINEAR;
+            texParams.mipFilter = rhi::SamplerFilter::MIP_LINEAR;
+        }
         else
             AXLOGW("Invalid minFilter: {}", minFilter);
 

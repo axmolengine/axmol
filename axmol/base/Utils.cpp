@@ -662,41 +662,6 @@ int toGLBlendFactor(rhi::BlendFactor blendFactor)
     return ret;
 }
 
-rhi::SamplerFilter toBackendSamplerFilter(int mode)
-{
-    switch (mode)
-    {
-    case GLTexParamConst::LINEAR:
-    case GLTexParamConst::LINEAR_MIPMAP_LINEAR:
-    case GLTexParamConst::LINEAR_MIPMAP_NEAREST:
-    case GLTexParamConst::NEAREST_MIPMAP_LINEAR:
-        return rhi::SamplerFilter::LINEAR;
-    case GLTexParamConst::NEAREST:
-    case GLTexParamConst::NEAREST_MIPMAP_NEAREST:
-        return rhi::SamplerFilter::NEAREST;
-    default:
-        AXASSERT(false, "invalid GL sampler filter!");
-        return rhi::SamplerFilter::LINEAR;
-    }
-}
-
-rhi::SamplerAddressMode toBackendAddressMode(int mode)
-{
-    switch (mode)
-    {
-    case GLTexParamConst::REPEAT:
-        return rhi::SamplerAddressMode::REPEAT;
-    case GLTexParamConst::CLAMP:
-    case GLTexParamConst::CLAMP_TO_EDGE:
-        return rhi::SamplerAddressMode::CLAMP_TO_EDGE;
-    case GLTexParamConst::MIRROR_REPEAT:
-        return rhi::SamplerAddressMode::MIRROR_REPEAT;
-    default:
-        AXASSERT(false, "invalid GL address mode");
-        return rhi::SamplerAddressMode::REPEAT;
-    }
-}
-
 const Mat4& getAdjustMatrix()
 {
     static ax::Mat4 adjustMatrix = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.5, 0.5, 0, 0, 0, 1};

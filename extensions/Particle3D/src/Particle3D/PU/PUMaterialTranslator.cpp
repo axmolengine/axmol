@@ -421,7 +421,7 @@ void PUMaterialTextureUnitTranslator::translate(PUScriptCompiler* compiler, PUAb
                         }
                         else if (val == matToken[TOKEN_MAT_TEXTURE_MIRROR])
                         {
-                            material->wrapMode = rhi::SamplerAddressMode::MIRROR_REPEAT;  // GL_MIRROR_CLAMP_EXT;
+                            material->wrapMode = rhi::SamplerAddressMode::MIRROR;
                         }
                     }
                 }

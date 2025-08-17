@@ -47,6 +47,8 @@ class RenderTarget;
 class Program;
 class VertexLayout;
 
+class SamplerCache;
+
 enum class FeatureType : uint32_t
 {
     ETC1,
@@ -75,6 +77,7 @@ class AX_DLL DriverBase
 {
 public:
     friend class ShaderCache;
+    friend class SamplerCache;
 
     /**
      * Returns a shared instance of the DriverBase.
@@ -217,6 +220,9 @@ protected:
      * @return A ShaderModule object.
      */
     virtual ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) = 0;
+
+    virtual SamplerHandle createSampler(const SamplerDesc& desc) = 0;
+    virtual void destroySampler(SamplerHandle&)                  = 0;
 
     // TODO: driverCaps
     int _maxAttributes     = 0;  ///< Maximum attribute count.

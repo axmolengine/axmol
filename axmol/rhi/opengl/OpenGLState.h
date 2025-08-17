@@ -90,11 +90,19 @@ struct StencilOperationState
     unsigned int depthStencilPassOp;
 };
 
-struct CommonBindState
+struct TextureBindState
 {
-    CommonBindState(GLenum t, GLuint h) : target(t), handle(h) {}
+    TextureBindState(GLenum t, GLuint h) : target(t), handle(h) {}
     inline bool equals(GLenum t, GLuint h) const { return this->target == t && this->handle == h; }
     GLenum target;
+    GLuint handle;
+};
+
+struct SamplerBindState
+{
+    SamplerBindState(GLuint s, GLuint h) : slot(s), handle(h) {}
+    inline bool equals(GLuint s, GLuint h) const { return this->slot == s && this->handle == h; }
+    GLuint slot;
     GLuint handle;
 };
 
@@ -264,7 +272,7 @@ struct AX_DLL OpenGLState
         if (activeLayer < MAX_TEXTURE_UNITS)
             try_callx(glBindTexture, _textureBindings[activeLayer], target, handle);
     }
-    void deleteTexture(GLenum target, GLuint handle)
+    void deleteTexture(GLuint handle)
     {
         glDeleteTextures(1, &handle);
 
@@ -272,6 +280,22 @@ struct AX_DLL OpenGLState
         {
             if (textureBinding.has_value() && textureBinding->handle == handle)
                 textureBinding.reset();
+        }
+    }
+    void bindSampler(GLuint slot, GLuint handle)
+    {
+        auto activeLayer = _activeTexture.has_value() ? _activeTexture.value() - GL_TEXTURE0 : 0;
+        if (activeLayer == slot && slot < MAX_TEXTURE_UNITS)
+            try_callx(glBindSampler, _samplerBindings[slot], slot, handle);
+    }
+    void deleteSampler(GLuint handle)
+    {
+        glDeleteSamplers(1, &handle);
+
+        for (auto& samplerBinding : _samplerBindings)
+        {
+            if (samplerBinding.has_value() && samplerBinding->handle == handle)
+                samplerBinding.reset();
         }
     }
     GLenum bindBuffer(BufferType type, GLuint buffer)
@@ -387,7 +411,8 @@ private:
     uint32_t _attribBits{0};   // vertexAttribArray bitset
     uint32_t _divisorBits{0};  // divisor bitset
     std::optional<GLuint> _bufferBindings[(int)BufferType::COUNT];
-    std::optional<CommonBindState> _textureBindings[MAX_TEXTURE_UNITS];
+    std::optional<TextureBindState> _textureBindings[MAX_TEXTURE_UNITS];
+    std::optional<SamplerBindState> _samplerBindings[MAX_TEXTURE_UNITS];
 
     std::optional<Viewport> _viewPort;
     std::optional<Winding> _winding;

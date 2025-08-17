@@ -94,10 +94,9 @@ void ax::Terrain::setLightMap(std::string_view fileName)
     _lightMap = new Texture2D();
     _lightMap->initWithImage(image);
 
-    Texture2D::TexParams tRepeatParams;  // set texture parameters
-    tRepeatParams.magFilter = tRepeatParams.minFilter = rhi::SamplerFilter::LINEAR;
-    tRepeatParams.sAddressMode                        = rhi::SamplerAddressMode::REPEAT;
-    tRepeatParams.tAddressMode                        = rhi::SamplerAddressMode::REPEAT;
+    Texture2D::TexParams tRepeatParams{};
+    tRepeatParams.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+    tRepeatParams.tAddressMode = rhi::SamplerAddressMode::REPEAT;
     _lightMap->setTexParameters(tRepeatParams);
 }
 
@@ -837,19 +836,18 @@ bool Terrain::initTextures()
         _detailMapTextures[i] = nullptr;
     }
 
-    Texture2D::TexParams texParam;
-    texParam.sAddressMode = rhi::SamplerAddressMode::REPEAT;
-    texParam.tAddressMode = rhi::SamplerAddressMode::REPEAT;
+    Texture2D::TexParams texParam{};
+
     if (_terrainData._alphaMapSrc.empty())
     {
+        texParam.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+        texParam.tAddressMode = rhi::SamplerAddressMode::REPEAT;
         auto textImage = new Image();
         textImage->initWithImageFile(_terrainData._detailMaps[0]._detailMapSrc);
         auto texture = new Texture2D();
         texture->initWithImage(textImage);
         texture->generateMipmap();
         _detailMapTextures[0] = texture;
-        texParam.minFilter    = rhi::SamplerFilter::LINEAR;
-        texParam.magFilter    = rhi::SamplerFilter::LINEAR;
         texture->setTexParameters(texParam);
         delete textImage;
     }
@@ -860,13 +858,13 @@ bool Terrain::initTextures()
         image->initWithImageFile(_terrainData._alphaMapSrc);
         _alphaMap = new Texture2D();
         _alphaMap->initWithImage(image);
-        texParam.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
-        texParam.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
-        texParam.minFilter    = rhi::SamplerFilter::LINEAR;
-        texParam.magFilter    = rhi::SamplerFilter::LINEAR;
+        texParam.sAddressMode = rhi::SamplerAddressMode::CLAMP;
+        texParam.tAddressMode = rhi::SamplerAddressMode::CLAMP;
         _alphaMap->setTexParameters(texParam);
         delete image;
 
+        texParam.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+        texParam.tAddressMode = rhi::SamplerAddressMode::REPEAT;
         for (int i = 0; i < _terrainData._detailMapAmount; ++i)
         {
             auto textImage = new Image();
@@ -877,10 +875,6 @@ bool Terrain::initTextures()
             texture->generateMipmap();
             _detailMapTextures[i] = texture;
 
-            texParam.sAddressMode = rhi::SamplerAddressMode::REPEAT;
-            texParam.tAddressMode = rhi::SamplerAddressMode::REPEAT;
-            texParam.minFilter    = rhi::SamplerFilter::LINEAR;
-            texParam.magFilter    = rhi::SamplerFilter::LINEAR;
             texture->setTexParameters(texParam);
         }
     }

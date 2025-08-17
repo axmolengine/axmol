@@ -234,6 +234,9 @@ protected:
      * @return A ShaderModule object.
      */
     ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
+    
+    SamplerHandle createSampler(const SamplerDesc& desc) override;
+    void destroySampler(SamplerHandle& sampler) override;
 
 private:
     static CAMetalLayer* _metalLayer;

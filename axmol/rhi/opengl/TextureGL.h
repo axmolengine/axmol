@@ -41,7 +41,6 @@ namespace ax::rhi::gl
 struct TextureInfoGL
 {
     void applySampler(const SamplerDesc& desc, bool isPow2, bool hasMipmaps);
-    void setCurrentTexParameters();
 
     TextureInfoGL() { textures.fill(0); }
     ~TextureInfoGL() {}
@@ -63,7 +62,7 @@ struct TextureInfoGL
     void destroy()
     {
         foreachTextures([this](GLuint& texID, int) {
-            __state->deleteTexture(this->target, texID);
+            __state->deleteTexture(texID);
             texID = 0;
         });
         textures.fill(0);
@@ -77,10 +76,7 @@ struct TextureInfoGL
     /// <param name="target">the target GL_TEXTURE_2D,GL_TEXTURE_CUBE_MAP</param>
     void apply(int slot, int index) const;
 
-    GLint magFilterGL    = GL_LINEAR;
-    GLint minFilterGL    = GL_LINEAR;
-    GLint sAddressModeGL = GL_REPEAT;
-    GLint tAddressModeGL = GL_REPEAT;
+    GLuint sampler{0};
 
     // Used in glTexImage2D().
     GLint internalFormat = GL_RGBA;

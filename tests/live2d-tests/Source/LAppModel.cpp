@@ -646,12 +646,7 @@ void LAppModel::SetupTextures()
         // テクスチャが読めていなければバインド処理をスキップ
         if(!texture) continue;
 
-        const SamplerDesc texParams = {
-          SamplerFilter::LINEAR_MIPMAP_LINEAR,
-          SamplerFilter::LINEAR,
-          SamplerAddressMode::CLAMP_TO_EDGE,
-          SamplerAddressMode::CLAMP_TO_EDGE
-        };
+        const SamplerDesc texParams = Texture2D::chooseSamplerDesc(true, true);
         texture->setTexParameters(texParams);
         texture->generateMipmap();
         _loadedTextures.PushBack(texture);
@@ -782,14 +777,7 @@ void LAppModel::MakeRenderingTarget()
         _renderSprite->setVisible(true);
 
         // _renderSpriteのテクスチャを作成する
-        _renderSprite->getSprite()->getTexture()->setTexParameters(
-          ax::Texture2D::TexParams(
-            ax::rhi::SamplerFilter::LINEAR,                    // MagFilter
-            ax::rhi::SamplerFilter::LINEAR,                    // MinFilter
-            ax::rhi::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
-            ax::rhi::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
-          )
-        );
+        _renderSprite->getSprite()->getTexture()->setTexParameters(ax::Texture2D::TexParams{});
 
         // レンダリングバッファの描画先をそのテクスチャにする
         _renderBuffer->CreateOffscreenFrame(frameW, frameH, _renderSprite);

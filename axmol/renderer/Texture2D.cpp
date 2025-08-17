@@ -56,6 +56,18 @@ THE SOFTWARE.
 namespace ax
 {
 
+rhi::SamplerDesc Texture2D::chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled)
+{
+    return antialiasEnabled ? rhi::SamplerDesc{.minFilter = rhi::SamplerFilter::MIN_LINEAR,
+                                               .magFilter = rhi::SamplerFilter::MAG_LINEAR,
+                                               .mipFilter = mipEnabled ? rhi::SamplerFilter::MIP_LINEAR
+                                                                       : rhi::SamplerFilter::MIP_NONE}
+                            : rhi::SamplerDesc{.minFilter = rhi::SamplerFilter::MIN_NEAREST,
+                                               .magFilter = rhi::SamplerFilter::MAG_NEAREST,
+                                               .mipFilter = mipEnabled ? rhi::SamplerFilter::MIP_NEAREST
+                                                                       : rhi::SamplerFilter::MIP_NONE};
+}
+
 Texture2D::Texture2D()
     : _pixelFormat(rhi::PixelFormat::NONE)
     , _pixelsWide(0)
@@ -342,20 +354,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
     textureDesc.width  = pixelsWide;
     textureDesc.height = pixelsHigh;
 
-    textureDesc.samplerDesc.magFilter =
-        (_flags & TextureFlag::ANTIALIAS_ENABLED) ? rhi::SamplerFilter::LINEAR : rhi::SamplerFilter::NEAREST;
-    if (mipmapsNum == 1)
-    {
-        textureDesc.samplerDesc.minFilter = (_flags & TextureFlag::ANTIALIAS_ENABLED)
-                                                            ? rhi::SamplerFilter::LINEAR
-                                                            : rhi::SamplerFilter::NEAREST;
-    }
-    else
-    {
-        textureDesc.samplerDesc.minFilter = (_flags & TextureFlag::ANTIALIAS_ENABLED)
-                                                            ? rhi::SamplerFilter::LINEAR_MIPMAP_NEAREST
-                                                            : rhi::SamplerFilter::NEAREST_MIPMAP_NEAREST;
-    }
+    textureDesc.samplerDesc = chooseSamplerDesc(_flags & TextureFlag::ANTIALIAS_ENABLED, mipmapsNum > 1);
 
     int width                           = pixelsWide;
     int height                          = pixelsHigh;
@@ -612,13 +611,8 @@ void Texture2D::setAliasTexParameters()
 
     _flags &= ~TextureFlag::ANTIALIAS_ENABLED;
 
-    rhi::SamplerDesc descriptor(rhi::SamplerFilter::NEAREST,  // magFilter
-                                          (_texture->hasMipmaps()) ? rhi::SamplerFilter::NEAREST_MIPMAP_NEAREST
-                                                                   : rhi::SamplerFilter::NEAREST,  // minFilter
-                                          rhi::SamplerAddressMode::DONT_CARE,                      // sAddressMode
-                                          rhi::SamplerAddressMode::DONT_CARE                       // tAddressMode
-    );
-    _texture->updateSamplerDesc(descriptor);
+    const auto desc = chooseSamplerDesc(false, _texture->hasMipmaps());
+    _texture->updateSamplerDesc(desc);
 }
 
 void Texture2D::setAntiAliasTexParameters()
@@ -630,13 +624,8 @@ void Texture2D::setAntiAliasTexParameters()
     }
     _flags |= TextureFlag::ANTIALIAS_ENABLED;
 
-    rhi::SamplerDesc descriptor(rhi::SamplerFilter::LINEAR,  // magFilter
-                                          (_texture->hasMipmaps()) ? rhi::SamplerFilter::LINEAR_MIPMAP_NEAREST
-                                                                   : rhi::SamplerFilter::LINEAR,  // minFilter
-                                          rhi::SamplerAddressMode::DONT_CARE,                     // sAddressMode
-                                          rhi::SamplerAddressMode::DONT_CARE                      // tAddressMode
-    );
-    _texture->updateSamplerDesc(descriptor);
+    const auto desc = chooseSamplerDesc(true, _texture->hasMipmaps());
+    _texture->updateSamplerDesc(desc);
 }
 
 const char* Texture2D::getStringForFormat() const

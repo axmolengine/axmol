@@ -93,6 +93,9 @@ public:
     using TexParams = rhi::SamplerDesc;
 
 public:
+
+    static rhi::SamplerDesc chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled);
+
     /**
      */
     Texture2D();

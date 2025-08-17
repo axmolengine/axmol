@@ -67,7 +67,7 @@ THE SOFTWARE.
 #    include "axmol/base/ScriptSupport.h"
 #endif
 
-using namespace std;
+#include "axmol/rhi/SamplerCache.h"
 
 namespace ax
 {
@@ -1056,6 +1056,8 @@ void Director::reset()
     resetMatrixStack();
 
     destroyTextureCache();
+
+    rhi::SamplerCache::destroyInstance();
 }
 
 void Director::cleanupDirector()

@@ -242,10 +242,6 @@ AX_DLL rhi::BlendFactor toBackendBlendFactor(int factor);
 
 AX_DLL int toGLBlendFactor(rhi::BlendFactor blendFactor);
 
-AX_DLL rhi::SamplerFilter toBackendSamplerFilter(int mode);
-
-AX_DLL rhi::SamplerAddressMode toBackendAddressMode(int mode);
-
 // Adjust matrix for metal.
 AX_DLL const Mat4& getAdjustMatrix();
 

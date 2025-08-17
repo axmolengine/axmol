@@ -297,11 +297,7 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(std::string_vie
     if (texture != nullptr)
     {
 
-        Texture2D::TexParams tRepeatParams;
-        tRepeatParams.magFilter    = rhi::SamplerFilter::LINEAR;
-        tRepeatParams.minFilter    = rhi::SamplerFilter::LINEAR;
-        tRepeatParams.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
-        tRepeatParams.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+        Texture2D::TexParams tRepeatParams{};
         texture->setTexParameters(tRepeatParams);
 
         ret = new CameraBackgroundSkyBoxBrush;

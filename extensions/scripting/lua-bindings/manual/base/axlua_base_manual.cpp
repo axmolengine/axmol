@@ -3703,7 +3703,7 @@ static int toaxlua_Texture2D_setTexParameters(lua_State* tolua_S)
         arg3 = (rhi::SamplerAddressMode)(int)tolua_tonumber(tolua_S, 4, 0);
         arg4 = (rhi::SamplerAddressMode)(int)tolua_tonumber(tolua_S, 5, 0);
 
-        Texture2D::TexParams param(arg1, arg2, arg3, arg4);
+        Texture2D::TexParams param{.minFilter = arg1, .magFilter = arg2, .sAddressMode = arg3, .tAddressMode = arg4};
 
         self->setTexParameters(param);
 

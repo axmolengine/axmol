@@ -307,21 +307,33 @@ enum class TextureType : uint32_t
 
 enum class SamplerAddressMode : uint32_t
 {
-    REPEAT,
-    MIRROR_REPEAT,
-    CLAMP_TO_EDGE,
-    DONT_CARE,
+    REPEAT = 0,
+    MIRROR,
+    CLAMP,
+    BORDER,
+    // alias
+    CLAMP_TO_EDGE = CLAMP,
 };
 
 enum class SamplerFilter : uint32_t
 {
-    NEAREST,
-    NEAREST_MIPMAP_NEAREST,
-    NEAREST_MIPMAP_LINEAR,
-    LINEAR,
-    LINEAR_MIPMAP_LINEAR,
-    LINEAR_MIPMAP_NEAREST,
-    DONT_CARE,
+    // min filter
+    MIN_NEAREST = 0,
+    MIN_LINEAR,
+    MIN_ANISOTROPIC,
+
+    // mag filter
+    MAG_NEAREST = 0,
+    MAG_LINEAR,
+
+    // mip filter
+    MIP_NONE = 0,
+    MIP_NEAREST,
+    MIP_LINEAR,
+
+    // alias
+    NEAREST = 0,
+    LINEAR
 };
 
 enum class CompareFunc : uint32_t
@@ -346,25 +358,20 @@ enum class TextureCubeFace : uint32_t
     NEGATIVE_Z = 5
 };
 
-/// @note In Metal, mipmap filter is derived from `magFilter` value: ie `NEAREST_MIPMAP_LINEAR` and
-///     `LINEAR_MIPMAP_LINEAR` will select `LINEAR` filter, while `NEAREST_MIPMAP_NEAREST` and
-///     `LINEAR_MIPMAP_NEAREST` will select `NEAREST` filter.
+/// @remark sizeof(SamplerDesc) == 4 as key for caching sampler fast
 struct SamplerDesc
 {
-    SamplerFilter magFilter         = SamplerFilter::LINEAR;
-    SamplerFilter minFilter         = SamplerFilter::LINEAR;
-    SamplerAddressMode sAddressMode = SamplerAddressMode::CLAMP_TO_EDGE;
-    SamplerAddressMode tAddressMode = SamplerAddressMode::CLAMP_TO_EDGE;
-
-    SamplerDesc() {}
-
-    SamplerDesc(SamplerFilter _magFilter,
-                      SamplerFilter _minFilter,
-                      SamplerAddressMode _sAddressMode,
-                      SamplerAddressMode _tAddressMode)
-        : magFilter(_magFilter), minFilter(_minFilter), sAddressMode(_sAddressMode), tAddressMode(_tAddressMode)
-    {}
+    SamplerFilter minFilter : 2         = SamplerFilter::MIN_LINEAR;
+    SamplerFilter magFilter : 1         = SamplerFilter::MAG_LINEAR;
+    SamplerFilter mipFilter : 2         = SamplerFilter::MIP_NONE;
+    SamplerAddressMode sAddressMode : 2 = SamplerAddressMode::CLAMP;
+    SamplerAddressMode tAddressMode : 2 = SamplerAddressMode::CLAMP;
+    SamplerAddressMode wAddressMode : 2 = SamplerAddressMode::CLAMP;
+    CompareFunc compareFunc : 4         = CompareFunc::NEVER;
+    uint32_t anisotropy : 4             = 1;
 };
+
+using SamplerHandle = void*;
 
 /**
  * Store texture description.
@@ -377,7 +384,7 @@ struct TextureDesc
     uint32_t width            = 1;
     uint32_t height           = 1;
     uint32_t depth            = 1;
-    SamplerDesc samplerDesc;
+    SamplerDesc samplerDesc{};
 };
 
 /**
