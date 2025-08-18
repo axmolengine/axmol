@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "platform/PlatformConfig.h"
-#include "NewAudioEngineTest.h"
+#include "AudioEngineTest.h"
 #include "ui/CocosGUI.h"
 
 using namespace ax;

@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "NewRendererTest.h"
+#include "RendererTest.h"
 #include <chrono>
 #include <sstream>
 #include "renderer/backend/DriverBase.h"

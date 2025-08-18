@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "LabelTestNew.h"
+#include "LabelTest.h"
 #include "../testResource.h"
 #include "renderer/Renderer.h"
 #include "2d/FontAtlasCache.h"

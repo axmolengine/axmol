@@ -134,7 +134,7 @@ list(APPEND GAME_HEADER
      Source/ConfigurationTest/ConfigurationTest.h
      Source/CurrentLanguageTest/CurrentLanguageTest.h
      Source/AppDelegate.h
-     Source/LabelTest/LabelTestNew.h
+     Source/LabelTest/LabelTest.h
     #  Source/LabelTest/LabelTest.h
      Source/Particle3DTest/Particle3DTest.h
      Source/VibrateTest/VibrateTest.h
@@ -143,7 +143,7 @@ list(APPEND GAME_HEADER
      Source/ImGuiTest/ImGuiTest.h
      Source/tests.h
      Source/DataVisitorTest/DataVisitorTest.h
-     Source/NewAudioEngineTest/NewAudioEngineTest.h
+     Source/AudioEngineTest/AudioEngineTest.h
      Source/BugsTest/Bug-422.h
      Source/BugsTest/Bug-DrawNode.h
      Source/BugsTest/BugsTest.h
@@ -170,7 +170,7 @@ list(APPEND GAME_HEADER
      Source/IntervalTest/IntervalTest.h
      Source/TileMapTest/TileMapTest2.h
      # Source/TileMapTest/TileMapTest.h
-     Source/NewEventDispatcherTest/NewEventDispatcherTest.h
+     Source/EventDispatcherTest/EventDispatcherTest.h
      Source/ActionsProgressTest/ActionsProgressTest.h
      Source/RotateWorldTest/RotateWorldTest.h
      Source/Camera3DTest/Camera3DTest.h
@@ -229,7 +229,7 @@ list(APPEND GAME_HEADER
      Source/testResource.h
      Source/ShaderTest/ShaderTest.h
      Source/ShaderTest/ShaderTest2.h
-     Source/NewRendererTest/NewRendererTest.h
+     Source/RendererTest/RendererTest.h
      Source/SpritePolygonTest/SpritePolygonTest.h
      Source/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.h
      Source/NodeTest/NodeTest.h
@@ -295,17 +295,16 @@ list(APPEND GAME_SOURCE
      Source/FontTest/FontTest.cpp
      Source/InputTest/MouseTest.cpp
      Source/IntervalTest/IntervalTest.cpp
-    #  Source/LabelTest/LabelTest.cpp
-     Source/LabelTest/LabelTestNew.cpp
+     Source/LabelTest/LabelTest.cpp
      Source/LayerTest/LayerTest.cpp
      Source/LightTest/LightTest.cpp
      Source/MaterialSystemTest/MaterialSystemTest.cpp
      Source/MenuTest/MenuTest.cpp
      Source/MotionStreakTest/MotionStreakTest.cpp
      Source/MultiTouchTest/MultiTouchTest.cpp
-     Source/NewAudioEngineTest/NewAudioEngineTest.cpp
-     Source/NewEventDispatcherTest/NewEventDispatcherTest.cpp
-     Source/NewRendererTest/NewRendererTest.cpp
+     Source/AudioEngineTest/AudioEngineTest.cpp
+     Source/EventDispatcherTest/EventDispatcherTest.cpp
+     Source/RendererTest/RendererTest.cpp
      Source/NodeTest/NodeTest.cpp
      Source/OpenURLTest/OpenURLTest.cpp
      Source/ParallaxTest/ParallaxTest.cpp

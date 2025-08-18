@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "AppDelegate.h"
 #include "lua-bindings/manual/LuaEngine.h"
 #include "lua_assetsmanager_test_sample.h"

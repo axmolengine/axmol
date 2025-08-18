@@ -30,7 +30,7 @@
 //
 //
 
-#include "NewEventDispatcherTest.h"
+#include "EventDispatcherTest.h"
 #include "testResource.h"
 
 using namespace ax;

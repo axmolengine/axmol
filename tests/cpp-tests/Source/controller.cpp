@@ -46,7 +46,7 @@ public:
 #    pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
-        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
+        addTest("Scene3D", [](){return new Scene3DTests(); });
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
@@ -73,7 +73,7 @@ public:
         addTest("Curl", []() { return new CurlTests(); });
 #endif
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
-        addTest("Network Test", []() { return new NetworkTests(); });
+        addTest("Network", []() { return new NetworkTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });
         addTest("Effects - Advanced", []() { return new EffectAdvanceTests(); });
         addTest("Effects - Basic", []() { return new EffectTests(); });
@@ -85,33 +85,33 @@ public:
 #endif
         addTest("Material System", []() { return new MaterialSystemTest(); });
         addTest("Navigation Mesh", []() { return new NavMeshTests(); });
-        addTest("Node: BillBoard Test", []() { return new BillBoardTests(); });
-        addTest("Node: Camera3D Test", []() { return new Camera3DTests(); });
-        addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
-        addTest("Node: Draw (WIP)", []() { return new DrawNodeTests(); });
-        addTest("Node: Label", []() { return new NewLabelTests(); });
-        addTest("Node: Layer", []() { return new LayerTests(); });
-        addTest("Node: Light", []() { return new LightTests(); });
-        addTest("Node: Menu", []() { return new MenuTests(); });
-        addTest("Node: MotionStreak", []() { return new MotionStreakTests(); });
-        addTest("Node: Node", []() { return new CocosNodeTests(); });
-        addTest("Node: Parallax", []() { return new ParallaxTests(); });
-        addTest("Node: Particles", []() { return new ParticleTests(); });
-        addTest("Node: Particle3D (PU)", []() { return new Particle3DTests(); });
+        addTest("BillBoard", []() { return new BillBoardTests(); });
+        addTest("Camera3D", []() { return new Camera3DTests(); });
+        addTest("Clipping", []() { return new ClippingNodeTests(); });
+        addTest("DrawNode", []() { return new DrawNodeTests(); });
+        addTest("Label", []() { return new NewLabelTests(); });
+        addTest("Layer", []() { return new LayerTests(); });
+        addTest("Light", []() { return new LightTests(); });
+        addTest("Menu", []() { return new MenuTests(); });
+        addTest("MotionStreak", []() { return new MotionStreakTests(); });
+        addTest("Node", []() { return new CocosNodeTests(); });
+        addTest("Parallax", []() { return new ParallaxTests(); });
+        addTest("Particles", []() { return new ParticleTests(); });
+        addTest("Particle3D (PU)", []() { return new Particle3DTests(); });
 #if defined(AX_ENABLE_PHYSICS)
-        addTest("Node: Physics", []() { return new PhysicsTests(); });
+        addTest("Physics", []() { return new PhysicsTests(); });
 #endif
-        addTest("Node: Physics3D", []() { return new Physics3DTests(); });
-        addTest("Node: RenderTexture", []() { return new RenderTextureTests(); });
-        addTest("Node: Scene", []() { return new SceneTests(); });
-        addTest("Node: Spine", []() { return new SpineTests(); });
-        addTest("Node: Sprite", []() { return new SpriteTests(); });
-        addTest("Node: MeshRenderer", []() { return new MeshRendererTests(); });
-        addTest("Node: SpritePolygon", []() { return new SpritePolygonTest(); });
-        addTest("Node: Terrain", []() { return new TerrainTests(); });
-        addTest("Node: FastTileMap", []() { return new FastTileMapTests(); });
-        addTest("Node: Text Input", []() { return new TextInputTests(); });
-        addTest("Node: UI", []() { return new UITests(); });
+        addTest("Physics3D", []() { return new Physics3DTests(); });
+        addTest("RenderTexture", []() { return new RenderTextureTests(); });
+        addTest("Scene", []() { return new SceneTests(); });
+        addTest("Spine", []() { return new SpineTests(); });
+        addTest("Sprite", []() { return new SpriteTests(); });
+        addTest("MeshRenderer", []() { return new MeshRendererTests(); });
+        addTest("SpritePolygon", []() { return new SpritePolygonTest(); });
+        addTest("Terrain", []() { return new TerrainTests(); });
+        addTest("FastTileMap", []() { return new FastTileMapTests(); });
+        addTest("Text Input", []() { return new TextInputTests(); });
+        addTest("UI", []() { return new UITests(); });
         addTest("Mouse", []() { return new MouseTests(); });
         addTest("MultiTouch", []() { return new MultiTouchTests(); });
         addTest("Renderer", []() { return new NewRendererTests(); });
@@ -124,8 +124,8 @@ public:
         addTest("TexturePacker Encryption", []() { return new TextureAtlasEncryptionTests(); });
         addTest("Touches", []() { return new TouchesTests(); });
         addTest("Transitions", []() { return new TransitionsTests(); });
-        addTest("Unzip Test", []() { return new ZipTests(); });
-        addTest("URL Open Test", []() { return new OpenURLTests(); });
+        addTest("Unzip", []() { return new ZipTests(); });
+        addTest("URL Open", []() { return new OpenURLTests(); });
         addTest("UserDefault", []() { return new UserDefaultTests(); });
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
         addTest("Vibrate", []() { return new VibrateTests(); });

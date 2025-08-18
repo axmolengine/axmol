@@ -24,12 +24,12 @@ require "FileUtilsTest/FileUtilsTest"
 require "FontTest/FontTest"
 require "IntervalTest/IntervalTest"
 require "KeypadTest/KeypadTest"
-require "LabelTestNew/LabelTestNew"
+require "LabelTest/LabelTest"
 require "LayerTest/LayerTest"
 require "LightTest/LightTest"
 require "MenuTest/MenuTest"
 require "MotionStreakTest/MotionStreakTest"
-require "NewEventDispatcherTest/NewEventDispatcherTest"
+require "EventDispatcherTest/EventDispatcherTest"
 require "NodeTest/NodeTest"
 require "ParallaxTest/ParallaxTest"
 require "ParticleTest/ParticleTest"
@@ -55,7 +55,7 @@ require "PhysicsTest/PhysicsTest"
 require "CaptureScreenTest/CaptureScreenTest"
 require "VideoPlayerTest/VideoPlayerTest"
 require "FastTiledMapTest/FastTiledMapTest"
-require "NewAudioEngineTest/NewAudioEngineTest"
+require "AudioEngineTest/AudioEngineTest"
 require "WebViewTest/WebViewTest"
 require "SpritePolygonTest/SpritePolygonTest"
 require "Physics3DTest/Physics3DTest"
@@ -115,7 +115,8 @@ local _allTests = {
     { isSupported = true,  name = "FontTest"               , create_func   =              FontTestMain      },
     { isSupported = true,  name = "IntervalTest"           , create_func   =              IntervalTestMain  },
     { isSupported = true,  name = "KeypadTest"             , create_func=                KeypadTestMain  }, 
-    { isSupported = true,  name = "LabelTestNew"           , create_func   =                 LabelTestNew      },
+    { isSupported = true,  name = "LabelTest
+"           , create_func   =                 LabelTestNew      },
     { isSupported = true,  name = "LayerTest"              , create_func   =                 LayerTestMain  },
     { isSupported = true,  name = "LightTest"              , create_func   =                 LightTestMain  },
     { isSupported = true,  name = "LuaBridgeTest"          , create_func   =        LuaBridgeMainTest },
@@ -125,7 +126,7 @@ local _allTests = {
     { isSupported = true,  name = "MotionStreakTest"       , create_func   =          MotionStreakTest      },
     { isSupported = false, name = "MultiTouchTest"         , create_func   =          MultiTouchTestMain    },
     { isSupported = true,  name = "NavMeshTest"            , create_func   =       NavMeshTest },
-    { isSupported = true,  name = "NewEventDispatcherTest"  , create_func   =       NewEventDispatcherTest },
+    { isSupported = true,  name = "EventDispatcherTest"  , create_func   =       NewEventDispatcherTest },
     { isSupported = true,  name = "NodeTest"               , create_func   =                  CocosNodeTest },
     { isSupported = true,  name = "ParallaxTest"           , create_func   =              ParallaxTestMain  },
     { isSupported = true,  name = "ParticleTest"           , create_func   =              ParticleTest      }, 
