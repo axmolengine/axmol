@@ -926,6 +926,8 @@ MediaPlayer::MediaPlayer()
             {
                 pvd->_vpixelDesc = frame._vpd;
 
+                rhi::TextureDesc desc;
+
                 AX_SAFE_RELEASE(pvd->_vtexture);
                 pvd->_vtexture = new Texture2D();  // deault is Sampler Filter is: LINEAR
 
@@ -967,40 +969,41 @@ MediaPlayer::MediaPlayer()
             {
             case MEVideoPixelFormat::YUY2:
             {
-                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RG8, PixelFormat::RG8,
-                                               bufferDim.x, bufferDim.y, false, 0);
-                pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
-                                                     PixelFormat::RGBA8, bufferDim.x >> 1, bufferDim.y, false, 0);
+                // RG8
+                //pvd->_vtexture->updateWithSubData(frame._dataPointer, 0, 0, frame._dataLen,
+                //                               bufferDim.x, bufferDim.y, false);
+                //pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
+                //                                     PixelFormat::RGBA8, bufferDim.x >> 1, bufferDim.y, false, 0);
                 break;
             }
             case MEVideoPixelFormat::NV12:
             {
-                pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
-                                               PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
-                pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
-                                                     PixelFormat::RG8, PixelFormat::RG8, bufferDim.x >> 1,
-                                                     bufferDim.y >> 1, false, 0);
+                //pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
+                //                               PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
+                //pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
+                //                                     PixelFormat::RG8, PixelFormat::RG8, bufferDim.x >> 1,
+                //                                     bufferDim.y >> 1, false, 0);
                 break;
             }
             case MEVideoPixelFormat::I420:
             {
-                pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
-                                               PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
-                const auto chromaTexDataSize = (bufferDim.x * bufferDim.y) >> 2;
-                pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, chromaTexDataSize, PixelFormat::R8,
-                                                     PixelFormat::R8, bufferDim.x >> 1, bufferDim.y >> 1, false, 0);
-                pvd->_vchroma2Texture->updateWithData(frame._cbcrDataPointer + chromaTexDataSize, chromaTexDataSize,
-                                                      PixelFormat::R8, PixelFormat::R8, bufferDim.x >> 1,
-                                                      bufferDim.y >> 1, false, 0);
+                //pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
+                //                               PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
+                //const auto chromaTexDataSize = (bufferDim.x * bufferDim.y) >> 2;
+                //pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, chromaTexDataSize, PixelFormat::R8,
+                //                                     PixelFormat::R8, bufferDim.x >> 1, bufferDim.y >> 1, false, 0);
+                //pvd->_vchroma2Texture->updateWithData(frame._cbcrDataPointer + chromaTexDataSize, chromaTexDataSize,
+                //                                      PixelFormat::R8, PixelFormat::R8, bufferDim.x >> 1,
+                //                                      bufferDim.y >> 1, false, 0);
                 break;
             }
             case MEVideoPixelFormat::RGB32:
-                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
-                                               PixelFormat::RGBA8, bufferDim.x, bufferDim.y, false, 0);
+                //pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
+                //                               PixelFormat::RGBA8, bufferDim.x, bufferDim.y, false, 0);
                 break;
             case MEVideoPixelFormat::BGR32:
-                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::BGRA8,
-                                               PixelFormat::BGRA8, bufferDim.x, bufferDim.y, false, 0);
+                //pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::BGRA8,
+                //                               PixelFormat::BGRA8, bufferDim.x, bufferDim.y, false, 0);
                 break;
             default:;
             }

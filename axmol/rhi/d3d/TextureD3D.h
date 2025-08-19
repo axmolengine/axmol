@@ -30,7 +30,7 @@
 #include <d3d11.h>
 #include <dxgi.h>
 #include <wrl/client.h>
-#include <array> // std::array
+#include <array>  // std::array
 
 namespace ax::rhi::d3d
 {
@@ -40,62 +40,24 @@ struct TextureHandle
 {
     explicit operator bool() const { return tex2d != nullptr; }
 
-    void Release()
+    void destroy()
     {
         SafeRelease(srv);
         SafeRelease(tex2d);
     }
 
+    TextureHandle detach()
+    {
+        auto ret = *this;
+        tex2d    = nullptr;
+        srv      = nullptr;
+        return ret;
+    }
+
+    operator ID3D11Resource* () { return tex2d; }
+
     ID3D11Texture2D* tex2d{};
-    ID3D11ShaderResourceView* srv{}; // Note: default color attachment not create srv yet.
-};
-
-/**
- * Store texture resource.
- */
-struct TextureResource
-{
-    TextureResource(ID3D11Device* d3d11device)
-    {
-        _device = d3d11device;
-        _textures.fill(TextureHandle{});
-    }
-    ~TextureResource() { destroy(); }
-
-    template <typename _Fty>
-    void foreachTextures(const _Fty& cb)
-    {
-        int idx = 0;
-        while (_textures[idx])
-        {
-            auto& h = _textures[idx];
-            cb(h, idx++);
-        }
-    }
-
-    TextureHandle createTexture(UINT mipLevels);
-
-    TextureHandle ensure(int index);
-
-    void destroy()
-    {
-        foreachTextures([this](TextureHandle& tex, int) {
-            if (tex)
-                tex.Release();
-        });
-        _textures.fill(TextureHandle{});
-    }
-
-    const TextureHandle& getTexture(int index) const { return _textures[index]; }
-
-    ID3D11Device* _device;
-
-    TextureDesc _desc;
-
-    std::array<TextureHandle, AX_META_TEXTURES + 1> _textures;
-    ID3D11SamplerState* _samplerState = nullptr;
-    int _maxIdx                       = 0;
-    UINT _mipLevels                   = -1; // means only 1 layer
+    ID3D11ShaderResourceView* srv{};  // Note: default color attachment not create srv yet.
 };
 
 /**
@@ -110,9 +72,9 @@ class TextureImpl : public rhi::Texture
 {
 public:
     /**
-     * @param descriptor Specifies the texture description.
+     * @param desc Specifies the texture description.
      */
-    TextureImpl(ID3D11Device* device, const TextureDesc& descriptor);
+    TextureImpl(ID3D11Device* device, const TextureDesc& desc);
     TextureImpl(ID3D11Device* device, ID3D11Texture2D* texture);
     ~TextureImpl();
 
@@ -124,7 +86,11 @@ public:
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      */
-    void updateData(uint8_t* data, std::size_t width, std::size_t height, std::size_t level, int index = 0) override;
+    void updateData(const void* data,
+                    std::size_t width,
+                    std::size_t height,
+                    std::size_t level,
+                    int layerIndex = 0) override;
 
     /**
      * Update a two-dimensional texture image in a compressed format
@@ -135,12 +101,12 @@ public:
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      */
-    void updateCompressedData(uint8_t* data,
+    void updateCompressedData(const void* data,
                               std::size_t width,
                               std::size_t height,
                               std::size_t dataLen,
                               std::size_t level,
-                              int index = 0) override;
+                              int layerIndex = 0) override;
 
     /**
      * Update a two-dimensional texture subimage
@@ -157,8 +123,8 @@ public:
                        std::size_t width,
                        std::size_t height,
                        std::size_t level,
-                       uint8_t* data,
-                       int index = 0) override;
+                       const void* data,
+                       int layerIndex = 0) override;
 
     /**
      * Update a two-dimensional texture subimage in a compressed format
@@ -177,15 +143,15 @@ public:
                                  std::size_t height,
                                  std::size_t dataLen,
                                  std::size_t level,
-                                 uint8_t* data,
-                                 int index = 0) override;
+                                 const void* data,
+                                 int layerIndex = 0) override;
 
     /**
      * Update texutre cube data in give slice side.
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
-    void updateFaceData(TextureCubeFace side, void* data, int index) override;
+    void updateFaceData(TextureCubeFace side, const void* data) override;
 
     /**
      * Update sampler
@@ -202,23 +168,24 @@ public:
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    void updateTextureDesc(const TextureDesc& descriptor, int index = 0) override;
+    void updateTextureDesc(const TextureDesc& desc) override;
 
     /**
      * Get texture object.
      * @return Texture object.
      */
-    const TextureHandle& internalHandle(int index = 0) const { return _textureRes._textures[index]; }
+    const TextureHandle& internalHandle() const { return _nativeTexture; }
 
-    ID3D11SamplerState* getSamplerState() const { return _textureRes._samplerState;  }
+    ID3D11SamplerState* getSamplerState() const { return _samplerState; }
 
-    const TextureDesc& getDesc() const { return _textureRes._desc; }
-
-    int getCount() const override { return _textureRes._maxIdx + 1; }
+    const TextureDesc& getDesc() const { return _desc; }
 
 private:
-    TextureResource _textureRes;
-    EventListener* _rendererRecreatedListener = nullptr;
+    void ensureNativeTexture();
+
+    ID3D11Device* _device;
+    TextureHandle _nativeTexture{};
+    ID3D11SamplerState* _samplerState         = nullptr;
 };
 
 // end of d3d group

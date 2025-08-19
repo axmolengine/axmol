@@ -41,7 +41,7 @@
 
 #include "axmol/base/Logging.h"
 
-#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/RHIUtils.h"
 
 using namespace Microsoft::WRL;
 

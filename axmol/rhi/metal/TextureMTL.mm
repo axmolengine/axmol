@@ -26,7 +26,7 @@
 #include "axmol/rhi/metal/TextureMTL.h"
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/base/Macros.h"
-#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/SamplerCache.h"
 
 namespace ax::rhi::mtl {
@@ -49,107 +49,27 @@ static bool isColorRenderable(PixelFormat textureFormat)
 }
 }
 
-/// CLASS TextureInfoMTL
-id<MTLTexture> TextureInfoMTL::ensure(int index)
-{
-    if (index < AX_META_TEXTURES)
-    {
-        id<MTLTexture>& mtlTexture = _mtlTextures[index];
-        if (mtlTexture)
-            return mtlTexture;
-        mtlTexture = createTexture(_mtlDevice, _desc);
-        if (_maxIdx < index)
-            _maxIdx = index;
-        return mtlTexture;
-    }
-    return nil;
-}
-
-void TextureInfoMTL::destroy()
-{
-    if (_maxIdx == -1)
-        return;
-
-    id<MTLTexture> texture;
-    int i = 0;
-    while ((texture = _mtlTextures[i++]))
-        [texture release];
-
-    _mtlSamplerState = nil;
-
-    _maxIdx = -1;
-}
-
-id<MTLTexture> TextureInfoMTL::createTexture(id<MTLDevice> mtlDevice, const TextureDesc& descriptor)
-{
-    MTLPixelFormat pixelFormat = UtilsMTL::toMTLPixelFormat(descriptor.textureFormat);
-    if (pixelFormat == MTLPixelFormatInvalid)
-        return nil;
-
-    MTLTextureDescriptor* textureDesc = nil;
-    switch (descriptor.textureType)
-    {
-    case TextureType::TEXTURE_2D:
-        textureDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
-                                                                               width:descriptor.width
-                                                                              height:descriptor.height
-                                                                           mipmapped:YES];
-        break;
-    case TextureType::TEXTURE_CUBE:
-        textureDesc = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:pixelFormat
-                                                                                  size:descriptor.width
-                                                                             mipmapped:YES];
-        break;
-    default:
-        return nil;
-    }
-
-    if (TextureUsage::RENDER_TARGET == descriptor.textureUsage)
-    {
-        // DepthStencil, and Multisample textures must be allocated with the MTLResourceStorageModePrivate resource
-        // option
-        if (PixelFormat::D24S8 == descriptor.textureFormat && descriptor.textureType == TextureType::TEXTURE_2D)
-            textureDesc.resourceOptions = MTLResourceStorageModePrivate;
-        textureDesc.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
-    }
-
-    return [mtlDevice newTextureWithDescriptor:textureDesc];
-}
-
-void TextureInfoMTL::recreateSampler(const SamplerDesc& desc)
-{
-    _mtlSamplerState = (id<MTLSamplerState>)SamplerCache::getInstance()->getSampler(desc);
-}
-
 /// CLASS TextureImpl
-TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, const TextureDesc& descriptor) : _textureInfo(mtlDevice)
+TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, const TextureDesc& desc) : _mtlDevice(mtlDevice)
 {
-    updateTextureDesc(descriptor);
+    updateTextureDesc(desc);
 }
 
 TextureImpl::~TextureImpl() {}
 
-void TextureImpl::updateSamplerDesc(const SamplerDesc& sampler)
+void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {
-    _textureInfo.recreateSampler(sampler);
+    _mtlSamplerState = (id<MTLSamplerState>)SamplerCache::getInstance()->getSampler(desc);
 }
 
-void TextureImpl::updateTextureDesc(const TextureDesc& desc, int index)
+void TextureImpl::updateTextureDesc(const TextureDesc& desc)
 {
-    Texture::updateTextureDesc(desc, index);
+    Texture::updateTextureDesc(desc);
 
-    _textureInfo._desc = desc;
-    _textureInfo.ensure(index);
     updateSamplerDesc(desc.samplerDesc);
-
-    _textureInfo._bytesPerRow = PixelFormatUtils::computeRowPitch(desc.textureFormat, desc.width);
-
-    if (desc.textureType == TextureType::TEXTURE_CUBE) {
-        _region                   = MTLRegionMake2D(0, 0, desc.width, desc.height);
-    }
 }
 
-void TextureImpl::updateData(uint8_t* data, std::size_t width, std::size_t height, std::size_t level, int index)
+void TextureImpl::updateData(const void* data, std::size_t width, std::size_t height, std::size_t level, int index)
 {
     updateSubData(0, 0, width, height, level, data, index);
 }
@@ -159,34 +79,32 @@ void TextureImpl::updateSubData(std::size_t xoffset,
                                std::size_t width,
                                std::size_t height,
                                std::size_t level,
-                               uint8_t* data,
-                               int index)
+                               const void* data,
+                               int layerIndex)
 {
-    auto mtlTexture = _textureInfo.ensure(index);
-    if (!mtlTexture)
-        return;
+    ensureNativeTexture();
 
     MTLRegion region = {
         {xoffset, yoffset, 0},  // MTLOrigin
         {width, height, 1}      // MTLSize
     };
 
-    auto bytesPerRow = PixelFormatUtils::computeRowPitch(_textureFormat, static_cast<uint32_t>(width));
+    auto bytesPerRow = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(width));
+    auto slicePitch = bytesPerRow * _desc.height;
+    [_mtlTexture replaceRegion:region mipmapLevel:level slice:layerIndex withBytes:data bytesPerRow:bytesPerRow bytesPerImage:slicePitch];
 
-    [mtlTexture replaceRegion:region mipmapLevel:level withBytes:data bytesPerRow:bytesPerRow];
-
-    if (!_hasMipmaps && level > 0)
-        _hasMipmaps = true;
+//    if (!_hasMipmaps && level > 0)
+//        _hasMipmaps = true;
 }
 
-void TextureImpl::updateCompressedData(uint8_t* data,
+void TextureImpl::updateCompressedData(const void* data,
                                       std::size_t width,
                                       std::size_t height,
                                       std::size_t dataLen,
                                       std::size_t level,
-                                      int index)
+                                      int layerIndex)
 {
-    updateCompressedSubData(0, 0, width, height, dataLen, level, data, index);
+    updateCompressedSubData(0, 0, width, height, dataLen, level, data, layerIndex);
 }
 
 void TextureImpl::updateCompressedSubData(std::size_t xoffset,
@@ -195,38 +113,80 @@ void TextureImpl::updateCompressedSubData(std::size_t xoffset,
                                          std::size_t height,
                                          std::size_t dataLen,
                                          std::size_t level,
-                                         uint8_t* data,
-                                         int index)
+                                         const void* data,
+                                         int layerIndex)
 {
-    updateSubData(xoffset, yoffset, width, height, level, data, index);
+    updateSubData(xoffset, yoffset, width, height, level, data, layerIndex);
 }
 
 void TextureImpl::generateMipmaps()
 {
-    if (TextureUsage::RENDER_TARGET == _textureUsage || !isColorRenderable(_textureFormat))
+    if (TextureUsage::RENDER_TARGET == _desc.textureUsage || !isColorRenderable(_desc.pixelFormat))
         return;
 
-    if (!_hasMipmaps)
+    if (_desc.mipLevels == 0)
     {
-        _hasMipmaps = true;
         UtilsMTL::generateMipmaps(internalHandle());
+        _desc.mipLevels = RHIUtils::computeMipLevels(_desc);
     }
 }
 
-void TextureImpl::updateFaceData(TextureCubeFace side, void* data, int index)
+void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
 {
+    ensureNativeTexture();
     NSUInteger slice = static_cast<int>(side);
-    auto mtlTexture  = _textureInfo.ensure(index);
-    if (!mtlTexture)
-        return;
 
-    auto slicePitch = _textureInfo._bytesPerRow * _textureInfo._desc.height;
-    [mtlTexture replaceRegion:_region
+    auto bytesPerRow = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(_desc.width));
+    auto slicePitch = bytesPerRow * _desc.height;
+
+    auto region = MTLRegionMake2D(0, 0, _desc.width, _desc.height);
+    [_mtlTexture replaceRegion:region
                   mipmapLevel:0
                         slice:slice
                     withBytes:data
-                  bytesPerRow:_textureInfo._bytesPerRow
+                  bytesPerRow:bytesPerRow
                 bytesPerImage:slicePitch];
+}
+
+void TextureImpl::ensureNativeTexture()
+{
+    if(_mtlTexture) return;
+    MTLPixelFormat pixelFormat = UtilsMTL::toMTLPixelFormat(_desc.pixelFormat);
+    if (pixelFormat == MTLPixelFormatInvalid)
+        return;
+
+    MTLTextureDescriptor* textureDesc = nil;
+    switch (_desc.textureType)
+    {
+    case TextureType::TEXTURE_2D:
+        textureDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
+                                                                               width:_desc.width
+                                                                              height:_desc.height
+                                                                           mipmapped:YES];
+        if (_desc.arraySize > 1) {
+            textureDesc.textureType = MTLTextureType2DArray;
+            textureDesc.arrayLength = _desc.arraySize;
+        }
+        break;
+    case TextureType::TEXTURE_CUBE:
+        textureDesc = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:pixelFormat
+                                                                                  size:_desc.width
+                                                                             mipmapped:YES];
+        break;
+    default:
+        return;
+    }
+
+    if (TextureUsage::RENDER_TARGET == _desc.textureUsage)
+    {
+        // DepthStencil, and Multisample textures must be allocated with the MTLResourceStorageModePrivate resource
+        // option
+        if (PixelFormat::D24S8 == _desc.pixelFormat && _desc.textureType == TextureType::TEXTURE_2D)
+            textureDesc.resourceOptions = MTLResourceStorageModePrivate;
+        textureDesc.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
+    }
+
+    _mtlTexture = [_mtlDevice newTextureWithDescriptor:textureDesc];
 }
 
 }

@@ -72,7 +72,7 @@ AnchoredSprite* AnchoredSprite::createWithTexture(Texture2D* texture, const Rect
 
 AnchoredSprite* AnchoredSprite::create(std::string_view filename)
 {
-    return AnchoredSprite::create(filename, PixelFormat::NONE);
+    return AnchoredSprite::create(filename, PixelFormat::AUTO);
 }
 
 AnchoredSprite* AnchoredSprite::create(std::string_view filename, PixelFormat format)

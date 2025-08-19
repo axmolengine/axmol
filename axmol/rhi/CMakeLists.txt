@@ -7,7 +7,7 @@ set(_AX_RHI_HEADER
   rhi/DepthStencilState.h
   rhi/DriverBase.h
   rhi/PixelBufferDesc.h
-  rhi/PixelFormatUtils.h
+  rhi/RHIUtils.h
   rhi/Program.h
   rhi/ProgramState.h
   rhi/RenderPassDesc.h
@@ -26,7 +26,7 @@ set(_AX_RHI_SRC
   rhi/DriverBase.cpp
   rhi/ShaderModule.cpp
   rhi/Texture.cpp
-  rhi/PixelFormatUtils.cpp
+  rhi/RHIUtils.cpp
   rhi/VertexLayout.cpp
   rhi/Program.cpp
   rhi/ProgramState.cpp

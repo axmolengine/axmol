@@ -52,16 +52,6 @@ namespace ax
  * @{
  */
 
-/**
- @brief Structure which can tell where mipmap begins and how long is it
- */
-typedef struct _MipmapInfo
-{
-    uint8_t* address;
-    int len;
-    _MipmapInfo() : address(NULL), len(0) {}
-} MipmapInfo;
-
 /** The Image class for loading all images supported by axmol . */
 class AX_DLL Image : public Object
 {
@@ -168,13 +158,13 @@ public:
 
     // Getters
     uint8_t* getData() { return _data + _offset; }
-    ssize_t getDataLen() { return _dataLen - _offset; }
+    ssize_t getDataSize() { return _dataSize - _offset; }
     Format getFileType() { return _fileType; }
     rhi::PixelFormat getPixelFormat() { return _pixelFormat; }
     int getWidth() { return _width; }
     int getHeight() { return _height; }
     int getNumberOfMipmaps() { return _numberOfMipmaps; }
-    MipmapInfo* getMipmaps() { return _mipmaps; }
+    std::span<MipmapInfo> getMipmaps() { return std::span<MipmapInfo>(&_mipmaps[0], &_mipmaps[0] + _numberOfMipmaps); }
     bool hasPremultipliedAlpha() { return _hasPremultipliedAlpha; }
     std::string getFilePath() const { return _filePath; }
 
@@ -233,7 +223,7 @@ protected:
     static uint32_t COMPRESSED_IMAGE_PMA_FLAGS;
 
     uint8_t* _data;
-    ssize_t _dataLen;
+    ssize_t _dataSize;
     ssize_t _offset;  // useful for hardware decoder present to hold data without copy
     int _width;
     int _height;

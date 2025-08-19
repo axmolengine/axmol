@@ -26,7 +26,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/platform/Image.h"
-#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/RHIUtils.h"
 
 #include <string>
 #include <ctype.h>
@@ -561,13 +561,13 @@ bool Image::isCompressedImageHavePMA(uint32_t target)
 
 Image::Image()
     : _data(nullptr)
-    , _dataLen(0)
+    , _dataSize(0)
     , _offset(0)
     , _width(0)
     , _height(0)
     , _unpack(false)
     , _fileType(Format::UNKNOWN)
-    , _pixelFormat(rhi::PixelFormat::NONE)
+    , _pixelFormat(rhi::PixelFormat::AUTO)
     , _numberOfMipmaps(0)
     , _hasPremultipliedAlpha(false)
 {}
@@ -581,7 +581,7 @@ Image::~Image()
     else
     {
         for (int i = 0; i < _numberOfMipmaps; ++i)
-            AX_SAFE_FREE(_mipmaps[i].address);
+            AX_SAFE_FREE(_mipmaps[i].data);
     }
 }
 
@@ -737,10 +737,10 @@ bool Image::initWithRawData(const uint8_t* data,
 
         // only RGBA8888 supported
         int bytesPerComponent = 4;
-        _dataLen              = height * width * bytesPerComponent;
-        _data                 = static_cast<uint8_t*>(malloc(_dataLen));
+        _dataSize              = height * width * bytesPerComponent;
+        _data                 = static_cast<uint8_t*>(malloc(_dataSize));
         AX_BREAK_IF(!_data);
-        memcpy(_data, data, _dataLen);
+        memcpy(_data, data, _dataSize);
 
         ret = true;
     } while (0);
@@ -924,17 +924,17 @@ Image::Format Image::detectFormat(const uint8_t* data, ssize_t dataLen)
 
 int Image::getBitPerPixel()
 {
-    return rhi::PixelFormatUtils::getFormatDesc(_pixelFormat).bpp;
+    return rhi::RHIUtils::getFormatDesc(_pixelFormat).bpp;
 }
 
 bool Image::hasAlpha()
 {
-    return rhi::PixelFormatUtils::getFormatDesc(_pixelFormat).alpha;
+    return rhi::RHIUtils::getFormatDesc(_pixelFormat).alpha;
 }
 
 bool Image::isCompressed()
 {
-    return rhi::PixelFormatUtils::isCompressed(_pixelFormat);
+    return rhi::RHIUtils::isCompressed(_pixelFormat);
 }
 
 #if AX_USE_WIC
@@ -975,12 +975,12 @@ bool Image::decodeWithWIC(const unsigned char* data, ssize_t dataLen)
             _pixelFormat = rhi::PixelFormat::BGRA8;
         }
 
-        _dataLen = img.getImageDataSize();
+        _dataSize = img.getImageDataSize();
 
-        AXASSERT(_dataLen > 0, "Image: Decompressed data length is invalid");
+        AXASSERT(_dataSize > 0, "Image: Decompressed data length is invalid");
 
-        _data = new (std::nothrow) unsigned char[_dataLen];
-        bRet  = (img.getImageData(_data, _dataLen) > 0);
+        _data = new unsigned char[_dataSize];
+        bRet  = (img.getImageData(_data, _dataSize) > 0);
 
         if (_pixelFormat == rhi::PixelFormat::RGBA8)
         {
@@ -996,17 +996,17 @@ bool Image::encodeWithWIC(std::string_view filePath, bool isToRGB, GUID containe
     // Save formats supported by WIC
     WICPixelFormatGUID targetFormat = isToRGB ? GUID_WICPixelFormat24bppBGR : GUID_WICPixelFormat32bppBGRA;
     unsigned char* pSaveData        = nullptr;
-    int saveLen                     = _dataLen;
+    int saveLen                     = _dataSize;
     int bpp                         = 4;
 
     if (targetFormat == GUID_WICPixelFormat24bppBGR && _pixelFormat == rhi::PixelFormat::RGBA8)
     {
         bpp       = 3;
         saveLen   = _width * _height * bpp;
-        pSaveData = new (std::nothrow) unsigned char[saveLen];
+        pSaveData = new unsigned char[saveLen];
         int indL = 0, indR = 0;
 
-        while (indL < saveLen && indR < _dataLen)
+        while (indL < saveLen && indR < _dataSize)
         {
             memcpy(&pSaveData[indL], &_data[indR], 3);
             indL += 3;
@@ -1015,7 +1015,7 @@ bool Image::encodeWithWIC(std::string_view filePath, bool isToRGB, GUID containe
     }
     else
     {
-        pSaveData = new (std::nothrow) unsigned char[saveLen];
+        pSaveData = new unsigned char[saveLen];
         memcpy(pSaveData, _data, saveLen);
     }
 
@@ -1157,8 +1157,8 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
         _width  = cinfo.output_width;
         _height = cinfo.output_height;
 
-        _dataLen = cinfo.output_width * cinfo.output_height * cinfo.output_components;
-        _data    = static_cast<uint8_t*>(malloc(_dataLen));
+        _dataSize = cinfo.output_width * cinfo.output_height * cinfo.output_components;
+        _data    = static_cast<uint8_t*>(malloc(_dataSize));
         AX_BREAK_IF(!_data);
 
         /* now actually read the jpeg into the raw buffer */
@@ -1294,8 +1294,8 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
 
         rowbytes = png_get_rowbytes(png_ptr, info_ptr);
 
-        _dataLen = rowbytes * _height;
-        _data    = static_cast<uint8_t*>(malloc(_dataLen));
+        _dataSize = rowbytes * _height;
+        _data    = static_cast<uint8_t*>(malloc(_dataSize));
         if (!_data)
         {
             if (row_pointers != nullptr)
@@ -1354,7 +1354,7 @@ bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
     _data = stbi_load_from_memory(data, static_cast<int>(dataLen), &_width, &_height, nullptr, nrChannels);
     if (_data)
     {
-        _dataLen     = _width * _height * nrChannels;
+        _dataSize     = _width * _height * nrChannels;
         _fileType    = Format::BMP;
         _pixelFormat = rhi::PixelFormat::RGBA8;
         return true;
@@ -1385,12 +1385,12 @@ bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
         // we ask webp to give data with premultiplied alpha
         _hasPremultipliedAlpha = (config.input.has_alpha != 0);
 
-        _dataLen = _width * _height * (config.input.has_alpha ? 4 : 3);
-        _data    = static_cast<uint8_t*>(malloc(_dataLen));
+        _dataSize = _width * _height * (config.input.has_alpha ? 4 : 3);
+        _data    = static_cast<uint8_t*>(malloc(_dataSize));
 
         config.output.u.RGBA.rgba        = static_cast<uint8_t*>(_data);
         config.output.u.RGBA.stride      = _width * (config.input.has_alpha ? 4 : 3);
-        config.output.u.RGBA.size        = _dataLen;
+        config.output.u.RGBA.size        = _dataSize;
         config.output.is_external_memory = 1;
 
         if (WebPDecode(static_cast<const uint8_t*>(data), dataLen, &config) != VP8_STATUS_OK)
@@ -1458,7 +1458,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
         _width    = tgaData->width;
         _height   = tgaData->height;
         _data     = tgaData->imageData;
-        _dataLen  = _width * _height * tgaData->pixelDepth / 8;
+        _dataSize  = _width * _height * tgaData->pixelDepth / 8;
         _fileType = Format::TGA;
 
         ret = true;
@@ -1535,7 +1535,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     }
 
     auto pixelFormat = getDevicePVRPixelFormat(v2_pixel_formathash.at(formatFlags));
-    auto& info       = rhi::PixelFormatUtils::getFormatDesc(pixelFormat);
+    auto& info       = rhi::RHIUtils::getFormatDesc(pixelFormat);
     int bpp          = info.bpp;
     if (!bpp)
     {
@@ -1571,9 +1571,10 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
             {
                 AXLOGD("Hardware PVR decoder not present. Using software decoder");
                 _unpack                            = true;
-                _mipmaps[_numberOfMipmaps].len     = width * height * 4;
-                _mipmaps[_numberOfMipmaps].address = (uint8_t*)malloc(width * height * 4);
-                PVRTDecompressPVRTC(pixelData + dataOffset, width, height, _mipmaps[_numberOfMipmaps].address, true);
+                _mipmaps[_numberOfMipmaps].dataSize     = width * height * 4;
+                _mipmaps[_numberOfMipmaps].data = (uint8_t*)malloc(width * height * 4);
+                _mipmaps[_numberOfMipmaps].mipLevel     = _numberOfMipmaps;
+                PVRTDecompressPVRTC(pixelData + dataOffset, width, height, _mipmaps[_numberOfMipmaps].data, true);
                 bpp = 2;
             }
             blockSize    = 8 * 4;  // Pixel by pixel block size for 2bpp
@@ -1584,10 +1585,11 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
             if (!Configuration::getInstance()->supportsPVRTC())
             {
                 AXLOGD("Hardware PVR decoder not present. Using software decoder");
-                _unpack                            = true;
-                _mipmaps[_numberOfMipmaps].len     = width * height * 4;
-                _mipmaps[_numberOfMipmaps].address = (uint8_t*)malloc(width * height * 4);
-                PVRTDecompressPVRTC(pixelData + dataOffset, width, height, _mipmaps[_numberOfMipmaps].address, false);
+                _unpack                             = true;
+                _mipmaps[_numberOfMipmaps].dataSize = width * height * 4;
+                _mipmaps[_numberOfMipmaps].data = (uint8_t*)malloc(width * height * 4);
+                _mipmaps[_numberOfMipmaps].mipLevel = _numberOfMipmaps;
+                PVRTDecompressPVRTC(pixelData + dataOffset, width, height, _mipmaps[_numberOfMipmaps].data, false);
                 bpp = 4;
             }
             blockSize    = 4 * 4;  // Pixel by pixel block size for 4bpp
@@ -1624,8 +1626,9 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         // Make record to the mipmaps array and increment counter
         if (!_unpack)
         {
-            _mipmaps[_numberOfMipmaps].address = pixelData + dataOffset;
-            _mipmaps[_numberOfMipmaps].len     = packetLength;
+            _mipmaps[_numberOfMipmaps].data     = pixelData + dataOffset;
+            _mipmaps[_numberOfMipmaps].dataSize = packetLength;
+            _mipmaps[_numberOfMipmaps].mipLevel = _numberOfMipmaps;
         }
         _numberOfMipmaps++;
 
@@ -1642,8 +1645,8 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     }
     else
     {
-        _data    = _mipmaps[0].address;
-        _dataLen = _mipmaps[0].len;
+        _data     = (uint8_t*)_mipmaps[0].data;
+        _dataSize = _mipmaps[0].dataSize;
     }
 
     return true;
@@ -1687,7 +1690,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     }
 
     auto finalPixelFormat = getDevicePVRPixelFormat(v3_pixel_formathash.at(pixelFormat));
-    auto& info            = rhi::PixelFormatUtils::getFormatDesc(finalPixelFormat);
+    auto& info            = rhi::RHIUtils::getFormatDesc(finalPixelFormat);
     int bpp               = info.bpp;
     if (!info.bpp)
     {
@@ -1735,10 +1738,11 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
             if (!Configuration::getInstance()->supportsPVRTC())
             {
                 AXLOGW("Hardware PVR decoder not present. Using software decoder");
-                _unpack             = true;
-                _mipmaps[i].len     = width * height * 4;
-                _mipmaps[i].address = (uint8_t*)malloc(width * height * 4);
-                PVRTDecompressPVRTC(pixelData + dataOffset, width, height, _mipmaps[i].address, true);
+                _unpack              = true;
+                _mipmaps[i].dataSize = width * height * 4;
+                _mipmaps[i].data     = (uint8_t*)malloc(width * height * 4);
+                _mipmaps[i].mipLevel = i;
+                PVRTDecompressPVRTC(pixelData + dataOffset, width, height, _mipmaps[i].data, true);
                 bpp = 2;
             }
             blockSize    = 8 * 4;  // Pixel by pixel block size for 2bpp
@@ -1751,9 +1755,10 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
             {
                 AXLOGW("Hardware PVR decoder not present. Using software decoder");
                 _unpack             = true;
-                _mipmaps[i].len     = width * height * 4;
-                _mipmaps[i].address = (uint8_t*)malloc(width * height * 4);
-                PVRTDecompressPVRTC(pixelData + dataOffset, width, height, _mipmaps[i].address, false);
+                _mipmaps[i].dataSize = width * height * 4;
+                _mipmaps[i].data     = (uint8_t*)malloc(width * height * 4);
+                _mipmaps[i].mipLevel = i;
+                PVRTDecompressPVRTC(pixelData + dataOffset, width, height, _mipmaps[i].data, false);
                 bpp = 4;
             }
             blockSize    = 4 * 4;  // Pixel by pixel block size for 4bpp
@@ -1766,10 +1771,11 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
                 AXLOGW("Hardware ETC1 decoder not present. Using software decoder");
                 const int bytePerPixel = 4;
                 _unpack                = true;
-                _mipmaps[i].len        = width * height * bytePerPixel;
-                _mipmaps[i].address    = (uint8_t*)malloc(width * height * bytePerPixel);
+                _mipmaps[i].dataSize   = width * height * bytePerPixel;
+                _mipmaps[i].data       = (uint8_t*)malloc(width * height * bytePerPixel);
+                _mipmaps[i].mipLevel   = i;
                 if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, pixelData + dataOffset,
-                                      static_cast<etc1_byte*>(_mipmaps[i].address), width, height) != 0)
+                                      static_cast<etc1_byte*>(_mipmaps[i].data), width, height) != 0)
                 {
                     return false;
                 }
@@ -1807,8 +1813,9 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
         if (!_unpack)
         {
-            _mipmaps[i].address = pixelData + dataOffset;
-            _mipmaps[i].len     = static_cast<int>(packetLength);
+            _mipmaps[i].data     = pixelData + dataOffset;
+            _mipmaps[i].dataSize = static_cast<int>(packetLength);
+            _mipmaps[i].mipLevel = i;
         }
 
         dataOffset += packetLength;
@@ -1824,8 +1831,8 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     }
     else
     {
-        _data    = _mipmaps[0].address;
-        _dataLen = _mipmaps[0].len;
+        _data     = static_cast<uint8_t*>(_mipmaps[0].data);
+        _dataSize = _mipmaps[0].dataSize;
     }
 
     return true;
@@ -1864,9 +1871,9 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
     else if (Configuration::getInstance()->supportsETC2())
         compressedFormat = rhi::PixelFormat::ETC2_RGB;
     else
-        compressedFormat = rhi::PixelFormat::NONE;
+        compressedFormat = rhi::PixelFormat::AUTO;
 
-    if (compressedFormat != rhi::PixelFormat::NONE)
+    if (compressedFormat != rhi::PixelFormat::AUTO)
     {
         _pixelFormat = compressedFormat;
         forwardPixels(data, dataLen, pixelOffset, ownData);
@@ -1876,8 +1883,8 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
     {
         AXLOGW("Hardware ETC1 decoder not present. Using software decoder");
 
-        _dataLen = _width * _height * 4;
-        _data    = static_cast<uint8_t*>(malloc(_dataLen));
+        _dataSize = _width * _height * 4;
+        _data    = static_cast<uint8_t*>(malloc(_dataSize));
         if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const uint8_t*>(data) + pixelOffset,
                               static_cast<etc2_byte*>(_data), _width, _height) == 0)
         {  // if it is not gles or device do not support ETC1, decode texture by software
@@ -1888,7 +1895,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         // software decode fail, release pixels data
         AX_SAFE_FREE(_data);
-        _dataLen = 0;
+        _dataSize = 0;
         return false;
     }
 }
@@ -1943,14 +1950,14 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
             // if device do not support ETC2, decode texture by software
             // etc2_decode_image always decode to RGBA8888
-            _dataLen = _width * _height * 4;
-            _data    = static_cast<uint8_t*>(malloc(_dataLen));
+            _dataSize = _width * _height * 4;
+            _data    = static_cast<uint8_t*>(malloc(_dataSize));
             if (AX_UNLIKELY(etc2_decode_image(format, static_cast<const uint8_t*>(data) + pixelOffset,
                                                  static_cast<etc2_byte*>(_data), _width, _height) != 0))
             {
                 // software decode fail, release pixels data
                 AX_SAFE_FREE(_data);
-                _dataLen = 0;
+                _dataSize = 0;
                 break;
             }
             _pixelFormat = rhi::PixelFormat::RGBA8;
@@ -2028,14 +2035,14 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
         {
             AXLOGW("Hardware ASTC decoder not present. Using software decoder");
 
-            _dataLen = _width * _height * 4;
-            _data    = static_cast<uint8_t*>(malloc(_dataLen));
+            _dataSize = _width * _height * 4;
+            _data    = static_cast<uint8_t*>(malloc(_dataSize));
             if (AX_UNLIKELY(astc_decompress_image(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE,
                                                      static_cast<uint32_t>(dataLen) - ASTC_HEAD_SIZE, _data, _width,
                                                      _height, block_x, block_y) != 0))
             {
                 AX_SAFE_FREE(_data);
-                _dataLen = 0;
+                _dataSize = 0;
                 break;
             }
 
@@ -2065,7 +2072,7 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
         1,
         header->ddsd.DUMMYUNIONNAMEN2
             .mipMapCount);  // if dds header reports 0 mipmaps, set to 1 to force correct software decoding (if needed).
-    _dataLen      = 0;
+    _dataSize      = 0;
     int blockSize = (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC) ? 8 : 16;
 
     /* calculate the dataLen */
@@ -2106,12 +2113,12 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
             if (height == 0)
                 height = 1;
 
-            _dataLen += (height * width * 4);
+            _dataSize += (height * width * 4);
 
             width >>= 1;
             height >>= 1;
         }
-        _data = static_cast<uint8_t*>(malloc(_dataLen));
+        _data = static_cast<uint8_t*>(malloc(_dataSize));
     }
 
     /* load the mipmaps */
@@ -2131,8 +2138,9 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         if (Configuration::getInstance()->supportsS3TC())
         {  // decode texture through hardware
-            _mipmaps[i].address = (uint8_t*)pixelData + encodeOffset;
-            _mipmaps[i].len     = size;
+            _mipmaps[i].data = (uint8_t*)pixelData + encodeOffset;
+            _mipmaps[i].dataSize = size;
+            _mipmaps[i].mipLevel = i;
         }
         else
         {  // if it is not gles or device do not support S3TC, decode texture by software
@@ -2156,9 +2164,10 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
                 s3tc_decode(pixelData + encodeOffset, &decodeImageData[0], width, height, S3TCDecodeFlag::DXT5);
             }
 
-            _mipmaps[i].address = (uint8_t*)_data + decodeOffset;
-            _mipmaps[i].len     = (stride * height);
-            memcpy((void*)_mipmaps[i].address, (void*)&decodeImageData[0], _mipmaps[i].len);
+            _mipmaps[i].data = (uint8_t*)_data + decodeOffset;
+            _mipmaps[i].dataSize = (stride * height);
+            _mipmaps[i].mipLevel = i;
+            memcpy((void*)_mipmaps[i].data, (void*)&decodeImageData[0], _mipmaps[i].dataSize);
             decodeOffset += stride * height;
         }
 
@@ -2243,12 +2252,12 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
             if (height == 0)
                 height = 1;
 
-            _dataLen += (height * width * 4);
+            _dataSize += (height * width * 4);
 
             width >>= 1;
             height >>= 1;
         }
-        _data = static_cast<uint8_t*>(malloc(_dataLen));
+        _data = static_cast<uint8_t*>(malloc(_dataSize));
     }
 
     /* load the mipmaps */
@@ -2269,8 +2278,9 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
         if (hardware)
         {
             /* decode texture through hardware */
-            _mipmaps[i].address = (uint8_t*)pixelData + encodeOffset;
-            _mipmaps[i].len     = size;
+            _mipmaps[i].data = (uint8_t*)pixelData + encodeOffset;
+            _mipmaps[i].dataSize = size;
+            _mipmaps[i].mipLevel = i;
         }
         else
         {
@@ -2295,9 +2305,10 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
                 break;
             }
 
-            _mipmaps[i].address = (uint8_t*)_data + decodeOffset;
-            _mipmaps[i].len     = (stride * height);
-            memcpy((void*)_mipmaps[i].address, (void*)&decodeImageData[0], _mipmaps[i].len);
+            _mipmaps[i].data = (uint8_t*)_data + decodeOffset;
+            _mipmaps[i].dataSize = (stride * height);
+            _mipmaps[i].mipLevel = i;
+            memcpy((void*)_mipmaps[i].data, (void*)&decodeImageData[0], _mipmaps[i].dataSize);
             decodeOffset += stride * height;
         }
 
@@ -2325,14 +2336,14 @@ void Image::forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownDa
     if (ownData)
     {
         _data    = data;
-        _dataLen = dataLen;
+        _dataSize = dataLen;
         _offset  = offset;
     }
     else
     {
-        _dataLen = dataLen - offset;
-        _data    = (uint8_t*)malloc(_dataLen);
-        memcpy(_data, data + offset, _dataLen);
+        _dataSize = dataLen - offset;
+        _data    = (uint8_t*)malloc(_dataSize);
+        memcpy(_data, data + offset, _dataSize);
     }
 }
 

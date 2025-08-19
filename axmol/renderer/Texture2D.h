@@ -29,8 +29,8 @@ THE SOFTWARE.
 #pragma once
 
 #include <string>
-#include <map>
 #include <unordered_map>
+#include <span>
 
 #include "axmol/base/Object.h"
 #include "axmol/math/Math.h"
@@ -43,7 +43,18 @@ namespace ax
 class Image;
 class NinePatchInfo;
 class SpriteFrame;
-typedef struct _MipmapInfo MipmapInfo;
+
+template<typename _PointerType>
+struct TextureSliceDataBase
+{
+    _PointerType data   = nullptr;
+    uint32_t dataSize   = 0;
+    uint16_t layerIndex = 0;
+    uint16_t mipLevel   = 0;
+};
+
+using MipmapInfo = TextureSliceDataBase<void*>;
+using TextureSliceData = TextureSliceDataBase<const void*>;
 
 namespace ui
 {
@@ -155,79 +166,22 @@ public:
      @param pixelsHigh The image height.
      @param preMultipliedAlpha The texture has premultiplied alpha
      */
-    bool initWithMipmaps(MipmapInfo* mipmaps,
-                         int mipmapsNum,
+    bool initWithMipmaps(std::span<MipmapInfo> mipmaps,
                          rhi::PixelFormat pixelFormat,
                          rhi::PixelFormat renderFormat,
                          int pixelsWide,
                          int pixelsHigh,
                          bool preMultipliedAlpha = false);
 
-    /** Update with image.
-
-    @param data Specifies a pointer to the image data in memory.
-    @param offsetX Specifies a texel offset in the x direction within the texture array.
-    @param offsetY Specifies a texel offset in the y direction within the texture array.
-    @param width Specifies the width of the texture subimage.
-    @param height Specifies the height of the texture subimage.
-    */
-    bool updateWithImage(Image* image, int index = 0);
-    bool updateWithImage(Image* image, rhi::PixelFormat format, int index = 0);
-    bool updateWithData(const void* data,
-                        ssize_t dataLen,
-                        rhi::PixelFormat pixelFormat,
-                        rhi::PixelFormat renderFormat,
-                        int pixelsWide,
-                        int pixelsHigh,
-                        bool preMultipliedAlpha,
-                        int index = 0);
-    bool updateWithMipmaps(MipmapInfo* mipmaps,
-                           int mipmapsNum,
-                           rhi::PixelFormat pixelFormat,
-                           rhi::PixelFormat renderFormat,
-                           int pixelsWide,
-                           int pixelsHigh,
-                           bool preMultipliedAlpha = false,
-                           int index               = 0);
-
-    /** Update with texture data.
-
-     @param data Specifies a pointer to the image data in memory.
-     @param offsetX Specifies a texel offset in the x direction within the texture array.
-     @param offsetY Specifies a texel offset in the y direction within the texture array.
-     @param width Specifies the width of the texture subimage.
-     @param height Specifies the height of the texture subimage.
-     */
-    bool updateWithSubData(void* data, int offsetX, int offsetY, int width, int height, int index = 0);
     /**
-    Drawing extensions to make it easy to draw basic quads using a Texture2D object.
-    These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be
-    enabled.
-    */
-    /** Draws a texture at a given point. */
-    void drawAtPoint(const Vec2& point, float globalZOrder);
-    /** Draws a texture inside a rect.*/
-    void drawInRect(const Rect& rect, float globalZOrder);
+  Initializes a texture from a UIImage object.
 
-    /**
-    Extensions to make it easy to create a Texture2D object from an image file.
-    */
-    /**
-    Initializes a texture from a UIImage object.
-
-    We will use the pixel format of the image.
-    NOTE: It will not convert the pvr image file.
+    We will use the format you passed to the function to convert the image format to the texture format.
+    If you pass PixelFormat::AUTO, we will auto detect the image render type and use that type for texture to render.
     @param image An UIImage object.
+    @param format Texture pixel formats.
     */
-    bool initWithImage(Image* image);
-
-    /**
-    Initializes a texture from an Image object and convert it to the given
-    format if necessary.
-
-    NOTE: It will not convert the pvr image file.
-    */
-    bool initWithImage(Image* image, PixelFormat format);
+    bool initWithImage(Image* image, PixelFormat renderFormat = PixelFormat::AUTO);
 
     /** Initializes a texture from a string with dimensions, alignment, font name and font size.
 
@@ -255,6 +209,31 @@ public:
      @param textDefinition A FontDefinition object contains font attributes.
      */
     bool initWithString(std::string_view text, const FontDefinition& textDefinition);
+
+    bool initWithSpec(rhi::TextureDesc desc,
+                      std::span<TextureSliceData> subDatas,
+                      PixelFormat renderFormat,
+                      bool preMultipliedAlpha = false);
+
+    /** Update with texture data.
+
+     @param data Specifies a pointer to the image data in memory.
+     @param offsetX Specifies a texel offset in the x direction within the texture array.
+     @param offsetY Specifies a texel offset in the y direction within the texture array.
+     @param width Specifies the width of the texture subimage.
+     @param height Specifies the height of the texture subimage.
+     */
+    bool updateWithSubData(const void* data, int offsetX, int offsetY, int width, int height, int level = 0, int layerIndex = 0);
+    /**
+    Drawing extensions to make it easy to draw basic quads using a Texture2D object.
+    These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be
+    enabled.
+    */
+    /** Draws a texture at a given point. */
+    void drawAtPoint(const Vec2& point, float globalZOrder);
+    /** Draws a texture inside a rect.*/
+    void drawInRect(const Rect& rect, float globalZOrder);
+
 
     //!!Used for render buffer, such depth stencil attachment
     bool updateTextureDesc(const rhi::TextureDesc& descriptor, bool preMultipliedAlpha = false);
@@ -391,7 +370,7 @@ private:
 
 protected:
     /** pixel format of the texture */
-    rhi::PixelFormat _pixelFormat;
+    rhi::PixelFormat _originalPF;
 
     /** width in pixels */
     int _pixelsWide;
@@ -400,7 +379,7 @@ protected:
     int _pixelsHigh;
 
     /** texture name */
-    rhi::Texture* _texture;
+    rhi::Texture* _rhiTexture;
 
     /** texture max S */
     float _maxS;

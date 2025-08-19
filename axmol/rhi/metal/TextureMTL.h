@@ -36,37 +36,6 @@ namespace ax::rhi::mtl {
  * @{
  */
 
-struct TextureInfoMTL
-{
-    TextureInfoMTL(id<MTLDevice> mtlDevice)
-    {
-        _mtlDevice = mtlDevice;
-        _mtlTextures.fill(nil);
-    }
-    ~TextureInfoMTL() { destroy(); }
-
-    id<MTLTexture> ensure(int index);
-    void destroy();
-
-    id<MTLTexture> createTexture(id<MTLDevice> mtlDevice, const TextureDesc& descriptor);
-    void recreateSampler(const SamplerDesc& descriptor);
-
-    MTLSamplerAddressMode _sAddressMode;
-    MTLSamplerAddressMode _tAddressMode;
-    MTLSamplerMinMagFilter _minFilter;
-    MTLSamplerMinMagFilter _magFilter;
-    MTLSamplerMipFilter _mipFilter;
-
-    id<MTLDevice> _mtlDevice;
-    std::array<id<MTLTexture>, AX_META_TEXTURES + 1> _mtlTextures;
-    int _maxIdx = -1;
-
-    TextureDesc _desc;
-
-    id<MTLSamplerState> _mtlSamplerState = nil;
-    unsigned int _bytesPerRow            = 0;
-};
-
 /**
  * TextureImpl
  */
@@ -88,11 +57,11 @@ public:
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      */
-    virtual void updateData(uint8_t* data,
-                            std::size_t width,
-                            std::size_t height,
-                            std::size_t level,
-                            int index = 0) override;
+    void updateData(const void* data,
+                    std::size_t width,
+                    std::size_t height,
+                    std::size_t level,
+                    int layerIndex = 0) override;
 
     /**
      * Update a two-dimensional texture image in a compressed format
@@ -103,12 +72,12 @@ public:
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      */
-    virtual void updateCompressedData(uint8_t* data,
-                                      std::size_t width,
-                                      std::size_t height,
-                                      std::size_t dataLen,
-                                      std::size_t level,
-                                      int index = 0) override;
+    void updateCompressedData(const void* data,
+                              std::size_t width,
+                              std::size_t height,
+                              std::size_t dataLen,
+                              std::size_t level,
+                              int layerIndex = 0) override;
 
     /**
      * Update a two-dimensional texture subimage
@@ -120,13 +89,13 @@ public:
      * reduction image.
      * @param data Specifies a pointer to the image data in memory.
      */
-    virtual void updateSubData(std::size_t xoffset,
-                               std::size_t yoffset,
-                               std::size_t width,
-                               std::size_t height,
-                               std::size_t level,
-                               uint8_t* data,
-                               int index = 0) override;
+    void updateSubData(std::size_t xoffset,
+                       std::size_t yoffset,
+                       std::size_t width,
+                       std::size_t height,
+                       std::size_t level,
+                       const void* data,
+                       int layerIndex = 0) override;
 
     /**
      * Update a two-dimensional texture subimage in a compressed format
@@ -139,14 +108,14 @@ public:
      * reduction image.
      * @param data Specifies a pointer to the compressed image data in memory.
      */
-    virtual void updateCompressedSubData(std::size_t xoffset,
-                                         std::size_t yoffset,
-                                         std::size_t width,
-                                         std::size_t height,
-                                         std::size_t dataLen,
-                                         std::size_t level,
-                                         uint8_t* data,
-                                         int index = 0) override;
+    void updateCompressedSubData(std::size_t xoffset,
+                                 std::size_t yoffset,
+                                 std::size_t width,
+                                 std::size_t height,
+                                 std::size_t dataLen,
+                                 std::size_t level,
+                                 const void* data,
+                                 int layerIndex = 0) override;
 
     /**
      * Update sampler
@@ -163,36 +132,36 @@ public:
      * Update texture description.
      * @param desc Specifies texture and sampler descriptor.
      */
-    void updateTextureDesc(const TextureDesc& desc, int index = 0) override;
+    void updateTextureDesc(const TextureDesc& desc) override;
 
     /**
      * Update texutre cube data in give slice side.
      * @param side Specifies which slice texture of cube to be update.
      * @param data Specifies a pointer to the image data in memory.
      */
-    void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
-
-    int getCount() const override { return _textureInfo._maxIdx + 1; }
+    void updateFaceData(TextureCubeFace side, const void* data) override;
 
     /**
      * Get MTLTexture object. reinterpret_cast<id<MTLTexture>>(handler);
      * @return A MTLTexture object.
      */
-    id<MTLTexture> internalHandle(int index = 0) const
+    id<MTLTexture> internalHandle() const
     {
-        return _textureInfo._mtlTextures[index];
+        return _mtlTexture;
     }
 
     /**
      * Get MTLSamplerState object
      * @return A MTLSamplerState object.
      */
-    inline id<MTLSamplerState> internalSampler() const { return _textureInfo._mtlSamplerState; }
+    inline id<MTLSamplerState> internalSampler() const { return _mtlSamplerState; }
 
 private:
-    TextureInfoMTL _textureInfo;
-
-    MTLRegion _region;
+    void ensureNativeTexture();
+    
+    id<MTLDevice> _mtlDevice;
+    id<MTLTexture> _mtlTexture = nil;
+    id<MTLSamplerState> _mtlSamplerState = nil;
 };
 
 // end of _metal group

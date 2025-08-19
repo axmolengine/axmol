@@ -48,7 +48,7 @@ public:
      * @param fragmentShader Specifes the fragment shader source.
      */
     ProgramImpl(std::string_view vertexShader, std::string_view fragmentShader);
-    virtual ~ProgramImpl();
+    ~ProgramImpl() override;
 
     /**
      * Get uniform location by name.

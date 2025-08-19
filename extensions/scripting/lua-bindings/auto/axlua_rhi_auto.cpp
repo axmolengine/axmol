@@ -122,7 +122,7 @@ int lua_register_ax_rhi_PixelFormat(lua_State* tolua_S)
         tolua_constant(tolua_S, "RGBA32F", 28);
         tolua_constant(tolua_S, "D24S8", 29);
         tolua_constant(tolua_S, "COUNT", 30);
-        tolua_constant(tolua_S, "NONE", 65535);
+        tolua_constant(tolua_S, "AUTO", -1);
     tolua_endmodule(tolua_S);
 
     auto typeName = typeid(ax::rhi::PixelFormat).name(); // rtti is literal storage
@@ -298,9 +298,10 @@ int lua_register_ax_rhi_SamplerAddressMode(lua_State* tolua_S)
     tolua_module(tolua_S, "SamplerAddressMode", 0);
     tolua_beginmodule(tolua_S,"SamplerAddressMode");
         tolua_constant(tolua_S, "REPEAT", 0);
-        tolua_constant(tolua_S, "MIRROR_REPEAT", 1);
+        tolua_constant(tolua_S, "MIRROR", 1);
+        tolua_constant(tolua_S, "CLAMP", 2);
+        tolua_constant(tolua_S, "BORDER", 3);
         tolua_constant(tolua_S, "CLAMP_TO_EDGE", 2);
-        tolua_constant(tolua_S, "DONT_CARE", 3);
     tolua_endmodule(tolua_S);
 
     auto typeName = typeid(ax::rhi::SamplerAddressMode).name(); // rtti is literal storage
@@ -314,13 +315,16 @@ int lua_register_ax_rhi_SamplerFilter(lua_State* tolua_S)
 {
     tolua_module(tolua_S, "SamplerFilter", 0);
     tolua_beginmodule(tolua_S,"SamplerFilter");
+        tolua_constant(tolua_S, "MIN_NEAREST", 0);
+        tolua_constant(tolua_S, "MIN_LINEAR", 1);
+        tolua_constant(tolua_S, "MIN_ANISOTROPIC", 2);
+        tolua_constant(tolua_S, "MAG_NEAREST", 0);
+        tolua_constant(tolua_S, "MAG_LINEAR", 1);
+        tolua_constant(tolua_S, "MIP_NONE", 0);
+        tolua_constant(tolua_S, "MIP_NEAREST", 1);
+        tolua_constant(tolua_S, "MIP_LINEAR", 2);
         tolua_constant(tolua_S, "NEAREST", 0);
-        tolua_constant(tolua_S, "NEAREST_MIPMAP_NEAREST", 1);
-        tolua_constant(tolua_S, "NEAREST_MIPMAP_LINEAR", 2);
-        tolua_constant(tolua_S, "LINEAR", 3);
-        tolua_constant(tolua_S, "LINEAR_MIPMAP_LINEAR", 4);
-        tolua_constant(tolua_S, "LINEAR_MIPMAP_NEAREST", 5);
-        tolua_constant(tolua_S, "DONT_CARE", 6);
+        tolua_constant(tolua_S, "LINEAR", 1);
     tolua_endmodule(tolua_S);
 
     auto typeName = typeid(ax::rhi::SamplerFilter).name(); // rtti is literal storage
@@ -1378,31 +1382,7 @@ int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
-        if (argc == 4) {
-            ax::rhi::UniformLocation arg0;
-            ok &= luaval_to_uniformLocation(tolua_S, 2, arg0, "axrhi.ProgramState:setTexture");
-
-            if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axrhi.ProgramState:setTexture");
-
-            if (!ok) { break; }
-            int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axrhi.ProgramState:setTexture");
-
-            if (!ok) { break; }
-            ax::rhi::Texture* arg3;
-            ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 5, "axrhi.Texture",&arg3, "axrhi.ProgramState:setTexture");
-
-            if (!ok) { break; }
-            cobj->setTexture(arg0, arg1, arg2, arg3);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axrhi.ProgramState:setTexture",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axrhi.ProgramState:setTexture",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1962,24 +1942,6 @@ int lua_ax_rhi_Texture_updateTextureDesc(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2) 
-    {
-        ax::rhi::TextureDesc arg0;
-        int arg1;
-
-        #pragma warning NO CONVERSION TO NATIVE FOR TextureDesc
-		ok = false;
-
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axrhi.Texture:updateTextureDesc");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateTextureDesc'", nullptr);
-            return 0;
-        }
-        cobj->updateTextureDesc(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.Texture:updateTextureDesc",argc, 1);
     return 0;
 
@@ -1990,7 +1952,7 @@ int lua_ax_rhi_Texture_updateTextureDesc(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_rhi_Texture_getTextureFormat(lua_State* tolua_S)
+int lua_ax_rhi_Texture_getPixelFormat(lua_State* tolua_S)
 {
     int argc = 0;
     ax::rhi::Texture* cobj = nullptr;
@@ -2010,7 +1972,7 @@ int lua_ax_rhi_Texture_getTextureFormat(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_getTextureFormat'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_getPixelFormat'", nullptr);
         return 0;
     }
 #endif
@@ -2020,19 +1982,19 @@ int lua_ax_rhi_Texture_getTextureFormat(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getTextureFormat'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getPixelFormat'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getTextureFormat();
+        int ret = (int)cobj->getPixelFormat();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.Texture:getTextureFormat",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.Texture:getPixelFormat",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_getTextureFormat'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_getPixelFormat'.",&tolua_err);
 #endif
 
     return 0;
@@ -2348,7 +2310,7 @@ int lua_ax_rhi_Texture_updateFaceData(lua_State* tolua_S)
     if (argc == 2) 
     {
         ax::rhi::TextureCubeFace arg0;
-        void* arg1;
+        const void* arg1;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.Texture:updateFaceData");
 
@@ -2360,27 +2322,6 @@ int lua_ax_rhi_Texture_updateFaceData(lua_State* tolua_S)
             return 0;
         }
         cobj->updateFaceData(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    if (argc == 3) 
-    {
-        ax::rhi::TextureCubeFace arg0;
-        void* arg1;
-        int arg2;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.Texture:updateFaceData");
-
-        #pragma warning NO CONVERSION TO NATIVE FOR void*
-		ok = false;
-
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axrhi.Texture:updateFaceData");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateFaceData'", nullptr);
-            return 0;
-        }
-        cobj->updateFaceData(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2409,7 +2350,7 @@ int lua_register_ax_rhi_Texture(lua_State* tolua_S)
         tolua_function(tolua_S,"updateSamplerDesc",lua_ax_rhi_Texture_updateSamplerDesc);
         tolua_function(tolua_S,"generateMipmaps",lua_ax_rhi_Texture_generateMipmaps);
         tolua_function(tolua_S,"updateTextureDesc",lua_ax_rhi_Texture_updateTextureDesc);
-        tolua_function(tolua_S,"getTextureFormat",lua_ax_rhi_Texture_getTextureFormat);
+        tolua_function(tolua_S,"getPixelFormat",lua_ax_rhi_Texture_getPixelFormat);
         tolua_function(tolua_S,"getTextureUsage",lua_ax_rhi_Texture_getTextureUsage);
         tolua_function(tolua_S,"getTextureType",lua_ax_rhi_Texture_getTextureType);
         tolua_function(tolua_S,"hasMipmaps",lua_ax_rhi_Texture_hasMipmaps);

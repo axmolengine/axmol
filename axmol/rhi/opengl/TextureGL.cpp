@@ -32,84 +32,21 @@
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/RHIUtils.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 #define ISPOW2(n) (((n) & (n - 1)) == 0)
 
-namespace
-{
-bool isMipmapEnabled(GLint filter)
-{
-    switch (filter)
-    {
-    case GL_LINEAR_MIPMAP_LINEAR:
-    case GL_LINEAR_MIPMAP_NEAREST:
-    case GL_NEAREST_MIPMAP_NEAREST:
-    case GL_NEAREST_MIPMAP_LINEAR:
-        return true;
-    default:
-        break;
-    }
-    return false;
-}
-}  // namespace
-
-/// CLASS TextureInfoGL
-void TextureInfoGL::applySampler(const SamplerDesc& desc, bool isPow2, bool hasMipmaps)
-{
-    this->sampler = static_cast<GLuint>(reinterpret_cast<uintptr_t>(SamplerCache::getInstance()->getSampler(desc)));
-}
-
-void TextureInfoGL::apply(int slot, int index) const
-{
-    __state->activeTexture(GL_TEXTURE0 + slot);
-    __state->bindTexture(this->target, index < AX_META_TEXTURES ? textures[index] : textures[0]);
-    __state->bindSampler(slot, this->sampler);
-}
-
-GLuint TextureInfoGL::ensure(int index)
-{
-    if (index >= AX_META_TEXTURES)
-        return 0;
-    // glActiveTexture(GL_TEXTURE0 + index);
-    auto& texID = this->textures[index];
-    if (!texID)
-        glGenTextures(1, &texID);
-    __state->bindTexture(this->target, texID);
-
-    if (this->maxIdx < index)
-        this->maxIdx = index;
-
-    return texID;
-}
-
-void TextureInfoGL::onRendererRecreated()
-{
-    int idx = 0;
-    for (auto&& texID : textures)
-    {
-        if (texID)
-        {
-            // NOTE: glDeleteTextures() doesn't need to be called here, because the textures were
-            // destroyed when the GL context was lost.
-            texID = 0;
-            ensure(idx);
-        }
-        ++idx;
-    }
-}
-
 /// CLASS TextureImpl
-TextureImpl::TextureImpl(const TextureDesc& descriptor)
+TextureImpl::TextureImpl(const TextureDesc& desc)
 {
-    _textureType = descriptor.textureType;
-    updateTextureDesc(descriptor);
+    updateTextureDesc(desc);
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on GLES.
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-        _textureInfo.onRendererRecreated();
         if (_usedForRT)
             this->ensureTexStorageForRT();
     });
@@ -117,36 +54,49 @@ TextureImpl::TextureImpl(const TextureDesc& descriptor)
 #endif
 }
 
-void TextureImpl::updateTextureDesc(const TextureDesc& descriptor, int index)
+void TextureImpl::updateTextureDesc(const TextureDesc& desc)
 {
-    _textureInfo.target = _textureType == rhi::TextureType::TEXTURE_2D ? GL_TEXTURE_2D : GL_TEXTURE_CUBE_MAP;
+    assert(desc.textureType == rhi::TextureType::TEXTURE_2D || _desc.width == _desc.height);
 
-    assert(descriptor.textureType == rhi::TextureType::TEXTURE_2D || _width == _height);
+    Texture::updateTextureDesc(desc);
 
-    Texture::updateTextureDesc(descriptor, index);
+    UtilsGL::toGLTypes(desc.pixelFormat, _nativeDesc.internalFormat, _nativeDesc.format, _nativeDesc.type);
+    switch (desc.textureType)
+    {
+    case TextureType::TEXTURE_2D:
+        _nativeDesc.target = _desc.arraySize == 1 ? GL_TEXTURE_2D : GL_TEXTURE_2D_ARRAY;
+        break;
+    case TextureType::TEXTURE_CUBE:
+        _nativeDesc.target = GL_TEXTURE_CUBE_MAP;
+        break;
+    }
 
-    UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type);
+    updateSamplerDesc(desc.samplerDesc);
 
-    updateSamplerDesc(descriptor.samplerDesc);
-
-    const bool useForRT = descriptor.textureUsage == TextureUsage::RENDER_TARGET;
+    if (_desc.arraySize == 1)
+    {
+        const bool useForRT = desc.textureUsage == TextureUsage::RENDER_TARGET;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    _usedForRT = useForRT;
+        _usedForRT = useForRT;
 #endif
-    if(useForRT) {
-        ensureTexStorageForRT();
+        if (useForRT)
+        {
+            ensureTexStorageForRT();
+        }
     }
 }
 
 void TextureImpl::ensureTexStorageForRT()
 {
-    auto size     = _width * _height * _bitsPerPixel / 8;
+    const auto w = getWidth();
+    const auto h = getHeight();
+    auto size    = w * h * _bitsPerPixel / 8;
     assert(size > 0);
 
-    uint8_t* data = (uint8_t*)malloc(size);
-    memset(data, 0, size);
-    updateData(data, _width, _height, 0);
-    free(data);
+    axstd::byte_buffer blackPixels;
+    blackPixels.resize(size, 0);
+
+    updateData(blackPixels.data(), w, h, 0, 0);
 }
 
 TextureImpl::~TextureImpl()
@@ -154,23 +104,57 @@ TextureImpl::~TextureImpl()
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
 #endif
-    _textureInfo.destroy();
+    if (_nativeTexture)
+    {
+        __state->deleteTexture(_nativeTexture);
+        _nativeTexture = 0;
+    }
+
+    _nativeSampler = 0;
 }
 
-void TextureImpl::updateSamplerDesc(const SamplerDesc& sampler)
+void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {
-    bool isPow2 = ISPOW2(_width) && ISPOW2(_height);
-    _textureInfo.applySampler(sampler, isPow2, _hasMipmaps);
+    // TODO: check mip POT
+    // bool isPow2 = ISPOW2(_width) && ISPOW2(_height);
+    // _textureInfo.applySampler(sampler, isPow2, _hasMipmaps);
+
+    this->_nativeSampler =
+        static_cast<GLuint>(reinterpret_cast<uintptr_t>(SamplerCache::getInstance()->getSampler(desc)));
 }
 
-void TextureImpl::updateData(uint8_t* data, std::size_t width, std::size_t height, std::size_t level, int index)
+void TextureImpl::ensureNativeTexture(size_t imageSize)
 {
-    assert(_textureInfo.target == GL_TEXTURE_2D);
-    if (!_textureInfo.ensure(index))
-        return;
+    bool initial = !_nativeTexture;
+
+    if (initial)
+        glGenTextures(1, &_nativeTexture);
+
+    __state->bindTexture(_nativeDesc.target, _nativeTexture);
+
+    if (initial && _desc.arraySize > 1)
+    { // allocate texture2d array storage
+        if (_nativeDesc.type != 0)
+        {
+            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, _nativeDesc.internalFormat, _desc.width, _desc.height, _desc.arraySize,
+                         0, _nativeDesc.format, _nativeDesc.type, nullptr);
+        }
+        else
+        {
+            glCompressedTexImage3D(GL_TEXTURE_2D_ARRAY, 0, _nativeDesc.internalFormat, _desc.width, _desc.height,
+                                   _desc.arraySize, 0, imageSize * _desc.arraySize, nullptr);
+        }
+        CHECK_GL_ERROR_DEBUG();
+    }
+}
+
+void TextureImpl::updateData(const void* data, std::size_t width, std::size_t height, std::size_t level, int layerIndex)
+{
+    assert(_desc.textureType == TextureType::TEXTURE_2D);
+    ensureNativeTexture();
 
     // Set the row align only when mipmapsNum == 1 and the data is uncompressed
-    auto mipmapEnabled = _hasMipmaps; // TODO: mipLevels
+    auto mipmapEnabled = _desc.samplerDesc.mipFilter != SamplerFilter::MIP_NONE;
     if (!mipmapEnabled)
     {
         unsigned int bytesPerRow = width * _bitsPerPixel / 8;
@@ -197,44 +181,49 @@ void TextureImpl::updateData(uint8_t* data, std::size_t width, std::size_t heigh
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     }
 
-    glTexImage2D(GL_TEXTURE_2D, level, _textureInfo.internalFormat, width, height,
-                 0,  // border
-                 _textureInfo.format, _textureInfo.type, data);
+    if (_desc.arraySize == 1)
+        glTexImage2D(GL_TEXTURE_2D, level, _nativeDesc.internalFormat, width, height, 0, _nativeDesc.format,
+                     _nativeDesc.type, data);
+    else
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, 0, 0, layerIndex, width, height, 1, _nativeDesc.internalFormat,
+                     _nativeDesc.type, data);
 
     CHECK_GL_ERROR_DEBUG();
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    if (_generateMipmaps)
+    if (_generateMipmaps && level == 0)
     {
-        _hasMipmaps = false;
+        // _hasMipmaps = false;
         generateMipmaps();
     }
 #endif
 
-    if (!_hasMipmaps && level > 0)
-        _hasMipmaps = true;
+    if (!_desc.mipLevels && level > 0)
+        _desc.mipLevels = level + 1;
 }
 
-void TextureImpl::updateCompressedData(uint8_t* data,
+void TextureImpl::updateCompressedData(const void* data,
                                        std::size_t width,
                                        std::size_t height,
-                                       std::size_t dataLen,
+                                       std::size_t dataSize,
                                        std::size_t level,
-                                       int index)
+                                       int layerIndex)
 {
-    assert(_textureInfo.target == GL_TEXTURE_2D);
-    if (!_textureInfo.ensure(index))
-        return;
+    assert(_desc.textureType == TextureType::TEXTURE_2D);
+    ensureNativeTexture(dataSize);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glCompressedTexImage2D(GL_TEXTURE_2D, level, _textureInfo.internalFormat, (GLsizei)width, (GLsizei)height,
-                           0,  // border
-                           dataLen, data);
+    if (_desc.arraySize == 1)
+        glCompressedTexImage2D(GL_TEXTURE_2D, level, _nativeDesc.internalFormat, (GLsizei)width, (GLsizei)height, 0,
+                               dataSize, data);
+    else
+        glCompressedTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, 0, 0, layerIndex, (GLsizei)width, (GLsizei)height, 1,
+                                  _nativeDesc.internalFormat, dataSize, data);
     CHECK_GL_ERROR_DEBUG();
 
-    if (!_hasMipmaps && level > 0)
-        _hasMipmaps = true;
+    if (!_desc.mipLevels && level > 0)
+        _desc.mipLevels = level + 1;
 }
 
 void TextureImpl::updateSubData(std::size_t xoffset,
@@ -242,77 +231,92 @@ void TextureImpl::updateSubData(std::size_t xoffset,
                                 std::size_t width,
                                 std::size_t height,
                                 std::size_t level,
-                                uint8_t* data,
-                                int index)
+                                const void* data,
+                                int layerIndex)
 {
-    assert(_textureInfo.target == GL_TEXTURE_2D);
-    if (!_textureInfo.ensure(index))
-        return;
+    assert(_desc.textureType == TextureType::TEXTURE_2D);
+    ensureNativeTexture();
 
     // !IMPORTANT: Set the unpack alignment to 1 byte to avoid issues with width or height no align with 4.
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _textureInfo.format, _textureInfo.type,
-                    data);
+    if (_desc.arraySize == 1)
+        glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _nativeDesc.format, _nativeDesc.type, data);
+    else
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, layerIndex, width, height, 1,
+                        _nativeDesc.internalFormat,
+                        _nativeDesc.type, data);
+
     CHECK_GL_ERROR_DEBUG();
 
-    if (!_hasMipmaps && level > 0)
-        _hasMipmaps = true;
+    // TODO:
+    // if (!_hasMipmaps && level > 0)
+    //     _hasMipmaps = true;
 }
 
 void TextureImpl::updateCompressedSubData(std::size_t xoffset,
                                           std::size_t yoffset,
                                           std::size_t width,
                                           std::size_t height,
-                                          std::size_t dataLen,
+                                          std::size_t dataSize,
                                           std::size_t level,
-                                          uint8_t* data,
-                                          int index)
+                                          const void* data,
+                                          int layerIndex)
 {
-    assert(_textureInfo.target == GL_TEXTURE_2D);
-    if (!_textureInfo.ensure(index))
-        return;
+    assert(_desc.textureType == TextureType::TEXTURE_2D);
+    ensureNativeTexture(dataSize);
 
-    glCompressedTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _textureInfo.internalFormat,
-                              dataLen, data);
+    if (_desc.arraySize == 1)
+        glCompressedTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _nativeDesc.internalFormat,
+                              dataSize, data);
+    else
+        glCompressedTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, layerIndex, width, height, 1,
+                                  _nativeDesc.internalFormat, dataSize, data);
     CHECK_GL_ERROR_DEBUG();
 
-    if (!_hasMipmaps && level > 0)
-        _hasMipmaps = true;
+    // TODO:
+    // if (!_hasMipmaps && level > 0)
+    //    _hasMipmaps = true;
 }
 
-void TextureImpl::updateFaceData(TextureCubeFace side, void* data, int index)
+void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
 {
-    assert(_textureInfo.target == GL_TEXTURE_CUBE_MAP);
-    if (!_textureInfo.ensure(index))
-        return;
+    assert(_desc.textureType == TextureType::TEXTURE_CUBE);
+    ensureNativeTexture();
 
     CHECK_GL_ERROR_DEBUG();
     int i = static_cast<int>(side);
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                 0,  // level
-                 _textureInfo.internalFormat, _width, _height,
-                 0,  // border
-                 _textureInfo.format, _textureInfo.type, data);
+
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, _nativeDesc.internalFormat, _desc.width, _desc.height, 0,
+                _nativeDesc.format, _nativeDesc.type, data);
 
     CHECK_GL_ERROR_DEBUG();
     __state->bindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
+void TextureImpl::apply(int slot) const
+{
+    __state->activeTexture(GL_TEXTURE0 + slot);
+    __state->bindTexture(_nativeDesc.target, _nativeTexture);
+    __state->bindSampler(slot, _nativeSampler);
+}
+
 void TextureImpl::generateMipmaps()
 {
-    if (TextureUsage::RENDER_TARGET == _textureUsage)
+    if (TextureUsage::RENDER_TARGET == _desc.textureUsage)
         return;
 
-    if (!_hasMipmaps)
+    if (_desc.mipLevels == 0)  // 0 means chould auto generate by GPU
     {
+        __state->bindTexture(_nativeDesc.target, (GLuint)this->internalHandle());
+        glGenerateMipmap(_nativeDesc.target);
+
 #if AX_ENABLE_CACHE_TEXTURE_DATA
         _generateMipmaps = true;
 #endif
-        _hasMipmaps = true;
-        __state->bindTexture(_textureInfo.target, (GLuint)this->internalHandle());
-        glGenerateMipmap(_textureInfo.target);
+
+        _desc.mipLevels = RHIUtils::computeMipLevels(_desc);
     }
 }
 
-}
+}  // namespace ax::rhi::gl

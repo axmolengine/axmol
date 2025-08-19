@@ -35,58 +35,12 @@
 namespace ax::rhi::gl
 {
 
-/**
- * Store texture information.
- */
-struct TextureInfoGL
+struct NativeTextureDesc
 {
-    void applySampler(const SamplerDesc& desc, bool isPow2, bool hasMipmaps);
-
-    TextureInfoGL() { textures.fill(0); }
-    ~TextureInfoGL() {}
-
-    template <typename _Fty>
-    void foreachTextures(const _Fty& cb)
-    {
-        int idx = 0;
-        while (textures[idx])
-        {
-            auto& h = textures[idx];
-            cb(h, idx++);
-        }
-    }
-
-    GLuint ensure(int index);
-    void onRendererRecreated();
-
-    void destroy()
-    {
-        foreachTextures([this](GLuint& texID, int) {
-            __state->deleteTexture(texID);
-            texID = 0;
-        });
-        textures.fill(0);
-    }
-
-    /// <summary>
-    /// Apply shader texture
-    /// </summary>
-    /// <param name="slot">the slot in shader</param>
-    /// <param name="index">the index in meta textrues</param>
-    /// <param name="target">the target GL_TEXTURE_2D,GL_TEXTURE_CUBE_MAP</param>
-    void apply(int slot, int index) const;
-
-    GLuint sampler{0};
-
-    // Used in glTexImage2D().
+    GLenum target        = GL_TEXTURE_2D;
     GLint internalFormat = GL_RGBA;
     GLenum format        = GL_RGBA;
     GLenum type          = GL_UNSIGNED_BYTE;
-
-    GLenum target = GL_TEXTURE_2D;
-
-    std::array<GLuint, AX_META_TEXTURES + 1> textures;
-    int maxIdx = 0;
 };
 
 /**
@@ -101,10 +55,10 @@ class TextureImpl : public rhi::Texture
 {
 public:
     /**
-     * @param descriptor Specifies the texture description.
+     * @param desc Specifies the texture description.
      */
-    TextureImpl(const TextureDesc& descriptor);
-    ~TextureImpl();
+    TextureImpl(const TextureDesc& desc);
+    ~TextureImpl() override;
 
     /**
      * Update a two-dimensional texture image
@@ -112,29 +66,31 @@ public:
      * @param width Specifies the width of the texture image.
      * @param height Specifies the height of the texture image.
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
+     * @param layerIndex Specifies the layer index for 2D array textures.
      * reduction image.
      */
-    virtual void updateData(uint8_t* data,
-                            std::size_t width,
-                            std::size_t height,
-                            std::size_t level,
-                            int index = 0) override;
+    void updateData(const void* data,
+                    std::size_t width,
+                    std::size_t height,
+                    std::size_t level,
+                    int layerIndex) override;
 
     /**
      * Update a two-dimensional texture image in a compressed format
      * @param data Specifies a pointer to the compressed image data in memory.
      * @param width Specifies the width of the texture image.
      * @param height Specifies the height of the texture image.
-     * @param dataLen Specifies the totoal size of compressed image in bytes.
+     * @param dataSize Specifies the totoal size of compressed image in bytes.
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
+     * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    virtual void updateCompressedData(uint8_t* data,
-                                      std::size_t width,
-                                      std::size_t height,
-                                      std::size_t dataLen,
-                                      std::size_t level,
-                                      int index = 0) override;
+    void updateCompressedData(const void* data,
+                              std::size_t width,
+                              std::size_t height,
+                              std::size_t dataSize,
+                              std::size_t level,
+                              int layerIndex) override;
 
     /**
      * Update a two-dimensional texture subimage
@@ -145,14 +101,15 @@ public:
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      * @param data Specifies a pointer to the image data in memory.
+     * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    virtual void updateSubData(std::size_t xoffset,
-                               std::size_t yoffset,
-                               std::size_t width,
-                               std::size_t height,
-                               std::size_t level,
-                               uint8_t* data,
-                               int index = 0) override;
+    void updateSubData(std::size_t xoffset,
+                       std::size_t yoffset,
+                       std::size_t width,
+                       std::size_t height,
+                       std::size_t level,
+                       const void* data,
+                       int layerIndex) override;
 
     /**
      * Update a two-dimensional texture subimage in a compressed format
@@ -160,21 +117,22 @@ public:
      * @param yoffset Specifies a texel offset in the y direction within the texture array.
      * @param width Specifies the width of the texture subimage.
      * @param height Specifies the height of the texture subimage.
-     * @param dataLen Specifies the totoal size of compressed subimage in bytes.
+     * @param dataSize Specifies the totoal size of compressed subimage in bytes.
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      * @param data Specifies a pointer to the compressed image data in memory.
+     * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    virtual void updateCompressedSubData(std::size_t xoffset,
-                                         std::size_t yoffset,
-                                         std::size_t width,
-                                         std::size_t height,
-                                         std::size_t dataLen,
-                                         std::size_t level,
-                                         uint8_t* data,
-                                         int index = 0) override;
+    void updateCompressedSubData(std::size_t xoffset,
+                                 std::size_t yoffset,
+                                 std::size_t width,
+                                 std::size_t height,
+                                 std::size_t dataSize,
+                                 std::size_t level,
+                                 const void* data,
+                                 int layerIndex) override;
 
-    void updateFaceData(TextureCubeFace side, void* data, int index = 0) override;
+    void updateFaceData(TextureCubeFace side, const void* data) override;
 
     /**
      * Update sampler
@@ -191,27 +149,30 @@ public:
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    void updateTextureDesc(const TextureDesc& descriptor, int index = 0) override;
+    void updateTextureDesc(const TextureDesc& descriptor) override;
 
     /**
      * Get internal texture object handle.
      * @return Texture object.
      */
-    GLuint internalHandle(int index = 0) const { return _textureInfo.textures[index]; }
+    GLuint internalHandle() const { return _nativeSampler; }
 
     /**
      * Set texture to pipeline
      * @param index Specifies the texture image unit selector.
      * @param target GL_TEXTURE_2D or GL_TEXTURE_CUBE_MAP
      */
-    void apply(int slot, int index) const { _textureInfo.apply(slot, index); }
+    void apply(int slot) const;
 
-    int getCount() const override { return _textureInfo.maxIdx + 1; }
+    void ensureNativeTexture(size_t imageSize = 0);
 
 private:
     void ensureTexStorageForRT();
 
-    TextureInfoGL _textureInfo;
+    NativeTextureDesc _nativeDesc{};
+    GLuint _nativeTexture{0};
+    GLuint _nativeSampler{0};  // weak ref
+
     EventListener* _rendererRecreatedListener = nullptr;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA

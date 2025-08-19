@@ -89,7 +89,7 @@ refer to:
   https://developer.apple.com/documentation/metal/mtlpixelformat?language=objc
  */
 
-enum class PixelFormat : uint32_t
+enum class PixelFormat : uint8_t
 {
     /* below is compression format */
 
@@ -164,10 +164,10 @@ enum class PixelFormat : uint32_t
     /* the count of pixel format supported by axmol */
     COUNT,
 
-    NONE = 0xffff
+    AUTO = 0xff
 };
 
-enum class TextureUsage : uint32_t
+enum class TextureUsage : uint8_t
 {
     READ,
     WRITE,
@@ -299,7 +299,7 @@ enum class Winding : uint32_t
     COUNTER_CLOCK_WISE
 };
 
-enum class TextureType : uint32_t
+enum class TextureType : uint8_t
 {
     TEXTURE_2D,
     TEXTURE_CUBE
@@ -378,12 +378,13 @@ using SamplerHandle = void*;
  */
 struct TextureDesc
 {
+    uint16_t width            = 1;
+    uint16_t height           = 1;
+    uint16_t arraySize        = 1;
+    uint16_t mipLevels        = 1;
     TextureType textureType   = TextureType::TEXTURE_2D;
-    PixelFormat textureFormat = PixelFormat::RGBA8;
+    PixelFormat pixelFormat   = PixelFormat::RGBA8;
     TextureUsage textureUsage = TextureUsage::READ;
-    uint32_t width            = 1;
-    uint32_t height           = 1;
-    uint32_t depth            = 1;
     SamplerDesc samplerDesc{};
 };
 

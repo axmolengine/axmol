@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/RHIUtils.h"
 #include "axmol/renderer/Renderer.h"
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -69,9 +69,10 @@ rhi::SamplerDesc Texture2D::chooseSamplerDesc(bool antialiasEnabled, bool mipEna
 }
 
 Texture2D::Texture2D()
-    : _pixelFormat(rhi::PixelFormat::NONE)
+    : _originalPF(rhi::PixelFormat::AUTO)
     , _pixelsWide(0)
     , _pixelsHigh(0)
+    , _rhiTexture(nullptr)
     , _maxS(0.0)
     , _maxT(0.0)
     , _flags(TextureFlag::ANTIALIAS_ENABLED)
@@ -79,10 +80,6 @@ Texture2D::Texture2D()
     , _ninePatchInfo(nullptr)
     , _valid(true)
 {
-    rhi::TextureDesc textureDesc;
-    textureDesc.textureFormat = PixelFormat::NONE;
-    _texture =
-        static_cast<rhi::Texture*>(rhi::DriverBase::getInstance()->createTexture(textureDesc));
 }
 
 Texture2D::~Texture2D()
@@ -93,13 +90,13 @@ Texture2D::~Texture2D()
 
     AX_SAFE_DELETE(_ninePatchInfo);
 
-    AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_rhiTexture);
     AX_SAFE_RELEASE(_programState);
 }
 
 rhi::PixelFormat Texture2D::getPixelFormat() const
 {
-    return _pixelFormat;
+    return _originalPF;
 }
 
 int Texture2D::getPixelsWide() const
@@ -114,7 +111,7 @@ int Texture2D::getPixelsHigh() const
 
 rhi::Texture* Texture2D::getBackendTexture() const
 {
-    return _texture;
+    return _rhiTexture;
 }
 
 Vec2 Texture2D::getContentSize() const
@@ -165,42 +162,21 @@ void Texture2D::setPremultipliedAlpha(bool premultipliedAlpha)
 }
 
 bool Texture2D::initWithData(const void* data,
-                             ssize_t dataLen,
+                             ssize_t dataSize,
                              rhi::PixelFormat pixelFormat,
                              rhi::PixelFormat renderFormat,
                              int pixelsWide,
                              int pixelsHigh,
                              bool preMultipliedAlpha)
 {
-    AXASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
+    AXASSERT(dataSize > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
 
     // if data has no mipmaps, we will consider it has only one mipmap
-    MipmapInfo mipmap;
-    mipmap.address = (unsigned char*)data;
-    mipmap.len     = static_cast<int>(dataLen);
-    return initWithMipmaps(&mipmap, 1, pixelFormat, renderFormat, pixelsWide, pixelsHigh, preMultipliedAlpha);
+    MipmapInfo mipmaps[] = {MipmapInfo{.data = (void*)data, .dataSize = static_cast<uint32_t>(dataSize)}};
+    return initWithMipmaps(mipmaps, pixelFormat, renderFormat, pixelsWide, pixelsHigh, preMultipliedAlpha);
 }
 
-bool Texture2D::initWithMipmaps(MipmapInfo* mipmaps,
-                                int mipmapsNum,
-                                rhi::PixelFormat pixelFormat,
-                                rhi::PixelFormat renderFormat,
-                                int pixelsWide,
-                                int pixelsHigh,
-                                bool preMultipliedAlpha)
-{
-    // the pixelFormat must be a certain value
-    updateWithMipmaps(mipmaps, mipmapsNum, pixelFormat, renderFormat, pixelsWide, pixelsHigh, preMultipliedAlpha);
-
-    return true;
-}
-
-bool Texture2D::updateWithImage(Image* image, int index)
-{
-    return updateWithImage(image, image->getPixelFormat(), index);
-}
-
-bool Texture2D::updateWithImage(Image* image, rhi::PixelFormat format, int index)
+bool Texture2D::initWithImage(Image* image, rhi::PixelFormat renderFormat)
 {
     if (image == nullptr)
     {
@@ -211,132 +187,81 @@ bool Texture2D::updateWithImage(Image* image, rhi::PixelFormat format, int index
     if (this->_filePath.empty())
         this->_filePath = image->getFilePath();
 
-    int imageWidth  = image->getWidth();
-    int imageHeight = image->getHeight();
-
-    Configuration* conf = Configuration::getInstance();
-
-    int maxTextureSize = conf->getMaxTextureSize();
-    if (imageWidth > maxTextureSize || imageHeight > maxTextureSize)
-    {
-        AXLOGW("axmol: WARNING: Image ({} x {}) is bigger than the supported {} x {}", imageWidth, imageHeight,
-              maxTextureSize, maxTextureSize);
-        return false;
-    }
-
-    unsigned char* tempData               = image->getData();
-    // Vec2 imageSize                        = Vec2((float)imageWidth, (float)imageHeight);
-    rhi::PixelFormat renderFormat     = (PixelFormat::NONE == format) ? image->getPixelFormat() : format;
-    rhi::PixelFormat imagePixelFormat = image->getPixelFormat();
-    size_t tempDataLen                    = image->getDataLen();
-
-#if AX_RENDER_API == AX_RENDER_API_MTL
-    //! override renderFormat, since some render format is not supported by metal
-    switch (renderFormat)
-    {
-#    if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)
-    // packed 16 bits pixels only available on iOS
-    case PixelFormat::RGB565:
-    case PixelFormat::RGB5A1:
-    case PixelFormat::RGBA4:
-#    endif
-    case PixelFormat::R8:
-    case PixelFormat::RG8:
-    case PixelFormat::RGB8:
-        // Note: conversion to RGBA8 will happends
-        renderFormat = PixelFormat::RGBA8;
-        break;
-    default:
-        break;
-    }
-#elif AX_RENDER_API == AX_RENDER_API_D3D
-    //! override renderFormat, since some render format is not supported by d3d
-    switch (renderFormat)
-    {
-    case PixelFormat::RGB8:
-        // Note: conversion to RGBA8 will happends
-        renderFormat = PixelFormat::RGBA8;
-        break;
-    default:
-        break;
-    }
-#endif
+    auto imagePixelFormat = image->getPixelFormat();
+    int imageWidth        = image->getWidth();
+    int imageHeight       = image->getHeight();
+    auto imageData        = image->getData();
+    auto imageDataSize    = image->getDataSize();
 
     if (image->getNumberOfMipmaps() > 1)
     {
-        if (renderFormat != imagePixelFormat)
-        {
-            AXLOGW("WARNING: This image has more than 1 mipmaps and we will not convert the data format");
-        }
-
         // pixel format of data is not converted, renderFormat can be different from pixelFormat
         // it will be done later
-        updateWithMipmaps(image->getMipmaps(), image->getNumberOfMipmaps(), imagePixelFormat, renderFormat, imageHeight, imageWidth, image->hasPremultipliedAlpha(), index);
+        initWithMipmaps(image->getMipmaps(),
+                        imagePixelFormat, renderFormat, imageHeight,
+                        imageWidth, image->hasPremultipliedAlpha());
     }
     else if (image->isCompressed())
     {  // !Only hardware support texture will be compression PixelFormat, otherwise, will convert to RGBA8 duraing image
        // load
-        renderFormat = imagePixelFormat;
-        updateWithData(tempData, tempDataLen, imagePixelFormat, image->getPixelFormat(), imageWidth, imageHeight, image->hasPremultipliedAlpha(), index);
+        initWithData(imageData, imageDataSize, imagePixelFormat, image->getPixelFormat(), imageWidth, imageHeight,
+                     image->hasPremultipliedAlpha());
     }
     else
     {
         // after conversion, renderFormat == pixelFormat of data
-        updateWithData(tempData, tempDataLen, imagePixelFormat, renderFormat, imageWidth, imageHeight,
-                       image->hasPremultipliedAlpha(), index);
+        initWithData(imageData, imageDataSize, imagePixelFormat, renderFormat, imageWidth, imageHeight,
+                     image->hasPremultipliedAlpha());
     }
 
     return true;
 }
 
-bool Texture2D::updateWithData(const void* data,
-                               ssize_t dataLen,
-                               rhi::PixelFormat pixelFormat,
-                               rhi::PixelFormat renderFormat,
-                               int pixelsWide,
-                               int pixelsHigh,
-                               bool preMultipliedAlpha,
-                               int index)
-{
-    AXASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
-
-    // if data has no mipmaps, we will consider it has only one mipmap
-    MipmapInfo mipmap;
-    mipmap.address = (unsigned char*)data;
-    mipmap.len     = static_cast<int>(dataLen);
-    return updateWithMipmaps(&mipmap, 1, pixelFormat, renderFormat, pixelsWide, pixelsHigh, preMultipliedAlpha, index);
-}
-
-bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
-                                  int mipmapsNum,
+bool Texture2D::initWithMipmaps(std::span<MipmapInfo> mipmaps,
                                   rhi::PixelFormat pixelFormat,
                                   rhi::PixelFormat renderFormat,
                                   int pixelsWide,
                                   int pixelsHigh,
-                                  bool preMultipliedAlpha,
-                                  int index)
+                                  bool preMultipliedAlpha)
 {
-    // the pixelFormat must be a certain value
-    AXASSERT(pixelFormat != PixelFormat::NONE, "the \"pixelFormat\" param must be a certain value!");
-    AXASSERT(pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
 
-    if (mipmapsNum <= 0)
-    {
-        AXLOGW("WARNING: mipmap number is less than 1");
-        return false;
-    }
+    rhi::TextureDesc desc;
 
-    auto& pfd = rhi::PixelFormatUtils::getFormatDesc(pixelFormat);
+    desc.width = pixelsWide;
+    desc.height = pixelsHigh;
+    desc.pixelFormat = pixelFormat;
+    desc.mipLevels   = mipmaps.size();
+    desc.samplerDesc = chooseSamplerDesc(true, desc.mipLevels > 1);
+
+    return initWithSpec(desc, (std::span<TextureSliceData>&)mipmaps, renderFormat, preMultipliedAlpha);
+}
+
+bool Texture2D::initWithSpec(rhi::TextureDesc desc,
+                             std::span<TextureSliceData> subDatas,
+                             PixelFormat renderFormat,
+                             bool preMultipliedAlpha)
+{
+    if (renderFormat == rhi::PixelFormat::AUTO)
+        renderFormat = desc.pixelFormat;
+
+    AXASSERT(desc.pixelFormat != rhi::PixelFormat::AUTO && renderFormat != rhi::PixelFormat::AUTO,
+             "PixelFormat should not be Auto");
+    AXASSERT(desc.width > 0 && desc.height > 0, "Invalid size");
+
+    if (_rhiTexture)
+        return true;
+
+    auto& pfd = rhi::RHIUtils::getFormatDesc(desc.pixelFormat);
     if (!pfd.bpp)
     {
-        AXLOGW("WARNING: unsupported pixelformat: {:x}", (uint32_t)pixelFormat);
+        AXLOGW("WARNING: unsupported pixelformat: {:x}", (uint32_t)desc.pixelFormat);
 #if AX_RENDER_API == AX_RENDER_API_MTL
         AXASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
 #endif
         return false;
     }
 
-    bool compressed = rhi::PixelFormatUtils::isCompressed(pixelFormat);
+    bool compressed = rhi::RHIUtils::isCompressed(desc.pixelFormat);
 
     if (compressed && !Configuration::getInstance()->supportsPVRTC() && !Configuration::getInstance()->supportsETC1() &&
         !Configuration::getInstance()->supportsETC2() && !Configuration::getInstance()->supportsS3TC() &&
@@ -350,124 +275,112 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
     VolatileTextureMgr::getOrAddVolatileTexture(this);
 #endif
 
-    rhi::TextureDesc textureDesc;
-    textureDesc.width  = pixelsWide;
-    textureDesc.height = pixelsHigh;
-
-    textureDesc.samplerDesc = chooseSamplerDesc(_flags & TextureFlag::ANTIALIAS_ENABLED, mipmapsNum > 1);
-
-    int width                           = pixelsWide;
-    int height                          = pixelsHigh;
-    rhi::PixelFormat oriPixelFormat = pixelFormat;
-    for (int i = 0; i < mipmapsNum; ++i)
+    // !override renderFormat since some render format by RHI
+    #if AX_RENDER_API == AX_RENDER_API_MTL
+    switch (renderFormat)
     {
-        unsigned char* data    = mipmaps[i].address;
-        size_t dataLen         = mipmaps[i].len;
-        unsigned char* outData = data;
-        size_t outDataLen      = dataLen;
-
-        if (renderFormat != oriPixelFormat && !compressed)  // need conversion
-        {
-            auto convertedFormat = rhi::PixelFormatUtils::convertDataToFormat(data, dataLen, oriPixelFormat,
-                                                                                  renderFormat, &outData, &outDataLen);
-#if AX_RENDER_API == AX_RENDER_API_MTL
-            AXASSERT(convertedFormat == renderFormat, "PixelFormat convert failed!");
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)
+    // packed 16 bits pixels only available on iOS
+    case PixelFormat::RGB565:
+    case PixelFormat::RGB5A1:
+    case PixelFormat::RGBA4:
+#    endif
+    case PixelFormat::RGB8:
+        // Note: conversion to RGBA8 will happends
+        renderFormat = PixelFormat::RGBA8;
+        break;
+    default:
+        break;
+    }
+#elif AX_RENDER_API == AX_RENDER_API_D3D
+    switch (renderFormat)
+    {
+    case PixelFormat::RGB8:
+        // Note: conversion to RGBA8 will happends
+        renderFormat = PixelFormat::RGBA8;
+        break;
+    default:
+        break;
+    }
 #endif
-            if (convertedFormat == renderFormat)
-                pixelFormat = renderFormat;
-        }
 
-        textureDesc.textureFormat = pixelFormat;
-        AXASSERT(textureDesc.textureFormat != rhi::PixelFormat::NONE, "PixelFormat should not be NONE");
+    _originalPF      = desc.pixelFormat;
+    _contentSize = Vec2((float)desc.width, (float)desc.height);
+    _pixelsWide  = desc.width;
+    _pixelsHigh  = desc.height;
+    _maxS        = 1;
+    _maxT        = 1;
 
-        if (_texture->getTextureFormat() != textureDesc.textureFormat)
-            _texture->updateTextureDesc(textureDesc, index);
+    desc.pixelFormat = renderFormat;
+    _rhiTexture = static_cast<rhi::Texture*>(rhi::DriverBase::getInstance()->createTexture(desc));
 
-        if (compressed)
+    for (auto& subres : subDatas)
+    {
+        if (!subres.data)
+            continue;
+
+        auto width  = (std::max)(1, _pixelsWide >> subres.mipLevel);
+        auto height = (std::max)(1, _pixelsHigh >> subres.mipLevel);
+
+        uint8_t* convertedData{nullptr};
+        size_t convertedDataLen{0};
+
+        const void* pixelData{nullptr};
+        size_t pixelDataSize{0};
+        if (_originalPF != renderFormat && !compressed)  // need conversion
         {
-            _texture->updateCompressedData(data, width, height, dataLen, i, index);
+            auto convertedFormat =
+                rhi::RHIUtils::convertDataToFormat((const uint8_t*)subres.data, subres.dataSize, _originalPF,
+                                                           renderFormat, &convertedData, &convertedDataLen);
+            if (convertedFormat != renderFormat || !convertedData)
+            {
+                AXLOGE("PixelFormat convert fail");
+                continue;
+            }
+            pixelData      = convertedData;
+            pixelDataSize = convertedDataLen;
         }
         else
         {
-            _texture->updateData(outData, width, height, i, index);
+            pixelData = subres.data;
+            pixelDataSize = subres.dataSize;
         }
 
-        if (outData && outData != data && outDataLen > 0)
-        {
-            free(outData);
-            outData    = nullptr;
-            outDataLen = 0;
-        }
+        if (compressed)
+            _rhiTexture->updateCompressedData(pixelData, width, height, pixelDataSize, subres.mipLevel,
+                                              subres.layerIndex);
+        else
+            _rhiTexture->updateData(pixelData, width, height, subres.mipLevel, subres.layerIndex);
 
-        if (i > 0 && (width != height || utils::nextPOT(width) != width))
-        {
-            AXLOGW(
-                "Texture2D. WARNING. Mipmap level {} is not squared. Texture won't render correctly. width={} "
-                "!= height={}",
-                i, width, height);
-        }
-
-        width  = MAX(width >> 1, 1);
-        height = MAX(height >> 1, 1);
+        if (convertedData)
+            free(convertedData);
     }
 
-    if (index == 0)
-    {
-        _contentSize = Vec2((float)pixelsWide, (float)pixelsHigh);
-        _pixelsWide  = pixelsWide;
-        _pixelsHigh  = pixelsHigh;
-        _pixelFormat = pixelFormat;
-        _maxS        = 1;
-        _maxT        = 1;
-
-        setPremultipliedAlpha(preMultipliedAlpha);
-    }
-
-    // pitfall: we do merge RGB+A at at dual sampler shader, so must mark as _hasPremultipliedAlpha = true to makesure
-    // alpha blend works well.
-    if (index > 0)
+    if (desc.arraySize == 2)
     {
         setPremultipliedAlpha(Image::isCompressedImageHavePMA(Image::CompressedImagePMAFlag::DUAL_SAMPLER));
         _samplerFlags |= TextureSamplerFlag::DUAL_SAMPLER;
     }
+    else
+    {
+        setPremultipliedAlpha(preMultipliedAlpha);
+    }
+
+    setRenderTarget(desc.textureUsage == TextureUsage::RENDER_TARGET);
 
     return true;
 }
 
-bool Texture2D::updateWithSubData(void* data, int offsetX, int offsetY, int width, int height, int index)
+bool Texture2D::updateWithSubData(const void* data, int offsetX, int offsetY, int width, int height, int level, int layerIndex)
 {
-    if (_texture && width > 0 && height > 0)
+    if (_rhiTexture && width > 0 && height > 0)
     {
-        uint8_t* textureData = static_cast<uint8_t*>(data);
-        _texture->updateSubData(offsetX, offsetY, width, height, 0, textureData, index);
+        // updateWithSubData must be called with the same pixel format as the original pixel format
+        assert(_rhiTexture->getPixelFormat() == _originalPF);
+        _rhiTexture->updateSubData(offsetX, offsetY, width, height, level, data, layerIndex);
         return true;
     }
     return false;
-}
-
-// implementation Texture2D (Image)
-bool Texture2D::initWithImage(Image* image)
-{
-    if (image == nullptr)
-    {
-        AXLOGW("Texture2D. Can't create Texture. UIImage is nil");
-        return false;
-    }
-
-    return initWithImage(image, image->getPixelFormat());
-}
-
-bool Texture2D::initWithImage(Image* image, rhi::PixelFormat format)
-{
-    if (image == nullptr)
-    {
-        AXLOGW("Texture2D. Can't create Texture. UIImage is nil");
-        return false;
-    }
-
-    this->_filePath = image->getFilePath();
-
-    return updateWithImage(image, format);
 }
 
 // implementation Texture2D (Text)
@@ -571,19 +484,19 @@ bool Texture2D::initWithString(std::string_view text, const FontDefinition& text
     return ret;
 }
 
-bool Texture2D::updateTextureDesc(const rhi::TextureDesc& descriptor, bool preMultipliedAlpha)
+bool Texture2D::updateTextureDesc(const rhi::TextureDesc& desc, bool preMultipliedAlpha)
 {
-    AX_ASSERT(_texture);
+    AX_ASSERT(_rhiTexture);
 
-    _texture->updateTextureDesc(descriptor);
-    _pixelsWide = _contentSize.width = _texture->getWidth();
-    _pixelsHigh = _contentSize.height = _texture->getHeight();
+    _rhiTexture->updateTextureDesc(desc);
+    _pixelsWide = _contentSize.width = _rhiTexture->getWidth();
+    _pixelsHigh = _contentSize.height = _rhiTexture->getHeight();
     setPremultipliedAlpha(preMultipliedAlpha);
 
-    setRenderTarget(descriptor.textureUsage == TextureUsage::RENDER_TARGET);
+    setRenderTarget(desc.textureUsage == TextureUsage::RENDER_TARGET);
 
-    if (_pixelFormat == PixelFormat::NONE)
-        _pixelFormat = descriptor.textureFormat;
+    if (_originalPF == PixelFormat::AUTO)
+        _originalPF = desc.pixelFormat;
 
     return true;
 }
@@ -598,7 +511,7 @@ void Texture2D::setRenderTarget(bool renderTarget)
 
 bool Texture2D::hasMipmaps() const
 {
-    return _texture->hasMipmaps();
+    return _rhiTexture->hasMipmaps();
 }
 
 void Texture2D::setAliasTexParameters()
@@ -611,8 +524,8 @@ void Texture2D::setAliasTexParameters()
 
     _flags &= ~TextureFlag::ANTIALIAS_ENABLED;
 
-    const auto desc = chooseSamplerDesc(false, _texture->hasMipmaps());
-    _texture->updateSamplerDesc(desc);
+    const auto desc = chooseSamplerDesc(false, _rhiTexture->hasMipmaps());
+    _rhiTexture->updateSamplerDesc(desc);
 }
 
 void Texture2D::setAntiAliasTexParameters()
@@ -624,23 +537,23 @@ void Texture2D::setAntiAliasTexParameters()
     }
     _flags |= TextureFlag::ANTIALIAS_ENABLED;
 
-    const auto desc = chooseSamplerDesc(true, _texture->hasMipmaps());
-    _texture->updateSamplerDesc(desc);
+    const auto desc = chooseSamplerDesc(true, _rhiTexture->hasMipmaps());
+    _rhiTexture->updateSamplerDesc(desc);
 }
 
 const char* Texture2D::getStringForFormat() const
 {
-    return rhi::PixelFormatUtils::getFormatDesc(_pixelFormat).name;
+    return rhi::RHIUtils::getFormatDesc(_originalPF).name;
 }
 
 unsigned int Texture2D::getBitsPerPixelForFormat(rhi::PixelFormat format) const
 {
-    return rhi::PixelFormatUtils::getFormatDesc(format).bpp;
+    return rhi::RHIUtils::getFormatDesc(format).bpp;
 }
 
 unsigned int Texture2D::getBitsPerPixelForFormat() const
 {
-    return getBitsPerPixelForFormat(_pixelFormat);
+    return getBitsPerPixelForFormat(_originalPF);
 }
 
 void Texture2D::addSpriteFrameCapInset(SpriteFrame* spritframe, const Rect& capInsets)
@@ -700,7 +613,7 @@ void Texture2D::removeSpriteFrameCapInset(SpriteFrame* spriteFrame)
 
 void Texture2D::setTexParameters(const Texture2D::TexParams& desc)
 {
-    _texture->updateSamplerDesc(desc);
+    _rhiTexture->updateSamplerDesc(desc);
 }
 
 void Texture2D::generateMipmap()
@@ -708,7 +621,7 @@ void Texture2D::generateMipmap()
     AXASSERT(_pixelsWide == utils::nextPOT(_pixelsWide) && _pixelsHigh == utils::nextPOT(_pixelsHigh),
              "Mipmap texture only works in POT textures");
 
-    _texture->generateMipmaps();
+    _rhiTexture->generateMipmaps();
 }
 
 void Texture2D::initProgram()
@@ -746,7 +659,7 @@ void Texture2D::initProgram()
     blendDesc.sourceRGBBlendFactor = blendDesc.sourceAlphaBlendFactor = blendFunc.src;
     blendDesc.destinationRGBBlendFactor = blendDesc.destinationAlphaBlendFactor = blendFunc.dst;
 
-    _programState->setTexture(_textureLocation, 0, _texture);
+    _programState->setTexture(_textureLocation, 0, _rhiTexture);
 }
 
 void Texture2D::drawAtPoint(const Vec2& point, float globalZOrder)

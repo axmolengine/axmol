@@ -134,20 +134,6 @@ static MTLRenderPassDescriptor* toMTLRenderPassDesc(const RenderTarget* rt, cons
     return mtlDesc;
 }
 
-static id<MTLTexture> getMTLTexture(Texture* texture, int index)
-{
-    return static_cast<TextureImpl*>(texture)->internalHandle(index);
-}
-
-static id<MTLSamplerState> getMTLSamplerState(Texture* texture)
-{
-    return static_cast<TextureImpl*>(texture)->internalSampler();
-}
-
-inline int clamp(int value, int min, int max)
-{
-    return std::min(max, std::max(min, value));
-}
 }
 
 CommandBufferImpl::CommandBufferImpl(DriverImpl* driver)
@@ -451,43 +437,11 @@ void CommandBufferImpl::prepareDrawing() const
 
 void CommandBufferImpl::setTextures() const
 {
-    if (_programState)
+    for (auto& [location, bindingInfo] : _programState->getTextureBindingInfos())
     {
-        doSetTextures(true);
-        doSetTextures(false);
-    }
-}
-
-void CommandBufferImpl::doSetTextures(bool isVertex) const
-{
-    const auto& bindTextureInfos =
-        (isVertex) ? _programState->getVertexTextureInfos() : _programState->getFragmentTextureInfos();
-
-    for (const auto& iter : bindTextureInfos)
-    {
-        /* About mutli textures support
-         *  a. TODO: sampler2DArray, not implemented in Metal Renderer currently
-         *  b. texture slot, one BackendTexture, multi GPU texture handlers, used by etc1, restrict: textures must have
-         * same size c. Bind multi BackendTexture to 1 Shader Program, see the ShaderTest d. iter.second.slots not used
-         * for Metal Renderer
-         */
-        auto location  = iter.first;
-        auto& textures = iter.second.textures;
-        auto& indexs   = iter.second.indexs;
-
-        auto texture = textures[0];
-        auto index   = indexs[0];
-
-        if (isVertex)
-        {
-            [_mtlRenderEncoder setVertexTexture:getMTLTexture(texture, index) atIndex:location];
-            [_mtlRenderEncoder setVertexSamplerState:getMTLSamplerState(texture) atIndex:location];
-        }
-        else
-        {
-            [_mtlRenderEncoder setFragmentTexture:getMTLTexture(texture, index) atIndex:location];
-            [_mtlRenderEncoder setFragmentSamplerState:getMTLSamplerState(texture) atIndex:location];
-        }
+        auto textureImpl = static_cast<TextureImpl*>(bindingInfo.tex);
+        [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:location];
+        [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:location];
     }
 }
 
@@ -522,10 +476,10 @@ void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float w
     if (isEnabled)
     {
         y                  = _renderTargetHeight - height - y;
-        int minX           = clamp((int)x, 0, (int)_renderTargetWidth);
-        int minY           = clamp((int)y, 0, (int)_renderTargetHeight);
-        int maxX           = clamp((int)(x + width), 0, (int)_renderTargetWidth);
-        int maxY           = clamp((int)(y + height), 0, (int)_renderTargetHeight);
+        int minX           = std::clamp((int)x, 0, (int)_renderTargetWidth);
+        int minY           = std::clamp((int)y, 0, (int)_renderTargetHeight);
+        int maxX           = std::clamp((int)(x + width), 0, (int)_renderTargetWidth);
+        int maxY           = std::clamp((int)(y + height), 0, (int)_renderTargetHeight);
         scissorRect.x      = minX;
         scissorRect.y      = minY;
         scissorRect.width  = maxX - minX;

@@ -138,7 +138,7 @@ RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
 {
     RenderTexture* ret = new RenderTexture();
 
-    if (ret->initWithWidthAndHeight(w, h, rhi::PixelFormat::RGBA8, PixelFormat::NONE, sharedRenderTarget))
+    if (ret->initWithWidthAndHeight(w, h, rhi::PixelFormat::RGBA8, PixelFormat::AUTO, sharedRenderTarget))
     {
         ret->autorelease();
         return ret;
@@ -149,7 +149,7 @@ RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
 
 bool RenderTexture::initWithWidthAndHeight(int w, int h, rhi::PixelFormat eFormat, bool sharedRenderTarget)
 {
-    return initWithWidthAndHeight(w, h, eFormat, PixelFormat::NONE, sharedRenderTarget);
+    return initWithWidthAndHeight(w, h, eFormat, PixelFormat::AUTO, sharedRenderTarget);
 }
 
 bool RenderTexture::initWithWidthAndHeight(int w,
@@ -190,13 +190,13 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         descriptor.width         = powW;
         descriptor.height        = powH;
         descriptor.textureUsage  = TextureUsage::RENDER_TARGET;
-        descriptor.textureFormat = PixelFormat::RGBA8;
+        descriptor.pixelFormat = PixelFormat::RGBA8;
         _texture2D               = new Texture2D();
         _texture2D->updateTextureDesc(descriptor, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
 
         if (PixelFormat::D24S8 == depthStencilFormat || sharedRenderTarget)
         {
-            descriptor.textureFormat = PixelFormat::D24S8;
+            descriptor.pixelFormat = PixelFormat::D24S8;
 
             AX_SAFE_RELEASE(_depthStencilTexture);
 

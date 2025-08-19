@@ -318,10 +318,6 @@ THE SOFTWARE.
 #    define AX_REDUCE_PAUSED_CPU_USAGE 0
 #endif
 
-#ifndef AX_META_TEXTURES
-#    define AX_META_TEXTURES 2
-#endif
-
 /// @name namespace ax
 /// @{
 #ifdef __cplusplus

@@ -23,12 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/RHIUtils.h"
 
 namespace ax::rhi
 {
 
-namespace PixelFormatUtils
+namespace RHIUtils
 {
 
 static const PixelFormatDesc s_pixelFormatDescriptors[] = {
@@ -452,7 +452,7 @@ static void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsig
 // converter function end
 //////////////////////////////////////////////////////////////////////////
 
-static ax::rhi::PixelFormat convertR8ToFormat(const unsigned char* data,
+static PixelFormat convertR8ToFormat(const unsigned char* data,
                                               size_t dataLen,
                                               PixelFormat format,
                                               unsigned char** outData,
@@ -512,7 +512,7 @@ static ax::rhi::PixelFormat convertR8ToFormat(const unsigned char* data,
     return format;
 }
 
-static ax::rhi::PixelFormat convertRG8ToFormat(const unsigned char* data,
+static PixelFormat convertRG8ToFormat(const unsigned char* data,
                                                size_t dataLen,
                                                PixelFormat format,
                                                unsigned char** outData,
@@ -568,7 +568,7 @@ static ax::rhi::PixelFormat convertRG8ToFormat(const unsigned char* data,
     return format;
 }
 
-static ax::rhi::PixelFormat convertRGB8ToFormat(const unsigned char* data,
+static PixelFormat convertRGB8ToFormat(const unsigned char* data,
                                                 size_t dataLen,
                                                 PixelFormat format,
                                                 unsigned char** outData,
@@ -623,7 +623,7 @@ static ax::rhi::PixelFormat convertRGB8ToFormat(const unsigned char* data,
     return format;
 }
 
-static ax::rhi::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
+static PixelFormat convertRGBA8ToFormat(const unsigned char* data,
                                                  size_t dataLen,
                                                  PixelFormat format,
                                                  unsigned char** outData,
@@ -680,7 +680,7 @@ static ax::rhi::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
     return format;
 }
 
-static ax::rhi::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
+static PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
                                                   size_t dataLen,
                                                   PixelFormat format,
                                                   unsigned char** outData,
@@ -714,7 +714,7 @@ static ax::rhi::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
     return format;
 }
 
-static ax::rhi::PixelFormat convertRGB565ToFormat(const unsigned char* data,
+static PixelFormat convertRGB565ToFormat(const unsigned char* data,
                                                   size_t dataLen,
                                                   PixelFormat format,
                                                   unsigned char** outData,
@@ -748,7 +748,7 @@ static ax::rhi::PixelFormat convertRGB565ToFormat(const unsigned char* data,
     return format;
 }
 
-static ax::rhi::PixelFormat convertRGBA4ToFormat(const unsigned char* data,
+static PixelFormat convertRGBA4ToFormat(const unsigned char* data,
                                                  size_t dataLen,
                                                  PixelFormat format,
                                                  unsigned char** outData,
@@ -818,7 +818,7 @@ static PixelFormat convertBGRA8ToFormat(const unsigned char* data,
  rgba(1) -> 12345678
 
  */
-ax::rhi::PixelFormat convertDataToFormat(const unsigned char* data,
+PixelFormat convertDataToFormat(const unsigned char* data,
                                          size_t dataLen,
                                          PixelFormat originFormat,
                                          PixelFormat format,
@@ -859,6 +859,6 @@ ax::rhi::PixelFormat convertDataToFormat(const unsigned char* data,
         return originFormat;
     }
 }
-}  // namespace PixelFormatUtils
+}  // namespace RHIUtils
 
 }  // namespace ax::rhi

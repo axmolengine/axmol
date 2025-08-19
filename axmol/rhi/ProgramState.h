@@ -51,29 +51,23 @@ class VertexLayout;
 /**
  * Store texture information.
  */
-struct AX_DLL TextureInfo
+struct AX_DLL TextureBindingInfo
 {
-    TextureInfo(std::vector<int>&& _slots, std::vector<rhi::Texture*>&& _textures);
-    TextureInfo(std::vector<int>&& _slots, std::vector<int>&& _indexs, std::vector<rhi::Texture*>&& _textures);
-    TextureInfo() = default;
-    TextureInfo(const TextureInfo&);
-    TextureInfo(TextureInfo&& rhs);
+    TextureBindingInfo() = default;
+    TextureBindingInfo(const TextureBindingInfo&);
+    TextureBindingInfo(TextureBindingInfo&& rhs);
+    ~TextureBindingInfo();
 
-    ~TextureInfo();
+    TextureBindingInfo& operator=(const TextureBindingInfo& other) noexcept;
+    TextureBindingInfo& operator=(TextureBindingInfo&& other) noexcept;
 
-    TextureInfo& operator=(const TextureInfo& other) noexcept;
-    TextureInfo& operator=(TextureInfo&& other) noexcept;
+    void assign(const TextureBindingInfo& other);
+    void assign(TextureBindingInfo&& other);
 
-    void assign(const TextureInfo& other);
-    void assign(TextureInfo&& other);
-    void assign(int slot, int index, rhi::Texture* texture);
+    void reset(int location, int slot, rhi::Texture* tex);
 
-    void retainTextures();
-    void releaseTextures();
-
-    std::vector<int> slots;
-    std::vector<int> indexs;
-    std::vector<rhi::Texture*> textures;
+    int slot{0};
+    rhi::Texture* tex{nullptr};
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     int location = -1;
 #endif
@@ -180,39 +174,12 @@ public:
      */
     void setTexture(const rhi::UniformLocation& uniformLocation, int slot, rhi::Texture* texture);
 
-    /**
-     * Set texture.
-     * @param uniformLocation Specifies texture location.
-     * @param slot Specifies texture slot selector.
-     * @param index Specifies texture index selector
-     * @param texture Specifies a pointer to backend texture.
-     */
-    void setTexture(const rhi::UniformLocation& uniformLocation,
-                    int slot,
-                    int index,
-                    rhi::Texture* texture);
-
-    /**
-     * Set textures in array.
-     * @param uniformLocation Specifies texture location.
-     * @param slots Specifies texture slot selector.
-     * @param textures Specifies a vector of backend texture object.
-     */
-    void setTextureArray(const rhi::UniformLocation& uniformLocation,
-                         std::vector<int> slots,
-                         std::vector<rhi::Texture*> textures);
 
     /**
      * Get vertex texture informations
      * @return Vertex texture informations. Key is the texture location, Value store the texture informations
      */
-    inline const std::unordered_map<int, TextureInfo>& getVertexTextureInfos() const { return _vertexTextureInfos; }
-
-    /**
-     * Get fragment texture informations
-     * @return Fragment texture informations. Key is the texture location, Value store the texture informations
-     */
-    inline const std::unordered_map<int, TextureInfo>& getFragmentTextureInfos() const { return _fragmentTextureInfos; }
+    inline const std::unordered_map<int, TextureBindingInfo>& getTextureBindingInfos() const { return _textureBindingInfos; }
 
     /**
      * Get vertex uniform buffer. The buffer store all the vertex uniform's data.
@@ -343,31 +310,6 @@ protected:
 #endif
 
     /**
-     * Set texture.
-     * @param location Specifies the location of texture.
-     * @param slot Specifies slot selector of texture.
-     * @param texture Specifies the texture to set in given location.
-     * @param textureInfo Specifies the texture information to update.
-     */
-    void setTexture(int location,
-                    int slot,
-                    int index,
-                    rhi::Texture* texture,
-                    std::unordered_map<int, TextureInfo>& textureInfo);
-
-    /**
-     * Set textures in array.
-     * @param location Specifies the location of texture.
-     * @param slots Specifies slot selector of texture.
-     * @param textures Specifies the texture to set in given location.
-     * @param textureInfo Specifies the texture information to update.
-     */
-    void setTextureArray(int location,
-                         std::vector<int> slots,
-                         std::vector<rhi::Texture*> textures,
-                         std::unordered_map<int, TextureInfo>& textureInfo);
-
-    /**
      * Reset uniform informations when EGL context lost
      */
     void resetUniforms();
@@ -389,8 +331,7 @@ protected:
     std::size_t _vertexUniformBufferSize   = 0;
     std::size_t _fragmentUniformBufferSize = 0;
 
-    std::unordered_map<int, TextureInfo> _vertexTextureInfos;
-    std::unordered_map<int, TextureInfo> _fragmentTextureInfos;
+    std::unordered_map<int, TextureBindingInfo> _textureBindingInfos;
 
     std::unordered_map<std::string, std::string> _autoBindings;
 

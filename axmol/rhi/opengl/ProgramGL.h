@@ -173,7 +173,7 @@ private:
     void clearUniformBuffers();
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    virtual void reloadProgram();
+    void reloadProgram();
     int getMappedLocation(int location) const override;
     int getOriginalLocation(int location) const override;
     const std::unordered_map<std::string, int> getAllUniformsLocation() const override

@@ -111,7 +111,7 @@ PixelFormat RenderTargetImpl::getColorAttachmentPixelFormat(int index) const
     if (isDefaultRenderTarget() && index == 0)
         return PixelFormat::BGRA8;
     auto& rb = this->_color[index];
-    return rb ? rb.texture->getTextureFormat() : PixelFormat::NONE;
+    return rb ? rb.texture->getPixelFormat() : PixelFormat::AUTO;
 }
 
 PixelFormat RenderTargetImpl::getDepthStencilAttachmentPixelFormat() const
@@ -119,8 +119,8 @@ PixelFormat RenderTargetImpl::getDepthStencilAttachmentPixelFormat() const
     if (isDefaultRenderTarget())
         return PixelFormat::D24S8;
     if (_depthStencil)
-        return _depthStencil.texture->getTextureFormat();
-    return PixelFormat::NONE;
+        return _depthStencil.texture->getPixelFormat();
+    return PixelFormat::AUTO;
 }
 
 }

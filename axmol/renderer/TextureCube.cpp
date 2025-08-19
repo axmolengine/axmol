@@ -29,7 +29,7 @@
 #include "axmol/platform/FileUtils.h"
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/DriverBase.h"
-#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/RHIUtils.h"
 
 namespace ax
 {
@@ -228,7 +228,7 @@ bool TextureCube::init(std::string_view positive_x,
         if (ePixelFmt != rhi::PixelFormat::RGBA8)
         {
             size_t len = 0;
-            rhi::PixelFormatUtils::convertDataToFormat(pData, img->getDataLen(), ePixelFmt,
+            rhi::RHIUtils::convertDataToFormat(pData, img->getDataSize(), ePixelFmt,
                                                            rhi::PixelFormat::RGBA8, &cData, &len);
             if (cData != pData)  // convert error
             {

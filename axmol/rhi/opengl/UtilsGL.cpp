@@ -26,7 +26,7 @@
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/ProgramGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
-#include "axmol/rhi/PixelFormatUtils.h"
+#include "axmol/rhi/RHIUtils.h"
 #include "axmol/platform/GL.h"
 
 namespace ax::rhi::gl {

@@ -87,7 +87,7 @@ public:
         : filename(fn)
         , callback(f)
         , callbackKey(key)
-        , pixelFormat(PixelFormat::NONE)
+        , pixelFormat(PixelFormat::AUTO)
         , loadSuccess(false)
     {}
 
@@ -356,7 +356,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
                 // ETC1 ALPHA supports.
                 if (asyncStruct->imageAlpha.getFileType() == Image::Format::ETC1)
                 {
-                    texture->updateWithImage(&asyncStruct->imageAlpha, asyncStruct->pixelFormat, 1);
+                    //texture->updateWithImage(&asyncStruct->imageAlpha, asyncStruct->pixelFormat, 1);
                 }
             }
             else
@@ -433,10 +433,10 @@ Texture2D* TextureCache::getDummyTexture()
 
 Texture2D* TextureCache::addImage(std::string_view path)
 {
-    return addImage(path, PixelFormat::NONE);
+    return addImage(path, PixelFormat::AUTO);
 }
 
-Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
+Texture2D* TextureCache::addImage(std::string_view path, PixelFormat renderFormat)
 {
     Texture2D* texture = nullptr;
     Image* image       = nullptr;
@@ -465,7 +465,45 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
 
             texture = new Texture2D();
 
-            if (texture->initWithImage(image, format))
+            std::string alphFullPath;
+            auto checkAlphaFile = [&alphFullPath , & path]()
+            {
+                alphFullPath.reserve(path.size() + TextureCache::s_etc1AlphaFileSuffix.size());
+                alphFullPath += path;
+                alphFullPath += TextureCache::s_etc1AlphaFileSuffix;
+                return FileUtils::getInstance()->isFileExist(alphFullPath);
+            };
+
+            bool ret;
+            if (image->getFileType() != Image::Format::ETC1 || !checkAlphaFile())
+            {
+                ret = texture->initWithImage(image, renderFormat);
+            }
+            else
+            { // ETC1 ALPHA supports.
+                Image imageAlpha;
+                ret = imageAlpha.initWithImageFile(alphFullPath);
+                if (ret)
+                {
+                    rhi::TextureDesc desc{
+                        .width       = static_cast<uint16_t>(image->getWidth()),
+                        .height      = static_cast<uint16_t>(image->getHeight()),
+                        .arraySize = 2,
+                        .pixelFormat = image->getPixelFormat(),
+                    };
+                    TextureSliceData subDatas[2] = {
+                        TextureSliceData{image->getData(), static_cast<uint16_t>(image->getDataSize()), 0},
+                        TextureSliceData{imageAlpha.getData(),
+                                                   static_cast<uint16_t>(imageAlpha.getDataSize()),
+                                                   1}
+                    };
+
+                    ret = texture->initWithSpec(desc, subDatas, renderFormat);
+                }
+
+            }
+
+            if (ret)
             {
 #if AX_ENABLE_CACHE_TEXTURE_DATA
                 // cache the texture file name
@@ -473,19 +511,6 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
 #endif
                 // texture already retained, no need to re-retain it
                 _textures.emplace(fullpath, texture);
-
-                //-- ANDROID ETC1 ALPHA SUPPORTS.
-                std::string alphaFullPath{path};
-                alphaFullPath += s_etc1AlphaFileSuffix;
-                if (image->getFileType() == Image::Format::ETC1 && !s_etc1AlphaFileSuffix.empty() &&
-                    FileUtils::getInstance()->isFileExist(alphaFullPath))
-                {
-                    Image imageAlpha;
-                    if (imageAlpha.initWithImageFile(alphaFullPath))
-                    {
-                        texture->updateWithImage(&imageAlpha, format, 1);
-                    }
-                }
 
                 // parse 9-patch info
                 this->parseNinePatchImage(image, texture, path);
@@ -516,7 +541,7 @@ void TextureCache::parseNinePatchImage(ax::Image* image, ax::Texture2D* texture,
 
 Texture2D* TextureCache::addImage(Image* image, std::string_view key)
 {
-    return addImage(image, key, PixelFormat::NONE);
+    return addImage(image, key, PixelFormat::AUTO);
 }
 
 Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelFormat format)
@@ -948,7 +973,7 @@ void VolatileTextureMgr::reloadAllTextures()
             Image image;
             if (image.initWithImageFile(vt->_fileName + TextureCache::getETC1AlphaFileSuffix()))
             {
-                vt->_texture->updateWithImage(&image, vt->_pixelFormat, 1);
+                vt->_texture->initWithImage(&image, vt->_pixelFormat);
             }
         }
         break;
