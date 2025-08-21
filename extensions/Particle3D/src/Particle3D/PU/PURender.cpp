@@ -280,7 +280,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
 
         if (_texture)
         {
-            _programState->setTexture(_locTexture, 0, _texture->getBackendTexture());
+            _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
         }
 
         auto uColor = Vec4(1, 1, 1, 1);
@@ -789,7 +789,7 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
 
         if (_texture)
         {
-            _programState->setTexture(_locTexture, 0, _texture->getBackendTexture());
+            _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
         }
 
         auto& projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
@@ -961,7 +961,7 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
 
         if (_texture)
         {
-            _programState->setTexture(_locTexture, 0, _texture->getBackendTexture());
+            _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
         }
 
         auto& projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);

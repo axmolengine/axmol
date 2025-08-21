@@ -138,7 +138,7 @@ RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
 {
     RenderTexture* ret = new RenderTexture();
 
-    if (ret->initWithWidthAndHeight(w, h, rhi::PixelFormat::RGBA8, PixelFormat::AUTO, sharedRenderTarget))
+    if (ret->initWithWidthAndHeight(w, h, rhi::PixelFormat::RGBA8, PixelFormat::NONE, sharedRenderTarget))
     {
         ret->autorelease();
         return ret;
@@ -149,7 +149,7 @@ RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
 
 bool RenderTexture::initWithWidthAndHeight(int w, int h, rhi::PixelFormat eFormat, bool sharedRenderTarget)
 {
-    return initWithWidthAndHeight(w, h, eFormat, PixelFormat::AUTO, sharedRenderTarget);
+    return initWithWidthAndHeight(w, h, eFormat, PixelFormat::NONE, sharedRenderTarget);
 }
 
 bool RenderTexture::initWithWidthAndHeight(int w,
@@ -214,13 +214,13 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         else
         {
             _renderTarget = rhi::DriverBase::getInstance()->createRenderTarget(
-                _texture2D ? _texture2D->getBackendTexture() : nullptr,
-                _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
+                _texture2D ? _texture2D->getRHITexture() : nullptr,
+                _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
         }
 
-        _renderTarget->setColorAttachment(_texture2D ? _texture2D->getBackendTexture() : nullptr);
+        _renderTarget->setColorAttachment(_texture2D ? _texture2D->getRHITexture() : nullptr);
 
-        auto depthStencilTexture = _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr;
+        auto depthStencilTexture = _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr;
         _renderTarget->setDepthStencilAttachment(depthStencilTexture);
 
         clearColorAttachment();

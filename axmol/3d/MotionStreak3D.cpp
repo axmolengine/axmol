@@ -258,7 +258,7 @@ void MotionStreak3D::setTexture(Texture2D* texture)
         AX_SAFE_RETAIN(texture);
         AX_SAFE_RELEASE(_texture);
         _texture = texture;
-        _programState->setTexture(_locTexture, 0, _texture->getBackendTexture());
+        _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
     }
 }
 

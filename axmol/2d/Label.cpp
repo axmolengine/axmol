@@ -2059,7 +2059,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
             auto texture       = textureAtlas->getTexture();
             auto& pipelineQuad = _quadCommand.getPipelineDesc();
             pipelineQuad.programState->setUniform(_mvpMatrixLocation, matrixProjection.m, sizeof(matrixProjection.m));
-            pipelineQuad.programState->setTexture(texture->getBackendTexture());
+            pipelineQuad.programState->setTexture(texture->getRHITexture());
             _quadCommand.init(_globalZOrder, texture, _blendFunc, textureAtlas->getQuads(),
                               textureAtlas->getTotalQuads(), transform, flags);
             renderer->addCommand(&_quadCommand);
@@ -2093,7 +2093,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
                 {
                     auto* programState = command->getPipelineDesc().programState;
                     programState->setUniform(_textColorLocation, &_textColor, sizeof(_textColor));
-                    programState->setTexture(textureAtlas->getTexture()->getBackendTexture());
+                    programState->setTexture(textureAtlas->getTexture()->getRHITexture());
                 }
                 batch.textCommand.getPipelineDesc().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
                                                                                    sizeof(matrixMVP.m));

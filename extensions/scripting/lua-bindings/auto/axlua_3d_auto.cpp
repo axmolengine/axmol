@@ -31,7 +31,7 @@ int lua_ax_3d_Animation3D_getDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -78,7 +78,7 @@ int lua_ax_3d_Animation3D_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Animation3DData arg0;
 
@@ -129,7 +129,7 @@ int lua_ax_3d_Animation3D_initWithFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -220,7 +220,7 @@ int lua_ax_3d_Animation3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -294,7 +294,7 @@ int lua_ax_3d_Animate3D_getSpeed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -341,7 +341,7 @@ int lua_ax_3d_Animate3D_setSpeed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         double arg0;
 
@@ -391,7 +391,7 @@ int lua_ax_3d_Animate3D_getWeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -438,7 +438,7 @@ int lua_ax_3d_Animate3D_setWeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         double arg0;
 
@@ -488,7 +488,7 @@ int lua_ax_3d_Animate3D_setOriginInterval(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         double arg0;
 
@@ -538,7 +538,7 @@ int lua_ax_3d_Animate3D_getOriginInterval(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -585,7 +585,7 @@ int lua_ax_3d_Animate3D_setQuality(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Animate3DQuality arg0;
 
@@ -635,7 +635,7 @@ int lua_ax_3d_Animate3D_getQuality(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -682,7 +682,7 @@ int lua_ax_3d_Animate3D_setKeyFrameUserInfo(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         int arg0;
         ax::ValueMap arg1;
@@ -735,7 +735,7 @@ int lua_ax_3d_Animate3D_removeFromMap(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -845,7 +845,7 @@ int lua_ax_3d_Animate3D_initWithFrames(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4) 
+    if (argc == 4)
     {
         ax::Animation3D* arg0;
         int arg1;
@@ -892,7 +892,7 @@ int lua_ax_3d_Animate3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -911,7 +911,7 @@ int lua_ax_3d_Animate3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -1074,7 +1074,7 @@ int lua_ax_3d_Animate3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1160,7 +1160,7 @@ int lua_ax_3d_TextureCube_setTexParameters(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Texture2D::TexParams arg0;
 
@@ -1184,7 +1184,7 @@ int lua_ax_3d_TextureCube_setTexParameters(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_3d_TextureCube_getBackendTexture(lua_State* tolua_S)
+int lua_ax_3d_TextureCube_getRHITexture(lua_State* tolua_S)
 {
     int argc = 0;
     ax::TextureCube* cobj = nullptr;
@@ -1204,29 +1204,29 @@ int lua_ax_3d_TextureCube_getBackendTexture(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_TextureCube_getBackendTexture'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_TextureCube_getRHITexture'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_TextureCube_getBackendTexture'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_TextureCube_getRHITexture'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBackendTexture();
+        auto&& ret = cobj->getRHITexture();
         object_to_luaval<ax::rhi::Texture>(tolua_S, "axrhi.Texture",(ax::rhi::Texture*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCube:getBackendTexture",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCube:getRHITexture",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_TextureCube_getBackendTexture'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_TextureCube_getRHITexture'.",&tolua_err);
 #endif
 
     return 0;
@@ -1257,7 +1257,7 @@ int lua_ax_3d_TextureCube_getImagePaths(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1304,7 +1304,7 @@ int lua_ax_3d_TextureCube_reloadTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1384,7 +1384,7 @@ int lua_ax_3d_TextureCube_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1422,7 +1422,7 @@ int lua_register_ax_3d_TextureCube(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"TextureCube");
         tolua_function(tolua_S,"new",lua_ax_3d_TextureCube_constructor);
         tolua_function(tolua_S,"setTexParameters",lua_ax_3d_TextureCube_setTexParameters);
-        tolua_function(tolua_S,"getBackendTexture",lua_ax_3d_TextureCube_getBackendTexture);
+        tolua_function(tolua_S,"getRHITexture",lua_ax_3d_TextureCube_getRHITexture);
         tolua_function(tolua_S,"getImagePaths",lua_ax_3d_TextureCube_getImagePaths);
         tolua_function(tolua_S,"reloadTexture",lua_ax_3d_TextureCube_reloadTexture);
         tolua_function(tolua_S,"create", lua_ax_3d_TextureCube_create);
@@ -1482,7 +1482,7 @@ int lua_ax_3d_AttachNode_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1553,7 +1553,7 @@ int lua_ax_3d_BillBoard_setMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::BillBoard::Mode arg0;
 
@@ -1603,7 +1603,7 @@ int lua_ax_3d_BillBoard_getMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1638,7 +1638,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -1651,7 +1651,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -1667,7 +1667,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -1677,7 +1677,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -1690,7 +1690,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -1706,7 +1706,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -1797,7 +1797,7 @@ int lua_ax_3d_BillBoard_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1871,7 +1871,7 @@ int lua_ax_3d_Mesh_getMeshVertexAttribCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1918,7 +1918,7 @@ int lua_ax_3d_Mesh_getMeshVertexAttribute(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         int arg0;
 
@@ -1968,7 +1968,7 @@ int lua_ax_3d_Mesh_getVertexSizeInBytes(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -2015,7 +2015,7 @@ int lua_ax_3d_Mesh_setVisible(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -2065,7 +2065,7 @@ int lua_ax_3d_Mesh_isVisible(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -2112,7 +2112,7 @@ int lua_ax_3d_Mesh_getProgramState(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -2159,7 +2159,7 @@ int lua_ax_3d_Mesh_getName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -2206,7 +2206,7 @@ int lua_ax_3d_Mesh_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::BlendFunc arg0;
 
@@ -2256,7 +2256,7 @@ int lua_ax_3d_Mesh_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -2303,7 +2303,7 @@ int lua_ax_3d_Mesh_setIndexFormat(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::rhi::IndexFormat arg0;
 
@@ -2353,7 +2353,7 @@ int lua_ax_3d_Mesh_setProgramState(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::rhi::ProgramState* arg0;
 
@@ -2403,7 +2403,7 @@ int lua_ax_3d_Mesh_setMaterial(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Material* arg0;
 
@@ -2453,7 +2453,7 @@ int lua_ax_3d_Mesh_getMaterial(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -2500,7 +2500,7 @@ int lua_ax_3d_Mesh_draw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 8) 
+    if (argc == 8)
     {
         ax::Renderer* arg0;
         double arg1;
@@ -2571,7 +2571,7 @@ int lua_ax_3d_Mesh_setSkin(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::MeshSkin* arg0;
 
@@ -2621,7 +2621,7 @@ int lua_ax_3d_Mesh_setMeshIndexData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::MeshIndexData* arg0;
 
@@ -2671,7 +2671,7 @@ int lua_ax_3d_Mesh_setName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -2721,7 +2721,7 @@ int lua_ax_3d_Mesh_calculateAABB(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -2768,7 +2768,7 @@ int lua_ax_3d_Mesh_setInstanceCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -2779,7 +2779,7 @@ int lua_ax_3d_Mesh_setInstanceCount(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 1) 
+    if (argc == 1)
     {
         int arg0;
 
@@ -2829,7 +2829,7 @@ int lua_ax_3d_Mesh_enableInstancing(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -2843,7 +2843,7 @@ int lua_ax_3d_Mesh_enableInstancing(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2) 
+    if (argc == 2)
     {
         bool arg0;
         int arg1;
@@ -2896,7 +2896,7 @@ int lua_ax_3d_Mesh_setDynamicInstancing(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -2946,7 +2946,7 @@ int lua_ax_3d_Mesh_addInstanceChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Node* arg0;
 
@@ -2996,7 +2996,7 @@ int lua_ax_3d_Mesh_shrinkToFitInstances(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3043,7 +3043,7 @@ int lua_ax_3d_Mesh_rebuildInstances(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3077,7 +3077,7 @@ int lua_ax_3d_Mesh_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3171,7 +3171,7 @@ int lua_ax_3d_Skeleton3D_getBoneCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3218,7 +3218,7 @@ int lua_ax_3d_Skeleton3D_getBoneByIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         unsigned int arg0;
 
@@ -3268,7 +3268,7 @@ int lua_ax_3d_Skeleton3D_getBoneByName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -3318,7 +3318,7 @@ int lua_ax_3d_Skeleton3D_getRootCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3365,7 +3365,7 @@ int lua_ax_3d_Skeleton3D_getRootBone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         int arg0;
 
@@ -3415,7 +3415,7 @@ int lua_ax_3d_Skeleton3D_getBoneIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Bone3D* arg0;
 
@@ -3465,7 +3465,7 @@ int lua_ax_3d_Skeleton3D_updateBoneMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3512,7 +3512,7 @@ int lua_ax_3d_Skeleton3D_removeAllBones(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3559,7 +3559,7 @@ int lua_ax_3d_Skeleton3D_addBone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Bone3D* arg0;
 
@@ -3596,7 +3596,7 @@ int lua_ax_3d_Skeleton3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3675,7 +3675,7 @@ int lua_ax_3d_Skybox_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::TextureCube* arg0;
 
@@ -3725,7 +3725,7 @@ int lua_ax_3d_Skybox_reload(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3772,7 +3772,7 @@ int lua_ax_3d_Skybox_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 6) 
+    if (argc == 6)
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -3825,7 +3825,7 @@ int lua_ax_3d_Skybox_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 6)
         {
@@ -3853,7 +3853,7 @@ int lua_ax_3d_Skybox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -3884,7 +3884,7 @@ int lua_ax_3d_Skybox_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3958,7 +3958,7 @@ int lua_ax_3d_MeshMaterial_getMaterialType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -3993,7 +3993,7 @@ int lua_ax_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -4003,7 +4003,7 @@ int lua_ax_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -4273,7 +4273,7 @@ int lua_ax_3d_MeshRenderer_getMeshByIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         int arg0;
 
@@ -4323,7 +4323,7 @@ int lua_ax_3d_MeshRenderer_getMeshByName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -4373,7 +4373,7 @@ int lua_ax_3d_MeshRenderer_getMesh(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -4420,7 +4420,7 @@ int lua_ax_3d_MeshRenderer_getMeshCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -4467,7 +4467,7 @@ int lua_ax_3d_MeshRenderer_getSkeleton(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -4514,7 +4514,7 @@ int lua_ax_3d_MeshRenderer_getAttachNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -4564,7 +4564,7 @@ int lua_ax_3d_MeshRenderer_removeAttachNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -4614,7 +4614,7 @@ int lua_ax_3d_MeshRenderer_removeAllAttachNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -4661,7 +4661,7 @@ int lua_ax_3d_MeshRenderer_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::BlendFunc arg0;
 
@@ -4711,7 +4711,7 @@ int lua_ax_3d_MeshRenderer_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -4758,7 +4758,7 @@ int lua_ax_3d_MeshRenderer_setForceDepthWrite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -4808,7 +4808,7 @@ int lua_ax_3d_MeshRenderer_isForceDepthWrite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -4855,7 +4855,7 @@ int lua_ax_3d_MeshRenderer_setCullFace(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::rhi::CullMode arg0;
 
@@ -4905,7 +4905,7 @@ int lua_ax_3d_MeshRenderer_setCullFaceEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -4955,7 +4955,7 @@ int lua_ax_3d_MeshRenderer_setLightMask(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         unsigned int arg0;
 
@@ -5005,7 +5005,7 @@ int lua_ax_3d_MeshRenderer_getLightMask(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5052,7 +5052,7 @@ int lua_ax_3d_MeshRenderer_setWireframe(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -5102,7 +5102,7 @@ int lua_ax_3d_MeshRenderer_isWireframe(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5208,7 +5208,7 @@ int lua_ax_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5219,7 +5219,7 @@ int lua_ax_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
         object_to_luaval<ax::Material>(tolua_S, "ax.Material",(ax::Material*)ret);
         return 1;
     }
-    if (argc == 1) 
+    if (argc == 1)
     {
         int arg0;
 
@@ -5269,7 +5269,7 @@ int lua_ax_3d_MeshRenderer_getMeshes(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5316,7 +5316,7 @@ int lua_ax_3d_MeshRenderer_genMaterial(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5327,7 +5327,7 @@ int lua_ax_3d_MeshRenderer_genMaterial(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -5464,7 +5464,7 @@ int lua_ax_3d_MeshRenderer_disableInstancing(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5511,7 +5511,7 @@ int lua_ax_3d_MeshRenderer_setDynamicInstancing(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -5561,7 +5561,7 @@ int lua_ax_3d_MeshRenderer_addInstanceChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Node* arg0;
 
@@ -5575,7 +5575,7 @@ int lua_ax_3d_MeshRenderer_addInstanceChild(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2) 
+    if (argc == 2)
     {
         ax::Node* arg0;
         bool arg1;
@@ -5628,7 +5628,7 @@ int lua_ax_3d_MeshRenderer_shrinkToFitInstances(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5675,7 +5675,7 @@ int lua_ax_3d_MeshRenderer_rebuildInstances(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5710,7 +5710,7 @@ int lua_ax_3d_MeshRenderer_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -5723,7 +5723,7 @@ int lua_ax_3d_MeshRenderer_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -5733,7 +5733,7 @@ int lua_ax_3d_MeshRenderer_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -5832,7 +5832,7 @@ int lua_ax_3d_MeshRendererCache_removeMeshRenderData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -5882,7 +5882,7 @@ int lua_ax_3d_MeshRendererCache_removeAllMeshRenderData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -5984,7 +5984,7 @@ int lua_ax_3d_MeshRendererCache_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -6056,7 +6056,7 @@ int lua_ax_3d_Terrain_setLightMap(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -6106,7 +6106,7 @@ int lua_ax_3d_Terrain_setLightDir(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Vec3 arg0;
 
@@ -6156,7 +6156,7 @@ int lua_ax_3d_Terrain_initProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -6203,7 +6203,7 @@ int lua_ax_3d_Terrain_initHeightMap(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -6253,7 +6253,7 @@ int lua_ax_3d_Terrain_initTextures(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -6300,7 +6300,7 @@ int lua_ax_3d_Terrain_getNormal(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         int arg0;
         int arg1;
@@ -6353,7 +6353,7 @@ int lua_ax_3d_Terrain_getImageHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         int arg0;
         int arg1;
@@ -6406,7 +6406,7 @@ int lua_ax_3d_Terrain_setDrawWire(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -6456,7 +6456,7 @@ int lua_ax_3d_Terrain_setLODDistance(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3) 
+    if (argc == 3)
     {
         double arg0;
         double arg1;
@@ -6512,7 +6512,7 @@ int lua_ax_3d_Terrain_setIsEnableFrustumCull(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         bool arg0;
 
@@ -6562,7 +6562,7 @@ int lua_ax_3d_Terrain_setAlphaMap(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Texture2D* arg0;
 
@@ -6612,7 +6612,7 @@ int lua_ax_3d_Terrain_setDetailMap(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         unsigned int arg0;
         ax::Terrain::DetailMap arg1;
@@ -6666,7 +6666,7 @@ int lua_ax_3d_Terrain_setMaxDetailMapAmount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         int arg0;
 
@@ -6716,7 +6716,7 @@ int lua_ax_3d_Terrain_convertToTerrainSpace(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::Vec2 arg0;
 
@@ -6766,7 +6766,7 @@ int lua_ax_3d_Terrain_resetHeightMap(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -6816,7 +6816,7 @@ int lua_ax_3d_Terrain_getMinHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -6863,7 +6863,7 @@ int lua_ax_3d_Terrain_getMaxHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -6910,7 +6910,7 @@ int lua_ax_3d_Terrain_setSkirtHeightRatio(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         double arg0;
 
@@ -6960,7 +6960,7 @@ int lua_ax_3d_Terrain_reload(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -7007,7 +7007,7 @@ int lua_ax_3d_Terrain_getTerrainSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -7054,7 +7054,7 @@ int lua_ax_3d_Terrain_getHeightData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -7101,7 +7101,7 @@ int lua_ax_3d_Terrain_initWithTerrainData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         ax::Terrain::TerrainData arg0;
         ax::Terrain::CrackFixedType arg1;
@@ -7142,7 +7142,7 @@ int lua_ax_3d_Terrain_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -7234,7 +7234,7 @@ int lua_ax_3d_Bundle3D_clear(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -7281,7 +7281,7 @@ int lua_ax_3d_Bundle3D_load(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         std::string_view arg0;
 
@@ -7331,7 +7331,7 @@ int lua_ax_3d_Bundle3D_loadSkinData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         std::string_view arg0;
         ax::SkinData* arg1;
@@ -7385,7 +7385,7 @@ int lua_ax_3d_Bundle3D_loadAnimationData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
+    if (argc == 2)
     {
         std::string_view arg0;
         ax::Animation3DData* arg1;
@@ -7439,7 +7439,7 @@ int lua_ax_3d_Bundle3D_loadNodes(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::NodeDatas arg0;
 
@@ -7490,7 +7490,7 @@ int lua_ax_3d_Bundle3D_loadMaterials(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 1)
     {
         ax::MaterialDatas arg0;
 
@@ -7672,7 +7672,7 @@ int lua_ax_3d_Bundle3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -7726,7 +7726,7 @@ int lua_register_ax_3d_Bundle3D(lua_State* tolua_S)
 TOLUA_API int register_all_ax_3d(lua_State* tolua_S)
 {
 	tolua_open(tolua_S);
-	
+
 	tolua_module(tolua_S,"ax",0);
 	tolua_beginmodule(tolua_S,"ax");
 

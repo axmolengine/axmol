@@ -56,10 +56,10 @@ void TrianglesCommand::init(float globalOrder,
     _mv = mv;
 
     auto batchId = _pipelineDesc.programState->getBatchId();
-    if (_batchId != batchId || _texture != texture->getBackendTexture() || _blendType != blendType)
+    if (_batchId != batchId || _texture != texture->getRHITexture() || _blendType != blendType)
     {
         _batchId   = batchId;
-        _texture   = texture->getBackendTexture();
+        _texture   = texture->getRHITexture();
         _blendType = blendType;
 
         // TODO: minggo set it in Node?

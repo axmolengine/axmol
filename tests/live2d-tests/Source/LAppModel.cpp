@@ -641,14 +641,13 @@ void LAppModel::SetupTextures()
 
         // Cocos2d-x
         // テクスチャをファイルからロードする. ロードできなければnullptrが返る
-        Texture2D* texture = Director::getInstance()->getTextureCache()->addImage(std::string(texturePath.GetRawString()));
+        Texture2D* texture = Director::getInstance()->getTextureCache()->addImage(std::string(texturePath.GetRawString()), true);
 
         // テクスチャが読めていなければバインド処理をスキップ
         if(!texture) continue;
 
         const SamplerDesc texParams = Texture2D::chooseSamplerDesc(true, true);
         texture->setTexParameters(texParams);
-        texture->generateMipmap();
         _loadedTextures.PushBack(texture);
 
         //Cocos2d

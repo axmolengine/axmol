@@ -75,7 +75,7 @@ Sprite* Sprite::createWithTexture(Texture2D* texture, const Rect& rect, bool rot
 
 Sprite* Sprite::create(std::string_view filename)
 {
-    return Sprite::create(filename, PixelFormat::AUTO);
+    return Sprite::create(filename, PixelFormat::NONE);
 }
 
 Sprite* Sprite::create(std::string_view filename, PixelFormat format)
@@ -187,7 +187,7 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect)
 
 bool Sprite::initWithFile(std::string_view filename)
 {
-    return initWithFile(filename, PixelFormat::AUTO);
+    return initWithFile(filename, PixelFormat::NONE);
 }
 
 bool Sprite::initWithFile(std::string_view filename, PixelFormat format)
@@ -1066,7 +1066,7 @@ void Sprite::updateTransform()
 // draw
 void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    if (_texture == nullptr || _texture->getBackendTexture() == nullptr)
+    if (_texture == nullptr || _texture->getRHITexture() == nullptr)
         return;
 
     // TODO: arnold: current camera can be a non-default one.
@@ -1699,10 +1699,10 @@ std::string Sprite::getDescription() const
     std::string_view desc;
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
         desc = fmt::format_to_z(buf, "<Sprite | Tag = {}, TextureID = {}>", _tag,
-                 fmt::ptr(_batchNode->getTextureAtlas()->getTexture()->getBackendTexture()));
+                 fmt::ptr(_batchNode->getTextureAtlas()->getTexture()->getRHITexture()));
     else
         desc = fmt::format_to_z(buf, "<Sprite | Tag = {}, TextureID = {}>", _tag,
-                 fmt::ptr(_texture->getBackendTexture()));
+                 fmt::ptr(_texture->getRHITexture()));
 
     return std::string{desc};
 }

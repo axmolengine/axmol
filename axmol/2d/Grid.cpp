@@ -220,7 +220,7 @@ void GridBase::beforeDraw()
         _oldRenderTarget = renderer->getRenderTarget();
         AX_SAFE_RELEASE(_renderTarget);
         _renderTarget =
-            rhi::DriverBase::getInstance()->createRenderTarget(_texture->getBackendTexture());
+            rhi::DriverBase::getInstance()->createRenderTarget(_texture->getRHITexture());
         renderer->setRenderTarget(_renderTarget);
     };
     renderer->addCallbackCommand(beforeDrawCommandFunc);
@@ -385,7 +385,7 @@ void Grid3D::blit()
     ax::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState           = _drawCommand.getPipelineDesc().programState;
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
-    programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());
+    programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
 }
 
 void Grid3D::calculateVertexPoints()
@@ -635,7 +635,7 @@ void TiledGrid3D::blit()
     ax::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState           = _drawCommand.getPipelineDesc().programState;
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
-    programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());
+    programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
 }
 
 void TiledGrid3D::calculateVertexPoints()

@@ -749,7 +749,7 @@ bool ShaderMultiTexture::init()
         auto programState   = new rhi::ProgramState(program);
         _sprite->setProgramState(programState);
 
-        SET_TEXTURE(programState, "u_tex1", 1, right->getTexture()->getBackendTexture());
+        SET_TEXTURE(programState, "u_tex1", 1, right->getTexture()->getRHITexture());
         SET_UNIFORM(programState, "u_interpolate", 0.5f);
 
         // slider
@@ -779,5 +779,5 @@ void ShaderMultiTexture::changeTexture(Object*)
     Sprite* right = dynamic_cast<Sprite*>(getChildByTag(rightSpriteTag));
     right->setTexture(texture);
     auto programState = _sprite->getProgramState();
-    SET_TEXTURE(programState, "u_tex1", 1, right->getTexture()->getBackendTexture());
+    SET_TEXTURE(programState, "u_tex1", 1, right->getTexture()->getRHITexture());
 }

@@ -87,7 +87,7 @@ public:
         : filename(fn)
         , callback(f)
         , callbackKey(key)
-        , pixelFormat(PixelFormat::AUTO)
+        , pixelFormat(PixelFormat::NONE)
         , loadSuccess(false)
     {}
 
@@ -431,12 +431,12 @@ Texture2D* TextureCache::getDummyTexture()
     return texture;
 }
 
-Texture2D* TextureCache::addImage(std::string_view path)
+Texture2D* TextureCache::addImage(std::string_view path, bool autoGenMipmaps)
 {
-    return addImage(path, PixelFormat::AUTO);
+    return addImage(path, PixelFormat::NONE, autoGenMipmaps);
 }
 
-Texture2D* TextureCache::addImage(std::string_view path, PixelFormat renderFormat)
+Texture2D* TextureCache::addImage(std::string_view path, PixelFormat renderFormat, bool autoGenMipmaps)
 {
     Texture2D* texture = nullptr;
     Image* image       = nullptr;
@@ -477,7 +477,7 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat renderForma
             bool ret;
             if (image->getFileType() != Image::Format::ETC1 || !checkAlphaFile())
             {
-                ret = texture->initWithImage(image, renderFormat);
+                ret = texture->initWithImage(image, renderFormat, autoGenMipmaps);
             }
             else
             { // ETC1 ALPHA supports.
@@ -498,6 +498,8 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat renderForma
                                                    1}
                     };
 
+                    if (autoGenMipmaps)
+                        desc.mipLevels = 0;  // generate mipmaps by GPU
                     ret = texture->initWithSpec(desc, subDatas, renderFormat);
                 }
 
@@ -541,7 +543,7 @@ void TextureCache::parseNinePatchImage(ax::Image* image, ax::Texture2D* texture,
 
 Texture2D* TextureCache::addImage(Image* image, std::string_view key)
 {
-    return addImage(image, key, PixelFormat::AUTO);
+    return addImage(image, key, PixelFormat::NONE);
 }
 
 Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelFormat format)
@@ -795,7 +797,7 @@ std::string TextureCache::getCachedTextureInfo() const
         totalBytes += bytes;
         count++;
         auto msg = fmt::format_to_z(tmp, "\"{}\" rc={} id={} {} x {} @ {} bpp => {} KB\n", texture.first,
-                 tex->getReferenceCount(), fmt::ptr(tex->getBackendTexture()), tex->getPixelsWide(),
+                 tex->getReferenceCount(), fmt::ptr(tex->getRHITexture()), tex->getPixelsWide(),
                  tex->getPixelsHigh(), bpp, bytes / 1024);
 
         ret += msg;

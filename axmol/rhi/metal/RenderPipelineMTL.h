@@ -71,8 +71,8 @@ private:
     id<MTLDevice> _mtlDevice                           = nil;
 
     MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc = nil;
-    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT]  = {PixelFormat::AUTO};
-    PixelFormat _depthStencilPF                        = PixelFormat::AUTO;
+    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT]  = {PixelFormat::NONE};
+    PixelFormat _depthStencilPF                        = PixelFormat::NONE;
 
     tsl::robin_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };

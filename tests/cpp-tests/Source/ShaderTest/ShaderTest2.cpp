@@ -435,7 +435,7 @@ bool EffectNormalMapped::init()
 bool EffectNormalMapped::initNormalMap(std::string_view normalMapFileName)
 {
     auto normalMapTexture = Director::getInstance()->getTextureCache()->addImage(normalMapFileName);
-    SET_TEXTURE(_programState, "u_normalMap", 1, normalMapTexture->getBackendTexture());
+    SET_TEXTURE(_programState, "u_normalMap", 1, normalMapTexture->getRHITexture());
     return true;
 }
 void EffectNormalMapped::setTarget(EffectSprite* sprite)

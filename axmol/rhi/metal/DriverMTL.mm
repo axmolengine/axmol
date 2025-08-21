@@ -530,7 +530,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     // --- Mip Filter ---
     switch (desc.mipFilter)
     {
-        case SamplerFilter::MIP_NONE:
+        case SamplerFilter::MIP_DEFAULT:
             samplerDesc.mipFilter = MTLSamplerMipFilterNotMipmapped;
             break;
         case SamplerFilter::MIP_NEAREST:

@@ -2271,10 +2271,10 @@ rhi::ProgramState* Node::setProgramStateByProgramId(uint64_t programId)
 
 void Node::updateProgramStateTexture(Texture2D* texture)
 {
-    if (texture == nullptr || texture->getBackendTexture() == nullptr || _programState == nullptr)
+    if (texture == nullptr || texture->getRHITexture() == nullptr || _programState == nullptr)
         return;
 
-    _programState->setTexture(texture->getBackendTexture());
+    _programState->setTexture(texture->getRHITexture());
 }
 
 rhi::ProgramState* Node::getProgramState() const

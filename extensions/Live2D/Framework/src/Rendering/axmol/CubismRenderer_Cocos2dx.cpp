@@ -1110,7 +1110,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         layout = programState->getMutableVertexLayout();
 
         //テクスチャ設定
-        programState->setTexture(shaderSet->SamplerTexture0Location, 0, texture->getBackendTexture());
+        programState->setTexture(shaderSet->SamplerTexture0Location, 0, texture->getRHITexture());
 
         // 頂点配列の設定
         layout->setAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0, false);
@@ -1193,7 +1193,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
             // frameBufferに書かれたテクスチャ
             ax::Texture2D* tex = renderer->_offscreenFrameBuffer.GetColorBuffer();
 
-            programState->setTexture(shaderSet->SamplerTexture1Location, 1, tex->getBackendTexture());
+            programState->setTexture(shaderSet->SamplerTexture1Location, 1, tex->getRHITexture());
 
             // View座標をClippingContextの座標に変換するための行列を設定
             programState->setUniform(shaderSet->UniformClipMatrixLocation,
@@ -1208,7 +1208,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         }
 
         //テクスチャ設定
-        programState->setTexture(shaderSet->SamplerTexture0Location, 0, texture->getBackendTexture());
+        programState->setTexture(shaderSet->SamplerTexture0Location, 0, texture->getRHITexture());
 
         //座標変換
         programState->setUniform(shaderSet->UniformMatrixLocation, matrix4x4.GetArray(), sizeof(float) * 16);

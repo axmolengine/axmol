@@ -70,9 +70,9 @@ public:
      * reduction image.
      */
     void updateData(const void* data,
-                    std::size_t width,
-                    std::size_t height,
-                    std::size_t level,
+                    int width,
+                    int height,
+                    int level,
                     int layerIndex) override;
 
     /**
@@ -86,10 +86,10 @@ public:
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
     void updateCompressedData(const void* data,
-                              std::size_t width,
-                              std::size_t height,
+                              int width,
+                              int height,
                               std::size_t dataSize,
-                              std::size_t level,
+                              int level,
                               int layerIndex) override;
 
     /**
@@ -103,11 +103,11 @@ public:
      * @param data Specifies a pointer to the image data in memory.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    void updateSubData(std::size_t xoffset,
-                       std::size_t yoffset,
-                       std::size_t width,
-                       std::size_t height,
-                       std::size_t level,
+    void updateSubData(int xoffset,
+                       int yoffset,
+                       int width,
+                       int height,
+                       int level,
                        const void* data,
                        int layerIndex) override;
 
@@ -123,12 +123,12 @@ public:
      * @param data Specifies a pointer to the compressed image data in memory.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    void updateCompressedSubData(std::size_t xoffset,
-                                 std::size_t yoffset,
-                                 std::size_t width,
-                                 std::size_t height,
+    void updateCompressedSubData(int xoffset,
+                                 int yoffset,
+                                 int width,
+                                 int height,
                                  std::size_t dataSize,
-                                 std::size_t level,
+                                 int level,
                                  const void* data,
                                  int layerIndex) override;
 
@@ -143,7 +143,7 @@ public:
     /**
      * Generate mipmaps.
      */
-    void generateMipmaps() override;
+    void generateMipmaps();
 
     /**
      * Update texture description.
@@ -155,7 +155,7 @@ public:
      * Get internal texture object handle.
      * @return Texture object.
      */
-    GLuint internalHandle() const { return _nativeSampler; }
+    GLuint internalHandle() const { return _nativeTexture; }
 
     /**
      * Set texture to pipeline
@@ -169,6 +169,8 @@ public:
 private:
     void ensureTexStorageForRT();
 
+    void configureUnpackAlignment(unsigned int width);
+
     NativeTextureDesc _nativeDesc{};
     GLuint _nativeTexture{0};
     GLuint _nativeSampler{0};  // weak ref
@@ -176,8 +178,7 @@ private:
     EventListener* _rendererRecreatedListener = nullptr;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    bool _generateMipmaps = false;
-    bool _usedForRT       = false;
+    bool _usedForRT = false;
 #endif
 };
 

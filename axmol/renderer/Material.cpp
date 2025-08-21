@@ -261,10 +261,18 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
 {
     AXASSERT(!samplerProperties->getId().empty(), "Sampler must have an id. The id is the uniform name");
 
+    // mipmap
+    bool usemipmap     = false;
+    const char* mipmap = getOptionalString(samplerProperties, "mipmap", "false");
+    if (mipmap && strcasecmp(mipmap, "true") == 0)
+    {
+        usemipmap = true;
+    }
+
     // required
     auto filename = samplerProperties->getString("path");
 
-    auto texture = Director::getInstance()->getTextureCache()->addImage(filename);
+    auto texture = Director::getInstance()->getTextureCache()->addImage(filename, usemipmap);
     if (!texture)
     {
         AXLOGW("Invalid filepath");
@@ -274,15 +282,6 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
     // optionals
     {
         Texture2D::TexParams texParams;
-
-        // mipmap
-        bool usemipmap     = false;
-        const char* mipmap = getOptionalString(samplerProperties, "mipmap", "false");
-        if (mipmap && strcasecmp(mipmap, "true") == 0)
-        {
-            texture->generateMipmap();
-            usemipmap = true;
-        }
 
         // valid options: REPEAT, CLAMP
         const char* wrapS = getOptionalString(samplerProperties, "wrapS", "CLAMP_TO_EDGE");
@@ -353,11 +352,11 @@ bool Material::parseSampler(rhi::ProgramState* programState, Properties* sampler
     if (_textureSlots.find(textureName) == _textureSlots.end())
     {
         _textureSlots[textureName] = _textureSlotIndex;
-        programState->setTexture(location, _textureSlotIndex++, texture->getBackendTexture());
+        programState->setTexture(location, _textureSlotIndex++, texture->getRHITexture());
     }
     else
     {
-        programState->setTexture(location, _textureSlots[textureName], texture->getBackendTexture());
+        programState->setTexture(location, _textureSlots[textureName], texture->getRHITexture());
     }
 
     return true;

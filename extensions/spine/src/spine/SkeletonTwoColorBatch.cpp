@@ -101,7 +101,7 @@ namespace spine {
 		auto finalMatrix = projectionMat * mv;
 
 		_programState->setUniform(_locPMatrix, finalMatrix.m, sizeof(finalMatrix.m));
-		_programState->setTexture(_locTexture, 0, texture->getBackendTexture());
+		_programState->setTexture(_locTexture, 0, texture->getRHITexture());
 
 
 		RenderCommand::init(globalOrder, mv, flags);
@@ -116,8 +116,8 @@ namespace spine {
 		_mv = mv;
 
 		if (_blendType.src != blendType.src || _blendType.dst != blendType.dst ||
-			_texture != texture->getBackendTexture() || _pipelineDesc.programState != _programState) {
-			_texture = texture->getBackendTexture();
+			_texture != texture->getRHITexture() || _pipelineDesc.programState != _programState) {
+			_texture = texture->getRHITexture();
 			_blendType = blendType;
 
 			_prog = _programState->getProgram();

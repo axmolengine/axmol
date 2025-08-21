@@ -166,7 +166,7 @@ void ParticleBatchNode::addChild(Node* aChild, int zOrder, int tag)
     AXASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
              "CCParticleBatchNode only supports QuadParticleSystems as children");
     ParticleSystem* child = static_cast<ParticleSystem*>(aChild);
-    AXASSERT(child->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
+    AXASSERT(child->getTexture()->getRHITexture() == _textureAtlas->getTexture()->getRHITexture(),
              "CCParticleSystem is not using the same texture id");
 
     addChildByTagOrName(child, zOrder, tag, "", true);
@@ -178,7 +178,7 @@ void ParticleBatchNode::addChild(Node* aChild, int zOrder, std::string_view name
     AXASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
              "CCParticleBatchNode only supports QuadParticleSystems as children");
     ParticleSystem* child = static_cast<ParticleSystem*>(aChild);
-    AXASSERT(child->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
+    AXASSERT(child->getTexture()->getRHITexture() == _textureAtlas->getTexture()->getRHITexture(),
              "CCParticleSystem is not using the same texture id");
 
     addChildByTagOrName(child, zOrder, 0, name, false);
@@ -541,7 +541,7 @@ void ParticleBatchNode::updateProgramStateTexture()
     if (!texture)
         return;
     auto programState = _customCommand.getPipelineDesc().programState;
-    programState->setTexture(texture->getBackendTexture());
+    programState->setTexture(texture->getRHITexture());
     // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
     if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == AX_BLEND_SRC && _blendFunc.dst == AX_BLEND_DST))
         _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;

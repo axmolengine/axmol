@@ -469,7 +469,7 @@ void FastTMXLayer::updatePrimitives()
 
             _mvpMatrixLocaiton = pipelineDesc.programState->getUniformLocation("u_MVPMatrix");
             _textureLocation   = pipelineDesc.programState->getUniformLocation("u_tex0");
-            pipelineDesc.programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());
+            pipelineDesc.programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
             command->init(_globalZOrder, blendfunc);
 
             _customCommands[iter.first] = command;

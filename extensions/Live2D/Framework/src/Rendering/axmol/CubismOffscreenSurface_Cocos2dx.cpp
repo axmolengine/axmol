@@ -45,7 +45,7 @@ void CubismOffscreenFrame_Cocos2dx::BeginDraw(CubismCommandBuffer_Cocos2dx* comm
     }
 
     // マスク用RenderTextureをactiveにセット
-    commandBuffer->SetColorBuffer(_renderTexture->getSprite()->getTexture()->getBackendTexture());
+    commandBuffer->SetColorBuffer(_renderTexture->getSprite()->getTexture()->getRHITexture());
 }
 
 void CubismOffscreenFrame_Cocos2dx::EndDraw(CubismCommandBuffer_Cocos2dx* commandBuffer)
@@ -95,7 +95,7 @@ csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBuf
             _renderTexture->getSprite()->getTexture()->setTexParameters(ax::Texture2D::TexParams{});
 
             texture2d                 = _renderTexture->getSprite()->getTexture();
-            _colorBuffer              = texture2d->getBackendTexture();
+            _colorBuffer              = texture2d->getRHITexture();
             _isInheritedRenderTexture = false;
         }
         else
@@ -104,7 +104,7 @@ csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBuf
             _renderTexture = renderTexture;
 
             texture2d    = _renderTexture->getSprite()->getTexture();
-            _colorBuffer = texture2d->getBackendTexture();
+            _colorBuffer = texture2d->getRHITexture();
 
 
             _isInheritedRenderTexture = true;

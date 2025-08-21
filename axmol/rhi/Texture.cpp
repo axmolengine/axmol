@@ -37,9 +37,9 @@ void Texture::updateTextureDesc(const TextureDesc& desc)
     _desc         = desc;
 
     if (_bitsPerPixel == 0)
-    {
         _bitsPerPixel = (uint8_t)(8 * 4);
-    }
+
+    _overrideMipLevels = desc.mipLevels;
 }
 
 }  // namespace ax::rhi

@@ -691,7 +691,7 @@ void PUBillboardChain::render(Renderer* renderer, const Mat4& transform, Particl
 
             if (_texture)
             {
-                _programState->setTexture(_locTexture, 0, _texture->getBackendTexture());
+                _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
             }
 
             auto uColor = Vec4(1, 1, 1, 1);

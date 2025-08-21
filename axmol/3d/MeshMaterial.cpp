@@ -325,7 +325,7 @@ void MeshMaterial::setTexture(Texture2D* tex, NTextureData::Usage usage)
     const auto& passes = getTechnique()->getPasses();
     for (auto&& pass : passes)
     {
-        pass->setUniformTexture(0, tex->getBackendTexture());
+        pass->setUniformTexture(0, tex->getRHITexture());
     }
 }
 

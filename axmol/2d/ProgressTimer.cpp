@@ -635,7 +635,7 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
     const ax::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat                      = projectionMat * transform;
     _programState->setUniform(_locMVP1, finalMat.m, sizeof(finalMat.m));
-    _programState->setTexture(_locTex1, 0, _sprite->getTexture()->getBackendTexture());
+    _programState->setTexture(_locTex1, 0, _sprite->getTexture()->getRHITexture());
 
     if (_type == Type::BAR)
     {
@@ -651,7 +651,7 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
 
             _customCommand2.init(_globalZOrder, _sprite->getBlendFunc());
             _programState2->setUniform(_locMVP2, finalMat.m, sizeof(finalMat.m));
-            _programState2->setTexture(_locTex2, 0, _sprite->getTexture()->getBackendTexture());
+            _programState2->setTexture(_locTex2, 0, _sprite->getTexture()->getRHITexture());
             renderer->addCommand(&_customCommand2);
         }
     }

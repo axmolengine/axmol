@@ -418,7 +418,7 @@ void CameraBackgroundSkyBoxBrush::setTexture(TextureCube* texture)
     AX_SAFE_RETAIN(texture);
     AX_SAFE_RELEASE(_texture);
     _texture = texture;
-    _programState->setTexture(_uniformEnvLoc, 0, _texture->getBackendTexture());
+    _programState->setTexture(_uniformEnvLoc, 0, _texture->getRHITexture());
 }
 
 bool CameraBackgroundSkyBoxBrush::isActived() const

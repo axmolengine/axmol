@@ -540,8 +540,7 @@ void TextureMipMap::onEnter()
     TextureDemo::onEnter();
     auto s = Director::getInstance()->getWinSize();
 
-    auto texture0 = Director::getInstance()->getTextureCache()->addImage("Images/grossini_dance_atlas.png");
-    texture0->generateMipmap();
+    auto texture0 = Director::getInstance()->getTextureCache()->addImage("Images/grossini_dance_atlas.png", true);
     Texture2D::TexParams texParams{};
     texture0->setTexParameters(texParams);
 

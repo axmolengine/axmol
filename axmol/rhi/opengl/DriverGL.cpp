@@ -231,7 +231,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         case SamplerFilter::MIP_LINEAR:
             minFilterGL = GL_NEAREST_MIPMAP_LINEAR;
             break;
-        default: // MIP_NONE
+        default: // MIP_DEFAULT
             minFilterGL = GL_NEAREST;
         }
     }

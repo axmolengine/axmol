@@ -346,26 +346,24 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     }
     else
     {
-        const int minL = static_cast<int>(desc.minFilter) & 1;
-        const int magL = static_cast<int>(desc.magFilter) & 1;
-        const int mipL = static_cast<int>(desc.mipFilter) & 1;
+        const auto minL = ((int)desc.minFilter & (int)SamplerFilter::MIN_LINEAR);
+        const auto magL = ((int)desc.magFilter & (int)SamplerFilter::MAG_LINEAR);
+        const auto mipL = ((int)desc.mipFilter & (int)SamplerFilter::MIP_LINEAR);
 
-        if (!minL && !magL && !mipL)
-            sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-        else if (!minL && !magL && mipL)
-            sd.Filter = D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-        else if (!minL && magL && !mipL)
-            sd.Filter = D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
-        else if (!minL && magL && mipL)
-            sd.Filter = D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
-        else if (minL && !magL && !mipL)
-            sd.Filter = D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
-        else if (minL && !magL && mipL)
-            sd.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-        else if (minL && magL && !mipL)
-            sd.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
-        else
-            sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        // minL<<2 | magL<<1 | mipL
+        static const D3D11_FILTER filterTable[8] = {
+            D3D11_FILTER_MIN_MAG_MIP_POINT,                // 000
+            D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR,         // 001
+            D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT,   // 010
+            D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR,         // 011
+            D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT,         // 100
+            D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR,  // 101
+            D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT,         // 110
+            D3D11_FILTER_MIN_MAG_MIP_LINEAR                // 111
+        };
+
+        const int idx = (minL << 2) | (magL << 1) | (mipL ? 1 : 0);
+        sd.Filter     = filterTable[idx];
 
         sd.MaxAnisotropy = 1;
     }

@@ -1136,7 +1136,7 @@ function Sprite3DCubeMapTest:addNewSpriteWithCoords(pos)
 
     --pass the texture sampler to our custom shader
     local locCubeTex = programState:getUniformLocation("u_cubeTex")
-    local cubeTexture = self._textureCube:getBackendTexture()
+    local cubeTexture = self._textureCube:getRHITexture()
     programState:setTexture(locCubeTex, 0, cubeTexture)
 
     self._teapot:setProgramState(programState)

@@ -101,7 +101,7 @@ static void ImGui_ImplAxmol_UpdateTexture(ImTextureData* tex)
                               tex->Height, true);
 
         rhi::SamplerDesc desc{};
-        texture->getBackendTexture()->updateSamplerDesc(desc);
+        texture->getRHITexture()->updateSamplerDesc(desc);
 
         // Store identifiers
         tex->SetTexID((ImTextureID)(intptr_t)texture);
@@ -336,7 +336,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         // setup attributes for ImDrawVert
                         desc.programState->setSharedVertexLayout(pinfo->layout);
                         desc.programState->setUniform(pinfo->projection, &bd->Projection, sizeof(Mat4));
-                        desc.programState->setTexture(pinfo->texture, 0, tex->getBackendTexture());
+                        desc.programState->setTexture(pinfo->texture, 0, tex->getRHITexture());
                         // In order to composite our output buffer we need to preserve alpha
                         desc.blendDesc.sourceAlphaBlendFactor = BlendFactor::ONE;
                         // set vertex/index buffer

@@ -179,7 +179,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
 
     if (_texture)
     {
-        _programState->setTexture(_locTexture, 0, _texture->getBackendTexture());
+        _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
     }
     _stateBlock.setBlendFunc(particleSystem->getBlendFunc());
     auto uColor = Vec4(1, 1, 1, 1);

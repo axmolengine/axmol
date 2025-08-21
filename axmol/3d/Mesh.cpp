@@ -332,7 +332,7 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
             auto technique = _material->_currentTechnique;
             for (auto&& pass : technique->_passes)
             {
-                pass->setUniformTexture(0, tex->getBackendTexture());
+                pass->setUniformTexture(0, tex->getRHITexture());
             }
         }
 
@@ -347,7 +347,7 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
             auto technique = _material->_currentTechnique;
             for (auto&& pass : technique->_passes)
             {
-                pass->setUniformNormTexture(1, tex->getBackendTexture());
+                pass->setUniformNormTexture(1, tex->getRHITexture());
             }
         }
     }

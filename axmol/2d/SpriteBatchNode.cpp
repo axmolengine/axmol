@@ -213,7 +213,7 @@ void SpriteBatchNode::addChild(Node* child, int zOrder, int tag)
     AXASSERT(dynamic_cast<Sprite*>(child) != nullptr, "CCSpriteBatchNode only supports Sprites as children");
     Sprite* sprite = static_cast<Sprite*>(child);
     // check Sprite is using the same texture id
-    AXASSERT(sprite->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
+    AXASSERT(sprite->getTexture()->getRHITexture() == _textureAtlas->getTexture()->getRHITexture(),
              "CCSprite is not using the same texture id");
 
     Node::addChild(child, zOrder, tag);

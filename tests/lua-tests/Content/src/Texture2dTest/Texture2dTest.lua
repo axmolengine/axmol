@@ -74,8 +74,7 @@ local function TextureMipMap()
     local s = ax.Director:getInstance():getWinSize()
 
     local texture0 = ax.Director:getInstance():getTextureCache():addImage(
-        "Images/grossini_dance_atlas.png")
-    texture0:generateMipmap()
+        "Images/grossini_dance_atlas.png", true)
     texture0:setTexParameters(ccb.SamplerFilter.LINEAR_MIPMAP_LINEAR, ccb.SamplerFilter.LINEAR, ccb.SamplerAddressMode.CLAMP_TO_EDGE, ccb.SamplerAddressMode.CLAMP_TO_EDGE)
 
     local texture1 = ax.Director:getInstance():getTextureCache():addImage(

@@ -105,7 +105,7 @@ public:
 
 public:
 
-    static rhi::SamplerDesc chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled);
+    static void chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled, rhi::SamplerDesc& desc);
 
     /**
      */
@@ -115,73 +115,14 @@ public:
      */
     virtual ~Texture2D();
 
-    /** Initializes with a texture2d with data.
-
-     @param data Specifies a pointer to the image data in memory.
-     @param dataLen The image data length.
-     @param pixelFormat The image pixelFormat.
-     @param pixelsWide The image width.
-     @param pixelsHigh The image height.
-     @param contentSize The image content size.
-     @param preMultipliedAlpha The texture has premultiplied alpha
-     * @lua NA
-     */
-    bool initWithData(const void* data,
-                      ssize_t dataLen,
-                      rhi::PixelFormat pixelFormat,
-                      int pixelsWide,
-                      int pixelsHigh,
-                      bool preMultipliedAlpha = false)
-    {
-        return initWithData(data, dataLen, pixelFormat, pixelFormat, pixelsWide, pixelsHigh,
-                            preMultipliedAlpha);
-    }
-
-    /** Initializes with a texture2d with data.
-
-     @param data Specifies a pointer to the image data in memory.
-     @param dataLen The image data length.
-     @param pixelFormat The image pixelFormat.
-     @param renderFormat The format converted to.
-     @param pixelsWide The image width.
-     @param pixelsHigh The image height.
-     @param contentSize The image content size.
-     @param preMultipliedAlpha The texture has premultiplied alpha
-     * @lua NA
-     */
-    bool initWithData(const void* data,
-                      ssize_t dataLen,
-                      rhi::PixelFormat pixelFormat,
-                      rhi::PixelFormat renderFormat,
-                      int pixelsWide,
-                      int pixelsHigh,
-                      bool preMultipliedAlpha = false);
-
-    /** Initializes with mipmaps.
-
-     @param mipmaps Specifies a pointer to the image data in memory.
-     @param mipmapsNum The mipmaps number.
-     @param pixelFormat The image pixelFormat.
-     @param pixelsWide The image width.
-     @param pixelsHigh The image height.
-     @param preMultipliedAlpha The texture has premultiplied alpha
-     */
-    bool initWithMipmaps(std::span<MipmapInfo> mipmaps,
-                         rhi::PixelFormat pixelFormat,
-                         rhi::PixelFormat renderFormat,
-                         int pixelsWide,
-                         int pixelsHigh,
-                         bool preMultipliedAlpha = false);
-
-    /**
-  Initializes a texture from a UIImage object.
+    /** Initializes a texture from a Image object.
 
     We will use the format you passed to the function to convert the image format to the texture format.
-    If you pass PixelFormat::AUTO, we will auto detect the image render type and use that type for texture to render.
-    @param image An UIImage object.
+    If you pass PixelFormat::NONE, we will auto detect the image render type and use that type for texture to render.
+    @param image An Image object.
     @param format Texture pixel formats.
     */
-    bool initWithImage(Image* image, PixelFormat renderFormat = PixelFormat::AUTO);
+    bool initWithImage(Image* image, PixelFormat renderFormat = PixelFormat::NONE, bool autoGenMipmaps = false);
 
     /** Initializes a texture from a string with dimensions, alignment, font name and font size.
 
@@ -210,9 +151,70 @@ public:
      */
     bool initWithString(std::string_view text, const FontDefinition& textDefinition);
 
+
+    /** Initializes with a texture2d with data.
+
+     @param data Specifies a pointer to the image data in memory.
+     @param dataSize The image data length.
+     @param pixelFormat The image pixelFormat.
+     @param pixelsWide The image width.
+     @param pixelsHigh The image height.
+     @param contentSize The image content size.
+     @param preMultipliedAlpha The texture has premultiplied alpha
+     * @lua NA
+     */
+    bool initWithData(const void* data,
+                      ssize_t dataSize,
+                      rhi::PixelFormat pixelFormat,
+                      int pixelsWide,
+                      int pixelsHigh,
+                      bool preMultipliedAlpha = false,
+                      bool autoGenMipmaps     = false)
+    {
+        return initWithData(data, dataSize, pixelFormat, pixelFormat, pixelsWide, pixelsHigh, preMultipliedAlpha,
+                            autoGenMipmaps);
+    }
+
+    /** Initializes with a texture2d with data.
+
+     @param data Specifies a pointer to the image data in memory.
+     @param dataSize The image data length.
+     @param pixelFormat The image pixelFormat.
+     @param renderFormat The format converted to.
+     @param pixelsWide The image width.
+     @param pixelsHigh The image height.
+     @param contentSize The image content size.
+     @param preMultipliedAlpha The texture has premultiplied alpha
+     * @lua NA
+     */
+    bool initWithData(const void* data,
+                      ssize_t dataSize,
+                      rhi::PixelFormat pixelFormat,
+                      rhi::PixelFormat renderFormat,
+                      int pixelsWide,
+                      int pixelsHigh,
+                      bool preMultipliedAlpha = false,
+                      bool autoGenMipmaps     = false);
+
+    /** Initializes with mipmaps.
+
+     @param mipmaps Specifies a pointer to the image data in memory.
+     @param mipmapsNum The mipmaps number.
+     @param pixelFormat The image pixelFormat.
+     @param pixelsWide The image width.
+     @param pixelsHigh The image height.
+     @param preMultipliedAlpha The texture has premultiplied alpha
+     */
+    bool initWithMipmaps(std::span<MipmapInfo> mipmaps,
+                         rhi::PixelFormat pixelFormat,
+                         rhi::PixelFormat renderFormat,
+                         int pixelsWide,
+                         int pixelsHigh,
+                         bool preMultipliedAlpha = false);
+
     bool initWithSpec(rhi::TextureDesc desc,
                       std::span<TextureSliceData> subDatas,
-                      PixelFormat renderFormat,
+                      PixelFormat renderFormat = PixelFormat::NONE,
                       bool preMultipliedAlpha = false);
 
     /** Update with texture data.
@@ -242,12 +244,6 @@ public:
     inline bool isRenderTarget() const { return _flags & TextureFlag::RENDERTARGET; }
 
     void setTexParameters(const TexParams& params);
-
-    /** Generates mipmap images for the texture.
-     It only works if the texture size is POT (power of 2).
-     @since v0.99.0
-     */
-    void generateMipmap();
 
     /** Sets antialias texture parameters:
      - GL_TEXTURE_MIN_FILTER = GL_LINEAR
@@ -305,7 +301,7 @@ public:
     /** Gets the height of the texture in pixels. */
     int getPixelsHigh() const;
 
-    rhi::Texture* getBackendTexture() const;
+    rhi::Texture* getRHITexture() const;
 
     /** Gets max S. */
     float getMaxS() const;

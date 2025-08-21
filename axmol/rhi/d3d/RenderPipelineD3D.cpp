@@ -252,15 +252,7 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDesc& desc)
 
     constexpr UINT sampleMask = 0xFFFFFFFF;
 
-    if (desc.blendDesc.blendEnabled)
-    {
-        // axmol don't call glBlendColor, so the default blendFactor shoud be transparent
-        const FLOAT blendColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-        _context->OMSetBlendState(blendState.Get(), blendColor, sampleMask);
-    }
-    else
-    {
-        _context->OMSetBlendState(nullptr, nullptr, sampleMask);
-    }
+    const FLOAT blendColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+    _context->OMSetBlendState(blendState.Get(), blendColor, sampleMask);
 }
 }  // namespace ax::rhi::d3d

@@ -68,7 +68,7 @@ public:
     */
     void setTexParameters(const Texture2D::TexParams&);
 
-    rhi::Texture* getBackendTexture() { return _texture; }
+    rhi::Texture* getRHITexture() { return _texture; }
 
     const std::vector<std::string>& getImagePaths() const { return _imgPath; }
 

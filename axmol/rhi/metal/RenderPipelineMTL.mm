@@ -308,7 +308,7 @@ void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc)
 {
     for (int i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
     {
-        if (PixelFormat::AUTO == _colorAttachmentsFormat[i])
+        if (PixelFormat::NONE == _colorAttachmentsFormat[i])
         {
             _mtlRenderPipelineDesc.colorAttachments[i].pixelFormat = MTLPixelFormat::MTLPixelFormatInvalid;
             continue;

@@ -163,7 +163,7 @@ void Skybox::setTexture(TextureCube* texture)
     AX_SAFE_RELEASE_NULL(_texture);
     texture->retain();
     _texture = texture;
-    _programState->setTexture(_uniformEnvLoc, 0, _texture->getBackendTexture());
+    _programState->setTexture(_uniformEnvLoc, 0, _texture->getRHITexture());
 }
 
 void Skybox::reload()

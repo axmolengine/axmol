@@ -1020,10 +1020,10 @@ MediaPlayer::MediaPlayer()
                     auto ps = pvd->_vrender->getProgramState();
                     PrivateVideoDesc::updateColorTransform(ps, frame._vpd._fullRange);
 
-                    ps->setTexture(ps->getUniformLocation("u_tex1"), 1, pvd->_vchromaTexture->getBackendTexture());
+                    ps->setTexture(ps->getUniformLocation("u_tex1"), 1, pvd->_vchromaTexture->getRHITexture());
 
                     if (pixelFormat == MEVideoPixelFormat::I420)
-                        ps->setTexture(ps->getUniformLocation("u_tex2"), 2, pvd->_vchroma2Texture->getBackendTexture());
+                        ps->setTexture(ps->getUniformLocation("u_tex2"), 2, pvd->_vchroma2Texture->getRHITexture());
                 }
 
                 pvd->_scaleDirty = true;

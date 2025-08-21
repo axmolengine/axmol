@@ -244,7 +244,7 @@ void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
             Csm::Rendering::CubismCommandBuffer_Cocos2dx* lastCommandBuffer = commandBuffer;
 
             _sprite->SetColor(1.0f, 1.0f, 1.0f, 0.25f + (float)i * 0.5f);
-            _sprite->RenderImmidiate(commandBuffer, _renderBuffer->GetColorBuffer()->getBackendTexture(), uvVertex);
+            _sprite->RenderImmidiate(commandBuffer, _renderBuffer->GetColorBuffer()->getRHITexture(), uvVertex);
 
             // 元に戻す
             commandBuffer = lastCommandBuffer;

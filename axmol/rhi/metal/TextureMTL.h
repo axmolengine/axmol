@@ -58,9 +58,9 @@ public:
      * reduction image.
      */
     void updateData(const void* data,
-                    std::size_t width,
-                    std::size_t height,
-                    std::size_t level,
+                    int width,
+                    int height,
+                    int level,
                     int layerIndex = 0) override;
 
     /**
@@ -68,15 +68,15 @@ public:
      * @param data Specifies a pointer to the compressed image data in memory.
      * @param width Specifies the width of the texture image.
      * @param height Specifies the height of the texture image.
-     * @param dataLen Specifies the totoal size of compressed image in bytes.
+     * @param dataSize Specifies the totoal size of compressed image in bytes.
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      */
     void updateCompressedData(const void* data,
-                              std::size_t width,
-                              std::size_t height,
-                              std::size_t dataLen,
-                              std::size_t level,
+                              int width,
+                              int height,
+                              std::size_t dataSize,
+                              int level,
                               int layerIndex = 0) override;
 
     /**
@@ -89,11 +89,11 @@ public:
      * reduction image.
      * @param data Specifies a pointer to the image data in memory.
      */
-    void updateSubData(std::size_t xoffset,
-                       std::size_t yoffset,
-                       std::size_t width,
-                       std::size_t height,
-                       std::size_t level,
+    void updateSubData(int xoffset,
+                       int yoffset,
+                       int width,
+                       int height,
+                       int level,
                        const void* data,
                        int layerIndex = 0) override;
 
@@ -103,17 +103,17 @@ public:
      * @param yoffset Specifies a texel offset in the y direction within the texture array.
      * @param width Specifies the width of the texture subimage.
      * @param height Specifies the height of the texture subimage.
-     * @param dataLen Specifies the totoal size of compressed subimage in bytes.
+     * @param dataSize Specifies the totoal size of compressed subimage in bytes.
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      * @param data Specifies a pointer to the compressed image data in memory.
      */
-    void updateCompressedSubData(std::size_t xoffset,
-                                 std::size_t yoffset,
-                                 std::size_t width,
-                                 std::size_t height,
-                                 std::size_t dataLen,
-                                 std::size_t level,
+    void updateCompressedSubData(int xoffset,
+                                 int yoffset,
+                                 int width,
+                                 int height,
+                                 std::size_t dataSize,
+                                 int level,
                                  const void* data,
                                  int layerIndex = 0) override;
 
@@ -126,7 +126,7 @@ public:
     /**
      * Generate mipmaps.
      */
-    void generateMipmaps() override;
+    void generateMipmaps();
 
     /**
      * Update texture description.
@@ -158,7 +158,7 @@ public:
 
 private:
     void ensureNativeTexture();
-    
+
     id<MTLDevice> _mtlDevice;
     id<MTLTexture> _mtlTexture = nil;
     id<MTLSamplerState> _mtlSamplerState = nil;

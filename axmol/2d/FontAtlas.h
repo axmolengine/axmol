@@ -161,7 +161,7 @@ protected:
 
     // Dynamic GlyphCollection related stuff
     int _currentPage                  = -1;
-    rhi::PixelFormat _pixelFormat = rhi::PixelFormat::AUTO;
+    rhi::PixelFormat _pixelFormat = rhi::PixelFormat::NONE;
     int _strideShift                  = 0;
     uint8_t* _currentPageData         = nullptr;
     int _currentPageDataSize          = 0;

@@ -99,8 +99,8 @@ public:
     * Supported image extensions: .png, .bmp, .jpeg, .pvr.
      @param filepath The file path.
     */
-    Texture2D* addImage(std::string_view filepath);
-    Texture2D* addImage(std::string_view filepath, PixelFormat format);
+    Texture2D* addImage(std::string_view filepath, bool autoGenMipmaps = false);
+    Texture2D* addImage(std::string_view filepath, PixelFormat format, bool autoGenMipmaps = false);
 
     /** Returns a Texture2D object given a file image.
     * If the file image was not previously loaded, it will create a new Texture2D object and it will return it.

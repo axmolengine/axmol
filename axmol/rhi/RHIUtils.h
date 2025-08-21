@@ -58,7 +58,7 @@ inline bool isCompressed(PixelFormat format)
 /**convert functions*/
 
 /**
-Convert the format to the format param you specified, if the format is PixelFormat::AUTO, it will detect it
+Convert the format to the format param you specified, if the format is PixelFormat::NONE, it will detect it
 automatically and convert to the closest format for you. It will return the converted format to you. if the outData !=
 data, you must delete it manually.
 */
@@ -69,9 +69,9 @@ PixelFormat convertDataToFormat(const unsigned char* data,
                                 unsigned char** outData,
                                 size_t* outDataLen);
 
-inline uint8_t computeMipLevels(const TextureDesc& desc)
+inline uint8_t computeMipLevels(int width, int height)
 {
-    return static_cast<uint8_t>(floor(log2(std::max(desc.width, desc.height))) + 1);
+    return static_cast<uint8_t>(floor(log2((std::max)(width, height))) + 1);
 }
 } // namespace RHIUtils
 }  // namespace ax::rhi

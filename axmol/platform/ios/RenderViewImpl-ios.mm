@@ -101,7 +101,7 @@ void RenderViewImpl::choosePixelFormats()
     }
     else if (_gfxContextAttrs.depthBits == 0 && _gfxContextAttrs.stencilBits == 0)
     {
-        _depthFormat = PixelFormat::AUTO;
+        _depthFormat = PixelFormat::NONE;
     }
     else
     {

@@ -56,6 +56,11 @@ enum class DigestPresent
     Binary,
 };
 
+inline unsigned int isPOT(unsigned int value)
+{
+    return (((value) & (value - 1)) == 0);
+}
+
 /** Returns the Next Power of Two value.
 
 Examples:

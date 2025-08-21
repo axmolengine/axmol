@@ -166,7 +166,7 @@ FontAtlas* FontAtlasCache::getFontAtlasCharMap(std::string_view plistFile)
 
 FontAtlas* FontAtlasCache::getFontAtlasCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
 {
-    auto atlasName = fmt::format("name:{}_{}_{}_{}", reinterpret_cast<uintptr_t>(texture->getBackendTexture()), itemWidth, itemHeight, startCharMap);
+    auto atlasName = fmt::format("name:{}_{}_{}_{}", reinterpret_cast<uintptr_t>(texture->getRHITexture()), itemWidth, itemHeight, startCharMap);
 
     auto it = _atlasMap.find(atlasName);
     if (it == _atlasMap.end())

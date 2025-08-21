@@ -135,7 +135,7 @@ void Terrain::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t f
     _programState->setUniform(_lightDirLocation, &_lightDir, sizeof(_lightDir));
     if (!_alphaMap)
     {
-        _programState->setTexture(_detailMapLocation[0], 0, _detailMapTextures[0]->getBackendTexture());
+        _programState->setTexture(_detailMapLocation[0], 0, _detailMapTextures[0]->getRHITexture());
         int hasAlphaMap = 0;
         _programState->setUniform(_alphaIsHasAlphaMapLocation, &hasAlphaMap, sizeof(hasAlphaMap));
     }
@@ -144,27 +144,27 @@ void Terrain::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t f
         float detailMapSize[4] = {0.0f, 0.0f, 0.0f, 0.0f};
         for (int i = 0; i < _maxDetailMapValue; ++i)
         {
-            _programState->setTexture(_detailMapLocation[i], i, _detailMapTextures[i]->getBackendTexture());
+            _programState->setTexture(_detailMapLocation[i], i, _detailMapTextures[i]->getRHITexture());
             detailMapSize[i] = _terrainData._detailMaps[i]._detailMapSize;
         }
         _programState->setUniform(_detailMapSizeLocation, detailMapSize, sizeof(detailMapSize));
 
         int hasAlphaMap = 1;
         _programState->setUniform(_alphaIsHasAlphaMapLocation, &hasAlphaMap, sizeof(hasAlphaMap));
-        _programState->setTexture(_alphaMapLocation, 4, _alphaMap->getBackendTexture());
+        _programState->setTexture(_alphaMapLocation, 4, _alphaMap->getRHITexture());
     }
     if (_lightMap)
     {
         int hasLightMap = 1;
         _programState->setUniform(_lightMapCheckLocation, &hasLightMap, sizeof(hasLightMap));
-        _programState->setTexture(_lightMapLocation, 5, _lightMap->getBackendTexture());
+        _programState->setTexture(_lightMapLocation, 5, _lightMap->getRHITexture());
     }
     else
     {
         int hasLightMap = 0;
         _programState->setUniform(_lightMapCheckLocation, &hasLightMap, sizeof(hasLightMap));
 #if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
-        _programState->setTexture(_lightMapLocation, 5, _dummyTexture->getBackendTexture());
+        _programState->setTexture(_lightMapLocation, 5, _detailMapTextures[0]->getRHITexture());
 #endif
     }
     auto camera = Camera::getVisitingCamera();
@@ -836,46 +836,58 @@ bool Terrain::initTextures()
         _detailMapTextures[i] = nullptr;
     }
 
-    Texture2D::TexParams texParam{};
-
+    rhi::TextureDesc texDesc;
     if (_terrainData._alphaMapSrc.empty())
     {
-        texParam.sAddressMode = rhi::SamplerAddressMode::REPEAT;
-        texParam.tAddressMode = rhi::SamplerAddressMode::REPEAT;
-        auto textImage = new Image();
-        textImage->initWithImageFile(_terrainData._detailMaps[0]._detailMapSrc);
-        auto texture = new Texture2D();
-        texture->initWithImage(textImage);
-        texture->generateMipmap();
+        texDesc.samplerDesc.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+        texDesc.samplerDesc.tAddressMode = rhi::SamplerAddressMode::REPEAT;
+        auto image                       = new Image();
+        image->initWithImageFile(_terrainData._detailMaps[0]._detailMapSrc);
+
+        TextureSliceData subDatas[] = {
+            TextureSliceData{.data = image->getData(), .dataSize = static_cast<unsigned int>(image->getDataSize())}};
+        texDesc.mipLevels = 0;  // request rhi to generate mipmaps automatically
+        texDesc.width     = image->getWidth();
+        texDesc.height    = image->getHeight();
+        texDesc.pixelFormat = image->getPixelFormat();
+        auto texture      = new Texture2D();
+
+        texture->initWithSpec(texDesc, subDatas);
         _detailMapTextures[0] = texture;
-        texture->setTexParameters(texParam);
-        delete textImage;
+        image->release();
     }
     else
     {
         // alpha map
         auto image = new Image();
         image->initWithImageFile(_terrainData._alphaMapSrc);
-        _alphaMap = new Texture2D();
-        _alphaMap->initWithImage(image);
-        texParam.sAddressMode = rhi::SamplerAddressMode::CLAMP;
-        texParam.tAddressMode = rhi::SamplerAddressMode::CLAMP;
-        _alphaMap->setTexParameters(texParam);
-        delete image;
 
-        texParam.sAddressMode = rhi::SamplerAddressMode::REPEAT;
-        texParam.tAddressMode = rhi::SamplerAddressMode::REPEAT;
+        _alphaMap = new Texture2D();
+        _alphaMap->initWithImage(image, PixelFormat::NONE, true);
+        image->release();
+
+        texDesc.samplerDesc.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+        texDesc.samplerDesc.tAddressMode = rhi::SamplerAddressMode::REPEAT;
+
+        // request rhi to generate mipmaps automatically
+        texDesc.mipLevels             = 0;
         for (int i = 0; i < _terrainData._detailMapAmount; ++i)
         {
-            auto textImage = new Image();
-            textImage->initWithImageFile(_terrainData._detailMaps[i]._detailMapSrc);
+            image = new Image();
+            image->initWithImageFile(_terrainData._detailMaps[i]._detailMapSrc);
+
+            texDesc.width       = image->getWidth();
+            texDesc.height      = image->getHeight();
+            texDesc.pixelFormat = image->getPixelFormat();
+
+            TextureSliceData subDatas[] = {TextureSliceData{
+                .data = image->getData(), .dataSize = static_cast<unsigned int>(image->getDataSize())}};
+
             auto texture = new Texture2D();
-            texture->initWithImage(textImage);
-            delete textImage;
-            texture->generateMipmap();
+            texture->initWithSpec(texDesc, subDatas);
             _detailMapTextures[i] = texture;
 
-            texture->setTexParameters(texParam);
+            image->release();
         }
     }
     setMaxDetailMapAmount(_terrainData._detailMapAmount);

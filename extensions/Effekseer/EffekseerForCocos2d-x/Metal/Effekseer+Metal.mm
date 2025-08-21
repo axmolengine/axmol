@@ -172,7 +172,7 @@ Effekseer::ModelLoaderRef CreateModelLoader(Effekseer::FileInterfaceRef effectFi
 
 void UpdateTextureData(::Effekseer::TextureRef textureData, cocos2d::Texture2D* texture)
 {
-    auto textureImpl = static_cast<ax::rhi::mtl::TextureImpl*>(texture->getBackendTexture());
+    auto textureImpl = static_cast<ax::rhi::mtl::TextureImpl*>(texture->getRHITexture());
 	auto device = EffekseerGraphicsDevice::create().DownCast<::EffekseerRendererLLGI::Backend::GraphicsDevice>();
 
     auto backend = device->CreateTexture(textureImpl->internalHandle(), []() -> void {});

@@ -102,7 +102,7 @@ static void fromD3DTexDesc(TextureDesc& td, const D3D11_TEXTURE2D_DESC& desc)
         td.pixelFormat = PixelFormat::D24S8;
         break;
     default:
-        td.pixelFormat = PixelFormat::AUTO;
+        td.pixelFormat = PixelFormat::NONE;
         break;
     }
 
@@ -158,82 +158,30 @@ void TextureImpl::updateTextureDesc(const TextureDesc& desc)
     updateSamplerDesc(desc.samplerDesc);
 }
 
-// ------------------------------------------------------------
-// generateMipmaps
-// ------------------------------------------------------------
-void TextureImpl::generateMipmaps()
-{
-    if (TextureUsage::RENDER_TARGET == _desc.textureUsage)
-        return;
-    if (!_nativeTexture)
-    {
-        // geneate mipmaps by GPU required at least upload data once
-        return;
-    }
-
-    auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
-
-    bool gpuMipmaps = false;
-
-    if (_desc.mipLevels == 0)
-    {  // recreate mipmaps
-        context->GenerateMips(_nativeTexture.srv);
-        gpuMipmaps = true;
-    }
-    else if (_desc.mipLevels == 1)
-    {
-        // FIXME: consider add a member mipLevels to TextureDesc to avoid recreate texture
-        auto storedTexture = _nativeTexture.detach();
-
-        // mark mipLevels=0 to recreate a texture which can be generate mips by GPU
-        _desc.mipLevels = 0;
-        ensureNativeTexture();
-        if (_nativeTexture)
-        {
-            context->CopySubresourceRegion(_nativeTexture.tex2d, 0, 0, 0, 0, storedTexture.tex2d, 0, nullptr);
-            context->GenerateMips(_nativeTexture.srv);
-            storedTexture.destroy();
-            gpuMipmaps = true;
-        }
-        else
-        {
-            AXLOGW("generate mipmaps fail");
-            _nativeTexture = storedTexture;
-        }
-    }  // other, not support geneate mipmaps by GPU
-
-    if (gpuMipmaps)
-    {
-        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-        _nativeTexture.srv->GetDesc(&srvDesc);
-        _desc.mipLevels = srvDesc.Texture2D.MipLevels;
-    }
-}
-
 void TextureImpl::updateData(const void* data,
-                             std::size_t width,
-                             std::size_t height,
-                             std::size_t level,
+                             int width,
+                             int height,
+                             int level,
                              int layerIndex /*=0*/)
 {
     updateSubData(0, 0, width, height, level, data, layerIndex);
 }
 
 void TextureImpl::updateCompressedData(const void* data,
-                                       std::size_t width,
-                                       std::size_t height,
-                                       std::size_t dataLen,
-                                       std::size_t level,
+                                       int width,
+                                       int height,
+                                       std::size_t dataSize,
+                                       int level,
                                        int layerIndex /*=0*/)
 {
-    updateCompressedSubData(0, 0, width, height, dataLen, level, data, layerIndex);
+    updateCompressedSubData(0, 0, width, height, dataSize, level, data, layerIndex);
 }
 
-void TextureImpl::updateSubData(std::size_t xoffset,
-                                std::size_t yoffset,
-                                std::size_t width,
-                                std::size_t height,
-                                std::size_t level,
+void TextureImpl::updateSubData(int xoffset,
+                                int yoffset,
+                                int width,
+                                int height,
+                                int level,
                                 const void* data,
                                 int layerIndex /*=0*/)
 {
@@ -254,14 +202,17 @@ void TextureImpl::updateSubData(std::size_t xoffset,
     auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
     UINT subresource = D3D11CalcSubresource(level, layerIndex, _desc.mipLevels);
     context->UpdateSubresource(_nativeTexture, subresource, &box, data, rowPitch, slicePitch);
+
+    if (shouldGenMipmaps(level))
+        generateMipmaps(context);
 }
 
-void TextureImpl::updateCompressedSubData(std::size_t xoffset,
-                                          std::size_t yoffset,
-                                          std::size_t width,
-                                          std::size_t height,
-                                          std::size_t dataLen,
-                                          std::size_t level,
+void TextureImpl::updateCompressedSubData(int xoffset,
+                                          int yoffset,
+                                          int width,
+                                          int height,
+                                          std::size_t /*dataSize*/,
+                                          int level,
                                           const void* data,
                                           int layerIndex /*=0*/)
 {
@@ -279,6 +230,9 @@ void TextureImpl::updateCompressedSubData(std::size_t xoffset,
     auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
     UINT subresource = D3D11CalcSubresource(level, layerIndex, _desc.mipLevels);
     context->UpdateSubresource(_nativeTexture, subresource, &box, data, 0, 0);
+
+    if (shouldGenMipmaps(level))
+        generateMipmaps(context);
 }
 
 void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
@@ -305,6 +259,9 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
     // 3. update
     //-------------------------------------------------------------------
     context->UpdateSubresource(_nativeTexture, subresource, nullptr, data, rowPitch, slicePitch);
+
+    if (shouldGenMipmaps())
+        generateMipmaps(context);
 }
 
 void TextureImpl::ensureNativeTexture()
@@ -380,6 +337,28 @@ void TextureImpl::ensureNativeTexture()
     }
 
     _nativeTexture = TextureHandle{texture.Detach(), srv.Detach()};
+}
+
+
+// ------------------------------------------------------------
+// generateMipmaps
+// ------------------------------------------------------------
+void TextureImpl::generateMipmaps(ID3D11DeviceContext* context)
+{
+    if (TextureUsage::RENDER_TARGET == _desc.textureUsage)
+        return;
+    if (!_nativeTexture)
+    {
+        // geneate mipmaps by GPU required at least upload data once
+        return;
+    }
+
+    // generate mipmaps
+    context->GenerateMips(_nativeTexture.srv);
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+    _nativeTexture.srv->GetDesc(&srvDesc);
+
+    _overrideMipLevels = (std::max)(1u, srvDesc.Texture2D.MipLevels);
 }
 
 }  // namespace ax::rhi::d3d

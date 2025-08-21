@@ -2244,7 +2244,7 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 
     // pass the texture sampler to our custom shader
     auto cubeTexLoc = state->getUniformLocation("u_cubeTex");
-    state->setTexture(cubeTexLoc, 0, _textureCube->getBackendTexture());
+    state->setTexture(cubeTexLoc, 0, _textureCube->getRHITexture());
 
     _teapot->setPosition3D(Vec3(0.0f, -5.0f, 0.0f));
     _teapot->setRotation3D(Vec3(-90.0f, 180.0f, 0.0f));
@@ -2283,7 +2283,7 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
         _skyBox->setTexture(_textureCube);
         // pass the texture sampler to our custom shader
         auto cubeTexLoc = state->getUniformLocation("u_cubeTex");
-        state->setTexture(cubeTexLoc, 0, _textureCube->getBackendTexture());
+        state->setTexture(cubeTexLoc, 0, _textureCube->getRHITexture());
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif

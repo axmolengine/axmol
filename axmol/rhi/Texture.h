@@ -31,7 +31,8 @@
 
 #include <functional>
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 /**
  * @addtogroup _rhi
  * @{
@@ -48,9 +49,6 @@ public:
      * @param sampler Specifies the sampler descriptor.
      */
     virtual void updateSamplerDesc(const SamplerDesc& desc) = 0;
-
-    /// Generate mipmaps.
-    virtual void generateMipmaps() = 0;
 
     /**
      * Update texture description.
@@ -80,12 +78,10 @@ public:
      * Check if mipmap had generated before.
      * @return true if the mipmap has always generated before, otherwise false.
      */
-    inline bool hasMipmaps() const { return _desc.mipLevels > 1; }
+    inline bool hasMipmaps() const { return _overrideMipLevels > 1; }
 
-    virtual int getCount() const { return 1; };
-
-    int getWidth() const { return _desc.width; }
-    int getHeight() const { return _desc.height; }
+    int getWidth() const { return static_cast<int>(_desc.width); }
+    int getHeight() const { return static_cast<int>(_desc.height); }
 
     /**
      * Update a two-dimensional texture image
@@ -96,27 +92,23 @@ public:
      * reduction image.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    virtual void updateData(const void* data,
-                            std::size_t width,
-                            std::size_t height,
-                            std::size_t level,
-                            int layerIndex) = 0;
+    virtual void updateData(const void* data, int width, int height, int level, int layerIndex) = 0;
 
     /**
      * Update a two-dimensional texture image in a compressed format
      * @param data Specifies a pointer to the compressed image data in memory.
      * @param width Specifies the width of the texture image.
      * @param height Specifies the height of the texture image.
-     * @param dataLen Specifies the totoal size of compressed image in bytes.
+     * @param dataSize Specifies the totoal size of compressed image in bytes.
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
     virtual void updateCompressedData(const void* data,
-                                      std::size_t width,
-                                      std::size_t height,
-                                      std::size_t dataLen,
-                                      std::size_t level,
+                                      int width,
+                                      int height,
+                                      std::size_t dataSize,
+                                      int level,
                                       int layerIndex) = 0;
 
     /**
@@ -130,13 +122,8 @@ public:
      * @param data Specifies a pointer to the image data in memory.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    virtual void updateSubData(std::size_t xoffset,
-                               std::size_t yoffset,
-                               std::size_t width,
-                               std::size_t height,
-                               std::size_t level,
-                               const void* data,
-                               int layerIndex) = 0;
+    virtual void
+    updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex) = 0;
 
     /**
      * Update a two-dimensional texture subimage in a compressed format
@@ -144,18 +131,18 @@ public:
      * @param yoffset Specifies a texel offset in the y direction within the texture array.
      * @param width Specifies the width of the texture subimage.
      * @param height Specifies the height of the texture subimage.
-     * @param dataLen Specifies the totoal size of compressed subimage in bytes.
+     * @param dataSize Specifies the totoal size of compressed subimage in bytes.
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      * @param data Specifies a pointer to the compressed image data in memory.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    virtual void updateCompressedSubData(std::size_t xoffset,
-                                         std::size_t yoffset,
-                                         std::size_t width,
-                                         std::size_t height,
-                                         std::size_t dataLen,
-                                         std::size_t level,
+    virtual void updateCompressedSubData(int xoffset,
+                                         int yoffset,
+                                         int width,
+                                         int height,
+                                         std::size_t dataSize,
+                                         int level,
                                          const void* data,
                                          int layerIndex) = 0;
 
@@ -166,6 +153,8 @@ public:
      */
     virtual void updateFaceData(TextureCubeFace side, const void* data) = 0;
 
+    bool shouldGenMipmaps(int level = 0) const { return _desc.mipLevels == 0 && level == 0 && !_overrideMipLevels; }
+
 protected:
     /**
      * @param descriptor Specifies the texture descriptor.
@@ -174,15 +163,11 @@ protected:
     virtual ~Texture();
 
     /// The bytes of all components.
-    uint8_t _bitsPerPixel = 0;
-
-    //TextureType _textureType   = TextureType::TEXTURE_2D;
-    //PixelFormat _textureFormat = PixelFormat::RGBA8;
-    //TextureUsage _textureUsage = TextureUsage::READ;
-
+    uint8_t _bitsPerPixel       = 0;
+    uint16_t _overrideMipLevels = 0;
     TextureDesc _desc;
 };
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

@@ -164,7 +164,7 @@ enum class PixelFormat : uint8_t
     /* the count of pixel format supported by axmol */
     COUNT,
 
-    AUTO = 0xff
+    NONE = 0xFF,  //!< No pixel format, used for invalid texture
 };
 
 enum class TextureUsage : uint8_t
@@ -327,9 +327,9 @@ enum class SamplerFilter : uint32_t
     MAG_LINEAR,
 
     // mip filter
-    MIP_NONE = 0,
-    MIP_NEAREST,
+    MIP_NEAREST = 0,
     MIP_LINEAR,
+    MIP_DEFAULT = 0b11,
 
     // alias
     NEAREST = 0,
@@ -363,7 +363,7 @@ struct SamplerDesc
 {
     SamplerFilter minFilter : 2         = SamplerFilter::MIN_LINEAR;
     SamplerFilter magFilter : 1         = SamplerFilter::MAG_LINEAR;
-    SamplerFilter mipFilter : 2         = SamplerFilter::MIP_NONE;
+    SamplerFilter mipFilter : 2         = SamplerFilter::MIP_DEFAULT;
     SamplerAddressMode sAddressMode : 2 = SamplerAddressMode::CLAMP;
     SamplerAddressMode tAddressMode : 2 = SamplerAddressMode::CLAMP;
     SamplerAddressMode wAddressMode : 2 = SamplerAddressMode::CLAMP;
@@ -381,6 +381,7 @@ struct TextureDesc
     uint16_t width            = 1;
     uint16_t height           = 1;
     uint16_t arraySize        = 1;
+    // =1: no mipmaps, =0: generate mipmaps by GPU, >1: mipmaps enabled manually
     uint16_t mipLevels        = 1;
     TextureType textureType   = TextureType::TEXTURE_2D;
     PixelFormat pixelFormat   = PixelFormat::RGBA8;

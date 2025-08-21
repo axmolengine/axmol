@@ -567,7 +567,7 @@ Image::Image()
     , _height(0)
     , _unpack(false)
     , _fileType(Format::UNKNOWN)
-    , _pixelFormat(rhi::PixelFormat::AUTO)
+    , _pixelFormat(rhi::PixelFormat::NONE)
     , _numberOfMipmaps(0)
     , _hasPremultipliedAlpha(false)
 {}
@@ -1871,9 +1871,9 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
     else if (Configuration::getInstance()->supportsETC2())
         compressedFormat = rhi::PixelFormat::ETC2_RGB;
     else
-        compressedFormat = rhi::PixelFormat::AUTO;
+        compressedFormat = rhi::PixelFormat::NONE;
 
-    if (compressedFormat != rhi::PixelFormat::AUTO)
+    if (compressedFormat != rhi::PixelFormat::NONE)
     {
         _pixelFormat = compressedFormat;
         forwardPixels(data, dataLen, pixelOffset, ownData);
