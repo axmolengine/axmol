@@ -3386,8 +3386,6 @@ SpriteBatchNodeChildrenChildren::SpriteBatchNodeChildrenChildren()
     //
 
     aParent = SpriteBatchNode::create("animations/ghosts.png");
-    // TODO: minggo
-    //    aParent->getTexture()->generateMipmap();
     addChild(aParent);
 
     // parent
@@ -4515,7 +4513,6 @@ SpriteBatchNodeReorderOneChild::SpriteBatchNodeReorderOneChild()
     aParent = SpriteBatchNode::create("animations/ghosts.png");
 
     _batchNode = aParent;
-    //[[aParent texture] generateMipmap];
     addChild(aParent);
 
     // parent

@@ -53,6 +53,9 @@ static bool isColorRenderable(PixelFormat textureFormat)
 TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, const TextureDesc& desc) : _mtlDevice(mtlDevice)
 {
     updateTextureDesc(desc);
+
+    if (_desc.textureUsage == TextureUsage::RENDER_TARGET)
+        zeroTexData();
 }
 
 TextureImpl::~TextureImpl() {}
@@ -144,7 +147,7 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
                     withBytes:data
                   bytesPerRow:bytesPerRow
                 bytesPerImage:slicePitch];
-    
+
     if (shouldGenMipmaps())
         generateMipmaps();
 }
@@ -155,7 +158,7 @@ void TextureImpl::ensureNativeTexture()
     MTLPixelFormat pixelFormat = UtilsMTL::toMTLPixelFormat(_desc.pixelFormat);
     if (pixelFormat == MTLPixelFormatInvalid)
         return;
-    
+
     bool needMipmaps = _desc.mipLevels != 1;
 
     MTLTextureDescriptor* textureDesc = nil;

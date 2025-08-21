@@ -57,12 +57,12 @@ bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
 
     Texture2D* texture = new Texture2D();
 
-    rhi::TextureDesc descriptor;
-    descriptor.width         = POTWide;
-    descriptor.height        = POTHigh;
-    descriptor.textureUsage  = rhi::TextureUsage::RENDER_TARGET;
-    descriptor.pixelFormat = rhi::PixelFormat::RGBA8;
-    texture->updateTextureDesc(descriptor);
+    rhi::TextureDesc desc;
+    desc.width         = POTWide;
+    desc.height        = POTHigh;
+    desc.textureUsage  = rhi::TextureUsage::RENDER_TARGET;
+    desc.pixelFormat   = rhi::PixelFormat::RGBA8;
+    texture->initWithSpec(desc, {});
 
     initWithSize(gridSize, texture, false, rect);
 

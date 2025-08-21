@@ -65,7 +65,6 @@ bool ControlColourPicker::init()
     */
         //        spriteSheet->getTexture()->setAliasTexParameters();
         //         spriteSheet->getTexture()->setSamplerDescriptor(&params);
-        //         spriteSheet->getTexture()->generateMipmap();
 
         // Init default color
         _hsv.h = 0;

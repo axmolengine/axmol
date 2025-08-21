@@ -81,7 +81,6 @@ struct TextureFlag
         NONE               = 0,
         ANTIALIAS_ENABLED  = 1 << 1,
         PREMULTIPLIEDALPHA = 1 << 2,
-        RENDERTARGET       = 1 << 3,
     };
 };
 

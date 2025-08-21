@@ -42,4 +42,20 @@ void Texture::updateTextureDesc(const TextureDesc& desc)
     _overrideMipLevels = desc.mipLevels;
 }
 
+void Texture::zeroTexData()
+{
+    if (!RHIUtils::isCompressed(_desc.pixelFormat))
+    {
+        const auto w = getWidth();
+        const auto h = getHeight();
+        auto size    = w * h * _bitsPerPixel / 8;
+        assert(size > 0);
+
+        axstd::byte_buffer blackPixels;
+        blackPixels.resize(size, 0);
+
+        updateData(blackPixels.data(), w, h, 0, 0);
+    }
+}
+
 }  // namespace ax::rhi

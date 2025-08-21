@@ -64,7 +64,7 @@ using namespace ax::ui;
 
 namespace
 {
-struct PrivateVideoDesc
+struct PrivateVideoContext
 {
     MediaEngine* _engine        = nullptr;
     Texture2D* _vtexture        = nullptr;
@@ -82,6 +82,178 @@ struct PrivateVideoDesc
     {
         if (_engine)
             _engine->close();
+    }
+
+    std::function<void(const MEVideoFrame& frame)> _renderFrameFunc;
+
+    void updatePixelDesc(const MEVideoPixelDesc& desc)
+    {
+        _vpixelDesc = desc;
+
+        auto pixelFormat = desc._PF;
+
+        AX_SAFE_RELEASE(_vtexture);
+        AX_SAFE_RELEASE_NULL(_vchromaTexture);
+        AX_SAFE_RELEASE_NULL(_vchroma2Texture);
+
+        auto programManager = ProgramManager::getInstance();
+
+        switch (pixelFormat)
+        {
+        case MEVideoPixelFormat::YUY2:
+            // RG8
+            _vtexture = new Texture2D();
+            _vtexture->initWithSpec(
+                {
+                    .width       = static_cast<uint16_t>(desc._dim.x),
+                    .height      = static_cast<uint16_t>(desc._dim.y),
+                    .pixelFormat = PixelFormat::RG8,
+                },
+                {});
+
+            // RGBA8
+            _vchromaTexture = new Texture2D();
+            _vchromaTexture->initWithSpec(
+                {
+                    .width  = static_cast<uint16_t>(desc._dim.x >> 1),
+                    .height = static_cast<uint16_t>(desc._dim.y),
+                    .pixelFormat = PixelFormat::RGBA8,
+                },
+                {});
+            _vchromaTexture->setAliasTexParameters();
+            _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_YUY2);
+
+            _renderFrameFunc = [this](const MEVideoFrame& frame) {
+                if (_vtexture && _vchromaTexture)
+                {
+                    auto& bufferDim = frame._vpd._dim;
+                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
+                    _vchromaTexture->updateData(frame._dataPointer, bufferDim.x >> 1, bufferDim.y);
+                }
+            };
+            break;
+        case MEVideoPixelFormat::NV12:
+            // R8
+            _vtexture = new Texture2D();
+            _vtexture->initWithSpec(
+                {
+                    .width       = static_cast<uint16_t>(desc._dim.x),
+                    .height      = static_cast<uint16_t>(desc._dim.y),
+                    .pixelFormat = PixelFormat::R8,
+                },
+                {});
+
+            // RG8
+            _vchromaTexture = new Texture2D();
+            _vchromaTexture->initWithSpec(
+                {
+                    .width       = static_cast<uint16_t>(desc._dim.x >> 1),
+                    .height      = static_cast<uint16_t>(desc._dim.y >> 1),
+                    .pixelFormat = PixelFormat::RG8,
+                },
+                {});
+            _vchromaTexture->setAliasTexParameters();
+            _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_NV12);
+
+            // allocate tex storage
+            _renderFrameFunc = [this](const MEVideoFrame& frame) {
+                if (_vtexture && _vchromaTexture)
+                {
+                    auto& bufferDim = frame._vpd._dim;
+                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
+                    _vchromaTexture->updateData(frame._cbcrDataPointer, bufferDim.x >> 1, bufferDim.y >> 1);
+                }
+            };
+            break;
+        case MEVideoPixelFormat::I420:
+            // R8
+            _vtexture = new Texture2D();
+            _vtexture->initWithSpec(
+                {
+                    .width       = static_cast<uint16_t>(desc._dim.x),
+                    .height      = static_cast<uint16_t>(desc._dim.y),
+                    .pixelFormat = PixelFormat::R8,
+                },
+                {});
+            // R8
+            _vchromaTexture = new Texture2D();
+            _vchromaTexture->initWithSpec(
+                {
+                    .width       = static_cast<uint16_t>(desc._dim.x >> 1),
+                    .height      = static_cast<uint16_t>(desc._dim.y >> 1),
+                    .pixelFormat = PixelFormat::R8,
+                },
+                {});
+            _vchromaTexture->setAliasTexParameters();
+            // R8
+            _vchroma2Texture = new Texture2D();
+            _vchroma2Texture->initWithSpec(
+                {
+                    .width       = static_cast<uint16_t>(desc._dim.x >> 1),
+                    .height      = static_cast<uint16_t>(desc._dim.y >> 1),
+                    .pixelFormat = PixelFormat::R8,
+                },
+                {});
+            _vchroma2Texture->setAliasTexParameters();
+            _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_I420);
+
+            _renderFrameFunc = [this](const MEVideoFrame& frame) {
+                if (_vtexture && _vchromaTexture && _vchroma2Texture)
+                {
+                    auto& bufferDim = frame._vpd._dim;
+                    const auto chromaTexDataSize = (bufferDim.x * bufferDim.y) >> 2;
+                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
+                    _vchromaTexture->updateData(frame._cbcrDataPointer, bufferDim.x >> 1, bufferDim.y >> 1);
+                    _vchroma2Texture->updateData(frame._cbcrDataPointer + chromaTexDataSize, bufferDim.x >> 1,
+                                                 bufferDim.y >> 1);
+                }
+            };
+            break;
+        case MEVideoPixelFormat::RGB32:
+            // RGBA8
+            _vtexture = new Texture2D();
+            _vtexture->initWithSpec(
+                {
+                    .width       = static_cast<uint16_t>(desc._dim.x),
+                    .height      = static_cast<uint16_t>(desc._dim.y),
+                    .pixelFormat = PixelFormat::RGBA8,
+                },
+                {});
+            _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_RGB32);
+
+            _renderFrameFunc = [this](const MEVideoFrame& frame) {
+                if (_vtexture)
+                {
+                    auto& bufferDim = frame._vpd._dim;
+                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
+                }
+            };
+            break;
+        case MEVideoPixelFormat::BGR32:
+            // BGRA8
+            _vtexture = new Texture2D();
+            _vtexture->initWithSpec(
+                {
+                    .width       = static_cast<uint16_t>(desc._dim.x),
+                    .height      = static_cast<uint16_t>(desc._dim.y),
+                    .pixelFormat = PixelFormat::BGRA8,
+                },
+                {});
+            _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_BGR32);
+            _renderFrameFunc = [this](const MEVideoFrame& frame) {
+                if (_vtexture) {
+                    auto& bufferDim = frame._vpd._dim;
+                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
+                }
+            };
+            break;
+        }
+    }
+
+    void renderFrame(const MEVideoFrame& frame)
+    {
+        if (_renderFrameFunc)
+            _renderFrameFunc(const_cast<MEVideoFrame&>(frame));
     }
 
     void rescaleTo(MediaPlayer* videoView)
@@ -868,7 +1040,7 @@ void BasicMediaController::updateControlsForContentSize(const Vec2& contentSize)
 
 MediaPlayer::MediaPlayer()
 {
-    auto pvd      = new PrivateVideoDesc{};
+    auto pvd      = new PrivateVideoContext{};
     _videoContext = pvd;
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
@@ -924,45 +1096,11 @@ MediaPlayer::MediaPlayer()
             auto bPixelDescChnaged = !frame._vpd.equals(pvd->_vpixelDesc);
             if (bPixelDescChnaged)
             {
-                pvd->_vpixelDesc = frame._vpd;
-
-                rhi::TextureDesc desc;
-
-                AX_SAFE_RELEASE(pvd->_vtexture);
-                pvd->_vtexture = new Texture2D();  // deault is Sampler Filter is: LINEAR
-
-                AX_SAFE_RELEASE_NULL(pvd->_vchromaTexture);
-                AX_SAFE_RELEASE_NULL(pvd->_vchroma2Texture);
-                if (pixelFormat >= MEVideoPixelFormat::YUY2)
-                {  // use separated texture we can set differrent sample filter
-                    pvd->_vchromaTexture = new Texture2D();  // Sampler Filter: NEAREST
-                    pvd->_vchromaTexture->setAliasTexParameters();
-
-                    if (pixelFormat == MEVideoPixelFormat::I420)
-                    {
-                        pvd->_vchroma2Texture = new Texture2D();  // Sampler Filter: NEAREST
-                        pvd->_vchroma2Texture->setAliasTexParameters();
-                    }
-                }
-
-                auto programManager = ProgramManager::getInstance();
-
-                switch (pixelFormat)
-                {
-                case MEVideoPixelFormat::YUY2:
-                    pvd->_vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_YUY2);
-                    break;
-                case MEVideoPixelFormat::NV12:
-                    pvd->_vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_NV12);
-                    break;
-                case MEVideoPixelFormat::I420:
-                    pvd->_vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_I420);
-                    break;
-                default:
-                    pvd->_vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_RGB32);
-                }
+                pvd->updatePixelDesc(frame._vpd);
             }
 
+            pvd->renderFrame(frame);
+            #if 0
             auto& bufferDim = frame._vpd._dim;
 
             switch (pixelFormat)
@@ -970,7 +1108,7 @@ MediaPlayer::MediaPlayer()
             case MEVideoPixelFormat::YUY2:
             {
                 // RG8
-                //pvd->_vtexture->updateWithSubData(frame._dataPointer, 0, 0, frame._dataLen,
+                //pvd->_vtexture->updateSubData(frame._dataPointer, 0, 0, frame._dataLen,
                 //                               bufferDim.x, bufferDim.y, false);
                 //pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
                 //                                     PixelFormat::RGBA8, bufferDim.x >> 1, bufferDim.y, false, 0);
@@ -1007,6 +1145,7 @@ MediaPlayer::MediaPlayer()
                 break;
             default:;
             }
+            #endif
             if (bPixelDescChnaged)
             {
                 pvd->_vrender->setTexture(pvd->_vtexture);
@@ -1018,7 +1157,7 @@ MediaPlayer::MediaPlayer()
                 if (pixelFormat >= MEVideoPixelFormat::YUY2)
                 {
                     auto ps = pvd->_vrender->getProgramState();
-                    PrivateVideoDesc::updateColorTransform(ps, frame._vpd._fullRange);
+                    PrivateVideoContext::updateColorTransform(ps, frame._vpd._fullRange);
 
                     ps->setTexture(ps->getUniformLocation("u_tex1"), 1, pvd->_vchromaTexture->getRHITexture());
 
@@ -1038,7 +1177,7 @@ MediaPlayer::MediaPlayer()
 
 MediaPlayer::~MediaPlayer()
 {
-    auto pvd = reinterpret_cast<PrivateVideoDesc*>(_videoContext);
+    auto pvd = reinterpret_cast<PrivateVideoContext*>(_videoContext);
 
     removeAllProtectedChildren();
 
@@ -1080,7 +1219,7 @@ void MediaPlayer::setFileName(std::string_view fileName)
     auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
     if (ax::utils::filePathToUrl(std::forward<std::string>(fullPath)) != _videoURL)
     {
-        reinterpret_cast<PrivateVideoDesc*>(_videoContext)->closePlayer();
+        reinterpret_cast<PrivateVideoContext*>(_videoContext)->closePlayer();
         _videoURL = std::move(fullPath);
     }
     _videoSource = MediaPlayer::Source::FILENAME;
@@ -1090,7 +1229,7 @@ void MediaPlayer::setURL(std::string_view videoUrl)
 {
     if (_videoURL != videoUrl)
     {
-        reinterpret_cast<PrivateVideoDesc*>(_videoContext)->closePlayer();
+        reinterpret_cast<PrivateVideoContext*>(_videoContext)->closePlayer();
         _videoURL = videoUrl;
     }
     _videoSource = MediaPlayer::Source::URL;
@@ -1100,7 +1239,7 @@ void MediaPlayer::setLooping(bool looping)
 {
     _isLooping = looping;
 
-    auto pvd = reinterpret_cast<PrivateVideoDesc*>(_videoContext);
+    auto pvd = reinterpret_cast<PrivateVideoContext*>(_videoContext);
     if (pvd->_engine)
         pvd->_engine->setLoop(looping);
 }
@@ -1125,7 +1264,7 @@ void MediaPlayer::setStyle(StyleType style)
 
 Node* MediaPlayer::getVirtualRenderer()
 {
-    auto pvd = reinterpret_cast<PrivateVideoDesc*>(_videoContext);
+    auto pvd = reinterpret_cast<PrivateVideoContext*>(_videoContext);
     return pvd->_vrender;
 }
 
@@ -1133,7 +1272,7 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 {
     ax::ui::Widget::draw(renderer, transform, flags);
 
-    auto pvd     = reinterpret_cast<PrivateVideoDesc*>(_videoContext);
+    auto pvd     = reinterpret_cast<PrivateVideoContext*>(_videoContext);
     auto vrender = pvd->_vrender;
     auto engine  = pvd->_engine;
     if (!vrender || !engine)
@@ -1157,7 +1296,7 @@ void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 void MediaPlayer::setContentSize(const Size& contentSize)
 {
     Widget::setContentSize(contentSize);
-    auto videoContext               = reinterpret_cast<PrivateVideoDesc*>(_videoContext);
+    auto videoContext               = reinterpret_cast<PrivateVideoContext*>(_videoContext);
     videoContext->_originalViewSize = contentSize;
     if (_mediaController)
     {
@@ -1170,7 +1309,7 @@ MediaPlayer::MediaState MediaPlayer::getState() const
     if (_videoURL.empty())
         return MediaState::CLOSED;
 
-    auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+    auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
     if (engine)
     {
         switch (engine->getState())
@@ -1217,7 +1356,7 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
     {
         _fullScreenEnabled = enabled;
 
-        auto pvd               = reinterpret_cast<PrivateVideoDesc*>(_videoContext);
+        auto pvd               = reinterpret_cast<PrivateVideoContext*>(_videoContext);
         const auto contentSize = enabled ? _director->getRenderView()->getDesignResolutionSize() : pvd->_originalViewSize;
         Widget::setContentSize(contentSize);
 
@@ -1235,7 +1374,7 @@ void MediaPlayer::setKeepAspectRatioEnabled(bool enable)
     if (_keepAspectRatioEnabled != enable)
     {
         _keepAspectRatioEnabled                                               = enable;
-        reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_scaleDirty = true;
+        reinterpret_cast<PrivateVideoContext*>(_videoContext)->_scaleDirty = true;
     }
 }
 
@@ -1243,7 +1382,7 @@ void MediaPlayer::setPlayRate(float fRate)
 {
     if (!_videoURL.empty())
     {
-        auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+        auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
         if (engine)
             engine->setRate(fRate);
     }
@@ -1253,7 +1392,7 @@ void MediaPlayer::play()
 {
     if (!_videoURL.empty())
     {
-        auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+        auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
         if (engine)
         {
             switch (engine->getState())
@@ -1286,7 +1425,7 @@ void MediaPlayer::pausePlayback()
 {
     if (!_videoURL.empty())
     {
-        auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+        auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
         if (engine)
         {
             engine->pause();
@@ -1299,7 +1438,7 @@ void MediaPlayer::resumePlayback()
 {
     if (!_videoURL.empty())
     {
-        auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+        auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
         if (engine)
         {
             switch (engine->getState())
@@ -1318,7 +1457,7 @@ void MediaPlayer::stop()
 {
     if (!_videoURL.empty())
     {
-        auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+        auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
         if (engine)
         {
             engine->stop();
@@ -1331,7 +1470,7 @@ void MediaPlayer::seekTo(float sec)
 {
     if (!_videoURL.empty())
     {
-        auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+        auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
         if (engine)
         {
             engine->setCurrentTime(sec);
@@ -1344,7 +1483,7 @@ float MediaPlayer::getCurrentTime()
 {
     if (!_videoURL.empty())
     {
-        auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+        auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
         if (engine)
         {
             return static_cast<float>(engine->getCurrentTime());
@@ -1358,7 +1497,7 @@ float MediaPlayer::getDuration()
 {
     if (!_videoURL.empty())
     {
-        auto engine = reinterpret_cast<PrivateVideoDesc*>(_videoContext)->_engine;
+        auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
         if (engine)
         {
             return static_cast<float>(engine->getDuration());

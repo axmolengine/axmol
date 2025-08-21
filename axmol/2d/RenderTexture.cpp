@@ -186,22 +186,22 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             powH = utils::nextPOT(h);
         }
 
-        rhi::TextureDesc descriptor;
-        descriptor.width         = powW;
-        descriptor.height        = powH;
-        descriptor.textureUsage  = TextureUsage::RENDER_TARGET;
-        descriptor.pixelFormat = PixelFormat::RGBA8;
+        rhi::TextureDesc desc;
+        desc.width         = powW;
+        desc.height        = powH;
+        desc.textureUsage  = TextureUsage::RENDER_TARGET;
+        desc.pixelFormat = PixelFormat::RGBA8;
         _texture2D               = new Texture2D();
-        _texture2D->updateTextureDesc(descriptor, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
+        _texture2D->initWithSpec(desc, {}, PixelFormat::NONE, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
 
         if (PixelFormat::D24S8 == depthStencilFormat || sharedRenderTarget)
         {
-            descriptor.pixelFormat = PixelFormat::D24S8;
+            desc.pixelFormat = PixelFormat::D24S8;
 
             AX_SAFE_RELEASE(_depthStencilTexture);
 
             _depthStencilTexture = new Texture2D();
-            _depthStencilTexture->updateTextureDesc(descriptor);
+            _depthStencilTexture->initWithSpec(desc, {});
         }
 
         AX_SAFE_RELEASE(_renderTarget);

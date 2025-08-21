@@ -88,7 +88,6 @@ Texture2D::Texture2D()
     , _flags(TextureFlag::ANTIALIAS_ENABLED)
     , _samplerFlags(TextureSamplerFlag::DEFAULT)
     , _ninePatchInfo(nullptr)
-    , _valid(true)
 {
 }
 
@@ -373,7 +372,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
             free(convertedData);
     }
 
-    if (desc.arraySize == 2)
+    if (desc.arraySize == 2 && _originalPF == PixelFormat::ETC1)
     {
         setPremultipliedAlpha(Image::isCompressedImageHavePMA(Image::CompressedImagePMAFlag::DUAL_SAMPLER));
         _samplerFlags |= TextureSamplerFlag::DUAL_SAMPLER;
@@ -383,16 +382,19 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
         setPremultipliedAlpha(preMultipliedAlpha);
     }
 
-    setRenderTarget(desc.textureUsage == TextureUsage::RENDER_TARGET);
-
     return true;
 }
 
-bool Texture2D::updateWithSubData(const void* data, int offsetX, int offsetY, int width, int height, int level, int layerIndex)
+bool Texture2D::isRenderTarget() const
+{
+    return _rhiTexture && _rhiTexture->getTextureUsage() == rhi::TextureUsage::RENDER_TARGET;
+}
+
+bool Texture2D::updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level, int layerIndex)
 {
     if (_rhiTexture && width > 0 && height > 0)
     {
-        // updateWithSubData must be called with the same pixel format as the original pixel format
+        // updateSubData must be called with the same pixel format as the original pixel format
         assert(_rhiTexture->getPixelFormat() == _originalPF);
         _rhiTexture->updateSubData(offsetX, offsetY, width, height, level, data, layerIndex);
         return true;
@@ -494,36 +496,8 @@ bool Texture2D::initWithString(std::string_view text, const FontDefinition& text
     Vec2 imageSize = Vec2((float)imageWidth, (float)imageHeight);
     const PixelFormat pixelFormat = PixelFormat::RGBA8;
 
-    ret = initWithData(outData.getBytes(), imageWidth * imageHeight * 4, pixelFormat, imageWidth, imageHeight);
-
-    setPremultipliedAlpha(hasPremultipliedAlpha);
-
-    return ret;
-}
-
-bool Texture2D::updateTextureDesc(const rhi::TextureDesc& desc, bool preMultipliedAlpha)
-{
-    AX_ASSERT(_rhiTexture);
-
-    _rhiTexture->updateTextureDesc(desc);
-    _pixelsWide = _contentSize.width = _rhiTexture->getWidth();
-    _pixelsHigh = _contentSize.height = _rhiTexture->getHeight();
-    setPremultipliedAlpha(preMultipliedAlpha);
-
-    setRenderTarget(desc.textureUsage == TextureUsage::RENDER_TARGET);
-
-    if (_originalPF == PixelFormat::NONE)
-        _originalPF = desc.pixelFormat;
-
-    return true;
-}
-
-void Texture2D::setRenderTarget(bool renderTarget)
-{
-    if (renderTarget)
-        _flags |= TextureFlag::RENDERTARGET;
-    else
-        _flags &= TextureFlag::RENDERTARGET;
+    return initWithData(outData.getBytes(), imageWidth * imageHeight * 4, pixelFormat, imageWidth, imageHeight,
+                       hasPremultipliedAlpha);
 }
 
 bool Texture2D::hasMipmaps() const
@@ -533,7 +507,6 @@ bool Texture2D::hasMipmaps() const
 
 void Texture2D::setAliasTexParameters()
 {
-
     if ((_flags & TextureFlag::ANTIALIAS_ENABLED) == 0)
     {
         return;
@@ -548,7 +521,6 @@ void Texture2D::setAliasTexParameters()
 
 void Texture2D::setAntiAliasTexParameters()
 {
-
     if (_flags & TextureFlag::ANTIALIAS_ENABLED)
     {
         return;

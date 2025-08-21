@@ -197,30 +197,7 @@ Effekseer::TextureRef TextureLoader::Load(const EFK_CHAR* path, ::Effekseer::Tex
 
 		if (image != nullptr && texture != nullptr && image->initWithImageData((const uint8_t*)data_texture, size_texture))
 		{
-			if (texture->initWithImage(image))
-			{
-
-				if(texture->getPixelsWide() > 1 || texture->getPixelsHigh() > 1)
-				{
-#if AX_RENDER_API == AX_RENDER_API_MTL
-					texture->generateMipmap();
-#else
-					if (texture->getPixelsWide() == ax::utils::nextPOT(texture->getPixelsWide()) &&
-						texture->getPixelsHigh() == ax::utils::nextPOT(texture->getPixelsHigh()))
-					{
-						texture->generateMipmap();
-					}
-					else
-					{
-						char path8[300];
-						::Effekseer::ConvertUtf16ToUtf8(path8, 300, path);
-						AXLOGW("{} : The texture is not shown on a mobile. The size is not power of two.", path8);
-					}
-#endif
-				}
-
-			}
-			else
+			if (!texture->initWithImage(image, ax::PixelFormat::NONE, true))
 			{
 				AX_SAFE_DELETE(texture);
 				AX_SAFE_DELETE(image);

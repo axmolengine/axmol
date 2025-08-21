@@ -35,7 +35,7 @@ int lua_ax_base_Object_retain(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -82,7 +82,7 @@ int lua_ax_base_Object_release(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -129,7 +129,7 @@ int lua_ax_base_Object_getReferenceCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -198,7 +198,7 @@ int lua_ax_base_Touch_getLocation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -245,7 +245,7 @@ int lua_ax_base_Touch_getPreviousLocation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -292,7 +292,7 @@ int lua_ax_base_Touch_getStartLocation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -339,7 +339,7 @@ int lua_ax_base_Touch_getDelta(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -386,7 +386,7 @@ int lua_ax_base_Touch_getLocationInView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -433,7 +433,7 @@ int lua_ax_base_Touch_getPreviousLocationInView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -480,7 +480,7 @@ int lua_ax_base_Touch_getStartLocationInView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -606,7 +606,7 @@ int lua_ax_base_Touch_getID(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -653,7 +653,7 @@ int lua_ax_base_Touch_getCurrentForce(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -700,7 +700,7 @@ int lua_ax_base_Touch_getMaxForce(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -734,7 +734,7 @@ int lua_ax_base_Touch_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -815,7 +815,7 @@ int lua_ax_base_Event_getType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -862,7 +862,7 @@ int lua_ax_base_Event_stopPropagation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -909,7 +909,7 @@ int lua_ax_base_Event_isStopped(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -956,7 +956,7 @@ int lua_ax_base_Event_getCurrentTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -990,7 +990,7 @@ int lua_ax_base_Event_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Event::Type arg0;
 
@@ -1067,7 +1067,7 @@ int lua_ax_base_EventTouch_getEventCode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1114,7 +1114,7 @@ int lua_ax_base_EventTouch_setEventCode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventTouch::EventCode arg0;
 
@@ -1151,7 +1151,7 @@ int lua_ax_base_EventTouch_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1210,7 +1210,7 @@ int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::EventKeyboard::KeyCode arg0;
         bool arg1;
@@ -1286,7 +1286,7 @@ int lua_ax_base_Action_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1333,7 +1333,7 @@ int lua_ax_base_Action_reverse(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1380,7 +1380,7 @@ int lua_ax_base_Action_isDone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1427,7 +1427,7 @@ int lua_ax_base_Action_startWithTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -1477,7 +1477,7 @@ int lua_ax_base_Action_stop(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1524,7 +1524,7 @@ int lua_ax_base_Action_step(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -1574,7 +1574,7 @@ int lua_ax_base_Action_update(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -1624,7 +1624,7 @@ int lua_ax_base_Action_getTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1671,7 +1671,7 @@ int lua_ax_base_Action_setTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -1721,7 +1721,7 @@ int lua_ax_base_Action_getOriginalTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1768,7 +1768,7 @@ int lua_ax_base_Action_setOriginalTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -1818,7 +1818,7 @@ int lua_ax_base_Action_getTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1865,7 +1865,7 @@ int lua_ax_base_Action_setTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -1915,7 +1915,7 @@ int lua_ax_base_Action_getFlags(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1962,7 +1962,7 @@ int lua_ax_base_Action_setFlags(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -2046,7 +2046,7 @@ int lua_ax_base_FiniteTimeAction_getDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2093,7 +2093,7 @@ int lua_ax_base_FiniteTimeAction_setDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -2164,7 +2164,7 @@ int lua_ax_base_Speed_getSpeed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2211,7 +2211,7 @@ int lua_ax_base_Speed_setSpeed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -2261,7 +2261,7 @@ int lua_ax_base_Speed_setInnerAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -2311,7 +2311,7 @@ int lua_ax_base_Speed_getInnerAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2358,7 +2358,7 @@ int lua_ax_base_Speed_initWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ActionInterval* arg0;
         double arg1;
@@ -2436,7 +2436,7 @@ int lua_ax_base_Speed_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2512,7 +2512,7 @@ int lua_ax_base_Follow_isBoundarySet(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2559,7 +2559,7 @@ int lua_ax_base_Follow_setBoundarySet(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -2609,7 +2609,7 @@ int lua_ax_base_Follow_initWithTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -2623,7 +2623,7 @@ int lua_ax_base_Follow_initWithTarget(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         ax::Rect arg1;
@@ -2676,7 +2676,7 @@ int lua_ax_base_Follow_initWithTargetAndOffset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Node* arg0;
         double arg1;
@@ -2696,7 +2696,7 @@ int lua_ax_base_Follow_initWithTargetAndOffset(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::Node* arg0;
         double arg1;
@@ -2852,7 +2852,7 @@ int lua_ax_base_Follow_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2928,7 +2928,7 @@ int lua_ax_base_EventListener_checkAvailable(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2975,7 +2975,7 @@ int lua_ax_base_EventListener_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3022,7 +3022,7 @@ int lua_ax_base_EventListener_setEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -3072,7 +3072,7 @@ int lua_ax_base_EventListener_isEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3129,7 +3129,7 @@ int lua_ax_base_EventListenerCustom_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3199,7 +3199,7 @@ int lua_ax_base_ShaderCache_purge(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3246,7 +3246,7 @@ int lua_ax_base_ShaderCache_acquireVertexShaderModule(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -3296,7 +3296,7 @@ int lua_ax_base_ShaderCache_acquireFragmentShaderModule(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -3346,7 +3346,7 @@ int lua_ax_base_ShaderCache_removeUnusedShader(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3486,7 +3486,7 @@ int lua_ax_base_Texture2D_initWithImage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Image* arg0;
 
@@ -3500,7 +3500,7 @@ int lua_ax_base_Texture2D_initWithImage(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Image* arg0;
         ax::rhi::PixelFormat arg1;
@@ -3517,7 +3517,7 @@ int lua_ax_base_Texture2D_initWithImage(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Image* arg0;
         ax::rhi::PixelFormat arg1;
@@ -3774,7 +3774,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Texture2D_updateWithSubData(lua_State* tolua_S)
+int lua_ax_base_Texture2D_updateData(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Texture2D* cobj = nullptr;
@@ -3794,13 +3794,58 @@ int lua_ax_base_Texture2D_updateWithSubData(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_updateWithSubData'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_updateData'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 5)
+    if (argc == 3) 
+    {
+        const void* arg0;
+        int arg1;
+        int arg2;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+		ok = false;
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateData");
+
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateData'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->updateData(arg0, arg1, arg2);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 4) 
+    {
+        const void* arg0;
+        int arg1;
+        int arg2;
+        int arg3;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+		ok = false;
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateData");
+
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateData");
+
+        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateData'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->updateData(arg0, arg1, arg2, arg3);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 5) 
     {
         const void* arg0;
         int arg1;
@@ -3811,23 +3856,86 @@ int lua_ax_base_Texture2D_updateWithSubData(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
 		ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateData");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateData");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateData");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateData");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateWithSubData'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateData'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->updateWithSubData(arg0, arg1, arg2, arg3, arg4);
+        auto&& ret = cobj->updateData(arg0, arg1, arg2, arg3, arg4);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 6)
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:updateData",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Texture2D_updateData'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Texture2D_updateSubData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Texture2D* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Texture2D",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_updateSubData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 5) 
+    {
+        const void* arg0;
+        int arg1;
+        int arg2;
+        int arg3;
+        int arg4;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+		ok = false;
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateSubData");
+
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateSubData");
+
+        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateSubData");
+
+        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateSubData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateSubData'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->updateSubData(arg0, arg1, arg2, arg3, arg4);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    if (argc == 6) 
     {
         const void* arg0;
         int arg1;
@@ -3839,25 +3947,25 @@ int lua_ax_base_Texture2D_updateWithSubData(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
 		ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:updateSubData");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateWithSubData'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateSubData'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->updateWithSubData(arg0, arg1, arg2, arg3, arg4, arg5);
+        auto&& ret = cobj->updateSubData(arg0, arg1, arg2, arg3, arg4, arg5);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 7)
+    if (argc == 7) 
     {
         const void* arg0;
         int arg1;
@@ -3870,32 +3978,32 @@ int lua_ax_base_Texture2D_updateWithSubData(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
 		ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 8,(int *)&arg6, "ax.Texture2D:updateWithSubData");
+        ok &= luaval_to_int32(tolua_S, 8,(int *)&arg6, "ax.Texture2D:updateSubData");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateWithSubData'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateSubData'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->updateWithSubData(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        auto&& ret = cobj->updateSubData(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:updateWithSubData",argc, 5);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:updateSubData",argc, 5);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Texture2D_updateWithSubData'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Texture2D_updateSubData'.",&tolua_err);
 #endif
 
     return 0;
@@ -3926,7 +4034,7 @@ int lua_ax_base_Texture2D_drawAtPoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -3979,7 +4087,7 @@ int lua_ax_base_Texture2D_drawInRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Rect arg0;
         double arg1;
@@ -4002,125 +4110,6 @@ int lua_ax_base_Texture2D_drawInRect(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Texture2D_drawInRect'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Texture2D_updateTextureDesc(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Texture2D* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Texture2D",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_updateTextureDesc'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        ax::rhi::TextureDesc arg0;
-
-        #pragma warning NO CONVERSION TO NATIVE FOR TextureDesc
-		ok = false;
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateTextureDesc'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->updateTextureDesc(arg0);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    if (argc == 2)
-    {
-        ax::rhi::TextureDesc arg0;
-        bool arg1;
-
-        #pragma warning NO CONVERSION TO NATIVE FOR TextureDesc
-		ok = false;
-
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Texture2D:updateTextureDesc");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateTextureDesc'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->updateTextureDesc(arg0, arg1);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:updateTextureDesc",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Texture2D_updateTextureDesc'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Texture2D_setRenderTarget(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Texture2D* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Texture2D",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Texture2D*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Texture2D_setRenderTarget'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Texture2D:setRenderTarget");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_setRenderTarget'", nullptr);
-            return 0;
-        }
-        cobj->setRenderTarget(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Texture2D:setRenderTarget",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Texture2D_setRenderTarget'.",&tolua_err);
 #endif
 
     return 0;
@@ -4151,7 +4140,7 @@ int lua_ax_base_Texture2D_isRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4198,7 +4187,7 @@ int lua_ax_base_Texture2D_setAntiAliasTexParameters(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4245,7 +4234,7 @@ int lua_ax_base_Texture2D_setAliasTexParameters(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4292,7 +4281,7 @@ int lua_ax_base_Texture2D_getStringForFormat(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4390,7 +4379,7 @@ int lua_ax_base_Texture2D_getContentSizeInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4437,7 +4426,7 @@ int lua_ax_base_Texture2D_hasPremultipliedAlpha(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4484,7 +4473,7 @@ int lua_ax_base_Texture2D_setPremultipliedAlpha(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -4534,7 +4523,7 @@ int lua_ax_base_Texture2D_hasMipmaps(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4581,7 +4570,7 @@ int lua_ax_base_Texture2D_getPixelFormat(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4628,7 +4617,7 @@ int lua_ax_base_Texture2D_getSamplerFlags(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4675,7 +4664,7 @@ int lua_ax_base_Texture2D_getPixelsWide(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4722,7 +4711,7 @@ int lua_ax_base_Texture2D_getPixelsHigh(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4769,7 +4758,7 @@ int lua_ax_base_Texture2D_getRHITexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4816,7 +4805,7 @@ int lua_ax_base_Texture2D_getMaxS(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4863,7 +4852,7 @@ int lua_ax_base_Texture2D_setMaxS(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -4913,7 +4902,7 @@ int lua_ax_base_Texture2D_getMaxT(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -4960,7 +4949,7 @@ int lua_ax_base_Texture2D_setMaxT(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -5010,7 +4999,7 @@ int lua_ax_base_Texture2D_getContentSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5057,7 +5046,7 @@ int lua_ax_base_Texture2D_getPath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5091,7 +5080,7 @@ int lua_ax_base_Texture2D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5130,11 +5119,10 @@ int lua_register_ax_base_Texture2D(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_ax_base_Texture2D_constructor);
         tolua_function(tolua_S,"initWithImage",lua_ax_base_Texture2D_initWithImage);
         tolua_function(tolua_S,"initWithString",lua_ax_base_Texture2D_initWithString);
-        tolua_function(tolua_S,"updateWithSubData",lua_ax_base_Texture2D_updateWithSubData);
+        tolua_function(tolua_S,"updateData",lua_ax_base_Texture2D_updateData);
+        tolua_function(tolua_S,"updateSubData",lua_ax_base_Texture2D_updateSubData);
         tolua_function(tolua_S,"drawAtPoint",lua_ax_base_Texture2D_drawAtPoint);
         tolua_function(tolua_S,"drawInRect",lua_ax_base_Texture2D_drawInRect);
-        tolua_function(tolua_S,"updateTextureDesc",lua_ax_base_Texture2D_updateTextureDesc);
-        tolua_function(tolua_S,"setRenderTarget",lua_ax_base_Texture2D_setRenderTarget);
         tolua_function(tolua_S,"isRenderTarget",lua_ax_base_Texture2D_isRenderTarget);
         tolua_function(tolua_S,"setAntiAliasTexParameters",lua_ax_base_Texture2D_setAntiAliasTexParameters);
         tolua_function(tolua_S,"setAliasTexParameters",lua_ax_base_Texture2D_setAliasTexParameters);
@@ -5188,7 +5176,7 @@ int lua_ax_base_Component_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5235,7 +5223,7 @@ int lua_ax_base_Component_isEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5282,7 +5270,7 @@ int lua_ax_base_Component_setEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -5332,7 +5320,7 @@ int lua_ax_base_Component_getName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5379,7 +5367,7 @@ int lua_ax_base_Component_setName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -5429,7 +5417,7 @@ int lua_ax_base_Component_getOwner(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5476,7 +5464,7 @@ int lua_ax_base_Component_setOwner(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -5526,7 +5514,7 @@ int lua_ax_base_Component_update(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -5576,7 +5564,7 @@ int lua_ax_base_Component_onAdd(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5623,7 +5611,7 @@ int lua_ax_base_Component_onRemove(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5734,7 +5722,7 @@ int lua_ax_base_Node_getDescription(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5781,7 +5769,7 @@ int lua_ax_base_Node_setLocalZOrder(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -5831,7 +5819,7 @@ int lua_ax_base_Node_updateOrderOfArrival(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5878,7 +5866,7 @@ int lua_ax_base_Node_getLocalZOrder(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -5925,7 +5913,7 @@ int lua_ax_base_Node_setGlobalZOrder(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -5975,7 +5963,7 @@ int lua_ax_base_Node_getGlobalZOrder(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6022,7 +6010,7 @@ int lua_ax_base_Node_setScaleX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -6072,7 +6060,7 @@ int lua_ax_base_Node_getScaleX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6119,7 +6107,7 @@ int lua_ax_base_Node_setScaleY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -6169,7 +6157,7 @@ int lua_ax_base_Node_getScaleY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6216,7 +6204,7 @@ int lua_ax_base_Node_setScaleZ(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -6266,7 +6254,7 @@ int lua_ax_base_Node_getScaleZ(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6372,7 +6360,7 @@ int lua_ax_base_Node_getScale(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6478,7 +6466,7 @@ int lua_ax_base_Node_setPositionNormalized(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -6528,7 +6516,7 @@ int lua_ax_base_Node_setNormalizedPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -6578,7 +6566,7 @@ int lua_ax_base_Node_getPositionNormalized(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6625,7 +6613,7 @@ int lua_ax_base_Node_getNormalizedPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6672,7 +6660,7 @@ int lua_ax_base_Node_setPositionX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -6722,7 +6710,7 @@ int lua_ax_base_Node_getPositionX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6769,7 +6757,7 @@ int lua_ax_base_Node_setPositionY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -6819,7 +6807,7 @@ int lua_ax_base_Node_getPositionY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6866,7 +6854,7 @@ int lua_ax_base_Node_setPosition3D(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -6916,7 +6904,7 @@ int lua_ax_base_Node_getPosition3D(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -6963,7 +6951,7 @@ int lua_ax_base_Node_setPositionZ(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -7013,7 +7001,7 @@ int lua_ax_base_Node_getPositionZ(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7060,7 +7048,7 @@ int lua_ax_base_Node_setSkewX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -7110,7 +7098,7 @@ int lua_ax_base_Node_getSkewX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7157,7 +7145,7 @@ int lua_ax_base_Node_setSkewY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -7207,7 +7195,7 @@ int lua_ax_base_Node_getSkewY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7254,7 +7242,7 @@ int lua_ax_base_Node_getAnchorPoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7301,7 +7289,7 @@ int lua_ax_base_Node_getAnchorPointInPoints(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7348,7 +7336,7 @@ int lua_ax_base_Node_getContentSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7395,7 +7383,7 @@ int lua_ax_base_Node_hitTest(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -7445,7 +7433,7 @@ int lua_ax_base_Node_setVisible(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -7495,7 +7483,7 @@ int lua_ax_base_Node_isVisible(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7542,7 +7530,7 @@ int lua_ax_base_Node_setRotation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -7592,7 +7580,7 @@ int lua_ax_base_Node_getRotation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7639,7 +7627,7 @@ int lua_ax_base_Node_setRotation3D(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -7689,7 +7677,7 @@ int lua_ax_base_Node_getRotation3D(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7736,7 +7724,7 @@ int lua_ax_base_Node_setRotationSkewX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -7786,7 +7774,7 @@ int lua_ax_base_Node_getRotationSkewX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7833,7 +7821,7 @@ int lua_ax_base_Node_setRotationSkewY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -7883,7 +7871,7 @@ int lua_ax_base_Node_getRotationSkewY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -7930,7 +7918,7 @@ int lua_ax_base_Node_setIgnoreAnchorPointForPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -7980,7 +7968,7 @@ int lua_ax_base_Node_isIgnoreAnchorPointForPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -8126,7 +8114,7 @@ int lua_ax_base_Node_getChildByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -8176,7 +8164,7 @@ int lua_ax_base_Node_getChildByName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -8273,7 +8261,7 @@ int lua_ax_base_Node_getChildrenCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -8320,7 +8308,7 @@ int lua_ax_base_Node_setParent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -8468,7 +8456,7 @@ int lua_ax_base_Node_removeChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -8482,7 +8470,7 @@ int lua_ax_base_Node_removeChild(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         bool arg1;
@@ -8535,7 +8523,7 @@ int lua_ax_base_Node_removeChildByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -8549,7 +8537,7 @@ int lua_ax_base_Node_removeChildByTag(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         int arg0;
         bool arg1;
@@ -8602,7 +8590,7 @@ int lua_ax_base_Node_removeChildByName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -8616,7 +8604,7 @@ int lua_ax_base_Node_removeChildByName(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         bool arg1;
@@ -8720,7 +8708,7 @@ int lua_ax_base_Node_reorderChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         int arg1;
@@ -8773,7 +8761,7 @@ int lua_ax_base_Node_sortAllChildren(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -8820,7 +8808,7 @@ int lua_ax_base_Node_getTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -8867,7 +8855,7 @@ int lua_ax_base_Node_setTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -8917,7 +8905,7 @@ int lua_ax_base_Node_getName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -8964,7 +8952,7 @@ int lua_ax_base_Node_setName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -9014,7 +9002,7 @@ int lua_ax_base_Node_setUserObject(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Object* arg0;
 
@@ -9064,7 +9052,7 @@ int lua_ax_base_Node_isRunning(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -9111,7 +9099,7 @@ int lua_ax_base_Node_cleanup(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -9276,7 +9264,7 @@ int lua_ax_base_Node_getScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -9323,7 +9311,7 @@ int lua_ax_base_Node_getBoundingBox(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -9370,7 +9358,7 @@ int lua_ax_base_Node_setEventDispatcher(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventDispatcher* arg0;
 
@@ -9420,7 +9408,7 @@ int lua_ax_base_Node_getEventDispatcher(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -9467,7 +9455,7 @@ int lua_ax_base_Node_setActionManager(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionManager* arg0;
 
@@ -9564,7 +9552,7 @@ int lua_ax_base_Node_runAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Action* arg0;
 
@@ -9614,7 +9602,7 @@ int lua_ax_base_Node_stopAllActions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -9661,7 +9649,7 @@ int lua_ax_base_Node_stopAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Action* arg0;
 
@@ -9711,7 +9699,7 @@ int lua_ax_base_Node_stopActionByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -9761,7 +9749,7 @@ int lua_ax_base_Node_stopAllActionsByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -9811,7 +9799,7 @@ int lua_ax_base_Node_stopActionsByFlags(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -9861,7 +9849,7 @@ int lua_ax_base_Node_getActionByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -9911,7 +9899,7 @@ int lua_ax_base_Node_getNumberOfRunningActions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -9958,7 +9946,7 @@ int lua_ax_base_Node_getNumberOfRunningActionsByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -10008,7 +9996,7 @@ int lua_ax_base_Node_setScheduler(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Scheduler* arg0;
 
@@ -10105,7 +10093,7 @@ int lua_ax_base_Node_isScheduled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -10155,7 +10143,7 @@ int lua_ax_base_Node_resume(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10202,7 +10190,7 @@ int lua_ax_base_Node_pause(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10249,7 +10237,7 @@ int lua_ax_base_Node_update(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -10299,7 +10287,7 @@ int lua_ax_base_Node_updateTransform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10448,7 +10436,7 @@ int lua_ax_base_Node_setNodeToParentTransform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Mat4 arg0;
 
@@ -10498,7 +10486,7 @@ int lua_ax_base_Node_getParentToNodeTransform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10545,7 +10533,7 @@ int lua_ax_base_Node_getParentToNodeAffineTransform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10592,7 +10580,7 @@ int lua_ax_base_Node_getNodeToWorldTransform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10639,7 +10627,7 @@ int lua_ax_base_Node_getNodeToWorldAffineTransform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10686,7 +10674,7 @@ int lua_ax_base_Node_getWorldToNodeTransform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10733,7 +10721,7 @@ int lua_ax_base_Node_getWorldToNodeAffineTransform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -10780,7 +10768,7 @@ int lua_ax_base_Node_convertToNodeSpace(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -10830,7 +10818,7 @@ int lua_ax_base_Node_convertToWorldSpace(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -10880,7 +10868,7 @@ int lua_ax_base_Node_convertToNodeSpaceAR(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -10930,7 +10918,7 @@ int lua_ax_base_Node_convertToWorldSpaceAR(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -10980,7 +10968,7 @@ int lua_ax_base_Node_convertTouchToNodeSpace(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Touch* arg0;
 
@@ -11030,7 +11018,7 @@ int lua_ax_base_Node_convertTouchToNodeSpaceAR(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Touch* arg0;
 
@@ -11080,7 +11068,7 @@ int lua_ax_base_Node_getWorldPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -11127,7 +11115,7 @@ int lua_ax_base_Node_setWorldPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -11177,7 +11165,7 @@ int lua_ax_base_Node_getComponent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -11227,7 +11215,7 @@ int lua_ax_base_Node_addComponent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Component* arg0;
 
@@ -11332,7 +11320,7 @@ int lua_ax_base_Node_removeAllComponents(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -11379,7 +11367,7 @@ int lua_ax_base_Node_getOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -11426,7 +11414,7 @@ int lua_ax_base_Node_getDisplayedOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -11473,7 +11461,7 @@ int lua_ax_base_Node_setOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         uint16_t arg0;
 
@@ -11523,7 +11511,7 @@ int lua_ax_base_Node_updateDisplayedOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         uint16_t arg0;
 
@@ -11573,7 +11561,7 @@ int lua_ax_base_Node_isCascadeOpacityEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -11620,7 +11608,7 @@ int lua_ax_base_Node_setCascadeOpacityEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -11670,7 +11658,7 @@ int lua_ax_base_Node_getColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -11717,7 +11705,7 @@ int lua_ax_base_Node_getDisplayedColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -11764,7 +11752,7 @@ int lua_ax_base_Node_setColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -11814,7 +11802,7 @@ int lua_ax_base_Node_updateDisplayedColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -11864,7 +11852,7 @@ int lua_ax_base_Node_isCascadeColorEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -11911,7 +11899,7 @@ int lua_ax_base_Node_setCascadeColorEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -11961,7 +11949,7 @@ int lua_ax_base_Node_setOpacityModifyRGB(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -12011,7 +11999,7 @@ int lua_ax_base_Node_isOpacityModifyRGB(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -12058,7 +12046,7 @@ int lua_ax_base_Node_setOnEnterCallback(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::function<void ()> arg0;
 
@@ -12112,7 +12100,7 @@ int lua_ax_base_Node_setOnExitCallback(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::function<void ()> arg0;
 
@@ -12166,7 +12154,7 @@ int lua_ax_base_Node_setOnEnterTransitionDidFinishCallback(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::function<void ()> arg0;
 
@@ -12220,7 +12208,7 @@ int lua_ax_base_Node_getOnEnterTransitionDidFinishCallback(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -12267,7 +12255,7 @@ int lua_ax_base_Node_setOnExitTransitionDidStartCallback(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::function<void ()> arg0;
 
@@ -12321,7 +12309,7 @@ int lua_ax_base_Node_getOnExitTransitionDidStartCallback(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -12368,7 +12356,7 @@ int lua_ax_base_Node_getCameraMask(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -12415,7 +12403,7 @@ int lua_ax_base_Node_setCameraMask(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned short arg0;
 
@@ -12429,7 +12417,7 @@ int lua_ax_base_Node_setCameraMask(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         unsigned short arg0;
         bool arg1;
@@ -12482,7 +12470,7 @@ int lua_ax_base_Node_applyMaskOnEnter(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -12603,7 +12591,7 @@ int lua_ax_base_Node_setProgramStateWithRegistry(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         unsigned int arg0;
         ax::Texture2D* arg1;
@@ -12656,7 +12644,7 @@ int lua_ax_base_Node_setProgramStateByProgramId(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned long long arg0;
 
@@ -12706,7 +12694,7 @@ int lua_ax_base_Node_getProgramState(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -12753,7 +12741,7 @@ int lua_ax_base_Node_updateProgramStateTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -12803,7 +12791,7 @@ int lua_ax_base_Node_resetChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         bool arg1;
@@ -12856,7 +12844,7 @@ int lua_ax_base_Node_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -12903,7 +12891,7 @@ int lua_ax_base_Node_initLayer(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -12950,7 +12938,7 @@ int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::PhysicsBody* arg0;
 
@@ -13000,7 +12988,7 @@ int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13102,7 +13090,7 @@ int lua_ax_base_Node_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13320,7 +13308,7 @@ int lua_ax_base_Image_initWithImageFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -13370,7 +13358,7 @@ int lua_ax_base_Image_flipRawData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13417,7 +13405,7 @@ int lua_ax_base_Image_getFileType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13464,7 +13452,7 @@ int lua_ax_base_Image_getPixelFormat(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13511,7 +13499,7 @@ int lua_ax_base_Image_getWidth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13558,7 +13546,7 @@ int lua_ax_base_Image_getHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13605,7 +13593,7 @@ int lua_ax_base_Image_getNumberOfMipmaps(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13652,7 +13640,7 @@ int lua_ax_base_Image_hasPremultipliedAlpha(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13699,7 +13687,7 @@ int lua_ax_base_Image_getFilePath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13746,7 +13734,7 @@ int lua_ax_base_Image_getBitPerPixel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13793,7 +13781,7 @@ int lua_ax_base_Image_hasAlpha(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13840,7 +13828,7 @@ int lua_ax_base_Image_isCompressed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -13887,7 +13875,7 @@ int lua_ax_base_Image_saveToFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -13901,7 +13889,7 @@ int lua_ax_base_Image_saveToFile(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         bool arg1;
@@ -13954,7 +13942,7 @@ int lua_ax_base_Image_premultiplyAlpha(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14001,7 +13989,7 @@ int lua_ax_base_Image_reversePremultipliedAlpha(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14145,7 +14133,7 @@ int lua_ax_base_Image_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14233,7 +14221,7 @@ int lua_ax_base_PolygonInfo_setQuad(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::V3F_T2F_C4B_Quad* arg0;
 
@@ -14284,7 +14272,7 @@ int lua_ax_base_PolygonInfo_setQuads(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::V3F_T2F_C4B_Quad* arg0;
         int arg1;
@@ -14338,7 +14326,7 @@ int lua_ax_base_PolygonInfo_setTriangles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TrianglesCommand::Triangles arg0;
 
@@ -14389,7 +14377,7 @@ int lua_ax_base_PolygonInfo_getVertCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14436,7 +14424,7 @@ int lua_ax_base_PolygonInfo_getTrianglesCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14483,7 +14471,7 @@ int lua_ax_base_PolygonInfo_getArea(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14530,7 +14518,7 @@ int lua_ax_base_PolygonInfo_getRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14577,7 +14565,7 @@ int lua_ax_base_PolygonInfo_setRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -14627,7 +14615,7 @@ int lua_ax_base_PolygonInfo_getFilename(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14674,7 +14662,7 @@ int lua_ax_base_PolygonInfo_setFilename(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -14711,7 +14699,7 @@ int lua_ax_base_PolygonInfo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14776,7 +14764,7 @@ int lua_ax_base_AutoPolygon_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -14847,7 +14835,7 @@ int lua_ax_base_SpriteFrame_getRectInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14894,7 +14882,7 @@ int lua_ax_base_SpriteFrame_setRectInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -14944,7 +14932,7 @@ int lua_ax_base_SpriteFrame_isRotated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -14991,7 +14979,7 @@ int lua_ax_base_SpriteFrame_setRotated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -15041,7 +15029,7 @@ int lua_ax_base_SpriteFrame_getRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15088,7 +15076,7 @@ int lua_ax_base_SpriteFrame_setRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -15138,7 +15126,7 @@ int lua_ax_base_SpriteFrame_getCenterRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15185,7 +15173,7 @@ int lua_ax_base_SpriteFrame_setCenterRectInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -15235,7 +15223,7 @@ int lua_ax_base_SpriteFrame_hasCenterRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15282,7 +15270,7 @@ int lua_ax_base_SpriteFrame_getOffsetInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15329,7 +15317,7 @@ int lua_ax_base_SpriteFrame_setOffsetInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -15379,7 +15367,7 @@ int lua_ax_base_SpriteFrame_getOriginalSizeInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15426,7 +15414,7 @@ int lua_ax_base_SpriteFrame_setOriginalSizeInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -15476,7 +15464,7 @@ int lua_ax_base_SpriteFrame_getOriginalSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15523,7 +15511,7 @@ int lua_ax_base_SpriteFrame_setOriginalSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -15573,7 +15561,7 @@ int lua_ax_base_SpriteFrame_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15620,7 +15608,7 @@ int lua_ax_base_SpriteFrame_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -15670,7 +15658,7 @@ int lua_ax_base_SpriteFrame_getOffset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15717,7 +15705,7 @@ int lua_ax_base_SpriteFrame_setOffset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -15767,7 +15755,7 @@ int lua_ax_base_SpriteFrame_getAnchorPoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15814,7 +15802,7 @@ int lua_ax_base_SpriteFrame_setAnchorPoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -15864,7 +15852,7 @@ int lua_ax_base_SpriteFrame_hasAnchorPoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -15911,7 +15899,7 @@ int lua_ax_base_SpriteFrame_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -16108,7 +16096,7 @@ int lua_ax_base_SpriteFrame_getName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -16143,7 +16131,7 @@ int lua_ax_base_SpriteFrame_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -16168,7 +16156,7 @@ int lua_ax_base_SpriteFrame_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -16206,7 +16194,7 @@ int lua_ax_base_SpriteFrame_createWithTexture(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -16231,7 +16219,7 @@ int lua_ax_base_SpriteFrame_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -16268,7 +16256,7 @@ int lua_ax_base_SpriteFrame_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -16366,7 +16354,7 @@ int lua_ax_base_AnimationFrame_getSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -16413,7 +16401,7 @@ int lua_ax_base_AnimationFrame_setSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -16463,7 +16451,7 @@ int lua_ax_base_AnimationFrame_getDelayUnits(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -16510,7 +16498,7 @@ int lua_ax_base_AnimationFrame_setDelayUnits(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -16607,7 +16595,7 @@ int lua_ax_base_AnimationFrame_setUserInfo(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ValueMap arg0;
 
@@ -16657,7 +16645,7 @@ int lua_ax_base_AnimationFrame_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -16704,7 +16692,7 @@ int lua_ax_base_AnimationFrame_initWithSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::SpriteFrame* arg0;
         double arg1;
@@ -16787,7 +16775,7 @@ int lua_ax_base_AnimationFrame_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -16866,7 +16854,7 @@ int lua_ax_base_Animation_addSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -16916,7 +16904,7 @@ int lua_ax_base_Animation_addSpriteFrameWithFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -16966,7 +16954,7 @@ int lua_ax_base_Animation_addSpriteFrameWithTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Texture2D* arg0;
         ax::Rect arg1;
@@ -17019,7 +17007,7 @@ int lua_ax_base_Animation_getTotalDelayUnits(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17066,7 +17054,7 @@ int lua_ax_base_Animation_setDelayPerUnit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -17116,7 +17104,7 @@ int lua_ax_base_Animation_getDelayPerUnit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17163,7 +17151,7 @@ int lua_ax_base_Animation_getDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17210,7 +17198,7 @@ int lua_ax_base_Animation_getFrames(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17257,7 +17245,7 @@ int lua_ax_base_Animation_setFrames(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::AnimationFrame *> arg0;
 
@@ -17307,7 +17295,7 @@ int lua_ax_base_Animation_getRestoreOriginalFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17354,7 +17342,7 @@ int lua_ax_base_Animation_setRestoreOriginalFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -17404,7 +17392,7 @@ int lua_ax_base_Animation_getLoops(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17451,7 +17439,7 @@ int lua_ax_base_Animation_setLoops(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -17501,7 +17489,7 @@ int lua_ax_base_Animation_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17548,7 +17536,7 @@ int lua_ax_base_Animation_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17595,7 +17583,7 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::SpriteFrame *> arg0;
 
@@ -17609,7 +17597,7 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Vector<ax::SpriteFrame *> arg0;
         double arg1;
@@ -17626,7 +17614,7 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Vector<ax::SpriteFrame *> arg0;
         double arg1;
@@ -17682,7 +17670,7 @@ int lua_ax_base_Animation_initWithAnimationFrames(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Vector<ax::AnimationFrame *> arg0;
         double arg1;
@@ -17726,7 +17714,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -17742,7 +17730,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -17761,7 +17749,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -17860,7 +17848,7 @@ int lua_ax_base_Animation_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17949,7 +17937,7 @@ int lua_ax_base_ActionInterval_getElapsed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -17996,7 +17984,7 @@ int lua_ax_base_ActionInterval_setAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -18046,7 +18034,7 @@ int lua_ax_base_ActionInterval_getAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -18093,7 +18081,7 @@ int lua_ax_base_ActionInterval_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -18166,7 +18154,7 @@ int lua_ax_base_Sequence_initWithTwoActions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::FiniteTimeAction* arg0;
         ax::FiniteTimeAction* arg1;
@@ -18219,7 +18207,7 @@ int lua_ax_base_Sequence_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::FiniteTimeAction *> arg0;
 
@@ -18256,7 +18244,7 @@ int lua_ax_base_Sequence_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -18328,7 +18316,7 @@ int lua_ax_base_Repeat_setInnerAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::FiniteTimeAction* arg0;
 
@@ -18378,7 +18366,7 @@ int lua_ax_base_Repeat_getInnerAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -18425,7 +18413,7 @@ int lua_ax_base_Repeat_initWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::FiniteTimeAction* arg0;
         unsigned int arg1;
@@ -18503,7 +18491,7 @@ int lua_ax_base_Repeat_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -18577,7 +18565,7 @@ int lua_ax_base_RepeatForever_setInnerAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -18627,7 +18615,7 @@ int lua_ax_base_RepeatForever_getInnerAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -18674,7 +18662,7 @@ int lua_ax_base_RepeatForever_initWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -18747,7 +18735,7 @@ int lua_ax_base_RepeatForever_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -18821,7 +18809,7 @@ int lua_ax_base_Spawn_initWithTwoActions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::FiniteTimeAction* arg0;
         ax::FiniteTimeAction* arg1;
@@ -18874,7 +18862,7 @@ int lua_ax_base_Spawn_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::FiniteTimeAction *> arg0;
 
@@ -18911,7 +18899,7 @@ int lua_ax_base_Spawn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -19038,7 +19026,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -19054,7 +19042,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -19073,7 +19061,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -19110,7 +19098,7 @@ int lua_ax_base_RotateTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -19253,7 +19241,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -19272,7 +19260,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -19288,7 +19276,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -19325,7 +19313,7 @@ int lua_ax_base_RotateBy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -19448,7 +19436,7 @@ int lua_ax_base_MoveBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -19464,7 +19452,7 @@ int lua_ax_base_MoveBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -19501,7 +19489,7 @@ int lua_ax_base_MoveBy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -19624,7 +19612,7 @@ int lua_ax_base_MoveTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -19640,7 +19628,7 @@ int lua_ax_base_MoveTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -19677,7 +19665,7 @@ int lua_ax_base_MoveTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -19749,7 +19737,7 @@ int lua_ax_base_SkewTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         double arg1;
@@ -19832,7 +19820,7 @@ int lua_ax_base_SkewTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -19904,7 +19892,7 @@ int lua_ax_base_SkewBy_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         double arg1;
@@ -19987,7 +19975,7 @@ int lua_ax_base_SkewBy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -20059,7 +20047,7 @@ int lua_ax_base_JumpBy_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -20147,7 +20135,7 @@ int lua_ax_base_JumpBy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -20219,7 +20207,7 @@ int lua_ax_base_JumpTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -20307,7 +20295,7 @@ int lua_ax_base_JumpTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -20379,7 +20367,7 @@ int lua_ax_base_BezierBy_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         ax::BezierConfig arg1;
@@ -20420,7 +20408,7 @@ int lua_ax_base_BezierBy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -20491,7 +20479,7 @@ int lua_ax_base_BezierTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         ax::BezierConfig arg1;
@@ -20532,7 +20520,7 @@ int lua_ax_base_BezierTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -20682,7 +20670,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -20701,7 +20689,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -20717,7 +20705,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -20760,7 +20748,7 @@ int lua_ax_base_ScaleTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -20820,7 +20808,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -20839,7 +20827,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -20855,7 +20843,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -20898,7 +20886,7 @@ int lua_ax_base_ScaleBy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -20969,7 +20957,7 @@ int lua_ax_base_Blink_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         int arg1;
@@ -21047,7 +21035,7 @@ int lua_ax_base_Blink_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -21119,7 +21107,7 @@ int lua_ax_base_FadeTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         uint16_t arg1;
@@ -21197,7 +21185,7 @@ int lua_ax_base_FadeTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -21269,7 +21257,7 @@ int lua_ax_base_FadeIn_setReverseAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::FadeTo* arg0;
 
@@ -21342,7 +21330,7 @@ int lua_ax_base_FadeIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -21414,7 +21402,7 @@ int lua_ax_base_FadeOut_setReverseAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::FadeTo* arg0;
 
@@ -21487,7 +21475,7 @@ int lua_ax_base_FadeOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -21559,7 +21547,7 @@ int lua_ax_base_TintTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         ax::Color32 arg1;
@@ -21600,7 +21588,7 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -21616,7 +21604,7 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -21659,7 +21647,7 @@ int lua_ax_base_TintTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -21731,7 +21719,7 @@ int lua_ax_base_TintBy_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         int32_t arg1;
@@ -21819,7 +21807,7 @@ int lua_ax_base_TintBy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -21914,7 +21902,7 @@ int lua_ax_base_DelayTime_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -21985,7 +21973,7 @@ int lua_ax_base_Animate_setAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Animation* arg0;
 
@@ -22082,7 +22070,7 @@ int lua_ax_base_Animate_getCurrentFrameIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -22129,7 +22117,7 @@ int lua_ax_base_Animate_initWithAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Animation* arg0;
 
@@ -22202,7 +22190,7 @@ int lua_ax_base_Animate_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -22277,7 +22265,7 @@ int lua_ax_base_TargetedAction_setForcedTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -22374,7 +22362,7 @@ int lua_ax_base_TargetedAction_initWithTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         ax::FiniteTimeAction* arg1;
@@ -22452,7 +22440,7 @@ int lua_ax_base_TargetedAction_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -22526,7 +22514,7 @@ int lua_ax_base_ActionFloat_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         double arg1;
@@ -22622,7 +22610,7 @@ int lua_ax_base_ActionFloat_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -22694,7 +22682,7 @@ int lua_ax_base_Scene_getDefaultCamera(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -22741,7 +22729,7 @@ int lua_ax_base_Scene_render(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Renderer* arg0;
         ax::Mat4 arg1;
@@ -22758,7 +22746,7 @@ int lua_ax_base_Scene_render(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Renderer* arg0;
         ax::Mat4 arg1;
@@ -22814,7 +22802,7 @@ int lua_ax_base_Scene_initWithSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -22864,7 +22852,7 @@ int lua_ax_base_Scene_setCameraOrderDirty(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -22911,7 +22899,7 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventCustom* arg0;
 
@@ -22961,7 +22949,7 @@ int lua_ax_base_Scene_getPhysicsWorld(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23008,7 +22996,7 @@ int lua_ax_base_Scene_initWithPhysics(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23055,7 +23043,7 @@ int lua_ax_base_Scene_initPhysicsWorld(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23102,7 +23090,7 @@ int lua_ax_base_Scene_fixedUpdate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -23152,7 +23140,7 @@ int lua_ax_base_Scene_stepPhysicsAndNavigation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -23293,7 +23281,7 @@ int lua_ax_base_Scene_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23376,7 +23364,7 @@ int lua_ax_base_RenderView_end(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23423,7 +23411,7 @@ int lua_ax_base_RenderView_isGfxContextReady(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23470,7 +23458,7 @@ int lua_ax_base_RenderView_swapBuffers(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23517,7 +23505,7 @@ int lua_ax_base_RenderView_setIMEKeyboardState(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -23567,7 +23555,7 @@ int lua_ax_base_RenderView_windowShouldClose(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23614,7 +23602,7 @@ int lua_ax_base_RenderView_pollEvents(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23661,7 +23649,7 @@ int lua_ax_base_RenderView_getFrameSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23708,7 +23696,7 @@ int lua_ax_base_RenderView_setFrameSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         double arg1;
@@ -23761,7 +23749,7 @@ int lua_ax_base_RenderView_setFrameZoomFactor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -23811,7 +23799,7 @@ int lua_ax_base_RenderView_getFrameZoomFactor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23858,7 +23846,7 @@ int lua_ax_base_RenderView_setCursorVisible(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -23908,7 +23896,7 @@ int lua_ax_base_RenderView_getRetinaFactor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -23955,7 +23943,7 @@ int lua_ax_base_RenderView_setContentScaleFactor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -24005,7 +23993,7 @@ int lua_ax_base_RenderView_getContentScaleFactor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24052,7 +24040,7 @@ int lua_ax_base_RenderView_isRetinaDisplay(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24099,7 +24087,7 @@ int lua_ax_base_RenderView_getVisibleSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24146,7 +24134,7 @@ int lua_ax_base_RenderView_getVisibleOrigin(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24193,7 +24181,7 @@ int lua_ax_base_RenderView_getVisibleRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24240,7 +24228,7 @@ int lua_ax_base_RenderView_getSafeAreaRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24287,7 +24275,7 @@ int lua_ax_base_RenderView_setDesignResolutionSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         double arg1;
@@ -24343,7 +24331,7 @@ int lua_ax_base_RenderView_getDesignResolutionSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24390,7 +24378,7 @@ int lua_ax_base_RenderView_setViewPortInPoints(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         double arg1;
@@ -24449,7 +24437,7 @@ int lua_ax_base_RenderView_setScissorInPoints(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         double arg1;
@@ -24508,7 +24496,7 @@ int lua_ax_base_RenderView_isScissorEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24555,7 +24543,7 @@ int lua_ax_base_RenderView_getScissorRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24602,7 +24590,7 @@ int lua_ax_base_RenderView_setViewName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -24652,7 +24640,7 @@ int lua_ax_base_RenderView_getViewName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24754,7 +24742,7 @@ int lua_ax_base_RenderView_setDefaultIcon(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24801,7 +24789,7 @@ int lua_ax_base_RenderView_getViewPortRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24848,7 +24836,7 @@ int lua_ax_base_RenderView_getScaleX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24895,7 +24883,7 @@ int lua_ax_base_RenderView_getScaleY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24942,7 +24930,7 @@ int lua_ax_base_RenderView_getResolutionPolicy(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -24989,7 +24977,7 @@ int lua_ax_base_RenderView_renderScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Scene* arg0;
         ax::Renderer* arg1;
@@ -25042,7 +25030,7 @@ int lua_ax_base_RenderView_setInteractive(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -25219,7 +25207,7 @@ int lua_ax_base_Director_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25266,7 +25254,7 @@ int lua_ax_base_Director_getRunningScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25313,7 +25301,7 @@ int lua_ax_base_Director_getNextScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25360,7 +25348,7 @@ int lua_ax_base_Director_getAnimationInterval(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25407,7 +25395,7 @@ int lua_ax_base_Director_setAnimationInterval(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -25457,7 +25445,7 @@ int lua_ax_base_Director_isStatsDisplay(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25504,7 +25492,7 @@ int lua_ax_base_Director_setStatsDisplay(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -25554,7 +25542,7 @@ int lua_ax_base_Director_getSecondsPerFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25601,7 +25589,7 @@ int lua_ax_base_Director_setStatsAnchor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25612,7 +25600,7 @@ int lua_ax_base_Director_setStatsAnchor(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::AnchorPreset arg0;
 
@@ -25662,7 +25650,7 @@ int lua_ax_base_Director_getRenderView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25709,7 +25697,7 @@ int lua_ax_base_Director_setRenderView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::RenderView* arg0;
 
@@ -25759,7 +25747,7 @@ int lua_ax_base_Director_getTextureCache(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25806,7 +25794,7 @@ int lua_ax_base_Director_isNextDeltaTimeZero(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25853,7 +25841,7 @@ int lua_ax_base_Director_setNextDeltaTimeZero(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -25903,7 +25891,7 @@ int lua_ax_base_Director_isPaused(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25950,7 +25938,7 @@ int lua_ax_base_Director_getTotalFrames(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -25997,7 +25985,7 @@ int lua_ax_base_Director_setProjection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Director::Projection arg0;
 
@@ -26047,7 +26035,7 @@ int lua_ax_base_Director_setViewport(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26094,7 +26082,7 @@ int lua_ax_base_Director_isSendCleanupToScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26141,7 +26129,7 @@ int lua_ax_base_Director_getNotificationNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26188,7 +26176,7 @@ int lua_ax_base_Director_setNotificationNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -26238,7 +26226,7 @@ int lua_ax_base_Director_getWinSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26285,7 +26273,7 @@ int lua_ax_base_Director_getWinSizeInPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26332,7 +26320,7 @@ int lua_ax_base_Director_getVisibleSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26379,7 +26367,7 @@ int lua_ax_base_Director_getVisibleOrigin(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26426,7 +26414,7 @@ int lua_ax_base_Director_getSafeAreaRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26473,7 +26461,7 @@ int lua_ax_base_Director_convertToGL(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -26523,7 +26511,7 @@ int lua_ax_base_Director_convertToUI(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -26573,7 +26561,7 @@ int lua_ax_base_Director_getZEye(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26620,7 +26608,7 @@ int lua_ax_base_Director_runWithScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Scene* arg0;
 
@@ -26670,7 +26658,7 @@ int lua_ax_base_Director_pushScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Scene* arg0;
 
@@ -26720,7 +26708,7 @@ int lua_ax_base_Director_popScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26767,7 +26755,7 @@ int lua_ax_base_Director_popToRootScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26814,7 +26802,7 @@ int lua_ax_base_Director_popToSceneStackLevel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -26864,7 +26852,7 @@ int lua_ax_base_Director_replaceScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Scene* arg0;
 
@@ -26914,7 +26902,7 @@ int lua_ax_base_Director_end(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -26961,7 +26949,7 @@ int lua_ax_base_Director_pause(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27008,7 +26996,7 @@ int lua_ax_base_Director_resume(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27055,7 +27043,7 @@ int lua_ax_base_Director_restart(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27102,7 +27090,7 @@ int lua_ax_base_Director_stopAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27149,7 +27137,7 @@ int lua_ax_base_Director_startAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27196,7 +27184,7 @@ int lua_ax_base_Director_drawScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27243,7 +27231,7 @@ int lua_ax_base_Director_purgeCachedData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27290,7 +27278,7 @@ int lua_ax_base_Director_setDefaultValues(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27337,7 +27325,7 @@ int lua_ax_base_Director_setGLDefaultValues(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27384,7 +27372,7 @@ int lua_ax_base_Director_setClearColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color arg0;
 
@@ -27485,7 +27473,7 @@ int lua_ax_base_Director_setContentScaleFactor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -27535,7 +27523,7 @@ int lua_ax_base_Director_getContentScaleFactor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27582,7 +27570,7 @@ int lua_ax_base_Director_getScheduler(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27629,7 +27617,7 @@ int lua_ax_base_Director_setScheduler(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Scheduler* arg0;
 
@@ -27679,7 +27667,7 @@ int lua_ax_base_Director_getActionManager(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27726,7 +27714,7 @@ int lua_ax_base_Director_setActionManager(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionManager* arg0;
 
@@ -27776,7 +27764,7 @@ int lua_ax_base_Director_getEventDispatcher(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27823,7 +27811,7 @@ int lua_ax_base_Director_setEventDispatcher(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventDispatcher* arg0;
 
@@ -27873,7 +27861,7 @@ int lua_ax_base_Director_getRenderer(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27920,7 +27908,7 @@ int lua_ax_base_Director_getDeltaTime(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -27967,7 +27955,7 @@ int lua_ax_base_Director_getFrameRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28014,7 +28002,7 @@ int lua_ax_base_Director_pushMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::MATRIX_STACK_TYPE arg0;
 
@@ -28064,7 +28052,7 @@ int lua_ax_base_Director_popMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::MATRIX_STACK_TYPE arg0;
 
@@ -28114,7 +28102,7 @@ int lua_ax_base_Director_loadIdentityMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::MATRIX_STACK_TYPE arg0;
 
@@ -28164,7 +28152,7 @@ int lua_ax_base_Director_loadMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::MATRIX_STACK_TYPE arg0;
         ax::Mat4 arg1;
@@ -28217,7 +28205,7 @@ int lua_ax_base_Director_multiplyMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::MATRIX_STACK_TYPE arg0;
         ax::Mat4 arg1;
@@ -28270,7 +28258,7 @@ int lua_ax_base_Director_getMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::MATRIX_STACK_TYPE arg0;
 
@@ -28320,7 +28308,7 @@ int lua_ax_base_Director_resetMatrixStack(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28367,7 +28355,7 @@ int lua_ax_base_Director_getAxmolThreadId(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28414,7 +28402,7 @@ int lua_ax_base_Director_setChildrenIndexerEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -28464,7 +28452,7 @@ int lua_ax_base_Director_isChildrenIndexerEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28511,7 +28499,7 @@ int lua_ax_base_Director_isValid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28716,7 +28704,7 @@ int lua_ax_base_Properties_getNextProperty(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28763,7 +28751,7 @@ int lua_ax_base_Properties_getNextNamespace(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28810,7 +28798,7 @@ int lua_ax_base_Properties_rewind(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28944,7 +28932,7 @@ int lua_ax_base_Properties_getId(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -28991,7 +28979,7 @@ int lua_ax_base_Properties_exists(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         const char* arg0;
 
@@ -29041,7 +29029,7 @@ int lua_ax_base_Properties_getType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -29052,7 +29040,7 @@ int lua_ax_base_Properties_getType(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         const char* arg0;
 
@@ -29102,7 +29090,7 @@ int lua_ax_base_Properties_getString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -29113,7 +29101,7 @@ int lua_ax_base_Properties_getString(lua_State* tolua_S)
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         const char* arg0;
 
@@ -29127,7 +29115,7 @@ int lua_ax_base_Properties_getString(lua_State* tolua_S)
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         const char* arg1;
@@ -29180,7 +29168,7 @@ int lua_ax_base_Properties_setString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         const char* arg1;
@@ -29233,7 +29221,7 @@ int lua_ax_base_Properties_getBool(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -29244,7 +29232,7 @@ int lua_ax_base_Properties_getBool(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         const char* arg0;
 
@@ -29258,7 +29246,7 @@ int lua_ax_base_Properties_getBool(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         bool arg1;
@@ -29311,7 +29299,7 @@ int lua_ax_base_Properties_getInt(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -29322,7 +29310,7 @@ int lua_ax_base_Properties_getInt(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         const char* arg0;
 
@@ -29372,7 +29360,7 @@ int lua_ax_base_Properties_getFloat(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -29383,7 +29371,7 @@ int lua_ax_base_Properties_getFloat(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         const char* arg0;
 
@@ -29433,7 +29421,7 @@ int lua_ax_base_Properties_getMat4(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         ax::Mat4* arg1;
@@ -29486,7 +29474,7 @@ int lua_ax_base_Properties_getVec2(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         ax::Vec2* arg1;
@@ -29539,7 +29527,7 @@ int lua_ax_base_Properties_getVec3(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         ax::Vec3* arg1;
@@ -29592,7 +29580,7 @@ int lua_ax_base_Properties_getVec4(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         ax::Vec4* arg1;
@@ -29645,7 +29633,7 @@ int lua_ax_base_Properties_getQuaternionFromAxisAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         ax::Quaternion* arg1;
@@ -29698,7 +29686,7 @@ int lua_ax_base_Properties_getColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         ax::Color* arg1;
@@ -29752,7 +29740,7 @@ int lua_ax_base_Properties_getPath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         std::string* arg1;
@@ -29806,7 +29794,7 @@ int lua_ax_base_Properties_getVariable(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         const char* arg0;
 
@@ -29820,7 +29808,7 @@ int lua_ax_base_Properties_getVariable(lua_State* tolua_S)
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         const char* arg1;
@@ -29873,7 +29861,7 @@ int lua_ax_base_Properties_setVariable(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         const char* arg1;
@@ -30162,7 +30150,7 @@ int lua_ax_base_Timer_setupTimerWithInterval(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         unsigned int arg1;
@@ -30218,7 +30206,7 @@ int lua_ax_base_Timer_setAborted(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -30265,7 +30253,7 @@ int lua_ax_base_Timer_isAborted(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -30312,7 +30300,7 @@ int lua_ax_base_Timer_isExhausted(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -30359,7 +30347,7 @@ int lua_ax_base_Timer_trigger(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -30409,7 +30397,7 @@ int lua_ax_base_Timer_cancel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -30456,7 +30444,7 @@ int lua_ax_base_Timer_update(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -30532,7 +30520,7 @@ int lua_ax_base_Scheduler_getTimeScale(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -30579,7 +30567,7 @@ int lua_ax_base_Scheduler_setTimeScale(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -30629,7 +30617,7 @@ int lua_ax_base_Scheduler_runOnAxmolThread(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::function<void ()> arg0;
 
@@ -30683,7 +30671,7 @@ int lua_ax_base_Scheduler_removeAllPendingActions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -30717,7 +30705,7 @@ int lua_ax_base_Scheduler_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -31145,7 +31133,7 @@ int lua_ax_base_UserDefault_setBoolForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         bool arg1;
@@ -31198,7 +31186,7 @@ int lua_ax_base_UserDefault_setIntegerForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         int arg1;
@@ -31251,7 +31239,7 @@ int lua_ax_base_UserDefault_setLargeIntForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         long long arg1;
@@ -31304,7 +31292,7 @@ int lua_ax_base_UserDefault_setFloatForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         double arg1;
@@ -31357,7 +31345,7 @@ int lua_ax_base_UserDefault_setDoubleForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         double arg1;
@@ -31410,7 +31398,7 @@ int lua_ax_base_UserDefault_setStringForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         std::string_view arg1;
@@ -31463,7 +31451,7 @@ int lua_ax_base_UserDefault_flush(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -31510,7 +31498,7 @@ int lua_ax_base_UserDefault_deleteValueForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         const char* arg0;
 
@@ -31560,7 +31548,7 @@ int lua_ax_base_UserDefault_setEncryptEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         bool arg0;
         std::string_view arg1;
@@ -31733,7 +31721,7 @@ int lua_ax_base_FileUtils_purgeCachedEntries(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -31780,7 +31768,7 @@ int lua_ax_base_FileUtils_getStringFromFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -31830,7 +31818,7 @@ int lua_ax_base_FileUtils_fullPathForFilename(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -31880,7 +31868,7 @@ int lua_ax_base_FileUtils_fullPathFromRelativeFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -31933,7 +31921,7 @@ int lua_ax_base_FileUtils_fullPathForDirectory(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -31983,7 +31971,7 @@ int lua_ax_base_FileUtils_setSearchPaths(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::vector<std::string> arg0;
 
@@ -32033,7 +32021,7 @@ int lua_ax_base_FileUtils_getDefaultResourceRootPath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -32080,7 +32068,7 @@ int lua_ax_base_FileUtils_setDefaultResourceRootPath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -32130,7 +32118,7 @@ int lua_ax_base_FileUtils_addSearchPath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -32144,7 +32132,7 @@ int lua_ax_base_FileUtils_addSearchPath(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         bool arg1;
@@ -32197,7 +32185,7 @@ int lua_ax_base_FileUtils_getSearchPaths(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -32244,7 +32232,7 @@ int lua_ax_base_FileUtils_getOriginalSearchPaths(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -32291,7 +32279,7 @@ int lua_ax_base_FileUtils_getWritablePath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -32338,7 +32326,7 @@ int lua_ax_base_FileUtils_getNativeWritableAbsolutePath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -32385,7 +32373,7 @@ int lua_ax_base_FileUtils_setWritablePath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -32435,7 +32423,7 @@ int lua_ax_base_FileUtils_setPopupNotify(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -32485,7 +32473,7 @@ int lua_ax_base_FileUtils_isPopupNotify(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -32532,7 +32520,7 @@ int lua_ax_base_FileUtils_getValueMapFromFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -32582,7 +32570,7 @@ int lua_ax_base_FileUtils_getValueMapFromData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const char* arg0;
         int arg1;
@@ -32635,7 +32623,7 @@ int lua_ax_base_FileUtils_writeToFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ValueMap arg0;
         std::string_view arg1;
@@ -32688,7 +32676,7 @@ int lua_ax_base_FileUtils_writeStringToFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -32741,7 +32729,7 @@ int lua_ax_base_FileUtils_writeValueMapToFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ValueMap arg0;
         std::string_view arg1;
@@ -32794,7 +32782,7 @@ int lua_ax_base_FileUtils_writeValueVectorToFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ValueVector arg0;
         std::string_view arg1;
@@ -32847,7 +32835,7 @@ int lua_ax_base_FileUtils_getValueVectorFromFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -32897,7 +32885,7 @@ int lua_ax_base_FileUtils_isFileExist(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -32947,7 +32935,7 @@ int lua_ax_base_FileUtils_isAbsolutePath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -32997,7 +32985,7 @@ int lua_ax_base_FileUtils_isDirectoryExist(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33047,7 +33035,7 @@ int lua_ax_base_FileUtils_createDirectories(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33097,7 +33085,7 @@ int lua_ax_base_FileUtils_removeDirectory(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33147,7 +33135,7 @@ int lua_ax_base_FileUtils_removeFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33264,7 +33252,7 @@ int lua_ax_base_FileUtils_getFileSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33314,7 +33302,7 @@ int lua_ax_base_FileUtils_listFiles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33364,7 +33352,7 @@ int lua_ax_base_FileUtils_listFilesRecursively(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::vector<std::string>* arg1;
@@ -33417,7 +33405,7 @@ int lua_ax_base_FileUtils_isFileExistInternal(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33467,7 +33455,7 @@ int lua_ax_base_FileUtils_isDirectoryExistInternal(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33887,7 +33875,7 @@ int lua_ax_base_EventCustom_getEventName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -33921,7 +33909,7 @@ int lua_ax_base_EventCustom_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -33995,7 +33983,7 @@ int lua_ax_base_EventDispatcher_addEventListenerWithSceneGraphPriority(lua_State
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::EventListener* arg0;
         ax::Node* arg1;
@@ -34048,7 +34036,7 @@ int lua_ax_base_EventDispatcher_addEventListenerWithFixedPriority(lua_State* tol
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::EventListener* arg0;
         int arg1;
@@ -34101,7 +34089,7 @@ int lua_ax_base_EventDispatcher_addCustomEventListener(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::function<void (ax::EventCustom *)> arg1;
@@ -34158,7 +34146,7 @@ int lua_ax_base_EventDispatcher_removeEventListener(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventListener* arg0;
 
@@ -34208,7 +34196,7 @@ int lua_ax_base_EventDispatcher_removeEventListenersForType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventListener::Type arg0;
 
@@ -34258,7 +34246,7 @@ int lua_ax_base_EventDispatcher_removeEventListenersForTarget(lua_State* tolua_S
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -34272,7 +34260,7 @@ int lua_ax_base_EventDispatcher_removeEventListenersForTarget(lua_State* tolua_S
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         bool arg1;
@@ -34325,7 +34313,7 @@ int lua_ax_base_EventDispatcher_removeCustomEventListeners(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -34375,7 +34363,7 @@ int lua_ax_base_EventDispatcher_removeAllEventListeners(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -34422,7 +34410,7 @@ int lua_ax_base_EventDispatcher_pauseEventListenersForTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -34436,7 +34424,7 @@ int lua_ax_base_EventDispatcher_pauseEventListenersForTarget(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         bool arg1;
@@ -34489,7 +34477,7 @@ int lua_ax_base_EventDispatcher_resumeEventListenersForTarget(lua_State* tolua_S
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -34503,7 +34491,7 @@ int lua_ax_base_EventDispatcher_resumeEventListenersForTarget(lua_State* tolua_S
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         bool arg1;
@@ -34556,7 +34544,7 @@ int lua_ax_base_EventDispatcher_setPriority(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::EventListener* arg0;
         int arg1;
@@ -34609,7 +34597,7 @@ int lua_ax_base_EventDispatcher_setEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -34659,7 +34647,7 @@ int lua_ax_base_EventDispatcher_isEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -34706,7 +34694,7 @@ int lua_ax_base_EventDispatcher_dispatchEvent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Event* arg0;
 
@@ -34720,7 +34708,7 @@ int lua_ax_base_EventDispatcher_dispatchEvent(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Event* arg0;
         bool arg1;
@@ -34773,7 +34761,7 @@ int lua_ax_base_EventDispatcher_dispatchCustomEvent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -34787,7 +34775,7 @@ int lua_ax_base_EventDispatcher_dispatchCustomEvent(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         void* arg1;
@@ -34805,7 +34793,7 @@ int lua_ax_base_EventDispatcher_dispatchCustomEvent(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 3)
+    if (argc == 3) 
     {
         std::string_view arg0;
         void* arg1;
@@ -34862,7 +34850,7 @@ int lua_ax_base_EventDispatcher_hasEventListener(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -34899,7 +34887,7 @@ int lua_ax_base_EventDispatcher_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -34972,7 +34960,7 @@ int lua_ax_base_EventFocus_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ui::Widget* arg0;
         ax::ui::Widget* arg1;
@@ -35048,7 +35036,7 @@ int lua_ax_base_EventListenerAcceleration_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::function<void (ax::Acceleration *, ax::Event *)> arg0;
 
@@ -35089,7 +35077,7 @@ int lua_ax_base_EventListenerAcceleration_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35160,7 +35148,7 @@ int lua_ax_base_EventListenerFocus_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35194,7 +35182,7 @@ int lua_ax_base_EventListenerFocus_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35265,7 +35253,7 @@ int lua_ax_base_EventListenerKeyboard_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35299,7 +35287,7 @@ int lua_ax_base_EventListenerKeyboard_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35370,7 +35358,7 @@ int lua_ax_base_EventMouse_getMouseEventType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35417,7 +35405,7 @@ int lua_ax_base_EventMouse_setScrollData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         double arg1;
@@ -35470,7 +35458,7 @@ int lua_ax_base_EventMouse_getScrollX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35517,7 +35505,7 @@ int lua_ax_base_EventMouse_getScrollY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35564,7 +35552,7 @@ int lua_ax_base_EventMouse_setMouseInfo(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         double arg1;
@@ -35620,7 +35608,7 @@ int lua_ax_base_EventMouse_setMouseButton(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventMouse::MouseButton arg0;
 
@@ -35670,7 +35658,7 @@ int lua_ax_base_EventMouse_getMouseButton(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35717,7 +35705,7 @@ int lua_ax_base_EventMouse_getLocation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35764,7 +35752,7 @@ int lua_ax_base_EventMouse_getPreviousLocation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35811,7 +35799,7 @@ int lua_ax_base_EventMouse_getStartLocation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35858,7 +35846,7 @@ int lua_ax_base_EventMouse_getDelta(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35905,7 +35893,7 @@ int lua_ax_base_EventMouse_getLocationInView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35952,7 +35940,7 @@ int lua_ax_base_EventMouse_getPreviousLocationInView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -35999,7 +35987,7 @@ int lua_ax_base_EventMouse_getStartLocationInView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36033,7 +36021,7 @@ int lua_ax_base_EventMouse_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventMouse::MouseEventType arg0;
 
@@ -36120,7 +36108,7 @@ int lua_ax_base_EventListenerMouse_setSwallowMouse(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -36170,7 +36158,7 @@ int lua_ax_base_EventListenerMouse_isSwallowMouse(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36217,7 +36205,7 @@ int lua_ax_base_EventListenerMouse_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36251,7 +36239,7 @@ int lua_ax_base_EventListenerMouse_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36343,7 +36331,7 @@ int lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -36393,7 +36381,7 @@ int lua_ax_base_EventListenerTouchOneByOne_isSwallowTouches(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36440,7 +36428,7 @@ int lua_ax_base_EventListenerTouchOneByOne_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36474,7 +36462,7 @@ int lua_ax_base_EventListenerTouchOneByOne_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36547,7 +36535,7 @@ int lua_ax_base_EventListenerTouchAllAtOnce_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36581,7 +36569,7 @@ int lua_ax_base_EventListenerTouchAllAtOnce_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36652,7 +36640,7 @@ int lua_ax_base_EventController_getControllerEventType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36699,7 +36687,7 @@ int lua_ax_base_EventController_getController(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36746,7 +36734,7 @@ int lua_ax_base_EventController_getKeyCode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -36793,7 +36781,7 @@ int lua_ax_base_EventController_setKeyCode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -36843,7 +36831,7 @@ int lua_ax_base_EventController_setConnectStatus(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -36893,7 +36881,7 @@ int lua_ax_base_EventController_isConnected(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37095,7 +37083,7 @@ int lua_ax_base_ActionCamera_getEye(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37142,7 +37130,7 @@ int lua_ax_base_ActionCamera_setCenter(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -37192,7 +37180,7 @@ int lua_ax_base_ActionCamera_getCenter(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37239,7 +37227,7 @@ int lua_ax_base_ActionCamera_setUp(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -37289,7 +37277,7 @@ int lua_ax_base_ActionCamera_getUp(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37323,7 +37311,7 @@ int lua_ax_base_ActionCamera_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37399,7 +37387,7 @@ int lua_ax_base_OrbitCamera_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 7)
+    if (argc == 7) 
     {
         double arg0;
         double arg1;
@@ -37502,7 +37490,7 @@ int lua_ax_base_OrbitCamera_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37574,7 +37562,7 @@ int lua_ax_base_CardinalSplineTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         ax::PointArray* arg1;
@@ -37630,7 +37618,7 @@ int lua_ax_base_CardinalSplineTo_updatePosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -37680,7 +37668,7 @@ int lua_ax_base_CardinalSplineTo_getPoints(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37714,7 +37702,7 @@ int lua_ax_base_CardinalSplineTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37774,7 +37762,7 @@ int lua_ax_base_CardinalSplineBy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -37844,7 +37832,7 @@ int lua_ax_base_CatmullRomTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         ax::PointArray* arg1;
@@ -37917,7 +37905,7 @@ int lua_ax_base_CatmullRomBy_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         ax::PointArray* arg1;
@@ -37990,7 +37978,7 @@ int lua_ax_base_ActionEase_getInnerAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -38037,7 +38025,7 @@ int lua_ax_base_ActionEase_initWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -38108,7 +38096,7 @@ int lua_ax_base_EaseRateAction_setRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -38158,7 +38146,7 @@ int lua_ax_base_EaseRateAction_getRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -38205,7 +38193,7 @@ int lua_ax_base_EaseRateAction_initWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ActionInterval* arg0;
         double arg1;
@@ -38342,7 +38330,7 @@ int lua_ax_base_EaseExponentialIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -38436,7 +38424,7 @@ int lua_ax_base_EaseExponentialOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -38530,7 +38518,7 @@ int lua_ax_base_EaseExponentialInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -38624,7 +38612,7 @@ int lua_ax_base_EaseSineIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -38718,7 +38706,7 @@ int lua_ax_base_EaseSineOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -38812,7 +38800,7 @@ int lua_ax_base_EaseSineInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -38925,7 +38913,7 @@ int lua_ax_base_EaseBounceIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39019,7 +39007,7 @@ int lua_ax_base_EaseBounceOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39113,7 +39101,7 @@ int lua_ax_base_EaseBounceInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39207,7 +39195,7 @@ int lua_ax_base_EaseBackIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39301,7 +39289,7 @@ int lua_ax_base_EaseBackOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39395,7 +39383,7 @@ int lua_ax_base_EaseBackInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39489,7 +39477,7 @@ int lua_ax_base_EaseQuadraticActionIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39583,7 +39571,7 @@ int lua_ax_base_EaseQuadraticActionOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39677,7 +39665,7 @@ int lua_ax_base_EaseQuadraticActionInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39771,7 +39759,7 @@ int lua_ax_base_EaseQuarticActionIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39865,7 +39853,7 @@ int lua_ax_base_EaseQuarticActionOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -39959,7 +39947,7 @@ int lua_ax_base_EaseQuarticActionInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40053,7 +40041,7 @@ int lua_ax_base_EaseQuinticActionIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40147,7 +40135,7 @@ int lua_ax_base_EaseQuinticActionOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40241,7 +40229,7 @@ int lua_ax_base_EaseQuinticActionInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40335,7 +40323,7 @@ int lua_ax_base_EaseCircleActionIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40429,7 +40417,7 @@ int lua_ax_base_EaseCircleActionOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40523,7 +40511,7 @@ int lua_ax_base_EaseCircleActionInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40617,7 +40605,7 @@ int lua_ax_base_EaseCubicActionIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40711,7 +40699,7 @@ int lua_ax_base_EaseCubicActionOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40805,7 +40793,7 @@ int lua_ax_base_EaseCubicActionInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40901,7 +40889,7 @@ int lua_ax_base_EaseIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -40997,7 +40985,7 @@ int lua_ax_base_EaseOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -41093,7 +41081,7 @@ int lua_ax_base_EaseInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -41164,7 +41152,7 @@ int lua_ax_base_EaseElastic_getPeriod(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -41211,7 +41199,7 @@ int lua_ax_base_EaseElastic_setPeriod(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -41261,7 +41249,7 @@ int lua_ax_base_EaseElastic_initWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -41275,7 +41263,7 @@ int lua_ax_base_EaseElastic_initWithAction(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ActionInterval* arg0;
         double arg1;
@@ -41388,7 +41376,7 @@ int lua_ax_base_EaseElasticIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -41497,7 +41485,7 @@ int lua_ax_base_EaseElasticOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -41606,7 +41594,7 @@ int lua_ax_base_EaseElasticInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -41677,7 +41665,7 @@ int lua_ax_base_EaseBezierAction_setBezierParamer(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         double arg1;
@@ -41759,7 +41747,7 @@ int lua_ax_base_EaseBezierAction_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -41871,7 +41859,7 @@ int lua_ax_base_Show_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -41963,7 +41951,7 @@ int lua_ax_base_Hide_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42055,7 +42043,7 @@ int lua_ax_base_ToggleVisibility_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42126,7 +42114,7 @@ int lua_ax_base_RemoveSelf_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -42210,7 +42198,7 @@ int lua_ax_base_RemoveSelf_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42282,7 +42270,7 @@ int lua_ax_base_FlipX_initWithFlipX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -42355,7 +42343,7 @@ int lua_ax_base_FlipX_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42427,7 +42415,7 @@ int lua_ax_base_FlipY_initWithFlipY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -42500,7 +42488,7 @@ int lua_ax_base_FlipY_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42572,7 +42560,7 @@ int lua_ax_base_Place_initWithPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -42645,7 +42633,7 @@ int lua_ax_base_Place_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42717,7 +42705,7 @@ int lua_ax_base_CallFunc_execute(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42751,7 +42739,7 @@ int lua_ax_base_CallFunc_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42822,7 +42810,7 @@ int lua_ax_base_GridAction_getGrid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -42869,7 +42857,7 @@ int lua_ax_base_GridAction_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -42943,7 +42931,7 @@ int lua_ax_base_Grid3DAction_getGridRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43050,7 +43038,7 @@ int lua_ax_base_StopGrid_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43121,7 +43109,7 @@ int lua_ax_base_ReuseGrid_initWithTimes(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -43194,7 +43182,7 @@ int lua_ax_base_ReuseGrid_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43266,7 +43254,7 @@ int lua_ax_base_Waves3D_getAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43313,7 +43301,7 @@ int lua_ax_base_Waves3D_setAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -43363,7 +43351,7 @@ int lua_ax_base_Waves3D_getAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43410,7 +43398,7 @@ int lua_ax_base_Waves3D_setAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -43460,7 +43448,7 @@ int lua_ax_base_Waves3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -43548,7 +43536,7 @@ int lua_ax_base_Waves3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43624,7 +43612,7 @@ int lua_ax_base_FlipX3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -43674,7 +43662,7 @@ int lua_ax_base_FlipX3D_initWithSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -43750,7 +43738,7 @@ int lua_ax_base_FlipX3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43846,7 +43834,7 @@ int lua_ax_base_FlipY3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43917,7 +43905,7 @@ int lua_ax_base_Lens3D_getLensEffect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -43964,7 +43952,7 @@ int lua_ax_base_Lens3D_setLensEffect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -44014,7 +44002,7 @@ int lua_ax_base_Lens3D_setConcave(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -44064,7 +44052,7 @@ int lua_ax_base_Lens3D_getPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -44111,7 +44099,7 @@ int lua_ax_base_Lens3D_setPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -44161,7 +44149,7 @@ int lua_ax_base_Lens3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -44249,7 +44237,7 @@ int lua_ax_base_Lens3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -44326,7 +44314,7 @@ int lua_ax_base_Ripple3D_getPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -44373,7 +44361,7 @@ int lua_ax_base_Ripple3D_setPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -44423,7 +44411,7 @@ int lua_ax_base_Ripple3D_getAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -44470,7 +44458,7 @@ int lua_ax_base_Ripple3D_setAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -44520,7 +44508,7 @@ int lua_ax_base_Ripple3D_getAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -44567,7 +44555,7 @@ int lua_ax_base_Ripple3D_setAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -44617,7 +44605,7 @@ int lua_ax_base_Ripple3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 6)
+    if (argc == 6) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -44715,7 +44703,7 @@ int lua_ax_base_Ripple3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -44793,7 +44781,7 @@ int lua_ax_base_Shaky3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -44881,7 +44869,7 @@ int lua_ax_base_Shaky3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -44953,7 +44941,7 @@ int lua_ax_base_Liquid_getAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45000,7 +44988,7 @@ int lua_ax_base_Liquid_setAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -45050,7 +45038,7 @@ int lua_ax_base_Liquid_getAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45097,7 +45085,7 @@ int lua_ax_base_Liquid_setAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -45147,7 +45135,7 @@ int lua_ax_base_Liquid_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -45235,7 +45223,7 @@ int lua_ax_base_Liquid_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45311,7 +45299,7 @@ int lua_ax_base_Waves_getAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45358,7 +45346,7 @@ int lua_ax_base_Waves_setAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -45408,7 +45396,7 @@ int lua_ax_base_Waves_getAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45455,7 +45443,7 @@ int lua_ax_base_Waves_setAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -45505,7 +45493,7 @@ int lua_ax_base_Waves_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 6)
+    if (argc == 6) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -45603,7 +45591,7 @@ int lua_ax_base_Waves_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45679,7 +45667,7 @@ int lua_ax_base_Twirl_getPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45726,7 +45714,7 @@ int lua_ax_base_Twirl_setPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -45776,7 +45764,7 @@ int lua_ax_base_Twirl_getAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45823,7 +45811,7 @@ int lua_ax_base_Twirl_setAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -45873,7 +45861,7 @@ int lua_ax_base_Twirl_getAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -45920,7 +45908,7 @@ int lua_ax_base_Twirl_setAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -45970,7 +45958,7 @@ int lua_ax_base_Twirl_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 5)
+    if (argc == 5) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -46063,7 +46051,7 @@ int lua_ax_base_Twirl_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -46141,7 +46129,7 @@ int lua_ax_base_ActionManager_addAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Action* arg0;
         ax::Node* arg1;
@@ -46197,7 +46185,7 @@ int lua_ax_base_ActionManager_removeAllActions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -46244,7 +46232,7 @@ int lua_ax_base_ActionManager_removeAllActionsFromTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -46294,7 +46282,7 @@ int lua_ax_base_ActionManager_removeAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Action* arg0;
 
@@ -46344,7 +46332,7 @@ int lua_ax_base_ActionManager_removeActionByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         int arg0;
         ax::Node* arg1;
@@ -46397,7 +46385,7 @@ int lua_ax_base_ActionManager_removeAllActionsByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         int arg0;
         ax::Node* arg1;
@@ -46450,7 +46438,7 @@ int lua_ax_base_ActionManager_removeActionsByFlags(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         unsigned int arg0;
         ax::Node* arg1;
@@ -46503,7 +46491,7 @@ int lua_ax_base_ActionManager_getActionByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         int arg0;
         const ax::Node* arg1;
@@ -46556,7 +46544,7 @@ int lua_ax_base_ActionManager_getNumberOfRunningActionsInTarget(lua_State* tolua
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         const ax::Node* arg0;
 
@@ -46606,7 +46594,7 @@ int lua_ax_base_ActionManager_getNumberOfRunningActions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -46653,7 +46641,7 @@ int lua_ax_base_ActionManager_getNumberOfRunningActionsInTargetByTag(lua_State* 
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const ax::Node* arg0;
         int arg1;
@@ -46706,7 +46694,7 @@ int lua_ax_base_ActionManager_pauseTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -46756,7 +46744,7 @@ int lua_ax_base_ActionManager_resumeTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -46806,7 +46794,7 @@ int lua_ax_base_ActionManager_pauseAllRunningActions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -46853,7 +46841,7 @@ int lua_ax_base_ActionManager_resumeTargets(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::Node *> arg0;
 
@@ -46903,7 +46891,7 @@ int lua_ax_base_ActionManager_update(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -46940,7 +46928,7 @@ int lua_ax_base_ActionManager_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -47084,7 +47072,7 @@ int lua_ax_base_ProgressTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         double arg1;
@@ -47162,7 +47150,7 @@ int lua_ax_base_ProgressTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -47234,7 +47222,7 @@ int lua_ax_base_ProgressFromTo_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         double arg1;
@@ -47317,7 +47305,7 @@ int lua_ax_base_ProgressFromTo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -47389,7 +47377,7 @@ int lua_ax_base_ShakyTiles3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -47477,7 +47465,7 @@ int lua_ax_base_ShakyTiles3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -47549,7 +47537,7 @@ int lua_ax_base_ShatteredTiles3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -47637,7 +47625,7 @@ int lua_ax_base_ShatteredTiles3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -47709,7 +47697,7 @@ int lua_ax_base_ShuffleTiles_getDelta(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -47759,7 +47747,7 @@ int lua_ax_base_ShuffleTiles_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -47842,7 +47830,7 @@ int lua_ax_base_ShuffleTiles_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -47915,7 +47903,7 @@ int lua_ax_base_FadeOutTRTiles_testFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -47968,7 +47956,7 @@ int lua_ax_base_FadeOutTRTiles_turnOnTile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -48018,7 +48006,7 @@ int lua_ax_base_FadeOutTRTiles_turnOffTile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -48068,7 +48056,7 @@ int lua_ax_base_FadeOutTRTiles_transformTile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -48146,7 +48134,7 @@ int lua_ax_base_FadeOutTRTiles_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -48246,7 +48234,7 @@ int lua_ax_base_FadeOutBLTiles_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -48342,7 +48330,7 @@ int lua_ax_base_FadeOutUpTiles_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -48438,7 +48426,7 @@ int lua_ax_base_FadeOutDownTiles_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -48509,7 +48497,7 @@ int lua_ax_base_TurnOffTiles_turnOnTile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -48559,7 +48547,7 @@ int lua_ax_base_TurnOffTiles_turnOffTile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -48609,7 +48597,7 @@ int lua_ax_base_TurnOffTiles_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -48653,7 +48641,7 @@ int lua_ax_base_TurnOffTiles_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -48672,7 +48660,7 @@ int lua_ax_base_TurnOffTiles_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -48709,7 +48697,7 @@ int lua_ax_base_TurnOffTiles_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -48783,7 +48771,7 @@ int lua_ax_base_WavesTiles3D_getAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -48830,7 +48818,7 @@ int lua_ax_base_WavesTiles3D_setAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -48880,7 +48868,7 @@ int lua_ax_base_WavesTiles3D_getAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -48927,7 +48915,7 @@ int lua_ax_base_WavesTiles3D_setAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -48977,7 +48965,7 @@ int lua_ax_base_WavesTiles3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -49065,7 +49053,7 @@ int lua_ax_base_WavesTiles3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -49141,7 +49129,7 @@ int lua_ax_base_JumpTiles3D_getAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -49188,7 +49176,7 @@ int lua_ax_base_JumpTiles3D_setAmplitude(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -49238,7 +49226,7 @@ int lua_ax_base_JumpTiles3D_getAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -49285,7 +49273,7 @@ int lua_ax_base_JumpTiles3D_setAmplitudeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -49335,7 +49323,7 @@ int lua_ax_base_JumpTiles3D_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         ax::Vec2 arg1;
@@ -49423,7 +49411,7 @@ int lua_ax_base_JumpTiles3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -49499,7 +49487,7 @@ int lua_ax_base_SplitRows_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         unsigned int arg1;
@@ -49577,7 +49565,7 @@ int lua_ax_base_SplitRows_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -49649,7 +49637,7 @@ int lua_ax_base_SplitCols_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         unsigned int arg1;
@@ -49727,7 +49715,7 @@ int lua_ax_base_SplitCols_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -49799,7 +49787,7 @@ int lua_ax_base_ActionTween_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         std::string_view arg1;
@@ -49921,7 +49909,7 @@ int lua_ax_base_ActionCoroutine_initWithCoroutine(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::function<ax::Coroutine ()> arg0;
 
@@ -50002,7 +49990,7 @@ int lua_ax_base_ActionCoroutine_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50074,7 +50062,7 @@ int lua_ax_base_AtlasNode_updateAtlasValues(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50121,7 +50109,7 @@ int lua_ax_base_AtlasNode_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50168,7 +50156,7 @@ int lua_ax_base_AtlasNode_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -50218,7 +50206,7 @@ int lua_ax_base_AtlasNode_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -50268,7 +50256,7 @@ int lua_ax_base_AtlasNode_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50315,7 +50303,7 @@ int lua_ax_base_AtlasNode_setTextureAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TextureAtlas* arg0;
 
@@ -50365,7 +50353,7 @@ int lua_ax_base_AtlasNode_getTextureAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50412,7 +50400,7 @@ int lua_ax_base_AtlasNode_setQuadsToDraw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ssize_t arg0;
 
@@ -50462,7 +50450,7 @@ int lua_ax_base_AtlasNode_getQuadsToDraw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50509,7 +50497,7 @@ int lua_ax_base_AtlasNode_initWithTileFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         std::string_view arg0;
         int arg1;
@@ -50568,7 +50556,7 @@ int lua_ax_base_AtlasNode_initWithTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::Texture2D* arg0;
         int arg1;
@@ -50656,7 +50644,7 @@ int lua_ax_base_AtlasNode_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50738,7 +50726,7 @@ int lua_ax_base_ClippingNode_getStencil(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50785,7 +50773,7 @@ int lua_ax_base_ClippingNode_setStencil(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -50799,7 +50787,7 @@ int lua_ax_base_ClippingNode_setStencil(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         bool arg1;
@@ -50852,7 +50840,7 @@ int lua_ax_base_ClippingNode_hasContent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50899,7 +50887,7 @@ int lua_ax_base_ClippingNode_getAlphaThreshold(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -50946,7 +50934,7 @@ int lua_ax_base_ClippingNode_setAlphaThreshold(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -50996,7 +50984,7 @@ int lua_ax_base_ClippingNode_isInverted(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -51043,7 +51031,7 @@ int lua_ax_base_ClippingNode_setInverted(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -51093,7 +51081,7 @@ int lua_ax_base_ClippingNode_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -51131,7 +51119,7 @@ int lua_ax_base_ClippingNode_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -51144,7 +51132,7 @@ int lua_ax_base_ClippingNode_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -51216,7 +51204,7 @@ int lua_ax_base_ClippingRectangleNode_getClippingRegion(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -51263,7 +51251,7 @@ int lua_ax_base_ClippingRectangleNode_setClippingRegion(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -51313,7 +51301,7 @@ int lua_ax_base_ClippingRectangleNode_isClippingEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -51360,7 +51348,7 @@ int lua_ax_base_ClippingRectangleNode_setClippingEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -51398,7 +51386,7 @@ int lua_ax_base_ClippingRectangleNode_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -51408,7 +51396,7 @@ int lua_ax_base_ClippingRectangleNode_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -51479,7 +51467,7 @@ int lua_ax_base_DrawNode_drawPoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -51499,7 +51487,7 @@ int lua_ax_base_DrawNode_drawPoint(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -51558,7 +51546,7 @@ int lua_ax_base_DrawNode_drawLine(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -51578,7 +51566,7 @@ int lua_ax_base_DrawNode_drawLine(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -51601,7 +51589,7 @@ int lua_ax_base_DrawNode_drawLine(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 5)
+    if (argc == 5) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -51627,7 +51615,7 @@ int lua_ax_base_DrawNode_drawLine(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 6)
+    if (argc == 6) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -52010,7 +51998,7 @@ int lua_ax_base_DrawNode_drawStar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 5)
+    if (argc == 5) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -52036,7 +52024,7 @@ int lua_ax_base_DrawNode_drawStar(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 6)
+    if (argc == 6) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -52101,7 +52089,7 @@ int lua_ax_base_DrawNode_drawSolidStar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 6)
+    if (argc == 6) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -52130,7 +52118,7 @@ int lua_ax_base_DrawNode_drawSolidStar(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 7)
+    if (argc == 7) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -52198,7 +52186,7 @@ int lua_ax_base_DrawNode_drawQuadBezier(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 5)
+    if (argc == 5) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -52224,7 +52212,7 @@ int lua_ax_base_DrawNode_drawQuadBezier(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 6)
+    if (argc == 6) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -52289,7 +52277,7 @@ int lua_ax_base_DrawNode_drawCubicBezier(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 6)
+    if (argc == 6) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -52318,7 +52306,7 @@ int lua_ax_base_DrawNode_drawCubicBezier(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 7)
+    if (argc == 7) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -52386,7 +52374,7 @@ int lua_ax_base_DrawNode_drawDot(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Vec2 arg0;
         double arg1;
@@ -52442,7 +52430,7 @@ int lua_ax_base_DrawNode_drawSolidRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -52462,7 +52450,7 @@ int lua_ax_base_DrawNode_drawSolidRect(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -52485,7 +52473,7 @@ int lua_ax_base_DrawNode_drawSolidRect(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 5)
+    if (argc == 5) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -52993,7 +52981,7 @@ int lua_ax_base_DrawNode_drawSegment(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -53016,7 +53004,7 @@ int lua_ax_base_DrawNode_drawSegment(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 5)
+    if (argc == 5) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -53042,7 +53030,7 @@ int lua_ax_base_DrawNode_drawSegment(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 6)
+    if (argc == 6) 
     {
         ax::Vec2 arg0;
         ax::Vec2 arg1;
@@ -53107,7 +53095,7 @@ int lua_ax_base_DrawNode_drawColoredTriangle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const ax::Vec2* arg0;
         const ax::Color* arg1;
@@ -53367,7 +53355,7 @@ int lua_ax_base_DrawNode_clear(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -53414,7 +53402,7 @@ int lua_ax_base_DrawNode_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -53461,7 +53449,7 @@ int lua_ax_base_DrawNode_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -53511,7 +53499,7 @@ int lua_ax_base_DrawNode_setIsolated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -53561,7 +53549,7 @@ int lua_ax_base_DrawNode_isIsolated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -53629,7 +53617,7 @@ int lua_ax_base_DrawNode_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -53721,7 +53709,7 @@ int lua_ax_base_Label_setTTFConfig(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::_ttfConfig arg0;
 
@@ -53771,7 +53759,7 @@ int lua_ax_base_Label_getTTFConfig(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -53957,7 +53945,7 @@ int lua_ax_base_Label_getBMFontFilePath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54095,7 +54083,7 @@ int lua_ax_base_Label_setSystemFontName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -54145,7 +54133,7 @@ int lua_ax_base_Label_getSystemFontName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54192,7 +54180,7 @@ int lua_ax_base_Label_setSystemFontSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -54242,7 +54230,7 @@ int lua_ax_base_Label_getSystemFontSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54289,7 +54277,7 @@ int lua_ax_base_Label_requestSystemFontRefresh(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54336,7 +54324,7 @@ int lua_ax_base_Label_setString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -54386,7 +54374,7 @@ int lua_ax_base_Label_getString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54433,7 +54421,7 @@ int lua_ax_base_Label_getStringNumLines(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54480,7 +54468,7 @@ int lua_ax_base_Label_getStringLength(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54527,7 +54515,7 @@ int lua_ax_base_Label_setTextColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -54577,7 +54565,7 @@ int lua_ax_base_Label_getTextColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54624,7 +54612,7 @@ int lua_ax_base_Label_enableShadow(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54635,7 +54623,7 @@ int lua_ax_base_Label_enableShadow(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -54649,7 +54637,7 @@ int lua_ax_base_Label_enableShadow(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Color32 arg0;
         ax::Vec2 arg1;
@@ -54666,7 +54654,7 @@ int lua_ax_base_Label_enableShadow(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Color32 arg0;
         ax::Vec2 arg1;
@@ -54722,7 +54710,7 @@ int lua_ax_base_Label_enableOutline(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -54736,7 +54724,7 @@ int lua_ax_base_Label_enableOutline(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Color32 arg0;
         int arg1;
@@ -54789,7 +54777,7 @@ int lua_ax_base_Label_enableGlow(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -54839,7 +54827,7 @@ int lua_ax_base_Label_enableItalics(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54886,7 +54874,7 @@ int lua_ax_base_Label_enableBold(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54933,7 +54921,7 @@ int lua_ax_base_Label_enableUnderline(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -54980,7 +54968,7 @@ int lua_ax_base_Label_enableStrikethrough(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55078,7 +55066,7 @@ int lua_ax_base_Label_isShadowEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55125,7 +55113,7 @@ int lua_ax_base_Label_getShadowOffset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55172,7 +55160,7 @@ int lua_ax_base_Label_getShadowBlurRadius(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55219,7 +55207,7 @@ int lua_ax_base_Label_getShadowColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55266,7 +55254,7 @@ int lua_ax_base_Label_getOutlineSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55313,7 +55301,7 @@ int lua_ax_base_Label_getLabelEffectType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55360,7 +55348,7 @@ int lua_ax_base_Label_getEffectColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55466,7 +55454,7 @@ int lua_ax_base_Label_getTextAlignment(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55513,7 +55501,7 @@ int lua_ax_base_Label_setHorizontalAlignment(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TextHAlignment arg0;
 
@@ -55563,7 +55551,7 @@ int lua_ax_base_Label_getHorizontalAlignment(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55610,7 +55598,7 @@ int lua_ax_base_Label_setVerticalAlignment(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TextVAlignment arg0;
 
@@ -55660,7 +55648,7 @@ int lua_ax_base_Label_getVerticalAlignment(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55707,7 +55695,7 @@ int lua_ax_base_Label_setLineBreakWithoutSpace(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -55757,7 +55745,7 @@ int lua_ax_base_Label_setMaxLineWidth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -55807,7 +55795,7 @@ int lua_ax_base_Label_getMaxLineWidth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55854,7 +55842,7 @@ int lua_ax_base_Label_setTTFFaceSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -55904,7 +55892,7 @@ int lua_ax_base_Label_getTTFFaceSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -55951,7 +55939,7 @@ int lua_ax_base_Label_setBMFontSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -56001,7 +55989,7 @@ int lua_ax_base_Label_getBMFontSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56048,7 +56036,7 @@ int lua_ax_base_Label_enableWrap(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -56098,7 +56086,7 @@ int lua_ax_base_Label_isWrapEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56145,7 +56133,7 @@ int lua_ax_base_Label_setOverflow(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Label::Overflow arg0;
 
@@ -56195,7 +56183,7 @@ int lua_ax_base_Label_getOverflow(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56242,7 +56230,7 @@ int lua_ax_base_Label_setWidth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -56292,7 +56280,7 @@ int lua_ax_base_Label_getWidth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56339,7 +56327,7 @@ int lua_ax_base_Label_setHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -56389,7 +56377,7 @@ int lua_ax_base_Label_getHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56436,7 +56424,7 @@ int lua_ax_base_Label_setDimensions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         double arg1;
@@ -56489,7 +56477,7 @@ int lua_ax_base_Label_getDimensions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56536,7 +56524,7 @@ int lua_ax_base_Label_updateContent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56583,7 +56571,7 @@ int lua_ax_base_Label_getLetter(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -56633,7 +56621,7 @@ int lua_ax_base_Label_setClipMarginEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -56683,7 +56671,7 @@ int lua_ax_base_Label_isClipMarginEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56730,7 +56718,7 @@ int lua_ax_base_Label_setLineHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -56780,7 +56768,7 @@ int lua_ax_base_Label_getLineHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56827,7 +56815,7 @@ int lua_ax_base_Label_setLineSpacing(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -56877,7 +56865,7 @@ int lua_ax_base_Label_getLineSpacing(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56924,7 +56912,7 @@ int lua_ax_base_Label_getLabelType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -56971,7 +56959,7 @@ int lua_ax_base_Label_getRenderingFontSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -57018,7 +57006,7 @@ int lua_ax_base_Label_setAdditionalKerning(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -57068,7 +57056,7 @@ int lua_ax_base_Label_getAdditionalKerning(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -57115,7 +57103,7 @@ int lua_ax_base_Label_getFontAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -57162,7 +57150,7 @@ int lua_ax_base_Label_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -57209,7 +57197,7 @@ int lua_ax_base_Label_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -57259,7 +57247,7 @@ int lua_ax_base_Label_removeAllChildrenWithCleanup(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -57629,7 +57617,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 6)
         {
@@ -57657,7 +57645,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -57673,7 +57661,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -57692,7 +57680,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -57714,7 +57702,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -57761,7 +57749,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -57783,7 +57771,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -57805,7 +57793,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -58049,7 +58037,7 @@ int lua_ax_base_LabelAtlas_setString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -58099,7 +58087,7 @@ int lua_ax_base_LabelAtlas_getString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -58134,7 +58122,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -58150,7 +58138,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -58175,7 +58163,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -58221,7 +58209,7 @@ int lua_ax_base_LabelAtlas_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -58295,7 +58283,7 @@ int lua_ax_base_Sprite_getBatchNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -58342,7 +58330,7 @@ int lua_ax_base_Sprite_setBatchNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteBatchNode* arg0;
 
@@ -58447,7 +58435,7 @@ int lua_ax_base_Sprite_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -58557,7 +58545,7 @@ int lua_ax_base_Sprite_setVertexRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -58607,7 +58595,7 @@ int lua_ax_base_Sprite_setCenterRectNormalized(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -58657,7 +58645,7 @@ int lua_ax_base_Sprite_getCenterRectNormalized(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -58704,7 +58692,7 @@ int lua_ax_base_Sprite_setCenterRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -58754,7 +58742,7 @@ int lua_ax_base_Sprite_getCenterRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -58856,7 +58844,7 @@ int lua_ax_base_Sprite_isFrameDisplayed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -58906,7 +58894,7 @@ int lua_ax_base_Sprite_getSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -58953,7 +58941,7 @@ int lua_ax_base_Sprite_setDisplayFrameWithAnimationName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         unsigned int arg1;
@@ -59006,7 +58994,7 @@ int lua_ax_base_Sprite_isDirty(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59053,7 +59041,7 @@ int lua_ax_base_Sprite_setDirty(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -59103,7 +59091,7 @@ int lua_ax_base_Sprite_removeAllChildrenWithCleanup(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -59153,7 +59141,7 @@ int lua_ax_base_Sprite_isTextureRectRotated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59200,7 +59188,7 @@ int lua_ax_base_Sprite_getAtlasIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59247,7 +59235,7 @@ int lua_ax_base_Sprite_setAtlasIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -59297,7 +59285,7 @@ int lua_ax_base_Sprite_getTextureRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59344,7 +59332,7 @@ int lua_ax_base_Sprite_getTextureAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59391,7 +59379,7 @@ int lua_ax_base_Sprite_setTextureAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TextureAtlas* arg0;
 
@@ -59441,7 +59429,7 @@ int lua_ax_base_Sprite_getOffsetPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59488,7 +59476,7 @@ int lua_ax_base_Sprite_isFlippedX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59535,7 +59523,7 @@ int lua_ax_base_Sprite_setFlippedX(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -59585,7 +59573,7 @@ int lua_ax_base_Sprite_isFlippedY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59632,7 +59620,7 @@ int lua_ax_base_Sprite_setFlippedY(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -59682,7 +59670,7 @@ int lua_ax_base_Sprite_setStretchEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -59732,7 +59720,7 @@ int lua_ax_base_Sprite_isStretchEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59779,7 +59767,7 @@ int lua_ax_base_Sprite_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -59829,7 +59817,7 @@ int lua_ax_base_Sprite_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59876,7 +59864,7 @@ int lua_ax_base_Sprite_getResourceType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -59923,7 +59911,7 @@ int lua_ax_base_Sprite_getResourceName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -60049,7 +60037,7 @@ int lua_ax_base_Sprite_initWithSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -60099,7 +60087,7 @@ int lua_ax_base_Sprite_initWithSpriteFrameName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -60224,7 +60212,7 @@ int lua_ax_base_Sprite_initWithImageData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Data arg0;
         std::string_view arg1;
@@ -60277,7 +60265,7 @@ int lua_ax_base_Sprite_setVertexLayout(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -60324,7 +60312,7 @@ int lua_ax_base_Sprite_setAutoUpdatePS(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -60374,7 +60362,7 @@ int lua_ax_base_Sprite_setAutoSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -60412,7 +60400,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -60428,7 +60416,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -60447,7 +60435,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -60553,7 +60541,7 @@ int lua_ax_base_Sprite_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -60722,7 +60710,7 @@ int lua_ax_base_LayerColor_changeWidth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -60772,7 +60760,7 @@ int lua_ax_base_LayerColor_changeHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -60822,7 +60810,7 @@ int lua_ax_base_LayerColor_changeWidthAndHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         double arg1;
@@ -60926,7 +60914,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -60945,7 +60933,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -60955,7 +60943,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -60989,7 +60977,7 @@ int lua_ax_base_LayerColor_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61064,7 +61052,7 @@ int lua_ax_base_LayerGradient_setCompressedInterpolation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -61114,7 +61102,7 @@ int lua_ax_base_LayerGradient_isCompressedInterpolation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61161,7 +61149,7 @@ int lua_ax_base_LayerGradient_setStartColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -61211,7 +61199,7 @@ int lua_ax_base_LayerGradient_getStartColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61258,7 +61246,7 @@ int lua_ax_base_LayerGradient_setEndColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -61308,7 +61296,7 @@ int lua_ax_base_LayerGradient_getEndColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61355,7 +61343,7 @@ int lua_ax_base_LayerGradient_setStartOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         uint16_t arg0;
 
@@ -61405,7 +61393,7 @@ int lua_ax_base_LayerGradient_getStartOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61452,7 +61440,7 @@ int lua_ax_base_LayerGradient_setEndOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         uint16_t arg0;
 
@@ -61502,7 +61490,7 @@ int lua_ax_base_LayerGradient_getEndOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61549,7 +61537,7 @@ int lua_ax_base_LayerGradient_setVector(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -61599,7 +61587,7 @@ int lua_ax_base_LayerGradient_getVector(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61701,7 +61689,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -61717,7 +61705,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -61727,7 +61715,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -61767,7 +61755,7 @@ int lua_ax_base_LayerGradient_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61851,7 +61839,7 @@ int lua_ax_base_LayerRadialGradient_setStartOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         uint16_t arg0;
 
@@ -61901,7 +61889,7 @@ int lua_ax_base_LayerRadialGradient_getStartOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -61948,7 +61936,7 @@ int lua_ax_base_LayerRadialGradient_setEndOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         uint16_t arg0;
 
@@ -61998,7 +61986,7 @@ int lua_ax_base_LayerRadialGradient_getEndOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -62045,7 +62033,7 @@ int lua_ax_base_LayerRadialGradient_setRadius(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -62095,7 +62083,7 @@ int lua_ax_base_LayerRadialGradient_getRadius(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -62142,7 +62130,7 @@ int lua_ax_base_LayerRadialGradient_setCenter(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -62192,7 +62180,7 @@ int lua_ax_base_LayerRadialGradient_getCenter(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -62239,7 +62227,7 @@ int lua_ax_base_LayerRadialGradient_setExpand(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -62289,7 +62277,7 @@ int lua_ax_base_LayerRadialGradient_getExpand(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -62336,7 +62324,7 @@ int lua_ax_base_LayerRadialGradient_setStartColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -62386,7 +62374,7 @@ int lua_ax_base_LayerRadialGradient_getStartColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -62433,7 +62421,7 @@ int lua_ax_base_LayerRadialGradient_setEndColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -62483,7 +62471,7 @@ int lua_ax_base_LayerRadialGradient_getEndColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -62530,7 +62518,7 @@ int lua_ax_base_LayerRadialGradient_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -62580,7 +62568,7 @@ int lua_ax_base_LayerRadialGradient_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -62627,7 +62615,7 @@ int lua_ax_base_LayerRadialGradient_initWithColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 5)
+    if (argc == 5) 
     {
         ax::Color32 arg0;
         ax::Color32 arg1;
@@ -62677,7 +62665,7 @@ int lua_ax_base_LayerRadialGradient_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -62687,7 +62675,7 @@ int lua_ax_base_LayerRadialGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -62733,7 +62721,7 @@ int lua_ax_base_LayerRadialGradient_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -62821,7 +62809,7 @@ int lua_ax_base_LayerMultiplex_addLayer(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -62930,7 +62918,7 @@ int lua_ax_base_LayerMultiplex_switchToAndReleaseMe(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -62980,7 +62968,7 @@ int lua_ax_base_LayerMultiplex_initWithArray(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::Node *> arg0;
 
@@ -63017,7 +63005,7 @@ int lua_ax_base_LayerMultiplex_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63091,7 +63079,7 @@ int lua_ax_base_MenuItem_rect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63138,7 +63126,7 @@ int lua_ax_base_MenuItem_activate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63185,7 +63173,7 @@ int lua_ax_base_MenuItem_selected(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63232,7 +63220,7 @@ int lua_ax_base_MenuItem_unselected(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63279,7 +63267,7 @@ int lua_ax_base_MenuItem_isEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63326,7 +63314,7 @@ int lua_ax_base_MenuItem_setEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -63376,7 +63364,7 @@ int lua_ax_base_MenuItem_isSelected(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63410,7 +63398,7 @@ int lua_ax_base_MenuItem_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63487,7 +63475,7 @@ int lua_ax_base_MenuItemLabel_setString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -63537,7 +63525,7 @@ int lua_ax_base_MenuItemLabel_getString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63584,7 +63572,7 @@ int lua_ax_base_MenuItemLabel_getDisabledColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63631,7 +63619,7 @@ int lua_ax_base_MenuItemLabel_setDisabledColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -63681,7 +63669,7 @@ int lua_ax_base_MenuItemLabel_getLabel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63728,7 +63716,7 @@ int lua_ax_base_MenuItemLabel_setLabel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -63778,7 +63766,7 @@ int lua_ax_base_MenuItemLabel_initWithLabel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         std::function<void (ax::Object *)> arg1;
@@ -63822,7 +63810,7 @@ int lua_ax_base_MenuItemLabel_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -63899,7 +63887,7 @@ int lua_ax_base_MenuItemAtlasFont_initWithString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 6)
+    if (argc == 6) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -63955,7 +63943,7 @@ int lua_ax_base_MenuItemAtlasFont_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64026,7 +64014,7 @@ int lua_ax_base_MenuItemFont_setFontSizeObj(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -64076,7 +64064,7 @@ int lua_ax_base_MenuItemFont_getFontSizeObj(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64123,7 +64111,7 @@ int lua_ax_base_MenuItemFont_setFontNameObj(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -64173,7 +64161,7 @@ int lua_ax_base_MenuItemFont_getFontNameObj(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64220,7 +64208,7 @@ int lua_ax_base_MenuItemFont_initWithString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::function<void (ax::Object *)> arg1;
@@ -64404,7 +64392,7 @@ int lua_ax_base_MenuItemFont_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64483,7 +64471,7 @@ int lua_ax_base_MenuItemSprite_getNormalImage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64530,7 +64518,7 @@ int lua_ax_base_MenuItemSprite_setNormalImage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -64580,7 +64568,7 @@ int lua_ax_base_MenuItemSprite_getSelectedImage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64627,7 +64615,7 @@ int lua_ax_base_MenuItemSprite_setSelectedImage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -64677,7 +64665,7 @@ int lua_ax_base_MenuItemSprite_getDisabledImage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64724,7 +64712,7 @@ int lua_ax_base_MenuItemSprite_setDisabledImage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -64774,7 +64762,7 @@ int lua_ax_base_MenuItemSprite_selected(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64821,7 +64809,7 @@ int lua_ax_base_MenuItemSprite_unselected(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -64868,7 +64856,7 @@ int lua_ax_base_MenuItemSprite_setEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -64918,7 +64906,7 @@ int lua_ax_base_MenuItemSprite_initWithNormalSprite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::Node* arg0;
         ax::Node* arg1;
@@ -64968,7 +64956,7 @@ int lua_ax_base_MenuItemSprite_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65048,7 +65036,7 @@ int lua_ax_base_MenuItemImage_setNormalSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -65098,7 +65086,7 @@ int lua_ax_base_MenuItemImage_setSelectedSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -65148,7 +65136,7 @@ int lua_ax_base_MenuItemImage_setDisabledSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -65198,7 +65186,7 @@ int lua_ax_base_MenuItemImage_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65245,7 +65233,7 @@ int lua_ax_base_MenuItemImage_initWithNormalImage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -65295,7 +65283,7 @@ int lua_ax_base_MenuItemImage_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65370,7 +65358,7 @@ int lua_ax_base_MenuItemToggle_addSubItem(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::MenuItem* arg0;
 
@@ -65420,7 +65408,7 @@ int lua_ax_base_MenuItemToggle_getSelectedItem(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65467,7 +65455,7 @@ int lua_ax_base_MenuItemToggle_getSelectedIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65514,7 +65502,7 @@ int lua_ax_base_MenuItemToggle_setSelectedIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -65564,7 +65552,7 @@ int lua_ax_base_MenuItemToggle_setSubItems(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::MenuItem *> arg0;
 
@@ -65614,7 +65602,7 @@ int lua_ax_base_MenuItemToggle_initWithItem(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::MenuItem* arg0;
 
@@ -65651,7 +65639,7 @@ int lua_ax_base_MenuItemToggle_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65727,7 +65715,7 @@ int lua_ax_base_Menu_alignItemsVertically(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65774,7 +65762,7 @@ int lua_ax_base_Menu_alignItemsVerticallyWithPadding(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -65824,7 +65812,7 @@ int lua_ax_base_Menu_alignItemsHorizontally(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65871,7 +65859,7 @@ int lua_ax_base_Menu_alignItemsHorizontallyWithPadding(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -65921,7 +65909,7 @@ int lua_ax_base_Menu_isEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -65968,7 +65956,7 @@ int lua_ax_base_Menu_setEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -66018,7 +66006,7 @@ int lua_ax_base_Menu_initWithArray(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::MenuItem *> arg0;
 
@@ -66055,7 +66043,7 @@ int lua_ax_base_Menu_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -66132,7 +66120,7 @@ int lua_ax_base_MotionStreak_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -66179,7 +66167,7 @@ int lua_ax_base_MotionStreak_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -66229,7 +66217,7 @@ int lua_ax_base_MotionStreak_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -66279,7 +66267,7 @@ int lua_ax_base_MotionStreak_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -66326,7 +66314,7 @@ int lua_ax_base_MotionStreak_tintWithColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -66376,7 +66364,7 @@ int lua_ax_base_MotionStreak_reset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -66423,7 +66411,7 @@ int lua_ax_base_MotionStreak_isFastMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -66470,7 +66458,7 @@ int lua_ax_base_MotionStreak_setFastMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -66520,7 +66508,7 @@ int lua_ax_base_MotionStreak_getStroke(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -66567,7 +66555,7 @@ int lua_ax_base_MotionStreak_setStroke(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -66617,7 +66605,7 @@ int lua_ax_base_MotionStreak_isStartingPositionInitialized(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -66664,7 +66652,7 @@ int lua_ax_base_MotionStreak_setStartingPositionInitialized(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -66789,7 +66777,7 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -66814,7 +66802,7 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -66860,7 +66848,7 @@ int lua_ax_base_MotionStreak_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -66991,7 +66979,7 @@ int lua_ax_base_NodeGrid_setGrid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::GridBase* arg0;
 
@@ -67041,7 +67029,7 @@ int lua_ax_base_NodeGrid_setTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -67091,7 +67079,7 @@ int lua_ax_base_NodeGrid_setGridRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -67141,7 +67129,7 @@ int lua_ax_base_NodeGrid_getGridRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -67176,7 +67164,7 @@ int lua_ax_base_NodeGrid_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -67189,7 +67177,7 @@ int lua_ax_base_NodeGrid_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -67220,7 +67208,7 @@ int lua_ax_base_NodeGrid_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -67296,7 +67284,7 @@ int lua_ax_base_ParticleBatchNode_insertChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ParticleSystem* arg0;
         int arg1;
@@ -67349,7 +67337,7 @@ int lua_ax_base_ParticleBatchNode_removeChildAtIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         int arg0;
         bool arg1;
@@ -67402,7 +67390,7 @@ int lua_ax_base_ParticleBatchNode_removeAllChildrenWithCleanup(lua_State* tolua_
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -67452,7 +67440,7 @@ int lua_ax_base_ParticleBatchNode_disableParticle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -67502,7 +67490,7 @@ int lua_ax_base_ParticleBatchNode_getTextureAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -67549,7 +67537,7 @@ int lua_ax_base_ParticleBatchNode_setTextureAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TextureAtlas* arg0;
 
@@ -67599,7 +67587,7 @@ int lua_ax_base_ParticleBatchNode_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -67646,7 +67634,7 @@ int lua_ax_base_ParticleBatchNode_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -67696,7 +67684,7 @@ int lua_ax_base_ParticleBatchNode_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -67746,7 +67734,7 @@ int lua_ax_base_ParticleBatchNode_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -67793,7 +67781,7 @@ int lua_ax_base_ParticleBatchNode_initWithTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Texture2D* arg0;
         int arg1;
@@ -67846,7 +67834,7 @@ int lua_ax_base_ParticleBatchNode_initWithFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         int arg1;
@@ -67988,7 +67976,7 @@ int lua_ax_base_ParticleBatchNode_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -68091,7 +68079,7 @@ int lua_ax_base_SpriteFrameCache_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -68269,7 +68257,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::SpriteFrame* arg0;
         std::string_view arg1;
@@ -68322,7 +68310,7 @@ int lua_ax_base_SpriteFrameCache_isSpriteFramesWithFileLoaded(lua_State* tolua_S
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -68372,7 +68360,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFrames(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -68419,7 +68407,7 @@ int lua_ax_base_SpriteFrameCache_removeUnusedSpriteFrames(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -68466,7 +68454,7 @@ int lua_ax_base_SpriteFrameCache_removeUnusedSpriteSheets(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -68513,7 +68501,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFrameByName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -68563,7 +68551,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFramesFromFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -68613,7 +68601,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFramesFromFileContent(lua_State* to
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -68663,7 +68651,7 @@ int lua_ax_base_SpriteFrameCache_removeSpriteFramesFromTexture(lua_State* tolua_
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -68713,7 +68701,7 @@ int lua_ax_base_SpriteFrameCache_getSpriteFrameByName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -68763,7 +68751,7 @@ int lua_ax_base_SpriteFrameCache_reloadTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -68813,7 +68801,7 @@ int lua_ax_base_SpriteFrameCache_findFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -68863,7 +68851,7 @@ int lua_ax_base_SpriteFrameCache_getSpriteFrameName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -68913,7 +68901,7 @@ int lua_ax_base_SpriteFrameCache_eraseFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -68963,7 +68951,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFrameCapInset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::SpriteFrame* arg0;
         ax::Rect arg1;
@@ -69019,7 +69007,7 @@ int lua_ax_base_SpriteFrameCache_deregisterSpriteSheetLoader(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -69069,7 +69057,7 @@ int lua_ax_base_SpriteFrameCache_getSpriteSheetLoader(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -69227,7 +69215,7 @@ int lua_ax_base_ParticleData_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -69277,7 +69265,7 @@ int lua_ax_base_ParticleData_release(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -69324,7 +69312,7 @@ int lua_ax_base_ParticleData_getMaxCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -69371,7 +69359,7 @@ int lua_ax_base_ParticleData_copyParticle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         int arg0;
         int arg1;
@@ -69411,7 +69399,7 @@ int lua_ax_base_ParticleData_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -69745,7 +69733,7 @@ int lua_ax_base_ParticleEmissionMaskCache_removeMask(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -69795,7 +69783,7 @@ int lua_ax_base_ParticleEmissionMaskCache_removeAllMasks(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -69900,7 +69888,7 @@ int lua_ax_base_ParticleSystem_addParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -69914,7 +69902,7 @@ int lua_ax_base_ParticleSystem_addParticles(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         int arg0;
         int arg1;
@@ -69931,7 +69919,7 @@ int lua_ax_base_ParticleSystem_addParticles(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 3)
+    if (argc == 3) 
     {
         int arg0;
         int arg1;
@@ -69987,7 +69975,7 @@ int lua_ax_base_ParticleSystem_stopSystem(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70034,7 +70022,7 @@ int lua_ax_base_ParticleSystem_resetSystem(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70081,7 +70069,7 @@ int lua_ax_base_ParticleSystem_isFull(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70128,7 +70116,7 @@ int lua_ax_base_ParticleSystem_updateParticleQuads(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70175,7 +70163,7 @@ int lua_ax_base_ParticleSystem_postStep(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70222,7 +70210,7 @@ int lua_ax_base_ParticleSystem_updateWithNoTime(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70269,7 +70257,7 @@ int lua_ax_base_ParticleSystem_isAutoRemoveOnFinish(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70316,7 +70304,7 @@ int lua_ax_base_ParticleSystem_setAutoRemoveOnFinish(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -70366,7 +70354,7 @@ int lua_ax_base_ParticleSystem_getGravity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70413,7 +70401,7 @@ int lua_ax_base_ParticleSystem_setGravity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -70463,7 +70451,7 @@ int lua_ax_base_ParticleSystem_getSpeed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70510,7 +70498,7 @@ int lua_ax_base_ParticleSystem_setSpeed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -70560,7 +70548,7 @@ int lua_ax_base_ParticleSystem_getSpeedVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70607,7 +70595,7 @@ int lua_ax_base_ParticleSystem_setSpeedVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -70657,7 +70645,7 @@ int lua_ax_base_ParticleSystem_getTangentialAccel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70704,7 +70692,7 @@ int lua_ax_base_ParticleSystem_setTangentialAccel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -70754,7 +70742,7 @@ int lua_ax_base_ParticleSystem_getTangentialAccelVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70801,7 +70789,7 @@ int lua_ax_base_ParticleSystem_setTangentialAccelVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -70851,7 +70839,7 @@ int lua_ax_base_ParticleSystem_getRadialAccel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70898,7 +70886,7 @@ int lua_ax_base_ParticleSystem_setRadialAccel(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -70948,7 +70936,7 @@ int lua_ax_base_ParticleSystem_getRadialAccelVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -70995,7 +70983,7 @@ int lua_ax_base_ParticleSystem_setRadialAccelVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -71045,7 +71033,7 @@ int lua_ax_base_ParticleSystem_getRotationIsDir(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71092,7 +71080,7 @@ int lua_ax_base_ParticleSystem_setRotationIsDir(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -71142,7 +71130,7 @@ int lua_ax_base_ParticleSystem_getStartRadius(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71189,7 +71177,7 @@ int lua_ax_base_ParticleSystem_setStartRadius(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -71239,7 +71227,7 @@ int lua_ax_base_ParticleSystem_getStartRadiusVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71286,7 +71274,7 @@ int lua_ax_base_ParticleSystem_setStartRadiusVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -71336,7 +71324,7 @@ int lua_ax_base_ParticleSystem_getEndRadius(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71383,7 +71371,7 @@ int lua_ax_base_ParticleSystem_setEndRadius(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -71433,7 +71421,7 @@ int lua_ax_base_ParticleSystem_getEndRadiusVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71480,7 +71468,7 @@ int lua_ax_base_ParticleSystem_setEndRadiusVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -71530,7 +71518,7 @@ int lua_ax_base_ParticleSystem_getRotatePerSecond(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71577,7 +71565,7 @@ int lua_ax_base_ParticleSystem_setRotatePerSecond(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -71627,7 +71615,7 @@ int lua_ax_base_ParticleSystem_getRotatePerSecondVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71674,7 +71662,7 @@ int lua_ax_base_ParticleSystem_setRotatePerSecondVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -71724,7 +71712,7 @@ int lua_ax_base_ParticleSystem_isActive(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71771,7 +71759,7 @@ int lua_ax_base_ParticleSystem_isBlendAdditive(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71818,7 +71806,7 @@ int lua_ax_base_ParticleSystem_setBlendAdditive(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -71868,7 +71856,7 @@ int lua_ax_base_ParticleSystem_getBatchNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -71915,7 +71903,7 @@ int lua_ax_base_ParticleSystem_setBatchNode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ParticleBatchNode* arg0;
 
@@ -71965,7 +71953,7 @@ int lua_ax_base_ParticleSystem_getAtlasIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72012,7 +72000,7 @@ int lua_ax_base_ParticleSystem_setAtlasIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -72062,7 +72050,7 @@ int lua_ax_base_ParticleSystem_getParticleCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72109,7 +72097,7 @@ int lua_ax_base_ParticleSystem_getDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72156,7 +72144,7 @@ int lua_ax_base_ParticleSystem_setDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -72206,7 +72194,7 @@ int lua_ax_base_ParticleSystem_getSourcePosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72253,7 +72241,7 @@ int lua_ax_base_ParticleSystem_setSourcePosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -72303,7 +72291,7 @@ int lua_ax_base_ParticleSystem_getPosVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72350,7 +72338,7 @@ int lua_ax_base_ParticleSystem_setPosVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -72400,7 +72388,7 @@ int lua_ax_base_ParticleSystem_getLife(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72447,7 +72435,7 @@ int lua_ax_base_ParticleSystem_setLife(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -72497,7 +72485,7 @@ int lua_ax_base_ParticleSystem_getLifeVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72544,7 +72532,7 @@ int lua_ax_base_ParticleSystem_setLifeVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -72594,7 +72582,7 @@ int lua_ax_base_ParticleSystem_getAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72641,7 +72629,7 @@ int lua_ax_base_ParticleSystem_setAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -72691,7 +72679,7 @@ int lua_ax_base_ParticleSystem_getAngleVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72738,7 +72726,7 @@ int lua_ax_base_ParticleSystem_setAngleVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -72788,7 +72776,7 @@ int lua_ax_base_ParticleSystem_getEmitterMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72835,7 +72823,7 @@ int lua_ax_base_ParticleSystem_setEmitterMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ParticleSystem::Mode arg0;
 
@@ -72885,7 +72873,7 @@ int lua_ax_base_ParticleSystem_getStartSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -72932,7 +72920,7 @@ int lua_ax_base_ParticleSystem_setStartSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -72982,7 +72970,7 @@ int lua_ax_base_ParticleSystem_getStartSizeVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73029,7 +73017,7 @@ int lua_ax_base_ParticleSystem_setStartSizeVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -73079,7 +73067,7 @@ int lua_ax_base_ParticleSystem_getEndSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73126,7 +73114,7 @@ int lua_ax_base_ParticleSystem_setEndSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -73176,7 +73164,7 @@ int lua_ax_base_ParticleSystem_getEndSizeVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73223,7 +73211,7 @@ int lua_ax_base_ParticleSystem_setEndSizeVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -73273,7 +73261,7 @@ int lua_ax_base_ParticleSystem_getStartColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73320,7 +73308,7 @@ int lua_ax_base_ParticleSystem_setStartColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color arg0;
 
@@ -73370,7 +73358,7 @@ int lua_ax_base_ParticleSystem_getStartColorVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73417,7 +73405,7 @@ int lua_ax_base_ParticleSystem_setStartColorVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color arg0;
 
@@ -73467,7 +73455,7 @@ int lua_ax_base_ParticleSystem_getEndColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73514,7 +73502,7 @@ int lua_ax_base_ParticleSystem_setEndColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color arg0;
 
@@ -73564,7 +73552,7 @@ int lua_ax_base_ParticleSystem_getEndColorVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73611,7 +73599,7 @@ int lua_ax_base_ParticleSystem_setEndColorVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color arg0;
 
@@ -73661,7 +73649,7 @@ int lua_ax_base_ParticleSystem_useHSV(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -73711,7 +73699,7 @@ int lua_ax_base_ParticleSystem_isHSV(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73758,7 +73746,7 @@ int lua_ax_base_ParticleSystem_getHue(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73805,7 +73793,7 @@ int lua_ax_base_ParticleSystem_setHue(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -73855,7 +73843,7 @@ int lua_ax_base_ParticleSystem_getHueVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73902,7 +73890,7 @@ int lua_ax_base_ParticleSystem_setHueVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -73952,7 +73940,7 @@ int lua_ax_base_ParticleSystem_getHSV(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -73999,7 +73987,7 @@ int lua_ax_base_ParticleSystem_setHSV(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::HSV arg0;
 
@@ -74050,7 +74038,7 @@ int lua_ax_base_ParticleSystem_getHSVVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74097,7 +74085,7 @@ int lua_ax_base_ParticleSystem_setHSVVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::HSV arg0;
 
@@ -74148,7 +74136,7 @@ int lua_ax_base_ParticleSystem_getStartSpin(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74195,7 +74183,7 @@ int lua_ax_base_ParticleSystem_setStartSpin(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -74245,7 +74233,7 @@ int lua_ax_base_ParticleSystem_getStartSpinVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74292,7 +74280,7 @@ int lua_ax_base_ParticleSystem_setStartSpinVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -74342,7 +74330,7 @@ int lua_ax_base_ParticleSystem_getEndSpin(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74389,7 +74377,7 @@ int lua_ax_base_ParticleSystem_setEndSpin(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -74439,7 +74427,7 @@ int lua_ax_base_ParticleSystem_getEndSpinVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74486,7 +74474,7 @@ int lua_ax_base_ParticleSystem_setEndSpinVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -74536,7 +74524,7 @@ int lua_ax_base_ParticleSystem_getSpawnAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74583,7 +74571,7 @@ int lua_ax_base_ParticleSystem_setSpawnAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -74633,7 +74621,7 @@ int lua_ax_base_ParticleSystem_getSpawnAngleVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74680,7 +74668,7 @@ int lua_ax_base_ParticleSystem_setSpawnAngleVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -74730,7 +74718,7 @@ int lua_ax_base_ParticleSystem_getSpawnFadeIn(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74777,7 +74765,7 @@ int lua_ax_base_ParticleSystem_setSpawnFadeIn(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -74827,7 +74815,7 @@ int lua_ax_base_ParticleSystem_getSpawnFadeInVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74874,7 +74862,7 @@ int lua_ax_base_ParticleSystem_setSpawnFadeInVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -74924,7 +74912,7 @@ int lua_ax_base_ParticleSystem_getSpawnScaleIn(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -74971,7 +74959,7 @@ int lua_ax_base_ParticleSystem_setSpawnScaleIn(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -75021,7 +75009,7 @@ int lua_ax_base_ParticleSystem_getSpawnScaleInVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75068,7 +75056,7 @@ int lua_ax_base_ParticleSystem_setSpawnScaleInVar(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -75118,7 +75106,7 @@ int lua_ax_base_ParticleSystem_getEmissionRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75165,7 +75153,7 @@ int lua_ax_base_ParticleSystem_setEmissionRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -75215,7 +75203,7 @@ int lua_ax_base_ParticleSystem_getTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75262,7 +75250,7 @@ int lua_ax_base_ParticleSystem_setTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -75312,7 +75300,7 @@ int lua_ax_base_ParticleSystem_setLifeAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -75362,7 +75350,7 @@ int lua_ax_base_ParticleSystem_setEmitterAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -75412,7 +75400,7 @@ int lua_ax_base_ParticleSystem_setLoopAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -75462,7 +75450,7 @@ int lua_ax_base_ParticleSystem_isLifeAnimated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75509,7 +75497,7 @@ int lua_ax_base_ParticleSystem_isEmitterAnimated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75556,7 +75544,7 @@ int lua_ax_base_ParticleSystem_isLoopAnimated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75603,7 +75591,7 @@ int lua_ax_base_ParticleSystem_getTotalAnimationIndices(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75650,7 +75638,7 @@ int lua_ax_base_ParticleSystem_setAnimationReverse(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -75700,7 +75688,7 @@ int lua_ax_base_ParticleSystem_isAnimationReversed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75747,7 +75735,7 @@ int lua_ax_base_ParticleSystem_resetAnimationIndices(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75794,7 +75782,7 @@ int lua_ax_base_ParticleSystem_resetAnimationDescriptors(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -75841,7 +75829,7 @@ int lua_ax_base_ParticleSystem_setMultiAnimationRandomSpecific(lua_State* tolua_
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::vector<unsigned short> arg0;
 
@@ -75891,7 +75879,7 @@ int lua_ax_base_ParticleSystem_setMultiAnimationRandom(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -76128,7 +76116,7 @@ int lua_ax_base_ParticleSystem_setRectForUndefinedIndices(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -76289,7 +76277,7 @@ int lua_ax_base_ParticleSystem_setAnimationSpeedTimescaleIndependent(lua_State* 
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -76339,7 +76327,7 @@ int lua_ax_base_ParticleSystem_isAnimationSpeedTimescaleIndependent(lua_State* t
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -76386,7 +76374,7 @@ int lua_ax_base_ParticleSystem_setEmissionShapes(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -76436,7 +76424,7 @@ int lua_ax_base_ParticleSystem_isEmissionShapes(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -76483,7 +76471,7 @@ int lua_ax_base_ParticleSystem_resetEmissionShapes(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -76530,7 +76518,7 @@ int lua_ax_base_ParticleSystem_addEmissionShape(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EmissionShape arg0;
 
@@ -76581,7 +76569,7 @@ int lua_ax_base_ParticleSystem_setEmissionShape(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         unsigned short arg0;
         ax::EmissionShape arg1;
@@ -76635,7 +76623,7 @@ int lua_ax_base_ParticleSystem_getPositionType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -76682,7 +76670,7 @@ int lua_ax_base_ParticleSystem_setPositionType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ParticleSystem::PositionType arg0;
 
@@ -76732,7 +76720,7 @@ int lua_ax_base_ParticleSystem_simulate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -76743,7 +76731,7 @@ int lua_ax_base_ParticleSystem_simulate(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -76757,7 +76745,7 @@ int lua_ax_base_ParticleSystem_simulate(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         double arg1;
@@ -76810,7 +76798,7 @@ int lua_ax_base_ParticleSystem_resimulate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -76821,7 +76809,7 @@ int lua_ax_base_ParticleSystem_resimulate(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -76835,7 +76823,7 @@ int lua_ax_base_ParticleSystem_resimulate(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         double arg1;
@@ -76888,7 +76876,7 @@ int lua_ax_base_ParticleSystem_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -76935,7 +76923,7 @@ int lua_ax_base_ParticleSystem_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -76985,7 +76973,7 @@ int lua_ax_base_ParticleSystem_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -77035,7 +77023,7 @@ int lua_ax_base_ParticleSystem_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77082,7 +77070,7 @@ int lua_ax_base_ParticleSystem_getResourceFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77129,7 +77117,7 @@ int lua_ax_base_ParticleSystem_start(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77176,7 +77164,7 @@ int lua_ax_base_ParticleSystem_stop(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77223,7 +77211,7 @@ int lua_ax_base_ParticleSystem_setSourcePositionCompatible(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -77273,7 +77261,7 @@ int lua_ax_base_ParticleSystem_isSourcePositionCompatible(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77320,7 +77308,7 @@ int lua_ax_base_ParticleSystem_initWithFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -77429,7 +77417,7 @@ int lua_ax_base_ParticleSystem_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -77479,7 +77467,7 @@ int lua_ax_base_ParticleSystem_isPaused(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77526,7 +77514,7 @@ int lua_ax_base_ParticleSystem_pauseEmissions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77573,7 +77561,7 @@ int lua_ax_base_ParticleSystem_resumeEmissions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77620,7 +77608,7 @@ int lua_ax_base_ParticleSystem_getFixedFPS(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77667,7 +77655,7 @@ int lua_ax_base_ParticleSystem_setFixedFPS(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77678,7 +77666,7 @@ int lua_ax_base_ParticleSystem_setFixedFPS(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -77728,7 +77716,7 @@ int lua_ax_base_ParticleSystem_getTimeScale(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77775,7 +77763,7 @@ int lua_ax_base_ParticleSystem_setTimeScale(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -77786,7 +77774,7 @@ int lua_ax_base_ParticleSystem_setTimeScale(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -78395,7 +78383,7 @@ int lua_ax_base_ParticleSystem_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -78634,7 +78622,7 @@ int lua_ax_base_ParticleSystemQuad_setDisplayFrame(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::SpriteFrame* arg0;
 
@@ -78684,7 +78672,7 @@ int lua_ax_base_ParticleSystemQuad_setTextureWithRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Texture2D* arg0;
         ax::Rect arg1;
@@ -78737,7 +78725,7 @@ int lua_ax_base_ParticleSystemQuad_listenRendererRecreated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::EventCustom* arg0;
 
@@ -78775,7 +78763,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -78788,7 +78776,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -78798,7 +78786,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -78868,7 +78856,7 @@ int lua_ax_base_ParticleSystemQuad_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79000,7 +78988,7 @@ int lua_ax_base_ParticleFire_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79072,7 +79060,7 @@ int lua_ax_base_ParticleFireworks_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79119,7 +79107,7 @@ int lua_ax_base_ParticleFireworks_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -79226,7 +79214,7 @@ int lua_ax_base_ParticleFireworks_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79300,7 +79288,7 @@ int lua_ax_base_ParticleSun_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79347,7 +79335,7 @@ int lua_ax_base_ParticleSun_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -79454,7 +79442,7 @@ int lua_ax_base_ParticleSun_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79528,7 +79516,7 @@ int lua_ax_base_ParticleGalaxy_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79575,7 +79563,7 @@ int lua_ax_base_ParticleGalaxy_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -79682,7 +79670,7 @@ int lua_ax_base_ParticleGalaxy_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79756,7 +79744,7 @@ int lua_ax_base_ParticleFlower_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79803,7 +79791,7 @@ int lua_ax_base_ParticleFlower_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -79910,7 +79898,7 @@ int lua_ax_base_ParticleFlower_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -79984,7 +79972,7 @@ int lua_ax_base_ParticleMeteor_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80031,7 +80019,7 @@ int lua_ax_base_ParticleMeteor_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -80138,7 +80126,7 @@ int lua_ax_base_ParticleMeteor_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80212,7 +80200,7 @@ int lua_ax_base_ParticleSpiral_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80259,7 +80247,7 @@ int lua_ax_base_ParticleSpiral_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -80366,7 +80354,7 @@ int lua_ax_base_ParticleSpiral_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80440,7 +80428,7 @@ int lua_ax_base_ParticleExplosion_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80487,7 +80475,7 @@ int lua_ax_base_ParticleExplosion_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -80594,7 +80582,7 @@ int lua_ax_base_ParticleExplosion_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80668,7 +80656,7 @@ int lua_ax_base_ParticleSmoke_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80715,7 +80703,7 @@ int lua_ax_base_ParticleSmoke_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -80822,7 +80810,7 @@ int lua_ax_base_ParticleSmoke_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80896,7 +80884,7 @@ int lua_ax_base_ParticleSnow_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -80943,7 +80931,7 @@ int lua_ax_base_ParticleSnow_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -81050,7 +81038,7 @@ int lua_ax_base_ParticleSnow_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81124,7 +81112,7 @@ int lua_ax_base_ParticleRain_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81171,7 +81159,7 @@ int lua_ax_base_ParticleRain_initWithTotalParticles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -81278,7 +81266,7 @@ int lua_ax_base_ParticleRain_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81352,7 +81340,7 @@ int lua_ax_base_ProgressTimer_getType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81399,7 +81387,7 @@ int lua_ax_base_ProgressTimer_getPercentage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81446,7 +81434,7 @@ int lua_ax_base_ProgressTimer_getSprite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81493,7 +81481,7 @@ int lua_ax_base_ProgressTimer_setPercentage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -81543,7 +81531,7 @@ int lua_ax_base_ProgressTimer_setSprite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Sprite* arg0;
 
@@ -81593,7 +81581,7 @@ int lua_ax_base_ProgressTimer_setType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ProgressTimer::Type arg0;
 
@@ -81643,7 +81631,7 @@ int lua_ax_base_ProgressTimer_isReverseDirection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81690,7 +81678,7 @@ int lua_ax_base_ProgressTimer_setReverseDirection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -81740,7 +81728,7 @@ int lua_ax_base_ProgressTimer_setMidpoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -81790,7 +81778,7 @@ int lua_ax_base_ProgressTimer_getMidpoint(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81837,7 +81825,7 @@ int lua_ax_base_ProgressTimer_setBarChangeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -81887,7 +81875,7 @@ int lua_ax_base_ProgressTimer_getBarChangeRate(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -81934,7 +81922,7 @@ int lua_ax_base_ProgressTimer_initWithSprite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Sprite* arg0;
 
@@ -82007,7 +81995,7 @@ int lua_ax_base_ProgressTimer_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -82170,7 +82158,7 @@ int lua_ax_base_ProtectedNode_getProtectedChildByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -82220,7 +82208,7 @@ int lua_ax_base_ProtectedNode_getProtectedChildByName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -82270,7 +82258,7 @@ int lua_ax_base_ProtectedNode_removeProtectedChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -82284,7 +82272,7 @@ int lua_ax_base_ProtectedNode_removeProtectedChild(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         bool arg1;
@@ -82337,7 +82325,7 @@ int lua_ax_base_ProtectedNode_removeProtectedChildByTag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -82351,7 +82339,7 @@ int lua_ax_base_ProtectedNode_removeProtectedChildByTag(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         int arg0;
         bool arg1;
@@ -82404,7 +82392,7 @@ int lua_ax_base_ProtectedNode_removeAllProtectedChildren(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -82451,7 +82439,7 @@ int lua_ax_base_ProtectedNode_removeAllProtectedChildrenWithCleanup(lua_State* t
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -82501,7 +82489,7 @@ int lua_ax_base_ProtectedNode_reorderProtectedChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Node* arg0;
         int arg1;
@@ -82554,7 +82542,7 @@ int lua_ax_base_ProtectedNode_sortAllProtectedChildren(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -82601,7 +82589,7 @@ int lua_ax_base_ProtectedNode_getProtectedChildren(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -82648,7 +82636,7 @@ int lua_ax_base_ProtectedNode_disableCascadeColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -82695,7 +82683,7 @@ int lua_ax_base_ProtectedNode_disableCascadeOpacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -82763,7 +82751,7 @@ int lua_ax_base_ProtectedNode_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -82846,7 +82834,7 @@ int lua_ax_base_RenderTexture_begin(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -83008,7 +82996,7 @@ int lua_ax_base_RenderTexture_end(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -83055,7 +83043,7 @@ int lua_ax_base_RenderTexture_clear(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         double arg1;
@@ -83114,7 +83102,7 @@ int lua_ax_base_RenderTexture_clearDepth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -83164,7 +83152,7 @@ int lua_ax_base_RenderTexture_clearStencil(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -83472,7 +83460,7 @@ int lua_ax_base_RenderTexture_getClearFlags(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -83519,7 +83507,7 @@ int lua_ax_base_RenderTexture_setClearFlags(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::TargetBufferFlags arg0;
 
@@ -83569,7 +83557,7 @@ int lua_ax_base_RenderTexture_getClearColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -83616,7 +83604,7 @@ int lua_ax_base_RenderTexture_setClearColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color arg0;
 
@@ -83666,7 +83654,7 @@ int lua_ax_base_RenderTexture_getClearDepth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -83713,7 +83701,7 @@ int lua_ax_base_RenderTexture_setClearDepth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -83763,7 +83751,7 @@ int lua_ax_base_RenderTexture_getClearStencil(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -83810,7 +83798,7 @@ int lua_ax_base_RenderTexture_setClearStencil(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -83860,7 +83848,7 @@ int lua_ax_base_RenderTexture_isAutoDraw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -83907,7 +83895,7 @@ int lua_ax_base_RenderTexture_setAutoDraw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -83957,7 +83945,7 @@ int lua_ax_base_RenderTexture_getSprite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84004,7 +83992,7 @@ int lua_ax_base_RenderTexture_getRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84051,7 +84039,7 @@ int lua_ax_base_RenderTexture_setKeepMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -84101,7 +84089,7 @@ int lua_ax_base_RenderTexture_setVirtualViewport(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Vec2 arg0;
         ax::Rect arg1;
@@ -84157,7 +84145,7 @@ int lua_ax_base_RenderTexture_isSharedRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84319,7 +84307,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -84338,7 +84326,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -84360,7 +84348,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -84382,7 +84370,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -84407,7 +84395,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -84423,7 +84411,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -84463,7 +84451,7 @@ int lua_ax_base_RenderTexture_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84558,7 +84546,7 @@ int lua_ax_base_TransitionEaseScene_easeActionWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -84628,7 +84616,7 @@ int lua_ax_base_TransitionScene_finish(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84675,7 +84663,7 @@ int lua_ax_base_TransitionScene_hideOutShowIn(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84722,7 +84710,7 @@ int lua_ax_base_TransitionScene_getInScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84769,7 +84757,7 @@ int lua_ax_base_TransitionScene_getDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84816,7 +84804,7 @@ int lua_ax_base_TransitionScene_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         double arg0;
         ax::Scene* arg1;
@@ -84894,7 +84882,7 @@ int lua_ax_base_TransitionScene_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -84970,7 +84958,7 @@ int lua_ax_base_TransitionSceneOriented_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         ax::Scene* arg1;
@@ -85053,7 +85041,7 @@ int lua_ax_base_TransitionSceneOriented_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85150,7 +85138,7 @@ int lua_ax_base_TransitionRotoZoom_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85246,7 +85234,7 @@ int lua_ax_base_TransitionJumpZoom_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85317,7 +85305,7 @@ int lua_ax_base_TransitionMoveInL_action(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85364,7 +85352,7 @@ int lua_ax_base_TransitionMoveInL_easeActionWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -85439,7 +85427,7 @@ int lua_ax_base_TransitionMoveInL_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85537,7 +85525,7 @@ int lua_ax_base_TransitionMoveInR_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85633,7 +85621,7 @@ int lua_ax_base_TransitionMoveInT_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85729,7 +85717,7 @@ int lua_ax_base_TransitionMoveInB_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85800,7 +85788,7 @@ int lua_ax_base_TransitionSlideInL_easeActionWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -85850,7 +85838,7 @@ int lua_ax_base_TransitionSlideInL_action(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -85922,7 +85910,7 @@ int lua_ax_base_TransitionSlideInL_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86020,7 +86008,7 @@ int lua_ax_base_TransitionSlideInR_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86116,7 +86104,7 @@ int lua_ax_base_TransitionSlideInB_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86212,7 +86200,7 @@ int lua_ax_base_TransitionSlideInT_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86283,7 +86271,7 @@ int lua_ax_base_TransitionShrinkGrow_easeActionWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -86358,7 +86346,7 @@ int lua_ax_base_TransitionShrinkGrow_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86418,7 +86406,7 @@ int lua_ax_base_TransitionFlipX_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -86434,7 +86422,7 @@ int lua_ax_base_TransitionFlipX_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -86474,7 +86462,7 @@ int lua_ax_base_TransitionFlipX_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86533,7 +86521,7 @@ int lua_ax_base_TransitionFlipY_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -86549,7 +86537,7 @@ int lua_ax_base_TransitionFlipY_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -86589,7 +86577,7 @@ int lua_ax_base_TransitionFlipY_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86648,7 +86636,7 @@ int lua_ax_base_TransitionFlipAngular_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -86664,7 +86652,7 @@ int lua_ax_base_TransitionFlipAngular_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -86704,7 +86692,7 @@ int lua_ax_base_TransitionFlipAngular_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86763,7 +86751,7 @@ int lua_ax_base_TransitionZoomFlipX_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -86779,7 +86767,7 @@ int lua_ax_base_TransitionZoomFlipX_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -86819,7 +86807,7 @@ int lua_ax_base_TransitionZoomFlipX_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86878,7 +86866,7 @@ int lua_ax_base_TransitionZoomFlipY_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -86894,7 +86882,7 @@ int lua_ax_base_TransitionZoomFlipY_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -86934,7 +86922,7 @@ int lua_ax_base_TransitionZoomFlipY_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -86993,7 +86981,7 @@ int lua_ax_base_TransitionZoomFlipAngular_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -87009,7 +86997,7 @@ int lua_ax_base_TransitionZoomFlipAngular_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -87049,7 +87037,7 @@ int lua_ax_base_TransitionZoomFlipAngular_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -87175,7 +87163,7 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -87191,7 +87179,7 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -87231,7 +87219,7 @@ int lua_ax_base_TransitionFade_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -87328,7 +87316,7 @@ int lua_ax_base_TransitionCrossFade_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -87399,7 +87387,7 @@ int lua_ax_base_TransitionTurnOffTiles_easeActionWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -87474,7 +87462,7 @@ int lua_ax_base_TransitionTurnOffTiles_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -87546,7 +87534,7 @@ int lua_ax_base_TransitionSplitCols_action(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -87593,7 +87581,7 @@ int lua_ax_base_TransitionSplitCols_easeActionWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -87668,7 +87656,7 @@ int lua_ax_base_TransitionSplitCols_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -87766,7 +87754,7 @@ int lua_ax_base_TransitionSplitRows_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -87837,7 +87825,7 @@ int lua_ax_base_TransitionFadeTR_actionWithSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -87887,7 +87875,7 @@ int lua_ax_base_TransitionFadeTR_easeActionWithAction(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ActionInterval* arg0;
 
@@ -87962,7 +87950,7 @@ int lua_ax_base_TransitionFadeTR_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88060,7 +88048,7 @@ int lua_ax_base_TransitionFadeBL_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88156,7 +88144,7 @@ int lua_ax_base_TransitionFadeUp_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88252,7 +88240,7 @@ int lua_ax_base_TransitionFadeDown_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88323,7 +88311,7 @@ int lua_ax_base_TransitionPageTurn_initWithDuration(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         double arg0;
         ax::Scene* arg1;
@@ -88379,7 +88367,7 @@ int lua_ax_base_TransitionPageTurn_actionWithSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -88456,7 +88444,7 @@ int lua_ax_base_TransitionPageTurn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88554,7 +88542,7 @@ int lua_ax_base_TransitionProgress_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88650,7 +88638,7 @@ int lua_ax_base_TransitionProgressRadialCCW_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88746,7 +88734,7 @@ int lua_ax_base_TransitionProgressRadialCW_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88842,7 +88830,7 @@ int lua_ax_base_TransitionProgressHorizontal_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -88938,7 +88926,7 @@ int lua_ax_base_TransitionProgressVertical_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89034,7 +89022,7 @@ int lua_ax_base_TransitionProgressInOut_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89130,7 +89118,7 @@ int lua_ax_base_TransitionProgressOutIn_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89201,7 +89189,7 @@ int lua_ax_base_Camera_getCameraFlag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89248,7 +89236,7 @@ int lua_ax_base_Camera_setCameraFlag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::CameraFlag arg0;
 
@@ -89298,7 +89286,7 @@ int lua_ax_base_Camera_lookAt(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -89312,7 +89300,7 @@ int lua_ax_base_Camera_lookAt(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Vec3 arg0;
         ax::Vec3 arg1;
@@ -89365,7 +89353,7 @@ int lua_ax_base_Camera_getProjectionMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89412,7 +89400,7 @@ int lua_ax_base_Camera_getViewMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89459,7 +89447,7 @@ int lua_ax_base_Camera_getViewProjectionMatrix(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89506,7 +89494,7 @@ int lua_ax_base_Camera_project(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -89556,7 +89544,7 @@ int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -89606,7 +89594,7 @@ int lua_ax_base_Camera_isVisibleInFrustum(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         const ax::AABB* arg0;
 
@@ -89656,7 +89644,7 @@ int lua_ax_base_Camera_getDepthInView(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Mat4 arg0;
 
@@ -89706,7 +89694,7 @@ int lua_ax_base_Camera_setDepth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int32_t arg0;
 
@@ -89756,7 +89744,7 @@ int lua_ax_base_Camera_getDepth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89803,7 +89791,7 @@ int lua_ax_base_Camera_getRenderOrder(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89850,7 +89838,7 @@ int lua_ax_base_Camera_getFOV(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89897,7 +89885,7 @@ int lua_ax_base_Camera_setFOV(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -89947,7 +89935,7 @@ int lua_ax_base_Camera_getFarPlane(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -89994,7 +89982,7 @@ int lua_ax_base_Camera_setFarPlane(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -90044,7 +90032,7 @@ int lua_ax_base_Camera_getNearPlane(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90091,7 +90079,7 @@ int lua_ax_base_Camera_setNearPlane(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -90141,7 +90129,7 @@ int lua_ax_base_Camera_getZoom(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90188,7 +90176,7 @@ int lua_ax_base_Camera_setZoom(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -90238,7 +90226,7 @@ int lua_ax_base_Camera_applyZoom(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90285,7 +90273,7 @@ int lua_ax_base_Camera_clearBackground(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90332,7 +90320,7 @@ int lua_ax_base_Camera_apply(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90379,7 +90367,7 @@ int lua_ax_base_Camera_isViewProjectionUpdated(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90426,7 +90414,7 @@ int lua_ax_base_Camera_setBackgroundBrush(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::CameraBackgroundBrush* arg0;
 
@@ -90476,7 +90464,7 @@ int lua_ax_base_Camera_getBackgroundBrush(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90523,7 +90511,7 @@ int lua_ax_base_Camera_isBrushValid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90570,7 +90558,7 @@ int lua_ax_base_Camera_setScene(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Scene* arg0;
 
@@ -90620,7 +90608,7 @@ int lua_ax_base_Camera_setAdditionalProjection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Mat4 arg0;
 
@@ -90670,7 +90658,7 @@ int lua_ax_base_Camera_initDefault(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -90717,7 +90705,7 @@ int lua_ax_base_Camera_initPerspective(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         double arg1;
@@ -90776,7 +90764,7 @@ int lua_ax_base_Camera_initOrthographic(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         double arg1;
@@ -90835,7 +90823,7 @@ int lua_ax_base_Camera_applyViewport(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -91126,7 +91114,7 @@ int lua_ax_base_Camera_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -91237,7 +91225,7 @@ int lua_ax_base_CameraBackgroundBrush_getBrushType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -91284,7 +91272,7 @@ int lua_ax_base_CameraBackgroundBrush_drawBackground(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Camera* arg0;
 
@@ -91334,7 +91322,7 @@ int lua_ax_base_CameraBackgroundBrush_isValid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -91381,7 +91369,7 @@ int lua_ax_base_CameraBackgroundBrush_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -91580,7 +91568,7 @@ int lua_ax_base_CameraBackgroundBrush_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -91658,7 +91646,7 @@ int lua_ax_base_CameraBackgroundDepthBrush_setDepth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -91731,7 +91719,7 @@ int lua_ax_base_CameraBackgroundDepthBrush_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -91803,7 +91791,7 @@ int lua_ax_base_CameraBackgroundColorBrush_setColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color arg0;
 
@@ -91878,7 +91866,7 @@ int lua_ax_base_CameraBackgroundColorBrush_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -91950,7 +91938,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TextureCube* arg0;
 
@@ -92000,7 +91988,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92047,7 +92035,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_isActived(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92094,7 +92082,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_setActived(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -92144,7 +92132,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_setTextureValid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -92182,7 +92170,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 0)
         {
@@ -92192,7 +92180,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 6)
         {
@@ -92241,7 +92229,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92317,7 +92305,7 @@ int lua_ax_base_GridBase_beforeBlit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92364,7 +92352,7 @@ int lua_ax_base_GridBase_afterBlit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92411,7 +92399,7 @@ int lua_ax_base_GridBase_blit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92458,7 +92446,7 @@ int lua_ax_base_GridBase_reuse(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92505,7 +92493,7 @@ int lua_ax_base_GridBase_calculateVertexPoints(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92655,7 +92643,7 @@ int lua_ax_base_GridBase_isActive(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92702,7 +92690,7 @@ int lua_ax_base_GridBase_setActive(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -92752,7 +92740,7 @@ int lua_ax_base_GridBase_getReuseGrid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92799,7 +92787,7 @@ int lua_ax_base_GridBase_setReuseGrid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -92849,7 +92837,7 @@ int lua_ax_base_GridBase_getGridSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92896,7 +92884,7 @@ int lua_ax_base_GridBase_setGridSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -92946,7 +92934,7 @@ int lua_ax_base_GridBase_getStep(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -92993,7 +92981,7 @@ int lua_ax_base_GridBase_setStep(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -93043,7 +93031,7 @@ int lua_ax_base_GridBase_isTextureFlipped(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93090,7 +93078,7 @@ int lua_ax_base_GridBase_setTextureFlipped(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -93140,7 +93128,7 @@ int lua_ax_base_GridBase_beforeDraw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93187,7 +93175,7 @@ int lua_ax_base_GridBase_afterDraw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Node* arg0;
 
@@ -93237,7 +93225,7 @@ int lua_ax_base_GridBase_set2DProjection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93284,7 +93272,7 @@ int lua_ax_base_GridBase_setGridRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Rect arg0;
 
@@ -93334,7 +93322,7 @@ int lua_ax_base_GridBase_getGridRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93421,7 +93409,7 @@ int lua_ax_base_Grid3D_setNeedDepthTestForBlit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -93471,7 +93459,7 @@ int lua_ax_base_Grid3D_getNeedDepthTestForBlit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93506,7 +93494,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -93522,7 +93510,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -93535,7 +93523,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -93554,7 +93542,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -93597,7 +93585,7 @@ int lua_ax_base_Grid3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93658,7 +93646,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 2)
         {
@@ -93674,7 +93662,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 1)
         {
@@ -93687,7 +93675,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 3)
         {
@@ -93706,7 +93694,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 4)
         {
@@ -93782,7 +93770,7 @@ int lua_ax_base_BaseLight_getLightType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93829,7 +93817,7 @@ int lua_ax_base_BaseLight_getIntensity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93876,7 +93864,7 @@ int lua_ax_base_BaseLight_setIntensity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -93926,7 +93914,7 @@ int lua_ax_base_BaseLight_getLightFlag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -93973,7 +93961,7 @@ int lua_ax_base_BaseLight_setLightFlag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::LightFlag arg0;
 
@@ -94023,7 +94011,7 @@ int lua_ax_base_BaseLight_setEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -94073,7 +94061,7 @@ int lua_ax_base_BaseLight_isEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94146,7 +94134,7 @@ int lua_ax_base_DirectionLight_setDirection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -94196,7 +94184,7 @@ int lua_ax_base_DirectionLight_getDirection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94243,7 +94231,7 @@ int lua_ax_base_DirectionLight_getDirectionInWorld(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94315,7 +94303,7 @@ int lua_ax_base_DirectionLight_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94389,7 +94377,7 @@ int lua_ax_base_PointLight_getRange(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94436,7 +94424,7 @@ int lua_ax_base_PointLight_setRange(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -94513,7 +94501,7 @@ int lua_ax_base_PointLight_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94586,7 +94574,7 @@ int lua_ax_base_SpotLight_setDirection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -94636,7 +94624,7 @@ int lua_ax_base_SpotLight_getDirection(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94683,7 +94671,7 @@ int lua_ax_base_SpotLight_getDirectionInWorld(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94730,7 +94718,7 @@ int lua_ax_base_SpotLight_setRange(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -94780,7 +94768,7 @@ int lua_ax_base_SpotLight_getRange(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94827,7 +94815,7 @@ int lua_ax_base_SpotLight_setInnerAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -94877,7 +94865,7 @@ int lua_ax_base_SpotLight_getInnerAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94924,7 +94912,7 @@ int lua_ax_base_SpotLight_getCosInnerAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -94971,7 +94959,7 @@ int lua_ax_base_SpotLight_setOuterAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -95021,7 +95009,7 @@ int lua_ax_base_SpotLight_getOuterAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95068,7 +95056,7 @@ int lua_ax_base_SpotLight_getCosOuterAngle(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95148,7 +95136,7 @@ int lua_ax_base_SpotLight_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95253,7 +95241,7 @@ int lua_ax_base_AmbientLight_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95324,7 +95312,7 @@ int lua_ax_base_RenderState_getName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95371,7 +95359,7 @@ int lua_ax_base_RenderState_bindPass(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Pass* arg0;
         ax::MeshCommand* arg1;
@@ -95445,7 +95433,7 @@ int lua_ax_base_Technique_addPass(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Pass* arg0;
 
@@ -95495,7 +95483,7 @@ int lua_ax_base_Technique_getName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95542,7 +95530,7 @@ int lua_ax_base_Technique_getPassByIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ssize_t arg0;
 
@@ -95592,7 +95580,7 @@ int lua_ax_base_Technique_getPassCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95639,7 +95627,7 @@ int lua_ax_base_Technique_getPasses(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95686,7 +95674,7 @@ int lua_ax_base_Technique_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -95733,7 +95721,7 @@ int lua_ax_base_Technique_setMaterial(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Material* arg0;
 
@@ -95885,7 +95873,7 @@ int lua_ax_base_Material_draw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 8)
+    if (argc == 8) 
     {
         ax::MeshCommand* arg0;
         double arg1;
@@ -95956,7 +95944,7 @@ int lua_ax_base_Material_getName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96003,7 +95991,7 @@ int lua_ax_base_Material_setName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -96053,7 +96041,7 @@ int lua_ax_base_Material_getTechniqueByName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -96103,7 +96091,7 @@ int lua_ax_base_Material_getTechniqueByIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ssize_t arg0;
 
@@ -96153,7 +96141,7 @@ int lua_ax_base_Material_getTechnique(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96200,7 +96188,7 @@ int lua_ax_base_Material_getTechniques(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96247,7 +96235,7 @@ int lua_ax_base_Material_getTechniqueCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96294,7 +96282,7 @@ int lua_ax_base_Material_addTechnique(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Technique* arg0;
 
@@ -96344,7 +96332,7 @@ int lua_ax_base_Material_setTechnique(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -96394,7 +96382,7 @@ int lua_ax_base_Material_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96441,7 +96429,7 @@ int lua_ax_base_Material_getRenderState(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96488,7 +96476,7 @@ int lua_ax_base_Material_setPrimitiveType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::PrimitiveType arg0;
 
@@ -96538,7 +96526,7 @@ int lua_ax_base_Material_getPrimitiveType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96585,7 +96573,7 @@ int lua_ax_base_Material_setTransparent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -96635,7 +96623,7 @@ int lua_ax_base_Material_isTransparent(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96682,7 +96670,7 @@ int lua_ax_base_Material_setForce2DQueue(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -96732,7 +96720,7 @@ int lua_ax_base_Material_isForce2DQueue(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96927,7 +96915,7 @@ int lua_ax_base_Pass_getProgramState(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -96974,7 +96962,7 @@ int lua_ax_base_Pass_draw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 8)
+    if (argc == 8) 
     {
         ax::MeshCommand* arg0;
         double arg1;
@@ -97045,7 +97033,7 @@ int lua_ax_base_Pass_setVertexInputBinding(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::VertexInputBinding* arg0;
 
@@ -97095,7 +97083,7 @@ int lua_ax_base_Pass_getVertexAttributeBinding(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -97142,7 +97130,7 @@ int lua_ax_base_Pass_setName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -97192,7 +97180,7 @@ int lua_ax_base_Pass_getName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -97239,7 +97227,7 @@ int lua_ax_base_Pass_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -97286,7 +97274,7 @@ int lua_ax_base_Pass_setTechnique(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Technique* arg0;
 
@@ -97336,7 +97324,7 @@ int lua_ax_base_Pass_updateMVPUniform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Mat4 arg0;
 
@@ -97386,7 +97374,7 @@ int lua_ax_base_Pass_setUniformTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         unsigned int arg0;
         ax::rhi::Texture* arg1;
@@ -97439,7 +97427,7 @@ int lua_ax_base_Pass_setUniformNormTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         unsigned int arg0;
         ax::rhi::Texture* arg1;
@@ -97492,7 +97480,7 @@ int lua_ax_base_Pass_setUniformColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97546,7 +97534,7 @@ int lua_ax_base_Pass_setUniformMatrixPalette(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97600,7 +97588,7 @@ int lua_ax_base_Pass_setUniformDirLightColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97654,7 +97642,7 @@ int lua_ax_base_Pass_setUniformDirLightDir(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97708,7 +97696,7 @@ int lua_ax_base_Pass_setUniformPointLightColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97762,7 +97750,7 @@ int lua_ax_base_Pass_setUniformPointLightPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97816,7 +97804,7 @@ int lua_ax_base_Pass_setUniformPointLightRangeInverse(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97870,7 +97858,7 @@ int lua_ax_base_Pass_setUniformSpotLightColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97924,7 +97912,7 @@ int lua_ax_base_Pass_setUniformSpotLightPosition(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -97978,7 +97966,7 @@ int lua_ax_base_Pass_setUniformSpotLightDir(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -98032,7 +98020,7 @@ int lua_ax_base_Pass_setUniformSpotLightInnerAngleCos(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -98086,7 +98074,7 @@ int lua_ax_base_Pass_setUniformSpotLightOuterAngleCos(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -98140,7 +98128,7 @@ int lua_ax_base_Pass_setUniformSpotLightRangeInverse(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -98194,7 +98182,7 @@ int lua_ax_base_Pass_setUniformAmbientLigthColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         const void* arg0;
         unsigned int arg1;
@@ -98368,7 +98356,7 @@ int lua_ax_base_ProgramManager_getBuiltinProgram(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -98418,7 +98406,7 @@ int lua_ax_base_ProgramManager_registerCustomProgram(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -98435,7 +98423,7 @@ int lua_ax_base_ProgramManager_registerCustomProgram(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    if (argc == 3)
+    if (argc == 3) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -98455,7 +98443,7 @@ int lua_ax_base_ProgramManager_registerCustomProgram(lua_State* tolua_S)
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    if (argc == 4)
+    if (argc == 4) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -98593,7 +98581,7 @@ int lua_ax_base_ProgramManager_unloadProgram(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::Program* arg0;
 
@@ -98643,7 +98631,7 @@ int lua_ax_base_ProgramManager_unloadUnusedPrograms(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -98690,7 +98678,7 @@ int lua_ax_base_ProgramManager_unloadAllPrograms(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -98869,7 +98857,7 @@ int lua_ax_base_Renderer_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -98916,7 +98904,7 @@ int lua_ax_base_Renderer_addCallbackCommand(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::function<void ()> arg0;
 
@@ -98934,7 +98922,7 @@ int lua_ax_base_Renderer_addCallbackCommand(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::function<void ()> arg0;
         double arg1;
@@ -99050,7 +99038,7 @@ int lua_ax_base_Renderer_getNextGroupCommand(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99097,7 +99085,7 @@ int lua_ax_base_Renderer_pushGroup(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -99147,7 +99135,7 @@ int lua_ax_base_Renderer_popGroup(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99194,7 +99182,7 @@ int lua_ax_base_Renderer_createRenderQueue(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99241,7 +99229,7 @@ int lua_ax_base_Renderer_render(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99288,7 +99276,7 @@ int lua_ax_base_Renderer_clean(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99335,7 +99323,7 @@ int lua_ax_base_Renderer_getDrawnBatches(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99382,7 +99370,7 @@ int lua_ax_base_Renderer_addDrawnBatches(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ssize_t arg0;
 
@@ -99432,7 +99420,7 @@ int lua_ax_base_Renderer_getDrawnVertices(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99479,7 +99467,7 @@ int lua_ax_base_Renderer_addDrawnVertices(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ssize_t arg0;
 
@@ -99529,7 +99517,7 @@ int lua_ax_base_Renderer_clearDrawStats(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99576,7 +99564,7 @@ int lua_ax_base_Renderer_getRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99623,7 +99611,7 @@ int lua_ax_base_Renderer_setRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::RenderTarget* arg0;
 
@@ -99673,7 +99661,7 @@ int lua_ax_base_Renderer_getDefaultRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99720,7 +99708,7 @@ int lua_ax_base_Renderer_getOffscreenRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99767,7 +99755,7 @@ int lua_ax_base_Renderer_clear(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 5)
+    if (argc == 5) 
     {
         ax::rhi::TargetBufferFlags arg0;
         ax::Color arg1;
@@ -99829,7 +99817,7 @@ int lua_ax_base_Renderer_getClearColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99876,7 +99864,7 @@ int lua_ax_base_Renderer_getClearDepth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99923,7 +99911,7 @@ int lua_ax_base_Renderer_getClearStencil(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -99970,7 +99958,7 @@ int lua_ax_base_Renderer_getClearFlag(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100017,7 +100005,7 @@ int lua_ax_base_Renderer_setDepthTest(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -100067,7 +100055,7 @@ int lua_ax_base_Renderer_setDepthWrite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -100117,7 +100105,7 @@ int lua_ax_base_Renderer_setDepthCompareFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::CompareFunc arg0;
 
@@ -100167,7 +100155,7 @@ int lua_ax_base_Renderer_getDepthTest(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100214,7 +100202,7 @@ int lua_ax_base_Renderer_getDepthWrite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100261,7 +100249,7 @@ int lua_ax_base_Renderer_getDepthCompareFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100308,7 +100296,7 @@ int lua_ax_base_Renderer_setStencilTest(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -100358,7 +100346,7 @@ int lua_ax_base_Renderer_setStencilCompareFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::rhi::CompareFunc arg0;
         unsigned int arg1;
@@ -100414,7 +100402,7 @@ int lua_ax_base_Renderer_setStencilOp(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::rhi::StencilOp arg0;
         ax::rhi::StencilOp arg1;
@@ -100470,7 +100458,7 @@ int lua_ax_base_Renderer_setStencilWriteMask(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -100520,7 +100508,7 @@ int lua_ax_base_Renderer_getStencilTest(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100567,7 +100555,7 @@ int lua_ax_base_Renderer_getStencilFailureOp(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100614,7 +100602,7 @@ int lua_ax_base_Renderer_getStencilPassDepthFailureOp(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100661,7 +100649,7 @@ int lua_ax_base_Renderer_getStencilDepthPassOp(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100708,7 +100696,7 @@ int lua_ax_base_Renderer_getStencilCompareFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100755,7 +100743,7 @@ int lua_ax_base_Renderer_getStencilReadMask(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100802,7 +100790,7 @@ int lua_ax_base_Renderer_getStencilWriteMask(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100849,7 +100837,7 @@ int lua_ax_base_Renderer_getStencilReferenceValue(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100896,7 +100884,7 @@ int lua_ax_base_Renderer_setDepthStencilDesc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::DepthStencilDesc arg0;
 
@@ -100947,7 +100935,7 @@ int lua_ax_base_Renderer_getDepthStencilDesc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -100994,7 +100982,7 @@ int lua_ax_base_Renderer_setCullMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::CullMode arg0;
 
@@ -101044,7 +101032,7 @@ int lua_ax_base_Renderer_getCullMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101091,7 +101079,7 @@ int lua_ax_base_Renderer_setWinding(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::Winding arg0;
 
@@ -101141,7 +101129,7 @@ int lua_ax_base_Renderer_getWinding(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101188,7 +101176,7 @@ int lua_ax_base_Renderer_setViewPort(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         int arg0;
         int arg1;
@@ -101247,7 +101235,7 @@ int lua_ax_base_Renderer_getViewport(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101294,7 +101282,7 @@ int lua_ax_base_Renderer_setScissorTest(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -101344,7 +101332,7 @@ int lua_ax_base_Renderer_setScissorRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         double arg0;
         double arg1;
@@ -101403,7 +101391,7 @@ int lua_ax_base_Renderer_getScissorTest(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101450,7 +101438,7 @@ int lua_ax_base_Renderer_getScissorRect(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101497,7 +101485,7 @@ int lua_ax_base_Renderer_checkVisibility(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Mat4 arg0;
         ax::Vec2 arg1;
@@ -101550,7 +101538,7 @@ int lua_ax_base_Renderer_readPixels(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::rhi::RenderTarget* arg0;
         std::function<void (const ax::rhi::PixelBufferDesc &)> arg1;
@@ -101607,7 +101595,7 @@ int lua_ax_base_Renderer_beginRenderPass(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101654,7 +101642,7 @@ int lua_ax_base_Renderer_endRenderPass(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101701,7 +101689,7 @@ int lua_ax_base_Renderer_nextCallbackCommand(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101748,7 +101736,7 @@ int lua_ax_base_Renderer_resizeSwapChain(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         unsigned int arg0;
         unsigned int arg1;
@@ -101788,7 +101776,7 @@ int lua_ax_base_Renderer_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -101915,7 +101903,7 @@ int lua_ax_base_TextureCache_getDescription(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -102017,7 +102005,7 @@ int lua_ax_base_TextureCache_getDummyTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -102211,7 +102199,7 @@ int lua_ax_base_TextureCache_unbindImageAsync(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -102261,7 +102249,7 @@ int lua_ax_base_TextureCache_unbindAllImageAsync(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -102308,7 +102296,7 @@ int lua_ax_base_TextureCache_getTextureForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -102358,7 +102346,7 @@ int lua_ax_base_TextureCache_reloadTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -102408,7 +102396,7 @@ int lua_ax_base_TextureCache_removeAllTextures(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -102455,7 +102443,7 @@ int lua_ax_base_TextureCache_removeUnusedTextures(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -102502,7 +102490,7 @@ int lua_ax_base_TextureCache_removeTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -102552,7 +102540,7 @@ int lua_ax_base_TextureCache_removeTextureForKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -102602,7 +102590,7 @@ int lua_ax_base_TextureCache_getCachedTextureInfo(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -102649,7 +102637,7 @@ int lua_ax_base_TextureCache_waitForQuit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -102696,7 +102684,7 @@ int lua_ax_base_TextureCache_getTextureFilePath(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -102746,7 +102734,7 @@ int lua_ax_base_TextureCache_renameTextureWithKey(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -102856,7 +102844,7 @@ int lua_ax_base_TextureCache_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -103397,7 +103385,7 @@ int lua_ax_base_Application_setAnimationInterval(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -103447,7 +103435,7 @@ int lua_ax_base_Application_getCurrentLanguage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -103494,7 +103482,7 @@ int lua_ax_base_Application_getCurrentLanguageCode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -103541,7 +103529,7 @@ int lua_ax_base_Application_getTargetPlatform(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -103588,7 +103576,7 @@ int lua_ax_base_Application_getVersion(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -103635,7 +103623,7 @@ int lua_ax_base_Application_openURL(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -103913,7 +103901,7 @@ int lua_ax_base_AnimationCache_init(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -103960,7 +103948,7 @@ int lua_ax_base_AnimationCache_addAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Animation* arg0;
         std::string_view arg1;
@@ -104013,7 +104001,7 @@ int lua_ax_base_AnimationCache_removeAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -104063,7 +104051,7 @@ int lua_ax_base_AnimationCache_getAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -104113,7 +104101,7 @@ int lua_ax_base_AnimationCache_addAnimationsWithDictionary(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::ValueMap arg0;
         std::string_view arg1;
@@ -104166,7 +104154,7 @@ int lua_ax_base_AnimationCache_addAnimationsWithFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -104271,7 +104259,7 @@ int lua_ax_base_AnimationCache_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -104347,7 +104335,7 @@ int lua_ax_base_SpriteBatchNode_getTextureAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -104394,7 +104382,7 @@ int lua_ax_base_SpriteBatchNode_setTextureAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TextureAtlas* arg0;
 
@@ -104444,7 +104432,7 @@ int lua_ax_base_SpriteBatchNode_increaseAtlasCapacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -104491,7 +104479,7 @@ int lua_ax_base_SpriteBatchNode_removeChildAtIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ssize_t arg0;
         bool arg1;
@@ -104544,7 +104532,7 @@ int lua_ax_base_SpriteBatchNode_appendChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Sprite* arg0;
 
@@ -104594,7 +104582,7 @@ int lua_ax_base_SpriteBatchNode_removeSpriteFromAtlas(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Sprite* arg0;
 
@@ -104644,7 +104632,7 @@ int lua_ax_base_SpriteBatchNode_rebuildIndexInOrder(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Sprite* arg0;
         ssize_t arg1;
@@ -104697,7 +104685,7 @@ int lua_ax_base_SpriteBatchNode_highestAtlasIndexInChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Sprite* arg0;
 
@@ -104747,7 +104735,7 @@ int lua_ax_base_SpriteBatchNode_lowestAtlasIndexInChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Sprite* arg0;
 
@@ -104797,7 +104785,7 @@ int lua_ax_base_SpriteBatchNode_atlasIndexForChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Sprite* arg0;
         int arg1;
@@ -104850,7 +104838,7 @@ int lua_ax_base_SpriteBatchNode_reorderBatch(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -104900,7 +104888,7 @@ int lua_ax_base_SpriteBatchNode_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -104947,7 +104935,7 @@ int lua_ax_base_SpriteBatchNode_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -104997,7 +104985,7 @@ int lua_ax_base_SpriteBatchNode_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -105047,7 +105035,7 @@ int lua_ax_base_SpriteBatchNode_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -105094,7 +105082,7 @@ int lua_ax_base_SpriteBatchNode_removeAllChildrenWithCleanup(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -105144,7 +105132,7 @@ int lua_ax_base_SpriteBatchNode_insertQuadFromSprite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Sprite* arg0;
         ssize_t arg1;
@@ -105197,7 +105185,7 @@ int lua_ax_base_SpriteBatchNode_addSpriteWithoutQuad(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Sprite* arg0;
         int arg1;
@@ -105253,7 +105241,7 @@ int lua_ax_base_SpriteBatchNode_reserveCapacity(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ssize_t arg0;
 
@@ -105303,7 +105291,7 @@ int lua_ax_base_SpriteBatchNode_initWithTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -105317,7 +105305,7 @@ int lua_ax_base_SpriteBatchNode_initWithTexture(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Texture2D* arg0;
         ssize_t arg1;
@@ -105370,7 +105358,7 @@ int lua_ax_base_SpriteBatchNode_initWithFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -105384,7 +105372,7 @@ int lua_ax_base_SpriteBatchNode_initWithFile(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         ssize_t arg1;
@@ -105526,7 +105514,7 @@ int lua_ax_base_SpriteBatchNode_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -105619,7 +105607,7 @@ int lua_ax_base_ParallaxNode_addChild(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::Node* arg0;
         int arg1;
@@ -105678,7 +105666,7 @@ int lua_ax_base_ParallaxNode_removeAllChildrenWithCleanup(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -105749,7 +105737,7 @@ int lua_ax_base_ParallaxNode_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -105822,7 +105810,7 @@ int lua_ax_base_TMXObjectGroup_getGroupName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -105869,7 +105857,7 @@ int lua_ax_base_TMXObjectGroup_setGroupName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -105919,7 +105907,7 @@ int lua_ax_base_TMXObjectGroup_getProperty(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -105969,7 +105957,7 @@ int lua_ax_base_TMXObjectGroup_getObject(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -106019,7 +106007,7 @@ int lua_ax_base_TMXObjectGroup_getPositionOffset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -106066,7 +106054,7 @@ int lua_ax_base_TMXObjectGroup_setPositionOffset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -106163,7 +106151,7 @@ int lua_ax_base_TMXObjectGroup_setProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ValueMap arg0;
 
@@ -106260,7 +106248,7 @@ int lua_ax_base_TMXObjectGroup_setObjects(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ValueVector arg0;
 
@@ -106297,7 +106285,7 @@ int lua_ax_base_TMXObjectGroup_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -106377,7 +106365,7 @@ int lua_ax_base_TMXLayerInfo_setProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ValueMap arg0;
 
@@ -106427,7 +106415,7 @@ int lua_ax_base_TMXLayerInfo_getProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -106461,7 +106449,7 @@ int lua_ax_base_TMXLayerInfo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -106533,7 +106521,7 @@ int lua_ax_base_TMXTilesetInfo_getRectForGID(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         unsigned int arg0;
 
@@ -106570,7 +106558,7 @@ int lua_ax_base_TMXTilesetInfo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -106641,7 +106629,7 @@ int lua_ax_base_TMXMapInfo_initWithTMXFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -106691,7 +106679,7 @@ int lua_ax_base_TMXMapInfo_initWithXML(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -106744,7 +106732,7 @@ int lua_ax_base_TMXMapInfo_parseXMLFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -106794,7 +106782,7 @@ int lua_ax_base_TMXMapInfo_parseXMLString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -106844,7 +106832,7 @@ int lua_ax_base_TMXMapInfo_getTileProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -106891,7 +106879,7 @@ int lua_ax_base_TMXMapInfo_setTileProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ValueMapIntKey arg0;
 
@@ -106941,7 +106929,7 @@ int lua_ax_base_TMXMapInfo_getOrientation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -106988,7 +106976,7 @@ int lua_ax_base_TMXMapInfo_setOrientation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -107038,7 +107026,7 @@ int lua_ax_base_TMXMapInfo_getStaggerAxis(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -107085,7 +107073,7 @@ int lua_ax_base_TMXMapInfo_setStaggerAxis(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -107135,7 +107123,7 @@ int lua_ax_base_TMXMapInfo_getStaggerIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -107182,7 +107170,7 @@ int lua_ax_base_TMXMapInfo_setStaggerIndex(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -107232,7 +107220,7 @@ int lua_ax_base_TMXMapInfo_getHexSideLength(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -107279,7 +107267,7 @@ int lua_ax_base_TMXMapInfo_setHexSideLength(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -107329,7 +107317,7 @@ int lua_ax_base_TMXMapInfo_getMapSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -107376,7 +107364,7 @@ int lua_ax_base_TMXMapInfo_setMapSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -107426,7 +107414,7 @@ int lua_ax_base_TMXMapInfo_getTileSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -107473,7 +107461,7 @@ int lua_ax_base_TMXMapInfo_setTileSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -107570,7 +107558,7 @@ int lua_ax_base_TMXMapInfo_setLayers(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::TMXLayerInfo *> arg0;
 
@@ -107667,7 +107655,7 @@ int lua_ax_base_TMXMapInfo_setTilesets(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::TMXTilesetInfo *> arg0;
 
@@ -107764,7 +107752,7 @@ int lua_ax_base_TMXMapInfo_setObjectGroups(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::TMXObjectGroup *> arg0;
 
@@ -107814,7 +107802,7 @@ int lua_ax_base_TMXMapInfo_getParentElement(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -107861,7 +107849,7 @@ int lua_ax_base_TMXMapInfo_setParentElement(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -107911,7 +107899,7 @@ int lua_ax_base_TMXMapInfo_getParentGID(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -107958,7 +107946,7 @@ int lua_ax_base_TMXMapInfo_setParentGID(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -108008,7 +107996,7 @@ int lua_ax_base_TMXMapInfo_getLayerAttribs(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -108055,7 +108043,7 @@ int lua_ax_base_TMXMapInfo_setLayerAttribs(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -108105,7 +108093,7 @@ int lua_ax_base_TMXMapInfo_isStoringCharacters(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -108152,7 +108140,7 @@ int lua_ax_base_TMXMapInfo_setStoringCharacters(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -108249,7 +108237,7 @@ int lua_ax_base_TMXMapInfo_setProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ValueMap arg0;
 
@@ -108299,7 +108287,7 @@ int lua_ax_base_TMXMapInfo_getCurrentString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -108346,7 +108334,7 @@ int lua_ax_base_TMXMapInfo_setCurrentString(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -108396,7 +108384,7 @@ int lua_ax_base_TMXMapInfo_getTMXFileName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -108443,7 +108431,7 @@ int lua_ax_base_TMXMapInfo_setTMXFileName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -108493,7 +108481,7 @@ int lua_ax_base_TMXMapInfo_getExternalTilesetFileName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -108601,7 +108589,7 @@ int lua_ax_base_TMXMapInfo_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -108712,7 +108700,7 @@ int lua_ax_base_TileMapAtlas_initWithTileFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 4)
+    if (argc == 4) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -108771,7 +108759,7 @@ int lua_ax_base_TileMapAtlas_getTileAt(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -108821,7 +108809,7 @@ int lua_ax_base_TileMapAtlas_setTile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::Color32 arg0;
         ax::Vec2 arg1;
@@ -108874,7 +108862,7 @@ int lua_ax_base_TileMapAtlas_releaseMap(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -108950,7 +108938,7 @@ int lua_ax_base_TileMapAtlas_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -109092,7 +109080,7 @@ int lua_ax_base_FastTMXLayer_removeTileAt(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -109142,7 +109130,7 @@ int lua_ax_base_FastTMXLayer_getPositionAt(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -109192,7 +109180,7 @@ int lua_ax_base_FastTMXLayer_getProperty(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -109242,7 +109230,7 @@ int lua_ax_base_FastTMXLayer_setupTiles(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -109289,7 +109277,7 @@ int lua_ax_base_FastTMXLayer_getLayerName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -109336,7 +109324,7 @@ int lua_ax_base_FastTMXLayer_setLayerName(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -109386,7 +109374,7 @@ int lua_ax_base_FastTMXLayer_getLayerSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -109433,7 +109421,7 @@ int lua_ax_base_FastTMXLayer_setLayerSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -109483,7 +109471,7 @@ int lua_ax_base_FastTMXLayer_getMapTileSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -109530,7 +109518,7 @@ int lua_ax_base_FastTMXLayer_setMapTileSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -109580,7 +109568,7 @@ int lua_ax_base_FastTMXLayer_getTileSet(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -109627,7 +109615,7 @@ int lua_ax_base_FastTMXLayer_setTileSet(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::TMXTilesetInfo* arg0;
 
@@ -109677,7 +109665,7 @@ int lua_ax_base_FastTMXLayer_getLayerOrientation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -109724,7 +109712,7 @@ int lua_ax_base_FastTMXLayer_setLayerOrientation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -109821,7 +109809,7 @@ int lua_ax_base_FastTMXLayer_setProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ValueMap arg0;
 
@@ -109871,7 +109859,7 @@ int lua_ax_base_FastTMXLayer_getTileAt(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -109921,7 +109909,7 @@ int lua_ax_base_FastTMXLayer_setupTileSprite(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::Sprite* arg0;
         ax::Vec2 arg1;
@@ -109977,7 +109965,7 @@ int lua_ax_base_FastTMXLayer_getAnimTileCoord(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110024,7 +110012,7 @@ int lua_ax_base_FastTMXLayer_hasTileAnimation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110071,7 +110059,7 @@ int lua_ax_base_FastTMXLayer_getTileAnimManager(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110118,7 +110106,7 @@ int lua_ax_base_FastTMXLayer_initWithTilesetInfo(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::TMXTilesetInfo* arg0;
         ax::TMXLayerInfo* arg1;
@@ -110201,7 +110189,7 @@ int lua_ax_base_FastTMXLayer_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110295,7 +110283,7 @@ int lua_ax_base_TMXTileAnimTask_start(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110342,7 +110330,7 @@ int lua_ax_base_TMXTileAnimTask_stop(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110389,7 +110377,7 @@ int lua_ax_base_TMXTileAnimTask_isRunning(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110484,7 +110472,7 @@ int lua_ax_base_TMXTileAnimTask_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
+    if (argc == 3) 
     {
         ax::FastTMXLayer* arg0;
         ax::TMXTileAnimInfo* arg1;
@@ -110508,7 +110496,7 @@ int lua_ax_base_TMXTileAnimTask_constructor(lua_State* tolua_S)
         toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.TMXTileAnimTask");
         return 1;
     }
-    if (argc == 4)
+    if (argc == 4) 
     {
         ax::FastTMXLayer* arg0;
         ax::TMXTileAnimInfo* arg1;
@@ -110595,7 +110583,7 @@ int lua_ax_base_TMXTileAnimManager_startAll(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110642,7 +110630,7 @@ int lua_ax_base_TMXTileAnimManager_stopAll(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110689,7 +110677,7 @@ int lua_ax_base_TMXTileAnimManager_getTasks(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -110759,7 +110747,7 @@ int lua_ax_base_TMXTileAnimManager_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::FastTMXLayer* arg0;
 
@@ -110836,7 +110824,7 @@ int lua_ax_base_FastTMXTiledMap_getLayer(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -110886,7 +110874,7 @@ int lua_ax_base_FastTMXTiledMap_getObjectGroup(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -110936,7 +110924,7 @@ int lua_ax_base_FastTMXTiledMap_getProperty(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -110986,7 +110974,7 @@ int lua_ax_base_FastTMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -111036,7 +111024,7 @@ int lua_ax_base_FastTMXTiledMap_getMapSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -111083,7 +111071,7 @@ int lua_ax_base_FastTMXTiledMap_setMapSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -111133,7 +111121,7 @@ int lua_ax_base_FastTMXTiledMap_getTileSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -111180,7 +111168,7 @@ int lua_ax_base_FastTMXTiledMap_setTileSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec2 arg0;
 
@@ -111230,7 +111218,7 @@ int lua_ax_base_FastTMXTiledMap_getMapOrientation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -111277,7 +111265,7 @@ int lua_ax_base_FastTMXTiledMap_setMapOrientation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -111374,7 +111362,7 @@ int lua_ax_base_FastTMXTiledMap_setObjectGroups(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vector<ax::TMXObjectGroup *> arg0;
 
@@ -111424,7 +111412,7 @@ int lua_ax_base_FastTMXTiledMap_getProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -111471,7 +111459,7 @@ int lua_ax_base_FastTMXTiledMap_setProperties(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::ValueMap arg0;
 
@@ -111521,7 +111509,7 @@ int lua_ax_base_FastTMXTiledMap_setTileAnimEnabled(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -111571,7 +111559,7 @@ int lua_ax_base_FastTMXTiledMap_getLayerCount(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -111618,7 +111606,7 @@ int lua_ax_base_FastTMXTiledMap_getResourceFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -111665,7 +111653,7 @@ int lua_ax_base_FastTMXTiledMap_getMapInfo(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -111712,7 +111700,7 @@ int lua_ax_base_FastTMXTiledMap_getTilesetInfo(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -111762,7 +111750,7 @@ int lua_ax_base_FastTMXTiledMap_getLayers(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -111809,7 +111797,7 @@ int lua_ax_base_FastTMXTiledMap_initWithTMXFile(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -111823,7 +111811,7 @@ int lua_ax_base_FastTMXTiledMap_initWithTMXFile(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         bool arg1;
@@ -111876,7 +111864,7 @@ int lua_ax_base_FastTMXTiledMap_initWithXML(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -111893,7 +111881,7 @@ int lua_ax_base_FastTMXTiledMap_initWithXML(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 3)
+    if (argc == 3) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -112042,7 +112030,7 @@ int lua_ax_base_FastTMXTiledMap_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112136,7 +112124,7 @@ int lua_ax_base_MotionStreak3D_tintWithColor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Color32 arg0;
 
@@ -112186,7 +112174,7 @@ int lua_ax_base_MotionStreak3D_reset(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112233,7 +112221,7 @@ int lua_ax_base_MotionStreak3D_getStroke(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112280,7 +112268,7 @@ int lua_ax_base_MotionStreak3D_setStroke(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -112330,7 +112318,7 @@ int lua_ax_base_MotionStreak3D_isStartingPositionInitialized(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112377,7 +112365,7 @@ int lua_ax_base_MotionStreak3D_setStartingPositionInitialized(lua_State* tolua_S
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         bool arg0;
 
@@ -112427,7 +112415,7 @@ int lua_ax_base_MotionStreak3D_getTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112474,7 +112462,7 @@ int lua_ax_base_MotionStreak3D_setTexture(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Texture2D* arg0;
 
@@ -112524,7 +112512,7 @@ int lua_ax_base_MotionStreak3D_setBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::BlendFunc arg0;
 
@@ -112574,7 +112562,7 @@ int lua_ax_base_MotionStreak3D_getBlendFunc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112621,7 +112609,7 @@ int lua_ax_base_MotionStreak3D_setSweepAxis(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::Vec3 arg0;
 
@@ -112671,7 +112659,7 @@ int lua_ax_base_MotionStreak3D_getSweepAxis(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112793,7 +112781,7 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -112818,7 +112806,7 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
+    do 
     {
         if (argc == 5)
         {
@@ -112864,7 +112852,7 @@ int lua_ax_base_MotionStreak3D_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112948,7 +112936,7 @@ int lua_ax_base_ComponentLua_getScriptObject(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -112995,7 +112983,7 @@ int lua_ax_base_ComponentLua_update(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         double arg0;
 
@@ -113068,7 +113056,7 @@ int lua_ax_base_ComponentLua_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -113120,7 +113108,7 @@ int lua_register_ax_base_ComponentLua(lua_State* tolua_S)
 TOLUA_API int register_all_ax_base(lua_State* tolua_S)
 {
 	tolua_open(tolua_S);
-
+	
 	tolua_module(tolua_S,"ax",0);
 	tolua_beginmodule(tolua_S,"ax");
 

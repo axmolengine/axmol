@@ -177,7 +177,6 @@ public:
 
 private:
     void ensureNativeTexture();
-
     void generateMipmaps(ID3D11DeviceContext* context);
 
     ID3D11Device* _device;

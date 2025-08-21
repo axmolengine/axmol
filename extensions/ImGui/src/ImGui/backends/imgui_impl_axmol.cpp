@@ -120,7 +120,7 @@ static void ImGui_ImplAxmol_UpdateTexture(ImTextureData* tex)
             auto texture = (Texture2D*)(intptr_t)tex->TexID;
             IM_ASSERT(texture != nullptr);
 
-            texture->updateWithSubData(bd->TempBuffer.getBytes(), r.x, r.y, r.w, r.h);
+            texture->updateSubData(bd->TempBuffer.getBytes(), r.x, r.y, r.w, r.h);
         }
 
         tex->SetStatus(ImTextureStatus_OK);

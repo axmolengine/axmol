@@ -217,7 +217,20 @@ public:
                       PixelFormat renderFormat = PixelFormat::NONE,
                       bool preMultipliedAlpha = false);
 
-    /** Update with texture data.
+    /**
+     * Update the texture with a new image data.
+     * @param data Specifies a pointer to the image data in memory.
+     * @param width Specifies the width of the texture.
+     * @param height Specifies the height of the texture.
+     * @param level Specifies the mipmap level to update. Default is 0.
+     * @param layerIndex Specifies the layer index to update. Default is 0.
+    */
+    bool updateData(const void* data, int width, int height, int level = 0, int layerIndex = 0)
+    {
+        return updateSubData(data, 0, 0, width, height, level, layerIndex);
+    }
+
+    /** Update texture sub data.
 
      @param data Specifies a pointer to the image data in memory.
      @param offsetX Specifies a texel offset in the x direction within the texture array.
@@ -225,7 +238,7 @@ public:
      @param width Specifies the width of the texture subimage.
      @param height Specifies the height of the texture subimage.
      */
-    bool updateWithSubData(const void* data, int offsetX, int offsetY, int width, int height, int level = 0, int layerIndex = 0);
+    bool updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level = 0, int layerIndex = 0);
     /**
     Drawing extensions to make it easy to draw basic quads using a Texture2D object.
     These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be
@@ -236,12 +249,7 @@ public:
     /** Draws a texture inside a rect.*/
     void drawInRect(const Rect& rect, float globalZOrder);
 
-
-    //!!Used for render buffer, such depth stencil attachment
-    bool updateTextureDesc(const rhi::TextureDesc& descriptor, bool preMultipliedAlpha = false);
-
-    void setRenderTarget(bool renderTarget);
-    inline bool isRenderTarget() const { return _flags & TextureFlag::RENDERTARGET; }
+    bool isRenderTarget() const;
 
     void setTexParameters(const TexParams& params);
 
@@ -365,8 +373,6 @@ private:
     void initProgram();
 
 protected:
-    /** pixel format of the texture */
-    rhi::PixelFormat _originalPF;
 
     /** width in pixels */
     int _pixelsWide;
@@ -386,15 +392,17 @@ protected:
     /** content size */
     Vec2 _contentSize;
 
-    uint16_t _flags : 16;
-    uint16_t _samplerFlags : 16;
+    uint8_t _flags;
+    uint8_t _samplerFlags;
+
+    /** pixel format of the texture */
+    rhi::PixelFormat _originalPF;
 
     NinePatchInfo* _ninePatchInfo;
     friend class SpriteFrameCache;
     friend class TextureCache;
     friend class ui::Scale9Sprite;
 
-    bool _valid;
     std::string _filePath;
 
     rhi::ProgramState* _programState = nullptr;

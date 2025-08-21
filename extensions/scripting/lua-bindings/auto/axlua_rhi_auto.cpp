@@ -488,7 +488,7 @@ int lua_ax_rhi_Program_getMaxVertexLocation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -535,7 +535,7 @@ int lua_ax_rhi_Program_getMaxFragmentLocation(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -582,7 +582,7 @@ int lua_ax_rhi_Program_getVertexShaderSource(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -629,7 +629,7 @@ int lua_ax_rhi_Program_getFragmentShaderSource(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -676,7 +676,7 @@ int lua_ax_rhi_Program_defineVertexLayout(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::VertexLayoutType arg0;
 
@@ -726,7 +726,7 @@ int lua_ax_rhi_Program_getProgramType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -773,7 +773,7 @@ int lua_ax_rhi_Program_getProgramId(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -820,7 +820,7 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::ShaderStage arg0;
 
@@ -870,7 +870,7 @@ int lua_ax_rhi_Program_getVertexLayout(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -947,7 +947,7 @@ int lua_ax_rhi_VertexLayout_getStride(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -994,7 +994,7 @@ int lua_ax_rhi_VertexLayout_getInstanceStride(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1041,7 +1041,7 @@ int lua_ax_rhi_VertexLayout_getVertexStepMode(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1088,7 +1088,7 @@ int lua_ax_rhi_VertexLayout_isValid(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1135,7 +1135,7 @@ int lua_ax_rhi_VertexLayout_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1206,7 +1206,7 @@ int lua_ax_rhi_ProgramState_clone(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1253,7 +1253,7 @@ int lua_ax_rhi_ProgramState_getProgram(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1418,7 +1418,7 @@ int lua_ax_rhi_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -1471,7 +1471,7 @@ int lua_ax_rhi_ProgramState_getMutableVertexLayout(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1518,7 +1518,7 @@ int lua_ax_rhi_ProgramState_setSharedVertexLayout(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::VertexLayout* arg0;
 
@@ -1568,7 +1568,7 @@ int lua_ax_rhi_ProgramState_getBatchId(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1615,7 +1615,7 @@ int lua_ax_rhi_ProgramState_isBatchable(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1662,7 +1662,7 @@ int lua_ax_rhi_ProgramState_updateBatchId(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1709,7 +1709,7 @@ int lua_ax_rhi_ProgramState_validateSharedVertexLayout(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::VertexLayoutType arg0;
 
@@ -1746,7 +1746,7 @@ int lua_ax_rhi_ProgramState_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::Program* arg0;
 
@@ -1830,7 +1830,7 @@ int lua_ax_rhi_Texture_updateSamplerDesc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::SamplerDesc arg0;
 
@@ -1880,7 +1880,7 @@ int lua_ax_rhi_Texture_updateTextureDesc(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::TextureDesc arg0;
 
@@ -1931,7 +1931,7 @@ int lua_ax_rhi_Texture_getPixelFormat(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -1978,7 +1978,7 @@ int lua_ax_rhi_Texture_getTextureUsage(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2025,7 +2025,7 @@ int lua_ax_rhi_Texture_getTextureType(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2072,7 +2072,7 @@ int lua_ax_rhi_Texture_hasMipmaps(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2119,7 +2119,7 @@ int lua_ax_rhi_Texture_getWidth(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2166,7 +2166,7 @@ int lua_ax_rhi_Texture_getHeight(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2213,7 +2213,7 @@ int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 5)
+    if (argc == 5) 
     {
         const void* arg0;
         int arg1;
@@ -2276,7 +2276,7 @@ int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 7)
+    if (argc == 7) 
     {
         int arg0;
         int arg1;
@@ -2345,7 +2345,7 @@ int lua_ax_rhi_Texture_updateFaceData(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::rhi::TextureCubeFace arg0;
         const void* arg1;
@@ -2399,7 +2399,7 @@ int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2410,7 +2410,7 @@ int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         int arg0;
 
@@ -2430,6 +2430,53 @@ int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_shouldGenMipmaps'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_Texture_zeroTexData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Texture* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_zeroTexData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_zeroTexData'", nullptr);
+            return 0;
+        }
+        cobj->zeroTexData();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.Texture:zeroTexData",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_zeroTexData'.",&tolua_err);
 #endif
 
     return 0;
@@ -2458,6 +2505,7 @@ int lua_register_ax_rhi_Texture(lua_State* tolua_S)
         tolua_function(tolua_S,"updateSubData",lua_ax_rhi_Texture_updateSubData);
         tolua_function(tolua_S,"updateFaceData",lua_ax_rhi_Texture_updateFaceData);
         tolua_function(tolua_S,"shouldGenMipmaps",lua_ax_rhi_Texture_shouldGenMipmaps);
+        tolua_function(tolua_S,"zeroTexData",lua_ax_rhi_Texture_zeroTexData);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::rhi::Texture).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axrhi.Texture";
@@ -2491,7 +2539,7 @@ int lua_ax_rhi_DriverBase_createDefaultRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2538,7 +2586,7 @@ int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2549,7 +2597,7 @@ int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
         object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::Texture* arg0;
 
@@ -2563,7 +2611,7 @@ int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
         object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
-    if (argc == 2)
+    if (argc == 2) 
     {
         ax::rhi::Texture* arg0;
         ax::rhi::Texture* arg1;
@@ -2616,7 +2664,7 @@ int lua_ax_rhi_DriverBase_createProgram(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 2) 
     {
         std::string_view arg0;
         std::string_view arg1;
@@ -2669,7 +2717,7 @@ int lua_ax_rhi_DriverBase_createVertexLayout(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2716,7 +2764,7 @@ int lua_ax_rhi_DriverBase_resetState(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2763,7 +2811,7 @@ int lua_ax_rhi_DriverBase_getVendor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2810,7 +2858,7 @@ int lua_ax_rhi_DriverBase_getRenderer(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2857,7 +2905,7 @@ int lua_ax_rhi_DriverBase_getVersion(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2904,7 +2952,7 @@ int lua_ax_rhi_DriverBase_getShaderVersion(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -2951,7 +2999,7 @@ int lua_ax_rhi_DriverBase_hasExtension(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         std::string_view arg0;
 
@@ -3001,7 +3049,7 @@ int lua_ax_rhi_DriverBase_dumpExtensions(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3048,7 +3096,7 @@ int lua_ax_rhi_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 1) 
     {
         ax::rhi::FeatureType arg0;
 
@@ -3098,7 +3146,7 @@ int lua_ax_rhi_DriverBase_getMaxTextureSize(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3145,7 +3193,7 @@ int lua_ax_rhi_DriverBase_getMaxAttributes(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3192,7 +3240,7 @@ int lua_ax_rhi_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3239,7 +3287,7 @@ int lua_ax_rhi_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 0) 
     {
         if(!ok)
         {
@@ -3367,7 +3415,7 @@ int lua_register_ax_rhi_DriverBase(lua_State* tolua_S)
 TOLUA_API int register_all_ax_rhi(lua_State* tolua_S)
 {
 	tolua_open(tolua_S);
-
+	
 	tolua_module(tolua_S,"axrhi",0);
 	tolua_beginmodule(tolua_S,"axrhi");
 

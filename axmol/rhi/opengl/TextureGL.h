@@ -167,18 +167,13 @@ public:
     void ensureNativeTexture(size_t imageSize = 0);
 
 private:
-    void ensureTexStorageForRT();
-
     void configureUnpackAlignment(unsigned int width);
 
     NativeTextureDesc _nativeDesc{};
     GLuint _nativeTexture{0};
     GLuint _nativeSampler{0};  // weak ref
-
-    EventListener* _rendererRecreatedListener = nullptr;
-
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-    bool _usedForRT = false;
+    EventListener* _rendererRecreatedListener = nullptr;
 #endif
 };
 

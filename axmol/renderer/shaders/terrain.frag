@@ -23,15 +23,15 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {
-    vec4 lightColor = vec4(1.0,1.0,1.0,1.0);
-    // if(u_has_light_map<=0)
-    // {
-    //     lightColor = vec4(1.0,1.0,1.0,1.0);
-    // }
-    // else
-    // {
-    //     lightColor = texture(u_lightMap,v_texCoord);
-    // }
+    vec4 lightColor;
+    if(u_has_light_map<=0)
+    {
+        lightColor = vec4(1.0,1.0,1.0,1.0);
+    }
+    else
+    {
+        lightColor = texture(u_lightMap,v_texCoord);
+    }
     float lightFactor = dot(-u_lightDir,v_normal);
     if(u_has_alpha<=0)
     {

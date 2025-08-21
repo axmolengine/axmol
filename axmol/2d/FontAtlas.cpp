@@ -463,7 +463,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 void FontAtlas::updateTextureContent(rhi::PixelFormat format, int startY)
 {
     auto data = _currentPageData + (_width * (int)startY << _strideShift);
-    _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, _width,
+    _atlasTextures[_currentPage]->updateSubData(data, 0, startY, _width,
                                                     (std::min)((int)_currentPageOrigY - startY + _currLineHeight, _height));
 }
 

@@ -155,6 +155,12 @@ public:
 
     bool shouldGenMipmaps(int level = 0) const { return _desc.mipLevels == 0 && level == 0 && !_overrideMipLevels; }
 
+    /**
+     * clear texture data to zero.
+     * @remark: only works for uncompressed texture.
+    */
+    void zeroTexData();
+
 protected:
     /**
      * @param descriptor Specifies the texture descriptor.
