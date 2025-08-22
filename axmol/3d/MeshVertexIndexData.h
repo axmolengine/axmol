@@ -96,7 +96,7 @@ protected:
 
     friend class MeshVertexData;
     friend class MeshRenderer;
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 };
@@ -149,7 +149,7 @@ protected:
 
     int _vertexCount = 0;  // vertex count
     std::vector<float> _vertexData;
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 };

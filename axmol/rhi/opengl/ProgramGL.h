@@ -172,7 +172,7 @@ private:
 
     void clearUniformBuffers();
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     void reloadProgram();
     int getMappedLocation(int location) const override;
     int getOriginalLocation(int location) const override;
@@ -193,7 +193,7 @@ private:
     hlookup::string_map<VertexInputDesc> _activeVertexInputs;
     hlookup::string_map<UniformInfo> _activeUniformInfos;
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     std::unordered_map<std::string, int>
         _originalUniformLocations;  ///< record the uniform location when shader was first created.
     std::unordered_map<int, int> _mapToCurrentActiveLocation;  ///<

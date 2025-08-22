@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/platform/Image.h"
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 #    include <list>
 #endif
 
@@ -224,6 +224,8 @@ private:
     void parseNinePatchImage(Image* image, Texture2D* texture, std::string_view path);
 
 public:
+    static std::string checkETC1AlphaFile(std::string_view path);
+
 protected:
     struct AsyncStruct;
 
@@ -247,7 +249,7 @@ protected:
     static std::string s_etc1AlphaFileSuffix;
 };
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 
 class VolatileTexture
 {
@@ -258,7 +260,7 @@ class VolatileTexture
         kImageData,
         kString,
         kImage,
-    } ccCachedImageType;
+    } CachedImageType;
 
 private:
     VolatileTexture(Texture2D* t);
@@ -271,9 +273,9 @@ protected:
     friend class VolatileTextureMgr;
     Texture2D* _texture;
 
-    Image* _uiImage;
+    Image* _image;
 
-    ccCachedImageType _cashedImageType;
+    CachedImageType _cachedImageType;
 
     void* _textureData;
     int _dataLen;
@@ -306,11 +308,10 @@ public:
 
     // find VolatileTexture by Texture2D*
     // if not found, create a new one
-    AX_DEPRECATED(2.2) static VolatileTexture* findVolotileTexture(Texture2D* tt) { return getOrAddVolatileTexture(tt); }
-    static VolatileTexture* getOrAddVolatileTexture(Texture2D* tt);
+    static VolatileTexture* ensureVolatileTexture(Texture2D* tt);
 
 private:
-    static void reloadTexture(Texture2D* texture, std::string_view filename, rhi::PixelFormat pixelFormat);
+    static void reloadTexture(VolatileTexture* vt);
 };
 
 #endif

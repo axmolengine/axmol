@@ -476,9 +476,7 @@ static rhi::PixelFormat getDevicePVRPixelFormat(rhi::PixelFormat format)
         else
             return rhi::PixelFormat::RGBA8;
     case rhi::PixelFormat::ETC1:
-        if (Configuration::getInstance()->supportsETC1())
-            return format;
-        else if (Configuration::getInstance()->supportsETC2())
+        if (Configuration::getInstance()->supportsETC2())
             return rhi::PixelFormat::ETC2_RGB;
         else
             return rhi::PixelFormat::RGBA8;
@@ -1766,7 +1764,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
             heightBlocks = height / 4;
             break;
         case PVR3TexturePixelFormat::ETC1:
-            if (!Configuration::getInstance()->supportsETC1())
+            if (!Configuration::getInstance()->supportsETC2())
             {
                 AXLOGW("Hardware ETC1 decoder not present. Using software decoder");
                 const int bytePerPixel = 4;
@@ -1865,17 +1863,10 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
     // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
     // format is forwards compatible so just use the ETC2 format.
-    rhi::PixelFormat compressedFormat;
-    if (Configuration::getInstance()->supportsETC1())
-        compressedFormat = rhi::PixelFormat::ETC1;
-    else if (Configuration::getInstance()->supportsETC2())
-        compressedFormat = rhi::PixelFormat::ETC2_RGB;
-    else
-        compressedFormat = rhi::PixelFormat::NONE;
-
-    if (compressedFormat != rhi::PixelFormat::NONE)
+    // @Note axmol-3.0, ETC1 not support sampler2DArray, so preferred ETC2
+    if (Configuration::getInstance()->supportsETC2())
     {
-        _pixelFormat = compressedFormat;
+        _pixelFormat = rhi::PixelFormat::ETC2_RGB;
         forwardPixels(data, dataLen, pixelOffset, ownData);
         return true;
     }

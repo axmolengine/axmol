@@ -51,6 +51,11 @@ void SamplerCache::removeAllSamplers()
     _samplers.clear();
 }
 
+void SamplerCache::invalidateAll()
+{
+    _samplers.clear();
+}
+
 SamplerHandle SamplerCache::getSampler(const SamplerDesc& desc)
 {
     auto key = *reinterpret_cast<const uint32_t*>(&desc);

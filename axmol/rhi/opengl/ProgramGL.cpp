@@ -81,7 +81,7 @@ ProgramImpl::ProgramImpl(std::string_view vertexShader, std::string_view fragmen
 
     reflectVertexInputs();
     reflectUniformInfos();
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     for (const auto& uniform : _activeUniformInfos)
     {
         auto location                            = uniform.second.location;
@@ -107,12 +107,12 @@ ProgramImpl::~ProgramImpl()
     if (_program)
         glDeleteProgram(_program);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 void ProgramImpl::reloadProgram()
 {
     _activeUniformInfos.clear();
@@ -396,7 +396,7 @@ UniformLocation ProgramImpl::getUniformLocation(std::string_view uniform) const
         const auto& uniformInfo = iter->second;
         if (uniformInfo.bufferOffset != -1)
         {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
             uniformLocation.vertStage.location = _mapToOriginalLocation.at(uniformInfo.location);
 #else
             uniformLocation.vertStage.location = uniformInfo.location;
@@ -406,7 +406,7 @@ UniformLocation ProgramImpl::getUniformLocation(std::string_view uniform) const
         else
         { // means it's sampler
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
             uniformLocation.fragStage.location = _mapToOriginalLocation.at(uniformInfo.location);
 #else
             uniformLocation.fragStage.location = uniformInfo.location;
@@ -427,7 +427,7 @@ int ProgramImpl::getMaxFragmentLocation() const
     return _maxLocation;
 }
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 int ProgramImpl::getMappedLocation(int location) const
 {
     if (_mapToCurrentActiveLocation.find(location) != _mapToCurrentActiveLocation.end())

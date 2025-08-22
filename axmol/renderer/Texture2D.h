@@ -217,6 +217,25 @@ public:
                       PixelFormat renderFormat = PixelFormat::NONE,
                       bool preMultipliedAlpha = false);
 
+    /*
+     * @brief update data by text
+    */
+    bool updateData(std::string_view text, const FontDefinition& textDefinition);
+
+    /**
+     * @brief update data by image
+     *
+     * @param image
+     */
+    bool updateData(Image* image);
+
+    /**
+     * @brief update data by subDatas
+     *
+     * @param subDatas
+     */
+    bool updateData(std::span<TextureSliceData> subDatas);
+
     /**
      * Update the texture with a new image data.
      * @param data Specifies a pointer to the image data in memory.
@@ -225,10 +244,7 @@ public:
      * @param level Specifies the mipmap level to update. Default is 0.
      * @param layerIndex Specifies the layer index to update. Default is 0.
     */
-    bool updateData(const void* data, int width, int height, int level = 0, int layerIndex = 0)
-    {
-        return updateSubData(data, 0, 0, width, height, level, layerIndex);
-    }
+    bool updateData(const void* data, int width, int height, int level = 0, int layerIndex = 0);
 
     /** Update texture sub data.
 
@@ -239,6 +255,15 @@ public:
      @param height Specifies the height of the texture subimage.
      */
     bool updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level = 0, int layerIndex = 0);
+
+    /*
+    * Invalidate the texture for we can re-create RHI GPU texture when app context loss recovery
+    * For example:
+    *   texture2d->invalidate();
+    *   texture2d->updateData(...); // re-create the texture
+    */
+    void invalidate();
+
     /**
     Drawing extensions to make it easy to draw basic quads using a Texture2D object.
     These functions require GL_TEXTURE_2D and both GL_VERTEX_ARRAY and GL_TEXTURE_COORD_ARRAY client states to be
@@ -373,6 +398,8 @@ private:
     void initProgram();
 
 protected:
+
+    void updateData(std::span<TextureSliceData> subDatas, PixelFormat renderFormat, bool compressed);
 
     /** width in pixels */
     int _pixelsWide;

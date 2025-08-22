@@ -153,6 +153,8 @@ public:
      */
     virtual void updateFaceData(TextureCubeFace side, const void* data) = 0;
 
+    virtual void invalidate();
+
     bool shouldGenMipmaps(int level = 0) const { return _desc.mipLevels == 0 && level == 0 && !_overrideMipLevels; }
 
     /**

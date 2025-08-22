@@ -68,7 +68,7 @@ void TextureBindingInfo::assign(const TextureBindingInfo& other)
         this->tex  = other.tex;
         AX_SAFE_RETAIN(this->tex);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         location = other.location;
 #endif
     }
@@ -81,7 +81,7 @@ void TextureBindingInfo::assign(TextureBindingInfo&& other)
         std::swap(slot, other.slot);
         std::swap(tex, other.tex);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         std::swap(location, other.location);
 #endif
     }
@@ -90,13 +90,13 @@ void TextureBindingInfo::assign(TextureBindingInfo&& other)
 void TextureBindingInfo::reset(int location_, int slot_, rhi::Texture* tex_)
 {
     AX_SAFE_RELEASE(this->tex);
-    
+
     this->slot = slot_;
     this->tex  = tex_;
 
     AX_SAFE_RETAIN(this->tex);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     this->location = location_;
 #endif
 }
@@ -127,7 +127,7 @@ bool ProgramState::init(Program* program)
 
     _uniformBuffers.resize((std::max)(_vertexUniformBufferSize + _fragmentUniformBufferSize, (size_t)1), 0);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->resetUniforms(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -151,7 +151,7 @@ void ProgramState::updateBatchId()
 
 void ProgramState::resetUniforms()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     if (_program == nullptr)
         return;
 
@@ -174,7 +174,7 @@ ProgramState::~ProgramState()
 {
     AX_SAFE_RELEASE(_program);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 

@@ -417,7 +417,7 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
     _blurRadius = 0;
     if (Sprite::initWithTexture(texture, rect))
     {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         auto listener =
             EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom* event) { initProgram(); });
 

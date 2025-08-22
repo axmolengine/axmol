@@ -85,7 +85,7 @@ DrawNode::DrawNode()
 
     properties.setDefaultValues();
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // TODO new-renderer: interface setupBuffer removal
 
     // Need to listen the event only when not use batchnode, because it will use VBO

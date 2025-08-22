@@ -60,7 +60,7 @@ TextureAtlas::~TextureAtlas()
 
     AX_SAFE_RELEASE(_texture);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
 #endif
 }

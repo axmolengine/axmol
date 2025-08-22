@@ -67,7 +67,6 @@ class AX_DLL FontAtlas : public Object
 public:
     static const int CacheTextureWidth;
     static const int CacheTextureHeight;
-    static const char* CMD_PURGE_FONTATLAS;
     static const char* CMD_RESET_FONTATLAS;
     static void loadFontAtlas(std::string_view fontatlasFile, hlookup::string_map<FontAtlas*>& outAtlasMap);
     /**
@@ -90,7 +89,7 @@ public:
 
     virtual void addNewPage();
 
-    void addNewPageWithData(const uint8_t* data, size_t size);
+    void ensureNextPage(const uint8_t* data, size_t size);
 
     void setTexture(unsigned int slot, Texture2D* texture);
     Texture2D* getTexture(int slot);
@@ -107,10 +106,10 @@ public:
      */
     void listenRendererRecreated(EventCustom* event);
 
-    /** Removes textures atlas.
-     It will purge the textures atlas and if multiple texture exist in the FontAtlas.
+    /** Clear textures atlas.
+     It will clear the textures atlas and if multiple texture exist in the FontAtlas.
      */
-    void purgeTexturesAtlas();
+    void clearTexturesAtlas();
 
     /** sets font texture parameters:
      - GL_TEXTURE_MIN_FILTER = GL_LINEAR

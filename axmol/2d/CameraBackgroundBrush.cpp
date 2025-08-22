@@ -36,7 +36,7 @@
 #include "axmol/renderer/TextureCube.h"
 #include "axmol/renderer/Shaders.h"
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 #    include "axmol/base/EventCustom.h"
 #    include "axmol/base/EventListenerCustom.h"
 #    include "axmol/base/EventType.h"
@@ -87,11 +87,11 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundBrush::createSkyboxBrush(std::strin
 CameraBackgroundDepthBrush::CameraBackgroundDepthBrush()
     : _depth(0.f)
     , _clearColor(false)
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     , _backToForegroundListener(nullptr)
 #endif
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { initBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -99,7 +99,7 @@ CameraBackgroundDepthBrush::CameraBackgroundDepthBrush()
 }
 CameraBackgroundDepthBrush::~CameraBackgroundDepthBrush()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -264,11 +264,11 @@ CameraBackgroundSkyBoxBrush::CameraBackgroundSkyBoxBrush()
     : _texture(nullptr)
     , _actived(true)
     , _textureValid(true)
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     , _backToForegroundListener(nullptr)
 #endif
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { initBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -278,7 +278,7 @@ CameraBackgroundSkyBoxBrush::CameraBackgroundSkyBoxBrush()
 CameraBackgroundSkyBoxBrush::~CameraBackgroundSkyBoxBrush()
 {
     AX_SAFE_RELEASE(_texture);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }

@@ -80,26 +80,26 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
         }                                           \
     }
 
-/** @def AX_ENABLE_CACHE_TEXTURE_DATA
+/** @def AX_ENABLE_CONTEXT_LOSS_RECOVERY
  * Enable it if you want to cache the texture data.
  * to be different from other platforms unless there's a good reason.
  *
  * @since v0.99.5
  */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
-#    if !defined(AX_ENABLE_CACHE_TEXTURE_DATA)
-#        define AX_ENABLE_CACHE_TEXTURE_DATA 1
+#    if !defined(AX_ENABLE_CONTEXT_LOSS_RECOVERY)
+#        define AX_ENABLE_CONTEXT_LOSS_RECOVERY 1
 #    endif
 #else
-#    undef AX_ENABLE_CACHE_TEXTURE_DATA
-#    define AX_ENABLE_CACHE_TEXTURE_DATA 0
+#    undef AX_ENABLE_CONTEXT_LOSS_RECOVERY
+#    define AX_ENABLE_CONTEXT_LOSS_RECOVERY 0
 #endif
 
 /** @def AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
  * Enable this if application should be restarted after the OpenGL context is lost
  *
  */
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && !AX_ENABLE_CACHE_TEXTURE_DATA)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && !AX_ENABLE_CONTEXT_LOSS_RECOVERY)
 #    if !defined(AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST)
 #        define AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST 1
 #    endif

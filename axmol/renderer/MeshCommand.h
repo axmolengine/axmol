@@ -74,12 +74,12 @@ public:
 
     void init(float globalZOrder, const Mat4& transform);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     void listenRendererRecreated(EventCustom* event);
 #endif
 
 protected:
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _rendererRecreatedListener;
 #endif
 };

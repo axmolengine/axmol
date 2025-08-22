@@ -904,7 +904,6 @@ protected:
 
     std::unordered_map<int, Sprite*> _letters;
 
-    EventListenerCustom* _purgeTextureListener;
     EventListenerCustom* _resetTextureListener;
 
 #if AX_LABEL_DEBUG_DRAW

@@ -45,13 +45,13 @@ namespace ax
 {
 
 MeshCommand::MeshCommand()
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     : _rendererRecreatedListener(nullptr)
 #endif
 {
     _type = RenderCommand::Type::MESH_COMMAND;
     _is3D = true;
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // listen the event that renderer was recreated on Android/WP8
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
                                                              AX_CALLBACK_1(MeshCommand::listenRendererRecreated, this));
@@ -76,12 +76,12 @@ void MeshCommand::init(float globalZOrder, const Mat4& transform)
 
 MeshCommand::~MeshCommand()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
 #endif
 }
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 void MeshCommand::listenRendererRecreated(EventCustom* event) {}
 #endif
 

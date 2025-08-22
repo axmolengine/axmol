@@ -68,7 +68,7 @@ struct AX_DLL TextureBindingInfo
 
     int slot{0};
     rhi::Texture* tex{nullptr};
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     int location = -1;
 #endif
 };
@@ -342,7 +342,7 @@ protected:
     uint64_t _batchId    = -1;
     bool _isBatchable = false;
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 };

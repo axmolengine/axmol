@@ -570,7 +570,7 @@ private:
     rhi::UniformLocation _lightDirLocation;
 
     rhi::UniformLocation _mvpMatrixLocation;
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _backToForegroundListener;
 #endif
 };

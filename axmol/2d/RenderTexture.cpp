@@ -50,7 +50,7 @@ namespace ax
 // implementation RenderTexture
 RenderTexture::RenderTexture()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // Listen this event to save render texture before come to background.
     // Then it can be restored after coming to foreground on Android.
     auto toBackgroundListener =
@@ -60,13 +60,30 @@ RenderTexture::RenderTexture()
     auto toForegroundListener =
         EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, AX_CALLBACK_1(RenderTexture::listenToForeground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toForegroundListener, this);
+
+     // Listen this event to restored texture id after coming to foreground on GLES.
+    _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+        TextureSliceData emptyData[] = {TextureSliceData{}};
+        // Invalidate _depthStencilTexture contents and reinitializing GPU resources (e.g., after context loss)
+        // Note: VolatileTextureMgr is responsible for resetting _colorTexture
+        if(_depthStencilTexture) {
+            _depthStencilTexture->invalidate();
+            _depthStencilTexture->updateData(emptyData);
+        }
+    });
+    _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
 #endif
 }
 
 RenderTexture::~RenderTexture()
 {
+#    if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    _eventDispatcher->removeEventListener(_rendererRecreatedListener);
+#endif
+
     AX_SAFE_RELEASE(_renderTarget);
     AX_SAFE_RELEASE(_sprite);
+    AX_SAFE_RELEASE(_colorTexture);
     AX_SAFE_RELEASE(_depthStencilTexture);
 }
 
@@ -74,7 +91,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
 {
     // We have not found a way to dispatch the enter background message before the texture data are destroyed.
     // So we disable this pair of message handler at present.
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     if (!_cachedTextureDirty)
         return;
     _cachedTextureDirty = false;
@@ -83,8 +100,8 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
         if (uiTextureImage)
         {
             _UITextureImage = uiTextureImage;
-            const Vec2& s   = _texture2D->getContentSizeInPixels();
-            VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4,
+            const Vec2& s   = _colorTexture->getContentSizeInPixels();
+            VolatileTextureMgr::addDataTexture(_colorTexture, uiTextureImage->getData(), s.width * s.height * 4,
                                                rhi::PixelFormat::RGBA8, s);
         }
         else
@@ -99,8 +116,8 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
 
 void RenderTexture::listenToForeground(EventCustom* /*event*/)
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
-    _texture2D->setAntiAliasTexParameters();
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    _colorTexture->setAntiAliasTexParameters();
 #endif
 }
 
@@ -191,8 +208,9 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         desc.height        = powH;
         desc.textureUsage  = TextureUsage::RENDER_TARGET;
         desc.pixelFormat = PixelFormat::RGBA8;
-        _texture2D               = new Texture2D();
-        _texture2D->initWithSpec(desc, {}, PixelFormat::NONE, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
+        _colorTexture                = new Texture2D();
+        TextureSliceData emptyData[] = {TextureSliceData{}};
+        _colorTexture->initWithSpec(desc, emptyData, PixelFormat::NONE, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
 
         if (PixelFormat::D24S8 == depthStencilFormat || sharedRenderTarget)
         {
@@ -201,7 +219,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             AX_SAFE_RELEASE(_depthStencilTexture);
 
             _depthStencilTexture = new Texture2D();
-            _depthStencilTexture->initWithSpec(desc, {});
+            _depthStencilTexture->initWithSpec(desc, emptyData);
         }
 
         AX_SAFE_RELEASE(_renderTarget);
@@ -214,21 +232,21 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         else
         {
             _renderTarget = rhi::DriverBase::getInstance()->createRenderTarget(
-                _texture2D ? _texture2D->getRHITexture() : nullptr,
+                _colorTexture ? _colorTexture->getRHITexture() : nullptr,
                 _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
         }
 
-        _renderTarget->setColorAttachment(_texture2D ? _texture2D->getRHITexture() : nullptr);
+        _renderTarget->setColorAttachment(_colorTexture ? _colorTexture->getRHITexture() : nullptr);
 
         auto depthStencilTexture = _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr;
         _renderTarget->setDepthStencilAttachment(depthStencilTexture);
 
         clearColorAttachment();
 
-        _texture2D->setAntiAliasTexParameters();
+        _colorTexture->setAntiAliasTexParameters();
 
         // retained
-        setSprite(Sprite::createWithTexture(_texture2D));
+        setSprite(Sprite::createWithTexture(_colorTexture));
 
         _sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         _sprite->setPosition(Vec2(w, h) / 2);
@@ -237,7 +255,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         _sprite->setFlippedY(true);
 #endif
 
-        if (_texture2D->hasPremultipliedAlpha())
+        if (_colorTexture->hasPremultipliedAlpha())
         {
             _sprite->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
             _sprite->setOpacityModifyRGB(true);
@@ -247,8 +265,6 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             _sprite->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
             _sprite->setOpacityModifyRGB(false);
         }
-
-        _texture2D->release();
 
         // Disabled by default.
         _autoDraw = false;
@@ -527,19 +543,17 @@ void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, b
 {
     AXASSERT(_pixelFormat == rhi::PixelFormat::RGBA8, "only RGBA8888 can be saved as image");
 
-    if ((nullptr == _texture2D))
-    {
+    if ((nullptr == _colorTexture))
         return;
-    }
 
-    const Vec2& s = _texture2D->getContentSizeInPixels();
+    const Vec2& s = _colorTexture->getContentSizeInPixels();
 
     // to get the image size to save
     //        if the saving image domain exceeds the buffer texture domain,
     //        it should be cut
     int savedBufferWidth       = (int)s.width;
     int savedBufferHeight      = (int)s.height;
-    bool hasPremultipliedAlpha = _texture2D->hasPremultipliedAlpha();
+    bool hasPremultipliedAlpha = _colorTexture->hasPremultipliedAlpha();
 
     auto callback = [hasPremultipliedAlpha, imageCallback](const rhi::PixelBufferDesc& pbd) {
         if (pbd)
@@ -606,7 +620,7 @@ void RenderTexture::onBegin()
     if (!_keepMatrix)
     {
         _director->setProjection(_director->getProjection());
-        const Vec2& texSize = _texture2D->getContentSizeInPixels();
+        const Vec2& texSize = _colorTexture->getContentSizeInPixels();
 
         // Calculate the adjustment ratios based on the old and new projections
         Vec2 size         = _director->getWinSizeInPixels();
@@ -659,7 +673,7 @@ void RenderTexture::begin()
     {
         _director->setProjection(_director->getProjection());
 
-        const Vec2& texSize = _texture2D->getContentSizeInPixels();
+        const Vec2& texSize = _colorTexture->getContentSizeInPixels();
 
         // Calculate the adjustment ratios based on the old and new projections
         Vec2 size = _director->getWinSizeInPixels();
@@ -683,7 +697,7 @@ void RenderTexture::begin()
     beginCommand->init(_globalZOrder);
     beginCommand->func = AX_CALLBACK_0(RenderTexture::onBegin, this);
     renderer->addCommand(beginCommand);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _cachedTextureDirty = true;
 #endif
 }

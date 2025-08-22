@@ -35,7 +35,7 @@ RenderTargetImpl::RenderTargetImpl(bool defaultRenderTarget, DriverImpl* driver)
     if (!defaultRenderTarget)
     {
         glGenFramebuffers(1, &_FBO);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
             glGenFramebuffers(1, &_FBO);
             _dirtyFlags = TargetBufferFlags::ALL;
@@ -53,7 +53,7 @@ RenderTargetImpl::~RenderTargetImpl()
 {
     if (!_defaultRenderTarget)
     {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
 #endif
 

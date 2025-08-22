@@ -153,10 +153,11 @@ bool Director::init()
 
     _renderer = new Renderer;
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // listen the event that renderer was recreated on Android/WP8
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         _isStatusLabelUpdated = true;  // Force recreation of textures
+        rhi::SamplerCache::getInstance()->invalidateAll();
     });
 
     _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
@@ -169,7 +170,7 @@ Director::~Director()
 {
     AXLOGD("deallocing Director: {}", fmt::ptr(this));
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _eventDispatcher->removeEventListener(_rendererRecreatedListener);
     _rendererRecreatedListener = nullptr;
 #endif
@@ -1106,7 +1107,7 @@ void Director::restartDirector()
 
     setGLDefaultValues();
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // listen the event that renderer was recreated on Android/WP8
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         _isStatusLabelUpdated = true;  // Force recreation of textures

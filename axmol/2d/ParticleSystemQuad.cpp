@@ -121,7 +121,7 @@ bool ParticleSystemQuad::initWithTotalParticles(int numberOfParticles)
         initIndices();
         //        setupVBO();
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         // Need to listen the event only when not use batchnode, because it will use VBO
         auto listener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
                                                     AX_CALLBACK_1(ParticleSystemQuad::listenRendererRecreated, this));

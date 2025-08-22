@@ -118,9 +118,6 @@ static void fromD3DTexDesc(TextureDesc& td, const D3D11_TEXTURE2D_DESC& desc)
 TextureImpl::TextureImpl(ID3D11Device* device, const TextureDesc& desc) : _device(device)
 {
     updateTextureDesc(desc);
-
-    if (_desc.textureUsage == TextureUsage::RENDER_TARGET)
-        zeroTexData();
 }
 
 TextureImpl::TextureImpl(ID3D11Device* device, ID3D11Texture2D* texture) : _device(device)
@@ -190,6 +187,9 @@ void TextureImpl::updateSubData(int xoffset,
 {
     assert(_desc.textureType == TextureType::TEXTURE_2D);
     ensureNativeTexture();
+
+    if(!data) [[unlikely]]
+        return;
 
     D3D11_BOX box{};
     box.left   = static_cast<UINT>(xoffset);

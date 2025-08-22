@@ -42,13 +42,11 @@ hlookup::string_map<FontAtlas*> FontAtlasCache::_atlasMap;
 
 void FontAtlasCache::purgeCachedData()
 {
-    auto atlasMapCopy = _atlasMap;
-    for (auto&& atlas : atlasMapCopy)
+    for(auto& [_, atlas] : _atlasMap)
     {
-        auto refCount = atlas.second->getReferenceCount();
-        atlas.second->release();
-        if (refCount != 1)
-            atlas.second->purgeTexturesAtlas();
+        if(atlas->getReferenceCount() > 1)
+            atlas->clearTexturesAtlas();
+        atlas->release();
     }
     _atlasMap.clear();
 }

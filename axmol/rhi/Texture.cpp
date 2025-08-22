@@ -42,6 +42,10 @@ void Texture::updateTextureDesc(const TextureDesc& desc)
     _overrideMipLevels = desc.mipLevels;
 }
 
+void Texture::invalidate()
+{
+}
+
 void Texture::zeroTexData()
 {
     if (!RHIUtils::isCompressed(_desc.pixelFormat))

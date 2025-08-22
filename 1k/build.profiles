@@ -5,9 +5,7 @@
 
 # --- region platfom:common
 
-# The axmol shader compiler,
-# before axmol-2.3.0, it's 'glslcc'
-# before axmol-3.0.0, it's 'axslcc'
+# The axmol shader compiler, legacy name is 'glslcc' before axmol-2.3.0
 axslcc=1.11.0+
 
 # The cmake, @gradle @axmol-cmdline

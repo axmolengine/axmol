@@ -49,7 +49,7 @@ struct NativeTextureDesc
  */
 
 /**
- * A 2D texture
+ * The texture implementation supports 2D, cubemap, and 2D array textures.
  */
 class TextureImpl : public rhi::Texture
 {
@@ -151,6 +151,8 @@ public:
      */
     void updateTextureDesc(const TextureDesc& descriptor) override;
 
+    void invalidate() override;
+
     /**
      * Get internal texture object handle.
      * @return Texture object.
@@ -172,9 +174,6 @@ private:
     NativeTextureDesc _nativeDesc{};
     GLuint _nativeTexture{0};
     GLuint _nativeSampler{0};  // weak ref
-#if AX_ENABLE_CACHE_TEXTURE_DATA
-    EventListener* _rendererRecreatedListener = nullptr;
-#endif
 };
 
 // end of _opengl group

@@ -49,12 +49,71 @@ THE SOFTWARE.
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/renderer/Renderer.h"
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 #    include "axmol/renderer/TextureCache.h"
 #endif
 
 namespace ax
 {
+static bool createStringTextureData(std::string_view text,
+                                    const FontDefinition& textDefinition,
+                                    Data& outData,
+                                    int& imageWidth,
+                                    int& imageHeight,
+                                    bool& premultipliedAlpha)
+{
+    Device::TextAlign align;
+
+    if (TextVAlignment::TOP == textDefinition._vertAlignment)
+    {
+        align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::TOP
+                : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::TOP_LEFT
+                                                                        : Device::TextAlign::TOP_RIGHT;
+    }
+    else if (TextVAlignment::CENTER == textDefinition._vertAlignment)
+    {
+        align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::CENTER
+                : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::LEFT
+                                                                        : Device::TextAlign::RIGHT;
+    }
+    else if (TextVAlignment::BOTTOM == textDefinition._vertAlignment)
+    {
+        align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::BOTTOM
+                : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::BOTTOM_LEFT
+                                                                        : Device::TextAlign::BOTTOM_RIGHT;
+    }
+    else
+    {
+        AXASSERT(false, "Not supported alignment format!");
+        return false;
+    }
+
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
+    AXASSERT(textDefinition._stroke._strokeEnabled == false, "Currently stroke only supported on iOS and Android!");
+#endif
+
+    auto textDef            = textDefinition;
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
+    textDef._fontSize *= contentScaleFactor;
+    textDef._dimensions.width *= contentScaleFactor;
+    textDef._dimensions.height *= contentScaleFactor;
+    textDef._stroke._strokeSize *= contentScaleFactor;
+    textDef._shadow._shadowEnabled = false;
+
+    outData = Device::getTextureDataForText(text, textDef, align, imageWidth, imageHeight, premultipliedAlpha);
+    if (outData.isNull())
+        return false;
+
+    const auto maxTextureSize = rhi::DriverBase::getInstance()->getMaxTextureSize();
+    if (imageWidth > maxTextureSize || imageHeight > maxTextureSize)
+    {
+        AXLOGW("Texture2D::initWithString fail, the texture size:{}x{} too large, max texture size:{}", imageWidth,
+                imageHeight, maxTextureSize);
+        return false;
+    }
+
+    return true;
+}
 
 void Texture2D::chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled, rhi::SamplerDesc& desc)
 {
@@ -93,7 +152,7 @@ Texture2D::Texture2D()
 
 Texture2D::~Texture2D()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     VolatileTextureMgr::removeTexture(this);
 #endif
 
@@ -249,7 +308,7 @@ bool Texture2D::initWithMipmaps(std::span<MipmapInfo> mipmaps,
     desc.height = pixelsHigh;
     desc.pixelFormat = pixelFormat;
     desc.mipLevels   = mipmaps.size();
-    return initWithSpec(desc, (std::span<TextureSliceData>&)mipmaps, renderFormat, preMultipliedAlpha);
+    return initWithSpec(desc, reinterpret_cast<std::span<TextureSliceData>&>(mipmaps), renderFormat, preMultipliedAlpha);
 }
 
 bool Texture2D::initWithSpec(rhi::TextureDesc desc,
@@ -279,17 +338,13 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
 
     bool compressed = rhi::RHIUtils::isCompressed(desc.pixelFormat);
 
-    if (compressed && !Configuration::getInstance()->supportsPVRTC() && !Configuration::getInstance()->supportsETC1() &&
+    if (compressed && !Configuration::getInstance()->supportsPVRTC() &&
         !Configuration::getInstance()->supportsETC2() && !Configuration::getInstance()->supportsS3TC() &&
         !Configuration::getInstance()->supportsASTC() && !Configuration::getInstance()->supportsATITC())
     {
         AXLOGW("WARNING: PVRTC/ETC images are not supported");
         return false;
     }
-
-#if AX_ENABLE_CACHE_TEXTURE_DATA
-    VolatileTextureMgr::getOrAddVolatileTexture(this);
-#endif
 
     // !override renderFormat since some render format by RHI
     #if AX_RENDER_API == AX_RENDER_API_MTL
@@ -332,45 +387,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     chooseSamplerDesc(true, desc.mipLevels != 1, desc.samplerDesc);
     _rhiTexture = static_cast<rhi::Texture*>(rhi::DriverBase::getInstance()->createTexture(desc));
 
-    for (auto& subres : subDatas)
-    {
-        if (!subres.data)
-            continue;
-        auto width  = (std::max)(1, _pixelsWide >> subres.mipLevel);
-        auto height = (std::max)(1, _pixelsHigh >> subres.mipLevel);
-        uint8_t* convertedData{nullptr};
-        size_t convertedDataLen{0};
-
-        const void* pixelData{nullptr};
-        size_t pixelDataSize{0};
-        if (_originalPF != renderFormat && !compressed)  // need conversion
-        {
-            auto convertedFormat =
-                rhi::RHIUtils::convertDataToFormat((const uint8_t*)subres.data, subres.dataSize, _originalPF,
-                                                           renderFormat, &convertedData, &convertedDataLen);
-            if (convertedFormat != renderFormat || !convertedData)
-            {
-                AXLOGE("PixelFormat convert fail");
-                continue;
-            }
-            pixelData      = convertedData;
-            pixelDataSize = convertedDataLen;
-        }
-        else
-        {
-            pixelData = subres.data;
-            pixelDataSize = subres.dataSize;
-        }
-
-        if (compressed)
-            _rhiTexture->updateCompressedData(pixelData, width, height, pixelDataSize, subres.mipLevel,
-                                              subres.layerIndex);
-        else
-            _rhiTexture->updateData(pixelData, width, height, subres.mipLevel, subres.layerIndex);
-
-        if (convertedData)
-            free(convertedData);
-    }
+    updateData(subDatas, renderFormat, compressed);
 
     if (desc.arraySize == 2)
     {
@@ -383,23 +400,6 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     }
 
     return true;
-}
-
-bool Texture2D::isRenderTarget() const
-{
-    return _rhiTexture && _rhiTexture->getTextureUsage() == rhi::TextureUsage::RENDER_TARGET;
-}
-
-bool Texture2D::updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level, int layerIndex)
-{
-    if (_rhiTexture && width > 0 && height > 0)
-    {
-        // updateSubData must be called with the same pixel format as the original pixel format
-        assert(_rhiTexture->getPixelFormat() == _originalPF);
-        _rhiTexture->updateSubData(offsetX, offsetY, width, height, level, data, layerIndex);
-        return true;
-    }
-    return false;
 }
 
 // implementation Texture2D (Text)
@@ -434,70 +434,154 @@ bool Texture2D::initWithString(std::string_view text, const FontDefinition& text
     if (text.empty())
         return false;
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // cache the texture data
     VolatileTextureMgr::addStringTexture(this, text, textDefinition);
 #endif
 
-    bool ret = false;
-    Device::TextAlign align;
-
-    if (TextVAlignment::TOP == textDefinition._vertAlignment)
-    {
-        align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::TOP
-                : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::TOP_LEFT
-                                                                      : Device::TextAlign::TOP_RIGHT;
-    }
-    else if (TextVAlignment::CENTER == textDefinition._vertAlignment)
-    {
-        align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::CENTER
-                : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::LEFT
-                                                                      : Device::TextAlign::RIGHT;
-    }
-    else if (TextVAlignment::BOTTOM == textDefinition._vertAlignment)
-    {
-        align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::BOTTOM
-                : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::BOTTOM_LEFT
-                                                                      : Device::TextAlign::BOTTOM_RIGHT;
-    }
-    else
-    {
-        AXASSERT(false, "Not supported alignment format!");
-        return false;
-    }
-
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
-    AXASSERT(textDefinition._stroke._strokeEnabled == false, "Currently stroke only supported on iOS and Android!");
-#endif
-
-    int imageWidth;
-    int imageHeight;
-    auto textDef            = textDefinition;
-    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
-    textDef._fontSize *= contentScaleFactor;
-    textDef._dimensions.width *= contentScaleFactor;
-    textDef._dimensions.height *= contentScaleFactor;
-    textDef._stroke._strokeSize *= contentScaleFactor;
-    textDef._shadow._shadowEnabled = false;
-
-    bool hasPremultipliedAlpha;
-    Data outData = Device::getTextureDataForText(text, textDef, align, imageWidth, imageHeight, hasPremultipliedAlpha);
-    if (outData.isNull())
+    Data outData;
+    int imageWidth, imageHeight;
+    bool premultipliedAlpha{false};
+    if (!createStringTextureData(text, textDefinition, outData, imageWidth, imageHeight, premultipliedAlpha))
         return false;
 
-    const auto maxTextureSize = rhi::DriverBase::getInstance()->getMaxTextureSize();
-    if (imageWidth > maxTextureSize || imageHeight > maxTextureSize)
-    {
-        AXLOGW("Texture2D::initWithString fail, the texture size:{}x{} too large, max texture size:{}", imageWidth,
-               imageHeight, maxTextureSize);
-        return false;
-    }
-
-    Vec2 imageSize = Vec2((float)imageWidth, (float)imageHeight);
     const PixelFormat pixelFormat = PixelFormat::RGBA8;
 
     return initWithData(outData.getBytes(), imageWidth * imageHeight * 4, pixelFormat, imageWidth, imageHeight,
-                       hasPremultipliedAlpha);
+                        premultipliedAlpha);
+}
+
+bool Texture2D::updateData(std::string_view text, const FontDefinition& textDefinition) {
+    if (text.empty())
+        return false;
+
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    // cache the texture data
+    VolatileTextureMgr::addStringTexture(this, text, textDefinition);
+#endif
+
+   Data outData;
+    int imageWidth, imageHeight;
+    bool premultipliedAlpha{false};
+    if (!createStringTextureData(text, textDefinition, outData, imageWidth, imageHeight, premultipliedAlpha))
+        return false;
+
+    TextureSliceData subDatas[] = {
+        {outData.getBytes(), (uint32_t)(imageWidth * imageHeight * 4), 0, 0}  // layerIndex = 0, mipLevel = 0
+    };
+
+    return updateData(subDatas);
+}
+
+bool Texture2D::updateData(Image* image)
+{
+    if (!_rhiTexture) [[unlikely]]
+        return false;
+
+    if (image->getNumberOfMipmaps() > 1)
+    {
+        auto mipmaps = image->getMipmaps();
+        return updateData(reinterpret_cast<std::span<TextureSliceData>&>(mipmaps));
+    }
+    else
+    {
+        TextureSliceData subDatas[] = {{image->getData(), (uint32_t)image->getDataSize(), 0, 0}};
+        return updateData(subDatas);
+    }
+}
+
+bool Texture2D::updateData(std::span<TextureSliceData> subDatas) {
+    if (!_rhiTexture)[[unlikely]]
+        return false;
+
+    const auto renderFormat = _rhiTexture->getPixelFormat();
+    updateData(subDatas, _rhiTexture->getPixelFormat(), rhi::RHIUtils::isCompressed(renderFormat));
+    return true;
+}
+
+void Texture2D::updateData(std::span<TextureSliceData> subDatas, PixelFormat renderFormat, bool compressed)
+{
+    for (auto& subres : subDatas)
+    {
+        auto width  = (std::max)(1, _pixelsWide >> subres.mipLevel);
+        auto height = (std::max)(1, _pixelsHigh >> subres.mipLevel);
+
+        if (!subres.data) [[unlikely]]
+        {
+            // uncompressed pixel data can be nullptr for initializing texture storage purpose
+            if (!compressed)
+                _rhiTexture->updateData(nullptr, width, height, subres.mipLevel, subres.layerIndex);
+            continue;
+        }
+
+        uint8_t* convertedData{nullptr};
+        size_t convertedDataLen{0};
+
+        const void* pixelData{nullptr};
+        size_t pixelDataSize{0};
+        if (_originalPF != renderFormat && !compressed)  // need conversion
+        {
+            auto convertedFormat =
+                rhi::RHIUtils::convertDataToFormat((const uint8_t*)subres.data, subres.dataSize, _originalPF,
+                                                   renderFormat, &convertedData, &convertedDataLen);
+            if (convertedFormat != renderFormat || !convertedData)
+            {
+                AXLOGE("PixelFormat convert fail");
+                continue;
+            }
+            pixelData     = convertedData;
+            pixelDataSize = convertedDataLen;
+        }
+        else
+        {
+            pixelData     = subres.data;
+            pixelDataSize = subres.dataSize;
+        }
+
+        if (compressed)
+            _rhiTexture->updateCompressedData(pixelData, width, height, pixelDataSize, subres.mipLevel,
+                                              subres.layerIndex);
+        else
+            _rhiTexture->updateData(pixelData, width, height, subres.mipLevel, subres.layerIndex);
+
+        if (convertedData)
+            free(convertedData);
+    }
+}
+
+bool Texture2D::updateData(const void* data, int width, int height, int level, int layerIndex)
+{
+    if (_rhiTexture && width > 0 && height > 0)
+    {
+        // updateData must be called with the same pixel format as the original pixel format
+        assert(_rhiTexture->getPixelFormat() == _originalPF);
+        _rhiTexture->updateData(data, width, height, level, layerIndex);
+        return true;
+    }
+    return false;
+}
+
+bool Texture2D::updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level, int layerIndex)
+{
+    if (_rhiTexture && width > 0 && height > 0)
+    {
+        // updateSubData must be called with the same pixel format as the original pixel format
+        assert(_rhiTexture->getPixelFormat() == _originalPF);
+        _rhiTexture->updateSubData(offsetX, offsetY, width, height, level, data, layerIndex);
+        return true;
+    }
+    return false;
+}
+
+void Texture2D::invalidate()
+{
+    if(_rhiTexture)
+        _rhiTexture->invalidate();
+}
+
+bool Texture2D::isRenderTarget() const
+{
+    return _rhiTexture && _rhiTexture->getTextureUsage() == rhi::TextureUsage::RENDER_TARGET;
 }
 
 bool Texture2D::hasMipmaps() const

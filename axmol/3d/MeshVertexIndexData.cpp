@@ -74,7 +74,7 @@ rhi::Buffer* MeshIndexData::getVertexBuffer() const
 
 MeshIndexData::MeshIndexData()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         _indexBuffer->updateData((void*)_indexData.data(), _indexData.bsize());
     });
@@ -84,7 +84,7 @@ MeshIndexData::MeshIndexData()
 
 void MeshIndexData::setIndexData(const ax::MeshData::IndexArray& indexdata)
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     if (!_indexData.empty())
         return;
     _indexData = indexdata;
@@ -95,14 +95,14 @@ MeshIndexData::~MeshIndexData()
 {
     AX_SAFE_RELEASE(_indexBuffer);
     _indexData.clear();
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
 void MeshVertexData::setVertexData(const std::vector<float>& vertexData)
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     if (!_vertexData.empty())
         return;
     _vertexData = vertexData;
@@ -122,7 +122,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
 
     if (vertexdata->_vertexBuffer)
     {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         vertexdata->setVertexData(meshdata.vertex);
         vertexdata->_vertexBuffer->usingDefaultStoredData(false);
 #endif
@@ -137,7 +137,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
         auto indexBuffer = rhi::DriverBase::getInstance()->createBuffer(
             indices.bsize(), rhi::BufferType::INDEX, rhi::BufferUsage::STATIC);
         indexBuffer->autorelease();
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         indexBuffer->usingDefaultStoredData(false);
 #endif
         indexBuffer->updateData((void*)indices.data(), indices.bsize());
@@ -151,7 +151,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
         }
         else
             indexdata = MeshIndexData::create(id, vertexdata, indexBuffer, meshdata.subMeshAABB[i]);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         indexdata->setIndexData(indices);
 #endif
         vertexdata->_indices.pushBack(indexdata);
@@ -183,7 +183,7 @@ bool MeshVertexData::hasVertexAttrib(shaderinfos::VertexKey attrib) const
 
 MeshVertexData::MeshVertexData()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         _vertexBuffer->updateData((void*)_vertexData.data(), _vertexData.size() * sizeof(_vertexData[0]));
     });
@@ -196,7 +196,7 @@ MeshVertexData::~MeshVertexData()
     AX_SAFE_RELEASE(_vertexBuffer);
     _indices.clear();
     _vertexData.clear();
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }

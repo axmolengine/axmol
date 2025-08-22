@@ -40,6 +40,8 @@ public:
 
     void removeAllSamplers();
 
+    void invalidateAll();
+
     SamplerHandle getSampler(const SamplerDesc& desc);
 
 private:

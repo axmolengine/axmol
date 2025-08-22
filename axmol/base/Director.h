@@ -662,7 +662,7 @@ protected:
     moodycamel::ConcurrentQueue<std::function<void()>> _operations;
 #endif
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _rendererRecreatedListener = nullptr;
 #endif
 

@@ -52,7 +52,7 @@ BufferImpl::BufferImpl(std::size_t size, BufferType type, BufferUsage usage) : B
 {
     glGenBuffers(1, &_buffer);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -63,7 +63,7 @@ BufferImpl::~BufferImpl()
 {
     if (_buffer)
         __state->deleteBuffer(_type, _buffer);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     AX_SAFE_DELETE_ARRAY(_data);
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
@@ -71,12 +71,12 @@ BufferImpl::~BufferImpl()
 
 void BufferImpl::usingDefaultStoredData(bool needDefaultStoredData)
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _needDefaultStoredData = needDefaultStoredData;
 #endif
 }
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 void BufferImpl::reloadBuffer()
 {
     glGenBuffers(1, &_buffer);
@@ -112,7 +112,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
         CHECK_GL_ERROR_DEBUG();
         _bufferAllocated = size;
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         if (data)
             fillBuffer(data, 0, size);
 #endif
@@ -131,7 +131,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
 
         glBufferSubData(__state->bindBuffer(_type, _buffer), offset, size, data);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         fillBuffer(data, offset, size);
 #endif
         CHECK_GL_ERROR_DEBUG();

@@ -53,9 +53,6 @@ static bool isColorRenderable(PixelFormat textureFormat)
 TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, const TextureDesc& desc) : _mtlDevice(mtlDevice)
 {
     updateTextureDesc(desc);
-
-    if (_desc.textureUsage == TextureUsage::RENDER_TARGET)
-        zeroTexData();
 }
 
 TextureImpl::~TextureImpl() {}
@@ -86,6 +83,9 @@ void TextureImpl::updateSubData(int xoffset,
                                int layerIndex)
 {
     ensureNativeTexture();
+
+    if(!data) [[unlikely]]
+        return;
 
     MTLRegion region = {
         {(NSUInteger)xoffset, (NSUInteger)yoffset, 0},  // MTLOrigin

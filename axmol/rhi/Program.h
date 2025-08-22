@@ -180,7 +180,7 @@ protected:
      */
     Program(std::string_view vs, std::string_view fs);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     /**
      * In case of EGL context lost, the engine will reload shaders. Thus location of uniform may changed.
      * The engine will maintain the relationship between the original uniform location and the current active uniform

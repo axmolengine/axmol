@@ -102,7 +102,7 @@ void AxmolRenderer::DeviceLost()
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
         director->setGLDefaultValues();
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         ax::VolatileTextureMgr::reloadAllTextures();
 #endif
 

@@ -238,7 +238,7 @@ protected:
     /** Quads that are going to be rendered */
     V3F_T2F_C4B_Quad* _quads = nullptr;
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     EventListenerCustom* _rendererRecreatedListener = nullptr;
 #endif
 };

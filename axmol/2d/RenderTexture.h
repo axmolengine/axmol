@@ -401,8 +401,9 @@ protected:
     void clearColorAttachment();
 
     void onSaveToFile(std::string fileName, bool isRGBA = true, bool forceNonPMA = false);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     bool _cachedTextureDirty = false;
+    EventListener* _rendererRecreatedListener = nullptr;
 #endif
     bool _keepMatrix = false;
     Rect _rtTextureRect;
@@ -411,7 +412,7 @@ protected:
 
     Viewport _oldViewport;
 
-    Texture2D* _texture2D           = nullptr;
+    Texture2D* _colorTexture        = nullptr;
     Texture2D* _depthStencilTexture = nullptr;
 
     rhi::RenderTarget* _renderTarget    = nullptr;

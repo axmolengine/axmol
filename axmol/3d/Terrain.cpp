@@ -256,11 +256,11 @@ Terrain::Terrain()
     : _alphaMap(nullptr)
     , _lightMap(nullptr)
     , _lightDir(-1.f, -1.f, 0.f)
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     , _backToForegroundListener(nullptr)
 #endif
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { reload(); });
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
@@ -489,7 +489,7 @@ Terrain::~Terrain()
         }
     }
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _director->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
