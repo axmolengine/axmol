@@ -146,7 +146,7 @@ void ProgressTimer::setSprite(Sprite* sprite)
         AX_SAFE_RETAIN(sprite);
         AX_SAFE_RELEASE(_sprite);
         _sprite = sprite;
-        setContentSize(_sprite->getContentSize());
+        Node::setContentSize(_sprite->getContentSize());
 
         //    Every time we set a new sprite, we free the current vertex data
         if (!_vertexData.empty())
@@ -321,6 +321,15 @@ uint8_t ProgressTimer::getOpacity() const
 uint8_t ProgressTimer::getDisplayedOpacity() const
 {
     return _sprite->getDisplayedOpacity();
+}
+
+void ProgressTimer::setContentSize(const ax::Vec2& size)
+{
+    if (size == getContentSize())
+        return;
+
+    _sprite->setContentSize(size);
+    Node::setContentSize(size);
 }
 
 void ProgressTimer::setMidpoint(const Vec2& midPoint)

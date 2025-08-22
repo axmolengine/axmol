@@ -159,6 +159,8 @@ public:
     uint8_t getOpacity() const override;
     uint8_t getDisplayedOpacity() const override;
 
+    void setContentSize(const ax::Vec2& size) override;
+
     /**
      */
     ProgressTimer() = default;
