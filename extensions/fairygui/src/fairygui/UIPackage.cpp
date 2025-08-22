@@ -621,39 +621,45 @@ void UIPackage::loadAtlas(PackageItem* item)
     Image::setPNGPremultipliedAlphaEnabled(true);
 #endif
 
+    auto checkAlphaFile = [item]() {
+        string alphaFilePath;
+        string ext = FileUtils::getPathExtension(item->file);
+        size_t pos = item->file.find_last_of('.');
+        if (pos != -1)
+            alphaFilePath = item->file.substr(0, pos) + "!a" + ext;
+        else
+            alphaFilePath = item->file + "!a" + ext;
+
+        return ToolSet::isFileExist(alphaFilePath) ? alphaFilePath : "";
+    };
+
     Texture2D* tex = new Texture2D();
-    tex->initWithImage(image);
-    item->texture = tex;
-    delete image;
 
-    string alphaFilePath;
-    string ext = FileUtils::getPathExtension(item->file);
-    size_t pos = item->file.find_last_of('.');
-    if (pos != -1)
-        alphaFilePath = item->file.substr(0, pos) + "!a" + ext;
-    else
-        alphaFilePath = item->file + "!a" + ext;
-
-    bool hasAlphaTexture = ToolSet::isFileExist(alphaFilePath);
-    if (hasAlphaTexture)
+    auto alphaFilePath = checkAlphaFile();
+    if (alphaFilePath.empty() || image->getFileType() != Image::Format::ETC1)
     {
-        image = new Image();
-        if (!image->initWithImageFile(alphaFilePath))
-        {
-            delete image;
-            return;
-        }
-
-#if defined(AX_VERSION)
-        if(image->getFileType() == Image::Format::ETC1)
-            tex->initWithImage(image);
-#else
-        tex = new Texture2D();
         tex->initWithImage(image);
-        item->texture->setAlphaTexture(tex);
-        tex->release();
-#endif
-        delete image;
+        item->texture = tex;
+        image->release();
+    }
+    else
+    {
+        auto alphaImage = new Image();
+        alphaImage->initWithImageFile(alphaFilePath);
+
+        TextureSliceData subDatas[] = {
+            TextureSliceData{image->getData(), static_cast<uint16_t>(image->getDataSize()), 0, 0},
+            TextureSliceData{alphaImage->getData(), static_cast<uint16_t>(alphaImage->getDataSize()), 1, 0}};
+        tex->initWithSpec(
+            rhi::TextureDesc{
+                .width       = static_cast<uint16_t>(image->getWidth()),
+                .height      = static_cast<uint16_t>(image->getHeight()),
+                .arraySize   = 2,
+                .pixelFormat = image->getPixelFormat(),
+            },
+            subDatas);
+        image->release();
+        alphaImage->release();
     }
 }
 

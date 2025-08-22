@@ -341,23 +341,35 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
                 // generate texture in render thread
                 texture = new Texture2D();
 
-                texture->initWithImage(image, asyncStruct->pixelFormat);
+                if (asyncStruct->imageAlpha.getFileType() != Image::Format::ETC1)
+                {
+                    texture->initWithImage(image, asyncStruct->pixelFormat);
+                }
+                else
+                {
+                    TextureSliceData subDatas[] = {
+                        TextureSliceData{image->getData(), static_cast<uint16_t>(image->getDataSize()), 0, 0},
+                        TextureSliceData{asyncStruct->imageAlpha.getData(),
+                                         static_cast<uint16_t>(asyncStruct->imageAlpha.getDataSize()), 1, 0}};
+                    texture->initWithSpec(rhi::TextureDesc{.width       = static_cast<uint16_t>(image->getWidth()),
+                                                           .height      = static_cast<uint16_t>(image->getHeight()),
+                                                           .arraySize   = 2,
+                                                           .pixelFormat = image->getPixelFormat()},
+                                          subDatas);
+                }
+
                 // parse 9-patch info
                 this->parseNinePatchImage(image, texture, asyncStruct->filename);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
-                // cache the texture file name
-                VolatileTextureMgr::addImageTexture(texture, asyncStruct->filename);
-#endif
+
                 // cache the texture. retain it, since it is added in the map
                 _textures.emplace(asyncStruct->filename, texture);
                 texture->retain();
 
                 texture->autorelease();
-                // ETC1 ALPHA supports.
-                if (asyncStruct->imageAlpha.getFileType() == Image::Format::ETC1)
-                {
-                    //texture->updateWithImage(&asyncStruct->imageAlpha, asyncStruct->pixelFormat, 1);
-                }
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+                // cache the texture file name
+                VolatileTextureMgr::addImageTexture(texture, asyncStruct->filename);
+#endif
             }
             else
             {

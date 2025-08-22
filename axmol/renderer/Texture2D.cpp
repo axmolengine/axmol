@@ -372,7 +372,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
             free(convertedData);
     }
 
-    if (desc.arraySize == 2 && _originalPF == PixelFormat::ETC1)
+    if (desc.arraySize == 2)
     {
         setPremultipliedAlpha(Image::isCompressedImageHavePMA(Image::CompressedImagePMAFlag::DUAL_SAMPLER));
         _samplerFlags |= TextureSamplerFlag::DUAL_SAMPLER;
