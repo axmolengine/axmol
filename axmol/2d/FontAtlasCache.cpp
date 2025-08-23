@@ -211,24 +211,22 @@ FontAtlas* FontAtlasCache::getFontAtlasCharMap(std::string_view charMapFile,
 
 bool FontAtlasCache::releaseFontAtlas(FontAtlas* atlas)
 {
-    if (nullptr != atlas)
+    if (!atlas) [[unlikely]]
+        return false;
+
+    if (atlas->getReferenceCount() == 1)
     {
-        if (atlas->getReferenceCount() == 1)
+        for (auto it = _atlasMap.begin(); it != _atlasMap.end(); ++it)
         {
-            for (auto&& item : _atlasMap)
+            if (it->second == atlas)
             {
-                if (item.second == atlas)
-                {
-                    _atlasMap.erase(item.first);
-                    break;
-                }
+                _atlasMap.erase(it);
+                break;
             }
         }
-        atlas->release();
-        return true;
     }
-
-    return false;
+    atlas->release();
+    return true;
 }
 
 void FontAtlasCache::reloadFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated)
