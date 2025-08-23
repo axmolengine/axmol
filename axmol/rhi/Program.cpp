@@ -42,16 +42,16 @@ struct VertexLayoutHelper
         /// a_position
         vertexLayout->setAttrib(rhi::VERTEX_INPUT_NAME_POSITION,
                                 program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                                rhi::VertexFormat::FLOAT2, 0, false);
+                                rhi::VertexFormat::FLOAT3, 0, false);
         /// a_texCoord
         vertexLayout->setAttrib(rhi::VERTEX_INPUT_NAME_TEXCOORD,
                                 program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                                rhi::VertexFormat::FLOAT2, 2 * sizeof(float), false);
+                                rhi::VertexFormat::FLOAT2, 3 * sizeof(float), false);
 
-        vertexLayout->setStride(4 * sizeof(float));
+        vertexLayout->setStride(5 * sizeof(float));
     }
 
-    static void definePosUvColor(Program* program)
+    static void definePosUVColor(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
 
@@ -71,6 +71,7 @@ struct VertexLayoutHelper
         vertexLayout->setStride(sizeof(V3F_T2F_C4F));
     }
 
+    // posUVColor32
     static void defineSprite(Program* program)
     {
         auto vertexLayout = program->getVertexLayout();
@@ -200,7 +201,7 @@ struct VertexLayoutHelper
 };
 std::function<void(Program*)> Program::s_vertexLayoutDefineList[static_cast<int>(VertexLayoutType::Count)] = {
     VertexLayoutHelper::defineDummy,      VertexLayoutHelper::definePos,        VertexLayoutHelper::defineTexture,
-    VertexLayoutHelper::definePosUvColor, VertexLayoutHelper::defineSprite,     VertexLayoutHelper::defineSprite2D,
+    VertexLayoutHelper::definePosUVColor, VertexLayoutHelper::defineSprite,     VertexLayoutHelper::defineSprite2D,
     VertexLayoutHelper::defineDrawNode,   VertexLayoutHelper::defineDrawNode3D, VertexLayoutHelper::defineSkyBox,
     VertexLayoutHelper::definePosColor,   VertexLayoutHelper::defineTerrain3D,  VertexLayoutHelper::defineInstanced};
 

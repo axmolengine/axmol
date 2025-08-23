@@ -52,7 +52,7 @@ rhi::ProgramState* initPipelineDesc(ax::CustomCommand& command,
                                               rhi::UniformLocation& locTexture)
 {
     auto& pipelieDesc = command.getPipelineDesc();
-    auto* program           = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+    auto* program     = axpm->getBuiltinProgram(rhi::ProgramType::POS_UV_COLOR_2D);
     auto programState       = new rhi::ProgramState(program);
     AX_SAFE_RELEASE(pipelieDesc.programState);
     pipelieDesc.programState = programState;

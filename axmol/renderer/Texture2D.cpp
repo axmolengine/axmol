@@ -312,7 +312,7 @@ bool Texture2D::initWithMipmaps(std::span<MipmapInfo> mipmaps,
 }
 
 bool Texture2D::initWithSpec(rhi::TextureDesc desc,
-                             std::span<TextureSliceData> subDatas,
+                             std::span<const TextureSliceData> subDatas,
                              PixelFormat renderFormat,
                              bool preMultipliedAlpha)
 {
@@ -490,7 +490,7 @@ bool Texture2D::updateData(Image* image)
     }
 }
 
-bool Texture2D::updateData(std::span<TextureSliceData> subDatas) {
+bool Texture2D::updateData(std::span<const TextureSliceData> subDatas) {
     if (!_rhiTexture)[[unlikely]]
         return false;
 
@@ -499,7 +499,7 @@ bool Texture2D::updateData(std::span<TextureSliceData> subDatas) {
     return true;
 }
 
-void Texture2D::updateData(std::span<TextureSliceData> subDatas, PixelFormat renderFormat, bool compressed)
+void Texture2D::updateData(std::span<const TextureSliceData> subDatas, PixelFormat renderFormat, bool compressed)
 {
     for (auto& subres : subDatas)
     {
@@ -749,20 +749,25 @@ void Texture2D::drawInRect(const Rect& rect, float globalZOrder)
 
     Mat4 matrixMVP = projection * modelView;
 
+    // vertex layout is: V3F_T2F
     float vertexData[] = {rect.origin.x,
                           rect.origin.y,
+                          0.0f,
                           0.0f,
                           _maxT,
                           rect.size.width + rect.origin.x,
                           rect.origin.y,
+                          0.0f,
                           _maxS,
                           _maxT,
                           rect.origin.x,
                           rect.size.height + rect.origin.y,
                           0.0f,
                           0.0f,
+                          0.0f,
                           rect.size.width + rect.origin.x,
                           rect.size.height + rect.origin.y,
+                          0.0f,
                           _maxS,
                           0.0f};
 

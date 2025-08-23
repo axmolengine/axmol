@@ -537,7 +537,7 @@ struct ProgramType
         VIDEO_TEXTURE_I420, // For some android 11 and older devices
         VIDEO_TEXTURE_BGR32,
 
-        TRAIL_2D,
+        POS_UV_COLOR_2D,
 
         BUILTIN_COUNT,
 

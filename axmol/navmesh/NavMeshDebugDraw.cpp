@@ -43,18 +43,6 @@ NavMeshDebugDraw::NavMeshDebugDraw()
     auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_COLOR);
     _programState = new rhi::ProgramState(program);
     _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
-
-    // the POSITION_COLOR default vertex layout is: V3F_C4F, so we need modify it
-    auto vertexLayout = _programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", _programState->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                                rhi::VertexFormat::FLOAT3,
-                                offsetof(V3F_C4F, position),
-                                false);
-    vertexLayout->setAttrib("a_color", _programState->getVertexInputDesc(rhi::VertexInputKind::COLOR),
-                                rhi::VertexFormat::FLOAT4,
-                                offsetof(V3F_C4F, color),
-                                false);
-    vertexLayout->setStride(sizeof(V3F_C4F));
 }
 
 void NavMeshDebugDraw::initCustomCommand(CustomCommand& command)
@@ -141,7 +129,7 @@ Vec4 NavMeshDebugDraw::getColor(unsigned int col)
     const unsigned int b = (col >> 16) & 0xff;
     const unsigned int a = (col >> 24) & 0xff;
 
-    float factor = 1.0f / 255.0f;
+    constexpr float factor = 1.0f / 255.0f;
     return Vec4(r, g, b, a) * factor;
 }
 

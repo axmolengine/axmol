@@ -103,6 +103,8 @@ public:
      */
     using TexParams = rhi::SamplerDesc;
 
+    static inline constexpr TextureSliceData DEFAULT_SLICE_DATA[] = {TextureSliceData{}};
+
 public:
 
     static void chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled, rhi::SamplerDesc& desc);
@@ -213,7 +215,7 @@ public:
                          bool preMultipliedAlpha = false);
 
     bool initWithSpec(rhi::TextureDesc desc,
-                      std::span<TextureSliceData> subDatas,
+                      std::span<const TextureSliceData> subDatas,
                       PixelFormat renderFormat = PixelFormat::NONE,
                       bool preMultipliedAlpha = false);
 
@@ -234,7 +236,7 @@ public:
      *
      * @param subDatas
      */
-    bool updateData(std::span<TextureSliceData> subDatas);
+    bool updateData(std::span<const TextureSliceData> subDatas);
 
     /**
      * Update the texture with a new image data.
@@ -399,7 +401,7 @@ private:
 
 protected:
 
-    void updateData(std::span<TextureSliceData> subDatas, PixelFormat renderFormat, bool compressed);
+    void updateData(std::span<const TextureSliceData> subDatas, PixelFormat renderFormat, bool compressed);
 
     /** width in pixels */
     int _pixelsWide;

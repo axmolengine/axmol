@@ -217,7 +217,7 @@ void MotionStreak::setTexture(Texture2D* texture)
         AX_SAFE_RELEASE(_texture);
         _texture = texture;
 
-        setProgramStateWithRegistry(rhi::ProgramType::TRAIL_2D, _texture);
+        setProgramStateWithRegistry(rhi::ProgramType::POS_UV_COLOR_2D, _texture);
     }
 }
 
@@ -230,30 +230,6 @@ bool MotionStreak::setProgramState(rhi::ProgramState* programState, bool ownPS /
         pipelineDesc.programState = _programState;
 
         _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
-
-        #if 0
-        // setup custom vertex layout for V2F_T2F_C4B
-        const auto& vertexInputs = _programState->getProgram()->getActiveVertexInputs();
-        auto iter                = vertexInputs.find("a_position");
-        auto layout               = _programState->getMutableVertexLayout();
-        if (iter != vertexInputs.end())
-        {
-            layout->setAttrib("a_position", &iter->second, rhi::VertexFormat::FLOAT2, 0, false);
-        }
-        iter = vertexInputs.find("a_texCoord");
-        if (iter != vertexInputs.end())
-        {
-            layout->setAttrib("a_texCoord", &iter->second, rhi::VertexFormat::FLOAT2, sizeof(Vec2), false);
-        }
-        iter = vertexInputs.find("a_color");
-        if (iter != vertexInputs.end())
-        {
-            layout->setAttrib("a_color", &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec2) * 2, true);
-        }
-
-        constexpr size_t vertexSize = sizeof(_vertices[0]);
-        layout->setStride(vertexSize);
-        #endif
 
         updateProgramStateTexture(_texture);
         return true;

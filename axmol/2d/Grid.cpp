@@ -62,7 +62,8 @@ bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
     desc.height        = POTHigh;
     desc.textureUsage  = rhi::TextureUsage::RENDER_TARGET;
     desc.pixelFormat   = rhi::PixelFormat::RGBA8;
-    texture->initWithSpec(desc, {});
+
+    texture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA);
 
     initWithSize(gridSize, texture, false, rect);
 
@@ -88,7 +89,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     AX_SAFE_RETAIN(_texture);
     _isTextureFlipped = flipped;
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
     _isTextureFlipped = !flipped;
 #endif
 
@@ -106,31 +107,11 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
 
     auto& pipelineDesc = _drawCommand.getPipelineDesc();
     AX_SAFE_RELEASE(_programState);
-    auto* program                   = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
-    _programState                   = new rhi::ProgramState(program);
+    auto* program             = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
+    _programState             = new rhi::ProgramState(program);
     pipelineDesc.programState = _programState;
-    _mvpMatrixLocation              = pipelineDesc.programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation                = pipelineDesc.programState->getUniformLocation("u_tex0");
-
-#define VERTEX_POSITION_SIZE 3
-#define VERTEX_TEXCOORD_SIZE 2
-    uint32_t texcoordOffset   = (VERTEX_POSITION_SIZE) * sizeof(float);
-    uint32_t totalSize        = (VERTEX_POSITION_SIZE + VERTEX_TEXCOORD_SIZE) * sizeof(float);
-    const auto& vertexInputs = _programState->getProgram()->getActiveVertexInputs();
-    auto iter                 = vertexInputs.find("a_position");
-
-    auto layout = _programState->getMutableVertexLayout();
-    if (iter != vertexInputs.end())
-    {
-        layout->setAttrib("a_position", &iter->second, rhi::VertexFormat::FLOAT3, 0, false);
-    }
-    iter = vertexInputs.find("a_texCoord");
-    if (iter != vertexInputs.end())
-    {
-        layout->setAttrib("a_texCoord", &iter->second, rhi::VertexFormat::FLOAT2, texcoordOffset,
-                                   false);
-    }
-    layout->setStride(totalSize);
+    _mvpMatrixLocation        = pipelineDesc.programState->getUniformLocation("u_MVPMatrix");
+    _textureLocation          = pipelineDesc.programState->getUniformLocation("u_tex0");
 
     calculateVertexPoints();
     updateBlendState();

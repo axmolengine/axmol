@@ -86,8 +86,12 @@ struct PrivateVideoContext
 
     std::function<void(const MEVideoFrame& frame)> _renderFrameFunc;
 
-    void updatePixelDesc(const MEVideoPixelDesc& desc)
+    bool updatePixelDesc(const MEVideoFrame& frame)
     {
+        auto& desc = frame._vpd;
+        if (desc.equals(_vpixelDesc))
+            return false;
+
         _vpixelDesc = desc;
 
         auto pixelFormat = desc._PF;
@@ -109,7 +113,7 @@ struct PrivateVideoContext
                     .height      = static_cast<uint16_t>(desc._dim.y),
                     .pixelFormat = PixelFormat::RG8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
 
             // RGBA8
             _vchromaTexture = new Texture2D();
@@ -119,7 +123,7 @@ struct PrivateVideoContext
                     .height = static_cast<uint16_t>(desc._dim.y),
                     .pixelFormat = PixelFormat::RGBA8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
             _vchromaTexture->setAliasTexParameters();
             _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_YUY2);
 
@@ -127,8 +131,8 @@ struct PrivateVideoContext
                 if (_vtexture && _vchromaTexture)
                 {
                     auto& bufferDim = frame._vpd._dim;
-                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
-                    _vchromaTexture->updateData(frame._dataPointer, bufferDim.x >> 1, bufferDim.y);
+                    _vtexture->updateSubData(frame._dataPointer, 0, 0, bufferDim.x, bufferDim.y);
+                    _vchromaTexture->updateSubData(frame._dataPointer, 0, 0, bufferDim.x >> 1, bufferDim.y);
                 }
             };
             break;
@@ -141,7 +145,7 @@ struct PrivateVideoContext
                     .height      = static_cast<uint16_t>(desc._dim.y),
                     .pixelFormat = PixelFormat::R8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
 
             // RG8
             _vchromaTexture = new Texture2D();
@@ -151,7 +155,7 @@ struct PrivateVideoContext
                     .height      = static_cast<uint16_t>(desc._dim.y >> 1),
                     .pixelFormat = PixelFormat::RG8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
             _vchromaTexture->setAliasTexParameters();
             _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_NV12);
 
@@ -160,8 +164,8 @@ struct PrivateVideoContext
                 if (_vtexture && _vchromaTexture)
                 {
                     auto& bufferDim = frame._vpd._dim;
-                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
-                    _vchromaTexture->updateData(frame._cbcrDataPointer, bufferDim.x >> 1, bufferDim.y >> 1);
+                    _vtexture->updateSubData(frame._dataPointer, 0, 0, bufferDim.x, bufferDim.y);
+                    _vchromaTexture->updateSubData(frame._cbcrDataPointer, 0, 0, bufferDim.x >> 1, bufferDim.y >> 1);
                 }
             };
             break;
@@ -174,7 +178,7 @@ struct PrivateVideoContext
                     .height      = static_cast<uint16_t>(desc._dim.y),
                     .pixelFormat = PixelFormat::R8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
             // R8
             _vchromaTexture = new Texture2D();
             _vchromaTexture->initWithSpec(
@@ -183,7 +187,7 @@ struct PrivateVideoContext
                     .height      = static_cast<uint16_t>(desc._dim.y >> 1),
                     .pixelFormat = PixelFormat::R8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
             _vchromaTexture->setAliasTexParameters();
             // R8
             _vchroma2Texture = new Texture2D();
@@ -193,7 +197,7 @@ struct PrivateVideoContext
                     .height      = static_cast<uint16_t>(desc._dim.y >> 1),
                     .pixelFormat = PixelFormat::R8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
             _vchroma2Texture->setAliasTexParameters();
             _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_I420);
 
@@ -202,9 +206,9 @@ struct PrivateVideoContext
                 {
                     auto& bufferDim = frame._vpd._dim;
                     const auto chromaTexDataSize = (bufferDim.x * bufferDim.y) >> 2;
-                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
-                    _vchromaTexture->updateData(frame._cbcrDataPointer, bufferDim.x >> 1, bufferDim.y >> 1);
-                    _vchroma2Texture->updateData(frame._cbcrDataPointer + chromaTexDataSize, bufferDim.x >> 1,
+                    _vtexture->updateSubData(frame._dataPointer, 0, 0, bufferDim.x, bufferDim.y);
+                    _vchromaTexture->updateSubData(frame._cbcrDataPointer, 0, 0, bufferDim.x >> 1, bufferDim.y >> 1);
+                    _vchroma2Texture->updateSubData(frame._cbcrDataPointer + chromaTexDataSize, 0, 0, bufferDim.x >> 1,
                                                  bufferDim.y >> 1);
                 }
             };
@@ -218,14 +222,14 @@ struct PrivateVideoContext
                     .height      = static_cast<uint16_t>(desc._dim.y),
                     .pixelFormat = PixelFormat::RGBA8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
             _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_RGB32);
 
             _renderFrameFunc = [this](const MEVideoFrame& frame) {
                 if (_vtexture)
                 {
                     auto& bufferDim = frame._vpd._dim;
-                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
+                    _vtexture->updateSubData(frame._dataPointer, 0, 0, bufferDim.x, bufferDim.y);
                 }
             };
             break;
@@ -238,16 +242,37 @@ struct PrivateVideoContext
                     .height      = static_cast<uint16_t>(desc._dim.y),
                     .pixelFormat = PixelFormat::BGRA8,
                 },
-                {});
+                Texture2D::DEFAULT_SLICE_DATA);
             _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_BGR32);
             _renderFrameFunc = [this](const MEVideoFrame& frame) {
                 if (_vtexture) {
                     auto& bufferDim = frame._vpd._dim;
-                    _vtexture->updateData(frame._dataPointer, bufferDim.x, bufferDim.y);
+                    _vtexture->updateSubData(frame._dataPointer, 0, 0, bufferDim.x, bufferDim.y);
                 }
             };
             break;
         }
+
+        _vrender->setTexture(_vtexture);
+        _vrender->setTextureRect(ax::Rect{Vec2::ZERO, Vec2{
+                                                          frame._videoDim.x / AX_CONTENT_SCALE_FACTOR(),
+                                                          frame._videoDim.y / AX_CONTENT_SCALE_FACTOR(),
+                                                      }});
+
+        if (pixelFormat >= MEVideoPixelFormat::YUY2)
+        {
+            auto ps = _vrender->getProgramState();
+            PrivateVideoContext::updateColorTransform(ps, frame._vpd._fullRange);
+
+            ps->setTexture(ps->getUniformLocation("u_tex1"), 1, _vchromaTexture->getRHITexture());
+
+            if (pixelFormat == MEVideoPixelFormat::I420)
+                ps->setTexture(ps->getUniformLocation("u_tex2"), 2, _vchroma2Texture->getRHITexture());
+        }
+
+        _scaleDirty = true;
+
+        return true;
     }
 
     void renderFrame(const MEVideoFrame& frame)
@@ -1057,8 +1082,7 @@ MediaPlayer::MediaPlayer()
         pvd->_vrender->setAutoUpdatePS(false);
         this->addProtectedChild(pvd->_vrender);
         /// setup media event callback
-        pvd->_engine->setCallbacks(
-            [this, pvd](MEMediaEventType event) {
+        pvd->_engine->setCallbacks([this, pvd](MEMediaEventType event) {
             switch (event)
             {
             case MEMediaEventType::Playing:
@@ -1090,83 +1114,9 @@ MediaPlayer::MediaPlayer()
                 onPlayEvent((int)EventType::ERROR);
                 break;
             }
-        },
-            [this, pvd](const ax::MEVideoFrame& frame) {
-            auto pixelFormat       = frame._vpd._PF;
-            auto bPixelDescChnaged = !frame._vpd.equals(pvd->_vpixelDesc);
-            if (bPixelDescChnaged)
-            {
-                pvd->updatePixelDesc(frame._vpd);
-            }
-
+        }, [this, pvd](const ax::MEVideoFrame& frame) {
+            pvd->updatePixelDesc(frame);
             pvd->renderFrame(frame);
-            #if 0
-            auto& bufferDim = frame._vpd._dim;
-
-            switch (pixelFormat)
-            {
-            case MEVideoPixelFormat::YUY2:
-            {
-                // RG8
-                //pvd->_vtexture->updateSubData(frame._dataPointer, 0, 0, frame._dataLen,
-                //                               bufferDim.x, bufferDim.y, false);
-                //pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
-                //                                     PixelFormat::RGBA8, bufferDim.x >> 1, bufferDim.y, false, 0);
-                break;
-            }
-            case MEVideoPixelFormat::NV12:
-            {
-                //pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
-                //                               PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
-                //pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
-                //                                     PixelFormat::RG8, PixelFormat::RG8, bufferDim.x >> 1,
-                //                                     bufferDim.y >> 1, false, 0);
-                break;
-            }
-            case MEVideoPixelFormat::I420:
-            {
-                //pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::R8,
-                //                               PixelFormat::R8, bufferDim.x, bufferDim.y, false, 0);
-                //const auto chromaTexDataSize = (bufferDim.x * bufferDim.y) >> 2;
-                //pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, chromaTexDataSize, PixelFormat::R8,
-                //                                     PixelFormat::R8, bufferDim.x >> 1, bufferDim.y >> 1, false, 0);
-                //pvd->_vchroma2Texture->updateWithData(frame._cbcrDataPointer + chromaTexDataSize, chromaTexDataSize,
-                //                                      PixelFormat::R8, PixelFormat::R8, bufferDim.x >> 1,
-                //                                      bufferDim.y >> 1, false, 0);
-                break;
-            }
-            case MEVideoPixelFormat::RGB32:
-                //pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
-                //                               PixelFormat::RGBA8, bufferDim.x, bufferDim.y, false, 0);
-                break;
-            case MEVideoPixelFormat::BGR32:
-                //pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::BGRA8,
-                //                               PixelFormat::BGRA8, bufferDim.x, bufferDim.y, false, 0);
-                break;
-            default:;
-            }
-            #endif
-            if (bPixelDescChnaged)
-            {
-                pvd->_vrender->setTexture(pvd->_vtexture);
-                pvd->_vrender->setTextureRect(ax::Rect{Vec2::ZERO, Vec2{
-                                                                       frame._videoDim.x / AX_CONTENT_SCALE_FACTOR(),
-                                                                       frame._videoDim.y / AX_CONTENT_SCALE_FACTOR(),
-                                                                   }});
-
-                if (pixelFormat >= MEVideoPixelFormat::YUY2)
-                {
-                    auto ps = pvd->_vrender->getProgramState();
-                    PrivateVideoContext::updateColorTransform(ps, frame._vpd._fullRange);
-
-                    ps->setTexture(ps->getUniformLocation("u_tex1"), 1, pvd->_vchromaTexture->getRHITexture());
-
-                    if (pixelFormat == MEVideoPixelFormat::I420)
-                        ps->setTexture(ps->getUniformLocation("u_tex2"), 2, pvd->_vchroma2Texture->getRHITexture());
-                }
-
-                pvd->_scaleDirty = true;
-            }
         });
     }
     else

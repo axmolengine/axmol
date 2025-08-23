@@ -172,7 +172,8 @@ void ProgramManager::init()
     registerProgram(ProgramType::VIDEO_TEXTURE_I420, positionTextureColor_vert, videoTextureI420_frag,
                     VertexLayoutType::Sprite);
 
-    registerProgram(ProgramType::TRAIL_2D, trail_2d_vert, positionTextureColor_frag, VertexLayoutType::Sprite2D);
+    registerProgram(ProgramType::POS_UV_COLOR_2D, posUVColor2D_vert, positionTextureColor_frag,
+                    VertexLayoutType::Sprite2D);
 
     // The builtin dual sampler shader registry
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR,

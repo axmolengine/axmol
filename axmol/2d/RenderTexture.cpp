@@ -209,8 +209,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         desc.textureUsage  = TextureUsage::RENDER_TARGET;
         desc.pixelFormat = PixelFormat::RGBA8;
         _colorTexture                = new Texture2D();
-        TextureSliceData emptyData[] = {TextureSliceData{}};
-        _colorTexture->initWithSpec(desc, emptyData, PixelFormat::NONE, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
+        _colorTexture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA, PixelFormat::NONE, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
 
         if (PixelFormat::D24S8 == depthStencilFormat || sharedRenderTarget)
         {
@@ -219,7 +218,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             AX_SAFE_RELEASE(_depthStencilTexture);
 
             _depthStencilTexture = new Texture2D();
-            _depthStencilTexture->initWithSpec(desc, emptyData);
+            _depthStencilTexture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA);
         }
 
         AX_SAFE_RELEASE(_renderTarget);
