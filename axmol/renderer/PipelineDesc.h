@@ -43,6 +43,7 @@ namespace ax
 struct PipelineDesc
 {
     rhi::ProgramState* programState{nullptr};
+    rhi::VertexLayout* vertexLayout{nullptr};
     rhi::BlendDesc blendDesc;
 };
 

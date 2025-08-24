@@ -63,8 +63,8 @@ UniformLocation ProgramImpl::getUniformLocation(rhi::Uniform name) const
     auto& frag = _fragmentShader->getUniformInfo(name);
 
     return UniformLocation {
-        { vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset) },
-        { frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset) }
+        { frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset) },
+        { vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset) }
     };
 }
 
@@ -78,8 +78,8 @@ UniformLocation ProgramImpl::getUniformLocation(std::string_view uniform) const
             "Same vertex and fragment uniform must much in type and size");
 
     return UniformLocation {
-        { vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset) },
-        { frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset) }
+        { frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset) },
+        { vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset) }
     };
 }
 

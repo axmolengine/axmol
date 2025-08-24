@@ -3092,7 +3092,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& 
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
-    luaval_to_stageUniformLocation(L, -1, loc.vertStage, "");
+    luaval_to_stageUniformLocation(L, -1, loc.stages[1], "");
     lua_pop(L, 1);
 
     lua_pushstring(L, "fragStage");
@@ -3101,7 +3101,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& 
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
-    luaval_to_stageUniformLocation(L, -1, loc.fragStage, "");
+    luaval_to_stageUniformLocation(L, -1, loc.stages[0], "");
     lua_pop(L, 1);
 
     return true;
@@ -3115,11 +3115,11 @@ void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc
     lua_newtable(L);
 
     lua_pushstring(L, "vertStage");
-    stageUniformLocation_to_luaval(L, loc.vertStage);
+    stageUniformLocation_to_luaval(L, loc.stages[1]);
     lua_rawset(L, -3);
 
     lua_pushstring(L, "fragStage");
-    stageUniformLocation_to_luaval(L, loc.fragStage);
+    stageUniformLocation_to_luaval(L, loc.stages[0]);
     lua_rawset(L, -3);
 }
 

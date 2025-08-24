@@ -24,6 +24,7 @@
 #include "axmol/rhi/d3d/DepthStencilStateD3D.h"
 #include <stdexcept>
 #include <cstring>
+#include "xxhash.h"
 
 namespace ax::rhi::d3d
 {
@@ -86,14 +87,41 @@ static D3D11_DEPTH_STENCILOP_DESC make_op_desc(const StencilDesc& s)
 }
 }  // namespace
 
+DepthStencilStateImpl::DepthStencilStateImpl(ID3D11Device* device) : _device(device) {
+    D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+    dsDesc.DepthEnable              = FALSE;
+    dsDesc.DepthWriteMask           = D3D11_DEPTH_WRITE_MASK_ZERO;
+    dsDesc.DepthFunc                = D3D11_COMPARISON_ALWAYS;
+
+    dsDesc.StencilEnable = FALSE;
+
+    _device->CreateDepthStencilState(&dsDesc, _disableState.GetAddressOf());
+}
+
 void DepthStencilStateImpl::update(const DepthStencilDesc& desc)
 {
-    if (_state && memcmp(&desc, &_dsDesc, sizeof(desc)) == 0)
+    DepthStencilState::update(desc); 
+
+    if (!isEnabled())
     {
+        _activeState = _disableState;
         return;
     }
 
-    DepthStencilState::update(desc);
+    DepthStencilDesc hashMe;
+    memset(&hashMe, 0, sizeof(hashMe));
+    hashMe.depthCompareFunc = desc.depthCompareFunc;
+    hashMe.backFaceStencil  = desc.backFaceStencil;
+    hashMe.frontFaceStencil = desc.frontFaceStencil;
+    hashMe.flags            = desc.flags;
+
+    auto key = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
+    auto it  = _stateCache.find(key);
+    if (it != _stateCache.end())
+    {
+        _activeState = it->second;
+        return;
+    }
 
     D3D11_DEPTH_STENCIL_DESC d{};
 
@@ -115,33 +143,15 @@ void DepthStencilStateImpl::update(const DepthStencilDesc& desc)
         throw std::runtime_error("CreateDepthStencilState failed");
     }
 
-    _state  = std::move(newState);
-    _dsDesc = desc;
-    _isBackFrontStencilEqual =
-        (std::memcmp(&desc.frontFaceStencil, &desc.backFaceStencil, sizeof(StencilDesc)) == 0);
+    _activeState = newState;
+
+    _stateCache.emplace(key, newState);
 }
 
 void DepthStencilStateImpl::apply(ID3D11DeviceContext* ctx, UINT stencilRef) const
 {
-    if (ctx && _state)
-        ctx->OMSetDepthStencilState(_state.Get(), stencilRef);
+    if (ctx && _activeState)
+         ctx->OMSetDepthStencilState(_activeState.Get(), stencilRef);
 }
 
-void DepthStencilStateImpl::reset(ID3D11DeviceContext* ctx)
-{
-    if (!_disableState)
-    {
-        D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-        dsDesc.DepthEnable              = FALSE;
-        dsDesc.DepthWriteMask           = D3D11_DEPTH_WRITE_MASK_ZERO;
-        dsDesc.DepthFunc                = D3D11_COMPARISON_ALWAYS;
-
-        dsDesc.StencilEnable = FALSE;
-
-        _device->CreateDepthStencilState(&dsDesc, _disableState.GetAddressOf());
-    }
-
-    if (_disableState)
-        ctx->OMSetDepthStencilState(_disableState.Get(), 0);
-}
 }  // namespace ax::rhi::d3d

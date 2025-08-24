@@ -62,8 +62,9 @@ enum class BufferType : uint32_t
 enum class ShaderStage
 {
     UNKNOWN = -1,
+    FRAGMENT = 0,
     VERTEX,
-    FRAGMENT
+    DEFAULT = FRAGMENT
 };
 
 enum class VertexFormat : uint32_t
@@ -433,22 +434,32 @@ struct StageUniformLocation
 
 struct UniformLocation
 {
-    StageUniformLocation vertStage;
-    StageUniformLocation fragStage;
+    UniformLocation() = default;
+    UniformLocation(StageUniformLocation&& s0, StageUniformLocation&& s1)
+    {
+        stages[0] = s0;
+        stages[1] = s1;
+    }
 
-    operator bool() const { return vertStage || fragStage; }
+    /*
+     * OpenGL(ES): all uniform linked to stages[0]
+     * Other APIs: stages[0] for fragment shader, stages[1] for vertex shader
+    */
+    StageUniformLocation stages[2];
+
+    operator bool() const { return stages[0] || stages[1]; }
     void reset()
     {
-        vertStage = {};
-        fragStage = {};
+        stages[0] = {};
+        stages[1] = {};
     }
     bool operator==(const UniformLocation& other) const
     {
-        return vertStage == other.vertStage && fragStage == other.fragStage;
+        return stages[0] == other.stages[0] && stages[1] == other.stages[1];
     }
     std::size_t operator()(const UniformLocation&) const  // used as a hash function
     {
-        return size_t(vertStage.location) ^ size_t(fragStage.location << 16);
+        return size_t(stages[0].location) ^ size_t(stages[1].location << 16);
     }
 };
 

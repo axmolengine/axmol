@@ -393,26 +393,13 @@ UniformLocation ProgramImpl::getUniformLocation(std::string_view uniform) const
     auto iter = _activeUniformInfos.find(uniform);
     if (iter != _activeUniformInfos.end())
     {
-        const auto& uniformInfo = iter->second;
-        if (uniformInfo.bufferOffset != -1)
-        {
+        auto& uniformInfo = iter->second;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-            uniformLocation.vertStage.location = _mapToOriginalLocation.at(uniformInfo.location);
+        uniformLocation.stages[0].location = _mapToOriginalLocation.at(uniformInfo.location);
 #else
-            uniformLocation.vertStage.location = uniformInfo.location;
+        uniformLocation.stages[0].location = uniformInfo.location;
 #endif
-            uniformLocation.vertStage.offset = uniformInfo.bufferOffset;
-        }
-        else
-        { // means it's sampler
-
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-            uniformLocation.fragStage.location = _mapToOriginalLocation.at(uniformInfo.location);
-#else
-            uniformLocation.fragStage.location = uniformInfo.location;
-#endif
-            uniformLocation.fragStage.offset   = -1;  // samplers don't have offset
-        }
+        uniformLocation.stages[0].offset = uniformInfo.bufferOffset;
     }
 
     return uniformLocation;
@@ -450,12 +437,12 @@ const hlookup::string_map<VertexInputDesc>& ProgramImpl::getActiveVertexInputs()
     return _activeVertexInputs;
 }
 
-const hlookup::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage stage) const
+const hlookup::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage /*stage*/) const
 {
     return _activeUniformInfos;
 }
 
-std::size_t ProgramImpl::getUniformBufferSize(ShaderStage stage) const
+std::size_t ProgramImpl::getUniformBufferSize(ShaderStage /*stage*/) const
 {
     return _totalBufferSize;
 }

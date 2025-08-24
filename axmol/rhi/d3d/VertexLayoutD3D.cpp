@@ -89,7 +89,7 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
             {
                 D3D11_INPUT_ELEMENT_DESC desc{};
 
-                desc.SemanticName         = inputDesc.name.c_str();
+                desc.SemanticName         = inputDesc.semantic.c_str();
                 desc.SemanticIndex        = inputDesc.index;
                 desc.Format               = toDXGIFormat(inputDesc.format, inputDesc.needToBeNormallized);
                 desc.InputSlot            = inputSlot;
@@ -104,7 +104,7 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
                 for (UINT i = 0; i < 4; ++i)
                 {
                     D3D11_INPUT_ELEMENT_DESC desc{};
-                    desc.SemanticName         = inputDesc.name.c_str();
+                    desc.SemanticName         = inputDesc.semantic.c_str();
                     desc.SemanticIndex        = inputDesc.index + i;
                     desc.Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
                     desc.InputSlot            = inputSlot;

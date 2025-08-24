@@ -42,7 +42,7 @@ TextureBindingInfo::TextureBindingInfo(const TextureBindingInfo& other)
     this->assign(other);
 }
 
-TextureBindingInfo::TextureBindingInfo(TextureBindingInfo&& other)
+TextureBindingInfo::TextureBindingInfo(TextureBindingInfo&& other) noexcept
 {
     this->assign(std::move(other));
 }
@@ -87,7 +87,7 @@ void TextureBindingInfo::assign(TextureBindingInfo&& other)
     }
 }
 
-void TextureBindingInfo::reset(int location_, int slot_, rhi::Texture* tex_)
+void TextureBindingInfo::setTexture(int location_, int slot_, rhi::Texture* tex_)
 {
     AX_SAFE_RELEASE(this->tex);
 
@@ -119,13 +119,17 @@ bool ProgramState::init(Program* program)
 
     _vertexLayout             = program->getVertexLayout();
     _ownVertexLayout          = false;
-    _vertexUniformBufferSize  = _program->getUniformBufferSize(ShaderStage::VERTEX);
 
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
-    _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
+#if AX_RENDER_API == AX_RENDER_API_GL
+    auto uboSize = _program->getUniformBufferSize(ShaderStage::DEFAULT);
+    _uniformBuffer.resize((std::max)(uboSize, (size_t)1), 0);
+#else
+    auto fragUboSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
+    auto vertUboSize  = _program->getUniformBufferSize(ShaderStage::VERTEX);
+
+    _uniformBuffer.resize((std::max)(vertUboSize + fragUboSize, (size_t)1), 0);
+    _vertexUniformBufferStart = fragUboSize;
 #endif
-
-    _uniformBuffers.resize((std::max)(_vertexUniformBufferSize + _fragmentUniformBufferSize, (size_t)1), 0);
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
@@ -145,7 +149,7 @@ bool ProgramState::init(Program* program)
 
 void ProgramState::updateBatchId()
 {
-    _batchId = XXH64(_uniformBuffers.data(), _uniformBuffers.size(), _program->getProgramId());
+    _batchId = XXH64(_uniformBuffer.data(), _uniformBuffer.size(), _program->getProgramId());
     _isBatchable = true;
 }
 
@@ -186,7 +190,11 @@ ProgramState* ProgramState::clone() const
 {
     ProgramState* cp          = new ProgramState(_program);
     cp->_textureBindingInfos  = _textureBindingInfos;
-    cp->_uniformBuffers       = _uniformBuffers;
+
+    cp->_uniformBuffer = _uniformBuffer;
+#if AX_RENDER_API != AX_RENDER_API_GL
+    cp->_vertexUniformBufferStart = _vertexUniformBufferStart;
+#endif
 
     cp->_ownVertexLayout = _ownVertexLayout;
     cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : _vertexLayout->clone(); // OPTIMIZE ME: make VertexLayout inherit from ax::Object, and just retain
@@ -213,32 +221,21 @@ void ProgramState::setCallbackUniform(const rhi::UniformLocation& uniformLocatio
 
 void ProgramState::setUniform(const rhi::UniformLocation& uniformLocation, const void* data, std::size_t size)
 {
-    if (uniformLocation.vertStage)
-        setVertexUniform(uniformLocation.vertStage.location, data, size, uniformLocation.vertStage.offset);
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
-    if (uniformLocation.fragStage)
-        setFragmentUniform(uniformLocation.fragStage.location, data, size, uniformLocation.fragStage.offset);
+    if (uniformLocation.stages[0])
+        setUniform(uniformLocation.stages[0].location, data, size, uniformLocation.stages[0].offset, 0);
+#if AX_RENDER_API != AX_RENDER_API_GL
+    if (uniformLocation.stages[1])
+        setUniform(uniformLocation.stages[1].location, data, size, uniformLocation.stages[1].offset,
+                   _vertexUniformBufferStart);
 #endif
 }
 
-void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, int offset)
+void ProgramState::setUniform(int location, const void* data, std::size_t size, int offset, int start)
 {
-    if (location < 0 || offset < 0)
-        return;
-
-    assert(location + offset + size <= _vertexUniformBufferSize);
-    memcpy(_uniformBuffers.data() + location + offset, data, size);
+    assert(offset >= 0);
+    assert(start + location + offset + size <= _uniformBuffer.size());
+    memcpy(_uniformBuffer.data() + start + location + offset, data, size);
 }
-
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
-void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, int offset)
-{
-    if (location < 0 || offset < 0)
-        return;
-
-    memcpy(_uniformBuffers.data() + _vertexUniformBufferSize + location + offset, data, size);
-}
-#endif
 
 void ProgramState::validateSharedVertexLayout(VertexLayoutType vlt)
 {
@@ -287,10 +284,11 @@ void ProgramState::setTexture(rhi::Texture* texture)
 
 void ProgramState::setTexture(const rhi::UniformLocation& uniformLocation, int slot, rhi::Texture* texture)
 {
-    if (uniformLocation.fragStage)
+    auto location = uniformLocation.stages[0].location;
+    if (location >= 0)
     {
-        auto& textureBinding = _textureBindingInfos[uniformLocation.fragStage.location];
-        textureBinding.reset(uniformLocation.fragStage.location, slot, texture);
+        auto& textureBinding = _textureBindingInfos[location];
+        textureBinding.setTexture(location, slot, texture);
     }
 }
 
@@ -318,18 +316,6 @@ ProgramState::AutoBindingResolver::~AutoBindingResolver()
 {
     auto& list = _customAutoBindingResolvers;
     list.erase(std::remove(list.begin(), list.end(), this), list.end());
-}
-
-const char* ProgramState::getVertexUniformBuffer(std::size_t& size) const
-{
-    size = _vertexUniformBufferSize;
-    return _uniformBuffers.data();
-}
-
-const char* ProgramState::getFragmentUniformBuffer(std::size_t& size) const
-{
-    size = _fragmentUniformBufferSize;
-    return _uniformBuffers.data() + _vertexUniformBufferSize;
 }
 
 }

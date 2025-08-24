@@ -56,13 +56,13 @@ public:
     struct InputBindingDesc
     {
         InputBindingDesc() = default;
-        InputBindingDesc(std::string_view _name,
+        InputBindingDesc(std::string_view _semantic,
                          int _index,
                          VertexFormat _format,
                          std::size_t _offset,
                          bool needToBeNormallized,
                          uint8_t instanceStepRate)
-            : name(_name)
+            : semantic(_semantic)
             , format(_format)
             , offset(_offset)
             , index(_index)
@@ -70,7 +70,7 @@ public:
             , instanceStepRate(instanceStepRate)
         {}
 
-        std::string name;  ///< name is used in opengl
+        std::string semantic;  ///< name is used in d3d11
         VertexFormat format      = VertexFormat::INT3;
         unsigned int offset      = 0;
         int index                = 0;  ///< index is used in metal

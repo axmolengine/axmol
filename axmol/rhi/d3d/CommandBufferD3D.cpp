@@ -320,19 +320,18 @@ void CommandBufferImpl::setWinding(Winding winding)
 
 void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
-    const int rtW = static_cast<int>(_renderTargetWidth);
-    const int rtH = static_cast<int>(_renderTargetHeight);
-
     D3D11_RECT rect{};
 
     if (isEnabled)
     {
-        y = _renderTargetHeight - height - y;
+        const float rtW = static_cast<float>(_renderTargetWidth);
+        const float rtH = static_cast<float>(_renderTargetHeight);
+        y               = rtH - height - y;
 
-        const int minX = std::clamp(static_cast<int>(x), 0, rtW);
-        const int minY = std::clamp(static_cast<int>(y), 0, rtH);
-        const int maxX = std::clamp(static_cast<int>(x + width), 0, rtW);
-        const int maxY = std::clamp(static_cast<int>(y + height), 0, rtH);
+        const int minX = static_cast<int>(std::clamp(x, 0.f, rtW));
+        const int minY = static_cast<int>(std::clamp(y, 0.f, rtH));
+        const int maxX = static_cast<int>(std::clamp(x + width, 0.f, rtW));
+        const int maxY = static_cast<int>(std::clamp(y + height, 0.f, rtH));
 
         rect.left   = minX;
         rect.top    = minY;
@@ -348,8 +347,8 @@ void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float w
     {
         rect.left   = 0;
         rect.top    = 0;
-        rect.right  = rtW;
-        rect.bottom = rtH;
+        rect.right  = _renderTargetWidth;
+        rect.bottom = _renderTargetHeight;
     }
 
     if (_rasterDesc.scissorEnable != isEnabled)
@@ -513,8 +512,10 @@ void CommandBufferImpl::endRenderPass()
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 
-    // clean bound SRVs to resolve: D3D11 WARNING: ID3D11DeviceContext::OMSetRenderTargets: Resource being set to OM RenderTarget slot 0 is still bound on input!
-    if (_textureBounds) {
+    // clean bound SRVs to resolve: D3D11 WARNING: ID3D11DeviceContext::OMSetRenderTargets: Resource being set to OM
+    // RenderTarget slot 0 is still bound on input!
+    if (_textureBounds)
+    {
         _nullSRVs.resize(_textureBounds, nullptr);
         _driverImpl->getContext()->PSSetShaderResources(0, _textureBounds, _nullSRVs.data());
         _textureBounds = 0;
@@ -560,25 +561,24 @@ void CommandBufferImpl::prepareDrawing()
 
     // bind uniform buffer: glsl-optimizer is bound to index 1, axslcc: bound to 0
     constexpr int bindingIndex = DriverImpl::VBO_BINDING_INDEX_START;
-    std::size_t bufferSize     = 0;
-    auto uniformBuffer         = _programState->getVertexUniformBuffer(bufferSize);
-    if (bufferSize)
+    auto vertUB         = _programState->getVertexUniformBuffer();
+    if (!vertUB.empty())
     {
-        program->bindVertexUniformBuffer(context, uniformBuffer, bufferSize, bindingIndex);
+        program->bindVertexUniformBuffer(context, vertUB.data(), vertUB.size(), bindingIndex);
     }
 
     // bind fragmentBuffer
-    auto fragmentBuffer = _programState->getFragmentUniformBuffer(bufferSize);
-    if (bufferSize)
+    auto fragUB = _programState->getFragmentUniformBuffer();
+    if (!fragUB.empty())
     {
-        program->bindFragmentUniformBuffer(context, fragmentBuffer, bufferSize, bindingIndex);
+        program->bindFragmentUniformBuffer(context, fragUB.data(), fragUB.size(), bindingIndex);
     }
 
     // bind texture
     _textureBounds = 0;
-    for (const auto& [_,bindingInfo] : _programState->getTextureBindingInfos())
+    for (const auto& [_, bindingInfo] : _programState->getTextureBindingInfos())
     {
-        auto textureImpl = static_cast<TextureImpl*>(bindingInfo.tex);
+        auto textureImpl    = static_cast<TextureImpl*>(bindingInfo.tex);
         auto& textureHandle = textureImpl->internalHandle();
         context->PSSetShaderResources(bindingInfo.slot, 1, &textureHandle.srv);
         auto samplerState = textureImpl->getSamplerState();
@@ -587,10 +587,7 @@ void CommandBufferImpl::prepareDrawing()
     }
 
     // depth stencil
-    if (_depthStencilState->isEnabled())
-        _depthStencilState->apply(context, _stencilReferenceValue);
-    else
-        _depthStencilState->reset(context);
+    _depthStencilState->apply(context, _stencilReferenceValue);
 }
 
 void CommandBufferImpl::endFrame()

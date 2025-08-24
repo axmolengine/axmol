@@ -402,11 +402,8 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
         for (auto&& cb : callbacks)
             cb.second(_programState, cb.first);
 
-        auto& uniformInfos = program->getActiveUniformInfos(ShaderStage::VERTEX);
-
-        std::size_t bufferSize = 0;
-        auto buffer            = _programState->getVertexUniformBuffer(bufferSize);
-        program->bindUniformBuffers(buffer, bufferSize);
+        auto&& buffer            = _programState->getUniformBuffer();
+        program->bindUniformBuffers(buffer.data(), buffer.size());
 
         for (auto& [location, bindingInfo] : _programState->getTextureBindingInfos())
         {

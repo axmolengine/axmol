@@ -143,13 +143,13 @@ void VertexInputBinding::setVertexInputPointer(VertexLayout* vertexLayout,
     auto v = getVertexInputDesc(name);
     if (v)
     {
-        // AXLOGD("set attribute '{}' location: {}, offset: {}", name, v->location, offset);
+        // AXLOGD("VertexInputBinding: set attribute '{}' location: {}, offset: {}", name, v->location, offset);
         vertexLayout->setAttrib(name, v, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else
     {
-        // AXLOGD("warning: Attribute not found: {}", name);
+        AXLOGW("VertexInputBinding: warning: Attribute not found: {}", name);
     }
 }
 

@@ -30,6 +30,7 @@
 #include <unordered_map>
 #include <cstdint>
 #include <functional>
+#include <span>
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Object.h"
 #include "axmol/base/EventListenerCustom.h"
@@ -55,7 +56,7 @@ struct AX_DLL TextureBindingInfo
 {
     TextureBindingInfo() = default;
     TextureBindingInfo(const TextureBindingInfo&);
-    TextureBindingInfo(TextureBindingInfo&& rhs);
+    TextureBindingInfo(TextureBindingInfo&& rhs) noexcept;
     ~TextureBindingInfo();
 
     TextureBindingInfo& operator=(const TextureBindingInfo& other) noexcept;
@@ -64,7 +65,7 @@ struct AX_DLL TextureBindingInfo
     void assign(const TextureBindingInfo& other);
     void assign(TextureBindingInfo&& other);
 
-    void reset(int location, int slot, rhi::Texture* tex);
+    void setTexture(int location, int slot, rhi::Texture* tex);
 
     int slot{0};
     rhi::Texture* tex{nullptr};
@@ -181,19 +182,28 @@ public:
      */
     inline const std::unordered_map<int, TextureBindingInfo>& getTextureBindingInfos() const { return _textureBindingInfos; }
 
+#if AX_RENDER_API == AX_RENDER_API_GL
+    std::span<const char> getUniformBuffer() { return std::span{_uniformBuffer}; }
+#else
+
     /**
      * Get vertex uniform buffer. The buffer store all the vertex uniform's data.
-     * @param[out] size Specifies the size of the buffer in bytes.
      * @return vertex uniform buffer, not nullable
      */
-    const char* getVertexUniformBuffer(std::size_t& size) const;
+    std::span<const char> getVertexUniformBuffer() const
+    {
+        return std::span{_uniformBuffer.begin() + _vertexUniformBufferStart, _uniformBuffer.end()};
+    }
 
     /**
      * Get fragment uniform buffer. The buffer store all the fragment uniform's data for metal.
-     * @param[out] size Specifies the size of the buffer in bytes.
      * @return fragment uniform buffer, not nullable
      */
-    const char* getFragmentUniformBuffer(std::size_t& size) const;
+    std::span<const char> getFragmentUniformBuffer() const
+    {
+        return std::span{_uniformBuffer.begin(), _uniformBuffer.begin() + _vertexUniformBufferStart};
+    }
+#endif
 
     /**
      * An abstract base class that can be extended to support custom material auto bindings.
@@ -296,18 +306,10 @@ protected:
      * @param location Specifies the uniform location.
      * @param data Specifies the new values to be used for the specified uniform variable.
      * @param size Specifies the uniform data size.
+     * @param offset Specifies the offset of the uniform in bytes.
+     * @param start Specifies the start offset of the uniform in bytes.
      */
-    void setVertexUniform(int location, const void* data, std::size_t size, int offset);
-
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
-    /**
-     * Set the fargment uniform data.
-     * @param location Specifies the uniform location.
-     * @param data Specifies the new values to be used for the specified uniform variable.
-     * @param size Specifies the uniform data size.
-     */
-    void setFragmentUniform(int location, const void* data, std::size_t size, int offset);
-#endif
+    void setUniform(int location, const void* data, std::size_t size, int offset, int start);
 
     /**
      * Reset uniform informations when EGL context lost
@@ -327,9 +329,12 @@ protected:
 
     rhi::Program* _program = nullptr;
     std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
-    yasio::sbyte_buffer _uniformBuffers;
-    std::size_t _vertexUniformBufferSize   = 0;
-    std::size_t _fragmentUniformBufferSize = 0;
+    
+
+    yasio::sbyte_buffer _uniformBuffer;
+#if AX_RENDER_API != AX_RENDER_API_GL
+    std::size_t _vertexUniformBufferStart = 0;
+#endif
 
     std::unordered_map<int, TextureBindingInfo> _textureBindingInfos;
 

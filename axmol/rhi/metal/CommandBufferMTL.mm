@@ -455,17 +455,17 @@ void CommandBufferImpl::setUniformBuffer() const
 
         // Uniform buffer: glsl-optimizer is bound to index 1, axslcc: bound to 0
         constexpr int bindingIndex = DriverImpl::VBO_BINDING_INDEX_START;
-        std::size_t bufferSize = 0;
-        auto vertexBuffer     = _programState->getVertexUniformBuffer(bufferSize);
-        if (bufferSize)
+
+        auto vertexUB     = _programState->getVertexUniformBuffer();
+        if (!vertexUB.empty())
         {
-            [_mtlRenderEncoder setVertexBytes:vertexBuffer length:bufferSize atIndex:bindingIndex];
+            [_mtlRenderEncoder setVertexBytes:vertexUB.data() length:vertexUB.size() atIndex:bindingIndex];
         }
 
-        auto fragmentBuffer = _programState->getFragmentUniformBuffer(bufferSize);
-        if (bufferSize)
+        auto fragUB = _programState->getFragmentUniformBuffer();
+        if (!fragUB.empty())
         {
-            [_mtlRenderEncoder setFragmentBytes:fragmentBuffer length:bufferSize atIndex:bindingIndex];
+            [_mtlRenderEncoder setFragmentBytes:fragUB.data() length:fragUB.size() atIndex:bindingIndex];
         }
     }
 }
