@@ -51,6 +51,7 @@ CameraBackgroundBrush::CameraBackgroundBrush() {}
 CameraBackgroundBrush::~CameraBackgroundBrush()
 {
     AX_SAFE_RELEASE_NULL(_programState);
+    axvlm->releaseVertexLayout(_vertexLayout);
 }
 
 CameraBackgroundBrush* CameraBackgroundBrush::createNoneBrush()
@@ -126,11 +127,11 @@ bool CameraBackgroundDepthBrush::init()
     AX_SAFE_RELEASE_NULL(_programState);
     auto* program = ProgramManager::getInstance()->getBuiltinProgram(rhi::ProgramType::CAMERA_CLEAR);
     _programState = new rhi::ProgramState(program);
+    Object::assign(_vertexLayout, program->getVertexLayout());
 
     _locDepth = _programState->getUniformLocation("dpeth");
 
-    auto& pipelineDesc        = _customCommand.getPipelineDesc();
-    pipelineDesc.programState = _programState;
+    _customCommand.setWeakPSVL(_programState, _vertexLayout);
 
     _vertices.resize(4);
     _vertices[0].position = Vec3(-1, -1, 0);
@@ -174,8 +175,7 @@ void CameraBackgroundDepthBrush::drawBackground(Camera* /*camera*/)
     renderer->addCommand(groupCommand);
     renderer->pushGroup(groupCommand->getRenderQueueID());
 
-    auto& pipelineDesc = _customCommand.getPipelineDesc();
-    auto& blend              = pipelineDesc.blendDesc;
+    auto& blend              = _customCommand.blendDesc();
     blend.writeMask          = _clearColor ? rhi::ColorWriteMask::ALL : rhi::ColorWriteMask::NONE;
 
     // draw
@@ -210,7 +210,10 @@ void CameraBackgroundDepthBrush::onAfterDraw()
 
 CameraBackgroundColorBrush::CameraBackgroundColorBrush() : _color(0.f, 0.f, 0.f, 0.f) {}
 
-CameraBackgroundColorBrush::~CameraBackgroundColorBrush() {}
+CameraBackgroundColorBrush::~CameraBackgroundColorBrush() {
+    AX_SAFE_RELEASE(_programState);
+    axvlm->releaseVertexLayout(_vertexLayout);
+}
 
 bool CameraBackgroundColorBrush::init()
 {
@@ -223,7 +226,7 @@ void CameraBackgroundColorBrush::drawBackground(Camera* camera)
 {
     BlendFunc op = {BlendFunc::ALPHA_NON_PREMULTIPLIED.src, BlendFunc::ALPHA_NON_PREMULTIPLIED.dst};
 
-    auto& blend                = _customCommand.getPipelineDesc().blendDesc;
+    auto& blend                = _customCommand.blendDesc();
     blend.sourceRGBBlendFactor = blend.sourceAlphaBlendFactor = op.src;
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = op.dst;
     blend.blendEnabled                                                  = true;
@@ -346,8 +349,7 @@ void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
 
     Mat4 cameraModelMat = camera->getNodeToWorldTransform();
 
-    auto& pipelineDesc                        = _customCommand.getPipelineDesc();
-    pipelineDesc.blendDesc.blendEnabled = false;
+    _customCommand.blendDesc().blendEnabled = false;
 
     Vec4 color(1.f, 1.f, 1.f, 1.f);
     cameraModelMat.m[12] = cameraModelMat.m[13] = cameraModelMat.m[14] = 0;
@@ -375,14 +377,15 @@ bool CameraBackgroundSkyBoxBrush::init()
     AX_SAFE_RELEASE_NULL(_programState);
     auto* program        = axpm->getBuiltinProgram(rhi::ProgramType::SKYBOX_3D);
     _programState        = new rhi::ProgramState(program);
+    Object::assign(_vertexLayout, program->getVertexLayout());
     _uniformColorLoc     = _programState->getUniformLocation("u_color");
     _uniformCameraRotLoc = _programState->getUniformLocation("u_cameraRot");
     _uniformEnvLoc       = _programState->getUniformLocation("u_Env");
 
-    auto& pipelineDesc        = _customCommand.getPipelineDesc();
-    pipelineDesc.programState = _programState;
+    _customCommand.setWeakPSVL(_programState, _vertexLayout);
+
     // disable blend
-    pipelineDesc.blendDesc.blendEnabled = false;
+    _customCommand.blendDesc().blendEnabled = false;
 
     initBuffer();
 

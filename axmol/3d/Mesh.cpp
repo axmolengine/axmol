@@ -450,7 +450,7 @@ void Mesh::draw(Renderer* renderer,
             AX_SAFE_RELEASE(_instanceTransformBuffer);
             AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
 
-            _instanceTransformBuffer = rhi::DriverBase::getInstance()->createBuffer(
+            _instanceTransformBuffer = axdrv->createBuffer(
                 _instanceCount * 64, rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
             _instanceMatrixCache = new float[_instanceCount * 16];

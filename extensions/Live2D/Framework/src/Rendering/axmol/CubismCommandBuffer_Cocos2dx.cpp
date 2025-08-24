@@ -22,12 +22,7 @@ CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::~DrawCommand()
 
 ax::rhi::BlendDesc* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetBlendDescriptor()
 {
-    return &_command.getPipelineDesc().blendDesc;
-}
-
-ax::PipelineDesc* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetPipelineDescriptor()
-{
-    return &_command.getPipelineDesc();
+    return &_command.blendDesc();
 }
 
 ax::CustomCommand* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetCommand()

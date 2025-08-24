@@ -434,7 +434,6 @@ protected:
 
     std::string _filePath;
 
-    rhi::ProgramState* _programState = nullptr;
     rhi::UniformLocation _mvpMatrixLocation;
     rhi::UniformLocation _textureLocation;
     CustomCommand _customCommand;

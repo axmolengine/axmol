@@ -33,8 +33,6 @@ namespace ax
 
 static std::vector<VertexInputBinding*> __vertexInputBindingCache;
 
-VertexInputBinding::VertexInputBinding() : _meshIndexData(nullptr), _programState(nullptr) {}
-
 VertexInputBinding::~VertexInputBinding()
 {
     // Delete from the vertex attribute binding cache.
@@ -47,6 +45,7 @@ VertexInputBinding::~VertexInputBinding()
 
     AX_SAFE_RELEASE(_meshIndexData);
     AX_SAFE_RELEASE(_programState);
+    axvlm->releaseVertexLayout(_vertexLayout);
 }
 
 VertexInputBinding* VertexInputBinding::create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
@@ -86,23 +85,30 @@ bool VertexInputBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshComm
     _programState = pass->getProgramState();
     _programState->retain();
 
+    if (_programState->getProgram()->getProgramType() == 27)
+        AXLOGD("hit");
+
     auto meshVertexData = meshIndexData->getMeshVertexData();
     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
 
     // Parse and set attributes
     parseAttributes();
     int offset = 0;
-    auto vertexLayout = _programState->getMutableVertexLayout();
+    auto desc  = axvlm->allocateVertexLayoutDesc();
+    desc.startLayout(attributeCount);
     for (auto k = 0; k < attributeCount; k++)
     {
         auto meshattribute = meshVertexData->getMeshVertexAttrib(k);
-        setVertexInputPointer(vertexLayout, shaderinfos::getAttributeName(meshattribute.vertexAttrib),
+        setVertexInputPointer(desc, shaderinfos::getAttributeName(meshattribute.vertexAttrib),
                                meshattribute.type, false,
                                offset, 1 << k);
         offset += meshattribute.getAttribSizeBytes();
     }
 
-    vertexLayout->setStride(offset);
+    desc.endLayout();
+
+    Object::adopt(_vertexLayout, axvlm->acquireVertexLayout(std::forward<VertexLayoutDesc>(desc)));
+    command->setWeakPSVL(_programState, _vertexLayout);
 
     AXASSERT(offset == meshVertexData->getSizePerVertex(), "vertex layout mismatch!");
 
@@ -133,7 +139,7 @@ const rhi::VertexInputDesc* VertexInputBinding::getVertexInputDesc(std::string_v
     return _programState->getProgram()->getVertexInputDesc(name);
 }
 
-void VertexInputBinding::setVertexInputPointer(VertexLayout* vertexLayout,
+void VertexInputBinding::setVertexInputPointer(VertexLayoutDesc& desc,
                                                  std::string_view name,
                                                  rhi::VertexFormat type,
                                                  bool normalized,
@@ -144,7 +150,7 @@ void VertexInputBinding::setVertexInputPointer(VertexLayout* vertexLayout,
     if (v)
     {
         // AXLOGD("VertexInputBinding: set attribute '{}' location: {}, offset: {}", name, v->location, offset);
-        vertexLayout->setAttrib(name, v, type, offset, normalized);
+        desc.addAttrib(name, v, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else

@@ -146,7 +146,7 @@ public:
      */
     virtual Program* createProgram(std::string_view vsSource, std::string_view fsSource) = 0;
 
-    virtual VertexLayout* createVertexLayout();
+    virtual VertexLayout* createVertexLayout(VertexLayoutDesc&& desc);
 
     virtual void resetState() {};
 
@@ -237,3 +237,5 @@ private:
 // end of _rhi group
 /// @}
 }
+
+#define axdrv ax::rhi::DriverBase::getInstance()

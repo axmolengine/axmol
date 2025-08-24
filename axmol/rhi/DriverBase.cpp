@@ -32,9 +32,9 @@ namespace ax::rhi
 
 DriverBase* DriverBase::_instance = nullptr;
 
-VertexLayout* DriverBase::createVertexLayout()
+VertexLayout* DriverBase::createVertexLayout(VertexLayoutDesc&& desc)
 {
-    return new VertexLayout();
+    return new VertexLayout(std::forward<VertexLayoutDesc>(desc));
 }
 
 }  // namespace ax::rhi

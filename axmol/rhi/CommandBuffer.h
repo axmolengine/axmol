@@ -89,24 +89,24 @@ public:
 
     /**
      * Begin a render pass, initial color, depth and stencil attachment.
-     * @param descriptor Specifies a group of render targets that hold the results of a render pass.
+     * @param desc Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& descriptor) = 0;
+    virtual void beginRenderPass(const RenderTarget* renderTarget, const RenderPassDesc& desc) = 0;
 
     /**
      * Update depthStencil status, improvment: for metal backend cache it
      * @param depthStencilState Specifies the depth and stencil status
      */
-    virtual void updateDepthStencilState(const DepthStencilDesc& descriptor) = 0;
+    virtual void updateDepthStencilState(const DepthStencilDesc& desc) = 0;
 
     /**
      * Update render pipeline status
      * Building a programmable pipeline involves an expensive evaluation of GPU state.
      * So a new render pipeline object will be created only if it hasn't been created before.
      * @param rt Specifies the render target.
-     * @param pipelineDesc Specifies the pipeline descriptor.
+     * @param pipelineDesc Specifies the pipeline desc.
      */
-    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor) = 0;
+    virtual void updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc) = 0;
 
     /**
      * Fixed-function state
@@ -134,12 +134,6 @@ public:
      * @param buffer The vertex buffer to be setted in the buffer argument table.
      */
     virtual void setVertexBuffer(Buffer* buffer) = 0;
-
-    /**
-     * Set unifroms and textures
-     * @param programState A programState object that hold the uniform and texture data.
-     */
-    virtual void setProgramState(ProgramState* programState) = 0;
 
     /**
      * Set indexes when drawing primitives with index list
@@ -241,6 +235,8 @@ protected:
 
     const RenderTarget* _screenRT{nullptr}; // weak ref (managed by Renderer)
     const RenderTarget* _currentRT{nullptr};  // weak ref (managed by Renderer)
+    ProgramState* _programState{nullptr};     // weak ref
+    VertexLayout* _vertexLayout{nullptr};     // weak ref
     unsigned int _stencilReferenceValue = 0;  ///< front stencil reference value
 };
 

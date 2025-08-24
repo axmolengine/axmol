@@ -98,8 +98,8 @@ bool AtlasNode::setProgramState(rhi::ProgramState* programState, bool ownPS /*= 
 {
     if (Node::setProgramState(programState, ownPS))
     {
-        auto& pipelineDesc        = _quadCommand.getPipelineDesc();
-        pipelineDesc.programState = _programState;
+        _quadCommand.setWeakPSVL(_programState, _vertexLayout);
+        
         _mvpMatrixLocation              = _programState->getUniformLocation("u_MVPMatrix");
 
         updateProgramStateTexture(_textureAtlas->getTexture());
@@ -134,7 +134,7 @@ void AtlasNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     if (_textureAtlas->getTotalQuads() == 0)
         return;
 
-    auto programState = _quadCommand.getPipelineDesc().programState;
+    auto programState = _quadCommand.unsafePS();
 
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));

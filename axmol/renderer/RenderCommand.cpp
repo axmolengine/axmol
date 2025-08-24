@@ -26,6 +26,7 @@
 #include "axmol/renderer/RenderCommand.h"
 #include "axmol/2d/Camera.h"
 #include "axmol/2d/Node.h"
+#include "axmol/renderer/VertexLayoutManager.h"
 
 namespace ax
 {
@@ -56,4 +57,69 @@ void RenderCommand::printID()
     AXLOGI("Command Depth: {}\n", _globalOrder);
 }
 
+void RenderCommand::setWeakPSVL(rhi::ProgramState* ps, rhi::VertexLayout* vl)
+{
+    // assert(ps && vl);
+
+    if (_ownsPSVL) [[unlikely]]
+    {
+        AX_SAFE_RELEASE(_pipelineDesc.programState);
+        axvlm->releaseVertexLayout(_pipelineDesc.vertexLayout);
+        _ownsPSVL = false;
+    }
+    if (ps)
+        _pipelineDesc.programState = ps;
+    if (vl)
+        _pipelineDesc.vertexLayout = vl;
 }
+
+void RenderCommand::setOwnPSVL(rhi::ProgramState* ps, rhi::VertexLayout* vl, unsigned int adoptFlags)
+{
+    // assert(ps && vl);
+
+    if (!(adoptFlags & ADOPT_FLAG_PS))
+    {
+        AX_SAFE_RETAIN(ps);
+    }
+
+    if (!(adoptFlags & ADOPT_FLAG_VL))
+    {
+        AX_SAFE_RETAIN(vl);
+    }
+
+    if (_ownsPSVL)
+    {
+        AX_SAFE_RELEASE(_pipelineDesc.programState);
+        axvlm->releaseVertexLayout(_pipelineDesc.vertexLayout);
+    }
+
+    _pipelineDesc.programState = ps;
+    _pipelineDesc.vertexLayout = vl;
+    _ownsPSVL = true;
+}
+
+void RenderCommand::releasePSVL()
+{
+    if (_ownsPSVL)
+    {
+        AX_SAFE_RELEASE(_pipelineDesc.programState);
+        axvlm->releaseVertexLayout(_pipelineDesc.vertexLayout);
+        _ownsPSVL = false;
+    }
+}
+
+bool RenderCommand::checkPSVL() const
+{
+    switch (_type)
+    {
+    case Type::QUAD_COMMAND:
+    case Type::MESH_COMMAND:
+    case Type::CUSTOM_COMMAND:
+    case Type::TRIANGLES_COMMAND:
+        return _pipelineDesc.programState && _pipelineDesc.vertexLayout;
+    }
+
+    return true;
+}
+
+}  // namespace ax

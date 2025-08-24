@@ -47,27 +47,26 @@ const char kProgressTextureCoords = 0x4b;
 namespace
 {
 rhi::ProgramState* initPipelineDesc(ax::CustomCommand& command,
-                                              bool ridal,
-                                              rhi::UniformLocation& locMVP,
-                                              rhi::UniformLocation& locTexture)
+                                    bool ridal,
+                                    rhi::UniformLocation& locMVP,
+                                    rhi::UniformLocation& locTexture)
 {
-    auto& pipelieDesc = command.getPipelineDesc();
     auto* program     = axpm->getBuiltinProgram(rhi::ProgramType::POS_UV_COLOR_2D);
-    auto programState       = new rhi::ProgramState(program);
-    AX_SAFE_RELEASE(pipelieDesc.programState);
-    pipelieDesc.programState = programState;
+    auto programState = new ProgramState(program);
 
     // set custom vertexLayout according to V2F_T2F_C4F structure
-    auto vertexLayout = programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", program->getVertexInputDesc(rhi::VertexInputKind::POSITION),
-                            rhi::VertexFormat::FLOAT2, 0, false);
-    vertexLayout->setAttrib("a_texCoord", program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD),
-                            rhi::VertexFormat::FLOAT2,
-                             offsetof(V2F_T2F_C4F, texCoord), false);
-    vertexLayout->setAttrib("a_color", program->getVertexInputDesc(rhi::VertexInputKind::COLOR),
-                                  rhi::VertexFormat::FLOAT4,
-                                   offsetof(V2F_T2F_C4F, color), false);
-    vertexLayout->setStride(sizeof(V2F_T2F_C4F));
+    VertexLayoutDesc desc = axvlm->allocateVertexLayoutDesc();
+    desc.startLayout(3);
+    desc.addAttrib("a_position", program->getVertexInputDesc(rhi::VertexInputKind::POSITION), rhi::VertexFormat::FLOAT2,
+                   0, false);
+    desc.addAttrib("a_texCoord", program->getVertexInputDesc(rhi::VertexInputKind::TEXCOORD), rhi::VertexFormat::FLOAT2,
+                   offsetof(V2F_T2F_C4F, texCoord), false);
+    desc.addAttrib("a_color", program->getVertexInputDesc(rhi::VertexInputKind::COLOR), rhi::VertexFormat::FLOAT4,
+                   offsetof(V2F_T2F_C4F, color), false);
+    desc.endLayout();
+
+    command.setOwnPSVL(programState, axvlm->acquireVertexLayout(std::forward<VertexLayoutDesc>(desc)),
+                       RenderCommand::ADOPT_FLAG_ALL);
 
     if (ridal)
     {
@@ -107,8 +106,6 @@ bool ProgressTimer::initWithSprite(Sprite* sp)
     setBarChangeRate(Vec2(1, 1));
     setSprite(sp);
 
-    // TODO: Use ProgramState Vector to Node
-    AX_SAFE_RELEASE(_programState2);
     setProgramState(initPipelineDesc(_customCommand, true, _locMVP1, _locTex1), true);
     _programState2 = initPipelineDesc(_customCommand2, false, _locMVP2, _locTex2);
 
@@ -119,6 +116,9 @@ ProgressTimer::~ProgressTimer()
 {
     AX_SAFE_RELEASE(_sprite);
     AX_SAFE_RELEASE(_programState2);
+
+    _customCommand.releasePSVL();
+    _customCommand2.releasePSVL();
 }
 
 void ProgressTimer::setPercentage(float percentage)

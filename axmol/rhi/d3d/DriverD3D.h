@@ -118,7 +118,7 @@ public:
      */
     Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
 
-    VertexLayout* createVertexLayout() override;
+    VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 
     /// below is driver info
 \

@@ -47,7 +47,8 @@ using ProgramType      = ::ax::rhi::ProgramType;
 using ProgramState     = ::ax::rhi::ProgramState;
 using Program          = ::ax::rhi::Program;
 using VertexLayout     = ::ax::rhi::VertexLayout;
-using VertexLayoutType = ::ax::rhi::VertexLayoutType;
+using VertexLayoutKind = ::ax::rhi::VertexLayoutKind;
+using VertexLayoutDesc = ::ax::rhi::VertexLayoutDesc;
 
 /**
  * Cache and reuse program object.
@@ -73,7 +74,7 @@ public:
      */
     uint64_t registerCustomProgram(std::string_view vsName,
                                    std::string_view fsName,
-                                   VertexLayoutType vlt = VertexLayoutType::Unspec,
+                                   VertexLayoutKind vlk = VertexLayoutKind::Invalid,
                                    bool force           = false);
 
     /**
@@ -88,13 +89,13 @@ public:
     * @brief Load a program with vsName, fsName as CUSTOM immediately without register
     * @param vsName the vertex shader name: custom/xxx_vs
     * @param fsName the fragment shader name: custom/xxx_vs
-    * @param vlt the builtin vertex layout type used for loading program
+    * @param vlk the builtin vertex layout type used for loading program
     * @return Program* (nullable)
     * @remark the returend program type always ProgramType::CUSTOM_PROGRAM
     */
     Program* loadProgram(std::string_view vsName,
                                std::string_view fsName,
-                               VertexLayoutType vlt = VertexLayoutType::Unspec);
+                         VertexLayoutKind vlk = VertexLayoutKind::Invalid);
 
      /**
      * Unload a program object from cache.
@@ -126,7 +127,7 @@ protected:
     uint64_t registerProgram(uint32_t progType,
                              std::string_view vsName,
                              std::string_view fsName,
-                             VertexLayoutType vlt,
+                             VertexLayoutKind vlk,
                              bool force = false);
 
     /**
@@ -136,7 +137,7 @@ protected:
                          std::string_view fsName,
                          uint32_t progType,
                          uint64_t progId,
-                         VertexLayoutType vlt);
+                         VertexLayoutKind vlk);
 
     uint64_t computeProgramId(std::string_view vsName, std::string_view fsName);
 
@@ -144,7 +145,7 @@ protected:
     {  // builtin shader name is literal string, so use std::string_view ok
         std::string_view vsName;
         std::string_view fsName;
-        VertexLayoutType vlt;
+        VertexLayoutKind vlk;
     };
 
     BuiltinRegInfo _builtinRegistry[(int)rhi::ProgramType::BUILTIN_COUNT];

@@ -98,7 +98,7 @@ public:
          * This method handles both setting and restoring of render states to ensure that
          * only the state explicitly defined by this StateBlock is applied to the renderer.
          */
-        void bind(PipelineDesc* programState);
+        void bind(RenderCommand* cmd);
 
         /**
          * Explicitly sets the source and destination used in the blend function for this render state.
@@ -223,9 +223,9 @@ public:
         /**
          * update internal states of ProgramState
          */
-        void apply(PipelineDesc* pipelineDesc);
+        void apply(RenderCommand* cmd);
 
-        static void restoreUnmodifiedStates(int32_t flags, PipelineDesc* pipelineDesc);
+        static void restoreUnmodifiedStates(int32_t flags, RenderCommand* cmd);
 
         bool _cullFaceEnabled          = false;
         bool _depthTestEnabled         = true;

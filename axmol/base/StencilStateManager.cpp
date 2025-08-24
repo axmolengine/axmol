@@ -36,13 +36,11 @@ int StencilStateManager::s_layer = -1;
 
 StencilStateManager::StencilStateManager()
 {
-    auto& pipelineDesc        = _customCommand.getPipelineDesc();
     auto* program                   = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_UCOLOR);
-    _programState                   = new rhi::ProgramState(program);
-    pipelineDesc.programState = _programState;
+    auto programState                   = new rhi::ProgramState(program);
 
-    _mvpMatrixLocaiton    = pipelineDesc.programState->getUniformLocation("u_MVPMatrix");
-    _colorUniformLocation = pipelineDesc.programState->getUniformLocation("u_color");
+    _mvpMatrixLocaiton    = programState->getUniformLocation("u_MVPMatrix");
+    _colorUniformLocation = programState->getUniformLocation("u_color");
 
     Vec2 vertices[4] = {Vec2(-1.0f, -1.0f), Vec2(1.0f, -1.0f), Vec2(1.0f, 1.0f), Vec2(-1.0f, 1.0f)};
     _customCommand.createVertexBuffer(sizeof(Vec2), 4, CustomCommand::BufferUsage::STATIC);
@@ -53,19 +51,21 @@ StencilStateManager::StencilStateManager()
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
 
     Color color(1, 1, 1, 1);
-    pipelineDesc.programState->setUniform(_colorUniformLocation, &color, sizeof(color));
+    programState->setUniform(_colorUniformLocation, &color, sizeof(color));
+
+    _customCommand.setOwnPSVL(programState, program->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
 }
 
 StencilStateManager::~StencilStateManager()
 {
-    AX_SAFE_RELEASE(_programState);
+    _customCommand.releasePSVL();
 }
 
 void StencilStateManager::drawFullScreenQuadClearStencil(float globalZOrder)
 {
     _customCommand.init(globalZOrder);
     Director::getInstance()->getRenderer()->addCommand(&_customCommand);
-    _programState->setUniform(_mvpMatrixLocaiton, Mat4::IDENTITY.m, sizeof(Mat4::IDENTITY.m));
+    _customCommand.unsafePS()->setUniform(_mvpMatrixLocaiton, Mat4::IDENTITY.m, sizeof(Mat4::IDENTITY.m));
 }
 
 void StencilStateManager::setAlphaThreshold(float alphaThreshold)

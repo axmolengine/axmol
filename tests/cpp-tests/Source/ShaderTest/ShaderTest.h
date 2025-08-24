@@ -157,7 +157,7 @@ protected:
     {
         if (Node::setProgramState(programState, ownPS))
         {
-            _customCommand.getPipelineDesc().programState = programState;
+            _customCommand.setWeakPSVL(_programState, _vertexLayout);
             updateUniforms();
             return true;
         }

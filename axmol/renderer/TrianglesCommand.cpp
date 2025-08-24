@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/renderer/TrianglesCommand.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/base/Utils.h"

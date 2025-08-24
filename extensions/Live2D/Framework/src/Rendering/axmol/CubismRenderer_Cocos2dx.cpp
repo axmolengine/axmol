@@ -1093,9 +1093,9 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
     }
 
     ax::rhi::BlendDesc* blendDescriptor = drawCommand->GetBlendDescriptor();
-    ax::PipelineDesc* pipelineDescriptor = drawCommand->GetPipelineDescriptor();
+    auto cmd = drawCommand->GetCommand();
 
-    ax::rhi::ProgramState* programState = pipelineDescriptor->programState;
+    ax::rhi::ProgramState* programState = cmd->unsafePS();
     VertexLayout* layout                    = nullptr;
 
     if (renderer->GetClippingContextBufferForMask() != NULL) // マスク生成時
@@ -1107,16 +1107,20 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
             programState = new ax::rhi::ProgramState(shaderSet->ShaderProgram);
         }
 
-        layout = programState->getMutableVertexLayout();
+        auto layoutDesc = axvlm->allocateVertexLayoutDesc();
 
         //テクスチャ設定
         programState->setTexture(shaderSet->SamplerTexture0Location, 0, texture->getRHITexture());
 
+        layoutDesc.startLayout(2);
+
         // 頂点配列の設定
-        layout->setAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0, false);
+        layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0,
+                            false);
         // テクスチャ頂点の設定
-        layout->setAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2,
+        layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2,
                           sizeof(csmFloat32) * 2, false);
+        layoutDesc.endLayout();
 
         // チャンネル
         const csmInt32 channelNo = renderer->GetClippingContextBufferForMask()->_layoutChannelNo;
@@ -1179,14 +1183,20 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         {
             programState = new ax::rhi::ProgramState(shaderSet->ShaderProgram);
         }
-        layout = programState->getMutableVertexLayout();
+        auto layoutDesc = axvlm->allocateVertexLayoutDesc();
+
+        layoutDesc.startLayout(2);
 
         // 頂点配列の設定
-        layout->setAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0,
+        layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexFormat::FLOAT2, 0,
                           false);
         // テクスチャ頂点の設定
-        layout->setAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2,
+        layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexFormat::FLOAT2,
                           sizeof(csmFloat32) * 2, false);
+
+        layoutDesc.endLayout();
+
+        layout = axvlm->acquireVertexLayout(std::move(layoutDesc));
 
         if (masked)
         {
@@ -1217,11 +1227,8 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         programState->setUniform(shaderSet->UniformBaseColorLocation, base, sizeof(float) * 4);
     }
 
-    if (layout)
-        layout->setStride(sizeof(csmFloat32) * 4);
-
     blendDescriptor->blendEnabled = true;
-    pipelineDescriptor->programState = programState;
+    cmd->setOwnPSVL(programState, layout, RenderCommand::ADOPT_FLAG_ALL);
 }
 
 ax::rhi::Program* CubismShader_Cocos2dx::LoadShaderProgram(const csmChar* vertShaderPath,

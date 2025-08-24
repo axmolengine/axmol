@@ -127,7 +127,7 @@ std::string Configuration::getInfo() const
 
 void Configuration::gatherGPUInfo()
 {
-    auto driver = rhi::DriverBase::getInstance();
+    auto driver = axdrv;
 
     _valueDict["vendor"]   = Value(driver->getVendor());
     _valueDict["renderer"] = Value(driver->getRenderer());
@@ -201,7 +201,7 @@ void Configuration::destroyInstance()
 //
 int Configuration::getMaxTextureSize() const
 {
-    return rhi::DriverBase::getInstance()->getMaxTextureSize();
+    return axdrv->getMaxTextureSize();
 }
 
 int Configuration::getMaxModelviewStackDepth() const
@@ -211,7 +211,7 @@ int Configuration::getMaxModelviewStackDepth() const
 
 int Configuration::getMaxTextureUnits() const
 {
-    return rhi::DriverBase::getInstance()->getMaxTextureUnits();
+    return axdrv->getMaxTextureUnits();
 }
 
 bool Configuration::supportsNPOT() const
@@ -414,7 +414,7 @@ void Configuration::loadConfigFile(std::string_view filename)
 
 int Configuration::getMaxAttributes() const
 {
-    return rhi::DriverBase::getInstance()->getMaxAttributes();
+    return axdrv->getMaxAttributes();
 }
 
 }

@@ -105,13 +105,13 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     _step.x = _gridRect.size.width / _gridSize.width;
     _step.y = _gridRect.size.height / _gridSize.height;
 
-    auto& pipelineDesc = _drawCommand.getPipelineDesc();
     AX_SAFE_RELEASE(_programState);
-    auto* program             = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
-    _programState             = new rhi::ProgramState(program);
-    pipelineDesc.programState = _programState;
-    _mvpMatrixLocation        = pipelineDesc.programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation          = pipelineDesc.programState->getUniformLocation("u_tex0");
+    auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
+    _programState = new rhi::ProgramState(program);
+    Object::assign(_vertexLayout, program->getVertexLayout());
+    _drawCommand.setWeakPSVL(_programState, _vertexLayout);
+    _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
+    _textureLocation   = _programState->getUniformLocation("u_tex0");
 
     calculateVertexPoints();
     updateBlendState();
@@ -201,7 +201,7 @@ void GridBase::beforeDraw()
         _oldRenderTarget = renderer->getRenderTarget();
         AX_SAFE_RELEASE(_renderTarget);
         _renderTarget =
-            rhi::DriverBase::getInstance()->createRenderTarget(_texture->getRHITexture());
+            axdrv->createRenderTarget(_texture->getRHITexture());
         renderer->setRenderTarget(_renderTarget);
     };
     renderer->addCallbackCommand(beforeDrawCommandFunc);
@@ -364,7 +364,7 @@ void Grid3D::blit()
     _drawCommand.init(0, _blendFunc);
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
     ax::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto programState           = _drawCommand.getPipelineDesc().programState;
+    auto programState           = _drawCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
 }
@@ -614,7 +614,7 @@ void TiledGrid3D::blit()
     updateVertexBuffer();
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
     ax::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto programState           = _drawCommand.getPipelineDesc().programState;
+    auto programState           = _drawCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
 }

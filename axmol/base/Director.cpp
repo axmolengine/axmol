@@ -68,6 +68,7 @@ THE SOFTWARE.
 #endif
 
 #include "axmol/rhi/SamplerCache.h"
+#include "axmol/renderer/VertexLayoutManager.h"
 
 namespace ax
 {
@@ -664,7 +665,7 @@ void Director::purgeCachedData()
 {
     FontFNT::purgeCachedData();
     FontAtlasCache::purgeCachedData();
-
+    
     if (s_SharedDirector->getRenderView())
     {
         SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
@@ -1049,6 +1050,7 @@ void Director::reset()
     SpriteFrameCache::destroyInstance();
     FileUtils::destroyInstance();
 
+    VertexLayoutManager::destroyInstance();
     ProgramStateRegistry::destroyInstance();
     ProgramManager::destroyInstance();
 

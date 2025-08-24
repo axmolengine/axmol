@@ -125,7 +125,7 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
     // shader state
     this->setProgramStateByProgramId(ProgramType::POSITION_TEXTURE_COLOR);
 
-    _customCommand.getPipelineDesc().programState = _programState;
+    _customCommand.setWeakPSVL(_programState, _vertexLayout);
 
     initCustomCommand();
 
@@ -141,9 +141,7 @@ void MotionStreak3D::initCustomCommand()
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
 
-    auto& pipelineDesc  = _customCommand.getPipelineDesc();
-
-    auto& blend                  = pipelineDesc.blendDesc;
+    auto& blend                  = _customCommand.blendDesc();
     blend.blendEnabled           = true;
     blend.sourceAlphaBlendFactor = blend.sourceRGBBlendFactor = _blendFunc.src;
     blend.destinationAlphaBlendFactor = blend.destinationRGBBlendFactor = _blendFunc.dst;

@@ -21,8 +21,8 @@ constexpr IndexFormat IMGUI_INDEX_FORMAT = sizeof(ImDrawIdx) == 2 ? IndexFormat:
 
 struct ProgramInfoData
 {
-    ProgramInfoData() { layout = DriverBase::getInstance()->createVertexLayout(); }
-    ~ProgramInfoData() { AX_SAFE_DELETE(layout); }
+    ProgramInfoData() {}
+    ~ProgramInfoData() { AX_SAFE_RELEASE(layout); }
     Program* program = nullptr;
     // Uniforms location
     UniformLocation texture{};
@@ -325,20 +325,17 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         auto cmd = std::make_shared<CustomCommand>();
                         bd->CustomCommands.push_back(cmd);
                         cmd->init(0.f, BlendFunc::ALPHA_NON_PREMULTIPLIED);
-                        const auto pinfo =
-                            &bd->ProgramInfo;  // tex == bd->FontTexture ? &bd->ProgramFontInfo : &bd->ProgramInfo;
+                        const auto pinfo = &bd->ProgramInfo; 
                         // create new ProgramState
                         auto state = new ProgramState(pinfo->program);
                         state->autorelease();
                         bd->ProgramStates.pushBack(state);
-                        auto& desc        = cmd->getPipelineDesc();
-                        desc.programState = state;
+                        cmd->setWeakPSVL(state, pinfo->layout);
                         // setup attributes for ImDrawVert
-                        desc.programState->setSharedVertexLayout(pinfo->layout);
-                        desc.programState->setUniform(pinfo->projection, &bd->Projection, sizeof(Mat4));
-                        desc.programState->setTexture(pinfo->texture, 0, tex->getRHITexture());
+                        state->setUniform(pinfo->projection, &bd->Projection, sizeof(Mat4));
+                        state->setTexture(pinfo->texture, 0, tex->getRHITexture());
                         // In order to composite our output buffer we need to preserve alpha
-                        desc.blendDesc.sourceAlphaBlendFactor = BlendFactor::ONE;
+                        cmd->blendDesc().sourceAlphaBlendFactor = BlendFactor::ONE;
                         // set vertex/index buffer
                         cmd->setIndexBuffer(ibuffer, IMGUI_INDEX_FORMAT);
                         cmd->setVertexBuffer(vbuffer);
@@ -437,11 +434,16 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
     IM_ASSERT(!!info.position);
     IM_ASSERT(!!info.uv);
     IM_ASSERT(!!info.color);
-    auto layout = info.layout;
-    layout->setAttrib("a_position", info.position, VertexFormat::FLOAT2, 0, false);
-    layout->setAttrib("a_texCoord", info.uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
-    layout->setAttrib("a_color", info.color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
-    layout->setStride(sizeof(ImDrawVert));
+    auto& layout = info.layout;
+
+    auto layoutDesc = axvlm->allocateVertexLayoutDesc();
+    layoutDesc.startLayout(3);
+    layoutDesc.addAttrib("a_position", info.position, VertexFormat::FLOAT2, 0, false);
+    layoutDesc.addAttrib("a_texCoord", info.uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
+    layoutDesc.addAttrib("a_color", info.color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
+    layoutDesc.endLayout();
+
+    info.layout = axvlm->acquireVertexLayout(std::forward<VertexLayoutDesc>(layoutDesc));
 
     return true;
 }

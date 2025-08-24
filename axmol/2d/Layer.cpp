@@ -369,10 +369,10 @@ LayerRadialGradient* LayerRadialGradient::create()
 
 LayerRadialGradient::LayerRadialGradient()
 {
-    auto& pipelinePS = _customCommand.getPipelineDesc().programState;
     auto* program    = axpm->getBuiltinProgram(rhi::ProgramType::LAYER_RADIA_GRADIENT);
     //!!! LayerRadialGradient private programState don't want affect by Node::_programState, so store at _customCommand
-    pipelinePS          = new rhi::ProgramState(program);
+    auto pipelinePS          = new rhi::ProgramState(program);
+    _customCommand.setOwnPSVL(pipelinePS, program->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
     _mvpMatrixLocation  = pipelinePS->getUniformLocation("u_MVPMatrix");
     _startColorLocation = pipelinePS->getUniformLocation("u_startColor");
     _endColorLocation   = pipelinePS->getUniformLocation("u_endColor");
@@ -388,7 +388,7 @@ LayerRadialGradient::LayerRadialGradient()
 
 LayerRadialGradient::~LayerRadialGradient()
 {
-    AX_SAFE_RELEASE_NULL(_customCommand.getPipelineDesc().programState);
+    _customCommand.releasePSVL();
 }
 
 bool LayerRadialGradient::initWithColor(const ax::Color32& startColor,
@@ -426,15 +426,15 @@ void LayerRadialGradient::draw(Renderer* renderer, const Mat4& transform, uint32
     renderer->addCommand(&_customCommand);
 
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto programState         = _customCommand.getPipelineDesc().programState;
+    auto ps         = _customCommand.unsafePS();
     Mat4 finalMat             = projectionMat * transform;
-    programState->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));
+    ps->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));
 
-    programState->setUniform(_startColorLocation, &_startColorRend, sizeof(_startColorRend));
-    programState->setUniform(_endColorLocation, &_endColorRend, sizeof(_endColorRend));
-    programState->setUniform(_centerLocation, &_center, sizeof(_center));
-    programState->setUniform(_radiusLocation, &_radius, sizeof(_radius));
-    programState->setUniform(_expandLocation, &_expand, sizeof(_expand));
+    ps->setUniform(_startColorLocation, &_startColorRend, sizeof(_startColorRend));
+    ps->setUniform(_endColorLocation, &_endColorRend, sizeof(_endColorRend));
+    ps->setUniform(_centerLocation, &_center, sizeof(_center));
+    ps->setUniform(_radiusLocation, &_radius, sizeof(_radius));
+    ps->setUniform(_expandLocation, &_expand, sizeof(_expand));
 }
 
 void LayerRadialGradient::setContentSize(const Vec2& size)

@@ -83,7 +83,6 @@ private:
 
     rhi::UniformLocation _mvpMatrixLocaiton;
     rhi::UniformLocation _colorUniformLocation;
-    rhi::ProgramState* _programState = nullptr;
 };
 
 }

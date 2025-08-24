@@ -35,7 +35,7 @@ DrawNode3D::DrawNode3D()
 
 DrawNode3D::~DrawNode3D()
 {
-    AX_SAFE_RELEASE_NULL(_programStateLine);
+    _customCommand.releasePSVL();
     AX_SAFE_DELETE(_depthstencilDescriptor);
 }
 
@@ -73,12 +73,12 @@ void DrawNode3D::ensureCapacity(int count)
 bool DrawNode3D::init()
 {
     _blendFunc        = BlendFunc::ALPHA_PREMULTIPLIED;
-    auto& pd          = _customCommand.getPipelineDesc();
     auto program      = axpm->getBuiltinProgram(rhi::ProgramType::LINE_COLOR_3D);
-    _programStateLine = new rhi::ProgramState(program);
-    pd.programState   = _programStateLine;
+    auto programStateLine = new rhi::ProgramState(program);
 
-    _locMVPMatrix = _programStateLine->getUniformLocation("u_MVPMatrix");
+    _customCommand.setOwnPSVL(programStateLine, programStateLine->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
+
+    _locMVPMatrix = programStateLine->getUniformLocation("u_MVPMatrix");
 
     _customCommand.setBeforeCallback(AX_CALLBACK_0(DrawNode3D::onBeforeDraw, this));
     _customCommand.setAfterCallback(AX_CALLBACK_0(DrawNode3D::onAfterDraw, this));
@@ -132,9 +132,9 @@ void DrawNode3D::updateCommand(ax::Renderer* renderer, const Mat4& transform, ui
     auto& matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto mvp      = matrixP * transform;
 
-    _programStateLine->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
+    _customCommand.unsafePS()->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
 
-    auto& blend                = _customCommand.getPipelineDesc().blendDesc;
+    auto& blend                = _customCommand.blendDesc();
     blend.blendEnabled         = true;
     blend.sourceRGBBlendFactor = blend.sourceAlphaBlendFactor = _blendFunc.src;
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = _blendFunc.dst;

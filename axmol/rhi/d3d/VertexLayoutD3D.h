@@ -32,10 +32,10 @@ namespace ax::rhi::d3d
 class VertexLayoutImpl : public VertexLayout
 {
 public:
+    VertexLayoutImpl(VertexLayoutDesc&&);
     ~VertexLayoutImpl() override;
 
     void apply(ID3D11DeviceContext* context, Program* program) const;
-    VertexLayoutImpl* clone() override;
 
 private:
 

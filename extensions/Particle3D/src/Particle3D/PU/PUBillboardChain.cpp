@@ -95,6 +95,7 @@ PUBillboardChain::~PUBillboardChain()
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
+    axvlm->releaseVertexLayout(_vertexLayout);
 }
 //-----------------------------------------------------------------------
 void PUBillboardChain::setupChainContainers()
@@ -648,8 +649,9 @@ void PUBillboardChain::init(std::string_view texFile)
         _programState = new rhi::ProgramState(program);
     }
 
-    auto& pipelineDescriptor        = _meshCommand.getPipelineDesc();
-    pipelineDescriptor.programState = _programState;
+    Object::assign(_vertexLayout, _programState->getVertexLayout());
+
+    _meshCommand.setWeakPSVL(_programState, _vertexLayout);
 
     _locColor   = _programState->getUniformLocation("u_color");
     _locPMatrix = _programState->getUniformLocation("u_PMatrix");
@@ -720,13 +722,12 @@ void PUBillboardChain::setBlendFunc(const BlendFunc& blendFunc)
 void PUBillboardChain::onBeforeDraw()
 {
     auto* renderer            = Director::getInstance()->getRenderer();
-    auto& pipelineDescriptor  = _meshCommand.getPipelineDesc();
     _rendererDepthTestEnabled = renderer->getDepthTest();
     _rendererDepthCmpFunc     = renderer->getDepthCompareFunc();
     _rendererCullMode         = renderer->getCullMode();
     _rendererDepthWrite       = renderer->getDepthWrite();
     _rendererWinding          = renderer->getWinding();
-    _stateBlock.bind(&pipelineDescriptor);
+    _stateBlock.bind(&_meshCommand);
     renderer->setDepthTest(true);
 }
 

@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/base/NinePatchImageParser.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 using namespace std;
 

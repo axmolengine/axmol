@@ -129,7 +129,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
 
 void ShaderNode::loadShaderVertex(std::string_view vert, std::string_view frag)
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(vert, frag, VertexLayoutType::Pos);
+    auto program      = ProgramManager::getInstance()->loadProgram(vert, frag, VertexLayoutKind::Pos);
     auto programState = new rhi::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
@@ -434,7 +434,7 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
 
 void SpriteBlur::initProgram()
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs", VertexLayoutType::Sprite);
+    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs", VertexLayoutKind::Sprite);
     auto programState = new rhi::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
@@ -566,7 +566,7 @@ bool ShaderRetroEffect::init()
             FileUtils::getInstance()->fullPathForFilename("custom/example_HorizontalColor_fs"));
         char* fragSource = (char*)fragStr.c_str();
 
-        auto program  = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_HorizontalColor_fs", VertexLayoutType::Sprite);
+        auto program  = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_HorizontalColor_fs", VertexLayoutKind::Sprite);
         auto p        = new rhi::ProgramState(program);
         auto director = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
@@ -745,7 +745,7 @@ bool ShaderMultiTexture::init()
         addChild(_sprite);
         _sprite->setPosition(Vec2(s.width / 2, s.height / 2));
 
-        auto program        = ProgramManager::getInstance()->loadProgram("custom/example_MultiTexture_vs", "custom/example_MultiTexture_fs", VertexLayoutType::Sprite);
+        auto program        = ProgramManager::getInstance()->loadProgram("custom/example_MultiTexture_vs", "custom/example_MultiTexture_fs", VertexLayoutKind::Sprite);
         auto programState   = new rhi::ProgramState(program);
         _sprite->setProgramState(programState);
 

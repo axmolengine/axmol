@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d/RenderPipelineD3D.h"
 #include "axmol/rhi/d3d/ProgramD3D.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 namespace ax::rhi::d3d
 {

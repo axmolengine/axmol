@@ -36,10 +36,7 @@ class Box2DTestDebugDrawNode : public ax::extension::PhysicsDebugNode
 {
 public:
     Box2DTestDebugDrawNode() : m_debugDraw(_debugDraw) {}
-    ~Box2DTestDebugDrawNode()
-    {
-
-    }
+    ~Box2DTestDebugDrawNode();
     bool initWithWorld(b2WorldId worldId) override;
 
     void DrawPolygon(const b2Vec2* vertices, int32_t vertexCount, b2HexColor color);
@@ -69,7 +66,7 @@ public:
     void AddCircle(const CircleData& circle);
     void AddCircle(const SolidCircleData& circle);
     void AddCapsule(const CapsuleData& capsule);
-    
+
     void submitDrawCommand(Renderer* renderer, CustomCommand& cmd, const Mat4& transform);
 
     void draw(Renderer* renderer, const Mat4& transform, uint32_t flags);

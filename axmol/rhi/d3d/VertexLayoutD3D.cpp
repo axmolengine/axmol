@@ -66,6 +66,8 @@ static DXGI_FORMAT toDXGIFormat(VertexFormat format, bool unorm)
     }
 }
 
+VertexLayoutImpl::VertexLayoutImpl(VertexLayoutDesc&& desc) : VertexLayout(std::move(desc)) {}
+
 VertexLayoutImpl::~VertexLayoutImpl()
 {
     SafeRelease(_d3dVL);
@@ -79,7 +81,9 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
         auto device   = static_cast<DriverImpl*>(DriverBase::getInstance())->getDevice();
 
         axstd::pod_vector<D3D11_INPUT_ELEMENT_DESC> inputElements;
-        inputElements.reserve(_bindings.size() + _instanceBindings.size());
+
+        auto& bindings = getBindings();
+        inputElements.reserve(bindings.size());
 
         auto appendElement = [&inputElements](const InputBindingDesc& inputDesc) {
             const auto inputSlot = inputDesc.instanceStepRate ? 1 : 0;
@@ -89,7 +93,7 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
             {
                 D3D11_INPUT_ELEMENT_DESC desc{};
 
-                desc.SemanticName         = inputDesc.semantic.c_str();
+                desc.SemanticName         = inputDesc.semantic;
                 desc.SemanticIndex        = inputDesc.index;
                 desc.Format               = toDXGIFormat(inputDesc.format, inputDesc.needToBeNormallized);
                 desc.InputSlot            = inputSlot;
@@ -104,7 +108,7 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
                 for (UINT i = 0; i < 4; ++i)
                 {
                     D3D11_INPUT_ELEMENT_DESC desc{};
-                    desc.SemanticName         = inputDesc.semantic.c_str();
+                    desc.SemanticName         = inputDesc.semantic;
                     desc.SemanticIndex        = inputDesc.index + i;
                     desc.Format               = DXGI_FORMAT_R32G32B32A32_FLOAT;
                     desc.InputSlot            = inputSlot;
@@ -117,33 +121,21 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
             }
         };
 
-        for (auto& [_, inputDesc] : _bindings)
-            appendElement(inputDesc);
-
-        for (auto& [_, inputDesc] : _instanceBindings)
+        for (auto& inputDesc : bindings)
             appendElement(inputDesc);
 
         ID3DBlob* vsBlob = progImpl->getVSBlob();
         HRESULT hr       = device->CreateInputLayout(inputElements.data(), static_cast<UINT>(inputElements.size()),
                                                      vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_d3dVL);
+
+        if (!_d3dVL)
+        {
+            AXLOGE("Create input layout fail");
+            return;
+        }
     }
 
-    if (_d3dVL)
-    {
-        context->IASetInputLayout(_d3dVL);
-    }
-    else
-    {
-        AXLOGE("Create input layout fail");
-    }
-}
-
-VertexLayoutImpl* VertexLayoutImpl::clone()
-{
-    auto vl = new VertexLayoutImpl(*this);
-    if (vl->_d3dVL)
-        vl->_d3dVL->AddRef();
-    return vl;
+    context->IASetInputLayout(_d3dVL);
 }
 
 }  // namespace ax::rhi::d3d

@@ -571,6 +571,8 @@ void RawStencilBufferTest::initCommands()
     const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     _programState->setUniform(_locMVPMatrix, projectionMat.m, sizeof(projectionMat.m));
 
+    Object::assign(_vertexLayout, _programState->getVertexLayout());
+
     size_t neededCmdSize = _planeCount * 2;
     _renderCmds.resize(neededCmdSize);
     auto winPoint  = Vec2(Director::getInstance()->getWinSize());
@@ -593,7 +595,7 @@ void RawStencilBufferTest::initCommands()
         cmd.updateVertexBuffer(vertices, sizeof(vertices));
         cmd.createIndexBuffer(rhi::IndexFormat::U_SHORT, 6, rhi::BufferUsage::STATIC);
         cmd.updateIndexBuffer(indices, sizeof(indices));
-        cmd.getPipelineDesc().programState = _programState;
+        cmd.setWeakPSVL(_programState, _vertexLayout);
 
         auto& cmd2 = _renderCmds[cmdIndex];
         cmdIndex++;
@@ -604,7 +606,7 @@ void RawStencilBufferTest::initCommands()
         cmd2.updateVertexBuffer(vertices2, sizeof(vertices2));
         cmd2.createIndexBuffer(rhi::IndexFormat::U_SHORT, 6, rhi::BufferUsage::STATIC);
         cmd2.updateIndexBuffer(indices, sizeof(indices));
-        cmd2.getPipelineDesc().programState = _programState;
+        cmd2.setWeakPSVL(_programState, _vertexLayout);
     }
 }
 

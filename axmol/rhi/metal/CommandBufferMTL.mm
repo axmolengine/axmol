@@ -392,7 +392,7 @@ void CommandBufferImpl::flushCaptureCommands()
                     CommandBufferImpl::readPixels(_drawableTexture, 0, 0, [_drawableTexture width],
                                                  [_drawableTexture height], screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
-                    rhi::DriverBase::getInstance()->setFrameBufferOnly(true);
+                    axdrv->setFrameBufferOnly(true);
                 }
                 cb.second(screenPixelData);
             }

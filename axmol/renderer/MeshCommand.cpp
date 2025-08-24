@@ -39,7 +39,7 @@
 #include "axmol/renderer/Technique.h"
 #include "axmol/renderer/Material.h"
 #include "axmol/renderer/Pass.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 namespace ax
 {

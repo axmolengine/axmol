@@ -27,7 +27,7 @@ public:
 
     void registerProgram(uint32_t programType, int textureSamplerFlags, uint32_t builtinProgramType);
 
-    rhi::ProgramState* newProgramState(uint32_t programType, int textureSamplerFlags);
+    rhi::ProgramState* acquireProgramState(uint32_t programType, int textureSamplerFlags);
     uint32_t getProgramType(uint32_t programType, int textureSamplerFlags);
 
 protected:

@@ -284,6 +284,7 @@ void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 
 void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {
+    CommandBuffer::updatePipelineState(rt, desc);
     _renderPipeline->update(rt, desc);
 }
 
@@ -396,13 +397,6 @@ void CommandBufferImpl::updateRasterizerState()
     _rasterDesc.dirtyFlags = 0;
 }
 
-void CommandBufferImpl::setProgramState(ProgramState* programState)
-{
-    AX_SAFE_RETAIN(programState);
-    AX_SAFE_RELEASE(_programState);
-    _programState = programState;
-}
-
 void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
@@ -507,7 +501,8 @@ void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
 
 void CommandBufferImpl::endRenderPass()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    _programState = nullptr;
+    _vertexLayout = nullptr;
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
@@ -539,22 +534,24 @@ void CommandBufferImpl::prepareDrawing()
     context->PSSetShader(static_cast<ID3D11PixelShader*>(program->getFragmentShader()->internalHandle()), nullptr, 0);
 
     // bind vertex layout
-    auto vertexLayout = static_cast<const VertexLayoutImpl*>(_programState->getVertexLayout());
-    vertexLayout->apply(context, program);
+    auto vertexLayoutImpl = static_cast<VertexLayoutImpl*>(_vertexLayout);
+    vertexLayoutImpl->apply(context, program);
+
+    auto& vertexLayoutDesc = vertexLayoutImpl->getDesc();
 
     // bind vertexBuffer
     if (!_instanceBuffer)
     {
         ID3D11Buffer* vbs[] = {_vertexBuffer->internalHandle()};
-        UINT strides[]      = {static_cast<UINT>(vertexLayout->getStride())};
+        UINT strides[]      = {static_cast<UINT>(vertexLayoutDesc.getStride())};
         UINT offsets[]      = {0};
         context->IASetVertexBuffers(0, 1, vbs, strides, offsets);
     }
     else
     {
         ID3D11Buffer* vbs[] = {_vertexBuffer->internalHandle(), _instanceBuffer->internalHandle()};
-        UINT strides[]      = {static_cast<UINT>(vertexLayout->getStride()),
-                               static_cast<UINT>(vertexLayout->getInstanceStride())};
+        UINT strides[]      = {static_cast<UINT>(vertexLayoutDesc.getStride()),
+                               static_cast<UINT>(vertexLayoutDesc.getInstanceStride())};
         UINT offsets[]      = {0, 0};
         context->IASetVertexBuffers(0, 2, vbs, strides, offsets);
     }

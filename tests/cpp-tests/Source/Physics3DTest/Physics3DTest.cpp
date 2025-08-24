@@ -328,8 +328,9 @@ bool Physics3DKinematicDemo::init()
         auto component = Physics3DComponent::create(rigidBody);
         auto sprite = MeshRenderer::create(tree1);
         sprite->addComponent(component);
-        static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0)->setTransparent(true);
-        static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0)->getStateBlock().setCullFaceSide(CullFaceSide::NONE);
+        auto material = static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0);
+        material->setTransparent(true);
+        material->getStateBlock().setCullFaceSide(CullFaceSide::NONE);
         sprite->setCameraMask((unsigned short)CameraFlag::USER1 | (unsigned short)CameraFlag::USER2 | (unsigned short)CameraFlag::USER3);
         sprite->setPosition3D(Vec3(20.0f, 0.0f, 0.0f));
         sprite->setScale(scale);

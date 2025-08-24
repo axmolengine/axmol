@@ -124,7 +124,7 @@ void SpriteBatchNode::setUniformLocation()
 void SpriteBatchNode::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    _programState->validateSharedVertexLayout(rhi::VertexLayoutType::Sprite);
+    Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(rhi::VertexLayoutKind::Sprite));
 }
 
 bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
@@ -132,10 +132,8 @@ bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownP
     AXASSERT(programState, "programState should not be nullptr");
     if (Node::setProgramState(programState, ownPS))
     {
-        auto& pipelineDesc        = _quadCommand.getPipelineDesc();
-        pipelineDesc.programState = _programState;
-
         setVertexLayout();
+        _quadCommand.setWeakPSVL(_programState, _vertexLayout);
         updateProgramStateTexture(_textureAtlas->getTexture());
         setUniformLocation();
         return true;
@@ -429,7 +427,7 @@ void SpriteBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t f
     }
 
     const auto& matrixProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto programState            = _quadCommand.getPipelineDesc().programState;
+    auto programState            = _quadCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocaiton, matrixProjection.m, sizeof(matrixProjection.m));
     _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(),
                       _textureAtlas->getTotalQuads(), transform, flags);

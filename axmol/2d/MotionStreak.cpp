@@ -226,8 +226,8 @@ bool MotionStreak::setProgramState(rhi::ProgramState* programState, bool ownPS /
     if (Node::setProgramState(programState, ownPS))
     {
         AXASSERT(programState, "argument should not be nullptr");
-        auto& pipelineDesc        = _customCommand.getPipelineDesc();
-        pipelineDesc.programState = _programState;
+
+        _customCommand.setWeakPSVL(_programState, _vertexLayout);
 
         _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
 
@@ -388,7 +388,7 @@ void MotionStreak::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     _customCommand.setVertexDrawInfo(0, drawCount);
     renderer->addCommand(&_customCommand);
 
-    auto programState = _customCommand.getPipelineDesc().programState;
+    auto programState = _customCommand.unsafePS();
 
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat             = projectionMat * transform;

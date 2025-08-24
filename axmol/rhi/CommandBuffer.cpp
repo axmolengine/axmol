@@ -27,6 +27,15 @@
 namespace ax::rhi
 {
 
+void CommandBuffer::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
+{
+    _programState = desc.programState;
+    _vertexLayout = desc.vertexLayout;
+
+    assert(_programState);
+    assert(_vertexLayout);
+}
+
 void CommandBuffer::setStencilReferenceValue(uint32_t value)
 {
     _stencilReferenceValue = value;

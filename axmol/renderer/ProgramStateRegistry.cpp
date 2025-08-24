@@ -34,7 +34,7 @@ void ProgramStateRegistry::clearPrograms()
     this->_registry.clear();
 }
 
-rhi::ProgramState* ProgramStateRegistry::newProgramState(uint32_t programType, int textureSamplerFlags)
+rhi::ProgramState* ProgramStateRegistry::acquireProgramState(uint32_t programType, int textureSamplerFlags)
 {
     uint32_t key = ((programType) << 16) | textureSamplerFlags;
     auto it      = this->_registry.find(key);

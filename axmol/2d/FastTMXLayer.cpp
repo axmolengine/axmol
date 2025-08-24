@@ -123,10 +123,10 @@ FastTMXLayer::~FastTMXLayer()
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
 
-    for (auto&& e : _customCommands)
+    for (auto& [_, cmd] : _customCommands)
     {
-        AX_SAFE_RELEASE(e.second->getPipelineDesc().programState);
-        delete e.second;
+        cmd->releasePSVL();
+        delete cmd;
     }
 }
 
@@ -159,14 +159,14 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat             = projectionMat * _modelViewTransform;
-    for (const auto& e : _customCommands)
+    for (const auto& [_, cmd] : _customCommands)
     {
-        if (e.second->getIndexDrawCount() > 0)
+        if (cmd->getIndexDrawCount() > 0)
         {
-            auto mvpmatrixLocation = e.second->getPipelineDesc().programState->getUniformLocation("u_MVPMatrix");
-            e.second->getPipelineDesc().programState->setUniform(mvpmatrixLocation, finalMat.m,
-                                                                       sizeof(finalMat.m));
-            renderer->addCommand(e.second);
+            auto ps                = cmd->unsafePS();
+            auto mvpmatrixLocation = ps->getUniformLocation("u_MVPMatrix");
+            ps->setUniform(mvpmatrixLocation, finalMat.m, sizeof(finalMat.m));
+            renderer->addCommand(cmd);
         }
     }
 }
@@ -274,7 +274,7 @@ void FastTMXLayer::updateVertexBuffer()
     unsigned int vertexBufferSize = (unsigned int)(sizeof(V3F_T2F_C4B) * _totalQuads.size() * 4);
     if (!_vertexBuffer)
     {
-        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(vertexBufferSize, rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
+        _vertexBuffer = axdrv->createBuffer(vertexBufferSize, rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
     }
     _vertexBuffer->updateData(&_totalQuads[0], vertexBufferSize);
 }
@@ -284,7 +284,7 @@ void FastTMXLayer::updateIndexBuffer()
     auto indexBufferSize = (sizeof(decltype(_indices)::value_type) * _indices.size());
     if (!_indexBuffer)
     {
-        _indexBuffer = rhi::DriverBase::getInstance()->createBuffer(indexBufferSize, rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+        _indexBuffer = axdrv->createBuffer(indexBufferSize, rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
     }
     _indexBuffer->updateData(&_indices[0], indexBufferSize);
 }
@@ -446,30 +446,30 @@ void FastTMXLayer::updatePrimitives()
 
             command->setIndexDrawInfo(start * 6, iter.second * 6);
 
-            auto& pipelineDesc = command->getPipelineDesc();
-
+            ProgramState* ps{nullptr};
+            VertexLayout* vl{nullptr};
             if (_useAutomaticVertexZ)
             {
-                AX_SAFE_RELEASE(pipelineDesc.programState);
                 auto* program =
                     axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-                auto programState               = new rhi::ProgramState(program);
-                pipelineDesc.programState = programState;
-                _alphaValueLocation             = pipelineDesc.programState->getUniformLocation("u_alpha_value");
-                pipelineDesc.programState->setUniform(_alphaValueLocation, &_alphaFuncValue,
+                ps            = new rhi::ProgramState(program);
+                vl = program->getVertexLayout();
+                _alphaValueLocation = ps->getUniformLocation("u_alpha_value");
+                ps->setUniform(_alphaValueLocation, &_alphaFuncValue,
                                                             sizeof(_alphaFuncValue));
             }
             else
             {
-                AX_SAFE_RELEASE(pipelineDesc.programState);
                 auto* program     = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
-                auto programState = new rhi::ProgramState(program);
-                pipelineDesc.programState = programState;
+                ps = new rhi::ProgramState(program);
+                vl                = program->getVertexLayout();
             }
 
-            _mvpMatrixLocaiton = pipelineDesc.programState->getUniformLocation("u_MVPMatrix");
-            _textureLocation   = pipelineDesc.programState->getUniformLocation("u_tex0");
-            pipelineDesc.programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
+            command->setOwnPSVL(ps, vl, RenderCommand::ADOPT_FLAG_PS);
+
+            _mvpMatrixLocaiton = ps->getUniformLocation("u_MVPMatrix");
+            _textureLocation   = ps->getUniformLocation("u_tex0");
+            ps->setTexture(_textureLocation, 0, _texture->getRHITexture());
             command->init(_globalZOrder, blendfunc);
 
             _customCommands[iter.first] = command;

@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include <string>
 #include <regex>
 
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/EventDispatcher.h"
@@ -198,6 +198,7 @@ Node::~Node()
 
     delete[] _additionalTransform;
     AX_SAFE_RELEASE(_programState);
+    axvlm->releaseVertexLayout(_vertexLayout);
 }
 
 bool Node::init()
@@ -2241,7 +2242,7 @@ int Node::getAttachedNodeCount()
 void Node::setProgramStateWithRegistry(uint32_t programType, Texture2D* texture)
 {
     auto samplerFlags = texture ? texture->getSamplerFlags() : 0;
-    auto programState = ProgramStateRegistry::getInstance()->newProgramState(programType, samplerFlags);
+    auto programState = ProgramStateRegistry::getInstance()->acquireProgramState(programType, samplerFlags);
     setProgramState(programState, true);
 }
 
@@ -2253,6 +2254,9 @@ bool Node::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false
         _programState = programState;
         if (!ownPS)
             AX_SAFE_RETAIN(_programState);
+
+        Object::assign(_vertexLayout, _programState->getVertexLayout());
+
         return !!_programState;
     }
     return false;

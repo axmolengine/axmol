@@ -97,7 +97,8 @@ private:
     };
 
     Primitive* _currentPrimitive         = nullptr;
-    rhi::ProgramState* _programState = nullptr;
+    rhi::ProgramState* _programState     = nullptr;
+    rhi::VertexLayout* _vertexLayout     = nullptr;
     bool _currentDepthMask               = true;
     bool _dirtyBuffer                    = true;
     rhi::Buffer* _vertexBuffer       = nullptr;

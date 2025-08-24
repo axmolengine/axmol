@@ -81,7 +81,6 @@ protected:
 
     ax::BlendFunc _blendFunc = BlendFunc::DISABLE;
     ax::CustomCommand _customCommand;
-    ax::rhi::ProgramState* _programState = nullptr;
 
     bool _dirty    = true;
     int _debugMode = DBG_DrawWireframe | DBG_DrawConstraints | DBG_DrawConstraintLimits;

@@ -735,7 +735,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod,
     lodIndices._relativeLod[4]     = selfLod;
     lodIndices._chunkIndices._size = size;
 
-    auto buffer = rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX,
+    auto buffer = axdrv->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX,
                                                             rhi::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
@@ -773,7 +773,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLODSkirt(int selfLod, uint16_t* indi
     skirtIndices._selfLod            = selfLod;
     skirtIndices._chunkIndices._size = size;
 
-    auto buffer = rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX,
+    auto buffer = axdrv->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX,
                                                             rhi::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
@@ -919,7 +919,7 @@ void Terrain::Chunk::finish()
     // frequently
 
     AX_SAFE_RELEASE_NULL(_buffer);
-    _buffer = rhi::DriverBase::getInstance()->createBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
+    _buffer = axdrv->createBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
                                                         rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
     _buffer->updateData(&_originalVertices[0], sizeof(TerrainVertexData) * _originalVertices.size());
@@ -961,7 +961,7 @@ void Terrain::Chunk::bindAndDraw()
     AXASSERT(_buffer && _chunkIndices._indexBuffer, "buffer should not be nullptr");
     _command.setIndexBuffer(_chunkIndices._indexBuffer, rhi::IndexFormat::U_SHORT);
     _command.setVertexBuffer(_buffer);
-    _command.getPipelineDesc().programState = _terrain->_programState;
+    _command.setWeakPSVL(_terrain->_programState, _terrain->_vertexLayout);
     _command.setIndexDrawInfo(0, _chunkIndices._size);
     renderer->addCommand(&_command);
     AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _chunkIndices._size);
@@ -1089,8 +1089,7 @@ Terrain::Chunk::Chunk(Terrain* terrain)
     _command.setBeforeCallback(AX_CALLBACK_0(Terrain::onBeforeDraw, terrain));
     _command.setAfterCallback(AX_CALLBACK_0(Terrain::onAfterDraw, terrain));
 
-    auto& pipelineDesc                        = _command.getPipelineDesc();
-    pipelineDesc.blendDesc.blendEnabled = false;
+    _command.blendDesc().blendEnabled = false;
 }
 
 void Terrain::Chunk::updateIndicesLOD()

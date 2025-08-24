@@ -230,7 +230,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-            _renderTarget = rhi::DriverBase::getInstance()->createRenderTarget(
+            _renderTarget = axdrv->createRenderTarget(
                 _colorTexture ? _colorTexture->getRHITexture() : nullptr,
                 _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
         }

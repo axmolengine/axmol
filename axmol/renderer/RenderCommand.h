@@ -43,6 +43,8 @@ namespace ax
  */
 class AX_DLL RenderCommand
 {
+    friend class Renderer;
+
 public:
     /**Enum the type of render command. */
     enum class Type
@@ -61,6 +63,13 @@ public:
         TRIANGLES_COMMAND,
         /**Callback command, used for calling callback for rendering.*/
         CALLBACK_COMMAND,
+    };
+
+    enum AdoptFlag
+    {
+        ADOPT_FLAG_PS = 1,
+        ADOPT_FLAG_VL = 1 << 1,
+        ADOPT_FLAG_ALL = ADOPT_FLAG_PS | ADOPT_FLAG_VL
     };
 
     /**
@@ -98,11 +107,24 @@ public:
     bool isWireframe() const { return _isWireframe; }
     /**Set wireframe render mode for this command.*/
     void setWireframe(bool value) { _isWireframe = value; }
-    /// Can use the result to change the descriptor content.
-    inline PipelineDesc& getPipelineDesc() { return _pipelineDesc; }
 
     const Mat4& getMV() const { return _mv; }
 
+    #pragma region safe to setup render command pipeline desc
+    rhi::BlendDesc& blendDesc() { return _pipelineDesc.blendDesc; }
+    rhi::ProgramState* unsafePS() const { return _pipelineDesc.programState; }
+    rhi::VertexLayout* unsafeVL() const { return _pipelineDesc.vertexLayout; }
+
+    void setWeakPSVL(rhi::ProgramState* ps, rhi::VertexLayout* vl);
+    void setOwnPSVL(rhi::ProgramState* ps, rhi::VertexLayout* vl, unsigned int adoptFlags = 0);
+    void releasePSVL();
+
+    bool checkPSVL() const;
+
+private:
+    /// Can use the result to change the descriptor content.
+    inline const PipelineDesc& getPipelineDesc() const { return _pipelineDesc; }
+    #pragma endregion
 protected:
     /**Constructor.*/
     RenderCommand();
@@ -134,6 +156,8 @@ protected:
 
     /** Polygon render mode set to LINE, which represents wireframe mode. */
     bool _isWireframe = false;
+
+    bool _ownsPSVL = false;
 
     Mat4 _mv;
 

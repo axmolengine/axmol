@@ -217,7 +217,7 @@ void ParticleSystemQuad::setTextureWithRect(Texture2D* texture, const Rect& rect
     if (needsUpdatePS) {
         auto programType = ax::ProgramManager::chooseSpriteProgramType(texture->getPixelFormat());
         setProgramState(programType);
-        _quadCommand.getPipelineDesc().programState = _programState;
+        _quadCommand.setWeakPSVL(_programState, _vertexLayout);
 
         _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
     }
@@ -659,7 +659,7 @@ void ParticleSystemQuad::draw(Renderer* renderer, const Mat4& transform, uint32_
     // quad command
     if (_particleCount > 0)
     {
-        auto programState = _quadCommand.getPipelineDesc().programState;
+        auto programState = _quadCommand.unsafePS();
 
         ax::Mat4 projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
         programState->setUniform(_mvpMatrixLocaiton, projectionMat.m, sizeof(projectionMat.m));

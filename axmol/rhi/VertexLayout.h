@@ -33,52 +33,64 @@
 #include <vector>
 #include <unordered_map>
 
+namespace ax
+{
+class VertexLayoutManager;
+}
+
 namespace ax::rhi
 {
 class Program;
+class VertexLayout;
+
+enum class VertexLayoutKind
+{
+    Invalid = -1,
+    Pos,         // V2F
+    Texture,     // T2F
+    PosUvColor,  // V3F_T2F_C4F
+    Sprite,      // V3F_T2F_C4B
+    Sprite2D,    // V2F_T2F_C4B
+    DrawNode,    // V2F_T2F_C4F
+    DrawNode3D,  // V3F_C4F
+    SkyBox,      // V3F
+    posColor,    // V3F_C4F
+    Terrain3D,   // V3F_T2F_V3F
+    Instanced,   // builtin instanced vertex format for 3D transform
+    Count,
+};
+
 /**
  * @addtogroup _rhi
  * @{
  */
 
-/**
- * Store vertex attribute layout.
- */
-class AX_DLL VertexLayout
+AX_DLL struct InputBindingDesc
 {
-    friend class DriverBase;
+    InputBindingDesc() = default;
+    InputBindingDesc(std::string_view _semantic,
+                     int _index,
+                     VertexFormat _format,
+                     unsigned int _offset,
+                     bool needToBeNormallized,
+                     uint8_t instanceStepRate);
 
-protected:
-    VertexLayout()                    = default;
-    VertexLayout(const VertexLayout& rhs) = default;
+    char semantic[32]        = {};  ///< semantic is used in d3d11
+    unsigned int offset      = 0;
+    int index                = 0;  ///< index is used in metal
+    VertexFormat format      = VertexFormat::INT3;
+    bool needToBeNormallized = false;
+    uint8_t instanceStepRate = 0;
+};
 
-public:
-    struct InputBindingDesc
-    {
-        InputBindingDesc() = default;
-        InputBindingDesc(std::string_view _semantic,
-                         int _index,
-                         VertexFormat _format,
-                         std::size_t _offset,
-                         bool needToBeNormallized,
-                         uint8_t instanceStepRate)
-            : semantic(_semantic)
-            , format(_format)
-            , offset(_offset)
-            , index(_index)
-            , needToBeNormallized(needToBeNormallized)
-            , instanceStepRate(instanceStepRate)
-        {}
+AX_DLL struct VertexLayoutDesc
+{
+    friend class VertexLayout;
 
-        std::string semantic;  ///< name is used in d3d11
-        VertexFormat format      = VertexFormat::INT3;
-        unsigned int offset      = 0;
-        int index                = 0;  ///< index is used in metal
-        bool needToBeNormallized = false;
-        uint8_t instanceStepRate = 0;
-    };
-
-    virtual ~VertexLayout() = default;
+    /**
+     * Start to define vertex layout.
+    */
+    void startLayout(size_t capacity);
 
     /**
      * Set attribute values to name.
@@ -89,65 +101,92 @@ public:
      * @param needToBeNormallized Specifies whether fixed-point data values should be normalized (true) or converted
      * directly as fixed-point values (false) when they are accessed.
      */
-    void setAttrib(std::string_view name,
+    void addAttrib(std::string_view name,
                    const VertexInputDesc* desc,
                    VertexFormat format,
                    std::size_t offset,
                    bool needNormalized,
                    uint8_t instanceStepRate = 0);
-    /**
-     * Set stride of vertices.
-     * @param stride Specifies the distance between the data of two vertices, in bytes.
-     */
-    inline void setStride(std::size_t stride) { _strides[0] = stride; }
 
-    /**
-     * Get the distance between the data of two vertices, in bytes.
-     * @return The distance between the data of two vertices, in bytes.
-     */
-    inline std::size_t getStride() const { return _strides[0]; }
+    /*
+     * End to define vertex layout and compute hash value.
+    */
+    void endLayout();
 
-    /**
-     * Set stride of vertices.
-     * @param stride Specifies the distance between the data of two vertices, in bytes.
-     */
-    inline void setInstanceStride(std::size_t stride) { _strides[1] = stride; }
+    /*
+    * compute hash
+    */
+    uint32_t getHash() const { return _hash; }
 
-    /**
-     * Get the distance between the data of two vertices, in bytes.
-     * @return The distance between the data of two vertices, in bytes.
-     */
-    inline std::size_t getInstanceStride() const { return _strides[1]; }
+    uint32_t getStride() const { return _strides[0]; }
+
+    uint32_t getInstanceStride() const { return _strides[1]; }
+
+    bool isValid() const { return !!_strides[0]; }
+
+    const std::vector<InputBindingDesc>& getBindings() const { return _bindings; }
+
+    void clear();
+
+private:
+    std::vector<InputBindingDesc> _bindings;
+    uint32_t _strides[2] = {};  // 0: normal verts, 1: instance verts
+    uint32_t _hash       = -1;
+};
+
+/**
+ * Store vertex attribute layout.
+ */
+class AX_DLL VertexLayout : public Object
+{
+    friend class DriverBase;
+    friend class ::ax::VertexLayoutManager;
+
+protected:
+    VertexLayout()                    = default;
+    explicit VertexLayout(VertexLayoutDesc&& desc) noexcept : _desc(std::move(desc)) {}
+    VertexLayout(const VertexLayout& rhs) = delete;
+    void setBuiltinId(int id) { _builtinId = id; }
+
+public:
+
+    virtual ~VertexLayout() = default;
+
+    const VertexLayoutDesc& getDesc() const { return _desc; }
 
     /**
      * Get attribute informations
      * @return Atrribute informations.
      */
-    inline const hlookup::string_map<InputBindingDesc>& getBindings() const { return _bindings; }
+    const std::vector<InputBindingDesc>& getBindings() const { return _desc.getBindings(); }
 
-    inline const hlookup::string_map<InputBindingDesc>& getInstanceBindings() const { return _instanceBindings; }
+    uint32_t getHash() const { return _desc.getHash(); }
 
     /**
      * Get vertex step function. Default value is VERTEX.
      * @return Vertex step function.
      * @note Used in metal.
      */
-    inline VertexStepMode getVertexStepMode() const { return _stepMode; }
+    VertexStepMode getVertexStepMode() const { return _stepMode; }
 
     /**
-     * Check if vertex layout has been set.
-     */
-    inline bool isValid() const { return _strides[0] != 0; }
-
-    virtual VertexLayout* clone() { return new VertexLayout(*this); }
+     *  Get built-in vertex layout id, -1 means not built-in
+    */
+    int getBuiltinId() const { return _builtinId; }
 
 protected:
-    hlookup::string_map<InputBindingDesc> _bindings;
-    hlookup::string_map<InputBindingDesc> _instanceBindings;
-    uint32_t _strides[2]     = {}; // 0: normal verts, 1: instance verts
+    VertexLayoutDesc _desc{};
+    int _builtinId{-1};
     VertexStepMode _stepMode = VertexStepMode::VERTEX;
 };
 
 // end of _rhi group
 /// @}
 }  // namespace ax::rhi
+
+namespace ax
+{
+using VertexLayout     = rhi::VertexLayout;
+using VertexLayoutDesc = rhi::VertexLayoutDesc;
+using VertexLayoutKind = rhi::VertexLayoutKind;
+}  // namespace ax

@@ -106,6 +106,7 @@ Pass::~Pass()
 {
     AX_SAFE_RELEASE(_vertexInputBinding);
     AX_SAFE_RELEASE(_programState);
+    axvlm->releaseVertexLayout(_vertexLayout);
 }
 
 Pass* Pass::clone() const
@@ -191,7 +192,7 @@ void Pass::draw(MeshCommand* meshCommand,
     meshCommand->setIndexBuffer(indexBuffer, indexFormat);
     meshCommand->setVertexBuffer(vertexBuffer);
     meshCommand->setIndexDrawInfo(0, indexCount);
-    meshCommand->getPipelineDesc().programState = _programState;
+    meshCommand->setWeakPSVL(_programState, _vertexLayout);
 
     auto* renderer = Director::getInstance()->getRenderer();
 

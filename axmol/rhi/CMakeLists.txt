@@ -17,6 +17,7 @@ set(_AX_RHI_HEADER
   rhi/ShaderModule.h
   rhi/Texture.h
   rhi/VertexLayout.h
+  renderer/VertexLayoutManager.h
   rhi/SamplerCache.h
 )
 
@@ -28,6 +29,7 @@ set(_AX_RHI_SRC
   rhi/Texture.cpp
   rhi/RHIUtils.cpp
   rhi/VertexLayout.cpp
+  renderer/VertexLayoutManager.cpp
   rhi/Program.cpp
   rhi/ProgramState.cpp
   rhi/ShaderCache.cpp

@@ -26,7 +26,7 @@
 #include "axmol/rhi/ShaderCache.h"
 #include "axmol/rhi/DriverBase.h"
 
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 namespace ax::rhi {
 
@@ -79,7 +79,7 @@ rhi::ShaderModule* ShaderCache::acquireShaderModule(rhi::ShaderStage stage, std:
         return iter->second;
     }
 
-    ShaderModule* const shader = rhi::DriverBase::getInstance()->createShaderModule(stage, shaderSource);
+    ShaderModule* const shader = axdrv->createShaderModule(stage, shaderSource);
 
     shader->setHashValue(key);
     _cachedShaders.emplace(key, shader);

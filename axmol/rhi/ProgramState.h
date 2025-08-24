@@ -36,7 +36,7 @@
 #include "axmol/base/EventListenerCustom.h"
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/Program.h"
-#include "axmol/rhi/VertexLayout.h"
+#include "axmol/renderer/VertexLayoutManager.h"
 #include "yasio/byte_buffer.hpp"
 
 namespace ax::rhi {
@@ -143,6 +143,12 @@ public:
     {
         return _program->getVertexInputDesc(name);
     }
+
+    /*
+    * Gets the inmutable vertex layout from _program
+    * @returns nullable
+    */
+    VertexLayout* getVertexLayout() const { return _program->getVertexLayout(); }
 
     /**
      * A callback to update unifrom.
@@ -268,14 +274,10 @@ public:
      */
     void setParameterAutoBinding(std::string_view uniformName, std::string_view autoBinding);
 
-    inline const VertexLayout* getVertexLayout() const
+    inline const VertexLayout* getBuiltinVertexLayout() const
     {
-        return _vertexLayout;
+        return _program->getVertexLayout();
     }
-
-    VertexLayout* getMutableVertexLayout();
-
-    void setSharedVertexLayout(VertexLayout* vertexLayout);
 
     /*
      * Gets batch id of current program state, part of batch draw materialID
@@ -293,13 +295,7 @@ public:
     */
     void updateBatchId();
 
-    /** Custom shader program's vertex layout maybe not setup
-     * so engine specific render node(such as Sprite) should invoke this API when ProgramState changed
-     */
-    void validateSharedVertexLayout(VertexLayoutType);
-
 protected:
-    void ensureVertexLayoutMutable();
 
     /**
      * Set the vertex uniform data.
@@ -329,7 +325,7 @@ protected:
 
     rhi::Program* _program = nullptr;
     std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
-    
+
 
     yasio::sbyte_buffer _uniformBuffer;
 #if AX_RENDER_API != AX_RENDER_API_GL
@@ -341,8 +337,6 @@ protected:
     std::unordered_map<std::string, std::string> _autoBindings;
 
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
-    VertexLayout* _vertexLayout          = nullptr;
-    bool _ownVertexLayout                = false;
 
     uint64_t _batchId    = -1;
     bool _isBatchable = false;

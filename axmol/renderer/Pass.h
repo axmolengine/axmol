@@ -139,8 +139,9 @@ protected:
     void setProgramState(rhi::ProgramState* programState);
     Node* getTarget() const;
 
-    VertexInputBinding* _vertexInputBinding = nullptr;
-    rhi::ProgramState* _programState      = nullptr;
+    VertexInputBinding* _vertexInputBinding   = nullptr;
+    rhi::ProgramState* _programState          = nullptr;
+    rhi::VertexLayout* _vertexLayout          = nullptr;
     Technique* _technique                     = nullptr;
     bool _hashDirty                           = true;
     RenderState _renderState;

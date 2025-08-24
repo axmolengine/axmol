@@ -52,7 +52,6 @@ void RenderState::bindPass(Pass* pass, MeshCommand* command)
     assert(pass->_technique && pass->_technique->_material);
     auto* technique          = pass->_technique;
     auto* material           = technique->_material;
-    auto& pipelineDesc = command->getPipelineDesc();
 
     // need reset all state
     // pipelineDesc.blendDesc.blendEnabled = true;
@@ -63,11 +62,11 @@ void RenderState::bindPass(Pass* pass, MeshCommand* command)
     overrideBits |= material->getStateBlock()._modifiedBits;
 
     // Restore renderer state to its default, except for explicitly specified states
-    RenderState::StateBlock::restoreUnmodifiedStates(overrideBits, &pipelineDesc);
+    RenderState::StateBlock::restoreUnmodifiedStates(overrideBits, command);
 
-    material->getStateBlock().apply(&pipelineDesc);
-    technique->getStateBlock().apply(&pipelineDesc);
-    _state.apply(&pipelineDesc);
+    material->getStateBlock().apply(command);
+    technique->getStateBlock().apply(command);
+    _state.apply(command);
 }
 
 RenderState::StateBlock& RenderState::getStateBlock() const
@@ -75,24 +74,24 @@ RenderState::StateBlock& RenderState::getStateBlock() const
     return _state;
 }
 
-void RenderState::StateBlock::bind(PipelineDesc* pipelineDesc)
+void RenderState::StateBlock::bind(RenderCommand* cmd)
 {
     // When the public bind() is called with no RenderState object passed in,
     // we assume we are being called to bind the state of a single StateBlock,
     // irrespective of whether it belongs to a hierarchy of RenderStates.
     // Therefore, we call restore() here with only this StateBlock's override
     // bits to restore state before applying the new state.
-    StateBlock::restoreUnmodifiedStates(_modifiedBits, pipelineDesc);
+    StateBlock::restoreUnmodifiedStates(_modifiedBits, cmd);
 
-    apply(pipelineDesc);
+    apply(cmd);
 }
 
-void RenderState::StateBlock::apply(PipelineDesc* pipelineDesc)
+void RenderState::StateBlock::apply(RenderCommand* cmd)
 {
     // AX_ASSERT(_globalState);
 
     auto renderer = Director::getInstance()->getRenderer();
-    auto& blend   = pipelineDesc->blendDesc;
+    auto& blend   = cmd->blendDesc();
 
     // Update any state that differs from _globalState and flip _globalState bits
     if ((_modifiedBits & RS_BLEND))
@@ -137,10 +136,10 @@ void RenderState::StateBlock::apply(PipelineDesc* pipelineDesc)
     }
 }
 
-void RenderState::StateBlock::restoreUnmodifiedStates(int32_t overrideBits, PipelineDesc* programState)
+void RenderState::StateBlock::restoreUnmodifiedStates(int32_t overrideBits, RenderCommand* cmd)
 {
     auto renderer = Director::getInstance()->getRenderer();
-    auto& blend   = programState->blendDesc;
+    auto& blend   = cmd->blendDesc();
 
     // Update any state that differs from _globalState and flip _globalState bits
     if (!(overrideBits & RS_BLEND))

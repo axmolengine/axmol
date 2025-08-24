@@ -26,11 +26,12 @@
 #include "axmol/renderer/ProgramManager.h"
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/rhi/ShaderModule.h"
+#include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/Configuration.h"
 
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 namespace ax {
 
@@ -106,74 +107,74 @@ void ProgramManager::init()
 #endif
 
     registerProgram(ProgramType::POSITION_TEXTURE_COLOR, positionTextureColor_vert, positionTextureColor_frag,
-                    VertexLayoutType::Sprite);
-    registerProgram(ProgramType::DUAL_SAMPLER, positionTextureColor_vert, dualSampler_frag, VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::DUAL_SAMPLER, positionTextureColor_vert, dualSampler_frag, VertexLayoutKind::Sprite);
     registerProgram(ProgramType::LABEL_DISTANCE_NORMAL, positionTextureColor_vert, label_distanceNormal_frag,
-                    VertexLayoutType::Sprite);
-    registerProgram(ProgramType::LABEL_NORMAL, positionTextureColor_vert, label_normal_frag, VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::LABEL_NORMAL, positionTextureColor_vert, label_normal_frag, VertexLayoutKind::Sprite);
     registerProgram(ProgramType::LABLE_OUTLINE, positionTextureColor_vert, label_outline_frag,
-                    VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
     registerProgram(ProgramType::LABEL_DISTANCE_OUTLINE, positionTextureColor_vert, label_distanceOutline_frag,
-                    VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
     registerProgram(ProgramType::LABLE_DISTANCE_GLOW, positionTextureColor_vert, label_distanceGlow_frag,
-                    VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
     registerProgram(ProgramType::POSITION_COLOR_LENGTH_TEXTURE, positionColorLengthTexture_vert,
-                    positionColorLengthTexture_frag, VertexLayoutType::DrawNode);
+                    positionColorLengthTexture_frag, VertexLayoutKind::DrawNode);
     registerProgram(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE, positionColorTextureAsPointsize_vert,
-                    positionColor_frag, VertexLayoutType::DrawNode);
-    registerProgram(ProgramType::POSITION_COLOR, positionColor_vert, positionColor_frag, VertexLayoutType::posColor);
-    registerProgram(ProgramType::LAYER_RADIA_GRADIENT, position_vert, layer_radialGradient_frag, VertexLayoutType::Pos);
+                    positionColor_frag, VertexLayoutKind::DrawNode);
+    registerProgram(ProgramType::POSITION_COLOR, positionColor_vert, positionColor_frag, VertexLayoutKind::posColor);
+    registerProgram(ProgramType::LAYER_RADIA_GRADIENT, position_vert, layer_radialGradient_frag, VertexLayoutKind::Pos);
     registerProgram(ProgramType::POSITION_TEXTURE, positionTexture_vert, positionTexture_frag,
-                    VertexLayoutType::Texture);
+                    VertexLayoutKind::Texture);
     registerProgram(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert,
-                    positionTextureColorAlphaTest_frag, VertexLayoutType::Sprite);
+                    positionTextureColorAlphaTest_frag, VertexLayoutKind::Sprite);
     registerProgram(ProgramType::POSITION_TEXTURE_GRAY_ALPHA, positionTextureColor_vert,
-                    positionTextureGrayAlpha_frag, VertexLayoutType::Sprite);
+                    positionTextureGrayAlpha_frag, VertexLayoutKind::Sprite);
     registerProgram(ProgramType::POSITION_TEXTURE_GRAY, positionTextureColor_vert,
-                    positionTextureGray_frag, VertexLayoutType::Sprite);
-    registerProgram(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag, VertexLayoutType::Pos);
+                    positionTextureGray_frag, VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag, VertexLayoutKind::Pos);
     registerProgram(ProgramType::DUAL_SAMPLER_GRAY, positionTextureColor_vert, dualSampler_gray_frag,
-                    VertexLayoutType::Sprite);
-    registerProgram(ProgramType::GRAY_SCALE, positionTextureColor_vert, grayScale_frag, VertexLayoutType::Sprite);
-    registerProgram(ProgramType::LINE_COLOR_3D, lineColor_vert, lineColor_frag, VertexLayoutType::DrawNode3D);
-    registerProgram(ProgramType::CAMERA_CLEAR, cameraClear_vert, cameraClear_frag, VertexLayoutType::Sprite);
-    registerProgram(ProgramType::SKYBOX_3D, skybox_vert, skybox_frag, VertexLayoutType::SkyBox);
+                    VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::GRAY_SCALE, positionTextureColor_vert, grayScale_frag, VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::LINE_COLOR_3D, lineColor_vert, lineColor_frag, VertexLayoutKind::DrawNode3D);
+    registerProgram(ProgramType::CAMERA_CLEAR, cameraClear_vert, cameraClear_frag, VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::SKYBOX_3D, skybox_vert, skybox_frag, VertexLayoutKind::SkyBox);
     registerProgram(ProgramType::SKINPOSITION_TEXTURE_3D, skinPositionTexture_vert, colorTexture_frag,
-                    VertexLayoutType::Unspec);
+                    VertexLayoutKind::Invalid);
     registerProgram(ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D, skinPositionNormalTexture_vert,
-                    colorNormalTexture_frag, VertexLayoutType::Unspec);
+                    colorNormalTexture_frag, VertexLayoutKind::Invalid);
     registerProgram(ProgramType::POSITION_NORMAL_TEXTURE_3D, positionNormalTexture_vert, colorNormalTexture_frag,
-                    VertexLayoutType::Unspec);
+                    VertexLayoutKind::Invalid);
     registerProgram(ProgramType::UNLIT, unlit_vert, colorTexture_frag,
-                    VertexLayoutType::Unspec);
+                    VertexLayoutKind::Invalid);
     registerProgram(ProgramType::UNLIT_INSTANCE, unlit_instance_vert, colorTexture_frag,
-                    VertexLayoutType::Instanced);
-    registerProgram(ProgramType::POSITION_3D, position_vert, color_frag, VertexLayoutType::Unspec);
+                    VertexLayoutKind::Instanced);
+    registerProgram(ProgramType::POSITION_3D, position_vert, color_frag, VertexLayoutKind::Invalid);
     registerProgram(ProgramType::POSITION_NORMAL_3D, positionNormalTexture_vert, colorNormal_frag,
-                    VertexLayoutType::Unspec);
+                    VertexLayoutKind::Invalid);
     registerProgram(ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D, positionNormalTexture_vert_1,
-                    colorNormalTexture_frag_1, VertexLayoutType::Unspec);
+                    colorNormalTexture_frag_1, VertexLayoutKind::Invalid);
     registerProgram(ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D, skinPositionNormalTexture_vert_1,
-                    colorNormalTexture_frag_1, VertexLayoutType::Unspec);
-    registerProgram(ProgramType::TERRAIN_3D, terrain_vert, terrain_frag, VertexLayoutType::Terrain3D);
+                    colorNormalTexture_frag_1, VertexLayoutKind::Invalid);
+    registerProgram(ProgramType::TERRAIN_3D, terrain_vert, terrain_frag, VertexLayoutKind::Terrain3D);
     registerProgram(ProgramType::PARTICLE_TEXTURE_3D, particle_vert, particleTexture_frag,
-                    VertexLayoutType::PosUvColor);
-    registerProgram(ProgramType::PARTICLE_COLOR_3D, particle_vert, particleColor_frag, VertexLayoutType::PosUvColor);
-    registerProgram(ProgramType::QUAD_COLOR_2D, quadColor_vert, quadColor_frag, VertexLayoutType::Unspec);
-    registerProgram(ProgramType::QUAD_TEXTURE_2D, quadTexture_vert, quadTexture_frag, VertexLayoutType::Unspec);
-    registerProgram(ProgramType::HSV, positionTextureColor_vert, hsv_frag, VertexLayoutType::Sprite);
+                    VertexLayoutKind::PosUvColor);
+    registerProgram(ProgramType::PARTICLE_COLOR_3D, particle_vert, particleColor_frag, VertexLayoutKind::PosUvColor);
+    registerProgram(ProgramType::QUAD_COLOR_2D, quadColor_vert, quadColor_frag, VertexLayoutKind::Invalid);
+    registerProgram(ProgramType::QUAD_TEXTURE_2D, quadTexture_vert, quadTexture_frag, VertexLayoutKind::Invalid);
+    registerProgram(ProgramType::HSV, positionTextureColor_vert, hsv_frag, VertexLayoutKind::Sprite);
     registerProgram(ProgramType::HSV_DUAL_SAMPLER, positionTextureColor_vert, dualSampler_hsv_frag,
-                    VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
 
     registerProgram(ProgramType::VIDEO_TEXTURE_YUY2, positionTextureColor_vert, videoTextureYUY2_frag,
-                    VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
     registerProgram(ProgramType::VIDEO_TEXTURE_NV12, positionTextureColor_vert, videoTextureNV12_frag,
-                    VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
     registerProgram(ProgramType::VIDEO_TEXTURE_I420, positionTextureColor_vert, videoTextureI420_frag,
-                    VertexLayoutType::Sprite);
+                    VertexLayoutKind::Sprite);
 
     registerProgram(ProgramType::POS_UV_COLOR_2D, posUVColor2D_vert, positionTextureColor_frag,
-                    VertexLayoutType::Sprite2D);
+                    VertexLayoutKind::Sprite2D);
 
     // The builtin dual sampler shader registry
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR,
@@ -191,7 +192,7 @@ Program* ProgramManager::getBuiltinProgram(uint32_t type)
     assert(type < ProgramType::BUILTIN_COUNT);
 
     auto& info = _builtinRegistry[static_cast<int>(type)];
-    return loadProgram(info.vsName, info.fsName, type, static_cast<uint64_t>(type), info.vlt);
+    return loadProgram(info.vsName, info.fsName, type, static_cast<uint64_t>(type), info.vlk);
 }
 
 Program* ProgramManager::loadProgram(uint64_t progId)
@@ -201,20 +202,20 @@ Program* ProgramManager::loadProgram(uint64_t progId)
 
     auto it = _customRegistry.find(progId);
     if (it != _customRegistry.end())
-        return loadProgram(it->second.vsName, it->second.fsName, ProgramType::CUSTOM_PROGRAM, progId, it->second.vlt);
+        return loadProgram(it->second.vsName, it->second.fsName, ProgramType::CUSTOM_PROGRAM, progId, it->second.vlk);
     return nullptr;
 }
 
-Program* ProgramManager::loadProgram(std::string_view vsName, std::string_view fsName, VertexLayoutType vlt)
+Program* ProgramManager::loadProgram(std::string_view vsName, std::string_view fsName, VertexLayoutKind vlk)
 {
-    return loadProgram(vsName, fsName, ProgramType::CUSTOM_PROGRAM, computeProgramId(vsName, fsName), vlt);
+    return loadProgram(vsName, fsName, ProgramType::CUSTOM_PROGRAM, computeProgramId(vsName, fsName), vlk);
 }
 
 Program* ProgramManager::loadProgram(std::string_view vsName,
                                      std::string_view fsName,
                                      uint32_t progType,
                                      uint64_t progId,
-                                     VertexLayoutType vlt)
+                                     VertexLayoutKind vlk)
 {
     assert(!vsName.empty() && !fsName.empty());
 
@@ -229,13 +230,16 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     auto fragFile   = fileUtils->fullPathForFilename(fsName);
     auto vertSource = fileUtils->getStringFromFile(vertFile);
     auto fragSource = fileUtils->getStringFromFile(fragFile);
-    auto program    = rhi::DriverBase::getInstance()->createProgram(vertSource, fragSource);
+    auto program    = axdrv->createProgram(vertSource, fragSource);
 
     if (program)
     {
         program->setProgramIds(progType, progId);
-        if (vlt < VertexLayoutType::Count)
-            program->defineVertexLayout(vlt);
+        if ((unsigned int)vlk < (unsigned int)VertexLayoutKind::Count)
+        {
+            auto layout = axvlm->acquireBuiltinVertexLayout(vlk, program);
+            program->setVertexLayout(layout);
+        }
         _cachedPrograms.emplace(progId, program);
     }
     return program;
@@ -243,22 +247,22 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
 
 uint64_t ProgramManager::registerCustomProgram(std::string_view vsName,
                                                std::string_view fsName,
-                                               VertexLayoutType vlt,
+                                               VertexLayoutKind vlk,
                                                bool force)
 {
-    return registerProgram(ProgramType::CUSTOM_PROGRAM, vsName, fsName, vlt, force);
+    return registerProgram(ProgramType::CUSTOM_PROGRAM, vsName, fsName, vlk, force);
 }
 
 uint64_t ProgramManager::registerProgram(uint32_t progType,
                                          std::string_view vsName,
                                          std::string_view fsName,
-                                         VertexLayoutType vlt,
+                                         VertexLayoutKind vlk,
                                          bool force)
 {
     uint64_t progId = 0;
     if (progType < ProgramType::BUILTIN_COUNT)
     {
-        _builtinRegistry[static_cast<int>(progType)] = {vsName, fsName, vlt};
+        _builtinRegistry[static_cast<int>(progType)] = {vsName, fsName, vlk};
         progId                                       = progType;
     }
     else
@@ -266,9 +270,9 @@ uint64_t ProgramManager::registerProgram(uint32_t progType,
         progId  = computeProgramId(vsName, fsName);
         auto it = _customRegistry.find(progId);
         if (it == _customRegistry.end())
-            _customRegistry.emplace(progId, BuiltinRegInfo{vsName, fsName, vlt});
+            _customRegistry.emplace(progId, BuiltinRegInfo{vsName, fsName, vlk});
         else if (force)
-            it->second = BuiltinRegInfo{vsName, fsName, vlt};
+            it->second = BuiltinRegInfo{vsName, fsName, vlk};
         else
             progId = 0;
     }

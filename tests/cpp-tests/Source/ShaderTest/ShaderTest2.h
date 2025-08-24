@@ -45,6 +45,7 @@ class Effect : public ax::Object
 {
 public:
     ax::rhi::ProgramState* getProgramState() const { return _programState; }
+    ax::rhi::VertexLayout* getVertexLayout() const { return _vertexLayout; }
     virtual void setTarget(EffectSprite* sprite) {}
 
 protected:
@@ -52,6 +53,7 @@ protected:
     Effect();
     virtual ~Effect();
     ax::rhi::ProgramState* _programState = nullptr;
+    ax::rhi::VertexLayout* _vertexLayout = nullptr;
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     std::string _fragSource;
     ax::EventListenerCustom* _backgroundListener;

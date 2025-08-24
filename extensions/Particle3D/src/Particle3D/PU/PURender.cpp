@@ -296,13 +296,12 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
 void PUParticle3DEntityRender::onBeforeDraw()
 {
     auto* renderer            = Director::getInstance()->getRenderer();
-    auto& pipelineDescriptor  = _meshCommand.getPipelineDesc();
     _rendererDepthTestEnabled = renderer->getDepthTest();
     _rendererDepthCmpFunc     = renderer->getDepthCompareFunc();
     _rendererCullMode         = renderer->getCullMode();
     _rendererDepthWrite       = renderer->getDepthWrite();
     _rendererWinding          = renderer->getWinding();
-    _stateBlock.bind(&pipelineDescriptor);
+    _stateBlock.bind(&_meshCommand);
     renderer->setDepthTest(true);
 }
 
@@ -605,11 +604,11 @@ PUParticle3DEntityRender::PUParticle3DEntityRender()
 
 PUParticle3DEntityRender::~PUParticle3DEntityRender()
 {
-    ;
     // AX_SAFE_RELEASE(_texture);
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
+    axvlm->releaseVertexLayout(_vertexLayout);
 }
 
 bool PUParticle3DEntityRender::initRender(std::string_view texFile)
@@ -632,8 +631,8 @@ bool PUParticle3DEntityRender::initRender(std::string_view texFile)
         _programState = new rhi::ProgramState(program);
     }
 
-    auto& pipelineDescriptor        = _meshCommand.getPipelineDesc();
-    pipelineDescriptor.programState = _programState;
+    Object::assign(_vertexLayout, _programState->getVertexLayout());
+    _meshCommand.setWeakPSVL(_programState, _vertexLayout);
 
     _locColor   = _programState->getUniformLocation("u_color");
     _locPMatrix = _programState->getUniformLocation("u_PMatrix");

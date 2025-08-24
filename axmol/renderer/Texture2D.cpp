@@ -104,7 +104,7 @@ static bool createStringTextureData(std::string_view text,
     if (outData.isNull())
         return false;
 
-    const auto maxTextureSize = rhi::DriverBase::getInstance()->getMaxTextureSize();
+    const auto maxTextureSize = axdrv->getMaxTextureSize();
     if (imageWidth > maxTextureSize || imageHeight > maxTextureSize)
     {
         AXLOGW("Texture2D::initWithString fail, the texture size:{}x{} too large, max texture size:{}", imageWidth,
@@ -159,7 +159,7 @@ Texture2D::~Texture2D()
     AX_SAFE_DELETE(_ninePatchInfo);
 
     AX_SAFE_RELEASE(_rhiTexture);
-    AX_SAFE_RELEASE(_programState);
+    _customCommand.releasePSVL();
 }
 
 rhi::PixelFormat Texture2D::getPixelFormat() const
@@ -385,7 +385,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     desc.pixelFormat = renderFormat;
 
     chooseSamplerDesc(true, desc.mipLevels != 1, desc.samplerDesc);
-    _rhiTexture = static_cast<rhi::Texture*>(rhi::DriverBase::getInstance()->createTexture(desc));
+    _rhiTexture = static_cast<rhi::Texture*>(axdrv->createTexture(desc));
 
     updateData(subDatas, renderFormat, compressed);
 
@@ -695,17 +695,16 @@ void Texture2D::setTexParameters(const Texture2D::TexParams& desc)
 
 void Texture2D::initProgram()
 {
-    if (_programState != nullptr)
+    if (_customCommand.unsafePS())
         return;
 
-    auto& pipelineDesc = _customCommand.getPipelineDesc();
     // create program state
     auto* program      = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
-    _programState      = new ax::rhi::ProgramState(program);
-    _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation   = _programState->getUniformLocation("u_tex0");
+    auto programState      = new ax::rhi::ProgramState(program);
+    _mvpMatrixLocation = programState->getUniformLocation("u_MVPMatrix");
+    _textureLocation       = programState->getUniformLocation("u_tex0");
 
-    pipelineDesc.programState = _programState;
+    _customCommand.setOwnPSVL(programState, program->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
 
     // create vertex buffer
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
@@ -723,12 +722,12 @@ void Texture2D::initProgram()
         blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
     }
 
-    auto& blendDesc                = pipelineDesc.blendDesc;
+    auto& blendDesc                = _customCommand.blendDesc();
     blendDesc.blendEnabled         = true;
     blendDesc.sourceRGBBlendFactor = blendDesc.sourceAlphaBlendFactor = blendFunc.src;
     blendDesc.destinationRGBBlendFactor = blendDesc.destinationAlphaBlendFactor = blendFunc.dst;
 
-    _programState->setTexture(_textureLocation, 0, _rhiTexture);
+    programState->setTexture(_textureLocation, 0, _rhiTexture);
 }
 
 void Texture2D::drawAtPoint(const Vec2& point, float globalZOrder)
@@ -771,7 +770,7 @@ void Texture2D::drawInRect(const Rect& rect, float globalZOrder)
                           _maxS,
                           0.0f};
 
-    _programState->setUniform(_mvpMatrixLocation, matrixMVP.m, sizeof(matrixMVP.m));
+    _customCommand.unsafePS()->setUniform(_mvpMatrixLocation, matrixMVP.m, sizeof(matrixMVP.m));
     _customCommand.updateVertexBuffer(vertexData, sizeof(vertexData));
     Director::getInstance()->getRenderer()->addCommand(&_customCommand);
 }

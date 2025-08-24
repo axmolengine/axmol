@@ -94,6 +94,7 @@ namespace spine {
 		void *_prog = nullptr;
 		axmol::rhi::Texture *_texture = nullptr;
 		axmol::rhi::ProgramState *_programState = nullptr;
+        axmol::rhi::VertexLayout* _vertexLayout = nullptr;
 		axmol::rhi::UniformLocation _locPMatrix;
 		axmol::rhi::UniformLocation _locTexture;
 

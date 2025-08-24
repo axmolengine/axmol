@@ -82,6 +82,7 @@ protected:
     RenderState::StateBlock _stateBlock;
     Texture2D* _texture                  = nullptr;
     rhi::ProgramState* _programState = nullptr;
+    rhi::VertexLayout* _vertexLayout     = nullptr;
     rhi::Buffer* _indexBuffer        = nullptr;  // index buffer
     rhi::Buffer* _vertexBuffer       = nullptr;  // vertex buffer
 

@@ -234,17 +234,19 @@ public:
      *
      * E.G:
      *      RefPtr<ax::Image> image;
-     *      image.weakAssign(new ax::Image());
+     *      image = ReferencedObject<ax::Image>(new ax::Image());
      *
      * Instead of:
      *      RefPtr<ax::Image> image;
      *      image = new ax::Image();
      *      image->release();               // Required because new'd object already has a reference count of '1'.
      */
-    void weakAssign(const RefPtr<T>& other)
+    RefPtr<T>& operator=(const ReferencedObject<T>& other)
     {
         AX_REF_PTR_SAFE_RELEASE(_ptr);
         _ptr = other._ptr;
+
+        return *this;
     }
 
 private:

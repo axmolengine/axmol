@@ -117,9 +117,6 @@ bool ProgramState::init(Program* program)
     AX_SAFE_RETAIN(program);
     _program = program;
 
-    _vertexLayout             = program->getVertexLayout();
-    _ownVertexLayout          = false;
-
 #if AX_RENDER_API == AX_RENDER_API_GL
     auto uboSize = _program->getUniformBufferSize(ShaderStage::DEFAULT);
     _uniformBuffer.resize((std::max)(uboSize, (size_t)1), 0);
@@ -181,9 +178,6 @@ ProgramState::~ProgramState()
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
-
-    if (_ownVertexLayout)
-        AX_SAFE_DELETE(_vertexLayout);
 }
 
 ProgramState* ProgramState::clone() const
@@ -195,9 +189,6 @@ ProgramState* ProgramState::clone() const
 #if AX_RENDER_API != AX_RENDER_API_GL
     cp->_vertexUniformBufferStart = _vertexUniformBufferStart;
 #endif
-
-    cp->_ownVertexLayout = _ownVertexLayout;
-    cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : _vertexLayout->clone(); // OPTIMIZE ME: make VertexLayout inherit from ax::Object, and just retain
 
     cp->_batchId = this->_batchId;
     cp->_isBatchable = this->_isBatchable;
@@ -235,45 +226,6 @@ void ProgramState::setUniform(int location, const void* data, std::size_t size, 
     assert(offset >= 0);
     assert(start + location + offset + size <= _uniformBuffer.size());
     memcpy(_uniformBuffer.data() + start + location + offset, data, size);
-}
-
-void ProgramState::validateSharedVertexLayout(VertexLayoutType vlt)
-{
-    if (!_ownVertexLayout && !_vertexLayout->isValid())
-        _program->defineVertexLayout(vlt);
-}
-
-void ProgramState::ensureVertexLayoutMutable()
-{
-    if (!_ownVertexLayout)
-    {
-        if(_vertexLayout)
-            _vertexLayout = _vertexLayout->clone();
-        else
-            _vertexLayout    = DriverBase::getInstance()->createVertexLayout();
-        _ownVertexLayout = true;
-    }
-}
-
-VertexLayout* ProgramState::getMutableVertexLayout()
-{
-    auto driver = DriverBase::getInstance();
-
-    if (_ownVertexLayout || !_vertexLayout->isValid())
-        return _vertexLayout;
-
-    assert(_vertexLayout);
-    _vertexLayout        = _vertexLayout->clone();
-    _ownVertexLayout     = true;
-    return _vertexLayout;
-}
-
-void ProgramState::setSharedVertexLayout(VertexLayout* vertexLayout)
-{
-    if (_ownVertexLayout)
-        delete _vertexLayout;
-    _ownVertexLayout = false;
-    _vertexLayout    = vertexLayout;
 }
 
 void ProgramState::setTexture(rhi::Texture* texture)

@@ -378,7 +378,7 @@ void Sprite::setTexture(std::string_view filename)
 void Sprite::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    _programState->validateSharedVertexLayout(rhi::VertexLayoutType::Sprite);
+    Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(VertexLayoutKind::Sprite));
 }
 
 void Sprite::setProgramState(uint32_t type)
@@ -391,12 +391,12 @@ bool Sprite::setProgramState(rhi::ProgramState* programState, bool ownPS/* = fal
     AXASSERT(programState, "argument should not be nullptr");
     if (Node::setProgramState(programState, ownPS))
     {
-        auto& pipelineDesc        = _trianglesCommand.getPipelineDesc();
-        pipelineDesc.programState = _programState;
-
         _mvpMatrixLocation = _programState->getUniformLocation(rhi::Uniform::MVP_MATRIX);
 
         setVertexLayout();
+
+        _trianglesCommand.setWeakPSVL(_programState, _vertexLayout);
+
         updateProgramStateTexture(_texture);
         setMVPMatrixUniform();
         return true;
@@ -1678,7 +1678,7 @@ void Sprite::updateBlendFunc()
              "Sprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
 
     // it is possible to have an untextured sprite
-    rhi::BlendDesc& blendDesc = _trianglesCommand.getPipelineDesc().blendDesc;
+    rhi::BlendDesc& blendDesc = _trianglesCommand.blendDesc();
     blendDesc.blendEnabled              = true;
 
     if (!_texture || !_texture->hasPremultipliedAlpha())
@@ -1721,7 +1721,7 @@ void Sprite::setPolygonInfo(const PolygonInfo& info)
 void Sprite::setMVPMatrixUniform()
 {
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto programState         = _trianglesCommand.getPipelineDesc().programState;
+    auto programState         = _trianglesCommand.unsafePS();
     if (programState && _mvpMatrixLocation)
         programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
 }

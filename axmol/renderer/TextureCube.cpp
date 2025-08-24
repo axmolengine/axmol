@@ -212,7 +212,7 @@ bool TextureCube::init(std::string_view positive_x,
     textureDesc.width = textureDesc.height = imageSize;
     textureDesc.textureType                = rhi::TextureType::TEXTURE_CUBE;
     _texture =
-        static_cast<rhi::Texture*>(rhi::DriverBase::getInstance()->createTexture(textureDesc));
+        static_cast<rhi::Texture*>(axdrv->createTexture(textureDesc));
     AXASSERT(_texture != nullptr, "TextureCubemap: texture can not be nullptr");
 
     for (int i = 0; i < 6; i++)

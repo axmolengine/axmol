@@ -42,6 +42,7 @@ NavMeshDebugDraw::NavMeshDebugDraw()
 {
     auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_COLOR);
     _programState = new rhi::ProgramState(program);
+    Object::assign(_vertexLayout, program->getVertexLayout());
     _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
 }
 
@@ -51,10 +52,9 @@ void NavMeshDebugDraw::initCustomCommand(CustomCommand& command)
     command.setTransparent(true);
     command.init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
     command.setDrawType(CustomCommand::DrawType::ARRAY);
-    auto& pipelineDesc        = command.getPipelineDesc();
-    pipelineDesc.programState = _programState;
+    command.setWeakPSVL(_programState, _vertexLayout);
 
-    auto& blend                = pipelineDesc.blendDesc;
+    auto& blend                = command.blendDesc();
     blend.blendEnabled         = true;
     blend.sourceRGBBlendFactor = blend.sourceAlphaBlendFactor = BlendFunc::ALPHA_NON_PREMULTIPLIED.src;
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = BlendFunc::ALPHA_NON_PREMULTIPLIED.dst;
@@ -95,6 +95,7 @@ NavMeshDebugDraw::~NavMeshDebugDraw()
     }
     AX_SAFE_RELEASE_NULL(_programState);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
+    axvlm->releaseVertexLayout(_vertexLayout);
 }
 
 void NavMeshDebugDraw::depthMask(bool state)
@@ -171,7 +172,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
     if (!_vertexBuffer || _vertexBuffer->getSize() < _vertices.size() * sizeof(_vertices[0]))
     {
-        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+        _vertexBuffer = axdrv->createBuffer(
             _vertices.size() * sizeof(_vertices[0]), rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
         _dirtyBuffer = true;
     }

@@ -87,10 +87,10 @@ void Physics3DDebugDrawer::draw(Renderer* renderer)
 
     auto& transform = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 
-    _programState->setUniform(_locMVP, transform.m, sizeof(transform.m));
+    _customCommand.unsafePS()->setUniform(_locMVP, transform.m, sizeof(transform.m));
     _customCommand.init(0, Mat4::IDENTITY, 0);
 
-    auto& blend                  = _customCommand.getPipelineDesc().blendDesc;
+    auto& blend                  = _customCommand.blendDesc();
     blend.blendEnabled           = true;
     blend.sourceAlphaBlendFactor = blend.sourceRGBBlendFactor = _blendFunc.src;
     blend.destinationAlphaBlendFactor = blend.destinationRGBBlendFactor = _blendFunc.dst;
@@ -122,23 +122,23 @@ Physics3DDebugDrawer::Physics3DDebugDrawer()
 
 Physics3DDebugDrawer::~Physics3DDebugDrawer()
 {
-    AX_SAFE_RELEASE(_programState);
+    _customCommand.releasePSVL();
 }
 
 void Physics3DDebugDrawer::init()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
     auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_COLOR);
-    _programState = new rhi::ProgramState(program);
-    _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
+    auto programState = new rhi::ProgramState(program);
+    _locMVP           = programState->getUniformLocation("u_MVPMatrix");
 
     _buffer.reserve(512);
 
-    _customCommand.getPipelineDesc().programState = _programState;
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setBeforeCallback(AX_CALLBACK_0(Physics3DDebugDrawer::onBeforeDraw, this));
     _customCommand.setAfterCallback(AX_CALLBACK_0(Physics3DDebugDrawer::onAfterDraw, this));
+
+    _customCommand.setOwnPSVL(programState, program->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
 }
 
 void Physics3DDebugDrawer::onBeforeDraw()

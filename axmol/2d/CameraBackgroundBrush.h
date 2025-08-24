@@ -127,6 +127,7 @@ public:
 
 protected:
     rhi::ProgramState* _programState = nullptr;
+    rhi::VertexLayout* _vertexLayout = nullptr;
 };
 
 /**

@@ -365,7 +365,7 @@ bool MixAndMatchExample::init()
     SCALE_SKELETON_NODE(skeletonNode);
 
     // load hsv as custom, we don't want batch draw
-    auto hsvProg = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, hsv_frag, VertexLayoutType::Sprite);
+    auto hsvProg = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, hsv_frag, VertexLayoutKind::Sprite);
 
     auto ps1     = new rhi::ProgramState(hsvProg);
     SET_UNIFORM(ps1, "u_hsv", Vec3(92.0f, 1.0f, 1.2f));
@@ -538,7 +538,7 @@ bool SpineboyExample::init()
     addChild(skeletonNode);
 
     auto program = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs",
-                                                                    VertexLayoutType::Sprite);
+                                                                    VertexLayoutKind::Sprite);
     skeletonNode->setProgramState(new rhi::ProgramState(program), true);
 
     //auto skeleton1PS = skeletonNode->getProgramState();

@@ -1894,7 +1894,7 @@ protected:
 
     Quaternion _rotationQuat;  /// rotation using quaternion, if _rotationZ_X == _rotationZ_Y, _rotationQuat =
                                /// RotationZ_X * RotationY * RotationX, else _rotationQuat = RotationY * RotationX
-
+    rhi::VertexLayout* _vertexLayout = nullptr;
     float _scaleX;  ///< scaling factor on x-axis
     float _scaleY;  ///< scaling factor on y-axis
     float _scaleZ;  ///< scaling factor on z-axis

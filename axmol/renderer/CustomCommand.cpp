@@ -108,6 +108,7 @@ void CustomCommand::assign(CustomCommand&& rhs)
 
         rhs._vertexBuffer = rhs._indexBuffer = nullptr;
         rhs._pipelineDesc.programState = nullptr;
+        rhs._pipelineDesc.vertexLayout       = nullptr;
     }
 }
 #if defined(__INTEL_COMPILER)
@@ -144,14 +145,14 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
     _vertexDrawCount = capacity;
 
     _vertexBuffer =
-        rhi::DriverBase::getInstance()->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
+        axdrv->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
 }
 
 void CustomCommand::createInstanceBuffer(std::size_t vertexSize, int capacity, BufferUsage usage)
 {
     AX_SAFE_RELEASE(_instanceBuffer);
     _instanceBuffer =
-        rhi::DriverBase::getInstance()->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
+        axdrv->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
     _instanceCapacity = capacity;
     _instanceCount    = capacity;
 }
@@ -178,7 +179,7 @@ void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, 
     _indexDrawCount = capacity;
 
     _indexBuffer =
-        rhi::DriverBase::getInstance()->createBuffer(_indexSize * capacity, rhi::BufferType::INDEX, usage);
+        axdrv->createBuffer(_indexSize * capacity, rhi::BufferType::INDEX, usage);
 }
 
 void CustomCommand::updateVertexBuffer(const void* data, std::size_t offset, std::size_t length)

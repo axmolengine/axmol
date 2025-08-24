@@ -67,11 +67,10 @@ bool Skybox::init()
     // create and set our custom shader
     setProgramStateByProgramId(rhi::ProgramType::SKYBOX_3D);
 
-    auto& pipelineDesc = _customCommand.getPipelineDesc();
-
-    pipelineDesc.programState = _programState;
+    _customCommand.setWeakPSVL(_programState, _vertexLayout);
+    
     // disable blend
-    pipelineDesc.blendDesc.blendEnabled = false;
+    _customCommand.blendDesc().blendEnabled = false;
 
     _uniformColorLoc     = _programState->getUniformLocation("u_color");
     _uniformCameraRotLoc = _programState->getUniformLocation("u_cameraRot");

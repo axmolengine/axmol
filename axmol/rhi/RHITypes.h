@@ -67,7 +67,7 @@ enum class ShaderStage
     DEFAULT = FRAGMENT
 };
 
-enum class VertexFormat : uint32_t
+enum class VertexFormat : uint16_t
 {
     FLOAT4,
     FLOAT3,
@@ -81,6 +81,7 @@ enum class VertexFormat : uint32_t
     USHORT2,
     UBYTE4,
     MAT4,
+    COUNT,
 };
 /** @typedef rhi::PixelFormat
      Possible texture pixel formats

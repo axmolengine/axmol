@@ -24,7 +24,7 @@
 #include "axmol/rhi/d3d/DepthStencilStateD3D.h"
 #include <stdexcept>
 #include <cstring>
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 namespace ax::rhi::d3d
 {

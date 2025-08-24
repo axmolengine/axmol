@@ -165,6 +165,7 @@ protected:
     rhi::UniformLocation _mvpMatrixLocation;
     rhi::UniformLocation _textureLocation;
     rhi::ProgramState* _programState = nullptr;
+    rhi::VertexLayout* _vertexLayout = nullptr;
 
     BlendFunc _blendFunc;
 };

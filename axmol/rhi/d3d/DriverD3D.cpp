@@ -395,9 +395,9 @@ void DriverImpl::destroySampler(SamplerHandle& h) {
     SafeRelease(reinterpret_cast<ID3D11SamplerState*&>(h));
 }
 
-VertexLayout* DriverImpl::createVertexLayout()
+VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
 {
-    return new VertexLayoutImpl();
+    return new VertexLayoutImpl(std::move(desc));
 }
 
 /// below is driver info

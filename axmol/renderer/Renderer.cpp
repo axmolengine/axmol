@@ -44,7 +44,7 @@
 #include "axmol/base/EventType.h"
 #include "axmol/2d/Camera.h"
 #include "axmol/2d/Scene.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 #include "axmol/rhi/axmol-rhi.h"
 #include "axmol/rhi/RenderTarget.h"
@@ -203,7 +203,7 @@ void Renderer::init()
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
 
-    auto driver = rhi::DriverBase::getInstance();
+    auto driver = axdrv;
 #if AX_RENDER_API == AX_RENDER_API_D3D
     auto mainWindowHandle = Director::getInstance()->getRenderView()->getWin32Window();
     _commandBuffer        = driver->createCommandBuffer(mainWindowHandle);
@@ -223,7 +223,7 @@ void Renderer::init()
 
 rhi::RenderTarget* Renderer::getOffscreenRenderTarget() {
     if (_offscreenRT != nullptr) return _offscreenRT;
-    return (_offscreenRT = rhi::DriverBase::getInstance()->createRenderTarget());
+    return (_offscreenRT = axdrv->createRenderTarget());
 }
 
 void Renderer::addCallbackCommand(std::function<void()> func, float globalZOrder)
@@ -245,6 +245,10 @@ void Renderer::addCommand(RenderCommand* command, int renderQueueID)
     AXASSERT(!_isRendering, "Cannot add command while rendering");
     AXASSERT(renderQueueID >= 0, "Invalid render queue");
     AXASSERT(command->getType() != RenderCommand::Type::UNKNOWN_COMMAND, "Invalid Command Type");
+
+#ifdef _DEBUG
+    AXASSERT(command->checkPSVL(), "Command pipelineDesc incomplete");
+#endif
 
     _renderGroups[renderQueueID].emplace_back(command);
 }
@@ -699,8 +703,6 @@ void Renderer::drawBatchedTriangles()
     {
         auto& drawInfo = _triBatchesToDraw[i];
         _commandBuffer->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDesc());
-        auto& pipelineDesc = drawInfo.cmd->getPipelineDesc();
-        _commandBuffer->setProgramState(pipelineDesc.programState);
         _commandBuffer->drawElements(rhi::PrimitiveType::TRIANGLE, rhi::IndexFormat::U_SHORT,
                                      drawInfo.indicesToDraw, drawInfo.offset * sizeof(_indices[0]));
 
@@ -730,7 +732,6 @@ void Renderer::drawCustomCommand(RenderCommand* command)
     _commandBuffer->setVertexBuffer(cmd->getVertexBuffer());
 
     _commandBuffer->updatePipelineState(_currentRT, cmd->getPipelineDesc());
-    _commandBuffer->setProgramState(cmd->getPipelineDesc().programState);
 
     auto drawType = cmd->getDrawType();
     switch (drawType)
@@ -838,7 +839,7 @@ void Renderer::readPixels(rhi::RenderTarget* rt,
     assert(!!rt);
     if (rt ==
         _defaultRT)  // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
-        rhi::DriverBase::getInstance()->setFrameBufferOnly(false);
+        axdrv->setFrameBufferOnly(false);
 
     _commandBuffer->readPixels(rt, std::move(callback));
 }
@@ -1009,7 +1010,7 @@ rhi::Buffer* Renderer::TriangleCommandBufferManager::getIndexBuffer() const
 
 void Renderer::TriangleCommandBufferManager::createBuffer()
 {
-    auto driver = rhi::DriverBase::getInstance();
+    auto driver = axdrv;
 
     // Not initializing the buffer before passing it to updateData for Android/OpenGL ES.
     // This change does fix the Android/OpenGL ES performance problem

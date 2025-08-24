@@ -95,7 +95,7 @@ private:
     /**
      * Constructor.
      */
-    VertexInputBinding();
+    VertexInputBinding() = default;
 
     /**
      * Destructor.
@@ -108,7 +108,7 @@ private:
     VertexInputBinding& operator=(const VertexInputBinding&);
 
     bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
-    void setVertexInputPointer(VertexLayout* vertexLayout, std::string_view name,
+    void setVertexInputPointer(VertexLayoutDesc& desc, std::string_view name,
                                 rhi::VertexFormat type,
                                 bool normalized,
                                 int offset,
@@ -116,9 +116,10 @@ private:
     const rhi::VertexInputDesc* getVertexInputDesc(std::string_view name);
     void parseAttributes();
 
-    MeshIndexData* _meshIndexData;
-    rhi::ProgramState* _programState;
-    uint32_t _vertexAttribsFlags;
+    MeshIndexData* _meshIndexData{nullptr};
+    ProgramState* _programState{nullptr};
+    VertexLayout* _vertexLayout{nullptr};
+    uint32_t _vertexAttribsFlags{0};
 };
 
 }

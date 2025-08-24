@@ -148,31 +148,22 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
                                     CustomCommand::DrawType drawType,
                                     CustomCommand::PrimitiveType primitiveType)
 {
-    auto& pipelinePS = cmd.getPipelineDesc().programState;
-    AX_SAFE_RELEASE(pipelinePS);
-
     auto program = axpm->getBuiltinProgram(programType);
-    pipelinePS   = new rhi::ProgramState(program);
-    setVertexLayout(cmd);
+    auto ps   = new rhi::ProgramState(program);
+    cmd.setOwnPSVL(ps, axvlm->acquireBuiltinVertexLayout(rhi::VertexLayoutKind::DrawNode),
+                   RenderCommand::ADOPT_FLAG_ALL);
     cmd.setPrimitiveType(primitiveType);
     cmd.setDrawType(drawType);
 }
 
-void DrawNode::setVertexLayout(CustomCommand& cmd)
-{
-    auto* programState = cmd.getPipelineDesc().programState;
-    programState->validateSharedVertexLayout(rhi::VertexLayoutType::DrawNode);
-}
-
 void DrawNode::freeShaderInternal(CustomCommand& cmd)
 {
-    auto& pipelinePS = cmd.getPipelineDesc().programState;
-    AX_SAFE_RELEASE_NULL(pipelinePS);
+    cmd.releasePSVL();
 }
 
 void DrawNode::updateBlendState(CustomCommand& cmd)
 {
-    rhi::BlendDesc& blendDesc = cmd.getPipelineDesc().blendDesc;
+    rhi::BlendDesc& blendDesc = cmd.blendDesc();
     blendDesc.blendEnabled              = true;
     if (_blendFunc == BlendFunc::ALPHA_NON_PREMULTIPLIED)
     {
@@ -194,16 +185,16 @@ void DrawNode::updateBlendState(CustomCommand& cmd)
 
 void DrawNode::updateUniforms(const Mat4& transform, CustomCommand& cmd)
 {
-    auto& pipelineDesc = cmd.getPipelineDesc();
+    auto pipelinePS = cmd.unsafePS();
     const auto& matrixP      = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 matrixMVP           = matrixP * transform;
-    auto mvpLocation         = pipelineDesc.programState->getUniformLocation("u_MVPMatrix");
-    pipelineDesc.programState->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));
+    auto mvpLocation         = pipelinePS->getUniformLocation("u_MVPMatrix");
+    pipelinePS->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));
 
     // FIXME: consider whether 'u_alpha' is a redundant uniform in shaders?
     float alpha               = _displayedColor.a / 255.0f;
-    auto alphaUniformLocation = pipelineDesc.programState->getUniformLocation("u_alpha");
-    pipelineDesc.programState->setUniform(alphaUniformLocation, &alpha, sizeof(alpha));
+    auto alphaUniformLocation = pipelinePS->getUniformLocation("u_alpha");
+    pipelinePS->setUniform(alphaUniformLocation, &alpha, sizeof(alpha));
 }
 
 void DrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)

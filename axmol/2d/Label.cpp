@@ -204,26 +204,20 @@ Label::BatchCommand::BatchCommand()
 
 Label::BatchCommand::~BatchCommand()
 {
-    AX_SAFE_RELEASE(textCommand.getPipelineDesc().programState);
-    AX_SAFE_RELEASE(shadowCommand.getPipelineDesc().programState);
-    AX_SAFE_RELEASE(outLineCommand.getPipelineDesc().programState);
+    textCommand.releasePSVL();
+    shadowCommand.releasePSVL();
+    outLineCommand.releasePSVL();
 }
 
 void Label::BatchCommand::setProgramState(rhi::ProgramState* programState)
 {
     assert(programState);
 
-    auto& programStateText = textCommand.getPipelineDesc().programState;
-    AX_SAFE_RELEASE(programStateText);
-    programStateText = programState->clone();
-
-    auto& programStateShadow = shadowCommand.getPipelineDesc().programState;
-    AX_SAFE_RELEASE(programStateShadow);
-    programStateShadow = programState->clone();
-
-    auto& programStateOutline = outLineCommand.getPipelineDesc().programState;
-    AX_SAFE_RELEASE(programStateOutline);
-    programStateOutline = programState->clone();
+    auto layout = programState->getVertexLayout();
+    assert(layout && "Program vertex layout incomplete");
+    textCommand.setOwnPSVL(programState->clone(), layout, RenderCommand::ADOPT_FLAG_PS);
+    shadowCommand.setOwnPSVL(programState->clone(), layout, RenderCommand::ADOPT_FLAG_PS);
+    outLineCommand.setOwnPSVL(programState->clone(), layout, RenderCommand::ADOPT_FLAG_PS);
 }
 
 std::array<CustomCommand*, 3> Label::BatchCommand::getCommandArray()
@@ -664,7 +658,7 @@ static Texture2D* _getTexture(Label* label)
 
 void Label::setVertexLayout()
 {
-    _programState->validateSharedVertexLayout(rhi::VertexLayoutType::Sprite);
+    Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(VertexLayoutKind::Sprite));
 }
 
 bool Label::setProgramState(rhi::ProgramState* programState, bool ownPS /*= false*/)
@@ -679,8 +673,7 @@ bool Label::setProgramState(rhi::ProgramState* programState, bool ownPS /*= fals
 
         setVertexLayout();
 
-        auto& quadPipeline        = _quadCommand.getPipelineDesc();
-        quadPipeline.programState = _programState;
+        _quadCommand.setWeakPSVL(_programState, _vertexLayout);
 
         return true;
     }
@@ -738,8 +731,7 @@ void Label::updateShaderProgram()
     for (auto&& batch : _batchCommands)
         updateBatchCommand(batch);
 
-    auto& quadPipeline        = _quadCommand.getPipelineDesc();
-    quadPipeline.programState = _programState;
+    _quadCommand.setWeakPSVL(_programState, _vertexLayout);
 }
 
 void Label::updateBatchCommand(Label::BatchCommand& batch)
@@ -1905,7 +1897,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
     {
         updateBuffer(textureAtlas, batch.shadowCommand);
         auto shadowMatrix = matrixProjection * _shadowTransform;
-        batch.shadowCommand.getPipelineDesc().programState->setUniform(_mvpMatrixLocation, shadowMatrix.m,
+        batch.shadowCommand.unsafePS()->setUniform(_mvpMatrixLocation, shadowMatrix.m,
                                                                              sizeof(shadowMatrix.m));
     }
 
@@ -1921,7 +1913,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             if (_shadowEnabled)
             {
                 effectType               = 2;
-                auto* programStateShadow = batch.shadowCommand.getPipelineDesc().programState;
+                auto programStateShadow = batch.shadowCommand.unsafePS();
                 programStateShadow->setUniform(_effectColorLocation, &_shadowColor, sizeof(ax::Color));
                 programStateShadow->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
                 batch.shadowCommand.init(_globalZOrder);
@@ -1931,7 +1923,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             if (_useDistanceField)
             {  // distance outline
                 effectColor.w = _outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize;
-                batch.textCommand.getPipelineDesc().programState->setUniform(_effectColorLocation, &effectColor,
+                batch.textCommand.unsafePS()->setUniform(_effectColorLocation, &effectColor,
                                                                                    sizeof(ax::Color));
             }
             else
@@ -1940,7 +1932,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 {
                     effectType = 1;
                     updateBuffer(textureAtlas, batch.outLineCommand);
-                    auto* programStateOutline = batch.outLineCommand.getPipelineDesc().programState;
+                    auto programStateOutline = batch.outLineCommand.unsafePS();
                     programStateOutline->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
                     programStateOutline->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
                     batch.outLineCommand.init(_globalZOrder);
@@ -1950,7 +1942,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 // draw text
                 {
                     effectType             = 0;
-                    auto* programStateText = batch.textCommand.getPipelineDesc().programState;
+                    auto programStateText = batch.textCommand.unsafePS();
 
                     programStateText->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
                     programStateText->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
@@ -1962,7 +1954,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
             if (_shadowEnabled)
             {
-                auto* programStateShadow = batch.shadowCommand.getPipelineDesc().programState;
+                auto programStateShadow = batch.shadowCommand.unsafePS();
                 programStateShadow->setUniform(_textColorLocation, &_shadowColor, sizeof(Vec4));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
@@ -1974,14 +1966,14 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             // draw shadow
             if (_shadowEnabled)
             {
-                auto* programStateShadow = batch.shadowCommand.getPipelineDesc().programState;
+                auto programStateShadow = batch.shadowCommand.unsafePS();
                 programStateShadow->setUniform(_textColorLocation, &_shadowColor, sizeof(Vec4));
                 programStateShadow->setUniform(_effectColorLocation, &_shadowColor, sizeof(Vec4));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
 
-            batch.textCommand.getPipelineDesc().programState->setUniform(_effectColorLocation, &_effectColor,
+            batch.textCommand.unsafePS()->setUniform(_effectColorLocation, &_effectColor,
                                                                                sizeof(Vec4));
         }
         break;
@@ -2050,9 +2042,9 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
                 return;
 
             auto texture       = textureAtlas->getTexture();
-            auto& pipelineQuad = _quadCommand.getPipelineDesc();
-            pipelineQuad.programState->setUniform(_mvpMatrixLocation, matrixProjection.m, sizeof(matrixProjection.m));
-            pipelineQuad.programState->setTexture(texture->getRHITexture());
+            auto pipelinePS = _quadCommand.unsafePS();
+            pipelinePS->setUniform(_mvpMatrixLocation, matrixProjection.m, sizeof(matrixProjection.m));
+            pipelinePS->setTexture(texture->getRHITexture());
             _quadCommand.init(_globalZOrder, texture, _blendFunc, textureAtlas->getQuads(),
                               textureAtlas->getTotalQuads(), transform, flags);
             renderer->addCommand(&_quadCommand);
@@ -2084,13 +2076,13 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
                 auto& batch = _batchCommands[i++];
                 for (auto&& command : batch.getCommandArray())
                 {
-                    auto* programState = command->getPipelineDesc().programState;
+                    auto programState = command->unsafePS();
                     programState->setUniform(_textColorLocation, &_textColor, sizeof(_textColor));
                     programState->setTexture(textureAtlas->getTexture()->getRHITexture());
                 }
-                batch.textCommand.getPipelineDesc().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
+                batch.textCommand.unsafePS()->setUniform(_mvpMatrixLocation, matrixMVP.m,
                                                                                    sizeof(matrixMVP.m));
-                batch.outLineCommand.getPipelineDesc().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
+                batch.outLineCommand.unsafePS()->setUniform(_mvpMatrixLocation, matrixMVP.m,
                                                                                       sizeof(matrixMVP.m));
                 updateEffectUniforms(batch, textureAtlas, renderer, transform);
             }
@@ -2105,11 +2097,11 @@ void Label::updateBlendState()
     {
         for (auto&& command : batch.getCommandArray())
         {
-            auto& blendDesc = command->getPipelineDesc().blendDesc;
+            auto& blendDesc = command->blendDesc();
             updateBlend(blendDesc, _blendFunc);
         }
     }
-    updateBlend(_quadCommand.getPipelineDesc().blendDesc, _blendFunc);
+    updateBlend(_quadCommand.blendDesc(), _blendFunc);
 }
 
 void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)

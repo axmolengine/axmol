@@ -49,10 +49,12 @@ using std::max;
 namespace {
 
 	std::shared_ptr<rhi::ProgramState> __twoColorProgramState = nullptr;
+    static ax::RefPtr<rhi::VertexLayout> __twoColorVertexLayout;
 	rhi::UniformLocation __locPMatrix;
 	rhi::UniformLocation __locTexture;
 
-	static void updateProgramStateLayout(rhi::ProgramState *programState) {
+	static void updateProgramStateLayout(ProgramState* programState, rhi::VertexLayout*& layout)
+    {
 		__locPMatrix = programState->getUniformLocation("u_PMatrix");
 		__locTexture = programState->getUniformLocation("u_tex0");
 
@@ -61,26 +63,33 @@ namespace {
         auto locColor    = programState->getVertexInputDesc("a_color");
         auto locColor2   = programState->getVertexInputDesc("a_color2");
 
-        auto vertexLayout = programState->getMutableVertexLayout();
-        vertexLayout->setAttrib("a_position", locPosition, rhi::VertexFormat::FLOAT3,
+        auto layoutDesc = axvlm->allocateVertexLayoutDesc();
+        layoutDesc.startLayout(4);
+        layoutDesc.addAttrib("a_position", locPosition, rhi::VertexFormat::FLOAT3,
                                      offsetof(spine::V3F_C4B_C4B_T2F, position), false);
-        vertexLayout->setAttrib("a_color", locColor, rhi::VertexFormat::UBYTE4,
+        layoutDesc.addAttrib("a_color", locColor, rhi::VertexFormat::UBYTE4,
                                      offsetof(spine::V3F_C4B_C4B_T2F, color), true);
-        vertexLayout->setAttrib("a_color2", locColor2, rhi::VertexFormat::UBYTE4,
+        layoutDesc.addAttrib("a_color2", locColor2, rhi::VertexFormat::UBYTE4,
                                      offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
-        vertexLayout->setAttrib("a_texCoord", locTexcoord, rhi::VertexFormat::FLOAT2,
+        layoutDesc.addAttrib("a_texCoord", locTexcoord, rhi::VertexFormat::FLOAT2,
                                      offsetof(spine::V3F_C4B_C4B_T2F, texCoord), false);
-        vertexLayout->setStride(sizeof(spine::V3F_C4B_C4B_T2F));
+        layoutDesc.endLayout();
+
+        layout = axvlm->acquireVertexLayout(std::move(layoutDesc));
 	}
 
-	static void initTwoColorProgramState() {
+	static void initTwoColorProgramState()
+        {
 		if (__twoColorProgramState) {
 			return;
 		}
 		auto program       = ProgramManager::getInstance()->loadProgram("custom/spineTwoColorTint_vs",
                                                                                       "custom/spineTwoColorTint_fs");
 		auto *programState = new rhi::ProgramState(program);
-		updateProgramStateLayout(programState);
+
+        rhi::VertexLayout* layout{nullptr};
+        updateProgramStateLayout(programState, layout);
+        __twoColorVertexLayout = ax::ReferencedObject<VertexLayout>(layout);
 
 		__twoColorProgramState = std::shared_ptr<rhi::ProgramState>(programState);
 	}
@@ -156,8 +165,10 @@ namespace spine {
 		AXASSERT(_programState, "programState should not be null");
 		pipelinePS = _programState;
 
-		if (needsUpdateStateLayout)
-			updateProgramStateLayout(pipelinePS);
+		if (needsUpdateStateLayout) {
+            axvlm->releaseVertexLayout(_vertexLayout);
+			updateProgramStateLayout(_programState, _vertexLayout);
+        }
 
 		_locPMatrix = __locPMatrix;
 		_locTexture = __locTexture;

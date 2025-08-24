@@ -69,10 +69,9 @@ bool BoneNode::init()
     updateVertices();
     updateColor();
 
-    auto& pipelineDescriptor = _customCommand.getPipelineDesc();
     auto* program = axpm->getBuiltinProgram(ax::rhi::ProgramType::POSITION_COLOR);  // TODO: noMVP?
     setProgramState(new ax::rhi::ProgramState(program), true);
-    pipelineDescriptor.programState = _programState;
+    _customCommand.setWeakPSVL(_programState, _vertexLayout);
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix"sv);
 

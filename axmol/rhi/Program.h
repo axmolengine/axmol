@@ -49,23 +49,6 @@ class VertexLayout;
  * @{
  */
 
-enum class VertexLayoutType
-{
-    Unspec,      // needs binding after program load
-    Pos,         // V2F
-    Texture,     // T2F
-    PosUvColor,  // V3F_T2F_C4F
-    Sprite,      // V3F_T2F_C4B
-    Sprite2D,    // V2F_T2F_C4B
-    DrawNode,    // V2F_T2F_C4F
-    DrawNode3D,  // V3F_C4F
-    SkyBox,      // V3F
-    posColor,    // V3F_C4F
-    Terrain3D,   // V3F_T2F_V3F
-    Instanced,   // builtin instanced vertex format for 3D transform
-    Count
-};
-
 /**
  * @addtogroup _rhi
  * @{
@@ -139,11 +122,6 @@ public:
     std::string_view getFragmentShaderSource() const { return _fsSource; }
 
     /**
-    * Define the program shared vertex layout type, see: VertexLayoutType
-    */
-    void defineVertexLayout(VertexLayoutType vlt);
-
-    /**
      * Get engine built-in program type.
      * @return The built-in program type.
      */
@@ -168,9 +146,11 @@ public:
      */
     virtual const hlookup::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const = 0;
 
-    inline VertexLayout* getVertexLayout() const { return _vertexLayout; }
+    VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
 protected:
+
+    void setVertexLayout(VertexLayout* layout) { _vertexLayout = layout; }
 
     void setProgramIds(uint32_t progType, uint64_t progId);
 
@@ -214,10 +194,6 @@ protected:
     VertexLayout* _vertexLayout{nullptr};
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
     uint64_t _programId   = 0;
-
-    using VERTEX_LAYOUT_SETUP_FUNC = std::function<void(Program*)>;
-
-    static std::function<void(Program*)> s_vertexLayoutDefineList[static_cast<int>(VertexLayoutType::Count)];
 };
 
 // end of _rhi group

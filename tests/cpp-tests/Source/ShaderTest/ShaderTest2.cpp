@@ -145,7 +145,7 @@ public:
             // normal effect: order == 0
             _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags);
 
-            updateUniforms(_trianglesCommand.getPipelineDesc().programState);
+            updateUniforms(_trianglesCommand.unsafePS());
             renderer->addCommand(&_trianglesCommand);
 
             // positive effects: order >= 0
@@ -155,7 +155,7 @@ public:
                 auto* programState = std::get<1>(*it)->getProgramState();
                 updateUniforms(programState);
                 q.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, transform, flags);
-                q.getPipelineDesc().programState = programState;
+                q.setWeakPSVL(programState, std::get<1>(*it)->getVertexLayout());
                 renderer->addCommand(&q);
                 idx++;
             }
@@ -183,10 +183,12 @@ protected:
 
 bool Effect::initProgramState(std::string_view fragmentFilename)
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, fragmentFilename, VertexLayoutType::Sprite);
+    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, fragmentFilename, VertexLayoutKind::Sprite);
     auto programState = new rhi::ProgramState(program);
     AX_SAFE_RELEASE(_programState);
     _programState = programState;
+
+    Object::assign(_vertexLayout, _programState->getVertexLayout());
 
     return _programState != nullptr;
 }
@@ -196,6 +198,7 @@ Effect::Effect() {}
 Effect::~Effect()
 {
     AX_SAFE_RELEASE_NULL(_programState);
+    axvlm->releaseVertexLayout(_vertexLayout);
 }
 
 // Blur
