@@ -200,7 +200,7 @@ void ShaderModuleImpl::compileShader(ID3D11Device* device, ShaderStage stage, st
     } while (false);  // iterator stages, current only 1 stage
 
     Microsoft::WRL::ComPtr<ID3DBlob> errorBlob;
-    UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
+    UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2 | D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined(_DEBUG)
     flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
