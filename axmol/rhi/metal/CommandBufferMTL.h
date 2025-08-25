@@ -125,13 +125,6 @@ public:
     void setVertexBuffer(Buffer* buffer) override;
 
     /**
-     * Set the uniform data at a given vertex and fragment buffer binding point 1
-     * Set a global texture for all vertex and fragment shaders at the given bind location.
-     * @param programState A programState object that hold the uniform and texture data.
-     */
-    void setProgramState(ProgramState* programState) override;
-
-    /**
      * Set indexes when drawing primitives with index list
      * @ buffer A buffer object that the device will read indexes from.
      * @ see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`

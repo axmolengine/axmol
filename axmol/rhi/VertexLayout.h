@@ -153,6 +153,9 @@ public:
     virtual ~VertexLayout() = default;
 
     const VertexLayoutDesc& getDesc() const { return _desc; }
+    
+    uint32_t getStride() const { return _desc.getStride(); }
+    uint32_t getInstanceStride() const { return _desc.getInstanceStride(); }
 
     /**
      * Get attribute informations

@@ -216,7 +216,7 @@ void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {
     CommandBuffer::updatePipelineState(rt, desc);
-    _renderPipelineImpl->update(rt, descriptor);
+    _renderPipelineImpl->update(rt, desc);
     [_mtlRenderEncoder setRenderPipelineState:_renderPipelineImpl->getMTLRenderPipelineState()];
 }
 
@@ -252,13 +252,6 @@ void CommandBufferImpl::setInstanceBuffer(Buffer* buffer) {
     // Vertex instancing transform buffer is bound in index VBO_INSTANCING_BINDING_INDEX.
     // TODO: sync device binding macros to AXSLCC
     [_mtlRenderEncoder setVertexBuffer:static_cast<BufferImpl*>(buffer)->getMTLBuffer() offset:0 atIndex:DriverImpl::VBO_INSTANCING_BINDING_INDEX];
-}
-
-void CommandBufferImpl::setProgramState(ProgramState* programState)
-{
-    AX_SAFE_RETAIN(programState);
-    AX_SAFE_RELEASE(_programState);
-    _programState = programState;
 }
 
 void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
@@ -418,8 +411,9 @@ void CommandBufferImpl::afterDraw()
         [_mtlIndexBuffer release];
         _mtlIndexBuffer = nullptr;
     }
-
-    AX_SAFE_RELEASE_NULL(_programState);
+    
+    _programState = nullptr;
+    _vertexLayout = nullptr;
 }
 
 void CommandBufferImpl::prepareDrawing() const

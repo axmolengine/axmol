@@ -198,8 +198,8 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
     hashMe.sourceAlphaBlendFactor      = (unsigned int)blendDesc.sourceAlphaBlendFactor;
     hashMe.destinationAlphaBlendFactor = (unsigned int)blendDesc.destinationAlphaBlendFactor;
     int index                          = 0;
-    auto vertexLayout                  = pipelineDesc.programState->getVertexLayout();
-    for (const auto& [_, bindingDesc] : vertexLayout->getBindings())
+    auto vertexLayout                  = pipelineDesc.vertexLayout;
+    for (const auto& bindingDesc : vertexLayout->getBindings())
     {
         /*
          stepFunction:1     stride:15       offest:10       format:5        needNormalized:1
@@ -246,9 +246,8 @@ RenderPipelineImpl::~RenderPipelineImpl()
 void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc,
                                         const PipelineDesc& desc)
 {
-    auto vertexLayout = desc.programState->getVertexLayout();
-    if (!vertexLayout->isValid())
-        return;
+    auto vertexLayout = desc.vertexLayout;
+    assert(vertexLayout);
 
     int stride = static_cast<int>(vertexLayout->getStride());
     auto vertexDesc = mtlDesc.vertexDescriptor;
@@ -256,14 +255,15 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc,
     vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction =
         toMTLVertexStepFunc(vertexLayout->getVertexStepMode());
 
-    for (const auto& [_, bindingDesc] : vertexLayout->getBindings())
+    for (const auto& bindingDesc : vertexLayout->getBindings())
     {
+        if(bindingDesc.instanceStepRate) [[unlikely]]
+            continue;
         vertexDesc.attributes[bindingDesc.index].format =
             toMTLVertexFormat(bindingDesc.format, bindingDesc.needToBeNormallized);
         vertexDesc.attributes[bindingDesc.index].offset = bindingDesc.offset;
         // Buffer index will always be 0;
         vertexDesc.attributes[bindingDesc.index].bufferIndex = DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
-
     }
 }
 
