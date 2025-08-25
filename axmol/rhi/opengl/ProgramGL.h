@@ -99,7 +99,7 @@ public:
      * Get program object.
      * @return Program object.
      */
-    inline GLuint getHandler() const { return _program; }
+    inline GLuint internalHandle() const { return _program; }
 
     /**
      * Get uniform location by name.

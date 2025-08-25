@@ -356,7 +356,7 @@ void ProgramImpl::bindUniformBuffers(const char* buffer, size_t bufferSize)
     {
         auto& desc = _uniformBuffers[blockIdx];
         desc._ubo->updateData(buffer + desc._location, desc._size);
-        __state->bindUniformBufferBase(blockIdx, desc._ubo->getHandler());
+        __state->bindUniformBufferBase(blockIdx, desc._ubo->internalHandle());
     }
 
     CHECK_GL_ERROR_DEBUG();

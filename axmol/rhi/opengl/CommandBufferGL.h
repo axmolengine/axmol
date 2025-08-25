@@ -224,7 +224,6 @@ protected:
     void cleanResources();
 
     BufferImpl* _vertexBuffer                     = nullptr;
-    ProgramState* _programState                   = nullptr;
     BufferImpl* _indexBuffer                      = nullptr;
     BufferImpl* _instanceBuffer                   = nullptr;
     RenderPipelineImpl* _renderPipeline           = nullptr;

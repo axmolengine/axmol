@@ -251,7 +251,6 @@ private:
 
     DepthStencilStateImpl* _depthStencilStateImpl = nullptr;
     RenderPipelineImpl* _renderPipelineImpl       = nullptr;
-    ProgramState* _programState                   = nullptr;
 
     unsigned int _renderTargetWidth  = 0;
     unsigned int _renderTargetHeight = 0;

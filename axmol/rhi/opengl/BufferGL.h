@@ -82,7 +82,7 @@ public:
      * Get buffer object.
      * @return Buffer object.
      */
-    inline GLuint getHandler() const { return _buffer; }
+    inline GLuint internalHandle() const { return _buffer; }
 
 private:
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
