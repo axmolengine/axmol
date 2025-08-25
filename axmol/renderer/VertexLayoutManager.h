@@ -32,7 +32,7 @@ namespace ax
 {
 class ProgramManager;
 
-AX_DLL class VertexLayoutManager
+class AX_DLL VertexLayoutManager
 {
     friend class ::ax::ProgramManager;
 

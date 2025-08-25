@@ -65,7 +65,7 @@ enum class VertexLayoutKind
  * @{
  */
 
-AX_DLL struct InputBindingDesc
+struct AX_DLL InputBindingDesc
 {
     InputBindingDesc() = default;
     InputBindingDesc(std::string_view _semantic,
@@ -83,7 +83,7 @@ AX_DLL struct InputBindingDesc
     uint8_t instanceStepRate = 0;
 };
 
-AX_DLL struct VertexLayoutDesc
+struct AX_DLL VertexLayoutDesc
 {
     friend class VertexLayout;
 
