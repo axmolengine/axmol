@@ -25,20 +25,24 @@
 
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/rhi/RHITypes.h"
-#include <d3d11.h>
 
-namespace ax::rhi::d3d
+namespace ax::rhi::gl
 {
+class BufferImpl;
 class VertexLayoutImpl : public VertexLayout
 {
 public:
     explicit VertexLayoutImpl(VertexLayoutDesc&&);
     ~VertexLayoutImpl() override;
 
-    void apply(ID3D11DeviceContext* context, Program* program) const;
+    void apply(BufferImpl* vertexBuffer, BufferImpl* instanceBuffer) const;
+
+    void invalidate() { _vao = 0; }
 
 private:
 
-    mutable ID3D11InputLayout* _d3dVL{nullptr};
+    void setupVAO();
+
+    mutable GLuint _vao{0};
 };
 }  // namespace ax::rhi::d3d

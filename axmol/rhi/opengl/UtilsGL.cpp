@@ -29,7 +29,8 @@
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/platform/GL.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 struct GPUTextureFormatInfo
 {
@@ -126,6 +127,20 @@ GLenum UtilsGL::toGLAttributeType(VertexFormat vertexFormat)
     return ret;
 }
 
+bool UtilsGL::isFloatFormat(VertexFormat vfmt)
+{
+    switch (vfmt)
+    {
+    case VertexFormat::FLOAT4:
+    case VertexFormat::FLOAT3:
+    case VertexFormat::FLOAT2:
+    case VertexFormat::FLOAT:
+    case VertexFormat::MAT4:
+        return true;
+    }
+    return false;
+}
+
 GLsizei UtilsGL::getGLAttributeSize(VertexFormat vertexFormat)
 {
     GLsizei ret = 0;
@@ -203,10 +218,7 @@ GLsizei UtilsGL::getGLDataTypeSize(GLenum size)
     return ret;
 }
 
-void UtilsGL::toGLTypes(PixelFormat textureFormat,
-                        GLint& internalFormat,
-                        GLuint& format,
-                        GLenum& type)
+void UtilsGL::toGLTypes(PixelFormat textureFormat, GLint& internalFormat, GLuint& format, GLenum& type)
 {
     if (textureFormat < PixelFormat::COUNT) [[likely]]
     {
@@ -410,4 +422,4 @@ GLenum UtilsGL::toGLCullMode(CullMode mode)
         return GL_FRONT;
 }
 
-}
+}  // namespace ax::rhi::gl

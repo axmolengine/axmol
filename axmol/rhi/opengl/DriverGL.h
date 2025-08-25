@@ -35,6 +35,13 @@ namespace ax::rhi::gl {
  * @{
  */
 
+struct DriverCapImpl
+{
+    bool textureCompressionAstc{false};
+    bool textureCompressionEtc2{false};
+    bool vertexAttribBinding{false};
+};
+
 /**
  * Use to create resoureces.
  */
@@ -95,6 +102,8 @@ public:
      * @return A Program instance.
      */
     Program* createProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+
+    VertexLayout* createVertexLayout(VertexLayoutDesc&&) override;
 
     void resetState() override;
 
@@ -168,8 +177,7 @@ private:
 
     const char* _version{nullptr};
 
-    bool _textureCompressionAstc{false};
-    bool _textureCompressionEtc2{false};
+    DriverCapImpl _cap{};
 };
 // end of _opengl group
 /// @}

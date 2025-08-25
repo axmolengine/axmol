@@ -36,6 +36,7 @@
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/RenderTargetGL.h"
 #include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/rhi/opengl/VertexLayoutGL.h"
 #include <algorithm>
 
 namespace ax::rhi::gl {
@@ -139,18 +140,20 @@ void CommandBufferImpl::setRenderPipeline(RenderPipeline* renderPipeline)
  * Update depthStencil status, improvment: for metal backend cache it
  * @param depthStencilState Specifies the depth and stencil status
  */
-void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& descriptor)
+void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 {
-    _depthStencilStateImpl->update(descriptor);
+    _depthStencilStateImpl->update(desc);
 }
 
 /**
  * Update render pipeline status
  * @param depthStencilState Specifies the depth and stencil status
  */
-void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor)
+void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {
-    _renderPipeline->update(rt, descriptor);
+    CommandBuffer::updatePipelineState(rt, desc);
+
+    _renderPipeline->update(rt, desc);
 }
 
 void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
@@ -166,13 +169,6 @@ void CommandBufferImpl::setCullMode(CullMode mode)
 void CommandBufferImpl::setWinding(Winding winding)
 {
     __state->winding(winding);
-}
-
-void CommandBufferImpl::setProgramState(ProgramState* programState)
-{
-    AX_SAFE_RETAIN(programState);
-    AX_SAFE_RELEASE(_programState);
-    _programState = programState;
 }
 
 void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
@@ -314,7 +310,7 @@ void CommandBufferImpl::prepareDrawing() const
     uint32_t usedBits{0};
 
     bindVertexBuffer(usedBits);
-    __state->disableUnusedVertexAttribs(usedBits);
+    // __state->disableUnusedVertexAttribs(usedBits);
 
     bindUniforms(program);
 
@@ -333,10 +329,12 @@ void CommandBufferImpl::prepareDrawing() const
 
 void CommandBufferImpl::bindVertexBuffer(uint32_t& usedBits) const
 {
-    auto vertexLayout = _programState->getVertexLayout();
+    assert(_vertexLayout);
 
-    if (!vertexLayout->isValid())
-        return;
+    auto vl = static_cast<VertexLayoutImpl*>(_vertexLayout);
+    vl->apply(_vertexBuffer, _instanceBuffer);
+
+#if 0
 
     // Bind vertex buffers and set the attributes.
     {
@@ -390,6 +388,7 @@ void CommandBufferImpl::bindVertexBuffer(uint32_t& usedBits) const
             }
         }
     }
+#endif
 }
 
 void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
@@ -415,7 +414,8 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
 
 void CommandBufferImpl::cleanResources()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    _programState = nullptr;
+    _vertexLayout = nullptr;
 }
 
 void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float width, float height)

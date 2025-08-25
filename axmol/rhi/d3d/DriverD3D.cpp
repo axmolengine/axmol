@@ -467,7 +467,8 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
     //     VAO,
     //     MAPBUFFER,
     //     DEPTH24,
-    //     ASTC
+    //     ASTC,
+    //     VERTEX_ATTRIB_BINDING
     // };
 
     switch (feature)
@@ -477,6 +478,7 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
     case FeatureType::PACKED_DEPTH_STENCIL:
     case FeatureType::IMG_FORMAT_BGRA8888:
     case FeatureType::S3TC:
+    case FeatureType::VERTEX_ATTRIB_BINDING:
         return true;
     }
     return false;

@@ -54,11 +54,18 @@ struct UtilsGL
     static GLsizei getGLAttributeSize(VertexFormat vertexFormat);
 
     /**
+     * check whether float format
+     * @param vertexFormat Specifies the attribute type.
+     */
+    static bool isFloatFormat(VertexFormat vfmt);
+
+    /**
      * Get opengl data type size in bytes. i.e. GL_FLOAT_VEC4 data type size is sizeof(GLfloat) * 4.
      * @param size  Specifies the data type.
      * @return Data type size in bytes.
      */
     static GLsizei getGLDataTypeSize(GLenum size);
+
 
     /**
      * Get textrue parameters from texture pixle format.

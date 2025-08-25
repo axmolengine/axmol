@@ -51,6 +51,7 @@ if(AX_RENDER_API STREQUAL "gl")
     rhi/opengl/ShaderModuleGL.h
     rhi/opengl/TextureGL.h
     rhi/opengl/UtilsGL.h
+    rhi/opengl/VertexLayoutGL.h
   )
 
   list(APPEND _AX_RHI_SRC
@@ -65,6 +66,7 @@ if(AX_RENDER_API STREQUAL "gl")
     rhi/opengl/TextureGL.cpp
     rhi/opengl/UtilsGL.cpp
     rhi/opengl/RenderTargetGL.cpp
+    rhi/opengl/VertexLayoutGL.cpp
   )
 elseif(AX_RENDER_API STREQUAL "mtl")
   list(APPEND _AX_RHI_HEADER

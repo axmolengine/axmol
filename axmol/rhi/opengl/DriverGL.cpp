@@ -33,6 +33,7 @@
 #include "axmol/rhi/opengl/ProgramGL.h"
 #include "axmol/rhi/opengl/RenderTargetGL.h"
 #include "axmol/rhi/opengl/MacrosGL.h"
+#include "axmol/rhi/opengl/VertexLayoutGL.h"
 
 #include "axmol/base/axstd.h"
 #include "axmol/base/format.h"
@@ -146,15 +147,25 @@ DriverImpl::DriverImpl()
         const auto textureCompressions = std::set<int>{formats.begin(), formats.end()};
 
         if (textureCompressions.find(GL_COMPRESSED_RGBA_ASTC_4x4_KHR) != textureCompressions.end())
-            _textureCompressionAstc = true;
+            _cap.textureCompressionAstc = true;
 
         if (textureCompressions.find(GL_COMPRESSED_RGBA8_ETC2_EAC) != textureCompressions.end())
-            _textureCompressionEtc2 = true;
+            _cap.textureCompressionEtc2 = true;
     }
 
+    // vertex binding attrib binding
+    _cap.vertexAttribBinding = glBindVertexBuffer != nullptr;
+    if (_cap.vertexAttribBinding)
+    {
+        AXLOGI("[RHI] OpenGL extension detected: GL_ARB_vertex_attrib_binding (Vertex Attribute Binding) is supported");
+    }
+
+    // default FBO
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
 
+    // reset gl state
     resetState();
+
 
     CHECK_GL_ERROR_DEBUG();
 }
@@ -355,6 +366,11 @@ RenderPipeline* DriverImpl::createRenderPipeline()
 Program* DriverImpl::createProgram(std::string_view vertexShader, std::string_view fragmentShader)
 {
     return new ProgramImpl(vertexShader, fragmentShader);
+}
+
+VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
+{
+    return new VertexLayoutImpl(std::move(desc));
 }
 
 void DriverImpl::resetState()
@@ -606,7 +622,7 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
         featureSupported = hasExtension("GL_OES_compressed_ETC1_RGB8_texture"sv);
         break;
     case FeatureType::ETC2:
-        featureSupported = _textureCompressionEtc2;
+        featureSupported = _cap.textureCompressionEtc2;
         break;
     case FeatureType::S3TC:
 #ifdef GL_EXT_texture_compression_s3tc
@@ -650,8 +666,11 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
         // "context lost" error. This occurs even if all GL errors are properly handled inside
         // checkASTCRenderability(), making the approach unreliable on affected devices.
         // see also: https://github.com/axmolengine/axmol/issues/2484
-        featureSupported = _textureCompressionAstc;
+        featureSupported = _cap.textureCompressionAstc;
 #endif
+        break;
+    case FeatureType::VERTEX_ATTRIB_BINDING:
+        featureSupported = _cap.vertexAttribBinding; 
         break;
     default:
         break;

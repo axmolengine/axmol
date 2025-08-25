@@ -208,13 +208,14 @@ void CommandBufferImpl::beginRenderPass(const RenderTarget* renderTarget, const 
     //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
 
-void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& descriptor)
+void CommandBufferImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 {
-    _depthStencilStateImpl->update(descriptor);
+    _depthStencilStateImpl->update(desc);
 }
 
-void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& descriptor)
+void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const PipelineDesc& desc)
 {
+    CommandBuffer::updatePipelineState(rt, desc);
     _renderPipelineImpl->update(rt, descriptor);
     [_mtlRenderEncoder setRenderPipelineState:_renderPipelineImpl->getMTLRenderPipelineState()];
 }

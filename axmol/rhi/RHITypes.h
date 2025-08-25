@@ -364,14 +364,16 @@ enum class TextureCubeFace : uint32_t
 struct SamplerDesc
 {
     SamplerFilter minFilter : 2         = SamplerFilter::MIN_LINEAR;
-    SamplerFilter magFilter : 1         = SamplerFilter::MAG_LINEAR;
+    SamplerFilter magFilter : 2         = SamplerFilter::MAG_LINEAR;
     SamplerFilter mipFilter : 2         = SamplerFilter::MIP_DEFAULT;
     SamplerAddressMode sAddressMode : 2 = SamplerAddressMode::CLAMP;
     SamplerAddressMode tAddressMode : 2 = SamplerAddressMode::CLAMP;
     SamplerAddressMode wAddressMode : 2 = SamplerAddressMode::CLAMP;
     CompareFunc compareFunc : 4         = CompareFunc::NEVER;
     uint32_t anisotropy : 4             = 1;
+    uint32_t reserved: 12               = 0;
 };
+static_assert(sizeof(SamplerDesc) == 4, "incompatible type: SamplerDesc");
 
 using SamplerHandle = void*;
 

@@ -64,7 +64,8 @@ enum class FeatureType : uint32_t
     VAO,
     MAPBUFFER,
     DEPTH24,
-    ASTC
+    ASTC,
+    VERTEX_ATTRIB_BINDING, // GL330 / GLES30, need detect
 };
 
 /**
