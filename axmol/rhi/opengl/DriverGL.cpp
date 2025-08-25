@@ -153,12 +153,11 @@ DriverImpl::DriverImpl()
             _cap.textureCompressionEtc2 = true;
     }
 
-    // vertex binding attrib binding
-    _cap.vertexAttribBinding = glBindVertexBuffer != nullptr;
-    if (_cap.vertexAttribBinding)
-    {
-        AXLOGI("[RHI] OpenGL extension detected: GL_ARB_vertex_attrib_binding (Vertex Attribute Binding) is supported");
-    }
+    // vertex binding attrib binding, TODO: detect it
+    // if (_cap.vertexAttribBinding)
+    // {
+    //     AXLOGI("[RHI] OpenGL extension detected: GL_ARB_vertex_attrib_binding (Vertex Attribute Binding) is supported");
+    // }
 
     // default FBO
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
@@ -670,7 +669,7 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
 #endif
         break;
     case FeatureType::VERTEX_ATTRIB_BINDING:
-        featureSupported = _cap.vertexAttribBinding; 
+        featureSupported = _cap.vertexAttribBinding;
         break;
     default:
         break;
