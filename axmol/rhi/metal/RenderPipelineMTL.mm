@@ -249,21 +249,44 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc,
     auto vertexLayout = desc.vertexLayout;
     assert(vertexLayout);
 
-    int stride = static_cast<int>(vertexLayout->getStride());
     auto vertexDesc = mtlDesc.vertexDescriptor;
-    vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stride = stride;
-    vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction =
-        toMTLVertexStepFunc(vertexLayout->getVertexStepMode());
+    vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stride = vertexLayout->getStride();
+    vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerVertex;
 
+    unsigned int instanceAttribCount = 0;
     for (const auto& bindingDesc : vertexLayout->getBindings())
     {
-        if(bindingDesc.instanceStepRate) [[unlikely]]
-            continue;
-        vertexDesc.attributes[bindingDesc.index].format =
-            toMTLVertexFormat(bindingDesc.format, bindingDesc.needToBeNormallized);
-        vertexDesc.attributes[bindingDesc.index].offset = bindingDesc.offset;
-        // Buffer index will always be 0;
-        vertexDesc.attributes[bindingDesc.index].bufferIndex = DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
+        if (bindingDesc.format != VertexFormat::MAT4) {
+            auto attrib = vertexDesc.attributes[bindingDesc.index];
+            attrib.format = toMTLVertexFormat(bindingDesc.format, bindingDesc.needToBeNormallized);
+            attrib.offset = bindingDesc.offset;
+            if (!bindingDesc.instanceStepRate) {
+                attrib.bufferIndex = DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
+            } else {
+                attrib.bufferIndex = DriverImpl::VBO_INSTANCING_BINDING_INDEX;
+                ++instanceAttribCount;
+                vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepRate = bindingDesc.instanceStepRate;
+            }
+        } else {
+            const uint32_t colStride = sizeof(float) * 4;
+            for (uint32_t col = 0; col < 4; ++col) {
+                auto attrib = vertexDesc.attributes[bindingDesc.index + col];
+                attrib.format = MTLVertexFormatFloat4;
+                attrib.offset = bindingDesc.offset + col * colStride;
+                if (!bindingDesc.instanceStepRate) {
+                    attrib.bufferIndex = DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
+                } else {
+                    attrib.bufferIndex = DriverImpl::VBO_INSTANCING_BINDING_INDEX;
+                    vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepRate = bindingDesc.instanceStepRate;
+                    ++instanceAttribCount;
+                }
+            }
+        }
+    }
+    
+    if (instanceAttribCount) {
+        vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stride = vertexLayout->getInstanceStride();
+        vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerInstance;
     }
 }
 

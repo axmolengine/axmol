@@ -302,8 +302,8 @@ void ShaderModuleImpl::setBuiltinLocations()
     // a_normal
     _builtinVertexInputs[VertexInputKind::NORMAL] = getVertexInputDesc(VERTEX_INPUT_NAME_NORMAL);
 
-    // a_instance, metal use SSUBO(Shader Storage Uniform Buffer)
-    // _builtinVertexInputs[VertexInputKind::INSTANCE] = getVertexInputDesc(VERTEX_INPUT_NAME_INSTANCE);
+    // a_instance, metal use SSUBO(Shader Storage Uniform Buffer) before axmol-3.0.0
+    _builtinVertexInputs[VertexInputKind::INSTANCE] = getVertexInputDesc(VERTEX_INPUT_NAME_INSTANCE);
 
     /*--- Builtin Uniforms ---*/
 
