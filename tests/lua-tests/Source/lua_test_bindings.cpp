@@ -158,23 +158,25 @@ bool DrawNode3D::init()
 
     const auto& inputs = _programState->getProgram()->getActiveVertexInputs();
     auto iter          = inputs.find("a_position");
-    auto vertexLayout         = _programState->getMutableVertexLayout();
+    auto desc          = axvlm->allocateVertexLayoutDesc();
+    desc.startLayout(2);
     if (iter != inputs.end())
     {
-        vertexLayout->setAttrib(iter->first, &iter->second, rhi::VertexFormat::FLOAT3, 0, false);
+        desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::FLOAT3, 0, false);
     }
     iter = inputs.find("a_color");
     if (iter != inputs.end())
     {
-        vertexLayout->setAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3),
+        desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3),
                                       true);
     }
-    vertexLayout->setStride(sizeof(V3F_C4B));
+    desc.endLayout();
+    _vertexLayout = axvlm->acquireVertexLayout(std::move(desc));
+
+    _customCommand.setWeakPSVL(_programState, _vertexLayout);
 
     _customCommand.createVertexBuffer(sizeof(V3F_C4B), INITIAL_VERTEX_BUFFER_LENGTH,
                                       CustomCommand::BufferUsage::DYNAMIC);
-
-    _customCommand.getPipelineDesc().programState = _programState;
 
     _dirty = true;
 
@@ -275,7 +277,7 @@ void DrawNode3D::setBlendFunc(const BlendFunc& blendFunc)
 {
     _blendFunc = blendFunc;
     // update blend mode
-    auto& blend                = _customCommand.getPipelineDesc().blendDesc;
+    auto& blend                = _customCommand.blendDesc();
     blend.blendEnabled         = true;
     blend.sourceRGBBlendFactor = blend.sourceAlphaBlendFactor = _blendFunc.src;
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = _blendFunc.dst;
