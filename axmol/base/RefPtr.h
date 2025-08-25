@@ -78,6 +78,7 @@ namespace ax
 template <typename T>
 struct ReferencedObject
 {
+    explicit ReferencedObject(T* ptr) : _ptr(ptr) {}
     T* _ptr;
 };
 
