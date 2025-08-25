@@ -40,13 +40,19 @@ struct equal_to
     using is_transparent = void;
 };
 
-template <typename _Valty>
-using stl_string_map = std::map<std::string, _Valty, std::less<>>;
-using stl_string_set = std::set<std::string, std::less<>>;
+template <typename _Kty, typename _Valty>
+using hash_map = tsl::robin_map<_Kty, _Valty, std::hash<_Kty>, equal_to>;
+
+template <typename _Kty>
+using hash_set = tsl::robin_map<_Kty, std::hash<_Kty>, equal_to>;
 
 template <typename _Valty>
 using string_map = tsl::robin_map<std::string, _Valty, string_hash, equal_to>;
 using string_set = tsl::robin_set<std::string, string_hash, equal_to>;
+
+template <typename _Valty>
+using stl_string_map = std::map<std::string, _Valty, std::less<>>;
+using stl_string_set = std::set<std::string, std::less<>>;
 
 template <typename _Cont, typename _Kty, typename _Valty>
 inline auto set_item(_Cont& cont, _Kty&& k, _Valty&& v)

@@ -35,7 +35,7 @@ Program::Program(std::string_view vs, std::string_view fs) : _vsSource(vs), _fsS
 
 Program::~Program()
 {
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE(_vertexLayout);
 }
 
 void Program::setProgramIds(uint32_t progType, uint64_t progId)

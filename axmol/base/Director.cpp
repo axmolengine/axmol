@@ -69,6 +69,7 @@ THE SOFTWARE.
 
 #include "axmol/rhi/SamplerCache.h"
 #include "axmol/renderer/VertexLayoutManager.h"
+#include "axmol/3d/VertexInputBinding.h"
 
 namespace ax
 {
@@ -1059,6 +1060,8 @@ void Director::reset()
     resetMatrixStack();
 
     destroyTextureCache();
+
+    VertexInputBinding::clearCache();
 
     rhi::SamplerCache::destroyInstance();
 }

@@ -64,7 +64,7 @@ void RenderCommand::setWeakPSVL(rhi::ProgramState* ps, rhi::VertexLayout* vl)
     if (_ownsPSVL) [[unlikely]]
     {
         AX_SAFE_RELEASE(_pipelineDesc.programState);
-        axvlm->releaseVertexLayout(_pipelineDesc.vertexLayout);
+        AX_SAFE_RELEASE(_pipelineDesc.vertexLayout);
         _ownsPSVL = false;
     }
     if (ps)
@@ -90,7 +90,7 @@ void RenderCommand::setOwnPSVL(rhi::ProgramState* ps, rhi::VertexLayout* vl, uns
     if (_ownsPSVL)
     {
         AX_SAFE_RELEASE(_pipelineDesc.programState);
-        axvlm->releaseVertexLayout(_pipelineDesc.vertexLayout);
+        AX_SAFE_RELEASE(_pipelineDesc.vertexLayout);
     }
 
     _pipelineDesc.programState = ps;
@@ -103,7 +103,7 @@ void RenderCommand::releasePSVL()
     if (_ownsPSVL)
     {
         AX_SAFE_RELEASE(_pipelineDesc.programState);
-        axvlm->releaseVertexLayout(_pipelineDesc.vertexLayout);
+        AX_SAFE_RELEASE(_pipelineDesc.vertexLayout);
         _ownsPSVL = false;
     }
 }

@@ -111,7 +111,7 @@ AX_DLL struct VertexLayoutDesc
     /*
      * End to define vertex layout and compute hash value.
     */
-    void endLayout();
+    void endLayout(int stride = -1);
 
     /*
     * compute hash

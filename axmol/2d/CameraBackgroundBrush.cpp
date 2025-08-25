@@ -51,7 +51,7 @@ CameraBackgroundBrush::CameraBackgroundBrush() {}
 CameraBackgroundBrush::~CameraBackgroundBrush()
 {
     AX_SAFE_RELEASE_NULL(_programState);
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE_NULL(_vertexLayout);
 }
 
 CameraBackgroundBrush* CameraBackgroundBrush::createNoneBrush()
@@ -212,7 +212,7 @@ CameraBackgroundColorBrush::CameraBackgroundColorBrush() : _color(0.f, 0.f, 0.f,
 
 CameraBackgroundColorBrush::~CameraBackgroundColorBrush() {
     AX_SAFE_RELEASE(_programState);
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE(_vertexLayout);
 }
 
 bool CameraBackgroundColorBrush::init()

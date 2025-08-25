@@ -19,16 +19,32 @@ public:
 
     VertexLayoutManager();
 
+    /**
+     * @brief acquire builtin vertex layout
+     *
+     * @param kind
+     * @return VertexLayout*
+     */
     VertexLayout* acquireBuiltinVertexLayout(VertexLayoutKind kind);
 
-    /// @brief acquire vertex layout by description
-    /// @return
+    /**
+     * @brief acquire vertex layout by desc
+     *
+     * @return VertexLayout*
+     */
     VertexLayout* acquireVertexLayout(VertexLayoutDesc&&);
 
-    /// @brief release a vertex layout
-    /// @param layout
-    void releaseVertexLayout(VertexLayout*& layout);
+    /**
+     * @brief Remove unused vertex layout
+     * @remark: only remove custom
+     */
+    void removeUnusedVertexLayouts();
 
+    /**
+     * @brief allocate vertex layout desc fast
+     *
+     * @return VertexLayoutDesc
+     */
     VertexLayoutDesc allocateVertexLayoutDesc();
 
 private:

@@ -198,7 +198,7 @@ Effect::Effect() {}
 Effect::~Effect()
 {
     AX_SAFE_RELEASE_NULL(_programState);
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE_NULL(_vertexLayout);
 }
 
 // Blur

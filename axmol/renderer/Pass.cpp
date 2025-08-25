@@ -106,7 +106,7 @@ Pass::~Pass()
 {
     AX_SAFE_RELEASE(_vertexInputBinding);
     AX_SAFE_RELEASE(_programState);
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE(_vertexLayout);
 }
 
 Pass* Pass::clone() const
@@ -133,14 +133,16 @@ rhi::ProgramState* Pass::getProgramState() const
 
 void Pass::setProgramState(rhi::ProgramState* programState)
 {
-    if (_programState != programState)
+    if (Object::assign(_programState, programState))
     {
-        AX_SAFE_RELEASE(_programState);
-        _programState = programState;
-        AX_SAFE_RETAIN(_programState);
         initUniformLocations();
         _hashDirty = true;
     }
+}
+
+void Pass::setVertexLayout(rhi::VertexLayout* vertexLayout)
+{
+    Object::assign(_vertexLayout, vertexLayout);
 }
 
 void Pass::initUniformLocations()
@@ -263,12 +265,7 @@ void Pass::setTechnique(Technique* technique)
 
 void Pass::setVertexInputBinding(VertexInputBinding* binding)
 {
-    if (_vertexInputBinding != binding)
-    {
-        AX_SAFE_RELEASE(_vertexInputBinding);
-        _vertexInputBinding = binding;
-        AX_SAFE_RETAIN(_vertexInputBinding);
-    }
+    Object::assign(_vertexInputBinding, binding);
 }
 
 VertexInputBinding* Pass::getVertexAttributeBinding() const

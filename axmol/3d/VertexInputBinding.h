@@ -59,7 +59,7 @@ class AX_DLL VertexInputBinding : public Object
 {
 public:
     /**
-     * Creates a new VertexInputBinding between the given MeshVertexData and GLProgramState.
+     * Spawn a VertexInputBinding with cache, autorelease
      *
      * If a VertexInputBinding matching the specified MeshVertexData and GLProgramState already
      * exists, it will be returned. Otherwise, a new VertexInputBinding will
@@ -72,7 +72,9 @@ public:
      *
      * @return A VertexInputBinding for the requested parameters.
      */
-    static VertexInputBinding* create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
+    static VertexInputBinding* spawn(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*, bool instancing);
+
+    static void clearCache();
 
     /**
      * Binds this vertex array object.
@@ -105,20 +107,18 @@ private:
     /**
      * Hidden copy assignment operator.
      */
-    VertexInputBinding& operator=(const VertexInputBinding&);
+    VertexInputBinding& operator=(const VertexInputBinding&) = delete;
 
-    bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
+    bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*, bool instancing);
     void setVertexInputPointer(VertexLayoutDesc& desc, std::string_view name,
                                 rhi::VertexFormat type,
                                 bool normalized,
                                 int offset,
                                 int flag);
-    const rhi::VertexInputDesc* getVertexInputDesc(std::string_view name);
-    void parseAttributes();
 
-    MeshIndexData* _meshIndexData{nullptr};
     ProgramState* _programState{nullptr};
     VertexLayout* _vertexLayout{nullptr};
+    uint32_t _hash{0};
     uint32_t _vertexAttribsFlags{0};
 };
 

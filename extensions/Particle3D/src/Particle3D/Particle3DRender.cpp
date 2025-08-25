@@ -51,7 +51,7 @@ Particle3DQuadRender::~Particle3DQuadRender()
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
 
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE(_vertexLayout);
 }
 
 Particle3DQuadRender* Particle3DQuadRender::create(std::string_view texFile)

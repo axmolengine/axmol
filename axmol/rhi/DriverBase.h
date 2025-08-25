@@ -49,6 +49,8 @@ class VertexLayout;
 
 class SamplerCache;
 
+class VertexLayoutDesc;
+
 enum class FeatureType : uint32_t
 {
     ETC1,

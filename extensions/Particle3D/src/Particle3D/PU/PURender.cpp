@@ -608,7 +608,7 @@ PUParticle3DEntityRender::~PUParticle3DEntityRender()
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE(_vertexLayout);
 }
 
 bool PUParticle3DEntityRender::initRender(std::string_view texFile)

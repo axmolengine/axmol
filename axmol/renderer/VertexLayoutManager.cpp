@@ -247,35 +247,22 @@ VertexLayout* VertexLayoutManager::acquireVertexLayout(VertexLayoutDesc&& desc)
     return layout;
 }
 
-/// @brief release a vertex layout
-/// @param layout
-void VertexLayoutManager::releaseVertexLayout(VertexLayout*& layout)
+void VertexLayoutManager::removeUnusedVertexLayouts()
 {
-    if (layout)
+    for (auto it = _customVertexLayouts.cbegin(); it != _customVertexLayouts.cend(); /* nothing */)
     {
-        auto builtinId = layout->getBuiltinId();
-        if (builtinId >= 0)
+        auto vl = it->second;
+        if (vl->getReferenceCount() == 1)
         {
-            assert(builtinId < (int)VertexLayoutKind::Count && builtinId < (int)VertexLayoutKind::Count);
-            // assert(layout == _builtinVertexLayouts[builtinId]);
+            AXLOGD("VertexLayoutManager: removing unused vertex layout: {}", it->first);
 
-            if (layout->getReferenceCount() == 1)
-                _builtinVertexLayouts[builtinId] = nullptr;
+            vl->release();
+            it = _customVertexLayouts.erase(it);
         }
         else
         {
-            auto key = layout->getHash();
-            auto it  = _customVertexLayouts.find(key);
-            if (it != _customVertexLayouts.end())
-            {
-                assert(layout == it->second);
-                if (layout->getReferenceCount() == 1)
-                    _customVertexLayouts.erase(it);
-            }
+            ++it;
         }
-
-        layout->release();
-        layout = nullptr;
     }
 }
 

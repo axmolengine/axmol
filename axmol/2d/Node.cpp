@@ -198,7 +198,8 @@ Node::~Node()
 
     delete[] _additionalTransform;
     AX_SAFE_RELEASE(_programState);
-    axvlm->releaseVertexLayout(_vertexLayout);
+    assert(!_vertexLayout || _vertexLayout->getReferenceCount() > 1);
+    AX_SAFE_RELEASE(_vertexLayout);
 }
 
 bool Node::init()

@@ -95,7 +95,7 @@ NavMeshDebugDraw::~NavMeshDebugDraw()
     }
     AX_SAFE_RELEASE_NULL(_programState);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE_NULL(_vertexLayout);
 }
 
 void NavMeshDebugDraw::depthMask(bool state)

@@ -95,7 +95,7 @@ PUBillboardChain::~PUBillboardChain()
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
-    axvlm->releaseVertexLayout(_vertexLayout);
+    AX_SAFE_RELEASE(_vertexLayout);
 }
 //-----------------------------------------------------------------------
 void PUBillboardChain::setupChainContainers()

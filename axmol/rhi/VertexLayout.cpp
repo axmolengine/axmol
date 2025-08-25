@@ -81,10 +81,13 @@ void VertexLayoutDesc::startLayout(size_t capacity)
     _bindings.reserve(capacity);
 }
 
-void VertexLayoutDesc::endLayout()
+void VertexLayoutDesc::endLayout(int stride)
 {
     // compute hash
     _hash = XXH32(_bindings.data(), _bindings.size() * sizeof(InputBindingDesc), 0);
+
+    if (stride != -1)
+        _strides[0] = stride;
 }
 
 void VertexLayoutDesc::addAttrib(std::string_view name,

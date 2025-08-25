@@ -166,7 +166,7 @@ namespace spine {
 		pipelinePS = _programState;
 
 		if (needsUpdateStateLayout) {
-            axvlm->releaseVertexLayout(_vertexLayout);
+            AX_SAFE_RELEASE_NULL(_vertexLayout);
 			updateProgramStateLayout(_programState, _vertexLayout);
         }
 
@@ -176,6 +176,7 @@ namespace spine {
 
 	TwoColorTrianglesCommand::~TwoColorTrianglesCommand() {
 		AX_SAFE_RELEASE_NULL(_programState);
+        AX_SAFE_RELEASE_NULL(_vertexLayout);
 	}
 
 	void TwoColorTrianglesCommand::generateMaterialID() {
