@@ -256,6 +256,7 @@ Terrain::Terrain()
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
     _dummyTexture = _director->getTextureCache()->getWhiteTexture();
+    AX_SAFE_RETAIN(_dummyTexture);
 }
 
 void Terrain::setChunksLOD(const Vec3& cameraPos)
