@@ -355,6 +355,11 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
             const auto arraySize = slots.size();
             if (!arraySize) [[unlikely]]
                 continue;
+
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+            location = bindingSet.loc;
+#endif
+
             if (arraySize == 1) 
             { // perform bind for 'uniform sampler2D u_tex;' or 'uniform sampler2DArray u_texs;'
                 static_cast<TextureImpl*>(texs[0])->apply(slots[0]);

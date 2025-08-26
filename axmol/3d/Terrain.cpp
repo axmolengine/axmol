@@ -47,15 +47,6 @@ using namespace ax;
 
 namespace ax
 {
-
-namespace
-{
-// It's used for creating a default texture when lightMap is nullpter
-static unsigned char ax_2x2_white_image[] = {
-    // RGBA8888
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-}  // namespace
-
 Terrain* Terrain::create(TerrainData& parameter, CrackFixedType fixedType)
 {
     Terrain* terrain = new Terrain();
@@ -138,9 +129,7 @@ void Terrain::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t f
         _programState->setTexture(_detailMapLocation, _detailMapBindings[0].slot, _detailMapBindings[0].tex);
         int hasAlphaMap = 0;
         _programState->setUniform(_alphaIsHasAlphaMapLocation, &hasAlphaMap, sizeof(hasAlphaMap));
-#if AX_RENDER_API != AX_RENDER_API_GL
         _programState->setTexture(_lightMapLocation, BINDING_SLOT_ALPHA_MAP, _dummyTexture->getRHITexture());
-#endif
     }
     else
     {
@@ -166,9 +155,7 @@ void Terrain::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t f
     {
         int hasLightMap = 0;
         _programState->setUniform(_lightMapCheckLocation, &hasLightMap, sizeof(hasLightMap));
-#if AX_RENDER_API != AX_RENDER_API_GL
         _programState->setTexture(_lightMapLocation, BINDING_SLOT_LIGHT_MAP, _dummyTexture->getRHITexture());
-#endif
     }
     auto camera = Camera::getVisitingCamera();
 
@@ -268,14 +255,7 @@ Terrain::Terrain()
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { reload(); });
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
-#if AX_RENDER_API == AX_RENDER_API_MTL || AX_RENDER_API == AX_RENDER_API_D3D
-    auto image          = new Image();
-    bool AX_UNUSED isOK = image->initWithRawData(ax_2x2_white_image, sizeof(ax_2x2_white_image), 2, 2, 8);
-    AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
-    _dummyTexture = new Texture2D();
-    _dummyTexture->initWithImage(image);
-    AX_SAFE_RELEASE(image);
-#endif
+    _dummyTexture = _director->getTextureCache()->getWhiteTexture();
 }
 
 void Terrain::setChunksLOD(const Vec3& cameraPos)

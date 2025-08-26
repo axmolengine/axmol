@@ -69,7 +69,7 @@ void TextureBindingSet::assign(const TextureBindingSet& other)
     if (this != &other)
     {
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        setTextureArray(other.location, other.slots, other.texs);
+        setTextureArray(other.loc, other.slots, other.texs);
 #else
         setTextureArray(-1, other.slots, other.texs);
 #endif
@@ -84,7 +84,7 @@ void TextureBindingSet::swap(TextureBindingSet& other)
         std::swap(texs, other.texs);
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        std::swap(location, other.location);
+        std::swap(loc, other.loc);
 #endif
     }
 }
@@ -94,7 +94,7 @@ void TextureBindingSet::setTexture(int location, int slot, rhi::Texture* tex)
     if(tex && slot >= 0) {
         tex->retain();
         releaseTextures();
-        this->slots.push_back(location);
+        this->slots.push_back(slot);
         this->texs.push_back(tex);
     }
 }
@@ -117,7 +117,7 @@ void TextureBindingSet::setTextureArray(int location, std::span<const TextureBin
     }
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    this->location = location_;
+    this->loc = location;
 #endif
 }
 
@@ -141,7 +141,7 @@ void TextureBindingSet::setTextureArray(int location, std::span<const int> slots
     }
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    this->location = location_;
+    this->loc = location;
 #endif
 }
 
@@ -211,10 +211,9 @@ void ProgramState::resetUniforms()
         auto mappedLocation = _program->getMappedLocation(location);
 
         // check if current location had been set before
-        if (_textureBindingInfos.find(location) != _textureBindingInfos.end())
-        {
-            _textureBindingInfos[location].location = mappedLocation;
-        }
+        auto it = _textureBindingSets.find(location);
+        if (it != _textureBindingSets.end())
+            it->second.loc = mappedLocation;
     }
 #endif
 }

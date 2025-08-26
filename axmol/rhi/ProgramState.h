@@ -87,7 +87,7 @@ struct AX_DLL TextureBindingSet
     axstd::pod_vector<int> slots;
     mutable axstd::pod_vector<rhi::Texture*> texs;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    int location = -1;
+    int loc = -1;
 #endif
 };
 
