@@ -348,7 +348,7 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
         auto&& buffer            = _programState->getUniformBuffer();
         program->bindUniformBuffers(buffer.data(), buffer.size());
 
-        for (auto& [location, bindingSet] : _programState->getTextureBindingSets())
+        for (const auto& [location, bindingSet] : _programState->getTextureBindingSets())
         {
             auto& slots = bindingSet.slots;
             auto& texs = bindingSet.texs;
@@ -357,19 +357,20 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
                 continue;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-            location = bindingSet.loc;
+            auto loc = bindingSet.loc;
+#else
+            auto loc = location;
 #endif
-
-            if (arraySize == 1) 
+            if (arraySize == 1)
             { // perform bind for 'uniform sampler2D u_tex;' or 'uniform sampler2DArray u_texs;'
                 static_cast<TextureImpl*>(texs[0])->apply(slots[0]);
-                glUniform1i(location, slots[0]);
+                glUniform1i(loc, slots[0]);
             }
-            else 
+            else
             { // perform bind for 'uniform sampler2D u_details[4];' in shader
                 for(size_t i = 0; i < arraySize; ++i)
                     static_cast<TextureImpl*>(texs[i])->apply(slots[i]);
-                glUniform1iv(location, static_cast<GLsizei>(arraySize), static_cast<const GLint*>(slots.data()));
+                glUniform1iv(loc, static_cast<GLsizei>(arraySize), static_cast<const GLint*>(slots.data()));
             }
         }
     }
