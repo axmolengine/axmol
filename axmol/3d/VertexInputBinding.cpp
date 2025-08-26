@@ -33,7 +33,9 @@ namespace ax
 {
 
 /**
-* FIXME: the cache miss always since programState always cloned
+* axmol-3.0: we use meshIndexData+instancing as key to ensure cache hit
+* older version: cache miss always due to programState always changes when switch
+* render objects
 */
 static tsl::robin_map<uint32_t, VertexInputBinding*>& _bindingCache()
 {
