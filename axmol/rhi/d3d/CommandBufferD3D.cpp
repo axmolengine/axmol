@@ -576,7 +576,7 @@ void CommandBufferImpl::prepareDrawing()
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
         auto& texs     = bindingSet.texs;
-        auto arraySize = bindingSet.slots.size();
+        auto arraySize = texs.size();
         for (size_t k = 0; k < arraySize; ++k)
         {
             const auto slot  = bindingIndex + k;

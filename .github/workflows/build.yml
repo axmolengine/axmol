@@ -144,7 +144,7 @@ jobs:
           templates/**/*.apk
           tests/**/*.apk
   ios:
-    runs-on: macos-latest
+    runs-on: macos-14
     strategy:
       matrix:
         target_os:

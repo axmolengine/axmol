@@ -411,7 +411,7 @@ void CommandBufferImpl::afterDraw()
         [_mtlIndexBuffer release];
         _mtlIndexBuffer = nullptr;
     }
-    
+
     _programState = nullptr;
     _vertexLayout = nullptr;
 }
@@ -432,16 +432,16 @@ void CommandBufferImpl::prepareDrawing() const
 
 void CommandBufferImpl::setTextures() const
 {
-    for (const auto& [location, bindingSet] : _programState->getTextureBindingSets())
+    for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
         auto& texs = bindingSet.texs;
         auto arraySize = texs.size();
         for(auto k = 0; k < arraySize; ++k)
         {
-            const auto bindingIndex = location + k;
+            const auto slot = bindingIndex + k;
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
-            [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:bindingIndex];
-            [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:bindingIndex];
+            [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:slot];
+            [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:slot];
         }
     }
 }
