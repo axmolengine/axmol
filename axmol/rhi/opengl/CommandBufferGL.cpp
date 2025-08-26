@@ -348,10 +348,24 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
         auto&& buffer            = _programState->getUniformBuffer();
         program->bindUniformBuffers(buffer.data(), buffer.size());
 
-        for (auto& [location, bindingInfo] : _programState->getTextureBindingInfos())
+        for (auto& [location, bindingSet] : _programState->getTextureBindingSets())
         {
-            static_cast<TextureImpl*>(bindingInfo.tex)->apply(bindingInfo.slot);
-            glUniform1i(location, bindingInfo.slot);
+            auto& slots = bindingSet.slots;
+            auto& texs = bindingSet.texs;
+            const auto arraySize = slots.size();
+            if (!arraySize) [[unlikely]]
+                continue;
+            if (arraySize == 1) 
+            { // perform bind for 'uniform sampler2D u_tex;' or 'uniform sampler2DArray u_texs;'
+                static_cast<TextureImpl*>(texs[0])->apply(slots[0]);
+                glUniform1i(location, slots[0]);
+            }
+            else 
+            { // perform bind for 'uniform sampler2D u_details[4];' in shader
+                for(size_t i = 0; i < arraySize; ++i)
+                    static_cast<TextureImpl*>(texs[i])->apply(slots[i]);
+                glUniform1iv(location, static_cast<GLsizei>(arraySize), static_cast<const GLint*>(slots.data()));
+            }
         }
     }
 }

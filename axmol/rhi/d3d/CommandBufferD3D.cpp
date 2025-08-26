@@ -573,7 +573,7 @@ void CommandBufferImpl::prepareDrawing()
 
     // bind texture
     _textureBounds = 0;
-    for (const auto& [_, bindingInfo] : _programState->getTextureBindingInfos())
+    for (const auto& [_, bindingInfo] : _programState->getTextureBindingSets())
     {
         auto textureImpl    = static_cast<TextureImpl*>(bindingInfo.tex);
         auto& textureHandle = textureImpl->internalHandle();

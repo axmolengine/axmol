@@ -100,6 +100,17 @@ public:
         INCREASE_LOWER,
     };
 
+    /* must match in shader terrain.frag
+        layout(binding = 0) uniform sampler2D u_details[4]; // will take slot 0~3
+        layout(binding = 4) uniform sampler2D u_alphaMap;
+        layout(binding = 5) uniform sampler2D u_lightMap;
+    */
+    enum TextureBindingSlot {
+        BINDING_SLOT_DETAIL_BASE = 0,
+        BINDING_SLOT_ALPHA_MAP = 4,
+        BINDING_SLOT_LIGHT_MAP = 5
+    };
+
     /**
      *DetailMap
      *this struct maintain a detail map data ,including source file ,detail size.
@@ -524,6 +535,7 @@ protected:
     unsigned char* _data;
     float _lodDistance[3];
     Texture2D* _detailMapTextures[4];
+    rhi::TextureBinding _detailMapBindings[4]; // weak ref
     Texture2D* _alphaMap;
     Texture2D* _lightMap;
     Texture2D* _dummyTexture = nullptr;
@@ -561,7 +573,7 @@ protected:
 
 private:
     // uniform locations
-    rhi::UniformLocation _detailMapLocation[4];
+    rhi::UniformLocation _detailMapLocation;
     rhi::UniformLocation _alphaMapLocation;
     rhi::UniformLocation _alphaIsHasAlphaMapLocation;
     rhi::UniformLocation _lightMapCheckLocation;

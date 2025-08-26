@@ -6,11 +6,8 @@ precision highp int;
 
 layout(location = TEXCOORD0) in vec2 v_texCoord;
 layout(location = NORMAL) in vec3 v_normal;
-layout(binding = 0) uniform sampler2D u_alphaMap;
-layout(binding = 1) uniform sampler2D u_tex0;
-layout(binding = 2) uniform sampler2D u_tex1;
-layout(binding = 3) uniform sampler2D u_tex2;
-layout(binding = 4) uniform sampler2D u_tex3;
+layout(binding = 0) uniform sampler2D u_details[4]; // will take slot 0~3
+layout(binding = 4) uniform sampler2D u_alphaMap;
 layout(binding = 5) uniform sampler2D u_lightMap;
 layout(std140) uniform fs_ub {
     int u_has_alpha;
@@ -35,15 +32,15 @@ void main()
     float lightFactor = dot(-u_lightDir,v_normal);
     if(u_has_alpha<=0)
     {
-        FragColor = texture(u_tex0, v_texCoord)*lightColor*lightFactor;
+        FragColor = texture(u_details[0], v_texCoord)*lightColor*lightFactor;
     }
     else
     {
         vec4 blendFactor =texture(u_alphaMap,v_texCoord);
         vec4 color = vec4(0.0,0.0,0.0,0.0);
-        color = texture(u_tex0, v_texCoord*vfloat_at(u_detailSize, 0))*blendFactor.r +
-        texture(u_tex1, v_texCoord*vfloat_at(u_detailSize, 1))*blendFactor.g + texture(u_tex2, v_texCoord*vfloat_at(u_detailSize, 2))*blendFactor.b
-            + texture(u_tex3, v_texCoord*vfloat_at(u_detailSize, 3))*(1.0 - blendFactor.a);
+        color = texture(u_details[0], v_texCoord*vfloat_at(u_detailSize, 0))*blendFactor.r +
+        texture(u_details[1], v_texCoord*vfloat_at(u_detailSize, 1))*blendFactor.g + texture(u_details[2], v_texCoord*vfloat_at(u_detailSize, 2))*blendFactor.b
+            + texture(u_details[3], v_texCoord*vfloat_at(u_detailSize, 3))*(1.0 - blendFactor.a);
         FragColor = vec4(color.rgb*lightColor.rgb*lightFactor, 1.0);
     }
 }

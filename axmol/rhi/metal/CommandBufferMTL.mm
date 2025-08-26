@@ -432,7 +432,7 @@ void CommandBufferImpl::prepareDrawing() const
 
 void CommandBufferImpl::setTextures() const
 {
-    for (auto& [location, bindingInfo] : _programState->getTextureBindingInfos())
+    for (auto& [location, bindingInfo] : _programState->getTextureBindingSets())
     {
         auto textureImpl = static_cast<TextureImpl*>(bindingInfo.tex);
         [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:location];

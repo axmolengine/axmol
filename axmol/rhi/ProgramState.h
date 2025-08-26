@@ -49,26 +49,43 @@ class VertexLayout;
  * @{
  */
 
+ struct TextureBinding {
+    int slot{-1};
+    rhi::Texture* tex{nullptr};
+
+    void reset() 
+    {
+        slot = -1;
+        tex = nullptr;
+    }
+ };
+
 /**
- * Store texture information.
+ * Store texture binding information.
+ * OpenGL can use 1 location (logic var location) to store multi texture units, in shader is 'uniform sampler2D texs[4]'
+ * Metal/D3D11 dicard location
  */
-struct AX_DLL TextureBindingInfo
+struct AX_DLL TextureBindingSet
 {
-    TextureBindingInfo() = default;
-    TextureBindingInfo(const TextureBindingInfo&);
-    TextureBindingInfo(TextureBindingInfo&& rhs) noexcept;
-    ~TextureBindingInfo();
+    TextureBindingSet() = default;
+    TextureBindingSet(const TextureBindingSet&);
+    TextureBindingSet(TextureBindingSet&& rhs) noexcept;
+    ~TextureBindingSet();
 
-    TextureBindingInfo& operator=(const TextureBindingInfo& other) noexcept;
-    TextureBindingInfo& operator=(TextureBindingInfo&& other) noexcept;
+    TextureBindingSet& operator=(const TextureBindingSet& other) noexcept;
+    TextureBindingSet& operator=(TextureBindingSet&& other) noexcept;
 
-    void assign(const TextureBindingInfo& other);
-    void assign(TextureBindingInfo&& other);
+    void assign(const TextureBindingSet& other);
+    void swap(TextureBindingSet& other);
 
     void setTexture(int location, int slot, rhi::Texture* tex);
+    void setTextureArray(int location, std::span<const TextureBinding> units);
+    void setTextureArray(int location, std::span<const int> slots, std::span<rhi::Texture*> texs);
 
-    int slot{0};
-    rhi::Texture* tex{nullptr};
+    void releaseTextures();
+
+    axstd::pod_vector<int> slots;
+    mutable axstd::pod_vector<rhi::Texture*> texs;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     int location = -1;
 #endif
@@ -177,21 +194,20 @@ public:
      * @param texture Specifies a pointer to backend texture.
      */
     void setTexture(rhi::Texture* texture);
-
-    /**
-     * Set texture.
-     * @param uniformLocation Specifies texture location.
-     * @param slot Specifies texture slot selector.
-     * @param texture Specifies a pointer to backend texture.
-     */
     void setTexture(const rhi::UniformLocation& uniformLocation, int slot, rhi::Texture* texture);
 
+    /**
+     * Set texture array in shader 'uniform sampler2D xxx[4];' unlikely sampoler2DArray, the array will
+     * use multi texture units
+     */
+    void setTextureArray(const rhi::UniformLocation& uniformLocation, std::span<TextureBinding> units);
+    void setTextureArray(const rhi::UniformLocation& uniformLocation, std::span<int> slot, std::span<rhi::Texture*> texture);
 
     /**
      * Get vertex texture informations
      * @return Vertex texture informations. Key is the texture location, Value store the texture informations
      */
-    inline const std::unordered_map<int, TextureBindingInfo>& getTextureBindingInfos() const { return _textureBindingInfos; }
+    inline const std::unordered_map<int, TextureBindingSet>& getTextureBindingSets() const { return _textureBindingSets; }
 
 #if AX_RENDER_API == AX_RENDER_API_GL
     std::span<const char> getUniformBuffer() { return std::span{_uniformBuffer}; }
@@ -337,7 +353,7 @@ protected:
     std::size_t _vertexUniformBufferStart = 0;
 #endif
 
-    std::unordered_map<int, TextureBindingInfo> _textureBindingInfos;
+    std::unordered_map<int, TextureBindingSet> _textureBindingSets;
 
     std::unordered_map<std::string, std::string> _autoBindings;
 
