@@ -432,11 +432,17 @@ void CommandBufferImpl::prepareDrawing() const
 
 void CommandBufferImpl::setTextures() const
 {
-    for (auto& [location, bindingInfo] : _programState->getTextureBindingSets())
+    for (const auto& [location, bindingSet] : _programState->getTextureBindingSets())
     {
-        auto textureImpl = static_cast<TextureImpl*>(bindingInfo.tex);
-        [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:location];
-        [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:location];
+        auto& texs = bindingSet.texs;
+        auto arraySize = texs.size();
+        for(auto k = 0; k < arraySize; ++k)
+        {
+            const auto bindingIndex = location + k;
+            auto textureImpl = static_cast<TextureImpl*>(texs[k]);
+            [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:bindingIndex];
+            [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:bindingIndex];
+        }
     }
 }
 
@@ -448,7 +454,7 @@ void CommandBufferImpl::setUniformBuffer() const
         for (auto& cb : callbackUniforms)
             cb.second(_programState, cb.first);
 
-        // Uniform buffer: glsl-optimizer is bound to index 1, axslcc: bound to 0
+        // axslcc spec, bound to 0
         constexpr int bindingIndex = DriverImpl::VBO_BINDING_INDEX_START;
 
         auto vertexUB     = _programState->getVertexUniformBuffer();
