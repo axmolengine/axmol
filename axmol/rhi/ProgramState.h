@@ -63,7 +63,7 @@ class VertexLayout;
 /**
  * Store texture binding information.
  * OpenGL can use 1 location (logic var location) to store multi texture units, in shader is 'uniform sampler2D texs[4]'
- * Metal/D3D11 dicard location
+ * Metal/D3D11: location is bindingIndex reflected from shader
  */
 struct AX_DLL TextureBindingSet
 {

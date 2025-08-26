@@ -148,7 +148,6 @@ namespace spine {
 		}
 
 		bool needsUpdateStateLayout = false;
-		auto &pipelinePS = _pipelineDesc.programState;
 		if (programState != nullptr) {
 			if (_programState != programState) {
 				AX_SAFE_RELEASE(_programState);
@@ -163,15 +162,20 @@ namespace spine {
 		}
 
 		AXASSERT(_programState, "programState should not be null");
-		pipelinePS = _programState;
 
 		if (needsUpdateStateLayout) {
             AX_SAFE_RELEASE_NULL(_vertexLayout);
 			updateProgramStateLayout(_programState, _vertexLayout);
         }
-
+        else
+        {
+            Object::assign(_vertexLayout, __twoColorVertexLayout.get());
+        }
+        
 		_locPMatrix = __locPMatrix;
-		_locTexture = __locTexture;
+        _locTexture = __locTexture;
+
+        setWeakPSVL(_programState, _vertexLayout);
 	}
 
 	TwoColorTrianglesCommand::~TwoColorTrianglesCommand() {

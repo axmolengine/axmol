@@ -94,12 +94,10 @@ namespace spine {
 		if(currentState == nullptr || currentState->getProgram() != programState->getProgram()) {
 	#endif
 			AX_SAFE_RELEASE(currentState);
-			//currentState = programState->clone();
-            programState->clone();
-            command->setWeakPSVL(programState, nullptr);
-
-			command->_locMVP     = currentState->getUniformLocation(rhi::UNIFORM_NAME_MVP_MATRIX);
-	        command->_locTexture = currentState->getUniformLocation(rhi::UNIFORM_NAME_TEXTURE);
+            currentState  = programState->clone();
+            command->_locMVP     = currentState->getUniformLocation(rhi::UNIFORM_NAME_MVP_MATRIX);
+            command->_locTexture = currentState->getUniformLocation(rhi::UNIFORM_NAME_TEXTURE);
+            command->setWeakPSVL(currentState, currentState->getVertexLayout());
 	}
 		return currentState;
 	}

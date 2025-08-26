@@ -33,7 +33,7 @@ namespace ax
 {
 
 /**
-* axmol-3.0: we use meshIndexData+instancing as key to ensure cache hit
+* axmol-3.0: we use meshIndexData+program+instancing as key to ensure cache hit
 * older version: cache miss always due to programState always changes when switch
 * render objects
 */
@@ -67,12 +67,14 @@ VertexInputBinding* VertexInputBinding::spawn(MeshIndexData* meshIndexData,
     struct HashMe
     {
         MeshIndexData* meshData;
+        Program* shaderProg;
         bool instancing;
     };
 
     HashMe hashMe;
     memset(&hashMe, 0, sizeof(hashMe));
     hashMe.meshData   = meshIndexData;
+    hashMe.shaderProg = pass->getProgramState()->getProgram();
     hashMe.instancing = instancing;
 
     auto hash   = XXH32(&hashMe, sizeof(hashMe), 0);
