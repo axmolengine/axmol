@@ -1,6 +1,8 @@
 name: clang-format
 
 on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
     inputs:
       commit_changes:
@@ -12,26 +14,43 @@ on:
         required: false
 
 jobs:
-  build:
+  clang-format-lint:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
     - name: Run clang-format lint
-      uses: DoozyX/clang-format-lint-action@v0.18
+      uses: DoozyX/clang-format-lint-action@v0.20
       with:
-        source: './core ./extensions ./tests ./templates'
+        source: './axmol ./extensions ./tests ./templates'
         exclude: './thidrparty ./extensions/fairygui ./extensions/Live2D ./extensions/Effekseer ./extensions/scripting/lua-bindings/auto ./extensions/spine ./tests/fairygui-tests ./extensions/**/*_generated.h'
         extensions: 'h,cpp,c,mm'
-        clangFormatVersion: 19
+        clangFormatVersion: 20
         inplace: True
+    - name: Check for uncommitted changes
+      if: ${{ github.event.inputs.commit_changes != 'true' }}
+      shell: pwsh
+      run: |
+        if (-not (git diff --quiet)) {
+          Write-Host "❌ clang-format check failed: Uncommitted formatting changes detected."
+          Write-Host "=== The following differences require formatting ==="
+          git --no-pager diff
+          Write-Host "===================================================="
+          exit 1
+        }
+        else {
+          Write-Host "✅ clang-format check passed: No formatting changes needed."
+        }
     - name: Commit clang-format changes
       if: ${{ github.event.inputs.commit_changes == 'true' }}
       uses: EndBug/add-and-commit@v9
       with:
+        author_name: axmol-bot
+        author_email: 116471739+axmol-bot@users.noreply.github.com
         committer_name: GitHub Actions
         committer_email: 41898282+github-actions[bot]@users.noreply.github.com
         message: 'Committing clang-format changes'
+        new_branch: ${{ github.head_ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
