@@ -336,6 +336,7 @@ void TextureImpl::ensureNativeTexture()
     if (FAILED(hr) || !srv)
     {
         AXLOGE("create srv from texture fail:{}", hr);
+        assert(false && "create srv from texture fail:{}");
         return;
     }
 

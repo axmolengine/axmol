@@ -1965,7 +1965,7 @@ void TextureCache1::onEnter()
 
 std::string TextureCache1::title() const
 {
-    return "CCTextureCache: remove";
+    return "TextureCache: remove";
 }
 
 std::string TextureCache1::subtitle() const

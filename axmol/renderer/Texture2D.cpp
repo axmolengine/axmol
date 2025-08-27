@@ -709,7 +709,7 @@ void Texture2D::initProgram()
     // create vertex buffer
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
-    _customCommand.createVertexBuffer(4 * sizeof(float), 4, CustomCommand::BufferUsage::DYNAMIC);
+    _customCommand.createVertexBuffer(sizeof(Vec3) + sizeof(Vec2), 4, CustomCommand::BufferUsage::DYNAMIC);
 
     // setup blend state
     BlendFunc blendFunc;
