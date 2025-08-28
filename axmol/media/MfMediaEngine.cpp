@@ -249,7 +249,6 @@ double MfMediaEngine::getDuration()
     return 0.0;
 }
 
-
 bool MfMediaEngine::transferVideoFrame()
 {
     if (m_mediaEngine != nullptr && m_state == MEMediaState::Playing)
@@ -277,8 +276,8 @@ bool MfMediaEngine::transferVideoFrame()
             BYTE* data{nullptr};
             AX_BREAK_IF(FAILED(lockedData->GetDataPointer(&bufferSize, &data)));
 
-            _onVideoFrame(MEVideoFrame{data, nullptr, bufferSize, MEVideoPixelDesc{MEVideoPixelFormat::BGR32, m_videoExtent},
-                                  m_videoExtent});
+            _onVideoFrame(MEVideoFrame{data, nullptr, bufferSize,
+                                       MEVideoPixelDesc{MEVideoPixelFormat::BGR32, m_videoExtent}, m_videoExtent});
             return true;
         } while (false);
     }
@@ -345,7 +344,7 @@ void MfMediaEngine::OnMediaEngineEvent(uint32_t meEvent)
                 HRESULT hr       = error->GetExtendedErrorCode();
                 char buff[128]   = {};
                 fmt::format_to_z(buff, "ERROR: Media Foundation Event Error {} ({:08X})\n", errorCode,
-                          static_cast<unsigned int>(hr));
+                                 static_cast<unsigned int>(hr));
                 OutputDebugStringA(buff);
             }
             else
@@ -383,6 +382,6 @@ void MfMediaEngine::UpdateVideoExtent()
     }
 }
 
-}
+}  // namespace ax
 
 #endif

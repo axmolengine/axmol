@@ -44,7 +44,7 @@ __inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
     return !::memcmp(&rguid1, &rguid2, sizeof(GUID));
 }
 #else
-#include <guiddef.h>
+#    include <guiddef.h>
 #endif
 
 namespace ax

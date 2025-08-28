@@ -148,4 +148,4 @@ bool PUBoxColliderTranslator::translateChildObject(PUScriptCompiler* /*compiler*
     return false;
 }
 
-}
+}  // namespace ax

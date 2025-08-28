@@ -348,4 +348,4 @@ Bone3D* Skeleton3D::createBone3D(const NodeData& nodedata)
     return bone;
 }
 
-}
+}  // namespace ax

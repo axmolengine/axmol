@@ -43,6 +43,6 @@ int gettimeofday(struct timeval* val, struct timezone*)
     return 0;
 }
 
-}
+}  // namespace ax
 
 #endif  // __MINGW32__

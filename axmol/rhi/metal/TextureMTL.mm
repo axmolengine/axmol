@@ -29,7 +29,8 @@
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/SamplerCache.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 namespace
 {
@@ -47,7 +48,7 @@ static bool isColorRenderable(PixelFormat textureFormat)
         return false;
     }
 }
-}
+}  // namespace
 
 /// CLASS TextureImpl
 TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, const TextureDesc& desc) : _mtlDevice(mtlDevice)
@@ -75,16 +76,16 @@ void TextureImpl::updateData(const void* data, int width, int height, int level,
 }
 
 void TextureImpl::updateSubData(int xoffset,
-                               int yoffset,
-                               int width,
-                               int height,
-                               int level,
-                               const void* data,
-                               int layerIndex)
+                                int yoffset,
+                                int width,
+                                int height,
+                                int level,
+                                const void* data,
+                                int layerIndex)
 {
     ensureNativeTexture();
 
-    if(!data) [[unlikely]]
+    if (!data) [[unlikely]]
         return;
 
     MTLRegion region = {
@@ -93,31 +94,36 @@ void TextureImpl::updateSubData(int xoffset,
     };
 
     auto bytesPerRow = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(width));
-    auto slicePitch = bytesPerRow * _desc.height;
-    [_mtlTexture replaceRegion:region mipmapLevel:level slice:layerIndex withBytes:data bytesPerRow:bytesPerRow bytesPerImage:slicePitch];
+    auto slicePitch  = bytesPerRow * _desc.height;
+    [_mtlTexture replaceRegion:region
+                   mipmapLevel:level
+                         slice:layerIndex
+                     withBytes:data
+                   bytesPerRow:bytesPerRow
+                 bytesPerImage:slicePitch];
 
     if (shouldGenMipmaps(level))
         generateMipmaps();
 }
 
 void TextureImpl::updateCompressedData(const void* data,
-                                      int width,
-                                      int height,
-                                      std::size_t dataSize,
-                                      int level,
-                                      int layerIndex)
+                                       int width,
+                                       int height,
+                                       std::size_t dataSize,
+                                       int level,
+                                       int layerIndex)
 {
     updateCompressedSubData(0, 0, width, height, dataSize, level, data, layerIndex);
 }
 
 void TextureImpl::updateCompressedSubData(int xoffset,
-                                         int yoffset,
-                                         int width,
-                                         int height,
-                                         std::size_t /*dataSize*/,
-                                         int level,
-                                         const void* data,
-                                         int layerIndex)
+                                          int yoffset,
+                                          int width,
+                                          int height,
+                                          std::size_t /*dataSize*/,
+                                          int level,
+                                          const void* data,
+                                          int layerIndex)
 {
     updateSubData(xoffset, yoffset, width, height, level, data, layerIndex);
 }
@@ -126,7 +132,6 @@ void TextureImpl::generateMipmaps()
 {
     if (TextureUsage::RENDER_TARGET == _desc.textureUsage || !isColorRenderable(_desc.pixelFormat))
         return;
-
 
     UtilsMTL::generateMipmaps(_mtlTexture);
     _overrideMipLevels = RHIUtils::computeMipLevels(_desc.width, _desc.height);
@@ -138,15 +143,15 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
     NSUInteger slice = static_cast<int>(side);
 
     auto bytesPerRow = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(_desc.width));
-    auto slicePitch = bytesPerRow * _desc.height;
+    auto slicePitch  = bytesPerRow * _desc.height;
 
     auto region = MTLRegionMake2D(0, 0, _desc.width, _desc.height);
     [_mtlTexture replaceRegion:region
-                  mipmapLevel:0
-                        slice:slice
-                    withBytes:data
-                  bytesPerRow:bytesPerRow
-                bytesPerImage:slicePitch];
+                   mipmapLevel:0
+                         slice:slice
+                     withBytes:data
+                   bytesPerRow:bytesPerRow
+                 bytesPerImage:slicePitch];
 
     if (shouldGenMipmaps())
         generateMipmaps();
@@ -154,7 +159,8 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
 
 void TextureImpl::ensureNativeTexture()
 {
-    if(_mtlTexture) return;
+    if (_mtlTexture)
+        return;
     MTLPixelFormat pixelFormat = UtilsMTL::toMTLPixelFormat(_desc.pixelFormat);
     if (pixelFormat == MTLPixelFormatInvalid)
         return;
@@ -166,18 +172,19 @@ void TextureImpl::ensureNativeTexture()
     {
     case TextureType::TEXTURE_2D:
         textureDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
-                                                                               width:_desc.width
-                                                                              height:_desc.height
-                                                                           mipmapped:needMipmaps];
-        if (_desc.arraySize > 1) {
+                                                                         width:_desc.width
+                                                                        height:_desc.height
+                                                                     mipmapped:needMipmaps];
+        if (_desc.arraySize > 1)
+        {
             textureDesc.textureType = MTLTextureType2DArray;
             textureDesc.arrayLength = _desc.arraySize;
         }
         break;
     case TextureType::TEXTURE_CUBE:
         textureDesc = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:pixelFormat
-                                                                                  size:_desc.width
-                                                                             mipmapped:needMipmaps];
+                                                                            size:_desc.width
+                                                                       mipmapped:needMipmaps];
         break;
     default:
         return;
@@ -195,4 +202,4 @@ void TextureImpl::ensureNativeTexture()
     _mtlTexture = [_mtlDevice newTextureWithDescriptor:textureDesc];
 }
 
-}
+}  // namespace ax::rhi::mtl

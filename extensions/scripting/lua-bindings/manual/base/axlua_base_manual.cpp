@@ -469,8 +469,8 @@ static int tolua_cocos2d_Menu_create(lua_State* tolua_S)
     else if (argc == 0)
     {
         ax::Menu* tolua_ret = ax::Menu::create();
-        int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* pLuaID              = (tolua_ret) ? &tolua_ret->_luaID : NULL;
+        int nID             = (tolua_ret) ? (int)tolua_ret->_ID : -1;
+        int* pLuaID         = (tolua_ret) ? &tolua_ret->_luaID : NULL;
         toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Menu");
         return 1;
     }
@@ -1678,9 +1678,9 @@ tolua_lerror:
 
 static int tolua_cocos2d_RenderTexture_newImage(lua_State* tolua_S)
 {
-    int argc                     = 0;
+    int argc                = 0;
     ax::RenderTexture* cobj = nullptr;
-    bool ok                      = true;
+    bool ok                 = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2085,9 +2085,9 @@ tolua_lerror:
 
 int tolua_cocos2d_Node_setContentSize(lua_State* tolua_S)
 {
-    int argc            = 0;
+    int argc       = 0;
     ax::Node* cobj = NULL;
-    bool ok             = true;
+    bool ok        = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -2146,9 +2146,9 @@ tolua_lerror:
 
 int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
 {
-    int argc            = 0;
+    int argc       = 0;
     ax::Node* cobj = NULL;
-    bool ok             = true;
+    bool ok        = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -2260,7 +2260,7 @@ tolua_lerror:
 
 static int axlua_Node_enumerateChildren(lua_State* tolua_S)
 {
-    int argc            = 0;
+    int argc       = 0;
     ax::Node* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -2293,11 +2293,10 @@ static int axlua_Node_enumerateChildren(lua_State* tolua_S)
         }
 #endif
 
-        auto name     = axlua_tosv(tolua_S, 2);
+        auto name            = axlua_tosv(tolua_S, 2);
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 3, 0);
-        auto stack = LuaEngine::getInstance()->getLuaStack();
+        auto stack           = LuaEngine::getInstance()->getLuaStack();
         cobj->enumerateChildren(name, [=](Node* node) -> bool {
-
             int id     = node ? (int)node->_ID : -1;
             int* luaID = node ? &node->_luaID : nullptr;
             toluafix_pushusertype_object(stack->getLuaState(), id, luaID, (void*)node, "ax.Node");
@@ -2322,9 +2321,9 @@ tolua_lerror:
 
 int axlua_Node_setAdditionalTransform(lua_State* tolua_S)
 {
-    int argc            = 0;
+    int argc       = 0;
     ax::Node* cobj = nullptr;
-    bool ok             = true;
+    bool ok        = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -2390,9 +2389,9 @@ tolua_lerror:
 
 int axlua_Node_setRotationQuat(lua_State* tolua_S)
 {
-    int argc            = 0;
+    int argc       = 0;
     ax::Node* cobj = nullptr;
-    bool ok             = true;
+    bool ok        = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -2443,9 +2442,9 @@ tolua_lerror:
 #    include "axmol/navmesh/NavMesh.h"
 int axlua_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
-    int argc             = 0;
+    int argc        = 0;
     ax::Scene* cobj = nullptr;
-    bool ok              = true;
+    bool ok         = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2494,9 +2493,9 @@ tolua_lerror:
 }
 int axlua_Scene_setNavMesh(lua_State* tolua_S)
 {
-    int argc             = 0;
+    int argc        = 0;
     ax::Scene* cobj = nullptr;
-    bool ok              = true;
+    bool ok         = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2545,9 +2544,9 @@ tolua_lerror:
 
 int axlua_Scene_getNavMesh(lua_State* tolua_S)
 {
-    int argc             = 0;
+    int argc        = 0;
     ax::Scene* cobj = nullptr;
-    bool ok              = true;
+    bool ok         = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2591,7 +2590,7 @@ tolua_lerror:
     return 0;
 }
 
-#endif  //#if defined(AX_ENABLE_NAVMESH)
+#endif  // #if defined(AX_ENABLE_NAVMESH)
 
 static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
 {
@@ -2626,8 +2625,7 @@ static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
                     goto tolua_lerror;
 #endif
 
-                ax::FiniteTimeAction* item =
-                    static_cast<ax::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, NULL));
+                ax::FiniteTimeAction* item = static_cast<ax::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, NULL));
                 if (NULL != item)
                 {
                     array.pushBack(item);
@@ -2637,8 +2635,8 @@ static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
         }
 
         ax::Spawn* tolua_ret = ax::Spawn::create(array);
-        int nID                   = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-        int* pLuaID               = (tolua_ret) ? &tolua_ret->_luaID : NULL;
+        int nID              = (tolua_ret) ? (int)tolua_ret->_ID : -1;
+        int* pLuaID          = (tolua_ret) ? &tolua_ret->_luaID : NULL;
         toluafix_pushusertype_object(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Spawn");
         return 1;
     }
@@ -2676,7 +2674,7 @@ int lua_cocos2d_CardinalSplineBy_create(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        int num            = 0;
+        int num       = 0;
         ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.CardinalSplineBy:create");
         if (!ok)
@@ -2751,7 +2749,7 @@ int tolua_cocos2d_CatmullRomBy_create(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        int num            = 0;
+        int num       = 0;
         ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.CatmullRomBy:create");
         if (!ok)
@@ -2817,7 +2815,7 @@ int tolua_cocos2d_CatmullRomTo_create(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        int num            = 0;
+        int num       = 0;
         ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.CatmullRomTo:create");
         if (!ok)
@@ -2883,7 +2881,7 @@ int tolua_cocos2d_BezierBy_create(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        int num            = 0;
+        int num       = 0;
         ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.BezierBy:create");
         if (!ok)
@@ -2944,7 +2942,7 @@ int tolua_cocos2d_BezierTo_create(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        int num            = 0;
+        int num       = 0;
         ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.BezierTo:create");
         if (!ok)
@@ -3075,9 +3073,9 @@ tolua_lerror:
 
 int toaxlua_DrawNode_drawSolidPoly(lua_State* tolua_S)
 {
-    int argc                = 0;
+    int argc           = 0;
     ax::DrawNode* self = nullptr;
-    bool ok                 = true;
+    bool ok            = true;
 
     tolua_Error tolua_err;
 
@@ -3231,9 +3229,9 @@ tolua_lerror:
 
 int toaxlua_DrawNode_drawCardinalSpline(lua_State* tolua_S)
 {
-    int argc                = 0;
+    int argc           = 0;
     ax::DrawNode* self = nullptr;
-    bool ok                 = true;
+    bool ok            = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3254,7 +3252,7 @@ int toaxlua_DrawNode_drawCardinalSpline(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 4)
     {
-        int num            = 0;
+        int num       = 0;
         ax::Vec2* arr = NULL;
         if (!luaval_to_array_of_vec2(tolua_S, 2, &arr, &num, "ax.DrawNode:drawCardinalSpline"))
             return 0;
@@ -3299,9 +3297,9 @@ tolua_lerror:
 
 int toaxlua_DrawNode_drawCatmullRom(lua_State* tolua_S)
 {
-    int argc                = 0;
+    int argc           = 0;
     ax::DrawNode* self = nullptr;
-    bool ok                 = true;
+    bool ok            = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3322,7 +3320,7 @@ int toaxlua_DrawNode_drawCatmullRom(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 3)
     {
-        int num            = 0;
+        int num       = 0;
         ax::Vec2* arr = NULL;
         if (!luaval_to_array_of_vec2(tolua_S, 2, &arr, &num, "ax.DrawNode:drawCatmullRom"))
             return 0;
@@ -3365,9 +3363,9 @@ tolua_lerror:
 
 int toaxlua_DrawNode_drawPoints(lua_State* tolua_S)
 {
-    int argc                = 0;
+    int argc           = 0;
     ax::DrawNode* self = nullptr;
-    bool ok                 = true;
+    bool ok            = true;
 
     tolua_Error tolua_err;
 
@@ -3726,9 +3724,9 @@ static int toaxlua_SpriteBatchNode_getDescendants(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
-    int argc                       = 0;
+    int argc                  = 0;
     ax::SpriteBatchNode* cobj = nullptr;
-    bool ok                        = true;
+    bool ok                   = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3791,9 +3789,9 @@ tolua_lerror:
 #    include "axmol/physics3d/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
-    int argc             = 0;
+    int argc        = 0;
     ax::Scene* cobj = nullptr;
-    bool ok              = true;
+    bool ok         = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3840,9 +3838,9 @@ tolua_lerror:
 
 int axlua_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
 {
-    int argc             = 0;
+    int argc        = 0;
     ax::Scene* cobj = nullptr;
-    bool ok              = true;
+    bool ok         = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -4271,9 +4269,9 @@ static void extendDrawNode(lua_State* tolua_S)
 
 int axlua_Sprite_initWithPolygon(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc         = 0;
     ax::Sprite* cobj = nullptr;
-    bool ok               = true;
+    bool ok          = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -4322,9 +4320,9 @@ tolua_lerror:
 
 int axlua_Sprite_setPolygonInfo(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc         = 0;
     ax::Sprite* cobj = nullptr;
-    bool ok               = true;
+    bool ok          = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -4534,10 +4532,10 @@ EventListenerAcceleration* LuaEventListenerAcceleration::create()
 {
     EventListenerAcceleration* eventAcceleration = new EventListenerAcceleration();
     if (eventAcceleration->init([=](Acceleration* acc, Event* event) {
-            LuaEventAccelerationData listenerData((void*)acc, event);
-            BasicScriptData data(eventAcceleration, (void*)&listenerData);
-            LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::EVENT_ACC, (void*)&data);
-        }))
+        LuaEventAccelerationData listenerData((void*)acc, event);
+        BasicScriptData data(eventAcceleration, (void*)&listenerData);
+        LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::EVENT_ACC, (void*)&data);
+    }))
     {
         eventAcceleration->autorelease();
     }
@@ -4552,9 +4550,9 @@ EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
 {
     EventListenerCustom* eventCustom = new EventListenerCustom();
     if (eventCustom->init(eventName, [=](EventCustom* event) {
-            BasicScriptData data((void*)eventCustom, (void*)event);
-            LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM, (void*)&data);
-        }))
+        BasicScriptData data((void*)eventCustom, (void*)event);
+        LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM, (void*)&data);
+    }))
     {
         eventCustom->autorelease();
     }
@@ -4564,7 +4562,7 @@ EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
     }
     return eventCustom;
 }
-}
+}  // namespace ax
 
 static int toaxlua_LuaEventListenerAcceleration_create(lua_State* tolua_S)
 {
@@ -4588,7 +4586,7 @@ static int toaxlua_LuaEventListenerAcceleration_create(lua_State* tolua_S)
             goto tolua_lerror;
         }
 #endif
-        LUA_FUNCTION handler                          = toluafix_ref_function(tolua_S, 2, 0);
+        LUA_FUNCTION handler                     = toluafix_ref_function(tolua_S, 2, 0);
         ax::EventListenerAcceleration* tolua_ret = ax::LuaEventListenerAcceleration::create();
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_ACC);
@@ -4633,8 +4631,8 @@ static int tolua_cocos2d_LuaEventListenerCustom_create(lua_State* tolua_S)
             goto tolua_lerror;
         }
 #endif
-        auto eventName                          = axlua_tosv(tolua_S, 2);
-        LUA_FUNCTION handler                    = toluafix_ref_function(tolua_S, 3, 0);
+        auto eventName                     = axlua_tosv(tolua_S, 2);
+        LUA_FUNCTION handler               = toluafix_ref_function(tolua_S, 3, 0);
         ax::EventListenerCustom* tolua_ret = LuaEventListenerCustom::create(eventName);
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM);
@@ -4825,8 +4823,7 @@ static int toaxlua_EventListenerKeyboard_registerScriptHandler(lua_State* tolua_
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S,
-                    "invalid 'self' in function 'toaxlua_EventListenerKeyboard_registerScriptHandler'\n",
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerKeyboard_registerScriptHandler'\n",
                     nullptr);
         return 0;
     }
@@ -4881,8 +4878,7 @@ static int toaxlua_EventListenerKeyboard_registerScriptHandler(lua_State* tolua_
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerKeyboard_registerScriptHandler'.",
-                &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerKeyboard_registerScriptHandler'.", &tolua_err);
     return 0;
 #endif
 }
@@ -5067,8 +5063,7 @@ static int toaxlua_EventListenerTouchOneByOne_registerScriptHandler(lua_State* t
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S,
-                    "invalid 'self' in function 'toaxlua_EventListenerTouchOneByOne_registerScriptHandler'\n",
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerTouchOneByOne_registerScriptHandler'\n",
                     nullptr);
         return 0;
     }
@@ -5145,8 +5140,7 @@ static int toaxlua_EventListenerTouchOneByOne_registerScriptHandler(lua_State* t
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerTouchOneByOne_registerScriptHandler'.",
-                &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'toaxlua_EventListenerTouchOneByOne_registerScriptHandler'.", &tolua_err);
     return 0;
 #endif
 }
@@ -5158,8 +5152,7 @@ static void extendEventListenerTouchOneByOne(lua_State* tolua_S)
     if (lua_istable(tolua_S, -1))
     {
         tolua_function(tolua_S, "create", toaxlua_EventListenerTouchOneByOne_create);
-        tolua_function(tolua_S, "registerScriptHandler",
-                       toaxlua_EventListenerTouchOneByOne_registerScriptHandler);
+        tolua_function(tolua_S, "registerScriptHandler", toaxlua_EventListenerTouchOneByOne_registerScriptHandler);
         tolua_function(tolua_S, "clone", toaxlua_EventListenerTouchOneByOne_clone);
     }
     lua_pop(tolua_S, 1);
@@ -5278,8 +5271,7 @@ static int toaxlua_EventListenerTouchAllAtOnce_clone(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerTouchAllAtOnce_clone'\n",
-                    nullptr);
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerTouchAllAtOnce_clone'\n", nullptr);
         return 0;
     }
 #endif
@@ -5332,8 +5324,7 @@ static int toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler(lua_State* 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S,
-                    "invalid 'self' in function 'toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler'\n",
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler'\n",
                     nullptr);
         return 0;
     }
@@ -5423,8 +5414,7 @@ static void extendEventListenerTouchAllAtOnce(lua_State* tolua_S)
     if (lua_istable(tolua_S, -1))
     {
         tolua_function(tolua_S, "create", toaxlua_EventListenerTouchAllAtOnce_create);
-        tolua_function(tolua_S, "registerScriptHandler",
-                       toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler);
+        tolua_function(tolua_S, "registerScriptHandler", toaxlua_EventListenerTouchAllAtOnce_registerScriptHandler);
         tolua_function(tolua_S, "clone", toaxlua_EventListenerTouchAllAtOnce_clone);
     }
     lua_pop(tolua_S, 1);
@@ -5709,7 +5699,7 @@ static int toaxlua_ActionCamera_reverse(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
-    int argc                    = 0;
+    int argc               = 0;
     ax::ActionCamera* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -5764,7 +5754,7 @@ static int toaxlua_GridAction_reverse(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
-    int argc                  = 0;
+    int argc             = 0;
     ax::GridAction* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -5850,12 +5840,11 @@ static int axlua_Label_createWithTTF00(lua_State* L)
         if (!ok)
             return 0;
 
-        int alignment = (int)tolua_tonumber(L, 4, 1);
-        int lineSize  = (int)tolua_tonumber(L, 5, 0);
-        ax::Label* ret =
-            ax::Label::createWithTTF(ttfConfig, text, static_cast<TextHAlignment>(alignment), lineSize);
-        int ID     = ret ? (int)(ret->_ID) : -1;
-        int* luaID = ret ? &(ret->_luaID) : nullptr;
+        int alignment  = (int)tolua_tonumber(L, 4, 1);
+        int lineSize   = (int)tolua_tonumber(L, 5, 0);
+        ax::Label* ret = ax::Label::createWithTTF(ttfConfig, text, static_cast<TextHAlignment>(alignment), lineSize);
+        int ID         = ret ? (int)(ret->_ID) : -1;
+        int* luaID     = ret ? &(ret->_luaID) : nullptr;
         toluafix_pushusertype_object(L, ID, luaID, (void*)ret, "ax.Label");
         return 1;
     }
@@ -5891,10 +5880,10 @@ static int axlua_Label_createWithTTF01(lua_State* L)
         }
         else
         {
-            std::string text         = tolua_tostring(L, 2, "");
-            std::string fontFile     = tolua_tostring(L, 3, "");
-            float fontSize           = (float)tolua_tonumber(L, 4, 0);
-            ax::Size dimensions = ax::Size::ZERO;
+            std::string text     = tolua_tostring(L, 2, "");
+            std::string fontFile = tolua_tostring(L, 3, "");
+            float fontSize       = (float)tolua_tonumber(L, 4, 0);
+            ax::Size dimensions  = ax::Size::ZERO;
             if (lua_istable(L, 5))
             {
                 luaval_to_size(L, 5, &dimensions, "ax.Label:createWithTTF");
@@ -5902,8 +5891,7 @@ static int axlua_Label_createWithTTF01(lua_State* L)
             TextHAlignment hAlignment = static_cast<TextHAlignment>((int)tolua_tonumber(L, 6, 0));
             TextVAlignment vAlignment = static_cast<TextVAlignment>((int)tolua_tonumber(L, 7, 0));
 
-            ax::Label* ret =
-                ax::Label::createWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment);
+            ax::Label* ret = ax::Label::createWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment);
 
             int ID     = ret ? (int)(ret->_ID) : -1;
             int* luaID = ret ? &(ret->_luaID) : nullptr;
@@ -5930,9 +5918,9 @@ static void extendLabel(lua_State* tolua_S)
 
 static int axlua_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc              = 0;
     ax::TMXTiledMap* cobj = NULL;
-    bool ok                    = true;
+    bool ok               = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -5987,7 +5975,7 @@ static void extendTMXTiledMap(lua_State* tolua_S)
 
 static int axlua_OrbitCamera_sphericalRadius(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc              = 0;
     ax::OrbitCamera* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -6057,9 +6045,9 @@ static void extendOrbitCamera(lua_State* tolua_S)
 
 int axlua_TMXLayer_getTileGIDAt(lua_State* tolua_S)
 {
-    int argc                = 0;
+    int argc           = 0;
     ax::TMXLayer* cobj = nullptr;
-    bool ok                 = true;
+    bool ok            = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6123,7 +6111,7 @@ tolua_lerror:
 
 int axlua_TMXLayer_setTiles(lua_State* tolua_S)
 {
-    int argc                = 0;
+    int argc           = 0;
     ax::TMXLayer* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -6197,9 +6185,9 @@ static void extendTMXLayer(lua_State* tolua_S)
 
 static int axlua_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::FastTMXLayer* cobj = nullptr;
-    bool ok                     = true;
+    bool ok                = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6274,7 +6262,7 @@ static void extendFastTMXLayer(lua_State* tolua_S)
 
 int axlua_Application_isIOS64bit(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc              = 0;
     ax::Application* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -6325,7 +6313,7 @@ tolua_lerror:
 
 int axlua_Application_is64BitMobileDevice(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc              = 0;
     ax::Application* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -6350,10 +6338,9 @@ int axlua_Application_is64BitMobileDevice(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        bool is64BitMobileDevice          = false;
+        bool is64BitMobileDevice       = false;
         Application::Platform platform = ax::Application::getInstance()->getTargetPlatform();
-        if (Application::Platform::iOS == platform ||
-            Application::Platform::Android == platform)
+        if (Application::Platform::iOS == platform || Application::Platform::Android == platform)
         {
 #if defined(__arm64__) || defined(__aarch64__)
             is64BitMobileDevice = true;
@@ -6363,8 +6350,8 @@ int axlua_Application_is64BitMobileDevice(lua_State* tolua_S)
         tolua_pushboolean(tolua_S, is64BitMobileDevice);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Application:is64BitMobileDevice",
-               argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",
+               "ax.Application:is64BitMobileDevice", argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -6421,8 +6408,8 @@ static int axlua_TextureCache_addImageAsync(lua_State* tolua_S)
             goto tolua_lerror;
         }
 #endif
-        auto configFilePath = axlua_tosv(tolua_S, 2);
-        LUA_FUNCTION handler       = (toluafix_ref_function(tolua_S, 3, 0));
+        auto configFilePath  = axlua_tosv(tolua_S, 2);
+        LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 3, 0));
 
         self->addImageAsync(configFilePath, [=](Texture2D* tex) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
@@ -6459,9 +6446,9 @@ static void extendTextureCache(lua_State* tolua_S)
 
 int axlua_RenderView_getAllTouches(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc             = 0;
     ax::RenderView* cobj = nullptr;
-    bool ok               = true;
+    bool ok              = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6509,8 +6496,8 @@ int axlua_RenderView_getAllTouches(lua_State* tolua_S)
 
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getAllTouches", argc,
-               0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getAllTouches",
+               argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -6534,9 +6521,9 @@ static void extendRenderView(lua_State* tolua_S)
 
 int axlua_Camera_unproject(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc         = 0;
     ax::Camera* cobj = nullptr;
-    bool ok               = true;
+    bool ok          = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6634,8 +6621,7 @@ int axlua_Properties_createNonRefCounted(lua_State* tolua_S)
         ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.Properties:createNonRefCounted");
         if (!ok)
         {
-            tolua_error(tolua_S, "invalid arguments in function 'axlua_Properties_createNonRefCounted'",
-                        nullptr);
+            tolua_error(tolua_S, "invalid arguments in function 'axlua_Properties_createNonRefCounted'", nullptr);
             return 0;
         }
         ax::Properties* ret = ax::Properties::createNonRefCounted(arg0);
@@ -6708,7 +6694,7 @@ tolua_lerror:
 
 int axlua_set_PolygonInfo_rect(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc              = 0;
     ax::PolygonInfo* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -6779,7 +6765,7 @@ tolua_lerror:
 
 int axlua_set_PolygonInfo_filename(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc              = 0;
     ax::PolygonInfo* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -6837,8 +6823,7 @@ int axlua_get_PipelineDescriptor_programState(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (nullptr == cobj)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'axlua_get_PipelineDescriptor_programState'\n",
-                    nullptr);
+        tolua_error(tolua_S, "invalid 'self' in function 'axlua_get_PipelineDescriptor_programState'\n", nullptr);
         return 0;
     }
 #endif
@@ -6854,7 +6839,7 @@ tolua_lerror:
 
 int axlua_set_PipelineDescriptor_programState(lua_State* tolua_S)
 {
-    int argc                          = 0;
+    int argc               = 0;
     ax::PipelineDesc* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -6867,8 +6852,7 @@ int axlua_set_PipelineDescriptor_programState(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'axlua_set_PipelineDescriptor_programState'\n",
-                    nullptr);
+        tolua_error(tolua_S, "invalid 'self' in function 'axlua_set_PipelineDescriptor_programState'\n", nullptr);
         return 0;
     }
 #endif
@@ -6879,7 +6863,7 @@ int axlua_set_PipelineDescriptor_programState(lua_State* tolua_S)
     {
         ax::rhi::ProgramState* programState = nullptr;
         luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axb.ProgramState", &programState,
-                                                         "axlua_set_PipelineDescriptor_programState");
+                                                "axlua_set_PipelineDescriptor_programState");
         self->programState = programState;
         return 0;
     }
@@ -6900,8 +6884,7 @@ static void extendPolygonInfo(lua_State* tolua_S)
     if (lua_istable(tolua_S, -1))
     {
         tolua_variable(tolua_S, "rect", axlua_get_PolygonInfo_rect, axlua_set_PolygonInfo_rect);
-        tolua_variable(tolua_S, "filename", axlua_get_PolygonInfo_filename,
-                       axlua_set_PolygonInfo_filename);
+        tolua_variable(tolua_S, "filename", axlua_get_PolygonInfo_filename, axlua_set_PolygonInfo_filename);
     }
     lua_pop(tolua_S, 1);
 
@@ -6927,9 +6910,9 @@ static void extendPipelineDescriptor(lua_State* tolua_S)
 
 static int axlua_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
 {
-    int argc                             = 0;
+    int argc                    = 0;
     ax::rhi::ProgramState* cobj = nullptr;
-    bool ok                              = true;
+    bool ok                     = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -6942,8 +6925,7 @@ static int axlua_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_backend_ProgramState_getUniformLocation'",
-                    nullptr);
+        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_backend_ProgramState_getUniformLocation'", nullptr);
         return 0;
     }
 #endif
@@ -6995,8 +6977,8 @@ tolua_lerror:
 
 static int axlua_ProgramState_setUniform(lua_State* tolua_S)
 {
-    bool ok                              = true;
-    int argc                             = 0;
+    bool ok                     = true;
+    int argc                    = 0;
     ax::rhi::ProgramState* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -7135,8 +7117,7 @@ int axlua_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        ax::PolygonInfo* ret =
-            new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
+        ax::PolygonInfo* ret = new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
         object_to_luaval<ax::PolygonInfo>(tolua_S, "ax.PolygonInfo", (ax::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
@@ -7197,19 +7178,19 @@ static void extendAutoPolygon(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
-//extern int axlua_Director_setStatsDisplay(lua_State* tolua_S);
-//static void extendDirector(lua_State* tolua_S)
+// extern int axlua_Director_setStatsDisplay(lua_State* tolua_S);
+// static void extendDirector(lua_State* tolua_S)
 //{
-//    lua_pushstring(tolua_S, "ax.Director");
-//    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
-//    if (lua_istable(tolua_S, -1))
-//    {
-//        lua_pushstring(tolua_S, "setDisplayStats");
-//        lua_pushcfunction(tolua_S, axlua_Director_setStatsDisplay);
-//        lua_rawset(tolua_S, -3);
-//    }
-//    lua_pop(tolua_S, 1);
-//}
+//     lua_pushstring(tolua_S, "ax.Director");
+//     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
+//     if (lua_istable(tolua_S, -1))
+//     {
+//         lua_pushstring(tolua_S, "setDisplayStats");
+//         lua_pushcfunction(tolua_S, axlua_Director_setStatsDisplay);
+//         lua_rawset(tolua_S, -3);
+//     }
+//     lua_pop(tolua_S, 1);
+// }
 
 int register_all_ax_manual(lua_State* tolua_S)
 {
@@ -7273,7 +7254,8 @@ static int tolua_cocos2d_utils_captureNode(lua_State* tolua_S)
 {
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isusertype(tolua_S, 2, "ax.Node", 0, &tolua_err) || !toluafix_isfunction(tolua_S, 3, "LUA_FUNCTION", 0, &tolua_err))
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isusertype(tolua_S, 2, "ax.Node", 0, &tolua_err) ||
+        !toluafix_isfunction(tolua_S, 3, "LUA_FUNCTION", 0, &tolua_err))
         goto tolua_lerror;
     else
 #endif
@@ -7288,20 +7270,18 @@ static int tolua_cocos2d_utils_captureNode(lua_State* tolua_S)
             scale = tolua_tonumber(tolua_S, 4, 1.0);
         }
 
-        ax::utils::captureNode(node,
-           [=](RefPtr<Image> image) {
-                auto stack = LuaEngine::getInstance()->getLuaStack();
-                auto Ls    = stack->getLuaState();
+        ax::utils::captureNode(node, [=](RefPtr<Image> image) {
+            auto stack = LuaEngine::getInstance()->getLuaStack();
+            auto Ls    = stack->getLuaState();
 
-                if (image == nullptr)
-                    stack->pushNil();
-                else
-                    stack->pushObject(image, "ax.Image");
+            if (image == nullptr)
+                stack->pushNil();
+            else
+                stack->pushObject(image, "ax.Image");
 
-                stack->executeFunctionByHandler(handler, 1);
-                stack->removeScriptHandler(handler);
-            },
-            scale);
+            stack->executeFunctionByHandler(handler, 1);
+            stack->removeScriptHandler(handler);
+        }, scale);
 
         return 0;
     }
@@ -7324,16 +7304,14 @@ static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
     {
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         auto fileName        = axlua_tosv(tolua_S, 3);
-        ax::utils::captureScreen(
-            [=](bool succeed, std::string_view name) {
-                auto stack = LuaEngine::getInstance()->getLuaStack();
-                auto Ls    = stack->getLuaState();
-                tolua_pushboolean(Ls, succeed);
-                tolua_pushstring(Ls, name.data());
-                stack->executeFunctionByHandler(handler, 2);
-                stack->removeScriptHandler(handler);
-            },
-            fileName);
+        ax::utils::captureScreen([=](bool succeed, std::string_view name) {
+            auto stack = LuaEngine::getInstance()->getLuaStack();
+            auto Ls    = stack->getLuaState();
+            tolua_pushboolean(Ls, succeed);
+            tolua_pushstring(Ls, name.data());
+            stack->executeFunctionByHandler(handler, 2);
+            stack->removeScriptHandler(handler);
+        }, fileName);
 
         return 0;
     }
@@ -7354,7 +7332,7 @@ static int tolua_cocos2d_utils_findChildren(lua_State* tolua_S)
     else
 #endif
     {
-        ax::Node* node         = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
+        ax::Node* node              = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
         auto name                   = axlua_tosv(tolua_S, 3);
         std::vector<Node*> children = ax::utils::findChildren(*node, name);
         lua_newtable(tolua_S);
@@ -7390,10 +7368,10 @@ static int tolua_cocos2d_utils_findChild(lua_State* tolua_S)
 #endif
     {
         ax::Node* node = static_cast<Node*>(tolua_tousertype(tolua_S, 1, nullptr));
-        auto name           = axlua_tosv(tolua_S, 2);
-        auto obj            = ax::utils::findChild(node, name);
-        int ID              = (obj) ? (int)obj->_ID : -1;
-        int* luaID          = (obj) ? &obj->_luaID : NULL;
+        auto name      = axlua_tosv(tolua_S, 2);
+        auto obj       = ax::utils::findChild(node, name);
+        int ID         = (obj) ? (int)obj->_ID : -1;
+        int* luaID     = (obj) ? &obj->_luaID : NULL;
         toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj, "ax.Node");
         return 1;
     }
@@ -7444,7 +7422,6 @@ tolua_lerror:
 #endif
 }
 
-
 static int tolua_cocos2d_utils_getFileMD5Hash(lua_State* tolua_S)
 {
 #if _AX_DEBUG >= 1
@@ -7455,17 +7432,17 @@ static int tolua_cocos2d_utils_getFileMD5Hash(lua_State* tolua_S)
     else
 #endif
     {
-        std::string  filename = tolua_tocppstring(tolua_S, 2, "");
-        uint32_t  bufferSize = tolua_tonumber(tolua_S, 3, 0);
-        std::string hexOutput = ax::utils::getFileMD5Hash(filename,bufferSize);
+        std::string filename  = tolua_tocppstring(tolua_S, 2, "");
+        uint32_t bufferSize   = tolua_tonumber(tolua_S, 3, 0);
+        std::string hexOutput = ax::utils::getFileMD5Hash(filename, bufferSize);
         lua_pushlstring(tolua_S, hexOutput.c_str(), hexOutput.size());
-        //delete[] hexOutput;
+        // delete[] hexOutput;
         return 1;
     }
 #if _AX_DEBUG >= 1
-    tolua_lerror:
-                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getFileMD5Hash'.", &tolua_err);
-                return 0;
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getFileMD5Hash'.", &tolua_err);
+    return 0;
 #endif
 }
 
@@ -7478,45 +7455,44 @@ static int tolua_cocos2d_utils_getStringMD5Hash(lua_State* tolua_S)
     else
 #endif
     {
-        std::string  str = tolua_tocppstring(tolua_S, 2, "");
+        std::string str       = tolua_tocppstring(tolua_S, 2, "");
         std::string hexOutput = ax::utils::getStringMD5Hash(std::string_view{str});
 
         lua_pushlstring(tolua_S, hexOutput.c_str(), hexOutput.size());
-        //delete[] hexOutput;
+        // delete[] hexOutput;
         return 1;
     }
 #if _AX_DEBUG >= 1
-    tolua_lerror:
-                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getStringMD5Hash'.", &tolua_err);
-                return 0;
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getStringMD5Hash'.", &tolua_err);
+    return 0;
 #endif
 }
-
 
 static int tolua_cocos2d_utils_base64Encode(lua_State* tolua_S)
 {
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isstring(tolua_S, 2, 0, &tolua_err) )
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isstring(tolua_S, 2, 0, &tolua_err))
         goto tolua_lerror;
     else
 #endif
     {
-        std::string  str = tolua_tocppstring(tolua_S, 2, "");
-        char *out;
+        std::string str = tolua_tocppstring(tolua_S, 2, "");
+        char* out;
         unsigned char* in;
-        in = (unsigned char*)str.c_str();
+        in                    = (unsigned char*)str.c_str();
         unsigned int inLength = str.size();
-        int len = ax::utils::base64Encode(in, (unsigned int)inLength, &out);
+        int len               = ax::utils::base64Encode(in, (unsigned int)inLength, &out);
 
-        lua_pushlstring(tolua_S, out,len);
-        //delete[] hexOutput;
+        lua_pushlstring(tolua_S, out, len);
+        // delete[] hexOutput;
         return 1;
     }
 #if _AX_DEBUG >= 1
-    tolua_lerror:
-                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_base64Encode'.", &tolua_err);
-                return 0;
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_base64Encode'.", &tolua_err);
+    return 0;
 #endif
 }
 
@@ -7524,50 +7500,48 @@ static int tolua_cocos2d_utils_base64Decode(lua_State* tolua_S)
 {
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isstring(tolua_S, 2, 0, &tolua_err) )
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isstring(tolua_S, 2, 0, &tolua_err))
         goto tolua_lerror;
     else
 #endif
     {
-        std::string  base64String = tolua_tocppstring(tolua_S, 2, "");
+        std::string base64String = tolua_tocppstring(tolua_S, 2, "");
 
         unsigned char* decoded;
-        int length = ax::utils::base64Decode((const unsigned char*)base64String.c_str(), (unsigned int)base64String.size(), &decoded);
-        const char* d  = (const char*)decoded;
+        int length    = ax::utils::base64Decode((const unsigned char*)base64String.c_str(),
+                                                (unsigned int)base64String.size(), &decoded);
+        const char* d = (const char*)decoded;
         lua_pushlstring(tolua_S, d, length);
-        //delete[] hexOutput;
+        // delete[] hexOutput;
         return 1;
     }
 #if _AX_DEBUG >= 1
-    tolua_lerror:
-                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_base64Decode'.", &tolua_err);
-                return 0;
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_base64Decode'.", &tolua_err);
+    return 0;
 #endif
 }
 
 static int tolua_cocos2d_utils_getCascadeBoundingBox(lua_State* tolua_S)
 {
 #if _AX_DEBUG >= 1
-                tolua_Error tolua_err;
-                if (!tolua_istable(tolua_S, 1, 0, &tolua_err) ||
-                    !tolua_isusertype(tolua_S, 2, "ax.Node", 0, &tolua_err))
+    tolua_Error tolua_err;
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isusertype(tolua_S, 2, "ax.Node", 0, &tolua_err))
         goto tolua_lerror;
-                else
+    else
 #endif
-                {
+    {
         ax::Node* node = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
-        Rect box            = ax::utils::getCascadeBoundingBox(node);
+        Rect box       = ax::utils::getCascadeBoundingBox(node);
         rect_to_luaval(tolua_S, box);
         return 1;
-                }
+    }
 #if _AX_DEBUG >= 1
 tolua_lerror:
-                tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getCascadeBoundingBox'.", &tolua_err);
-                return 0;
+    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getCascadeBoundingBox'.", &tolua_err);
+    return 0;
 #endif
 }
-
-
 
 int register_all_ax_module_manual(lua_State* tolua_S)
 {
@@ -8301,12 +8275,12 @@ int register_all_ax_shaders_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
-#define set_lua_field(field)             \
-    do                                   \
-    {                                    \
-        lua_pushlstring(tolua_S, #field, sizeof(#field) - 1); \
-        lua_pushlstring(tolua_S, field.data(), field.length());  \
-        lua_rawset(tolua_S, -3);         \
+#define set_lua_field(field)                                    \
+    do                                                          \
+    {                                                           \
+        lua_pushlstring(tolua_S, #field, sizeof(#field) - 1);   \
+        lua_pushlstring(tolua_S, field.data(), field.length()); \
+        lua_rawset(tolua_S, -3);                                \
     } while (false)
 
     tolua_open(tolua_S);

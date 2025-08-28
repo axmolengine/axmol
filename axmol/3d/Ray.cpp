@@ -224,4 +224,4 @@ void Ray::transform(const Mat4& matrix)
     _direction.normalize();
 }
 
-}
+}  // namespace ax

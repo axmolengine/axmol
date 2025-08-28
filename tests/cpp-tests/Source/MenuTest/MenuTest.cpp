@@ -36,15 +36,15 @@ enum
     kTagMenu1 = 1,
 };
 
-#define MID_CALLBACK 1000
-#define MID_CALLBACK2 1001
-#define MID_DISABLED 1002
-#define MID_ENABLE 1003
-#define MID_CONFIG 1004
-#define MID_QUIT 1005
-#define MID_OPACITY 1006
-#define MID_ALIGN 1007
-#define MID_CALLBACK3 1008
+#define MID_CALLBACK     1000
+#define MID_CALLBACK2    1001
+#define MID_DISABLED     1002
+#define MID_ENABLE       1003
+#define MID_CONFIG       1004
+#define MID_QUIT         1005
+#define MID_OPACITY      1006
+#define MID_ALIGN        1007
+#define MID_CALLBACK3    1008
 #define MID_BACKCALLBACK 1009
 
 MenuTests::MenuTests()
@@ -331,8 +331,8 @@ MenuLayer3::MenuLayer3()
         _disabledItem->setEnabled(!_disabledItem->isEnabled());
         _disabledItem->stopAllActions();
     });
-    auto item2 = MenuItemFont::create("--- Go Back ---",
-                                      [&](Object* sender) { static_cast<LayerMultiplex*>(_parent)->switchTo(0, false); });
+    auto item2 = MenuItemFont::create(
+        "--- Go Back ---", [&](Object* sender) { static_cast<LayerMultiplex*>(_parent)->switchTo(0, false); });
 
     auto spriteNormal   = Sprite::create(s_MenuItem, Rect(0, 23 * 2, 115, 23));
     auto spriteSelected = Sprite::create(s_MenuItem, Rect(0, 23 * 1, 115, 23));

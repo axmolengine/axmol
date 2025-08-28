@@ -89,7 +89,7 @@ void PhysicsContact::generateContactData()
         return;
     }
 
-    auto count = b2Body_GetContactCapacity(b2_nullBodyId); // FIXME
+    auto count         = b2Body_GetContactCapacity(b2_nullBodyId);  // FIXME
     b2ContactData* arb = static_cast<b2ContactData*>(_contactInfo);
     AX_SAFE_DELETE(_preContactData);
     _preContactData     = _contactData;
@@ -110,45 +110,45 @@ PhysicsContactPreSolve::~PhysicsContactPreSolve() {}
 
 float PhysicsContactPreSolve::getRestitution() const
 {
-    //return cpArbiterGetRestitution(static_cast<cpArbiter*>(_contactInfo));
+    // return cpArbiterGetRestitution(static_cast<cpArbiter*>(_contactInfo));
 
-    return 0; // FIXME
+    return 0;  // FIXME
 }
 
 float PhysicsContactPreSolve::getFriction() const
 {
-    //return cpArbiterGetFriction(static_cast<cpArbiter*>(_contactInfo));
-    return 0; // FIXME
+    // return cpArbiterGetFriction(static_cast<cpArbiter*>(_contactInfo));
+    return 0;  // FIXME
 }
 
 Vec2 PhysicsContactPreSolve::getSurfaceVelocity() const
 {
-    //return PhysicsHelper::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
-    return 0; // FIXME
+    // return PhysicsHelper::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
+    return 0;  // FIXME
 }
 
 void PhysicsContactPreSolve::setRestitution(float restitution)
 {
     // FIXME
-    //cpArbiterSetRestitution(static_cast<cpArbiter*>(_contactInfo), restitution);
+    // cpArbiterSetRestitution(static_cast<cpArbiter*>(_contactInfo), restitution);
 }
 
 void PhysicsContactPreSolve::setFriction(float friction)
 {
     // FIXME
-    //cpArbiterSetFriction(static_cast<cpArbiter*>(_contactInfo), friction);
+    // cpArbiterSetFriction(static_cast<cpArbiter*>(_contactInfo), friction);
 }
 
 void PhysicsContactPreSolve::setSurfaceVelocity(const Vec2& velocity)
 {
     // FIXME
-    //cpArbiterSetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo), PhysicsHelper::vec22cpv(velocity));
+    // cpArbiterSetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo), PhysicsHelper::vec22cpv(velocity));
 }
 
 void PhysicsContactPreSolve::ignore()
 {
     // FIXME
-    //cpArbiterIgnore(static_cast<cpArbiter*>(_contactInfo));
+    // cpArbiterIgnore(static_cast<cpArbiter*>(_contactInfo));
 }
 
 // PhysicsContactPostSolve implementation
@@ -159,21 +159,21 @@ PhysicsContactPostSolve::~PhysicsContactPostSolve() {}
 float PhysicsContactPostSolve::getRestitution() const
 {
     // FIXME
-    //return cpArbiterGetRestitution(static_cast<cpArbiter*>(_contactInfo));
+    // return cpArbiterGetRestitution(static_cast<cpArbiter*>(_contactInfo));
     return 0;
 }
 
 float PhysicsContactPostSolve::getFriction() const
 {
     // FIXME
-    //return cpArbiterGetFriction(static_cast<cpArbiter*>(_contactInfo));
+    // return cpArbiterGetFriction(static_cast<cpArbiter*>(_contactInfo));
     return 0;
 }
 
 Vec2 PhysicsContactPostSolve::getSurfaceVelocity() const
 {
     // FIXME
-    //return PhysicsHelper::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
+    // return PhysicsHelper::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
     return Vec2::ZERO;
 }
 
@@ -445,5 +445,5 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::clon
     return nullptr;
 }
 
-}
+}  // namespace ax
 #endif  // defined(AX_ENABLE_PHYSICS)

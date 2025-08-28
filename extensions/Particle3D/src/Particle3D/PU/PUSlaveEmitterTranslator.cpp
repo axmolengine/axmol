@@ -76,4 +76,4 @@ bool PUSlaveEmitterTranslator::translateChildObject(PUScriptCompiler* /*compiler
     return false;
 }
 
-}
+}  // namespace ax

@@ -646,7 +646,7 @@ void ActionAnimate::onEnter()
     //
     // Manual animation
     //
-    auto animation   = Animation::create();
+    auto animation = Animation::create();
     char szName[100];
     for (int i = 1; i < 15; i++)
     {
@@ -1655,12 +1655,10 @@ void Issue1305::onEnter()
     _spriteTmp->runAction(CallFunc::create(std::bind(&Issue1305::print, this, _spriteTmp)));
     _spriteTmp->retain();
 
-    scheduleOnce(
-        [&](float dt) {
+    scheduleOnce([&](float dt) {
         _spriteTmp->setPosition(250, 250);
         addChild(_spriteTmp);
-    },
-        2, "update_key");
+    }, 2, "update_key");
 }
 
 void Issue1305::print(Node* sender)
@@ -2079,23 +2077,19 @@ void PauseResumeActions::onEnter()
     _grossini->runAction(RepeatForever::create(RotateBy::create(3.0f, -360.0f)));
     _kathia->runAction(RepeatForever::create(RotateBy::create(3.0f, 360.0f)));
 
-    this->schedule(
-        [&](float dt) {
+    this->schedule([&](float dt) {
         AXLOGD("Pausing");
         auto director = Director::getInstance();
 
         _pausedTargets = director->getActionManager()->pauseAllRunningActions();
-    },
-        3, false, 0, "pause_key");
+    }, 3, false, 0, "pause_key");
 
-    this->schedule(
-        [&](float dt) {
+    this->schedule([&](float dt) {
         AXLOGD("Resuming");
         auto director = Director::getInstance();
         director->getActionManager()->resumeTargets(_pausedTargets);
         _pausedTargets.clear();
-    },
-        5, false, 0, "resume_key");
+    }, 5, false, 0, "resume_key");
 }
 
 std::string PauseResumeActions::title() const
@@ -2433,8 +2427,7 @@ void ActionCoroutineTest::onEnter()
     this->runAction(action);
 
     auto s = Director::getInstance()->getWinSize();
-    _label =
-        Label::createWithTTF(fmt::format("frame count : {}", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    _label = Label::createWithTTF(fmt::format("frame count : {}", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     _label->setPosition(s.width / 2, s.height / 2 + 100);
     addChild(_label, 1, 1);
 
@@ -2461,20 +2454,17 @@ Coroutine ActionCoroutineTest::coroutineCallback()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto label1 =
-        Label::createWithTTF(fmt::format("First ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    auto label1 = Label::createWithTTF(fmt::format("First ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label1->setPosition(s.width / 4 * 1, s.height / 2);
     addChild(label1);
     co_yield DelayTime::create(3.0f);  // delay 3s
 
-    auto label2 =
-        Label::createWithTTF(fmt::format("after 3sec ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    auto label2 = Label::createWithTTF(fmt::format("after 3sec ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label2->setPosition(s.width / 4 * 2, s.height / 2);
     addChild(label2);
     co_yield nullptr;  // next frame
 
-    auto label3 =
-        Label::createWithTTF(fmt::format("next frame ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    auto label3 = Label::createWithTTF(fmt::format("next frame ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label3->setPosition(s.width / 4 * 3, s.height / 2);
     addChild(label3);
 

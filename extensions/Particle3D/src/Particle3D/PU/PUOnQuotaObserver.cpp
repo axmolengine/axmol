@@ -90,4 +90,4 @@ PUOnQuotaObserver* PUOnQuotaObserver::create()
     return pqo;
 }
 
-}
+}  // namespace ax

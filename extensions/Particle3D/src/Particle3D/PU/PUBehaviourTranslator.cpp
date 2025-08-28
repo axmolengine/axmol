@@ -120,4 +120,4 @@ void PUBehaviourTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode
     }
 }
 
-}
+}  // namespace ax

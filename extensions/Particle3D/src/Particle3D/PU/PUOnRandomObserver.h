@@ -65,11 +65,10 @@ public:
     void copyAttributesTo(PUObserver* observer) override;
 
     PUOnRandomObserver();
-    virtual ~PUOnRandomObserver(){};
+    virtual ~PUOnRandomObserver() {};
 
 protected:
     float _threshold;  // Value between 0..1
 };
 
-}
-
+}  // namespace ax

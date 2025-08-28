@@ -172,46 +172,40 @@ private:
 
         HRESULT res = CreateCoreWebView2EnvironmentWithOptions(
             nullptr, (userDataFolder + L"/" + currentExeNameW).c_str(), nullptr,
-            new webview2_com_handler(
-                wnd, cb,
-                [&](ICoreWebView2Controller* controller) {
-                    m_controller = controller;
-                    m_controller->get_CoreWebView2(&m_webview);
-                    m_webview->AddRef();
-                    flag.clear();
-                },
-                [this](std::string_view url) -> bool {
-                    const auto scheme = url.substr(0, url.find_first_of(':'));
-                    if (scheme == m_jsScheme)
-                    {
-                        if (_onJsCallback)
-                        {
-                            _onJsCallback(url);
-                        }
-                        return true;
-                    }
+            new webview2_com_handler(wnd, cb, [&](ICoreWebView2Controller* controller) {
+            m_controller = controller;
+            m_controller->get_CoreWebView2(&m_webview);
+            m_webview->AddRef();
+            flag.clear();
+        }, [this](std::string_view url) -> bool {
+            const auto scheme = url.substr(0, url.find_first_of(':'));
+            if (scheme == m_jsScheme)
+            {
+                if (_onJsCallback)
+                {
+                    _onJsCallback(url);
+                }
+                return true;
+            }
 
-                    if (_shouldStartLoading && !url.empty())
-                    {
-                        return _shouldStartLoading(url);
-                    }
-                    return true;
-                },
-                [this]() {
-                    LPWSTR uri;
-                    this->m_webview->get_Source(&uri);
-                    std::string result = ntcvt::from_chars(uri);
-                    if (_didFinishLoading)
-                        _didFinishLoading(result);
-                },
-                [this]() {
-                    LPWSTR uri;
-                    this->m_webview->get_Source(&uri);
-                    std::string result = ntcvt::from_chars(uri);
-                    if (_didFailLoading)
-                        _didFailLoading(result);
-                },
-                [this](std::string_view url) { loadURL(url, false); }));
+            if (_shouldStartLoading && !url.empty())
+            {
+                return _shouldStartLoading(url);
+            }
+            return true;
+        }, [this]() {
+            LPWSTR uri;
+            this->m_webview->get_Source(&uri);
+            std::string result = ntcvt::from_chars(uri);
+            if (_didFinishLoading)
+                _didFinishLoading(result);
+        }, [this]() {
+            LPWSTR uri;
+            this->m_webview->get_Source(&uri);
+            std::string result = ntcvt::from_chars(uri);
+            if (_didFailLoading)
+                _didFailLoading(result);
+        }, [this](std::string_view url) { loadURL(url, false); }));
 
         if (res != S_OK)
         {
@@ -461,36 +455,32 @@ WebViewImpl::WebViewImpl(WebView* webView) : _createSucceeded(false), _systemWeb
         return;
     }
 
-    _createSucceeded = _systemWebControl->createWebView(
-        [this](std::string_view url) -> bool {
-            const auto shouldStartLoading = _webView->getOnShouldStartLoading();
-            if (shouldStartLoading != nullptr)
-            {
-                return shouldStartLoading(_webView, url);
-            }
-            return true;
-        },
-        [this](std::string_view url) {
-            WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
-            if (didFinishLoading != nullptr)
-            {
-                didFinishLoading(_webView, url);
-            }
-        },
-        [this](std::string_view url) {
-            WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
-            if (didFailLoading != nullptr)
-            {
-                didFailLoading(_webView, url);
-            }
-        },
-        [this](std::string_view url) {
-            WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
-            if (onJsCallback != nullptr)
-            {
-                onJsCallback(_webView, url);
-            }
-        });
+    _createSucceeded = _systemWebControl->createWebView([this](std::string_view url) -> bool {
+        const auto shouldStartLoading = _webView->getOnShouldStartLoading();
+        if (shouldStartLoading != nullptr)
+        {
+            return shouldStartLoading(_webView, url);
+        }
+        return true;
+    }, [this](std::string_view url) {
+        WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
+        if (didFinishLoading != nullptr)
+        {
+            didFinishLoading(_webView, url);
+        }
+    }, [this](std::string_view url) {
+        WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
+        if (didFailLoading != nullptr)
+        {
+            didFailLoading(_webView, url);
+        }
+    }, [this](std::string_view url) {
+        WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
+        if (onJsCallback != nullptr)
+        {
+            onJsCallback(_webView, url);
+        }
+    });
 }
 
 WebViewImpl::~WebViewImpl()

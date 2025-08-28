@@ -197,4 +197,4 @@ Animation* Animation::clone() const
     return a;
 }
 
-}
+}  // namespace ax

@@ -67,10 +67,22 @@ void TextFieldReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* coc
         // read all color related properties of widget
         AX_COLOR_PROPERTY_BINARY_READER
 
-        else if (key == P_PlaceHolder) { textField->setPlaceHolder(value); }
-        else if (key == P_Text) { textField->setString(value); }
-        else if (key == P_FontSize) { textField->setFontSize(valueToInt(value)); }
-        else if (key == P_FontName) { textField->setFontName(value); }
+        else if (key == P_PlaceHolder)
+        {
+            textField->setPlaceHolder(value);
+        }
+        else if (key == P_Text)
+        {
+            textField->setString(value);
+        }
+        else if (key == P_FontSize)
+        {
+            textField->setFontSize(valueToInt(value));
+        }
+        else if (key == P_FontName)
+        {
+            textField->setFontName(value);
+        }
         else if (key == P_TouchSizeWidth)
         {
             textField->setTouchSize(Size(valueToFloat(value), textField->getTouchSize().height));
@@ -79,10 +91,22 @@ void TextFieldReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* coc
         {
             textField->setTouchSize(Size(textField->getTouchSize().width, valueToFloat(value)));
         }
-        else if (key == P_MaxLengthEnable) { textField->setMaxLengthEnabled(valueToBool(value)); }
-        else if (key == P_MaxLength) { textField->setMaxLength(valueToInt(value)); }
-        else if (key == P_PasswordEnable) { textField->setPasswordEnabled(valueToBool(value)); }
-        else if (key == P_PasswordStyleText) { textField->setPasswordStyleText(value.c_str()); }
+        else if (key == P_MaxLengthEnable)
+        {
+            textField->setMaxLengthEnabled(valueToBool(value));
+        }
+        else if (key == P_MaxLength)
+        {
+            textField->setMaxLength(valueToInt(value));
+        }
+        else if (key == P_PasswordEnable)
+        {
+            textField->setPasswordEnabled(valueToBool(value));
+        }
+        else if (key == P_PasswordStyleText)
+        {
+            textField->setPasswordStyleText(value.c_str());
+        }
     }  // end of for loop
     this->endSetBasicProperties(widget);
 }
@@ -227,7 +251,7 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")

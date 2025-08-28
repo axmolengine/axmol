@@ -78,7 +78,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
                 printf("%s() called from %s returned error %i\n", #__FUNC__, __FUNCTION__, __error); \
             (__error ? NO : YES);                                                                    \
         })
-//#define CHECK_GL_ERROR() ({ GLenum __error = glGetError(); if(__error) printf("OpenGL error 0x%04X in %s\n", __error,
+// #define CHECK_GL_ERROR() ({ GLenum __error = glGetError(); if(__error) printf("OpenGL error 0x%04X in %s\n", __error,
 //__FUNCTION__); (__error ? NO : YES); })
 #    define CHECK_GL_ERROR()                                                               \
         ({                                                                                 \

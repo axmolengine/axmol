@@ -99,5 +99,4 @@ protected:
 
     float _latestTimeElapsed;
 };
-}
-
+}  // namespace ax

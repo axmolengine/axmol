@@ -163,11 +163,11 @@ THE SOFTWARE.
 #include "axmol/renderer/Shaders.h"
 
 // physics
- #include "axmol/physics/PhysicsBody.h"
- #include "axmol/physics/PhysicsContact.h"
- #include "axmol/physics/PhysicsJoint.h"
- #include "axmol/physics/PhysicsCollider.h"
- #include "axmol/physics/PhysicsWorld.h"
+#include "axmol/physics/PhysicsBody.h"
+#include "axmol/physics/PhysicsContact.h"
+#include "axmol/physics/PhysicsJoint.h"
+#include "axmol/physics/PhysicsCollider.h"
+#include "axmol/physics/PhysicsWorld.h"
 
 // platform
 #include "axmol/platform/Common.h"
@@ -220,11 +220,11 @@ THE SOFTWARE.
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
-    #include "axmol/platform/wasm/Application-wasm.h"
-    #include "axmol/platform/RenderViewImpl.h"
-    #include "axmol/platform/wasm/GL-wasm.h"
-    #include "axmol/platform/wasm/StdC-wasm.h"
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#    include "axmol/platform/wasm/Application-wasm.h"
+#    include "axmol/platform/RenderViewImpl.h"
+#    include "axmol/platform/wasm/GL-wasm.h"
+#    include "axmol/platform/wasm/StdC-wasm.h"
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
 // script_support
 #include "axmol/base/ScriptSupport.h"

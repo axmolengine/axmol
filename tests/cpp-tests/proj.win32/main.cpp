@@ -32,7 +32,8 @@
 
 using namespace ax;
 
-static int axmol_main() {
+static int axmol_main()
+{
     // create the application instance
     AppDelegate app;
     return Application::getInstance()->run();
@@ -45,15 +46,16 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // create the application instance
-#ifdef USE_WIN32_CONSOLE
-#    include "axmol/platform/win32/EmbedConsole.h"
-#endif
+#    ifdef USE_WIN32_CONSOLE
+#        include "axmol/platform/win32/EmbedConsole.h"
+#    endif
 
     // create the application instance
     return axmol_main();
 }
 #else
-int main(int, char**) {
+int main(int, char**)
+{
     return axmol_main();
 }
 #endif

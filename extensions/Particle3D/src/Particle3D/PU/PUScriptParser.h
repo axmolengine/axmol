@@ -84,4 +84,4 @@ private:
                                                    PUScriptTokenList::const_iterator end);
 };
 
-}
+}  // namespace ax

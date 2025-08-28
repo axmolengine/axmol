@@ -84,4 +84,4 @@ std::unique_ptr<MediaEngineFactory> MediaEngineFactory::create()
 #endif
 }
 
-}
+}  // namespace ax

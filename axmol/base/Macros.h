@@ -208,42 +208,39 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #    define AX_PROFILER_STOP(__name__)   ax::ProfilingEndTimingBlock(__name__)
 #    define AX_PROFILER_RESET(__name__)  ax::ProfilingResetTimingBlock(__name__)
 
-#    define AX_PROFILER_START_CATEGORY(__cat__, __name__)   \
-        do                                                  \
-        {                                                   \
-            if (__cat__)                                    \
-                ax::ProfilingBeginTimingBlock(__name__); \
-        } while (0)
-#    define AX_PROFILER_STOP_CATEGORY(__cat__, __name__)  \
+#    define AX_PROFILER_START_CATEGORY(__cat__, __name__) \
         do                                                \
         {                                                 \
             if (__cat__)                                  \
-                ax::ProfilingEndTimingBlock(__name__); \
+                ax::ProfilingBeginTimingBlock(__name__);  \
         } while (0)
-#    define AX_PROFILER_RESET_CATEGORY(__cat__, __name__)   \
-        do                                                  \
-        {                                                   \
-            if (__cat__)                                    \
-                ax::ProfilingResetTimingBlock(__name__); \
+#    define AX_PROFILER_STOP_CATEGORY(__cat__, __name__) \
+        do                                               \
+        {                                                \
+            if (__cat__)                                 \
+                ax::ProfilingEndTimingBlock(__name__);   \
+        } while (0)
+#    define AX_PROFILER_RESET_CATEGORY(__cat__, __name__) \
+        do                                                \
+        {                                                 \
+            if (__cat__)                                  \
+                ax::ProfilingResetTimingBlock(__name__);  \
         } while (0)
 
-#    define AX_PROFILER_START_INSTANCE(__id__, __name__)                                       \
-        do                                                                                     \
-        {                                                                                      \
-            ax::ProfilingBeginTimingBlock(                                                  \
-                ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+#    define AX_PROFILER_START_INSTANCE(__id__, __name__)                                                              \
+        do                                                                                                            \
+        {                                                                                                             \
+            ax::ProfilingBeginTimingBlock(ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
-#    define AX_PROFILER_STOP_INSTANCE(__id__, __name__)                                        \
-        do                                                                                     \
-        {                                                                                      \
-            ax::ProfilingEndTimingBlock(                                                    \
-                ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+#    define AX_PROFILER_STOP_INSTANCE(__id__, __name__)                                                             \
+        do                                                                                                          \
+        {                                                                                                           \
+            ax::ProfilingEndTimingBlock(ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
-#    define AX_PROFILER_RESET_INSTANCE(__id__, __name__)                                       \
-        do                                                                                     \
-        {                                                                                      \
-            ax::ProfilingResetTimingBlock(                                                  \
-                ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+#    define AX_PROFILER_RESET_INSTANCE(__id__, __name__)                                                              \
+        do                                                                                                            \
+        {                                                                                                             \
+            ax::ProfilingResetTimingBlock(ax::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
 
 #else
@@ -347,7 +344,7 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #define AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(__drawcalls__, __vertices__) \
     do                                                                          \
     {                                                                           \
-        auto __renderer__ = ax::Director::getInstance() -> getRenderer();       \
+        auto __renderer__ = ax::Director::getInstance()->getRenderer();         \
         __renderer__->addDrawnBatches(__drawcalls__);                           \
         __renderer__->addDrawnVertices(__vertices__);                           \
     } while (0)

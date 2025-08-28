@@ -63,4 +63,4 @@ private:
 
 /// @endcond
 
-}
+}  // namespace ax

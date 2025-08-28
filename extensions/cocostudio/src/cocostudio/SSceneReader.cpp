@@ -212,7 +212,7 @@ Node* SceneReader::nodeByTag(Node* parent, int tag)
 ax::Component* SceneReader::createComponent(std::string_view classname)
 {
     std::string name = this->getComponentClassName(classname);
-    Object* object      = ObjectFactory::getInstance()->createObject(name);
+    Object* object   = ObjectFactory::getInstance()->createObject(name);
 
     return dynamic_cast<Component*>(object);
 }
@@ -248,9 +248,7 @@ std::string SceneReader::getComponentClassName(std::string_view name)
     return comName;
 }
 
-Node* SceneReader::createObject(const rapidjson::Value& dict,
-                                ax::Node* parent,
-                                AttachComponentType attachComponent)
+Node* SceneReader::createObject(const rapidjson::Value& dict, ax::Node* parent, AttachComponentType attachComponent)
 {
     const char* className = DICTOOL->getStringValue_json(dict, "classname");
     if (strcmp(className, "CCNode") == 0)
@@ -353,9 +351,9 @@ Node* SceneReader::createObject(const rapidjson::Value& dict,
 }
 
 ax::Node* SceneReader::createObject(CocoLoader* cocoLoader,
-                                         stExpCocoNode* cocoNode,
-                                         ax::Node* parent,
-                                         AttachComponentType attachComponent)
+                                    stExpCocoNode* cocoNode,
+                                    ax::Node* parent,
+                                    AttachComponentType attachComponent)
 {
     stExpCocoNode* pNodeArray = cocoNode->GetChildArray(cocoLoader);
     std::string Key           = pNodeArray[1].GetName(cocoLoader);

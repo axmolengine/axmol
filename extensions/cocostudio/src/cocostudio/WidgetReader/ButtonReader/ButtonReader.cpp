@@ -82,7 +82,10 @@ void ButtonReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
         // read all color related properties of widget
         AX_COLOR_PROPERTY_BINARY_READER
 
-        else if (key == P_Scale9Enable) { button->setScale9Enabled(valueToBool(value)); }
+        else if (key == P_Scale9Enable)
+        {
+            button->setScale9Enabled(valueToBool(value));
+        }
         else if (key == P_NormalData)
         {
 
@@ -120,17 +123,50 @@ void ButtonReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
 
             button->loadTextureDisabled(backgroundValue, imageFileNameType);
         }
-        else if (key == P_Text) { button->setTitleText(value); }
-        else if (key == P_CapInsetsX) { capsx = valueToFloat(value); }
-        else if (key == P_CapInsetsY) { capsy = valueToFloat(value); }
-        else if (key == P_CapInsetsWidth) { capsWidth = valueToFloat(value); }
-        else if (key == P_CapInsetsHeight) { capsHeight = valueToFloat(value); }
-        else if (key == P_Scale9Width) { scale9Width = valueToFloat(value); }
-        else if (key == P_Scale9Height) { scale9Height = valueToFloat(value); }
-        else if (key == P_TextColorR) { cri = valueToInt(value); }
-        else if (key == P_TextColorG) { cgi = valueToInt(value); }
-        else if (key == P_TextColorB) { cbi = valueToInt(value); }
-        else if (key == P_FontSize) { button->setTitleFontSize(valueToFloat(value)); }
+        else if (key == P_Text)
+        {
+            button->setTitleText(value);
+        }
+        else if (key == P_CapInsetsX)
+        {
+            capsx = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsY)
+        {
+            capsy = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsWidth)
+        {
+            capsWidth = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsHeight)
+        {
+            capsHeight = valueToFloat(value);
+        }
+        else if (key == P_Scale9Width)
+        {
+            scale9Width = valueToFloat(value);
+        }
+        else if (key == P_Scale9Height)
+        {
+            scale9Height = valueToFloat(value);
+        }
+        else if (key == P_TextColorR)
+        {
+            cri = valueToInt(value);
+        }
+        else if (key == P_TextColorG)
+        {
+            cgi = valueToInt(value);
+        }
+        else if (key == P_TextColorB)
+        {
+            cbi = valueToInt(value);
+        }
+        else if (key == P_FontSize)
+        {
+            button->setTitleFontSize(valueToFloat(value));
+        }
         else if (key == P_FontName)
         {
             button->setTitleFontName(value);  // fonts
@@ -378,7 +414,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "X")
@@ -398,7 +434,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             attribute = child.first_attribute();
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "R")
@@ -426,7 +462,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -461,7 +497,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -496,7 +532,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -528,7 +564,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -553,7 +589,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "A")
@@ -582,7 +618,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "A")
@@ -611,7 +647,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "A")

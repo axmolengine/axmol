@@ -160,7 +160,7 @@ public:
     /**
      * clear texture data to zero.
      * @remark: only works for uncompressed texture.
-    */
+     */
     void zeroTexData();
 
 protected:

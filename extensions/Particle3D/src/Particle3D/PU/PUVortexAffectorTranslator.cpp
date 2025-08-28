@@ -127,4 +127,4 @@ bool PUVortexAffectorTranslator::translateChildObject(PUScriptCompiler* compiler
     return false;
 }
 
-}
+}  // namespace ax

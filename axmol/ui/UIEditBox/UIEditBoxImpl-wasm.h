@@ -62,8 +62,9 @@ public:
     void nativeOpenKeyboard() override;
     void nativeCloseKeyboard() override;
     void setNativeMaxLength(int maxLength) override;
-    //EditBoxDelegate::EditBoxEndAction _endAction;
+    // EditBoxDelegate::EditBoxEndAction _endAction;
     bool isEditingMode() const { return _editingMode; }
+
 private:
     void createEditCtrl(EditBox::InputMode inputMode);
 
@@ -74,7 +75,6 @@ private:
 
 }  // namespace ui
 
-}
+}  // namespace ax
 
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WASM) */
-

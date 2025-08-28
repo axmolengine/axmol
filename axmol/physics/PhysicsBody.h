@@ -57,7 +57,7 @@ const PhysicsMaterial PHYSICSBODY_MATERIAL_DEFAULT(0.1f, 0.5f, 0.5f);
  * If you create body with createXXX, it will automatically compute mass and moment with density your specified(which is
  * PHYSICSBODY_MATERIAL_DEFAULT by default, and the density value is 0.1f), and it based on the formula: mass = density
  * * area. If you create body with createEdgeXXX, the mass and moment will be PHYSICS_INFINITY by default. And it's a
- * static body. 
+ * static body.
  * or static by use function setDynamic().
  * Note: box2d not allow change mass and moment dynamic
  */
@@ -169,7 +169,8 @@ public:
     /**
      * @brief Add a collider to body.
      * @param collider The collider to be added.
-     * @param addMassAndMoment If this is true, the collider's mass and moment will be added to body. The default is true.
+     * @param addMassAndMoment If this is true, the collider's mass and moment will be added to body. The default is
+     * true.
      * @return This collider's pointer if added success or nullptr if failed.
      */
     virtual PhysicsCollider* addCollider(PhysicsCollider* collider, bool addMassAndMoment = true);
@@ -513,7 +514,6 @@ protected:
     void afterSimulation(const Mat4& parentToWorldTransform, float parentRotation);
 
 protected:
-
     void deatchFromWOrld();
 
     std::vector<PhysicsJoint*> _joints;
@@ -561,6 +561,6 @@ protected:
 /** @} */
 /** @} */
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_PHYSICS)

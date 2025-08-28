@@ -30,12 +30,11 @@
 NS_AX_MATH_BEGIN
 
 #if defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
-    const Mat4 Mat4::IDENTITY =
-        Mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+const Mat4 Mat4::IDENTITY =
+    Mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
-    const Mat4 Mat4::ZERO = Mat4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+const Mat4 Mat4::ZERO = Mat4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 #endif
-
 
 void Mat4::createLookAt(const Vec3& eyePosition, const Vec3& targetPosition, const Vec3& up, Mat4* dst)
 {
@@ -104,7 +103,7 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     if (std::abs(std::fmod(theta, MATH_PIOVER2)) < MATH_EPSILON)
     {
         AXLOGE("Invalid field of view value ({}) causes attempted calculation tan({}), which is undefined.",
-                   fieldOfView, theta);
+               fieldOfView, theta);
         return;
     }
     float divisor = std::tan(theta);

@@ -33,7 +33,6 @@
 #    include "axmol/2d/Sprite.h"
 #    include <chrono>
 
-
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
 #        include "axmol/2d/DrawNode.h"
 #    endif
@@ -65,7 +64,7 @@ public:
     explicit MediaController(MediaPlayer* player) : _mediaPlayer(player) {}
     ~MediaController() override = 0;
 
-    virtual void updateControllerState() = 0;
+    virtual void updateControllerState()            = 0;
     virtual void setTimelineBarHeight(float height) = 0;
 
     void setOrientation(Orientation orientation);
@@ -141,7 +140,7 @@ protected:
     EventListenerTouchOneByOne* _timelineTouchListener = nullptr;
     float _playRate                                    = 1.f;
     std::chrono::steady_clock::time_point _lastTouch;
-    bool _controlsReady      = false;
+    bool _controlsReady = false;
     float _timelineBarHeight;
 };
 
@@ -271,13 +270,13 @@ public:
 
     /**
      * @brief Pauses playback
-     * 
+     *
      */
     void pausePlayback();
 
     /**
      * @brief Resumes playback
-     * 
+     *
      */
     void resumePlayback();
 
@@ -428,7 +427,7 @@ protected:
 using VideoPlayer = MediaPlayer;
 }  // namespace ui
 
-}
+}  // namespace ax
 // end group
 /// @}
 #endif

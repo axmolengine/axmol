@@ -41,6 +41,6 @@ EditBoxImpl* __createSystemEditBox(EditBox* pEditBox)
 
 }  // namespace ui
 
-}
+}  // namespace ax
 
 #endif /* #if (..) */

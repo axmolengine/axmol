@@ -118,4 +118,4 @@ PUSphereSurfaceEmitter* PUSphereSurfaceEmitter::clone()
     return be;
 }
 
-}
+}  // namespace ax

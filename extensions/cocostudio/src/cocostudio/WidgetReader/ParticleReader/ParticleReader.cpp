@@ -85,7 +85,7 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -110,7 +110,7 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Src")
@@ -148,8 +148,8 @@ void ParticleReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
     if (particle && f_blendFunc)
     {
         ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
-        blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
-        blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
+        blendFunc.src           = utils::toBackendBlendFactor(f_blendFunc->src());
+        blendFunc.dst           = utils::toBackendBlendFactor(f_blendFunc->dst());
         particle->setBlendFunc(blendFunc);
     }
 

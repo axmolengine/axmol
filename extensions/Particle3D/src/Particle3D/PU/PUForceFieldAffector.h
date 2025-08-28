@@ -156,5 +156,4 @@ protected:
     Vec3 _basePosition;
     bool _suppressGeneration;  // Prevents re-generation of the complete forcefield after a change.
 };
-}
-
+}  // namespace ax

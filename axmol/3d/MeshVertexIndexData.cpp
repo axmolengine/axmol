@@ -112,8 +112,8 @@ void MeshVertexData::setVertexData(const std::vector<float>& vertexData)
 MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::IndexFormat format)
 {
     auto vertexdata           = new MeshVertexData();
-    vertexdata->_vertexBuffer = axdrv->createBuffer(
-        meshdata.vertex.size() * sizeof(meshdata.vertex[0]), rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
+    vertexdata->_vertexBuffer = axdrv->createBuffer(meshdata.vertex.size() * sizeof(meshdata.vertex[0]),
+                                                    rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
     // AX_SAFE_RETAIN(vertexdata->_vertexBuffer);
 
     vertexdata->_sizePerVertex = meshdata.getPerVertexSize();
@@ -133,9 +133,8 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
     bool needCalcAABB = (meshdata.subMeshAABB.size() != meshdata.subMeshIndices.size());
     for (size_t i = 0, size = meshdata.subMeshIndices.size(); i < size; ++i)
     {
-        auto& indices = meshdata.subMeshIndices[i];
-        auto indexBuffer = axdrv->createBuffer(
-            indices.bsize(), rhi::BufferType::INDEX, rhi::BufferUsage::STATIC);
+        auto& indices    = meshdata.subMeshIndices[i];
+        auto indexBuffer = axdrv->createBuffer(indices.bsize(), rhi::BufferType::INDEX, rhi::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         indexBuffer->usingDefaultStoredData(false);
@@ -201,4 +200,4 @@ MeshVertexData::~MeshVertexData()
 #endif
 }
 
-}
+}  // namespace ax

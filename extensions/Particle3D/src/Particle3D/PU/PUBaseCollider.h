@@ -124,5 +124,4 @@ protected:
     CollisionType _collisionType;
     float _velocityScale;  // Value set in the particle system, but stored in the collider for convenience.
 };
-}
-
+}  // namespace ax

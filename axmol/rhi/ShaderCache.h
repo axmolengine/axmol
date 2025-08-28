@@ -32,7 +32,8 @@
 #include <string>
 #include <unordered_map>
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 /**
  * @addtogroup _rhi
  * @{
@@ -87,4 +88,4 @@ protected:
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

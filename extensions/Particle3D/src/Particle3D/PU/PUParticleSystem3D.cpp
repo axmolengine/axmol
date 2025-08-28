@@ -1578,4 +1578,4 @@ void PUParticleSystem3D::forceStopParticleSystem()
     unPrepared();
 }
 
-}
+}  // namespace ax

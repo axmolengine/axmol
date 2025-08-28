@@ -186,4 +186,4 @@ void PUGeometryRotator::copyAttributesTo(PUAffector* affector)
 
 //-----------------------------------------------------------------------
 
-}
+}  // namespace ax

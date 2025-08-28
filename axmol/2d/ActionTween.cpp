@@ -78,4 +78,4 @@ ActionTween* ActionTween::reverse() const
     return ActionTween::create(_duration, _key, _to, _from);
 }
 
-}
+}  // namespace ax

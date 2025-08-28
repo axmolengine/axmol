@@ -191,4 +191,4 @@ protected:
     bool _needTimeUpdate;
 };
 
-}
+}  // namespace ax

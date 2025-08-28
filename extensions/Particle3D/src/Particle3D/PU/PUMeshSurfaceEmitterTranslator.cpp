@@ -120,4 +120,4 @@ bool PUMeshSurfaceEmitterTranslator::translateChildObject(PUScriptCompiler* /*co
     return false;
 }
 
-}
+}  // namespace ax

@@ -116,7 +116,7 @@ Sprite* Sprite::create(std::string_view filename, const Rect& rect)
 
 Sprite* Sprite::create(const Data& imageData, std::string_view key)
 {
-    Sprite *sprite = new Sprite();
+    Sprite* sprite = new Sprite();
     if (sprite->initWithImageData(imageData, key))
     {
         sprite->autorelease();
@@ -327,7 +327,7 @@ bool Sprite::initWithImageData(const Data& imageData, std::string_view key)
 
     //_fileName = filename;
 
-    Texture2D *texture = _director->getTextureCache()->addImage(imageData, key);
+    Texture2D* texture = _director->getTextureCache()->addImage(imageData, key);
 
     if (texture)
     {
@@ -386,7 +386,7 @@ void Sprite::setProgramState(uint32_t type)
     setProgramStateWithRegistry(type, _texture);
 }
 
-bool Sprite::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
+bool Sprite::setProgramState(rhi::ProgramState* programState, bool ownPS /* = false*/)
 {
     AXASSERT(programState, "argument should not be nullptr");
     if (Node::setProgramState(programState, ownPS))
@@ -1316,7 +1316,7 @@ void Sprite::setScaleX(float scaleX)
 void Sprite::setScaleY(float scaleY)
 {
 #if AX_RENDER_API == AX_RENDER_API_MTL
-    if (_texture &&_texture->isRenderTarget())
+    if (_texture && _texture->isRenderTarget())
         scaleY = std::abs(scaleY);
 #endif
     Node::setScaleY(scaleY);
@@ -1362,8 +1362,7 @@ void Sprite::setVisible(bool bVisible)
 void Sprite::setContentSize(const Vec2& size)
 {
     if (_stretchEnabled && (_renderMode == RenderMode::QUAD_BATCHNODE || _renderMode == RenderMode::POLYGON))
-        AXLOGW(
-            "Sprite::setContentSize() doesn't stretch the sprite when using QUAD_BATCHNODE or POLYGON render modes");
+        AXLOGW("Sprite::setContentSize() doesn't stretch the sprite when using QUAD_BATCHNODE or POLYGON render modes");
 
     Node::setContentSize(size);
 
@@ -1675,7 +1674,7 @@ void Sprite::updateBlendFunc()
 
     // it is possible to have an untextured sprite
     rhi::BlendDesc& blendDesc = _trianglesCommand.blendDesc();
-    blendDesc.blendEnabled              = true;
+    blendDesc.blendEnabled    = true;
 
     if (!_texture || !_texture->hasPremultipliedAlpha())
     {
@@ -1695,10 +1694,9 @@ std::string Sprite::getDescription() const
     std::string_view desc;
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
         desc = fmt::format_to_z(buf, "<Sprite | Tag = {}, TextureID = {}>", _tag,
-                 fmt::ptr(_batchNode->getTextureAtlas()->getTexture()->getRHITexture()));
+                                fmt::ptr(_batchNode->getTextureAtlas()->getTexture()->getRHITexture()));
     else
-        desc = fmt::format_to_z(buf, "<Sprite | Tag = {}, TextureID = {}>", _tag,
-                 fmt::ptr(_texture->getRHITexture()));
+        desc = fmt::format_to_z(buf, "<Sprite | Tag = {}, TextureID = {}>", _tag, fmt::ptr(_texture->getRHITexture()));
 
     return std::string{desc};
 }
@@ -1722,4 +1720,4 @@ void Sprite::setMVPMatrixUniform()
         programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
 }
 
-}
+}  // namespace ax

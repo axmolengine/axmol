@@ -29,18 +29,18 @@ THE SOFTWARE.
 #include "axmol/platform/winrt/WinRTUtils.h"
 
 #if defined(VLD_DEBUG_MEMORY)
-#include <vld.h>
+#    include <vld.h>
 #endif
 
 namespace ax
 {
 
-void messageBox(const char * pszMsg, const char * pszTitle)
+void messageBox(const char* pszMsg, const char* pszTitle)
 {
     // Create the message dialog and set its content
     auto message = PlatformStringFromString(pszMsg);
-    auto title = PlatformStringFromString(pszTitle);
+    auto title   = PlatformStringFromString(pszTitle);
     RenderViewImpl::sharedRenderView()->ShowMessageBox(title, message);
 }
 
-}
+}  // namespace ax

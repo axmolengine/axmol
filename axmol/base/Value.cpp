@@ -964,4 +964,4 @@ void Value::reset(Type type)
     _type = type;
 }
 
-}
+}  // namespace ax

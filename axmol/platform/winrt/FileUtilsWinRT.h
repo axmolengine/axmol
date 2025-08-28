@@ -58,7 +58,7 @@ public:
                                            std::string_view resolutionDirectory) const override;
     virtual std::string getFullPathForFilenameWithinDirectory(std::string_view strDirectory,
                                                               std::string_view strFilename) const override;
-    //virtual std::string getSuitableFOpen(const std::string_view& filenameUtf8) const override;
+    // virtual std::string getSuitableFOpen(const std::string_view& filenameUtf8) const override;
     int64_t getFileSize(std::string_view filepath) const override;
     static std::string getAppPath();
 
@@ -75,8 +75,7 @@ private:
      *  @param name     The new name of the file.
      *  @return True if the file have been renamed successfully, false if not.
      */
-    virtual bool renameFile(std::string_view path,
-                            std::string_view oldname, std::string_view name) const override;
+    virtual bool renameFile(std::string_view path, std::string_view oldname, std::string_view name) const override;
 
     /**
      *  Renames a file.
@@ -122,5 +121,4 @@ private:
 // end of platform group
 /// @}
 
-}
-
+}  // namespace ax

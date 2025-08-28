@@ -94,4 +94,4 @@ protected:
     static Application* sm_pSharedApplication;
 };
 
-}
+}  // namespace ax

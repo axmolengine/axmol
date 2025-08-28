@@ -29,7 +29,8 @@
 #include "axmol/renderer/PipelineDesc.h"
 #include "axmol/rhi/RenderPassDesc.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 /**
  * @addtogroup _rhi
  * @{
@@ -49,4 +50,4 @@ protected:
 };
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

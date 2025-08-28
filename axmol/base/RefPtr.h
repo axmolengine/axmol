@@ -40,38 +40,38 @@ namespace ax
  * Utility/support macros. Defined to enable RefPtr<T> to contain types like 'const T' because we do not
  * regard retain()/release() as affecting mutability of state.
  */
-#define AX_REF_PTR_SAFE_RETAIN(ptr)                                   \
-                                                                      \
-    do                                                                \
-    {                                                                 \
-        if (ptr)                                                      \
-        {                                                             \
-            (ptr)->retain(); \
-        }                                                             \
-                                                                      \
+#define AX_REF_PTR_SAFE_RETAIN(ptr) \
+                                    \
+    do                              \
+    {                               \
+        if (ptr)                    \
+        {                           \
+            (ptr)->retain();        \
+        }                           \
+                                    \
     } while (0);
 
-#define AX_REF_PTR_SAFE_RELEASE(ptr)                                   \
-                                                                       \
-    do                                                                 \
-    {                                                                  \
-        if (ptr)                                                       \
-        {                                                              \
-            (ptr)->release(); \
-        }                                                              \
-                                                                       \
+#define AX_REF_PTR_SAFE_RELEASE(ptr) \
+                                     \
+    do                               \
+    {                                \
+        if (ptr)                     \
+        {                            \
+            (ptr)->release();        \
+        }                            \
+                                     \
     } while (0);
 
-#define AX_REF_PTR_SAFE_RELEASE_NULL(ptr)                              \
-                                                                       \
-    do                                                                 \
-    {                                                                  \
-        if (ptr)                                                       \
-        {                                                              \
-            (ptr)->release(); \
-            ptr = nullptr;                                             \
-        }                                                              \
-                                                                       \
+#define AX_REF_PTR_SAFE_RELEASE_NULL(ptr) \
+                                          \
+    do                                    \
+    {                                     \
+        if (ptr)                          \
+        {                                 \
+            (ptr)->release();             \
+            ptr = nullptr;                \
+        }                                 \
+                                          \
     } while (0);
 
 // Tell RefPtr, the object already referenced, no need to retain again
@@ -336,6 +336,6 @@ RefPtr<T> dynamic_pointer_cast(const RefPtr<U>& r)
 #undef AX_REF_PTR_SAFE_RELEASE
 #undef AX_REF_PTR_SAFE_RELEASE_NULL
 
-}
+}  // namespace ax
 
 /// @endcond

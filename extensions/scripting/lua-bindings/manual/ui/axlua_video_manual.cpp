@@ -33,35 +33,35 @@
 static int axlua_video_MediaPlayer_addEventListener(lua_State* L)
 {
 
-    int argc                       = 0;
+    int argc                  = 0;
     ax::ui::MediaPlayer* self = nullptr;
 
-#    if _AX_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "axui.MediaPlayer", 0, &tolua_err))
         goto tolua_lerror;
-#    endif
+#endif
 
     self = static_cast<ax::ui::MediaPlayer*>(tolua_tousertype(L, 1, 0));
 
-#    if _AX_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'axlua_Widget_addTouchEventListener'\n", nullptr);
         return 0;
     }
-#    endif
+#endif
 
     argc = lua_gettop(L) - 1;
 
     if (argc == 1)
     {
-#    if _AX_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!toluafix_isfunction(L, 2, "LUA_FUNCTION", 0, &tolua_err))
         {
             goto tolua_lerror;
         }
-#    endif
+#endif
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
@@ -79,10 +79,10 @@ static int axlua_video_MediaPlayer_addEventListener(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.MediaPlayer:addEventListener",
                argc, 0);
     return 0;
-#    if _AX_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'axlua_MediaPlayer_addEventListener'.", &tolua_err);
-#    endif
+#endif
     return 0;
 }
 

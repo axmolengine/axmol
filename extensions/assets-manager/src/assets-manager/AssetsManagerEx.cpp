@@ -482,7 +482,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             if (!fsOut)
             {
                 AXLOGD("AssetsManagerEx : can not create decompress destination file {} (errno: {})\n", fullPath,
-                      errno);
+                       errno);
                 unzCloseCurrentFile(zipfile);
                 unzClose(zipfile);
                 return false;
@@ -560,16 +560,14 @@ void AssetsManagerEx::decompressDownloadedZip(std::string_view customId, std::st
         delete dataInner;
     };
 
-    Director::getInstance()->getJobSystem()->enqueue(
-        [this, asyncData]() {
+    Director::getInstance()->getJobSystem()->enqueue([this, asyncData]() {
         // Decompress all compressed files
         if (decompress(asyncData->zipFile))
         {
             asyncData->succeed = true;
         }
         _fileUtils->removeFile(asyncData->zipFile);
-    },
-        [decompressFinished, asyncData]() { decompressFinished(asyncData); });
+    }, [decompressFinished, asyncData]() { decompressFinished(asyncData); });
 }
 
 void AssetsManagerEx::dispatchUpdateEvent(EventAssetsManagerEx::EventCode code,
@@ -764,8 +762,8 @@ void AssetsManagerEx::startUpdate()
         _totalWaitToDownload = _totalToDownload = (int)_downloadUnits.size();
         this->batchDownload();
 
-        std::string msg = fmt::format(
-            "Resuming from previous unfinished update, {} files remains to be finished.", _totalToDownload);
+        std::string msg =
+            fmt::format("Resuming from previous unfinished update, {} files remains to be finished.", _totalToDownload);
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION, "", msg);
     }
     else

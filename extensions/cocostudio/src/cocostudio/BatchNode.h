@@ -58,14 +58,11 @@ public:
     void addChild(ax::Node* pChild, int zOrder, int tag) override;
     void addChild(ax::Node* pChild, int zOrder, std::string_view name) override;
     void removeChild(ax::Node* child, bool cleanup) override;
-    virtual void visit(ax::Renderer* renderer,
-                       const ax::Mat4& parentTransform,
-                       uint32_t parentFlags) override;
+    virtual void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
     void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:
     void generateGroupCommand();
-
 };
 
 }  // namespace cocostudio

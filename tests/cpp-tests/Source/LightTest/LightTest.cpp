@@ -264,7 +264,7 @@ void LightTest::SwitchLight(Object* sender, LightType lightType)
     {
     case LightType::AMBIENT:
     {
-        bool isON = !_ambientLight->isEnabled();
+        bool isON    = !_ambientLight->isEnabled();
         auto infoStr = fmt::format_to_z(tmp, "Ambient Light {}", isON == true ? "ON" : "OFF");
         _ambientLight->setEnabled(isON);
         _ambientLightLabel->setString(infoStr);
@@ -273,7 +273,7 @@ void LightTest::SwitchLight(Object* sender, LightType lightType)
 
     case LightType::DIRECTIONAL:
     {
-        bool isON = !_directionalLight->isEnabled();
+        bool isON    = !_directionalLight->isEnabled();
         auto infoStr = fmt::format_to_z(tmp, "Directional Light {}", isON == true ? "ON" : "OFF");
         _directionalLight->setEnabled(isON);
         _directionalLightLabel->setString(infoStr);
@@ -282,7 +282,7 @@ void LightTest::SwitchLight(Object* sender, LightType lightType)
 
     case LightType::POINT:
     {
-        bool isON = !_pointLight->isEnabled();
+        bool isON    = !_pointLight->isEnabled();
         auto infoStr = fmt::format_to_z(tmp, "Point Light {}", isON == true ? "ON" : "OFF");
         _pointLight->setEnabled(isON);
         _pointLightLabel->setString(infoStr);
@@ -291,7 +291,7 @@ void LightTest::SwitchLight(Object* sender, LightType lightType)
 
     case LightType::SPOT:
     {
-        bool isON = !_spotLight->isEnabled();
+        bool isON    = !_spotLight->isEnabled();
         auto infoStr = fmt::format_to_z(tmp, "Spot Light {}", isON == true ? "ON" : "OFF");
         _spotLight->setEnabled(isON);
         _spotLightLabel->setString(infoStr);

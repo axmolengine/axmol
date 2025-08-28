@@ -415,10 +415,7 @@ protected:
     void initDrawBox();
     void reachEndCallBack();
 
-    void unproject(const ax::Mat4& viewProjection,
-                   const ax::Size* viewport,
-                   ax::Vec3* src,
-                   ax::Vec3* dst);
+    void unproject(const ax::Mat4& viewProjection, const ax::Size* viewport, ax::Vec3* src, ax::Vec3* dst);
     void calculateRayByLocationInView(ax::Ray* ray, const ax::Vec2& location);
 };
 

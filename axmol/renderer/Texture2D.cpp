@@ -68,19 +68,19 @@ static bool createStringTextureData(std::string_view text,
     {
         align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::TOP
                 : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::TOP_LEFT
-                                                                        : Device::TextAlign::TOP_RIGHT;
+                                                                      : Device::TextAlign::TOP_RIGHT;
     }
     else if (TextVAlignment::CENTER == textDefinition._vertAlignment)
     {
         align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::CENTER
                 : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::LEFT
-                                                                        : Device::TextAlign::RIGHT;
+                                                                      : Device::TextAlign::RIGHT;
     }
     else if (TextVAlignment::BOTTOM == textDefinition._vertAlignment)
     {
         align = (TextHAlignment::CENTER == textDefinition._alignment) ? Device::TextAlign::BOTTOM
                 : (TextHAlignment::LEFT == textDefinition._alignment) ? Device::TextAlign::BOTTOM_LEFT
-                                                                        : Device::TextAlign::BOTTOM_RIGHT;
+                                                                      : Device::TextAlign::BOTTOM_RIGHT;
     }
     else
     {
@@ -108,7 +108,7 @@ static bool createStringTextureData(std::string_view text,
     if (imageWidth > maxTextureSize || imageHeight > maxTextureSize)
     {
         AXLOGW("Texture2D::initWithString fail, the texture size:{}x{} too large, max texture size:{}", imageWidth,
-                imageHeight, maxTextureSize);
+               imageHeight, maxTextureSize);
         return false;
     }
 
@@ -130,7 +130,7 @@ void Texture2D::chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled, rhi::S
 
     if (mipEnabled)
     {
-        if(desc.mipFilter == rhi::SamplerFilter::MIP_DEFAULT)
+        if (desc.mipFilter == rhi::SamplerFilter::MIP_DEFAULT)
             desc.mipFilter = antialiasEnabled ? rhi::SamplerFilter::MIP_LINEAR : rhi::SamplerFilter::MIP_NEAREST;
     }
     else
@@ -147,8 +147,7 @@ Texture2D::Texture2D()
     , _flags(TextureFlag::ANTIALIAS_ENABLED)
     , _samplerFlags(TextureSamplerFlag::DEFAULT)
     , _ninePatchInfo(nullptr)
-{
-}
+{}
 
 Texture2D::~Texture2D()
 {
@@ -250,9 +249,8 @@ bool Texture2D::initWithImage(Image* image, rhi::PixelFormat renderFormat, bool 
     {
         // pixel format of data is not converted, renderFormat can be different from pixelFormat
         // it will be done later
-        initWithMipmaps(image->getMipmaps(),
-                        imagePixelFormat, renderFormat, imageHeight,
-                        imageWidth, image->hasPremultipliedAlpha());
+        initWithMipmaps(image->getMipmaps(), imagePixelFormat, renderFormat, imageHeight, imageWidth,
+                        image->hasPremultipliedAlpha());
     }
     else if (image->isCompressed())
     {  // !Only hardware support texture will be compression PixelFormat, otherwise, will convert to RGBA8 duraing image
@@ -295,20 +293,21 @@ bool Texture2D::initWithData(const void* data,
 }
 
 bool Texture2D::initWithMipmaps(std::span<MipmapInfo> mipmaps,
-                                  rhi::PixelFormat pixelFormat,
-                                  rhi::PixelFormat renderFormat,
-                                  int pixelsWide,
-                                  int pixelsHigh,
-                                  bool preMultipliedAlpha)
+                                rhi::PixelFormat pixelFormat,
+                                rhi::PixelFormat renderFormat,
+                                int pixelsWide,
+                                int pixelsHigh,
+                                bool preMultipliedAlpha)
 {
 
     rhi::TextureDesc desc;
 
-    desc.width = pixelsWide;
-    desc.height = pixelsHigh;
+    desc.width       = pixelsWide;
+    desc.height      = pixelsHigh;
     desc.pixelFormat = pixelFormat;
     desc.mipLevels   = mipmaps.size();
-    return initWithSpec(desc, reinterpret_cast<std::span<TextureSliceData>&>(mipmaps), renderFormat, preMultipliedAlpha);
+    return initWithSpec(desc, reinterpret_cast<std::span<TextureSliceData>&>(mipmaps), renderFormat,
+                        preMultipliedAlpha);
 }
 
 bool Texture2D::initWithSpec(rhi::TextureDesc desc,
@@ -338,16 +337,16 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
 
     bool compressed = rhi::RHIUtils::isCompressed(desc.pixelFormat);
 
-    if (compressed && !Configuration::getInstance()->supportsPVRTC() &&
-        !Configuration::getInstance()->supportsETC2() && !Configuration::getInstance()->supportsS3TC() &&
-        !Configuration::getInstance()->supportsASTC() && !Configuration::getInstance()->supportsATITC())
+    if (compressed && !Configuration::getInstance()->supportsPVRTC() && !Configuration::getInstance()->supportsETC2() &&
+        !Configuration::getInstance()->supportsS3TC() && !Configuration::getInstance()->supportsASTC() &&
+        !Configuration::getInstance()->supportsATITC())
     {
         AXLOGW("WARNING: PVRTC/ETC images are not supported");
         return false;
     }
 
-    // !override renderFormat since some render format by RHI
-    #if AX_RENDER_API == AX_RENDER_API_MTL
+// !override renderFormat since some render format by RHI
+#if AX_RENDER_API == AX_RENDER_API_MTL
     switch (renderFormat)
     {
 #    if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)
@@ -375,7 +374,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     }
 #endif
 
-    _originalPF      = desc.pixelFormat;
+    _originalPF  = desc.pixelFormat;
     _contentSize = Vec2((float)desc.width, (float)desc.height);
     _pixelsWide  = desc.width;
     _pixelsHigh  = desc.height;
@@ -451,7 +450,8 @@ bool Texture2D::initWithString(std::string_view text, const FontDefinition& text
                         premultipliedAlpha);
 }
 
-bool Texture2D::updateData(std::string_view text, const FontDefinition& textDefinition) {
+bool Texture2D::updateData(std::string_view text, const FontDefinition& textDefinition)
+{
     if (text.empty())
         return false;
 
@@ -460,7 +460,7 @@ bool Texture2D::updateData(std::string_view text, const FontDefinition& textDefi
     VolatileTextureMgr::addStringTexture(this, text, textDefinition);
 #endif
 
-   Data outData;
+    Data outData;
     int imageWidth, imageHeight;
     bool premultipliedAlpha{false};
     if (!createStringTextureData(text, textDefinition, outData, imageWidth, imageHeight, premultipliedAlpha))
@@ -490,8 +490,9 @@ bool Texture2D::updateData(Image* image)
     }
 }
 
-bool Texture2D::updateData(std::span<const TextureSliceData> subDatas) {
-    if (!_rhiTexture)[[unlikely]]
+bool Texture2D::updateData(std::span<const TextureSliceData> subDatas)
+{
+    if (!_rhiTexture) [[unlikely]]
         return false;
 
     const auto renderFormat = _rhiTexture->getPixelFormat();
@@ -561,7 +562,13 @@ bool Texture2D::updateData(const void* data, int width, int height, int level, i
     return false;
 }
 
-bool Texture2D::updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level, int layerIndex)
+bool Texture2D::updateSubData(const void* data,
+                              int offsetX,
+                              int offsetY,
+                              int width,
+                              int height,
+                              int level,
+                              int layerIndex)
 {
     if (_rhiTexture && width > 0 && height > 0)
     {
@@ -575,7 +582,7 @@ bool Texture2D::updateSubData(const void* data, int offsetX, int offsetY, int wi
 
 void Texture2D::invalidate()
 {
-    if(_rhiTexture)
+    if (_rhiTexture)
         _rhiTexture->invalidate();
 }
 
@@ -700,9 +707,9 @@ void Texture2D::initProgram()
 
     // create program state
     auto* program      = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
-    auto programState      = new ax::rhi::ProgramState(program);
+    auto programState  = new ax::rhi::ProgramState(program);
     _mvpMatrixLocation = programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation       = programState->getUniformLocation("u_tex0");
+    _textureLocation   = programState->getUniformLocation("u_tex0");
 
     _customCommand.setOwnPSVL(programState, program->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
 
@@ -775,4 +782,4 @@ void Texture2D::drawInRect(const Rect& rect, float globalZOrder)
     Director::getInstance()->getRenderer()->addCommand(&_customCommand);
 }
 
-}
+}  // namespace ax

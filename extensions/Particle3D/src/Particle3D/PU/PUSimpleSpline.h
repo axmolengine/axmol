@@ -101,5 +101,4 @@ protected:
     /// Matrix of coefficients
     Mat4 _coeffs;
 };
-}
-
+}  // namespace ax

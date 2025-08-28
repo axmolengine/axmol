@@ -78,4 +78,4 @@ PUOnClearObserver* PUOnClearObserver::create()
     return pco;
 }
 
-}
+}  // namespace ax

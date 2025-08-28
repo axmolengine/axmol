@@ -109,4 +109,4 @@ bool PUSineForceAffectorTranslator::translateChildObject(PUScriptCompiler* /*com
     return false;
 }
 
-}
+}  // namespace ax

@@ -122,4 +122,4 @@ void PUEventHandlerTranslator::translate(PUScriptCompiler* compiler, PUAbstractN
     }
 }
 
-}
+}  // namespace ax

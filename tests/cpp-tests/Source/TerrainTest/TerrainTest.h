@@ -24,12 +24,12 @@
 
 #ifndef TERRAIN_TESH_H
 
-#include "../BaseTest.h"
+#    include "../BaseTest.h"
 
-#include "axmol/3d/MeshRenderer.h"
-#include "axmol/3d/Terrain.h"
-#include "axmol/2d/Camera.h"
-#include "axmol/2d/Action.h"
+#    include "axmol/3d/MeshRenderer.h"
+#    include "axmol/3d/Terrain.h"
+#    include "axmol/2d/Camera.h"
+#    include "axmol/2d/Action.h"
 
 DEFINE_TEST_SUITE(TerrainTests);
 
@@ -53,10 +53,10 @@ protected:
     ax::Camera* _camera;
 };
 
-#    define PLAYER_STATE_LEFT 0
-#    define PLAYER_STATE_RIGHT 1
-#    define PLAYER_STATE_IDLE 2
-#    define PLAYER_STATE_FORWARD 3
+#    define PLAYER_STATE_LEFT     0
+#    define PLAYER_STATE_RIGHT    1
+#    define PLAYER_STATE_IDLE     2
+#    define PLAYER_STATE_FORWARD  3
 #    define PLAYER_STATE_BACKWARD 4
 
 class Player : public ax::MeshRenderer

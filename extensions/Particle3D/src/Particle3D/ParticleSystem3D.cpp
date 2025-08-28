@@ -207,4 +207,4 @@ void ParticleSystem3D::setEnabled(bool enabled)
     _isEnabled = enabled;
 }
 
-}
+}  // namespace ax

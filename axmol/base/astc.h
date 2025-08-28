@@ -36,7 +36,6 @@ static unsigned int astc_unpack_bytes(uint8_t a, uint8_t b, uint8_t c, uint8_t d
     return ((unsigned int)(a)) + ((unsigned int)(b) << 8) + ((unsigned int)(c) << 16) + ((unsigned int)(d) << 24);
 }
 
-
 int astc_decompress_image(const uint8_t* in,
                           uint32_t inlen,
                           uint8_t* out,
@@ -44,4 +43,3 @@ int astc_decompress_image(const uint8_t* in,
                           uint32_t ydim,
                           uint32_t xblock,
                           uint32_t yblock);
-

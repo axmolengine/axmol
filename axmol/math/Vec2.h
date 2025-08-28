@@ -95,7 +95,7 @@ public:
      * @param xx The x coordinate.
      * @param yy The y coordinate.
      */
-    constexpr Vec2(float xx, float yy) : x(xx), y(yy) { }
+    constexpr Vec2(float xx, float yy) : x(xx), y(yy) {}
 
     /**
      * Constructs a new vector from the values in the specified array.
@@ -141,7 +141,11 @@ public:
      *
      * @param v The vector to add.
      */
-    void add(const Vec2& v) { x += v.x; y += v.y; }
+    void add(const Vec2& v)
+    {
+        x += v.x;
+        y += v.y;
+    }
 
     /**
      * Adds the specified vectors and stores the result in dst.
@@ -503,10 +507,7 @@ public:
      * @param s the constant to divide this vector with
      * @return a smaller vector
      */
-    Vec2 operator/(float s) const
-    {
-        return Vec2(this->x / s, this->y / s);
-    }
+    Vec2 operator/(float s) const { return Vec2(this->x / s, this->y / s); }
 
     /**
      * Determines if this vector is less than the given vector.
@@ -547,7 +548,7 @@ public:
      *
      * @return True if this vector is equal to the given vector, false otherwise.
      */
-    bool operator==(const Vec2& v) const { return x==v.x && y==v.y; }
+    bool operator==(const Vec2& v) const { return x == v.x && y == v.y; }
 
     /**
      * Determines if this vector is not equal to the given vector.
@@ -834,19 +835,19 @@ inline Vec2 operator/(const Vec2& left, const Vec2& right)
 }
 
 #if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-    inline constexpr Vec2 Vec2::ZERO(0.0f, 0.0f);
-    inline constexpr Vec2 Vec2::ONE(1.0f, 1.0f);
-    inline constexpr Vec2 Vec2::UNIT_X(1.0f, 0.0f);
-    inline constexpr Vec2 Vec2::UNIT_Y(0.0f, 1.0f);
-    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE(0.5f, 0.5f);
-    inline constexpr Vec2 Vec2::ANCHOR_BOTTOM_LEFT(0.0f, 0.0f);
-    inline constexpr Vec2 Vec2::ANCHOR_TOP_LEFT(0.0f, 1.0f);
-    inline constexpr Vec2 Vec2::ANCHOR_BOTTOM_RIGHT(1.0f, 0.0f);
-    inline constexpr Vec2 Vec2::ANCHOR_TOP_RIGHT(1.0f, 1.0f);
-    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_RIGHT(1.0f, 0.5f);
-    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_LEFT(0.0f, 0.5f);
-    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_TOP(0.5f, 1.0f);
-    inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_BOTTOM(0.5f, 0.0f);
+inline constexpr Vec2 Vec2::ZERO(0.0f, 0.0f);
+inline constexpr Vec2 Vec2::ONE(1.0f, 1.0f);
+inline constexpr Vec2 Vec2::UNIT_X(1.0f, 0.0f);
+inline constexpr Vec2 Vec2::UNIT_Y(0.0f, 1.0f);
+inline constexpr Vec2 Vec2::ANCHOR_MIDDLE(0.5f, 0.5f);
+inline constexpr Vec2 Vec2::ANCHOR_BOTTOM_LEFT(0.0f, 0.0f);
+inline constexpr Vec2 Vec2::ANCHOR_TOP_LEFT(0.0f, 1.0f);
+inline constexpr Vec2 Vec2::ANCHOR_BOTTOM_RIGHT(1.0f, 0.0f);
+inline constexpr Vec2 Vec2::ANCHOR_TOP_RIGHT(1.0f, 1.0f);
+inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_RIGHT(1.0f, 0.5f);
+inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_LEFT(0.0f, 0.5f);
+inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_TOP(0.5f, 1.0f);
+inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_BOTTOM(0.5f, 0.0f);
 #endif
 
 using Point = Vec2;
@@ -860,4 +861,3 @@ NS_AX_MATH_END
  end of base group
  @}
  */
-

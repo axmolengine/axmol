@@ -37,11 +37,10 @@ class PUGeometryRotatorTranslator : public PUScriptTranslator
 {
 public:
     PUGeometryRotatorTranslator();
-    virtual ~PUGeometryRotatorTranslator(){};
+    virtual ~PUGeometryRotatorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

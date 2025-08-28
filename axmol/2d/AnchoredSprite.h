@@ -139,7 +139,8 @@ public:
 
     /* This function will reposition the sprite's vertices itself instead of the node */
     void setAnchorPoint(const Vec2& anchor) override;
-    /* Gets the hit area of the anchored sprite, this requires special calculations for shifted vertices and should be used with touch event listeners */
+    /* Gets the hit area of the anchored sprite, this requires special calculations for shifted vertices and should be
+     * used with touch event listeners */
     virtual Rect getTouchRect();
 
 protected:
@@ -150,4 +151,4 @@ protected:
 // end of sprite_nodes group
 /// @}
 
-}
+}  // namespace ax

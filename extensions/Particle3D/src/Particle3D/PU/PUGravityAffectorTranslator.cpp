@@ -62,4 +62,4 @@ bool PUGravityAffectorTranslator::translateChildObject(PUScriptCompiler* /*compi
     return false;
 }
 
-}
+}  // namespace ax

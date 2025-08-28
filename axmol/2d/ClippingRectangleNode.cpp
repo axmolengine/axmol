@@ -78,10 +78,10 @@ void ClippingRectangleNode::onBeforeVisitScissor()
             parent = parent->getParent();
         }
 
-        const Point pos = convertToWorldSpace(Point(_clippingRegion.origin.x, _clippingRegion.origin.y));
-        RenderView* renderView  = _director->getRenderView();
+        const Point pos        = convertToWorldSpace(Point(_clippingRegion.origin.x, _clippingRegion.origin.y));
+        RenderView* renderView = _director->getRenderView();
         renderView->setScissorInPoints(pos.x, pos.y, _clippingRegion.size.width * scaleX,
-                                   _clippingRegion.size.height * scaleY);
+                                       _clippingRegion.size.height * scaleY);
     }
 }
 
@@ -106,4 +106,4 @@ void ClippingRectangleNode::visit(Renderer* renderer, const Mat4& parentTransfor
     renderer->addCommand(afterVisitCmdScissor);
 }
 
-}
+}  // namespace ax

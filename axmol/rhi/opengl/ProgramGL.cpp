@@ -228,7 +228,7 @@ void ProgramImpl::reflectVertexInputs()
     _activeVertexInputs.reserve(numOfActiveInputs);
 
     constexpr int MAX_VERTEX_INPUT_NAME_LENGTH = 255;
-    auto attrName                    = axstd::make_unique_for_overwrite<char[]>(MAX_VERTEX_INPUT_NAME_LENGTH + 1);
+    auto attrName = axstd::make_unique_for_overwrite<char[]>(MAX_VERTEX_INPUT_NAME_LENGTH + 1);
 
     GLint attrNameLen = 0;
     GLenum attrType;
@@ -339,7 +339,8 @@ void ProgramImpl::reflectUniformInfos()
         }
         else
         {  // must be samper: sampler2D, sampler2DArray, samplerCube
-            assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE || uniform.type == GL_SAMPLER_2D_ARRAY);
+            assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE ||
+                   uniform.type == GL_SAMPLER_2D_ARRAY);
             uniform.location     = glGetUniformLocation(_program, uniformName.data());
             uniform.bufferOffset = -1;
         }

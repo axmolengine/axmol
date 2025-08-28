@@ -106,7 +106,7 @@ protected:
     friend class EventListenerController;
 };
 /// @endcond EventController
-}
+}  // namespace ax
 
 // end of base group
 /// @}

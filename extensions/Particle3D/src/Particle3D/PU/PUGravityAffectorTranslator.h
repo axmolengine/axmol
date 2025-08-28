@@ -37,11 +37,10 @@ class PUGravityAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUGravityAffectorTranslator();
-    virtual ~PUGravityAffectorTranslator(){};
+    virtual ~PUGravityAffectorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

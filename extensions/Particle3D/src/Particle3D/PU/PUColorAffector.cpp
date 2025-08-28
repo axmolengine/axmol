@@ -91,7 +91,7 @@ void PUColorAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime
     {
         // PUParticle3D *particle = iter;
         //  Linear interpolation of the colour
-        Color color           = Color::WHITE;
+        Color color          = Color::WHITE;
         float timeFraction   = (particle->totalTimeToLive - particle->timeToLive) / particle->totalTimeToLive;
         ColorMapIterator it1 = findNearestColorMapIterator(timeFraction);
         ColorMapIterator it2 = it1;
@@ -118,7 +118,7 @@ void PUColorAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime
         {
             // Multiply
             particle->color = Color(color.x * particle->originalColor.x, color.y * particle->originalColor.y,
-                                   color.z * particle->originalColor.z, color.w * particle->originalColor.w);
+                                    color.z * particle->originalColor.z, color.w * particle->originalColor.w);
         }
     }
 }
@@ -139,4 +139,4 @@ void PUColorAffector::copyAttributesTo(PUAffector* affector)
     colourAffector->_colorOperation = _colorOperation;
 }
 
-}
+}  // namespace ax

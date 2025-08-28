@@ -40,4 +40,4 @@ void messageBox(const char* pszMsg, const char* pszTitle)
     MessageBoxW(nullptr, wsMsg.c_str(), wsTitle.c_str(), MB_OK | MB_TOPMOST);
 }
 
-}
+}  // namespace ax

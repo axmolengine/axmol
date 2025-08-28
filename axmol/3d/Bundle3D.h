@@ -112,11 +112,11 @@ public:
                         const char* mtl_basepath = nullptr);
 
     // calculate aabb
-    static AABB calculateAABB(const std::vector<float>& vertex,
-                              int stride, const IndexArray& indices);
+    static AABB calculateAABB(const std::vector<float>& vertex, int stride, const IndexArray& indices);
 
     Bundle3D();
     virtual ~Bundle3D();
+
 protected:
     bool loadJson(std::string_view path);
     bool loadBinary(std::string_view path);
@@ -201,4 +201,4 @@ protected:
 // end of 3d group
 /// @}
 
-}
+}  // namespace ax

@@ -400,4 +400,4 @@ CallFuncN* CallFuncN::clone() const
     return a;
 }
 
-}
+}  // namespace ax

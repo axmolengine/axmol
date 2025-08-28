@@ -47,4 +47,3 @@ public:
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* light3DOptions);
 };
 }  // namespace cocostudio
-

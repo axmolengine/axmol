@@ -256,7 +256,7 @@ void FontAtlas::reset()
     _currentPageOrigY = 0;
     _letterDefinitions.clear();
 
-     reinit();
+    reinit();
 }
 
 void FontAtlas::releaseTextures()
@@ -386,17 +386,18 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                 if (charRenderer)
                 {
                     unsigned int glyphIndex = fallbackFaceInfo->currentGlyphIndex;
-                    bitmap =
-                        charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
+                    bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect,
+                                                                 tempDef.xAdvance);
                     _missingGlyphFallbackFonts.emplace(charCode, std::make_pair(charRenderer, glyphIndex));
                 }
             }
         }
         else
         {  // found fallback font for missing charas, getGlyphBitmap without fallback
-            charRenderer = missingIt->second.first;
+            charRenderer            = missingIt->second.first;
             unsigned int glyphIndex = missingIt->second.second;
-            bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
+            bitmap =
+                charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
         }
         if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
         {
@@ -420,11 +421,11 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                     addNewPage();
                 }
             }
-            glyphHeight = static_cast<int>(bitmapHeight) + _letterPadding + _letterEdgeExtend;
+            glyphHeight     = static_cast<int>(bitmapHeight) + _letterPadding + _letterEdgeExtend;
             _currLineHeight = std::max(glyphHeight, _currLineHeight);
             charRenderer->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
                                        (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight,
-                                        _width, _height);
+                                       _width, _height);
 
             tempDef.U         = _currentPageOrigX;
             tempDef.V         = _currentPageOrigY;
@@ -465,7 +466,7 @@ void FontAtlas::updateTextureContent(rhi::PixelFormat format, int startY)
 {
     auto data = _currentPageData + (_width * (int)startY << _strideShift);
     _atlasTextures[_currentPage]->updateSubData(data, 0, startY, _width,
-                                                    (std::min)((int)_currentPageOrigY - startY + _currLineHeight, _height));
+                                                (std::min)((int)_currentPageOrigY - startY + _currLineHeight, _height));
 }
 
 void FontAtlas::addNewPage()
@@ -558,4 +559,4 @@ void FontAtlas::setAntiAliasTexParameters()
     }
 }
 
-}
+}  // namespace ax

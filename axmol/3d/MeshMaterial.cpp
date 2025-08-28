@@ -55,7 +55,7 @@ MeshMaterial* MeshMaterial::_diffuseMaterialSkin       = nullptr;
 MeshMaterial* MeshMaterial::_bumpedDiffuseMaterialSkin = nullptr;
 
 MeshMaterial* MeshMaterial::_quadTextureMaterial = nullptr;
-MeshMaterial* MeshMaterial::_quadColorMaterial = nullptr;
+MeshMaterial* MeshMaterial::_quadColorMaterial   = nullptr;
 
 rhi::ProgramState* MeshMaterial::_unLitMaterialProgState         = nullptr;
 rhi::ProgramState* MeshMaterial::_unLitInstanceMaterialProgState = nullptr;
@@ -70,8 +70,8 @@ rhi::ProgramState* MeshMaterial::_vertexLitMaterialSkinProgState     = nullptr;
 rhi::ProgramState* MeshMaterial::_diffuseMaterialSkinProgState       = nullptr;
 rhi::ProgramState* MeshMaterial::_bumpedDiffuseMaterialSkinProgState = nullptr;
 
-rhi::ProgramState* MeshMaterial::_quadTextureMaterialProgState            = nullptr;
-rhi::ProgramState* MeshMaterial::_quadColorMaterialProgState            = nullptr;
+rhi::ProgramState* MeshMaterial::_quadTextureMaterialProgState = nullptr;
+rhi::ProgramState* MeshMaterial::_quadColorMaterialProgState   = nullptr;
 
 void MeshMaterial::createBuiltInMaterial()
 {
@@ -83,7 +83,7 @@ void MeshMaterial::createBuiltInMaterial()
         _unLitMaterialSkin->_type = MeshMaterial::MaterialType::UNLIT;
     }
 
-    program = axpm->getBuiltinProgram(rhi::ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
+    program                       = axpm->getBuiltinProgram(rhi::ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
     _diffuseMaterialSkinProgState = new rhi::ProgramState(program);
     _diffuseMaterialSkin          = new MeshMaterial();
     if (_diffuseMaterialSkin && _diffuseMaterialSkin->initWithProgramState(_diffuseMaterialSkinProgState))
@@ -109,7 +109,7 @@ void MeshMaterial::createBuiltInMaterial()
 
     program                         = axpm->getBuiltinProgram(rhi::ProgramType::UNLIT_INSTANCE);
     _unLitInstanceMaterialProgState = new rhi::ProgramState(program);
-    _unLitInstanceMaterial  = new MeshMaterial();
+    _unLitInstanceMaterial          = new MeshMaterial();
     if (_unLitInstanceMaterial && _unLitInstanceMaterial->initWithProgramState(_unLitInstanceMaterialProgState))
     {
         _unLitInstanceMaterial->_type = MeshMaterial::MaterialType::UNLIT_INSTANCE;
@@ -131,7 +131,7 @@ void MeshMaterial::createBuiltInMaterial()
         _diffuseNoTexMaterial->_type = MeshMaterial::MaterialType::DIFFUSE_NOTEX;
     }
 
-    program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D);
+    program                         = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D);
     _bumpedDiffuseMaterialProgState = new rhi::ProgramState(program);
     _bumpedDiffuseMaterial          = new MeshMaterial();
     if (_bumpedDiffuseMaterial && _bumpedDiffuseMaterial->initWithProgramState(_bumpedDiffuseMaterialProgState))
@@ -148,7 +148,7 @@ void MeshMaterial::createBuiltInMaterial()
         _bumpedDiffuseMaterialSkin->_type = MeshMaterial::MaterialType::BUMPED_DIFFUSE;
     }
 
-    program = axpm->getBuiltinProgram(rhi::ProgramType::QUAD_TEXTURE_2D);
+    program                       = axpm->getBuiltinProgram(rhi::ProgramType::QUAD_TEXTURE_2D);
     _quadTextureMaterialProgState = new rhi::ProgramState(program);
     _quadTextureMaterial          = new MeshMaterial();
     if (_quadTextureMaterial && _quadTextureMaterial->initWithProgramState(_quadTextureMaterialProgState))
@@ -156,7 +156,7 @@ void MeshMaterial::createBuiltInMaterial()
         _quadTextureMaterial->_type = MeshMaterial::MaterialType::QUAD_TEXTURE;
     }
 
-    program = axpm->getBuiltinProgram(rhi::ProgramType::QUAD_COLOR_2D);
+    program                     = axpm->getBuiltinProgram(rhi::ProgramType::QUAD_COLOR_2D);
     _quadColorMaterialProgState = new rhi::ProgramState(program);
     _quadColorMaterial          = new MeshMaterial();
     if (_quadColorMaterial && _quadColorMaterial->initWithProgramState(_quadColorMaterialProgState))
@@ -405,4 +405,4 @@ void MeshMaterialCache::removeUnusedMeshMaterial()
     }
 }
 
-}
+}  // namespace ax

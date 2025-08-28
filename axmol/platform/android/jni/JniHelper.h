@@ -224,7 +224,9 @@ public:
     @return std::vector<std::string>
     */
     template <typename... Ts>
-    static std::vector<std::string> callStaticStringArrayMethod(const char* className, const char* methodName, Ts&&... xs)
+    static std::vector<std::string> callStaticStringArrayMethod(const char* className,
+                                                                const char* methodName,
+                                                                Ts&&... xs)
     {
         ax::JniMethodInfo t;
         const auto signature = "(Ljava/lang/String;)[Ljava/lang/String;";
@@ -232,7 +234,7 @@ public:
         {
             LocalRefMapType localRefs;
             jobjectArray array =
-                    (jobjectArray)t.env->CallStaticObjectMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
+                (jobjectArray)t.env->CallStaticObjectMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
 
             if (array == nullptr)
             {
@@ -243,11 +245,11 @@ public:
 
             jsize len = t.env->GetArrayLength(array);
             std::vector<std::string> result(len);
-            for (int i=0; i < len; ++i)
+            for (int i = 0; i < len; ++i)
             {
-                jstring string = (jstring)t.env->GetObjectArrayElement(array, i);
+                jstring string        = (jstring)t.env->GetObjectArrayElement(array, i);
                 const char* arrayItem = t.env->GetStringUTFChars(string, 0);
-                result[i] = std::move((std::string(arrayItem)));
+                result[i]             = std::move((std::string(arrayItem)));
                 t.env->ReleaseStringUTFChars(string, arrayItem);
                 t.env->DeleteLocalRef(string);
             }
@@ -268,7 +270,9 @@ public:
     @return axstd::pod_vector
     */
     template <typename... Ts>
-    static axstd::pod_vector<float> callStaticFloatArrayMethod(const char* className, const char* methodName, Ts&&... xs)
+    static axstd::pod_vector<float> callStaticFloatArrayMethod(const char* className,
+                                                               const char* methodName,
+                                                               Ts&&... xs)
     {
         ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jfloat>(std::decay_t<Ts>...)>{}();
@@ -309,7 +313,9 @@ public:
     @return axstd::pod_vector
     */
     template <typename... Ts>
-    static axstd::pod_vector<int32_t> callStaticIntArrayMethod(const char* className, const char* methodName, Ts&&... xs)
+    static axstd::pod_vector<int32_t> callStaticIntArrayMethod(const char* className,
+                                                               const char* methodName,
+                                                               Ts&&... xs)
     {
         ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jint>(std::decay_t<Ts>...)>{}();
@@ -529,10 +535,7 @@ private:
 
     static jstring convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, const std::string& x);
 
-    inline static jint convert(LocalRefMapType&, ax::JniMethodInfo&, int32_t value)
-    {
-        return static_cast<jint>(value);
-    }
+    inline static jint convert(LocalRefMapType&, ax::JniMethodInfo&, int32_t value) { return static_cast<jint>(value); }
     inline static jlong convert(LocalRefMapType&, ax::JniMethodInfo&, int64_t value)
     {
         return static_cast<jlong>(value);
@@ -573,5 +576,4 @@ private:
     static void reportError(const char* className, const char* methodName, const char* signature);
 };
 
-}
-
+}  // namespace ax

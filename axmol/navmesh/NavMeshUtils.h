@@ -143,6 +143,6 @@ bool getSteerTarget(dtNavMeshQuery* navQuery,
                     int* outPointCount = nullptr);
 /** @} */
 
-}
+}  // namespace ax
 
 #endif  // AX_ENABLE_NAVMESH

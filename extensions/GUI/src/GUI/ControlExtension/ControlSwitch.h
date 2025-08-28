@@ -36,7 +36,7 @@ namespace ax
 {
 class Sprite;
 class Label;
-}
+}  // namespace ax
 
 NS_AX_EXT_BEGIN
 

@@ -242,7 +242,7 @@ void ProgressTimer::updateDisplayedOpacity(uint8_t parentOpacity)
     {
         _sprite->updateDisplayedOpacity(_displayedColor.a);
 
-        for(const auto& child : _children)
+        for (const auto& child : _children)
         {
             child->updateDisplayedOpacity(_displayedColor.a);
         }
@@ -257,10 +257,10 @@ void ProgressTimer::updateColor()
     if (!_vertexData.empty())
     {
         auto sc = _sprite->getQuad().tl.color;
-        sc.r = sc.r * _sprite->getOpacity() / 255.0f;
-        sc.g = sc.g * _sprite->getOpacity() / 255.0f;
-        sc.b = sc.b * _sprite->getOpacity() / 255.0f;
-        sc.a = sc.a * _sprite->getOpacity() / 255.0f;
+        sc.r    = sc.r * _sprite->getOpacity() / 255.0f;
+        sc.g    = sc.g * _sprite->getOpacity() / 255.0f;
+        sc.b    = sc.b * _sprite->getOpacity() / 255.0f;
+        sc.a    = sc.a * _sprite->getOpacity() / 255.0f;
         for (auto& d : _vertexData)
         {
             d.color = ax::Color{sc};
@@ -455,16 +455,16 @@ void ProgressTimer::updateRadial()
         //    First we populate the array with the _midpoint, then all
         //    vertices/texcoords/colors of the 12 'o clock start and edges and the hitpoint
         _vertexData[0].texCoord = textureCoordFromAlphaPoint(_midpoint);
-        _vertexData[0].position  = vertexFromAlphaPoint(_midpoint);
+        _vertexData[0].position = vertexFromAlphaPoint(_midpoint);
 
         _vertexData[1].texCoord = textureCoordFromAlphaPoint(topMid);
-        _vertexData[1].position  = vertexFromAlphaPoint(topMid);
+        _vertexData[1].position = vertexFromAlphaPoint(topMid);
 
         for (int i = 0; i < index; ++i)
         {
-            Vec2 alphaPoint              = boundaryTexCoord(i);
+            Vec2 alphaPoint             = boundaryTexCoord(i);
             _vertexData[i + 2].texCoord = textureCoordFromAlphaPoint(alphaPoint);
-            _vertexData[i + 2].position  = vertexFromAlphaPoint(alphaPoint);
+            _vertexData[i + 2].position = vertexFromAlphaPoint(alphaPoint);
         }
 
         for (int i = 0; i < index + 1; i++)
@@ -479,7 +479,7 @@ void ProgressTimer::updateRadial()
 
     //    hitpoint will go last
     _vertexData[_vertexData.size() - 1].texCoord = textureCoordFromAlphaPoint(hit);
-    _vertexData[_vertexData.size() - 1].position  = vertexFromAlphaPoint(hit);
+    _vertexData[_vertexData.size() - 1].position = vertexFromAlphaPoint(hit);
 
     updateColor();
     _customCommand.updateVertexBuffer(_vertexData.data(), (unsigned int)(sizeof(_vertexData[0]) * _vertexData.size()));
@@ -542,19 +542,19 @@ void ProgressTimer::updateBar()
 
         //    TOPLEFT
         _vertexData[0].texCoord = textureCoordFromAlphaPoint(Vec2(min.x, max.y));
-        _vertexData[0].position  = vertexFromAlphaPoint(Vec2(min.x, max.y));
+        _vertexData[0].position = vertexFromAlphaPoint(Vec2(min.x, max.y));
 
         //    BOTLEFT
         _vertexData[1].texCoord = textureCoordFromAlphaPoint(Vec2(min.x, min.y));
-        _vertexData[1].position  = vertexFromAlphaPoint(Vec2(min.x, min.y));
+        _vertexData[1].position = vertexFromAlphaPoint(Vec2(min.x, min.y));
 
         //    TOPRIGHT
         _vertexData[2].texCoord = textureCoordFromAlphaPoint(Vec2(max.x, max.y));
-        _vertexData[2].position  = vertexFromAlphaPoint(Vec2(max.x, max.y));
+        _vertexData[2].position = vertexFromAlphaPoint(Vec2(max.x, max.y));
 
         //    BOTRIGHT
         _vertexData[3].texCoord = textureCoordFromAlphaPoint(Vec2(max.x, min.y));
-        _vertexData[3].position  = vertexFromAlphaPoint(Vec2(max.x, min.y));
+        _vertexData[3].position = vertexFromAlphaPoint(Vec2(max.x, min.y));
 
         updateColor();
 
@@ -572,36 +572,36 @@ void ProgressTimer::updateBar()
                                                CustomCommand::BufferUsage::DYNAMIC);
             //    TOPLEFT 1
             _vertexData[0].texCoord = textureCoordFromAlphaPoint(Vec2(0, 1));
-            _vertexData[0].position  = vertexFromAlphaPoint(Vec2(0, 1));
+            _vertexData[0].position = vertexFromAlphaPoint(Vec2(0, 1));
 
             //    BOTLEFT 1
             _vertexData[1].texCoord = textureCoordFromAlphaPoint(Vec2(0, 0));
-            _vertexData[1].position  = vertexFromAlphaPoint(Vec2(0, 0));
+            _vertexData[1].position = vertexFromAlphaPoint(Vec2(0, 0));
 
             //    TOPRIGHT 2
             _vertexData[6].texCoord = textureCoordFromAlphaPoint(Vec2(1, 1));
-            _vertexData[6].position  = vertexFromAlphaPoint(Vec2(1, 1));
+            _vertexData[6].position = vertexFromAlphaPoint(Vec2(1, 1));
 
             //    BOTRIGHT 2
             _vertexData[7].texCoord = textureCoordFromAlphaPoint(Vec2(1, 0));
-            _vertexData[7].position  = vertexFromAlphaPoint(Vec2(1, 0));
+            _vertexData[7].position = vertexFromAlphaPoint(Vec2(1, 0));
         }
 
         //    TOPRIGHT 1
         _vertexData[2].texCoord = textureCoordFromAlphaPoint(Vec2(min.x, max.y));
-        _vertexData[2].position  = vertexFromAlphaPoint(Vec2(min.x, max.y));
+        _vertexData[2].position = vertexFromAlphaPoint(Vec2(min.x, max.y));
 
         //    BOTRIGHT 1
         _vertexData[3].texCoord = textureCoordFromAlphaPoint(Vec2(min.x, min.y));
-        _vertexData[3].position  = vertexFromAlphaPoint(Vec2(min.x, min.y));
+        _vertexData[3].position = vertexFromAlphaPoint(Vec2(min.x, min.y));
 
         //    TOPLEFT 2
         _vertexData[4].texCoord = textureCoordFromAlphaPoint(Vec2(max.x, max.y));
-        _vertexData[4].position  = vertexFromAlphaPoint(Vec2(max.x, max.y));
+        _vertexData[4].position = vertexFromAlphaPoint(Vec2(max.x, max.y));
 
         //    BOTLEFT 2
         _vertexData[5].texCoord = textureCoordFromAlphaPoint(Vec2(max.x, min.y));
-        _vertexData[5].position  = vertexFromAlphaPoint(Vec2(max.x, min.y));
+        _vertexData[5].position = vertexFromAlphaPoint(Vec2(max.x, min.y));
 
         updateColor();
 
@@ -633,7 +633,7 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
         return;
 
     const ax::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    Mat4 finalMat                      = projectionMat * transform;
+    Mat4 finalMat                 = projectionMat * transform;
     _programState->setUniform(_locMVP1, finalMat.m, sizeof(finalMat.m));
     _programState->setTexture(_locTex1, 0, _sprite->getTexture()->getRHITexture());
 
@@ -662,4 +662,4 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
     }
 }
 
-}
+}  // namespace ax

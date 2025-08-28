@@ -42,7 +42,7 @@ bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
     if (isCompressed() || (_pixelFormat != rhi::PixelFormat::RGB8 && _pixelFormat != rhi::PixelFormat::RGBA8))
     {
         AXLOGW("Image: saveToFile is only support for rhi::PixelFormat::RGB8 or "
-              "rhi::PixelFormat::RGBA8 uncompressed data for now");
+               "rhi::PixelFormat::RGBA8 uncompressed data for now");
         return false;
     }
     bool saveToPNG        = false;
@@ -130,4 +130,4 @@ bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
     return true;
 }
 
-}
+}  // namespace ax

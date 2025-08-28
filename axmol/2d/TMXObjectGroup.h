@@ -133,4 +133,4 @@ protected:
 // end of tilemap_parallax_nodes group
 /** @} */
 
-}
+}  // namespace ax

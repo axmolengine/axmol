@@ -160,4 +160,4 @@ bool PUScaleAffectorTranslator::translateChildObject(PUScriptCompiler* compiler,
     return false;
 }
 
-}
+}  // namespace ax

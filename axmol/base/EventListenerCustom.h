@@ -83,7 +83,7 @@ protected:
     friend class LuaEventListenerCustom;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

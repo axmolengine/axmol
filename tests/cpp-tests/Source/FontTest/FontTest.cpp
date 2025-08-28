@@ -159,9 +159,7 @@ FontNoReplacementTest* FontNoReplacementTest::create()
     return ret;
 }
 
-FontNoReplacementTest::FontNoReplacementTest()
-{
-}
+FontNoReplacementTest::FontNoReplacementTest() {}
 
 FontNoReplacementTest::~FontNoReplacementTest()
 {

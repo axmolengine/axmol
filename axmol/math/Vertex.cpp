@@ -147,4 +147,4 @@ bool vertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float
     return true;
 }
 
-}
+}  // namespace ax

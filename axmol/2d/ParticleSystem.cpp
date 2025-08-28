@@ -436,8 +436,8 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary)
 
 bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_view dirname)
 {
-    bool ret              = false;
-    Image* image          = nullptr;
+    bool ret     = false;
+    Image* image = nullptr;
     do
     {
         int maxParticles = optValue(dictionary, "maxParticles").asInt();
@@ -639,13 +639,13 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                         AXASSERT(!buffer.empty(), "CCParticleSystem: error decoding textureImageData");
                         AX_BREAK_IF(buffer.empty());
 
-                        auto deflated           = ZipUtils::decompressGZ(std::span{buffer});
+                        auto deflated = ZipUtils::decompressGZ(std::span{buffer});
                         AXASSERT(!deflated.empty(), "CCParticleSystem: error ungzipping textureImageData");
                         AX_BREAK_IF(deflated.empty());
 
                         // For android, we should retain it in VolatileTexture::addImage which invoked in
                         // Director::getInstance()->getTextureCache()->addUIImage()
-                        image     = new Image();
+                        image                   = new Image();
                         const auto imageDataLen = deflated.size();
                         bool isOK = image->initWithImageData(deflated.release_pointer(), imageDataLen, true);
                         AXASSERT(isOK, "CCParticleSystem: error init image with Data");
@@ -780,11 +780,11 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::RECTTORUS:
             {
-                float width  = (shape.outerWidth - shape.innerWidth) * _rng.float01() + shape.innerWidth;
-                float height = (shape.outerHeight - shape.innerHeight) * _rng.float01() + shape.innerHeight;
-                width        = _rng.rangef() < 0.0F ? width * -1 : width;
-                height       = _rng.rangef() < 0.0F ? height * -1 : height;
-                float prob   = _rng.rangef();
+                float width           = (shape.outerWidth - shape.innerWidth) * _rng.float01() + shape.innerWidth;
+                float height          = (shape.outerHeight - shape.innerHeight) * _rng.float01() + shape.innerHeight;
+                width                 = _rng.rangef() < 0.0F ? width * -1 : width;
+                height                = _rng.rangef() < 0.0F ? height * -1 : height;
+                float prob            = _rng.rangef();
                 _particleData.posx[i] = _sourcePosition.x + shape.x + width / 2 * (prob >= 0.0F ? 1.0F : _rng.rangef());
                 _particleData.posy[i] = _sourcePosition.y + shape.y + height / 2 * (prob < 0.0F ? 1.0F : _rng.rangef());
 
@@ -792,10 +792,11 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::CIRCLE:
             {
-                auto val              = _rng.float01() * shape.innerRadius / shape.innerRadius;
-                val                   = powf(val, 1 / shape.edgeBias);
-                auto point            = Vec2(0.0F, val * shape.innerRadius);
-                point                 = point.rotateByAngle(Vec2::ZERO, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
+                auto val   = _rng.float01() * shape.innerRadius / shape.innerRadius;
+                val        = powf(val, 1 / shape.edgeBias);
+                auto point = Vec2(0.0F, val * shape.innerRadius);
+                point      = point.rotateByAngle(
+                    Vec2::ZERO, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
 
@@ -803,10 +804,12 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::TORUS:
             {
-                auto val              = _rng.float01() * shape.outerRadius / shape.outerRadius;
-                val                   = powf(val, 1 / shape.edgeBias);
-                auto point            = Vec2(0.0F, ((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) - (shape.outerRadius - shape.innerRadius)));
-                point                 = point.rotateByAngle(Vec2::ZERO, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
+                auto val   = _rng.float01() * shape.outerRadius / shape.outerRadius;
+                val        = powf(val, 1 / shape.edgeBias);
+                auto point = Vec2(0.0F, ((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) -
+                                         (shape.outerRadius - shape.innerRadius)));
+                point      = point.rotateByAngle(
+                    Vec2::ZERO, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
 
@@ -816,20 +819,20 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             {
                 auto& mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(shape.fourccId);
 
-                Vec2 pos            = {shape.x, shape.y};
-                Vec2 size           = mask.size;
-                Vec2 overrideSize   = {shape.innerWidth, shape.innerHeight};
-                Vec2 scale          = {shape.outerWidth, shape.outerHeight};
-                float angle         = shape.coneOffset;
+                Vec2 pos          = {shape.x, shape.y};
+                Vec2 size         = mask.size;
+                Vec2 overrideSize = {shape.innerWidth, shape.innerHeight};
+                Vec2 scale        = {shape.outerWidth, shape.outerHeight};
+                float angle       = shape.coneOffset;
 
                 if (overrideSize.isZero())
                     overrideSize = mask.size;
 
                 Vec2 point = {0, 0};
 
-                int rand0 = _rng.float01() * mask.points.size();
+                int rand0  = _rng.float01() * mask.points.size();
                 auto index = MIN(rand0, mask.points.size() - 1);
-                point = mask.points[index];
+                point      = mask.points[index];
 
                 point -= size / 2;
 
@@ -901,7 +904,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             for (int i = start; i < _particleCount; ++i)
             {
                 int rand0                  = _rng.float01() * _randomAnimations.size();
-                auto index                  = MIN(rand0, _randomAnimations.size() - 1);
+                auto index                 = MIN(rand0, _randomAnimations.size() - 1);
                 _particleData.animIndex[i] = _randomAnimations[index];
                 auto& descriptor           = _animations.at(_particleData.animIndex[i]);
                 _particleData.animTimeLength[i] =
@@ -1109,10 +1112,10 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 }
 
 void ParticleSystem::setAnimationDesc(unsigned short indexOfDesc,
-                                            float time,
-                                            float timeVariance,
-                                            const std::vector<unsigned short>& indices,
-                                            bool reverse)
+                                      float time,
+                                      float timeVariance,
+                                      const std::vector<unsigned short>& indices,
+                                      bool reverse)
 {
     auto iter = _animations.find(indexOfDesc);
     if (iter == _animations.end())
@@ -1238,11 +1241,7 @@ EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float ed
     return shape;
 }
 
-EmissionShape ParticleSystem::createConeShape(Vec2 pos,
-                                                              float radius,
-                                                              float offset,
-                                                              float angle,
-                                                              float edgeBias)
+EmissionShape ParticleSystem::createConeShape(Vec2 pos, float radius, float offset, float angle, float edgeBias)
 {
     EmissionShape shape{};
 
@@ -1261,10 +1260,7 @@ EmissionShape ParticleSystem::createConeShape(Vec2 pos,
     return shape;
 }
 
-EmissionShape ParticleSystem::createTorusShape(Vec2 pos,
-                                                               float innerRadius,
-                                                               float outerRadius,
-                                                               float edgeBias)
+EmissionShape ParticleSystem::createTorusShape(Vec2 pos, float innerRadius, float outerRadius, float edgeBias)
 {
     EmissionShape shape{};
 
@@ -1285,11 +1281,11 @@ EmissionShape ParticleSystem::createTorusShape(Vec2 pos,
 }
 
 EmissionShape ParticleSystem::createConeTorusShape(Vec2 pos,
-                                                                   float innerRadius,
-                                                                   float outerRadius,
-                                                                   float offset,
-                                                                   float angle,
-                                                                   float edgeBias)
+                                                   float innerRadius,
+                                                   float outerRadius,
+                                                   float offset,
+                                                   float angle,
+                                                   float edgeBias)
 {
     EmissionShape shape{};
 
@@ -1483,11 +1479,11 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, ax::Rect rect, bool
 
 void ParticleSystem::simulate(float seconds, float frameRate)
 {
-    seconds             = seconds == static_cast<float>(SIMULATION_USE_PARTICLE_LIFETIME) ? getLife() + getLifeVar() : seconds;
-    frameRate           = frameRate == static_cast<float>(SIMULATION_USE_GAME_ANIMATION_INTERVAL)
-                              ? 1.0F / Director::getInstance()->getAnimationInterval()
-                              : frameRate;
-    auto delta          = 1.0F / frameRate;
+    seconds    = seconds == static_cast<float>(SIMULATION_USE_PARTICLE_LIFETIME) ? getLife() + getLifeVar() : seconds;
+    frameRate  = frameRate == static_cast<float>(SIMULATION_USE_GAME_ANIMATION_INTERVAL)
+                     ? 1.0F / Director::getInstance()->getAnimationInterval()
+                     : frameRate;
+    auto delta = 1.0F / frameRate;
     if (seconds > delta)
     {
         while (seconds > 0.0F)
@@ -2334,7 +2330,7 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
     iter->second = desc;
 
     AXLOGD("Particle emission mask '{}' baked ({}x{}), {} samples generated taking {:.2f}mb of memory.",
-          (unsigned int)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
+           (unsigned int)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
 }
 
 const ParticleEmissionMaskDesc& ParticleEmissionMaskCache::getEmissionMask(uint32_t fourccId)
@@ -2375,4 +2371,4 @@ void ParticleEmissionMaskCache::removeAllMasks()
     this->masks.clear();
 }
 
-}
+}  // namespace ax

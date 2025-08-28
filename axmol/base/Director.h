@@ -42,7 +42,7 @@ THE SOFTWARE.
 #    include "concurrentqueue/concurrentqueue.h"
 #endif
 #ifdef AX_ENABLE_CONSOLE
-#include "axmol/base/Console.h"
+#    include "axmol/base/Console.h"
 #endif
 
 #include "axmol/base/JobSystem.h"
@@ -391,7 +391,6 @@ public:
      */
     float getContentScaleFactor() const { return _contentScaleFactor; }
 
-
     /** Gets the JobSystem associated with this director.
      * @since axmol-2.1.4
      */
@@ -673,4 +672,4 @@ protected:
 // end of base group
 /** @} */
 
-}
+}  // namespace ax

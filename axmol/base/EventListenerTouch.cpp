@@ -186,4 +186,4 @@ EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::clone()
     return ret;
 }
 
-}
+}  // namespace ax

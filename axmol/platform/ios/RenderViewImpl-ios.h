@@ -37,15 +37,14 @@ namespace ax
 class AX_DLL RenderViewImpl : public RenderView
 {
 public:
-
     /** creates a RenderViewImpl with a title name in fullscreen mode */
     static RenderViewImpl* create(std::string_view viewName);
 
     /** creates a RenderViewImpl with a title name, a rect and the zoom factor */
     static RenderViewImpl* createWithRect(std::string_view viewName,
-                                      const Rect& rect,
-                                      float frameZoomFactor = 1.0f,
-                                      bool resizable        = false);
+                                          const Rect& rect,
+                                          float frameZoomFactor = 1.0f,
+                                          bool resizable        = false);
 
     /** creates a RenderViewImpl with a name in fullscreen mode */
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
@@ -96,4 +95,4 @@ protected:
     void* _eaWindowHandle;
 };
 
-}
+}  // namespace ax

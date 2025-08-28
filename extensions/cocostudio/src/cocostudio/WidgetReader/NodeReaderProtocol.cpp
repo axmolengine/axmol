@@ -44,25 +44,21 @@ static void onLoadSpriteFramesWithFileDummy(std::string&) {}
 
 namespace cocostudio
 {
-NodeReaderProtocol::NodeReaderProtocol(){};
-NodeReaderProtocol::~NodeReaderProtocol(){};
+NodeReaderProtocol::NodeReaderProtocol() {};
+NodeReaderProtocol::~NodeReaderProtocol() {};
 
-void NodeReaderProtocol::setCurrentCustomClassName(const char* className){};
+void NodeReaderProtocol::setCurrentCustomClassName(const char* className) {};
 }  // namespace cocostudio
 
 namespace ax
 {
 namespace wext
 {
-bool (*onBeforeLoadObjectAsset)(ax::Node*,
-                                ax::ResourceData& assets,
-                                int index /*= 0*/)                     = &onLoadObjectAssetDummy;
-bool (*onAfterLoadObjectAsset)(ax::Node*,
-                               ax::ResourceData& assets,
-                               int index /*= 0*/)                      = &onLoadObjectAssetDummy;
-void (*onLoadSpriteFramesWithFile)(std::string& file)                  = nullptr;
-void (*onNestingNodeLoading)(std::string_view filePath)                = nullptr;
-void (*onNestingNodeLoaded)(ax::Node*, std::string_view filePath) = nullptr;
+bool (*onBeforeLoadObjectAsset)(ax::Node*, ax::ResourceData& assets, int index /*= 0*/) = &onLoadObjectAssetDummy;
+bool (*onAfterLoadObjectAsset)(ax::Node*, ax::ResourceData& assets, int index /*= 0*/)  = &onLoadObjectAssetDummy;
+void (*onLoadSpriteFramesWithFile)(std::string& file)                                   = nullptr;
+void (*onNestingNodeLoading)(std::string_view filePath)                                 = nullptr;
+void (*onNestingNodeLoaded)(ax::Node*, std::string_view filePath)                       = nullptr;
 ax::Node* (*aNode)();
 ax::ui::Widget* (*aWidget)();
 ax::Sprite* (*aSprite)();
@@ -125,9 +121,9 @@ void resetReaderAllHooks()
 }
 
 static uint8_t _AUTO_INIT_VARS = (resetReaderAllHooks(), 0);
-} // namespace wext
+}  // namespace wext
 
-} // namespace ax
+}  // namespace ax
 
 ax::ResourceData ax::wext::makeResourceData(const flatbuffers::ResourceData* orig)
 {

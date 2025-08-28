@@ -64,4 +64,4 @@ const int CLAMP_TO_EDGE          = 0x812F;  // GL_CLAMP_TO_EDGE
 const int MIRROR_REPEAT          = 0x8370;  // GL_MIRRORED_REPEAT
 }  // namespace GLTexParamConst
 
-}
+}  // namespace ax

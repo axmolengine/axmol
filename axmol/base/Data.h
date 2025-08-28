@@ -28,8 +28,8 @@
 #pragma once
 
 #include "axmol/platform/PlatformMacros.h"
-#include <stdint.h>           // for ssize_t on android
-#include <string>             // for ssize_t on linux
+#include <stdint.h>               // for ssize_t on android
+#include <string>                 // for ssize_t on linux
 #include "axmol/platform/StdC.h"  // for ssize_t on window
 #include "axmol/base/axstd.h"
 
@@ -43,14 +43,13 @@ namespace ax
 class AX_DLL Data
 {
 public:
-
     /* stl compatible */
     using value_type = uint8_t;
     size_t size() const { return _impl.size(); }
     const uint8_t* data() const { return _impl.data(); }
     uint8_t* data() { return _impl.data(); }
 
-    operator yasio::byte_buffer&(){ return _impl; }
+    operator yasio::byte_buffer&() { return _impl; }
 
     /**
      * This parameter is defined for convenient reference if a null Data object is needed.
@@ -158,6 +157,6 @@ private:
     mutable axstd::byte_buffer _impl;
 };
 
-}
+}  // namespace ax
 
 /** @} */

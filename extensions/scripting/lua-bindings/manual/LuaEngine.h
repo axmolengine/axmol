@@ -110,8 +110,8 @@ public:
     virtual int reload(const char* moduleFileName);
 
     /**
-     * Remove the related reference about the Object object stored in the Lua table by set the value of corresponding key
-     * nil: The related Lua tables are toluafix_refid_ptr_mapping,toluafix_refid_type_mapping,tolua_value_root and
+     * Remove the related reference about the Object object stored in the Lua table by set the value of corresponding
+     * key nil: The related Lua tables are toluafix_refid_ptr_mapping,toluafix_refid_type_mapping,tolua_value_root and
      * object_Metatable["tolua_ubox"] or tolua_ubox. Meanwhile set the corresponding userdata nullptr and remove the all
      * the lua function reference corresponding to this object.
      *
@@ -170,7 +170,7 @@ public:
     virtual int executeAccelerometerEvent(Layer* pLayer, Acceleration* pAccelerationValue);
     virtual int executeEvent(int nHandler,
                              const char* pEventName,
-                             Object* pEventSource                 = NULL,
+                             Object* pEventSource              = NULL,
                              const char* pEventSourceClassName = NULL);
     /**
      * Handle the assert message.
@@ -258,8 +258,7 @@ private:
     LuaStack* _stack;
 };
 
-}
+}  // namespace ax
 
 // end group
 /// @}
-

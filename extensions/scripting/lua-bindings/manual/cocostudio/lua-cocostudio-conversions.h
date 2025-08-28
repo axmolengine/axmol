@@ -40,4 +40,3 @@ extern bool luaval_to_animationInfo(lua_State* L,
                                     const char* funcName = "");
 
 extern void animationInfo_to_luaval(lua_State* L, const cocostudio::timeline::AnimationInfo& inValue);
-

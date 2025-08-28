@@ -37,7 +37,7 @@ namespace
 std::unique_ptr<AppDelegate> appDelegate;
 }
 
-void axmol_wasm_app_exit() 
+void axmol_wasm_app_exit()
 {
     appDelegate = nullptr;
 }

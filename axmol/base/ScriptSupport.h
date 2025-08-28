@@ -443,8 +443,8 @@ struct KeypadScriptData
 /**
  * For Lua, the CommonScriptData is used to find the Lua function pointer by the handler, then call the Lua function by
  * push the eventName, eventSource(if it not nullptr), eventSourceClassName(if it is nullptr or "", and the eventSource
- * is not nullptr,would give the default string "cc.Object") into the Lua stack as the parameter when the common event such
- * as is triggered.
+ * is not nullptr,would give the default string "cc.Object") into the Lua stack as the parameter when the common event
+ * such as is triggered.
  */
 struct CommonScriptData
 {
@@ -787,10 +787,9 @@ private:
     ScriptEngineProtocol* _scriptEngine;
 };
 
-}
+}  // namespace ax
 
 #endif  // #if AX_ENABLE_SCRIPT_BINDING
 
 // end group
 /// @}
-

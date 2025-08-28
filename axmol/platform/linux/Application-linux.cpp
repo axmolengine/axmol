@@ -61,8 +61,8 @@ int Application::run()
 
     std::chrono::steady_clock::time_point lastTime{};
 
-    auto director = Director::getInstance();
-    auto renderView   = director->getRenderView();
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
 
     // Retain renderView to avoid renderView being released in the while loop
     renderView->retain();
@@ -162,4 +162,4 @@ LanguageType Application::getCurrentLanguage()
     return utils::getLanguageTypeByISO2(pLanguageName);
 }
 
-}
+}  // namespace ax

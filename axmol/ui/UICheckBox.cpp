@@ -146,4 +146,4 @@ void CheckBox::copySpecialProperties(Widget* widget)
 
 }  // namespace ui
 
-}
+}  // namespace ax

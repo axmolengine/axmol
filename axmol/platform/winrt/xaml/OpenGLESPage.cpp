@@ -241,7 +241,6 @@ void OpenGLESPage::StartRenderLoop()
 
         // the actual render frame function
         std::function<bool(void)> frameFunc = [&]() {
-
             if (!mVisible)
             {
                 mRenderer->Pause();
@@ -275,7 +274,8 @@ void OpenGLESPage::StartRenderLoop()
             mRenderer->Draw(panelWidth, panelHeight, mDpi, mOrientation);
 
             // Recreate input dispatch
-            if (RenderViewImpl::sharedRenderView() && mCursorVisible != RenderViewImpl::sharedRenderView()->isCursorVisible())
+            if (RenderViewImpl::sharedRenderView() &&
+                mCursorVisible != RenderViewImpl::sharedRenderView()->isCursorVisible())
             {
                 CreateInput();
                 mCursorVisible = RenderViewImpl::sharedRenderView()->isCursorVisible();
@@ -415,9 +415,7 @@ void OpenGLESPage::OnKeyPressed(CoreWindow const& sender, KeyEventArgs const& ar
     }
 }
 
-void OpenGLESPage::_OnCharacterReceived(CoreWindow const& /*sender*/, CharacterReceivedEventArgs const& /*args*/)
-{
-}
+void OpenGLESPage::_OnCharacterReceived(CoreWindow const& /*sender*/, CharacterReceivedEventArgs const& /*args*/) {}
 
 void OpenGLESPage::OnKeyReleased(CoreWindow const& /*sender*/, KeyEventArgs const& args)
 {

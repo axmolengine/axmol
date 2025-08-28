@@ -24,7 +24,8 @@
 
 #include "axmol/rhi/ShaderModule.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 ShaderStage ShaderModule::getShaderStage() const
 {
@@ -35,4 +36,4 @@ ShaderModule::ShaderModule(ShaderStage stage) : _stage(stage) {}
 
 ShaderModule::~ShaderModule() {}
 
-}
+}  // namespace ax::rhi

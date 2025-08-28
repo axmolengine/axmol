@@ -29,7 +29,8 @@
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 void DepthStencilStateImpl::reset()
 {
@@ -57,29 +58,27 @@ void DepthStencilStateImpl::apply(unsigned int stencilReferenceValue) const
         if (_isBackFrontStencilEqual)
         {
             __state->stencilFunc(UtilsGL::toGLCompareFunc(_dsDesc.frontFaceStencil.stencilCompareFunc),
-                              (GLint)stencilReferenceValue, _dsDesc.frontFaceStencil.readMask);
+                                 (GLint)stencilReferenceValue, _dsDesc.frontFaceStencil.readMask);
 
             __state->stencilOp(UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.stencilFailureOp),
-                           UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.depthFailureOp),
-                           UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.depthStencilPassOp));
+                               UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.depthFailureOp),
+                               UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.depthStencilPassOp));
 
             __state->stencilMask(_dsDesc.frontFaceStencil.writeMask);
         }
         else
         {
             __state->stencilFuncFront(UtilsGL::toGLCompareFunc(_dsDesc.backFaceStencil.stencilCompareFunc),
-                                   (GLint)stencilReferenceValue, _dsDesc.backFaceStencil.readMask);
+                                      (GLint)stencilReferenceValue, _dsDesc.backFaceStencil.readMask);
             __state->stencilFuncBack(UtilsGL::toGLCompareFunc(_dsDesc.frontFaceStencil.stencilCompareFunc),
-                                  (GLint)stencilReferenceValue, _dsDesc.frontFaceStencil.readMask);
+                                     (GLint)stencilReferenceValue, _dsDesc.frontFaceStencil.readMask);
 
-            __state->stencilOpFront(
-                UtilsGL::toGLStencilOp(_dsDesc.backFaceStencil.stencilFailureOp),
-                UtilsGL::toGLStencilOp(_dsDesc.backFaceStencil.depthFailureOp),
-                UtilsGL::toGLStencilOp(_dsDesc.backFaceStencil.depthStencilPassOp));
-            __state->stencilOpBack(
-                UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.stencilFailureOp),
-                UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.depthFailureOp),
-                UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.depthStencilPassOp));
+            __state->stencilOpFront(UtilsGL::toGLStencilOp(_dsDesc.backFaceStencil.stencilFailureOp),
+                                    UtilsGL::toGLStencilOp(_dsDesc.backFaceStencil.depthFailureOp),
+                                    UtilsGL::toGLStencilOp(_dsDesc.backFaceStencil.depthStencilPassOp));
+            __state->stencilOpBack(UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.stencilFailureOp),
+                                   UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.depthFailureOp),
+                                   UtilsGL::toGLStencilOp(_dsDesc.frontFaceStencil.depthStencilPassOp));
 
             __state->stencilMaskBack(_dsDesc.backFaceStencil.writeMask);
             __state->stencilMaskFront(_dsDesc.frontFaceStencil.writeMask);
@@ -91,4 +90,4 @@ void DepthStencilStateImpl::apply(unsigned int stencilReferenceValue) const
     CHECK_GL_ERROR_DEBUG();
 }
 
-}
+}  // namespace ax::rhi::gl

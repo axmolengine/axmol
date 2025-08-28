@@ -56,7 +56,7 @@ protected:
 
     static void pushValue(lua_State* L, void* val);
 };
-}
+}  // namespace ax
 
 // end group
 /// @}

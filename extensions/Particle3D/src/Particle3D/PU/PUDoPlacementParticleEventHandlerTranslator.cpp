@@ -208,4 +208,4 @@ bool PUDoPlacementParticleEventHandlerTranslator::translateChildObject(PUScriptC
     return false;
 }
 
-}
+}  // namespace ax

@@ -96,7 +96,7 @@ protected:
     BlendFunc _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     CustomCommand _customCommand;
     rhi::ProgramState* _programState = nullptr;
-    bool _dirty                          = false;
+    bool _dirty                      = false;
     rhi::UniformLocation _locMVPMatrix;
 
 private:
@@ -167,8 +167,7 @@ bool DrawNode3D::init()
     iter = inputs.find("a_color");
     if (iter != inputs.end())
     {
-        desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3),
-                                      true);
+        desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3), true);
     }
     desc.endLayout();
     _vertexLayout = axvlm->acquireVertexLayout(std::move(desc));
@@ -333,13 +332,13 @@ ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
 
     return ret;
 }
-}
+}  // namespace ax
 
 int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
 {
-    int argc                  = 0;
+    int argc             = 0;
     ax::DrawNode3D* cobj = nullptr;
-    bool ok                   = true;
+    bool ok              = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -382,9 +381,9 @@ tolua_lerror:
 
 int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
 {
-    int argc                  = 0;
+    int argc             = 0;
     ax::DrawNode3D* cobj = nullptr;
-    bool ok                   = true;
+    bool ok              = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -433,9 +432,9 @@ tolua_lerror:
 
 int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
 {
-    int argc                  = 0;
+    int argc             = 0;
     ax::DrawNode3D* cobj = nullptr;
-    bool ok                   = true;
+    bool ok              = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -486,9 +485,9 @@ tolua_lerror:
 
 int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
 {
-    int argc                  = 0;
+    int argc             = 0;
     ax::DrawNode3D* cobj = nullptr;
-    bool ok                   = true;
+    bool ok              = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -530,9 +529,9 @@ tolua_lerror:
 
 int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
 {
-    int argc                  = 0;
+    int argc             = 0;
     ax::DrawNode3D* cobj = nullptr;
-    bool ok                   = true;
+    bool ok              = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -680,8 +679,7 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
         if (!ok)
             return 0;
         ax::ValueTypeJudgeInTable* ret = ax::ValueTypeJudgeInTable::create(arg0);
-        object_to_luaval<ax::ValueTypeJudgeInTable>(L, "ax.ValueTypeJudgeInTable",
-                                                         (ax::ValueTypeJudgeInTable*)ret);
+        object_to_luaval<ax::ValueTypeJudgeInTable>(L, "ax.ValueTypeJudgeInTable", (ax::ValueTypeJudgeInTable*)ret);
         return 1;
     }
     AXLOGD("{} has wrong number of arguments: {}, was expecting {}\n ", "ax.ValueTypeJudgeInTable:create", argc, 1);

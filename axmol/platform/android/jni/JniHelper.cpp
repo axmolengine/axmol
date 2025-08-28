@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "axmol/base/text_utils.h"
 
-#define LOG_TAG "JniHelper"
+#define LOG_TAG   "JniHelper"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
@@ -48,8 +48,8 @@ jclass _getClassID(const char* className)
 
     jstring _jstrClassName = env->NewStringUTF(className);
 
-    jclass _clazz = (jclass)env->CallObjectMethod(ax::JniHelper::classloader,
-                                                  ax::JniHelper::loadclassMethod_methodID, _jstrClassName);
+    jclass _clazz = (jclass)env->CallObjectMethod(ax::JniHelper::classloader, ax::JniHelper::loadclassMethod_methodID,
+                                                  _jstrClassName);
 
     if (nullptr == _clazz)
     {

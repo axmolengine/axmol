@@ -31,10 +31,9 @@ namespace ax
 {
 
 PUEventHandler::PUEventHandler()
-    : _parentObserver(0)
-    , _eventHandlerScale(Vec3::ONE){
-          // mAliasType = AT_HANDLER;
-      };
+    : _parentObserver(0), _eventHandlerScale(Vec3::ONE) {
+        // mAliasType = AT_HANDLER;
+    };
 
 PUEventHandler::~PUEventHandler() {}
 
@@ -45,4 +44,4 @@ void PUEventHandler::copyAttributesTo(PUEventHandler* eventHandler)
     eventHandler->_eventHandlerScale = _eventHandlerScale;
 }
 
-}
+}  // namespace ax

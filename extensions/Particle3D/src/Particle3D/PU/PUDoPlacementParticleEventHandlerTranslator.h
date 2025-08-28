@@ -37,11 +37,10 @@ class PUDoPlacementParticleEventHandlerTranslator : public PUScriptTranslator
 {
 public:
     PUDoPlacementParticleEventHandlerTranslator();
-    virtual ~PUDoPlacementParticleEventHandlerTranslator(){};
+    virtual ~PUDoPlacementParticleEventHandlerTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

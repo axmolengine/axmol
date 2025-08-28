@@ -32,7 +32,8 @@
 
 using namespace ax;
 
-int axmol_main() {
+int axmol_main()
+{
     // create the application instance
     AppDelegate app;
     int ret = Application::getInstance()->run();
@@ -45,25 +46,26 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-#ifdef USE_WIN32_CONSOLE
-#    include "axmol/platform/win32/EmbedConsole.h"
-#endif
+#    ifdef USE_WIN32_CONSOLE
+#        include "axmol/platform/win32/EmbedConsole.h"
+#    endif
 
     auto result = axmol_main();
 
-#if AX_OBJECT_LEAK_DETECTION
+#    if AX_OBJECT_LEAK_DETECTION
     Object::printLeaks();
-#endif
+#    endif
 
     return result;
 }
 #else
-int main(int, char**) {
+int main(int, char**)
+{
     auto result = axmol_main();
 
-#if AX_OBJECT_LEAK_DETECTION
+#    if AX_OBJECT_LEAK_DETECTION
     Object::printLeaks();
-#endif
+#    endif
 
     return result;
 }

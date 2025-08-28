@@ -94,4 +94,4 @@ bool EventListenerAcceleration::checkAvailable()
     return true;
 }
 
-}
+}  // namespace ax

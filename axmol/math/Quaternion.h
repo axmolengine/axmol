@@ -25,7 +25,7 @@
 #include "axmol/base/Macros.h"
 #include "axmol/math/Vec3.h"
 #include "axmol/math/Mat4.h"
-//#include "Plane.h"
+// #include "Plane.h"
 
 /**
  * @addtogroup base
@@ -293,10 +293,7 @@ public:
      * @param axis The axis of rotation.
      * @param angle The angle of rotation (in radians).
      */
-    void set(const Vec3& axis, float angle)
-    {
-        Quaternion::createFromAxisAngle(axis, angle, this);
-    }
+    void set(const Vec3& axis, float angle) { Quaternion::createFromAxisAngle(axis, angle, this); }
 
     /**
      * Sets the elements of this quaternion to a copy of the specified quaternion.
@@ -476,7 +473,7 @@ private:
 };
 
 #if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-    inline constexpr Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+inline constexpr Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
 #endif
 
 NS_AX_MATH_END
@@ -484,4 +481,3 @@ NS_AX_MATH_END
  end of base group
  @}
  */
-

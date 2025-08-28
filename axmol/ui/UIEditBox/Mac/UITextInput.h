@@ -44,4 +44,3 @@
 - (void)axui_setDelegate:(id<NSTextFieldDelegate, NSTextViewDelegate>)delegate;
 
 @end
-

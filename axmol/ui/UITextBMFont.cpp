@@ -192,4 +192,4 @@ void TextBMFont::resetRender()
 }
 }  // namespace ui
 
-}
+}  // namespace ax

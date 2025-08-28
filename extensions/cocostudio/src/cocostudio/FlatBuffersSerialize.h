@@ -159,4 +159,3 @@ private:
     std::string _csdVersion;
 };
 }  // namespace cocostudio
-

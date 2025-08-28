@@ -192,4 +192,4 @@ void PUAffectorTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
     }
 }
 
-}
+}  // namespace ax

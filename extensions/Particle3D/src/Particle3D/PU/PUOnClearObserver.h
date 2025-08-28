@@ -61,11 +61,10 @@ public:
     void postUpdateObserver(float timeElapsed) override;
 
     PUOnClearObserver() : PUObserver(), _continue(false) {}
-    virtual ~PUOnClearObserver(){};
+    virtual ~PUOnClearObserver() {};
 
 protected:
     bool _continue;
 };
 
-}
-
+}  // namespace ax

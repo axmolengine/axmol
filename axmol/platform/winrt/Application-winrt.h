@@ -51,8 +51,8 @@ public:
     int run();
 
     /**
-    * @brief frame step with FPS control
-    */
+     * @brief frame step with FPS control
+     */
     bool frameStep(const std::function<bool()>& onFrame);
 
     /**
@@ -109,7 +109,6 @@ protected:
     static Application* sm_pSharedApplication;
 };
 
-}
+}  // namespace ax
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-

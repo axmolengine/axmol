@@ -7,7 +7,8 @@
 #include <string>
 #include <unordered_map>
 
-namespace ax {
+namespace ax
+{
 
 /**
  * @addtogroup _renderer
@@ -36,4 +37,4 @@ protected:
 
 // end of _renderer group
 /// @}
-}
+}  // namespace ax

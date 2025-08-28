@@ -320,6 +320,6 @@ protected:
 /** @} */
 /** @} */
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_PHYSICS)

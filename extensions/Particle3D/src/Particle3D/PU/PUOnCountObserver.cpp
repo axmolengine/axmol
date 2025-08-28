@@ -113,4 +113,4 @@ void PUOnCountObserver::copyAttributesTo(PUObserver* observer)
     onCountObserver->_compare          = _compare;
 }
 
-}
+}  // namespace ax

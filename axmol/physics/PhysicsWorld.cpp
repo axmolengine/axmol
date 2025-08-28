@@ -328,12 +328,12 @@ void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, 
         }
         RayCastCallbackInfo info = {this, func, point1, point2, data};
 
-        auto translation = point2 - point1;
+        auto translation                = point2 - point1;
         PhysicsWorldCallback::continues = true;
         b2World_CastRay(_b2World, phlp::tob2Vec2(point1), phlp::tob2Vec2(translation), b2DefaultQueryFilter(),
                         PhysicsWorldCallback::rayCastCallbackFunc, &info);
 
-        #if 0
+#    if 0
         auto result = b2World_CastRayClosest(_b2World, phlp::tob2Vec2(point1), phlp::tob2Vec2(translation), b2DefaultQueryFilter());
         if (b2Shape_IsValid(result.shapeId))
         {
@@ -342,7 +342,7 @@ void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, 
                                            result.fraction};
             func(*this, rayCastInfo, data);
         }
-        #endif
+#    endif
     }
 }
 

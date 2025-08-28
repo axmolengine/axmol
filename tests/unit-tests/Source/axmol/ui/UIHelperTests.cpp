@@ -29,17 +29,20 @@
 using namespace ax;
 using ax::ui::Helper;
 
-
-TEST_SUITE("ui/Helper") {
-    TEST_CASE("getSubStringOfUTF8String") {
-        SUBCASE("normal_cases") {
+TEST_SUITE("ui/Helper")
+{
+    TEST_CASE("getSubStringOfUTF8String")
+    {
+        SUBCASE("normal_cases")
+        {
             std::string source = "abcdefghij";
             CHECK(Helper::getSubStringOfUTF8String(source, 0, 2) == "ab");
             CHECK(Helper::getSubStringOfUTF8String(source, 2, 2) == "cd");
             CHECK(Helper::getSubStringOfUTF8String(source, 4, 2) == "ef");
         }
 
-        SUBCASE("empty_string") {
+        SUBCASE("empty_string")
+        {
             std::string source = "";
 
             // OK
@@ -51,7 +54,8 @@ TEST_SUITE("ui/Helper") {
             CHECK(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
         }
 
-        SUBCASE("ascii") {
+        SUBCASE("ascii")
+        {
             std::string source = "abc";
 
             // OK
@@ -73,7 +77,8 @@ TEST_SUITE("ui/Helper") {
             CHECK(Helper::getSubStringOfUTF8String(source, 4, 1) == "");
         }
 
-        SUBCASE("CJK") {
+        SUBCASE("CJK")
+        {
             std::string source = "这里是中文测试例";
 
             // OK
@@ -85,11 +90,11 @@ TEST_SUITE("ui/Helper") {
             CHECK(Helper::getSubStringOfUTF8String(source, 0, 1) == "\xe8\xbf\x99");
             CHECK(Helper::getSubStringOfUTF8String(source, 0, 4) == "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad");
             CHECK(Helper::getSubStringOfUTF8String(source, 0, 8) ==
-                    "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95\xe4\xbe\x8b");
+                  "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95\xe4\xbe\x8b");
             CHECK(Helper::getSubStringOfUTF8String(source, 0, 100) ==
-                    "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95\xe4\xbe\x8b");
+                  "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95\xe4\xbe\x8b");
             CHECK(Helper::getSubStringOfUTF8String(source, 2, 5) ==
-                    "\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95");
+                  "\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95");
             CHECK(Helper::getSubStringOfUTF8String(source, 6, 2) == "\xe8\xaf\x95\xe4\xbe\x8b");
             CHECK(Helper::getSubStringOfUTF8String(source, 6, 100) == "\xe8\xaf\x95\xe4\xbe\x8b");
 
@@ -98,7 +103,8 @@ TEST_SUITE("ui/Helper") {
             CHECK(Helper::getSubStringOfUTF8String(source, 9, 1) == "");
         }
 
-        SUBCASE("redundant_utf8_sequence_for_directory_traversal_attack") {
+        SUBCASE("redundant_utf8_sequence_for_directory_traversal_attack")
+        {
             // Redundant UTF-8 sequence for Directory traversal attack (1)
             std::string source = "\xC0\xAF";
 
@@ -110,7 +116,8 @@ TEST_SUITE("ui/Helper") {
             CHECK(Helper::getSubStringOfUTF8String(source, 0, 2) == "");
         }
 
-        SUBCASE("redundant_utf8_sequence_for_directory_traversal_attack_2") {
+        SUBCASE("redundant_utf8_sequence_for_directory_traversal_attack_2")
+        {
             std::string source = "\xE0\x80\xAF";
 
             // Error: Can't convert string to correct encoding such as UTF-32
@@ -121,7 +128,8 @@ TEST_SUITE("ui/Helper") {
             CHECK(Helper::getSubStringOfUTF8String(source, 0, 3) == "");
         }
 
-        SUBCASE("redundant_utf8_sequence_for_directory_traversal_attack_3") {
+        SUBCASE("redundant_utf8_sequence_for_directory_traversal_attack_3")
+        {
             std::string source = "\xF0\x80\x80\xAF";
 
             // Error: Can't convert string to correct encoding such as UTF-32

@@ -55,7 +55,7 @@ public:
     virtual ~NavMeshDebugDraw();
 
     void depthMask(bool state) override;
-    void texture(bool /*state*/) override{};
+    void texture(bool /*state*/) override {};
     void begin(duDebugDrawPrimitives prim, float size = 1.0f) override;
 
     void vertex(const float* pos, unsigned int color) override;
@@ -90,17 +90,17 @@ private:
     struct Primitive
     {
         rhi::PrimitiveType type = rhi::PrimitiveType::LINE;
-        bool depthMask              = false;
-        unsigned short start        = 0;
-        unsigned short end          = 0;
-        float size                  = 1.0f;
+        bool depthMask          = false;
+        unsigned short start    = 0;
+        unsigned short end      = 0;
+        float size              = 1.0f;
     };
 
-    Primitive* _currentPrimitive         = nullptr;
-    rhi::ProgramState* _programState     = nullptr;
-    rhi::VertexLayout* _vertexLayout     = nullptr;
-    bool _currentDepthMask               = true;
-    bool _dirtyBuffer                    = true;
+    Primitive* _currentPrimitive     = nullptr;
+    rhi::ProgramState* _programState = nullptr;
+    rhi::VertexLayout* _vertexLayout = nullptr;
+    bool _currentDepthMask           = true;
+    bool _dirtyBuffer                = true;
     rhi::Buffer* _vertexBuffer       = nullptr;
 
     // RenderState::StateBlock     _stateBlock;
@@ -109,19 +109,19 @@ private:
     rhi::UniformLocation _locMVP;
     std::vector<CustomCommand> _commands;
 
-    //CallbackCommand _beforeCommand;
-    //CallbackCommand _afterCommand;
+    // CallbackCommand _beforeCommand;
+    // CallbackCommand _afterCommand;
 
     // renderer state cache variables
-    bool _rendererDepthTestEnabled                 = true;
+    bool _rendererDepthTestEnabled         = true;
     rhi::CompareFunc _rendererDepthCmpFunc = rhi::CompareFunc::LESS;
-    rhi::CullMode _rendererCullMode            = rhi::CullMode::BACK;
-    rhi::Winding _rendererWinding              = rhi::Winding::COUNTER_CLOCK_WISE;
-    bool _rendererDepthWrite                       = false;
+    rhi::CullMode _rendererCullMode        = rhi::CullMode::BACK;
+    rhi::Winding _rendererWinding          = rhi::Winding::COUNTER_CLOCK_WISE;
+    bool _rendererDepthWrite               = false;
 };
 
 /** @} */
 
-}
+}  // namespace ax
 
 #endif  // AX_ENABLE_NAVMESH

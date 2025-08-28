@@ -37,10 +37,10 @@ class PUSlaveBehaviourTranslator : public PUScriptTranslator
 {
 public:
     PUSlaveBehaviourTranslator();
-    virtual ~PUSlaveBehaviourTranslator(){};
+    virtual ~PUSlaveBehaviourTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
+}  // namespace ax

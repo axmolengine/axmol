@@ -41,10 +41,10 @@ class PUParticle3DBeamVisualData : public Object
 {
 public:
     PUParticle3DBeamVisualData(size_t index, PUBillboardChain* bbChain)
-        : chainIndex(index), timeSinceLastUpdate(0.0f), billboardChain(bbChain){};
+        : chainIndex(index), timeSinceLastUpdate(0.0f), billboardChain(bbChain) {};
 
     // Set the chain visible or invisible (PU 1.4)
-    void setVisible(bool visible){/* No implementation */};
+    void setVisible(bool visible) { /* No implementation */ };
 
     /** The is no decent way to make the individual chains/elements invisible. The width of each element is set to 0 to
        make it invisible. PU 1.4
@@ -146,4 +146,4 @@ protected:
     PUBillboardChain::TexCoordDirection _texCoordDirection;
 };
 
-}
+}  // namespace ax

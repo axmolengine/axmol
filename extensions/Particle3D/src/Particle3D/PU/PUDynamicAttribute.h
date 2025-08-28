@@ -327,5 +327,4 @@ public:
      */
     float calculate(PUDynamicAttribute* dyn, float x, float defaultValue = 0.0f);
 };
-}
-
+}  // namespace ax

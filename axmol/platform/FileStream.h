@@ -89,4 +89,4 @@ private:
     const PXIoF* _iof{nullptr};
 };
 
-}
+}  // namespace ax

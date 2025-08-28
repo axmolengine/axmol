@@ -85,8 +85,7 @@ public:
                                        const FontDefinition& textDefinition)
     {
         JniMethodInfo methodInfo;
-        if (!JniHelper::getStaticMethodInfo(methodInfo, "dev.axmol.lib.BitmapHelper",
-                                            "createTextBitmapShadowStroke",
+        if (!JniHelper::getStaticMethodInfo(methodInfo, "dev.axmol.lib.BitmapHelper", "createTextBitmapShadowStroke",
                                             "([BLjava/lang/String;IIIIIIIIZFFFFZIIIIFZI)Z"))
         {
             AXLOGE("{} {}: error to get methodInfo", __FILE__, __LINE__);
@@ -212,7 +211,7 @@ void Device::selectionChanged()
     JniHelper::callStaticVoidMethod(deviceHelperClassName, "selectionChanged");
 }
 
-}
+}  // namespace ax
 
 // this method is called by BitmapHelper
 extern "C" {
@@ -222,11 +221,11 @@ extern "C" {
 JNIEXPORT void JNICALL
 Java_dev_axmol_lib_BitmapHelper_nativeInitBitmapDC(JNIEnv* env, jclass, jint width, jint height, jbyteArray pixels)
 {
-    int size                    = width * height * 4;
+    int size               = width * height * 4;
     ax::BitmapDC& bitmapDC = ax::sharedBitmapDC();
-    bitmapDC._width             = width;
-    bitmapDC._height            = height;
-    bitmapDC._data              = (unsigned char*)malloc(sizeof(unsigned char) * size);
+    bitmapDC._width        = width;
+    bitmapDC._height       = height;
+    bitmapDC._data         = (unsigned char*)malloc(sizeof(unsigned char) * size);
     env->GetByteArrayRegion(pixels, 0, size, (jbyte*)bitmapDC._data);
 }
 };

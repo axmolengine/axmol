@@ -71,16 +71,16 @@ protected:
 protected:
     std::string _title;
     ax::Camera* _camera = nullptr;
-    float _angle             = 0.f;
-    bool _needShootBox       = false;
+    float _angle        = 0.f;
+    bool _needShootBox  = false;
 };
 
 class BasicPhysics3DDemo : public Physics3DTestDemo
 {
 public:
     CREATE_FUNC(BasicPhysics3DDemo);
-    BasicPhysics3DDemo(){};
-    virtual ~BasicPhysics3DDemo(){};
+    BasicPhysics3DDemo() {};
+    virtual ~BasicPhysics3DDemo() {};
 
     virtual std::string subtitle() const override;
 
@@ -91,8 +91,8 @@ class Physics3DConstraintDemo : public Physics3DTestDemo
 {
 public:
     CREATE_FUNC(Physics3DConstraintDemo);
-    Physics3DConstraintDemo() : _constraint(nullptr), _pickingDistance(0.f){};
-    virtual ~Physics3DConstraintDemo(){};
+    Physics3DConstraintDemo() : _constraint(nullptr), _pickingDistance(0.f) {};
+    virtual ~Physics3DConstraintDemo() {};
 
     virtual std::string subtitle() const override;
 
@@ -104,15 +104,15 @@ public:
 
 protected:
     ax::Physics3DConstraint* _constraint;  // for picking
-    float _pickingDistance;                     // picking distance
+    float _pickingDistance;                // picking distance
 };
 
 class Physics3DKinematicDemo : public Physics3DTestDemo
 {
 public:
     CREATE_FUNC(Physics3DKinematicDemo);
-    Physics3DKinematicDemo(){};
-    virtual ~Physics3DKinematicDemo(){};
+    Physics3DKinematicDemo() {};
+    virtual ~Physics3DKinematicDemo() {};
 
     virtual std::string subtitle() const override;
 
@@ -123,8 +123,8 @@ class Physics3DCollisionCallbackDemo : public Physics3DTestDemo
 {
 public:
     CREATE_FUNC(Physics3DCollisionCallbackDemo);
-    Physics3DCollisionCallbackDemo(){};
-    virtual ~Physics3DCollisionCallbackDemo(){};
+    Physics3DCollisionCallbackDemo() {};
+    virtual ~Physics3DCollisionCallbackDemo() {};
 
     virtual std::string subtitle() const override;
 
@@ -135,8 +135,8 @@ class Physics3DTerrainDemo : public Physics3DTestDemo
 {
 public:
     CREATE_FUNC(Physics3DTerrainDemo);
-    Physics3DTerrainDemo(){};
-    virtual ~Physics3DTerrainDemo(){};
+    Physics3DTerrainDemo() {};
+    virtual ~Physics3DTerrainDemo() {};
 
     virtual std::string subtitle() const override;
 
@@ -149,8 +149,8 @@ class Physics3DColliderDemo : public Physics3DTestDemo
 {
 public:
     CREATE_FUNC(Physics3DColliderDemo);
-    Physics3DColliderDemo(){};
-    virtual ~Physics3DColliderDemo(){};
+    Physics3DColliderDemo() {};
+    virtual ~Physics3DColliderDemo() {};
 
     virtual std::string subtitle() const override;
 

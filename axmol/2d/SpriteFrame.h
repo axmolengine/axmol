@@ -308,7 +308,7 @@ public:
 
 protected:
     void setName(std::string_view name) { _name = name; }
-    
+
     Vec2 _offset;
     Vec2 _anchorPoint;
     Vec2 _originalSize;
@@ -327,4 +327,4 @@ protected:
 // end of _2d group
 /// @}
 
-}
+}  // namespace ax

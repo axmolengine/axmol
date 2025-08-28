@@ -101,5 +101,4 @@ protected:
     PUVortexAffectorTranslator _vortexAffectorTranslator;
 };
 
-}
-
+}  // namespace ax

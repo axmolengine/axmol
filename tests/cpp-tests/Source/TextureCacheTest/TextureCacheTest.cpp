@@ -34,9 +34,7 @@ TextureCacheTests::TextureCacheTests()
     ADD_TEST_CASE(TextureCacheUnbindTest);
 }
 
-TextureCacheTest::TextureCacheTest() : _numberOfSprites(20), _numberOfLoadedSprites(0)
-{
-}
+TextureCacheTest::TextureCacheTest() : _numberOfSprites(20), _numberOfLoadedSprites(0) {}
 
 TextureCacheTest::~TextureCacheTest()
 {
@@ -184,9 +182,7 @@ void TextureCacheTest::addSprite()
     this->addChild(s15);
 }
 
-TextureCacheUnbindTest::TextureCacheUnbindTest()
-{
-}
+TextureCacheUnbindTest::TextureCacheUnbindTest() {}
 
 TextureCacheUnbindTest::~TextureCacheUnbindTest()
 {

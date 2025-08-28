@@ -213,7 +213,7 @@ void MeshRendererBasicTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererBasicTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto&&touch : touches)
+    for (auto&& touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -376,7 +376,7 @@ MeshRendererInstancingStressTest::MeshRendererInstancingStressTest()
     mesh->setPosition(s.width / 2, s.height / 2);
 
     mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE, 10000);
-    mesh->setDynamicInstancing(false); // false by default
+    mesh->setDynamicInstancing(false);  // false by default
 
     FastRNG r{};
 
@@ -546,7 +546,7 @@ MeshRendererFakeShadowTest::MeshRendererFakeShadowTest()
         _state   = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
         _plane->setMaterial(mat);
         rhi::UniformLocation loc = _state->getUniformLocation("u_model_matrix");
-        auto trans                   = _plane->getNodeToWorldTransform();
+        auto trans               = _plane->getNodeToWorldTransform();
         _state->setUniform(loc, &trans, sizeof(trans));
         loc      = _state->getUniformLocation("u_target_pos");
         auto pos = _orc->getPosition3D();
@@ -679,7 +679,7 @@ void MeshRendererFakeShadowTest::onTouchesMoved(const std::vector<Touch*>& touch
 
 void MeshRendererFakeShadowTest::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event)
 {
-    for (auto&&item : touches)
+    for (auto&& item : touches)
     {
         auto touch    = item;
         auto location = touch->getLocationInView();
@@ -918,7 +918,7 @@ MeshRendererEffectTest::MeshRendererEffectTest()
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
         auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
         material->setTechnique("outline_noneskinned");
-        for (auto&&mesh : _meshes)
+        for (auto&& mesh : _meshes)
         {
             mesh->setMaterial(material->clone());
         }
@@ -946,7 +946,7 @@ std::string MeshRendererEffectTest::subtitle() const
 void MeshRendererEffectTest::addNewMeshWithCoords(Vec2 p)
 {
     // option 2: load obj and assign the texture
-    auto mesh   = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    auto mesh     = MeshRenderer::create("MeshRendererTest/boss1.obj");
     auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
     material->setTechnique("outline_noneskinned");
     mesh->setMaterial(material);
@@ -980,7 +980,7 @@ void MeshRendererEffectTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererEffectTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto&&touch : touches)
+    for (auto&& touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -1035,7 +1035,8 @@ void AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh(Object* sender)
     int32_t index = 0;
     for (const auto& path : _paths)
     {
-        MeshRenderer::createAsync(path, AX_CALLBACK_2(AsyncLoadMeshRendererTest::asyncLoad_Callback, this), reinterpret_cast<void*>(static_cast<uintptr_t>(++index)));
+        MeshRenderer::createAsync(path, AX_CALLBACK_2(AsyncLoadMeshRendererTest::asyncLoad_Callback, this),
+                                  reinterpret_cast<void*>(static_cast<uintptr_t>(++index)));
     }
 }
 
@@ -1086,7 +1087,7 @@ std::string MeshRendererWithSkinTest::subtitle() const
 void MeshRendererWithSkinTest::addNewMeshWithCoords(Vec2 p)
 {
     std::string fileName = "MeshRendererTest/orc.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
     mesh->setScale(3);
     mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
     mesh->setPosition(Vec2(p.x, p.y));
@@ -1138,7 +1139,7 @@ void MeshRendererWithSkinTest::switchAnimationQualityCallback(Object* sender)
 
     _menuItem->setString(getAnimationQualityMessage());
 
-    for (auto&&iter : _meshes)
+    for (auto&& iter : _meshes)
     {
         RepeatForever* repAction = dynamic_cast<RepeatForever*>(iter->getActionByTag(110));
         Animate3D* animate3D     = dynamic_cast<Animate3D*>(repAction->getInnerAction());
@@ -1148,7 +1149,7 @@ void MeshRendererWithSkinTest::switchAnimationQualityCallback(Object* sender)
 
 void MeshRendererWithSkinTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto&&touch : touches)
+    for (auto&& touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -1169,7 +1170,7 @@ MeshRendererWithSkinOutlineTest::MeshRendererWithSkinOutlineTest()
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
         auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
         material->setTechnique("outline_skinned");
-        for (auto&&mesh : _meshes)
+        for (auto&& mesh : _meshes)
         {
             mesh->setMaterial(material->clone());
         }
@@ -1196,7 +1197,7 @@ void MeshRendererWithSkinOutlineTest::addNewMeshWithCoords(Vec2 p)
 {
 
     std::string fileName = "MeshRendererTest/orc.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
 
     auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
     material->setTechnique("outline_skinned");
@@ -1231,7 +1232,7 @@ void MeshRendererWithSkinOutlineTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererWithSkinOutlineTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto&&touch : touches)
+    for (auto&& touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -1294,12 +1295,12 @@ void Animate3DTest::update(float dt)
 void Animate3DTest::addMeshRenderer()
 {
     std::string fileName = "MeshRendererTest/tortoise.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
     mesh->setScale(0.1f);
     auto s = Director::getInstance()->getWinSize();
     mesh->setPosition(Vec2(s.width * 4.f / 5.f, s.height / 2.f));
     addChild(mesh);
-    _mesh        = mesh;
+    _mesh          = mesh;
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
@@ -1346,7 +1347,7 @@ void Animate3DTest::renewCallBack()
 
 void Animate3DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto&&touch : touches)
+    for (auto&& touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -1364,7 +1365,7 @@ void Animate3DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
                     _mesh->runAction(_hurt);
                     auto delay = DelayTime::create(_hurt->getDuration() - Animate3D::getTransitionTime());
                     auto seq   = Sequence::create(
-                          delay, CallFunc::create(AX_CALLBACK_0(Animate3DTest::renewCallBack, this)), nullptr);
+                        delay, CallFunc::create(AX_CALLBACK_0(Animate3DTest::renewCallBack, this)), nullptr);
                     seq->setTag(101);
                     _mesh->runAction(seq);
                 }
@@ -1395,7 +1396,7 @@ std::string AttachmentTest::subtitle() const
 void AttachmentTest::addNewMeshWithCoords(Vec2 p)
 {
     std::string fileName = "MeshRendererTest/orc.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
     mesh->setScale(5);
     mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
     addChild(mesh);
@@ -1412,7 +1413,7 @@ void AttachmentTest::addNewMeshWithCoords(Vec2 p)
 
         mesh->runAction(RepeatForever::create(animate));
     }
-    _mesh    = mesh;
+    _mesh      = mesh;
     _hasWeapon = true;
 }
 
@@ -1485,7 +1486,7 @@ std::string MeshRendererReskinTest::subtitle() const
 void MeshRendererReskinTest::addNewMeshWithCoords(Vec2 p)
 {
     std::string fileName = "MeshRendererTest/ReskinGirl.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
     mesh->setScale(4);
     mesh->setRotation3D(Vec3(0.0f, 0.0f, 0.0f));
     addChild(mesh);
@@ -1565,9 +1566,11 @@ MeshRendererWithOBBPerformanceTest::MeshRendererWithOBBPerformanceTest()
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
-    auto decrease = MenuItemFont::create(" - ", AX_CALLBACK_1(MeshRendererWithOBBPerformanceTest::delOBBCallback, this));
+    auto decrease =
+        MenuItemFont::create(" - ", AX_CALLBACK_1(MeshRendererWithOBBPerformanceTest::delOBBCallback, this));
     decrease->setColor(Color32(0, 200, 20));
-    auto increase = MenuItemFont::create(" + ", AX_CALLBACK_1(MeshRendererWithOBBPerformanceTest::addOBBCallback, this));
+    auto increase =
+        MenuItemFont::create(" + ", AX_CALLBACK_1(MeshRendererWithOBBPerformanceTest::addOBBCallback, this));
     increase->setColor(Color32(0, 200, 20));
 
     auto menu = Menu::create(decrease, increase, nullptr);
@@ -1682,7 +1685,7 @@ void MeshRendererWithOBBPerformanceTest::initDrawBox()
 void MeshRendererWithOBBPerformanceTest::addNewMeshWithCoords(Vec2 p)
 {
     std::string fileName = "MeshRendererTest/tortoise.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
     AABB aabb            = mesh->getAABB();
     _obbt                = OBB(aabb);
     _obbtOri             = _obbt;
@@ -1691,7 +1694,7 @@ void MeshRendererWithOBBPerformanceTest::addNewMeshWithCoords(Vec2 p)
     auto s = Director::getInstance()->getWinSize();
     mesh->setPosition(Vec2(s.width * 4.f / 5.f, s.height / 2.f));
     addChild(mesh);
-    _mesh        = mesh;
+    _mesh          = mesh;
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
@@ -1702,7 +1705,8 @@ void MeshRendererWithOBBPerformanceTest::addNewMeshWithCoords(Vec2 p)
     _moveAction = MoveTo::create(4.f, Vec2(s.width / 5.f, s.height / 2.f));
     _moveAction->retain();
     auto seq = Sequence::create(
-        _moveAction, CallFunc::create(AX_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)), nullptr);
+        _moveAction, CallFunc::create(AX_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)),
+        nullptr);
     seq->setTag(100);
     mesh->runAction(seq);
 
@@ -1719,9 +1723,9 @@ void MeshRendererWithOBBPerformanceTest::reachEndCallBack()
     _moveAction->release();
     _moveAction = inverse;
     auto rot    = RotateBy::create(1.0f, Vec3(0.f, 180.f, 0.f));
-    auto seq    = Sequence::create(rot, _moveAction,
-                                   CallFunc::create(AX_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)),
-                                   nullptr);
+    auto seq    = Sequence::create(
+        rot, _moveAction, CallFunc::create(AX_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)),
+        nullptr);
     seq->setTag(100);
     _mesh->runAction(seq);
 }
@@ -1760,7 +1764,10 @@ void MeshRendererWithOBBPerformanceTest::delOBBWithCount(float value)
     else
         return;
 }
-void MeshRendererWithOBBPerformanceTest::unproject(const Mat4& viewProjection, const Size* viewport, Vec3* src, Vec3* dst)
+void MeshRendererWithOBBPerformanceTest::unproject(const Mat4& viewProjection,
+                                                   const Size* viewport,
+                                                   Vec3* src,
+                                                   Vec3* dst)
 {
     assert(dst);
 
@@ -1822,7 +1829,7 @@ std::string MeshRendererMirrorTest::subtitle() const
 void MeshRendererMirrorTest::addNewMeshWithCoords(Vec2 p)
 {
     std::string fileName = "MeshRendererTest/orc.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
     mesh->setScale(5);
     mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
     addChild(mesh);
@@ -1839,7 +1846,7 @@ void MeshRendererMirrorTest::addNewMeshWithCoords(Vec2 p)
 
         mesh->runAction(RepeatForever::create(animate));
     }
-    _mesh    = mesh;
+    _mesh      = mesh;
     _hasWeapon = true;
 
     // create mirror MeshRenderer
@@ -1883,12 +1890,12 @@ std::string QuaternionTest::subtitle() const
 void QuaternionTest::addNewMeshWithCoords(Vec2 p)
 {
     std::string fileName = "MeshRendererTest/tortoise.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
     mesh->setScale(0.1f);
     auto s = Director::getInstance()->getWinSize();
     mesh->setPosition(Vec2(s.width / 2.f + _radius * cosf(_accAngle), s.height / 2.f + _radius * sinf(_accAngle)));
     addChild(mesh);
-    _mesh        = mesh;
+    _mesh          = mesh;
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
@@ -1974,7 +1981,7 @@ void UseCaseMeshRenderer::switchCase()
     if (_caseIdx == 0)  // use case 1, 3d transparent mesh + 2d mesh
     {
         std::string filename = "MeshRendererTest/girl.c3b";
-        auto mesh          = MeshRenderer::create(filename);
+        auto mesh            = MeshRenderer::create(filename);
         mesh->setScale(0.15f);
         auto animation = Animation3D::create(filename);
         if (animation)
@@ -2017,7 +2024,7 @@ void UseCaseMeshRenderer::switchCase()
         addChild(layer);
 
         std::string filename = "MeshRendererTest/girl.c3b";
-        auto mesh          = MeshRenderer::create(filename);
+        auto mesh            = MeshRenderer::create(filename);
         mesh->setScale(0.5f);
         auto animation = Animation3D::create(filename);
         if (animation)
@@ -2079,9 +2086,9 @@ void UseCaseMeshRenderer::update(float delta)
         float radius = 30.f;
         float x = cosf(accAngle) * radius, z = sinf(accAngle) * radius;
 
-        auto node     = getChildByTag(101);
+        auto node   = getChildByTag(101);
         auto mesh3d = node->getChildByTag(3);
-        auto circle   = node->getChildByTag(2);
+        auto circle = node->getChildByTag(2);
 
         mesh3d->setPositionX(x);
         mesh3d->setPositionZ(z);
@@ -2144,7 +2151,7 @@ void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
 
     // add jumping ball
     std::string fileName = "MeshRendererTest/ball.c3b";
-    auto mesh          = MeshRenderer::create(fileName);
+    auto mesh            = MeshRenderer::create(fileName);
     mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
     mesh->setScale(3);
     mesh->setPosition(Vec2(s.width / 2.f, s.height / 3.f));
@@ -2168,7 +2175,7 @@ void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
 
     // add jumping orc
     fileName = "MeshRendererTest/orc_jump.c3t";
-    mesh   = MeshRenderer::create(fileName);
+    mesh     = MeshRenderer::create(fileName);
     mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
     mesh->setScale(3);
     mesh->setPosition(Vec2(s.width / 2.f, s.height / 3.f));
@@ -2307,7 +2314,7 @@ Issue9767::Issue9767()
 {
     _shaderType = Issue9767::ShaderType::SHADER_TEX;
 
-    auto s      = Director::getInstance()->getWinSize();
+    auto s    = Director::getInstance()->getWinSize();
     auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
     mesh->setScale(3.f);
     mesh->setTexture("MeshRendererTest/boss.png");
@@ -2359,8 +2366,8 @@ std::string Issue9767::subtitle() const
 
 MeshRendererClippingTest::MeshRendererClippingTest()
 {
-    auto size         = Director::getInstance()->getWinSize();
-    auto stencil      = Sprite::create("Images/close.png");
+    auto size             = Director::getInstance()->getWinSize();
+    auto stencil          = Sprite::create("Images/close.png");
     auto clipMeshRenderer = ClippingNode::create();
     clipMeshRenderer->setStencil(stencil);
     this->addChild(clipMeshRenderer);
@@ -2398,7 +2405,7 @@ Animate3DCallbackTest::Animate3DCallbackTest()
     FileUtils::getInstance()->addSearchPath("Particle3D/materials");
     FileUtils::getInstance()->addSearchPath("Particle3D/scripts");
 
-    auto s    = Director::getInstance()->getWinSize();
+    auto s        = Director::getInstance()->getWinSize();
     _meshRenderer = MeshRenderer::create("MeshRendererTest/ReskinGirl.c3b");
     _meshRenderer->setPosition(Vec2(s.width / 2.0f, s.height / 3.0f));
     _meshRenderer->setScale(3.0f);
@@ -2558,7 +2565,8 @@ void CameraBackgroundClearTest::switch_CameraClearMode(ax::Object* sender)
     {
         _camera->setBackgroundBrush(CameraBackgroundBrush::createSkyboxBrush(
             "MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg", "MeshRendererTest/skybox/top.jpg",
-            "MeshRendererTest/skybox/bottom.jpg", "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg"));
+            "MeshRendererTest/skybox/bottom.jpg", "MeshRendererTest/skybox/front.jpg",
+            "MeshRendererTest/skybox/back.jpg"));
         _label->setString("Skybox Clear Brush");
     }
     else if (type == CameraBackgroundBrush::BrushType::SKYBOX)
@@ -2597,7 +2605,7 @@ MotionStreak3DTest::MotionStreak3DTest()
 
     setCameraMask(2);
 
-    _mesh = mesh;
+    _mesh   = mesh;
     _streak = streak;
     scheduleUpdate();
 }

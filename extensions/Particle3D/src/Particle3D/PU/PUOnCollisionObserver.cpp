@@ -42,4 +42,4 @@ PUOnCollisionObserver* PUOnCollisionObserver::create()
     return pco;
 }
 
-}
+}  // namespace ax

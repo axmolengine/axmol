@@ -475,4 +475,4 @@ void OBB::transform(const Mat4& mat)
     computeExtAxis();
 }
 
-}
+}  // namespace ax

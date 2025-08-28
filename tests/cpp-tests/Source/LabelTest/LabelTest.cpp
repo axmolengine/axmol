@@ -293,7 +293,7 @@ void LabelFNTSpriteActions::step(float dt)
 {
     _time += dt;
     char tmp[10];
-    auto text = fmt::format_to_z(tmp, "{:04.1f}", _time);
+    auto text   = fmt::format_to_z(tmp, "{:04.1f}", _time);
     auto label1 = (Label*)getChildByTag(kTagBitmapAtlas2);
     label1->setString(text);
 }
@@ -418,7 +418,7 @@ LabelFNTHundredLabels::LabelFNTHundredLabels()
     char tmp[6];
     for (int i = 0; i < 100; i++)
     {
-        auto str = fmt::format_to_z(tmp, "-{}-", i);
+        auto str   = fmt::format_to_z(tmp, "-{}-", i);
         auto label = Label::createWithBMFont("fonts/bitmapFontTest.fnt", str);
         addChild(label);
 
@@ -1596,7 +1596,6 @@ std::string LabelTTFSDF::subtitle() const
     return "Testing rendering Label on DistanceField";
 }
 
-
 LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
 {
     auto size = Director::getInstance()->getWinSize();
@@ -1771,7 +1770,7 @@ void LabelCharMapTest::step(float dt)
     label1->setString(text);
 
     auto label2 = (Label*)getChildByTag(kTagSprite2);
-    text = fmt::format_to_z(tmp, "{}", (int)_time);
+    text        = fmt::format_to_z(tmp, "{}", (int)_time);
     label2->setString(text);
 }
 
@@ -1825,12 +1824,12 @@ void LabelCharMapColorTest::step(float dt)
 {
     _time += dt;
     char tmp[12];
-    auto info = fmt::format_to_z(tmp, "{:2.2f} Test", _time);
+    auto info   = fmt::format_to_z(tmp, "{:2.2f} Test", _time);
     auto label1 = (Label*)getChildByTag(kTagSprite1);
     label1->setString(info);
 
     auto label2 = (Label*)getChildByTag(kTagSprite2);
-    info = fmt::format_to_z(tmp, "{}", _time);
+    info        = fmt::format_to_z(tmp, "{}", _time);
     label2->setString(info);
 }
 
@@ -2673,31 +2672,30 @@ void LabelLayoutBaseTest::initUnderlineStrikethroughOption(const ax::Size& size)
     // add text alignment settings
     MenuItemFont::setFontSize(12);
     auto menu = Menu::create(MenuItemFont::create("Toggle Underline",
-        [this](Object*) {
-            if (_underline)
-            {
-                _label->disableEffect(LabelEffect::UNDERLINE);
-            }
-            else
-            {
-                _label->enableUnderline();
-            }
-            _underline = !_underline;
+                                                  [this](Object*) {
+        if (_underline)
+        {
+            _label->disableEffect(LabelEffect::UNDERLINE);
         }
-    ),
-    MenuItemFont::create("Toggle Strikethrough",
-        [this](Object*) {
-            if (_strikethrough)
-            {
-                _label->disableEffect(LabelEffect::STRIKETHROUGH);
-            }
-            else
-            {
-                _label->enableStrikethrough();
-            }
-            _strikethrough = !_strikethrough;
+        else
+        {
+            _label->enableUnderline();
         }
-    ), nullptr);
+        _underline = !_underline;
+    }),
+                             MenuItemFont::create("Toggle Strikethrough",
+                                                  [this](Object*) {
+        if (_strikethrough)
+        {
+            _label->disableEffect(LabelEffect::STRIKETHROUGH);
+        }
+        else
+        {
+            _label->enableStrikethrough();
+        }
+        _strikethrough = !_strikethrough;
+    }),
+                             nullptr);
     menu->alignItemsVerticallyWithPadding(4);
     menu->setPosition(Vec2(size.width - 60, 60));
     this->addChild(menu);
@@ -2782,7 +2780,7 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
 void LabelLayoutBaseTest::initTestLabel(const ax::Size& size)
 {
     auto center = VisibleRect::center();
-    _label = Label::createWithTTF("五六七八This is a very long sentence一二三四.", "fonts/HKYuanMini.ttf", 20);
+    _label      = Label::createWithTTF("五六七八This is a very long sentence一二三四.", "fonts/HKYuanMini.ttf", 20);
     _label->setDimensions(size.width / 2, size.height / 2);
     _label->setPosition(center);
     _label->setName("Label");
@@ -2932,8 +2930,8 @@ LabelWrapNoBreakSpaceTest::LabelWrapNoBreakSpaceTest()
 {
     _label->setLineBreakWithoutSpace(false);
     const char* no_break_space_utf8 = "\xC2\xA0";  // 0xA0 - no-break space
-    auto str                        = fmt::format(
-        "The price is ${}1.25. \n\nthe space between \"$\" and \"1.25\" is a no break space.", no_break_space_utf8);
+    auto str = fmt::format("The price is ${}1.25. \n\nthe space between \"$\" and \"1.25\" is a no break space.",
+                           no_break_space_utf8);
     _label->setString(str);
     _label->setVerticalAlignment(TextVAlignment::TOP);
     _label->setOverflow(Label::Overflow::CLAMP);
@@ -3636,7 +3634,7 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
 
     // Glow normal(CPU)
     ttfConf.distanceFieldEnabled = false;
-    auto label2                    = Label::createWithTTF(ttfConf, "Glow2", TextHAlignment::CENTER, s.width);
+    auto label2                  = Label::createWithTTF(ttfConf, "Glow2", TextHAlignment::CENTER, s.width);
     label2->setPosition(Vec2(s.width / 2, s.height * 0.6));
     label2->setTextColor(Color32::GREEN);
     label2->enableGlow(Color32::YELLOW);
@@ -3647,7 +3645,7 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     // Outline SDF(GPU)
     ttfConf.distanceFieldEnabled = true;
     ttfConf.outlineSize          = 2;
-    auto label3                    = Label::createWithTTF(ttfConf, "Outline1", TextHAlignment::CENTER, s.width);
+    auto label3                  = Label::createWithTTF(ttfConf, "Outline1", TextHAlignment::CENTER, s.width);
     label3->setPosition(Vec2(s.width / 2, s.height * 0.48));
     label3->setTextColor(Color32::RED);
     label3->enableOutline(Color32::BLUE);
@@ -3658,7 +3656,7 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     // Outline normal(CPU by freetype2)
     ttfConf.distanceFieldEnabled = false;
     ttfConf.outlineSize          = 2;
-    auto label4                    = Label::createWithTTF(ttfConf, "Outline2", TextHAlignment::CENTER, s.width);
+    auto label4                  = Label::createWithTTF(ttfConf, "Outline2", TextHAlignment::CENTER, s.width);
     label4->setPosition(Vec2(s.width / 2, s.height * 0.36));
     label4->setTextColor(Color32::RED);
     label4->enableOutline(Color32::BLUE, 2);
@@ -3676,34 +3674,38 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     const int count = 7;
     Label* labels[count];
 
-    labels[0] = Label::createWithSystemFont("SystemFont TextVAlignment::TOP\nusing setTextColor(255, 0, 255, 100)", font, 14, Vec2::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
+    labels[0] = Label::createWithSystemFont("SystemFont TextVAlignment::TOP\nusing setTextColor(255, 0, 255, 100)",
+                                            font, 14, Vec2::ZERO, TextHAlignment::LEFT, TextVAlignment::TOP);
     labels[0]->setTextColor(Color32(255, 0, 255, 100));
     labels[0]->enableGlow(Color32::BLUE);
 
-    labels[1] = Label::createWithSystemFont("SystemFont TextVAlignment::CENTER\nusing setColor(*RED*)", font, 14, Vec2::ZERO, TextHAlignment::RIGHT, TextVAlignment::CENTER);
+    labels[1] = Label::createWithSystemFont("SystemFont TextVAlignment::CENTER\nusing setColor(*RED*)", font, 14,
+                                            Vec2::ZERO, TextHAlignment::RIGHT, TextVAlignment::CENTER);
     labels[1]->setColor(Color32::RED);
 
     labels[2] = Label::createWithSystemFont("SystemFont TextVAlignment::BOTTOM\nusingsetTextColor(*YELLOW)", font, 14,
-                                           Vec2::ZERO, TextHAlignment::CENTER, TextVAlignment::BOTTOM);
+                                            Vec2::ZERO, TextHAlignment::CENTER, TextVAlignment::BOTTOM);
     labels[2]->setTextColor(Color32::YELLOW);
 
-    labels[3] = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "BMFont\nwith default color", TextHAlignment::CENTER, s.width);
+    labels[3] = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "BMFont\nwith default color",
+                                        TextHAlignment::CENTER, s.width);
 
     labels[4] = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "BMFont\nusing setTextColor(0, 255, 0, 100)",
-                                       TextHAlignment::CENTER, s.width);
+                                        TextHAlignment::CENTER, s.width);
     labels[4]->setTextColor(Color32(0, 255, 0, 100));
 
-    labels[5] = Label::createWithTTF(ttfConfig,  "TTF setColor(*BLUE*)\nwith multiline 1\nand a much more longer multiline 2",
-                                    TextHAlignment::LEFT, s.width);
+    labels[5] =
+        Label::createWithTTF(ttfConfig, "TTF setColor(*BLUE*)\nwith multiline 1\nand a much more longer multiline 2",
+                             TextHAlignment::LEFT, s.width);
     labels[5]->setColor(Color32::BLUE);
 
-    labels[6] = Label::createWithTTF("TTF setTextColor(*RED*)\nwith multiline 1\nand a much more longer multiline 2",
-                                    font, 14);
+    labels[6] =
+        Label::createWithTTF("TTF setTextColor(*RED*)\nwith multiline 1\nand a much more longer multiline 2", font, 14);
     labels[6]->setTextColor(Color32::RED);
 
     for (int i = 0; i < count; i++)
     {
-        labels[i]->setPosition(Vec2(labels[i]->getBoundingBox().getMaxX() +10, s.height * 0.13f * (i + 1)));
+        labels[i]->setPosition(Vec2(labels[i]->getBoundingBox().getMaxX() + 10, s.height * 0.13f * (i + 1)));
         labels[i]->enableUnderline();
         labels[i]->enableStrikethrough();
         addChild(labels[i]);
@@ -3715,7 +3717,7 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
     {
         float fs     = (i + 1) * 3;
         labelSize[i] = Label::createWithTTF("UNDERLINE", "fonts/arial.ttf", fs);
-        labelSize[i]->setPosition(s.width / 1.3, s.height -50 - y);
+        labelSize[i]->setPosition(s.width / 1.3, s.height - 50 - y);
         y += (i + 2) * 3;
         labelSize[i]->enableUnderline();
         addChild(labelSize[i]);
@@ -3768,7 +3770,7 @@ std::string LabelUnderlineStrikethroughMultiline::title() const
 std::string LabelUnderlineStrikethroughMultiline::subtitle() const
 {
     return "";
-    //Underline + Strikethrough + Color on TTF and BMfont with multiline ";
+    // Underline + Strikethrough + Color on TTF and BMfont with multiline ";
 }
 
 ///
@@ -4128,12 +4130,10 @@ LabelIssue20523::LabelIssue20523()
     addChild(_crashingLabel, 1);
     //_crashingLabel->setWidth(size.width);
 
-    this->schedule(
-        [this, _crashingLabel](float) {
+    this->schedule([this, _crashingLabel](float) {
         ++_i;
         _crashingLabel->setString(std::to_string(_i));
-        },
-        1, AX_REPEAT_FOREVER, 0, "repeat");
+    }, 1, AX_REPEAT_FOREVER, 0, "repeat");
 }
 
 std::string LabelIssue20523::title() const

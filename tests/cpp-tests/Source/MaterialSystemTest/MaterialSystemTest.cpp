@@ -137,10 +137,10 @@ void Material_2DEffects::onEnter()
 
     timeUniforms.clear();
 
-#define FETCH_CCTIME_LOCATION(mesh)                                   \
+#define FETCH_CCTIME_LOCATION(mesh)                                     \
     do                                                                  \
     {                                                                   \
-        auto programState = mesh->getProgramState();                  \
+        auto programState = mesh->getProgramState();                    \
         auto location     = programState->getUniformLocation("u_Time"); \
         timeUniforms.emplace_back(programState, location);              \
     } while (0)
@@ -423,12 +423,10 @@ void Material_parsePerformance::onEnter()
             {
                 label->setString("Testing start!");
             }
-            this->scheduleOnce(
-                [this, p, slider](float) {
-                    this->parsingTesting(p * _maxParsingCoumt);
-                    slider->setTouchEnabled(true);
-                },
-                1.0, "schedule test parsing");
+            this->scheduleOnce([this, p, slider](float) {
+                this->parsingTesting(p * _maxParsingCoumt);
+                slider->setTouchEnabled(true);
+            }, 1.0, "schedule test parsing");
         }
     });
 
@@ -463,8 +461,8 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
     Label* label        = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
     if (label)
     {
-        std::string str = fmt::format("Testing completed! Took: {:.3} seconds for parsing material {} times.",
-                                              elapsed_secs, count);
+        std::string str =
+            fmt::format("Testing completed! Took: {:.3} seconds for parsing material {} times.", elapsed_secs, count);
         label->setString(str);
 
         AXLOGD("Took: {:.3} seconds for parsing material {} times.", elapsed_secs, count);

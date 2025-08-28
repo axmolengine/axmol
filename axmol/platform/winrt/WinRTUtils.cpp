@@ -63,7 +63,8 @@ bool isWindowsPhone()
 #endif
 }
 
-std::string PlatformStringToString(const winrt::hstring& s) {
+std::string PlatformStringToString(const winrt::hstring& s)
+{
     return ntcvt::from_chars(std::wstring_view(s.data(), s.size()));
 }
 
@@ -90,9 +91,9 @@ float getScaledDPIValue(float v) {
 void AX_DLL printIPAddresses()
 {
     auto hostnames = NetworkInformation::GetHostNames();
-    int length = hostnames.Size();
+    int length     = hostnames.Size();
 
-    for(int i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
         auto hn = hostnames.GetAt(i);
         if (hn.IPInformation() != nullptr)
@@ -108,9 +109,9 @@ std::string AX_DLL getDeviceIPAddresses()
     std::stringstream result;
 
     auto hostnames = NetworkInformation::GetHostNames();
-    int length = hostnames.Size();
+    int length     = hostnames.Size();
 
-    for(int i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
         auto hn = hostnames.GetAt(i);
         if (hn.IPInformation() != nullptr)
@@ -122,7 +123,8 @@ std::string AX_DLL getDeviceIPAddresses()
     return result.str();
 }
 
-Windows::Foundation::IInspectable findXamlElement(Windows::Foundation::IInspectable const& parent, winrt::hstring const& name)
+Windows::Foundation::IInspectable findXamlElement(Windows::Foundation::IInspectable const& parent,
+                                                  winrt::hstring const& name)
 {
     if (parent == nullptr || name.empty())
     {
@@ -140,7 +142,7 @@ Windows::Foundation::IInspectable findXamlElement(Windows::Foundation::IInspecta
         return element;
     }
 
-    Panel panel = element.try_as <Panel>();
+    Panel panel = element.try_as<Panel>();
     if (!panel)
     {
         return nullptr;
@@ -158,7 +160,6 @@ Windows::Foundation::IInspectable findXamlElement(Windows::Foundation::IInspecta
 
     return nullptr;
 }
-
 
 bool removeXamlElement(Windows::Foundation::IInspectable const& parent,
                        Windows::Foundation::IInspectable const& element)
@@ -223,31 +224,33 @@ bool replaceXamlElement(Windows::Foundation::IInspectable const& parent,
 std::string computeHashForFile(const std::string& filePath)
 {
     std::string ret = filePath;
-    size_t pos = ret.find_last_of('/');
+    size_t pos      = ret.find_last_of('/');
 
-    if (pos != std::string::npos) {
+    if (pos != std::string::npos)
+    {
         ret = ret.substr(pos);
     }
 
     pos = ret.find_last_of('.');
 
-    if (pos != std::string::npos) {
+    if (pos != std::string::npos)
+    {
         ret = ret.substr(0, pos);
     }
 
-    CREATEFILE2_EXTENDED_PARAMETERS extParams = { 0 };
-    extParams.dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
-    extParams.dwFileFlags = FILE_FLAG_RANDOM_ACCESS;
-    extParams.dwSecurityQosFlags = SECURITY_ANONYMOUS;
-    extParams.dwSize = sizeof(extParams);
-    extParams.hTemplateFile = nullptr;
-    extParams.lpSecurityAttributes = nullptr;
+    CREATEFILE2_EXTENDED_PARAMETERS extParams = {0};
+    extParams.dwFileAttributes                = FILE_ATTRIBUTE_NORMAL;
+    extParams.dwFileFlags                     = FILE_FLAG_RANDOM_ACCESS;
+    extParams.dwSecurityQosFlags              = SECURITY_ANONYMOUS;
+    extParams.dwSize                          = sizeof(extParams);
+    extParams.hTemplateFile                   = nullptr;
+    extParams.lpSecurityAttributes            = nullptr;
 
     winrt::file_handle handle{CreateFile2(std::wstring(filePath.begin(), filePath.end()).c_str(), GENERIC_READ,
-                                         FILE_SHARE_READ, OPEN_EXISTING, &extParams)};
+                                          FILE_SHARE_READ, OPEN_EXISTING, &extParams)};
     if (handle)
     {
-        FILE_BASIC_INFO  fInfo = { 0 };
+        FILE_BASIC_INFO fInfo = {0};
         if (GetFileInformationByHandleEx(handle.get(), FileBasicInfo, &fInfo, sizeof(FILE_BASIC_INFO)))
         {
             std::stringstream ss;
@@ -261,17 +264,21 @@ std::string computeHashForFile(const std::string& filePath)
     return ret;
 }
 
-bool createMappedCacheFile(const std::string& srcFilePath, std::string& cacheFilePath, const std::string& ext /* = "" */)
+bool createMappedCacheFile(const std::string& srcFilePath,
+                           std::string& cacheFilePath,
+                           const std::string& ext /* = "" */)
 {
-    bool ret = false;
+    bool ret        = false;
     auto folderPath = FileUtils::getInstance()->getWritablePath();
-    cacheFilePath = folderPath + computeHashForFile(srcFilePath) + ext;
-    auto prevFile = UserDefault::getInstance()->getStringForKey(srcFilePath.c_str());
+    cacheFilePath   = folderPath + computeHashForFile(srcFilePath) + ext;
+    auto prevFile   = UserDefault::getInstance()->getStringForKey(srcFilePath.c_str());
 
-    if (prevFile == cacheFilePath) {
+    if (prevFile == cacheFilePath)
+    {
         ret = FileUtils::getInstance()->isFileExist(cacheFilePath);
     }
-    else {
+    else
+    {
         FileUtils::getInstance()->removeFile(prevFile);
     }
 
@@ -283,11 +290,12 @@ void destroyMappedCacheFile(const std::string& key)
 {
     auto value = UserDefault::getInstance()->getStringForKey(key.c_str());
 
-    if (!value.empty()) {
+    if (!value.empty())
+    {
         FileUtils::getInstance()->removeFile(value);
     }
 
     UserDefault::getInstance()->setStringForKey(key.c_str(), "");
 }
 
-}
+}  // namespace ax

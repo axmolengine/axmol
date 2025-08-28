@@ -33,7 +33,8 @@
 #include <unordered_map>
 #import <Metal/Metal.h>
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 /**
  * @addtogroup _metal
  * @{
@@ -95,7 +96,6 @@ public:
      */
     inline const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
 
-
     /**
      * Get all uniformInfos.
      * @return The uniformInfos.
@@ -136,4 +136,4 @@ private:
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

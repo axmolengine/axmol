@@ -30,7 +30,8 @@
 #import <Metal/Metal.h>
 #include <array>
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 /**
  * @addtogroup _metal
  * @{
@@ -57,11 +58,7 @@ public:
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      */
-    void updateData(const void* data,
-                    int width,
-                    int height,
-                    int level,
-                    int layerIndex = 0) override;
+    void updateData(const void* data, int width, int height, int level, int layerIndex = 0) override;
 
     /**
      * Update a two-dimensional texture image in a compressed format
@@ -89,13 +86,8 @@ public:
      * reduction image.
      * @param data Specifies a pointer to the image data in memory.
      */
-    void updateSubData(int xoffset,
-                       int yoffset,
-                       int width,
-                       int height,
-                       int level,
-                       const void* data,
-                       int layerIndex = 0) override;
+    void updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex = 0)
+        override;
 
     /**
      * Update a two-dimensional texture subimage in a compressed format
@@ -145,10 +137,7 @@ public:
      * Get MTLTexture object. reinterpret_cast<id<MTLTexture>>(handler);
      * @return A MTLTexture object.
      */
-    id<MTLTexture> internalHandle() const
-    {
-        return _mtlTexture;
-    }
+    id<MTLTexture> internalHandle() const { return _mtlTexture; }
 
     /**
      * Get MTLSamplerState object
@@ -160,10 +149,10 @@ private:
     void ensureNativeTexture();
 
     id<MTLDevice> _mtlDevice;
-    id<MTLTexture> _mtlTexture = nil;
+    id<MTLTexture> _mtlTexture           = nil;
     id<MTLSamplerState> _mtlSamplerState = nil;
 };
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

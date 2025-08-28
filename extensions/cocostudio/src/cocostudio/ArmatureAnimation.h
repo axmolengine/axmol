@@ -46,7 +46,7 @@ typedef void (ax::Object::*SEL_MovementEventCallFunc)(Armature*, MovementEventTy
 typedef void (ax::Object::*SEL_FrameEventCallFunc)(Bone*, std::string_view, int, int);
 
 #define movementEvent_selector(_SELECTOR) (cocostudio::SEL_MovementEventCallFunc)(&_SELECTOR)
-#define frameEvent_selector(_SELECTOR) (cocostudio::SEL_FrameEventCallFunc)(&_SELECTOR)
+#define frameEvent_selector(_SELECTOR)    (cocostudio::SEL_FrameEventCallFunc)(&_SELECTOR)
 
 struct FrameEvent
 {

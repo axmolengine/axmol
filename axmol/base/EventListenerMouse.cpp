@@ -80,11 +80,7 @@ EventListenerMouse* EventListenerMouse::clone()
 }
 
 EventListenerMouse::EventListenerMouse()
-    : onMouseDown(nullptr)
-    , onMouseUp(nullptr)
-    , onMouseMove(nullptr)
-    , onMouseScroll(nullptr)
-    , _needSwallow(false)
+    : onMouseDown(nullptr), onMouseUp(nullptr), onMouseMove(nullptr), onMouseScroll(nullptr), _needSwallow(false)
 {}
 
 bool EventListenerMouse::init()
@@ -97,4 +93,4 @@ bool EventListenerMouse::init()
     return false;
 }
 
-}
+}  // namespace ax

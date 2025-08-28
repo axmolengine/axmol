@@ -276,7 +276,7 @@ inline std::string_view axlua_tosv(lua_State* L, int arg)
     return std::string_view{s, l};
 }
 
-}
+}  // namespace ax
 
 // end group
 /// @}

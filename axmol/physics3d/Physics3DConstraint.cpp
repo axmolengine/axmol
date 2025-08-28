@@ -878,6 +878,6 @@ void Physics3D6DofConstraint::setUseFrameOffset(bool frameOffsetOnOff) const
     static_cast<btGeneric6DofConstraint*>(_constraint)->setUseFrameOffset(frameOffsetOnOff);
 }
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

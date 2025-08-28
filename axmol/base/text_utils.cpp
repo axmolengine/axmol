@@ -364,8 +364,8 @@ size_t countUTF8Chars(std::string_view utf8)
 
     if (!utf8.empty())
     {
-        const UTF8* source = (const UTF8*)utf8.data();
-        const UTF8* sourceEnd   = (const UTF8*)utf8.data() + utf8.length();
+        const UTF8* source    = (const UTF8*)utf8.data();
+        const UTF8* sourceEnd = (const UTF8*)utf8.data() + utf8.length();
         while (source != sourceEnd)
         {
             auto size = getUTF8SequenceSize(source, sourceEnd);
@@ -378,7 +378,7 @@ size_t countUTF8Chars(std::string_view utf8)
             ++count;
         }
     }
-  
+
     return count;
 }
 
@@ -387,7 +387,7 @@ size_t getUTF8ByteOffset(std::string_view utf8, size_t utf8CharOffset)
     if (utf8CharOffset >= utf8.length())
         return std::string_view::npos;
 
-    const UTF8* source = (const UTF8*)utf8.data();
+    const UTF8* source    = (const UTF8*)utf8.data();
     const UTF8* sourceEnd = source + utf8.length();
     for (size_t i = 0; i < utf8CharOffset; ++i)
     {
@@ -403,12 +403,12 @@ size_t getUTF8ByteOffset(std::string_view utf8, size_t utf8CharOffset)
 }
 
 size_t eraseUTF8CharAt(std::string& str, size_t utf8CharOffset)
-{ 
+{
     if (utf8CharOffset >= str.length())
         return 0;
-    const UTF8* source = (const UTF8*)str.data();
+    const UTF8* source    = (const UTF8*)str.data();
     const UTF8* sourceEnd = source + str.length();
-    size_t byteOffset = getUTF8ByteOffset(str, utf8CharOffset);
+    size_t byteOffset     = getUTF8ByteOffset(str, utf8CharOffset);
     if (byteOffset == std::string_view::npos)
         return 0;
     auto size = getUTF8SequenceSize(source + byteOffset, sourceEnd);

@@ -63,7 +63,7 @@ public:
     MeshCommand(const MeshCommand&) = default;
     MeshCommand(MeshCommand&&)      = default;
 
-    MeshCommand& operator=(MeshCommand&&) = default;
+    MeshCommand& operator=(MeshCommand&&)      = default;
     MeshCommand& operator=(const MeshCommand&) = default;
 
     /**
@@ -84,4 +84,4 @@ protected:
 #endif
 };
 
-}
+}  // namespace ax

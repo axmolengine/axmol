@@ -113,8 +113,5 @@ std::string LoadObj(std::vector<shape_t>& shapes,        // [output]
 
 /// Loads materials into std::map
 /// Returns an empty string if successful
-std::string LoadMtl(hlookup::string_map<int>& material_map,
-                    std::vector<material_t>& materials,
-                    std::istream& inStream);
+std::string LoadMtl(hlookup::string_map<int>& material_map, std::vector<material_t>& materials, std::istream& inStream);
 }  // namespace tinyobj
-

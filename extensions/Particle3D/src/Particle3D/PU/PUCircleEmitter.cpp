@@ -195,8 +195,8 @@ PUCircleEmitter* PUCircleEmitter::create()
 }
 
 ax::Quaternion PUCircleEmitter::getRotationTo(const Vec3& src,
-                                                   const Vec3& dest,
-                                                   const Vec3& fallbackAxis /*= Vec3::ZERO*/) const
+                                              const Vec3& dest,
+                                              const Vec3& fallbackAxis /*= Vec3::ZERO*/) const
 {
     // Based on Stan Melax's article in Game Programming Gems
     Quaternion q;
@@ -273,4 +273,4 @@ PUCircleEmitter* PUCircleEmitter::clone()
     return be;
 }
 
-}
+}  // namespace ax

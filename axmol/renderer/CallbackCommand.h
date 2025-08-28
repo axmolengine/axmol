@@ -52,7 +52,7 @@ class AX_DLL CallbackCommand : public RenderCommand
     // only allow render to manage the callbackCommand
     friend class Renderer;
     CallbackCommand();
-    ~CallbackCommand(){};
+    ~CallbackCommand() {};
 
 public:
     void init(float globalZOrder);
@@ -72,7 +72,7 @@ public:
     std::function<void()> func;
 };
 
-}
+}  // namespace ax
 /**
  end of support group
  @}

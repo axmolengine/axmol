@@ -152,7 +152,7 @@ LanguageType Application::getCurrentLanguage()
 {
     LanguageType ret = LanguageType::ENGLISH;
 
-    LCID localeID                    = GetUserDefaultLCID();
+    LCID localeID = GetUserDefaultLCID();
 
     unsigned short primaryLanguageID = PRIMARYLANGID(localeID);
     unsigned short subLanguageID     = SUBLANGID(localeID);
@@ -279,8 +279,9 @@ std::string Application::getVersion()
                         // DWORD is always 32 bits, so first two revision numbers
                         // come from dwFileVersionMS, last two come from dwFileVersionLS
                         version = fmt::format_to_z(buf, "{}.{}.{}.{}", (verInfo->dwFileVersionMS >> 16) & 0xffff,
-                                (verInfo->dwFileVersionMS >> 0) & 0xffff, (verInfo->dwFileVersionLS >> 16) & 0xffff,
-                                (verInfo->dwFileVersionLS >> 0) & 0xffff);
+                                                   (verInfo->dwFileVersionMS >> 0) & 0xffff,
+                                                   (verInfo->dwFileVersionLS >> 16) & 0xffff,
+                                                   (verInfo->dwFileVersionLS >> 0) & 0xffff);
                     }
                 }
             }
@@ -303,7 +304,7 @@ void Application::setStartupScriptFilename(std::string_view startupScriptFile)
     std::replace(_startupScriptFilename.begin(), _startupScriptFilename.end(), '\\', '/');
 }
 
-}
+}  // namespace ax
 
 //////////////////////////////////////////////////////////////////////////
 // Local function

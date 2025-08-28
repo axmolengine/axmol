@@ -47,11 +47,11 @@ using namespace std;
 using namespace ax;
 using namespace ax::network;
 
-#define KEY_OF_VERSION "current-version-code"
+#define KEY_OF_VERSION            "current-version-code"
 #define KEY_OF_DOWNLOADED_VERSION "downloaded-version-code"
-#define TEMP_PACKAGE_FILE_NAME "cocos2dx-update-temp-package.zip"
-#define BUFFER_SIZE 8192
-#define MAX_FILENAME 512
+#define TEMP_PACKAGE_FILE_NAME    "cocos2dx-update-temp-package.zip"
+#define BUFFER_SIZE               8192
+#define MAX_FILENAME              512
 
 class AssetManagerZipFileInfo
 {
@@ -236,8 +236,7 @@ AssetsManager::AssetsManager(const char* packageUrl /* =nullptr */,
         // start download new version assets
         // 1. Urls of package and version should be valid;
         // 2. Package should be a zip file.
-        if (_versionFileUrl.empty() || _packageUrl.empty() ||
-            FileUtils::getPathExtension(_packageUrl) != ".zip")
+        if (_versionFileUrl.empty() || _packageUrl.empty() || FileUtils::getPathExtension(_packageUrl) != ".zip")
         {
             AXLOGD("no version file url, or no package url, or the package is not a zip file");
             _isDownloading = false;

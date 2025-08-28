@@ -68,5 +68,4 @@ protected:
     FactoryMap _typeMap;
 };
 
-}
-
+}  // namespace ax

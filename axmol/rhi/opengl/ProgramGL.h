@@ -39,7 +39,8 @@
 
 #include "axmol/base/axstd.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 class ShaderModuleImpl;
 
@@ -120,7 +121,7 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    const VertexInputDesc* getVertexInputDesc (std::string_view name) const override;
+    const VertexInputDesc* getVertexInputDesc(std::string_view name) const override;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
@@ -182,7 +183,7 @@ private:
     }
 #endif
 
-    GLuint _program                       = 0;
+    GLuint _program                         = 0;
     ShaderModuleImpl* _vertexShaderModule   = nullptr;
     ShaderModuleImpl* _fragmentShaderModule = nullptr;
 
@@ -210,4 +211,4 @@ private:
 };
 // end of _opengl group
 /// @}
-}
+}  // namespace ax::rhi::gl

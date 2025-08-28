@@ -153,4 +153,4 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(ActionCoroutine);
 };
 
-}
+}  // namespace ax

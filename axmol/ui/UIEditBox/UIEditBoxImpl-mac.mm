@@ -60,8 +60,8 @@ EditBoxImplMac::~EditBoxImplMac()
 void EditBoxImplMac::createNativeControl(const ax::Rect& frame)
 {
     auto renderView = ax::Director::getInstance()->getRenderView();
-    Size size   = frame.size;
-    NSRect rect = NSMakeRect(0, 0, size.width * renderView->getScaleX(), size.height * renderView->getScaleY());
+    Size size       = frame.size;
+    NSRect rect     = NSMakeRect(0, 0, size.width * renderView->getScaleX(), size.height * renderView->getScaleY());
 
     float factor = ax::Director::getInstance()->getContentScaleFactor();
 
@@ -77,7 +77,7 @@ NSFont* EditBoxImplMac::constructFont(const char* fontName, int fontSize)
     NSString* fntName  = [NSString stringWithUTF8String:fontName];
     fntName            = [[fntName lastPathComponent] stringByDeletingPathExtension];
     float retinaFactor = _inRetinaMode ? 2.0f : 1.0f;
-    auto renderView        = ax::Director::getInstance()->getRenderView();
+    auto renderView    = ax::Director::getInstance()->getRenderView();
     float scaleFactor  = renderView->getScaleX();
 
     if (fontSize == -1)
@@ -196,7 +196,7 @@ void EditBoxImplMac::setNativeVisible(bool visible)
 void EditBoxImplMac::updateNativeFrame(const ax::Rect& rect)
 {
     RenderView* renderView = Director::getInstance()->getRenderView();
-    auto frameSize  = renderView->getFrameSize();
+    auto frameSize         = renderView->getFrameSize();
     // Coordinate System on OSX has its origin at the lower left corner.
     //    https://developer.apple.com/library/ios/documentation/General/Conceptual/Devpedia-CocoaApp/CoordinateSystem.html
     auto screenPosY = frameSize.height - rect.origin.y - rect.size.height;
@@ -219,8 +219,8 @@ void EditBoxImplMac::nativeCloseKeyboard()
     [_sysEdit closeKeyboard];
 }
 
-}
+}  // namespace ui
 
-}
+}  // namespace ax
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)

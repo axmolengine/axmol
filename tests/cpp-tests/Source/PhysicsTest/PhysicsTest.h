@@ -41,23 +41,21 @@ public:
 
     virtual bool init() override;
     virtual void onEnter() override;
-    
+
     virtual std::string title() const override;
 
     void toggleDebugCallback(ax::Object* sender);
 
     ax::Sprite* addGrossiniAtPosition(ax::Vec2 p, float scale = 1.0);
-    ax::Sprite* makeBall(ax::Vec2 point,
-                              float radius,
-                              ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
+    ax::Sprite* makeBall(ax::Vec2 point, float radius, ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
     ax::Sprite* makeBox(ax::Vec2 point,
-                             ax::Size size,
-                             int color                         = 0,
-                             ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
+                        ax::Size size,
+                        int color                    = 0,
+                        ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
     ax::Sprite* makeTriangle(ax::Vec2 point,
-                                  ax::Size size,
-                                  int color                         = 0,
-                                  ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
+                             ax::Size size,
+                             int color                    = 0,
+                             ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
 
     bool onTouchBegan(ax::Touch* touch, ax::Event* event);
     void onTouchMoved(ax::Touch* touch, ax::Event* event);

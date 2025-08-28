@@ -27,7 +27,8 @@
 #include <vector>
 #include "axmol/rhi/RHITypes.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 class BufferImpl;
 
@@ -66,4 +67,4 @@ private:
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

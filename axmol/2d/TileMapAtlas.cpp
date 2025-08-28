@@ -125,7 +125,7 @@ void TileMapAtlas::setTile(const Color32& tile, const Vec2& position)
     AXASSERT(position.y < _TGAInfo->height, "Invalid position.x");
     AXASSERT(tile.r != 0, "R component must be non 0");
 
-    auto color24  = (uint8_t*)_TGAInfo->imageData + static_cast<int>(position.x + position.y * _TGAInfo->width) * 3;
+    auto color24 = (uint8_t*)_TGAInfo->imageData + static_cast<int>(position.x + position.y * _TGAInfo->width) * 3;
     if (color24[0])
     {
         color24[0] = tile.r;
@@ -148,7 +148,7 @@ Color32 TileMapAtlas::getTileAt(const Vec2& position) const
     AXASSERT(position.x < _TGAInfo->width, "Invalid position.x");
     AXASSERT(position.y < _TGAInfo->height, "Invalid position.y");
 
-    auto color24  = (uint8_t*)_TGAInfo->imageData + static_cast<int>(position.x + position.y * _TGAInfo->width) * 3;
+    auto color24 = (uint8_t*)_TGAInfo->imageData + static_cast<int>(position.x + position.y * _TGAInfo->width) * 3;
     return Color32{color24[0], color24[1], color24[2]};
 }
 
@@ -158,12 +158,12 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const uint8_t* color24, i
 
     auto quad = &((_textureAtlas->getQuads())[index]);
 
-    int x     = pos.x;
-    int y     = pos.y;
+    int x = pos.x;
+    int y = pos.y;
 
     const auto red = color24[0];
-    float row = (float)(red % _itemsPerRow);
-    float col = (float)(red / _itemsPerRow);
+    float row      = (float)(red % _itemsPerRow);
+    float col      = (float)(red / _itemsPerRow);
 
     float textureWide = (float)(_textureAtlas->getTexture()->getPixelsWide());
     float textureHigh = (float)(_textureAtlas->getTexture()->getPixelsHigh());
@@ -206,10 +206,10 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const uint8_t* color24, i
     quad->tr.position.z = 0.0f;
 
     const Color32& color = _displayedColor;
-    quad->tr.color = color;
-    quad->tl.color = color;
-    quad->br.color = color;
-    quad->bl.color = color;
+    quad->tr.color       = color;
+    quad->tl.color       = color;
+    quad->br.color       = color;
+    quad->bl.color       = color;
 
     _textureAtlas->setDirty(true);
     ssize_t totalQuads = _textureAtlas->getTotalQuads();
@@ -246,4 +246,4 @@ void TileMapAtlas::updateAtlasValues()
     }
 }
 
-}
+}  // namespace ax

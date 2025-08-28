@@ -74,7 +74,7 @@ public:
     friend class EventDispatcher;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

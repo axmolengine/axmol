@@ -81,4 +81,4 @@ CGFloat _calculateTextDrawStartWidth(ax::Device::TextAlign align, CGSize realDim
     return xPadding;
 }
 
-}
+}  // namespace FontUtils

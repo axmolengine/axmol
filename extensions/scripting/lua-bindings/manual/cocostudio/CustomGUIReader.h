@@ -50,4 +50,3 @@ private:
     int _setPropsFunc;
 };
 }  // namespace cocostudio
-

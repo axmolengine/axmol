@@ -94,8 +94,7 @@ LuaCallFunc* LuaCallFunc::clone() const
 
     ret->autorelease();
 
-    int newscriptHandler =
-        ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+    int newscriptHandler = ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
     ScriptHandlerMgr::getInstance()->addObjectHandler((void*)ret, newscriptHandler,
                                                       ScriptHandlerMgr::HandlerType::CALLFUNC);
@@ -228,7 +227,7 @@ ScriptHandlerMgr::HandlerType ScriptHandlerMgr::addCustomHandler(void* object, i
     return handlerType;
 }
 
-}
+}  // namespace ax
 
 static void tolua_reg_script_handler_mgr_type(lua_State* tolua_S)
 {
@@ -257,7 +256,7 @@ tolua_lerror:
     return 0;
 #    endif
 }
-#endif  //#ifndef TOLUA_DISABLE
+#endif  // #ifndef TOLUA_DISABLE
 
 /* method: registerScriptHandler of class  ScriptHandlerMgr */
 static int tolua_Cocos2d_ScriptHandlerMgr_registerScriptHandler00(lua_State* tolua_S)
@@ -272,8 +271,7 @@ static int tolua_Cocos2d_ScriptHandlerMgr_registerScriptHandler00(lua_State* tol
     else
 #endif
     {
-        ax::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        ax::ScriptHandlerMgr* scriptHanlderMgr = static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
@@ -308,8 +306,7 @@ static int tolua_Cocos2d_ScriptHandlerMgr_unregisterScriptHandler00(lua_State* t
     else
 #endif
     {
-        ax::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        ax::ScriptHandlerMgr* scriptHanlderMgr = static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
@@ -342,8 +339,7 @@ static int tolua_Cocos2d_ScriptHandlerMgr_removeObjectAllHandlers00(lua_State* t
     else
 #endif
     {
-        ax::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        ax::ScriptHandlerMgr* scriptHanlderMgr = static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {

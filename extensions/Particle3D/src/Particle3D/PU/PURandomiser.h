@@ -84,5 +84,4 @@ protected:
     bool _randomDirection;
     bool _update;
 };
-}
-
+}  // namespace ax

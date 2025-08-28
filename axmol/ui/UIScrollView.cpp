@@ -43,9 +43,9 @@ constexpr float BOUNCE_BACK_DURATION                    = 1.0f;
 
 float convertDistanceFromPointToInch(const Vec2& dis)
 {
-    auto renderView    = Director::getInstance()->getRenderView();
-    int dpi        = Device::getDPI();
-    float distance = Vec2(dis.x * renderView->getScaleX() / dpi, dis.y * renderView->getScaleY() / dpi).getLength();
+    auto renderView = Director::getInstance()->getRenderView();
+    int dpi         = Device::getDPI();
+    float distance  = Vec2(dis.x * renderView->getScaleX() / dpi, dis.y * renderView->getScaleY() / dpi).getLength();
     return distance;
 }
 }  // namespace
@@ -1091,23 +1091,23 @@ bool ScrollView::onMouseScroll(Event* event)
 {
     bool pass = Widget::onMouseScroll(event);
 
-    if(pass)
+    if (pass)
     {
-        auto mouseEvent = static_cast<EventMouse*>(event);
+        auto mouseEvent   = static_cast<EventMouse*>(event);
         float mouseFactor = 20.f;
         Vec2 move;
 
         if (_direction == Direction::HORIZONTAL)
         {
-            move = Vec2(mouseEvent->getScrollY()*mouseFactor, 0.f);
+            move = Vec2(mouseEvent->getScrollY() * mouseFactor, 0.f);
         }
         else
         {
-            move = Vec2(0.f, mouseEvent->getScrollY()*mouseFactor);
+            move = Vec2(0.f, mouseEvent->getScrollY() * mouseFactor);
         }
 
         bool origBounce = _bounceEnabled;
-        _bounceEnabled = false;
+        _bounceEnabled  = false;
         scrollChildren(move);
         _bounceEnabled = origBounce;
         processScrollingEndedEvent();
@@ -1644,7 +1644,9 @@ Vec2 ScrollView::calculateItemPositionWithAnchor(const Node* node, const Vec2& i
     return origin + Vec2(size.width * itemAnchorPoint.x, size.height * itemAnchorPoint.y);
 }
 
-Vec2 ScrollView::calculateItemDestination(const Vec2& positionRatioInView, const Node* item, const Vec2& itemAnchorPoint)
+Vec2 ScrollView::calculateItemDestination(const Vec2& positionRatioInView,
+                                          const Node* item,
+                                          const Vec2& itemAnchorPoint)
 {
     const Vec2& contentSize = getContentSize();
     Vec2 positionInView;
@@ -1671,4 +1673,4 @@ void ScrollView::scrollToItem(Node* item, const Vec2& positionRatioInView, const
 }
 }  // namespace ui
 
-}
+}  // namespace ax

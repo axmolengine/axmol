@@ -128,4 +128,4 @@ PUEmitter* PUEmitterManager::createEmitter(std::string_view type)
     return nullptr;
 }
 
-}
+}  // namespace ax

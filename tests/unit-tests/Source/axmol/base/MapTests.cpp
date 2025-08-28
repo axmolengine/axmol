@@ -29,9 +29,10 @@
 
 using namespace ax;
 
-
-TEST_SUITE("base/Map") {
-    TEST_CASE("old_tests") {
+TEST_SUITE("base/Map")
+{
+    TEST_CASE("old_tests")
+    {
         auto createMap = []() {
             StringMap<Node*> ret;
             for (int i = 0; i < 20; ++i)
@@ -101,8 +102,8 @@ TEST_SUITE("base/Map") {
         auto keys = map4.keys();
         std::sort(keys.begin(), keys.end());
         CHECK(keys.size() == 20);
-        const char* keyValues[20] = {"0", "1", "10", "11", "12", "13", "14", "15", "16", "17",
-                            "18", "19", "2", "3", "4", "5", "6", "7", "8", "9"};
+        const char* keyValues[20] = {"0",  "1",  "10", "11", "12", "13", "14", "15", "16", "17",
+                                     "18", "19", "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9"};
         for (int i = 0; i < 20; ++i)
         {
             CHECK(keys[i] == keyValues[i]);
@@ -182,7 +183,7 @@ TEST_SUITE("base/Map") {
         // Set the seed by time
         std::srand((unsigned)time(nullptr));
         StringMap<Node*> mapForRandom = createMap();
-        auto different = 0;
+        auto different                = 0;
         for (int i = 0; i < mapForRandom.size(); ++i)
         {
             auto a = mapForRandom.getRandomObject();
@@ -191,7 +192,7 @@ TEST_SUITE("base/Map") {
                 different++;
         }
         CHECK(different > 0);
-        CHECK(different > mapForRandom.size() * 3 / 4); // At least 75% different
+        CHECK(different > mapForRandom.size() * 3 / 4);  // At least 75% different
 
         // Self assignment
         StringMap<Node*> mapForSelfAssign = createMap();

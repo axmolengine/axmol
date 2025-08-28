@@ -54,7 +54,7 @@ struct TextureHandle
         return ret;
     }
 
-    operator ID3D11Resource* () { return tex2d; }
+    operator ID3D11Resource*() { return tex2d; }
 
     ID3D11Texture2D* tex2d{};
     ID3D11ShaderResourceView* srv{};  // Note: default color attachment not create srv yet.
@@ -86,11 +86,7 @@ public:
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      */
-    void updateData(const void* data,
-                    int width,
-                    int height,
-                    int level,
-                    int layerIndex = 0) override;
+    void updateData(const void* data, int width, int height, int level, int layerIndex = 0) override;
 
     /**
      * Update a two-dimensional texture image in a compressed format
@@ -118,13 +114,8 @@ public:
      * reduction image.
      * @param data Specifies a pointer to the image data in memory.
      */
-    void updateSubData(int xoffset,
-                       int yoffset,
-                       int width,
-                       int height,
-                       int level,
-                       const void* data,
-                       int layerIndex = 0) override;
+    void updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex = 0)
+        override;
 
     /**
      * Update a two-dimensional texture subimage in a compressed format
@@ -181,7 +172,7 @@ private:
 
     ID3D11Device* _device;
     TextureHandle _nativeTexture{};
-    ID3D11SamplerState* _samplerState         = nullptr;
+    ID3D11SamplerState* _samplerState = nullptr;
 };
 
 // end of d3d group

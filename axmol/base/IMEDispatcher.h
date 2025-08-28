@@ -134,7 +134,6 @@ private:
     Impl* _impl;
 };
 
-}
+}  // namespace ax
 // end of base group
 /// @}
-

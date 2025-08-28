@@ -1197,7 +1197,8 @@ std::string FileUtils::getPathBaseNameNoExtension(std::string_view filePath)
     return std::string{filePath.substr(0, dot)};
 }
 
-std::string FileUtils::getPathDirName(std::string_view filePath) {
+std::string FileUtils::getPathDirName(std::string_view filePath)
+{
     auto pos = filePath.find_last_of("/\\");
     if (pos != std::string_view::npos)
         return std::string{filePath.substr(0, pos)};
@@ -1208,4 +1209,4 @@ void FileUtils::valueMapCompact(ValueMap& /*valueMap*/) const {}
 
 void FileUtils::valueVectorCompact(ValueVector& /*valueVector*/) const {}
 
-}
+}  // namespace ax

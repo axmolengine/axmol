@@ -877,4 +877,4 @@ void SplitCols::update(float time)
     }
 }
 
-}
+}  // namespace ax

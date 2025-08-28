@@ -576,7 +576,7 @@ int LuaEngine::handleEventAcc(void* data)
 
     LuaEventAccelerationData* eventListennerAcc = static_cast<LuaEventAccelerationData*>(basicScriptData->value);
     toluafix_pushusertype_object(L, eventListennerAcc->event->_ID, &(eventListennerAcc->event->_luaID),
-                                   (void*)(eventListennerAcc->event), "ax.Event");
+                                 (void*)(eventListennerAcc->event), "ax.Event");
     Acceleration* accleration = static_cast<Acceleration*>(eventListennerAcc->acc);
     lua_pushnumber(L, accleration->x);
     lua_pushnumber(L, accleration->y);
@@ -605,7 +605,7 @@ int LuaEngine::handleEventKeyboard(ScriptHandlerMgr::HandlerType type, void* dat
     lua_State* L = _stack->getLuaState();
     lua_pushinteger(L, keyboardData->keyCode);
     toluafix_pushusertype_object(L, keyboardData->event->_ID, &(keyboardData->event->_luaID),
-                                   (void*)(keyboardData->event), "ax.Event");
+                                 (void*)(keyboardData->event), "ax.Event");
     int ret = _stack->executeFunctionByHandler(handler, 2);
     _stack->clean();
     return ret;
@@ -862,8 +862,8 @@ int LuaEngine::handleTableViewEvent(ScriptHandlerMgr::HandlerType type, void* da
             break;
         }
         toluafix_pushusertype_object(_stack->getLuaState(), obj->_ID, &(obj->_luaID), (void*)(obj), "ax.TableView");
-        toluafix_pushusertype_object(_stack->getLuaState(), cellObject->_ID, &(cellObject->_luaID),
-                                       (void*)(cellObject), "ax.TableViewCell");
+        toluafix_pushusertype_object(_stack->getLuaState(), cellObject->_ID, &(cellObject->_luaID), (void*)(cellObject),
+                                     "ax.TableViewCell");
         ret = _stack->executeFunctionByHandler(handler, 2);
     }
     break;
@@ -1026,4 +1026,4 @@ int LuaEngine::reload(const char* moduleFileName)
     return _stack->reload(moduleFileName);
 }
 
-}
+}  // namespace ax

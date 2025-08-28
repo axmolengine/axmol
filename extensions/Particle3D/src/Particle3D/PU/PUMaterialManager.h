@@ -73,5 +73,4 @@ protected:
     MaterialVector _materialMap;
 };
 
-}
-
+}  // namespace ax

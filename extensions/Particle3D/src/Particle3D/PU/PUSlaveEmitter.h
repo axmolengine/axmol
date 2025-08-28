@@ -85,7 +85,7 @@ public:
     void copyAttributesTo(PUEmitter* emitter) override;
 
     PUSlaveEmitter();
-    virtual ~PUSlaveEmitter(){};
+    virtual ~PUSlaveEmitter() {};
 
 protected:
     PUParticle3D* _masterParticle;
@@ -95,5 +95,4 @@ protected:
     Vec3 _masterDirection;
     bool _masterEmitterNameSet;
 };
-}
-
+}  // namespace ax

@@ -4,12 +4,12 @@
 
 #pragma once
 
-#    include "axmol/media/MediaEngine.h"
+#include "axmol/media/MediaEngine.h"
 
 #if defined(AX_ENABLE_VLC_MEDIA)
 
-#include "vlc/vlc.h"
-#include <atomic>
+#    include "vlc/vlc.h"
+#    include <atomic>
 
 namespace ax
 {
@@ -67,14 +67,14 @@ private:
 
     static libvlc_instance_t* s_vlc;
     libvlc_instance_t* _vlc{};
-    libvlc_media_player_t* _mp{}; // media player
-    libvlc_media_list_player_t* _mlp{}; // media list player
-    libvlc_media_list_t* _ml{}; // media list
+    libvlc_media_player_t* _mp{};        // media player
+    libvlc_media_list_player_t* _mlp{};  // media list player
+    libvlc_media_list_t* _ml{};          // media list
     libvlc_event_manager_t* _mp_events{};
     libvlc_event_manager_t* _mpl_events{};
 
-    bool _bAutoPlay = false;
-    bool _looping   = false;
+    bool _bAutoPlay     = false;
+    bool _looping       = false;
     bool _playbackEnded = false;
 
     std::atomic<MEMediaState> _state{MEMediaState::Closed};
@@ -84,10 +84,10 @@ private:
     MEIntPoint _videoDim;
 
     /*
-    * codec dim, not for render, just record info i.e
-    *   H265: ALIGN_XY(_videoDim, 32)
-    *   H264: ALIGN_X(_videoDim.x, 16)
-    */
+     * codec dim, not for render, just record info i.e
+     *   H265: ALIGN_XY(_videoDim, 32)
+     *   H264: ALIGN_X(_videoDim.x, 16)
+     */
     MEIntPoint _codecDim;
 
     std::string _videoCodecMimeType;
@@ -103,6 +103,6 @@ struct VlcMediaEngineFactory : public MediaEngineFactory
     void destroyMediaEngine(MediaEngine* me) override { delete static_cast<VlcMediaEngine*>(me); }
 };
 
-}
+}  // namespace ax
 
 #endif

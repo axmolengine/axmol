@@ -212,5 +212,4 @@ private:
 // end of 2d group
 /// @}
 
-}
-
+}  // namespace ax

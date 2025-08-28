@@ -72,8 +72,7 @@ public:
      * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
      */
     inline const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
-	
-	
+
     /**
      * Get all uniformInfos.
      * @return The uniformInfos.

@@ -403,7 +403,8 @@ std::vector<ax::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& sta
         }
         else
         {
-            _points.emplace_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor, (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
+            _points.emplace_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor,
+                                      (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
         }
 
         count++;
@@ -485,7 +486,7 @@ std::vector<Vec2> AutoPolygon::reduce(const std::vector<Vec2>& points, const Rec
     if (size < 3)
     {
         AXLOGE("AUTOPOLYGON: cannot reduce points for {} that has less than 3 points in input, e: {}", _filename,
-            epsilon);
+               epsilon);
         return std::vector<Vec2>();
     }
     // if there are less than 9 points (but more than 3), then we don't need to reduce it
@@ -519,7 +520,7 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     Clipper2Lib::Path64 result;
     Clipper2Lib::Paths64 solution;
 
-    for (auto&& pt:points)
+    for (auto&& pt : points)
     {
         result.emplace_back(Clipper2Lib::Point64(pt.x * PRECISION, pt.y * PRECISION));
     }
@@ -527,7 +528,6 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     Clipper2Lib::ClipperOffset co;
     co.AddPath(result, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon);
     co.Execute(epsilon * PRECISION, solution);
-
 
     // turn the result into simply polygon (AKA, fix overlap)
     // clamp into the specified rect
@@ -549,10 +549,10 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     cl.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, out);
 
     /*
-    * Notes: the clipper2 no longer remove duplicates, so we ensure it with std::set to avoid crash some times
-    *   Fix issue: https://github.com/axmolengine/axmol/issues/1075
-    *   @remark: Still faster than clipper1
-    */
+     * Notes: the clipper2 no longer remove duplicates, so we ensure it with std::set to avoid crash some times
+     *   Fix issue: https://github.com/axmolengine/axmol/issues/1075
+     *   @remark: Still faster than clipper1
+     */
     using Point64Ptr = const Clipper2Lib::Point64*;
     struct point64_less
     {
@@ -593,7 +593,6 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
         AXLOGE("AUTOPOLYGON: cannot triangulate {} with less than 3 points", _filename);
         return TrianglesCommand::Triangles();
     }
-
 
     std::vector<p2t::Point> p2pointsStorage;
     p2pointsStorage.reserve(points.size());
@@ -642,7 +641,8 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
             {
                 // vert does not exist yet, so we need to create a new one
                 verts.emplace_back(v3, Vec2::ZERO, Color32::WHITE);
-                indices[idx++] = vdx++;;
+                indices[idx++] = vdx++;
+                ;
             }
         }
     }
@@ -681,8 +681,8 @@ void AutoPolygon::calculateUV(const Rect& rect, V3F_T2F_C4B* verts, ssize_t coun
     for (auto i = verts; i != end; ++i)
     {
         // for every point, offset with the center point
-        float u        = (i->position.x * _scaleFactor + rect.origin.x) / texWidth;
-        float v        = (rect.origin.y + rect.size.height - i->position.y * _scaleFactor) / texHeight;
+        float u       = (i->position.x * _scaleFactor + rect.origin.x) / texWidth;
+        float v       = (rect.origin.y + rect.size.height - i->position.y * _scaleFactor) / texHeight;
         i->texCoord.u = u;
         i->texCoord.v = v;
     }
@@ -727,4 +727,4 @@ PolygonInfo AutoPolygon::generatePolygon(std::string_view filename, const Rect& 
     return ap.generateTriangles(rect, epsilon, threshold);
 }
 
-}
+}  // namespace ax

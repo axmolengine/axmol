@@ -172,4 +172,4 @@ private:
 // end group
 /// @}
 
-}
+}  // namespace ax

@@ -56,28 +56,28 @@ THE SOFTWARE.
 #    undef glGenerateMipmap
 #endif
 
-#define GL_DEPTH_STENCIL GL_DEPTH_STENCIL_OES
-#define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
+#define GL_DEPTH_STENCIL     GL_DEPTH_STENCIL_OES
+#define GL_DEPTH24_STENCIL8  GL_DEPTH24_STENCIL8_OES
 #define GL_UNSIGNED_INT_24_8 GL_UNSIGNED_INT_24_8_OES
-#define glClearDepth glClearDepthf
-#define glMapBuffer glMapBufferOES
-#define glUnmapBuffer glUnmapBufferOES
-#define glBindVertexArray glBindVertexArrayOES
+#define glClearDepth         glClearDepthf
+#define glMapBuffer          glMapBufferOES
+#define glUnmapBuffer        glUnmapBufferOES
+#define glBindVertexArray    glBindVertexArrayOES
 #define glDeleteVertexArrays glDeleteVertexArraysOES
-#define glGenVertexArrays glGenVertexArraysOES
+#define glGenVertexArrays    glGenVertexArraysOES
 #if defined(GL_VERSION_ES_CM_1_0)
-#    define glIsRenderbuffer glIsRenderbufferOES
-#    define glBindRenderbuffer glBindRenderbufferOES
-#    define glDeleteRenderbuffers glDeleteRenderbuffersOES
-#    define glGenRenderbuffers glGenRenderbuffersOES
-#    define glRenderbufferStorage glRenderbufferStorageOES
-#    define glIsFramebuffer glIsFramebufferOES
-#    define glBindFramebuffer glBindFramebufferOES
-#    define glDeleteFramebuffers glDeleteFramebuffersOES
-#    define glGenFramebuffers glGenFramebuffersOES
-#    define glCheckFramebufferStatus glCheckFramebufferStatusOES
-#    define glFramebufferRenderbuffer glFramebufferRenderbufferOES
-#    define glFramebufferTexture2D glFramebufferTexture2DOES
+#    define glIsRenderbuffer                      glIsRenderbufferOES
+#    define glBindRenderbuffer                    glBindRenderbufferOES
+#    define glDeleteRenderbuffers                 glDeleteRenderbuffersOES
+#    define glGenRenderbuffers                    glGenRenderbuffersOES
+#    define glRenderbufferStorage                 glRenderbufferStorageOES
+#    define glIsFramebuffer                       glIsFramebufferOES
+#    define glBindFramebuffer                     glBindFramebufferOES
+#    define glDeleteFramebuffers                  glDeleteFramebuffersOES
+#    define glGenFramebuffers                     glGenFramebuffersOES
+#    define glCheckFramebufferStatus              glCheckFramebufferStatusOES
+#    define glFramebufferRenderbuffer             glFramebufferRenderbufferOES
+#    define glFramebufferTexture2D                glFramebufferTexture2DOES
 #    define glGetFramebufferAttachmentParameteriv glGetFramebufferAttachmentParameterivOES
-#    define glGenerateMipmap glGenerateMipmapOES
+#    define glGenerateMipmap                      glGenerateMipmapOES
 #endif

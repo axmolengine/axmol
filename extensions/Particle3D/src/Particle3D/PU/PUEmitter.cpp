@@ -815,8 +815,8 @@ void PUEmitter::initParticleTextureCoords(PUParticle3D* particle)
 {
     if (_particleTextureCoordsRangeSet)
     {
-        particle->textureCoordsCurrent = (unsigned short)ax::random(
-            (float)_particleTextureCoordsRangeStart, (float)_particleTextureCoordsRangeEnd + 0.999f);
+        particle->textureCoordsCurrent = (unsigned short)ax::random((float)_particleTextureCoordsRangeStart,
+                                                                    (float)_particleTextureCoordsRangeEnd + 0.999f);
     }
     else
     {
@@ -980,4 +980,4 @@ void PUEmitter::copyAttributesTo(PUEmitter* emitter)
     }
 }
 
-}
+}  // namespace ax

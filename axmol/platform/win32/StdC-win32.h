@@ -95,7 +95,7 @@ struct timezone
 
 int AX_DLL gettimeofday(struct timeval*, struct timezone*);
 
-}
+}  // namespace ax
 
 // Conflicted with ParticleSystem::PositionType::RELATIVE, so we need to undef it.
 #ifdef RELATIVE

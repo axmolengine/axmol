@@ -5,7 +5,6 @@
 #include "axmol/base/Scheduler.h"
 #include "doctest.h"
 
-
 /// A helper class for testing asynchronous functions. It waits while the function
 /// is executing on another thread and in the meantime updates the scheduler so
 /// async result queued by `runOnAxmolThread` will be executed.
@@ -19,17 +18,20 @@
 ///    CHECK(result); // Test result
 /// @endcode
 template <class T>
-class AsyncRunner {
+class AsyncRunner
+{
     std::promise<T> p;
 
 public:
     void finish(const T& value) { p.set_value(value); }
     void finish(T&& value) { p.set_value(value); }
 
-    T operator()() {
+    T operator()()
+    {
         auto scheduler = ax::Director::getInstance()->getScheduler();
-        auto f = p.get_future();
-        while (true) {
+        auto f         = p.get_future();
+        while (true)
+        {
             auto result = f.wait_for(std::chrono::seconds(0));
             if (result == std::future_status::ready)
                 break;
@@ -40,9 +42,9 @@ public:
     }
 };
 
-
-namespace ax {
-    doctest::String toString(const Color32& value);
-    doctest::String toString(const Vec2& value);
-    doctest::String toString(const Vec3& value);
-}
+namespace ax
+{
+doctest::String toString(const Color32& value);
+doctest::String toString(const Vec2& value);
+doctest::String toString(const Vec3& value);
+}  // namespace ax

@@ -1,19 +1,19 @@
 #if defined(_WIN32)
 
-#include "axmol/media/MFUtils.h"
+#    include "axmol/media/MFUtils.h"
 
-#include <windows.h>
-#include <mfapi.h>
-#include <mfobjects.h>
-#include <mfidl.h>
+#    include <windows.h>
+#    include <mfapi.h>
+#    include <mfobjects.h>
+#    include <mfidl.h>
 
-#pragma comment(lib, "mf")
-#pragma comment(lib, "Mfplat")
-#pragma comment(lib, "mfuuid")
-#pragma comment(lib, "shlwapi")
+#    pragma comment(lib, "mf")
+#    pragma comment(lib, "Mfplat")
+#    pragma comment(lib, "mfuuid")
+#    pragma comment(lib, "shlwapi")
 
 #    define __TEXTSV(quote) quote##sv
-#    define TEXTSV(str) __TEXTSV(str)
+#    define TEXTSV(str)     __TEXTSV(str)
 
 namespace MFUtils
 {

@@ -81,9 +81,8 @@ private:
     UIEditBoxImplMac* _sysEdit;
 };
 
-}
+}  // namespace ui
 
-}
+}  // namespace ax
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-

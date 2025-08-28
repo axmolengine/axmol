@@ -531,6 +531,6 @@ using ClearFlag         = rhi::ClearFlag;
 
 typedef void (*AsyncOperation)(void* param);
 
-}
+}  // namespace ax
 // end group
 /// @}

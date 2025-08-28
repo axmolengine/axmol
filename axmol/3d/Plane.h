@@ -105,5 +105,4 @@ protected:
     float _dist;   // original displacement of the normal
 };
 
-}
-
+}  // namespace ax

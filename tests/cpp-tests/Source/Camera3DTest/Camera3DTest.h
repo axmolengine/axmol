@@ -226,10 +226,10 @@ protected:
     ax::Camera* _camera;
     ax::DrawNode3D* _drawGrid;
     ax::Quaternion _rotationQuat;  // rotation Quaternion
-    float _radius;                      // arc ball radius
+    float _radius;                 // arc ball radius
     float _distanceZ;
     OperateCamType _operate;  // switch rotate or zoom
-    ax::Vec3 _center;    // camera look target
+    ax::Vec3 _center;         // camera look target
     int _target;              // switch camera look target
     ax::MeshRenderer* _mesh1;
     ax::MeshRenderer* _mesh2;
@@ -255,11 +255,11 @@ public:
     void switchTypeCallback(ax::Object* sender, int type);
 
 protected:
-    CameraType _cameraType                         = CameraType::Free;
-    ax::Layer* _layer3D                       = nullptr;
-    ax::Camera* _camera                       = nullptr;
-    ax::MeshRenderer* _mesh1                  = nullptr;
-    ax::MeshRenderer* _mesh2                  = nullptr;
+    CameraType _cameraType                = CameraType::Free;
+    ax::Layer* _layer3D                   = nullptr;
+    ax::Camera* _camera                   = nullptr;
+    ax::MeshRenderer* _mesh1              = nullptr;
+    ax::MeshRenderer* _mesh2              = nullptr;
     ax::rhi::ProgramState* _programState1 = nullptr;
     ax::rhi::ProgramState* _programState2 = nullptr;
 

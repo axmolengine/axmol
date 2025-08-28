@@ -82,5 +82,4 @@ public:
 
 // end of ui group
 /// @}
-}
-
+}  // namespace ax

@@ -44,4 +44,4 @@ public:
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
+}  // namespace ax

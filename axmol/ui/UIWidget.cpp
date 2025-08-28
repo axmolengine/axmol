@@ -621,9 +621,9 @@ void Widget::setMouseEnabled(bool enable)
         _mouseListener = EventListenerMouse::create();
         AX_SAFE_RETAIN(_mouseListener);
         _mouseListener->setSwallowMouse(true);
-        _mouseListener->onMouseUp = AX_CALLBACK_1(Widget::onMouseUp, this);
-        _mouseListener->onMouseDown = AX_CALLBACK_1(Widget::onMouseDown, this);
-        _mouseListener->onMouseMove = AX_CALLBACK_1(Widget::onMouseMove, this);
+        _mouseListener->onMouseUp     = AX_CALLBACK_1(Widget::onMouseUp, this);
+        _mouseListener->onMouseDown   = AX_CALLBACK_1(Widget::onMouseDown, this);
+        _mouseListener->onMouseMove   = AX_CALLBACK_1(Widget::onMouseMove, this);
         _mouseListener->onMouseScroll = AX_CALLBACK_1(Widget::onMouseScroll, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
     }
@@ -829,9 +829,7 @@ bool Widget::onTouchBegan(Touch* touch, Event* /*unusedEvent*/)
     return true;
 }
 
-void Widget::propagateTouchEvent(ax::ui::Widget::TouchEventType event,
-                                 ax::ui::Widget* sender,
-                                 ax::Touch* touch)
+void Widget::propagateTouchEvent(ax::ui::Widget::TouchEventType event, ax::ui::Widget* sender, ax::Touch* touch)
 {
     Widget* widgetParent = getWidgetParent();
     if (widgetParent)
@@ -1596,4 +1594,4 @@ bool Widget::isLayoutComponentEnabled() const
 }
 
 }  // namespace ui
-}
+}  // namespace ax

@@ -109,10 +109,10 @@ public:
     virtual operator bool() const { return isOpen(); }
 
 protected:
-    IFileStream(){};
+    IFileStream() {};
 };
 
 // end of support group
 /** @} */
 
-}
+}  // namespace ax

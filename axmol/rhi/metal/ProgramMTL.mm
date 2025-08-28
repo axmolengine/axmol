@@ -28,7 +28,8 @@
 #include "axmol/base/Macros.h"
 #include "axmol/rhi/metal/DriverMTL.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 namespace
 {
 // constexpr std::string_view metalSpecificDefine = "#define METAL\n"sv;
@@ -38,7 +39,8 @@ ProgramImpl::ProgramImpl(std::string_view vertexShader, std::string_view fragmen
     : Program(vertexShader, fragmentShader)
 {
     _vertexShader = static_cast<ShaderModuleImpl*>(ShaderCache::getInstance()->acquireVertexShaderModule(_vsSource));
-    _fragmentShader = static_cast<ShaderModuleImpl*>(ShaderCache::getInstance()->acquireFragmentShaderModule(_fsSource));
+    _fragmentShader =
+        static_cast<ShaderModuleImpl*>(ShaderCache::getInstance()->acquireFragmentShaderModule(_fsSource));
 }
 
 ProgramImpl::~ProgramImpl()
@@ -62,10 +64,8 @@ UniformLocation ProgramImpl::getUniformLocation(rhi::Uniform name) const
     auto& vert = _vertexShader->getUniformInfo(name);
     auto& frag = _fragmentShader->getUniformInfo(name);
 
-    return UniformLocation {
-        { frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset) },
-        { vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset) }
-    };
+    return UniformLocation{{frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset)},
+                           {vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset)}};
 }
 
 UniformLocation ProgramImpl::getUniformLocation(std::string_view uniform) const
@@ -75,12 +75,10 @@ UniformLocation ProgramImpl::getUniformLocation(std::string_view uniform) const
 
     if (vert.location != -1 && frag.location != -1)
         AXASSERT(vert.type == frag.type && vert.count == frag.count && vert.size == frag.size,
-            "Same vertex and fragment uniform must much in type and size");
+                 "Same vertex and fragment uniform must much in type and size");
 
-    return UniformLocation {
-        { frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset) },
-        { vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset) }
-    };
+    return UniformLocation{{frag.location, frag.location == -1 ? -1 : static_cast<int>(frag.bufferOffset)},
+                           {vert.location, vert.location == -1 ? -1 : static_cast<int>(vert.bufferOffset)}};
 }
 
 int ProgramImpl::getMaxVertexLocation() const
@@ -126,4 +124,4 @@ const hlookup::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(Shade
     }
 }
 
-}
+}  // namespace ax::rhi::mtl

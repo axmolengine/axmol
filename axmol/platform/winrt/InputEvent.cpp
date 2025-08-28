@@ -35,10 +35,7 @@ THE SOFTWARE.
 namespace ax
 {
 
-AccelerometerEvent::AccelerometerEvent(const Acceleration& event)
-    : m_event(event)
-{
-}
+AccelerometerEvent::AccelerometerEvent(const Acceleration& event) : m_event(event) {}
 
 void AccelerometerEvent::execute()
 {
@@ -47,16 +44,13 @@ void AccelerometerEvent::execute()
     dispatcher->dispatchEvent(&accEvent);
 }
 
-
 PointerEvent::PointerEvent(PointerEventType type, const Windows::UI::Core::PointerEventArgs& args)
     : m_type(type), m_args(args)
-{
-
-}
+{}
 
 void PointerEvent::execute()
 {
-    switch(m_type)
+    switch (m_type)
     {
     case PointerEventType::PointerPressed:
         RenderViewImpl::sharedRenderView()->OnPointerPressed(m_args);
@@ -82,21 +76,13 @@ void PointerEvent::execute()
     }
 }
 
-KeyboardEvent::KeyboardEvent(AxmolKeyEvent type)
-    : m_type(type), m_text()
-{
+KeyboardEvent::KeyboardEvent(AxmolKeyEvent type) : m_type(type), m_text() {}
 
-}
-
-KeyboardEvent::KeyboardEvent(AxmolKeyEvent type, const winrt::hstring& text)
-    : m_type(type), m_text(text)
-{
-
-}
+KeyboardEvent::KeyboardEvent(AxmolKeyEvent type, const winrt::hstring& text) : m_type(type), m_text(text) {}
 
 void KeyboardEvent::execute()
 {
-    switch(m_type)
+    switch (m_type)
     {
     case AxmolKeyEvent::Text:
     {
@@ -109,7 +95,7 @@ void KeyboardEvent::execute()
         switch (m_type)
         {
         case AxmolKeyEvent::Escape:
-            //Director::getInstance()()->getKeypadDispatcher()->dispatchKeypadMSG(kTypeBackClicked);
+            // Director::getInstance()()->getKeypadDispatcher()->dispatchKeypadMSG(kTypeBackClicked);
             break;
         case AxmolKeyEvent::Back:
             IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward(1);
@@ -125,44 +111,34 @@ void KeyboardEvent::execute()
 }
 
 WinRTKeyboardEvent::WinRTKeyboardEvent(WinRTKeyboardEventType type, const Windows::UI::Core::KeyEventArgs& args)
-	: m_type(type), m_key(args)
-{
-}
+    : m_type(type), m_key(args)
+{}
 
 void WinRTKeyboardEvent::execute()
 {
-	RenderViewImpl::sharedRenderView()->OnWinRTKeyboardEvent(m_type, m_key);
+    RenderViewImpl::sharedRenderView()->OnWinRTKeyboardEvent(m_type, m_key);
 }
 
-BackButtonEvent::BackButtonEvent()
-{
-
-}
+BackButtonEvent::BackButtonEvent() {}
 
 void BackButtonEvent::execute()
 {
     RenderViewImpl::sharedRenderView()->OnBackKeyPress();
 }
 
-CustomInputEvent::CustomInputEvent(const std::function<void()>& fun)
-: m_fun(fun)
-{
-}
+CustomInputEvent::CustomInputEvent(const std::function<void()>& fun) : m_fun(fun) {}
 
 void CustomInputEvent::execute()
 {
     m_fun();
 }
 
-UIEditBoxEvent::UIEditBoxEvent(const Windows::Foundation::IInspectable& sender,
-                               const winrt::hstring& text,
+UIEditBoxEvent::UIEditBoxEvent(
+    const Windows::Foundation::IInspectable& sender,
+    const winrt::hstring& text,
     const winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&>& handle)
-    : m_sender(sender)
-    , m_text(text)
-    , m_handler(handle)
-{
-
-}
+    : m_sender(sender), m_text(text), m_handler(handle)
+{}
 
 void UIEditBoxEvent::execute()
 {
@@ -177,23 +153,16 @@ UIEditBoxEndEvent::UIEditBoxEndEvent(
     const winrt::hstring& text,
     int action,
     winrt::delegate<Windows::Foundation::IInspectable const&, EndEventArgs const&>& handle)
-  : m_sender(sender)
-  , m_text(text)
-  , m_action(action)
-  , m_handler(handle)
-{
-
-}
+    : m_sender(sender), m_text(text), m_action(action), m_handler(handle)
+{}
 
 void UIEditBoxEndEvent::execute()
 {
-  if (m_handler)
-  {
-    EndEventArgs args(m_action, m_text);
-    m_handler(m_sender, args);
-  }
+    if (m_handler)
+    {
+        EndEventArgs args(m_action, m_text);
+        m_handler(m_sender, args);
+    }
 }
 
-}
-
-
+}  // namespace ax

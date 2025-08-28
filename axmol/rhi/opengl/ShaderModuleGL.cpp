@@ -29,7 +29,8 @@
 #include "axmol/base/Macros.h"
 #include "axmol/base/axstd.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 ShaderModuleImpl::ShaderModuleImpl(ShaderStage stage, std::string_view source) : ShaderModule(stage)
 {
@@ -63,8 +64,7 @@ void ShaderModuleImpl::compileShader(ShaderStage stage, std::string_view source)
         {
             auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
             glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.get());
-            AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(),
-                         source.data());
+            AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(), source.data());
         }
         else
         {
@@ -85,4 +85,4 @@ void ShaderModuleImpl::deleteShader()
     }
 }
 
-}
+}  // namespace ax::rhi::gl

@@ -131,4 +131,4 @@ CCPUBoxEmitter* CCPUBoxEmitter::clone()
     return be;
 }
 
-}
+}  // namespace ax

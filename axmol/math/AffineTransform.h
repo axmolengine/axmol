@@ -111,7 +111,7 @@ AX_DLL Mat4 TransformConcat(const Mat4& t1, const Mat4& t2);
 
 extern AX_DLL const AffineTransform AffineTransformIdentity;
 
-}
+}  // namespace ax
 
 // end of base transform
 /// @}

@@ -89,7 +89,7 @@ struct AX_DLL VertexLayoutDesc
 
     /**
      * Start to define vertex layout.
-    */
+     */
     void startLayout(size_t capacity);
 
     /**
@@ -110,12 +110,12 @@ struct AX_DLL VertexLayoutDesc
 
     /*
      * End to define vertex layout and compute hash value.
-    */
+     */
     void endLayout(int stride = -1);
 
     /*
-    * compute hash
-    */
+     * compute hash
+     */
     uint32_t getHash() const { return _hash; }
 
     uint32_t getStride() const { return _strides[0]; }
@@ -143,17 +143,16 @@ class AX_DLL VertexLayout : public Object
     friend class ::ax::VertexLayoutManager;
 
 protected:
-    VertexLayout()                    = default;
+    VertexLayout() = default;
     explicit VertexLayout(VertexLayoutDesc&& desc) noexcept : _desc(std::move(desc)) {}
     VertexLayout(const VertexLayout& rhs) = delete;
     void setBuiltinId(int id) { _builtinId = id; }
 
 public:
-
     virtual ~VertexLayout() = default;
 
     const VertexLayoutDesc& getDesc() const { return _desc; }
-    
+
     uint32_t getStride() const { return _desc.getStride(); }
     uint32_t getInstanceStride() const { return _desc.getInstanceStride(); }
 
@@ -174,7 +173,7 @@ public:
 
     /**
      *  Get built-in vertex layout id, -1 means not built-in
-    */
+     */
     int getBuiltinId() const { return _builtinId; }
 
 protected:

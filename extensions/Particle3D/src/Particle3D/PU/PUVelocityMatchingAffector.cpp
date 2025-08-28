@@ -119,4 +119,4 @@ void PUVelocityMatchingAffector::copyAttributesTo(PUAffector* affector)
     velocityMatchingAffector->_radius                    = _radius;
 }
 
-}
+}  // namespace ax

@@ -37,9 +37,8 @@ void CCSlot::_addDisplay()
 
 void CCSlot::_replaceDisplay(void* value, bool isArmatureDisplay)
 {
-    const auto container = static_cast<CCArmatureDisplay*>(_armature->getDisplay());
-    const auto prevDisplay =
-        isArmatureDisplay ? static_cast<ax::Node*>(value) : static_cast<ax::Node*>(value);
+    const auto container   = static_cast<CCArmatureDisplay*>(_armature->getDisplay());
+    const auto prevDisplay = isArmatureDisplay ? static_cast<ax::Node*>(value) : static_cast<ax::Node*>(value);
     container->addChild(_renderDisplay, prevDisplay->getLocalZOrder());
     container->removeChild(prevDisplay);
     _textureScale = 1.0f;
@@ -92,7 +91,7 @@ void CCSlot::_updateFrame()
 
                 const auto& region           = currentTextureData->region;
                 const auto& textureAtlasSize = currentTextureData->spriteFrame->getTexture()->getContentSizeInPixels();
-                auto vertices                = new ax::V3F_T2F_C4B[vertexCount];  // does cocos2dx release it?
+                auto vertices                = new ax::V3F_T2F_C4B[vertexCount];       // does cocos2dx release it?
                 auto vertexIndices           = new unsigned short[triangleCount * 3];  // does cocos2dx release it?
                 ax::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);
 
@@ -118,7 +117,7 @@ void CCSlot::_updateFrame()
                     }
 
                     vertexData.color = ax::Color32::WHITE;
-                    vertices[iH]      = vertexData;
+                    vertices[iH]     = vertexData;
 
                     if (boundsRect.origin.x > x)
                     {

@@ -215,7 +215,7 @@ Widget* GUIReader::widgetFromJsonFile(const char* fileName)
     jsonDict.Parse<0>(contentStr.c_str());
     if (jsonDict.HasParseError())
     {
-        AXLOGD("GetParseError {}\n",  static_cast<int>(jsonDict.GetParseError()));
+        AXLOGD("GetParseError {}\n", static_cast<int>(jsonDict.GetParseError()));
     }
     Widget* widget                  = nullptr;
     const char* fileVersion         = DICTOOL->getStringValue_json(jsonDict, "version");
@@ -680,9 +680,9 @@ void WidgetPropertiesReader0250::setColorPropsForWidgetFromJsonDictionary(Widget
                                                                           const rapidjson::Value& options)
 {
     bool op = DICTOOL->checkObjectExist_json(options, "opacity");
-    bool cr    = DICTOOL->checkObjectExist_json(options, "colorR");
-    bool cg    = DICTOOL->checkObjectExist_json(options, "colorG");
-    bool cb    = DICTOOL->checkObjectExist_json(options, "colorB");
+    bool cr = DICTOOL->checkObjectExist_json(options, "colorR");
+    bool cg = DICTOOL->checkObjectExist_json(options, "colorG");
+    bool cb = DICTOOL->checkObjectExist_json(options, "colorB");
 
     int colorA = op ? DICTOOL->getIntValue_json(options, "opacity") : 255;
     int colorR = cr ? DICTOOL->getIntValue_json(options, "colorR") : 255;
@@ -702,7 +702,7 @@ void WidgetPropertiesReader0250::setPropsForButtonFromJsonDictionary(Widget* wid
 {
     setPropsForWidgetFromJsonDictionary(widget, options);
     ax::ui::Button* button = static_cast<Button*>(widget);
-    bool scale9Enable           = DICTOOL->getBooleanValue_json(options, "scale9Enable");
+    bool scale9Enable      = DICTOOL->getBooleanValue_json(options, "scale9Enable");
     button->setScale9Enabled(scale9Enable);
 
     std::string tp_n = m_strFilePath;
@@ -843,9 +843,9 @@ void WidgetPropertiesReader0250::setPropsForImageViewFromJsonDictionary(Widget* 
 {
     setPropsForWidgetFromJsonDictionary(widget, options);
     ax::ui::ImageView* imageView = static_cast<ImageView*>(widget);
-    const char* imageFileName         = DICTOOL->getStringValue_json(options, "fileName");
-    bool scale9EnableExist            = DICTOOL->checkObjectExist_json(options, "scale9Enable");
-    bool scale9Enable                 = false;
+    const char* imageFileName    = DICTOOL->getStringValue_json(options, "fileName");
+    bool scale9EnableExist       = DICTOOL->checkObjectExist_json(options, "scale9Enable");
+    bool scale9Enable            = false;
     if (scale9EnableExist)
     {
         scale9Enable = DICTOOL->getBooleanValue_json(options, "scale9Enable");
@@ -903,7 +903,7 @@ void WidgetPropertiesReader0250::setPropsForImageViewFromJsonDictionary(Widget* 
 void WidgetPropertiesReader0250::setPropsForLabelFromJsonDictionary(Widget* widget, const rapidjson::Value& options)
 {
     setPropsForWidgetFromJsonDictionary(widget, options);
-    ax::ui::Text* label  = static_cast<ax::ui::Text*>(widget);
+    ax::ui::Text* label       = static_cast<ax::ui::Text*>(widget);
     bool touchScaleChangeAble = DICTOOL->getBooleanValue_json(options, "touchScaleEnable");
     label->setTouchScaleChangeEnabled(touchScaleChangeAble);
     const char* text = DICTOOL->getStringValue_json(options, "text");
@@ -948,11 +948,11 @@ void WidgetPropertiesReader0250::setPropsForLabelAtlasFromJsonDictionary(Widget*
 {
     setPropsForWidgetFromJsonDictionary(widget, options);
     ax::ui::TextAtlas* labelAtlas = static_cast<ax::ui::TextAtlas*>(widget);
-    bool sv                            = DICTOOL->checkObjectExist_json(options, "stringValue");
-    bool cmf                           = DICTOOL->checkObjectExist_json(options, "charMapFile");
-    bool iw                            = DICTOOL->checkObjectExist_json(options, "itemWidth");
-    bool ih                            = DICTOOL->checkObjectExist_json(options, "itemHeight");
-    bool scm                           = DICTOOL->checkObjectExist_json(options, "startCharMap");
+    bool sv                       = DICTOOL->checkObjectExist_json(options, "stringValue");
+    bool cmf                      = DICTOOL->checkObjectExist_json(options, "charMapFile");
+    bool iw                       = DICTOOL->checkObjectExist_json(options, "itemWidth");
+    bool ih                       = DICTOOL->checkObjectExist_json(options, "itemHeight");
+    bool scm                      = DICTOOL->checkObjectExist_json(options, "startCharMap");
     if (sv && cmf && iw && ih && scm && (strcmp(DICTOOL->getStringValue_json(options, "charMapFile"), "") != 0))
     {
         std::string tp_c   = m_strFilePath;
@@ -975,8 +975,7 @@ void WidgetPropertiesReader0250::setPropsForLayoutFromJsonDictionary(Widget* wid
 {
     setPropsForWidgetFromJsonDictionary(widget, options);
     Layout* containerWidget = static_cast<Layout*>(widget);
-    if (!dynamic_cast<ax::ui::ScrollView*>(containerWidget) &&
-        !dynamic_cast<ax::ui::ListView*>(containerWidget))
+    if (!dynamic_cast<ax::ui::ScrollView*>(containerWidget) && !dynamic_cast<ax::ui::ListView*>(containerWidget))
     {
         containerWidget->setClippingEnabled(DICTOOL->getBooleanValue_json(options, "clipAble"));
     }
@@ -1047,8 +1046,8 @@ void WidgetPropertiesReader0250::setPropsForScrollViewFromJsonDictionary(Widget*
 {
     setPropsForLayoutFromJsonDictionary(widget, options);
     ax::ui::ScrollView* scrollView = static_cast<ax::ui::ScrollView*>(widget);
-    float innerWidth                    = DICTOOL->getFloatValue_json(options, "innerWidth");
-    float innerHeight                   = DICTOOL->getFloatValue_json(options, "innerHeight");
+    float innerWidth               = DICTOOL->getFloatValue_json(options, "innerWidth");
+    float innerHeight              = DICTOOL->getFloatValue_json(options, "innerHeight");
     scrollView->setInnerContainerSize(Size(innerWidth, innerHeight));
     int direction = DICTOOL->getFloatValue_json(options, "direction");
     scrollView->setDirection((ScrollView::Direction)direction);
@@ -1143,7 +1142,7 @@ void WidgetPropertiesReader0250::setPropsForTextFieldFromJsonDictionary(Widget* 
 {
     setPropsForWidgetFromJsonDictionary(widget, options);
     ax::ui::TextField* textField = static_cast<ax::ui::TextField*>(widget);
-    bool ph                           = DICTOOL->checkObjectExist_json(options, "placeHolder");
+    bool ph                      = DICTOOL->checkObjectExist_json(options, "placeHolder");
     if (ph)
     {
         textField->setPlaceHolder(DICTOOL->getStringValue_json(options, "placeHolder"));
@@ -1199,9 +1198,9 @@ void WidgetPropertiesReader0250::setPropsForLoadingBarFromJsonDictionary(Widget*
 {
     setPropsForWidgetFromJsonDictionary(widget, options);
     ax::ui::LoadingBar* loadingBar = static_cast<ax::ui::LoadingBar*>(widget);
-    bool useMergedTexture               = DICTOOL->getBooleanValue_json(options, "useMergedTexture");
-    std::string tp_b                    = m_strFilePath;
-    const char* imageFileName           = DICTOOL->getStringValue_json(options, "texture");
+    bool useMergedTexture          = DICTOOL->getBooleanValue_json(options, "useMergedTexture");
+    std::string tp_b               = m_strFilePath;
+    const char* imageFileName      = DICTOOL->getStringValue_json(options, "texture");
     const char* imageFileName_tp =
         (imageFileName && (strcmp(imageFileName, "") != 0)) ? tp_b.append(imageFileName).c_str() : nullptr;
     if (useMergedTexture)
@@ -1316,8 +1315,8 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data,
 }
 
 ax::ui::Widget* WidgetPropertiesReader0300::createWidgetFromBinary(CocoLoader* cocoLoader,
-                                                                        stExpCocoNode* cocoNode,
-                                                                        const char* fileName)
+                                                                   stExpCocoNode* cocoNode,
+                                                                   const char* fileName)
 {
 
     stExpCocoNode* tpChildArray = cocoNode->GetChildArray(cocoLoader);
@@ -1583,7 +1582,7 @@ Widget* WidgetPropertiesReader0300::widgetFromJsonDictionary(const rapidjson::Va
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                AXLOGD("GetParseError {}\n",  static_cast<int>(customJsonDict.GetParseError()));
+                AXLOGD("GetParseError {}\n", static_cast<int>(customJsonDict.GetParseError()));
             }
             setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }
@@ -1597,7 +1596,7 @@ Widget* WidgetPropertiesReader0300::widgetFromJsonDictionary(const rapidjson::Va
     for (int i = 0; i < childrenCount; i++)
     {
         const rapidjson::Value& subData = DICTOOL->getDictionaryFromArray_json(data, "children", i);
-        ax::ui::Widget* child      = widgetFromJsonDictionary(subData);
+        ax::ui::Widget* child           = widgetFromJsonDictionary(subData);
         if (child)
         {
             PageView* pageView = dynamic_cast<PageView*>(widget);

@@ -77,4 +77,4 @@ public:
     virtual ~PUTranslateManager();
 };
 
-}
+}  // namespace ax

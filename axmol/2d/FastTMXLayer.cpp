@@ -248,7 +248,7 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
             int offset  = iter->second;
             iter->second++;
 
-            auto quadIndex = static_cast<decltype(_indices)::value_type>(_tileToQuadIndex[tileIndex]);
+            auto quadIndex           = static_cast<decltype(_indices)::value_type>(_tileToQuadIndex[tileIndex]);
             _indices[6 * offset + 0] = quadIndex * 4 + 0;
             _indices[6 * offset + 1] = quadIndex * 4 + 1;
             _indices[6 * offset + 2] = quadIndex * 4 + 2;
@@ -257,7 +257,7 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
             _indices[6 * offset + 5] = quadIndex * 4 + 1;
 
         }  // for x
-    }      // for y
+    }  // for y
 
     for (const auto& iter : _indicesVertexZOffsets)
     {
@@ -356,8 +356,8 @@ void FastTMXLayer::setupTiles()
                     }
                 }
 
-                int pos = static_cast<int>(newX + _layerSize.width * y);
-                uint32_t gid = _tiles[pos];
+                int pos        = static_cast<int>(newX + _layerSize.width * y);
+                uint32_t gid   = _tiles[pos];
                 uint32_t flags = 0;
 
                 // issue#1098 TileMap flipped/rotated animation bug.
@@ -450,19 +450,17 @@ void FastTMXLayer::updatePrimitives()
             VertexLayout* vl{nullptr};
             if (_useAutomaticVertexZ)
             {
-                auto* program =
-                    axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-                ps            = new rhi::ProgramState(program);
-                vl = program->getVertexLayout();
+                auto* program       = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
+                ps                  = new rhi::ProgramState(program);
+                vl                  = program->getVertexLayout();
                 _alphaValueLocation = ps->getUniformLocation("u_alpha_value");
-                ps->setUniform(_alphaValueLocation, &_alphaFuncValue,
-                                                            sizeof(_alphaFuncValue));
+                ps->setUniform(_alphaValueLocation, &_alphaFuncValue, sizeof(_alphaFuncValue));
             }
             else
             {
-                auto* program     = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
-                ps = new rhi::ProgramState(program);
-                vl                = program->getVertexLayout();
+                auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+                ps            = new rhi::ProgramState(program);
+                vl            = program->getVertexLayout();
             }
 
             command->setOwnPSVL(ps, vl, RenderCommand::ADOPT_FLAG_PS);
@@ -900,7 +898,7 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
 
 void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid)
 {
-    auto tempPosAt = getPositionAt(pos);
+    auto tempPosAt             = getPositionAt(pos);
     auto tempSpriteContentSize = sprite->getContentSize();
 
     sprite->setPositionZ((float)getVertexZForPos(pos));
@@ -959,7 +957,7 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
 std::string FastTMXLayer::getDescription() const
 {
     return fmt::format("<FastTMXLayer | tag = {}, size = {},{}>", _tag, (int)_mapTileSize.width,
-                               (int)_mapTileSize.height);
+                       (int)_mapTileSize.height);
 }
 
 TMXTileAnimManager::TMXTileAnimManager(FastTMXLayer* layer)
@@ -969,7 +967,8 @@ TMXTileAnimManager::TMXTileAnimManager(FastTMXLayer* layer)
     {
         for (auto&& tile : p.second)
         {
-            _tasks.pushBack(TMXTileAnimTask::create(_layer, _layer->getTileSet()->_animationInfo.at(p.first), tile._tilePos, tile._flag));
+            _tasks.pushBack(TMXTileAnimTask::create(_layer, _layer->getTileSet()->_animationInfo.at(p.first),
+                                                    tile._tilePos, tile._flag));
         }
     }
 }
@@ -1041,11 +1040,14 @@ void TMXTileAnimTask::setCurrFrame()
     _nextFrame = (_currentFrame + 1) % _frameCount;
 }
 
-TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag)
+TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer,
+                                         TMXTileAnimInfo* animation,
+                                         const Vec2& tilePos,
+                                         uint32_t flag)
 {
     TMXTileAnimTask* ret = new TMXTileAnimTask(layer, animation, tilePos, flag);
     ret->autorelease();
     return ret;
 }
 
-}
+}  // namespace ax

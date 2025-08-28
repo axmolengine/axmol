@@ -49,7 +49,7 @@ typedef unsigned int etc2_uint32;
 // Size of a PKM header, in bytes.
 #define ETC2_PKM_HEADER_SIZE 16
 
-#define ETC2_RGB_NO_MIPMAPS 1
+#define ETC2_RGB_NO_MIPMAPS  1
 #define ETC2_RGBA_NO_MIPMAPS 3
 
 // Check if a PKM header is correctly formatted.

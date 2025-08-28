@@ -37,11 +37,10 @@ class PUOnCountObserverTranslator : public PUScriptTranslator
 {
 public:
     PUOnCountObserverTranslator();
-    virtual ~PUOnCountObserverTranslator(){};
+    virtual ~PUOnCountObserverTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

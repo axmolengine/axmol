@@ -35,7 +35,7 @@ int register_network_module(lua_State* L)
     {
         tolua_web_socket_open(L);
         register_web_socket_manual(L);
-        
+
         register_xml_http_request(L);
         register_downloader(L);
     }

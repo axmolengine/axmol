@@ -71,7 +71,10 @@ void LoadingBarReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* co
         // read all color related properties of widget
         AX_COLOR_PROPERTY_BINARY_READER
 
-        else if (key == P_Scale9Enable) { loadingBar->setScale9Enabled(valueToBool(value)); }
+        else if (key == P_Scale9Enable)
+        {
+            loadingBar->setScale9Enabled(valueToBool(value));
+        }
         else if (key == P_TextureData)
         {
 
@@ -83,12 +86,30 @@ void LoadingBarReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* co
             std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
             loadingBar->loadTexture(backgroundValue, imageFileNameType);
         }
-        else if (key == P_CapInsetsX) { capsx = valueToFloat(value); }
-        else if (key == P_CapInsetsY) { capsy = valueToFloat(value); }
-        else if (key == P_CapInsetsWidth) { capsWidth = valueToFloat(value); }
-        else if (key == P_CapInsetsHeight) { capsHeight = valueToFloat(value); }
-        else if (key == P_Direction) { loadingBar->setDirection((LoadingBar::Direction)valueToInt(value)); }
-        else if (key == P_Percent) { percent = valueToInt(value); }
+        else if (key == P_CapInsetsX)
+        {
+            capsx = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsY)
+        {
+            capsy = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsWidth)
+        {
+            capsWidth = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsHeight)
+        {
+            capsHeight = valueToFloat(value);
+        }
+        else if (key == P_Direction)
+        {
+            loadingBar->setDirection((LoadingBar::Direction)valueToInt(value));
+        }
+        else if (key == P_Percent)
+        {
+            percent = valueToInt(value);
+        }
 
     }  // end of for loop
 
@@ -185,7 +206,7 @@ Offset<Table> LoadingBarReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")

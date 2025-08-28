@@ -91,7 +91,7 @@ public:
     void copyAttributesTo(PUEmitter* emitter) override;
 
     PULineEmitter();
-    virtual ~PULineEmitter(){};
+    virtual ~PULineEmitter() {};
 
 protected:
     Vec3 _end;            // End point of the line (startpoint is determined by means of position)
@@ -115,5 +115,4 @@ protected:
     float _scaledMaxIncrement;
     float _scaledLength;
 };
-}
-
+}  // namespace ax

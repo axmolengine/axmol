@@ -93,4 +93,4 @@ bool EventListenerFocus::checkAvailable()
     return true;
 }
 
-}
+}  // namespace ax

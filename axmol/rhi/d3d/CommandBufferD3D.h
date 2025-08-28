@@ -216,7 +216,6 @@ public:
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
 protected:
-
     void readPixels(RenderTarget* rt, UINT x, UINT y, UINT width, UINT height, PixelBufferDesc& pbd);
 
     void updateRasterizerState();
@@ -225,7 +224,7 @@ protected:
 
     DriverImpl* _driverImpl{nullptr};
     IDXGISwapChain* _swapChain{nullptr};
-    ID3D11Texture2D* _depthStencilTexture {nullptr};
+    ID3D11Texture2D* _depthStencilTexture{nullptr};
     ComPtr<ID3D11RasterizerState> _rasterState{nullptr};
     RasterStateDesc _rasterDesc{};
     BufferImpl* _vertexBuffer{nullptr};

@@ -40,10 +40,7 @@ extern bool luaval_to_navmeshagentparam(lua_State* L,
                                         int lo,
                                         ax::NavMeshAgentParam* outValue,
                                         const char* funcName = "");
-extern bool luaval_to_offmeshlinkdata(lua_State* L,
-                                      int lo,
-                                      ax::OffMeshLinkData* outValue,
-                                      const char* funcName = "");
+extern bool luaval_to_offmeshlinkdata(lua_State* L, int lo, ax::OffMeshLinkData* outValue, const char* funcName = "");
 
 extern void navmeshagentparam_to_luaval(lua_State* L, const ax::NavMeshAgentParam& inValue);
 extern void offmeshlinkdata_to_luaval(lua_State* L, const ax::OffMeshLinkData& inValue);

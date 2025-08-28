@@ -291,4 +291,4 @@ void PUDoPlacementParticleEventHandler::copyAttributesTo(PUEventHandler* eventHa
     doPlacementParticleEventHandler->_inheritParticleDepth     = _inheritParticleDepth;
 }
 
-}
+}  // namespace ax

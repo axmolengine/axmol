@@ -62,10 +62,7 @@ public:
 
     void setJavascriptInterfaceScheme(std::string_view scheme);
 
-    void loadData(const ax::Data& data,
-                  std::string_view MIMEType,
-                  std::string_view encoding,
-                  std::string_view baseURL);
+    void loadData(const ax::Data& data, std::string_view MIMEType, std::string_view encoding, std::string_view baseURL);
 
     void loadHTMLString(std::string_view string, std::string_view baseURL);
 

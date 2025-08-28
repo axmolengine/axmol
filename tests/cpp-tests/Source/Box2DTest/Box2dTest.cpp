@@ -258,8 +258,8 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     auto dynamicBox = b2MakeBox(.5f, .5f);  // These are mid points for our 1m box
 
     // Define the dynamic body fixture.
-    b2ShapeDef shapeDef = b2DefaultShapeDef();
-    shapeDef.density    = 1.0f;
+    b2ShapeDef shapeDef        = b2DefaultShapeDef();
+    shapeDef.density           = 1.0f;
     shapeDef.material.friction = 0.3f;
     b2CreatePolygonShape(body, &shapeDef, &dynamicBox);
 

@@ -646,4 +646,4 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
     }
 }
 
-}
+}  // namespace ax

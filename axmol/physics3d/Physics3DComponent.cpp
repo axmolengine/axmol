@@ -162,8 +162,7 @@ void Physics3DComponent::postSimulate()
     }
 }
 
-void Physics3DComponent::setTransformInPhysics(const ax::Vec3& translateInPhysics,
-                                               const ax::Quaternion& rotInPhsyics)
+void Physics3DComponent::setTransformInPhysics(const ax::Vec3& translateInPhysics, const ax::Quaternion& rotInPhsyics)
 {
     Mat4::createRotation(rotInPhsyics, &_transformInPhysics);
     _transformInPhysics.m[12] = translateInPhysics.x;
@@ -248,6 +247,6 @@ void Physics3DComponent::syncNodeToPhysics()
     }
 }
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

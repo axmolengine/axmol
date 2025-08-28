@@ -134,7 +134,6 @@ public:
      */
     int getTag() const { return _tag; }
 
-
     /**
      * Get this shape's density.
      *

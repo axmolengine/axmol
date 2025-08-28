@@ -115,13 +115,11 @@ void MeshRenderer::createAsync(std::string_view modelPath,
     meshRenderer->_asyncLoadParam.nodeDatas         = new NodeDatas();
 
     auto director = Director::getInstance();
-    director->getJobSystem()->enqueue(
-        [director, meshRenderer] {
+    director->getJobSystem()->enqueue([director, meshRenderer] {
         auto& loadParam  = meshRenderer->_asyncLoadParam;
         loadParam.result = meshRenderer->loadFromFile(loadParam.modelFullPath, loadParam.nodeDatas, loadParam.meshdatas,
                                                       loadParam.materialdatas);
-    },
-        [meshRenderer] { meshRenderer->afterAsyncLoad(&meshRenderer->_asyncLoadParam); });
+    }, [meshRenderer] { meshRenderer->afterAsyncLoad(&meshRenderer->_asyncLoadParam); });
 }
 
 void MeshRenderer::afterAsyncLoad(void* param)
@@ -1113,4 +1111,4 @@ static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVerte
     return MeshMaterial::createBuiltInMaterial(type, hasSkin);
 }
 
-}
+}  // namespace ax

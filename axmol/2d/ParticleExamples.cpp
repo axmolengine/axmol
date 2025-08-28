@@ -1230,4 +1230,4 @@ bool ParticleRain::initWithTotalParticles(int numberOfParticles)
     return false;
 }
 
-}
+}  // namespace ax

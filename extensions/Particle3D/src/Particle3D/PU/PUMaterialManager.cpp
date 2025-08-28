@@ -112,7 +112,7 @@ void PUMaterialCache::addMaterial(PUMaterial* material)
         if (iter->name == material->name)
         {
             AXLOGD("warning: Material has existed (FilePath: {},  MaterialName: {})", material->fileName,
-                  material->name.c_str());
+                   material->name.c_str());
             return;
         }
     }
@@ -227,4 +227,4 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     return state;
 }
 
-}
+}  // namespace ax

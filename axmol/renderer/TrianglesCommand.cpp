@@ -106,4 +106,4 @@ void TrianglesCommand::generateMaterialID()
     _materialID    = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
 }
 
-}
+}  // namespace ax

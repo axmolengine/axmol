@@ -116,7 +116,7 @@ bool Bug1174Layer::init()
         //
         // Test 2.
         //
-       AXLOGI("Test2 - Start");
+        AXLOGI("Test2 - Start");
 
         p1 = Vec2(220, 480);
         p2 = Vec2(304, 325);

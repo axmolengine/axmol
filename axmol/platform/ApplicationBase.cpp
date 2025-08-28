@@ -36,4 +36,4 @@ ApplicationBase::~ApplicationBase()
     Director::destroyInstance();
 }
 
-}
+}  // namespace ax

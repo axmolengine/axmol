@@ -29,4 +29,3 @@ THE SOFTWARE.
 
 int getFontSizeAccordingHeightJni(int height);
 std::string getStringWithEllipsisJni(const char* text, float width, float fontSize);
-

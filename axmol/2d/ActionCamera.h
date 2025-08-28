@@ -55,7 +55,7 @@ public:
     /**
      * @lua NA
      */
-    virtual ~ActionCamera(){};
+    virtual ~ActionCamera() {};
 
     // Overrides
     void startWithTarget(Node* target) override;
@@ -173,4 +173,4 @@ protected:
 // end of actions group
 /// @}
 
-}
+}  // namespace ax

@@ -30,19 +30,18 @@ THE SOFTWARE.
 #include "TriggerMng.h"
 #include "CocosStudioExport.h"
 
-#define DECLARE_CLASS_INFO                     \
-public:                                        \
+#define DECLARE_CLASS_INFO                \
+public:                                   \
     static ax::ObjectFactory::TInfo Type; \
     static ax::Object* createInstance(void);
 
-#define IMPLEMENT_CLASS_INFO(className)           \
+#define IMPLEMENT_CLASS_INFO(className)         \
     ax::Object* className::createInstance(void) \
-    {                                             \
-        auto ret = new className;                 \
-        ret->autorelease();                       \
-        return ret;                               \
-    }                                             \
+    {                                           \
+        auto ret = new className;               \
+        ret->autorelease();                     \
+        return ret;                             \
+    }                                           \
     ax::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
 
 void CCS_DLL sendEvent(unsigned int event);
-

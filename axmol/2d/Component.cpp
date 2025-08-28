@@ -78,4 +78,4 @@ void Component::setEnabled(bool enabled)
     _enabled = enabled;
 }
 
-}
+}  // namespace ax

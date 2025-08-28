@@ -283,7 +283,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             attribute = child.first_attribute();
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "R")
@@ -311,7 +311,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -346,7 +346,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -381,7 +381,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -416,7 +416,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -451,7 +451,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -483,7 +483,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")

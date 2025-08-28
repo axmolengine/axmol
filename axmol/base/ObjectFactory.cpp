@@ -114,4 +114,4 @@ void ObjectFactory::registerType(const TInfo& t)
     _typeMap.emplace(t._class, t);
 }
 
-}
+}  // namespace ax

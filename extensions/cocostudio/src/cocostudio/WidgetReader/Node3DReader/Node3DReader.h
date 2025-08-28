@@ -54,4 +54,3 @@ protected:
     ax::Vec3 getVec3Attribute(pugi::xml_attribute attribute) const;
 };
 }  // namespace cocostudio
-

@@ -106,4 +106,4 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(NodeGrid);
 };
 /** @} */
-}
+}  // namespace ax

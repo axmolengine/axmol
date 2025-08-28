@@ -28,4 +28,3 @@
 #include "lua-bindings/manual/Lua-BindingsExport.h"
 
 AX_LUA_DLL int lua_module_register(lua_State* L);
-

@@ -142,4 +142,4 @@ void ComponentContainer::onExit()
     }
 }
 
-}
+}  // namespace ax

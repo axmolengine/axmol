@@ -50,4 +50,4 @@ bool PULinearForceAffectorTranslator::translateChildObject(PUScriptCompiler* /*c
     return false;
 }
 
-}
+}  // namespace ax

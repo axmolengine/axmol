@@ -93,4 +93,3 @@ THE SOFTWARE.
 #        define GL_LUMINANCE_ALPHA 0x190A
 #    endif
 #endif
-

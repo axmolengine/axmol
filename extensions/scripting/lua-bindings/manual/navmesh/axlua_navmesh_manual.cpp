@@ -35,9 +35,9 @@
 
 int axlua_navmesh_NavMeshAgent_move(lua_State* tolua_S)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::NavMeshAgent* cobj = nullptr;
-    bool ok                     = true;
+    bool ok                = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;

@@ -28,21 +28,19 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "axmol/platform/Common.h"
-#include "axmol/platform/wasm/StdC-wasm.h"
-#include "axmol/base/Logging.h"
-#include <emscripten/emscripten.h>
+#    include "axmol/platform/Common.h"
+#    include "axmol/platform/wasm/StdC-wasm.h"
+#    include "axmol/base/Logging.h"
+#    include <emscripten/emscripten.h>
 
 namespace ax
 {
 
-void messageBox(const char * msg, const char * title)
+void messageBox(const char* msg, const char* title)
 {
-    EM_ASM_ARGS({
-        window.alert(UTF8ToString($0) + ": " + UTF8ToString($1));
-    }, title, msg);
+    EM_ASM_ARGS({ window.alert(UTF8ToString($0) + ": " + UTF8ToString($1)); }, title, msg);
 }
 
-}
+}  // namespace ax
 
-#endif //  AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#endif  //  AX_TARGET_PLATFORM == AX_PLATFORM_WASM

@@ -72,8 +72,7 @@ public:
     void copyAttributesTo(PUObserver* observer) override;
 
     PUOnCountObserver();
-    virtual ~PUOnCountObserver(){};
+    virtual ~PUOnCountObserver() {};
 };
 
-}
-
+}  // namespace ax

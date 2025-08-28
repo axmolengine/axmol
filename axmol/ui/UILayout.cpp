@@ -334,7 +334,7 @@ void Layout::onBeforeVisitScissor()
     if (false == _clippingOldRect.equals(clippingRect))
     {
         renderView->setScissorInPoints(clippingRect.origin.x, clippingRect.origin.y, clippingRect.size.width,
-                                   clippingRect.size.height);
+                                       clippingRect.size.height);
     }
 }
 
@@ -347,7 +347,7 @@ void Layout::onAfterVisitScissor()
         {
             auto renderView = _director->getRenderView();
             renderView->setScissorInPoints(_clippingOldRect.origin.x, _clippingOldRect.origin.y,
-                                       _clippingOldRect.size.width, _clippingOldRect.size.height);
+                                           _clippingOldRect.size.width, _clippingOldRect.size.height);
         }
     }
     else
@@ -1892,4 +1892,4 @@ ResourceData Layout::getRenderFile()
 }
 
 }  // namespace ui
-}
+}  // namespace ax

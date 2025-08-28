@@ -109,4 +109,4 @@ void PUOnPositionObserver::copyAttributesTo(PUObserver* observer)
     onPositionObserver->_positionZThresholdSet = _positionZThresholdSet;
 }
 
-}
+}  // namespace ax

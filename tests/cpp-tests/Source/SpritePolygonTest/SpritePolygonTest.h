@@ -54,7 +54,7 @@ protected:
     ax::Sprite* _polygonSprite_fix;
     ax::Sprite* _normalSprite;
     virtual bool init() override;
-    virtual void initSprites(){};
+    virtual void initSprites() {};
     void initTouches();
 };
 
@@ -82,7 +82,7 @@ protected:
     ax::Sprite* makeSprite(std::string_view filename, const ax::Vec2& pos);
     virtual bool init() override;
     void initSliders();
-    virtual void initSprites(){};
+    virtual void initSprites() {};
     void makeSprites(const std::string* list, const int count, const float y);
     void changeEpsilon(Object* pSender, ax::ui::Slider::EventType type);
     void updateLabel(const ax::Sprite* sp, const ax::PolygonInfo& pinfo);
@@ -157,7 +157,7 @@ protected:
     virtual bool init() override;
     virtual Node* makeSprite();
     void incrementStats();
-    virtual void initIncrementStats(){};
+    virtual void initIncrementStats() {};
 };
 
 class SpritePolygonPerformanceTestDynamic : public SpritePolygonPerformance
@@ -250,15 +250,15 @@ protected:
         int _cnt = 0;
         int _max = 0;
     };
-    Node* _spritesAnchor       = nullptr;
-    int _spriteIndex           = 0;
-    float _maDt                = 1.0f / 60.0f;
-    float _rmaDt               = 1.0f / 60.0f;
-    const float DEST_DT_30FPS  = 1.0f / 30.0f;
-    ax::Label* _totalSprites = nullptr;
-    Ticker _contSlow           = Ticker(20);
-    Ticker _contFast           = Ticker(2);
-    Ticker _around30fps        = Ticker(60 * 3);
+    Node* _spritesAnchor      = nullptr;
+    int _spriteIndex          = 0;
+    float _maDt               = 1.0f / 60.0f;
+    float _rmaDt              = 1.0f / 60.0f;
+    const float DEST_DT_30FPS = 1.0f / 30.0f;
+    ax::Label* _totalSprites  = nullptr;
+    Ticker _contSlow          = Ticker(20);
+    Ticker _contFast          = Ticker(2);
+    Ticker _around30fps       = Ticker(60 * 3);
 };
 
 #endif /* defined(__cocos2d_tests__SpritePolygonTest__) */

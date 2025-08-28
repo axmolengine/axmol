@@ -55,8 +55,8 @@ void AppDelegate::initGfxContextAttrs()
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
-    auto director = Director::getInstance();
-    auto renderView   = director->getRenderView();
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
     if (!renderView)
     {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
@@ -77,7 +77,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // Set the design resolution
     renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
-                                    ResolutionPolicy::SHOW_ALL);
+                                        ResolutionPolicy::SHOW_ALL);
 
     // create a scene. it's an autorelease object
     auto scene = utils::createInstance<MainScene>();

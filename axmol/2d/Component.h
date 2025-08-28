@@ -83,6 +83,6 @@ protected:
     bool _enabled;
 };
 
-}
+}  // namespace ax
 
 /// @endcond

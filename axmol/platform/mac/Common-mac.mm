@@ -47,8 +47,8 @@ void messageBox(const char* msg, const char* title)
     [alert setAlertStyle:NSAlertStyleWarning];
 
     auto renderView = Director::getInstance()->getRenderView();
-    id window   = (id)renderView->getCocoaWindow();
+    id window       = (id)renderView->getCocoaWindow();
     [alert beginSheetModalForWindow:window completionHandler:nil];
 }
 
-}
+}  // namespace ax

@@ -436,10 +436,10 @@ private:
         void update(float dt);
 
     private:
-        TestClass* _nextObj            = nullptr;
-        int _index                     = 0;
+        TestClass* _nextObj       = nullptr;
+        int _index                = 0;
         ax::Scheduler* _scheduler = nullptr;
-        bool _cleanedUp                = false;
+        bool _cleanedUp           = false;
     };
     std::vector<TestClass*> _testvector;
 };

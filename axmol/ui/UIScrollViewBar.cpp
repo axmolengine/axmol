@@ -317,4 +317,4 @@ Vec2 ScrollViewBar::calculatePosition(float innerContainerMeasure,
 }
 }  // namespace ui
 
-}
+}  // namespace ax
