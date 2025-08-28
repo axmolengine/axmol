@@ -39,9 +39,8 @@ struct emscripten_fetch_t;
 namespace ax
 {
 
-namespace network {
-
-
+namespace network
+{
 
 /** Singleton that handles asynchronous http requests.
  *
@@ -53,8 +52,8 @@ class AX_DLL HttpClient
 {
 public:
     /**
-    * The buffer size of _responseMessage
-    */
+     * The buffer size of _responseMessage
+     */
     static const int RESPONSE_BUFFER_SIZE = 256;
 
     /**
@@ -141,7 +140,7 @@ public:
      */
     int getTimeoutForRead();
 
-    HttpCookie* getCookie() const {return _cookie; }
+    HttpCookie* getCookie() const { return _cookie; }
 
     typedef std::function<bool(HttpRequest*)> ClearRequestPredicate;
     typedef std::function<bool(HttpResponse*)> ClearResponsePredicate;
@@ -156,11 +155,11 @@ public:
     void clearResponseQueue() { clearResponseAndRequestQueue(); }
 
     /**
-    * Sets a predicate function that is going to be called to determine if we proceed
-    * each of the pending requests
-    *
-    * @param predicate function that will be called
-    */
+     * Sets a predicate function that is going to be called to determine if we proceed
+     * each of the pending requests
+     *
+     * @param predicate function that will be called
+     */
     void setClearRequestPredicate(ClearRequestPredicate predicate) { _clearRequestPredicate = predicate; }
 
     /**
@@ -171,13 +170,12 @@ public:
     */
     void setClearResponsePredicate(ClearResponsePredicate predicate) { _clearResponsePredicate = predicate; }
 
-
 private:
     HttpClient();
     virtual ~HttpClient();
 
     void processResponse(HttpResponse* response, bool isAlone);
-    static void onRequestComplete(emscripten_fetch_t *fetch);
+    static void onRequestComplete(emscripten_fetch_t* fetch);
     void increaseThreadCount();
     void decreaseThreadCountAndMayDeleteThis();
 
@@ -188,7 +186,7 @@ private:
 
     int _threadCount;
 
-    Vector<HttpRequest*>  _requestQueue;
+    Vector<HttpRequest*> _requestQueue;
 
     std::string _cookieFilename;
 
@@ -200,9 +198,9 @@ private:
     ClearResponsePredicate _clearResponsePredicate;
 };
 
-} // namespace network
+}  // namespace network
 
-}
+}  // namespace ax
 
 // end group
 /// @}

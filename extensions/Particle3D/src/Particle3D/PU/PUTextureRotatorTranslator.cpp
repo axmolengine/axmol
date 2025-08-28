@@ -173,4 +173,4 @@ bool PUTextureRotatorTranslator::translateChildObject(PUScriptCompiler* compiler
     return false;
 }
 
-}
+}  // namespace ax

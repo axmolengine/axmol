@@ -244,4 +244,4 @@ int LuaBridge::retainLuaFunction(lua_State* L, int functionIndex, int* retainCou
     return functionId;
 }
 
-}
+}  // namespace ax

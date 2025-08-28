@@ -127,7 +127,7 @@ void SpriteBatchNode::setVertexLayout()
     Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(rhi::VertexLayoutKind::Sprite));
 }
 
-bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
+bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownPS /* = false*/)
 {
     AXASSERT(programState, "programState should not be nullptr");
     if (Node::setProgramState(programState, ownPS))
@@ -442,7 +442,7 @@ void SpriteBatchNode::increaseAtlasCapacity()
     ssize_t quantity = (_textureAtlas->getCapacity() + 1) * 4 / 3;
 
     AXLOGD("SpriteBatchNode: resizing TextureAtlas capacity from [{}] to [{}].",
-          static_cast<int>(_textureAtlas->getCapacity()), static_cast<int>(quantity));
+           static_cast<int>(_textureAtlas->getCapacity()), static_cast<int>(quantity));
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
@@ -774,7 +774,7 @@ SpriteBatchNode* SpriteBatchNode::addSpriteWithoutQuad(Sprite* child, int z, int
     // IMPORTANT: Call super, and not self. Avoid adding it to the texture atlas array
     Node::addChild(child, z, aTag);
 
-    //#issue 1262 don't use lazy sorting, tiles are added as quads not as sprites, so sprites need to be added in order
+    // #issue 1262 don't use lazy sorting, tiles are added as quads not as sprites, so sprites need to be added in order
     reorderBatch(false);
 
     return this;
@@ -785,4 +785,4 @@ std::string SpriteBatchNode::getDescription() const
     return fmt::format("<SpriteBatchNode | tag = {}>", _tag);
 }
 
-}
+}  // namespace ax

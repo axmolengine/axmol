@@ -65,5 +65,4 @@ protected:
     Vec3 _scaledVector;
     ForceApplication _forceApplication;
 };
-}
-
+}  // namespace ax

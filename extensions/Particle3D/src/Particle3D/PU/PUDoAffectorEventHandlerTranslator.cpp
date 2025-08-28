@@ -76,4 +76,4 @@ bool PUDoAffectorEventHandlerTranslator::translateChildObject(PUScriptCompiler* 
     return false;
 }
 
-}
+}  // namespace ax

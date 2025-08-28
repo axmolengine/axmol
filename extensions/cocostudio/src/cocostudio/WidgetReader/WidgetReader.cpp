@@ -243,7 +243,7 @@ void WidgetReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
 
 void WidgetReader::setColorPropsFromJsonDictionary(Widget* widget, const rapidjson::Value& options)
 {
-    bool op = DICTOOL->checkObjectExist_json(options, P_Opacity);
+    bool op    = DICTOOL->checkObjectExist_json(options, P_Opacity);
     bool cr    = DICTOOL->checkObjectExist_json(options, P_ColorR);
     bool cg    = DICTOOL->checkObjectExist_json(options, P_ColorG);
     bool cb    = DICTOOL->checkObjectExist_json(options, P_ColorB);
@@ -265,7 +265,7 @@ void WidgetReader::beginSetBasicProperties(ax::ui::Widget* widget)
 {
     _position = widget->getPosition();
     // set default color
-    _color = Color32::WHITE;
+    _color   = Color32::WHITE;
     _color.a = widget->getOpacity();
     widget->setColor(_color);
     _originalAnchorPoint = widget->getAnchorPoint();
@@ -589,7 +589,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "X")
@@ -610,7 +610,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "ScaleX")
@@ -631,7 +631,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "ScaleX")
@@ -652,7 +652,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "A")
@@ -681,7 +681,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "X")
@@ -702,7 +702,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "X")
@@ -723,7 +723,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "X")

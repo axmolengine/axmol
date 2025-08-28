@@ -73,7 +73,7 @@ public:
     void copyAttributesTo(PUObserver* observer) override;
 
     PUOnTimeObserver();
-    virtual ~PUOnTimeObserver(){};
+    virtual ~PUOnTimeObserver() {};
 
 protected:
     float _threshold;
@@ -81,5 +81,4 @@ protected:
     bool _sinceStartSystem;
 };
 
-}
-
+}  // namespace ax

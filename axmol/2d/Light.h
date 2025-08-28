@@ -60,7 +60,7 @@ enum class LightFlag
 };
 
 /**
-*/
+ */
 class AX_DLL BaseLight : public Node
 {
 public:
@@ -101,7 +101,7 @@ protected:
 };
 
 /**
-*/
+ */
 class AX_DLL DirectionLight : public BaseLight
 {
 public:
@@ -139,7 +139,7 @@ public:
 };
 
 /**
-*/
+ */
 class AX_DLL PointLight : public BaseLight
 {
 public:
@@ -168,7 +168,7 @@ protected:
 };
 
 /**
-*/
+ */
 class AX_DLL SpotLight : public BaseLight
 {
 public:
@@ -265,7 +265,7 @@ protected:
 };
 
 /**
-*/
+ */
 class AX_DLL AmbientLight : public BaseLight
 {
 public:
@@ -284,4 +284,4 @@ public:
     virtual ~AmbientLight();
 };
 
-}
+}  // namespace ax

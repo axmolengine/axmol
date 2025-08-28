@@ -164,6 +164,6 @@ void NavMeshObstacle::syncToObstacle()
     }
 }
 
-}
+}  // namespace ax
 
 #endif  // AX_ENABLE_NAVMESH

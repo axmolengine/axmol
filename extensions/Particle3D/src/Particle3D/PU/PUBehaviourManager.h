@@ -51,5 +51,4 @@ protected:
     PUSlaveBehaviourTranslator _slaveBehaviourTranslator;
 };
 
-}
-
+}  // namespace ax

@@ -72,8 +72,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     Configuration::getInstance()->loadConfigFile("configs/config-example.plist");
 
     // initialize director
-    auto director = Director::getInstance();
-    auto renderView   = director->getRenderView();
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
     if (!renderView)
     {
         std::string title = "Cpp Tests";
@@ -81,15 +81,15 @@ bool AppDelegate::applicationDidFinishLaunching()
         title += " *Debug*",
 #endif
 #ifdef AX_PLATFORM_PC
-        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
+            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height),
+                                                        1.0F, true);
 #else
         renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif
         director->setRenderView(renderView);
     }
 
-    const char* const autotest_capture =
-        std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
+    const char* const autotest_capture = std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
     director->setStatsDisplay(!autotest_capture || !autotest_capture[0]);
 
 #ifdef AX_PLATFORM_PC
@@ -135,16 +135,13 @@ bool AppDelegate::applicationDidFinishLaunching()
     _testController = TestController::getInstance();
 
     const char* const autotest_env = std::getenv("AXMOL_START_AUTOTEST");
-    int autotest = 0;
+    int autotest                   = 0;
     if (autotest_env)
     {
-      const std::from_chars_result r =
-          std::from_chars
-          (autotest_env, autotest_env + std::strlen(autotest_env), autotest);
-      if (r.ec != std::errc{})
-        AXLOGW("Could not parse AXMOL_START_AUTOTEST: {}.",
-               std::make_error_code(r.ec).message());
-
+        const std::from_chars_result r =
+            std::from_chars(autotest_env, autotest_env + std::strlen(autotest_env), autotest);
+        if (r.ec != std::errc{})
+            AXLOGW("Could not parse AXMOL_START_AUTOTEST: {}.", std::make_error_code(r.ec).message());
     }
 
     if (autotest != 0)

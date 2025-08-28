@@ -47,11 +47,11 @@ void CallbackCommand::init(float globalOrder, const Mat4& transform, unsigned in
 
 void CallbackCommand::reset()
 {
-    _globalOrder = 0.0f;
+    _globalOrder   = 0.0f;
     _isTransparent = true;
-    _skipBatching = false;
-    _is3D = false;
-    _depth = 0.0f;
+    _skipBatching  = false;
+    _is3D          = false;
+    _depth         = 0.0f;
 }
 
 void CallbackCommand::execute()
@@ -60,4 +60,4 @@ void CallbackCommand::execute()
         func();
 }
 
-}
+}  // namespace ax

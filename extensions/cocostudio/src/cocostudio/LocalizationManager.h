@@ -103,4 +103,3 @@ public:
     static bool isBinManager();
 };
 }  // namespace cocostudio
-

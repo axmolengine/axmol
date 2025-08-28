@@ -77,12 +77,11 @@ public:
     void copyAttributesTo(PUEventHandler* eventHandler) override;
 
     PUDoScaleEventHandler();
-    virtual ~PUDoScaleEventHandler(){};
+    virtual ~PUDoScaleEventHandler() {};
 
 protected:
     float _scaleFraction;
     ScaleType _scaleType;
 };
 
-}
-
+}  // namespace ax

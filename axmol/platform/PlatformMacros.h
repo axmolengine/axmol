@@ -432,4 +432,3 @@ public:                                                 \
 #    define AX_UNROLL   _Pragma("unroll")
 #    define AX_NOUNROLL _Pragma("nounroll")
 #endif
-

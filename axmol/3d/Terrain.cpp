@@ -683,7 +683,7 @@ void Terrain::setDetailMap(unsigned int index, DetailMap detailMap)
     delete textImage;
 
     _detailMapBindings[index].slot = BINDING_SLOT_DETAIL_BASE + index;
-    _detailMapBindings[index].tex = _detailMapTextures[index]->getRHITexture();
+    _detailMapBindings[index].tex  = _detailMapTextures[index]->getRHITexture();
 }
 
 Terrain::ChunkIndices Terrain::lookForIndicesLOD(int neighborLod[4], int selfLod, bool* result)
@@ -722,8 +722,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod,
     lodIndices._relativeLod[4]     = selfLod;
     lodIndices._chunkIndices._size = size;
 
-    auto buffer = axdrv->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX,
-                                                            rhi::BufferUsage::STATIC);
+    auto buffer = axdrv->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX, rhi::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
     AX_SAFE_RELEASE_NULL(lodIndices._chunkIndices._indexBuffer);
@@ -760,8 +759,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLODSkirt(int selfLod, uint16_t* indi
     skirtIndices._selfLod            = selfLod;
     skirtIndices._chunkIndices._size = size;
 
-    auto buffer = axdrv->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX,
-                                                            rhi::BufferUsage::STATIC);
+    auto buffer = axdrv->createBuffer(sizeof(uint16_t) * size, rhi::BufferType::INDEX, rhi::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
     AX_SAFE_RELEASE_NULL(skirtIndices._chunkIndices._indexBuffer);
@@ -826,18 +824,18 @@ bool Terrain::initTextures()
 
         TextureSliceData subDatas[] = {
             TextureSliceData{.data = image->getData(), .dataSize = static_cast<unsigned int>(image->getDataSize())}};
-        texDesc.mipLevels = 0;  // request rhi to generate mipmaps automatically
-        texDesc.width     = image->getWidth();
-        texDesc.height    = image->getHeight();
+        texDesc.mipLevels   = 0;  // request rhi to generate mipmaps automatically
+        texDesc.width       = image->getWidth();
+        texDesc.height      = image->getHeight();
         texDesc.pixelFormat = image->getPixelFormat();
-        auto texture      = new Texture2D();
+        auto texture        = new Texture2D();
 
         texture->initWithSpec(texDesc, subDatas);
         _detailMapTextures[0] = texture;
         image->release();
 
         _detailMapBindings[0].slot = BINDING_SLOT_DETAIL_BASE;
-        _detailMapBindings[0].tex = texture->getRHITexture();
+        _detailMapBindings[0].tex  = texture->getRHITexture();
     }
     else
     {
@@ -853,7 +851,7 @@ bool Terrain::initTextures()
         texDesc.samplerDesc.tAddressMode = rhi::SamplerAddressMode::REPEAT;
 
         // request rhi to generate mipmaps automatically
-        texDesc.mipLevels             = 0;
+        texDesc.mipLevels = 0;
         for (int i = 0; i < _terrainData._detailMapAmount; ++i)
         {
             image = new Image();
@@ -871,7 +869,7 @@ bool Terrain::initTextures()
             _detailMapTextures[i] = texture;
 
             _detailMapBindings[i].slot = BINDING_SLOT_DETAIL_BASE + i;
-            _detailMapBindings[i].tex = texture->getRHITexture();
+            _detailMapBindings[i].tex  = texture->getRHITexture();
 
             image->release();
         }
@@ -905,8 +903,8 @@ void Terrain::Chunk::finish()
     // frequently
 
     AX_SAFE_RELEASE_NULL(_buffer);
-    _buffer = axdrv->createBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
-                                                        rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+    _buffer = axdrv->createBuffer(sizeof(TerrainVertexData) * _originalVertices.size(), rhi::BufferType::VERTEX,
+                                  rhi::BufferUsage::DYNAMIC);
 
     _buffer->updateData(&_originalVertices[0], sizeof(TerrainVertexData) * _originalVertices.size());
 
@@ -976,7 +974,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
         // add four skirts
 
         float skirtHeight = _terrain->_skirtRatio * _terrain->_terrainData._mapScale * 8;
-        //#1
+        // #1
         _terrain->_skirtVerticesOffset[0] = (int)_originalVertices.size();
         for (int i = _size.height * m; i <= _size.height * (m + 1); ++i)
         {
@@ -985,7 +983,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
             _originalVertices.emplace_back(v);
         }
 
-        //#2
+        // #2
         _terrain->_skirtVerticesOffset[1] = (int)_originalVertices.size();
         for (int j = _size.width * n; j <= _size.width * (n + 1); j++)
         {
@@ -994,7 +992,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
             _originalVertices.emplace_back(v);
         }
 
-        //#3
+        // #3
         _terrain->_skirtVerticesOffset[2] = (int)_originalVertices.size();
         for (int i = _size.height * m; i <= _size.height * (m + 1); ++i)
         {
@@ -1003,7 +1001,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
             _originalVertices.emplace_back(v);
         }
 
-        //#4
+        // #4
         _terrain->_skirtVerticesOffset[3] = (int)_originalVertices.size();
         for (int j = _size.width * n; j <= _size.width * (n + 1); j++)
         {
@@ -1316,7 +1314,7 @@ void Terrain::Chunk::updateIndicesLOD()
 void Terrain::Chunk::calculateAABB()
 {
     auto pos = axstd::pod_vector_from<Vec3>(_originalVertices.begin(), _originalVertices.end(),
-                   [](const auto& it) { return it._position; });
+                                            [](const auto& it) { return it._position; });
     _aabb.updateMinMax(&pos[0], pos.size());
 }
 
@@ -1439,7 +1437,7 @@ void Terrain::Chunk::updateIndicesLODSkirt()
         }
     }
     // add skirt
-    //#1
+    // #1
     for (int i = 0; i < gridY; i += step)
     {
         int nLocIndex = i * (gridX + 1) + gridX;
@@ -1452,7 +1450,7 @@ void Terrain::Chunk::updateIndicesLODSkirt()
         _lod[_currentLod]._indices.emplace_back((gridY + 1) * (gridX + 1) + i + step);
     }
 
-    //#2
+    // #2
     for (int j = 0; j < gridX; j += step)
     {
         int nLocIndex = (gridY) * (gridX + 1) + j;
@@ -1465,7 +1463,7 @@ void Terrain::Chunk::updateIndicesLODSkirt()
         _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[1] + j + step);
     }
 
-    //#3
+    // #3
     for (int i = 0; i < gridY; i += step)
     {
         int nLocIndex = i * (gridX + 1);
@@ -1478,7 +1476,7 @@ void Terrain::Chunk::updateIndicesLODSkirt()
         _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[2] + i + step);
     }
 
-    //#4
+    // #4
     for (int j = 0; j < gridX; j += step)
     {
         int nLocIndex = j;
@@ -1811,4 +1809,4 @@ void Terrain::StateBlock::apply()
     renderer->setWinding(winding);
 }
 
-}
+}  // namespace ax

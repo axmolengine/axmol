@@ -37,11 +37,10 @@ class PUDoStopSystemEventHandlerTranslator : public PUScriptTranslator
 {
 public:
     PUDoStopSystemEventHandlerTranslator();
-    virtual ~PUDoStopSystemEventHandlerTranslator(){};
+    virtual ~PUDoStopSystemEventHandlerTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

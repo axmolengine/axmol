@@ -29,24 +29,24 @@
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0
 #    define CHECK_GL_ERROR_DEBUG()
 #else
-#    define CHECK_GL_ERROR_DEBUG()                                                                            \
-        do                                                                                                    \
-        {                                                                                                     \
-            GLenum __error = glGetError();                                                                    \
-            if (__error)                                                                                      \
-            {                                                                                                 \
+#    define CHECK_GL_ERROR_DEBUG()                                                                        \
+        do                                                                                                \
+        {                                                                                                 \
+            GLenum __error = glGetError();                                                                \
+            if (__error)                                                                                  \
+            {                                                                                             \
                 AXLOGE("OpenGL error 0x{:04X} in {} {} {}\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-            }                                                                                                 \
+            }                                                                                             \
         } while (false)
-#    define CHECK_GL_ERROR_ABORT()                                                                            \
-        do                                                                                                    \
-        {                                                                                                     \
-            GLenum __error = glGetError();                                                                    \
-            if (__error)                                                                                      \
-            {                                                                                                 \
+#    define CHECK_GL_ERROR_ABORT()                                                                        \
+        do                                                                                                \
+        {                                                                                                 \
+            GLenum __error = glGetError();                                                                \
+            if (__error)                                                                                  \
+            {                                                                                             \
                 AXLOGE("OpenGL error 0x{:04X} in {} {} {}\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-                assert(false);                                                                                \
-            }                                                                                                 \
+                assert(false);                                                                            \
+            }                                                                                             \
         } while (false)
 #endif
 
@@ -61,10 +61,10 @@
 #if defined(NDEBUG) || (defined(__APPLE__) && !defined(DEBUG))
 #    define AX_GL_ASSERT(gl_code) gl_code
 #else
-#    define AX_GL_ASSERT(gl_code)                               \
-        do                                                      \
-        {                                                       \
-            gl_code;                                            \
+#    define AX_GL_ASSERT(gl_code)                                  \
+        do                                                         \
+        {                                                          \
+            gl_code;                                               \
             __state_error_code = glGetError();                     \
             AX_ASSERT(__state_error_code == GL_NO_ERROR, "Error"); \
         } while (0)

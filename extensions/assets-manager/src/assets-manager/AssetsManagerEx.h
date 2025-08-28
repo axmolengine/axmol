@@ -41,7 +41,6 @@
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/document.h"
 
-
 struct zlib_filefunc_def_s;
 
 NS_AX_EXT_BEGIN
@@ -335,4 +334,3 @@ private:
 };
 
 NS_AX_EXT_END
-

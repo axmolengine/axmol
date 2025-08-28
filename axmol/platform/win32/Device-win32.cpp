@@ -511,4 +511,4 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-}
+}  // namespace ax

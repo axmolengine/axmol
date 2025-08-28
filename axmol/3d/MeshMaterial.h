@@ -77,7 +77,7 @@ public:
      */
     enum class InstanceMaterialType
     {
-        NO_INSTANCING,  // disabled instancing
+        NO_INSTANCING,   // disabled instancing
         UNLIT_INSTANCE,  // unlit instance material
 
         // Custom material
@@ -195,11 +195,11 @@ public:
     ~MeshMaterialCache();
 
 protected:
-    static MeshMaterialCache* _cacheInstance;  // cache instance
-    hlookup::string_map<Texture2D*> _materials;    // cached materials
+    static MeshMaterialCache* _cacheInstance;    // cache instance
+    hlookup::string_map<Texture2D*> _materials;  // cached materials
 };
 
 // end of 3d group
 /// @}
 
-}
+}  // namespace ax

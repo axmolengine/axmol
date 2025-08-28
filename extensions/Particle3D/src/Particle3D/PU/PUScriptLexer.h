@@ -79,5 +79,4 @@ private:  // Private utility operations
     bool isNewline(char c) const;
 };
 
-}
-
+}  // namespace ax

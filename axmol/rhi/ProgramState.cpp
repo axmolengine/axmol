@@ -32,7 +32,8 @@
 #include <algorithm>
 #include "xxhash/xxhash.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 // static field
 std::vector<ProgramState::AutoBindingResolver*> ProgramState::_customAutoBindingResolvers;
@@ -91,7 +92,8 @@ void TextureBindingSet::swap(TextureBindingSet& other)
 
 void TextureBindingSet::setTexture(int location, int slot, rhi::Texture* tex)
 {
-    if(tex && slot >= 0) {
+    if (tex && slot >= 0)
+    {
         tex->retain();
         releaseTextures();
         this->slots.push_back(slot);
@@ -101,17 +103,19 @@ void TextureBindingSet::setTexture(int location, int slot, rhi::Texture* tex)
 
 void TextureBindingSet::setTextureArray(int location, std::span<const TextureBinding> units)
 {
-    for(auto& unit : units)
+    for (auto& unit : units)
         AX_SAFE_RETAIN(unit.tex);
 
     releaseTextures();
 
-    if(!units.empty()) {
+    if (!units.empty())
+    {
         const auto count = units.size();
         this->texs.resize(count);
         this->slots.resize(count);
-        for (int i = 0; i < count; ++i) {
-            this->texs[i] = units[i].tex;
+        for (int i = 0; i < count; ++i)
+        {
+            this->texs[i]  = units[i].tex;
             this->slots[i] = units[i].slot;
         }
     }
@@ -125,17 +129,19 @@ void TextureBindingSet::setTextureArray(int location, std::span<const int> slots
 {
     bool retain = !slots.empty() && (slots.size() == texs.size());
 
-    if (retain) {
-        for(auto tex : texs)
+    if (retain)
+    {
+        for (auto tex : texs)
             AX_SAFE_RETAIN(tex);
     }
 
     releaseTextures();
 
-    if(retain) {
+    if (retain)
+    {
         this->slots.resize(slots.size());
         this->texs.resize(slots.size());
-        
+
         memcpy(this->slots.data(), slots.data(), slots.size_bytes());
         memcpy(this->texs.data(), texs.data(), texs.size_bytes());
     }
@@ -147,12 +153,11 @@ void TextureBindingSet::setTextureArray(int location, std::span<const int> slots
 
 void TextureBindingSet::releaseTextures()
 {
-    for(auto& tex: this->texs)
+    for (auto& tex : this->texs)
         AX_SAFE_RELEASE(tex);
     this->texs.clear();
     this->slots.clear();
 }
-
 
 /* CLASS ProgramState */
 ProgramState::ProgramState(Program* program)
@@ -170,7 +175,7 @@ bool ProgramState::init(Program* program)
     _uniformBuffer.resize((std::max)(uboSize, (size_t)1), 0);
 #else
     auto fragUboSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
-    auto vertUboSize  = _program->getUniformBufferSize(ShaderStage::VERTEX);
+    auto vertUboSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
 
     _uniformBuffer.resize((std::max)(vertUboSize + fragUboSize, (size_t)1), 0);
     _vertexUniformBufferStart = fragUboSize;
@@ -185,7 +190,7 @@ bool ProgramState::init(Program* program)
     const auto programId = program->getProgramId();
     if (programId < ProgramType::BUILTIN_COUNT)
     {
-        this->_batchId = programId;
+        this->_batchId     = programId;
         this->_isBatchable = true;
     }
 
@@ -194,7 +199,7 @@ bool ProgramState::init(Program* program)
 
 void ProgramState::updateBatchId()
 {
-    _batchId = XXH64(_uniformBuffer.data(), _uniformBuffer.size(), _program->getProgramId());
+    _batchId     = XXH64(_uniformBuffer.data(), _uniformBuffer.size(), _program->getProgramId());
     _isBatchable = true;
 }
 
@@ -229,15 +234,15 @@ ProgramState::~ProgramState()
 
 ProgramState* ProgramState::clone() const
 {
-    ProgramState* cp          = new ProgramState(_program);
-    cp->_textureBindingSets   = _textureBindingSets;
+    ProgramState* cp        = new ProgramState(_program);
+    cp->_textureBindingSets = _textureBindingSets;
 
     cp->_uniformBuffer = _uniformBuffer;
 #if AX_RENDER_API != AX_RENDER_API_GL
     cp->_vertexUniformBufferStart = _vertexUniformBufferStart;
 #endif
 
-    cp->_batchId = this->_batchId;
+    cp->_batchId     = this->_batchId;
     cp->_isBatchable = this->_isBatchable;
     return cp;
 }
@@ -301,7 +306,9 @@ void ProgramState::setTextureArray(const rhi::UniformLocation& uniformLocation, 
     }
 }
 
-void ProgramState::setTextureArray(const rhi::UniformLocation& uniformLocation, std::span<int> slots, std::span<rhi::Texture*> textures)
+void ProgramState::setTextureArray(const rhi::UniformLocation& uniformLocation,
+                                   std::span<int> slots,
+                                   std::span<rhi::Texture*> textures)
 {
     auto location = uniformLocation.stages[0].location;
     if (location >= 0)
@@ -337,4 +344,4 @@ ProgramState::AutoBindingResolver::~AutoBindingResolver()
     list.erase(std::remove(list.begin(), list.end(), this), list.end());
 }
 
-}
+}  // namespace ax::rhi

@@ -63,7 +63,7 @@ public:
      */
     ~AnimationCache();
     /** Returns the shared instance of the Animation cache
-        */
+     */
     static AnimationCache* getInstance();
 
     /** Purges the cache. It releases all the Animation objects and the shared instance.
@@ -121,5 +121,4 @@ private:
 // end of sprite_nodes group
 /// @}
 
-}
-
+}  // namespace ax

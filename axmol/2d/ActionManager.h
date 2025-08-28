@@ -213,4 +213,4 @@ protected:
 // end of actions group
 /// @}
 
-}
+}  // namespace ax

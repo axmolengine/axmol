@@ -29,26 +29,27 @@
 
 using namespace ax;
 
-
-TEST_SUITE("platform/FileUtils") {
+TEST_SUITE("platform/FileUtils")
+{
     // !!!Don't invoke FileUtils::getInstacne at here, it's dangerous due to
     // The test suite function will invoke before entrypoint `main`, it will cause
     // crash on Linux(maybe others), crt not initalized properly yet.
 #define fu FileUtils::getInstance()
 
-    TEST_CASE("getWritablePath") {
+    TEST_CASE("getWritablePath")
+    {
         REQUIRE(not fu->getWritablePath().empty());
         REQUIRE(fu->getWritablePath().back() == '/');
     }
 
-
-    TEST_CASE("getDefaultResourceRootPath") {
+    TEST_CASE("getDefaultResourceRootPath")
+    {
         REQUIRE(not fu->getDefaultResourceRootPath().empty());
         REQUIRE(fu->getDefaultResourceRootPath().back() == '/');
     }
 
-
-    TEST_CASE("fullPathForDirectory") {
+    TEST_CASE("fullPathForDirectory")
+    {
         CHECK(fu->fullPathForDirectory("") == "");
 
         CHECK(fu->fullPathForDirectory("doesnt_exist") == "");
@@ -72,10 +73,12 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(FileUtils::getPathBaseNameNoExtension("a/b/c.txt.bytes") == "c.txt");
     }
 
-    TEST_CASE("search_paths") {
+    TEST_CASE("search_paths")
+    {
         fu->purgeCachedEntries();
 
-        SUBCASE("addSearchPath") {
+        SUBCASE("addSearchPath")
+        {
             auto originalSearchPaths = fu->getOriginalSearchPaths();
 
             CHECK(fu->fullPathForFilename("123.txt") == "");
@@ -90,8 +93,8 @@ TEST_SUITE("platform/FileUtils") {
             CHECK(fu->fullPathForFilename("123.txt") == "");
         }
 
-
-        SUBCASE("setDefaultResourceRootPath") {
+        SUBCASE("setDefaultResourceRootPath")
+        {
             auto originalDefaultResourceRootPath = fu->getDefaultResourceRootPath();
 
             REQUIRE(not originalDefaultResourceRootPath.empty());
@@ -106,8 +109,8 @@ TEST_SUITE("platform/FileUtils") {
         }
     }
 
-
-    TEST_CASE("isFileExist" * doctest::timeout(10)) {
+    TEST_CASE("isFileExist" * doctest::timeout(10))
+    {
         CHECK(fu->isFileExist("text/123.txt"));
         CHECK(fu->isFileExist(fu->fullPathForFilename("text/123.txt")));
         CHECK(not fu->isFileExist("text/doesnt_exist.txt"));
@@ -116,8 +119,8 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(not fu->isFileExist(fu->fullPathForDirectory("text")));
     }
 
-
-    TEST_CASE("isDirectoryExist") {
+    TEST_CASE("isDirectoryExist")
+    {
         CHECK(fu->isDirectoryExist("text"));
         CHECK(fu->isDirectoryExist(fu->fullPathForDirectory("text")));
         CHECK(not fu->isDirectoryExist("doesnt_exist"));
@@ -126,15 +129,15 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(not fu->isDirectoryExist(fu->fullPathForFilename("text/123.txt")));
     }
 
-
-    TEST_CASE("getFileSize") {
+    TEST_CASE("getFileSize")
+    {
         CHECK(fu->getFileSize(fu->fullPathForFilename("text/123.txt")) == 3);
         CHECK(fu->getFileSize(fu->fullPathForFilename("text/hello.txt")) == 12);
         CHECK(fu->getFileSize("text/doesnt_exist.txt") == -1);
     }
 
-
-    TEST_CASE("renameFile") {
+    TEST_CASE("renameFile")
+    {
         auto file1 = fu->getWritablePath() + "__test1.txt";
         auto file2 = fu->getWritablePath() + "__test2.txt";
 
@@ -151,8 +154,8 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(fu->isFileExist(file2));
     }
 
-
-    TEST_CASE("removeFile") {
+    TEST_CASE("removeFile")
+    {
         auto file = fu->getWritablePath() + "__test.txt";
 
         if (fu->isFileExist(file))
@@ -162,15 +165,16 @@ TEST_SUITE("platform/FileUtils") {
         REQUIRE(fu->writeStringToFile("Hello!", file));
         REQUIRE(fu->isFileExist(file));
 
-        SUBCASE("normal") {
+        SUBCASE("normal")
+        {
             CHECK(fu->removeFile(file));
             CHECK(not fu->isFileExist(file));
             CHECK(not fu->removeFile(file));
         }
     }
 
-
-    TEST_CASE("file_ops") {
+    TEST_CASE("file_ops")
+    {
         auto file1 = fu->getWritablePath() + "__test1.txt";
         auto file2 = fu->getWritablePath() + "__test2.txt";
 
@@ -182,7 +186,8 @@ TEST_SUITE("platform/FileUtils") {
         REQUIRE(not fu->isFileExist(file1));
         REQUIRE(not fu->isFileExist(file2));
 
-        SUBCASE("writeStringToFile,getStringFromFile") {
+        SUBCASE("writeStringToFile,getStringFromFile")
+        {
             REQUIRE(fu->writeStringToFile("Hello!", file1));
             CHECK(fu->getStringFromFile(file1) == "Hello!");
             REQUIRE(fu->removeFile(file1));
@@ -191,15 +196,16 @@ TEST_SUITE("platform/FileUtils") {
         }
     }
 
-
-    TEST_CASE("dir_ops") {
-        auto dir = fu->getWritablePath() + "__test_dir/";
+    TEST_CASE("dir_ops")
+    {
+        auto dir     = fu->getWritablePath() + "__test_dir/";
         auto subdirs = dir + "dir1/dir2/";
 
         if (fu->isDirectoryExist(dir))
             REQUIRE(fu->removeDirectory(dir));
 
-        SUBCASE("createDirectory,removeDirectory,isDirectoryExist") {
+        SUBCASE("createDirectory,removeDirectory,isDirectoryExist")
+        {
             REQUIRE(not fu->isDirectoryExist(dir));
             REQUIRE(fu->createDirectories(subdirs));
             REQUIRE(fu->isDirectoryExist(dir));
@@ -209,8 +215,8 @@ TEST_SUITE("platform/FileUtils") {
         }
     }
 
-
-    TEST_CASE("ResizableBufferAdapter") {
+    TEST_CASE("ResizableBufferAdapter")
+    {
         yasio::byte_buffer buffer;
 
         fu->getContents("text/123.txt", &buffer);
@@ -218,7 +224,7 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(buffer[0] == '1');
         CHECK(buffer[1] == '2');
         CHECK(buffer[2] == '3');
-        
+
         fu->getContents("text/hello.txt", &buffer);
         REQUIRE(buffer.size() == 12);
         auto expected = std::string_view("Hello world!");
@@ -226,44 +232,46 @@ TEST_SUITE("platform/FileUtils") {
             CHECK(buffer[i] == expected[i]);
     }
 
+    TEST_CASE("getContents")
+    {
+        static const std::string FileErrors[] = {
+            "OK", "NotExists", "OpenFailed", "ReadFailed", "NotInitialized", "TooLarge", "ObtainSizeFailed",
+        };
 
-    TEST_CASE("getContents") {
-        static const std::string FileErrors[] = { "OK", "NotExists", "OpenFailed", "ReadFailed", "NotInitialized", "TooLarge", "ObtainSizeFailed", };
-
-        auto file = "text/binary.bin";
+        auto file                = "text/binary.bin";
         std::vector<char> binary = {'\r', '\n', '\r', '\n', '\0', '\0', '\r', '\n'};
         std::string text(binary.begin(), binary.end());
 
-
-        SUBCASE("requirements") {
+        SUBCASE("requirements")
+        {
             REQUIRE(fu->isFileExist(file));
         }
 
-
-        SUBCASE("string") {
+        SUBCASE("string")
+        {
             std::string bs;
             REQUIRE(fu->getContents(file, &bs) == FileUtils::Status::OK);
             CHECK(bs.size() == binary.size());
             CHECK(bs == text);
         }
 
-
-        SUBCASE("getStringFromFile") {
+        SUBCASE("getStringFromFile")
+        {
             std::string ts = fu->getStringFromFile(file);
             CHECK(ts.size() == binary.size());
             CHECK(ts == text);
         }
 
-
-        SUBCASE("vector") {
+        SUBCASE("vector")
+        {
             std::vector<int> vbuf;
             REQUIRE(fu->getContents(file, &vbuf) == FileUtils::Status::OK);
             CHECK(vbuf.size() == binary.size() / sizeof(int));
             CHECK(memcmp(vbuf.data(), binary.data(), binary.size()) == 0);
         }
 
-
-        SUBCASE("Data") {
+        SUBCASE("Data")
+        {
             Data dbuf;
             REQUIRE(fu->getContents(file, &dbuf) == FileUtils::Status::OK);
             CHECK(dbuf.getSize() == binary.size());
@@ -271,15 +279,15 @@ TEST_SUITE("platform/FileUtils") {
         }
     }
 
-
-    TEST_CASE("write_data") {
+    TEST_CASE("write_data")
+    {
         auto file = fu->getWritablePath() + "__test.txt";
 
         if (fu->isFileExist(file))
             REQUIRE(fu->removeFile(file));
 
-
-        SUBCASE("writeDataToFile") {
+        SUBCASE("writeDataToFile")
+        {
             std::string writeDataStr = "Hello World!";
             Data writeData;
             writeData.copy((unsigned char*)writeDataStr.c_str(), writeDataStr.size());
@@ -290,8 +298,8 @@ TEST_SUITE("platform/FileUtils") {
             fu->removeFile(file);
         }
 
-
-        SUBCASE("getDataFromFile") {
+        SUBCASE("getDataFromFile")
+        {
             Data readData = FileUtils::getInstance()->getDataFromFile("text/hello.txt");
             REQUIRE(not readData.isNull());
             CHECK(readData.getSize() == 12);
@@ -299,8 +307,8 @@ TEST_SUITE("platform/FileUtils") {
         }
     }
 
-
-    TEST_CASE("ValueMap") {
+    TEST_CASE("ValueMap")
+    {
         auto file = fu->getWritablePath() + "__test.txt";
 
         if (fu->isFileExist(file))
@@ -371,8 +379,8 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(fu->removeFile(file));
     }
 
-
-    TEST_CASE("ValueVector") {
+    TEST_CASE("ValueVector")
+    {
         auto file = fu->getWritablePath() + "__test.txt";
 
         if (fu->isFileExist(file))
@@ -441,9 +449,9 @@ TEST_SUITE("platform/FileUtils") {
         REQUIRE(fu->removeFile(file));
     }
 
-
-    TEST_CASE("unicode") {
-        auto dir = fu->getWritablePath() + "中文路径/";
+    TEST_CASE("unicode")
+    {
+        auto dir      = fu->getWritablePath() + "中文路径/";
         auto filename = dir + "测试文件.test";
 
         if (fu->isDirectoryExist(dir))
@@ -469,8 +477,8 @@ TEST_SUITE("platform/FileUtils") {
         CHECK(not fu->isDirectoryExist(dir));
     }
 
-
-    TEST_CASE("listFiles") {
+    TEST_CASE("listFiles")
+    {
         auto list = fu->listFiles("text");
         std::sort(list.begin(), list.end());
         auto path = fu->fullPathForDirectory("text");

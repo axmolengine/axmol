@@ -49,4 +49,4 @@ struct PipelineDesc
 
 // end of renderer group
 /// @}
-}
+}  // namespace ax

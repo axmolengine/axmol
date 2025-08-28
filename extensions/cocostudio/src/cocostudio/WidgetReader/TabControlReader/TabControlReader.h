@@ -102,4 +102,3 @@ public:
 private:
     static TabItemReader* _tabItemReaderInstance;
 };
-

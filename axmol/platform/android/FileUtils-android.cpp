@@ -36,17 +36,17 @@ THE SOFTWARE.
 
 #include "yasio/string_view.hpp"
 
-#define LOG_TAG "FileUtils-android.cpp"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOG_TAG                   "FileUtils-android.cpp"
+#define LOGD(...)                 __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
-#define ASSETS_FOLDER_NAME "assets/"
+#define ASSETS_FOLDER_NAME        "assets/"
 #define ASSETS_FOLDER_NAME_LENGTH 7
 
 // #define AX_USE_ANDROID_EXTERNAL_FILES_DIR 1
 
 namespace ax
 {
-static jobject s_assetmanager_hold = nullptr;
+static jobject s_assetmanager_hold            = nullptr;
 AAssetManager* FileUtilsAndroid::assetmanager = nullptr;
 ZipFile* FileUtilsAndroid::obbfile            = nullptr;
 
@@ -56,7 +56,7 @@ void FileUtilsAndroid::setAssetManagerFromJava(jobject a)
     if (!s_assetmanager_hold)
         s_assetmanager_hold = env->NewGlobalRef(a);
     /*
-    Note: that the caller is responsible for obtaining and holding a VM reference to the jobject to 
+    Note: that the caller is responsible for obtaining and holding a VM reference to the jobject to
         prevent its being garbage collected while the native object is in use.
     refer: https://developer.android.com/ndk/reference/group/asset#aassetmanager_fromjava
     */
@@ -274,7 +274,8 @@ std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) c
         return obbfile->listFiles(relativePath);
     }
 
-    std::string fullPath = std::string(dirPath); // don't call fullPathForDirectory(dirPath), since empty folders will not return a valid result
+    std::string fullPath = std::string(
+        dirPath);  // don't call fullPathForDirectory(dirPath), since empty folders will not return a valid result
     size_t position = fullPath.find(apkprefix);
     if (0 == position)
     {
@@ -322,7 +323,7 @@ std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
     return path;
 }
 
-}
+}  // namespace ax
 
 #undef ASSETS_FOLDER_NAME_LENGTH
 #undef ASSETS_FOLDER_NAME

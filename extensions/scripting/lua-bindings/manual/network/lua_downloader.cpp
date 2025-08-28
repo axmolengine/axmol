@@ -175,8 +175,8 @@ static int lua_downloader_createDownloadDataTask(lua_State* L)
 
 static int lua_downloader_createDownloadFileTask(lua_State* L)
 {
-    int argc                = lua_gettop(L) - 1;
-    Downloader* d           = checkDownloader(L);
+    int argc                     = lua_gettop(L) - 1;
+    Downloader* d                = checkDownloader(L);
     std::string_view url         = ""sv;
     std::string_view storagePath = ""sv;
     std::string_view identifier  = ""sv;
@@ -194,7 +194,7 @@ static int lua_downloader_createDownloadFileTask(lua_State* L)
 
     std::string_view md5checksum = ""sv;
     std::string_view cacertPath  = ""sv;
-    bool background = false;
+    bool background              = false;
 
     if (argc > 3)
         md5checksum = axlua_tosv(L, 5);

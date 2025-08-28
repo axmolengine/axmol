@@ -282,4 +282,4 @@ private:
     static void sendHelp(socket_native_type fd, const hlookup::string_map<Command*>& commands, const char* msg);
 };
 
-}
+}  // namespace ax

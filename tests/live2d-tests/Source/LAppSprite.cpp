@@ -16,18 +16,17 @@ LAppSprite::LAppSprite(rhi::Program* program)
     std::fill_n(_spriteColor, 4, 1);
 }
 
-LAppSprite::~LAppSprite()
-{
-}
+LAppSprite::~LAppSprite() {}
 
 void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer,
                                  rhi::Texture* texture,
                                  float uvVertex[8]) const
 {
-    Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer* drawCommandBuffer = CSM_NEW Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer();
+    Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer* drawCommandBuffer =
+        CSM_NEW Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer();
     PipelineDesc* pipelineDescriptor = drawCommandBuffer->GetCommandDraw()->GetPipelineDescriptor();
-    rhi::BlendDesc* blendDescriptor = drawCommandBuffer->GetCommandDraw()->GetBlendDescriptor();
-    rhi::ProgramState* programState = pipelineDescriptor->programState;
+    rhi::BlendDesc* blendDescriptor  = drawCommandBuffer->GetCommandDraw()->GetBlendDescriptor();
+    rhi::ProgramState* programState  = pipelineDescriptor->programState;
 
     drawCommandBuffer->GetCommandDraw()->GetCommand()->setDrawType(ax::CustomCommand::DrawType::ELEMENT);
     drawCommandBuffer->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::rhi::PrimitiveType::TRIANGLE);
@@ -36,22 +35,16 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     // 画面サイズを取得する
     ax::Size visibleSize = ax::Director::getInstance()->getVisibleSize();
-    ax::Size winSize = ax::Director::getInstance()->getWinSize();
+    ax::Size winSize     = ax::Director::getInstance()->getWinSize();
 
     // 頂点データ
-    float positionVertex[] =
-    {
-        visibleSize.width / winSize.width, visibleSize.height / winSize.height,
-       -visibleSize.width / winSize.width, visibleSize.height / winSize.height,
-       -visibleSize.width / winSize.width,-visibleSize.height / winSize.height,
-        visibleSize.width / winSize.width,-visibleSize.height / winSize.height,
+    float positionVertex[] = {
+        visibleSize.width / winSize.width,   visibleSize.height / winSize.height,  -visibleSize.width / winSize.width,
+        visibleSize.height / winSize.height, -visibleSize.width / winSize.width,   -visibleSize.height / winSize.height,
+        visibleSize.width / winSize.width,   -visibleSize.height / winSize.height,
     };
 
-    short positionIndex[] =
-    {
-        0,1,2,
-        0,2,3
-    };
+    short positionIndex[] = {0, 1, 2, 0, 2, 3};
 
     drawCommandBuffer->UpdateVertexBuffer(positionVertex, uvVertex, 4);
     drawCommandBuffer->UpdateIndexBuffer(positionIndex, 6);
@@ -66,7 +59,7 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
     // attribute属性を登録
     layout->setAttrib("a_position", _program->getVertexInputDesc("a_position"), rhi::VertexFormat::FLOAT2, 0, false);
     layout->setAttrib("a_texCoord", _program->getVertexInputDesc("a_texCoord"), rhi::VertexFormat::FLOAT2,
-                            sizeof(float) * 2, false);
+                      sizeof(float) * 2, false);
 
     // uniform属性の登録
     programState->setTexture(_program->getUniformLocation("u_tex0"), 0, texture);
@@ -75,17 +68,16 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     layout->setStride(sizeof(float) * 4);
 
-    blendDescriptor->sourceRGBBlendFactor = ax::rhi::BlendFactor::ONE;
-    blendDescriptor->destinationRGBBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
-    blendDescriptor->sourceAlphaBlendFactor = ax::rhi::BlendFactor::ONE;
+    blendDescriptor->sourceRGBBlendFactor        = ax::rhi::BlendFactor::ONE;
+    blendDescriptor->destinationRGBBlendFactor   = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
+    blendDescriptor->sourceAlphaBlendFactor      = ax::rhi::BlendFactor::ONE;
     blendDescriptor->destinationAlphaBlendFactor = ax::rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
-    blendDescriptor->blendEnabled = true;
+    blendDescriptor->blendEnabled                = true;
 
     pipelineDescriptor->programState = programState;
 
     // モデルの描画
     commandBuffer->AddDrawCommand(drawCommandBuffer->GetCommandDraw());
-
 }
 
 void LAppSprite::SetColor(float r, float g, float b, float a)

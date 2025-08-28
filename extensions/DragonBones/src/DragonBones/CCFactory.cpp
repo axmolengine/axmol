@@ -30,8 +30,7 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
             auto texture            = textureCache->getTextureForKey(textureAtlasData->imagePath);
             if (texture == nullptr)
             {
-                ax::rhi::PixelFormat pixelFormat =
-                    ax::rhi::PixelFormat::NONE;
+                ax::rhi::PixelFormat pixelFormat = ax::rhi::PixelFormat::NONE;
                 switch (textureAtlasData->format)
                 {
                 case TextureFormat::RGBA8888:

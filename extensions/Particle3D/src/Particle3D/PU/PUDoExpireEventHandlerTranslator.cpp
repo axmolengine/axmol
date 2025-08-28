@@ -45,4 +45,4 @@ bool PUDoExpireEventHandlerTranslator::translateChildObject(PUScriptCompiler* /*
     return false;
 }
 
-}
+}  // namespace ax

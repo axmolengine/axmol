@@ -134,4 +134,4 @@ void PUVortexAffector::copyAttributesTo(PUAffector* affector)
     vortexAffector->setRotationSpeed(getRotationSpeed()->clone());
 }
 
-}
+}  // namespace ax

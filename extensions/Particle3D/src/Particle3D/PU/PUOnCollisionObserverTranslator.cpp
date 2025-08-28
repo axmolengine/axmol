@@ -45,4 +45,4 @@ bool PUOnCollisionObserverTranslator::translateChildObject(PUScriptCompiler* /*c
     return false;
 }
 
-}
+}  // namespace ax

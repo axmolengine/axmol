@@ -155,7 +155,6 @@ protected:
     IMEDelegate();
 };
 
-}
+}  // namespace ax
 // end of base group
 /// @}
-

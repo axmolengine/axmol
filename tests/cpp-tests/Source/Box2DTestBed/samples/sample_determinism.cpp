@@ -24,47 +24,39 @@
 class FallingHinges : public Sample
 {
 public:
+    explicit FallingHinges(Settings& settings) : Sample(settings)
+    {
+        if (settings.restart == false)
+        {
+            g_camera.m_center = {0.0f, 7.5f};
+            g_camera.m_zoom   = 10.0f;
+        }
 
-	explicit FallingHinges( Settings& settings )
-		: Sample( settings )
-	{
-		if ( settings.restart == false )
-		{
-			g_camera.m_center = { 0.0f, 7.5f };
-			g_camera.m_zoom = 10.0f;
-		}
+        m_data = CreateFallingHinges(m_worldId);
+        m_done = false;
+    }
 
-		m_data = CreateFallingHinges( m_worldId );
-		m_done = false;
-	}
+    ~FallingHinges() override { DestroyFallingHinges(&m_data); }
 
-	~FallingHinges() override
-	{
-		DestroyFallingHinges( &m_data );
-	}
+    void Step(Settings& settings) override
+    {
+        Sample::Step(settings);
 
-	void Step( Settings& settings ) override
-	{
-		Sample::Step( settings );
+        if (m_done == false)
+        {
+            m_done = UpdateFallingHinges(m_worldId, &m_data);
+        }
+        else
+        {
+            g_draw.DrawString(5, m_textLine, "sleep step = %d, hash = 0x%08x", m_data.sleepStep, m_data.hash);
+            m_textLine += m_textIncrement;
+        }
+    }
 
-		if (m_done == false)
-		{
-			m_done = UpdateFallingHinges( m_worldId, &m_data );
-		}
-		else
-		{
-			g_draw.DrawString( 5, m_textLine, "sleep step = %d, hash = 0x%08x", m_data.sleepStep, m_data.hash );
-			m_textLine += m_textIncrement;
-		}
-	}
+    static Sample* Create(Settings& settings) { return new FallingHinges(settings); }
 
-	static Sample* Create( Settings& settings )
-	{
-		return new FallingHinges( settings );
-	}
-
-	FallingHingeData m_data;
-	bool m_done;
+    FallingHingeData m_data;
+    bool m_done;
 };
 
-static int sampleFallingHinges = RegisterSample( "Determinism", "Falling Hinges", FallingHinges::Create );
+static int sampleFallingHinges = RegisterSample("Determinism", "Falling Hinges", FallingHinges::Create);

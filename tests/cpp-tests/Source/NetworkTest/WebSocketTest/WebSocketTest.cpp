@@ -37,7 +37,7 @@
    - wss://socketsbay.com/wss/v2/1/demo/
    - https://blog.postman.com/introducing-postman-websocket-echo-service/
 */
-#define ECHO_SERVER_URL "wss://echo.websocket.events/.ws" //"wss://ws.postman-echo.com/raw"
+#define ECHO_SERVER_URL  "wss://echo.websocket.events/.ws"  //"wss://ws.postman-echo.com/raw"
 #define SOCKETIO_SERVICE "wss://ws.postman-echo.com/socketio"
 
 using namespace ax;
@@ -429,7 +429,7 @@ WebSocketDelayTest::WebSocketDelayTest()
 
     // Send Text
     char buf[60];
-    auto cmdLabel = fmt::format_to_z(buf, "Send {} Text", SEND_TEXT_TIMES);
+    auto cmdLabel      = fmt::format_to_z(buf, "Send {} Text", SEND_TEXT_TIMES);
     auto labelSendText = Label::createWithTTF(cmdLabel, "fonts/arial.ttf", 20);
     auto itemSendText =
         MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketDelayTest::onMenuSendTextClicked, this));
@@ -533,7 +533,7 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
     {
         _receiveTextTimes++;
         char buf[100];
-        auto infoStr = fmt::format_to_z(buf, "{}", _receiveTextTimes);
+        auto infoStr        = fmt::format_to_z(buf, "{}", _receiveTextTimes);
         std::string textStr = (std::string("response text msg: ") + data.bytes + ", ");
         textStr += infoStr;
         AXLOGD("{}", textStr);

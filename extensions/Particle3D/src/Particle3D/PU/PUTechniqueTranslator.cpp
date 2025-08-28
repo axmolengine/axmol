@@ -406,4 +406,4 @@ void PUTechniqueTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode
     }
 }
 
-}
+}  // namespace ax

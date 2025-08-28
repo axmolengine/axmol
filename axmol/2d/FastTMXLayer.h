@@ -55,7 +55,7 @@ class Buffer;
 
 /**
  * !!! uncomment if you want reduce bandwidth of GPU, then the tiled layer size will be limited to 128x128
-*/
+ */
 #define AX_FAST_TILEMAP_32_BIT_INDICES 1
 
 /** @brief FastTMXLayer represents the TMX layer.
@@ -294,9 +294,7 @@ public:
 
     TMXTileAnimManager* getTileAnimManager() const { return _tileAnimManager; }
 
-    bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo,
-                                                     TMXLayerInfo* layerInfo,
-                                                     TMXMapInfo* mapInfo);
+    bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
 protected:
     void setOpacity(uint8_t opacity) override;
@@ -362,7 +360,7 @@ protected:
     /** tile coordinate to node coordinate transform */
     Mat4 _tileToNodeTransform;
     /** data for rendering */
-    bool _quadsDirty = true;
+    bool _quadsDirty          = true;
     Vec2 _cameraPositionDirty = {INFINITY, INFINITY};
     float _cameraZoomDirty;
 
@@ -395,7 +393,10 @@ class AX_DLL TMXTileAnimTask : public Object
 {
 public:
     TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
-    static TMXTileAnimTask* create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
+    static TMXTileAnimTask* create(FastTMXLayer* layer,
+                                   TMXTileAnimInfo* animation,
+                                   const Vec2& tilePos,
+                                   uint32_t flag = 0);
     /** start the animation task */
     void start();
     /** stop the animation task */
@@ -421,7 +422,7 @@ protected:
     TMXTileAnimInfo* _animation = nullptr;
     /** Index of the frame that should be drawn currently */
     uint32_t _currentFrame = 0;
-    uint32_t _nextFrame = 0;
+    uint32_t _nextFrame    = 0;
     uint32_t _frameCount   = 0;
 };
 
@@ -453,4 +454,4 @@ typedef FastTMXLayer TMXLayer;
 
 // end of tilemap_parallax_nodes group
 /// @}
-}
+}  // namespace ax

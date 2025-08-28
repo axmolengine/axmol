@@ -96,4 +96,4 @@ bool PUSphereColliderTranslator::translateChildObject(PUScriptCompiler* /*compil
     return false;
 }
 
-}
+}  // namespace ax

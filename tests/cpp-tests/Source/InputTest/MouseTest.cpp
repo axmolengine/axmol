@@ -96,7 +96,7 @@ bool MouseEventTest::onMouseUp(Event* event)
 bool MouseEventTest::onMouseMove(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
-    auto loc = e->getLocation();
+    auto loc        = e->getLocation();
     std::string str = fmt::format("MousePosition:({},{})", loc.x, loc.y);
     _labelPosition->setString(str);
 

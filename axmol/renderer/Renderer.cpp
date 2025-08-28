@@ -221,8 +221,10 @@ void Renderer::init()
     _commandBuffer->setDepthStencilState(_depthStencilState);
 }
 
-rhi::RenderTarget* Renderer::getOffscreenRenderTarget() {
-    if (_offscreenRT != nullptr) return _offscreenRT;
+rhi::RenderTarget* Renderer::getOffscreenRenderTarget()
+{
+    if (_offscreenRT != nullptr)
+        return _offscreenRT;
     return (_offscreenRT = axdrv->createRenderTarget());
 }
 
@@ -524,8 +526,8 @@ void Renderer::setStencilCompareFunc(rhi::CompareFunc func, unsigned int ref, un
 }
 
 void Renderer::setStencilOp(rhi::StencilOp stencilFailureOp,
-                                   rhi::StencilOp depthFailureOp,
-                                   rhi::StencilOp stencilDepthPassOp)
+                            rhi::StencilOp depthFailureOp,
+                            rhi::StencilOp stencilDepthPassOp)
 {
     _dsDesc.frontFaceStencil.stencilFailureOp = stencilFailureOp;
     _dsDesc.backFaceStencil.stencilFailureOp  = stencilFailureOp;
@@ -590,24 +592,24 @@ const rhi::DepthStencilDesc& Renderer::getDepthStencilDesc() const
 
 void Renderer::setViewPort(int x, int y, unsigned int w, unsigned int h)
 {
-    _viewport.x = x;
-    _viewport.y = y;
-    _viewport.width = w;
+    _viewport.x      = x;
+    _viewport.y      = y;
+    _viewport.width  = w;
     _viewport.height = h;
 }
 
 void Renderer::fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset)
 {
     auto destVertices = &_verts[_filledVertex];
-    auto srcVertices = cmd->getVertices();
-    auto vertexCount = cmd->getVertexCount();
-    auto&& modelView = cmd->getModelView();
+    auto srcVertices  = cmd->getVertices();
+    auto vertexCount  = cmd->getVertexCount();
+    auto&& modelView  = cmd->getModelView();
     MathUtil::transformVertices(destVertices, srcVertices, vertexCount, modelView);
 
     auto destIndices = &_indices[_filledIndex];
-    auto srcIndices = cmd->getIndices();
-    auto indexCount = cmd->getIndexCount();
-    auto offset = vertexBufferOffset + _filledVertex;
+    auto srcIndices  = cmd->getIndices();
+    auto indexCount  = cmd->getIndexCount();
+    auto offset      = vertexBufferOffset + _filledVertex;
     MathUtil::transformIndices(destIndices, srcIndices, indexCount, int(offset));
 
     _filledVertex += vertexCount;
@@ -619,7 +621,7 @@ void Renderer::drawBatchedTriangles()
     if (_queuedTriangleCommands.empty())
         return;
 
-        /************** 1: Setup up vertices/indices *************/
+    /************** 1: Setup up vertices/indices *************/
 #if AX_RENDER_API == AX_RENDER_API_MTL
     unsigned int vertexBufferFillOffset = _queuedTotalVertexCount - _queuedVertexCount;
     unsigned int indexBufferFillOffset  = _queuedTotalIndexCount - _queuedIndexCount;
@@ -703,8 +705,8 @@ void Renderer::drawBatchedTriangles()
     {
         auto& drawInfo = _triBatchesToDraw[i];
         _commandBuffer->updatePipelineState(_currentRT, drawInfo.cmd->getPipelineDesc());
-        _commandBuffer->drawElements(rhi::PrimitiveType::TRIANGLE, rhi::IndexFormat::U_SHORT,
-                                     drawInfo.indicesToDraw, drawInfo.offset * sizeof(_indices[0]));
+        _commandBuffer->drawElements(rhi::PrimitiveType::TRIANGLE, rhi::IndexFormat::U_SHORT, drawInfo.indicesToDraw,
+                                     drawInfo.offset * sizeof(_indices[0]));
 
         _drawnBatches++;
         _drawnVertices += _triBatchesToDraw[i].indicesToDraw;
@@ -757,8 +759,7 @@ void Renderer::drawCustomCommand(RenderCommand* command)
     case CustomCommand::DrawType::ARRAY_INSTANCED:
         _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
         _commandBuffer->drawArraysInstanced(cmd->getPrimitiveType(), cmd->getVertexDrawStart(),
-                                            cmd->getVertexDrawCount(), cmd->getInstanceCount(),
-                                   cmd->isWireframe());
+                                            cmd->getVertexDrawCount(), cmd->getInstanceCount(), cmd->isWireframe());
         _drawnVertices += cmd->getVertexDrawCount() * cmd->getInstanceCount();
         break;
     default:;
@@ -833,8 +834,7 @@ bool Renderer::checkVisibility(const Mat4& transform, const Vec2& size)
     return ret;
 }
 
-void Renderer::readPixels(rhi::RenderTarget* rt,
-                          std::function<void(const rhi::PixelBufferDesc&)> callback)
+void Renderer::readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback)
 {
     assert(!!rt);
     if (rt ==
@@ -885,7 +885,6 @@ void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned 
     CallbackCommand* command = nextCallbackCommand();
     command->init(globalOrder);
     command->func = [this, flags, color, depth, stencil]() -> void {
-
         rhi::RenderPassDesc descriptor;
 
         descriptor.flags.clear = flags;
@@ -1015,14 +1014,15 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
     // Not initializing the buffer before passing it to updateData for Android/OpenGL ES.
     // This change does fix the Android/OpenGL ES performance problem
     // If for some reason we get reports of performance issues on OpenGL implementations,
-    // then we can just add pre-processor checks for OpenGL and have the updateData() allocate the full size after buffer creation.
+    // then we can just add pre-processor checks for OpenGL and have the updateData() allocate the full size after
+    // buffer creation.
     auto vertexBuffer = driver->createBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), rhi::BufferType::VERTEX,
-                                          rhi::BufferUsage::DYNAMIC);
+                                             rhi::BufferUsage::DYNAMIC);
     if (!vertexBuffer)
         return;
 
     auto indexBuffer = driver->createBuffer(Renderer::INDEX_VBO_SIZE * sizeof(_indices[0]), rhi::BufferType::INDEX,
-                                         rhi::BufferUsage::DYNAMIC);
+                                            rhi::BufferUsage::DYNAMIC);
     if (!indexBuffer)
     {
         vertexBuffer->release();
@@ -1051,4 +1051,4 @@ void Renderer::popStateBlock()
     _stateBlockStack.pop_back();
 }
 
-}
+}  // namespace ax

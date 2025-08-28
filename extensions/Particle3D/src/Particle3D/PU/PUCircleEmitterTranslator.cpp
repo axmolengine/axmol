@@ -178,4 +178,4 @@ bool PUCircleEmitterTranslator::translateChildObject(PUScriptCompiler* /*compile
     return false;
 }
 
-}
+}  // namespace ax

@@ -105,10 +105,11 @@ public:
         layout(binding = 4) uniform sampler2D u_alphaMap;
         layout(binding = 5) uniform sampler2D u_lightMap;
     */
-    enum TextureBindingSlot {
+    enum TextureBindingSlot
+    {
         BINDING_SLOT_DETAIL_BASE = 0,
-        BINDING_SLOT_ALPHA_MAP = 4,
-        BINDING_SLOT_LIGHT_MAP = 5
+        BINDING_SLOT_ALPHA_MAP   = 4,
+        BINDING_SLOT_LIGHT_MAP   = 5
     };
 
     /**
@@ -200,7 +201,7 @@ private:
         ChunkIndices& operator=(const ChunkIndices& o);
         ~ChunkIndices();
         rhi::Buffer* _indexBuffer = nullptr;
-        unsigned short _size          = 0;
+        unsigned short _size      = 0;
     };
 
     struct ChunkLODIndices
@@ -220,7 +221,7 @@ private:
     struct AX_DLL TerrainVertexData
     {
         /*constructor*/
-        TerrainVertexData(){};
+        TerrainVertexData() {};
         TerrainVertexData(const Vec3& v1, const Tex2F& v2)
         {
             _position = v1;
@@ -535,7 +536,7 @@ protected:
     unsigned char* _data;
     float _lodDistance[3];
     Texture2D* _detailMapTextures[4];
-    rhi::TextureBinding _detailMapBindings[4]; // weak ref
+    rhi::TextureBinding _detailMapBindings[4];  // weak ref
     Texture2D* _alphaMap;
     Texture2D* _lightMap;
     Texture2D* _dummyTexture = nullptr;
@@ -560,8 +561,8 @@ protected:
     struct StateBlock
     {
         // bool blend;
-        bool depthWrite            = true;
-        bool depthTest             = true;
+        bool depthWrite        = true;
+        bool depthTest         = true;
         rhi::CullMode cullFace = rhi::CullMode::FRONT;
         rhi::Winding winding   = rhi::Winding::CLOCK_WISE;
         void apply();
@@ -590,4 +591,4 @@ private:
 // end of actions group
 /// @}
 
-}
+}  // namespace ax

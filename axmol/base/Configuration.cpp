@@ -132,7 +132,7 @@ void Configuration::gatherGPUInfo()
     _valueDict["vendor"]   = Value(driver->getVendor());
     _valueDict["renderer"] = Value(driver->getRenderer());
     _valueDict["version"]  = Value(driver->getVersion());
-    _valueDict["shader"]     = Value(driver->getShaderVersion());
+    _valueDict["shader"]   = Value(driver->getShaderVersion());
 
     _valueDict["max_texture_size"]      = Value(driver->getMaxTextureSize());
     _valueDict["max_vertex_attributes"] = Value(driver->getMaxAttributes());
@@ -417,4 +417,4 @@ int Configuration::getMaxAttributes() const
     return axdrv->getMaxAttributes();
 }
 
-}
+}  // namespace ax

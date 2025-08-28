@@ -601,4 +601,4 @@ PUMeshSurfaceEmitter* PUMeshSurfaceEmitter::clone()
     return be;
 }
 
-}
+}  // namespace ax

@@ -30,7 +30,8 @@
 
 #include <vector>
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 /**
  * @addtogroup _opengl
  * @{
@@ -99,4 +100,4 @@ private:
 };
 // end of _opengl group
 ///> @}
-}
+}  // namespace ax::rhi::gl

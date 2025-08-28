@@ -1,6 +1,7 @@
 #include "axmol/rhi/opengl/OpenGLState.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 namespace
 {
@@ -19,7 +20,7 @@ OpenGLState::OpenGLState()
 void OpenGLState::reset()
 {
     g_defaultOpenGLState = std::make_unique<OpenGLState>();
-    __state = g_defaultOpenGLState.get();
+    __state              = g_defaultOpenGLState.get();
 }
 
-}
+}  // namespace ax::rhi::gl

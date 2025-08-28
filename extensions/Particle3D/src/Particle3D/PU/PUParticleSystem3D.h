@@ -419,5 +419,4 @@ protected:
     PUParticleSystem3D* _parentParticleSystem;
 };
 
-}
-
+}  // namespace ax

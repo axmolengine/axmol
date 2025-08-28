@@ -32,4 +32,3 @@ extern "C" {
 
 extern int axlua_loader(lua_State* L);
 }
-

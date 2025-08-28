@@ -273,6 +273,6 @@ protected:
     EventCustom* _loadedEvent;
 };
 
-}
+}  // namespace ax
 // end of base group
 /// @}

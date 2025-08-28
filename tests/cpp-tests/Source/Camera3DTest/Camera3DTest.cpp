@@ -1254,9 +1254,9 @@ void FogTestDemo::onEnter()
     AX_SAFE_RELEASE_NULL(_programState1);
     AX_SAFE_RELEASE_NULL(_programState2);
 
-    auto program      = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
-    _programState1    = new rhi::ProgramState(program);
-    _programState2    = new rhi::ProgramState(program);
+    auto program   = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
+    _programState1 = new rhi::ProgramState(program);
+    _programState2 = new rhi::ProgramState(program);
 
     _mesh1 = MeshRenderer::create("MeshRendererTest/teapot.c3b");
     _mesh2 = MeshRenderer::create("MeshRendererTest/teapot.c3b");
@@ -1264,9 +1264,9 @@ void FogTestDemo::onEnter()
     _mesh1->setProgramState(_programState1);
     _mesh2->setProgramState(_programState2);
 
-    auto fogColor   = Vec4(0.5, 0.5, 0.5, 1.0);
-    float fogStart  = 10;
-    float fogEnd    = 60;
+    auto fogColor     = Vec4(0.5, 0.5, 0.5, 1.0);
+    float fogStart    = 10;
+    float fogEnd      = 60;
     float fogEquation = 0;
 
     SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
@@ -1301,16 +1301,16 @@ void FogTestDemo::onEnter()
         AX_SAFE_RELEASE_NULL(_programState1);
         AX_SAFE_RELEASE_NULL(_programState2);
 
-        auto program      = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
-        _programState1    = new rhi::ProgramState(program);
-        _programState2    = new rhi::ProgramState(program);
+        auto program   = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
+        _programState1 = new rhi::ProgramState(program);
+        _programState2 = new rhi::ProgramState(program);
 
         _mesh1->setProgramState(_programState1);
         _mesh2->setProgramState(_programState2);
 
-        auto fogColor   = Vec4(0.5, 0.5, 0.5, 1.0);
-        float fogStart  = 10;
-        float fogEnd    = 60;
+        auto fogColor     = Vec4(0.5, 0.5, 0.5, 1.0);
+        float fogStart    = 10;
+        float fogEnd      = 60;
         float fogEquation = 0;
 
         SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
@@ -1326,9 +1326,9 @@ void FogTestDemo::switchTypeCallback(Object* sender, int type)
 {
     if (type == 0)
     {
-        auto fogColor   = Vec4(0.5, 0.5, 0.5, 1.0);
-        float fogStart  = 10;
-        float fogEnd    = 60;
+        auto fogColor     = Vec4(0.5, 0.5, 0.5, 1.0);
+        float fogStart    = 10;
+        float fogEnd      = 60;
         float fogEquation = 0;
 
         SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
@@ -1338,9 +1338,9 @@ void FogTestDemo::switchTypeCallback(Object* sender, int type)
     }
     else if (type == 1)
     {
-        auto fogColor    = Vec4(0.5, 0.5, 0.5, 1.0);
-        float fogDensity = 0.03f;
-        float fogEquation  = 1;
+        auto fogColor     = Vec4(0.5, 0.5, 0.5, 1.0);
+        float fogDensity  = 0.03f;
+        float fogEquation = 1;
 
         SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
         SET_UNIFORM("u_fogDensity", &fogDensity, sizeof(fogDensity));
@@ -1348,9 +1348,9 @@ void FogTestDemo::switchTypeCallback(Object* sender, int type)
     }
     else if (type == 2)
     {
-        auto fogColor    = Vec4(0.5, 0.5, 0.5, 1.0);
-        float fogDensity = 0.03f;
-        float fogEquation  = 2;
+        auto fogColor     = Vec4(0.5, 0.5, 0.5, 1.0);
+        float fogDensity  = 0.03f;
+        float fogEquation = 2;
 
         SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
         SET_UNIFORM("u_fogDensity", &fogDensity, sizeof(fogDensity));

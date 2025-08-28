@@ -29,7 +29,8 @@
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Configuration.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 id<MTLTexture> UtilsMTL::_defaultColorAttachmentTexture        = nil;
 id<MTLTexture> UtilsMTL::_defaultDepthStencilAttachmentTexture = nil;
@@ -46,7 +47,7 @@ MTLPixelFormat getSupportedDepthStencilFormat()
 #endif
     return pixelFormat;
 }
-}
+}  // namespace
 
 struct GPUTextureFormatInfo
 {
@@ -175,8 +176,8 @@ id<MTLTexture> UtilsMTL::createDepthStencilAttachmentTexture()
 
 void UtilsMTL::generateMipmaps(id<MTLTexture> texture)
 {
-    auto commandQueue                        = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCommandQueue();
-    auto commandBuffer                       = [commandQueue commandBuffer];
+    auto commandQueue  = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCommandQueue();
+    auto commandBuffer = [commandQueue commandBuffer];
     id<MTLBlitCommandEncoder> commandEncoder = [commandBuffer blitCommandEncoder];
     [commandEncoder generateMipmapsForTexture:texture];
     [commandEncoder endEncoding];
@@ -206,4 +207,4 @@ void UtilsMTL::swizzleImage(unsigned char* image, std::size_t width, std::size_t
     }
 }
 
-}
+}  // namespace ax::rhi::mtl

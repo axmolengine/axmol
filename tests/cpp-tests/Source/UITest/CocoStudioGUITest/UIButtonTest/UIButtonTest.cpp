@@ -79,7 +79,7 @@ bool UIButtonTest::init()
         // Create the button
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         AXLOGD("content size should be greater than 0:  width = {}, height = {}", button->getContentSize().width,
-              button->getContentSize().height);
+               button->getContentSize().height);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest::touchEvent, this));
         button->setZoomScale(0.4f);
@@ -716,7 +716,7 @@ bool UIButtonTextOnly::init()
 
         button->setTitleText("PLAY GAME");
         AXLOGD("content size should be greater than 0:  width = {}, height = {}", button->getContentSize().width,
-              button->getContentSize().height);
+               button->getContentSize().height);
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
         button->addClickEventListener([](Object* sender) { AXLOGD("clicked!"); });

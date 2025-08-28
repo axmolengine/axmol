@@ -28,7 +28,7 @@
 #    include <android/log.h>
 #    include "axmol/base/text_utils.h"
 
-#    define LOG_TAG "luajc"
+#    define LOG_TAG   "luajc"
 #    define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 extern "C" {
@@ -273,8 +273,8 @@ bool LuaJavaBridge::CallInfo::getMethodInfo()
         return false;
     }
     jstring _jstrClassName = m_env->NewStringUTF(m_className.c_str());
-    m_classID              = (jclass)m_env->CallObjectMethod(ax::JniHelper::classloader,
-                                                             ax::JniHelper::loadclassMethod_methodID, _jstrClassName);
+    m_classID = (jclass)m_env->CallObjectMethod(ax::JniHelper::classloader, ax::JniHelper::loadclassMethod_methodID,
+                                                _jstrClassName);
 
     if (NULL == m_classID)
     {

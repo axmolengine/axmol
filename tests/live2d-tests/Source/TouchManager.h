@@ -12,25 +12,25 @@
 class TouchManager
 {
 private:
-    float startY; // タッチを開始した位置
+    float startY;  // タッチを開始した位置
     float startX;
 
-    float lastX; // シングルタッチ時のxの値
-    float lastY; // シングルタッチ時のyの値
-    float lastX1; // ダブルタッチ時の一つ目のxの値
-    float lastY1; // ダブルタッチ時の一つ目のyの値
-    float lastX2; // ダブルタッチ時の二つ目のxの値
-    float lastY2; // ダブルタッチ時の二つ目のyの値
+    float lastX;   // シングルタッチ時のxの値
+    float lastY;   // シングルタッチ時のyの値
+    float lastX1;  // ダブルタッチ時の一つ目のxの値
+    float lastY1;  // ダブルタッチ時の一つ目のyの値
+    float lastX2;  // ダブルタッチ時の二つ目のxの値
+    float lastY2;  // ダブルタッチ時の二つ目のyの値
 
-    float lastTouchDist; // 2本以上でタッチしたときの指の距離
+    float lastTouchDist;  // 2本以上でタッチしたときの指の距離
 
-    float deltaX; // 前回の値から今回の値へのxの移動距離。
-    float deltaY; // 前回の値から今回の値へのyの移動距離。
+    float deltaX;  // 前回の値から今回の値へのxの移動距離。
+    float deltaY;  // 前回の値から今回の値へのyの移動距離。
 
-    float scale; // このフレームで掛け合わせる拡大率。拡大操作中以外は1。
+    float scale;  // このフレームで掛け合わせる拡大率。拡大操作中以外は1。
 
-    bool touchSingle; // シングルタッチ時はtrue
-    bool flipAvailable; // フリップが有効かどうか
+    bool touchSingle;    // シングルタッチ時はtrue
+    bool flipAvailable;  // フリップが有効かどうか
 
 public:
     TouchManager();

@@ -282,8 +282,8 @@ protected:
      * mode. */
     void dispatchTouchEvent(EventTouch* event);
 
-    /** Mouse Scroll event needs to be processed different with other events since it needs support ALL_AT_ONCE and ONE_BY_NONE
-     * mode. */
+    /** Mouse Scroll event needs to be processed different with other events since it needs support ALL_AT_ONCE and
+     * ONE_BY_NONE mode. */
     void dispatchMouseEvent(EventMouse* event);
 
     /** Associates node with event listener */
@@ -362,8 +362,7 @@ protected:
     std::set<std::string> _internalCustomListenerIDs;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}
-

@@ -92,4 +92,4 @@ bool PUDoEnableComponentEventHandlerTranslator::translateChildObject(PUScriptCom
     return false;
 }
 
-}
+}  // namespace ax

@@ -137,10 +137,10 @@ protected:
     friend class BaseLight;
     friend class Renderer;
 
-    std::vector<Camera*> _cameras;     // weak ref to Camera
+    std::vector<Camera*> _cameras;  // weak ref to Camera
 
-    /* weak ref, default camera created by scene, at _cameras[0], Caution! the default camera can not be added to _cameras
-     before onEnter is called. */
+    /* weak ref, default camera created by scene, at _cameras[0], Caution! the default camera can not be added to
+     _cameras before onEnter is called. */
     Camera* _defaultCamera = nullptr;
     /* indicates if the order is dirty and if so then it needs sorting */
     bool _cameraOrderDirty = true;
@@ -219,4 +219,4 @@ public:
 // end of _2d group
 /// @}
 
-}
+}  // namespace ax

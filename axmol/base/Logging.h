@@ -160,5 +160,5 @@ inline void printLogT(_FmtType&& fmt, LogItem&& item, _Types&&... args)
 #define AXLOGW(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Warn, fmtOrMsg, ##__VA_ARGS__)
 #define AXLOGE(fmtOrMsg, ...) AXLOG_WITH_LEVEL(ax::LogLevel::Error, fmtOrMsg, ##__VA_ARGS__)
 
-#define AXLOGT AXLOGV
-}
+#define AXLOGT                AXLOGV
+}  // namespace ax

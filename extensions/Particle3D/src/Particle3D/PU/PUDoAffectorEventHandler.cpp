@@ -92,4 +92,4 @@ void PUDoAffectorEventHandler::copyAttributesTo(PUEventHandler* eventHandler)
     doAffectorEventHandler->setPrePost(_prePost);
 }
 
-}
+}  // namespace ax

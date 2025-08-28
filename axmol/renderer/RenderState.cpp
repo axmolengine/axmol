@@ -50,8 +50,8 @@ void RenderState::bindPass(Pass* pass, MeshCommand* command)
 {
     AX_ASSERT(pass);
     assert(pass->_technique && pass->_technique->_material);
-    auto* technique          = pass->_technique;
-    auto* material           = technique->_material;
+    auto* technique = pass->_technique;
+    auto* material  = technique->_material;
 
     // need reset all state
     // pipelineDesc.blendDesc.blendEnabled = true;
@@ -222,8 +222,7 @@ static rhi::BlendFactor parseBlend(std::string_view value)
         return rhi::BlendFactor::SRC_ALPHA_SATURATE;
     else
     {
-        AXLOGW("Unsupported blend value ({}). (Will default to BLEND_ONE if errors are treated as warnings)",
-              value);
+        AXLOGW("Unsupported blend value ({}). (Will default to BLEND_ONE if errors are treated as warnings)", value);
         return rhi::BlendFactor::ONE;
     }
 }
@@ -252,7 +251,7 @@ static DepthFunc parseDepthFunc(std::string_view value)
     else
     {
         AXLOGW("Unsupported depth function value ({}). Will default to DEPTH_LESS if errors are treated as warnings)",
-              value);
+               value);
         return DepthFunc::LESS;
     }
 }
@@ -271,8 +270,7 @@ static CullFaceSide parseCullFaceSide(std::string_view value)
     //        return RenderState::CULL_FACE_SIDE_FRONT_AND_BACK;
     else
     {
-        AXLOGW("Unsupported cull face side value ({}). Will default to BACK if errors are treated as warnings.",
-              value);
+        AXLOGW("Unsupported cull face side value ({}). Will default to BACK if errors are treated as warnings.", value);
         return CullFaceSide::BACK;
     }
 }
@@ -288,8 +286,7 @@ static FrontFace parseFrontFace(std::string_view value)
         return FrontFace::CLOCK_WISE;
     else
     {
-        AXLOGW("Unsupported front face side value ({}). Will default to CCW if errors are treated as warnings.",
-              value);
+        AXLOGW("Unsupported front face side value ({}). Will default to CCW if errors are treated as warnings.", value);
         return FrontFace::COUNTER_CLOCK_WISE;
     }
 }
@@ -410,4 +407,4 @@ void RenderState::StateBlock::setDepthFunc(DepthFunc func)
     _modifiedBits |= RS_DEPTH_FUNC;
 }
 
-}
+}  // namespace ax

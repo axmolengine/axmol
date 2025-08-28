@@ -42,7 +42,7 @@ class DownloadTask;
 class AX_DLL IDownloadContext
 {
 public:
-    virtual ~IDownloadContext(){}
+    virtual ~IDownloadContext() {}
     virtual void cancel() {}
 };
 

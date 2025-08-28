@@ -37,11 +37,10 @@ class PUScaleVelocityAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUScaleVelocityAffectorTranslator();
-    virtual ~PUScaleVelocityAffectorTranslator(){};
+    virtual ~PUScaleVelocityAffectorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

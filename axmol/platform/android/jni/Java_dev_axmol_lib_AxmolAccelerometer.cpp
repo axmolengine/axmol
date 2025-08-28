@@ -33,12 +33,8 @@
 using namespace ax;
 
 extern "C" {
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolAccelerometer_onSensorChanged(JNIEnv*,
-                                                                                   jclass,
-                                                                                   jfloat x,
-                                                                                   jfloat y,
-                                                                                   jfloat z,
-                                                                                   jlong timeStamp)
+JNIEXPORT void JNICALL
+Java_dev_axmol_lib_AxmolAccelerometer_onSensorChanged(JNIEnv*, jclass, jfloat x, jfloat y, jfloat z, jlong timeStamp)
 {
     Acceleration a;
     a.x         = -((double)x / TG3_GRAVITY_EARTH);

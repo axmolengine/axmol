@@ -204,10 +204,10 @@ WebSocket::WebSocket() : _isDestroyed(std::make_shared<std::atomic<bool>>(false)
     std::shared_ptr<std::atomic<bool>> isDestroyed = _isDestroyed;
     _resetDirectorListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
         Director::EVENT_RESET, [this, isDestroyed](EventCustom*) {
-            if (*isDestroyed)
-                return;
-            close();
-        });
+        if (*isDestroyed)
+            return;
+        close();
+    });
 
     _scheduler->schedule([this](float) { dispatchEvents(); }, this, 0, false, "#");
 }
@@ -227,10 +227,7 @@ WebSocket::~WebSocket()
     purgePendingEvents();
 }
 
-bool WebSocket::open(Delegate* delegate,
-                     std::string_view url,
-                     std::string_view caFilePath,
-                     std::string_view protocols)
+bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view caFilePath, std::string_view protocols)
 {
     _delegate    = delegate;
     _url         = url;
@@ -392,9 +389,9 @@ int WebSocket::on_frame_end(websocket_parser* parser)
             AXLOGD("WS: control frame: CLOSE");
             if (ws->_receivedData.size() > 1)
             {
-                if(ws->_closeCode == 0)
-                    ws->_closeCode = ((uint16_t) ws->_receivedData.data()[0]) << 8 | ws->_receivedData.data()[1];
-                
+                if (ws->_closeCode == 0)
+                    ws->_closeCode = ((uint16_t)ws->_receivedData.data()[0]) << 8 | ws->_receivedData.data()[1];
+
                 if (ws->_receivedData.size() > 2 && ws->_closeReason.empty())
                     ws->_closeReason = std::string(ws->_receivedData.data()[3], ws->_receivedData.size() - 2);
             }
@@ -452,21 +449,21 @@ void WebSocket::close(uint16_t code, std::string_view reason)
     {
         _closeCode   = code;
         _closeReason = reason;
-        
+
         if (_service->is_open(0))
         {
             _state = State::CLOSING;
-            
-            std::vector<char> closeData(sizeof(_closeCode)+reason.size());
+
+            std::vector<char> closeData(sizeof(_closeCode) + reason.size());
             memcpy(closeData.data(), &_closeCode, sizeof(_closeCode));
-            
+
             if (!reason.empty())
             {
-                memcpy(closeData.data()+sizeof(_closeCode), reason.data(), reason.size());
+                memcpy(closeData.data() + sizeof(_closeCode), reason.data(), reason.size());
             }
-            
+
             WebSocketProtocol::sendFrame(*this, closeData.data(), closeData.size(), ws::detail::opcode::close);
-            
+
             _service->close(0);
 
             if (_transport)
@@ -518,7 +515,7 @@ void WebSocket::generateHandshakeSecKey()
 
     auto signContent = _handshakeSecKey;
     signContent += "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"sv;
-    _verifySecKey   = utils::computeDigest(signContent, "sha1"sv, utils::DigestPresent::Base64);
+    _verifySecKey = utils::computeDigest(signContent, "sha1"sv, utils::DigestPresent::Base64);
 }
 
 void WebSocket::handleNetworkEvent(yasio::io_event* event)
@@ -657,9 +654,9 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
         break;
     case YEK_ON_CLOSE:
         _transport = nullptr;
-        if(_closeCode == ws::detail::close_code::none)
+        if (_closeCode == ws::detail::close_code::none)
         {
-            _closeCode = ws::detail::close_code::abnormal;
+            _closeCode   = ws::detail::close_code::abnormal;
             _closeReason = "Abnormal close";
         }
         if (_state == State::OPEN || _state == State::CLOSING)
@@ -675,4 +672,4 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
 
 }  // namespace network
 
-}
+}  // namespace ax

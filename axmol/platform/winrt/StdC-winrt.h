@@ -35,21 +35,21 @@ typedef SSIZE_T ssize_t;
 #include <float.h>
 
 // for math.h on win32 platform
-#    if !defined(_USE_MATH_DEFINES)
-#        define _USE_MATH_DEFINES  // make M_PI can be use
-#    endif
+#if !defined(_USE_MATH_DEFINES)
+#    define _USE_MATH_DEFINES  // make M_PI can be use
+#endif
 
-#    if _MSC_VER < 1800
-#        if !defined(isnan)
-#            define isnan _isnan
-#        endif
+#if _MSC_VER < 1800
+#    if !defined(isnan)
+#        define isnan _isnan
 #    endif
+#endif
 
-#    if _MSC_VER < 1900
-#        ifndef snprintf
-#            define snprintf _snprintf
-#        endif
+#if _MSC_VER < 1900
+#    ifndef snprintf
+#        define snprintf _snprintf
 #    endif
+#endif
 
 #include <math.h>
 #include <string.h>
@@ -73,15 +73,15 @@ typedef SSIZE_T ssize_t;
 #    define MAX(x, y) (((x) < (y)) ? (y) : (x))
 #endif  // MAX
 
-# include <stdint.h>
+#include <stdint.h>
 
 #ifndef NOMINMAX
 #    define NOMINMAX
 #endif
 
-#    include <WinSock2.h>
+#include <WinSock2.h>
 // Structure timeval has define in winsock.h, include windows.h for it.
-#    include <Windows.h>
+#include <Windows.h>
 
 namespace ax
 {
@@ -94,7 +94,7 @@ struct timezone
 
 int AX_DLL gettimeofday(struct timeval*, struct timezone*);
 
-}
+}  // namespace ax
 
 // Conflicted with ParticleSystem::PositionType::RELATIVE, so we need to undef it.
 #ifdef RELATIVE

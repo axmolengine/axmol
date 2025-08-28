@@ -68,7 +68,7 @@ bool Skybox::init()
     setProgramStateByProgramId(rhi::ProgramType::SKYBOX_3D);
 
     _customCommand.setWeakPSVL(_programState, _vertexLayout);
-    
+
     // disable blend
     _customCommand.blendDesc().blendEnabled = false;
 
@@ -149,7 +149,7 @@ void Skybox::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     cameraModelMat.scale(1 / projectionMat.m[0], 1 / projectionMat.m[5], 1.0);
 
     Color color(_displayedColor);
-    color.a = 1.0f; // FIXME: should we ignore opacity for compatibile with previous versions
+    color.a = 1.0f;  // FIXME: should we ignore opacity for compatibile with previous versions
     _programState->setUniform(_uniformColorLoc, &color, sizeof(color));
     _programState->setUniform(_uniformCameraRotLoc, cameraModelMat.m, sizeof(cameraModelMat.m));
 
@@ -191,4 +191,4 @@ void Skybox::onAfterDraw()
     renderer->setCullMode(_rendererCullMode);
 }
 
-}
+}  // namespace ax

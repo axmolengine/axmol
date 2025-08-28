@@ -30,23 +30,23 @@
 #include <fstream>
 #include <stdio.h>
 
-#define KEY_VERSION "version"
-#define KEY_PACKAGE_URL "packageUrl"
-#define KEY_MANIFEST_URL "remoteManifestUrl"
-#define KEY_VERSION_URL "remoteVersionUrl"
-#define KEY_GROUP_VERSIONS "groupVersions"
-#define KEY_ENGINE_VERSION "engineVersion"
-#define KEY_ASSETS "assets"
+#define KEY_VERSION          "version"
+#define KEY_PACKAGE_URL      "packageUrl"
+#define KEY_MANIFEST_URL     "remoteManifestUrl"
+#define KEY_VERSION_URL      "remoteVersionUrl"
+#define KEY_GROUP_VERSIONS   "groupVersions"
+#define KEY_ENGINE_VERSION   "engineVersion"
+#define KEY_ASSETS           "assets"
 #define KEY_COMPRESSED_FILES "compressedFiles"
-#define KEY_SEARCH_PATHS "searchPaths"
+#define KEY_SEARCH_PATHS     "searchPaths"
 
-#define KEY_PATH "path"
-#define KEY_MD5 "md5"
-#define KEY_GROUP "group"
-#define KEY_COMPRESSED "compressed"
-#define KEY_SIZE "size"
-#define KEY_COMPRESSED_FILE "compressedFile"
-#define KEY_DOWNLOAD_STATE "downloadState"
+#define KEY_PATH             "path"
+#define KEY_MD5              "md5"
+#define KEY_GROUP            "group"
+#define KEY_COMPRESSED       "compressed"
+#define KEY_SIZE             "size"
+#define KEY_COMPRESSED_FILE  "compressedFile"
+#define KEY_DOWNLOAD_STATE   "downloadState"
 
 NS_AX_EXT_BEGIN
 
@@ -110,7 +110,7 @@ void Manifest::loadJson(std::string_view url)
                 if (offset > 0)
                     offset--;
                 std::string errorSnippet = content.substr(offset, 10);
-                AXLOGD("File parse error {} at <{}>\n",  static_cast<int>(_json.GetParseError()), errorSnippet);
+                AXLOGD("File parse error {} at <{}>\n", static_cast<int>(_json.GetParseError()), errorSnippet);
             }
         }
     }

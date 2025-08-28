@@ -61,8 +61,7 @@ public:
 #endif
 
     bool createDirectories(std::string_view path) const override;
-    virtual std::string getPathForDirectory(std::string_view dir,
-                                            std::string_view searchPath) const override;
+    virtual std::string getPathForDirectory(std::string_view dir, std::string_view searchPath) const override;
 
 private:
     bool isFileExistInternal(std::string_view filePath) const override;
@@ -75,5 +74,4 @@ private:
 // end of platform group
 /// @}
 
-}
-
+}  // namespace ax

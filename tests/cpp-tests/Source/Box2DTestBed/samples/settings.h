@@ -6,39 +6,39 @@
 // todo add camera and draw and remove globals
 struct Settings
 {
-	void Save();
-	void Load();
+    void Save();
+    void Load();
 
-	int sampleIndex = 0;
-	int windowWidth = 1920;
-	int windowHeight = 1080;
-	//int windowWidth = 900;
-	//int windowHeight = 600;
+    int sampleIndex  = 0;
+    int windowWidth  = 1920;
+    int windowHeight = 1080;
+    // int windowWidth = 900;
+    // int windowHeight = 600;
 
-	float hertz = 60.0f;
-	int subStepCount = 4;
-	int workerCount = 1;
+    float hertz      = 60.0f;
+    int subStepCount = 4;
+    int workerCount  = 1;
 
-	bool useCameraBounds = false;
-	bool drawShapes = true;
-	bool drawJoints = true;
-	bool drawJointExtras = false;
-	bool drawBounds = false;
-	bool drawMass = false;
-	bool drawBodyNames = false;
-	bool drawContactPoints = false;
-	bool drawContactNormals = false;
-	bool drawContactImpulses = false;
-	bool drawContactFeatures = false;
-	bool drawFrictionImpulses = false;
-	bool drawIslands = false;
-	bool drawGraphColors = false;
-	bool drawCounters = false;
-	bool drawProfile = false;
-	bool enableWarmStarting = true;
-	bool enableContinuous = true;
-	bool enableSleep = true;
-	bool pause = false;
-	bool singleStep = false;
-	bool restart = false;
+    bool useCameraBounds      = false;
+    bool drawShapes           = true;
+    bool drawJoints           = true;
+    bool drawJointExtras      = false;
+    bool drawBounds           = false;
+    bool drawMass             = false;
+    bool drawBodyNames        = false;
+    bool drawContactPoints    = false;
+    bool drawContactNormals   = false;
+    bool drawContactImpulses  = false;
+    bool drawContactFeatures  = false;
+    bool drawFrictionImpulses = false;
+    bool drawIslands          = false;
+    bool drawGraphColors      = false;
+    bool drawCounters         = false;
+    bool drawProfile          = false;
+    bool enableWarmStarting   = true;
+    bool enableContinuous     = true;
+    bool enableSleep          = true;
+    bool pause                = false;
+    bool singleStep           = false;
+    bool restart              = false;
 };

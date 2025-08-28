@@ -106,8 +106,8 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
     // init custom command
     auto inputDesc = _programState->getVertexInputDesc("a_position");
 
-    //auto vertexLayout = _programState->getMutableVertexLayout();
-    //vertexLayout->setAttrib("a_position", attrPosLoc, rhi::VertexFormat::FLOAT4, 0, false);
+    // auto vertexLayout = _programState->getMutableVertexLayout();
+    // vertexLayout->setAttrib("a_position", attrPosLoc, rhi::VertexFormat::FLOAT4, 0, false);
 
     float w = SIZE_X, h = SIZE_Y;
     Vec3 vertices[6] = {Vec3(0.0f, 0.0f, 1.0f), Vec3(w, 0.0f, 1.0f), Vec3(w, h, 1.0f),
@@ -434,7 +434,8 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
 
 void SpriteBlur::initProgram()
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs", VertexLayoutKind::Sprite);
+    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs",
+                                                                   VertexLayoutKind::Sprite);
     auto programState = new rhi::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
@@ -566,9 +567,10 @@ bool ShaderRetroEffect::init()
             FileUtils::getInstance()->fullPathForFilename("custom/example_HorizontalColor_fs"));
         char* fragSource = (char*)fragStr.c_str();
 
-        auto program  = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_HorizontalColor_fs", VertexLayoutKind::Sprite);
-        auto p        = new rhi::ProgramState(program);
-        auto director = Director::getInstance();
+        auto program = ProgramManager::getInstance()->loadProgram(
+            positionTextureColor_vert, "custom/example_HorizontalColor_fs", VertexLayoutKind::Sprite);
+        auto p                         = new rhi::ProgramState(program);
+        auto director                  = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
         const auto& frameSize          = director->getRenderView()->getFrameSize();
         float retinaFactor             = director->getRenderView()->getRetinaFactor();
@@ -745,8 +747,9 @@ bool ShaderMultiTexture::init()
         addChild(_sprite);
         _sprite->setPosition(Vec2(s.width / 2, s.height / 2));
 
-        auto program        = ProgramManager::getInstance()->loadProgram("custom/example_MultiTexture_vs", "custom/example_MultiTexture_fs", VertexLayoutKind::Sprite);
-        auto programState   = new rhi::ProgramState(program);
+        auto program = ProgramManager::getInstance()->loadProgram(
+            "custom/example_MultiTexture_vs", "custom/example_MultiTexture_fs", VertexLayoutKind::Sprite);
+        auto programState = new rhi::ProgramState(program);
         _sprite->setProgramState(programState);
 
         SET_TEXTURE(programState, "u_tex1", 1, right->getTexture()->getRHITexture());

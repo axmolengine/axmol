@@ -69,7 +69,10 @@ void ImageViewReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* coc
         // read all color related properties of widget
         AX_COLOR_PROPERTY_BINARY_READER
 
-        else if (key == P_Scale9Enable) { imageView->setScale9Enabled(valueToBool(value)); }
+        else if (key == P_Scale9Enable)
+        {
+            imageView->setScale9Enabled(valueToBool(value));
+        }
         else if (key == P_FileNameData)
         {
             stExpCocoNode* backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -88,10 +91,22 @@ void ImageViewReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* coc
         {
             imageView->setContentSize(Size(imageView->getContentSize().width, valueToFloat(value)));
         }
-        else if (key == P_CapInsetsX) { capsx = valueToFloat(value); }
-        else if (key == P_CapInsetsY) { capsy = valueToFloat(value); }
-        else if (key == P_CapInsetsWidth) { capsWidth = valueToFloat(value); }
-        else if (key == P_CapInsetsHeight) { capsHeight = valueToFloat(value); }
+        else if (key == P_CapInsetsX)
+        {
+            capsx = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsY)
+        {
+            capsy = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsWidth)
+        {
+            capsWidth = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsHeight)
+        {
+            capsHeight = valueToFloat(value);
+        }
 
     }  // end of for loop
 
@@ -206,7 +221,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "X")
@@ -230,7 +245,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")

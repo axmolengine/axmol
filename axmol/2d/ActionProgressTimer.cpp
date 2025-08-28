@@ -131,4 +131,4 @@ void ProgressFromTo::update(float time)
     ((kProgressTimerCast)(_target))->setPercentage(_from + (_to - _from) * time);
 }
 
-}
+}  // namespace ax

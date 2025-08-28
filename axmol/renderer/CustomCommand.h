@@ -247,8 +247,8 @@ protected:
     rhi::Buffer* _indexBuffer  = nullptr;
 
     rhi::Buffer* _instanceBuffer = nullptr;
-    int _instanceCount               = 0;
-    int _instanceCapacity            = 0;
+    int _instanceCount           = 0;
+    int _instanceCapacity        = 0;
 
     std::size_t _vertexDrawStart = 0;
     std::size_t _vertexDrawCount = 0;

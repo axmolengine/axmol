@@ -620,4 +620,4 @@ ResourceData AbstractCheckButton::getCrossDisabledFile()
 
 }  // namespace ui
 
-}
+}  // namespace ax

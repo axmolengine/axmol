@@ -49,9 +49,7 @@ THE SOFTWARE.
 namespace ax
 {
 
-ParticleSystemQuad::ParticleSystemQuad()
-{
-}
+ParticleSystemQuad::ParticleSystemQuad() {}
 
 ParticleSystemQuad::~ParticleSystemQuad()
 {
@@ -214,7 +212,8 @@ void ParticleSystemQuad::setTextureWithRect(Texture2D* texture, const Rect& rect
          (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags() ||
           _texture->getPixelFormat() != texture->getPixelFormat()));
 
-    if (needsUpdatePS) {
+    if (needsUpdatePS)
+    {
         auto programType = ax::ProgramManager::chooseSpriteProgramType(texture->getPixelFormat());
         setProgramState(programType);
         _quadCommand.setWeakPSVL(_programState, _vertexLayout);
@@ -453,10 +452,10 @@ void ParticleSystemQuad::updateParticleQuads()
     }
 
     auto quad = startQuad;
-    float* r               = _particleData.colorR;
-    float* g               = _particleData.colorG;
-    float* b               = _particleData.colorB;
-    float* a               = _particleData.colorA;
+    float* r  = _particleData.colorR;
+    float* g  = _particleData.colorG;
+    float* b  = _particleData.colorB;
+    float* a  = _particleData.colorA;
 
     if (_isOpacityFadeInAllocated)
     {
@@ -496,9 +495,9 @@ void ParticleSystemQuad::updateParticleQuads()
                 {
                     hsv.fromRgba({*r, *g, *b, *a * (*fadeDt / *fadeLn)});
                     hsv.h += *hue;
-                    hsv.s    = abs(*sat);
-                    hsv.v    = abs(*val);
-                    auto col = hsv.toColor32();
+                    hsv.s          = abs(*sat);
+                    hsv.v          = abs(*val);
+                    auto col       = hsv.toColor32();
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -557,7 +556,6 @@ void ParticleSystemQuad::updateParticleQuads()
                     quad->br.color = col;
                     quad->tl.color = col;
                     quad->tr.color = col;
-
                 }
             }
             else
@@ -567,9 +565,9 @@ void ParticleSystemQuad::updateParticleQuads()
                 {
                     hsv.fromRgba({*r, *g, *b, *a});
                     hsv.h += *hue;
-                    hsv.s    = abs(*sat);
-                    hsv.v    = abs(*val);
-                    auto col = hsv.toColor32();
+                    hsv.s          = abs(*sat);
+                    hsv.v          = abs(*val);
+                    auto col       = hsv.toColor32();
                     quad->bl.color = col;
                     quad->br.color = col;
                     quad->tl.color = col;
@@ -685,7 +683,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
             AXLOGW("Particle system: not enough memory");
             return;
         }
-        auto quadsNew = (V3F_T2F_C4B_Quad*)realloc(_quads, quadsSize);
+        auto quadsNew              = (V3F_T2F_C4B_Quad*)realloc(_quads, quadsSize);
         unsigned short* indicesNew = (unsigned short*)realloc(_indices, indicesSize);
 
         if (quadsNew && indicesNew)
@@ -829,4 +827,4 @@ std::string ParticleSystemQuad::getDescription() const
 {
     return fmt::format("<ParticleSystemQuad | Tag = {}, Total Particles = {}>", _tag, _totalParticles);
 }
-}
+}  // namespace ax

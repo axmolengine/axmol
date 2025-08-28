@@ -37,7 +37,6 @@
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/document.h"
 
-
 NS_AX_EXT_BEGIN
 
 struct DownloadUnit

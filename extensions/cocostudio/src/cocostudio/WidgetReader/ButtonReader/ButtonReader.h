@@ -51,4 +51,3 @@ public:
     int getResourceType(std::string_view key);
 };
 }  // namespace cocostudio
-

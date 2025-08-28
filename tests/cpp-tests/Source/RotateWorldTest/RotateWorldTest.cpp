@@ -54,7 +54,7 @@ void TestLayer::onEnter()
     label->setPosition(Vec2(x / 2, y / 3.5));
     addChild(label);
 
-    auto sprite        = Sprite::create(s_pathAxmolLogo);
+    auto sprite = Sprite::create(s_pathAxmolLogo);
     sprite->setScale(1.5f);
     sprite->setPosition(Vec2(x / 2, y / 1.5));
     addChild(sprite, -1);
@@ -126,7 +126,7 @@ void RotateWorldMainLayer::onEnter()
 
     auto blue  = LayerColor::create(Color32(0, 0, 255, 255));
     auto red   = LayerColor::create(Color32(255, 0, 0, 255));
-    auto dark = LayerColor::create(Color32(2, 2, 2, 255));
+    auto dark  = LayerColor::create(Color32(2, 2, 2, 255));
     auto white = LayerColor::create(Color32(255, 255, 255, 255));
 
     blue->setScale(0.5f);

@@ -58,8 +58,7 @@ template <typename T>
 inline HRESULT CreateInstance(REFCLSID clsid, winrt::com_ptr<T>& ptr)
 {
     ASSERT(!ptr);
-    return CoCreateInstance(clsid, nullptr, CLSCTX_INPROC_SERVER, __uuidof(T),
-                            reinterpret_cast<void**>(ptr.put()));
+    return CoCreateInstance(clsid, nullptr, CLSCTX_INPROC_SERVER, __uuidof(T), reinterpret_cast<void**>(ptr.put()));
 }
 
 #    define ASSERT_HR(expression) winrt::check_hresult(expression)
@@ -401,8 +400,8 @@ void Device::setAccelerometerEnabled(bool isEnabled)
         setAccelerometerInterval(0.0f);
         sEnabled = true;
 
-        sToken = sAccelerometer.ReadingChanged(
-                [](Accelerometer const& a, AccelerometerReadingChangedEventArgs const& e) {
+        sToken =
+            sAccelerometer.ReadingChanged([](Accelerometer const& a, AccelerometerReadingChangedEventArgs const& e) {
             if (!sEnabled)
             {
                 return;
@@ -481,7 +480,7 @@ void Device::setAccelerometerEnabled(bool isEnabled)
 
             std::shared_ptr<ax::InputEvent> event(new AccelerometerEvent(acc));
             ax::RenderViewImpl::sharedRenderView()->QueueEvent(event);
-            });
+        });
     }
 }
 
@@ -575,6 +574,6 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-}
+}  // namespace ax
 
 #endif  // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)

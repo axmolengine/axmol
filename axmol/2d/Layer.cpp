@@ -200,8 +200,8 @@ bool LayerGradient::initWithColor(const Color32& start, const Color32& end)
 
 bool LayerGradient::initWithColor(const Color32& start, const Color32& end, const Vec2& v)
 {
-    _endColor = end;
-    _alongVector  = v;
+    _endColor    = end;
+    _alongVector = v;
 
     _compressedInterpolation = true;
 
@@ -369,9 +369,9 @@ LayerRadialGradient* LayerRadialGradient::create()
 
 LayerRadialGradient::LayerRadialGradient()
 {
-    auto* program    = axpm->getBuiltinProgram(rhi::ProgramType::LAYER_RADIA_GRADIENT);
+    auto* program = axpm->getBuiltinProgram(rhi::ProgramType::LAYER_RADIA_GRADIENT);
     //!!! LayerRadialGradient private programState don't want affect by Node::_programState, so store at _customCommand
-    auto pipelinePS          = new rhi::ProgramState(program);
+    auto pipelinePS = new rhi::ProgramState(program);
     _customCommand.setOwnPSVL(pipelinePS, program->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
     _mvpMatrixLocation  = pipelinePS->getUniformLocation("u_MVPMatrix");
     _startColorLocation = pipelinePS->getUniformLocation("u_startColor");
@@ -404,10 +404,10 @@ bool LayerRadialGradient::initWithColor(const ax::Color32& startColor,
     if (Node::initLayer())
     {
         _startColorRend = static_cast<ax::Color>(startColor);
-        _startColor = startColor;
+        _startColor     = startColor;
 
         _endColorRend = static_cast<ax::Color>(endColor);
-        _endColor = endColor;
+        _endColor     = endColor;
 
         _expand = expand;
 
@@ -426,7 +426,7 @@ void LayerRadialGradient::draw(Renderer* renderer, const Mat4& transform, uint32
     renderer->addCommand(&_customCommand);
 
     const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto ps         = _customCommand.unsafePS();
+    auto ps                   = _customCommand.unsafePS();
     Mat4 finalMat             = projectionMat * transform;
     ps->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));
 
@@ -502,7 +502,7 @@ float LayerRadialGradient::getExpand() const
 
 void LayerRadialGradient::setStartColor(const ax::Color32& color)
 {
-    _startColor = color;
+    _startColor     = color;
     _startColorRend = static_cast<ax::Color>(color);
 }
 
@@ -513,7 +513,7 @@ Color32 LayerRadialGradient::getStartColor() const
 
 void LayerRadialGradient::setEndColor(const ax::Color32& color)
 {
-    _endColor = color;
+    _endColor     = color;
     _endColorRend = static_cast<ax::Color>(color);
 }
 
@@ -720,4 +720,4 @@ std::string LayerMultiplex::getDescription() const
     return fmt::format("<LayerMultiplex | Tag = {}, Layers = {}", _tag, static_cast<int>(_children.size()));
 }
 
-}
+}  // namespace ax

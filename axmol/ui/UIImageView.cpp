@@ -162,7 +162,8 @@ void ImageView::setTextureRect(const Rect& rect)
 {
     // This API should be refactor
     if (_scale9Enabled)
-    {}
+    {
+    }
     else
     {
         auto sprite = _imageRenderer->getSprite();
@@ -315,4 +316,4 @@ const BlendFunc& ImageView::getBlendFunc() const
 
 }  // namespace ui
 
-}
+}  // namespace ax

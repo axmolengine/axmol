@@ -453,4 +453,4 @@ void Text::copySpecialProperties(Widget* widget)
 
 }  // namespace ui
 
-}
+}  // namespace ax

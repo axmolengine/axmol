@@ -7,7 +7,7 @@
 #include "box2d/types.h"
 #include "settings.h"
 
-#define ARRAY_COUNT( A ) (int)( sizeof( A ) / sizeof( A[0] ) )
+#define ARRAY_COUNT(A) (int)(sizeof(A) / sizeof(A[0]))
 
 namespace enki
 {
@@ -24,78 +24,79 @@ constexpr int k_maxContactPoints = 12 * 2048;
 
 struct ContactPoint
 {
-	b2ShapeId shapeIdA;
-	b2ShapeId shapeIdB;
-	b2Vec2 normal;
-	b2Vec2 position;
-	bool persisted;
-	float normalImpulse;
-	float tangentImpulse;
-	float separation;
-	int constraintIndex;
-	int color;
+    b2ShapeId shapeIdA;
+    b2ShapeId shapeIdB;
+    b2Vec2 normal;
+    b2Vec2 position;
+    bool persisted;
+    float normalImpulse;
+    float tangentImpulse;
+    float separation;
+    int constraintIndex;
+    int color;
 };
 
 class Sample
 {
 public:
-	explicit Sample( Settings& settings );
-	virtual ~Sample();
+    explicit Sample(Settings& settings);
+    virtual ~Sample();
 
-	void CreateWorld( );
+    void CreateWorld();
 
-	void DrawTitle( const char* string );
-	virtual void Step( Settings& settings );
-	virtual void UpdateGui()
-	{
-	}
-	virtual void Keyboard( int )
-	{
-	}
-	virtual void MouseDown( b2Vec2 p, int button, int mod );
-	virtual void MouseUp( b2Vec2 p, int button );
-	virtual void MouseMove( b2Vec2 p );
+    void DrawTitle(const char* string);
+    virtual void Step(Settings& settings);
+    virtual void UpdateGui() {}
+    virtual void Keyboard(int) {}
+    virtual void MouseDown(b2Vec2 p, int button, int mod);
+    virtual void MouseUp(b2Vec2 p, int button);
+    virtual void MouseMove(b2Vec2 p);
 
-	void DrawTextLine( const char* text, ... );
-	void ResetProfile();
-	void ShiftOrigin( b2Vec2 newOrigin );
+    void DrawTextLine(const char* text, ...);
+    void ResetProfile();
+    void ShiftOrigin(b2Vec2 newOrigin);
 
-	static int ParsePath( const char* svgPath, b2Vec2 offset, b2Vec2* points, int capacity, float scale, bool reverseOrder );
+    static int ParsePath(const char* svgPath,
+                         b2Vec2 offset,
+                         b2Vec2* points,
+                         int capacity,
+                         float scale,
+                         bool reverseOrder);
 
-	friend class DestructionListener;
-	friend class BoundaryListener;
-	friend class ContactListener;
+    friend class DestructionListener;
+    friend class BoundaryListener;
+    friend class ContactListener;
 
-	static constexpr int m_maxTasks = 64;
-	static constexpr int m_maxThreads = 64;
+    static constexpr int m_maxTasks   = 64;
+    static constexpr int m_maxThreads = 64;
 
-	const Settings* m_settings;
-	enki::TaskScheduler* m_scheduler;
-	class SampleTask* m_tasks;
-	int m_taskCount;
-	int m_threadCount;
+    const Settings* m_settings;
+    enki::TaskScheduler* m_scheduler;
+    class SampleTask* m_tasks;
+    int m_taskCount;
+    int m_threadCount;
 
-	b2BodyId m_groundBodyId;
+    b2BodyId m_groundBodyId;
 
-	// DestructionListener m_destructionListener;
-	int m_textLine;
-	b2WorldId m_worldId;
-	b2JointId m_mouseJointId;
-	int m_stepCount;
-	int m_textIncrement;
-	b2Profile m_maxProfile;
-	b2Profile m_totalProfile;
+    // DestructionListener m_destructionListener;
+    int m_textLine;
+    b2WorldId m_worldId;
+    b2JointId m_mouseJointId;
+    int m_stepCount;
+    int m_textIncrement;
+    b2Profile m_maxProfile;
+    b2Profile m_totalProfile;
 };
 
-typedef Sample* SampleCreateFcn( Settings& settings );
+typedef Sample* SampleCreateFcn(Settings& settings);
 
-int RegisterSample( const char* category, const char* name, SampleCreateFcn* fcn );
+int RegisterSample(const char* category, const char* name, SampleCreateFcn* fcn);
 
 struct SampleEntry
 {
-	const char* category;
-	const char* name;
-	SampleCreateFcn* createFcn;
+    const char* category;
+    const char* name;
+    SampleCreateFcn* createFcn;
 };
 
 #define MAX_SAMPLES 256

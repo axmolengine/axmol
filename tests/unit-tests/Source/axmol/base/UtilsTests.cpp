@@ -28,9 +28,10 @@
 
 using namespace ax;
 
-
-TEST_SUITE("base/Utils") {
-    TEST_CASE("parseIntegerList") {
+TEST_SUITE("base/Utils")
+{
+    TEST_CASE("parseIntegerList")
+    {
         using ax::utils::parseIntegerList;
 
         std::vector<int> res1{};

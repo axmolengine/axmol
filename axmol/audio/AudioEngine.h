@@ -53,9 +53,9 @@ namespace ax
  */
 struct AX_DLL AudioPlayerSettings
 {
-    bool loop = false; // Whether audio instance loop or not.
-    float volume = 1.0f; // Volume value (range from 0.0 to 1.0).
-    float time = 0.0f; // The initial time offset when play audio
+    bool loop    = false;  // Whether audio instance loop or not.
+    float volume = 1.0f;   // Volume value (range from 0.0 to 1.0).
+    float time   = 0.0f;   // The initial time offset when play audio
 };
 
 /**
@@ -141,7 +141,7 @@ public:
                            float volume                = 1.0f,
                            const AudioProfile* profile = nullptr);
 
-     /**
+    /**
      * Play 2d sound.
      *
      * @param filePath The path of an audio file.
@@ -402,7 +402,7 @@ protected:
     friend class AudioEngineImpl;
 };
 
-}
+}  // namespace ax
 
 // end group
 /// @}

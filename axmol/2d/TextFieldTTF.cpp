@@ -37,8 +37,8 @@ THE SOFTWARE.
 namespace ax
 {
 
-#define CURSOR_TIME_SHOW_HIDE 0.5f
-#define CURSOR_DEFAULT_CHAR '|'
+#define CURSOR_TIME_SHOW_HIDE       0.5f
+#define CURSOR_DEFAULT_CHAR         '|'
 #define PASSWORD_STYLE_TEXT_DEFAULT "\xe2\x80\xa2"
 static std::size_t _calcCharCount(const char* text)
 {
@@ -340,8 +340,8 @@ void TextFieldTTF::deleteBackward(size_t numChars)
         totalDeleteLen += deleteLen;
     }
 
-    if (_delegate &&
-        _delegate->onTextFieldDeleteBackward(this, _inputText.c_str() + len - totalDeleteLen, static_cast<int>(totalDeleteLen)))
+    if (_delegate && _delegate->onTextFieldDeleteBackward(this, _inputText.c_str() + len - totalDeleteLen,
+                                                          static_cast<int>(totalDeleteLen)))
     {
         // delegate doesn't want to delete backwards
         return;
@@ -764,4 +764,4 @@ bool TextFieldTTF::isSecureTextEntry() const
     return _secureTextEntry;
 }
 
-}
+}  // namespace ax

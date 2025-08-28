@@ -150,7 +150,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            //btn->setVisible(false);
+            // btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);
@@ -170,7 +170,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            //btn->setVisible(false);
+            // btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);
@@ -191,7 +191,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            //btn->setVisible(false);
+            // btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);
@@ -214,7 +214,8 @@ struct DownloaderTest : public TestCase
             bar->setVisible(true);
             bar->setEnabled(true);
             auto path = FileUtils::getInstance()->getWritablePath() + "CppTests/DownloaderTest/" + sNameList[3];
-            auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3], sBigFileDigest, false);
+            auto task =
+                this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3], sBigFileDigest, false);
         });
         bottomRightView->setName(sNameList[3]);
         bottomRightView->setAnchorPoint(Vec2(0, 1));
@@ -308,10 +309,10 @@ struct DownloaderTest : public TestCase
         };
 
         // define failed callback
-        downloader->onTaskError = [this](const ax::network::DownloadTask& task, int errorCode,
-                                         int errorCodeInternal, std::string_view errorStr) {
+        downloader->onTaskError = [this](const ax::network::DownloadTask& task, int errorCode, int errorCodeInternal,
+                                         std::string_view errorStr) {
             AXLOGW("Failed to download : {}, identifier({}) error code({}), internal error code({}) desc({})",
-                task.requestURL, task.identifier, errorCode, errorCodeInternal, errorStr);
+                   task.requestURL, task.identifier, errorCode, errorCodeInternal, errorStr);
             auto view   = this->getChildByName(task.identifier);
             auto status = (Label*)view->getChildByTag(TAG_STATUS);
             status->setString(errorStr.length() ? errorStr : "Download failed.");
@@ -348,7 +349,8 @@ struct DownloaderMultiTask : public TestCase
         for (int i = 0; i < 64; i++)
         {
             auto namesv = fmt::format_to_z(name, "{}_{}", i, sNameList[0]);
-            auto pathsv = fmt::format_to_z(path, "{}CppTests/DownloaderTest/{}", FileUtils::getInstance()->getWritablePath().c_str(), name);
+            auto pathsv = fmt::format_to_z(path, "{}CppTests/DownloaderTest/{}",
+                                           FileUtils::getInstance()->getWritablePath().c_str(), name);
             AXLOGI("downloader task create: {}", name);
             this->downloader->createDownloadFileTask(sURLList[0], pathsv, namesv);
         }
@@ -358,9 +360,9 @@ struct DownloaderMultiTask : public TestCase
 
         downloader->onTaskError =
             ([](const network::DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr) {
-                AXLOGI("downloader task failed : {}, identifier({}) error code({}), internal error code({}) desc({})",
-                    task.requestURL, task.identifier, errorCode, errorCodeInternal, errorStr);
-            });
+            AXLOGI("downloader task failed : {}, identifier({}) error code({}), internal error code({}) desc({})",
+                   task.requestURL, task.identifier, errorCode, errorCodeInternal, errorStr);
+        });
     }
 };
 

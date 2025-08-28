@@ -2,16 +2,14 @@
 
 #if defined(AX_ENABLE_EXT_SPINE)
 
-#if !defined(AX_SPINE_VERSION) || AX_SPINE_VERSION >= 0x030700
+#    if !defined(AX_SPINE_VERSION) || AX_SPINE_VERSION >= 0x030700
 SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 {
     static SpineSkeletonDataCache internalShared;
     return &internalShared;
 }
 
-SpineSkeletonDataCache::SpineSkeletonDataCache()
-{
-}
+SpineSkeletonDataCache::SpineSkeletonDataCache() {}
 
 void SpineSkeletonDataCache::removeData(const char* dataFile)
 {
@@ -128,7 +126,7 @@ void SpineSkeletonDataCache::removeAllUnusedData(void)
     }
 }
 
-#else
+#    else
 
 SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 {
@@ -136,9 +134,7 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
     return &internalShared;
 }
 
-SpineSkeletonDataCache::SpineSkeletonDataCache()
-{
-}
+SpineSkeletonDataCache::SpineSkeletonDataCache() {}
 
 void SpineSkeletonDataCache::removeData(const char* dataFile)
 {
@@ -272,6 +268,6 @@ void SpineSkeletonDataCache::removeAllUnusedData(void)
         ++_First;
     }
 }
-#endif
+#    endif
 
-#endif // defined(AX_ENABLE_EXT_SPINE)
+#endif  // defined(AX_ENABLE_EXT_SPINE)

@@ -26,7 +26,7 @@
 #pragma once
 
 #define NS_AX_EXT_BEGIN \
-    namespace ax   \
+    namespace ax        \
     {                   \
     namespace extension \
     {

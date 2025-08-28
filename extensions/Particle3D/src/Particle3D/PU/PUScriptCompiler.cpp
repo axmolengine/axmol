@@ -408,4 +408,4 @@ PUScriptCompiler* PUScriptCompiler::Instance()
     return &psc;
 }
 
-}
+}  // namespace ax

@@ -35,7 +35,8 @@
 
 #include <string>
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 class CommandBuffer;
 class Buffer;
@@ -65,7 +66,7 @@ enum class FeatureType : uint32_t
     MAPBUFFER,
     DEPTH24,
     ASTC,
-    VERTEX_ATTRIB_BINDING, // GL330 / GLES30, need detect
+    VERTEX_ATTRIB_BINDING,  // GL330 / GLES30, need detect
 };
 
 /**
@@ -117,8 +118,8 @@ public:
 
     virtual RenderTarget* createDefaultRenderTarget() = 0;
 
-    virtual RenderTarget* createRenderTarget(Texture* colorAttachment    = nullptr,
-                                          Texture* depthStencilAttachment    = nullptr) = 0;
+    virtual RenderTarget* createRenderTarget(Texture* colorAttachment        = nullptr,
+                                             Texture* depthStencilAttachment = nullptr) = 0;
 
     virtual DepthStencilState* createDepthStencilState() = 0;
 
@@ -154,7 +155,7 @@ public:
     virtual void resetState() {};
 
     /// below is driver info
-     /**
+    /**
      * Get vendor device name.
      * @return Vendor device name.
      */
@@ -180,8 +181,8 @@ public:
     virtual bool hasExtension(std::string_view /*extName*/) const { return false; };
 
     /**
-    * Dump all extensions to string
-    */
+     * Dump all extensions to string
+     */
     virtual std::string dumpExtensions() const { return {}; };
 
     /**
@@ -239,6 +240,6 @@ private:
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi
 
 #define axdrv ax::rhi::DriverBase::getInstance()

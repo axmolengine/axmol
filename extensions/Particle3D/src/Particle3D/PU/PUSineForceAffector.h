@@ -65,5 +65,4 @@ protected:
     float _frequencyMax;
     float _frequency;
 };
-}
-
+}  // namespace ax

@@ -27,7 +27,8 @@
 #include "axmol/rhi/Buffer.h"
 #import <Metal/Metal.h>
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 /**
  * @addtogroup _metal
@@ -78,7 +79,7 @@ public:
     /**
      * Emply implementation. Mainly used in EGL context lost.
      */
-    void usingDefaultStoredData(bool needDefaultStoredData) override{};
+    void usingDefaultStoredData(bool needDefaultStoredData) override {};
 
     /// @name Setters & Getters
     id<MTLBuffer> getMTLBuffer() const;
@@ -100,4 +101,4 @@ private:
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

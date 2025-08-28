@@ -34,13 +34,16 @@
 //// Widget macro
 //
 
-#define DECLARE_CLASS_GUI_INFO                   \
-public:                                          \
+#define DECLARE_CLASS_GUI_INFO              \
+public:                                     \
     static ax::ObjectFactory::TInfo __Type; \
     static ax::Object* createInstance();
 
-#define IMPLEMENT_CLASS_GUI_INFO(className)                                   \
-    ax::Object* className::createInstance() { return className::create(); } \
+#define IMPLEMENT_CLASS_GUI_INFO(className) \
+    ax::Object* className::createInstance() \
+    {                                       \
+        return className::create();         \
+    }                                       \
     ax::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
 #define CREATE_CLASS_GUI_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)
@@ -49,20 +52,23 @@ public:                                          \
 //// Reader macro
 //
 
-#define DECLARE_CLASS_WIDGET_READER_INFO         \
-public:                                          \
+#define DECLARE_CLASS_WIDGET_READER_INFO    \
+public:                                     \
     static ax::ObjectFactory::TInfo __Type; \
     static ax::Object* createInstance();
 
-#define IMPLEMENT_CLASS_WIDGET_READER_INFO(className)                              \
-    ax::Object* className::createInstance() { return className::getInstance(); } \
+#define IMPLEMENT_CLASS_WIDGET_READER_INFO(className) \
+    ax::Object* className::createInstance()           \
+    {                                                 \
+        return className::getInstance();              \
+    }                                                 \
     ax::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
 #define CREATE_CLASS_WIDGET_READER_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)
 
-#define AX_VIDEOPLAYER_DEBUG_DRAW 0
+#define AX_VIDEOPLAYER_DEBUG_DRAW                  0
 
-#define __LAYOUT_COMPONENT_NAME "__ui_layout"
+#define __LAYOUT_COMPONENT_NAME                    "__ui_layout"
 ///@endcond
 
 namespace ax
@@ -113,5 +119,4 @@ struct AX_DLL ResourceData
         return *this;
     }
 };
-}
-
+}  // namespace ax

@@ -26,7 +26,7 @@
 
 #pragma once
 
-//#include <iostream>
+// #include <iostream>
 #include "Particle3D/PU/PUParticleSystem3D.h"
 #include "Particle3D/PU/PUScriptTranslator.h"
 #include "Particle3D/PU/PUScriptCompiler.h"
@@ -51,5 +51,4 @@ protected:
     PUParticleSystem3D* _system;
 };
 
-}
-
+}  // namespace ax

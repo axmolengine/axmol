@@ -60,7 +60,7 @@ public:
     static void destroyInstance();
     static const char* sceneReaderVersion();
     ax::Node* createNodeWithSceneFile(std::string_view fileName,
-                                           AttachComponentType attachComponent = AttachComponentType::EMPTY_NODE);
+                                      AttachComponentType attachComponent = AttachComponentType::EMPTY_NODE);
     void setTarget(const std::function<void(ax::Object* obj, void* doc)>& selector);
     ax::Node* getNodeByTag(int nTag);
     inline AttachComponentType getAttachComponentType() { return _attachComponent; }
@@ -72,16 +72,14 @@ private:
 
     ax::Component* createComponent(std::string_view classname);
 
-    ax::Node* createObject(const rapidjson::Value& dict,
-                                ax::Node* parent,
-                                AttachComponentType attachComponent);
+    ax::Node* createObject(const rapidjson::Value& dict, ax::Node* parent, AttachComponentType attachComponent);
     void setPropertyFromJsonDict(const rapidjson::Value& dict, ax::Node* node);
     bool readJson(std::string_view fileName, rapidjson::Document& doc);
 
     ax::Node* createObject(CocoLoader* cocoLoader,
-                                stExpCocoNode* cocoNode,
-                                ax::Node* parent,
-                                AttachComponentType attachComponent);
+                           stExpCocoNode* cocoNode,
+                           ax::Node* parent,
+                           AttachComponentType attachComponent);
     void setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, ax::Node* node);
 
     ax::Node* nodeByTag(ax::Node* parent, int tag);

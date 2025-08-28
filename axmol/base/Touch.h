@@ -168,5 +168,4 @@ private:
 // end of base group
 /// @}
 
-}
-
+}  // namespace ax

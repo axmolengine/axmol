@@ -244,9 +244,9 @@ Vec2 RenderView::getVisibleOrigin() const
 void RenderView::setViewPortInPoints(float x, float y, float w, float h)
 {
     Viewport vp;
-    vp.x = (int)(x * _scaleX + _viewPortRect.origin.x);
-    vp.y = (int)(y * _scaleY + _viewPortRect.origin.y);
-    vp.width = (unsigned int)(w * _scaleX);
+    vp.x      = (int)(x * _scaleX + _viewPortRect.origin.x);
+    vp.y      = (int)(y * _scaleY + _viewPortRect.origin.y);
+    vp.width  = (unsigned int)(w * _scaleX);
     vp.height = (unsigned int)(h * _scaleY);
     Camera::setDefaultViewport(vp);
 }
@@ -398,10 +398,10 @@ void RenderView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys
 }
 
 void RenderView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
-                                        int num,
-                                        intptr_t ids[],
-                                        float xs[],
-                                        float ys[])
+                                            int num,
+                                            intptr_t ids[],
+                                            float xs[],
+                                            float ys[])
 {
     intptr_t id = 0;
     float x     = 0.0f;
@@ -497,9 +497,7 @@ void RenderView::renderScene(Scene* scene, Renderer* renderer)
     scene->render(renderer, Mat4::IDENTITY, nullptr);
 }
 
-void RenderView::queueOperation(AsyncOperation /*op*/, void* /*param*/)
-{
-}
+void RenderView::queueOperation(AsyncOperation /*op*/, void* /*param*/) {}
 
 void RenderView::setInteractive(bool interactive)
 {
@@ -514,7 +512,7 @@ void RenderView::setInteractive(bool interactive)
 void RenderView::cancelAllTouches()
 {
     EventTouch touchEvent;
-    touchEvent._touches = getAllTouchesVector();
+    touchEvent._touches   = getAllTouchesVector();
     touchEvent._eventCode = EventTouch::EventCode::CANCELLED;
 
     if (touchEvent._touches.empty())
@@ -523,7 +521,7 @@ void RenderView::cancelAllTouches()
         return;
     }
 
-    auto dispatcher= Director::getInstance()->getEventDispatcher();
+    auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->dispatchEvent(&touchEvent);
 
     for (auto&& touch : touchEvent._touches)
@@ -541,4 +539,4 @@ void RenderView::cancelAllTouches()
     }
 }
 
-}
+}  // namespace ax

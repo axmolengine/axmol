@@ -32,19 +32,19 @@
 #endif
 
 #if defined(__EMSCRIPTEN__)
-    #import <AL/al.h>
-    #import <AL/alc.h>
-    #define MAX_AUDIOINSTANCES 128
+#    import <AL/al.h>
+#    import <AL/alc.h>
+#    define MAX_AUDIOINSTANCES 128
 #else
-    #if !AX_USE_ALSOFT
-    #    import <OpenAL/al.h>
-    #    import <OpenAL/alc.h>
-    #    define MAX_AUDIOINSTANCES 128
-    #else
-    #    define AL_ALEXT_PROTOTYPES 1
-    #    include "AL/al.h"
-    #    include "AL/alc.h"
-    #    include "AL/alext.h"
-    #    define MAX_AUDIOINSTANCES 128
-    #endif
+#    if !AX_USE_ALSOFT
+#        import <OpenAL/al.h>
+#        import <OpenAL/alc.h>
+#        define MAX_AUDIOINSTANCES 128
+#    else
+#        define AL_ALEXT_PROTOTYPES 1
+#        include "AL/al.h"
+#        include "AL/alc.h"
+#        include "AL/alext.h"
+#        define MAX_AUDIOINSTANCES 128
+#    endif
 #endif

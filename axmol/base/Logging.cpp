@@ -147,7 +147,8 @@ AX_API LogItem&& preprocessLog(LogItem&& item)
             prefix_size += fmt::format_to_n(wptr + prefix_size, buffer_size - prefix_size,
                                             "[{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}.{:03d}]", ts.tm_year + 1900,
                                             ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec,
-                                            static_cast<int>(tv_msec % std::milli::den)).size;
+                                            static_cast<int>(tv_msec % std::milli::den))
+                               .size;
         }
         if (bitmask::any(s_logFmtFlags, LogFmtFlag::ProcessId))
             prefix_size +=
@@ -231,4 +232,4 @@ AX_DLL void writeLog(LogItem& item, const char* tag)
 #    endif
 #endif
 }
-}
+}  // namespace ax

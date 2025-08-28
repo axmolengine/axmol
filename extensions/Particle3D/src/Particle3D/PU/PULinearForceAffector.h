@@ -42,8 +42,7 @@ public:
 
     void copyAttributesTo(PUAffector* affector) override;
 
-    PULinearForceAffector(){};
-    virtual ~PULinearForceAffector(){};
+    PULinearForceAffector() {};
+    virtual ~PULinearForceAffector() {};
 };
-}
-
+}  // namespace ax

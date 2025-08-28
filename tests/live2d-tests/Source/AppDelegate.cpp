@@ -12,27 +12,25 @@
 #include "LAppPal.hpp"
 
 #if USE_AUDIO_ENGINE && USE_SIMPLE_AUDIO_ENGINE
-#error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
+#    error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
 #endif
 
 #if USE_AUDIO_ENGINE
-#include "audio/include/AudioEngine.h"
+#    include "audio/include/AudioEngine.h"
 using namespace ax::experimental;
 #elif USE_SIMPLE_AUDIO_ENGINE
-#include "audio/include/SimpleAudioEngine.h"
+#    include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;
 #endif
 
 using namespace ax;
 
 static ax::Size designResolutionSize = ax::Size(LAppDefine::RenderTargetWidth, LAppDefine::RenderTargetHeight);
-static ax::Size smallResolutionSize = ax::Size(480, 320);
+static ax::Size smallResolutionSize  = ax::Size(480, 320);
 static ax::Size mediumResolutionSize = ax::Size(1024, 768);
-static ax::Size largeResolutionSize = ax::Size(2048, 1536);
+static ax::Size largeResolutionSize  = ax::Size(2048, 1536);
 
-AppDelegate::AppDelegate()
-{
-}
+AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate()
 {
@@ -61,18 +59,20 @@ void AppDelegate::initGfxContextAttrs()
 // don't modify or remove this function
 static int register_all_packages()
 {
-    return 0; //flag for packages manager
+    return 0;  // flag for packages manager
 }
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
-    auto director = Director::getInstance();
+    auto director   = Director::getInstance();
     auto renderView = director->getRenderView();
-    if(!renderView)
+    if (!renderView)
     {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-        renderView = RenderViewImpl::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+        renderView = RenderViewImpl::createWithRect(
+            "Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
         renderView = RenderViewImpl::create("Demo");
 #endif
@@ -86,35 +86,37 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 
     // Set the design resolution
-    renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::SHOW_ALL);
-//    auto frameSize = renderView->getFrameSize();
-//    // if the frame's height is larger than the height of medium size.
-//    if (frameSize.height > mediumResolutionSize.height)
-//    {
-//        director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
-//    }
-//    // if the frame's height is larger than the height of small size.
-//    else if (frameSize.height > smallResolutionSize.height)
-//    {
-//        director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height, mediumResolutionSize.width/designResolutionSize.width));
-//    }
-//    // if the frame's height is smaller than the height of medium size.
-//    else
-//    {
-//        director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
-//    }
+    renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
+                                        ResolutionPolicy::SHOW_ALL);
+    //    auto frameSize = renderView->getFrameSize();
+    //    // if the frame's height is larger than the height of medium size.
+    //    if (frameSize.height > mediumResolutionSize.height)
+    //    {
+    //        director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height,
+    //        largeResolutionSize.width/designResolutionSize.width));
+    //    }
+    //    // if the frame's height is larger than the height of small size.
+    //    else if (frameSize.height > smallResolutionSize.height)
+    //    {
+    //        director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height,
+    //        mediumResolutionSize.width/designResolutionSize.width));
+    //    }
+    //    // if the frame's height is smaller than the height of medium size.
+    //    else
+    //    {
+    //        director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height,
+    //        smallResolutionSize.width/designResolutionSize.width));
+    //    }
 
     register_all_packages();
 
     // prepare for Cubism Framework API.
-    _cubismOption.LogFunction = LAppPal::PrintMessage;
+    _cubismOption.LogFunction  = LAppPal::PrintMessage;
     _cubismOption.LoggingLevel = LAppDefine::CubismLoggingLevel;
     Csm::CubismFramework::StartUp(&_cubismAllocator, &_cubismOption);
 
-    _recreatedEventlistener = ax::EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*)
-    {
-        LAppLive2DManager::GetInstance()->RecreateRenderer();
-    });
+    _recreatedEventlistener = ax::EventListenerCustom::create(
+        EVENT_RENDERER_RECREATED, [this](EventCustom*) { LAppLive2DManager::GetInstance()->RecreateRenderer(); });
     director->getEventDispatcher()->addEventListenerWithFixedPriority(_recreatedEventlistener, -1);
 
     // create a scene. it's an autorelease object

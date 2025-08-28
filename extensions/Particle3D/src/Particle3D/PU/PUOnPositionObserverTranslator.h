@@ -37,11 +37,10 @@ class PUOnPositionObserverTranslator : public PUScriptTranslator
 {
 public:
     PUOnPositionObserverTranslator();
-    virtual ~PUOnPositionObserverTranslator(){};
+    virtual ~PUOnPositionObserverTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

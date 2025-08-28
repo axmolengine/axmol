@@ -29,7 +29,8 @@
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/PixelBufferDesc.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 /**
  * @addtogroup _opengl
  * @{
@@ -66,7 +67,6 @@ struct UtilsGL
      */
     static GLsizei getGLDataTypeSize(GLenum size);
 
-
     /**
      * Get textrue parameters from texture pixle format.
      * @param in textureFormat Specifies texture pixel format.
@@ -75,10 +75,7 @@ struct UtilsGL
      * @param out type Specifies the data type of the texel data.
      * @param out isCompressed Specifies if the texel data is compressed.
      */
-    static void toGLTypes(PixelFormat textureFormat,
-                          GLint& internalFormat,
-                          GLuint& format,
-                          GLenum& type);
+    static void toGLTypes(PixelFormat textureFormat, GLint& internalFormat, GLuint& format, GLenum& type);
 
     /**
      * Convert compare function to GLenum. i.e. convert CompareFunc::NEVER to GL_NEVER.
@@ -138,4 +135,4 @@ struct UtilsGL
 };
 // end of _opengl group
 /// @}
-}
+}  // namespace ax::rhi::gl

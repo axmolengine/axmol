@@ -182,4 +182,4 @@ protected:
 
 /// @endcond
 
-}
+}  // namespace ax

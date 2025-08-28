@@ -61,7 +61,7 @@ private:
     friend class EventListenerFocus;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

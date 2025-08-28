@@ -56,7 +56,8 @@ static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, Box2DTes
 {
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
-    context->AddCircle(CircleData{PhysicsHelper::toColor(color), b2Vec2{center.x * ratio + offset.x, center.y * ratio + offset.y}, radius * ratio});
+    context->AddCircle(CircleData{PhysicsHelper::toColor(color),
+                                  b2Vec2{center.x * ratio + offset.x, center.y * ratio + offset.y}, radius * ratio});
 }
 
 static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Box2DTestDebugDrawNode* context)
@@ -66,7 +67,8 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Box
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
     context->AddCircle({{t.p.x * ratio + offset.x, t.p.y * ratio + offset.y, t.q.c, t.q.s},
-                        PhysicsHelper::toColor(color), radius * ratio});
+                        PhysicsHelper::toColor(color),
+                        radius * ratio});
 }
 
 static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor c, Box2DTestDebugDrawNode* context)
@@ -94,8 +96,7 @@ static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor 
     context->AddCapsule({{transform.p.x + offset.x, transform.p.y + offset.y, transform.q.c, transform.q.s},
                          rgba,
                          radius * ratio,
-                         length
-                         });
+                         length});
 }
 
 Box2DTestDebugDrawNode::~Box2DTestDebugDrawNode()
@@ -127,15 +128,15 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 
     /// circle shader
     {
-        auto& cmd        = _customCommandCircle;
+        auto& cmd = _customCommandCircle;
 
         // vertex attributes
-        auto program = axpm->loadProgram("custom/circle_vs", "custom/circle_fs");
-        auto pipelinePS   = new rhi::ProgramState(program);
-        auto vfmt    = axvlm->allocateVertexLayoutDesc();
+        auto program    = axpm->loadProgram("custom/circle_vs", "custom/circle_fs");
+        auto pipelinePS = new rhi::ProgramState(program);
+        auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(3);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"),
-                        rhi::VertexFormat::FLOAT2, 0, false);
+        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexFormat::FLOAT2, 0,
+                       false);
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
         float a           = 1.1f;
         b2Vec2 vertices[] = {{-a, -a}, {a, -a}, {-a, a}, {a, -a}, {a, a}, {-a, a}};
@@ -143,10 +144,10 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
         cmd.setVertexDrawInfo(0, 6);
 
         // instanced attributes
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"),
-                                 rhi::VertexFormat::FLOAT4, offsetof(CircleData, rgba), false, 1);
+        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexFormat::FLOAT4,
+                       offsetof(CircleData, rgba), false, 1);
         vfmt.addAttrib("a_instancePosAndRadius", program->getVertexInputDesc("a_instancePosAndRadius"),
-                                rhi::VertexFormat::FLOAT4, offsetof(CircleData, position), false, 1);
+                       rhi::VertexFormat::FLOAT4, offsetof(CircleData, position), false, 1);
         vfmt.endLayout();
 
         auto pipelineVL = axvlm->acquireVertexLayout(std::move(vfmt));
@@ -159,15 +160,15 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 
     /// solid circle shader
     {
-        auto& cmd        = _customCommandSolidCircle;
+        auto& cmd = _customCommandSolidCircle;
 
         // vertex attributes
-        auto program = axpm->loadProgram("custom/solid_circle_vs", "custom/solid_circle_fs");
+        auto program    = axpm->loadProgram("custom/solid_circle_vs", "custom/solid_circle_fs");
         auto pipelinePS = new rhi::ProgramState(program);
-        auto vfmt    = axvlm->allocateVertexLayoutDesc();
+        auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(4);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"),
-                      rhi::VertexFormat::FLOAT2, 0, false);
+        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexFormat::FLOAT2, 0,
+                       false);
 
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
         float a           = 1.1f;
@@ -177,11 +178,11 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 
         // instanced attributes
         vfmt.addAttrib("a_instanceTransform", program->getVertexInputDesc("a_instanceTransform"),
-                        rhi::VertexFormat::FLOAT4, offsetof(SolidCircleData, transform), false, 1);
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"),
-                        rhi::VertexFormat::FLOAT4, offsetof(SolidCircleData, rgba), false, 1);
-        vfmt.addAttrib("a_instanceRadius", program->getVertexInputDesc("a_instanceRadius"),
-                                 rhi::VertexFormat::FLOAT4, offsetof(SolidCircleData, radius), false, 1);
+                       rhi::VertexFormat::FLOAT4, offsetof(SolidCircleData, transform), false, 1);
+        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexFormat::FLOAT4,
+                       offsetof(SolidCircleData, rgba), false, 1);
+        vfmt.addAttrib("a_instanceRadius", program->getVertexInputDesc("a_instanceRadius"), rhi::VertexFormat::FLOAT4,
+                       offsetof(SolidCircleData, radius), false, 1);
         vfmt.endLayout();
 
         auto pipelineVL = axvlm->acquireVertexLayout(std::move(vfmt));
@@ -193,15 +194,15 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 
     /// solid capsule shader
     {
-        auto& cmd        = _customCommandCapsule;
+        auto& cmd = _customCommandCapsule;
 
         // vertex attributes
-        auto program = axpm->loadProgram("custom/solid_capsule_vs", "custom/solid_capsule_fs");
+        auto program    = axpm->loadProgram("custom/solid_capsule_vs", "custom/solid_capsule_fs");
         auto pipelinePS = new rhi::ProgramState(program);
-        auto vfmt    = axvlm->allocateVertexLayoutDesc();
+        auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(4);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"),
-                        rhi::VertexFormat::FLOAT2, 0, false);
+        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexFormat::FLOAT2, 0,
+                       false);
 
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
         float a           = 1.1f;
@@ -211,11 +212,11 @@ bool Box2DTestDebugDrawNode::initWithWorld(b2WorldId worldId)
 
         // instanced attributes
         vfmt.addAttrib("a_instanceTransform", program->getVertexInputDesc("a_instanceTransform"),
-                                 rhi::VertexFormat::FLOAT4, offsetof(CapsuleData, transform), false, 1);
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"),
-                                 rhi::VertexFormat::FLOAT4, offsetof(CapsuleData, rgba), false, 1);
+                       rhi::VertexFormat::FLOAT4, offsetof(CapsuleData, transform), false, 1);
+        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexFormat::FLOAT4,
+                       offsetof(CapsuleData, rgba), false, 1);
         vfmt.addAttrib("a_instanceRadiusAndLength", program->getVertexInputDesc("a_instanceRadiusAndLength"),
-                                 rhi::VertexFormat::FLOAT4, offsetof(CapsuleData, radius), false, 1);
+                       rhi::VertexFormat::FLOAT4, offsetof(CapsuleData, radius), false, 1);
         vfmt.endLayout();
 
         auto pipelineVL = axvlm->acquireVertexLayout(std::move(vfmt));
@@ -411,17 +412,17 @@ void Box2DTestDebugDrawNode::draw(Renderer* renderer, const Mat4& transform, uin
 
 void Box2DTestDebugDrawNode::submitDrawCommand(Renderer* renderer, CustomCommand& cmd, const Mat4& transform)
 {
-    rhi::BlendDesc& blendDescriptor   = cmd.blendDesc();
+    rhi::BlendDesc& blendDescriptor             = cmd.blendDesc();
     blendDescriptor.blendEnabled                = true;
     blendDescriptor.sourceRGBBlendFactor        = rhi::BlendFactor::SRC_ALPHA;
     blendDescriptor.destinationRGBBlendFactor   = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
     blendDescriptor.sourceAlphaBlendFactor      = rhi::BlendFactor::SRC_ALPHA;
     blendDescriptor.destinationAlphaBlendFactor = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
 
-    auto pipelinePS = cmd.unsafePS();
-    const auto& matrixP      = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    Mat4 matrixMVP           = matrixP * transform;
-    auto mvpLocation         = pipelinePS->getUniformLocation("u_MVPMatrix");
+    auto pipelinePS     = cmd.unsafePS();
+    const auto& matrixP = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    Mat4 matrixMVP      = matrixP * transform;
+    auto mvpLocation    = pipelinePS->getUniformLocation("u_MVPMatrix");
     pipelinePS->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));
 
     auto viewHeight      = _director->getRenderView()->getDesignResolutionSize().height;

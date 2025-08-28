@@ -39,7 +39,8 @@ namespace ax
 {
 class ProgramManager;
 
-namespace rhi {
+namespace rhi
+{
 
 class ShaderModule;
 class VertexLayout;
@@ -60,6 +61,7 @@ class VertexLayout;
 class AX_DLL Program : public Object
 {
     friend class ::ax::ProgramManager;
+
 public:
     ~Program();
 
@@ -149,7 +151,6 @@ public:
     VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
 protected:
-
     void setVertexLayout(VertexLayout* layout) { _vertexLayout = layout; }
 
     void setProgramIds(uint32_t progType, uint64_t progId);
@@ -189,8 +190,8 @@ protected:
     friend class ProgramState;
 #endif
 
-    std::string _vsSource;                            ///< Vertex shader.
-    std::string _fsSource;                          ///< Fragment shader.
+    std::string _vsSource;  ///< Vertex shader.
+    std::string _fsSource;  ///< Fragment shader.
     VertexLayout* _vertexLayout{nullptr};
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
     uint64_t _programId   = 0;
@@ -198,5 +199,5 @@ protected:
 
 // end of _rhi group
 /// @}
-}
-}
+}  // namespace rhi
+}  // namespace ax

@@ -130,9 +130,9 @@ private:
                                                           \
     public:                                               \
         static CLASSNAME* create(ActionInterval* action); \
-        CLASSNAME* clone() const override;        \
-        void update(float time) override;         \
-        ActionEase* reverse() const override;     \
+        CLASSNAME* clone() const override;                \
+        void update(float time) override;                 \
+        ActionEase* reverse() const override;             \
                                                           \
     private:                                              \
         AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);           \
@@ -381,9 +381,9 @@ EASE_TEMPLATE_DECL_CLASS(EaseCubicActionInOut);
         CLASSNAME() {}                                                \
                                                                       \
         static CLASSNAME* create(ActionInterval* action, float rate); \
-        CLASSNAME* clone() const override;                    \
-        void update(float time) override;                     \
-        EaseRateAction* reverse() const override;             \
+        CLASSNAME* clone() const override;                            \
+        void update(float time) override;                             \
+        EaseRateAction* reverse() const override;                     \
                                                                       \
     private:                                                          \
         AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);                       \
@@ -467,9 +467,9 @@ private:
         CLASSNAME() {}                                                       \
                                                                              \
         static CLASSNAME* create(ActionInterval* action, float rate = 0.3f); \
-        CLASSNAME* clone() const override;                           \
-        void update(float time) override;                            \
-        EaseElastic* reverse() const override;                       \
+        CLASSNAME* clone() const override;                                   \
+        void update(float time) override;                                    \
+        EaseElastic* reverse() const override;                               \
                                                                              \
     private:                                                                 \
         AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);                              \
@@ -552,4 +552,4 @@ private:
 // end of actions group
 /// @}
 
-}
+}  // namespace ax

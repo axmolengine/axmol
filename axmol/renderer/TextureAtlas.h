@@ -246,4 +246,4 @@ protected:
 // end of textures group
 /// @}
 
-}
+}  // namespace ax

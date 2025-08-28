@@ -67,8 +67,8 @@ public:
 
     enum AdoptFlag
     {
-        ADOPT_FLAG_PS = 1,
-        ADOPT_FLAG_VL = 1 << 1,
+        ADOPT_FLAG_PS  = 1,
+        ADOPT_FLAG_VL  = 1 << 1,
         ADOPT_FLAG_ALL = ADOPT_FLAG_PS | ADOPT_FLAG_VL
     };
 
@@ -110,7 +110,7 @@ public:
 
     const Mat4& getMV() const { return _mv; }
 
-    #pragma region safe to setup render command pipeline desc
+#pragma region safe to setup render command pipeline desc
     rhi::BlendDesc& blendDesc() { return _pipelineDesc.blendDesc; }
     rhi::ProgramState* unsafePS() const { return _pipelineDesc.programState; }
     rhi::VertexLayout* unsafeVL() const { return _pipelineDesc.vertexLayout; }
@@ -124,7 +124,7 @@ public:
 private:
     /// Can use the result to change the descriptor content.
     inline const PipelineDesc& getPipelineDesc() const { return _pipelineDesc; }
-    #pragma endregion
+#pragma endregion
 protected:
     /**Constructor.*/
     RenderCommand();
@@ -164,7 +164,7 @@ protected:
     PipelineDesc _pipelineDesc;
 };
 
-}
+}  // namespace ax
 /**
  end of support group
  @}

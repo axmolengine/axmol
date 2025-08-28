@@ -217,8 +217,8 @@ void ActionManager::removeAction(Action* action)
         return;
     }
 
-    Object* target   = action->getOriginalTarget();
-    auto actionIt = _targets.find(static_cast<Node*>(target));
+    Object* target = action->getOriginalTarget();
+    auto actionIt  = _targets.find(static_cast<Node*>(target));
     if (actionIt != _targets.end())
     {
         auto i = actionIt->second.actions.getIndex(action);
@@ -454,4 +454,4 @@ void ActionManager::update(float dt)
     _currentTarget = nullptr;
 }
 
-}
+}  // namespace ax

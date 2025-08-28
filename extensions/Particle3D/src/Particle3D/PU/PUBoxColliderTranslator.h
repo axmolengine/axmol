@@ -37,11 +37,10 @@ class PUBoxColliderTranslator : public PUScriptTranslator
 {
 public:
     PUBoxColliderTranslator();
-    virtual ~PUBoxColliderTranslator(){};
+    virtual ~PUBoxColliderTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

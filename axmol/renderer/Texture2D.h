@@ -44,7 +44,7 @@ class Image;
 class NinePatchInfo;
 class SpriteFrame;
 
-template<typename _PointerType>
+template <typename _PointerType>
 struct TextureSliceDataBase
 {
     _PointerType data   = nullptr;
@@ -53,7 +53,7 @@ struct TextureSliceDataBase
     uint16_t mipLevel   = 0;
 };
 
-using MipmapInfo = TextureSliceDataBase<void*>;
+using MipmapInfo       = TextureSliceDataBase<void*>;
 using TextureSliceData = TextureSliceDataBase<const void*>;
 
 namespace ui
@@ -106,7 +106,6 @@ public:
     static inline constexpr TextureSliceData DEFAULT_SLICE_DATA[] = {TextureSliceData{}};
 
 public:
-
     static void chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled, rhi::SamplerDesc& desc);
 
     /**
@@ -152,7 +151,6 @@ public:
      @param textDefinition A FontDefinition object contains font attributes.
      */
     bool initWithString(std::string_view text, const FontDefinition& textDefinition);
-
 
     /** Initializes with a texture2d with data.
 
@@ -217,11 +215,11 @@ public:
     bool initWithSpec(rhi::TextureDesc desc,
                       std::span<const TextureSliceData> subDatas,
                       PixelFormat renderFormat = PixelFormat::NONE,
-                      bool preMultipliedAlpha = false);
+                      bool preMultipliedAlpha  = false);
 
     /*
      * @brief update data by text
-    */
+     */
     bool updateData(std::string_view text, const FontDefinition& textDefinition);
 
     /**
@@ -245,7 +243,7 @@ public:
      * @param height Specifies the height of the texture.
      * @param level Specifies the mipmap level to update. Default is 0.
      * @param layerIndex Specifies the layer index to update. Default is 0.
-    */
+     */
     bool updateData(const void* data, int width, int height, int level = 0, int layerIndex = 0);
 
     /** Update texture sub data.
@@ -256,14 +254,15 @@ public:
      @param width Specifies the width of the texture subimage.
      @param height Specifies the height of the texture subimage.
      */
-    bool updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level = 0, int layerIndex = 0);
+    bool
+    updateSubData(const void* data, int offsetX, int offsetY, int width, int height, int level = 0, int layerIndex = 0);
 
     /*
-    * Invalidate the texture for we can re-create RHI GPU texture when app context loss recovery
-    * For example:
-    *   texture2d->invalidate();
-    *   texture2d->updateData(...); // re-create the texture
-    */
+     * Invalidate the texture for we can re-create RHI GPU texture when app context loss recovery
+     * For example:
+     *   texture2d->invalidate();
+     *   texture2d->updateData(...); // re-create the texture
+     */
     void invalidate();
 
     /**
@@ -400,7 +399,6 @@ private:
     void initProgram();
 
 protected:
-
     void updateData(std::span<const TextureSliceData> subDatas, PixelFormat renderFormat, bool compressed);
 
     /** width in pixels */
@@ -442,4 +440,4 @@ protected:
 // end of textures group
 /// @}
 
-}
+}  // namespace ax

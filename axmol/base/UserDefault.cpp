@@ -429,7 +429,8 @@ void UserDefault::lazyInit()
         {
             closeFileMapping();
             ::remove(_filePath.c_str());
-            AXLOGW("UserDefault::init map file '{}' failed, we can't save data persisit this time, next time "
+            AXLOGW(
+                "UserDefault::init map file '{}' failed, we can't save data persisit this time, next time "
                 "we will retry!",
                 _filePath);
         }
@@ -533,4 +534,4 @@ void UserDefault::setFileName(std::string_view nameFile)
         _userDefaultFileName.assign(nameFile).append("UserDefault.bin"sv);
 }
 
-}
+}  // namespace ax

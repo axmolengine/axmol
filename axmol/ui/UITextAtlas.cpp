@@ -204,4 +204,4 @@ ResourceData TextAtlas::getRenderFile()
 }
 
 }  // namespace ui
-}
+}  // namespace ax

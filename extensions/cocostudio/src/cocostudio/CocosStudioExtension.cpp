@@ -7,4 +7,4 @@ NodeExtension::NodeExtension() {}
 
 NodeExtension::~NodeExtension() {}
 
-}
+}  // namespace ax

@@ -30,7 +30,8 @@
 namespace ax::rhi::d3d
 {
 
-class RenderTargetImpl : public RenderTarget {
+class RenderTargetImpl : public RenderTarget
+{
 public:
     struct Attachment
     {
@@ -57,4 +58,4 @@ private:
     mutable std::array<ID3D11RenderTargetView*, MAX_COLOR_ATTCHMENT> _rtvs{};
     mutable ID3D11DepthStencilView* _dsv = nullptr;
 };
-}
+}  // namespace ax::rhi::d3d

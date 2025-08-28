@@ -73,10 +73,7 @@ public:
      * @param encoding The encoding of the data.
      * @param baseURL The base URL for the content.
      */
-    void loadData(const ax::Data& data,
-                  std::string_view MIMEType,
-                  std::string_view encoding,
-                  std::string_view baseURL);
+    void loadData(const ax::Data& data, std::string_view MIMEType, std::string_view encoding, std::string_view baseURL);
 
     /**
      * Sets the main page content and base URL.

@@ -48,8 +48,7 @@ public:
     bool observe(PUParticle3D* particle, float timeElapsed) override;
 
     PUOnExpireObserver() : PUObserver() {}
-    virtual ~PUOnExpireObserver(){};
+    virtual ~PUOnExpireObserver() {};
 };
 
-}
-
+}  // namespace ax

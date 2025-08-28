@@ -42,9 +42,7 @@ void Texture::updateTextureDesc(const TextureDesc& desc)
     _overrideMipLevels = desc.mipLevels;
 }
 
-void Texture::invalidate()
-{
-}
+void Texture::invalidate() {}
 
 void Texture::zeroTexData()
 {

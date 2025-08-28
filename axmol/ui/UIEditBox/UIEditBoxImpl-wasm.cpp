@@ -42,13 +42,12 @@ extern "C" {
 EMSCRIPTEN_KEEPALIVE
 void getInputOver(char* dataPtr, int dataLength)
 {
-    std::string_view text{ dataPtr, static_cast<size_t>(dataLength) };
+    std::string_view text{dataPtr, static_cast<size_t>(dataLength)};
     AXLOGD("text {} ", text);
     if (_activeEditBox)
     {
         if (_activeEditBox->isEditingMode())
-            _activeEditBox->editBoxEditingDidEnd(text,
-                                                 EditBoxDelegate::EditBoxEndAction::RETURN);
+            _activeEditBox->editBoxEditingDidEnd(text, EditBoxDelegate::EditBoxEndAction::RETURN);
         _activeEditBox = nullptr;
     }
     free(dataPtr);
@@ -58,7 +57,7 @@ EMSCRIPTEN_KEEPALIVE
 
 void getInputChange(char* dataPtr, int dataLength)
 {
-    std::string_view text{ dataPtr, static_cast<size_t>(dataLength) };
+    std::string_view text{dataPtr, static_cast<size_t>(dataLength)};
     AXLOGD("text {} ", text);
     if (_activeEditBox && _activeEditBox->isEditingMode())
     {
@@ -106,7 +105,7 @@ void EditBoxImplWasm::setNativeFont(const char* pFontName, int fontSize)
     EM_ASM(
         {
             var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-            input.style.fontSize = $0 + "px";
+            input.style.fontSize                = $0 + "px";
         },
         fontSize);
 }
@@ -141,10 +140,12 @@ void EditBoxImplWasm::setNativeTextHorizontalAlignment(TextHAlignment alignment)
 
 void EditBoxImplWasm::setNativeText(const char* pText)
 {
-    EM_ASM({
-        var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-        input.value = UTF8ToString($0);
-    }, pText);
+    EM_ASM(
+        {
+            var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
+            input.value                         = UTF8ToString($0);
+        },
+        pText);
 }
 
 void EditBoxImplWasm::setNativePlaceHolder(const char* pText)
@@ -154,55 +155,64 @@ void EditBoxImplWasm::setNativePlaceHolder(const char* pText)
 
 void EditBoxImplWasm::setNativeVisible(bool visible)
 {
-    EM_ASM({
-        var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-
-        if ($0 == 0)
-            input.style.display = "none";
-        else
+    EM_ASM(
         {
-            var inputMode = $1;
-            var inputFlag = $2;
-            // set input type
-            switch(inputMode) {
-            case 2: // NUMERIC
-            case 3: // PHONE_NUMBER
-                input.type = 'number';
-            default:
-                if (inputFlag != 0) {
-                    input.type = 'text';
-                } else {
-                    input.type = 'password';
-                }
-            }
+            var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
 
-            input.style.display = "";
-            var canvas = document.getElementById('canvas');
-            var inputParent = input.parentNode;
-            var canvasParent = canvas.parentNode;
-            if(inputParent != canvasParent) {
-                if (inputParent != null) {
-                    inputParent.removeChild(input);
+            if ($0 == 0)
+                input.style.display = "none";
+            else
+            {
+                var inputMode = $1;
+                var inputFlag = $2;
+                // set input type
+                switch (inputMode)
+                {
+                case 2:  // NUMERIC
+                case 3:  // PHONE_NUMBER
+                    input.type = 'number';
+                default:
+                    if (inputFlag != 0)
+                    {
+                        input.type = 'text';
+                    }
+                    else
+                    {
+                        input.type = 'password';
+                    }
                 }
-                canvasParent.insertBefore(input, canvas);
+
+                input.style.display = "";
+                var canvas          = document.getElementById('canvas');
+                var inputParent     = input.parentNode;
+                var canvasParent    = canvas.parentNode;
+                if (inputParent != canvasParent)
+                {
+                    if (inputParent != null)
+                    {
+                        inputParent.removeChild(input);
+                    }
+                    canvasParent.insertBefore(input, canvas);
+                }
             }
-        }
-    }, (int)visible, (int)_editBoxInputMode, (int)_editBoxInputFlag);
+        },
+        (int)visible, (int)_editBoxInputMode, (int)_editBoxInputFlag);
 }
 
 void EditBoxImplWasm::updateNativeFrame(const Rect& rect)
 {
-    EM_ASM({
-        var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-        var canvas                          = Module["canvas"];
-        // set input style
-        input.style.position = "absolute";
-        input.style.left     = canvas.offsetLeft + $0 + "px";
-        input.style.top      = canvas.offsetTop + $1 + "px";
-        input.style.width    = $2 + "px";
-        input.style.height   = $3 + "px";
-    },
-    rect.origin.x, rect.origin.y, rect.size.x, rect.size.y);
+    EM_ASM(
+        {
+            var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
+            var canvas                          = Module["canvas"];
+            // set input style
+            input.style.position = "absolute";
+            input.style.left     = canvas.offsetLeft + $0 + "px";
+            input.style.top      = canvas.offsetTop + $1 + "px";
+            input.style.width    = $2 + "px";
+            input.style.height   = $3 + "px";
+        },
+        rect.origin.x, rect.origin.y, rect.size.x, rect.size.y);
 }
 
 const char* EditBoxImplWasm::getNativeDefaultFontName()
@@ -216,13 +226,15 @@ void EditBoxImplWasm::nativeOpenKeyboard()
 
     this->editBoxEditingDidBegin();
 
-    EM_ASM({
-        var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-        // sync input value from native and focus
-        input.value = UTF8ToString($0);
-        input.maxlength = $1 != -1 ? $1 : undefined;
-        input.focus();
-    }, this->getText(), (int)_maxLength);
+    EM_ASM(
+        {
+            var input = Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
+            // sync input value from native and focus
+            input.value     = UTF8ToString($0);
+            input.maxlength = $1 != -1 ? $1 : undefined;
+            input.focus();
+        },
+        this->getText(), (int)_maxLength);
 
     auto rect = ui::Helper::convertBoundingBoxToScreen(_editBox);
     this->updateNativeFrame(rect);
@@ -308,15 +320,13 @@ void EditBoxImplWasm::lazyInit()
 
 void EditBoxImplWasm::createEditCtrl(EditBox::InputMode inputMode)
 {
-    EM_ASM({
-            Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input");
-        });
+    EM_ASM({ Module.axmolSharedInput = Module.axmolSharedInput || document.createElement("input"); });
     this->setNativeFont(this->getNativeDefaultFontName(), this->_fontSize);
     this->setNativeText(this->_text.c_str());
 }
 
 }  // namespace ui
 
-}
+}  // namespace ax
 
 #endif

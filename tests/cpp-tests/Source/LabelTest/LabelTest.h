@@ -187,7 +187,7 @@ protected:
     std::vector<ax::MenuItemFont*> _menuItems;
     ax::MenuItemFont* _lastSentenceItem  = nullptr;
     ax::MenuItemFont* _lastAlignmentItem = nullptr;
-    bool _drag                                = false;
+    bool _drag                           = false;
 };
 
 class LabelFNTMultiLineAlignmentUNICODE : public LabelFNTMultiLineAlignment
@@ -374,9 +374,13 @@ public:
     virtual std::string subtitle() const override;
     ax::Label* _labelNormal;
     ax::Label* _labelSDF;
-    ax::ui::Slider *_sliderOutline;
-    void initToggleLabel(std::string content, ax::Vec2 pos, std::function<void(Object*, ax::ui::CheckBox::EventType)> callback);
-    ax::ui::Slider* initSlider(std::string content,ax::Vec2 pos,std::function<void(Object*, ax::ui::Slider::EventType)> callback);
+    ax::ui::Slider* _sliderOutline;
+    void initToggleLabel(std::string content,
+                         ax::Vec2 pos,
+                         std::function<void(Object*, ax::ui::CheckBox::EventType)> callback);
+    ax::ui::Slider* initSlider(std::string content,
+                               ax::Vec2 pos,
+                               std::function<void(Object*, ax::ui::Slider::EventType)> callback);
     void initToggleCheckboxes();
     void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
 };

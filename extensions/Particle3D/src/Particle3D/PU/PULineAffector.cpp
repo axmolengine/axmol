@@ -176,4 +176,4 @@ void PULineAffector::copyAttributesTo(PUAffector* affector)
     lineAffector->_oneMinusDrift = _oneMinusDrift;
 }
 
-}
+}  // namespace ax

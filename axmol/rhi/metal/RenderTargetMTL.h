@@ -2,7 +2,8 @@
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/metal/CommandBufferMTL.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 class RenderTargetImpl : public RenderTarget
 {
@@ -29,4 +30,4 @@ public:
     PixelFormat getDepthStencilAttachmentPixelFormat() const;
 };
 
-}
+}  // namespace ax::rhi::mtl

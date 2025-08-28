@@ -39,7 +39,8 @@
 #include "axmol/renderer/VertexLayoutManager.h"
 #include "yasio/byte_buffer.hpp"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 class Texture;
 class VertexLayout;
@@ -49,16 +50,17 @@ class VertexLayout;
  * @{
  */
 
- struct TextureBinding {
+struct TextureBinding
+{
     int slot{-1};
     rhi::Texture* tex{nullptr};
 
-    void reset() 
+    void reset()
     {
         slot = -1;
-        tex = nullptr;
+        tex  = nullptr;
     }
- };
+};
 
 /**
  * Store texture binding information.
@@ -148,7 +150,10 @@ public:
      * @return Attribute location.
      * @see `int getAttributeLocation(std::string_view name) const`
      */
-    inline const VertexInputDesc* getVertexInputDesc(std::string_view name) const { return _program->getVertexInputDesc(name); }
+    inline const VertexInputDesc* getVertexInputDesc(std::string_view name) const
+    {
+        return _program->getVertexInputDesc(name);
+    }
 
     /**
      * Get an attribute location by the engine built-in attribute name.
@@ -167,9 +172,9 @@ public:
     }
 
     /*
-    * Gets the inmutable vertex layout from _program
-    * @returns nullable
-    */
+     * Gets the inmutable vertex layout from _program
+     * @returns nullable
+     */
     VertexLayout* getVertexLayout() const { return _program->getVertexLayout(); }
 
     /**
@@ -201,13 +206,18 @@ public:
      * use multi texture units
      */
     void setTextureArray(const rhi::UniformLocation& uniformLocation, std::span<TextureBinding> units);
-    void setTextureArray(const rhi::UniformLocation& uniformLocation, std::span<int> slot, std::span<rhi::Texture*> texture);
+    void setTextureArray(const rhi::UniformLocation& uniformLocation,
+                         std::span<int> slot,
+                         std::span<rhi::Texture*> texture);
 
     /**
      * Get vertex texture informations
      * @return Vertex texture informations. Key is the texture location, Value store the texture informations
      */
-    inline const std::unordered_map<int, TextureBindingSet>& getTextureBindingSets() const { return _textureBindingSets; }
+    inline const std::unordered_map<int, TextureBindingSet>& getTextureBindingSets() const
+    {
+        return _textureBindingSets;
+    }
 
 #if AX_RENDER_API == AX_RENDER_API_GL
     std::span<const char> getUniformBuffer() { return std::span{_uniformBuffer}; }
@@ -295,10 +305,7 @@ public:
      */
     void setParameterAutoBinding(std::string_view uniformName, std::string_view autoBinding);
 
-    inline const VertexLayout* getBuiltinVertexLayout() const
-    {
-        return _program->getVertexLayout();
-    }
+    inline const VertexLayout* getBuiltinVertexLayout() const { return _program->getVertexLayout(); }
 
     /*
      * Gets batch id of current program state, part of batch draw materialID
@@ -311,13 +318,12 @@ public:
     bool isBatchable() const { return _isBatchable; };
 
     /*
-    * Update batchID of current program state, by default, custom program was traits with mutable uniforms
-    * so batch ID was set to -1 indicate batch was disabled
-    */
+     * Update batchID of current program state, by default, custom program was traits with mutable uniforms
+     * so batch ID was set to -1 indicate batch was disabled
+     */
     void updateBatchId();
 
 protected:
-
     /**
      * Set the vertex uniform data.
      * @param location Specifies the uniform location.
@@ -347,7 +353,6 @@ protected:
     rhi::Program* _program = nullptr;
     std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
 
-
     yasio::sbyte_buffer _uniformBuffer;
 #if AX_RENDER_API != AX_RENDER_API_GL
     std::size_t _vertexUniformBufferStart = 0;
@@ -359,7 +364,7 @@ protected:
 
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
 
-    uint64_t _batchId    = -1;
+    uint64_t _batchId = -1;
     bool _isBatchable = false;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
@@ -369,4 +374,4 @@ protected:
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

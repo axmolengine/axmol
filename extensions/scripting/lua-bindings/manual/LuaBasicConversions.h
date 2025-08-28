@@ -38,11 +38,11 @@
 #include "axmol/3d/Bundle3D.h"
 #include "axmol/base/Value.h"
 #include "axmol/base/Types.h"
-#    if defined(AX_ENABLE_PHYSICS)
-#include "axmol/physics/PhysicsContact.h"
-#include "axmol/physics/PhysicsJoint.h"
-#include "axmol/physics/PhysicsWorld.h"
-#    endif
+#if defined(AX_ENABLE_PHYSICS)
+#    include "axmol/physics/PhysicsContact.h"
+#    include "axmol/physics/PhysicsJoint.h"
+#    include "axmol/physics/PhysicsWorld.h"
+#endif
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/ui/GUIDefine.h"
 
@@ -62,7 +62,7 @@ void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const
     if (!(condition))                                                                            \
     {                                                                                            \
         AXLOGE("lua: ERROR: File {}: Line: {}, Function: {}", __FILE__, __LINE__, __FUNCTION__); \
-        AXLOGE(__VA_ARGS__);                                                                   \
+        AXLOGE(__VA_ARGS__);                                                                     \
     }
 
 /**
@@ -459,18 +459,17 @@ static inline bool luaval_to_point(lua_State* L, int lo, ax::Vec2* outValue, con
     return luaval_to_vec2(L, lo, outValue);
 }
 
-AX_DEPRECATED(2.1) static inline bool luaval_to_kmMat4(lua_State* L,
-                                                            int lo,
-                                                            ax::Mat4* outValue,
-                                                            const char* funcName = "")
+AX_DEPRECATED(2.1)
+static inline bool luaval_to_kmMat4(lua_State* L, int lo, ax::Mat4* outValue, const char* funcName = "")
 {
     return luaval_to_mat4(L, lo, outValue);
 }
-AX_DEPRECATED(2.1) static inline bool luaval_to_array_of_Point(lua_State* L,
-                                                                    int lo,
-                                                                    ax::Vec2** points,
-                                                                    int* numPoints,
-                                                                    const char* funcName = "")
+AX_DEPRECATED(2.1)
+static inline bool luaval_to_array_of_Point(lua_State* L,
+                                            int lo,
+                                            ax::Vec2** points,
+                                            int* numPoints,
+                                            const char* funcName = "")
 {
     return luaval_to_array_of_vec2(L, lo, points, numPoints);
 }
@@ -1200,8 +1199,8 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
         {
             // use c style cast, T may not polymorphic
             ax::Object* dynObject = (ax::Object*)(ret);
-            int ID             = (int)(dynObject->_ID);
-            int* luaID         = &(dynObject->_luaID);
+            int ID                = (int)(dynObject->_ID);
+            int* luaID            = &(dynObject->_luaID);
             toluafix_pushusertype_object(L, ID, luaID, (void*)ret, type);
         }
         else
@@ -1304,34 +1303,24 @@ AX_LUA_DLL extern void node_to_luaval(lua_State* L, const char* type, ax::Node* 
 /**
  * convert lua object VertexLayout to native object
  */
-AX_LUA_DLL bool luaval_to_vertexLayout(lua_State* L,
-                                       int pos,
-                                       ax::rhi::VertexLayout& outLayout,
-                                       const char* message);
+AX_LUA_DLL bool luaval_to_vertexLayout(lua_State* L, int pos, ax::rhi::VertexLayout& outLayout, const char* message);
 
 /**
  * convert lua object SamplerDesc to native object
  */
-AX_LUA_DLL bool luaval_to_samplerDesc(lua_State* L,
-                                            int pos,
-                                            ax::rhi::SamplerDesc& desc,
-                                            const char* message);
+AX_LUA_DLL bool luaval_to_samplerDesc(lua_State* L, int pos, ax::rhi::SamplerDesc& desc, const char* message);
 
 /**
  * convert lua object to ax::rhi::UniformLocation
  */
-AX_LUA_DLL bool luaval_to_uniformLocation(lua_State* L,
-                                          int pos,
-                                          ax::rhi::UniformLocation& desc,
-                                          const char* message);
+AX_LUA_DLL bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& desc, const char* message);
 
 /**
  * convert ax::rhi::UniformLocation to lua object
  */
 AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& desc);
 
-AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L,
-                                              const hlookup::string_map<ax::rhi::VertexInputDesc>& map);
+AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::rhi::VertexInputDesc>& map);
 
 /**
  * convert ax::ResourceData to lua object

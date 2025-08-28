@@ -136,24 +136,30 @@ bool EaseRateAction::initWithAction(ActionInterval* action, float rate)
 // NOTE: Converting these macros into Templates is desirable, but please see
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
-#define EASE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME)         \
-    CLASSNAME* CLASSNAME::create(ax::ActionInterval* action)            \
-    {                                                                        \
-        CLASSNAME* ease = new CLASSNAME();                                   \
-        if (ease->initWithAction(action))                                    \
-            ease->autorelease();                                             \
-        else                                                                 \
-            AX_SAFE_DELETE(ease);                                            \
-        return ease;                                                         \
-    }                                                                        \
-    CLASSNAME* CLASSNAME::clone() const                                      \
-    {                                                                        \
-        if (_inner)                                                          \
-            return CLASSNAME::create(_inner->clone());                       \
-        return nullptr;                                                      \
-    }                                                                        \
-    void CLASSNAME::update(float time) { _inner->update(TWEEN_FUNC(time)); } \
-    ActionEase* CLASSNAME::reverse() const { return REVERSE_CLASSNAME::create(_inner->reverse()); }
+#define EASE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
+    CLASSNAME* CLASSNAME::create(ax::ActionInterval* action)         \
+    {                                                                \
+        CLASSNAME* ease = new CLASSNAME();                           \
+        if (ease->initWithAction(action))                            \
+            ease->autorelease();                                     \
+        else                                                         \
+            AX_SAFE_DELETE(ease);                                    \
+        return ease;                                                 \
+    }                                                                \
+    CLASSNAME* CLASSNAME::clone() const                              \
+    {                                                                \
+        if (_inner)                                                  \
+            return CLASSNAME::create(_inner->clone());               \
+        return nullptr;                                              \
+    }                                                                \
+    void CLASSNAME::update(float time)                               \
+    {                                                                \
+        _inner->update(TWEEN_FUNC(time));                            \
+    }                                                                \
+    ActionEase* CLASSNAME::reverse() const                           \
+    {                                                                \
+        return REVERSE_CLASSNAME::create(_inner->reverse());         \
+    }
 
 EASE_TEMPLATE_IMPL(EaseExponentialIn, tweenfunc::expoEaseIn, EaseExponentialOut);
 EASE_TEMPLATE_IMPL(EaseExponentialOut, tweenfunc::expoEaseOut, EaseExponentialIn);
@@ -187,24 +193,30 @@ EASE_TEMPLATE_IMPL(EaseCubicActionInOut, tweenfunc::cubicEaseInOut, EaseCubicAct
 // NOTE: Converting these macros into Templates is desirable, but please see
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
-#define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC)                               \
-    CLASSNAME* CLASSNAME::create(ax::ActionInterval* action, float rate)       \
-    {                                                                               \
-        CLASSNAME* ease = new CLASSNAME();                                          \
-        if (ease->initWithAction(action, rate))                                     \
-            ease->autorelease();                                                    \
-        else                                                                        \
-            AX_SAFE_DELETE(ease);                                                   \
-        return ease;                                                                \
-    }                                                                               \
-    CLASSNAME* CLASSNAME::clone() const                                             \
-    {                                                                               \
-        if (_inner)                                                                 \
-            return CLASSNAME::create(_inner->clone(), _rate);                       \
-        return nullptr;                                                             \
-    }                                                                               \
-    void CLASSNAME::update(float time) { _inner->update(TWEEN_FUNC(time, _rate)); } \
-    EaseRateAction* CLASSNAME::reverse() const { return CLASSNAME::create(_inner->reverse(), 1.f / _rate); }
+#define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC)                    \
+    CLASSNAME* CLASSNAME::create(ax::ActionInterval* action, float rate) \
+    {                                                                    \
+        CLASSNAME* ease = new CLASSNAME();                               \
+        if (ease->initWithAction(action, rate))                          \
+            ease->autorelease();                                         \
+        else                                                             \
+            AX_SAFE_DELETE(ease);                                        \
+        return ease;                                                     \
+    }                                                                    \
+    CLASSNAME* CLASSNAME::clone() const                                  \
+    {                                                                    \
+        if (_inner)                                                      \
+            return CLASSNAME::create(_inner->clone(), _rate);            \
+        return nullptr;                                                  \
+    }                                                                    \
+    void CLASSNAME::update(float time)                                   \
+    {                                                                    \
+        _inner->update(TWEEN_FUNC(time, _rate));                         \
+    }                                                                    \
+    EaseRateAction* CLASSNAME::reverse() const                           \
+    {                                                                    \
+        return CLASSNAME::create(_inner->reverse(), 1.f / _rate);        \
+    }
 
 // NOTE: the original code used the same class for the `reverse()` method
 EASERATE_TEMPLATE_IMPL(EaseIn, tweenfunc::easeIn);
@@ -230,24 +242,30 @@ bool EaseElastic::initWithAction(ActionInterval* action, float period /* = 0.3f*
 // NOTE: Converting these macros into Templates is desirable, but please see
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
-#define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME)                 \
+#define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME)            \
     CLASSNAME* CLASSNAME::create(ax::ActionInterval* action, float period /* = 0.3f*/) \
-    {                                                                                       \
-        CLASSNAME* ease = new CLASSNAME();                                                  \
-        if (ease->initWithAction(action, period))                                           \
-            ease->autorelease();                                                            \
-        else                                                                                \
-            AX_SAFE_DELETE(ease);                                                           \
-        return ease;                                                                        \
-    }                                                                                       \
-    CLASSNAME* CLASSNAME::clone() const                                                     \
-    {                                                                                       \
-        if (_inner)                                                                         \
-            return CLASSNAME::create(_inner->clone(), _period);                             \
-        return nullptr;                                                                     \
-    }                                                                                       \
-    void CLASSNAME::update(float time) { _inner->update(TWEEN_FUNC(time, _period)); }       \
-    EaseElastic* CLASSNAME::reverse() const { return REVERSE_CLASSNAME::create(_inner->reverse(), _period); }
+    {                                                                                  \
+        CLASSNAME* ease = new CLASSNAME();                                             \
+        if (ease->initWithAction(action, period))                                      \
+            ease->autorelease();                                                       \
+        else                                                                           \
+            AX_SAFE_DELETE(ease);                                                      \
+        return ease;                                                                   \
+    }                                                                                  \
+    CLASSNAME* CLASSNAME::clone() const                                                \
+    {                                                                                  \
+        if (_inner)                                                                    \
+            return CLASSNAME::create(_inner->clone(), _period);                        \
+        return nullptr;                                                                \
+    }                                                                                  \
+    void CLASSNAME::update(float time)                                                 \
+    {                                                                                  \
+        _inner->update(TWEEN_FUNC(time, _period));                                     \
+    }                                                                                  \
+    EaseElastic* CLASSNAME::reverse() const                                            \
+    {                                                                                  \
+        return REVERSE_CLASSNAME::create(_inner->reverse(), _period);                  \
+    }
 
 EASEELASTIC_TEMPLATE_IMPL(EaseElasticIn, tweenfunc::elasticEaseIn, EaseElasticOut);
 EASEELASTIC_TEMPLATE_IMPL(EaseElasticOut, tweenfunc::elasticEaseOut, EaseElasticIn);
@@ -306,4 +324,4 @@ EaseBezierAction* EaseBezierAction::reverse() const
     return reverseAction;
 }
 
-}
+}  // namespace ax

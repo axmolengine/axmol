@@ -37,8 +37,7 @@ THE SOFTWARE.
 #include <android/api-level.h>
 #include <jni.h>
 
-
-#define LOG_TAG "main"
+#define LOG_TAG   "main"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 void axmol_android_app_init(JNIEnv* env) __attribute__((weak));
@@ -84,8 +83,8 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
 {
     RenderViewImpl::loadGLES2();
 
-    auto director = ax::Director::getInstance();
-    auto renderView   = director->getRenderView();
+    auto director   = ax::Director::getInstance();
+    auto renderView = director->getRenderView();
     if (!renderView)
     {
         renderView = ax::RenderViewImpl::create("axmol2");
@@ -123,7 +122,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnContextLost(JNIE
     JniHelper::callStaticVoidMethod("dev/axmol/lib/AxmolEngine", "restartProcess");
 #endif
 
-    if(isWarmStart)
+    if (isWarmStart)
     {
         auto director = ax::Director::getInstance();
         ax::EventCustom warmStartEvent(EVENT_APP_WARM_START);

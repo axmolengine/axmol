@@ -36,7 +36,7 @@ EventMouse::EventMouse(MouseEventType mouseEventCode)
     , _mouseButton(MouseButton::BUTTON_UNSET)
     , _scrollX(0.0f)
     , _scrollY(0.0f)
-    , _startPointCaptured(false){};
+    , _startPointCaptured(false) {};
 
 // returns the current touch location in screen coordinates
 Vec2 EventMouse::getLocationInView() const
@@ -79,4 +79,4 @@ Vec2 EventMouse::getDelta() const
 {
     return getLocation() - getPreviousLocation();
 }
-}
+}  // namespace ax

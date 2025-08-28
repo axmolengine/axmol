@@ -576,4 +576,4 @@ private:
     std::string* _dirPath;
     Properties* _parent;
 };
-}
+}  // namespace ax

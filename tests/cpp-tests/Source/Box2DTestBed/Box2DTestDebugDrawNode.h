@@ -108,4 +108,3 @@ struct b2SampleCamera
 };
 
 extern b2SampleCamera g_camera;
-

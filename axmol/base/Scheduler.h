@@ -472,6 +472,7 @@ public:
      * @since v3.14
      */
     void removeAllPendingActions();
+
 protected:
     /** Schedules the 'callback' function for a given target with a given priority.
      The 'callback' selector will be called every frame.
@@ -498,7 +499,7 @@ protected:
 
     float _timeScale;
 
-    axstd::pod_vector<SchedHandle*> _waitList; // list wait active
+    axstd::pod_vector<SchedHandle*> _waitList;  // list wait active
 
     //
     // "updates with priority" stuff
@@ -531,4 +532,4 @@ protected:
 // end of base group
 /** @} */
 
-}
+}  // namespace ax

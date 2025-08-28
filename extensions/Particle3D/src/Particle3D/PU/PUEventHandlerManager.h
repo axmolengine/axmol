@@ -61,5 +61,4 @@ protected:
     PUDoStopSystemEventHandlerTranslator _doStopSystemEventHandlerTranslator;
 };
 
-}
-
+}  // namespace ax

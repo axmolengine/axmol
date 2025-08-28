@@ -357,4 +357,4 @@ void PUForceField::setWorldSize(const Vec3& worldSize)
     }
 }
 
-}
+}  // namespace ax

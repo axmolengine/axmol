@@ -28,11 +28,11 @@ THE SOFTWARE.
 
 #include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#include "axmol/ui/UIEditBox/UIEditBoxImpl-common.h"
+#    include "axmol/ui/UIEditBox/UIEditBoxImpl-common.h"
 
-#include <winrt/Windows.Foundation.h>
-#include <winrt/Windows.UI.Xaml.h>
-#include <winrt/Windows.UI.Xaml.Controls.h>
+#    include <winrt/Windows.Foundation.h>
+#    include <winrt/Windows.UI.Xaml.h>
+#    include <winrt/Windows.UI.Xaml.Controls.h>
 
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
@@ -41,14 +41,15 @@ using namespace Windows::UI::Xaml::Input;
 namespace ax
 {
 
-namespace ui {
+namespace ui
+{
 
-  class EditBoxWinRT : public winrt::implements <EditBoxWinRT, Windows::Foundation::IInspectable>
-  {
-  public:
-      EditBoxWinRT(winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> const& beginHandler,
-          winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> const& changeHandler,
-          winrt::delegate<Windows::Foundation::IInspectable const&, ax::EndEventArgs const&> const& endHandler);
+class EditBoxWinRT : public winrt::implements<EditBoxWinRT, Windows::Foundation::IInspectable>
+{
+public:
+    EditBoxWinRT(winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> const& beginHandler,
+                 winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> const& changeHandler,
+                 winrt::delegate<Windows::Foundation::IInspectable const&, ax::EndEventArgs const&> const& endHandler);
 
     void closeKeyboard();
     bool isEditing();
@@ -65,12 +66,13 @@ namespace ui {
     void setText(winrt::hstring const& text);
     void setVisible(bool visible);
 
-  private:
-
-    void onPasswordChanged(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& args);
+private:
+    void onPasswordChanged(Windows::Foundation::IInspectable const& sender,
+                           Windows::UI::Xaml::RoutedEventArgs const& args);
     void onTextChanged(Windows::Foundation::IInspectable const& sender,
-                                       Windows::UI::Xaml::Controls::TextChangedEventArgs const& e);
-    void onKeyDown(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::Input::KeyRoutedEventArgs const& args);
+                       Windows::UI::Xaml::Controls::TextChangedEventArgs const& e);
+    void onKeyDown(Windows::Foundation::IInspectable const& sender,
+                   Windows::UI::Xaml::Input::KeyRoutedEventArgs const& args);
     void onGotFocus(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& args);
     void onLostFocus(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& args);
 
@@ -79,8 +81,8 @@ namespace ui {
     void removeTextBox();
     void setInputScope(TextBox textBox);
     void _setTextHorizontalAlignment(TextBox textBox);
-	void _setTexVerticalAlignment(Windows::UI::Xaml::Controls::Control textBox);
-	void _setPadding(Windows::UI::Xaml::Controls::Control editBox);
+    void _setTexVerticalAlignment(Windows::UI::Xaml::Controls::Control textBox);
+    void _setPadding(Windows::UI::Xaml::Controls::Control editBox);
 
     // Properties
     Windows::Foundation::Rect _rect;
@@ -102,63 +104,76 @@ namespace ui {
     Windows::UI::Xaml::Controls::Control _textBox = nullptr;
 
     winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher = nullptr;
-    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> m_panel = nullptr;
+    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> m_panel     = nullptr;
     Concurrency::critical_section _critical_section;
 
-    winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> _beginHandler = nullptr;
+    winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> _beginHandler  = nullptr;
     winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&> _changeHandler = nullptr;
-    winrt::delegate<Windows::Foundation::IInspectable const&, EndEventArgs const&> _endHandler     = nullptr;
+    winrt::delegate<Windows::Foundation::IInspectable const&, EndEventArgs const&> _endHandler      = nullptr;
 
     winrt::event_token _unfocusToken;
     winrt::event_token _changeToken;
     winrt::event_token _focusToken;
     winrt::event_token _keydownToken;
-  };
+};
 
-  class AX_GUI_DLL UIEditBoxImplWinrt : public EditBoxImplCommon
-  {
-  public:
+class AX_GUI_DLL UIEditBoxImplWinrt : public EditBoxImplCommon
+{
+public:
     /**
-    */
+     */
     UIEditBoxImplWinrt(EditBox* pEditText);
 
     /**
-    * @lua NA
-    */
-    virtual ~UIEditBoxImplWinrt() { };
+     * @lua NA
+     */
+    virtual ~UIEditBoxImplWinrt() {};
 
     bool isEditing() override { return _system_control.get()->isEditing(); }
-    void createNativeControl(const Rect& frame) override {  }
+    void createNativeControl(const Rect& frame) override {}
     void setNativeFont(const char* pFontName, int fontSize) override;
     void setNativeFontColor(const Color32& color) override;
-    void setNativePlaceholderFont(const char* pFontName, int fontSize) override { AXLOGD("Warning! You can't change WinRT placeholder font"); }
-    void setNativePlaceholderFontColor(const Color32& color) override { AXLOGD("Warning! You can't change WinRT placeholder font color"); }
+    void setNativePlaceholderFont(const char* pFontName, int fontSize) override
+    {
+        AXLOGD("Warning! You can't change WinRT placeholder font");
+    }
+    void setNativePlaceholderFontColor(const Color32& color) override
+    {
+        AXLOGD("Warning! You can't change WinRT placeholder font color");
+    }
     void setNativeInputMode(EditBox::InputMode inputMode) override;
     void setNativeInputFlag(EditBox::InputFlag inputFlag) override;
-    void setNativeReturnType(EditBox::KeyboardReturnType returnType) override { AXLOGD("Warning! You can't change WinRT return type"); }
+    void setNativeReturnType(EditBox::KeyboardReturnType returnType) override
+    {
+        AXLOGD("Warning! You can't change WinRT return type");
+    }
     virtual void setNativeTextHorizontalAlignment(ax::TextHAlignment alignment);
     void setNativeText(const char* pText) override;
-    void setNativePlaceHolder(const char* pText) override { AXLOGD("Warning! You can't change WinRT placeholder text"); }
+    void setNativePlaceHolder(const char* pText) override
+    {
+        AXLOGD("Warning! You can't change WinRT placeholder text");
+    }
     void setNativeVisible(bool visible) override;
-    void updateNativeFrame(const Rect& rect) override; // TODO
+    void updateNativeFrame(const Rect& rect) override;  // TODO
     const char* getNativeDefaultFontName() override { return "Segoe UI"; }
     virtual void nativeOpenKeyboard();
     void nativeCloseKeyboard() override;
     void setNativeMaxLength(int maxLength) override;
 
-  private:
+private:
     ax::Vec2 convertDesignCoordToXamlCoord(const ax::Vec2& designCoord);
-    void doAnimationWhenKeyboardMove(float duration, float distance) override { AXLOGD("Warning! doAnimationWhenKeyboardMove not supported on WinRT"); }
+    void doAnimationWhenKeyboardMove(float duration, float distance) override
+    {
+        AXLOGD("Warning! doAnimationWhenKeyboardMove not supported on WinRT");
+    }
 
     winrt::agile_ref<Windows::Foundation::IInspectable> _system_control_agile;
     winrt::com_ptr<EditBoxWinRT> _system_control{};
     int _fontSize;
-  };
+};
 
-} // namespace ui
+}  // namespace ui
 
-}
+}  // namespace ax
 
-#endif // AX_PLATFORM_WINRT
-
-
+#endif  // AX_PLATFORM_WINRT

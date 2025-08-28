@@ -18,27 +18,21 @@ using namespace ax::rhi;
 
 // Clang warnings with -Weverything
 #if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wold-style-cast"     // warning: use of old-style cast
-#pragma clang diagnostic ignored "-Wsign-conversion"    // warning: implicit conversion changes signedness
-#if __has_warning("-Wzero-as-null-pointer-constant")
-#pragma clang diagnostic ignored "-Wzero-as-null-pointer-constant"
-#endif
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wold-style-cast"   // warning: use of old-style cast
+#    pragma clang diagnostic ignored "-Wsign-conversion"  // warning: implicit conversion changes signedness
+#    if __has_warning("-Wzero-as-null-pointer-constant")
+#        pragma clang diagnostic ignored "-Wzero-as-null-pointer-constant"
+#    endif
 #endif
 
 // Text handling
 class KeyboardInputDelegate : public IMEDelegate
 {
 protected:
-    bool canAttachWithIME() override
-    {
-        return true;
-    }
+    bool canAttachWithIME() override { return true; }
 
-    bool canDetachWithIME() override
-    {
-        return true;
-    }
+    bool canDetachWithIME() override { return true; }
 
     void controlKey(EventKeyboard::KeyCode keyCode) override
     {
@@ -55,20 +49,19 @@ protected:
     }
 };
 
-
 // Android data
 
 struct ImGui_ImplAndroid_Data
 {
-    RenderView*      Window{nullptr};
-    double           Time{0};
-    bool             InstalledCallbacks{false};
+    RenderView* Window{nullptr};
+    double Time{0};
+    bool InstalledCallbacks{false};
 
     // ImGui_ImplAndroid_Data()   { memset(this, 0, sizeof(*this)); }
 
     // axmol spec data
     Vec2 ViewResolution = Vec2(1920, 1080);
-    ImVec2         LastValidMousePos;
+    ImVec2 LastValidMousePos;
     EventListener* TouchListener = nullptr;
 
     KeyboardInputDelegate KeyboardInputDelegate;
@@ -82,11 +75,11 @@ static ImGui_ImplAndroid_Data* ImGui_ImplAndroid_GetBackendData()
 
 static ax::Vec2 convertToUICoordinates(const Vec2& pos)
 {
-    auto* bd = ImGui_ImplAndroid_GetBackendData();
+    auto* bd    = ImGui_ImplAndroid_GetBackendData();
     ImGuiIO& io = ImGui::GetIO();
     auto origin = bd->Window->getViewPortRect().origin;
-    auto uiX = (pos.x * bd->Window->getScaleX() + origin.x) / io.DisplayFramebufferScale.x;
-    auto uiY = (pos.y * bd->Window->getScaleY() + origin.y) / io.DisplayFramebufferScale.y;
+    auto uiX    = (pos.x * bd->Window->getScaleX() + origin.x) / io.DisplayFramebufferScale.x;
+    auto uiY    = (pos.y * bd->Window->getScaleY() + origin.y) / io.DisplayFramebufferScale.y;
 
     return Vec2(uiX, uiY);
 }
@@ -100,18 +93,20 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
     // Setup backend capabilities flags
     ImGui_ImplAndroid_Data* bd = IM_NEW(ImGui_ImplAndroid_Data)();
     io.BackendPlatformUserData = (void*)bd;
-    io.BackendPlatformName = "imgui_impl_android";
-    //io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
-    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
-    //io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports;    // We can create multi-viewports on the Platform side (optional)
+    io.BackendPlatformName     = "imgui_impl_android";
+    // io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |=
+        ImGuiBackendFlags_HasSetMousePos;  // We can honor io.WantSetMousePos requests (optional, rarely used)
+    // io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports;    // We can create multi-viewports on the Platform
+    // side (optional)
 
     bd->Window = window;
-    bd->Time = 0.0;
+    bd->Time   = 0.0;
 
     // = bd->Window;
 
     // Our mouse update function expect PlatformHandle to be filled for the main viewport
-    ImGuiViewport* main_viewport = ImGui::GetMainViewport();
+    ImGuiViewport* main_viewport  = ImGui::GetMainViewport();
     main_viewport->PlatformHandle = (void*)bd->Window;
 
     io.AddFocusEvent(true);
@@ -122,9 +117,9 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
     bd->TouchListener = touchListener;
 
     touchListener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-        ImGuiIO& io = ImGui::GetIO();
+        ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location = convertToUICoordinates(touch->getLocationInView());
+        auto location              = convertToUICoordinates(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, true);
@@ -142,17 +137,17 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
     };
 
     touchListener->onTouchMoved = [](Touch* touch, Event* /*event*/) {
-        ImGuiIO& io = ImGui::GetIO();
+        ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location = convertToUICoordinates(touch->getLocationInView());
+        auto location              = convertToUICoordinates(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
     };
 
     touchListener->onTouchEnded = [](Touch* touch, Event* event) {
-        ImGuiIO& io = ImGui::GetIO();
+        ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location = convertToUICoordinates(touch->getLocationInView());
+        auto location              = convertToUICoordinates(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);
@@ -170,9 +165,9 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
     };
 
     touchListener->onTouchCancelled = [](Touch* touch, Event* /*event*/) {
-        ImGuiIO& io = ImGui::GetIO();
+        ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location = convertToUICoordinates(touch->getLocationInView());
+        auto location              = convertToUICoordinates(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);
@@ -189,7 +184,7 @@ void ImGui_ImplAndroid_Shutdown()
     IM_ASSERT(bd != nullptr && "No platform backend to shutdown, or already shutdown?");
     ImGuiIO& io = ImGui::GetIO();
 
-    io.BackendPlatformName = nullptr;
+    io.BackendPlatformName     = nullptr;
     io.BackendPlatformUserData = nullptr;
     io.BackendRendererUserData = nullptr;
 
@@ -209,10 +204,10 @@ void ImGui_ImplAndroid_NewFrame()
     IM_ASSERT(bd != nullptr && "Did you call ImGui_ImplAndroid_InitForXXX()?");
 
     // Setup display size (every frame to accommodate for window resizing)
-    int32_t window_width = bd->ViewResolution.width;
+    int32_t window_width  = bd->ViewResolution.width;
     int32_t window_height = bd->ViewResolution.height;
-    int display_width = bd->Window->getFrameSize().width;
-    int display_height = bd->Window->getFrameSize().height;
+    int display_width     = bd->Window->getFrameSize().width;
+    int display_height    = bd->Window->getFrameSize().height;
 
     io.DisplaySize = ImVec2((float)window_width, (float)window_height);
     if (window_width > 0 && window_height > 0)
@@ -222,25 +217,32 @@ void ImGui_ImplAndroid_NewFrame()
     struct timespec current_timespec;
     clock_gettime(CLOCK_MONOTONIC, &current_timespec);
     double current_time = (double)(current_timespec.tv_sec) + (current_timespec.tv_nsec / 1000000000.0);
-    io.DeltaTime = bd->Time > 0.0 ? (float)(current_time - bd->Time) : (float)(1.0f / 60.0f);
-    bd->Time = current_time;
+    io.DeltaTime        = bd->Time > 0.0 ? (float)(current_time - bd->Time) : (float)(1.0f / 60.0f);
+    bd->Time            = current_time;
 }
 
 //--------------------------------------------------------------------------------------------------------
 // MULTI-VIEWPORT / PLATFORM INTERFACE SUPPORT
-// This is an _advanced_ and _optional_ feature, allowing the backend to create and handle multiple viewports simultaneously.
-// If you are new to dear imgui or creating a new binding for dear imgui, it is recommended that you completely ignore this section first..
+// This is an _advanced_ and _optional_ feature, allowing the backend to create and handle multiple viewports
+// simultaneously. If you are new to dear imgui or creating a new binding for dear imgui, it is recommended that you
+// completely ignore this section first..
 //--------------------------------------------------------------------------------------------------------
 
-// Helper structure we store in the void* RenderUserData field of each ImGuiViewport to easily retrieve our backend data.
+// Helper structure we store in the void* RenderUserData field of each ImGuiViewport to easily retrieve our backend
+// data.
 struct ImGui_ImplAndroid_ViewportData
 {
     RenderView* Window;
-    bool        WindowOwned;
-    int         IgnoreWindowPosEventFrame;
-    int         IgnoreWindowSizeEventFrame;
+    bool WindowOwned;
+    int IgnoreWindowPosEventFrame;
+    int IgnoreWindowSizeEventFrame;
 
-    ImGui_ImplAndroid_ViewportData()  { Window = nullptr; WindowOwned = false; IgnoreWindowSizeEventFrame = IgnoreWindowPosEventFrame = -1; }
+    ImGui_ImplAndroid_ViewportData()
+    {
+        Window                     = nullptr;
+        WindowOwned                = false;
+        IgnoreWindowSizeEventFrame = IgnoreWindowPosEventFrame = -1;
+    }
     ~ImGui_ImplAndroid_ViewportData() { IM_ASSERT(Window == nullptr); }
 };
 
@@ -258,5 +260,5 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_SetViewResolution(float width, float height)
 }
 
 #if defined(__clang__)
-#pragma clang diagnostic pop
+#    pragma clang diagnostic pop
 #endif

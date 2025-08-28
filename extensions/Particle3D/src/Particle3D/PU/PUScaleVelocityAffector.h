@@ -70,5 +70,4 @@ protected:
     bool _sinceStartSystem;
     bool _stopAtFlip;
 };
-}
-
+}  // namespace ax

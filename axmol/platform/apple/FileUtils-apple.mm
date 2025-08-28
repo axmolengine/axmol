@@ -156,7 +156,11 @@ bool FileUtilsApple::isFileExistInternal(std::string_view filePath) const
     {
         // Search path is an absolute path.
         BOOL isDir = NO;
-        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:filePath.data() length:filePath.size() encoding:NSUTF8StringEncoding] isDirectory:&isDir] && !isDir)
+        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:filePath.data()
+                                                                     length:filePath.size()
+                                                                   encoding:NSUTF8StringEncoding]
+                                isDirectory:&isDir] &&
+            !isDir)
         {
             ret = true;
         }
@@ -190,8 +194,7 @@ bool FileUtilsApple::removeDirectory(std::string_view path) const
         return true;
 }
 
-std::string FileUtilsApple::getPathForDirectory(std::string_view dir,
-                                                std::string_view searchPath) const
+std::string FileUtilsApple::getPathForDirectory(std::string_view dir, std::string_view searchPath) const
 {
     std::string path{searchPath};
     path.append(dir);
@@ -204,7 +207,10 @@ std::string FileUtilsApple::getPathForDirectory(std::string_view dir,
     if (path[0] == '/')
     {
         BOOL isDir = NO;
-        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:path.data() length:path.size() encoding:NSUTF8StringEncoding] isDirectory:&isDir])
+        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:path.data()
+                                                                     length:path.size()
+                                                                   encoding:NSUTF8StringEncoding]
+                                isDirectory:&isDir])
         {
             return appendTrailingSlashToDir(isDir ? path : "");
         }
@@ -229,7 +235,8 @@ std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(std::string_vi
     if (filename.empty())
         return ret;
 
-    if (!directory.empty() && directory[0] == '/') {
+    if (!directory.empty() && directory[0] == '/')
+    {
         size_t pathSize = directory.size() + filename.size();
         if (directory.back() != '/')
             ++pathSize;
@@ -238,15 +245,24 @@ std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(std::string_vi
         ret += filename;
     }
     else
-    { // Build full path for the file
+    {  // Build full path for the file
         NSString* path = nil;
-        if (!directory.empty()) {
-            path = [pimpl_->getBundle() pathForResource:[[NSString alloc] initWithBytes:filename.data() length:filename.size() encoding:NSUTF8StringEncoding]
-                                                       ofType:nil
-                                                  inDirectory:[[NSString alloc] initWithBytes:directory.data() length:directory.size() encoding:NSUTF8StringEncoding]];
-        } else {
-            path = [pimpl_->getBundle() pathForResource:[[NSString alloc] initWithBytes:filename.data() length:filename.size() encoding:NSUTF8StringEncoding]
-                                                       ofType:nil];
+        if (!directory.empty())
+        {
+            path = [pimpl_->getBundle() pathForResource:[[NSString alloc] initWithBytes:filename.data()
+                                                                                 length:filename.size()
+                                                                               encoding:NSUTF8StringEncoding]
+                                                 ofType:nil
+                                            inDirectory:[[NSString alloc] initWithBytes:directory.data()
+                                                                                 length:directory.size()
+                                                                               encoding:NSUTF8StringEncoding]];
+        }
+        else
+        {
+            path = [pimpl_->getBundle() pathForResource:[[NSString alloc] initWithBytes:filename.data()
+                                                                                 length:filename.size()
+                                                                               encoding:NSUTF8StringEncoding]
+                                                 ofType:nil];
         }
         if (path != nil)
             ret = [path UTF8String];
@@ -271,7 +287,9 @@ bool FileUtilsApple::createDirectories(std::string_view path) const
 
     NSError* error;
 
-    bool result = [s_fileManager createDirectoryAtPath:[[NSString alloc] initWithBytes:path.data() length:path.size() encoding:NSUTF8StringEncoding]
+    bool result = [s_fileManager createDirectoryAtPath:[[NSString alloc] initWithBytes:path.data()
+                                                                                length:path.size()
+                                                                              encoding:NSUTF8StringEncoding]
                            withIntermediateDirectories:YES
                                             attributes:nil
                                                  error:&error];
@@ -284,4 +302,4 @@ bool FileUtilsApple::createDirectories(std::string_view path) const
     return result;
 }
 
-}
+}  // namespace ax

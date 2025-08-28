@@ -31,9 +31,9 @@
 
 namespace
 {
-static uint64_t s_blur_program_id = 0;
+static uint64_t s_blur_program_id  = 0;
 static uint64_t s_sepia_program_id = 0;
-}
+}  // namespace
 
 using namespace ax;
 
@@ -71,13 +71,11 @@ private:
 
 NewRendererTests::NewRendererTests()
 {
-     auto programManager = ProgramManager::getInstance();
-     s_blur_program_id   = programManager->registerCustomProgram(positionTextureColor_vert,
-                                                  "custom/example_Blur_fs"sv,
-                                                VertexLayoutKind::Sprite);
-     s_sepia_program_id = programManager->registerCustomProgram(positionTextureColor_vert,
-                                                "custom/example_Sepia_fs"sv,
-                                          VertexLayoutKind::Sprite);
+    auto programManager = ProgramManager::getInstance();
+    s_blur_program_id   = programManager->registerCustomProgram(positionTextureColor_vert, "custom/example_Blur_fs"sv,
+                                                                VertexLayoutKind::Sprite);
+    s_sepia_program_id  = programManager->registerCustomProgram(positionTextureColor_vert, "custom/example_Sepia_fs"sv,
+                                                                VertexLayoutKind::Sprite);
 
     ADD_TEST_CASE(NewSpriteTest);
     ADD_TEST_CASE(GroupCommandTest);
@@ -209,7 +207,7 @@ SpriteInGroupCommand* SpriteInGroupCommand::create(std::string_view filename)
 void SpriteInGroupCommand::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     AXASSERT(renderer, "Render is null");
-    auto * spriteWrapperCommand = renderer->getNextGroupCommand();
+    auto* spriteWrapperCommand = renderer->getNextGroupCommand();
     spriteWrapperCommand->init(_globalZOrder);
     renderer->addCommand(spriteWrapperCommand);
     renderer->pushGroup(spriteWrapperCommand->getRenderQueueID());
@@ -424,7 +422,7 @@ SpriteCreation::SpriteCreation()
     parent->setPosition(s.width / 2, s.height / 2);
     addChild(parent);
 
-#define KEY_CREATION "11"
+#define KEY_CREATION     "11"
 #define KEY_DESTROYATION "22"
 
     labelCreate  = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "Sprite Creation: ..");
@@ -759,13 +757,11 @@ BugAutoCulling::BugAutoCulling()
         label->setPosition(s.width / 2 + s.width / 10 * i, s.height / 2);
         this->addChild(label);
     }
-    this->scheduleOnce(
-        [=](float) {
-            auto camera = Director::getInstance()->getRunningScene()->getCameras().front();
-            auto move   = MoveBy::create(2.0f, Vec2(2 * s.width, 0.0f));
-            camera->runAction(Sequence::create(move, move->reverse(), nullptr));
-        },
-        1.0f, "lambda-autoculling-bug");
+    this->scheduleOnce([=](float) {
+        auto camera = Director::getInstance()->getRunningScene()->getCameras().front();
+        auto move   = MoveBy::create(2.0f, Vec2(2 * s.width, 0.0f));
+        camera->runAction(Sequence::create(move, move->reverse(), nullptr));
+    }, 1.0f, "lambda-autoculling-bug");
 }
 
 std::string BugAutoCulling::title() const
@@ -823,7 +819,7 @@ RendererUniformBatch::RendererUniformBatch()
 {
     Size s = Director::getInstance()->getWinSize();
 
-    auto blurState  = createBlurProgramState();
+    auto blurState = createBlurProgramState();
     blurState->updateBatchId();
     auto sepiaState = createSepiaProgramState();
     sepiaState->updateBatchId();
@@ -854,12 +850,11 @@ RendererUniformBatch::RendererUniformBatch()
 
 ax::rhi::ProgramState* RendererUniformBatch::createBlurProgramState()
 {
-    auto programState =
-        new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
+    auto programState = new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
     programState->autorelease();
 
     rhi::UniformLocation loc = programState->getUniformLocation("resolution");
-    auto resolution              = Vec2(85, 121);
+    auto resolution          = Vec2(85, 121);
     programState->setUniform(loc, &resolution, sizeof(resolution));
 
     loc              = programState->getUniformLocation("blurRadius");
@@ -926,11 +921,10 @@ RendererUniformBatch2::RendererUniformBatch2()
 
 rhi::ProgramState* RendererUniformBatch2::createBlurProgramState()
 {
-    auto programState =
-        new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
+    auto programState = new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
 
     rhi::UniformLocation loc = programState->getUniformLocation("resolution");
-    auto resolution              = Vec2(85, 121);
+    auto resolution          = Vec2(85, 121);
     programState->setUniform(loc, &resolution, sizeof(resolution));
 
     loc              = programState->getUniformLocation("blurRadius");
@@ -946,8 +940,7 @@ rhi::ProgramState* RendererUniformBatch2::createBlurProgramState()
 
 rhi::ProgramState* RendererUniformBatch2::createSepiaProgramState()
 {
-    auto programState =
-        new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_sepia_program_id));
+    auto programState = new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(s_sepia_program_id));
     programState->autorelease();
     return programState;
 }

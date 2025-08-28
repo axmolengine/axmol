@@ -102,4 +102,4 @@ bool PUParticleFollowerTranslator::translateChildObject(PUScriptCompiler* /*comp
     return false;
 }
 
-}
+}  // namespace ax

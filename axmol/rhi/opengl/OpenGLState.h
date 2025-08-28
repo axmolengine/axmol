@@ -16,10 +16,7 @@ namespace ax::rhi::gl
 struct BlendEquationSeparateState
 {
     BlendEquationSeparateState(GLenum rgb, GLenum alpha) : rgbBlendOp(rgb), alphaBlendOp(alpha) {}
-    bool equals(GLenum rgb, GLenum alpha) const
-    {
-        return this->rgbBlendOp == rgb && this->alphaBlendOp == alpha;
-    }
+    bool equals(GLenum rgb, GLenum alpha) const { return this->rgbBlendOp == rgb && this->alphaBlendOp == alpha; }
     GLenum rgbBlendOp;
     GLenum alphaBlendOp;
 };
@@ -67,8 +64,7 @@ struct StencilFuncState
     {}
     inline bool equals(GLenum func, GLint ref, GLuint mask) const
     {
-        return this->stencilCompareFunc == func && this->stencilReferenceValueFront == ref &&
-               this->readMask == mask;
+        return this->stencilCompareFunc == func && this->stencilReferenceValueFront == ref && this->readMask == mask;
     }
     unsigned int stencilCompareFunc;
     int stencilReferenceValueFront;
@@ -82,8 +78,7 @@ struct StencilOperationState
     {}
     inline bool equals(GLenum fail, GLenum zfail, GLenum zpass) const
     {
-        return this->stencilFailureOp == fail && this->depthFailureOp == zfail &&
-               this->depthStencilPassOp == zpass;
+        return this->stencilFailureOp == fail && this->depthFailureOp == zfail && this->depthStencilPassOp == zpass;
     }
     unsigned int stencilFailureOp;
     unsigned int depthFailureOp;

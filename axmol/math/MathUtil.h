@@ -25,10 +25,9 @@
 
 #include "axmol/math/MathBase.h"
 
-
 namespace ax
 {
-    struct V3F_T2F_C4B;
+struct V3F_T2F_C4B;
 }
 
 /**
@@ -112,9 +111,9 @@ private:
 
     static void transposeMatrix(const float* m, float* dst);
 
-    static void transformVec4(const float* m, float x, float y, float z, float w, float* dst/*vec3*/);
+    static void transformVec4(const float* m, float x, float y, float z, float w, float* dst /*vec3*/);
 
-    static void transformVec4(const float* m, const float* v, float* dst/*vec4*/);
+    static void transformVec4(const float* m, const float* v, float* dst /*vec4*/);
 
     static void crossVec3(const float* v1, const float* v2, float* dst);
 
@@ -127,4 +126,3 @@ NS_AX_MATH_END
  end of base group
  @}
  */
-

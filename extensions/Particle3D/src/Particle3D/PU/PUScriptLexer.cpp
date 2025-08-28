@@ -293,4 +293,4 @@ bool PUScriptLexer::isNewline(char c) const
     return c == '\n' || c == '\r';
 }
 
-}
+}  // namespace ax

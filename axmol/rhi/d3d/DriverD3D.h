@@ -27,7 +27,8 @@
 #include <optional>
 #include <d3d11.h>
 
-namespace ax::rhi::d3d {
+namespace ax::rhi::d3d
+{
 
 /**
  * @addtogroup _d3d
@@ -84,8 +85,7 @@ public:
     Texture* createTexture(const TextureDesc& descriptor) override;
 
     RenderTarget* createDefaultRenderTarget() override;
-    RenderTarget* createRenderTarget(Texture* colorAttachment,
-                                  Texture* depthStencilAttachment) override;
+    RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 
     /**
      * Create a DepthStencilState object.
@@ -121,7 +121,7 @@ public:
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 
     /// below is driver info
-\
+
     /// @name Setters & Getters
     /**
      * Get vendor device name.
@@ -152,7 +152,6 @@ public:
      */
     bool checkForFeatureSupported(FeatureType feature) override;
 
-
     inline ID3D11Device* getDevice() const { return _device; }
 
     inline ID3D11DeviceContext* getContext() const { return _context; }
@@ -171,13 +170,12 @@ protected:
     void destroySampler(SamplerHandle& h) override;
 
 private:
-
-    ID3D11Device* _device = nullptr;
+    ID3D11Device* _device         = nullptr;
     ID3D11DeviceContext* _context = nullptr;
 
     DXGI_ADAPTER_DESC _adapterDesc;
 
-    //FeatureSet _featureSet = FeatureSet::Unknown;
+    // FeatureSet _featureSet = FeatureSet::Unknown;
     static bool _isDepth24Stencil8PixelFormatSupported;
 
     std::optional<LARGE_INTEGER> _driverVersion;
@@ -187,4 +185,4 @@ private:
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::d3d

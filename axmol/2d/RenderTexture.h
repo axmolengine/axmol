@@ -333,6 +333,7 @@ public:
      * @return Returns true if this using a shared render target.
      */
     bool isSharedRenderTarget() const;
+
 public:
     /** FIXME: should be protected.
      * but due to a bug in PowerVR + Android,
@@ -404,7 +405,7 @@ protected:
 
     void onSaveToFile(std::string fileName, bool isRGBA = true, bool forceNonPMA = false);
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    bool _cachedTextureDirty = false;
+    bool _cachedTextureDirty                  = false;
     EventListener* _rendererRecreatedListener = nullptr;
 #endif
     bool _keepMatrix = false;
@@ -420,7 +421,7 @@ protected:
     rhi::RenderTarget* _renderTarget    = nullptr;
     rhi::RenderTarget* _oldRenderTarget = nullptr;
 
-    RefPtr<Image> _UITextureImage     = nullptr;
+    RefPtr<Image> _UITextureImage = nullptr;
     rhi::PixelFormat _pixelFormat = rhi::PixelFormat::RGBA8;
 
     Color _clearColor;

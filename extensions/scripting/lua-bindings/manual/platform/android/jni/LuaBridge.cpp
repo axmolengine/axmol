@@ -31,26 +31,25 @@
 
 #    include "axmol/base/text_utils.h"
 
-#    define LOG_TAG "LuaBridge_java"
+#    define LOG_TAG   "LuaBridge_java"
 #    define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 extern "C" {
 
 JNIEXPORT jint JNICALL Java_dev_axmol_lib_LuaBridge_callLuaFunctionWithString(JNIEnv* env,
-                                                                                             jclass,
-                                                                                             jint functionId,
-                                                                                             jstring value)
+                                                                              jclass,
+                                                                              jint functionId,
+                                                                              jstring value)
 {
     std::string strValue = ax::text_utils::getStringUTFCharsJNI(env, value);
     int ret              = LuaJavaBridge::callLuaFunctionById(functionId, strValue.c_str());
     return ret;
 }
 
-JNIEXPORT jint JNICALL
-Java_dev_axmol_lib_LuaBridge_callLuaGlobalFunctionWithString(JNIEnv* env,
-                                                                            jclass,
-                                                                            jstring luaFunctionName,
-                                                                            jstring value)
+JNIEXPORT jint JNICALL Java_dev_axmol_lib_LuaBridge_callLuaGlobalFunctionWithString(JNIEnv* env,
+                                                                                    jclass,
+                                                                                    jstring luaFunctionName,
+                                                                                    jstring value)
 {
     std::string functionNameStr = ax::text_utils::getStringUTFCharsJNI(env, luaFunctionName);
     std::string valueStr        = ax::text_utils::getStringUTFCharsJNI(env, value);
@@ -59,16 +58,12 @@ Java_dev_axmol_lib_LuaBridge_callLuaGlobalFunctionWithString(JNIEnv* env,
     return ret;
 }
 
-JNIEXPORT jint JNICALL Java_dev_axmol_lib_LuaBridge_retainLuaFunction(JNIEnv* env,
-                                                                                     jclass,
-                                                                                     jint luaFunctionId)
+JNIEXPORT jint JNICALL Java_dev_axmol_lib_LuaBridge_retainLuaFunction(JNIEnv* env, jclass, jint luaFunctionId)
 {
     return LuaJavaBridge::retainLuaFunctionById(luaFunctionId);
 }
 
-JNIEXPORT jint JNICALL Java_dev_axmol_lib_LuaBridge_releaseLuaFunction(JNIEnv* env,
-                                                                                      jclass,
-                                                                                      jint luaFunctionId)
+JNIEXPORT jint JNICALL Java_dev_axmol_lib_LuaBridge_releaseLuaFunction(JNIEnv* env, jclass, jint luaFunctionId)
 {
     return LuaJavaBridge::releaseLuaFunctionById(luaFunctionId);
 }

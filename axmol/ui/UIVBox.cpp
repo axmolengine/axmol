@@ -82,4 +82,4 @@ bool VBox::initWithSize(const Vec2& size)
 
 }  // namespace ui
 
-}
+}  // namespace ax

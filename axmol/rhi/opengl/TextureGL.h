@@ -69,11 +69,7 @@ public:
      * @param layerIndex Specifies the layer index for 2D array textures.
      * reduction image.
      */
-    void updateData(const void* data,
-                    int width,
-                    int height,
-                    int level,
-                    int layerIndex) override;
+    void updateData(const void* data, int width, int height, int level, int layerIndex) override;
 
     /**
      * Update a two-dimensional texture image in a compressed format
@@ -85,12 +81,8 @@ public:
      * reduction image.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    void updateCompressedData(const void* data,
-                              int width,
-                              int height,
-                              std::size_t dataSize,
-                              int level,
-                              int layerIndex) override;
+    void updateCompressedData(const void* data, int width, int height, std::size_t dataSize, int level, int layerIndex)
+        override;
 
     /**
      * Update a two-dimensional texture subimage
@@ -103,13 +95,8 @@ public:
      * @param data Specifies a pointer to the image data in memory.
      * @param layerIndex Specifies the layer index for 2D array textures.
      */
-    void updateSubData(int xoffset,
-                       int yoffset,
-                       int width,
-                       int height,
-                       int level,
-                       const void* data,
-                       int layerIndex) override;
+    void updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex)
+        override;
 
     /**
      * Update a two-dimensional texture subimage in a compressed format

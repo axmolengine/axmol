@@ -47,4 +47,4 @@ bool PUDoStopSystemEventHandlerTranslator::translateChildObject(PUScriptCompiler
     return false;
 }
 
-}
+}  // namespace ax

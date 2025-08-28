@@ -49,13 +49,13 @@ public:
     static RenderViewImpl* create(std::string_view viewName);
     static RenderViewImpl* create(std::string_view viewName, bool resizable);
     static RenderViewImpl* createWithRect(std::string_view viewName,
-                                      const Rect& rect,
-                                      float frameZoomFactor = 1.0f,
-                                      bool resizable        = false);
+                                          const Rect& rect,
+                                          float frameZoomFactor = 1.0f,
+                                          bool resizable        = false);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName,
-                                            const GLFWvidmode& videoMode,
-                                            GLFWmonitor* monitor);
+                                                const GLFWvidmode& videoMode,
+                                                GLFWmonitor* monitor);
 
     /*
      *frameZoomFactor for frame. This method is for debugging big resolution (e.g.new ipad) app on desktop.
@@ -99,8 +99,11 @@ public:
     void getWindowPosition(int* xpos, int* ypos);
     void getWindowSize(int* width, int* height);
 
-    void setWindowSizeLimits(int minwidth, int minheight, int maxwidth = GLFW_DONT_CARE, int maxheight = GLFW_DONT_CARE);
-    
+    void setWindowSizeLimits(int minwidth,
+                             int minheight,
+                             int maxwidth  = GLFW_DONT_CARE,
+                             int maxheight = GLFW_DONT_CARE);
+
     int getMonitorCount() const;
     Vec2 getMonitorSize() const;
 
@@ -151,7 +154,7 @@ public:
     void* getWaylandWindow() override;
     void* getWaylandDisplay() override;
     */
-#endif // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 protected:
     RenderViewImpl(bool initglfw = true);

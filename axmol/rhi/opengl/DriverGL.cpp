@@ -156,7 +156,8 @@ DriverImpl::DriverImpl()
     // vertex binding attrib binding, TODO: detect it
     // if (_cap.vertexAttribBinding)
     // {
-    //     AXLOGI("[RHI] OpenGL extension detected: GL_ARB_vertex_attrib_binding (Vertex Attribute Binding) is supported");
+    //     AXLOGI("[RHI] OpenGL extension detected: GL_ARB_vertex_attrib_binding (Vertex Attribute Binding) is
+    //     supported");
     // }
 
     // default FBO
@@ -164,7 +165,6 @@ DriverImpl::DriverImpl()
 
     // reset gl state
     resetState();
-
 
     CHECK_GL_ERROR_DEBUG();
 }
@@ -211,7 +211,6 @@ ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view
     return new ShaderModuleImpl(stage, source);
 }
 
-
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 {
     GLuint sampler = 0;
@@ -241,7 +240,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         case SamplerFilter::MIP_LINEAR:
             minFilterGL = GL_NEAREST_MIPMAP_LINEAR;
             break;
-        default: // MIP_DEFAULT
+        default:  // MIP_DEFAULT
             minFilterGL = GL_NEAREST;
         }
     }

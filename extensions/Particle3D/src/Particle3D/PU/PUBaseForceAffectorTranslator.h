@@ -37,11 +37,10 @@ class AX_EX_DLL PUBaseForceAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUBaseForceAffectorTranslator();
-    virtual ~PUBaseForceAffectorTranslator(){};
+    virtual ~PUBaseForceAffectorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

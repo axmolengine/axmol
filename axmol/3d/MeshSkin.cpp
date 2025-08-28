@@ -162,4 +162,4 @@ const Mat4& MeshSkin::getInvBindPose(const Bone3D* bone)
     return Mat4::IDENTITY;
 }
 
-}
+}  // namespace ax

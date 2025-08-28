@@ -46,9 +46,9 @@ void Physics3DDebugDrawer::drawLine(const btVector3& from, const btVector3& to, 
 
     V3F_C4F a, b;
     a.position = convertbtVector3ToVec3(from);
-    a.color   = Color(col.x, col.y, col.z, 1.0f);
+    a.color    = Color(col.x, col.y, col.z, 1.0f);
     b.position = convertbtVector3ToVec3(to);
-    b.color   = Color(col.x, col.y, col.z, 1.0f);
+    b.color    = Color(col.x, col.y, col.z, 1.0f);
 
     _buffer.emplace_back(a);
     _buffer.emplace_back(b);
@@ -127,7 +127,7 @@ Physics3DDebugDrawer::~Physics3DDebugDrawer()
 
 void Physics3DDebugDrawer::init()
 {
-    auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_COLOR);
+    auto* program     = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_COLOR);
     auto programState = new rhi::ProgramState(program);
     _locMVP           = programState->getUniformLocation("u_MVPMatrix");
 
@@ -159,6 +159,6 @@ void Physics3DDebugDrawer::clear()
     _buffer.clear();
 }
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

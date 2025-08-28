@@ -102,7 +102,7 @@ public:
     void setParticleTypeToObserve(const PUParticle3D::ParticleType particleTypeToObserve);
 
     virtual void notifyStart();
-    virtual void notifyStop(){/* Do nothing */};
+    virtual void notifyStop() { /* Do nothing */ };
     virtual void notifyRescaled(const Vec3& scale);
     virtual void preUpdateObserver(float deltaTime);
     virtual void updateObserver(PUParticle3D* particle, float deltaTime, bool firstParticle);
@@ -239,5 +239,4 @@ protected:
     virtual void handleEvent(PUParticle3D* particle, float timeElapsed);
 };
 
-}
-
+}  // namespace ax

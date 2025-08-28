@@ -236,10 +236,7 @@ public:
      *
      * @see lengthSquared
      */
-    float length() const
-    {
-        return std::sqrt(x * x + y * y + z * z);
-    }
+    float length() const { return std::sqrt(x * x + y * y + z * z); }
 
     /**
      * Returns the squared length of this vector.
@@ -348,10 +345,7 @@ public:
     /**
      * Sets the elements of this vector to zero.
      */
-    void setZero()
-    {
-        x = y = z = 0.0f;
-    }
+    void setZero() { x = y = z = 0.0f; }
 
     /**
      * Subtracts this vector and the specified vector as (this - v)
@@ -393,10 +387,7 @@ public:
      * Linear interpolation between two vectors A and B by alpha which
      * is in the range [0,1]
      */
-    Vec3 lerp(const Vec3& target, float alpha) const
-    {
-        return *this * (1.f - alpha) + target * alpha;
-    }
+    Vec3 lerp(const Vec3& target, float alpha) const { return *this * (1.f - alpha) + target * alpha; }
 
     /**
      * Calculates the sum of this vector with the given vector.
@@ -530,7 +521,7 @@ public:
      *
      * @return True if this vector is equal to the given vector, false otherwise.
      */
-    bool operator==(const Vec3& v) const { return x==v.x && y==v.y && z==v.z; }
+    bool operator==(const Vec3& v) const { return x == v.x && y == v.y && z == v.z; }
 
     /**
      * Determines if this vector is not equal to the given vector.
@@ -539,7 +530,7 @@ public:
      *
      * @return True if this vector is not equal to the given vector, false otherwise.
      */
-    bool operator!=(const Vec3& v) const { return x!=v.x || y!=v.y || z!=v.z; }
+    bool operator!=(const Vec3& v) const { return x != v.x || y != v.y || z != v.z; }
 
     /** equals to Vec3(0,0,0) */
     static const Vec3 ZERO;
@@ -568,11 +559,11 @@ inline Vec3 operator*(float x, const Vec3& v)
 }
 
 #if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-    inline constexpr Vec3 Vec3::ZERO(0.0f, 0.0f, 0.0f);
-    inline constexpr Vec3 Vec3::ONE(1.0f, 1.0f, 1.0f);
-    inline constexpr Vec3 Vec3::UNIT_X(1.0f, 0.0f, 0.0f);
-    inline constexpr Vec3 Vec3::UNIT_Y(0.0f, 1.0f, 0.0f);
-    inline constexpr Vec3 Vec3::UNIT_Z(0.0f, 0.0f, 1.0f);
+inline constexpr Vec3 Vec3::ZERO(0.0f, 0.0f, 0.0f);
+inline constexpr Vec3 Vec3::ONE(1.0f, 1.0f, 1.0f);
+inline constexpr Vec3 Vec3::UNIT_X(1.0f, 0.0f, 0.0f);
+inline constexpr Vec3 Vec3::UNIT_Y(0.0f, 1.0f, 0.0f);
+inline constexpr Vec3 Vec3::UNIT_Z(0.0f, 0.0f, 1.0f);
 #endif
 
 NS_AX_MATH_END
@@ -580,4 +571,3 @@ NS_AX_MATH_END
  end of base group
  @}
  */
-

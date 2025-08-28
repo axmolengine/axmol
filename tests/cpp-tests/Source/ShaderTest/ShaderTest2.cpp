@@ -126,7 +126,7 @@ public:
         {
             // negative effects: order < 0
             int idx = 0;
-            for (auto&&effect : _effects)
+            for (auto&& effect : _effects)
             {
 
                 if (std::get<0>(effect) >= 0)
@@ -166,7 +166,7 @@ protected:
     EffectSprite() : _defaultEffect(nullptr) { _effects.reserve(2); }
     ~EffectSprite()
     {
-        for (auto&&tuple : _effects)
+        for (auto&& tuple : _effects)
         {
             std::get<1>(tuple)->release();
         }
@@ -183,7 +183,8 @@ protected:
 
 bool Effect::initProgramState(std::string_view fragmentFilename)
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, fragmentFilename, VertexLayoutKind::Sprite);
+    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, fragmentFilename,
+                                                                   VertexLayoutKind::Sprite);
     auto programState = new rhi::ProgramState(program);
     AX_SAFE_RELEASE(_programState);
     _programState = programState;
@@ -572,7 +573,7 @@ bool EffectSpriteLamp::init()
 
 void EffectSpriteLamp::onTouchesBegan(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for (auto&&item : touches)
+    for (auto&& item : touches)
     {
         auto touch         = item;
         auto s             = Director::getInstance()->getWinSize();
@@ -588,7 +589,7 @@ void EffectSpriteLamp::onTouchesBegan(const std::vector<Touch*>& touches, Event*
 
 void EffectSpriteLamp::onTouchesMoved(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for (auto&&item : touches)
+    for (auto&& item : touches)
     {
         auto touch         = item;
         auto s             = Director::getInstance()->getWinSize();
@@ -604,7 +605,7 @@ void EffectSpriteLamp::onTouchesMoved(const std::vector<Touch*>& touches, Event*
 
 void EffectSpriteLamp::onTouchesEnded(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for (auto&&item : touches)
+    for (auto&& item : touches)
     {
         auto touch         = item;
         auto s             = Director::getInstance()->getWinSize();

@@ -107,4 +107,4 @@ void PUParticleFollower::copyAttributesTo(PUAffector* affector)
     particleFollower->_minDistance       = _minDistance;
 }
 
-}
+}  // namespace ax

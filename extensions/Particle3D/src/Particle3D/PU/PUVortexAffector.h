@@ -76,5 +76,4 @@ protected:
     PUDynamicAttribute* _dynRotationSpeed;
     PUDynamicAttributeHelper _dynamicAttributeHelper;
 };
-}
-
+}  // namespace ax

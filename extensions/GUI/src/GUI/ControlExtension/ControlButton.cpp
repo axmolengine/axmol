@@ -131,9 +131,7 @@ ControlButton* ControlButton::create(Node* label, ax::ui::Scale9Sprite* backgrou
     return pRet;
 }
 
-ControlButton* ControlButton::create(Node* label,
-                                     ax::ui::Scale9Sprite* backgroundSprite,
-                                     bool adjustBackGroundSize)
+ControlButton* ControlButton::create(Node* label, ax::ui::Scale9Sprite* backgroundSprite, bool adjustBackGroundSize)
 {
     ControlButton* pRet = new ControlButton();
     pRet->initWithLabelAndBackgroundSprite(label, backgroundSprite, adjustBackGroundSize);

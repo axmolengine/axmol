@@ -3,11 +3,12 @@
 
 #include "axmol/rhi/RHITypes.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 struct PixelBufferDesc
 {
-    PixelBufferDesc()                             = default;
+    PixelBufferDesc()                       = default;
     PixelBufferDesc(const PixelBufferDesc&) = default;
     PixelBufferDesc(PixelBufferDesc&& rhs) noexcept
         : _data(std::move(rhs._data)), _width(rhs._width), _height(rhs._height)
@@ -20,4 +21,4 @@ struct PixelBufferDesc
     int _height = 0;
 };
 
-}
+}  // namespace ax::rhi

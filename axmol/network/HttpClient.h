@@ -29,17 +29,17 @@
 #pragma once
 
 #if !defined(__EMSCRIPTEN__)
-#include <thread>
-#include <condition_variable>
-#include <deque>
+#    include <thread>
+#    include <condition_variable>
+#    include <deque>
 
-#include "axmol/base/Scheduler.h"
-#include "axmol/network/HttpRequest.h"
-#include "axmol/network/HttpResponse.h"
-#include "axmol/network/HttpCookie.h"
-#include "axmol/network/Uri.h"
-#include "yasio/yasio_fwd.hpp"
-#include "axmol/base/ConcurrentDeque.h"
+#    include "axmol/base/Scheduler.h"
+#    include "axmol/network/HttpRequest.h"
+#    include "axmol/network/HttpResponse.h"
+#    include "axmol/network/HttpCookie.h"
+#    include "axmol/network/Uri.h"
+#    include "yasio/yasio_fwd.hpp"
+#    include "axmol/base/ConcurrentDeque.h"
 
 /**
  * @addtogroup network
@@ -64,7 +64,7 @@ public:
     /**
      * How many requests could be perform concurrency.
      */
-    static const int MAX_CHANNELS       = 21;
+    static const int MAX_CHANNELS = 21;
 
     /**
      * Get instance of HttpClient.
@@ -120,7 +120,7 @@ public:
      *      https://stackoverflow.com/questions/23714383/what-are-all-the-possible-values-for-http-content-type-header
      */
     void send(HttpRequest* request);
-    void sendImmediate(HttpRequest* request){ this->send(request); }
+    void sendImmediate(HttpRequest* request) { this->send(request); }
 
     /**
      * Set the timeout value for connecting.
@@ -248,13 +248,13 @@ private:
 
 }  // namespace network
 
-}
+}  // namespace ax
 
 // end group
 /// @}
 
 #else
 
-#include "axmol/network/HttpClient-wasm.h"
+#    include "axmol/network/HttpClient-wasm.h"
 
 #endif

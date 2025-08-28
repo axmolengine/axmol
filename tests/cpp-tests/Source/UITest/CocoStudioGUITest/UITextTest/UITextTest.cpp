@@ -149,14 +149,14 @@ bool UILabelTest_Effect::init()
         Text* outline_label = Text::create();
         outline_label->setString("Outline");
         AXLOGD("content size without outline: {} {}", outline_label->getContentSize().width,
-              outline_label->getContentSize().height);
+               outline_label->getContentSize().height);
         outline_label->enableOutline(Color32::GREEN, 4);
         outline_label->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - shadow_label->getContentSize().height - 50));
 
         _uiLayer->addChild(outline_label);
         AXLOGD("content size after applying outline: {} {}", outline_label->getContentSize().width,
-              outline_label->getContentSize().height);
+               outline_label->getContentSize().height);
 
         // create buttons to disable effect and add
         auto disableOutlineBtn = Button::create();
@@ -167,7 +167,7 @@ bool UILabelTest_Effect::init()
         disableOutlineBtn->addClickEventListener([=](Object*) {
             outline_label->disableEffect(LabelEffect::OUTLINE);
             AXLOGD("content size after disable outline: {} {}", outline_label->getContentSize().width,
-                  outline_label->getContentSize().height);
+                   outline_label->getContentSize().height);
         });
         this->addChild(disableOutlineBtn);
 

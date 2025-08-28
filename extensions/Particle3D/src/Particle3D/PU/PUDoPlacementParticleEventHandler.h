@@ -186,5 +186,4 @@ protected:
     bool _inheritParticleDepth;
 };
 
-}
-
+}  // namespace ax

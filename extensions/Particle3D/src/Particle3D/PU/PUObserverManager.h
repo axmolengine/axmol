@@ -70,5 +70,4 @@ protected:
     PUOnVelocityObserverTranslator _onVelocityObserverTranslator;
 };
 
-}
-
+}  // namespace ax

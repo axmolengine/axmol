@@ -39,7 +39,10 @@ public:
     // static function
     static void loadGLES2();
     static RenderViewImpl* create(std::string_view viewname);
-    static RenderViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f, bool resizable = false);
+    static RenderViewImpl* createWithRect(std::string_view viewName,
+                                          const Rect& rect,
+                                          float frameZoomFactor = 1.0f,
+                                          bool resizable        = false);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
 
     bool isGfxContextReady() override;
@@ -58,4 +61,4 @@ protected:
     bool initWithFullScreen(std::string_view viewName);
 };
 
-}
+}  // namespace ax

@@ -74,4 +74,4 @@ bool PUAlignAffectorTranslator::translateChildObject(PUScriptCompiler* /*compile
     return false;
 }
 
-}
+}  // namespace ax

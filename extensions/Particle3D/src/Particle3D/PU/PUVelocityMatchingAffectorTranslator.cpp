@@ -77,4 +77,4 @@ bool PUVelocityMatchingAffectorTranslator::translateChildObject(PUScriptCompiler
     return false;
 }
 
-}
+}  // namespace ax

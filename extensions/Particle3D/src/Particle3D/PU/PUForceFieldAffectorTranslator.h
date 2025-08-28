@@ -37,11 +37,10 @@ class PUForceFieldAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUForceFieldAffectorTranslator();
-    virtual ~PUForceFieldAffectorTranslator(){};
+    virtual ~PUForceFieldAffectorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

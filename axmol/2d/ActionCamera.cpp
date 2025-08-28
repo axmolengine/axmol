@@ -243,4 +243,4 @@ void OrbitCamera::sphericalRadius(float* newRadius, float* zenith, float* azimut
     *newRadius = r / FLT_EPSILON;
 }
 
-}
+}  // namespace ax

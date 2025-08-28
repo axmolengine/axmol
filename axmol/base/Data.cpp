@@ -126,4 +126,4 @@ uint8_t* Data::takeBuffer(ssize_t* size)
     return _impl.release_pointer();
 }
 
-}
+}  // namespace ax

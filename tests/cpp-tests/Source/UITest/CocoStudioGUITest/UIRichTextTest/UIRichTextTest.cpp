@@ -186,11 +186,9 @@ bool UIRichTextTest::init()
         std::string str1 = config->getValue("Chinese").asString();
         std::string str2 = config->getValue("Japanese").asString();
         AXLOGD("str1:{} ascii length = {}, utf8 length = {}, substr = {}", str1, static_cast<int32_t>(str1.length()),
-            text_utils::countUTF8Chars(str1),
-              Helper::getSubStringOfUTF8String(str1, 0, 5));
-        AXLOGD("str2:{} ascii length = {}, utf8 length = {}, substr = {}", str2,
-              static_cast<int32_t>(str2.length()), text_utils::countUTF8Chars(str2),
-              Helper::getSubStringOfUTF8String(str2, 0, 2));
+               text_utils::countUTF8Chars(str1), Helper::getSubStringOfUTF8String(str1, 0, 5));
+        AXLOGD("str2:{} ascii length = {}, utf8 length = {}, substr = {}", str2, static_cast<int32_t>(str2.length()),
+               text_utils::countUTF8Chars(str2), Helper::getSubStringOfUTF8String(str2, 0, 2));
 
         // Add the alert
         Text* alert = Text::create("RichText", "fonts/Marker Felt.ttf", 30);
@@ -207,11 +205,10 @@ bool UIRichTextTest::init()
         _richText->setContentSize(_defaultContentSize);
 
         RichElementText* re1 = RichElementText::create(1, Color32::WHITE, str1, "SimSun", 10);
-        RichElementText* re2 =
-            RichElementText::create(2, Color32::YELLOW, "And this is yellow. ", "Helvetica", 10);
+        RichElementText* re2 = RichElementText::create(2, Color32::YELLOW, "And this is yellow. ", "Helvetica", 10);
         RichElementText* re3 = RichElementText::create(3, Color32::GRAY, str2, "Yu Mincho", 10);
-        RichElementText* re4 = RichElementText::create(4, Color32::GREEN, "And green with TTF support. ",
-                                                       "fonts/Marker Felt.ttf", 10);
+        RichElementText* re4 =
+            RichElementText::create(4, Color32::GREEN, "And green with TTF support. ", "fonts/Marker Felt.ttf", 10);
         RichElementText* re5 = RichElementText::create(5, Color32::RED, "Last one is red ", "Helvetica", 10);
 
         RichElementImage* reimg = RichElementImage::create(6, Color32::WHITE, "cocosui/sliderballnormal.png");
@@ -265,7 +262,8 @@ bool UIRichTextXMLBasic::init()
 
         // RichText
         _richText = RichText::createWithXML(
-            "This is just simple text, with no XML tags. Testing the basics. Testing word-wrapping. Testing (\"punctuation\") "
+            "This is just simple text, with no XML tags. Testing the basics. Testing word-wrapping. Testing "
+            "(\"punctuation\") "
             "Testing, Testing");
         _richText->ignoreContentAdaptWithSize(false);
         _richText->setContentSize(_defaultContentSize);
@@ -500,7 +498,8 @@ bool UIRichTextXMLImg::init()
             "Image with width%/height%: <img src='cocosui/sliderballnormal.png' width='150%' height='150%' /> and "
             "Image with empty width/height%: <img src='cocosui/sliderballnormal.png' width='' height='150%' /> and "
             "Image with scale: <img src='cocosui/sliderballnormal.png' scale='3.5' /> and "
-            "Image with w/h/sX/sY: <img src='cocosui/sliderballnormal.png' width='30' height='30' scaleX='0.5' scaleY='0.5' /> and "
+            "Image with w/h/sX/sY: <img src='cocosui/sliderballnormal.png' width='30' height='30' scaleX='0.5' "
+            "scaleY='0.5' /> and "
             "goes text again");
         _richText->ignoreContentAdaptWithSize(false);
         _richText->setContentSize(_defaultContentSize);
@@ -845,8 +844,7 @@ bool UIRichTextXMLExtend::init()
             return make_pair(ValueMap(), richElement);
         });
         RichText::setTagDescription("CloseSelected", false, [](const ValueMap& tagAttrValueMap) {
-            RichElementImage* richElement =
-                RichElementImage::create(0, Color32::WHITE, "cocosui/CloseSelected.png");
+            RichElementImage* richElement = RichElementImage::create(0, Color32::WHITE, "cocosui/CloseSelected.png");
             return make_pair(ValueMap(), richElement);
         });
 
@@ -943,7 +941,7 @@ bool UIRichTextNewline::init()
     {
         auto& widgetSize = _widget->getContentSize();
 
-                // Add the alert
+        // Add the alert
         Text* alert = Text::create("Axmol Issue #1170", "fonts/Marker Felt.ttf", 30);
         alert->setColor(Color32(159, 168, 176));
         alert->setPosition(
@@ -1073,9 +1071,11 @@ bool UIRichTextParagraph::init()
 
         // RichText
         _richText = RichText::createWithXML(
-            "<p><b>Paragraph1: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et "
+            "<p><b>Paragraph1: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor "
+            "incididunt ut labore et "
             "dolore magna aliqua. Feugiat scelerisque varius morbi enim nunc. Dis parturient montes nascetur ridiculus "
-            "mus mauris vitae ultricies.</p><p><b>Paragraph2: </b>Lectus urna duis convallis convallis tellus id interdum velit. "
+            "mus mauris vitae ultricies.</p><p><b>Paragraph2: </b>Lectus urna duis convallis convallis tellus id "
+            "interdum velit. "
             "Convallis a cras semper auctor neque vitae tempus quam pellentesque. Congue quisque egestas diam in arcu "
             "cursus euismod quis.</p>");
         _richText->ignoreContentAdaptWithSize(false);

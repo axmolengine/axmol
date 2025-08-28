@@ -111,16 +111,16 @@ protected:
 
 protected:
     MeshCommand _meshCommand;
-    //CallbackCommand _beforeCommand;
-    //CallbackCommand _afterCommand;
-    Texture2D* _texture                  = nullptr;
+    // CallbackCommand _beforeCommand;
+    // CallbackCommand _afterCommand;
+    Texture2D* _texture              = nullptr;
     rhi::ProgramState* _programState = nullptr;
-    rhi::VertexLayout* _vertexLayout     = nullptr;
+    rhi::VertexLayout* _vertexLayout = nullptr;
     rhi::Buffer* _indexBuffer        = nullptr;  // index buffer
     rhi::Buffer* _vertexBuffer       = nullptr;  // vertex buffer
 
     std::vector<ax::V3F_T2F_C4F> _posuvcolors;  // vertex data
-    std::vector<uint16_t> _indexData;      // index data
+    std::vector<uint16_t> _indexData;           // index data
     std::string _texFile;
 
     rhi::UniformLocation _locColor;
@@ -128,11 +128,11 @@ protected:
     rhi::UniformLocation _locPMatrix;
 
     // renderer state cache variables
-    bool _rendererDepthTestEnabled                 = true;
+    bool _rendererDepthTestEnabled         = true;
     rhi::CompareFunc _rendererDepthCmpFunc = rhi::CompareFunc::LESS;
-    rhi::CullMode _rendererCullMode            = rhi::CullMode::BACK;
-    rhi::Winding _rendererWinding              = rhi::Winding::COUNTER_CLOCK_WISE;
-    bool _rendererDepthWrite                       = false;
+    rhi::CullMode _rendererCullMode        = rhi::CullMode::BACK;
+    rhi::Winding _rendererWinding          = rhi::Winding::COUNTER_CLOCK_WISE;
+    bool _rendererDepthWrite               = false;
 };
 
 // particle renderer using MeshRenderer
@@ -154,4 +154,4 @@ protected:
     Vec3 _meshSize;
 };
 
-}
+}  // namespace ax

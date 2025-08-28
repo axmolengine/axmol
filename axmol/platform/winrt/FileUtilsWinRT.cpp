@@ -71,17 +71,18 @@ FileUtils* FileUtils::getInstance()
     if (s_sharedFileUtils == nullptr)
     {
         s_sharedFileUtils = new FileUtilsWinRT();
-        if(!s_sharedFileUtils->init())
+        if (!s_sharedFileUtils->init())
         {
-          delete s_sharedFileUtils;
-          s_sharedFileUtils = nullptr;
-          AXLOGE("ERROR: Could not init FileUtilsWinRT");
+            delete s_sharedFileUtils;
+            s_sharedFileUtils = nullptr;
+            AXLOGE("ERROR: Could not init FileUtilsWinRT");
         }
     }
     return s_sharedFileUtils;
 }
 
-std::string FileUtilsWinRT::getNativeWritableAbsolutePath() const {
+std::string FileUtilsWinRT::getNativeWritableAbsolutePath() const
+{
     if (!_writablePath.empty())
     {
         return _writablePath;
@@ -94,9 +95,7 @@ std::string FileUtilsWinRT::getNativeWritableAbsolutePath() const {
     return ret;
 }
 
-FileUtilsWinRT::FileUtilsWinRT()
-{
-}
+FileUtilsWinRT::FileUtilsWinRT() {}
 
 bool FileUtilsWinRT::init()
 {
@@ -107,17 +106,18 @@ bool FileUtilsWinRT::init()
 
 std::string FileUtilsWinRT::getPathForFilename(std::string_view filename, std::string_view resolutionDirectory) const
 {
-    std::string unixFileName = convertPathFormatToUnixStyle(filename);
+    std::string unixFileName            = convertPathFormatToUnixStyle(filename);
     std::string unixResolutionDirectory = convertPathFormatToUnixStyle(resolutionDirectory);
     // std::string unixSearchPath = convertPathFormatToUnixStyle(searchPath);
 
     return FileUtils::getPathForFilename(unixFileName, unixResolutionDirectory);
 }
 
-std::string FileUtilsWinRT::getFullPathForFilenameWithinDirectory(std::string_view strDirectory, std::string_view strFilename) const
+std::string FileUtilsWinRT::getFullPathForFilenameWithinDirectory(std::string_view strDirectory,
+                                                                  std::string_view strFilename) const
 {
     std::string unixDirectory = convertPathFormatToUnixStyle(strDirectory);
-    std::string unixFilename = convertPathFormatToUnixStyle(strFilename);
+    std::string unixFilename  = convertPathFormatToUnixStyle(strFilename);
     return FileUtils::getFullPathForFilenameWithinDirectory(unixDirectory, unixFilename);
 }
 
@@ -126,11 +126,11 @@ int64_t FileUtilsWinRT::getFileSize(std::string_view filepath) const
     WIN32_FILE_ATTRIBUTE_DATA fad;
     if (!GetFileAttributesEx(ntcvt::from_chars(filepath).c_str(), GetFileExInfoStandard, &fad))
     {
-        return 0; // error condition, could call GetLastError to find out more
+        return 0;  // error condition, could call GetLastError to find out more
     }
     LARGE_INTEGER size;
     size.HighPart = fad.nFileSizeHigh;
-    size.LowPart = fad.nFileSizeLow;
+    size.LowPart  = fad.nFileSizeLow;
     return (long)size.QuadPart;
 }
 
@@ -164,9 +164,8 @@ bool FileUtilsWinRT::createDirectories(std::string_view dirPath) const
     bool fail = false;
     if ((GetFileAttributesW(path.c_str())) == INVALID_FILE_ATTRIBUTES)
     {
-        axstd::splitpath_cb(
-            &path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
-            [&dirPath, &fail](const wchar_t* subpath) {
+        axstd::splitpath_cb(&path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
+                            [&dirPath, &fail](const wchar_t* subpath) {
             auto attribs = GetFileAttributesW(subpath);
             if (attribs == INVALID_FILE_ATTRIBUTES)
             {
@@ -191,8 +190,8 @@ bool FileUtilsWinRT::removeDirectory(std::string_view path) const
     std::wstring wpath = ntcvt::from_chars(path);
     std::wstring files = wpath + L"*.*";
     WIN32_FIND_DATA wfd;
-    HANDLE  search = FindFirstFileEx(files.c_str(), FindExInfoStandard, &wfd, FindExSearchNameMatch, NULL, 0);
-    bool ret = true;
+    HANDLE search = FindFirstFileEx(files.c_str(), FindExInfoStandard, &wfd, FindExSearchNameMatch, NULL, 0);
+    bool ret      = true;
     if (search != INVALID_HANDLE_VALUE)
     {
         BOOL find = true;
@@ -226,9 +225,8 @@ bool FileUtilsWinRT::removeDirectory(std::string_view path) const
 
 bool FileUtilsWinRT::isAbsolutePath(std::string_view strPath) const
 {
-    if (   strPath.length() > 2
-        && ( (strPath[0] >= 'a' && strPath[0] <= 'z') || (strPath[0] >= 'A' && strPath[0] <= 'Z') )
-        && strPath[1] == ':')
+    if (strPath.length() > 2 &&
+        ((strPath[0] >= 'a' && strPath[0] <= 'z') || (strPath[0] >= 'A' && strPath[0] <= 'Z')) && strPath[1] == ':')
     {
         return true;
     }
@@ -271,7 +269,7 @@ bool FileUtilsWinRT::renameFile(std::string_view oldfullpath, std::string_view n
     }
 
     if (MoveFileEx(ntcvt::from_chars(_oldfullpath).c_str(), _wNewfullpath.c_str(),
-        MOVEFILE_REPLACE_EXISTING & MOVEFILE_WRITE_THROUGH))
+                   MOVEFILE_REPLACE_EXISTING & MOVEFILE_WRITE_THROUGH))
     {
         return true;
     }
@@ -304,4 +302,4 @@ std::string FileUtilsWinRT::getAppPath()
     return convertPathFormatToUnixStyle(PlatformStringToString(package.InstalledLocation().Path()));
 }
 
-}
+}  // namespace ax

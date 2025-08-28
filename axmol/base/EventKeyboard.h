@@ -233,7 +233,7 @@ private:
     friend class EventListenerKeyboard;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

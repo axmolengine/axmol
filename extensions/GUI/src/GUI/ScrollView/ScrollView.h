@@ -50,11 +50,11 @@ public:
     /**
      * @lua NA
      */
-    virtual void scrollViewDidScroll(ScrollView* view){};
+    virtual void scrollViewDidScroll(ScrollView* view) {};
     /**
      * @lua NA
      */
-    virtual void scrollViewDidZoom(ScrollView* view){};
+    virtual void scrollViewDidZoom(ScrollView* view) {};
 };
 
 /**
@@ -369,8 +369,8 @@ protected:
     /** Touch listener */
     EventListenerTouchOneByOne* _touchListener;
 
-    //CustomCommand _beforeDrawCommand;
-    //CustomCommand _afterDrawCommand;
+    // CustomCommand _beforeDrawCommand;
+    // CustomCommand _afterDrawCommand;
 
     /**
      * Action created with setContentOffsetInDuration(), saved so it can be halted

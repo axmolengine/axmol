@@ -251,4 +251,4 @@ PULineEmitter* PULineEmitter::clone()
     return be;
 }
 
-}
+}  // namespace ax

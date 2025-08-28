@@ -126,5 +126,4 @@ private:
 // end of 3d group
 /// @}
 
-}
-
+}  // namespace ax

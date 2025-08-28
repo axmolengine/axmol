@@ -254,4 +254,4 @@ BillBoard::Mode BillBoard::getMode() const
     return _mode;
 }
 
-}
+}  // namespace ax

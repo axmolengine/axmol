@@ -85,7 +85,7 @@ bool Paddle::containsTouchLocation(Touch* touch)
 bool Paddle::onTouchBegan(Touch* touch, Event* event)
 {
     AXLOGD("Paddle::onTouchBegan id = {}, x = {}, y = {}", touch->getID(), touch->getLocation().x,
-          touch->getLocation().y);
+           touch->getLocation().y);
 
     if (_state != kPaddleStateUngrabbed)
         return false;
@@ -107,7 +107,7 @@ void Paddle::onTouchMoved(Touch* touch, Event* event)
     // in each touchXXX method.
 
     AXLOGD("Paddle::onTouchMoved id = {}, x = {}, y = {}", touch->getID(), touch->getLocation().x,
-          touch->getLocation().y);
+           touch->getLocation().y);
 
     AXASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
 

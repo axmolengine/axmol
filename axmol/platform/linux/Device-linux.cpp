@@ -72,7 +72,7 @@ struct LineBreakLine
         if (glyphs.empty() == false)
         {
             LineBreakGlyph& glyph = glyphs.at(glyphs.size() - 1);
-            lineWidth             = glyph.paintPosition + std::max(glyph.glyphWidth, glyph.horizAdvance - glyph.bearingX);
+            lineWidth = glyph.paintPosition + std::max(glyph.glyphWidth, glyph.horizAdvance - glyph.bearingX);
         }
     }
 };
@@ -520,12 +520,9 @@ public:
                             continue;
                         }
 
-                        int iX = xoffset + x;
-                        const uint32_t iTemp =
-                            (textColor.a * cTemp / 255) << 24 |
-                            (textColor.b * cTemp / 255) << 16 |
-                            (textColor.g * cTemp / 255) << 8  |
-                            (textColor.r * cTemp / 255);
+                        int iX               = xoffset + x;
+                        const uint32_t iTemp = (textColor.a * cTemp / 255) << 24 | (textColor.b * cTemp / 255) << 16 |
+                                               (textColor.g * cTemp / 255) << 8 | (textColor.r * cTemp / 255);
                         *(int*)&_data[(iY + iX) * 4 + 0] = iTemp;
                     }
                 }
@@ -595,4 +592,4 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-}
+}  // namespace ax

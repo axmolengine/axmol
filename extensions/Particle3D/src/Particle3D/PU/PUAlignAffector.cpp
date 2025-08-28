@@ -91,4 +91,4 @@ void PUAlignAffector::copyAttributesTo(PUAffector* affector)
     alignAffector->_resize         = _resize;
 }
 
-}
+}  // namespace ax

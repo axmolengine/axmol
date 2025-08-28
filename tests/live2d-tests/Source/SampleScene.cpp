@@ -15,22 +15,17 @@ using namespace ax;
 
 namespace
 {
-    SampleScene* instance = NULL;
+SampleScene* instance = NULL;
 }
 
-SampleScene::SampleScene()
-    : _pView(NULL)
-    , _changeItem(NULL)
-    , _closeItem(NULL)
-{
-}
+SampleScene::SampleScene() : _pView(NULL), _changeItem(NULL), _closeItem(NULL) {}
 
 Scene* SampleScene::createScene()
 {
     return SampleScene::create();
 }
 
-SampleScene * SampleScene::getInstance()
+SampleScene* SampleScene::getInstance()
 {
     return instance;
 }
@@ -39,7 +34,9 @@ SampleScene * SampleScene::getInstance()
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in SampleSceneScene.cpp\n");
+    printf(
+        "Depending on how you compiled you might have to add 'Resources/' in front of filenames in "
+        "SampleSceneScene.cpp\n");
 }
 
 // on "init" you need to initialize your instance
@@ -55,24 +52,19 @@ bool SampleScene::init()
     // Live2DManager実体化の前に必要となる
     instance = this;
 
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize     = Director::getInstance()->getWinSize();
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Vec2 origin      = Director::getInstance()->getVisibleOrigin();
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
 
     // add a "close" icon to exit the progress. it's an autorelease object
-    _closeItem = MenuItemImage::create(
-        "CloseNormal.png",
-        "CloseSelected.png",
-        AX_CALLBACK_1(SampleScene::menuCloseCallback, this)
-    );
+    _closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
+                                       AX_CALLBACK_1(SampleScene::menuCloseCallback, this));
 
-    if (_closeItem == nullptr ||
-        _closeItem->getContentSize().width <= 0 ||
-        _closeItem->getContentSize().height <= 0)
+    if (_closeItem == nullptr || _closeItem->getContentSize().width <= 0 || _closeItem->getContentSize().height <= 0)
     {
         problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
     }
@@ -83,15 +75,10 @@ bool SampleScene::init()
     closeMenu->setPosition(Vec2::ZERO);
     this->addChild(closeMenu, 1);
 
-    _changeItem = MenuItemImage::create(
-        "icon_gear.png",
-        "icon_gear.png",
-        AX_CALLBACK_1(SampleScene::menuChangeCallback, this)
-    );
+    _changeItem =
+        MenuItemImage::create("icon_gear.png", "icon_gear.png", AX_CALLBACK_1(SampleScene::menuChangeCallback, this));
 
-    if (_changeItem == nullptr ||
-        _changeItem->getContentSize().width <= 0 ||
-        _changeItem->getContentSize().height <= 0)
+    if (_changeItem == nullptr || _changeItem->getContentSize().width <= 0 || _changeItem->getContentSize().height <= 0)
     {
         problemLoading("'icon_gear.png'");
     }
@@ -154,9 +141,9 @@ void SampleScene::update(float delta)
     Node::update(delta);
 
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize     = Director::getInstance()->getWinSize();
         auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        Vec2 origin      = Director::getInstance()->getVisibleOrigin();
         // 端に隙間なく位置すると端末によっては描画されないことがあるのでマージンを設ける
         Vec2 margin = Vec2(20, 20);
 
@@ -164,14 +151,14 @@ void SampleScene::update(float delta)
         {
             float x = origin.x + visibleSize.width - _changeItem->getContentSize().width / 2 - margin.x;
             float y = getContentSize().height - _changeItem->getContentSize().height / 2 - margin.y;
-            _changeItem->setPosition(Vec2(x,y));
+            _changeItem->setPosition(Vec2(x, y));
         }
 
         if (_closeItem)
         {
             float x = origin.x + visibleSize.width - _closeItem->getContentSize().width / 2 - margin.x;
             float y = origin.y + _closeItem->getContentSize().height / 2 + margin.y;
-            _closeItem->setPosition(Vec2(x,y));
+            _closeItem->setPosition(Vec2(x, y));
         }
     }
 }

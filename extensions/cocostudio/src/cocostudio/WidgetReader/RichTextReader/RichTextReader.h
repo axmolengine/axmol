@@ -46,4 +46,3 @@ public:
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textBMFontOptions);
 };
 }  // namespace cocostudio
-

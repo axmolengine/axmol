@@ -82,4 +82,4 @@ private:
     static hlookup::string_map<FontAtlas*> _atlasMap;
 };
 
-}
+}  // namespace ax

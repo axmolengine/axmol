@@ -26,14 +26,14 @@
 #include "cocostudio/WidgetReader/Particle3DReader/Particle3DReader.h"
 #if defined(AX_ENABLE_EXT_PARTICLE3D)
 
-#include "cocostudio/CSParseBinary_generated.h"
-#include "cocostudio/CSParse3DBinary_generated.h"
-#include "cocostudio/FlatBuffersSerialize.h"
-#include "cocostudio/WidgetReader/Node3DReader/Node3DReader.h"
+#    include "cocostudio/CSParseBinary_generated.h"
+#    include "cocostudio/CSParse3DBinary_generated.h"
+#    include "cocostudio/FlatBuffersSerialize.h"
+#    include "cocostudio/WidgetReader/Node3DReader/Node3DReader.h"
 
-#include "flatbuffers/flatbuffers.h"
+#    include "flatbuffers/flatbuffers.h"
 
-#include "Particle3D/PU/PUParticleSystem3D.h"
+#    include "Particle3D/PU/PUParticleSystem3D.h"
 
 using namespace ax;
 using namespace flatbuffers;
@@ -84,7 +84,7 @@ Offset<Table> Particle3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -149,4 +149,4 @@ Node* Particle3DReader::createNodeWithFlatBuffers(const flatbuffers::Table* part
 }
 }  // namespace cocostudio
 
-#endif // defined(AX_ENABLE_EXT_PARTICLE3D)
+#endif  // defined(AX_ENABLE_EXT_PARTICLE3D)

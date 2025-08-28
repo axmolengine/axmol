@@ -155,4 +155,4 @@ ActionInterval* TransitionPageTurn::actionWithSize(const Vec2& vector)
     }
 }
 
-}
+}  // namespace ax

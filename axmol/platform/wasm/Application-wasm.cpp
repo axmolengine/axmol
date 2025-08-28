@@ -93,18 +93,19 @@ namespace ax
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
 
-static int64_t NANOSECONDSPERSECOND = 1000000000LL;
+static int64_t NANOSECONDSPERSECOND      = 1000000000LL;
 static int64_t NANOSECONDSPERMICROSECOND = 1000000LL;
-static int64_t FPS_CONTROL_THRESHOLD = static_cast<int64_t>(1.0f / 1200.0f * NANOSECONDSPERSECOND);
+static int64_t FPS_CONTROL_THRESHOLD     = static_cast<int64_t>(1.0f / 1200.0f * NANOSECONDSPERSECOND);
 
-static int64_t s_animationInterval = static_cast<int64_t>(1/60.0 * NANOSECONDSPERSECOND);
+static int64_t s_animationInterval = static_cast<int64_t>(1 / 60.0 * NANOSECONDSPERSECOND);
 
 static Director* __director;
 static int64_t mLastTickInNanoSeconds = 0;
 
-static void renderFrame() {
-    auto director = __director;
-    auto renderView   = director->getRenderView();
+static void renderFrame()
+{
+    auto director   = __director;
+    auto renderView = director->getRenderView();
 
     director->mainLoop();
     renderView->pollEvents();
@@ -130,13 +131,15 @@ static void updateFrame(void)
     renderFrame();
 
     /*
-    * No need to use algorithm in default(60,90,120... FPS) situation,
-    * since onDrawFrame() was called by system 60 times per second by default.
-    */
-    if (s_animationInterval > FPS_CONTROL_THRESHOLD) {
+     * No need to use algorithm in default(60,90,120... FPS) situation,
+     * since onDrawFrame() was called by system 60 times per second by default.
+     */
+    if (s_animationInterval > FPS_CONTROL_THRESHOLD)
+    {
         auto interval = yasio::xhighp_clock() - mLastTickInNanoSeconds;
 
-        if (interval < s_animationInterval) {
+        if (interval < s_animationInterval)
+        {
             std::this_thread::sleep_for(std::chrono::nanoseconds(s_animationInterval - interval));
         }
 
@@ -144,7 +147,8 @@ static void updateFrame(void)
     }
 }
 
-static void getCurrentLangISO2(char buf[16]) {
+static void getCurrentLangISO2(char buf[16])
+{
     // clang-format off
     EM_ASM_ARGS(
         {
@@ -196,12 +200,12 @@ int Application::run()
     as the browser’s requestAnimationFrame will make sure you render at a proper smooth rate
     that lines up properly with the browser and monitor.
     */
-#if AX_WASM_TIMING_USE_TIMEOUT
+#    if AX_WASM_TIMING_USE_TIMEOUT
     double fps = ceil(1.0 / (static_cast<double>(s_animationInterval) / NANOSECONDSPERSECOND));
     emscripten_set_main_loop(updateFrame, static_cast<int>(fps), false);
-#else
+#    else
     emscripten_set_main_loop(updateFrame, -1, false);
-#endif
+#    endif
 
     return 0;
 }

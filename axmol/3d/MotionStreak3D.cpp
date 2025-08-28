@@ -320,9 +320,9 @@ void MotionStreak3D::update(float delta)
                 _pointVertexes[newIdx] = _pointVertexes[i];
 
                 // Move pos
-                i2                           = i * 2;
-                newIdx2                      = newIdx * 2;
-                _vertices[newIdx2].position       = _vertices[i2].position;
+                i2                              = i * 2;
+                newIdx2                         = newIdx * 2;
+                _vertices[newIdx2].position     = _vertices[i2].position;
                 _vertices[newIdx2 + 1].position = _vertices[i2 + 1].position;
 
                 // Move color
@@ -332,9 +332,9 @@ void MotionStreak3D::update(float delta)
             else
                 newIdx2 = newIdx * 2;
 
-            const uint8_t alpha                 = (uint8_t)(_pointState[newIdx] * 255.0f);
-            _vertices[newIdx2].color.a       = alpha;
-            _vertices[newIdx2 + 1].color.a      = alpha;
+            const uint8_t alpha            = (uint8_t)(_pointState[newIdx] * 255.0f);
+            _vertices[newIdx2].color.a     = alpha;
+            _vertices[newIdx2 + 1].color.a = alpha;
         }
     }
     _nuPoints -= mov;
@@ -363,16 +363,16 @@ void MotionStreak3D::update(float delta)
         _pointState[_nuPoints]    = 1.0f;
 
         // Color assignment
-        auto tmpColor                         = _displayedColor;
-        tmpColor.a                            = 255;
-        _vertices[_nuPoints * 2].color        = tmpColor;
-        _vertices[_nuPoints * 2 + 1].color    = tmpColor;
+        auto tmpColor                      = _displayedColor;
+        tmpColor.a                         = 255;
+        _vertices[_nuPoints * 2].color     = tmpColor;
+        _vertices[_nuPoints * 2 + 1].color = tmpColor;
 
         // Generate polygon
         {
-            float stroke                            = _stroke * 0.5f;
-            _vertices[_nuPoints * 2].position       = _pointVertexes[_nuPoints] + (_sweepAxis * stroke);
-            _vertices[_nuPoints * 2 + 1].position   = _pointVertexes[_nuPoints] - (_sweepAxis * stroke);
+            float stroke                          = _stroke * 0.5f;
+            _vertices[_nuPoints * 2].position     = _pointVertexes[_nuPoints] + (_sweepAxis * stroke);
+            _vertices[_nuPoints * 2 + 1].position = _pointVertexes[_nuPoints] - (_sweepAxis * stroke);
         }
 
         _nuPoints++;
@@ -402,7 +402,7 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
     if (_nuPoints <= 1)
         return;
     auto beforeCommand = renderer->nextCallbackCommand();
-    auto afterCommand = renderer->nextCallbackCommand();
+    auto afterCommand  = renderer->nextCallbackCommand();
 
     beforeCommand->init(_globalZOrder);
     afterCommand->init(_globalZOrder);
@@ -443,4 +443,4 @@ void MotionStreak3D::onAfterDraw()
     renderer->setCullMode(_rendererCullface);
 }
 
-}
+}  // namespace ax

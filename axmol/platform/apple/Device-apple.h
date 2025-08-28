@@ -33,5 +33,4 @@ namespace FontUtils
 NSMutableParagraphStyle* _calculateParagraphStyle(bool enableWrap, int overflow);
 NSTextAlignment _calculateTextAlignment(ax::Device::TextAlign align);
 CGFloat _calculateTextDrawStartWidth(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions);
-}
-
+}  // namespace FontUtils

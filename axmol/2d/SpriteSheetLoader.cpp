@@ -42,4 +42,4 @@ void SpriteSheetLoader::initializePolygonInfo(const Vec2& textureSize,
     info.setRect(Rect(0, 0, spriteSize.width, spriteSize.height));
 }
 
-}
+}  // namespace ax

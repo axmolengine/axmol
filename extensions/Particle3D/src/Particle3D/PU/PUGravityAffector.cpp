@@ -91,4 +91,4 @@ void PUGravityAffector::copyAttributesTo(PUAffector* affector)
     gravityAffector->_gravity          = _gravity;
 }
 
-}
+}  // namespace ax

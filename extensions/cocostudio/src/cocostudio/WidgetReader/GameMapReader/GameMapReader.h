@@ -47,4 +47,3 @@ public:
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* gameMapOptions);
 };
 }  // namespace cocostudio
-

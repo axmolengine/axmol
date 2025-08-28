@@ -100,4 +100,4 @@ protected:
     Material* _material = nullptr;
 };
 
-}
+}  // namespace ax

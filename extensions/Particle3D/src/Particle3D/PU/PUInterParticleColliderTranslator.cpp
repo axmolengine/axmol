@@ -122,4 +122,4 @@ bool PUInterParticleColliderTranslator::translateChildObject(PUScriptCompiler* /
     return false;
 }
 
-}
+}  // namespace ax

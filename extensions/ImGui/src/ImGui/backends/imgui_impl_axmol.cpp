@@ -97,8 +97,8 @@ static void ImGui_ImplAxmol_UpdateTexture(ImTextureData* tex)
         const void* pixels = tex->GetPixels();
 
         auto texture = new Texture2D();
-        texture->initWithData(pixels, tex->Width * tex->Height * 4, rhi::PixelFormat::RGBA8, tex->Width,
-                              tex->Height, true);
+        texture->initWithData(pixels, tex->Width * tex->Height * 4, rhi::PixelFormat::RGBA8, tex->Width, tex->Height,
+                              true);
 
         rhi::SamplerDesc desc{};
         texture->getRHITexture()->updateSamplerDesc(desc);
@@ -325,7 +325,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         auto cmd = std::make_shared<CustomCommand>();
                         bd->CustomCommands.push_back(cmd);
                         cmd->init(0.f, BlendFunc::ALPHA_NON_PREMULTIPLIED);
-                        const auto pinfo = &bd->ProgramInfo; 
+                        const auto pinfo = &bd->ProgramInfo;
                         // create new ProgramState
                         auto state = new ProgramState(pinfo->program);
                         state->autorelease();
@@ -386,7 +386,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window)
 #    if AX_RENDER_API == AX_RENDER_API_GL
     auto currentState = glfwGetWindowUserPointer(window);
     if (!currentState)
-    { // create gl state for imgui mutli-viewport window
+    {  // create gl state for imgui mutli-viewport window
         currentState = new gl::OpenGLState();
         glfwSetWindowUserPointer(window, currentState);
     }

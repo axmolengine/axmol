@@ -239,11 +239,13 @@ public:
         }
         return -1;
     }
-    
-    void onSocketClosed(curl_socket_t fd) {
+
+    void onSocketClosed(curl_socket_t fd)
+    {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
 
-        if (this->_sockfd != -1 && this->_sockfd == fd) {
+        if (this->_sockfd != -1 && this->_sockfd == fd)
+        {
             this->_sockfd = -1;
         }
     }
@@ -323,21 +325,21 @@ private:
     std::recursive_mutex _mutex;
 
     // header info
-    int64_t _totalBytesExpected = -1; // some server may not send data size, so set it to -1
+    int64_t _totalBytesExpected = -1;  // some server may not send data size, so set it to -1
 
-    curl_off_t _speed = 0;
-    CURL* _curl = nullptr;
+    curl_off_t _speed     = 0;
+    CURL* _curl           = nullptr;
     curl_socket_t _sockfd = -1;  // store the sockfd to support cancel download manually
     bool _cancelled       = false;
 
     // progress
-    bool _alreadyDownloaded = false;
-    int64_t _transferOffset = 0;
-    int64_t _bytesReceived = 0;
+    bool _alreadyDownloaded     = false;
+    int64_t _transferOffset     = 0;
+    int64_t _bytesReceived      = 0;
     int64_t _totalBytesReceived = 0;
 
     // error
-    int _errCode = DownloadTask::ERROR_NO_ERROR;
+    int _errCode         = DownloadTask::ERROR_NO_ERROR;
     int _errCodeInternal = CURLE_OK;
     std::string _errDescription;
 
@@ -479,7 +481,7 @@ private:
             context->owner._impl->_contextMap.emplace(fd, context->weak_from_this());
         return fd;
     }
-    
+
     static int _closeSocketCallback(DownloaderCURL::Impl* impl, curl_socket_t fd)
     {
         int ret = ::closesocket(fd);
@@ -494,7 +496,7 @@ private:
                 AXLOGD("DownloadContextCURL was destoryed early than closesocket:fd:{}", fd);
             impl->_contextMap.erase(fd);
         }
-        
+
         return ret;
     }
 
@@ -525,10 +527,10 @@ private:
 
         curl_easy_setopt(handle, CURLOPT_OPENSOCKETFUNCTION, _openSocketCallback);
         curl_easy_setopt(handle, CURLOPT_OPENSOCKETDATA, context);
-        
+
         curl_easy_setopt(handle, CURLOPT_CLOSESOCKETFUNCTION, _closeSocketCallback);
         curl_easy_setopt(handle, CURLOPT_CLOSESOCKETDATA, this);
-        
+
         curl_easy_setopt(handle, CURLOPT_HEADER, 0L);
 
         /** if server acceptRanges and local has part of file, we continue to download **/
@@ -632,10 +634,10 @@ private:
                         auto task = taskMap[curlHandle];
 
                         /* clean underlaying execution
-                        * !!!Note 
-                        * the closesocket callback may not invoke immidiately after remove & cleanup handle,
-                        * and may invoking delay at next curl_multi_perform or curl_multi_cleanup
-                        */
+                         * !!!Note
+                         * the closesocket callback may not invoke immidiately after remove & cleanup handle,
+                         * and may invoking delay at next curl_multi_perform or curl_multi_cleanup
+                         */
 
                         // remove from multi-handle
                         curl_multi_remove_handle(curlmHandle, curlHandle);
@@ -645,7 +647,8 @@ private:
                             if (CURLE_OK != errCode)
                             {
                                 std::string errorMsg = curl_easy_strerror(errCode);
-                                if (errCode == CURLE_HTTP_RETURNED_ERROR) {
+                                if (errCode == CURLE_HTTP_RETURNED_ERROR)
+                                {
                                     long responeCode = 0;
                                     curl_easy_getinfo(curlHandle, CURLINFO_RESPONSE_CODE, &responeCode);
                                     fmt::format_to(std::back_inserter(errorMsg), FMT_COMPILE(": {}"), responeCode);
@@ -669,8 +672,8 @@ private:
                         } while (0);
 
                         curl_easy_cleanup(curlHandle);
-                        AXLOGD("    _threadProc task clean cur handle :{} with errCode:{}, serialId:{}", fmt::ptr(curlHandle),
-                               static_cast<int>(errCode), context->serialId);
+                        AXLOGD("    _threadProc task clean cur handle :{} with errCode:{}, serialId:{}",
+                               fmt::ptr(curlHandle), static_cast<int>(errCode), context->serialId);
 
                         // remove from taskMap
                         taskMap.erase(curlHandle);
@@ -849,7 +852,7 @@ void DownloaderCURL::_lazyScheduleUpdate()
         _scheduler->retain();
 
         char buf[128];
-        auto key = fmt::format_to_z(buf, "DownloaderCURL({})", fmt::ptr(this));
+        auto key      = fmt::format_to_z(buf, "DownloaderCURL({})", fmt::ptr(this));
         _schedulerKey = key;
 
         _scheduler->schedule(std::bind(&DownloaderCURL::_onUpdate, this, std::placeholders::_1), this, 0.1f, true,
@@ -979,9 +982,8 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task)
             {
                 context->_errCode         = DownloadTask::ERROR_CHECK_SUM_FAILED;
                 context->_errCodeInternal = 0;
-                context->_errDescription =
-                    fmt::format("Check file: {} md5 failed, required:{}, real:{}", context->_fileName,
-                                        task.checksum, realMd5);
+                context->_errDescription  = fmt::format("Check file: {} md5 failed, required:{}, real:{}",
+                                                        context->_fileName, task.checksum, realMd5);
 
                 pFileUtils->removeFile(context->_checksumFileName);
                 pFileUtils->removeFile(context->_tempFileName);

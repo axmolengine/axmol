@@ -97,5 +97,4 @@ protected:
      */
     PUDynamicAttributeHelper _dynamicAttributeHelper;
 };
-}
-
+}  // namespace ax

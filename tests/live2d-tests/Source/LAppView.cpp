@@ -16,10 +16,7 @@ using namespace LAppDefine;
 
 using namespace ax;
 
-LAppView::LAppView(): DrawNode()
-                    , _debugRects(NULL)
-{
-}
+LAppView::LAppView() : DrawNode(), _debugRects(NULL) {}
 
 void LAppView::onEnter()
 {
@@ -36,42 +33,38 @@ void LAppView::onEnter()
 
     Size size = Director::getInstance()->getWinSize();
 
-    float width = size.width;
+    float width  = size.width;
     float height = size.height;
     // 縦サイズを基準とする
-    float ratio = width / height;
-    float left = -ratio;
-    float right = ratio;
+    float ratio  = width / height;
+    float left   = -ratio;
+    float right  = ratio;
     float bottom = ViewLogicalLeft;
-    float top = ViewLogicalRight;
+    float top    = ViewLogicalRight;
 
-    viewMatrix->SetScreenRect(left, right, bottom, top); // デバイスに対応する画面の範囲。 Xの左端, Xの右端, Yの下端, Yの上端
+    viewMatrix->SetScreenRect(left, right, bottom,
+                              top);  // デバイスに対応する画面の範囲。 Xの左端, Xの右端, Yの下端, Yの上端
     viewMatrix->Scale(ViewScale, ViewScale);
 
-    deviceToScreen->LoadIdentity(); // サイズが変わった際などリセット必須
+    deviceToScreen->LoadIdentity();  // サイズが変わった際などリセット必須
     if (width > height)
     {
-      float screenW = fabsf(right - left);
-      deviceToScreen->ScaleRelative(screenW / width, -screenW / width);
+        float screenW = fabsf(right - left);
+        deviceToScreen->ScaleRelative(screenW / width, -screenW / width);
     }
     else
     {
-      float screenH = fabsf(top - bottom);
-      deviceToScreen->ScaleRelative(screenH / height, -screenH / height);
+        float screenH = fabsf(top - bottom);
+        deviceToScreen->ScaleRelative(screenH / height, -screenH / height);
     }
     deviceToScreen->TranslateRelative(-width / 2.0f, -height / 2.0f);
 
     // 表示範囲の設定
-    viewMatrix->SetMaxScale(ViewMaxScale); // 限界拡大率
-    viewMatrix->SetMinScale(ViewMinScale); // 限界縮小率
+    viewMatrix->SetMaxScale(ViewMaxScale);  // 限界拡大率
+    viewMatrix->SetMinScale(ViewMinScale);  // 限界縮小率
 
     // 表示できる最大範囲
-    viewMatrix->SetMaxScreenRect(
-        ViewLogicalMaxLeft,
-        ViewLogicalMaxRight,
-        ViewLogicalMaxBottom,
-        ViewLogicalMaxTop
-    );
+    viewMatrix->SetMaxScreenRect(ViewLogicalMaxLeft, ViewLogicalMaxRight, ViewLogicalMaxBottom, ViewLogicalMaxTop);
 
     // イベントリスナー作成
     EventListenerTouchAllAtOnce* listener = EventListenerTouchAllAtOnce::create();
@@ -132,7 +125,8 @@ void LAppView::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
     if (touchNum == 1)
     {
         Point pt = touches[0]->getLocationInView();
-        if (DebugTouchLogEnable)LAppPal::PrintLog("[APP]touchesBegan x:%.0f y:%.0f", pt.x, pt.y);
+        if (DebugTouchLogEnable)
+            LAppPal::PrintLog("[APP]touchesBegan x:%.0f y:%.0f", pt.x, pt.y);
         touchMgr->touchesBegan(pt.x, pt.y);
     }
 }
@@ -144,15 +138,16 @@ void LAppView::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
 
     float screenX = this->transformScreenX(touchMgr->getX());
     float screenY = this->transformScreenY(touchMgr->getY());
-    float viewX = this->transformViewX(touchMgr->getX());
-    float viewY = this->transformViewY(touchMgr->getY());
+    float viewX   = this->transformViewX(touchMgr->getX());
+    float viewY   = this->transformViewY(touchMgr->getY());
 
     if (touchNum == 1)
     {
         Point pt = touches[0]->getLocationInView();
 
         if (DebugTouchLogEnable)
-            LAppPal::PrintLog("[APP]touchesMoved device{x:%.0f y:%.0f} screen{x:%.2f y:%.2f} view{x:%.2f y:%.2f}", pt.x, pt.y, screenX, screenY, viewX, viewY);
+            LAppPal::PrintLog("[APP]touchesMoved device{x:%.0f y:%.0f} screen{x:%.2f y:%.2f} view{x:%.2f y:%.2f}", pt.x,
+                              pt.y, screenX, screenY, viewX, viewY);
 
         touchMgr->touchesMoved(pt.x, pt.y);
     }
@@ -169,9 +164,10 @@ void LAppView::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event*
     if (touches.size() == 1)
     {
         // シングルタップ
-        float x = deviceToScreen->TransformX(touchMgr->getX()); // 論理座標変換した座標を取得。
-        float y = deviceToScreen->TransformY(touchMgr->getY()); // 論理座標変換した座標を取得。
-        if (DebugTouchLogEnable) LAppPal::PrintLog("[APP]touchesEnded x:%.2f y:%.2f", x, y);
+        float x = deviceToScreen->TransformX(touchMgr->getX());  // 論理座標変換した座標を取得。
+        float y = deviceToScreen->TransformY(touchMgr->getY());  // 論理座標変換した座標を取得。
+        if (DebugTouchLogEnable)
+            LAppPal::PrintLog("[APP]touchesEnded x:%.2f y:%.2f", x, y);
         live2DMgr->OnTap(x, y);
     }
 }
@@ -191,14 +187,14 @@ void LAppView::updateViewMatrix(float dx, float dy, float cx, float cy, float sc
 
 float LAppView::transformViewX(float deviceX)
 {
-    float screenX = deviceToScreen->TransformX(deviceX); // 論理座標変換した座標を取得。
-    return viewMatrix->InvertTransformX(screenX); // 拡大、縮小、移動後の値。
+    float screenX = deviceToScreen->TransformX(deviceX);  // 論理座標変換した座標を取得。
+    return viewMatrix->InvertTransformX(screenX);         // 拡大、縮小、移動後の値。
 }
 
 float LAppView::transformViewY(float deviceY)
 {
-    float screenY = deviceToScreen->TransformY(deviceY); // 論理座標変換した座標を取得。
-    return viewMatrix->InvertTransformY(screenY); // 拡大、縮小、移動後の値。
+    float screenY = deviceToScreen->TransformY(deviceY);  // 論理座標変換した座標を取得。
+    return viewMatrix->InvertTransformY(screenY);         // 拡大、縮小、移動後の値。
 }
 
 float LAppView::transformScreenX(float deviceX)
@@ -218,11 +214,11 @@ void LAppView::setDebugRectsNode(DrawNode* debugRects)
 
 void LAppView::drawDebugRects(LAppLive2DManager* manager) const
 {
-    const Color hitAreaColor = Color(1.0f, 0, 0, 0.2f);
+    const Color hitAreaColor      = Color(1.0f, 0, 0, 0.2f);
     const Color userDataAreaColor = Color(0, 0, 1.0f, 0.2f);
 
     CubismMatrix44 projection;
-    const Size window = Director::getInstance()->getWinSize();
+    const Size window              = Director::getInstance()->getWinSize();
     const CubismVector2 windowSize = CubismVector2(window.width, window.height);
     projection.Scale(1, window.width / window.height);
 
@@ -234,28 +230,27 @@ void LAppView::drawDebugRects(LAppLive2DManager* manager) const
     for (csmUint32 i = 0; i < manager->GetModelCount(); ++i)
     {
         _debugRects->clear();
-        LAppModel* model = manager->GetModel(i);
+        LAppModel* model                                   = manager->GetModel(i);
         const Csm::csmVector<Csm::csmRectF>& userDataAreas = model->GetUserDataAreas(projection, windowSize);
         for (csmUint32 j = 0; j < userDataAreas.GetSize(); ++j)
         {
-            _debugRects->drawSolidRect(Vec2(userDataAreas[j].X, userDataAreas[j].Y)
-                                       , Vec2(userDataAreas[j].GetRight(), userDataAreas[j].GetBottom())
-                                       , userDataAreaColor);
+            _debugRects->drawSolidRect(Vec2(userDataAreas[j].X, userDataAreas[j].Y),
+                                       Vec2(userDataAreas[j].GetRight(), userDataAreas[j].GetBottom()),
+                                       userDataAreaColor);
         }
 
         const Csm::csmVector<Csm::csmRectF>& hitAreas = model->GetHitAreas(projection, windowSize);
         for (csmUint32 j = 0; j < hitAreas.GetSize(); ++j)
         {
-            _debugRects->drawSolidRect(Vec2(hitAreas[j].X, hitAreas[j].Y)
-                                       , Vec2(hitAreas[j].GetRight(), hitAreas[j].GetBottom())
-                                       , hitAreaColor);
+            _debugRects->drawSolidRect(Vec2(hitAreas[j].X, hitAreas[j].Y),
+                                       Vec2(hitAreas[j].GetRight(), hitAreas[j].GetBottom()), hitAreaColor);
         }
     }
 }
 
 LAppView* LAppView::createDrawNode()
 {
-    LAppView* ret = new(std::nothrow) LAppView();
+    LAppView* ret = new (std::nothrow) LAppView();
     if (ret && ret->init())
     {
         ret->autorelease();

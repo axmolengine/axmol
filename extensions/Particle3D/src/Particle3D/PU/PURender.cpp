@@ -83,8 +83,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     {
         size_t stride = sizeof(V3F_T2F_C4F);
         _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
-            stride * 4 * particleSystem->getParticleQuota(),
-                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+            stride * 4 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DQuadRender::render create vertex buffer failed");
@@ -96,7 +95,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     {
         _indexBuffer =
             rhi::DriverBase::getInstance()->createBuffer(6 * particleSystem->getParticleQuota() * sizeof(uint16_t),
-                                                      rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+                                                         rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DQuadRender::render create index buffer failed");
@@ -697,9 +696,8 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer =
-            rhi::DriverBase::getInstance()->createBuffer(stride * 8 * particleSystem->getParticleQuota(),
-                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
+            stride * 8 * particleSystem->getParticleQuota(), rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DBoxRender::render create vertex buffer failed");
@@ -709,7 +707,7 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
 
         _indexBuffer =
             rhi::DriverBase::getInstance()->createBuffer(sizeof(uint16_t) * 36 * particleSystem->getParticleQuota(),
-                                                      rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
+                                                         rhi::BufferType::INDEX, rhi::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
             AXLOGD("PUParticle3DBoxRender::render create index buffer failed");
@@ -730,47 +728,47 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
         float halfWidth  = particle->width * 0.5f;
         float halfDepth  = particle->depth * 0.5f;
         Mat4::createRotation(backward, particle->zRotation, &texRot);
-        val                                 = texRot * Vec3(0.0f, 0.75f, 0.0);
-        _vertices[vertexindex + 0].position = particle->position + Vec3(-halfWidth, -halfHeight, halfDepth);
-        _vertices[vertexindex + 0].color    = particle->color;
-        _vertices[vertexindex + 0].texCoord.x     = val.x;
-        _vertices[vertexindex + 0].texCoord.y     = val.y;
-        val                                 = texRot * Vec3(0.0f, 0.25f, 0.0);
-        _vertices[vertexindex + 1].position = particle->position + Vec3(halfWidth, -halfHeight, halfDepth);
-        _vertices[vertexindex + 1].color    = particle->color;
-        _vertices[vertexindex + 1].texCoord.x     = val.x;
-        _vertices[vertexindex + 1].texCoord.y     = val.y;
-        val                                 = texRot * Vec3(0.5f, 0.25f, 0.0);
-        _vertices[vertexindex + 2].position = particle->position + Vec3(halfWidth, halfHeight, halfDepth);
-        _vertices[vertexindex + 2].color    = particle->color;
-        _vertices[vertexindex + 2].texCoord.x     = val.x;
-        _vertices[vertexindex + 2].texCoord.y     = val.y;
-        val                                 = texRot * Vec3(0.5f, 0.75f, 0.0);
-        _vertices[vertexindex + 3].position = particle->position + Vec3(-halfWidth, halfHeight, halfDepth);
-        _vertices[vertexindex + 3].color    = particle->color;
-        _vertices[vertexindex + 3].texCoord.x     = val.x;
-        _vertices[vertexindex + 3].texCoord.y     = val.y;
+        val                                   = texRot * Vec3(0.0f, 0.75f, 0.0);
+        _vertices[vertexindex + 0].position   = particle->position + Vec3(-halfWidth, -halfHeight, halfDepth);
+        _vertices[vertexindex + 0].color      = particle->color;
+        _vertices[vertexindex + 0].texCoord.x = val.x;
+        _vertices[vertexindex + 0].texCoord.y = val.y;
+        val                                   = texRot * Vec3(0.0f, 0.25f, 0.0);
+        _vertices[vertexindex + 1].position   = particle->position + Vec3(halfWidth, -halfHeight, halfDepth);
+        _vertices[vertexindex + 1].color      = particle->color;
+        _vertices[vertexindex + 1].texCoord.x = val.x;
+        _vertices[vertexindex + 1].texCoord.y = val.y;
+        val                                   = texRot * Vec3(0.5f, 0.25f, 0.0);
+        _vertices[vertexindex + 2].position   = particle->position + Vec3(halfWidth, halfHeight, halfDepth);
+        _vertices[vertexindex + 2].color      = particle->color;
+        _vertices[vertexindex + 2].texCoord.x = val.x;
+        _vertices[vertexindex + 2].texCoord.y = val.y;
+        val                                   = texRot * Vec3(0.5f, 0.75f, 0.0);
+        _vertices[vertexindex + 3].position   = particle->position + Vec3(-halfWidth, halfHeight, halfDepth);
+        _vertices[vertexindex + 3].color      = particle->color;
+        _vertices[vertexindex + 3].texCoord.x = val.x;
+        _vertices[vertexindex + 3].texCoord.y = val.y;
 
-        val                                 = texRot * Vec3(0.0f, 0.0f, 0.0);
-        _vertices[vertexindex + 4].position = particle->position + Vec3(halfWidth, -halfHeight, -halfDepth);
-        _vertices[vertexindex + 4].color    = particle->color;
-        _vertices[vertexindex + 4].texCoord.x     = val.x;
-        _vertices[vertexindex + 4].texCoord.y     = val.y;
-        val                                 = texRot * Vec3(0.0f, 1.0f, 0.0);
-        _vertices[vertexindex + 5].position = particle->position + Vec3(-halfWidth, -halfHeight, -halfDepth);
-        _vertices[vertexindex + 5].color    = particle->color;
-        _vertices[vertexindex + 5].texCoord.x     = val.x;
-        _vertices[vertexindex + 5].texCoord.y     = val.y;
-        val                                 = texRot * Vec3(0.5f, 1.0f, 0.0);
-        _vertices[vertexindex + 6].position = particle->position + Vec3(-halfWidth, halfHeight, -halfDepth);
-        _vertices[vertexindex + 6].color    = particle->color;
-        _vertices[vertexindex + 6].texCoord.x     = val.x;
-        _vertices[vertexindex + 6].texCoord.y     = val.y;
-        val                                 = texRot * Vec3(0.5f, 0.0f, 0.0);
-        _vertices[vertexindex + 7].position = particle->position + Vec3(halfWidth, halfHeight, -halfDepth);
-        _vertices[vertexindex + 7].color    = particle->color;
-        _vertices[vertexindex + 7].texCoord.x     = val.x;
-        _vertices[vertexindex + 7].texCoord.y     = val.y;
+        val                                   = texRot * Vec3(0.0f, 0.0f, 0.0);
+        _vertices[vertexindex + 4].position   = particle->position + Vec3(halfWidth, -halfHeight, -halfDepth);
+        _vertices[vertexindex + 4].color      = particle->color;
+        _vertices[vertexindex + 4].texCoord.x = val.x;
+        _vertices[vertexindex + 4].texCoord.y = val.y;
+        val                                   = texRot * Vec3(0.0f, 1.0f, 0.0);
+        _vertices[vertexindex + 5].position   = particle->position + Vec3(-halfWidth, -halfHeight, -halfDepth);
+        _vertices[vertexindex + 5].color      = particle->color;
+        _vertices[vertexindex + 5].texCoord.x = val.x;
+        _vertices[vertexindex + 5].texCoord.y = val.y;
+        val                                   = texRot * Vec3(0.5f, 1.0f, 0.0);
+        _vertices[vertexindex + 6].position   = particle->position + Vec3(-halfWidth, halfHeight, -halfDepth);
+        _vertices[vertexindex + 6].color      = particle->color;
+        _vertices[vertexindex + 6].texCoord.x = val.x;
+        _vertices[vertexindex + 6].texCoord.y = val.y;
+        val                                   = texRot * Vec3(0.5f, 0.0f, 0.0);
+        _vertices[vertexindex + 7].position   = particle->position + Vec3(halfWidth, halfHeight, -halfDepth);
+        _vertices[vertexindex + 7].color      = particle->color;
+        _vertices[vertexindex + 7].texCoord.x = val.x;
+        _vertices[vertexindex + 7].texCoord.y = val.y;
 
         vertexindex += 8;
         index += 36;
@@ -889,9 +887,9 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
         size_t stride = sizeof(V3F_T2F_C4F);
-        _vertexBuffer = rhi::DriverBase::getInstance()->createBuffer(
-            stride * vertexCount * particleSystem->getParticleQuota(),
-                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _vertexBuffer =
+            rhi::DriverBase::getInstance()->createBuffer(stride * vertexCount * particleSystem->getParticleQuota(),
+                                                         rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
             AXLOGD("PUSphereRender::render create vertex buffer failed");
@@ -934,11 +932,12 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
 
         for (unsigned int i = 0; i < vertexCount; ++i)
         {
-            val = texRot * Vec3(_vertexTemplate[vertexindex + i].texCoord.x, _vertexTemplate[vertexindex + i].texCoord.y, 0.0f);
+            val = texRot *
+                  Vec3(_vertexTemplate[vertexindex + i].texCoord.x, _vertexTemplate[vertexindex + i].texCoord.y, 0.0f);
             mat.transformPoint(_vertexTemplate[vertexindex + i].position, &_vertices[vertexindex + i].position);
-            _vertices[vertexindex + i].color = particle->color;
-            _vertices[vertexindex + i].texCoord.x  = val.x;
-            _vertices[vertexindex + i].texCoord.y  = val.y;
+            _vertices[vertexindex + i].color      = particle->color;
+            _vertices[vertexindex + i].texCoord.x = val.x;
+            _vertices[vertexindex + i].texCoord.y = val.y;
         }
         vertexindex += vertexCount;
         index += indexCount;
@@ -1039,4 +1038,4 @@ PUSphereRender* PUSphereRender::clone()
     return render;
 }
 
-}
+}  // namespace ax

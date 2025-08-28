@@ -86,7 +86,8 @@ bool VideoPlayerTest::init()
     onlineVideo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     onlineVideo->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 100));
 
-    auto ratioSwitch = createMenuFontWithColor("KeepRatioSwitch", AX_CALLBACK_1(VideoPlayerTest::menuRatioCallback, this));
+    auto ratioSwitch =
+        createMenuFontWithColor("KeepRatioSwitch", AX_CALLBACK_1(VideoPlayerTest::menuRatioCallback, this));
     ratioSwitch->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     ratioSwitch->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 150));
 
@@ -116,7 +117,8 @@ bool VideoPlayerTest::init()
     return true;
 }
 
-void VideoPlayerTest::onEnter() {
+void VideoPlayerTest::onEnter()
+{
     UIScene::onEnter();
 
     createVideo();
@@ -129,7 +131,6 @@ void VideoPlayerTest::onExit()
 
     UIScene::onExit();
 }
-
 
 void VideoPlayerTest::menuCloseCallback(Object* sender)
 {
@@ -354,8 +355,8 @@ bool SimpleVideoPlayerTest::init()
     _switchStyle->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _switchStyle->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 50));
 
-    _switchUserInputEnabled =
-        createMenuFontWithColor("Enable User Input", AX_CALLBACK_1(SimpleVideoPlayerTest::switchUserInputCallback, this));
+    _switchUserInputEnabled = createMenuFontWithColor(
+        "Enable User Input", AX_CALLBACK_1(SimpleVideoPlayerTest::switchUserInputCallback, this));
     _switchUserInputEnabled->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _switchUserInputEnabled->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 100));
 

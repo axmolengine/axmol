@@ -49,7 +49,7 @@ VRTest1::VRTest1()
 
     auto button = MenuItemFont::create("Enable / Disable VR", [](Object* ref) {
         auto renderView = Director::getInstance()->getRenderView();
-        auto vrimpl = renderView->getVR();
+        auto vrimpl     = renderView->getVR();
         if (vrimpl)
         {
             renderView->setVR(nullptr);

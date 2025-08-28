@@ -5,8 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
+#ifndef _APP_DELEGATE_H_
+#define _APP_DELEGATE_H_
 
 #include "axmol/axmol.h"
 #include "LAppAllocator.hpp"
@@ -54,5 +54,4 @@ private:
     Csm::CubismFramework::Option _cubismOption;
 };
 
-#endif // _APP_DELEGATE_H_
-
+#endif  // _APP_DELEGATE_H_

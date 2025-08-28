@@ -561,7 +561,7 @@ void UITextFieldTest_PlaceHolderColor::textFieldEvent(Object* pSender, TextField
     {
         _displayValueLabel->setString(("insert words"));
         AXLOGD("{}, {}", dynamic_cast<TextField*>(pSender)->getContentSize().width,
-              dynamic_cast<TextField*>(pSender)->getContentSize().height);
+               dynamic_cast<TextField*>(pSender)->getContentSize().height);
     }
     break;
 

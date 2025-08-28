@@ -180,8 +180,7 @@ void BoneNode::addToBoneList(BoneNode* bone)
                     _rootSkeleton->_subBonesOrderDirty = true;
                 }
                 else
-                    AXLOGD("already has a bone named {} in skeleton {}", bonename,
-                          _rootSkeleton->getName());
+                    AXLOGD("already has a bone named {} in skeleton {}", bonename, _rootSkeleton->getName());
             }
         }
         else

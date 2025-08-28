@@ -42,9 +42,9 @@ hlookup::string_map<FontAtlas*> FontAtlasCache::_atlasMap;
 
 void FontAtlasCache::purgeCachedData()
 {
-    for(auto& [_, atlas] : _atlasMap)
+    for (auto& [_, atlas] : _atlasMap)
     {
-        if(atlas->getReferenceCount() > 1)
+        if (atlas->getReferenceCount() > 1)
             atlas->clearTexturesAtlas();
         atlas->release();
     }
@@ -63,7 +63,7 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
     int outlineSize        = useDistanceField ? 0 : config->outlineSize;
 
     // underlaying font engine (freetype2) only support int type, so convert to int avoid precision issue
-    const int faceSize = config->distanceFieldEnabled ? config->faceSize : static_cast<int>(config->fontSize);
+    const int faceSize  = config->distanceFieldEnabled ? config->faceSize : static_cast<int>(config->fontSize);
     auto scaledFaceSize = static_cast<int>(faceSize * AX_CONTENT_SCALE_FACTOR());
 
     std::string atlasName = config->distanceFieldEnabled
@@ -164,7 +164,8 @@ FontAtlas* FontAtlasCache::getFontAtlasCharMap(std::string_view plistFile)
 
 FontAtlas* FontAtlasCache::getFontAtlasCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
 {
-    auto atlasName = fmt::format("name:{}_{}_{}_{}", reinterpret_cast<uintptr_t>(texture->getRHITexture()), itemWidth, itemHeight, startCharMap);
+    auto atlasName = fmt::format("name:{}_{}_{}_{}", reinterpret_cast<uintptr_t>(texture->getRHITexture()), itemWidth,
+                                 itemHeight, startCharMap);
 
     auto it = _atlasMap.find(atlasName);
     if (it == _atlasMap.end())
@@ -263,4 +264,4 @@ void FontAtlasCache::unloadFontAtlasTTF(std::string_view fontFileName)
     }
 }
 
-}
+}  // namespace ax

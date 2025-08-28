@@ -95,7 +95,7 @@ static void atitc_decode_block(uint8_t** blockData,
 
         unsigned int alphaArray[8];
 
-        alphaArray[0] = (alpha)&0xff;
+        alphaArray[0] = (alpha) & 0xff;
         alphaArray[1] = (alpha >> 8) & 0xff;
 
         if (alphaArray[0] >= alphaArray[1])
@@ -192,6 +192,6 @@ void atitc_decode(uint8_t* encodeData,  // in_data
             default:
                 break;
             }  // switch
-        }      // for block_x
-    }          // for block_y
+        }  // for block_x
+    }  // for block_y
 }

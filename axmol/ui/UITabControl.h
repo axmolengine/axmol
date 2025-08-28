@@ -383,5 +383,4 @@ private:
 }  // namespace ui
 // end group
 /// @}
-}
-
+}  // namespace ax

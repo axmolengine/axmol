@@ -103,8 +103,9 @@ ProfilingTimer::~ProfilingTimer() {}
 
 std::string ProfilingTimer::getDescription() const
 {
-    std::string description = fmt::format("{} ::\tavg1: {},\tavg2: {},\tmin: {},\tmax: {},\ttotal: {:.2f}s,\tnr calls: {}",
-            _nameStr, _averageTime1, _averageTime2, minTime, maxTime, totalTime / 1000000., numberOfCalls);
+    std::string description =
+        fmt::format("{} ::\tavg1: {},\tavg2: {},\tmin: {},\tmax: {},\ttotal: {:.2f}s,\tnr calls: {}", _nameStr,
+                    _averageTime1, _averageTime2, minTime, maxTime, totalTime / 1000000., numberOfCalls);
     return description;
 }
 
@@ -164,4 +165,4 @@ void ProfilingResetTimingBlock(const char* timerName)
     timer->reset();
 }
 
-}
+}  // namespace ax

@@ -62,8 +62,8 @@ protected:
     float _updateInterval = (1.0f / 24);
     float _updateTimer    = 0.f;
     // Use this value to detect if we are scrolling left or right
-    float _lastContentPosY           = 0.f;
-    float _reuseItemOffset           = 0.f;
+    float _lastContentPosY      = 0.f;
+    float _reuseItemOffset      = 0.f;
     ax::ui::ListView* _listView = nullptr;
     std::vector<std::string> _array;
     ax::ui::Text* _indexLabels[3] = {nullptr};
@@ -95,10 +95,10 @@ protected:
     float _bufferZone        = 140.f;
     float _itemTemplateWidth = 0.f;
     // Could tweak this value to adjust ListView data update rate.
-    float _updateInterval            = 1.0f / 24;
-    float _updateTimer               = 0.f;
-    float _lastContentPosX           = 0.f;
-    float _reuseItemOffset           = 0.f;
+    float _updateInterval       = 1.0f / 24;
+    float _updateTimer          = 0.f;
+    float _lastContentPosX      = 0.f;
+    float _reuseItemOffset      = 0.f;
     ax::ui::ListView* _listView = nullptr;
 
     std::vector<std::string> _array;

@@ -226,7 +226,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
         int i = 0;
         char buf[20];
         std::string dir;
-        auto last       = fullPath.rfind('/');
+        auto last = fullPath.rfind('/');
         if (last != std::string::npos)
             dir = fullPath.substr(0, last + 1);
         for (auto&& material : materials)
@@ -664,7 +664,8 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         }
 
         meshdata->vertex.resize(meshdata->vertexSizeInFloat);
-        if (_binaryReader.read_blob(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) != meshdata->vertexSizeInFloat)
+        if (_binaryReader.read_blob(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) !=
+            meshdata->vertexSizeInFloat)
         {
             AXLOGW("warning: Failed to read meshdata: vertex element '{}'.", _path);
             AX_SAFE_DELETE(meshdata);
@@ -894,7 +895,7 @@ bool Bundle3D::loadMaterialsBinary(MaterialDatas& materialdatas)
 {
     if (!seekToFirstType(BUNDLE_TYPE_MATERIAL))
         return false;
-    
+
     try
     {
         unsigned int materialnum = 1;
@@ -989,8 +990,8 @@ bool Bundle3D::loadMaterialsBinary_0_2(MaterialDatas& materialdatas)
 
             NTextureData textureData;
             (textureData.filename = _modelPath) += texturePath;
-            textureData.type     = NTextureData::Usage::Diffuse;
-            textureData.id       = "";
+            textureData.type = NTextureData::Usage::Diffuse;
+            textureData.id   = "";
             materialData.textures.emplace_back(textureData);
             materialdatas.materials.emplace_back(materialData);
         }
@@ -1123,7 +1124,8 @@ bool Bundle3D::loadBinary(std::string_view path)
         for (unsigned int i = 0; i < _referenceCount; ++i)
         {
             if ((_references[i].id = _binaryReader.read_v32()).empty() ||
-                _binaryReader.read_blob(_references[i].type) != 1 || _binaryReader.read_blob(_references[i].offset) != 1)
+                _binaryReader.read_blob(_references[i].type) != 1 ||
+                _binaryReader.read_blob(_references[i].offset) != 1)
             {
                 clear();
                 AXLOGW("warning: Failed to read ref number {} for bundle '{}'.", i, path);
@@ -1718,7 +1720,7 @@ bool Bundle3D::loadNodesJson(NodeDatas& nodedatas)
     for (auto&& jnode : nodes.get_array())
     {
 
-        NodeData* nodedata  = parseNodesRecursivelyJson(jnode, node_count == 1);
+        NodeData* nodedata = parseNodesRecursivelyJson(jnode, node_count == 1);
 
         bool isSkeleton = jnode[SKELETON];
         if (isSkeleton)

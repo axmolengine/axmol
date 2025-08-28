@@ -162,4 +162,4 @@ private:
     PUParticleSystem3D* _PUParticleSystem3D;
 };
 
-}
+}  // namespace ax

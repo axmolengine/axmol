@@ -27,16 +27,16 @@
 #include "axmol/platform/PlatformDefine.h"
 
 #if defined(_WIN32)
-#  if defined(AX_EX_DLLEXPORT)
-#    define AX_EX_API __declspec(dllexport)
-#  elif defined(AX_EX_DLLIMPORT)
-#    define AX_EX_API __declspec(dllimport)
-#  endif
+#    if defined(AX_EX_DLLEXPORT)
+#        define AX_EX_API __declspec(dllexport)
+#    elif defined(AX_EX_DLLIMPORT)
+#        define AX_EX_API __declspec(dllimport)
+#    endif
 #elif defined(AX_EX_DLLEXPORT) || defined(AX_EX_DLLIMPORT)
-#  define AX_EX_API __attribute__((visibility("default")))
+#    define AX_EX_API __attribute__((visibility("default")))
 #endif
 #ifndef AX_EX_API
-#  define AX_EX_API
+#    define AX_EX_API
 #endif
 
 #define AX_EX_DLL AX_EX_API

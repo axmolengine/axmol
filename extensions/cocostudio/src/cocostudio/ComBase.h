@@ -30,13 +30,16 @@ THE SOFTWARE.
 #include "axmol/base/ObjectFactory.h"
 #include "CocoLoader.h"
 
-#define DECLARE_CLASS_COMPONENT_INFO           \
-public:                                        \
+#define DECLARE_CLASS_COMPONENT_INFO      \
+public:                                   \
     static ax::ObjectFactory::TInfo Type; \
     static ax::Object* createInstance(void);
 
-#define IMPLEMENT_CLASS_COMPONENT_INFO(className)                                 \
-    ax::Object* className::createInstance(void) { return className::create(); } \
+#define IMPLEMENT_CLASS_COMPONENT_INFO(className) \
+    ax::Object* className::createInstance(void)   \
+    {                                             \
+        return className::create();               \
+    }                                             \
     ax::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
 
 #define CREATE_CLASS_COMPONENT_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)

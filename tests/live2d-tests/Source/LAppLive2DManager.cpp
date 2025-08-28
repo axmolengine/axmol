@@ -5,7 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-//Cubism
+// Cubism
 #include "SampleScene.h"
 #include "LAppLive2DManager.hpp"
 #include "LAppPal.hpp"
@@ -14,29 +14,30 @@
 #include "LAppSprite.hpp"
 #include <Rendering/CubismRenderer.hpp>
 #ifdef CSM_TARGET_ANDROID_ES2
-#include <Rendering/Cocos2d/CubismRenderer_Cocos2dx.hpp>
+#    include <Rendering/Cocos2d/CubismRenderer_Cocos2dx.hpp>
 #endif
 
-//cocos2d
+// cocos2d
 #include "axmol/base/Director.h"
 #include "axmol/rhi/DriverBase.h"
 
 using namespace Csm;
 using namespace LAppDefine;
 
-//#define USE_RENDER_TARGET
-//#define USE_MODEL_RENDER_TARGET
+// #define USE_RENDER_TARGET
+// #define USE_MODEL_RENDER_TARGET
 
 using namespace ax;
 
-namespace {
-    LAppLive2DManager* s_instance = NULL;
+namespace
+{
+LAppLive2DManager* s_instance = NULL;
 
-    void FinishedMotion(ACubismMotion* self)
-    {
-        LAppPal::PrintLog("Motion Finished: %x", self);
-    }
+void FinishedMotion(ACubismMotion* self)
+{
+    LAppPal::PrintLog("Motion Finished: %x", self);
 }
+}  // namespace
 
 LAppLive2DManager* LAppLive2DManager::GetInstance()
 {
@@ -74,7 +75,7 @@ LAppLive2DManager::LAppLive2DManager()
 
     CreateShader();
 
-    int width = static_cast<int>(ax::Director::getInstance()->getRenderView()->getFrameSize().width);
+    int width  = static_cast<int>(ax::Director::getInstance()->getRenderView()->getFrameSize().width);
     int height = static_cast<int>(ax::Director::getInstance()->getRenderView()->getFrameSize().height);
 
     // 画面全体を覆うサイズ
@@ -85,11 +86,11 @@ LAppLive2DManager::LAppLive2DManager()
     // 使用するターゲット
     _renderBuffer = new Csm::Rendering::CubismOffscreenFrame_Cocos2dx;
     if (_renderBuffer)
-    {// 描画ターゲット作成
+    {  // 描画ターゲット作成
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-        // Retina対策でこっちからとる
-        RenderViewImpl *glimpl = (RenderViewImpl *)Director::getInstance()->getRenderView();
+       // Retina対策でこっちからとる
+        RenderViewImpl* glimpl = (RenderViewImpl*)Director::getInstance()->getRenderView();
         glfwGetFramebufferSize(glimpl->getWindow(), &width, &height);
 #endif
 
@@ -98,9 +99,10 @@ LAppLive2DManager::LAppLive2DManager()
     }
 
 #ifdef CSM_TARGET_ANDROID_ES2
-    char *exts = (char*)rhi::DriverBase::getInstance()->getExtension();
-    if(strstr(exts, "GL_NV_shader_framebuffer_fetch ")){
-        Rendering::CubismRenderer_Cocos2dx::SetExtShaderMode( true , true );
+    char* exts = (char*)rhi::DriverBase::getInstance()->getExtension();
+    if (strstr(exts, "GL_NV_shader_framebuffer_fetch "))
+    {
+        Rendering::CubismRenderer_Cocos2dx::SetExtShaderMode(true, true);
     }
 #endif
 
@@ -134,7 +136,7 @@ void LAppLive2DManager::ReleaseAllModel()
 
 LAppModel* LAppLive2DManager::GetModel(csmUint32 no) const
 {
-    if(no < _models.GetSize())
+    if (no < _models.GetSize())
     {
         return _models[no];
     }
@@ -163,7 +165,6 @@ void LAppLive2DManager::SetViewMatrix(Csm::CubismMatrix44* matrix)
     _viewMatrix = matrix;
 }
 
-
 void LAppLive2DManager::OnDrag(csmFloat32 x, csmFloat32 y) const
 {
     for (csmUint32 i = 0; i < _models.GetSize(); i++)
@@ -176,18 +177,21 @@ void LAppLive2DManager::OnDrag(csmFloat32 x, csmFloat32 y) const
 
 void LAppLive2DManager::OnTap(csmFloat32 x, csmFloat32 y)
 {
-    if (DebugLogEnable) LAppPal::PrintLog("[APP]tap point: {x:%.2f y:%.2f}", x, y);
+    if (DebugLogEnable)
+        LAppPal::PrintLog("[APP]tap point: {x:%.2f y:%.2f}", x, y);
 
     for (csmUint32 i = 0; i < _models.GetSize(); i++)
     {
         if (_models[i]->HitTest(HitAreaNameHead, x, y))
         {
-            if (DebugLogEnable) LAppPal::PrintLog("[APP]hit area: [%s]", HitAreaNameHead);
+            if (DebugLogEnable)
+                LAppPal::PrintLog("[APP]hit area: [%s]", HitAreaNameHead);
             _models[i]->SetRandomExpression();
         }
         else if (_models[i]->HitTest(HitAreaNameBody, x, y))
         {
-            if (DebugLogEnable) LAppPal::PrintLog("[APP]hit area: [%s]", HitAreaNameBody);
+            if (DebugLogEnable)
+                LAppPal::PrintLog("[APP]hit area: [%s]", HitAreaNameBody);
             _models[i]->StartRandomMotion(MotionGroupTapBody, PriorityNormal, FinishedMotion);
         }
     }
@@ -196,7 +200,7 @@ void LAppLive2DManager::OnTap(csmFloat32 x, csmFloat32 y)
 void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer) const
 {
     Director* director = Director::getInstance();
-    Size window = director->getWinSize();
+    Size window        = director->getWinSize();
 
     Csm::Rendering::CubismRenderer_Cocos2dx::StartFrame(commandBuffer);
 
@@ -222,22 +226,19 @@ void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
         }
 
         if (_renderTarget == SelectTarget_ViewFrameBuffer && _renderBuffer && _sprite)
-        {// レンダリングターゲット使いまわしの場合
+        {  // レンダリングターゲット使いまわしの場合
             // レンダリング開始
             _renderBuffer->BeginDraw(commandBuffer, NULL);
-            _renderBuffer->Clear(commandBuffer, _clearColor[0], _clearColor[1], _clearColor[2], _clearColor[3]); // 背景クリアカラー
+            _renderBuffer->Clear(commandBuffer, _clearColor[0], _clearColor[1], _clearColor[2],
+                                 _clearColor[3]);  // 背景クリアカラー
 
             model->Update();
-            model->Draw(commandBuffer, projection);///< 参照渡しなのでprojectionは変質する
+            model->Draw(commandBuffer, projection);  ///< 参照渡しなのでprojectionは変質する
 
             _renderBuffer->EndDraw(commandBuffer);
 
-            float uvVertex[] =
-            {
-                1.0f, 1.0f,
-                0.0f, 1.0f,
-                0.0f, 0.0f,
-                1.0f, 0.0f,
+            float uvVertex[] = {
+                1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
             };
 
             // program退避
@@ -249,9 +250,10 @@ void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
             // 元に戻す
             commandBuffer = lastCommandBuffer;
         }
-        else {
+        else
+        {
             model->Update();
-            model->Draw(commandBuffer, projection);///< 参照渡しなのでprojectionは変質する
+            model->Draw(commandBuffer, projection);  ///< 参照渡しなのでprojectionは変質する
         }
     }
 }
@@ -265,7 +267,8 @@ void LAppLive2DManager::NextScene()
 void LAppLive2DManager::ChangeScene(Csm::csmInt32 index)
 {
     _sceneIndex = index;
-    if (DebugLogEnable) LAppPal::PrintLog("[APP]model index: %d", _sceneIndex);
+    if (DebugLogEnable)
+        LAppPal::PrintLog("[APP]model index: %d", _sceneIndex);
 
     // ModelDir[]に保持したディレクトリ名から
     // model3.jsonのパスを決定する.
@@ -303,14 +306,14 @@ void LAppLive2DManager::ChangeScene(Csm::csmInt32 index)
         _models[1]->GetModelMatrix()->TranslateX(0.2f);
 #endif
 
-        if(_renderTarget == SelectTarget_ModelFrameBuffer)
+        if (_renderTarget == SelectTarget_ModelFrameBuffer)
         {
-            for(Csm::csmUint32 i=0;i<_models.GetSize(); i++)
+            for (Csm::csmUint32 i = 0; i < _models.GetSize(); i++)
             {
                 // レンダリング先とスプライトを作成
                 _models[i]->MakeRenderingTarget();
                 // 適当なαを付ける
-                _models[i]->SetSpriteColor(1.0f, 1.0f, 1.0f, 0.25f + 0.5f*(float)i);
+                _models[i]->SetSpriteColor(1.0f, 1.0f, 1.0f, 0.25f + 0.5f * (float)i);
             }
         }
     }
@@ -319,7 +322,7 @@ void LAppLive2DManager::ChangeScene(Csm::csmInt32 index)
 void LAppLive2DManager::CreateShader()
 {
     auto* program = ProgramManager::getInstance()->loadProgram("custom/live2d_test_vs", "custom/live2d_test_fs");
-    _program = program;
+    _program      = program;
 }
 
 void LAppLive2DManager::SetRenderTargetClearColor(float r, float g, float b)

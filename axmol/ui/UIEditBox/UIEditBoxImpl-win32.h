@@ -93,7 +93,6 @@ private:
 
 }  // namespace ui
 
-}
+}  // namespace ax
 
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
-

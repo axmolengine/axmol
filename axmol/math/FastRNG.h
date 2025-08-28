@@ -127,7 +127,8 @@ public:
         return static_cast<T>(min + nextReal<T>() * (max - min));
     }
 
-    // generates a random integer that ranges from min inclusive to max exclusive [min, max) and is uniformly distributed using fastrange algorithm
+    // generates a random integer that ranges from min inclusive to max exclusive [min, max) and is uniformly
+    // distributed using fastrange algorithm
     template <typename T>
     T nextInt(T min, T max)
     {
@@ -163,4 +164,3 @@ public:
 };
 
 NS_AX_MATH_END
-

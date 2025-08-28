@@ -59,4 +59,4 @@ void PUOnEventFlagObserver::copyAttributesTo(PUObserver* observer)
     onEventFlagObserver->_eventFlag            = _eventFlag;
 }
 
-}
+}  // namespace ax

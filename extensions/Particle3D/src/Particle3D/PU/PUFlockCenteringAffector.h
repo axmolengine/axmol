@@ -49,5 +49,4 @@ protected:
     Vec3 _average;
     float _count;
 };
-}
-
+}  // namespace ax

@@ -155,4 +155,4 @@ private:
 // end of base_node group
 /// @}
 
-}
+}  // namespace ax

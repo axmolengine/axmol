@@ -27,7 +27,8 @@
 #include "axmol/rhi/RenderTarget.h"
 #include "xxhash.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 namespace
 {
@@ -106,13 +107,13 @@ static void setMTLStencilDesc(MTLStencilDescriptor* stencilDesc, const StencilDe
     stencilDesc.readMask                  = desc.readMask;
     stencilDesc.writeMask                 = desc.writeMask;
 }
-}
+}  // namespace
 
 DepthStencilStateImpl::DepthStencilStateImpl(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice)
 {
     // By default MTLDepthStencilDescriptor disables depth and stencil access
     MTLDepthStencilDescriptor* mtlDesc = [MTLDepthStencilDescriptor new];
-    _mtlDepthStencilDisabledState = [mtlDevice newDepthStencilStateWithDescriptor:mtlDesc];
+    _mtlDepthStencilDisabledState      = [mtlDevice newDepthStencilStateWithDescriptor:mtlDesc];
     [mtlDesc release];
 }
 
@@ -172,4 +173,4 @@ DepthStencilStateImpl::~DepthStencilStateImpl()
     _mtlStateCache.clear();
 }
 
-}
+}  // namespace ax::rhi::mtl

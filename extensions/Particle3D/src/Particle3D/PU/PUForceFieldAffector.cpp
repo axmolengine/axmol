@@ -62,9 +62,9 @@ PUForceFieldAffector::PUForceFieldAffector()
     , _movementSet(false)
     , _movementFrequency(DEFAULT_MOVEMENT_FREQUENCY)
     , _movementFrequencyCount(0.0f)
-    , _suppressGeneration(false){};
+    , _suppressGeneration(false) {};
 //-----------------------------------------------------------------------
-PUForceFieldAffector::~PUForceFieldAffector(){};
+PUForceFieldAffector::~PUForceFieldAffector() {};
 //-----------------------------------------------------------------------
 PUForceField::ForceFieldType PUForceFieldAffector::getForceFieldType() const
 {
@@ -334,4 +334,4 @@ void PUForceFieldAffector::copyAttributesTo(PUAffector* affector)
     forceFieldAffector->_movement            = _movement;
 }
 
-}
+}  // namespace ax

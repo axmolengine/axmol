@@ -73,7 +73,7 @@ ColliderBody::ColliderBody(ContourData* contourData) : _fixture(nullptr), _conto
 ColliderBody::ColliderBody(ContourData* contourData) : _shape(nullptr), _contourData(contourData)
 {
     AX_SAFE_RETAIN(_contourData);
-    _filter               = new ColliderFilter();
+    _filter = new ColliderFilter();
 
 #    if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     _calculatedVertexList = Array::create();
@@ -341,7 +341,7 @@ void ColliderDetector::updateTransform(Mat4& t)
         }
 #endif
 
-        unsigned long num              = contourData->vertexList.size();
+        unsigned long num         = contourData->vertexList.size();
         std::vector<ax::Vec2>& vs = contourData->vertexList;
 
 #if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX

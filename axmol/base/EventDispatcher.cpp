@@ -1034,7 +1034,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
     bool isNeedsMutableSet = (oneByOneListeners && allAtOnceListeners);
 
     const std::vector<Touch*>& originalTouches = event->getTouches();
-    auto mutableTouches = originalTouches;
+    auto mutableTouches                        = originalTouches;
 
     //
     // process the target handlers 1st
@@ -1265,7 +1265,6 @@ void EventDispatcher::dispatchMouseEvent(EventMouse* event)
             AXASSERT(false, "The type is invalid.");
             break;
         }
-        
 
         // If the event was stopped, return directly.
         if (event->isStopped())
@@ -1478,15 +1477,15 @@ void EventDispatcher::sortEventListenersOfSceneGraphPriority(std::string_view li
     // After sort: priority < 0, > 0
     std::stable_sort(sceneGraphListeners->begin(), sceneGraphListeners->end(),
                      [this](const EventListener* l1, const EventListener* l2) {
-                         return _nodePriorityMap[l1->getAssociatedNode()] > _nodePriorityMap[l2->getAssociatedNode()];
-                     });
+        return _nodePriorityMap[l1->getAssociatedNode()] > _nodePriorityMap[l2->getAssociatedNode()];
+    });
 
 #if DUMP_LISTENER_ITEM_PRIORITY_INFO
     AXLOGI("-----------------------------------");
     for (auto&& l : *sceneGraphListeners)
     {
         AXLOGI("listener priority: node ([{}]{}), priority ({})", typeid(*l->_node).name(), l->_node,
-            _nodePriorityMap[l->_node]);
+               _nodePriorityMap[l->_node]);
     }
 #endif
 }
@@ -1505,8 +1504,8 @@ void EventDispatcher::sortEventListenersOfFixedPriority(std::string_view listene
     // After sort: priority < 0, > 0
     std::stable_sort(fixedListeners->begin(), fixedListeners->end(),
                      [](const EventListener* l1, const EventListener* l2) {
-                         return l1->getFixedPriority() < l2->getFixedPriority();
-                     });
+        return l1->getFixedPriority() < l2->getFixedPriority();
+    });
 
     // FIXME: Should use binary search
     int index = 0;
@@ -1776,4 +1775,4 @@ void EventDispatcher::releaseListener(EventListener* listener)
     AX_SAFE_RELEASE(listener);
 }
 
-}
+}  // namespace ax

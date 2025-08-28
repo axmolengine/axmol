@@ -146,7 +146,7 @@ protected:
     std::unordered_map<unsigned int, Texture2D*> _atlasTextures;
     std::unordered_map<char32_t, FontLetterDefinition> _letterDefinitions;
 
-    StringMap<FontFreeType*> _missingFallbackFonts; // maybe style no needs?
+    StringMap<FontFreeType*> _missingFallbackFonts;  // maybe style no needs?
     std::unordered_map<char32_t, std::pair<FontFreeType*, unsigned int>> _missingGlyphFallbackFonts;
 
     Font* _font                 = nullptr;
@@ -159,11 +159,11 @@ protected:
     float _lineHeight = 0.f;
 
     // Dynamic GlyphCollection related stuff
-    int _currentPage                  = -1;
+    int _currentPage              = -1;
     rhi::PixelFormat _pixelFormat = rhi::PixelFormat::NONE;
-    int _strideShift                  = 0;
-    uint8_t* _currentPageData         = nullptr;
-    int _currentPageDataSize          = 0;
+    int _strideShift              = 0;
+    uint8_t* _currentPageData     = nullptr;
+    int _currentPageDataSize      = 0;
 
     float _currentPageOrigX = 0;
     float _currentPageOrigY = 0;
@@ -178,5 +178,5 @@ protected:
     friend class Label;
 };
 
-}
+}  // namespace ax
 /// @endcond

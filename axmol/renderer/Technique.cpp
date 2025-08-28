@@ -120,4 +120,4 @@ const Vector<Pass*>& Technique::getPasses() const
     return _passes;
 }
 
-}
+}  // namespace ax

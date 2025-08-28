@@ -397,4 +397,4 @@ void Scene::stepPhysicsAndNavigation(float deltaTime)
 }
 #endif
 
-}
+}  // namespace ax

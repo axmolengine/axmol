@@ -167,7 +167,7 @@ void Object::printLeaks()
             AX_ASSERT(ref);
             const char* type = typeid(*ref).name();
             AXLOGI("[memory] LEAK: object '{}' still active with reference count {}.\n", (type ? type : ""),
-                ref->getReferenceCount());
+                   ref->getReferenceCount());
         }
     }
 }
@@ -196,4 +196,4 @@ static void untrackRef(Object* ref)
 
 #endif  // #if AX_OBJECT_LEAK_DETECTION
 
-}
+}  // namespace ax

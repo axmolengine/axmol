@@ -45,9 +45,9 @@
 const float MAX_MEASURE_HEIGHT = 10000;
 
 #if !defined(AX_TARGET_OS_TVOS)
-static UIImpactFeedbackGenerator *impactFeedbackGenerator[3];
-static UINotificationFeedbackGenerator *notificationFeedbackGenerator;
-static UISelectionFeedbackGenerator *selectionFeedbackGenerator;
+static UIImpactFeedbackGenerator* impactFeedbackGenerator[3];
+static UINotificationFeedbackGenerator* notificationFeedbackGenerator;
+static UISelectionFeedbackGenerator* selectionFeedbackGenerator;
 #endif
 
 static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedString* attributedString, CGFloat fontSize)
@@ -316,7 +316,8 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 namespace ax
 {
 
-static float getDevicePixelRatio(int& sdpi) {
+static float getDevicePixelRatio(int& sdpi)
+{
     float scale = 1.0f;
 
     if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
@@ -339,7 +340,7 @@ int Device::getDPI()
 
     if (dpi == -1)
     {
-        int sdpi; // the standard dpi without scaling
+        int sdpi;  // the standard dpi without scaling
         float scale = getDevicePixelRatio(sdpi);
         return static_cast<int>(scale * sdpi);
     }
@@ -677,18 +678,20 @@ void Device::vibrate(float duration)
 void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle style)
 {
 #if !defined(AX_TARGET_OS_TVOS)
-    if (impactFeedbackGenerator[style] == nullptr) {
+    if (impactFeedbackGenerator[style] == nullptr)
+    {
         UIImpactFeedbackStyle impactStyle;
-        switch (style) {
-            case ImpactFeedbackStyleLight:
-                impactStyle = UIImpactFeedbackStyleLight;
-                break;
-            case ImpactFeedbackStyleMedium:
-                impactStyle = UIImpactFeedbackStyleMedium;
-                break;
-            case ImpactFeedbackStyleHeavy:
-                impactStyle = UIImpactFeedbackStyleHeavy;
-                break;
+        switch (style)
+        {
+        case ImpactFeedbackStyleLight:
+            impactStyle = UIImpactFeedbackStyleLight;
+            break;
+        case ImpactFeedbackStyleMedium:
+            impactStyle = UIImpactFeedbackStyleMedium;
+            break;
+        case ImpactFeedbackStyleHeavy:
+            impactStyle = UIImpactFeedbackStyleHeavy;
+            break;
         }
 
         impactFeedbackGenerator[style] = [[UIImpactFeedbackGenerator alloc] initWithStyle:impactStyle];
@@ -700,7 +703,8 @@ void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle style)
 void Device::impactOccurred(ImpactFeedbackStyle style)
 {
 #if !defined(AX_TARGET_OS_TVOS)
-    if (impactFeedbackGenerator[style] == nullptr) {
+    if (impactFeedbackGenerator[style] == nullptr)
+    {
         prepareImpactFeedbackGenerator(style);
     }
     [impactFeedbackGenerator[style] impactOccurred];
@@ -710,7 +714,8 @@ void Device::impactOccurred(ImpactFeedbackStyle style)
 void Device::prepareNotificationFeedbackGenerator()
 {
 #if !defined(AX_TARGET_OS_TVOS)
-    if (notificationFeedbackGenerator == nullptr) {
+    if (notificationFeedbackGenerator == nullptr)
+    {
         notificationFeedbackGenerator = [[UINotificationFeedbackGenerator alloc] init];
     }
     [notificationFeedbackGenerator prepare];
@@ -720,21 +725,23 @@ void Device::prepareNotificationFeedbackGenerator()
 void Device::notificationOccurred(NotificationFeedbackType type)
 {
 #if !defined(AX_TARGET_OS_TVOS)
-    if (notificationFeedbackGenerator == nullptr) {
+    if (notificationFeedbackGenerator == nullptr)
+    {
         prepareNotificationFeedbackGenerator();
     }
 
     UINotificationFeedbackType notificationType;
-    switch (type) {
-        case NotificationFeedbackTypeError:
-            notificationType = UINotificationFeedbackTypeError;
-            break;
-        case NotificationFeedbackTypeSuccess:
-            notificationType = UINotificationFeedbackTypeSuccess;
-            break;
-        case NotificationFeedbackTypeWarning:
-            notificationType = UINotificationFeedbackTypeWarning;
-            break;
+    switch (type)
+    {
+    case NotificationFeedbackTypeError:
+        notificationType = UINotificationFeedbackTypeError;
+        break;
+    case NotificationFeedbackTypeSuccess:
+        notificationType = UINotificationFeedbackTypeSuccess;
+        break;
+    case NotificationFeedbackTypeWarning:
+        notificationType = UINotificationFeedbackTypeWarning;
+        break;
     }
 
     [notificationFeedbackGenerator notificationOccurred:notificationType];
@@ -744,7 +751,8 @@ void Device::notificationOccurred(NotificationFeedbackType type)
 void Device::prepareSelectionFeedbackGenerator()
 {
 #if !defined(AX_TARGET_OS_TVOS)
-    if (selectionFeedbackGenerator == nullptr) {
+    if (selectionFeedbackGenerator == nullptr)
+    {
         selectionFeedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
     }
     [selectionFeedbackGenerator prepare];
@@ -754,7 +762,8 @@ void Device::prepareSelectionFeedbackGenerator()
 void Device::selectionChanged()
 {
 #if !defined(AX_TARGET_OS_TVOS)
-    if (selectionFeedbackGenerator == nullptr) {
+    if (selectionFeedbackGenerator == nullptr)
+    {
         prepareSelectionFeedbackGenerator();
     }
     [selectionFeedbackGenerator selectionChanged];
@@ -762,4 +771,4 @@ void Device::selectionChanged()
 #endif
 }
 
-}
+}  // namespace ax

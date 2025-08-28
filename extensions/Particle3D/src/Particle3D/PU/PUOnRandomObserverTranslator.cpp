@@ -63,4 +63,4 @@ bool PUOnRandomObserverTranslator::translateChildObject(PUScriptCompiler* /*comp
     return false;
 }
 
-}
+}  // namespace ax

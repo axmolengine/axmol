@@ -72,9 +72,9 @@ bool SkeletonNode::init()
 ax::Rect SkeletonNode::getBoundingBox() const
 {
     float minx, miny, maxx, maxy = 0;
-    minx = miny = maxx        = maxy;
+    minx = miny = maxx   = maxy;
     ax::Rect boundingBox = getVisibleSkinsRect();
-    bool first                = true;
+    bool first           = true;
     if (!boundingBox.equals(ax::Rect::ZERO))
     {
         minx  = boundingBox.getMinX();
@@ -87,7 +87,7 @@ ax::Rect SkeletonNode::getBoundingBox() const
     for (const auto& bone : allbones)
     {
         ax::Rect r = RectApplyAffineTransform(bone->getVisibleSkinsRect(),
-                                                   bone->getNodeToParentAffineTransform(bone->getRootSkeletonNode()));
+                                              bone->getNodeToParentAffineTransform(bone->getRootSkeletonNode()));
         if (r.equals(ax::Rect::ZERO))
             continue;
 

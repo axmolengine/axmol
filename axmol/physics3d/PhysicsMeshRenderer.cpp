@@ -32,9 +32,9 @@ namespace ax
 {
 
 PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
-                                         Physics3DRigidBodyDes* rigidDes,
-                                         const ax::Vec3& translateInPhysics,
-                                         const ax::Quaternion& rotInPhsyics)
+                                                 Physics3DRigidBodyDes* rigidDes,
+                                                 const ax::Vec3& translateInPhysics,
+                                                 const ax::Quaternion& rotInPhsyics)
 {
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
@@ -52,9 +52,9 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
 }
 
 PhysicsMeshRenderer* PhysicsMeshRenderer::createWithCollider(std::string_view modelPath,
-                                                     Physics3DColliderDes* colliderDes,
-                                                     const ax::Vec3& translateInPhysics,
-                                                     const ax::Quaternion& rotInPhsyics)
+                                                             Physics3DColliderDes* colliderDes,
+                                                             const ax::Vec3& translateInPhysics,
+                                                             const ax::Quaternion& rotInPhsyics)
 {
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
@@ -97,6 +97,6 @@ void PhysicsMeshRenderer::syncPhysicsToNode()
 PhysicsMeshRenderer::PhysicsMeshRenderer() : _physicsComponent(nullptr) {}
 PhysicsMeshRenderer::~PhysicsMeshRenderer() {}
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

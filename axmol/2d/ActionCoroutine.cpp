@@ -119,4 +119,4 @@ void ActionCoroutine::step(float dt)
     _coroutine.moveNext();
 }
 
-}
+}  // namespace ax

@@ -120,21 +120,21 @@ public:
      * @param m44 The fourth element of the fourth row.
      */
     constexpr Mat4(float m11,
-         float m12,
-         float m13,
-         float m14,
-         float m21,
-         float m22,
-         float m23,
-         float m24,
-         float m31,
-         float m32,
-         float m33,
-         float m34,
-         float m41,
-         float m42,
-         float m43,
-         float m44)
+                   float m12,
+                   float m13,
+                   float m14,
+                   float m21,
+                   float m22,
+                   float m23,
+                   float m24,
+                   float m31,
+                   float m32,
+                   float m33,
+                   float m34,
+                   float m41,
+                   float m42,
+                   float m43,
+                   float m44)
     {
         set(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
     }
@@ -730,21 +730,21 @@ public:
      * @param m44 The fourth element of the fourth row.
      */
     constexpr void set(float m11,
-             float m12,
-             float m13,
-             float m14,
-             float m21,
-             float m22,
-             float m23,
-             float m24,
-             float m31,
-             float m32,
-             float m33,
-             float m34,
-             float m41,
-             float m42,
-             float m43,
-             float m44)
+                       float m12,
+                       float m13,
+                       float m14,
+                       float m21,
+                       float m22,
+                       float m23,
+                       float m24,
+                       float m31,
+                       float m32,
+                       float m33,
+                       float m34,
+                       float m41,
+                       float m42,
+                       float m43,
+                       float m44)
     {
         m[0]  = m11;
         m[1]  = m21;
@@ -1104,8 +1104,9 @@ inline Vec4 operator*(const Mat4& m, const Vec4& v)
 }
 
 #if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-    inline constexpr Mat4 Mat4::IDENTITY(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-    inline constexpr Mat4 Mat4::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+inline constexpr Mat4
+    Mat4::IDENTITY(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+inline constexpr Mat4 Mat4::ZERO(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 #endif
 
 NS_AX_MATH_END
@@ -1113,4 +1114,3 @@ NS_AX_MATH_END
  end of base group
  @}
  */
-

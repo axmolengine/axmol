@@ -65,5 +65,4 @@ protected:
     PUSphereSurfaceEmitterTranslator _sphereSurfaceEmitterTranlator;
 };
 
-}
-
+}  // namespace ax

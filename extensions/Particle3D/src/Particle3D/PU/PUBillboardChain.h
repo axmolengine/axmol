@@ -312,9 +312,9 @@ protected:
 
     MeshCommand _meshCommand;
     RenderState::StateBlock _stateBlock;
-    Texture2D* _texture                  = nullptr;
+    Texture2D* _texture              = nullptr;
     rhi::ProgramState* _programState = nullptr;
-    rhi::VertexLayout* _vertexLayout     = nullptr;
+    rhi::VertexLayout* _vertexLayout = nullptr;
     rhi::Buffer* _indexBuffer        = nullptr;  // index buffer
     rhi::Buffer* _vertexBuffer       = nullptr;  // vertex buffer
 
@@ -328,11 +328,11 @@ protected:
     rhi::UniformLocation _locPMatrix;
 
     // renderer state cache variables
-    bool _rendererDepthTestEnabled                 = true;
+    bool _rendererDepthTestEnabled         = true;
     rhi::CompareFunc _rendererDepthCmpFunc = rhi::CompareFunc::LESS;
-    rhi::CullMode _rendererCullMode            = rhi::CullMode::BACK;
-    rhi::Winding _rendererWinding              = rhi::Winding::COUNTER_CLOCK_WISE;
-    bool _rendererDepthWrite                       = false;
+    rhi::CullMode _rendererCullMode        = rhi::CullMode::BACK;
+    rhi::Winding _rendererWinding          = rhi::Winding::COUNTER_CLOCK_WISE;
+    bool _rendererDepthWrite               = false;
 };
 
-}
+}  // namespace ax

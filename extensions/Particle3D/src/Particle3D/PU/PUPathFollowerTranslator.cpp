@@ -63,4 +63,4 @@ bool PUPathFollowerTranslator::translateChildObject(PUScriptCompiler* /*compiler
     return false;
 }
 
-}
+}  // namespace ax

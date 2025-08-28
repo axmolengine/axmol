@@ -103,7 +103,7 @@ bool WebSocket::open(Delegate* delegate, std::string_view url, std::string_view 
     AXLOGD("ws open url: {}, protocols: {}", ws_attrs.url, ws_attrs.protocols ? ws_attrs.protocols : "");
 
     _state = WebSocket::State::CONNECTING;
-    _wsfd = emscripten_websocket_new(&ws_attrs);
+    _wsfd  = emscripten_websocket_new(&ws_attrs);
 
     // chrome/edge can't connect
     // firefox works with "Sec-Fetch-Site: cross-site" in request header
@@ -161,8 +161,7 @@ void WebSocket::closeAsync(uint16_t code, std::string_view reason)
 {
     // close code: Uncaught DOMException: Failed to execute 'close' on 'WebSocket':
     // The code must be either 1000, or between 3000 and 4999. 1024 is neither.
-    EMSCRIPTEN_RESULT error =
-        emscripten_websocket_close(_wsfd, (unsigned short)code, reason.data());
+    EMSCRIPTEN_RESULT error = emscripten_websocket_close(_wsfd, (unsigned short)code, reason.data());
     if (!error)
         _state = WebSocket::State::CLOSING;
     else
@@ -171,4 +170,4 @@ void WebSocket::closeAsync(uint16_t code, std::string_view reason)
 
 }  // namespace network
 
-}
+}  // namespace ax

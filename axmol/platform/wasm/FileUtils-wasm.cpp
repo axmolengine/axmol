@@ -28,14 +28,14 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "axmol/platform/wasm/FileUtils-wasm.h"
-#include "axmol/platform/wasm/Application-wasm.h"
-#include "axmol/platform/Common.h"
-#include "axmol/base/Macros.h"
-#include "axmol/base/text_utils.h"
-#include <unistd.h>
+#    include "axmol/platform/wasm/FileUtils-wasm.h"
+#    include "axmol/platform/wasm/Application-wasm.h"
+#    include "axmol/platform/Common.h"
+#    include "axmol/base/Macros.h"
+#    include "axmol/base/text_utils.h"
+#    include <unistd.h>
 
-#include "yasio/string_view.hpp"
+#    include "yasio/string_view.hpp"
 
 using namespace std;
 
@@ -47,18 +47,17 @@ FileUtils* FileUtils::getInstance()
     if (s_sharedFileUtils == nullptr)
     {
         s_sharedFileUtils = new FileUtilsEmscripten();
-        if(!s_sharedFileUtils->init())
+        if (!s_sharedFileUtils->init())
         {
-          delete s_sharedFileUtils;
-          s_sharedFileUtils = nullptr;
-          AXLOGE("ERROR: Could not init FileUtilsEmscripten");
+            delete s_sharedFileUtils;
+            s_sharedFileUtils = nullptr;
+            AXLOGE("ERROR: Could not init FileUtilsEmscripten");
         }
     }
     return s_sharedFileUtils;
 }
 
-FileUtilsEmscripten::FileUtilsEmscripten()
-{}
+FileUtilsEmscripten::FileUtilsEmscripten() {}
 
 bool FileUtilsEmscripten::init()
 {
@@ -92,9 +91,9 @@ bool FileUtilsEmscripten::isFileExistInternal(std::string_view path) const
 
     std::string strPath(path);
     if (strPath[0] != '/')
-    { // Not absolute path, add the default root path at the beginning.
+    {  // Not absolute path, add the default root path at the beginning.
         if (!cxx20::starts_with(strPath, _defaultResRootPath))
-        {// Didn't find "assets/" at the beginning of the path, adding it.
+        {  // Didn't find "assets/" at the beginning of the path, adding it.
             strPath.insert(0, _defaultResRootPath);
         }
     }
@@ -102,6 +101,6 @@ bool FileUtilsEmscripten::isFileExistInternal(std::string_view path) const
     return access(strPath.c_str(), F_OK) != -1 ? true : false;
 }
 
-}
+}  // namespace ax
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

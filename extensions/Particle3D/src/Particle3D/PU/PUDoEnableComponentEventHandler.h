@@ -80,7 +80,7 @@ public:
     void copyAttributesTo(PUEventHandler* eventHandler) override;
 
     PUDoEnableComponentEventHandler();
-    virtual ~PUDoEnableComponentEventHandler(){};
+    virtual ~PUDoEnableComponentEventHandler() {};
 
 protected:
     // Identifies the name of component
@@ -94,5 +94,4 @@ protected:
     bool _componentEnabled;
 };
 
-}
-
+}  // namespace ax

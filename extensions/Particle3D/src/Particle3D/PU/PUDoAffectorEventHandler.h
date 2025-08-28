@@ -74,7 +74,7 @@ public:
     void copyAttributesTo(PUEventHandler* eventHandler) override;
 
     PUDoAffectorEventHandler();
-    virtual ~PUDoAffectorEventHandler(){};
+    virtual ~PUDoAffectorEventHandler() {};
 
 protected:
     // Identifies the name of affector
@@ -84,5 +84,4 @@ protected:
     bool _prePost;
 };
 
-}
-
+}  // namespace ax

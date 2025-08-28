@@ -175,4 +175,4 @@ void PUTextureRotator::copyAttributesTo(PUAffector* affector)
     textureRotator->_useOwnRotationSpeed = _useOwnRotationSpeed;
 }
 
-}
+}  // namespace ax

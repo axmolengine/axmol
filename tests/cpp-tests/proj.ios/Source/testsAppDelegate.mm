@@ -48,10 +48,10 @@ static AppDelegate s_sharedApplication;
     // Override point for customization after application launch.
 
     auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");
-    
+
     // Use RootViewController manage EARenderView and UIWindow
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
-    
+
     renderView->showWindow(viewController);
 
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController

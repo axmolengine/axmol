@@ -269,4 +269,4 @@ void PUTextureAnimator::copyAttributesTo(PUAffector* affector)
     textureAnimator->_startRandom          = _startRandom;
 }
 
-}
+}  // namespace ax

@@ -98,7 +98,7 @@ bool ReleasePoolTest::init()
         char buf[20];
         for (int i = 0; i < 100; ++i)
         {
-            auto name = fmt::format_to_z(buf, "object{}", i);
+            auto name          = fmt::format_to_z(buf, "object{}", i);
             TestObject* tmpObj = new TestObject(name);
             tmpObj->autorelease();
         }

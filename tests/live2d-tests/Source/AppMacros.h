@@ -10,9 +10,9 @@
      Please look into Appdelegate::applicationDidFinishLaunching.
      We check current device frame size to decide which resource need to be selected.
      So if you want to test this situation which said in title '[Situation 1]',
-     you should change ios simulator to different device(e.g. iphone, iphone-retina3.5, iphone-retina4.0, ipad, ipad-retina),
-     or change the window size in "proj.XXX/main.cpp" by "CCERenderView::setFrameSize" if you are using win32 or linux plaform
-     and modify "proj.mac/AppController.mm" by changing the window rectangle.
+     you should change ios simulator to different device(e.g. iphone, iphone-retina3.5, iphone-retina4.0, ipad,
+   ipad-retina), or change the window size in "proj.XXX/main.cpp" by "CCERenderView::setFrameSize" if you are using
+   win32 or linux plaform and modify "proj.mac/AppController.mm" by changing the window rectangle.
 
    [Situation 2] Using one resource to match different design resolutions.
      The coordinates in your codes is based on your current design resolution rather than resource size.
@@ -23,12 +23,12 @@
    [Note] Normally, developer just need to define one design resolution(e.g. 960x640) with one or more resources.
  */
 
-#define DESIGN_RESOLUTION_480X320    0
-#define DESIGN_RESOLUTION_1024X768   1
-#define DESIGN_RESOLUTION_2048X1536  2
+#define DESIGN_RESOLUTION_480X320   0
+#define DESIGN_RESOLUTION_1024X768  1
+#define DESIGN_RESOLUTION_2048X1536 2
 
 /* If you want to switch design resolution, change next line */
-#define TARGET_DESIGN_RESOLUTION_SIZE  DESIGN_RESOLUTION_480X320
+#define TARGET_DESIGN_RESOLUTION_SIZE DESIGN_RESOLUTION_480X320
 
 typedef struct tagResource
 {
@@ -36,9 +36,9 @@ typedef struct tagResource
     char directory[100];
 } Resource;
 
-static Resource smallResource = {ax::CCSizeMake(480, 320), "iphone"};
+static Resource smallResource  = {ax::CCSizeMake(480, 320), "iphone"};
 static Resource mediumResource = {ax::CCSizeMake(1024, 768), "ipad"};
-static Resource largeResource = {ax::CCSizeMake(2048, 1536), "ipadhd"};
+static Resource largeResource  = {ax::CCSizeMake(2048, 1536), "ipadhd"};
 
 #if (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_480X320)
 static ax::CCSize designResolutionSize = ax::CCSizeMake(480, 320);
@@ -47,10 +47,11 @@ static ax::CCSize designResolutionSize = ax::CCSizeMake(1024, 768);
 #elif (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_2048X1536)
 static ax::CCSize designResolutionSize = ax::CCSizeMake(2048, 1536);
 #else
-#error unknown target design resolution!
+#    error unknown target design resolution!
 #endif
 
 // The font size 24 is designed for small resolution, so we should change it to fit for current design resolution
-#define TITLE_FONT_SIZE  (ax::CCERenderView::sharedRenderView()->getDesignResolutionSize().width / smallResource.size.width * 24)
+#define TITLE_FONT_SIZE \
+    (ax::CCERenderView::sharedRenderView()->getDesignResolutionSize().width / smallResource.size.width * 24)
 
 #endif /* __APPMACROS_H__ */

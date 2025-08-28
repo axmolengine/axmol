@@ -53,12 +53,12 @@ using Ref                   = Object;
 
 namespace cocos2d = ax;
 
-#define CC_SAFE_RELEASE       AX_SAFE_RELEASE
-#define CC_SAFE_RELEASE_NULL  AX_SAFE_RELEASE_NULL
-#define CC_SAFE_DELETE        AX_SAFE_DELETE
-#define CCASSERT              AXASSERT
-#define CC_ASSERT             AX_ASSERT
-#define CC_CONSTRUCTOR_ACCESS public
+#define CC_SAFE_RELEASE              AX_SAFE_RELEASE
+#define CC_SAFE_RELEASE_NULL         AX_SAFE_RELEASE_NULL
+#define CC_SAFE_DELETE               AX_SAFE_DELETE
+#define CCASSERT                     AXASSERT
+#define CC_ASSERT                    AX_ASSERT
+#define CC_CONSTRUCTOR_ACCESS        public
 
 #define CC_SAFE_RETAIN               AX_SAFE_RETAIN
 
@@ -85,4 +85,3 @@ namespace cocos2d = ax;
 #define CC_PLATFORM_MAC              AX_PLATFORM_MAC
 
 #define CC_REQUIRES_NULL_TERMINATION AX_REQUIRES_NULL_TERMINATION
-

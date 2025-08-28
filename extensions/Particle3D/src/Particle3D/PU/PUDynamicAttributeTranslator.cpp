@@ -216,4 +216,4 @@ void PUDynamicAttributeTranslator::translate(PUScriptCompiler* compiler, PUAbstr
     obj->context = _dynamicAttribute;
 }
 
-}
+}  // namespace ax

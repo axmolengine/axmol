@@ -102,7 +102,7 @@ public:
     virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 private:
-//    ax::CallbackCommand _renderCmds[4];
+    //    ax::CallbackCommand _renderCmds[4];
     void onBeforeClear();
     void onBeforeStencil();
     void onBeforeDraw();

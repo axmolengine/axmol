@@ -184,8 +184,8 @@ protected:
     std::vector<V3F_T2F_C4B> _vertices;
     struct
     {
-        uint32_t stencilWriteMask            = 0;
-        bool depthTest                       = true;
+        uint32_t stencilWriteMask    = 0;
+        bool depthTest               = true;
         rhi::CompareFunc compareFunc = rhi::CompareFunc::ALWAYS;
     } _stateBlock;
 };
@@ -316,11 +316,11 @@ private:
 
     struct
     {
-        bool depthTest                     = true;
-        bool depthWrite                    = true;
+        bool depthTest             = true;
+        bool depthWrite            = true;
         rhi::CompareFunc depthFunc = rhi::CompareFunc::ALWAYS;
-        rhi::CullMode cullMode         = rhi::CullMode::BACK;
+        rhi::CullMode cullMode     = rhi::CullMode::BACK;
     } _stateBlock;
 };
 
-}
+}  // namespace ax

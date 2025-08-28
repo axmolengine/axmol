@@ -90,4 +90,4 @@ void PUJetAffector::copyAttributesTo(PUAffector* affector)
     jetAffector->setDynAcceleration(getDynAcceleration()->clone());
 }
 
-}
+}  // namespace ax

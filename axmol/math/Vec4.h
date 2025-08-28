@@ -134,7 +134,7 @@ struct Vec4Adapter : public Vec4Base
 public:
     using impl_type = _ImplType;
 
-    constexpr Vec4Adapter()  = default;
+    constexpr Vec4Adapter() = default;
     constexpr Vec4Adapter(float xx, float yy, float zz, float ww) : Vec4Base(xx, yy, zz, ww) {}
     constexpr explicit Vec4Adapter(const float* src) : Vec4Base(src) {}
 
@@ -500,4 +500,3 @@ NS_AX_MATH_END
  end of base group
  @}
  */
-

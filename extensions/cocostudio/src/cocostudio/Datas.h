@@ -166,7 +166,7 @@ public:
     /**
      * @lua NA
      */
-    virtual ~SpriteDisplayData(){};
+    virtual ~SpriteDisplayData() {};
 
     void copy(DisplayData* displayData);
 
@@ -205,7 +205,7 @@ public:
     /**
      * @lua NA
      */
-    virtual ~ParticleDisplayData(){};
+    virtual ~ParticleDisplayData() {};
 };
 
 /**
@@ -233,8 +233,8 @@ public:
     DisplayData* getDisplayData(int index);
 
 public:
-    std::string name;                               //! the bone's name
-    std::string parentName;                         //! the bone parent's name
+    std::string name;                          //! the bone's name
+    std::string parentName;                    //! the bone parent's name
     ax::Vector<DisplayData*> displayDataList;  //! save DisplayData informations for the Bone
     ax::AffineTransform boneDataTransform;
 };

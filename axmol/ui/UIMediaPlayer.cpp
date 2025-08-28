@@ -45,18 +45,18 @@ using namespace ax;
 
 //-----------------------------------------------------------------------------------------------------------
 
-#    define PS_SET_UNIFORM(ps, name, value)                         \
-        do                                                          \
-        {                                                           \
-            decltype(value) __v = value;                            \
-            auto __loc          = (ps) -> getUniformLocation(name); \
-            (ps)->setUniform(__loc, &__v, sizeof(__v));             \
+#    define PS_SET_UNIFORM(ps, name, value)                       \
+        do                                                        \
+        {                                                         \
+            decltype(value) __v = value;                          \
+            auto __loc          = (ps)->getUniformLocation(name); \
+            (ps)->setUniform(__loc, &__v, sizeof(__v));           \
         } while (false)
 
 #    define PS_SET_UNIFORM_R(ps, name, value)               \
         do                                                  \
         {                                                   \
-            auto __loc = (ps) -> getUniformLocation(name);  \
+            auto __loc = (ps)->getUniformLocation(name);    \
             (ps)->setUniform(__loc, &value, sizeof(value)); \
         } while (false)
 
@@ -119,8 +119,8 @@ struct PrivateVideoContext
             _vchromaTexture = new Texture2D();
             _vchromaTexture->initWithSpec(
                 {
-                    .width  = static_cast<uint16_t>(desc._dim.x >> 1),
-                    .height = static_cast<uint16_t>(desc._dim.y),
+                    .width       = static_cast<uint16_t>(desc._dim.x >> 1),
+                    .height      = static_cast<uint16_t>(desc._dim.y),
                     .pixelFormat = PixelFormat::RGBA8,
                 },
                 Texture2D::DEFAULT_SLICE_DATA);
@@ -204,12 +204,12 @@ struct PrivateVideoContext
             _renderFrameFunc = [this](const MEVideoFrame& frame) {
                 if (_vtexture && _vchromaTexture && _vchroma2Texture)
                 {
-                    auto& bufferDim = frame._vpd._dim;
+                    auto& bufferDim              = frame._vpd._dim;
                     const auto chromaTexDataSize = (bufferDim.x * bufferDim.y) >> 2;
                     _vtexture->updateSubData(frame._dataPointer, 0, 0, bufferDim.x, bufferDim.y);
                     _vchromaTexture->updateSubData(frame._cbcrDataPointer, 0, 0, bufferDim.x >> 1, bufferDim.y >> 1);
                     _vchroma2Texture->updateSubData(frame._cbcrDataPointer + chromaTexDataSize, 0, 0, bufferDim.x >> 1,
-                                                 bufferDim.y >> 1);
+                                                    bufferDim.y >> 1);
                 }
             };
             break;
@@ -245,7 +245,8 @@ struct PrivateVideoContext
                 Texture2D::DEFAULT_SLICE_DATA);
             _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_BGR32);
             _renderFrameFunc = [this](const MEVideoFrame& frame) {
-                if (_vtexture) {
+                if (_vtexture)
+                {
                     auto& bufferDim = frame._vpd._dim;
                     _vtexture->updateSubData(frame._dataPointer, 0, 0, bufferDim.x, bufferDim.y);
                 }
@@ -715,13 +716,11 @@ void BasicMediaController::initRenderer()
     // loop. This is a work-around for a RenderTexture issue
     // when being created such places as a button click event handler
     // on Apple platforms/Metal renderer backend
-    scheduleOnce(
-        [this](float) {
+    scheduleOnce([this](float) {
         createControls();
         updateControlsForContentSize(_mediaPlayer->getContentSize());
         updateControllerState();
-    },
-        0.f, "__create_video_controls"sv);
+    }, 0.f, "__create_video_controls"sv);
 }
 
 void BasicMediaController::onPressStateChangedToPressed()
@@ -740,8 +739,7 @@ void BasicMediaController::onPressStateChangedToPressed()
         if (_controlPanel->isScheduled("__media_controller_fader"sv))
             return;
 
-        _controlPanel->schedule(
-            [this](float) {
+        _controlPanel->schedule([this](float) {
             auto now       = std::chrono::steady_clock::now();
             auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastTouch);
             if (deltaTime > std::chrono::milliseconds{2500})
@@ -750,8 +748,7 @@ void BasicMediaController::onPressStateChangedToPressed()
                 _controlPanel->runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
                 _mediaOverlay->runAction(Sequence::create(FadeOut::create(0.5f), nullptr));
             }
-        },
-            1.f, "__media_controller_fader"sv);
+        }, 1.f, "__media_controller_fader"sv);
     }),
                                               nullptr));
 }
@@ -1306,8 +1303,9 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
     {
         _fullScreenEnabled = enabled;
 
-        auto pvd               = reinterpret_cast<PrivateVideoContext*>(_videoContext);
-        const auto contentSize = enabled ? _director->getRenderView()->getDesignResolutionSize() : pvd->_originalViewSize;
+        auto pvd = reinterpret_cast<PrivateVideoContext*>(_videoContext);
+        const auto contentSize =
+            enabled ? _director->getRenderView()->getDesignResolutionSize() : pvd->_originalViewSize;
         Widget::setContentSize(contentSize);
 
         sendEvent((int)EventType::FULLSCREEN_SWITCH);
@@ -1323,7 +1321,7 @@ void MediaPlayer::setKeepAspectRatioEnabled(bool enable)
 {
     if (_keepAspectRatioEnabled != enable)
     {
-        _keepAspectRatioEnabled                                               = enable;
+        _keepAspectRatioEnabled                                            = enable;
         reinterpret_cast<PrivateVideoContext*>(_videoContext)->_scaleDirty = true;
     }
 }

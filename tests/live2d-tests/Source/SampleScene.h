@@ -43,4 +43,4 @@ private:
     ax::MenuItemImage* _closeItem;
 };
 
-#endif // __SAMPLE_SCENE_H__
+#endif  // __SAMPLE_SCENE_H__

@@ -77,7 +77,7 @@ public:
     void copyAttributesTo(PUEmitter* emitter) override;
 
     PUCircleEmitter();
-    virtual ~PUCircleEmitter(){};
+    virtual ~PUCircleEmitter() {};
 
 protected:
     /** Determine a particle position on the circle.
@@ -101,5 +101,4 @@ protected:
     Quaternion _orientation;
     Vec3 _normal;
 };
-}
-
+}  // namespace ax

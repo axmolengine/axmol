@@ -143,5 +143,4 @@ protected:
     float _mass;
 };
 
-}
-
+}  // namespace ax

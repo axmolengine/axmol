@@ -221,14 +221,14 @@ void AudioCache::readDataTask(unsigned int selfId)
 
 #if AX_USE_ALSOFT
             AXLOGV("pcm buffer was loaded successfully, total frames: {}, total read frames: {}, remainingFrames: {}",
-                  totalFrames, _framesRead, remainingFrames);
+                   totalFrames, _framesRead, remainingFrames);
             if (sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
                 alBufferi(_alBufferId, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
 #else
             /// Apple OpenAL framework, try adjust frames
             /// May don't need, xcode11 sdk works well
             uint32_t adjustFrames = 0;
-            if(decoder->seek(totalFrames))
+            if (decoder->seek(totalFrames))
             {
                 char* tmpBuf = (char*)malloc(decoder->framesToBytes(framesToReadOnce));
                 std::vector<char> adjustFrameBuf;
@@ -242,7 +242,8 @@ void AudioCache::readDataTask(unsigned int selfId)
                     if (framesRead > 0)
                     {
                         adjustFrames += framesRead;
-                        adjustFrameBuf.insert(adjustFrameBuf.end(), tmpBuf, tmpBuf + decoder->framesToBytes(framesRead));
+                        adjustFrameBuf.insert(adjustFrameBuf.end(), tmpBuf,
+                                              tmpBuf + decoder->framesToBytes(framesRead));
                     }
 
                 } while (framesRead > 0);
@@ -250,7 +251,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                 if (adjustFrames > 0)
                 {
                     AXLOGV("Orignal total frames: {}, adjust frames: {}, current total frames: {}", totalFrames,
-                        adjustFrames, totalFrames + adjustFrames);
+                           adjustFrames, totalFrames + adjustFrames);
                     totalFrames += adjustFrames;
                     _totalFrames = remainingFrames = totalFrames;
                 }
@@ -262,7 +263,8 @@ void AudioCache::readDataTask(unsigned int selfId)
 
                 if (adjustFrames > 0)
                 {
-                    pcmBuffer.insert(pcmBuffer.end(), adjustFrameBuf.data(), adjustFrameBuf.data() + adjustFrameBuf.size());
+                    pcmBuffer.insert(pcmBuffer.end(), adjustFrameBuf.data(),
+                                     adjustFrameBuf.data() + adjustFrameBuf.size());
                     pcmData  = pcmBuffer.data();
                     dataSize = static_cast<uint32_t>(pcmBuffer.size());
                 }
@@ -271,7 +273,7 @@ void AudioCache::readDataTask(unsigned int selfId)
                     "remainingFrames: {}",
                     totalFrames, _framesRead, adjustFrames, remainingFrames);
                 _framesRead += adjustFrames;
-            } // seek fail, means no more data need to read
+            }  // seek fail, means no more data need to read
 #endif
             alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
             alError = alGetError();
@@ -409,4 +411,4 @@ void AudioCache::invokingLoadCallbacks()
         _loadCallbacks.clear();
     });
 }
-}
+}  // namespace ax

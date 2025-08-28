@@ -100,7 +100,7 @@ public:
     void copyAttributesTo(PUObserver* observer) override;
 
     PUOnPositionObserver();
-    virtual ~PUOnPositionObserver(){};
+    virtual ~PUOnPositionObserver() {};
 
 protected:
     float _positionXThreshold;
@@ -114,5 +114,4 @@ protected:
     PUComparisionOperator _comparePositionZ;
 };
 
-}
-
+}  // namespace ax

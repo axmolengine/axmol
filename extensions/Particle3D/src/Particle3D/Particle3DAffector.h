@@ -56,5 +56,4 @@ protected:
     bool _isEnabled;
 };
 
-}
-
+}  // namespace ax

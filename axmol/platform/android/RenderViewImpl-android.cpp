@@ -33,9 +33,8 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include <android/log.h>
 
-#define DEFAULT_MARGIN_ANDROID 30.0f
+#define DEFAULT_MARGIN_ANDROID           30.0f
 #define WIDE_SCREEN_ASPECT_RATIO_ANDROID 2.0f
-
 
 namespace ax
 {
@@ -48,7 +47,10 @@ void RenderViewImpl::loadGLES2()
         throw std::runtime_error("Load GLES fail");
 }
 
-RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable)
+RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
+                                               const Rect& rect,
+                                               float frameZoomFactor,
+                                               bool resizable)
 {
     auto ret = new RenderViewImpl;
     if (ret && ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
@@ -84,13 +86,14 @@ RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
     return nullptr;
 }
 
-RenderViewImpl::RenderViewImpl()
-{
-}
+RenderViewImpl::RenderViewImpl() {}
 
 RenderViewImpl::~RenderViewImpl() {}
 
-bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& /*rect*/, float /*frameZoomFactor*/, bool /*resizable*/)
+bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
+                                  const Rect& /*rect*/,
+                                  float /*frameZoomFactor*/,
+                                  bool /*resizable*/)
 {
     return true;
 }
@@ -145,13 +148,13 @@ Rect RenderViewImpl::getSafeAreaRect() const
     bool hasSoftKeys     = JniHelper::callStaticBooleanMethod("dev/axmol/lib/AxmolEngine", "hasSoftKeys");
     bool isCutoutEnabled = JniHelper::callStaticBooleanMethod("dev/axmol/lib/AxmolEngine", "isCutoutEnabled");
 
-    float insetTop = 0.0f;
+    float insetTop    = 0.0f;
     float insetBottom = 0.0f;
-    float insetLeft = 0.0f;
-    float insetRight = 0.0f;
+    float insetLeft   = 0.0f;
+    float insetRight  = 0.0f;
 
     static axstd::pod_vector<int32_t> cornerRadii =
-            JniHelper::callStaticIntArrayMethod("dev/axmol/lib/AxmolEngine", "getDeviceCornerRadii");
+        JniHelper::callStaticIntArrayMethod("dev/axmol/lib/AxmolEngine", "getDeviceCornerRadii");
 
     if (isScreenRound)
     {
@@ -194,13 +197,13 @@ Rect RenderViewImpl::getSafeAreaRect() const
                 }
 
                 // portrait
-                insetTop = radiiTop;
+                insetTop    = radiiTop;
                 insetBottom = radiiBottom;
             }
             else
             {
                 // landscape
-                insetLeft = radiiLeft;
+                insetLeft  = radiiLeft;
                 insetRight = radiiRight;
             }
         }
@@ -241,7 +244,7 @@ Rect RenderViewImpl::getSafeAreaRect() const
     {
         // screen with enabled cutout area (ex. Google Pixel 3 XL, Huawei P20, Asus ZenFone 5, etc)
         static axstd::pod_vector<int32_t> safeInsets =
-                JniHelper::callStaticIntArrayMethod("dev/axmol/lib/AxmolEngine", "getSafeInsets");
+            JniHelper::callStaticIntArrayMethod("dev/axmol/lib/AxmolEngine", "getSafeInsets");
 
         if (safeInsets.size() >= 4)
         {
@@ -273,4 +276,4 @@ void RenderViewImpl::queueOperation(void (*op)(void*), void* param)
                                     (jlong)(uintptr_t)param);
 }
 
-}
+}  // namespace ax

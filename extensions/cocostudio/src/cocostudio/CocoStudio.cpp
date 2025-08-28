@@ -27,8 +27,8 @@
 #include "WidgetReader/MeshReader/MeshReader.h"
 #include "WidgetReader/UserCameraReader/UserCameraReader.h"
 #if defined(AX_ENABLE_EXT_PARTICLE3D)
-#include "WidgetReader/Particle3DReader/Particle3DReader.h"
-#endif // defined(AX_ENABLE_EXT_PARTICLE3D)
+#    include "WidgetReader/Particle3DReader/Particle3DReader.h"
+#endif  // defined(AX_ENABLE_EXT_PARTICLE3D)
 
 namespace cocostudio
 {
@@ -63,7 +63,7 @@ void destroyCocosStudio()
     UserCameraReader::destroyInstance();
 #if defined(AX_ENABLE_EXT_PARTICLE3D)
     Particle3DReader::destroyInstance();
-#endif // defined(AX_ENABLE_EXT_PARTICLE3D)
+#endif  // defined(AX_ENABLE_EXT_PARTICLE3D)
 
     ax::CSLoader::destroyInstance();
 

@@ -20,32 +20,32 @@
 #include <cstdint>
 #include "axmol/base/pvr.h"
 
-#define PVRT_MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define PVRT_MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define PVRT_MIN(a, b)      (((a) < (b)) ? (a) : (b))
+#define PVRT_MAX(a, b)      (((a) > (b)) ? (a) : (b))
 #define PVRT_CLAMP(x, l, h) (PVRT_MIN((h), PVRT_MAX((x), (l))))
 
 /*****************************************************************************
  * defines and consts
  *****************************************************************************/
-#define PT_INDEX (2)  // The Punch-through index
+#define PT_INDEX              (2)  // The Punch-through index
 
-#define BLK_Y_SIZE (4)  // always 4 for all 2D block types
+#define BLK_Y_SIZE            (4)  // always 4 for all 2D block types
 
-#define BLK_X_MAX (8)  // Max X dimension for blocks
+#define BLK_X_MAX             (8)  // Max X dimension for blocks
 
-#define BLK_X_2BPP (8)  // dimensions for the two formats
-#define BLK_X_4BPP (4)
+#define BLK_X_2BPP            (8)  // dimensions for the two formats
+#define BLK_X_4BPP            (4)
 
-#define WRAP_COORD(Val, Size) ((Val) & ((Size)-1))
+#define WRAP_COORD(Val, Size) ((Val) & ((Size) - 1))
 
-#define POWER_OF_2(X) util_number_is_power_2(X)
+#define POWER_OF_2(X)         util_number_is_power_2(X)
 
 /*
  Define an expression to either wrap or clamp large or small vals to the
  legal coordinate range
  */
 #define LIMIT_COORD(Val, Size, AssumeImageTiles) \
-    ((AssumeImageTiles) ? WRAP_COORD((Val), (Size)) : PVRT_CLAMP((Val), 0, (Size)-1))
+    ((AssumeImageTiles) ? WRAP_COORD((Val), (Size)) : PVRT_CLAMP((Val), 0, (Size) - 1))
 
 /*****************************************************************************
  * Useful typedefs
@@ -666,7 +666,7 @@ static void PVRDecompress(AMTC_BLOCK_STRUCT* pCompressedData,
             InterpolateColours(Colours5554[0][0].Reps[1], Colours5554[0][1].Reps[1], Colours5554[1][0].Reps[1],
                                Colours5554[1][1].Reps[1], Do2bitMode, x, y, BSig);
 
-            GetModulationValue(x, y, Do2bitMode, (const int(*)[16])ModulationVals, (const int(*)[16])ModulationModes,
+            GetModulationValue(x, y, Do2bitMode, (const int (*)[16])ModulationVals, (const int (*)[16])ModulationModes,
                                &Mod, &DoPT);
 
             // compute the modulated colour

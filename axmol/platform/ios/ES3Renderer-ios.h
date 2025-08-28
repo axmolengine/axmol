@@ -39,7 +39,7 @@
 #    import <OpenGLES/ES3/gl.h>
 #    import <OpenGLES/ES3/glext.h>
 
-//#    import "platform/PlatformMacros.h"
+// #    import "platform/PlatformMacros.h"
 
 @interface ES3Renderer : NSObject <ESRenderer> {
     // The pixel dimensions of the CAEAGLLayer

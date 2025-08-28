@@ -346,7 +346,6 @@ public:
     /** get the number of substeps */
     int getFixedUpdateRate() const { return _fixedRate; }
 
-
     /**
      * set the callback which invoked before update of each object in physics world.
      */

@@ -35,11 +35,11 @@ namespace ax
 #endif
 
 static Label* _createLabel(std::string_view text,
-                          std::string_view font,
-                          float fontSize,
-                          const Vec2& dimensions    = Vec2::ZERO,
-                          TextHAlignment hAlignment = TextHAlignment::LEFT,
-                          TextVAlignment vAlignment = TextVAlignment::TOP)
+                           std::string_view font,
+                           float fontSize,
+                           const Vec2& dimensions    = Vec2::ZERO,
+                           TextHAlignment hAlignment = TextHAlignment::LEFT,
+                           TextVAlignment vAlignment = TextVAlignment::TOP)
 {
     if (FileUtils::getInstance()->isFileExist(font))
     {
@@ -290,7 +290,8 @@ bool TextFieldEx::initWithPlaceHolder(std::string_view placeholder,
     _renderLabel->setAnchorPoint(Point::ANCHOR_MIDDLE_LEFT);
     this->addChild(_renderLabel);
 
-    _director->getScheduler()->runOnAxmolThread([this] { _renderLabel->setPosition(Point(0, this->getContentSize().height / 2)); });
+    _director->getScheduler()->runOnAxmolThread(
+        [this] { _renderLabel->setPosition(Point(0, this->getContentSize().height / 2)); });
 
     __initCursor(fontSize, cursorWidth, cursorColor);
 
@@ -315,7 +316,7 @@ void TextFieldEx::setTextFontName(std::string_view fontName)
         config.fontSize     = _fontSize;
         _renderLabel->setTTFConfig(config);
         _systemFontUsed = false;
-        _fontType      = 1;
+        _fontType       = 1;
     }
     else
     {
@@ -326,7 +327,7 @@ void TextFieldEx::setTextFontName(std::string_view fontName)
         }
         _renderLabel->setSystemFontSize(_fontSize);
         _systemFontUsed = true;
-        _fontType      = 0;
+        _fontType       = 0;
     }
     _fontName = fontName;
 
@@ -369,9 +370,8 @@ void TextFieldEx::enableIME(Node* control)
     if (control == nullptr)
         control = this;
 
-    _touchListener->onTouchBegan = [control,this](Touch* touch, Event*) {
-        bool focus = (_checkVisibility(this) && _editable && this->_enabled &&
-                      _containsTouchPoint(control, touch));
+    _touchListener->onTouchBegan = [control, this](Touch* touch, Event*) {
+        bool focus = (_checkVisibility(this) && _editable && this->_enabled && _containsTouchPoint(control, touch));
 
         if (this->_continuousTouchDelayTimerID != nullptr)
         {
@@ -397,8 +397,7 @@ void TextFieldEx::enableIME(Node* control)
             this->_continuousTouchDelayTimerID = nullptr;
         }
 
-        bool focus = (_checkVisibility(this) && _editable && this->_enabled &&
-                      _containsTouchPoint(control, touch));
+        bool focus = (_checkVisibility(this) && _editable && this->_enabled && _containsTouchPoint(control, touch));
 
         if (focus)
         {
@@ -1034,5 +1033,4 @@ void TextFieldEx::__moveCursorTo(float x)
 }
 };  // namespace ui
 
-}
-
+}  // namespace ax

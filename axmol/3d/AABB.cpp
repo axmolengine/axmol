@@ -189,4 +189,4 @@ void AABB::transform(const Mat4& mat)
     updateMinMax(corners, 8);
 }
 
-}
+}  // namespace ax

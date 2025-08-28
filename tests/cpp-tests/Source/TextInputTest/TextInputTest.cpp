@@ -68,7 +68,7 @@ KeyboardNotificationLayer::KeyboardNotificationLayer() : _trackNode(0)
 void KeyboardNotificationLayer::keyboardWillShow(IMEKeyboardNotificationInfo& info)
 {
     AXLOGD("TextInputTest:keyboardWillShowAt(origin:{},{}, size:{},{})", info.end.origin.x, info.end.origin.y,
-          info.end.size.width, info.end.size.height);
+           info.end.size.width, info.end.size.height);
 
     if (!_trackNode)
     {
@@ -77,7 +77,7 @@ void KeyboardNotificationLayer::keyboardWillShow(IMEKeyboardNotificationInfo& in
 
     auto rectTracked = getRect(_trackNode);
     AXLOGD("TextInputTest:trackingNodeAt(origin:{},{}, size:{},{})", rectTracked.origin.x, rectTracked.origin.y,
-          rectTracked.size.width, rectTracked.size.height);
+           rectTracked.size.width, rectTracked.size.height);
 
     // if the keyboard area doesn't intersect with the tracking node area, nothing need to do.
     if (!rectTracked.intersectsRect(info.end))
