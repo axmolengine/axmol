@@ -24,8 +24,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
-      with:
-        ref: ${{ github.head_ref || github.ref_name }}
 
     - name: Set LAST_COMMIT_HASH (short)
       run: echo "LAST_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
@@ -95,6 +93,6 @@ jobs:
         committer_name: GitHub Actions
         committer_email: 41898282+github-actions[bot]@users.noreply.github.com
         message: 'Committing clang-format changes'
-        new_branch: ${{ github.head_ref }}
+        new_branch: ${{ github.head_ref || github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

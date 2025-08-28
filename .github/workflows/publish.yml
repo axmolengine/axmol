@@ -24,8 +24,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
 
     - name: Check release ver from input
       if: ${{ github.event.inputs.version != '' }}

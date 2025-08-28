@@ -37,8 +37,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
+
     - name: Build
       shell: pwsh
       run: |
@@ -59,8 +58,7 @@ jobs:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v5
-          with:
-            submodules: 'recursive'
+
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p win32 -a x64 -dll
@@ -69,8 +67,7 @@ jobs:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v5
-          with:
-            submodules: 'recursive'
+
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p winuwp -a x64 -O3
@@ -81,8 +78,7 @@ jobs:
           WINSDK_VER: '10.0.19041.0'
         steps:
         - uses: actions/checkout@v5
-          with:
-            submodules: 'recursive'
+
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER -O3
@@ -90,8 +86,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
 
     - name: Install dependencies
       run: |
@@ -105,8 +99,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
+
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx && ./tools/cmdline/axmol run -p osx -t unit-tests
@@ -114,8 +107,7 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
+
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p osx && ./tools/cmdline/axmol run -p osx -t unit-tests
@@ -132,8 +124,7 @@ jobs:
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
+
     - name: Build
       shell: pwsh
       run: |
@@ -156,8 +147,7 @@ jobs:
       TARGET_OS: ${{ matrix.target_os }}
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
+
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
@@ -165,8 +155,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
+
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p wasm -O3 -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
@@ -186,8 +175,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
+
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p wasm64 -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
