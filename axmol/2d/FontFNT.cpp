@@ -127,9 +127,9 @@ BMFontConfiguration::~BMFontConfiguration()
 
 std::string BMFontConfiguration::description() const
 {
-    return fmt::format(
-        "<BMFontConfiguration = " AX_FORMAT_PRINTF_SIZE_T " | Glphys:{} Kernings:{} | Image = {}>", (size_t)this,
-        static_cast<int>(_fontDefDictionary.size()), static_cast<int>(_kerningDictionary.size()), _atlasName);
+    return fmt::format("<BMFontConfiguration = " AX_FORMAT_PRINTF_SIZE_T " | Glphys:{} Kernings:{} | Image = {}>",
+                       (size_t)this, static_cast<int>(_fontDefDictionary.size()),
+                       static_cast<int>(_kerningDictionary.size()), _atlasName);
 }
 
 void BMFontConfiguration::purgeKerningDictionary()
@@ -152,7 +152,8 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view co
     if (data.size() >= (sizeof("BMP") - 1) && memcmp("BMF", data.c_str(), sizeof("BMP") - 1) == 0)
     {
         // Handle fnt file of binary format
-        std::set<unsigned int>* ret = parseBinaryConfigFile((unsigned char*)&data.front(), static_cast<uint32_t>(data.size()), controlFile);
+        std::set<unsigned int>* ret =
+            parseBinaryConfigFile((unsigned char*)&data.front(), static_cast<uint32_t>(data.size()), controlFile);
         return ret;
     }
     if (data[0] == 0)
@@ -772,4 +773,4 @@ void FontFNT::reloadBMFontResource(std::string_view fntFilePath)
     }
 }
 
-}
+}  // namespace ax

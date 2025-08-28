@@ -33,8 +33,6 @@ using namespace ax;
 using namespace std;
 using namespace spine;
 
-
-
 #define SET_UNIFORM(ps, name, value)                          \
     do                                                        \
     {                                                         \
@@ -43,14 +41,14 @@ using namespace spine;
         (ps)->setUniform(__loc, &__v, sizeof(__v));           \
     } while (false)
 
-#define NUM_SKELETONS 50
+#define NUM_SKELETONS           50
 #define SPINE_NODE_SCALE_FACTOR 0.4
 
 static AxmolTextureLoader textureLoader;
 
 PowInterpolation pow2(2);
 PowOutInterpolation powOut2(2);
-//SwirlVertexEffect effect(400, powOut2);
+// SwirlVertexEffect effect(400, powOut2);
 
 #define SCALE_SKELETON_NODE(node)                    \
     do                                               \
@@ -146,7 +144,6 @@ bool SpineTestLayer::init()
                 SET_UNIFORM(skeleton1PS, "blurRadius", blurRadius);
                 SET_UNIFORM(skeleton1PS, "sampleNum", sampleNum);
             }
-
         }
         return true;
     };
@@ -317,7 +314,7 @@ bool IKExample::init()
         crosshair->getParent()->worldToLocal(position.x, position.y, localX, localY);
         crosshair->setX(localX);
         crosshair->setY(localY);
-        //crosshair->setAppliedValid(false);
+        // crosshair->setAppliedValid(false);
 
         node->getSkeleton()->updateWorldTransform(spine::Physics_Update);
     });
@@ -365,9 +362,10 @@ bool MixAndMatchExample::init()
     SCALE_SKELETON_NODE(skeletonNode);
 
     // load hsv as custom, we don't want batch draw
-    auto hsvProg = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, hsv_frag, VertexLayoutKind::Sprite);
+    auto hsvProg =
+        ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, hsv_frag, VertexLayoutKind::Sprite);
 
-    auto ps1     = new rhi::ProgramState(hsvProg);
+    auto ps1 = new rhi::ProgramState(hsvProg);
     SET_UNIFORM(ps1, "u_hsv", Vec3(92.0f, 1.0f, 1.2f));
     ps1->updateBatchId();
     skeletonNode->setProgramState(ps1, true);
@@ -416,10 +414,10 @@ bool RaptorExample::init()
     skeletonNode->addAnimation(1, "gun-grab", false, 2);
     skeletonNode->setTwoColorTint(true);
 
-    //effect.setCenterY(200);
+    // effect.setCenterY(200);
     swirlTime = 0;
 
-    //skeletonNode->setVertexEffect(&effect);
+    // skeletonNode->setVertexEffect(&effect);
 
     skeletonNode->setPosition(Vec2(_contentSize.width / 2, 20));
     addChild(skeletonNode);
@@ -436,7 +434,7 @@ void RaptorExample::update(float fDelta)
     float percent = spine::MathUtil::fmod(swirlTime, 2);
     if (percent > 1)
         percent = 1 - (percent - 1);
-    //effect.setAngle(pow2.interpolate(-60.0f, 60.0f, percent));
+    // effect.setAngle(pow2.interpolate(-60.0f, 60.0f, percent));
 }
 
 bool SkeletonRendererSeparatorExample::init()
@@ -518,8 +516,8 @@ bool SpineboyExample::init()
     skeletonNode->setCompleteListener([](TrackEntry* entry) { AXLOGI("{} complete", entry->getTrackIndex()); });
     skeletonNode->setDisposeListener([](TrackEntry* entry) { AXLOGI("{} dispose", entry->getTrackIndex()); });
     skeletonNode->setEventListener([](TrackEntry* entry, spine::Event* event) {
-        AXLOGI("{} event: {}, {}, {}, {}", entry->getTrackIndex(), event->getData().getName(),
-               event->getIntValue(), event->getFloatValue(), event->getStringValue());
+        AXLOGI("{} event: {}, {}, {}, {}", entry->getTrackIndex(), event->getData().getName(), event->getIntValue(),
+               event->getFloatValue(), event->getStringValue());
     });
 
     skeletonNode->setMix("walk", "jump", 0.4);
@@ -538,17 +536,17 @@ bool SpineboyExample::init()
     addChild(skeletonNode);
 
     auto program = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs",
-                                                                    VertexLayoutKind::Sprite);
+                                                              VertexLayoutKind::Sprite);
     skeletonNode->setProgramState(new rhi::ProgramState(program), true);
 
-    //auto skeleton1PS = skeletonNode->getProgramState();
+    // auto skeleton1PS = skeletonNode->getProgramState();
 
-    //Vec2 resolution{100.f, 100.f};
-    //float blurRadius = 50.0f;
-    //float sampleNum  = 7.0f;
-    //SET_UNIFORM(skeleton1PS, "resolution", resolution);
-    //SET_UNIFORM(skeleton1PS, "blurRadius", blurRadius);
-    //SET_UNIFORM(skeleton1PS, "sampleNum", sampleNum);
+    // Vec2 resolution{100.f, 100.f};
+    // float blurRadius = 50.0f;
+    // float sampleNum  = 7.0f;
+    // SET_UNIFORM(skeleton1PS, "resolution", resolution);
+    // SET_UNIFORM(skeleton1PS, "blurRadius", blurRadius);
+    // SET_UNIFORM(skeleton1PS, "sampleNum", sampleNum);
 
     scheduleUpdate();
 

@@ -37,10 +37,10 @@ class PUPointEmitterTranslator : public PUScriptTranslator
 {
 public:
     PUPointEmitterTranslator();
-    virtual ~PUPointEmitterTranslator(){};
+    virtual ~PUPointEmitterTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
+}  // namespace ax

@@ -43,7 +43,7 @@ class PURibbonTrailVisualData : public Object
 public:
     // Constructor
     PURibbonTrailVisualData(Node* sceneNode, PURibbonTrail* ribbonTrail)
-        : node(sceneNode), addedToTrail(false), trail(ribbonTrail), index(0){};
+        : node(sceneNode), addedToTrail(false), trail(ribbonTrail), index(0) {};
 
     Node* node;
     bool addedToTrail;
@@ -148,4 +148,4 @@ protected:
     std::string _texFile;
 };
 
-}
+}  // namespace ax

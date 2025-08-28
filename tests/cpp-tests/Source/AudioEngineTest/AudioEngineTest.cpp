@@ -531,8 +531,8 @@ bool AudioWavTest::init()
             {
                 AudioEngine::stop(_audioID);
                 _audioID = AudioEngine::play2d(_wavFiles[--_curIndex]);
-                _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
-                                                           FileUtils::getPathBaseName(_wavFiles[_curIndex])));
+                _stateLabel->setString(
+                    fmt::format("[index: {}] {}", _curIndex, FileUtils::getPathBaseName(_wavFiles[_curIndex])));
             }
         });
         playPrev->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
@@ -543,7 +543,8 @@ bool AudioWavTest::init()
             {
                 AudioEngine::stop(_audioID);
                 _audioID = AudioEngine::play2d(_wavFiles[++_curIndex]);
-                _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex, FileUtils::getPathBaseName(_wavFiles[_curIndex])));
+                _stateLabel->setString(
+                    fmt::format("[index: {}] {}", _curIndex, FileUtils::getPathBaseName(_wavFiles[_curIndex])));
             }
         });
         playNext->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
@@ -563,8 +564,8 @@ void AudioWavTest::onEnter()
     {
         _curIndex = 0;
         _audioID  = AudioEngine::play2d(_wavFiles[_curIndex]);
-        _stateLabel->setString(fmt::format("[index: {}] {}", _curIndex,
-                                                   FileUtils::getPathBaseName(_wavFiles[_curIndex])));
+        _stateLabel->setString(
+            fmt::format("[index: {}] {}", _curIndex, FileUtils::getPathBaseName(_wavFiles[_curIndex])));
     }
 }
 
@@ -577,7 +578,7 @@ bool PlaySimultaneouslyTest::init()
     int offset = 81;
     for (int index = 0; index < TEST_COUNT; ++index)
     {
-        auto text = fmt::format_to_z(buf, "audio/SoundEffectsFX009/FX0{}.mp3", offset + index);
+        auto text     = fmt::format_to_z(buf, "audio/SoundEffectsFX009/FX0{}.mp3", offset + index);
         _files[index] = text;
     }
     _playingcount = 0;
@@ -781,17 +782,15 @@ bool AudioIssue18597Test::init()
         auto& layerSize = this->getContentSize();
 
         // test case for https://github.com/cocos2d/cocos2d-x/issues/18597
-        this->schedule(
-            [this](float dt) {
-                AXLOGD("issues 18597 audio crash test");
-                for (int i = 0; i < 2; ++i)
-                {
-                    auto id = AudioEngine::play2d("audio/MUS_BGM_Battle_Round1_v1.caf", true, 1.0f);
-                    this->runAction(Sequence::create(DelayTime::create(8.0f),
-                                                     CallFunc::create([=]() { AudioEngine::stop(id); }), nullptr));
-                }
-            },
-            2.0, 10000, 0.0, "audio test");
+        this->schedule([this](float dt) {
+            AXLOGD("issues 18597 audio crash test");
+            for (int i = 0; i < 2; ++i)
+            {
+                auto id = AudioEngine::play2d("audio/MUS_BGM_Battle_Round1_v1.caf", true, 1.0f);
+                this->runAction(Sequence::create(DelayTime::create(8.0f),
+                                                 CallFunc::create([=]() { AudioEngine::stop(id); }), nullptr));
+            }
+        }, 2.0, 10000, 0.0, "audio test");
         // add label to show the side effect of "UnqueueBuffers Before alSourceStop"
         _time          = 0.0;
         auto labelTime = Label::createWithBMFont("fonts/bitmapFontTest2.fnt", "time: ");
@@ -799,14 +798,12 @@ bool AudioIssue18597Test::init()
         labelTime->setTag(999);
         this->addChild(labelTime);
         // update label quickly
-        this->schedule(
-            [this](float dt) {
-                _time += dt;
-                char buf[20];
-                auto infoStr = fmt::format_to_z(buf, "Time {:2.2f}", _time);
-                dynamic_cast<Label*>(this->getChildByTag(999))->setString(infoStr);
-            },
-            0.05, 1000000, 0, "update label quickly");
+        this->schedule([this](float dt) {
+            _time += dt;
+            char buf[20];
+            auto infoStr = fmt::format_to_z(buf, "Time {:2.2f}", _time);
+            dynamic_cast<Label*>(this->getChildByTag(999))->setString(infoStr);
+        }, 0.05, 1000000, 0, "update label quickly");
 
         return true;
     }
@@ -836,13 +833,11 @@ bool AudioIssue11143Test::init()
 
             auto audioId  = AudioEngine::play2d("audio/SoundEffectsFX009/FX082.mp3", true);
             char buf[100] = {0};
-            auto key = fmt::format_to_z(buf, "play another sound {}", audioId);
-            button->scheduleOnce(
-                [audioId](float dt) {
-                    AudioEngine::stop(audioId);
-                    AudioEngine::play2d("audio/SoundEffectsFX009/FX083.mp3");
-                },
-                0.3f, key);
+            auto key      = fmt::format_to_z(buf, "play another sound {}", audioId);
+            button->scheduleOnce([audioId](float dt) {
+                AudioEngine::stop(audioId);
+                AudioEngine::play2d("audio/SoundEffectsFX009/FX083.mp3");
+            }, 0.3f, key);
         });
         playItem->setPosition(layerSize.width * 0.5f, layerSize.height * 0.5f);
         addChild(playItem);
@@ -940,14 +935,12 @@ bool AudioPerformanceTest::init()
             static_cast<TextButton*>(getChildByName("DisplayButton"))->setEnabled(true);
 
             unschedule("test");
-            schedule(
-                [audioFiles](float dt) {
-                    int index = ax::random(0, (int)(audioFiles.size() - 1));
-                    AX_PROFILER_START("play2d");
-                    AudioEngine::play2d(audioFiles[index]);
-                    AX_PROFILER_STOP("play2d");
-                },
-                0.25f, "test");
+            schedule([audioFiles](float dt) {
+                int index = ax::random(0, (int)(audioFiles.size() - 1));
+                AX_PROFILER_START("play2d");
+                AudioEngine::play2d(audioFiles[index]);
+                AX_PROFILER_STOP("play2d");
+            }, 0.25f, "test");
         });
         playItem->setPosition(layerSize.width * 0.5f, layerSize.height * 2 / 3);
         playItem->setName("PlayButton");
@@ -1173,7 +1166,7 @@ void AudioPlayFileInWritablePath::onEnter()
     if (!fileUtils->isFileExist(saveFilePath))
     {
         Data data = fileUtils->getDataFromFile(musicFile);
-        auto fp  = fopen(saveFilePath.c_str(), "wb");
+        auto fp   = fopen(saveFilePath.c_str(), "wb");
         if (fp != nullptr)
         {
             fwrite(data.getBytes(), data.getSize(), 1, fp);

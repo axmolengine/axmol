@@ -672,4 +672,4 @@ void LayoutComponent::setPercentOnlyEnabled(bool enable)
 }
 }  // namespace ui
 
-}
+}  // namespace ax

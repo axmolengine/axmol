@@ -35,7 +35,6 @@ class DrawNodeBaseTest : public TestCase
 {
 
 protected:
-
     enum sliderType
     {
         AngleStart = 0,
@@ -69,7 +68,8 @@ protected:
         LAST
     };
 
-    std::string drawMethods[drawMethodes::LAST] = { "drawLine",
+    std::string drawMethods[drawMethodes::LAST] = {
+        "drawLine",
         "drawRect",
         "drawCircle",
         "drawQuadBezier",
@@ -88,10 +88,10 @@ protected:
         "drawSolidPoly",
         "drawSolidRect",
         "drawStar",
-        "drawSolidStar", };
+        "drawSolidStar",
+    };
 
 public:
-
     DrawNodeBaseTest();
 
     void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
@@ -114,24 +114,22 @@ public:
     // using from https://github.com/intmainreturn00/AwesomeNode/
     void generateDataPoints();
 
-    ax::PointArray* pts = nullptr;
+    ax::PointArray* pts  = nullptr;
     ax::PointArray* pts2 = nullptr;
     float defY, defY2, dev;
-    const int n = 50;
-    const int grid = 10;
+    const int n      = 50;
+    const int grid   = 10;
     const int margin = 20;
     ax::Size screen;
-    ax::Vec2  sixth;
+    ax::Vec2 sixth;
 
 protected:
-
     int _currentSeletedItemIndex = 0;
 
-    //UI stuff
+    // UI stuff
     ax::ui::Slider* slider[sliderType::sliderTypeLast];
     ax::Label* sliderLabel[sliderType::sliderTypeLast];
     float sliderValue[sliderType::sliderTypeLast];
-
 
     ax::ui::RadioButtonGroup* _radioButtonGroup;
     ax::Layer* _uiLayer;
@@ -144,7 +142,6 @@ protected:
     // DrawNode stuff
     ax::DrawNode* drawNode = nullptr;
     ax::DrawNode* drawNodeArray[10];
-
 
     // Window stuff
     ax::Vec2 origin;
@@ -162,8 +159,6 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void update(float dt) override;
-
-
 };
 
 const int NUM_POINTS = 10000;
@@ -180,6 +175,7 @@ public:
     void CalculatePoint(float x, float y, float t, float& px, float& py);
     void DrawFrame();
     void UpdateJellyPoints();
+
 private:
     ax::Vec2 dots[NUM_POINTS];
 };
@@ -307,7 +303,6 @@ public:
 
     void update(float dt) override;
     void onEnter() override;
-
 };
 
 class DrawNodeMethodsTest : public DrawNodeBaseTest
@@ -339,7 +334,6 @@ private:
     ax::ui::RadioButtonGroup* _radioButtonGroup;
     int selectedRadioButton;
 };
-
 
 class DrawNodeDrawInWrongOrder_Issue1888 : public DrawNodeBaseTest
 {
@@ -400,7 +394,6 @@ private:
     ax::Label* _thresholdLabel;
     float threshold = 0;
 };
-
 
 class DrawNodeThicknessStressTest : public DrawNodeBaseTest
 {

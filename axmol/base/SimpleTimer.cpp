@@ -28,19 +28,22 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/base/Scheduler.h"
 
-#define STIMER_DEFINE_REFERENCE_CLASS    \
-private:                                 \
-    unsigned int referenceCount_;        \
-                                         \
-public:                                  \
-    void retain() { ++referenceCount_; } \
-    void release()                       \
-    {                                    \
-        --referenceCount_;               \
-        if (referenceCount_ == 0)        \
-            delete this;                 \
-    }                                    \
-                                         \
+#define STIMER_DEFINE_REFERENCE_CLASS \
+private:                              \
+    unsigned int referenceCount_;     \
+                                      \
+public:                               \
+    void retain()                     \
+    {                                 \
+        ++referenceCount_;            \
+    }                                 \
+    void release()                    \
+    {                                 \
+        --referenceCount_;            \
+        if (referenceCount_ == 0)     \
+            delete this;              \
+    }                                 \
+                                      \
 private:
 
 // Retrive the fake target of Simple Timer, well, any system's malloc never return a object address
@@ -79,9 +82,8 @@ TIMER_ID loop(unsigned int n, float interval, vcallback_t callback, bool bNative
 
         Director::getInstance()->getScheduler()->schedule(
             [timerObj](float /*dt*/) {  // lambda expression hold the reference of timerObj automatically.
-                timerObj->callback_();
-            },
-            STIMER_TARGET(bNative), interval, n - 1, 0, false, key);
+            timerObj->callback_();
+        }, STIMER_TARGET(bNative), interval, n - 1, 0, false, key);
 
         return timerId;
     }
@@ -98,9 +100,8 @@ TIMER_ID delay(float delay, vcallback_t callback, bool bNative)
         std::string key = fmt::format("STMR#{}", fmt::ptr(timerId));
         Director::getInstance()->getScheduler()->schedule(
             [timerObj](float /*dt*/) {  // lambda expression hold the reference of timerObj automatically.
-                timerObj->callback_();
-            },
-            STIMER_TARGET(bNative), 0, 0, delay, false, key);
+            timerObj->callback_();
+        }, STIMER_TARGET(bNative), 0, 0, delay, false, key);
 
         return timerId;
     }
@@ -118,4 +119,4 @@ void killAll(bool bNative)
     Director::getInstance()->getScheduler()->unscheduleAllForTarget(STIMER_TARGET(bNative));
 }
 }  // namespace stimer
-}
+}  // namespace ax

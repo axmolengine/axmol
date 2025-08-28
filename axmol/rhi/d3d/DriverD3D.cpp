@@ -192,16 +192,16 @@ DriverImpl::DriverImpl()
     };
 
     auto requestDriverType = D3D_DRIVER_TYPE_HARDWARE;
-    HRESULT hr = D3D11CreateDevice(nullptr,                   // Adapter
-                                   requestDriverType,         // Driver Type
-                                   nullptr,                   // Software
-                                   createDeviceFlags,         // Flags
-                                   featureLevels,             // Feature Levels
-                                   ARRAYSIZE(featureLevels),  // Num Feature Levels
-                                   D3D11_SDK_VERSION,         // SDK Version
-                                   &_device,                  // Device
-                                   &_featureLevel,             // Feature Level
-                                   &_context);
+    HRESULT hr             = D3D11CreateDevice(nullptr,                   // Adapter
+                                               requestDriverType,         // Driver Type
+                                               nullptr,                   // Software
+                                               createDeviceFlags,         // Flags
+                                               featureLevels,             // Feature Levels
+                                               ARRAYSIZE(featureLevels),  // Num Feature Levels
+                                               D3D11_SDK_VERSION,         // SDK Version
+                                               &_device,                  // Device
+                                               &_featureLevel,            // Feature Level
+                                               &_context);
     if (hr == DXGI_ERROR_UNSUPPORTED)
     {
         // Try again with software driver type
@@ -390,7 +390,8 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     return sampler;
 }
 
-void DriverImpl::destroySampler(SamplerHandle& h) {
+void DriverImpl::destroySampler(SamplerHandle& h)
+{
 
     SafeRelease(reinterpret_cast<ID3D11SamplerState*&>(h));
 }

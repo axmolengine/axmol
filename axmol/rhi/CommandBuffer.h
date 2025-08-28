@@ -44,7 +44,8 @@ namespace ax
 struct PipelineDesc;
 }
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 class RenderPass;
 class RenderPipeline;
@@ -161,10 +162,10 @@ public:
                             bool wireframe = false) = 0;
 
     virtual void drawArraysInstanced(PrimitiveType primitiveType,
-                             std::size_t start,
-                             std::size_t count,
-                             int instanceCount,
-                             bool wireframe = false) = 0;
+                                     std::size_t start,
+                                     std::size_t count,
+                                     int instanceCount,
+                                     bool wireframe = false) = 0;
 
     /**
      * Draw primitives with an index list.
@@ -233,7 +234,7 @@ public:
 protected:
     virtual ~CommandBuffer() = default;
 
-    const RenderTarget* _screenRT{nullptr}; // weak ref (managed by Renderer)
+    const RenderTarget* _screenRT{nullptr};   // weak ref (managed by Renderer)
     const RenderTarget* _currentRT{nullptr};  // weak ref (managed by Renderer)
     ProgramState* _programState{nullptr};     // weak ref
     VertexLayout* _vertexLayout{nullptr};     // weak ref
@@ -242,4 +243,4 @@ protected:
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

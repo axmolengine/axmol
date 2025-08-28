@@ -143,4 +143,4 @@ PUPositionEmitter* PUPositionEmitter::clone()
     return be;
 }
 
-}
+}  // namespace ax

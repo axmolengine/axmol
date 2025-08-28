@@ -99,6 +99,6 @@ protected:
 // end of 3d group
 /// @}
 
-}
+}  // namespace ax
 
 #include "axmol/3d/AnimationCurve.inl"

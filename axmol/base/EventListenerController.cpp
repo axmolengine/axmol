@@ -116,4 +116,4 @@ EventListenerController* EventListenerController::clone()
     return nullptr;
 }
 
-}
+}  // namespace ax

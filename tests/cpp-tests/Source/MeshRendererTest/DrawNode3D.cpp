@@ -72,8 +72,8 @@ void DrawNode3D::ensureCapacity(int count)
 
 bool DrawNode3D::init()
 {
-    _blendFunc        = BlendFunc::ALPHA_PREMULTIPLIED;
-    auto program      = axpm->getBuiltinProgram(rhi::ProgramType::LINE_COLOR_3D);
+    _blendFunc            = BlendFunc::ALPHA_PREMULTIPLIED;
+    auto program          = axpm->getBuiltinProgram(rhi::ProgramType::LINE_COLOR_3D);
     auto programStateLine = new rhi::ProgramState(program);
 
     _customCommand.setOwnPSVL(programStateLine, programStateLine->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
@@ -203,4 +203,4 @@ void DrawNode3D::onAfterDraw()
     renderer->setDepthTest(_rendererDepthTestEnabled);
 }
 
-}
+}  // namespace ax

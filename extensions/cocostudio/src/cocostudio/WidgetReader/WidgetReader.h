@@ -137,161 +137,182 @@ extern const char* P_AnchorPointY;
 extern const char* P_ResourceType;
 extern const char* P_Path;
 
-#define AX_BASIC_PROPERTY_BINARY_READER                                                             \
-    if (key == P_IgnoreSize)                                                                        \
-    {                                                                                               \
-        widget->ignoreContentAdaptWithSize(valueToBool(value));                                     \
-    }                                                                                               \
-    else if (key == P_SizeType)                                                                     \
-    {                                                                                               \
-        widget->setSizeType((Widget::SizeType)valueToInt(value));                                   \
-    }                                                                                               \
-    else if (key == P_PositionType)                                                                 \
-    {                                                                                               \
-        widget->setPositionType((Widget::PositionType)valueToInt(value));                           \
-    }                                                                                               \
-    else if (key == P_SizePercentX)                                                                 \
-    {                                                                                               \
-        _sizePercentX = valueToFloat(value);                                                        \
-    }                                                                                               \
-    else if (key == P_SizePercentY)                                                                 \
-    {                                                                                               \
-        _sizePercentY = valueToFloat(value);                                                        \
-    }                                                                                               \
-    else if (key == P_PositionPercentX)                                                             \
-    {                                                                                               \
-        _positionPercentX = valueToFloat(value);                                                    \
-    }                                                                                               \
-    else if (key == P_PositionPercentY)                                                             \
-    {                                                                                               \
-        _positionPercentY = valueToFloat(value);                                                    \
-    }                                                                                               \
-    else if (key == P_Width)                                                                        \
-    {                                                                                               \
-        _width = valueToFloat(value);                                                               \
-    }                                                                                               \
-    else if (key == P_Height)                                                                       \
-    {                                                                                               \
-        _height = valueToFloat(value);                                                              \
-    }                                                                                               \
-    else if (key == P_Tag)                                                                          \
-    {                                                                                               \
-        widget->setTag(valueToInt(value));                                                          \
-    }                                                                                               \
-    else if (key == P_ActionTag)                                                                    \
-    {                                                                                               \
-        widget->setActionTag(valueToInt(value));                                                    \
-    }                                                                                               \
-    else if (key == P_TouchAble)                                                                    \
-    {                                                                                               \
-        widget->setTouchEnabled(valueToBool(value));                                                \
-    }                                                                                               \
-    else if (key == P_Name)                                                                         \
-    {                                                                                               \
-        std::string widgetName = value.empty() ? "default" : value;                                 \
-        widget->setName(widgetName);                                                                \
-    }                                                                                               \
-    else if (key == P_X)                                                                            \
-    {                                                                                               \
-        _position.x = valueToFloat(value);                                                          \
-    }                                                                                               \
-    else if (key == P_Y)                                                                            \
-    {                                                                                               \
-        _position.y = valueToFloat(value);                                                          \
-    }                                                                                               \
-    else if (key == P_ScaleX)                                                                       \
-    {                                                                                               \
-        widget->setScaleX(valueToFloat(value));                                                     \
-    }                                                                                               \
-    else if (key == P_ScaleY)                                                                       \
-    {                                                                                               \
-        widget->setScaleY(valueToFloat(value));                                                     \
-    }                                                                                               \
-    else if (key == P_Rotation)                                                                     \
-    {                                                                                               \
-        widget->setRotation(valueToFloat(value));                                                   \
-    }                                                                                               \
-    else if (key == P_Visbile)                                                                      \
-    {                                                                                               \
-        widget->setVisible(valueToBool(value));                                                     \
-    }                                                                                               \
-    else if (key == P_ZOrder)                                                                       \
-    {                                                                                               \
-        widget->setLocalZOrder(valueToInt(value));                                                  \
-    }                                                                                               \
-    else if (key == P_LayoutParameter)                                                              \
-    {                                                                                               \
-        stExpCocoNode* layoutCocosNode                 = stChildArray[i].GetChildArray(cocoLoader); \
-        ui::LinearLayoutParameter* linearParameter     = ui::LinearLayoutParameter::create();       \
-        ui::RelativeLayoutParameter* relativeParameter = ui::RelativeLayoutParameter::create();     \
-        ui::Margin mg;                                                                              \
-        int paramType = -1;                                                                         \
-        for (int j = 0; j < stChildArray[i].GetChildNum(); ++j)                                     \
-        {                                                                                           \
-            std::string innerKey   = layoutCocosNode[j].GetName(cocoLoader);                        \
-            std::string innerValue = layoutCocosNode[j].GetValue(cocoLoader);                       \
-            if (innerKey == P_Type)                                                                 \
-            {                                                                                       \
-                paramType = valueToInt(innerValue);                                                 \
-            }                                                                                       \
-            else if (innerKey == P_Gravity)                                                         \
-            {                                                                                       \
-                linearParameter->setGravity(                                                        \
-                    (ax::ui::LinearLayoutParameter::LinearGravity)valueToInt(innerValue));     \
-            }                                                                                       \
-            else if (innerKey == P_RelativeName)                                                    \
-            {                                                                                       \
-                relativeParameter->setRelativeName(innerValue);                                     \
-            }                                                                                       \
-            else if (innerKey == P_RelativeToName)                                                  \
-            {                                                                                       \
-                relativeParameter->setRelativeToWidgetName(innerValue);                             \
-            }                                                                                       \
-            else if (innerKey == P_Align)                                                           \
-            {                                                                                       \
-                relativeParameter->setAlign(                                                        \
-                    (ax::ui::RelativeLayoutParameter::RelativeAlign)valueToInt(innerValue));   \
-            }                                                                                       \
-            else if (innerKey == P_MarginLeft)                                                      \
-            {                                                                                       \
-                mg.left = valueToFloat(innerValue);                                                 \
-            }                                                                                       \
-            else if (innerKey == P_MarginTop)                                                       \
-            {                                                                                       \
-                mg.top = valueToFloat(innerValue);                                                  \
-            }                                                                                       \
-            else if (innerKey == P_MarginRight)                                                     \
-            {                                                                                       \
-                mg.right = valueToFloat(innerValue);                                                \
-            }                                                                                       \
-            else if (innerKey == P_MarginDown)                                                      \
-            {                                                                                       \
-                mg.bottom = valueToFloat(innerValue);                                               \
-            }                                                                                       \
-        }                                                                                           \
-        linearParameter->setMargin(mg);                                                             \
-        relativeParameter->setMargin(mg);                                                           \
-        switch (paramType)                                                                          \
-        {                                                                                           \
-        case 1:                                                                                     \
-            widget->setLayoutParameter(linearParameter);                                            \
-            break;                                                                                  \
-        case 2:                                                                                     \
-            widget->setLayoutParameter(relativeParameter);                                          \
-        default:                                                                                    \
-            break;                                                                                  \
-        }                                                                                           \
+#define AX_BASIC_PROPERTY_BINARY_READER                                                                              \
+    if (key == P_IgnoreSize)                                                                                         \
+    {                                                                                                                \
+        widget->ignoreContentAdaptWithSize(valueToBool(value));                                                      \
+    }                                                                                                                \
+    else if (key == P_SizeType)                                                                                      \
+    {                                                                                                                \
+        widget->setSizeType((Widget::SizeType)valueToInt(value));                                                    \
+    }                                                                                                                \
+    else if (key == P_PositionType)                                                                                  \
+    {                                                                                                                \
+        widget->setPositionType((Widget::PositionType)valueToInt(value));                                            \
+    }                                                                                                                \
+    else if (key == P_SizePercentX)                                                                                  \
+    {                                                                                                                \
+        _sizePercentX = valueToFloat(value);                                                                         \
+    }                                                                                                                \
+    else if (key == P_SizePercentY)                                                                                  \
+    {                                                                                                                \
+        _sizePercentY = valueToFloat(value);                                                                         \
+    }                                                                                                                \
+    else if (key == P_PositionPercentX)                                                                              \
+    {                                                                                                                \
+        _positionPercentX = valueToFloat(value);                                                                     \
+    }                                                                                                                \
+    else if (key == P_PositionPercentY)                                                                              \
+    {                                                                                                                \
+        _positionPercentY = valueToFloat(value);                                                                     \
+    }                                                                                                                \
+    else if (key == P_Width)                                                                                         \
+    {                                                                                                                \
+        _width = valueToFloat(value);                                                                                \
+    }                                                                                                                \
+    else if (key == P_Height)                                                                                        \
+    {                                                                                                                \
+        _height = valueToFloat(value);                                                                               \
+    }                                                                                                                \
+    else if (key == P_Tag)                                                                                           \
+    {                                                                                                                \
+        widget->setTag(valueToInt(value));                                                                           \
+    }                                                                                                                \
+    else if (key == P_ActionTag)                                                                                     \
+    {                                                                                                                \
+        widget->setActionTag(valueToInt(value));                                                                     \
+    }                                                                                                                \
+    else if (key == P_TouchAble)                                                                                     \
+    {                                                                                                                \
+        widget->setTouchEnabled(valueToBool(value));                                                                 \
+    }                                                                                                                \
+    else if (key == P_Name)                                                                                          \
+    {                                                                                                                \
+        std::string widgetName = value.empty() ? "default" : value;                                                  \
+        widget->setName(widgetName);                                                                                 \
+    }                                                                                                                \
+    else if (key == P_X)                                                                                             \
+    {                                                                                                                \
+        _position.x = valueToFloat(value);                                                                           \
+    }                                                                                                                \
+    else if (key == P_Y)                                                                                             \
+    {                                                                                                                \
+        _position.y = valueToFloat(value);                                                                           \
+    }                                                                                                                \
+    else if (key == P_ScaleX)                                                                                        \
+    {                                                                                                                \
+        widget->setScaleX(valueToFloat(value));                                                                      \
+    }                                                                                                                \
+    else if (key == P_ScaleY)                                                                                        \
+    {                                                                                                                \
+        widget->setScaleY(valueToFloat(value));                                                                      \
+    }                                                                                                                \
+    else if (key == P_Rotation)                                                                                      \
+    {                                                                                                                \
+        widget->setRotation(valueToFloat(value));                                                                    \
+    }                                                                                                                \
+    else if (key == P_Visbile)                                                                                       \
+    {                                                                                                                \
+        widget->setVisible(valueToBool(value));                                                                      \
+    }                                                                                                                \
+    else if (key == P_ZOrder)                                                                                        \
+    {                                                                                                                \
+        widget->setLocalZOrder(valueToInt(value));                                                                   \
+    }                                                                                                                \
+    else if (key == P_LayoutParameter)                                                                               \
+    {                                                                                                                \
+        stExpCocoNode* layoutCocosNode                 = stChildArray[i].GetChildArray(cocoLoader);                  \
+        ui::LinearLayoutParameter* linearParameter     = ui::LinearLayoutParameter::create();                        \
+        ui::RelativeLayoutParameter* relativeParameter = ui::RelativeLayoutParameter::create();                      \
+        ui::Margin mg;                                                                                               \
+        int paramType = -1;                                                                                          \
+        for (int j = 0; j < stChildArray[i].GetChildNum(); ++j)                                                      \
+        {                                                                                                            \
+            std::string innerKey   = layoutCocosNode[j].GetName(cocoLoader);                                         \
+            std::string innerValue = layoutCocosNode[j].GetValue(cocoLoader);                                        \
+            if (innerKey == P_Type)                                                                                  \
+            {                                                                                                        \
+                paramType = valueToInt(innerValue);                                                                  \
+            }                                                                                                        \
+            else if (innerKey == P_Gravity)                                                                          \
+            {                                                                                                        \
+                linearParameter->setGravity((ax::ui::LinearLayoutParameter::LinearGravity)valueToInt(innerValue));   \
+            }                                                                                                        \
+            else if (innerKey == P_RelativeName)                                                                     \
+            {                                                                                                        \
+                relativeParameter->setRelativeName(innerValue);                                                      \
+            }                                                                                                        \
+            else if (innerKey == P_RelativeToName)                                                                   \
+            {                                                                                                        \
+                relativeParameter->setRelativeToWidgetName(innerValue);                                              \
+            }                                                                                                        \
+            else if (innerKey == P_Align)                                                                            \
+            {                                                                                                        \
+                relativeParameter->setAlign((ax::ui::RelativeLayoutParameter::RelativeAlign)valueToInt(innerValue)); \
+            }                                                                                                        \
+            else if (innerKey == P_MarginLeft)                                                                       \
+            {                                                                                                        \
+                mg.left = valueToFloat(innerValue);                                                                  \
+            }                                                                                                        \
+            else if (innerKey == P_MarginTop)                                                                        \
+            {                                                                                                        \
+                mg.top = valueToFloat(innerValue);                                                                   \
+            }                                                                                                        \
+            else if (innerKey == P_MarginRight)                                                                      \
+            {                                                                                                        \
+                mg.right = valueToFloat(innerValue);                                                                 \
+            }                                                                                                        \
+            else if (innerKey == P_MarginDown)                                                                       \
+            {                                                                                                        \
+                mg.bottom = valueToFloat(innerValue);                                                                \
+            }                                                                                                        \
+        }                                                                                                            \
+        linearParameter->setMargin(mg);                                                                              \
+        relativeParameter->setMargin(mg);                                                                            \
+        switch (paramType)                                                                                           \
+        {                                                                                                            \
+        case 1:                                                                                                      \
+            widget->setLayoutParameter(linearParameter);                                                             \
+            break;                                                                                                   \
+        case 2:                                                                                                      \
+            widget->setLayoutParameter(relativeParameter);                                                           \
+        default:                                                                                                     \
+            break;                                                                                                   \
+        }                                                                                                            \
     }
 
-#define AX_COLOR_PROPERTY_BINARY_READER                                               \
-    else if (key == P_Opacity) { _color.a = valueToInt(value); }                      \
-    else if (key == P_ColorR) { _color.r = valueToInt(value); }                       \
-    else if (key == P_ColorG) { _color.g = valueToInt(value); }                       \
-    else if (key == P_ColorB) { _color.b = valueToInt(value); }                       \
-    else if (key == P_FlipX) { widget->setFlippedX(valueToBool(value)); }             \
-    else if (key == P_FlipY) { widget->setFlippedY(valueToBool(value)); }             \
-    else if (key == P_AnchorPointX) { _originalAnchorPoint.x = valueToFloat(value); } \
-    else if (key == P_AnchorPointY) { _originalAnchorPoint.y = valueToFloat(value); }
+#define AX_COLOR_PROPERTY_BINARY_READER               \
+    else if (key == P_Opacity)                        \
+    {                                                 \
+        _color.a = valueToInt(value);                 \
+    }                                                 \
+    else if (key == P_ColorR)                         \
+    {                                                 \
+        _color.r = valueToInt(value);                 \
+    }                                                 \
+    else if (key == P_ColorG)                         \
+    {                                                 \
+        _color.g = valueToInt(value);                 \
+    }                                                 \
+    else if (key == P_ColorB)                         \
+    {                                                 \
+        _color.b = valueToInt(value);                 \
+    }                                                 \
+    else if (key == P_FlipX)                          \
+    {                                                 \
+        widget->setFlippedX(valueToBool(value));      \
+    }                                                 \
+    else if (key == P_FlipY)                          \
+    {                                                 \
+        widget->setFlippedY(valueToBool(value));      \
+    }                                                 \
+    else if (key == P_AnchorPointX)                   \
+    {                                                 \
+        _originalAnchorPoint.x = valueToFloat(value); \
+    }                                                 \
+    else if (key == P_AnchorPointY)                   \
+    {                                                 \
+        _originalAnchorPoint.y = valueToFloat(value); \
+    }
 
 }  // namespace cocostudio
-

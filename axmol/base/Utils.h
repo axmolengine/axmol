@@ -233,7 +233,7 @@ AX_DLL std::string computeDigest(std::string_view data,
  */
 AX_DLL std::string computeFileDigest(std::string_view filename,
                                      std::string_view algorithm,
-                                     uint32_t bufferSize = 16 * 1024,
+                                     uint32_t bufferSize   = 16 * 1024,
                                      DigestPresent present = DigestPresent::Hex);
 
 /**
@@ -439,7 +439,7 @@ AX_DLL std::string&& filePathToUrl(std::string&& path);
  */
 AX_DLL std::string base64Encode(const void* in, size_t inlen);
 
-template<typename _Ty, size_t _Extent = std::dynamic_extent>
+template <typename _Ty, size_t _Extent = std::dynamic_extent>
 inline std::string base64Encode(std::span<_Ty, _Extent> in)
 {
     return base64Encode(in.data(), in.size_bytes());
@@ -496,4 +496,4 @@ AX_DLL Rect parseRect(std::string_view str);
 
 }  // namespace utils
 
-}
+}  // namespace ax

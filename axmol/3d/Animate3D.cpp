@@ -157,7 +157,7 @@ void Animate3D::startWithTarget(Node* target)
         _boneCurves.clear();
         _nodeCurves.clear();
 
-        bool hasCurve    = false;
+        bool hasCurve      = false;
         MeshRenderer* mesh = dynamic_cast<MeshRenderer*>(target);
 
         if (mesh)
@@ -537,4 +537,4 @@ void Animate3D::removeFromMap()
     }
 }
 
-}
+}  // namespace ax

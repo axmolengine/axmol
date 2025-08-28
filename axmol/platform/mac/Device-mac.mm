@@ -68,7 +68,7 @@ int Device::getDPI()
 
 float Device::getPixelRatio()
 {
-    NSScreen* screen    = [NSScreen mainScreen];
+    NSScreen* screen  = [NSScreen mainScreen];
     const auto points = [screen frame];
     const auto pixels = [screen convertRectToBacking:points];
     return static_cast<float>(pixels.size.width / points.size.width);
@@ -295,7 +295,9 @@ static bool _initWithString(std::string_view text,
 
     do
     {
-        NSString* string = [[NSString alloc] initWithBytes:text.data() length:text.size() encoding:NSUTF8StringEncoding];
+        NSString* string = [[NSString alloc] initWithBytes:text.data()
+                                                    length:text.size()
+                                                  encoding:NSUTF8StringEncoding];
         AX_BREAK_IF(!string);
 
         id font = _createSystemFont(fontName, size);
@@ -423,8 +425,8 @@ Data Device::getTextureDataForText(std::string_view text,
         info.height     = textDefinition._dimensions.height;
 
         if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
-                             &textDefinition._fontFillColor, textDefinition._enableWrap,
-                             textDefinition._overflow, textDefinition._stroke))
+                             &textDefinition._fontFillColor, textDefinition._enableWrap, textDefinition._overflow,
+                             textDefinition._stroke))
         {
             break;
         }
@@ -453,4 +455,4 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-}
+}  // namespace ax

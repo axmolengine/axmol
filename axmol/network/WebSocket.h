@@ -252,7 +252,7 @@ public:
     bool open(Delegate* delegate,
               std::string_view url,
               std::string_view caFilePath = "",
-              std::string_view protocols = "");
+              std::string_view protocols  = "");
 
     /**
      *  @brief Sends string data to websocket server.
@@ -440,7 +440,7 @@ protected:
 };
 }  // namespace network
 
-}
+}  // namespace ax
 #else
 #    include "axmol/network/WebSocket-wasm.h"
 #endif

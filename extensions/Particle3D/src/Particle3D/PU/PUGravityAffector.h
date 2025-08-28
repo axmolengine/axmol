@@ -56,5 +56,4 @@ public:
 protected:
     float _gravity;
 };
-}
-
+}  // namespace ax

@@ -430,4 +430,4 @@ void PUMaterialTextureUnitTranslator::translate(PUScriptCompiler* compiler, PUAb
     }
 }
 
-}
+}  // namespace ax

@@ -301,4 +301,4 @@ VertexLayoutDesc VertexLayoutManager::allocateVertexLayoutDesc()
     return VertexLayoutDesc{};
 }
 
-}  // namespace ax::rhi
+}  // namespace ax

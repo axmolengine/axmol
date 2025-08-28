@@ -49,4 +49,4 @@ PUDoExpireEventHandler* PUDoExpireEventHandler::create()
     return peh;
 }
 
-}
+}  // namespace ax

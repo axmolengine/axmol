@@ -34,7 +34,8 @@
 
 struct XXH64_state_s;
 
-namespace ax {
+namespace ax
+{
 /**
  * @addtogroup _renderer
  * @{
@@ -86,18 +87,18 @@ public:
     Program* loadProgram(uint64_t progId);
 
     /**
-    * @brief Load a program with vsName, fsName as CUSTOM immediately without register
-    * @param vsName the vertex shader name: custom/xxx_vs
-    * @param fsName the fragment shader name: custom/xxx_vs
-    * @param vlk the builtin vertex layout type used for loading program
-    * @return Program* (nullable)
-    * @remark the returend program type always ProgramType::CUSTOM_PROGRAM
-    */
+     * @brief Load a program with vsName, fsName as CUSTOM immediately without register
+     * @param vsName the vertex shader name: custom/xxx_vs
+     * @param fsName the fragment shader name: custom/xxx_vs
+     * @param vlk the builtin vertex layout type used for loading program
+     * @return Program* (nullable)
+     * @remark the returend program type always ProgramType::CUSTOM_PROGRAM
+     */
     Program* loadProgram(std::string_view vsName,
-                               std::string_view fsName,
+                         std::string_view fsName,
                          VertexLayoutKind vlk = VertexLayoutKind::Invalid);
 
-     /**
+    /**
      * Unload a program object from cache.
      * @param program Specifies the program object to move.
      */
@@ -112,6 +113,7 @@ public:
      * Unload all program objects from cache.
      */
     void unloadAllPrograms();
+
 protected:
     ProgramManager();
     virtual ~ProgramManager();
@@ -162,4 +164,4 @@ protected:
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax

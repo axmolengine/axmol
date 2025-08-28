@@ -37,11 +37,10 @@ class PUParticleFollowerTranslator : public PUScriptTranslator
 {
 public:
     PUParticleFollowerTranslator();
-    virtual ~PUParticleFollowerTranslator(){};
+    virtual ~PUParticleFollowerTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

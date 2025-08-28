@@ -421,4 +421,4 @@ void PURibbonTrailRender::updateParticles(const ParticlePool& pool)
     }
 }
 
-}
+}  // namespace ax

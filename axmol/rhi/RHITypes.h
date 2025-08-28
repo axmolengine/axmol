@@ -61,7 +61,7 @@ enum class BufferType : uint32_t
 
 enum class ShaderStage
 {
-    UNKNOWN = -1,
+    UNKNOWN  = -1,
     FRAGMENT = 0,
     VERTEX,
     DEFAULT = FRAGMENT
@@ -371,7 +371,7 @@ struct SamplerDesc
     SamplerAddressMode wAddressMode : 2 = SamplerAddressMode::CLAMP;
     CompareFunc compareFunc : 4         = CompareFunc::NEVER;
     uint32_t anisotropy : 4             = 1;
-    uint32_t reserved: 12               = 0;
+    uint32_t reserved : 12              = 0;
 };
 static_assert(sizeof(SamplerDesc) == 4, "incompatible type: SamplerDesc");
 
@@ -382,9 +382,9 @@ using SamplerHandle = void*;
  */
 struct TextureDesc
 {
-    uint16_t width            = 1;
-    uint16_t height           = 1;
-    uint16_t arraySize        = 1;
+    uint16_t width     = 1;
+    uint16_t height    = 1;
+    uint16_t arraySize = 1;
     // =1: no mipmaps, =0: generate mipmaps by GPU, >1: mipmaps enabled manually
     uint16_t mipLevels        = 1;
     TextureType textureType   = TextureType::TEXTURE_2D;
@@ -447,7 +447,7 @@ struct UniformLocation
     /*
      * OpenGL(ES): all uniform linked to stages[0]
      * Other APIs: stages[0] for fragment shader, stages[1] for vertex shader
-    */
+     */
     StageUniformLocation stages[2];
 
     operator bool() const { return stages[0] || stages[1]; }
@@ -470,7 +470,7 @@ struct UniformLocation
 struct VertexInputDesc
 {
     std::string semantic;
-    int location = -1; // gl: location, d3d: semantic_index, metal: index
+    int location = -1;  // gl: location, d3d: semantic_index, metal: index
     int count    = 0;
     int format   = 0;
 };

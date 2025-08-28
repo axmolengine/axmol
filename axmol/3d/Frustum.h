@@ -83,5 +83,4 @@ protected:
     bool _initialized;
 };
 
-}
-
+}  // namespace ax

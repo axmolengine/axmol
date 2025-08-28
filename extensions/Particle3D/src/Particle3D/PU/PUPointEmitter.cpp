@@ -53,4 +53,4 @@ PUPointEmitter* PUPointEmitter::clone()
     return be;
 }
 
-}
+}  // namespace ax

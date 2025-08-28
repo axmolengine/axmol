@@ -197,4 +197,4 @@ bool NinePatchImageParser::isNinePatchImage(std::string_view filepath)
     }
 }
 
-}
+}  // namespace ax

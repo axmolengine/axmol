@@ -49,4 +49,4 @@ PUDoFreezeEventHandler* PUDoFreezeEventHandler::create()
     return peh;
 }
 
-}
+}  // namespace ax

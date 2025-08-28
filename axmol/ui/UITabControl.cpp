@@ -723,4 +723,4 @@ void TabHeader::copySpecialProperties(Widget* model)
 }
 
 }  // namespace ui
-}
+}  // namespace ax

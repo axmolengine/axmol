@@ -258,8 +258,8 @@ public:
      */
     static PolygonInfo generatePolygon(std::string_view filename,
                                        const Rect& rect = Rect::ZERO,
-                                       float epsilon = 2.0f,
-                                       float threshold = 0.05f);
+                                       float epsilon    = 2.0f,
+                                       float threshold  = 0.05f);
 
 protected:
     Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);
@@ -290,4 +290,4 @@ protected:
     unsigned int _threshold;
 };
 
-}
+}  // namespace ax

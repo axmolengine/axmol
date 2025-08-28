@@ -213,10 +213,9 @@ protected:
     int _textureSlotIndex = 0;
 
     bool _isTransparent = false;  // is this mesh transparent.
-    bool _force2DQueue = false;   // render meshes using this material in 2D render queue.
+    bool _force2DQueue  = false;  // render meshes using this material in 2D render queue.
 
-    ax::rhi::PrimitiveType _drawPrimitive =
-        ax::rhi::PrimitiveType::TRIANGLE;  // primitive draw type for meshes
+    ax::rhi::PrimitiveType _drawPrimitive = ax::rhi::PrimitiveType::TRIANGLE;  // primitive draw type for meshes
 };
 
-}
+}  // namespace ax

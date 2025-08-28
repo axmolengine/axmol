@@ -249,7 +249,7 @@ public:
     /** Delete frame from cache, rebuild index
      */
     bool eraseFrame(std::string_view frameName);
-    
+
     void addSpriteFrameCapInset(SpriteFrame* spriteFrame, const Rect& capInsets, Texture2D* texture);
 
     void registerSpriteSheetLoader(std::shared_ptr<ISpriteSheetLoader> loader);
@@ -309,4 +309,4 @@ private:
 // end of _2d group
 /// @}
 
-}
+}  // namespace ax

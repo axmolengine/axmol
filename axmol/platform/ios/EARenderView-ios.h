@@ -114,8 +114,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (id)initWithFrame:(CGRect)frame;  // These also set the current context
 /** Initializes an EARenderView with a frame, a color buffer format, and 0-bit depth buffer */
 - (id)initWithFrame:(CGRect)frame pixelFormat:(int)format;
-/** Initializes an EARenderView with a frame, a color buffer format, a depth buffer format, a sharegroup and multisampling
- * support */
+/** Initializes an EARenderView with a frame, a color buffer format, a depth buffer format, a sharegroup and
+ * multisampling support */
 - (id)initWithFrame:(CGRect)frame
            pixelFormat:(int)format
            depthFormat:(int)depth

@@ -39,16 +39,15 @@ public:
 
     void invalidate()
     {
-        _vao = 0;
+        _vao      = 0;
         _usedBits = 0;
     }
 
 private:
-
     void setupVAO();
 
     mutable GLuint _vao{0};
 
     uint32_t _usedBits{0};
 };
-}  // namespace ax::rhi::d3d
+}  // namespace ax::rhi::gl

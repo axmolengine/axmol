@@ -32,7 +32,8 @@
 #include "tsl/robin_map.h"
 #import <Metal/Metal.h>
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 /**
  * @addtogroup _metal
  * @{
@@ -70,13 +71,13 @@ private:
     id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
     id<MTLDevice> _mtlDevice                           = nil;
 
-    MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc = nil;
-    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT]  = {PixelFormat::NONE};
-    PixelFormat _depthStencilPF                        = PixelFormat::NONE;
+    MTLRenderPipelineDescriptor* _mtlRenderPipelineDesc      = nil;
+    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = {PixelFormat::NONE};
+    PixelFormat _depthStencilPF                              = PixelFormat::NONE;
 
     tsl::robin_map<uint32_t, id<MTLRenderPipelineState>> _mtlStateCache;
 };
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

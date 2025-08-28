@@ -193,11 +193,11 @@ public:
      @return A object pointer.
      */
     static PhysicsJointLimit* instantiate(PhysicsBody* a,
-                                        PhysicsBody* b,
-                                        const Vec2& anchr1,
-                                        const Vec2& anchr2,
-                                        float min,
-                                        float max);
+                                          PhysicsBody* b,
+                                          const Vec2& anchr1,
+                                          const Vec2& anchr2,
+                                          float min,
+                                          float max);
 
     /** Get the anchor point on body a.*/
     Vec2 getAnchr1() const;
@@ -304,11 +304,11 @@ public:
      @return A object pointer.
      */
     static PhysicsJointSpring* instantiate(PhysicsBody* a,
-                                         PhysicsBody* b,
-                                         const Vec2& anchr1,
-                                         const Vec2& anchr2,
-                                         float stiffness,
-                                         float damping);
+                                           PhysicsBody* b,
+                                           const Vec2& anchr1,
+                                           const Vec2& anchr2,
+                                           float stiffness,
+                                           float damping);
 
     /** Get the anchor point on body a.*/
     Vec2 getAnchr1() const;
@@ -363,10 +363,10 @@ public:
      @return A object pointer.
      */
     static PhysicsJointGroove* instantiate(PhysicsBody* a,
-                                         PhysicsBody* b,
-                                         const Vec2& grooveA,
-                                         const Vec2& grooveB,
-                                         const Vec2& anchr2);
+                                           PhysicsBody* b,
+                                           const Vec2& grooveA,
+                                           const Vec2& grooveB,
+                                           const Vec2& anchr2);
 
     /** Get the line begin position*/
     Vec2 getGrooveA() const;

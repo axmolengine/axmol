@@ -190,7 +190,7 @@ public:
     virtual std::string subtitle() const override;
 };
 
-class DemoTimeScale: public ParticleDemo
+class DemoTimeScale : public ParticleDemo
 {
 public:
     CREATE_FUNC(DemoTimeScale);

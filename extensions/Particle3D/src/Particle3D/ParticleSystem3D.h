@@ -49,7 +49,7 @@ struct AX_EX_DLL Particle3D
     // property of particles
     Vec3 position;           // position
     Quaternion orientation;  //  Orientation of the particle.
-    Color color;              // particle color
+    Color color;             // particle color
     Vec2 lb_uv;              // left bottom uv
     Vec2 rt_uv;              // right top uv
     float width;             // Own width
@@ -67,8 +67,8 @@ public:
     typedef typename std::list<T*> PoolList;
     typedef typename std::list<T*>::iterator PoolIterator;
 
-    DataPool(){};
-    ~DataPool(){};
+    DataPool() {};
+    ~DataPool() {};
 
     T* createData()
     {
@@ -296,5 +296,4 @@ protected:
     bool _isEnabled;
 };
 
-}
-
+}  // namespace ax

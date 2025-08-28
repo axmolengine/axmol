@@ -70,8 +70,14 @@ void SliderReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
         AX_COLOR_PROPERTY_BINARY_READER
 
         // control custom properties
-        else if (key == P_Scale9Enable) { slider->setScale9Enabled(valueToBool(value)); }
-        else if (key == P_Percent) { percent = valueToInt(value); }
+        else if (key == P_Scale9Enable)
+        {
+            slider->setScale9Enabled(valueToBool(value));
+        }
+        else if (key == P_Percent)
+        {
+            percent = valueToInt(value);
+        }
         else if (key == P_BarFileNameData)
         {
             stExpCocoNode* backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -82,7 +88,10 @@ void SliderReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
             std::string backgroundValue = this->getResourcePath(cocoLoader, &stChildArray[i], imageFileNameType);
             slider->loadBarTexture(backgroundValue, imageFileNameType);
         }
-        else if (key == P_Length) { barLength = valueToFloat(value); }
+        else if (key == P_Length)
+        {
+            barLength = valueToFloat(value);
+        }
         else if (key == P_BallNormalData)
         {
             stExpCocoNode* backGroundChildren = stChildArray[i].GetChildArray(cocoLoader);
@@ -250,7 +259,7 @@ Offset<Table> SliderReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -285,7 +294,7 @@ Offset<Table> SliderReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -320,7 +329,7 @@ Offset<Table> SliderReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -355,7 +364,7 @@ Offset<Table> SliderReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -390,7 +399,7 @@ Offset<Table> SliderReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")

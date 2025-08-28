@@ -53,7 +53,7 @@ private:
     friend class EventListenerAcceleration;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

@@ -32,7 +32,8 @@
 #include "axmol/rhi/metal/ProgramMTL.h"
 #include "xxhash.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 namespace
 {
@@ -158,7 +159,7 @@ static MTLBlendOperation toMTLBlendOp(BlendOp operation)
         return MTLBlendOperationAdd;
     }
 }
-}
+}  // namespace
 
 RenderPipelineImpl::RenderPipelineImpl(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice) {}
 
@@ -188,11 +189,11 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
     hashMe.vertexShaderHash   = program->getVertexShader()->getHashValue();
     hashMe.fragmentShaderHash = program->getFragmentShader()->getHashValue();
     memcpy(&hashMe.colorAttachment, &_colorAttachmentsFormat, sizeof(_colorAttachmentsFormat));
-    hashMe.depthStencilPF             = _depthStencilPF;
+    hashMe.depthStencilPF              = _depthStencilPF;
     hashMe.blendEnabled                = blendDesc.blendEnabled;
     hashMe.writeMask                   = (unsigned int)blendDesc.writeMask;
-    hashMe.rgbBlendOp           = (unsigned int)blendDesc.rgbBlendOp;
-    hashMe.alphaBlendOp         = (unsigned int)blendDesc.alphaBlendOp;
+    hashMe.rgbBlendOp                  = (unsigned int)blendDesc.rgbBlendOp;
+    hashMe.alphaBlendOp                = (unsigned int)blendDesc.alphaBlendOp;
     hashMe.sourceRGBBlendFactor        = (unsigned int)blendDesc.sourceRGBBlendFactor;
     hashMe.destinationRGBBlendFactor   = (unsigned int)blendDesc.destinationRGBBlendFactor;
     hashMe.sourceAlphaBlendFactor      = (unsigned int)blendDesc.sourceAlphaBlendFactor;
@@ -205,10 +206,11 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
          stepFunction:1     stride:15       offest:10       format:5        needNormalized:1
          bit31           bit30 ~ bit16   bit15 ~ bit6    bit5 ~ bit1     bit0
          */
-        hashMe.vertexLayoutInfo[index++] =
-            ((unsigned int)vertexLayout->getVertexStepMode() & 0x1) << 31 |
-            ((unsigned int)(vertexLayout->getStride() & 0x7FFF)) << 16 | ((unsigned int)bindingDesc.offset & 0x3FF) << 6 |
-            ((unsigned int)bindingDesc.format & 0x1F) << 1 | ((unsigned int)bindingDesc.needToBeNormallized & 0x1);
+        hashMe.vertexLayoutInfo[index++] = ((unsigned int)vertexLayout->getVertexStepMode() & 0x1) << 31 |
+                                           ((unsigned int)(vertexLayout->getStride() & 0x7FFF)) << 16 |
+                                           ((unsigned int)bindingDesc.offset & 0x3FF) << 6 |
+                                           ((unsigned int)bindingDesc.format & 0x1F) << 1 |
+                                           ((unsigned int)bindingDesc.needToBeNormallized & 0x1);
     }
 
     unsigned int hash = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
@@ -227,8 +229,7 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
     setBlendStateAndFormat(pipelineDesc.blendDesc);
 
     NSError* error          = nil;
-    _mtlRenderPipelineState = [_mtlDevice newRenderPipelineStateWithDescriptor:_mtlRenderPipelineDesc
-                                                                         error:&error];
+    _mtlRenderPipelineState = [_mtlDevice newRenderPipelineStateWithDescriptor:_mtlRenderPipelineDesc error:&error];
     if (error)
         NSLog(@"Can not create renderpipeline state: %@", error);
 
@@ -243,55 +244,66 @@ RenderPipelineImpl::~RenderPipelineImpl()
         [item.second release];
 }
 
-void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc,
-                                        const PipelineDesc& desc)
+void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, const PipelineDesc& desc)
 {
     auto vertexLayout = desc.vertexLayout;
     assert(vertexLayout);
 
-    auto vertexDesc = mtlDesc.vertexDescriptor;
-    vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stride = vertexLayout->getStride();
+    auto vertexDesc                                                            = mtlDesc.vertexDescriptor;
+    vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stride       = vertexLayout->getStride();
     vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerVertex;
 
     unsigned int instanceAttribCount = 0;
     for (const auto& bindingDesc : vertexLayout->getBindings())
     {
-        if (bindingDesc.format != VertexFormat::MAT4) {
-            auto attrib = vertexDesc.attributes[bindingDesc.index];
+        if (bindingDesc.format != VertexFormat::MAT4)
+        {
+            auto attrib   = vertexDesc.attributes[bindingDesc.index];
             attrib.format = toMTLVertexFormat(bindingDesc.format, bindingDesc.needToBeNormallized);
             attrib.offset = bindingDesc.offset;
-            if (!bindingDesc.instanceStepRate) {
+            if (!bindingDesc.instanceStepRate)
+            {
                 attrib.bufferIndex = DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
-            } else {
+            }
+            else
+            {
                 attrib.bufferIndex = DriverImpl::VBO_INSTANCING_BINDING_INDEX;
                 ++instanceAttribCount;
                 vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepRate = bindingDesc.instanceStepRate;
             }
-        } else {
+        }
+        else
+        {
             const uint32_t colStride = sizeof(float) * 4;
-            for (uint32_t col = 0; col < 4; ++col) {
-                auto attrib = vertexDesc.attributes[bindingDesc.index + col];
+            for (uint32_t col = 0; col < 4; ++col)
+            {
+                auto attrib   = vertexDesc.attributes[bindingDesc.index + col];
                 attrib.format = MTLVertexFormatFloat4;
                 attrib.offset = bindingDesc.offset + col * colStride;
-                if (!bindingDesc.instanceStepRate) {
+                if (!bindingDesc.instanceStepRate)
+                {
                     attrib.bufferIndex = DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
-                } else {
+                }
+                else
+                {
                     attrib.bufferIndex = DriverImpl::VBO_INSTANCING_BINDING_INDEX;
-                    vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepRate = bindingDesc.instanceStepRate;
+                    vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepRate =
+                        bindingDesc.instanceStepRate;
                     ++instanceAttribCount;
                 }
             }
         }
     }
-    
-    if (instanceAttribCount) {
-        vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stride = vertexLayout->getInstanceStride();
+
+    if (instanceAttribCount)
+    {
+        vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stride       = vertexLayout->getInstanceStride();
         vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerInstance;
     }
 }
 
 void RenderPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDesc,
-                                      const BlendDesc& blendDesc)
+                                       const BlendDesc& blendDesc)
 {
     colorAttachmentDesc.blendingEnabled = blendDesc.blendEnabled;
     colorAttachmentDesc.writeMask       = toMTLColorWriteMask(blendDesc.writeMask);
@@ -299,11 +311,10 @@ void RenderPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescripto
     colorAttachmentDesc.rgbBlendOperation   = toMTLBlendOp(blendDesc.rgbBlendOp);
     colorAttachmentDesc.alphaBlendOperation = toMTLBlendOp(blendDesc.alphaBlendOp);
 
-    colorAttachmentDesc.sourceRGBBlendFactor      = toMTLBlendFactor(blendDesc.sourceRGBBlendFactor);
-    colorAttachmentDesc.destinationRGBBlendFactor = toMTLBlendFactor(blendDesc.destinationRGBBlendFactor);
-    colorAttachmentDesc.sourceAlphaBlendFactor    = toMTLBlendFactor(blendDesc.sourceAlphaBlendFactor);
-    colorAttachmentDesc.destinationAlphaBlendFactor =
-        toMTLBlendFactor(blendDesc.destinationAlphaBlendFactor);
+    colorAttachmentDesc.sourceRGBBlendFactor        = toMTLBlendFactor(blendDesc.sourceRGBBlendFactor);
+    colorAttachmentDesc.destinationRGBBlendFactor   = toMTLBlendFactor(blendDesc.destinationRGBBlendFactor);
+    colorAttachmentDesc.sourceAlphaBlendFactor      = toMTLBlendFactor(blendDesc.sourceAlphaBlendFactor);
+    colorAttachmentDesc.destinationAlphaBlendFactor = toMTLBlendFactor(blendDesc.destinationAlphaBlendFactor);
 }
 
 void RenderPipelineImpl::setShaderModules(const PipelineDesc& descriptor)
@@ -316,15 +327,15 @@ void RenderPipelineImpl::setShaderModules(const PipelineDesc& descriptor)
 }
 
 void RenderPipelineImpl::chooseAttachmentFormat(const RenderTarget* renderTarget,
-                                               PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
-                                               PixelFormat& depthStencilFormat)
+                                                PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT],
+                                                PixelFormat& depthStencilFormat)
 {
     // Choose color attachment format
-    auto rtMTL   = static_cast<const RenderTargetImpl*>(renderTarget);
+    auto rtMTL = static_cast<const RenderTargetImpl*>(renderTarget);
     for (auto i = 0; i < MAX_COLOR_ATTCHMENT; ++i)
         colorAttachmentsFormat[i] = rtMTL->getColorAttachmentPixelFormat(i);
 
-    depthStencilFormat   = rtMTL->getDepthStencilAttachmentPixelFormat();
+    depthStencilFormat = rtMTL->getDepthStencilAttachmentPixelFormat();
 }
 
 void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc)
@@ -337,14 +348,13 @@ void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc)
             continue;
         }
 
-        _mtlRenderPipelineDesc.colorAttachments[i].pixelFormat =
-            UtilsMTL::toMTLPixelFormat(_colorAttachmentsFormat[i]);
+        _mtlRenderPipelineDesc.colorAttachments[i].pixelFormat = UtilsMTL::toMTLPixelFormat(_colorAttachmentsFormat[i]);
         setBlendState(_mtlRenderPipelineDesc.colorAttachments[i], blendDesc);
     }
 
-    auto nativePF = UtilsMTL::toMTLPixelFormat(_depthStencilPF);
+    auto nativePF                                       = UtilsMTL::toMTLPixelFormat(_depthStencilPF);
     _mtlRenderPipelineDesc.depthAttachmentPixelFormat   = nativePF;
     _mtlRenderPipelineDesc.stencilAttachmentPixelFormat = nativePF;
 }
 
-}
+}  // namespace ax::rhi::mtl

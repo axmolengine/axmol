@@ -747,7 +747,8 @@ HRESULT WmfMediaEngine::OnTopologyReady(IMFMediaEvent* pEvent)
     m_videoExtent.y = cy;
 
     // MFVideoRotationFormat
-    m_VideoRotation = static_cast<MFVideoRotationFormat>(MFGetAttributeUINT32(m_videoInputType.Get(), MF_MT_VIDEO_ROTATION, FALSE));
+    m_VideoRotation =
+        static_cast<MFVideoRotationFormat>(MFGetAttributeUINT32(m_videoInputType.Get(), MF_MT_VIDEO_ROTATION, FALSE));
     if (m_bAutoPlay)
         StartPlayback(nullptr);
 
@@ -1134,7 +1135,7 @@ HRESULT WmfMediaEngine::StartPlayback(const MFTIME* hnsPosition)
     }
 
     m_bPlaybackEnded = false;
-    hr = m_pSession->Start(NULL, &varStart);
+    hr               = m_pSession->Start(NULL, &varStart);
 
     // Note: Start is an asynchronous operation. However, we
     // can treat our state as being already started. If Start
@@ -1482,8 +1483,8 @@ HRESULT WmfMediaEngine::CloseSession()
     m_pSource.Reset();
     m_pSession.Reset();
 
-    m_state    = MEMediaState::Closed;
-    m_bPending = false;
+    m_state         = MEMediaState::Closed;
+    m_bPending      = false;
     m_bClosePending = false;
 
 done:
@@ -1799,6 +1800,6 @@ HRESULT WmfMediaEngine::GetNativeVideoSize(DWORD* cx, DWORD* cy)
     return hr;
 }
 
-}
+}  // namespace ax
 
 #endif

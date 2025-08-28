@@ -230,14 +230,12 @@
         return;
     }
 
-    if (self.dataInputMode == ax::ui::EditBox::InputFlag::PASSWORD &&
-        inputFlag != ax::ui::EditBox::InputFlag::PASSWORD)
+    if (self.dataInputMode == ax::ui::EditBox::InputFlag::PASSWORD && inputFlag != ax::ui::EditBox::InputFlag::PASSWORD)
     {
         [self createSingleLineTextField];
     }
 
-    if (self.dataInputMode != ax::ui::EditBox::InputFlag::PASSWORD &&
-        inputFlag == ax::ui::EditBox::InputFlag::PASSWORD)
+    if (self.dataInputMode != ax::ui::EditBox::InputFlag::PASSWORD && inputFlag == ax::ui::EditBox::InputFlag::PASSWORD)
     {
         [self createPasswordTextField];
     }

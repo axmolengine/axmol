@@ -2309,9 +2309,9 @@ void TintBy::startWithTarget(Node* target)
     if (target)
     {
         auto color = target->getColor();
-        _fromR        = color.r;
-        _fromG        = color.g;
-        _fromB        = color.b;
+        _fromR     = color.r;
+        _fromG     = color.g;
+        _fromB     = color.b;
     }
 }
 
@@ -2765,4 +2765,4 @@ ActionFloat* ActionFloat::reverse() const
     return ActionFloat::create(_duration, _to, _from, _callback);
 }
 
-}
+}  // namespace ax

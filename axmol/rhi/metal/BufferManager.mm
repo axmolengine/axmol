@@ -25,7 +25,8 @@
 #include "axmol/rhi/metal/BufferManager.h"
 #include "axmol/rhi/metal/BufferMTL.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 std::vector<BufferImpl*> BufferManager::_buffers;
 
@@ -47,4 +48,4 @@ void BufferManager::beginFrame()
         buffer->beginFrame();
 }
 
-}
+}  // namespace ax::rhi::mtl

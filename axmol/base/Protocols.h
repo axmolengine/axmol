@@ -261,4 +261,4 @@ public:
 
     virtual void stop() = 0;
 };
-}
+}  // namespace ax

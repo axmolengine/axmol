@@ -44,7 +44,7 @@ public:
     PUForceFieldCalculationFactory()
         : _octaves(2), _frequency(1.0f), _amplitude(1.0f), _persistence(1.0f), _worldSize(DEFAULT_WORLDSIZE)
     {}
-    virtual ~PUForceFieldCalculationFactory(){};
+    virtual ~PUForceFieldCalculationFactory() {};
 
     /** Generates the force field
     @remarks
@@ -101,8 +101,8 @@ protected:
 class PURealTimeForceFieldCalculationFactory : public PUForceFieldCalculationFactory
 {
 public:
-    PURealTimeForceFieldCalculationFactory() : PUForceFieldCalculationFactory(){};
-    virtual ~PURealTimeForceFieldCalculationFactory(){};
+    PURealTimeForceFieldCalculationFactory() : PUForceFieldCalculationFactory() {};
+    virtual ~PURealTimeForceFieldCalculationFactory() {};
 
     /** Override from ForceFieldCalculationFactory
      */
@@ -205,5 +205,4 @@ protected:
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-}
-
+}  // namespace ax

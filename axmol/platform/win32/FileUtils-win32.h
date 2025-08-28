@@ -117,8 +117,7 @@ protected:
      *  @param searchPath The search path.
      *  @return The full path of the file. It will return an empty string if the full path of the file doesn't exist.
      */
-    virtual std::string getPathForFilename(std::string_view filename,
-                                           std::string_view searchPath) const override;
+    virtual std::string getPathForFilename(std::string_view filename, std::string_view searchPath) const override;
 
     /**
      *  Gets full path for the directory and the filename.
@@ -137,4 +136,4 @@ protected:
 // end of platform group
 /// @}
 
-}
+}  // namespace ax

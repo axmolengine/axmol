@@ -90,4 +90,4 @@ bool EventListenerCustom::checkAvailable()
     return ret;
 }
 
-}
+}  // namespace ax

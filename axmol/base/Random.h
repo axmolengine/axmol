@@ -125,6 +125,6 @@ inline float rand_0_1()
     return std::rand() / (float)RAND_MAX;
 }
 
-}
+}  // namespace ax
 // end group
 /// @}

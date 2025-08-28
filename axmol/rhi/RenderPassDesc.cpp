@@ -24,7 +24,8 @@
 
 #include "axmol/rhi/RenderPassDesc.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 bool RenderPassDesc::operator==(const RenderPassDesc& descriptor) const
 {
@@ -37,4 +38,4 @@ bool RenderPassDesc::operator==(const RenderPassDesc& descriptor) const
             flags.discardEnd == descriptor.flags.discardEnd);
 }
 
-}
+}  // namespace ax::rhi

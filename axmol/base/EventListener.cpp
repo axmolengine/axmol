@@ -53,4 +53,4 @@ bool EventListener::checkAvailable()
     return (_onEvent != nullptr);
 }
 
-}
+}  // namespace ax

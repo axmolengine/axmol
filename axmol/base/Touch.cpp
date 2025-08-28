@@ -84,4 +84,4 @@ float Touch::getMaxForce() const
     return _maxForce;
 }
 
-}
+}  // namespace ax

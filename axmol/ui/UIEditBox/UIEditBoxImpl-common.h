@@ -111,31 +111,31 @@ public:
     void editBoxEditingDidEnd(std::string_view text,
                               EditBoxDelegate::EditBoxEndAction action = EditBoxDelegate::EditBoxEndAction::UNKNOWN);
 
-    bool isEditing() override                                                = 0;
-    virtual void createNativeControl(const Rect& frame)                              = 0;
-    virtual void setNativeFont(const char* pFontName, int fontSize)                  = 0;
-    virtual void setNativeFontColor(const Color32& color)                            = 0;
-    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize)       = 0;
-    virtual void setNativePlaceholderFontColor(const Color32& color)                 = 0;
-    virtual void setNativeInputMode(EditBox::InputMode inputMode)                    = 0;
-    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag)                    = 0;
-    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)         = 0;
+    bool isEditing() override                                                   = 0;
+    virtual void createNativeControl(const Rect& frame)                         = 0;
+    virtual void setNativeFont(const char* pFontName, int fontSize)             = 0;
+    virtual void setNativeFontColor(const Color32& color)                       = 0;
+    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize)  = 0;
+    virtual void setNativePlaceholderFontColor(const Color32& color)            = 0;
+    virtual void setNativeInputMode(EditBox::InputMode inputMode)               = 0;
+    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag)               = 0;
+    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)    = 0;
     virtual void setNativeTextHorizontalAlignment(ax::TextHAlignment alignment) = 0;
-    virtual void setNativeText(const char* pText)                                    = 0;
-    virtual void setNativePlaceHolder(const char* pText)                             = 0;
-    virtual void setNativeVisible(bool visible)                                      = 0;
-    virtual void updateNativeFrame(const Rect& rect)                                 = 0;
-    virtual const char* getNativeDefaultFontName()                                   = 0;
-    virtual void nativeOpenKeyboard()                                                = 0;
-    virtual void nativeCloseKeyboard()                                               = 0;
-    virtual void setNativeMaxLength(int maxLength){};
+    virtual void setNativeText(const char* pText)                               = 0;
+    virtual void setNativePlaceHolder(const char* pText)                        = 0;
+    virtual void setNativeVisible(bool visible)                                 = 0;
+    virtual void updateNativeFrame(const Rect& rect)                            = 0;
+    virtual const char* getNativeDefaultFontName()                              = 0;
+    virtual void nativeOpenKeyboard()                                           = 0;
+    virtual void nativeCloseKeyboard()                                          = 0;
+    virtual void setNativeMaxLength(int maxLength) {};
 
 protected:
     void initInactiveLabels(const Size& size);
     void setInactiveText(const char* pText);
     void refreshLabelAlignment();
     void placeInactiveLabels(const Size& size);
-    void doAnimationWhenKeyboardMove(float duration, float distance) override{};
+    void doAnimationWhenKeyboardMove(float duration, float distance) override {};
 
     Label* _label;
     Label* _labelPlaceHolder;
@@ -163,5 +163,4 @@ protected:
 
 }  // namespace ui
 
-}
-
+}  // namespace ax

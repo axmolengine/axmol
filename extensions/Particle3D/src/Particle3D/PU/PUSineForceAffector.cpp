@@ -122,4 +122,4 @@ void PUSineForceAffector::copyAttributesTo(PUAffector* affector)
     sineForceAffector->_angle              = _angle;
 }
 
-}
+}  // namespace ax

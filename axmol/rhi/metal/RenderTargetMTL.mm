@@ -2,7 +2,8 @@
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/rhi/metal/TextureMTL.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 static MTLLoadAction getLoadAction(const RenderPassDesc& params, TargetBufferFlags buffer)
 {
@@ -32,8 +33,7 @@ static MTLStoreAction getStoreAction(const RenderPassDesc& params, TargetBufferF
 RenderTargetImpl::RenderTargetImpl(bool defaultRenderTarget) : RenderTarget(defaultRenderTarget) {}
 RenderTargetImpl::~RenderTargetImpl() {}
 
-void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params,
-                                                 MTLRenderPassDescriptor* desc) const
+void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, MTLRenderPassDescriptor* desc) const
 {
     // const auto discardFlags = params.flags.discardEnd;
     auto clearFlags = params.flags.clear;
@@ -56,7 +56,7 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params,
         if (bitmask::any(clearFlags, MRTColorFlag))
             desc.colorAttachments[i].clearColor =
                 MTLClearColorMake(params.clearColorValue[0], params.clearColorValue[1], params.clearColorValue[2],
-                                params.clearColorValue[3]);
+                                  params.clearColorValue[3]);
     }
 
     // Sets descriptor depth and stencil params, should match RenderTargetImpl::chooseAttachmentFormat
@@ -92,8 +92,8 @@ RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) con
     if (isDefaultRenderTarget() && index == 0)
         return {DriverImpl::getCurrentDrawable().texture, 0};
     auto& rb = this->_color[index];
-    return RenderTargetImpl::Attachment{static_cast<bool>(rb) ? static_cast<TextureImpl*>(rb.texture)->internalHandle() : nil,
-                                       rb.level};
+    return RenderTargetImpl::Attachment{
+        static_cast<bool>(rb) ? static_cast<TextureImpl*>(rb.texture)->internalHandle() : nil, rb.level};
 }
 
 RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment() const
@@ -123,4 +123,4 @@ PixelFormat RenderTargetImpl::getDepthStencilAttachmentPixelFormat() const
     return PixelFormat::NONE;
 }
 
-}
+}  // namespace ax::rhi::mtl

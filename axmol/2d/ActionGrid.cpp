@@ -447,4 +447,4 @@ ReuseGrid* ReuseGrid::reverse() const
     return this->clone();
 }
 
-}
+}  // namespace ax

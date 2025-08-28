@@ -203,11 +203,11 @@ void LabelAtlas::updateAtlasValues()
         quads[i].tr.position.x = (float)(i * _itemWidth + _itemWidth);
         quads[i].tr.position.y = (float)(_itemHeight);
         quads[i].tr.position.z = 0.0f;
-        const Color32& c = _displayedColor;
-        quads[i].tl.color = c;
-        quads[i].tr.color = c;
-        quads[i].bl.color = c;
-        quads[i].br.color = c;
+        const Color32& c       = _displayedColor;
+        quads[i].tl.color      = c;
+        quads[i].tr.color      = c;
+        quads[i].bl.color      = c;
+        quads[i].br.color      = c;
     }
     if (n > 0)
     {
@@ -283,4 +283,4 @@ std::string LabelAtlas::getDescription() const
     return fmt::format("<LabelAtlas | Tag = {}, Label = '{}'>", _tag, _string);
 }
 
-}
+}  // namespace ax

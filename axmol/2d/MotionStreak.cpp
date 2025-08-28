@@ -113,7 +113,7 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
 
     constexpr size_t vertexSize = sizeof(_vertices[0]);
 
-    auto vertexCount  = _maxPoints * 2;
+    auto vertexCount = _maxPoints * 2;
     _vertices.resize(vertexCount);
     memset(_vertices.data(), 0, sizeof(_vertices[0]) * vertexCount);
     _customCommand.createVertexBuffer(vertexSize, vertexCount, CustomCommand::BufferUsage::DYNAMIC);
@@ -295,8 +295,8 @@ void MotionStreak::update(float delta)
                 _pointVertexes[newIdx] = _pointVertexes[i];
 
                 // Move pos
-                i2                     = i * 2;
-                newIdx2                = newIdx * 2;
+                i2                              = i * 2;
+                newIdx2                         = newIdx * 2;
                 _vertices[newIdx2].position     = _vertices[i2].position;
                 _vertices[newIdx2 + 1].position = _vertices[i2 + 1].position;
 
@@ -307,9 +307,9 @@ void MotionStreak::update(float delta)
             else
                 newIdx2 = newIdx * 2;
 
-            const uint8_t alpha           = (uint8_t)(_pointState[newIdx] * 255.0f);
-            _vertices[newIdx2].color.a    = alpha;
-            _vertices[newIdx2].color.a    = alpha;
+            const uint8_t alpha        = (uint8_t)(_pointState[newIdx] * 255.0f);
+            _vertices[newIdx2].color.a = alpha;
+            _vertices[newIdx2].color.a = alpha;
         }
     }
     _nuPoints -= mov;
@@ -397,4 +397,4 @@ void MotionStreak::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     _customCommand.updateVertexBuffer(_vertices.data(), sizeof(_vertices[0]) * drawCount);
 }
 
-}
+}  // namespace ax

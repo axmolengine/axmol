@@ -85,5 +85,4 @@ protected:
     ColorMap _colorMap;
     ColorOperation _colorOperation;
 };
-}
-
+}  // namespace ax

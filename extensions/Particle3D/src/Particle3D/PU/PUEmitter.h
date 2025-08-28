@@ -576,5 +576,4 @@ protected:
     bool _isMarkedForEmission;
 };
 
-}
-
+}  // namespace ax

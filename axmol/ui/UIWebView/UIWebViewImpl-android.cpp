@@ -42,7 +42,7 @@ static const char* className = "dev.axmol.lib.WebViewHelper";
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "", __VA_ARGS__)
 
 static constexpr std::string_view s_assetsBaseUrl = "file:///android_asset/"sv;
-static constexpr std::string_view s_sdRootBaseUrl  = "file://"sv;
+static constexpr std::string_view s_sdRootBaseUrl = "file://"sv;
 
 static std::string getFixedBaseUrl(std::string_view baseUrl)
 {
@@ -87,9 +87,9 @@ extern "C" {
  * Signature: (ILjava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_dev_axmol_lib_WebViewHelper_shouldStartLoading(JNIEnv* env,
-                                                                                          jclass,
-                                                                                          jint index,
-                                                                                          jstring jurl)
+                                                                               jclass,
+                                                                               jint index,
+                                                                               jstring jurl)
 {
     auto charUrl    = env->GetStringUTFChars(jurl, NULL);
     std::string url = charUrl;
@@ -102,10 +102,7 @@ JNIEXPORT jboolean JNICALL Java_dev_axmol_lib_WebViewHelper_shouldStartLoading(J
  * Method:    didFinishLoading
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_dev_axmol_lib_WebViewHelper_didFinishLoading(JNIEnv* env,
-                                                                                    jclass,
-                                                                                    jint index,
-                                                                                    jstring jurl)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_WebViewHelper_didFinishLoading(JNIEnv* env, jclass, jint index, jstring jurl)
 {
     // LOGD("didFinishLoading");
     auto charUrl    = env->GetStringUTFChars(jurl, NULL);
@@ -119,10 +116,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_WebViewHelper_didFinishLoading(JNIEnv*
  * Method:    didFailLoading
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_dev_axmol_lib_WebViewHelper_didFailLoading(JNIEnv* env,
-                                                                                  jclass,
-                                                                                  jint index,
-                                                                                  jstring jurl)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_WebViewHelper_didFailLoading(JNIEnv* env, jclass, jint index, jstring jurl)
 {
     // LOGD("didFailLoading");
     auto charUrl    = env->GetStringUTFChars(jurl, NULL);
@@ -136,10 +130,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_WebViewHelper_didFailLoading(JNIEnv* e
  * Method:    onJsCallback
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_dev_axmol_lib_WebViewHelper_onJsCallback(JNIEnv* env,
-                                                                                jclass,
-                                                                                jint index,
-                                                                                jstring jmessage)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_WebViewHelper_onJsCallback(JNIEnv* env, jclass, jint index, jstring jmessage)
 {
     // LOGD("jsCallback");
     auto charMessage    = env->GetStringUTFChars(jmessage, NULL);
@@ -209,8 +200,7 @@ void WebViewImpl::loadData(const Data& data,
                            std::string_view baseURL)
 {
     std::string dataString(reinterpret_cast<char*>(data.getBytes()), static_cast<unsigned int>(data.getSize()));
-    JniHelper::callStaticVoidMethod(className, "loadData", _viewTag, dataString, MIMEType, encoding,
-                                    baseURL);
+    JniHelper::callStaticVoidMethod(className, "loadData", _viewTag, dataString, MIMEType, encoding, baseURL);
 }
 
 void WebViewImpl::loadHTMLString(std::string_view string, std::string_view baseURL)

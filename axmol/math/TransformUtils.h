@@ -46,7 +46,7 @@ struct AffineTransform;
 AX_DLL void CGAffineToGL(const AffineTransform& t, float* m);
 AX_DLL void GLToCGAffine(const float* m, AffineTransform* t);
 /**@}*/
-}  // namespace   cocos2d
+}  // namespace ax
 /**
  end of base group
  @}

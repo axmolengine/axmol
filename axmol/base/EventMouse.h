@@ -108,9 +108,9 @@ public:
      */
     void setMouseInfo(float x, float y, MouseButton button)
     {
-        _prevPoint = _point;
-        _point.x   = x;
-        _point.y   = y;
+        _prevPoint   = _point;
+        _point.x     = x;
+        _point.y     = y;
         _mouseButton = button;
         if (!_startPointCaptured)
         {
@@ -190,7 +190,7 @@ private:
     friend class EventListenerMouse;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

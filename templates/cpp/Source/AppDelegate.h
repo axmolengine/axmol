@@ -57,4 +57,3 @@ public:
     */
     void applicationWillEnterForeground() override;
 };
-

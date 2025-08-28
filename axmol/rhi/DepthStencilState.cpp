@@ -25,22 +25,22 @@
 #include "axmol/rhi/DepthStencilState.h"
 #include "axmol/rhi/RenderTarget.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 bool StencilDesc::operator==(const StencilDesc& rhs) const
 {
-    return (
-        stencilFailureOp == rhs.stencilFailureOp && depthFailureOp == rhs.depthFailureOp &&
-        depthStencilPassOp == rhs.depthStencilPassOp &&
-        stencilCompareFunc == rhs.stencilCompareFunc && readMask == rhs.readMask && writeMask == rhs.writeMask);
+    return (stencilFailureOp == rhs.stencilFailureOp && depthFailureOp == rhs.depthFailureOp &&
+            depthStencilPassOp == rhs.depthStencilPassOp && stencilCompareFunc == rhs.stencilCompareFunc &&
+            readMask == rhs.readMask && writeMask == rhs.writeMask);
 }
 
 DepthStencilState::~DepthStencilState() {}
 
 void DepthStencilState::update(const DepthStencilDesc& dsDesc)
 {
-    _dsDesc        = dsDesc;
+    _dsDesc                  = dsDesc;
     _isBackFrontStencilEqual = dsDesc.backFaceStencil == dsDesc.frontFaceStencil;
 }
 
-}
+}  // namespace ax::rhi

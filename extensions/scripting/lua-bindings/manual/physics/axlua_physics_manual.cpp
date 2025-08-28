@@ -37,7 +37,7 @@
             {                      \
                 if (p)             \
                 {                  \
-                    delete[](p);   \
+                    delete[] (p);  \
                     (p) = nullptr; \
                 }                  \
             }                      \
@@ -46,9 +46,9 @@
 
 int axlua_physics_PhysicsBody_getJoints(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc              = 0;
     ax::PhysicsBody* cobj = nullptr;
-    bool ok                    = true;
+    bool ok               = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -112,7 +112,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsWorld_getScene(lua_State* tolua_S)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::PhysicsWorld* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -162,9 +162,9 @@ tolua_lerror:
 
 int axlua_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::PhysicsWorld* cobj = nullptr;
-    bool ok                     = true;
+    bool ok                = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -195,10 +195,8 @@ int axlua_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
         auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler, stack](ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info,
-                             void* data) -> bool {
-                
-                auto Ls    = stack->getLuaState();
+            arg0 = [handler, stack](ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info, void* data) -> bool {
+                auto Ls = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
                 physics_raycastinfo_to_luaval(Ls, info);
                 return stack->executeFunctionByHandler(handler, 2);
@@ -229,9 +227,9 @@ tolua_lerror:
 }
 int axlua_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::PhysicsWorld* cobj = nullptr;
-    bool ok                     = true;
+    bool ok                = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -261,9 +259,8 @@ int axlua_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
         auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler,stack](ax::PhysicsWorld& world, ax::PhysicsCollider& shape, void* data) -> bool {
-               
-                auto Ls    = stack->getLuaState();
+            arg0 = [handler, stack](ax::PhysicsWorld& world, ax::PhysicsCollider& shape, void* data) -> bool {
+                auto Ls = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
                 toluafix_pushusertype_object(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsCollider");
                 return stack->executeFunctionByHandler(handler, 2);
@@ -294,9 +291,9 @@ tolua_lerror:
 
 int axlua_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::PhysicsWorld* cobj = nullptr;
-    bool ok                     = true;
+    bool ok                = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -326,8 +323,8 @@ int axlua_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
         auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler,stack](ax::PhysicsWorld& world, ax::PhysicsCollider& shape, void* data) -> bool {
-                auto Ls    = stack->getLuaState();
+            arg0 = [handler, stack](ax::PhysicsWorld& world, ax::PhysicsCollider& shape, void* data) -> bool {
+                auto Ls = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
                 toluafix_pushusertype_object(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsCollider");
                 return stack->executeFunctionByHandler(handler, 2);
@@ -375,7 +372,7 @@ int axlua_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::Vec2* arg0 = nullptr;
-        int arg1            = 0;
+        int arg1       = 0;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsBody:createPolygon");
@@ -877,7 +874,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderBox_getPoints(lua_State* tolua_S)
 {
-    int argc                       = 0;
+    int argc                     = 0;
     ax::PhysicsColliderBox* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -920,7 +917,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
 {
-    int argc                           = 0;
+    int argc                         = 0;
     ax::PhysicsColliderPolygon* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -945,7 +942,7 @@ int axlua_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        int count           = cobj->getPointsCount();
+        int count      = cobj->getPointsCount();
         ax::Vec2* arg0 = new ax::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
@@ -1003,7 +1000,7 @@ int axlua_physics_PhysicsColliderPolygon_create(lua_State* tolua_S)
         ax::PhysicsColliderPolygon* ret = ax::PhysicsColliderPolygon::create(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderPolygon>(tolua_S, "ax.PhysicsColliderPolygon",
-                                                       (ax::PhysicsColliderPolygon*)ret);
+                                                     (ax::PhysicsColliderPolygon*)ret);
         return 1;
     }
     if (argc == 3)
@@ -1031,7 +1028,7 @@ int axlua_physics_PhysicsColliderPolygon_create(lua_State* tolua_S)
         ax::PhysicsColliderPolygon* ret = ax::PhysicsColliderPolygon::create(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderPolygon>(tolua_S, "ax.PhysicsColliderPolygon",
-                                                       (ax::PhysicsColliderPolygon*)ret);
+                                                     (ax::PhysicsColliderPolygon*)ret);
         return 1;
     }
     if (argc == 4)
@@ -1061,7 +1058,7 @@ int axlua_physics_PhysicsColliderPolygon_create(lua_State* tolua_S)
         ax::PhysicsColliderPolygon* ret = ax::PhysicsColliderPolygon::create(arg0, arg1, arg2, arg3, arg4);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderPolygon>(tolua_S, "ax.PhysicsColliderPolygon",
-                                                       (ax::PhysicsColliderPolygon*)ret);
+                                                     (ax::PhysicsColliderPolygon*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);
@@ -1121,7 +1118,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderEdgeBox_getPoints(lua_State* tolua_S)
 {
-    int argc                           = 0;
+    int argc                         = 0;
     ax::PhysicsColliderEdgeBox* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -1146,7 +1143,7 @@ int axlua_physics_PhysicsColliderEdgeBox_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        int count           = cobj->getPointsCount();
+        int count      = cobj->getPointsCount();
         ax::Vec2* arg0 = new ax::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
@@ -1166,7 +1163,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
 {
-    int argc                               = 0;
+    int argc                             = 0;
     ax::PhysicsColliderEdgePolygon* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -1183,8 +1180,7 @@ int axlua_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
 #    if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsColliderEdgePolygon_getPoints'",
-                    NULL);
+        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsColliderEdgePolygon_getPoints'", NULL);
         return 0;
     }
 #    endif
@@ -1192,7 +1188,7 @@ int axlua_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        int count           = cobj->getPointsCount();
+        int count      = cobj->getPointsCount();
         ax::Vec2* arg0 = new ax::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
@@ -1212,7 +1208,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
 {
-    int argc                             = 0;
+    int argc                           = 0;
     ax::PhysicsColliderEdgeChain* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -1237,7 +1233,7 @@ int axlua_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        int count           = cobj->getPointsCount();
+        int count      = cobj->getPointsCount();
         ax::Vec2* arg0 = new ax::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
@@ -1272,8 +1268,7 @@ static int toaxlua_EventListenerPhysicsContact_registerScriptHandler(lua_State* 
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S,
-                    "invalid 'self' in function 'toaxlua_EventListenerPhysicsContact_registerScriptHandler'\n",
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerPhysicsContact_registerScriptHandler'\n",
                     nullptr);
         return 0;
     }
@@ -1404,7 +1399,7 @@ int axlua_physics_PhysicsColliderEdgePolygon_create(lua_State* tolua_S)
         ax::PhysicsColliderEdgePolygon* ret = ax::PhysicsColliderEdgePolygon::create(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgePolygon>(tolua_S, "ax.PhysicsColliderEdgePolygon",
-                                                           (ax::PhysicsColliderEdgePolygon*)ret);
+                                                         (ax::PhysicsColliderEdgePolygon*)ret);
         return 1;
     }
     if (argc == 3)
@@ -1432,7 +1427,7 @@ int axlua_physics_PhysicsColliderEdgePolygon_create(lua_State* tolua_S)
         ax::PhysicsColliderEdgePolygon* ret = ax::PhysicsColliderEdgePolygon::create(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgePolygon>(tolua_S, "ax.PhysicsColliderEdgePolygon",
-                                                           (ax::PhysicsColliderEdgePolygon*)ret);
+                                                         (ax::PhysicsColliderEdgePolygon*)ret);
         return 1;
     }
     if (argc == 4)
@@ -1462,7 +1457,7 @@ int axlua_physics_PhysicsColliderEdgePolygon_create(lua_State* tolua_S)
         ax::PhysicsColliderEdgePolygon* ret = ax::PhysicsColliderEdgePolygon::create(arg0, arg1, arg2, arg3, arg4);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgePolygon>(tolua_S, "ax.PhysicsColliderEdgePolygon",
-                                                           (ax::PhysicsColliderEdgePolygon*)ret);
+                                                         (ax::PhysicsColliderEdgePolygon*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);
@@ -1513,7 +1508,7 @@ int axlua_physics_PhysicsColliderEdgeChain_create(lua_State* tolua_S)
         ax::PhysicsColliderEdgeChain* ret = ax::PhysicsColliderEdgeChain::create(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgeChain>(tolua_S, "ax.PhysicsColliderEdgeChain",
-                                                         (ax::PhysicsColliderEdgeChain*)ret);
+                                                       (ax::PhysicsColliderEdgeChain*)ret);
         return 1;
     }
     if (argc == 3)
@@ -1541,7 +1536,7 @@ int axlua_physics_PhysicsColliderEdgeChain_create(lua_State* tolua_S)
         ax::PhysicsColliderEdgeChain* ret = ax::PhysicsColliderEdgeChain::create(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgeChain>(tolua_S, "ax.PhysicsColliderEdgeChain",
-                                                         (ax::PhysicsColliderEdgeChain*)ret);
+                                                       (ax::PhysicsColliderEdgeChain*)ret);
         return 1;
     }
     if (argc == 4)
@@ -1571,7 +1566,7 @@ int axlua_physics_PhysicsColliderEdgeChain_create(lua_State* tolua_S)
         ax::PhysicsColliderEdgeChain* ret = ax::PhysicsColliderEdgeChain::create(arg0, arg1, arg2, arg3, arg4);
         AX_SAFE_DELETE_ARRAY(arg1);
         object_to_luaval<ax::PhysicsColliderEdgeChain>(tolua_S, "ax.PhysicsColliderEdgeChain",
-                                                         (ax::PhysicsColliderEdgeChain*)ret);
+                                                       (ax::PhysicsColliderEdgeChain*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);
@@ -1720,8 +1715,7 @@ int register_all_ax_physics_manual(lua_State* tolua_S)
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-        tolua_function(tolua_S, "registerScriptHandler",
-                       toaxlua_EventListenerPhysicsContact_registerScriptHandler);
+        tolua_function(tolua_S, "registerScriptHandler", toaxlua_EventListenerPhysicsContact_registerScriptHandler);
     }
     lua_pop(tolua_S, 1);
 

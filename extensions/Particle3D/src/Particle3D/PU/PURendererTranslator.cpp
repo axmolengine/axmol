@@ -783,4 +783,4 @@ void PURendererTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
     // }
 }
 
-}
+}  // namespace ax

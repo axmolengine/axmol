@@ -29,7 +29,8 @@
 #include "axmol/rhi/metal/DriverMTL.h"
 #include <unordered_map>
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 class RenderPipelineImpl;
 class DepthStencilStateImpl;
@@ -139,8 +140,8 @@ public:
      * @param start For each instance, the first index to draw
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
-	 *
-	 * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
+     *
+     * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
      */
     void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
     void drawArraysInstanced(PrimitiveType primitiveType,
@@ -157,14 +158,14 @@ public:
      * @param offset Byte offset within indexBuffer to start reading indexes from.
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
-	 *
-	 * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
+     *
+     * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
      */
     void drawElements(PrimitiveType primitiveType,
-                              IndexFormat indexType,
-                              std::size_t count,
-                              std::size_t offset,
-                              bool wireframe) override;
+                      IndexFormat indexType,
+                      std::size_t count,
+                      std::size_t offset,
+                      bool wireframe) override;
 
     void drawElementsInstanced(PrimitiveType primitiveType,
                                IndexFormat indexType,
@@ -251,11 +252,11 @@ private:
     dispatch_semaphore_t _frameBoundarySemaphore;
     const RenderTarget* _currentRenderTarget = nil;  // weak ref
     RenderPassDesc _currentRenderPassDesc;
-    NSAutoreleasePool* _autoReleasePool         = nil;
+    NSAutoreleasePool* _autoReleasePool = nil;
 
     std::vector<std::pair<Texture*, std::function<void(const PixelBufferDesc&)>>> _captureCallbacks;
 };
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

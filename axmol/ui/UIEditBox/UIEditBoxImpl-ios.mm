@@ -181,7 +181,7 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
-    auto renderView          = ax::Director::getInstance()->getRenderView();
+    auto renderView      = ax::Director::getInstance()->getRenderView();
     EARenderView* eaView = (__bridge EARenderView*)renderView->getEARenderView();
 
     float factor = eaView.contentScaleFactor;
@@ -210,13 +210,13 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     AXASSERT(fontName != nullptr, "fontName can't be nullptr");
-    auto eaView = static_cast<EARenderView*>(ax::Director::getInstance()->getRenderView()->getEARenderView());
-    float retinaFactor   = eaView.contentScaleFactor;
-    NSString* fntName    = [NSString stringWithUTF8String:fontName];
+    auto eaView        = static_cast<EARenderView*>(ax::Director::getInstance()->getRenderView()->getEARenderView());
+    float retinaFactor = eaView.contentScaleFactor;
+    NSString* fntName  = [NSString stringWithUTF8String:fontName];
 
     fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
 
-    auto renderView       = ax::Director::getInstance()->getRenderView();
+    auto renderView   = ax::Director::getInstance()->getRenderView();
     float scaleFactor = renderView->getScaleX();
 
     if (fontSize == -1)
@@ -243,8 +243,8 @@ UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
     }
     return textFont;
 }
-}
+}  // namespace ui
 
-}
+}  // namespace ax
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */

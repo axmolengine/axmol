@@ -31,4 +31,3 @@
 #include "axmol/math/Rect.h"
 #include "axmol/math/Quaternion.h"
 #include "axmol/math/Color.h"
-

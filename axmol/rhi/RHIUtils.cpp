@@ -453,10 +453,10 @@ static void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsig
 //////////////////////////////////////////////////////////////////////////
 
 static PixelFormat convertR8ToFormat(const unsigned char* data,
-                                              size_t dataLen,
-                                              PixelFormat format,
-                                              unsigned char** outData,
-                                              size_t* outDataLen)
+                                     size_t dataLen,
+                                     PixelFormat format,
+                                     unsigned char** outData,
+                                     size_t* outDataLen)
 {
     switch (format)
     {
@@ -513,10 +513,10 @@ static PixelFormat convertR8ToFormat(const unsigned char* data,
 }
 
 static PixelFormat convertRG8ToFormat(const unsigned char* data,
-                                               size_t dataLen,
-                                               PixelFormat format,
-                                               unsigned char** outData,
-                                               size_t* outDataLen)
+                                      size_t dataLen,
+                                      PixelFormat format,
+                                      unsigned char** outData,
+                                      size_t* outDataLen)
 {
     switch (format)
     {
@@ -569,10 +569,10 @@ static PixelFormat convertRG8ToFormat(const unsigned char* data,
 }
 
 static PixelFormat convertRGB8ToFormat(const unsigned char* data,
-                                                size_t dataLen,
-                                                PixelFormat format,
-                                                unsigned char** outData,
-                                                size_t* outDataLen)
+                                       size_t dataLen,
+                                       PixelFormat format,
+                                       unsigned char** outData,
+                                       size_t* outDataLen)
 {
     switch (format)
     {
@@ -624,10 +624,10 @@ static PixelFormat convertRGB8ToFormat(const unsigned char* data,
 }
 
 static PixelFormat convertRGBA8ToFormat(const unsigned char* data,
-                                                 size_t dataLen,
-                                                 PixelFormat format,
-                                                 unsigned char** outData,
-                                                 size_t* outDataLen)
+                                        size_t dataLen,
+                                        PixelFormat format,
+                                        unsigned char** outData,
+                                        size_t* outDataLen)
 {
 
     switch (format)
@@ -681,10 +681,10 @@ static PixelFormat convertRGBA8ToFormat(const unsigned char* data,
 }
 
 static PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
-                                                  size_t dataLen,
-                                                  PixelFormat format,
-                                                  unsigned char** outData,
-                                                  size_t* outDataLen)
+                                         size_t dataLen,
+                                         PixelFormat format,
+                                         unsigned char** outData,
+                                         size_t* outDataLen)
 {
     switch (format)
     {
@@ -715,10 +715,10 @@ static PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
 }
 
 static PixelFormat convertRGB565ToFormat(const unsigned char* data,
-                                                  size_t dataLen,
-                                                  PixelFormat format,
-                                                  unsigned char** outData,
-                                                  size_t* outDataLen)
+                                         size_t dataLen,
+                                         PixelFormat format,
+                                         unsigned char** outData,
+                                         size_t* outDataLen)
 {
     switch (format)
     {
@@ -749,10 +749,10 @@ static PixelFormat convertRGB565ToFormat(const unsigned char* data,
 }
 
 static PixelFormat convertRGBA4ToFormat(const unsigned char* data,
-                                                 size_t dataLen,
-                                                 PixelFormat format,
-                                                 unsigned char** outData,
-                                                 size_t* outDataLen)
+                                        size_t dataLen,
+                                        PixelFormat format,
+                                        unsigned char** outData,
+                                        size_t* outDataLen)
 {
     switch (format)
     {
@@ -819,11 +819,11 @@ static PixelFormat convertBGRA8ToFormat(const unsigned char* data,
 
  */
 PixelFormat convertDataToFormat(const unsigned char* data,
-                                         size_t dataLen,
-                                         PixelFormat originFormat,
-                                         PixelFormat format,
-                                         unsigned char** outData,
-                                         size_t* outDataLen)
+                                size_t dataLen,
+                                PixelFormat originFormat,
+                                PixelFormat format,
+                                unsigned char** outData,
+                                size_t* outDataLen)
 {
     // don't need to convert
     if (format == originFormat)

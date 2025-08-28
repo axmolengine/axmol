@@ -31,7 +31,8 @@
 
 #include "axmol/rhi/axslc-spec.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 using namespace ::axslc;
 
@@ -41,11 +42,12 @@ struct SLCReflectContext
     yasio::fast_ibstream_view* ibs;
 };
 
-static inline std::string_view _sc_read_name(yasio::fast_ibstream_view* ibs) {
+static inline std::string_view _sc_read_name(yasio::fast_ibstream_view* ibs)
+{
     // view bytes without copy
     std::string_view name = ibs->read_bytes(sizeof(sc_refl_input::name));
-    auto len = name.find_last_not_of('\0');
-    assert(len != std::string::npos); // name must not empty
+    auto len              = name.find_last_not_of('\0');
+    assert(len != std::string::npos);  // name must not empty
     name.remove_suffix(name.length() - len - 1);
     return name;
 }
@@ -194,13 +196,13 @@ void ShaderModuleImpl::reflectVertexInputs(SLCReflectContext* context)
     for (int i = 0; i < context->refl->num_inputs; ++i)
     {
         std::string_view name = _sc_read_name(ibs);
-        auto loc = ibs->read<int32_t>();
+        auto loc              = ibs->read<int32_t>();
 
         ibs->advance(sizeof(sc_refl_input) - offsetof(sc_refl_input, semantic));
 
         VertexInputDesc desc;
-        desc.location = loc;
-        _activeVertexInputs[name]   = desc;
+        desc.location             = loc;
+        _activeVertexInputs[name] = desc;
     }
 }
 
@@ -326,4 +328,4 @@ void ShaderModuleImpl::setBuiltinLocations()
     _builtinUniforms[Uniform::EFFECT_TYPE] = getUniformInfo(UNIFORM_NAME_EFFECT_TYPE);
 }
 
-}
+}  // namespace ax::rhi::mtl

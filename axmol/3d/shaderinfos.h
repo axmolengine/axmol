@@ -279,4 +279,4 @@ const std::vector<std::pair<const char*, VertexKey>>& getPredefinedAttributes();
 const std::string_view getAttributeName(const VertexKey& key);
 };  // namespace shaderinfos
 
-}
+}  // namespace ax

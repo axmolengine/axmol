@@ -575,7 +575,8 @@ bool UIS9FrameNameSpriteSheetRotatedInsets::init()
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
-        auto blocks_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png", Rect(32, 32, 32, 32));
+        auto blocks_with_insets =
+            ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png", Rect(32, 32, 32, 32));
 
         blocks_with_insets->setPosition(Vec2(x, y));
 
@@ -687,9 +688,9 @@ bool UIS9CascadeOpacityAndColor::init()
         rgba->addChild(blocks_scaled_with_insets);
         auto actions = Sequence::create(FadeIn::create(1), TintTo::create(1, 0, 255, 0), TintTo::create(1, 255, 0, 255),
                                         CallFunc::create([=]() {
-                                            rgba->setCascadeColorEnabled(false);
-                                            rgba->setCascadeOpacityEnabled(false);
-                                        }),
+            rgba->setCascadeColorEnabled(false);
+            rgba->setCascadeOpacityEnabled(false);
+        }),
                                         nullptr);
         auto repeat  = RepeatForever::create(actions);
         rgba->runAction(repeat);
@@ -891,10 +892,10 @@ bool UIS9ChangeAnchorPoint::init()
                 normalSprite->setAnchorPoint(Vec2::ZERO);
                 normalSprite->setScale9Enabled(true);
                 AXLOGD("position = {}, {},  anchor point = {}, {}", normalSprite->getPosition().x,
-                      normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
-                      normalSprite->getAnchorPoint().y);
+                       normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
+                       normalSprite->getAnchorPoint().y);
                 AXLOGD("tests:content size : width = {}, height = {}", normalSprite->getContentSize().width,
-                      normalSprite->getContentSize().height);
+                       normalSprite->getContentSize().height);
             }
         });
         this->addChild(button1);
@@ -909,10 +910,10 @@ bool UIS9ChangeAnchorPoint::init()
                 normalSprite->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
                 normalSprite->setScale9Enabled(false);
                 AXLOGD("position = {}, {},  anchor point = {}, {}", normalSprite->getPosition().x,
-                      normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
-                      normalSprite->getAnchorPoint().y);
+                       normalSprite->getPosition().y, normalSprite->getAnchorPoint().x,
+                       normalSprite->getAnchorPoint().y);
                 AXLOGD("tests:content size : width = {}, height = {}", normalSprite->getContentSize().width,
-                      normalSprite->getContentSize().height);
+                       normalSprite->getContentSize().height);
             }
         });
         this->addChild(button2);
@@ -940,14 +941,14 @@ bool UIS9NinePatchTest::init()
         playerSprite->setContentSize(preferedSize);
         auto capInsets = playerSprite->getCapInsets();
         AXLOGD("player sprite capInset = {}, {} {}, {}", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
-              capInsets.size.height);
+               capInsets.size.height);
         this->addChild(playerSprite);
 
         auto animationBtnSprite = ui::Scale9Sprite::createWithSpriteFrameName("animationbuttonpressed.png");
         animationBtnSprite->setPosition(x - 100, y - 100);
         capInsets = animationBtnSprite->getCapInsets();
         AXLOGD("animationBtnSprite capInset = {}, {} {}, {}", capInsets.origin.x, capInsets.origin.y,
-              capInsets.size.width, capInsets.size.height);
+               capInsets.size.width, capInsets.size.height);
         this->addChild(animationBtnSprite);
 
         auto monsterSprite = ui::Scale9Sprite::createWithSpriteFrameName("monster.9.png");
@@ -955,7 +956,7 @@ bool UIS9NinePatchTest::init()
         capInsets = monsterSprite->getCapInsets();
         monsterSprite->setContentSize(preferedSize);
         AXLOGD("monsterSprite capInset = {}, {} {}, {}", capInsets.origin.x, capInsets.origin.y, capInsets.size.width,
-              capInsets.size.height);
+               capInsets.size.height);
         this->addChild(monsterSprite);
 
         auto spriteFrame        = SpriteFrameCache::getInstance()->getSpriteFrameByName("buttonnormal.9.png");

@@ -57,8 +57,7 @@ public:
     void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
 
     PUDoExpireEventHandler() : PUEventHandler() {}
-    virtual ~PUDoExpireEventHandler(){};
+    virtual ~PUDoExpireEventHandler() {};
 };
 
-}
-
+}  // namespace ax

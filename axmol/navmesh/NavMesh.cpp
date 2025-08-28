@@ -661,6 +661,6 @@ void ax::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec3>
     }
 }
 
-}
+}  // namespace ax
 
 #endif  // AX_ENABLE_NAVMESH

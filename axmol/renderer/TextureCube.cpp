@@ -211,8 +211,7 @@ bool TextureCube::init(std::string_view positive_x,
     rhi::TextureDesc textureDesc{};
     textureDesc.width = textureDesc.height = imageSize;
     textureDesc.textureType                = rhi::TextureType::TEXTURE_CUBE;
-    _texture =
-        static_cast<rhi::Texture*>(axdrv->createTexture(textureDesc));
+    _texture                               = static_cast<rhi::Texture*>(axdrv->createTexture(textureDesc));
     AXASSERT(_texture != nullptr, "TextureCubemap: texture can not be nullptr");
 
     for (int i = 0; i < 6; i++)
@@ -228,8 +227,8 @@ bool TextureCube::init(std::string_view positive_x,
         if (ePixelFmt != rhi::PixelFormat::RGBA8)
         {
             size_t len = 0;
-            rhi::RHIUtils::convertDataToFormat(pData, img->getDataSize(), ePixelFmt,
-                                                           rhi::PixelFormat::RGBA8, &cData, &len);
+            rhi::RHIUtils::convertDataToFormat(pData, img->getDataSize(), ePixelFmt, rhi::PixelFormat::RGBA8, &cData,
+                                               &len);
             if (cData != pData)  // convert error
             {
                 useData = cData;
@@ -268,4 +267,4 @@ bool TextureCube::reloadTexture()
     return init(_imgPath[0], _imgPath[1], _imgPath[2], _imgPath[3], _imgPath[4], _imgPath[5]);
 }
 
-}
+}  // namespace ax

@@ -35,9 +35,9 @@
 namespace ax
 {
 
-PixelFormat RenderViewImpl::_pixelFormat        = PixelFormat::RGB565;
-PixelFormat RenderViewImpl::_depthFormat        = PixelFormat::D24S8;
-int RenderViewImpl::_multisamplingCount = 0;
+PixelFormat RenderViewImpl::_pixelFormat = PixelFormat::RGB565;
+PixelFormat RenderViewImpl::_depthFormat = PixelFormat::D24S8;
+int RenderViewImpl::_multisamplingCount  = 0;
 
 RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 {
@@ -52,9 +52,9 @@ RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 }
 
 RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
-                                       const ax::Rect& rect,
-                                       float frameZoomFactor,
-                                       bool resizable)
+                                               const ax::Rect& rect,
+                                               float frameZoomFactor,
+                                               bool resizable)
 {
     auto ret = new RenderViewImpl;
     if (ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
@@ -119,7 +119,10 @@ RenderViewImpl::~RenderViewImpl()
     //[eaView release];
 }
 
-bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rect, float frameZoomFactor, bool /*resizable*/)
+bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
+                                  const Rect& rect,
+                                  float frameZoomFactor,
+                                  bool /*resizable*/)
 {
     CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     choosePixelFormats();
@@ -129,12 +132,12 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rec
 
     // create platform render view
     EARenderView* eaView = [EARenderView viewWithFrame:r
-                                         pixelFormat:(int)_pixelFormat
-                                         depthFormat:(int)_depthFormat
-                                  preserveBackbuffer:NO
-                                          sharegroup:nil
-                                     multiSampling:_multisamplingCount > 0 ? YES : NO
-                                     numberOfSamples:_multisamplingCount];
+                                           pixelFormat:(int)_pixelFormat
+                                           depthFormat:(int)_depthFormat
+                                    preserveBackbuffer:NO
+                                            sharegroup:nil
+                                         multiSampling:_multisamplingCount > 0 ? YES : NO
+                                       numberOfSamples:_multisamplingCount];
 
     // Not available on tvOS
 #if !defined(AX_TARGET_OS_TVOS)
@@ -173,13 +176,13 @@ void RenderViewImpl::setMultipleTouchEnabled(bool enabled)
 
 void RenderViewImpl::showWindow(void* viewController)
 {
-    auto window = (__bridge UIWindow*)_eaWindowHandle;
+    auto window     = (__bridge UIWindow*)_eaWindowHandle;
     auto controller = (__bridge UIViewController*)viewController;
 
 #if !defined(AX_TARGET_OS_TVOS)
     controller.extendedLayoutIncludesOpaqueBars = YES;
 #endif
-    auto view = (__bridge EARenderView*)_eaViewHandle;
+    auto view       = (__bridge EARenderView*)_eaViewHandle;
     controller.view = view;
 
     // Set RootViewController to window
@@ -302,9 +305,9 @@ Rect RenderViewImpl::getSafeAreaRect() const
 
 void RenderViewImpl::queueOperation(void (*op)(void*), void* param)
 {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^(void){
-        op(param);
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^(void) {
+      op(param);
     }];
 }
 
-}
+}  // namespace ax

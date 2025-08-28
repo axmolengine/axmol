@@ -33,13 +33,14 @@
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 namespace
 {
 
-#define byte(n) ((n)*8)
-#define bit(n) (n)
+#define byte(n) ((n) * 8)
+#define bit(n)  (n)
 static uint8_t getBitsPerElementMTL(MTLPixelFormat pixleFormat)
 {
     switch (pixleFormat)
@@ -134,7 +135,7 @@ static MTLRenderPassDescriptor* toMTLRenderPassDesc(const RenderTarget* rt, cons
     return mtlDesc;
 }
 
-}
+}  // namespace
 
 CommandBufferImpl::CommandBufferImpl(DriverImpl* driver)
     : _mtlCommandQueue(driver->getMTLCommandQueue())
@@ -177,7 +178,7 @@ bool CommandBufferImpl::beginFrame()
 }
 
 void CommandBufferImpl::updateRenderCommandEncoder(const RenderTarget* renderTarget,
-                                                  const RenderPassDesc& renderPassDesc)
+                                                   const RenderPassDesc& renderPassDesc)
 {
     if (_mtlRenderEncoder != nil && _currentRenderPassDesc == renderPassDesc && _currentRenderTarget == renderTarget &&
         !renderTarget->isDirty())
@@ -185,8 +186,8 @@ void CommandBufferImpl::updateRenderCommandEncoder(const RenderTarget* renderTar
         return;
     }
 
-    _currentRenderTarget      = renderTarget;
-    _currentRenderPassDesc    = renderPassDesc;
+    _currentRenderTarget   = renderTarget;
+    _currentRenderPassDesc = renderPassDesc;
 
     if (_mtlRenderEncoder != nil)
     {
@@ -195,7 +196,7 @@ void CommandBufferImpl::updateRenderCommandEncoder(const RenderTarget* renderTar
         _mtlRenderEncoder = nil;
     }
 
-    auto mtlDesc  = toMTLRenderPassDesc(renderTarget, renderPassDesc);
+    auto mtlDesc        = toMTLRenderPassDesc(renderTarget, renderPassDesc);
     _renderTargetWidth  = (unsigned int)mtlDesc.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDesc.colorAttachments[0].texture.height;
     _mtlRenderEncoder   = [_mtlCommandBuffer renderCommandEncoderWithDescriptor:mtlDesc];
@@ -245,13 +246,18 @@ void CommandBufferImpl::setWinding(Winding winding)
 void CommandBufferImpl::setVertexBuffer(Buffer* buffer)
 {
     // Vertex buffer is bound in index DEFAULT_ATTRIBS_BINDING_INDEX.
-    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferImpl*>(buffer)->getMTLBuffer() offset:0 atIndex:DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX];
+    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferImpl*>(buffer)->getMTLBuffer()
+                                offset:0
+                               atIndex:DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX];
 }
 
-void CommandBufferImpl::setInstanceBuffer(Buffer* buffer) {
+void CommandBufferImpl::setInstanceBuffer(Buffer* buffer)
+{
     // Vertex instancing transform buffer is bound in index VBO_INSTANCING_BINDING_INDEX.
     // TODO: sync device binding macros to AXSLCC
-    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferImpl*>(buffer)->getMTLBuffer() offset:0 atIndex:DriverImpl::VBO_INSTANCING_BINDING_INDEX];
+    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferImpl*>(buffer)->getMTLBuffer()
+                                offset:0
+                               atIndex:DriverImpl::VBO_INSTANCING_BINDING_INDEX];
 }
 
 void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
@@ -264,46 +270,56 @@ void CommandBufferImpl::setIndexBuffer(Buffer* buffer)
     [_mtlIndexBuffer retain];
 }
 
-void CommandBufferImpl::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe /* unused */)
+void CommandBufferImpl::drawArrays(PrimitiveType primitiveType,
+                                   std::size_t start,
+                                   std::size_t count,
+                                   bool wireframe /* unused */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType) vertexStart:start vertexCount:count];
 }
 
-void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType, std::size_t start, std::size_t count, int instanceCount, bool wireframe /* unused */)
+void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType,
+                                            std::size_t start,
+                                            std::size_t count,
+                                            int instanceCount,
+                                            bool wireframe /* unused */)
 {
     prepareDrawing();
-    [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType) vertexStart:start vertexCount:count instanceCount:instanceCount];
+    [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType)
+                          vertexStart:start
+                          vertexCount:count
+                        instanceCount:instanceCount];
 }
 
 void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
-                                    IndexFormat indexType,
-                                    std::size_t count,
-                                    std::size_t offset,
-									bool /* wireframe */)
+                                     IndexFormat indexType,
+                                     std::size_t count,
+                                     std::size_t offset,
+                                     bool /* wireframe */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
-                                indexCount:count
-                                indexType:toMTLIndexType(indexType)
-                                indexBuffer:_mtlIndexBuffer
-                                indexBufferOffset:offset];
+                                  indexCount:count
+                                   indexType:toMTLIndexType(indexType)
+                                 indexBuffer:_mtlIndexBuffer
+                           indexBufferOffset:offset];
 }
 
 void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                           IndexFormat indexType,
-                           std::size_t count,
-                           std::size_t offset,
-                           int instanceCount,
-                           bool /* wireframe */)
+                                              IndexFormat indexType,
+                                              std::size_t count,
+                                              std::size_t offset,
+                                              int instanceCount,
+                                              bool /* wireframe */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
-                                indexCount:count
-                                indexType:toMTLIndexType(indexType)
-                                indexBuffer:_mtlIndexBuffer
-                                indexBufferOffset:offset
-                                instanceCount:instanceCount];
+                                  indexCount:count
+                                   indexType:toMTLIndexType(indexType)
+                                 indexBuffer:_mtlIndexBuffer
+                           indexBufferOffset:offset
+                               instanceCount:instanceCount];
 }
 
 void CommandBufferImpl::endRenderPass()
@@ -345,7 +361,8 @@ void CommandBufferImpl::endFrame()
 
 void CommandBufferImpl::endEncoding()
 {
-    if (_mtlRenderEncoder) {
+    if (_mtlRenderEncoder)
+    {
         [_mtlRenderEncoder endEncoding];
         [_mtlRenderEncoder release];
     }
@@ -384,7 +401,7 @@ void CommandBufferImpl::flushCaptureCommands()
                 if (!screenPixelData)
                 {
                     CommandBufferImpl::readPixels(_drawableTexture, 0, 0, [_drawableTexture width],
-                                                 [_drawableTexture height], screenPixelData);
+                                                  [_drawableTexture height], screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
                     axdrv->setFrameBufferOnly(true);
                 }
@@ -434,11 +451,11 @@ void CommandBufferImpl::setTextures() const
 {
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
-        auto& texs = bindingSet.texs;
+        auto& texs     = bindingSet.texs;
         auto arraySize = texs.size();
-        for(auto k = 0; k < arraySize; ++k)
+        for (auto k = 0; k < arraySize; ++k)
         {
-            const auto slot = bindingIndex + k;
+            const auto slot  = bindingIndex + k;
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
             [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:slot];
             [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:slot];
@@ -457,7 +474,7 @@ void CommandBufferImpl::setUniformBuffer() const
         // axslcc spec, bound to 0
         constexpr int bindingIndex = DriverImpl::VBO_BINDING_INDEX_START;
 
-        auto vertexUB     = _programState->getVertexUniformBuffer();
+        auto vertexUB = _programState->getVertexUniformBuffer();
         if (!vertexUB.empty())
         {
             [_mtlRenderEncoder setVertexBytes:vertexUB.data() length:vertexUB.size() atIndex:bindingIndex];
@@ -502,35 +519,34 @@ void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float w
 }
 
 void CommandBufferImpl::readPixels(Texture* texture,
-                                  std::size_t origX,
-                                  std::size_t origY,
-                                  std::size_t rectWidth,
-                                  std::size_t rectHeight,
-                                  PixelBufferDesc& pbd)
+                                   std::size_t origX,
+                                   std::size_t origY,
+                                   std::size_t rectWidth,
+                                   std::size_t rectHeight,
+                                   PixelBufferDesc& pbd)
 {
     CommandBufferImpl::readPixels(static_cast<TextureImpl*>(texture)->internalHandle(), origX, origY, rectWidth,
-                                 rectHeight, pbd);
+                                  rectHeight, pbd);
 }
 
 void CommandBufferImpl::readPixels(id<MTLTexture> texture,
-                                  std::size_t origX,
-                                  std::size_t origY,
-                                  std::size_t rectWidth,
-                                  std::size_t rectHeight,
-                                  PixelBufferDesc& pbd)
+                                   std::size_t origX,
+                                   std::size_t origY,
+                                   std::size_t rectWidth,
+                                   std::size_t rectHeight,
+                                   PixelBufferDesc& pbd)
 {
     NSUInteger texWidth   = texture.width;
     NSUInteger texHeight  = texture.height;
     MTLRegion region      = MTLRegionMake2D(0, 0, texWidth, texHeight);
     MTLRegion imageRegion = MTLRegionMake2D(origX, origY, rectWidth, rectHeight);
 
-    MTLTextureDescriptor* textureDesc =
-        [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:[texture pixelFormat]
-                                                           width:texWidth
-                                                          height:texHeight
-                                                       mipmapped:NO];
-    id<MTLDevice> device             = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
-    id<MTLTexture> readPixelsTexture = [device newTextureWithDescriptor:textureDesc];
+    MTLTextureDescriptor* textureDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:[texture pixelFormat]
+                                                                                           width:texWidth
+                                                                                          height:texHeight
+                                                                                       mipmapped:NO];
+    id<MTLDevice> device              = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
+    id<MTLTexture> readPixelsTexture  = [device newTextureWithDescriptor:textureDesc];
 
     id<MTLCommandQueue> commandQueue = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCommandQueue();
     auto commandBuffer               = [commandQueue commandBuffer];
@@ -568,4 +584,4 @@ void CommandBufferImpl::readPixels(id<MTLTexture> texture,
     [commandBuffer waitUntilCompleted];
 }
 
-}
+}  // namespace ax::rhi::mtl

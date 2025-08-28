@@ -31,12 +31,12 @@
 
 NS_AX_EXT_BEGIN
 
-#define ControlStepperLabelColorEnabled Color32(55, 55, 55, 255)
+#define ControlStepperLabelColorEnabled  Color32(55, 55, 55, 255)
 #define ControlStepperLabelColorDisabled Color32(147, 147, 147, 255)
 
-#define ControlStepperLabelFont "CourierNewPSMT"
+#define ControlStepperLabelFont          "CourierNewPSMT"
 
-#define kAutorepeatDeltaTime 0.15f
+#define kAutorepeatDeltaTime             0.15f
 #define kAutorepeatIncreaseTimeIncrement 12
 
 ControlStepper::ControlStepper()

@@ -128,7 +128,7 @@ protected:
     /**
      * Update(float dt) will call this handler, you can handle your logic here
      */
-    virtual void updateHandler(){};
+    virtual void updateHandler() {};
 
 protected:
     //! Scale the process speed

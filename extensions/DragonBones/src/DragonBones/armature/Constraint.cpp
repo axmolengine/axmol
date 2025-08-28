@@ -77,7 +77,8 @@ void IKConstraint::_computeB()
     {
         radianA = std::atan2(ikGlobal.y - parentGlobal.y, ikGlobal.x - parentGlobal.x);
         if (lL + lP <= lT)
-        {}
+        {
+        }
         else if (lP < lL)
         {
             radianA += Transform::PI;

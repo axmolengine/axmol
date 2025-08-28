@@ -64,12 +64,11 @@ class AX_DLL SAXParser
     SAXDelegator* _delegator;
 
 public:
-
     enum class ParseOption
     {
-        NORMAL, // parse_normal
-        HTML, // parse_normal|parse_html_entity_translation|parse_normalize_whitespace
-        TRIM_WHITESPACE, // parse_normal|parse_trim_whitespace
+        NORMAL,           // parse_normal
+        HTML,             // parse_normal|parse_html_entity_translation|parse_normalize_whitespace
+        TRIM_WHITESPACE,  // parse_normal|parse_trim_whitespace
     };
 
     /**
@@ -119,4 +118,4 @@ public:
 // end of platform group
 /// @}
 
-}
+}  // namespace ax

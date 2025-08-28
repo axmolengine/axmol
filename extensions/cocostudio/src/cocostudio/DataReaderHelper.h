@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/document.h"
 
-
 #include <string>
 #include <queue>
 #include <mutex>
@@ -86,7 +85,6 @@ protected:
     } DataInfo;
 
 public:
-
     static DataReaderHelper* getInstance();
     static void destroyInstance();
 

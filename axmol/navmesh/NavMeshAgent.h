@@ -231,6 +231,6 @@ private:
 
 /** @} */
 
-}
+}  // namespace ax
 
 #endif  // AX_ENABLE_NAVMESH

@@ -47,16 +47,16 @@ void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const
             int narg = err->index;
             if (err->array)
                 AXLOGD("{}\n     {} argument #{} is array of '{}'; array of '{}' expected.\n", msg + 2, funcName, narg,
-                      provided, expected);
+                       provided, expected);
             else
                 AXLOGD("{}\n     {} argument #{} is '{}'; '{}' expected.\n", msg + 2, funcName, narg, provided,
-                      expected);
+                       expected);
         }
         else if (msg[1] == 'v')
         {
             if (err->array)
                 AXLOGD("{}\n     {} value is array of '{}'; array of '{}' expected.\n", funcName, msg + 2, provided,
-                      expected);
+                       expected);
             else
                 AXLOGD("{}\n     {} value is '{}'; '{}' expected.\n", msg + 2, funcName, provided, expected);
         }
@@ -542,7 +542,7 @@ bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue,
     }
     return ok;
 }
-#endif  //#if defined(AX_ENABLE_PHYSICS)
+#endif  // #if defined(AX_ENABLE_PHYSICS)
 
 bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
@@ -2001,10 +2001,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret,
     return ok;
 }
 
-bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
-                                      int lo,
-                                      std::vector<ax::V3F_T2F_C4F>* ret,
-                                      const char* funcName)
+bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L, int lo, std::vector<ax::V3F_T2F_C4F>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -2296,7 +2293,7 @@ void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data)
     lua_pushnumber(L, data->POINT_MAX);
     lua_rawset(L, -3);
 }
-#endif  //#if defined(AX_ENABLE_PHYSICS)
+#endif  // #if defined(AX_ENABLE_PHYSICS)
 
 void size_to_luaval(lua_State* L, const Size& sz)
 {
@@ -2334,41 +2331,42 @@ void color32_to_luaval(lua_State* L, const Color32& color)
 {
     if (NULL == L)
         return;
-    lua_newtable(L);                     /* L: table */
-    lua_pushstring(L, "r");              /* L: table key */
+    lua_newtable(L);                        /* L: table */
+    lua_pushstring(L, "r");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-    lua_pushstring(L, "g");              /* L: table key */
+    lua_rawset(L, -3);                      /* table[key] = value, L: table */
+    lua_pushstring(L, "g");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-    lua_pushstring(L, "b");              /* L: table key */
+    lua_rawset(L, -3);                      /* table[key] = value, L: table */
+    lua_pushstring(L, "b");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-    lua_pushstring(L, "a");              /* L: table key */
+    lua_rawset(L, -3);                      /* table[key] = value, L: table */
+    lua_pushstring(L, "a");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
+    lua_rawset(L, -3);                      /* table[key] = value, L: table */
 }
 
 void color_to_luaval(lua_State* L, const ax::Color& color)
 {
     if (NULL == L)
         return;
-    lua_newtable(L);                     /* L: table */
-    lua_pushstring(L, "r");              /* L: table key */
+    lua_newtable(L);                        /* L: table */
+    lua_pushstring(L, "r");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-    lua_pushstring(L, "g");              /* L: table key */
+    lua_rawset(L, -3);                      /* table[key] = value, L: table */
+    lua_pushstring(L, "g");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-    lua_pushstring(L, "b");              /* L: table key */
+    lua_rawset(L, -3);                      /* table[key] = value, L: table */
+    lua_pushstring(L, "b");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
-    lua_pushstring(L, "a");              /* L: table key */
+    lua_rawset(L, -3);                      /* table[key] = value, L: table */
+    lua_pushstring(L, "a");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
-    lua_rawset(L, -3);                   /* table[key] = value, L: table */
+    lua_rawset(L, -3);                      /* table[key] = value, L: table */
 }
 
-void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value) {
+void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value)
+{
     auto threadHash = std::hash<std::thread::id>{}(value);
     lua_pushinteger(L, threadHash);
 }
@@ -2984,7 +2982,7 @@ bool luaval_to_vertexLayout(lua_State* L, int pos, ax::rhi::VertexLayout& outLay
         return false;
 
     ax::rhi::VertexLayout* tmp = nullptr;
-    auto ret = luaval_to_object<ax::rhi::VertexLayout>(L, pos, "ax.VertexLayout", &tmp, message);
+    auto ret                   = luaval_to_object<ax::rhi::VertexLayout>(L, pos, "ax.VertexLayout", &tmp, message);
     if (!tmp)
     {
         return false;
@@ -2993,10 +2991,7 @@ bool luaval_to_vertexLayout(lua_State* L, int pos, ax::rhi::VertexLayout& outLay
     return ret;
 }
 
-bool luaval_to_samplerDesc(lua_State* L,
-                                 int pos,
-                                 ax::rhi::SamplerDesc& output,
-                                 const char* message)
+bool luaval_to_samplerDesc(lua_State* L, int pos, ax::rhi::SamplerDesc& output, const char* message)
 {
     if (L == nullptr)
         return false;
@@ -3042,7 +3037,7 @@ bool luaval_to_stageUniformLocation(lua_State* L, int pos, ax::rhi::StageUniform
         return false;
 
     if (pos < 0)
-        pos -= 1; // since we'll be pushing keys for table access
+        pos -= 1;  // since we'll be pushing keys for table access
 
     lua_pushstring(L, "location");
     lua_gettable(L, pos);

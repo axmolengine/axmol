@@ -39,4 +39,4 @@ void Particle3DEmitter::updateEmitter(Particle3D* /*particle*/, float /*deltaTim
 
 void Particle3DEmitter::emit(int /*count*/) {}
 
-}
+}  // namespace ax

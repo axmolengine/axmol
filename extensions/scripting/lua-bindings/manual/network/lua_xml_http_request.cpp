@@ -205,71 +205,70 @@ void LuaMinXmlHttpRequest::_setHttpRequestHeader()
  */
 void LuaMinXmlHttpRequest::_sendRequest()
 {
-    _httpRequest->setResponseCallback(
-        [this](ax::network::HttpClient* sender, ax::network::HttpResponse* response) {
-            if (_isAborted)
-                return;
-            auto tag = response->getHttpRequest()->getTag();
-            if (!tag.empty())
+    _httpRequest->setResponseCallback([this](ax::network::HttpClient* sender, ax::network::HttpResponse* response) {
+        if (_isAborted)
+            return;
+        auto tag = response->getHttpRequest()->getTag();
+        if (!tag.empty())
+        {
+            AXLOGD("{} completed", tag);
+        }
+
+        int statusCode = response->getResponseCode();
+
+        if (!response->isSucceed())
+        {
+            AXLOGD("Response failed, statusCode: {}", statusCode);
+            if (statusCode == 0)
             {
-                AXLOGD("{} completed", tag);
+                _errorFlag = true;
+                _status    = 0;
+                _statusText.clear();
             }
-
-            int statusCode = response->getResponseCode();
-
-            if (!response->isSucceed())
-            {
-                AXLOGD("Response failed, statusCode: {}", statusCode);
-                if (statusCode == 0)
-                {
-                    _errorFlag = true;
-                    _status    = 0;
-                    _statusText.clear();
-                }
-                // TODO: call back lua function
-                int handler = ax::ScriptHandlerMgr::getInstance()->getObjectHandler(
-                    (void*)this, ax::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
-
-                if (0 != handler)
-                {
-                    AXLOGD("come in handler, handler is {}", handler);
-                    ax::CommonScriptData data(handler, "");
-                    ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
-                    ax::ScriptEngineManager::sendEventToLua(event);
-                }
-                return;
-            }
-
-            // set header
-            _httpHeader = response->getResponseHeaders();
-
-            /** get the response data **/
-            auto buffer = response->getResponseData();
-
-            if (statusCode == 200)
-            {
-                // Succeeded
-                _status     = 200;
-                _readyState = DONE;
-                _data       = std::move(*buffer);
-            }
-            else
-            {
-                _status = 0;
-            }
-
             // TODO: call back lua function
             int handler = ax::ScriptHandlerMgr::getInstance()->getObjectHandler(
                 (void*)this, ax::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
 
             if (0 != handler)
             {
+                AXLOGD("come in handler, handler is {}", handler);
                 ax::CommonScriptData data(handler, "");
                 ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
                 ax::ScriptEngineManager::sendEventToLua(event);
             }
-            release();
-        });
+            return;
+        }
+
+        // set header
+        _httpHeader = response->getResponseHeaders();
+
+        /** get the response data **/
+        auto buffer = response->getResponseData();
+
+        if (statusCode == 200)
+        {
+            // Succeeded
+            _status     = 200;
+            _readyState = DONE;
+            _data       = std::move(*buffer);
+        }
+        else
+        {
+            _status = 0;
+        }
+
+        // TODO: call back lua function
+        int handler = ax::ScriptHandlerMgr::getInstance()->getObjectHandler(
+            (void*)this, ax::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+
+        if (0 != handler)
+        {
+            ax::CommonScriptData data(handler, "");
+            ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
+            ax::ScriptEngineManager::sendEventToLua(event);
+        }
+        release();
+    });
     network::HttpClient::getInstance()->send(_httpRequest);
     retain();
 }

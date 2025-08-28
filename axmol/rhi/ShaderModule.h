@@ -29,7 +29,8 @@
 
 #include <string>
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 // #define AX_USE_UNIFORM_FULL_NAME
 
@@ -84,9 +85,9 @@ protected:
 
     friend class ShaderCache;
     ShaderStage _stage = ShaderStage::VERTEX;
-    uint64_t _hash  = 0;
+    uint64_t _hash     = 0;
 };
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

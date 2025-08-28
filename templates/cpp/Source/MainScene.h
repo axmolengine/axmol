@@ -71,4 +71,3 @@ private:
     ax::EventListenerMouse* _mouseListener          = nullptr;
     int _sceneID                                    = 0;
 };
-

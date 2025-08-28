@@ -143,4 +143,4 @@ bool PUOnPositionObserverTranslator::translateChildObject(PUScriptCompiler* /*co
     return false;
 }
 
-}
+}  // namespace ax

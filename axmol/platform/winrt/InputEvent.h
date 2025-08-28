@@ -49,8 +49,8 @@ enum PointerEventType
 };
 enum MouseButton
 {
-    Left = 0,
-    Right = 1,
+    Left   = 0,
+    Right  = 1,
     Middle = 2,
     None
 };
@@ -62,7 +62,6 @@ public:
     virtual ~InputEvent() {};
     virtual void execute() = 0;
 };
-
 
 class AX_DLL AccelerometerEvent : public InputEvent
 {
@@ -79,7 +78,6 @@ class AX_DLL PointerEvent : public InputEvent
 public:
     PointerEvent(PointerEventType type, const Windows::UI::Core::PointerEventArgs& args);
     virtual void execute();
-
 
 private:
     PointerEventType m_type;
@@ -101,21 +99,20 @@ private:
 
 enum WinRTKeyboardEventType
 {
-	KeyPressed,
-	KeyReleased,
+    KeyPressed,
+    KeyReleased,
 };
 
 class AX_DLL WinRTKeyboardEvent : public InputEvent
 {
 public:
-	WinRTKeyboardEvent(WinRTKeyboardEventType type, const Windows::UI::Core::KeyEventArgs& args);
-	virtual void execute();
+    WinRTKeyboardEvent(WinRTKeyboardEventType type, const Windows::UI::Core::KeyEventArgs& args);
+    virtual void execute();
 
 private:
-	WinRTKeyboardEventType m_type;
+    WinRTKeyboardEventType m_type;
     Windows::UI::Core::KeyEventArgs m_key;
 };
-
 
 class AX_DLL BackButtonEvent : public InputEvent
 {
@@ -129,6 +126,7 @@ class AX_DLL CustomInputEvent : public InputEvent
 public:
     CustomInputEvent(const std::function<void()>&);
     virtual void execute();
+
 private:
     std::function<void()> m_fun;
 };
@@ -167,14 +165,13 @@ public:
                       const winrt::hstring& text,
                       int action,
                       winrt::delegate<Windows::Foundation::IInspectable const&, EndEventArgs const&>& handle);
-  virtual void execute();
+    virtual void execute();
+
 protected:
-  int m_action;
-  Windows::Foundation::IInspectable m_sender;
-  winrt::hstring m_text;
-  winrt::delegate<Windows::Foundation::IInspectable const&, EndEventArgs const&> m_handler;
+    int m_action;
+    Windows::Foundation::IInspectable m_sender;
+    winrt::hstring m_text;
+    winrt::delegate<Windows::Foundation::IInspectable const&, EndEventArgs const&> m_handler;
 };
 
-}
-
-
+}  // namespace ax

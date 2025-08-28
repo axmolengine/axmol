@@ -153,10 +153,10 @@ protected:
     Color _clearColor = {0, 0, 0, 0};
 
     CustomCommand _drawCommand;
-    //CallbackCommand _beforeDrawCommand;
-    //CallbackCommand _afterDrawCommand;
-    //CallbackCommand _beforeBlitCommand;
-    //CallbackCommand _afterBlitCommand;
+    // CallbackCommand _beforeDrawCommand;
+    // CallbackCommand _afterDrawCommand;
+    // CallbackCommand _beforeBlitCommand;
+    // CallbackCommand _afterBlitCommand;
 
     // New
     rhi::RenderTarget* _oldRenderTarget = nullptr;
@@ -300,4 +300,4 @@ protected:
 // end of effects group
 /// @}
 
-}
+}  // namespace ax

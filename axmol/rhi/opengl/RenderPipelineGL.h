@@ -30,7 +30,8 @@
 
 #include <vector>
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 class ProgramImpl;
 /**
@@ -64,4 +65,4 @@ private:
 };
 // end of _opengl group
 /// @}
-}
+}  // namespace ax::rhi::gl

@@ -58,4 +58,4 @@ public:
     virtual FontFaceInfo* lookupFontFaceForCodepoint(char32_t charCode) = 0;
 };
 
-}
+}  // namespace ax

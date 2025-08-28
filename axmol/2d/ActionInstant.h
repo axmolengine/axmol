@@ -341,8 +341,8 @@ public:
     CallFunc* reverse() const override;
     CallFunc* clone() const override;
 
-    CallFunc() = default;
-    virtual ~CallFunc()                = default;
+    CallFunc()          = default;
+    virtual ~CallFunc() = default;
 
     /** initializes the action with the std::function<void()>
      * @lua NA
@@ -394,4 +394,4 @@ private:
 // end of actions group
 /// @}
 
-}
+}  // namespace ax

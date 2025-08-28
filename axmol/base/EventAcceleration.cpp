@@ -30,4 +30,4 @@ namespace ax
 
 EventAcceleration::EventAcceleration(const Acceleration& acc) : Event(Type::ACCELERATION), _acc(acc) {}
 
-}
+}  // namespace ax

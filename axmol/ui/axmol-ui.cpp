@@ -43,4 +43,4 @@ const char* CocosGUIVersion()
 }
 
 }  // namespace ui
-}
+}  // namespace ax

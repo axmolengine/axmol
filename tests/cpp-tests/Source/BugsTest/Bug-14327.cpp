@@ -44,7 +44,7 @@ bool Bug14327Layer::init()
 {
     if (BugsTestBase::init())
     {
-        auto renderView        = Director::getInstance()->getRenderView();
+        auto renderView    = Director::getInstance()->getRenderView();
         auto visibleOrigin = renderView->getVisibleOrigin();
         auto visibleSize   = renderView->getVisibleSize();
 
@@ -83,7 +83,8 @@ void Bug14327Layer::update(float dt)
     {
         ldiv_t ret = ldiv(delta, 60L);
         char buf[100];
-        auto infoStr = fmt::format_to_z(buf, "{}{:02d}:{:02d}", "Edit control will be removed after ", ret.quot, ret.rem);
+        auto infoStr =
+            fmt::format_to_z(buf, "{}{:02d}:{:02d}", "Edit control will be removed after ", ret.quot, ret.rem);
         _TTFShowTime->setString(infoStr);
     }
     else

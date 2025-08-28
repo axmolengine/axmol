@@ -76,5 +76,4 @@ protected:
     double _persistence;
 };
 
-}
-
+}  // namespace ax

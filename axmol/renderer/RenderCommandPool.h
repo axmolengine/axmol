@@ -95,6 +95,6 @@ private:
     // std::set<T*> _usedPool;
 };
 
-}
+}  // namespace ax
 
 /// @endcond

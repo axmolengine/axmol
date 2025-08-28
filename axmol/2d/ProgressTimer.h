@@ -207,4 +207,4 @@ private:
 // end of misc_nodes group
 /// @}
 
-}
+}  // namespace ax

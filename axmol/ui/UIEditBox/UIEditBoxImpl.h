@@ -92,7 +92,7 @@ public:
     /**
      * check the editbox's position, update it when needed
      */
-    virtual void updatePosition(float dt){};
+    virtual void updatePosition(float dt) {};
     /**
      * @lua NA
      */
@@ -116,4 +116,3 @@ extern EditBoxImpl* __createSystemEditBox(EditBox* pEditBox);
 
 }  // namespace ui
 }  // namespace ax
-

@@ -27,7 +27,7 @@
 
 #define KTX_V1_HEADER_SIZE 64
 
-#define KTX_V1_MAGIC "KTX 11"
+#define KTX_V1_MAGIC       "KTX 11"
 
 // ktxv1 header, refer to: https://www.khronos.org/registry/KTX/specs/1.0/ktxspec_v1.html
 struct KTXv1Header

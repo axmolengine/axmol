@@ -39,8 +39,8 @@ protected:
 
 public:
     PUEventHandlerTranslator();
-    virtual ~PUEventHandlerTranslator(){};
+    virtual ~PUEventHandlerTranslator() {};
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
+}  // namespace ax

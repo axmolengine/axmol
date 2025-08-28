@@ -166,7 +166,7 @@ struct MEVideoFrame
                  size_t len,
                  const MEVideoPixelDesc& vpd,
                  const MEIntPoint& videoDim)
-        : _vpd(vpd), _dataPointer(data), _cbcrDataPointer(cbcrData), _dataLen(len), _videoDim(videoDim){};
+        : _vpd(vpd), _dataPointer(data), _cbcrDataPointer(cbcrData), _dataLen(len), _videoDim(videoDim) {};
     const uint8_t* _dataPointer;  // the video data
     const size_t _dataLen;        // the video data len
     const uint8_t* _cbcrDataPointer;
@@ -212,4 +212,4 @@ public:
     virtual void destroyMediaEngine(MediaEngine* me) = 0;
 };
 
-}
+}  // namespace ax

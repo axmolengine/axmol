@@ -150,7 +150,7 @@ public:
     bool intersectsRect(const Rect& rect) const
     {
         return !(getMaxX() < rect.getMinX() || rect.getMaxX() < getMinX() || getMaxY() < rect.getMinY() ||
-                rect.getMaxY() < getMinY());
+                 rect.getMaxY() < getMinY());
     }
     /**
     Check the intersect status of the rect and a circle.
@@ -168,11 +168,10 @@ public:
 };
 
 #if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-    inline constexpr Rect Rect::ZERO(0, 0, 0, 0);
+inline constexpr Rect Rect::ZERO(0, 0, 0, 0);
 #endif
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}
-

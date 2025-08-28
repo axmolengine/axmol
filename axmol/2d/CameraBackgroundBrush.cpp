@@ -175,8 +175,8 @@ void CameraBackgroundDepthBrush::drawBackground(Camera* /*camera*/)
     renderer->addCommand(groupCommand);
     renderer->pushGroup(groupCommand->getRenderQueueID());
 
-    auto& blend              = _customCommand.blendDesc();
-    blend.writeMask          = _clearColor ? rhi::ColorWriteMask::ALL : rhi::ColorWriteMask::NONE;
+    auto& blend     = _customCommand.blendDesc();
+    blend.writeMask = _clearColor ? rhi::ColorWriteMask::ALL : rhi::ColorWriteMask::NONE;
 
     // draw
     _programState->setUniform(_locDepth, &_depth, sizeof(_depth));
@@ -210,7 +210,8 @@ void CameraBackgroundDepthBrush::onAfterDraw()
 
 CameraBackgroundColorBrush::CameraBackgroundColorBrush() : _color(0.f, 0.f, 0.f, 0.f) {}
 
-CameraBackgroundColorBrush::~CameraBackgroundColorBrush() {
+CameraBackgroundColorBrush::~CameraBackgroundColorBrush()
+{
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(_vertexLayout);
 }
@@ -357,7 +358,6 @@ void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
     _programState->setUniform(_uniformColorLoc, &color, sizeof(color));
     _programState->setUniform(_uniformCameraRotLoc, cameraModelMat.m, sizeof(cameraModelMat.m));
 
-
     renderer->addCommand(groupCommand);
     renderer->pushGroup(groupCommand->getRenderQueueID());
 
@@ -375,8 +375,8 @@ bool CameraBackgroundSkyBoxBrush::init()
     _customCommand.setAfterCallback(AX_CALLBACK_0(CameraBackgroundSkyBoxBrush::onAfterDraw, this));
 
     AX_SAFE_RELEASE_NULL(_programState);
-    auto* program        = axpm->getBuiltinProgram(rhi::ProgramType::SKYBOX_3D);
-    _programState        = new rhi::ProgramState(program);
+    auto* program = axpm->getBuiltinProgram(rhi::ProgramType::SKYBOX_3D);
+    _programState = new rhi::ProgramState(program);
     Object::assign(_vertexLayout, program->getVertexLayout());
     _uniformColorLoc     = _programState->getUniformLocation("u_color");
     _uniformCameraRotLoc = _programState->getUniformLocation("u_cameraRot");
@@ -461,4 +461,4 @@ void CameraBackgroundSkyBoxBrush::onAfterDraw()
     renderer->setCullMode(_stateBlock.cullMode);
 }
 
-}
+}  // namespace ax

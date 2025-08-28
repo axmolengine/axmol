@@ -189,9 +189,9 @@ Rect Helper::restrictCapInsetRect(const ax::Rect& capInsets, const Vec2& texture
 
 Rect Helper::convertBoundingBoxToScreen(Node* node)
 {
-    auto director  = Director::getInstance();
-    auto renderView    = director->getRenderView();
-    auto frameSize = renderView->getFrameSize();
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
+    auto frameSize  = renderView->getFrameSize();
 
     auto winSize    = director->getWinSize();
     auto leftBottom = node->convertToWorldSpace(Point::ZERO);
@@ -262,8 +262,7 @@ void Helper::setDesignSizeNoBorder(const Vec2& designSize)
     AXLOGD("x: {}; y: {}; scale: {}", scaleX, scaleY, s_adjustedScale);
 
     pERenderView->setDesignResolutionSize(Helper::s_designSize.width * s_adjustedScale,
-                                          Helper::s_designSize.height * s_adjustedScale,
-                                          ResolutionPolicy::NO_BORDER);
+                                          Helper::s_designSize.height * s_adjustedScale, ResolutionPolicy::NO_BORDER);
 }
 
 ax::Vec2 Helper::getVisibleOrigin(void)
@@ -295,7 +294,7 @@ Vec2 Helper::getNodeGroupSize(const std::vector<Node*>& nodes)
     for (size_t index = 1; index < nodes.size(); ++index)
     {
         Node* child = nodes[index];
-        auto x = getNodeLeft(child);
+        auto x      = getNodeLeft(child);
         if (minX > x)
         {
             minX = x;
@@ -607,7 +606,7 @@ void Helper::centerVertically(const std::vector<Node*>& nodes)
 
     // group nodes locators
     float minY = getNodeTop(nodes[0]), maxY = getNodeTop(nodes[0]) + nodes[0]->getContentSize().height;
-    float y      = 0.0f;
+    float y = 0.0f;
 
     std::for_each(nodes.begin() + 1, nodes.end(), [&](Node* child) -> void {
         if (minY > (y = getNodeTop(child)))
@@ -765,7 +764,6 @@ void Helper::alignBottoms(const std::vector<Node*>& nodes)
 
     std::for_each(nodes.begin(), nodes.end(),
                   [maxBottom](Node* child) -> void { setNodeTop(child, maxBottom - child->getContentSize().height); });
-
 }
 
 /// <summary>
@@ -784,7 +782,7 @@ void Helper::alignHorizontals(const std::vector<Node*>& nodes)
 
     for (index = 1; index < nodes.size(); ++index)
     {
-        child   = nodes[index];
+        child        = nodes[index];
         auto centerY = getNodeBottom(child, 0.5f);  // child.GetX(0.5f);
         if (minCenterY > centerY)
         {
@@ -818,7 +816,7 @@ void Helper::alignVerticals(const std::vector<Node*>& nodes)
 
     for (index = 1; index < nodes.size(); ++index)
     {
-        child   = nodes[index];
+        child        = nodes[index];
         auto centerX = getNodeLeft(child, 0.5f);  // child.GetX(0.5f);
         if (minCenterX > centerX)
         {
@@ -1448,4 +1446,4 @@ void Helper::VisibleRect::setNodeNormalizedPosition(Node* pNode, const ax::Point
 
 }  // namespace ui
 
-}
+}  // namespace ax

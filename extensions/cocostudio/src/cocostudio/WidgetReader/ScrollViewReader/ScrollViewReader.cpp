@@ -104,11 +104,11 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     std::string plistFile;
     int resourceType = 0;
 
-    bool clipEnabled = false;
-    Color32 bgColor = Color32::WHITE;
+    bool clipEnabled     = false;
+    Color32 bgColor      = Color32::WHITE;
     Color32 bgStartColor = Color32::WHITE;
-    Color32 bgEndColor = Color32::WHITE;
-    int colorType          = 0;
+    Color32 bgEndColor   = Color32::WHITE;
+    int colorType        = 0;
     Vec2 colorVector(0.0f, -0.5f);
     Rect capInsets;
     Size scale9Size;
@@ -204,7 +204,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             attribute = child.first_attribute();
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Width")
@@ -225,7 +225,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "X")
@@ -246,7 +246,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "R")
@@ -271,7 +271,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "R")
@@ -296,7 +296,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "R")
@@ -320,7 +320,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             attribute = child.first_attribute();
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "ScaleX")
@@ -344,7 +344,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -385,8 +385,8 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto options = CreateScrollViewOptions(
         *builder, widgetOptions,
         CreateResourceData(*builder, builder->CreateString(path), builder->CreateString(plistFile), resourceType),
-        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColor.a, &f_colorVector,
-        &f_capInsets, &f_scale9Size, backGroundScale9Enabled, &f_innerSize, direction, bounceEnabled, scrollbarEnabled,
+        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColor.a, &f_colorVector, &f_capInsets,
+        &f_scale9Size, backGroundScale9Enabled, &f_innerSize, direction, bounceEnabled, scrollbarEnabled,
         scrollbarAutoHide, scrollbarAutoHideTime);
 
     return *(Offset<Table>*)(&options);
@@ -403,8 +403,8 @@ void ScrollViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers
     bool backGroundScale9Enabled = options->backGroundScale9Enabled() != 0;
     scrollView->setBackGroundImageScale9Enabled(backGroundScale9Enabled);
 
-    auto f_bgColor = options->bgColor();
-    int bgColorOpacity = options->bgColorOpacity(); // FIXME: redundant, should we use f_bgColor->a() instead?
+    auto f_bgColor     = options->bgColor();
+    int bgColorOpacity = options->bgColorOpacity();  // FIXME: redundant, should we use f_bgColor->a() instead?
     Color32 bgColor(f_bgColor->r(), f_bgColor->g(), f_bgColor->b(), bgColorOpacity);
     auto f_bgStartColor = options->bgStartColor();
     Color32 bgStartColor(f_bgStartColor->r(), f_bgStartColor->g(), f_bgStartColor->b(), f_bgStartColor->a());
@@ -484,7 +484,7 @@ void ScrollViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers
 
     auto widgetOptions = options->widgetOptions();
     auto f_color       = widgetOptions->color();
-    int opacity = widgetOptions->alpha(); // FIXME: redundant, should we use f_color->a() instead?
+    int opacity        = widgetOptions->alpha();  // FIXME: redundant, should we use f_color->a() instead?
     Color32 color(f_color->r(), f_color->g(), f_color->b(), opacity);
     scrollView->setColor(color);
 

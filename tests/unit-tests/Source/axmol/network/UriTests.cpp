@@ -29,9 +29,10 @@
 using namespace ax;
 using namespace ax::network;
 
-
-TEST_SUITE("network/Uri") {
-    TEST_CASE("standard_url") {
+TEST_SUITE("network/Uri")
+{
+    TEST_CASE("standard_url")
+    {
         std::string s("http://www.facebook.com/hello/world?query#fragment");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -46,7 +47,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());  // canonical
     }
 
-    TEST_CASE("url_with_port") {
+    TEST_CASE("url_with_port")
+    {
         std::string s("http://www.facebook.com:8080/hello/world?query#fragment");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -61,7 +63,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());  // canonical
     }
 
-    TEST_CASE("url_with_ip") {
+    TEST_CASE("url_with_ip")
+    {
         std::string s("http://127.0.0.1:8080/hello/world?query#fragment");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -76,7 +79,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());  // canonical
     }
 
-    TEST_CASE("url_with_ipv6") {
+    TEST_CASE("url_with_ipv6")
+    {
         std::string s("http://[::1]:8080/hello/world?query#fragment");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -92,7 +96,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());  // canonical
     }
 
-    TEST_CASE("url_with_ipv6_port") {
+    TEST_CASE("url_with_ipv6_port")
+    {
         std::string s("http://[2401:db00:20:7004:face:0:29:0]:8080/hello/world?query");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -108,7 +113,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());  // canonical
     }
 
-    TEST_CASE("url_with_ipv6") {
+    TEST_CASE("url_with_ipv6")
+    {
         std::string s("http://[2401:db00:20:7004:face:0:29:0]/hello/world?query");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -124,7 +130,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());  // canonical
     }
 
-    TEST_CASE("user_password") {
+    TEST_CASE("user_password")
+    {
         std::string s("http://user:pass@host.com/");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -139,7 +146,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());
     }
 
-    TEST_CASE("user") {
+    TEST_CASE("user")
+    {
         std::string s("http://user@host.com/");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -154,7 +162,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());
     }
 
-    TEST_CASE("user_empty_password") {
+    TEST_CASE("user_empty_password")
+    {
         std::string s("http://user:@host.com/");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -169,7 +178,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ("http://user@host.com/", u.toString());
     }
 
-    TEST_CASE("empty_user_password") {
+    TEST_CASE("empty_user_password")
+    {
         std::string s("http://:pass@host.com/");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -184,7 +194,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());
     }
 
-    TEST_CASE("empty_user_empty_password") {
+    TEST_CASE("empty_user_empty_password")
+    {
         std::string s("http://@host.com/");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -199,7 +210,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ("http://host.com/", u.toString());
     }
 
-    TEST_CASE("empty_user_empty_password") {
+    TEST_CASE("empty_user_empty_password")
+    {
         std::string s("http://:@host.com/");
         Uri u = Uri::parse(s);
         CHECK_EQ("http", u.getScheme());
@@ -214,7 +226,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ("http://host.com/", u.toString());
     }
 
-    TEST_CASE("local_file_tripple_slash") {
+    TEST_CASE("local_file_tripple_slash")
+    {
         std::string s("file:///etc/motd");
         Uri u = Uri::parse(s);
         CHECK_EQ("file", u.getScheme());
@@ -229,7 +242,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());
     }
 
-    TEST_CASE("local_file"){
+    TEST_CASE("local_file")
+    {
         std::string s("file://etc/motd");
         Uri u = Uri::parse(s);
         CHECK_EQ("file", u.getScheme());
@@ -244,13 +258,14 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(s, u.toString());
     }
 
-    TEST_CASE("query_parameters") {
+    TEST_CASE("query_parameters")
+    {
         // test query parameters
         std::string s("http://localhost?&key1=foo&key2=&key3&=bar&=bar=&");
         Uri u           = Uri::parse(s);
         auto paramsList = u.getQueryParams();
         std::map<std::string, std::string> params;
-        for (auto&&param : paramsList)
+        for (auto&& param : paramsList)
         {
             params[param.first] = param.second;
         }
@@ -262,7 +277,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ("", params["key3"]);
     }
 
-    TEST_CASE("invalid_parameters") {
+    TEST_CASE("invalid_parameters")
+    {
         // test query parameters
         std::string s("http://localhost?&&&&&&&&&&&&&&&");
         Uri u       = Uri::parse(s);
@@ -270,13 +286,14 @@ TEST_SUITE("network/Uri") {
         CHECK(params.empty());
     }
 
-    TEST_CASE("invalid_parameters_2") {
+    TEST_CASE("invalid_parameters_2")
+    {
         // test query parameters
         std::string s("http://localhost?&=invalid_key&key2&key3=foo");
         Uri u           = Uri::parse(s);
         auto paramsList = u.getQueryParams();
         std::map<std::string, std::string> params;
-        for (auto&&param : paramsList)
+        for (auto&& param : paramsList)
         {
             params[param.first] = param.second;
         }
@@ -286,13 +303,14 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ("foo", params["key3"]);
     }
 
-    TEST_CASE("invalid_parameters_3") {
+    TEST_CASE("invalid_parameters_3")
+    {
         // test query parameters
         std::string s("http://localhost?&key1=====&&=key2&key3=");
         Uri u           = Uri::parse(s);
         auto paramsList = u.getQueryParams();
         std::map<std::string, std::string> params;
-        for (auto&&param : paramsList)
+        for (auto&& param : paramsList)
         {
             params[param.first] = param.second;
         }
@@ -301,12 +319,14 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ("", params["key3"]);
     }
 
-    TEST_CASE("various") {
+    TEST_CASE("various")
+    {
         // test query parameters
         std::string s("ws://localhost:90?key1=foo=bar&key2=foobar&");
-        Uri u           = Uri::parse(s);
+        Uri u = Uri::parse(s);
 
-        SUBCASE("invalid_parameters_4") {
+        SUBCASE("invalid_parameters_4")
+        {
             auto paramsList = u.getQueryParams();
             std::map<std::string, std::string> params;
             for (auto&& param : paramsList)
@@ -317,7 +337,8 @@ TEST_SUITE("network/Uri") {
             CHECK_EQ("foobar", params["key2"]);
         }
 
-        SUBCASE("copy_constructor") {
+        SUBCASE("copy_constructor")
+        {
             Uri v(u);
             u = v = u;
             CHECK(v.isValid());
@@ -331,7 +352,8 @@ TEST_SUITE("network/Uri") {
             CHECK_EQ(u, v);
         }
 
-        SUBCASE("copy_assign_operator") {
+        SUBCASE("copy_assign_operator")
+        {
             Uri v;
             v = u;
             CHECK(v.isValid());
@@ -345,17 +367,20 @@ TEST_SUITE("network/Uri") {
             CHECK_EQ(u, v);
         }
 
-        SUBCASE("self_assignment") {
+        SUBCASE("self_assignment")
+        {
             u = u;
             CHECK(u.isValid());
         }
 
-        SUBCASE("self_move_assignment") {
+        SUBCASE("self_move_assignment")
+        {
             u = std::move(u);
             CHECK(u.isValid());
         }
 
-        SUBCASE("move_constructor"){
+        SUBCASE("move_constructor")
+        {
             Uri v = std::move(u);
             CHECK_FALSE(u.isValid());
             CHECK(v.isValid());
@@ -369,7 +394,8 @@ TEST_SUITE("network/Uri") {
             u = std::move(v);
         }
 
-        SUBCASE("copy_assign_operator") {
+        SUBCASE("copy_assign_operator")
+        {
             Uri v;
             v = std::move(u);
             CHECK_FALSE(u.isValid());
@@ -385,46 +411,53 @@ TEST_SUITE("network/Uri") {
         }
     }
 
-    TEST_CASE("invalid_url") {
+    TEST_CASE("invalid_url")
+    {
         std::string s("2http://www.facebook.com");
 
         Uri u = Uri::parse(s);
         CHECK_FALSE(u.isValid());
     }
 
-    TEST_CASE("invalid_url_2") {
+    TEST_CASE("invalid_url_2")
+    {
         std::string s("www[facebook]com");
 
         Uri u = Uri::parse("http://" + s);
         CHECK_FALSE(u.isValid());
     }
 
-    TEST_CASE("invalid_url_3") {
+    TEST_CASE("invalid_url_3")
+    {
         std::string s("http://[::1:8080/hello/world?query#fragment");
         Uri u = Uri::parse(s);
         CHECK_FALSE(u.isValid());
     }
 
-    TEST_CASE("invalid_url_4") {
+    TEST_CASE("invalid_url_4")
+    {
         std::string s("http://::1]:8080/hello/world?query#fragment");
 
         Uri u = Uri::parse(s);
         CHECK_FALSE(u.isValid());
     }
 
-    TEST_CASE("invalid_url_5") {
+    TEST_CASE("invalid_url_5")
+    {
         std::string s("http://::1:8080/hello/world?query#fragment");
         Uri u = Uri::parse(s);
         CHECK_FALSE(u.isValid());
     }
 
-    TEST_CASE("invalid_url_6") {
+    TEST_CASE("invalid_url_6")
+    {
         std::string s("http://2401:db00:20:7004:face:0:29:0/hello/world?query");
         Uri u = Uri::parse(s);
         CHECK_FALSE(u.isValid());
     }
 
-    TEST_CASE("various_checks") {
+    TEST_CASE("various_checks")
+    {
         Uri http       = Uri::parse("http://google.com");
         Uri https      = Uri::parse("https://www.google.com:90");
         Uri query      = Uri::parse("http://google.com:8080/foo/bar?foo=bar");
@@ -468,7 +501,8 @@ TEST_SUITE("network/Uri") {
         CHECK_EQ(ipv6query.getPathEtc(), "/foo/bar?foo=bar");
     }
 
-    TEST_CASE("various_checks_2") {
+    TEST_CASE("various_checks_2")
+    {
         Uri u0 = Uri::parse("http://localhost:84/foo.html?&q=123");
         Uri u1 = Uri::parse("https://localhost:82/foo.html?&q=1");
         Uri u2 = Uri::parse("ws://localhost/foo");

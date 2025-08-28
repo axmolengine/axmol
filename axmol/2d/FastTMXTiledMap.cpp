@@ -94,8 +94,7 @@ bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view r
 }
 
 FastTMXTiledMap::FastTMXTiledMap() : _mapSize(Vec2::ZERO), _tileSize(Vec2::ZERO), _mapOrientation(0), _mapInfo(nullptr)
-{
-}
+{}
 
 FastTMXTiledMap::~FastTMXTiledMap()
 {
@@ -320,4 +319,4 @@ Vector<FastTMXLayer*> FastTMXTiledMap::getLayers() const
     return layers;
 }
 
-}
+}  // namespace ax

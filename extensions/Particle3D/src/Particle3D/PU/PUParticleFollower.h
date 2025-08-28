@@ -65,5 +65,4 @@ protected:
     Vec3 _positionPreviousParticle;
     bool _first;
 };
-}
-
+}  // namespace ax

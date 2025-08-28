@@ -167,4 +167,4 @@ bool PUTextureAnimatorTranslator::translateChildObject(PUScriptCompiler* /*compi
     return false;
 }
 
-}
+}  // namespace ax

@@ -44,4 +44,3 @@ void s3tc_decode(uint8_t* encode_data,
                  S3TCDecodeFlag decodeFlag);
 
 /// @endcond
-

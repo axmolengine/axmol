@@ -435,4 +435,4 @@ ResourceData LoadingBar::getRenderFile()
 
 }  // namespace ui
 
-}
+}  // namespace ax

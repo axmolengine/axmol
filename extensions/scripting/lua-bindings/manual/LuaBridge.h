@@ -53,8 +53,8 @@ typedef enum
     kLuaBridgeErrorJavaVMError       = -6, /** &lt; value -6 */
 } LuaBridgeError;
 
-#define LUA_BRIDGE_REGISTRY_FUNCTION "lua_bridge_function_id"       // table[function] = id
-#define LUA_BRIDGE_REGISTRY_RETAIN "lua_bridge_function_id_retain"  // table[id] = retain count
+#define LUA_BRIDGE_REGISTRY_FUNCTION "lua_bridge_function_id"         // table[function] = id
+#define LUA_BRIDGE_REGISTRY_RETAIN   "lua_bridge_function_id_retain"  // table[id] = retain count
 
 /**
  * Build bridge between ObjC and Lua.
@@ -110,8 +110,7 @@ protected:
     static int s_newFunctionId;
 };
 
-}
+}  // namespace ax
 
 // end group
 /// @}
-

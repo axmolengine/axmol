@@ -119,4 +119,4 @@ private:
     bool _isRotated;
 };
 
-}
+}  // namespace ax

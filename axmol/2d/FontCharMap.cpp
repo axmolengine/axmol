@@ -143,4 +143,4 @@ FontAtlas* FontCharMap::newFontAtlas()
     return tempAtlas;
 }
 
-}
+}  // namespace ax

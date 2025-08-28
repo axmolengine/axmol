@@ -51,8 +51,8 @@ class RelativeLayoutParameter;
 class AX_GUI_DLL LayoutManager : public Object
 {
 public:
-    virtual ~LayoutManager(){}
-    LayoutManager(){}
+    virtual ~LayoutManager() {}
+    LayoutManager() {}
 
     /**
      * The interface does the actual layout work.
@@ -70,8 +70,8 @@ public:
 class AX_GUI_DLL LinearVerticalLayoutManager : public LayoutManager
 {
 private:
-    LinearVerticalLayoutManager(){}
-    virtual ~LinearVerticalLayoutManager(){}
+    LinearVerticalLayoutManager() {}
+    virtual ~LinearVerticalLayoutManager() {}
     static LinearVerticalLayoutManager* create();
     void doLayout(LayoutProtocol* layout) override;
 
@@ -86,8 +86,8 @@ private:
 class AX_GUI_DLL LinearHorizontalLayoutManager : public LayoutManager
 {
 private:
-    LinearHorizontalLayoutManager(){}
-    virtual ~LinearHorizontalLayoutManager(){}
+    LinearHorizontalLayoutManager() {}
+    virtual ~LinearHorizontalLayoutManager() {}
     static LinearHorizontalLayoutManager* create();
     void doLayout(LayoutProtocol* layout) override;
 
@@ -102,8 +102,8 @@ private:
 class AX_GUI_DLL LinearCenterVerticalLayoutManager : public LayoutManager
 {
 private:
-    LinearCenterVerticalLayoutManager(){}
-    virtual ~LinearCenterVerticalLayoutManager(){}
+    LinearCenterVerticalLayoutManager() {}
+    virtual ~LinearCenterVerticalLayoutManager() {}
     static LinearCenterVerticalLayoutManager* create();
     void doLayout(LayoutProtocol* layout) override;
 
@@ -118,14 +118,13 @@ private:
 class AX_GUI_DLL LinearCenterHorizontalLayoutManager : public LayoutManager
 {
 private:
-    LinearCenterHorizontalLayoutManager(){}
-    virtual ~LinearCenterHorizontalLayoutManager(){}
+    LinearCenterHorizontalLayoutManager() {}
+    virtual ~LinearCenterHorizontalLayoutManager() {}
     static LinearCenterHorizontalLayoutManager* create();
     void doLayout(LayoutProtocol* layout) override;
 
     friend class Layout;
 };
-
 
 /**
  *@brief Relative layout class.
@@ -142,7 +141,7 @@ private:
         , _finalPositionY(0.0f)
         , _relativeWidgetLP(nullptr)
     {}
-    virtual ~RelativeLayoutManager(){}
+    virtual ~RelativeLayoutManager() {}
     static RelativeLayoutManager* create();
     void doLayout(LayoutProtocol* layout) override;
 
@@ -164,6 +163,6 @@ private:
 
 }  // namespace ui
 
-}
+}  // namespace ax
 // end of ui group
 /// @}

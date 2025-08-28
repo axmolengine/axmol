@@ -62,7 +62,7 @@ namespace ax
 
 using namespace MFUtils;
 
-#    define CMD_PENDING 0x01
+#    define CMD_PENDING      0x01
 #    define CMD_PENDING_SEEK 0x02
 #    define CMD_PENDING_RATE 0x04
 
@@ -130,7 +130,7 @@ public:
     }
 
     void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
-                     std::function<void(const MEVideoFrame&)> onVideoFrame) override
+                      std::function<void(const MEVideoFrame&)> onVideoFrame) override
     {
         _onMediaEvent = std::move(onMediaEvent);
         _onVideoFrame = std::move(onVideoFrame);
@@ -186,7 +186,7 @@ public:
     bool isPlaybackEnded() const override { return m_bPlaybackEnded; }
 
     void HandleVideoSample(const uint8_t* buf, size_t len);
-    //bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
+    // bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
 
     bool transferVideoFrame() override;
 
@@ -200,7 +200,7 @@ protected:
 
     HRESULT GetNativeVideoSize(DWORD* cx, DWORD* cy);
 
-     void ClearPendingBuffers();
+    void ClearPendingBuffers();
 
 protected:
     // Destructor is private. Caller should call Release.
@@ -255,9 +255,9 @@ protected:
     SeekState m_request{CmdNone, 1.0, FALSE, 0};  // Pending request state.
     BOOL m_bPending = FALSE;                      // Is a request pending?
 
-    std::atomic<bool> m_bOpenPending = false;
+    std::atomic<bool> m_bOpenPending  = false;
     std::atomic<bool> m_bClosePending = false;
-    bool m_bPlaybackEnded = false;
+    bool m_bPlaybackEnded             = false;
 
     mutable CritSec m_critsec;  // Protects the seeking and rate-change states.
 
@@ -283,8 +283,8 @@ protected:
     MEVideoPixelFormat m_videoPF = MEVideoPixelFormat::INVALID;
 
     mutable std::mutex m_frameBuffer1Mtx;
-    yasio::byte_buffer m_frameBuffer1; // for write
-    yasio::byte_buffer m_frameBuffer2; // for read
+    yasio::byte_buffer m_frameBuffer1;  // for write
+    yasio::byte_buffer m_frameBuffer2;  // for read
 };
 
 struct WmfMediaEngineFactory : public MediaEngineFactory
@@ -307,6 +307,6 @@ struct WmfMediaEngineFactory : public MediaEngineFactory
     }
 };
 
-}
+}  // namespace ax
 
 #endif

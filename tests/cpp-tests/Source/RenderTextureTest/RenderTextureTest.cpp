@@ -530,24 +530,24 @@ void RenderTextureTestDepthStencil::draw(Renderer* renderer, const Mat4& transfo
 {
     _rtx->beginWithClear(0, 0, 0, 0, 0, 0);
 
-//    _renderCmds[0].init(_globalZOrder);
-//    _renderCmds[0].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
+    //    _renderCmds[0].init(_globalZOrder);
+    //    _renderCmds[0].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
     renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this), _globalZOrder);
 
-//    _renderCmds[1].init(_globalZOrder);
-//    _renderCmds[1].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
+    //    _renderCmds[1].init(_globalZOrder);
+    //    _renderCmds[1].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
     renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this), _globalZOrder);
 
     _spriteDS->visit();
 
-//    _renderCmds[2].init(_globalZOrder);
-//    _renderCmds[2].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
+    //    _renderCmds[2].init(_globalZOrder);
+    //    _renderCmds[2].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
     renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this), _globalZOrder);
 
     _spriteDraw->visit();
 
-//    _renderCmds[3].init(_globalZOrder);
-//    _renderCmds[3].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
+    //    _renderCmds[3].init(_globalZOrder);
+    //    _renderCmds[3].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
     renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this), _globalZOrder);
 
     /// !!!end will set current render target to default renderTarget
@@ -565,8 +565,7 @@ void RenderTextureTestDepthStencil::onBeforeStencil()
     //! mark sprite quad into stencil buffer
     _renderer->setStencilTest(true);
     _renderer->setStencilCompareFunc(rhi::CompareFunc::NEVER, 1, 0xFF);
-    _renderer->setStencilOp(rhi::StencilOp::REPLACE, rhi::StencilOp::REPLACE,
-                                   rhi::StencilOp::REPLACE);
+    _renderer->setStencilOp(rhi::StencilOp::REPLACE, rhi::StencilOp::REPLACE, rhi::StencilOp::REPLACE);
 }
 
 void RenderTextureTestDepthStencil::onBeforeDraw()

@@ -185,4 +185,4 @@ private:
 // end of _2d group
 /// @}
 
-}
+}  // namespace ax

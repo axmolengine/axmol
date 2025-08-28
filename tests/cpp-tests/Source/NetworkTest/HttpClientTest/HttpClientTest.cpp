@@ -29,7 +29,7 @@
 using namespace ax;
 using namespace ax::network;
 
-#define CHROME_UA                                                                                                   \
+#define CHROME_UA                                                                                               \
     "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 " \
     "Safari/537.36"
 
@@ -53,9 +53,9 @@ HttpClientTest::HttpClientTest() : _labelStatusCode(nullptr)
     const int MARGIN = 40;
     const int SPACE  = 35;
 
-    const int LEFT  = winSize.width / 4 * 1;
-    const int CENTER  = winSize.width / 2;
-    const int RIGHT = winSize.width / 4 * 3;
+    const int LEFT   = winSize.width / 4 * 1;
+    const int CENTER = winSize.width / 2;
+    const int RIGHT  = winSize.width / 4 * 3;
 
     auto menuRequest = Menu::create();
     menuRequest->setPosition(Vec2::ZERO);
@@ -341,9 +341,9 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient* sender, HttpResponse* re
         AXLOGI("{} completed", tag.data());
     }
 
-    int32_t statusCode    = response->getResponseCode();
-    char tmp[64] = {};
-    auto statusStr = fmt::format_to_z(tmp, "HTTP Status Code: {}, tag = {}", statusCode, tag.data());
+    int32_t statusCode = response->getResponseCode();
+    char tmp[64]       = {};
+    auto statusStr     = fmt::format_to_z(tmp, "HTTP Status Code: {}, tag = {}", statusCode, tag.data());
     _labelStatusCode->setString(statusStr);
     AXLOGI("response code: {}", statusCode);
 
@@ -357,11 +357,11 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient* sender, HttpResponse* re
     // dump data
     auto buffer = response->getResponseData();
     buffer->push_back('\0');  // to c_str
-   AXLOGI("Http Test, dump data: {}", buffer->data());
-   AXLOGI("\n");
+    AXLOGI("Http Test, dump data: {}", buffer->data());
+    AXLOGI("\n");
     if (response->getHttpRequest()->getReferenceCount() != 2)
     {
-       AXLOGI("request ref count not 2, is {}", response->getHttpRequest()->getReferenceCount());
+        AXLOGI("request ref count not 2, is {}", response->getHttpRequest()->getReferenceCount());
     }
 }
 
@@ -492,14 +492,15 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient* sender, Htt
         AXLOGD("{} completed", tag.data());
     }
 
-    int32_t statusCode    = response->getResponseCode();
-    char tmp[64] = {};
-    auto statusStr = fmt::format_to_z(tmp, "HTTP Status Code: {}, tag = {}", statusCode, tag);
+    int32_t statusCode = response->getResponseCode();
+    char tmp[64]       = {};
+    auto statusStr     = fmt::format_to_z(tmp, "HTTP Status Code: {}, tag = {}", statusCode, tag);
     _labelStatusCode->setString(statusStr);
     AXLOGD("response code: {}", statusCode);
 
     _totalProcessedRequests++;
-    statusStr = fmt::format_to_z(tmp, "Got {} of {} expected http requests", _totalProcessedRequests, _totalExpectedRequests);
+    statusStr =
+        fmt::format_to_z(tmp, "Got {} of {} expected http requests", _totalProcessedRequests, _totalExpectedRequests);
     _labelTrakingData->setString(statusStr);
 
     if (!response->isSucceed())

@@ -261,4 +261,4 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
     }
 }
 
-}
+}  // namespace ax

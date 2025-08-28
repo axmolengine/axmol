@@ -29,8 +29,8 @@
 #include "../BaseTest.h"
 
 #define kTagSpriteBatchNode 100
-#define kTagClipperNode 101
-#define kTagContentNode 102
+#define kTagClipperNode     101
+#define kTagContentNode     102
 
 DEFINE_TEST_SUITE(NewRendererTests);
 
@@ -134,8 +134,8 @@ public:
     void doTest();
 
 protected:
-    int totalSprites                = 1000;
-    int suggestDelta                = 100;
+    int totalSprites           = 1000;
+    int suggestDelta           = 100;
     ax::Label* _labelSpriteNum = nullptr;
     ax::Label* labelCreate     = nullptr;
     ax::Label* labelDestory    = nullptr;
@@ -269,14 +269,14 @@ protected:
         int _cnt = 0;
         int _max = 0;
     };
-    Node* _spritesAnchor          = nullptr;
-    int _spriteIndex              = 0;
-    float _maDt                   = 1.0f / 60.0f;
-    float _rmaDt                  = 1.0f / 60.0f;
-    const float DEST_DT_30FPS     = 1.0f / 30.0f;
-    ax::Label* _totalSprites = nullptr;
-    Ticker _contSlow              = Ticker(20);
-    Ticker _contFast              = Ticker(2);
-    Ticker _around30fps           = Ticker(60 * 3);
+    Node* _spritesAnchor      = nullptr;
+    int _spriteIndex          = 0;
+    float _maDt               = 1.0f / 60.0f;
+    float _rmaDt              = 1.0f / 60.0f;
+    const float DEST_DT_30FPS = 1.0f / 30.0f;
+    ax::Label* _totalSprites  = nullptr;
+    Ticker _contSlow          = Ticker(20);
+    Ticker _contFast          = Ticker(2);
+    Ticker _around30fps       = Ticker(60 * 3);
 };
 #endif  //__NewRendererTest_H_

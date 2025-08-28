@@ -108,4 +108,4 @@ protected:
     friend class AudioPlayer;
 };
 
-}
+}  // namespace ax

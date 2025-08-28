@@ -76,4 +76,4 @@ bool PUSphereSurfaceEmitterTranslator::translateChildObject(PUScriptCompiler* /*
     return false;
 }
 
-}
+}  // namespace ax

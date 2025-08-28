@@ -32,7 +32,6 @@ namespace ax::rhi
 class SamplerCache
 {
 public:
-
     static SamplerCache* getInstance();
     static void destroyInstance();
 

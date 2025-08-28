@@ -37,11 +37,10 @@ class PUOnCollisionObserverTranslator : public PUScriptTranslator
 {
 public:
     PUOnCollisionObserverTranslator();
-    virtual ~PUOnCollisionObserverTranslator(){};
+    virtual ~PUOnCollisionObserverTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

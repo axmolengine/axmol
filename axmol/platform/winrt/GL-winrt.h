@@ -26,8 +26,8 @@ THE SOFTWARE.
 
 #pragma once
 
-#define GL_BGRA GL_BGRA_EXT
-#define glClearDepth glClearDepthf
+#define GL_BGRA       GL_BGRA_EXT
+#define glClearDepth  glClearDepthf
 #define GL_WRITE_ONLY GL_WRITE_ONLY_OES
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
@@ -40,12 +40,12 @@ THE SOFTWARE.
 #    include "GLES2/gl2ext.h"
 #    include "GLES3/gl3.h"
 
-#    define glClearDepth glClearDepthf
+#    define glClearDepth         glClearDepthf
 #    define glDeleteVertexArrays glDeleteVertexArraysOES
-#    define glGenVertexArrays glGenVertexArraysOES
-#    define glBindVertexArray glBindVertexArrayOES
-#    define glMapBuffer glMapBufferOES
-#    define glUnmapBuffer glUnmapBufferOES
+#    define glGenVertexArrays    glGenVertexArraysOES
+#    define glBindVertexArray    glBindVertexArrayOES
+#    define glMapBuffer          glMapBufferOES
+#    define glUnmapBuffer        glUnmapBufferOES
 #    define glDrawBuffer(...)
 
 #    define GL_WRITE_ONLY GL_WRITE_ONLY_OES

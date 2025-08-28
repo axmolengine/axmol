@@ -4454,6 +4454,6 @@ Controller::~Controller()
     delete _axisEvent;
 }
 
-}
+}  // namespace ax
 
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)

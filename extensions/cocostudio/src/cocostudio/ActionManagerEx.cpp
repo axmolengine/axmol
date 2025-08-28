@@ -170,7 +170,7 @@ void ActionManagerEx::releaseActions()
     for (auto&& iter : _actionDic)
     {
         ax::Vector<ActionObject*> objList = iter.second;
-        ssize_t listCount                      = objList.size();
+        ssize_t listCount                 = objList.size();
         for (ssize_t i = 0; i < listCount; i++)
         {
             ActionObject* action = objList.at(i);

@@ -76,4 +76,4 @@ bool PUPositionEmitterTranslator::translateChildObject(PUScriptCompiler* /*compi
     return false;
 }
 
-}
+}  // namespace ax

@@ -196,8 +196,8 @@ protected:
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(MotionStreak3D);
 
-    //CallbackCommand _beforeCommand;
-    //CallbackCommand _afterCommand;
+    // CallbackCommand _beforeCommand;
+    // CallbackCommand _afterCommand;
     rhi::UniformLocation _locMVP;
     rhi::UniformLocation _locTexture;
 
@@ -211,5 +211,4 @@ private:
 // end of _3d group
 /// @}
 
-}
-
+}  // namespace ax

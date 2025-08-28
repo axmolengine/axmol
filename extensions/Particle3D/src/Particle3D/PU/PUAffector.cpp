@@ -201,4 +201,4 @@ void PUAffector::process(PUParticle3D* particle, float delta, bool firstParticle
     updatePUAffector(particle, delta);
 }
 
-}
+}  // namespace ax

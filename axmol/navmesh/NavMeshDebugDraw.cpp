@@ -43,7 +43,7 @@ NavMeshDebugDraw::NavMeshDebugDraw()
     auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_COLOR);
     _programState = new rhi::ProgramState(program);
     Object::assign(_vertexLayout, program->getVertexLayout());
-    _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
+    _locMVP = _programState->getUniformLocation("u_MVPMatrix");
 }
 
 void NavMeshDebugDraw::initCustomCommand(CustomCommand& command)
@@ -151,14 +151,14 @@ rhi::PrimitiveType NavMeshDebugDraw::getPrimitiveType(duDebugDrawPrimitives prim
 
 void NavMeshDebugDraw::draw(Renderer* renderer)
 {
-    auto& transform = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto& transform    = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto beforeCommand = renderer->nextCallbackCommand();
     auto afterCommand  = renderer->nextCallbackCommand();
 
     beforeCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
     afterCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
 
-    beforeCommand->func  = AX_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
+    beforeCommand->func = AX_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
     afterCommand->func  = AX_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);
 
     beforeCommand->set3D(true);
@@ -172,9 +172,9 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
     if (!_vertexBuffer || _vertexBuffer->getSize() < _vertices.size() * sizeof(_vertices[0]))
     {
-        _vertexBuffer = axdrv->createBuffer(
-            _vertices.size() * sizeof(_vertices[0]), rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC);
-        _dirtyBuffer = true;
+        _vertexBuffer = axdrv->createBuffer(_vertices.size() * sizeof(_vertices[0]), rhi::BufferType::VERTEX,
+                                            rhi::BufferUsage::STATIC);
+        _dirtyBuffer  = true;
     }
 
     if (_dirtyBuffer)
@@ -253,6 +253,6 @@ void NavMeshDebugDraw::clear()
     _primitiveList.clear();
 }
 
-}
+}  // namespace ax
 
 #endif  // AX_ENABLE_NAVMESH

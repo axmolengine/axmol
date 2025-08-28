@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "axmol/base/text_utils.h"
 
-#define LOG_TAG "Java_dev_axmol_lib_AxmolEngine.cpp"
+#define LOG_TAG   "Java_dev_axmol_lib_AxmolEngine.cpp"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 static const char* className = "dev.axmol.lib.AxmolEngine";
@@ -49,17 +49,17 @@ using namespace std;
 extern "C" {
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeSetContext(JNIEnv* env,
-                                                                             jclass,
-                                                                             jobject context,
-                                                                             jobject assetManager)
+                                                                       jclass,
+                                                                       jobject context,
+                                                                       jobject assetManager)
 {
     JniHelper::setClassLoaderFrom(context);
     FileUtilsAndroid::setAssetManagerFromJava(assetManager);
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeSetEditTextDialogResult(JNIEnv* env,
-                                                                                          jclass,
-                                                                                          jbyteArray text)
+                                                                                    jclass,
+                                                                                    jbyteArray text)
 {
     jsize size = env->GetArrayLength(text);
 
@@ -102,16 +102,15 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeRunOnGLThread(JNIEnv
 
     ax::Director::getInstance()->getScheduler()->runOnAxmolThread(
         [wrap = std::make_shared<std::unique_ptr<jobject_type, jobject_delete>>(env->NewGlobalRef(runnable))] {
-            auto curEnv = JniHelper::getEnv();
+        auto curEnv = JniHelper::getEnv();
 
-            JniMethodInfo mi;
-            if (JniHelper::getMethodInfo(mi, "java/lang/Runnable", "run", "()V"))
-            {
-                curEnv->CallVoidMethod(wrap.get()->get(), mi.methodID);
-            }
-        });
+        JniMethodInfo mi;
+        if (JniHelper::getMethodInfo(mi, "java/lang/Runnable", "run", "()V"))
+        {
+            curEnv->CallVoidMethod(wrap.get()->get(), mi.methodID);
+        }
+    });
 }
-
 }
 
 const char* getApkPath()

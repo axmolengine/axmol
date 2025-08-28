@@ -36,4 +36,4 @@ void messageBox(const char* msg, const char* title)
     AXLOGE("{}: {}", title, msg);
 }
 
-}
+}  // namespace ax

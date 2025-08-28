@@ -107,7 +107,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -142,7 +142,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -177,7 +177,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -212,7 +212,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -247,7 +247,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")

@@ -208,4 +208,4 @@ Rect AnchoredSprite::getTouchRect()
     return Rect(-a.x, -a.y, s.width, s.height);
 }
 
-}
+}  // namespace ax

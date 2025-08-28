@@ -101,7 +101,7 @@ Animation3D::Curve::~Curve()
     AX_SAFE_RELEASE_NULL(scaleCurve);
 }
 
-//constexpr bool kkk = std::is_trivially_copyable<Quaternion>::value;
+// constexpr bool kkk = std::is_trivially_copyable<Quaternion>::value;
 
 bool Animation3D::init(const Animation3DData& data)
 {
@@ -121,7 +121,6 @@ bool Animation3D::init(const Animation3DData& data)
 
             if (iter.second.empty())
                 continue;
-
 
             axstd::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
                                         [](const auto& keyIter) { return keyIter._time; });
@@ -251,4 +250,4 @@ Animation3DCache::~Animation3DCache()
     removeAllAnimations();
 }
 
-}
+}  // namespace ax

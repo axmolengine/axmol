@@ -60,7 +60,7 @@ public:
     void copyAttributesTo(PUEmitter* emitter) override;
 
     CCPUBoxEmitter();
-    virtual ~CCPUBoxEmitter(){};
+    virtual ~CCPUBoxEmitter() {};
 
 protected:
     /**
@@ -76,5 +76,4 @@ protected:
     float _yRange;
     float _zRange;
 };
-}
-
+}  // namespace ax

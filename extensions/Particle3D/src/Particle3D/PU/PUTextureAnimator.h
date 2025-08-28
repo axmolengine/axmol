@@ -105,5 +105,4 @@ protected:
     unsigned short _textureCoordsStart;
     unsigned short _textureCoordsEnd;
 };
-}
-
+}  // namespace ax

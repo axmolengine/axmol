@@ -136,4 +136,4 @@ protected:
 // end group
 /// @}
 
-}
+}  // namespace ax

@@ -3,8 +3,8 @@
 #include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "axmol/base/Scheduler.h"
-#include "axmol/base/Director.h"
+#    include "axmol/base/Scheduler.h"
+#    include "axmol/base/Director.h"
 
 namespace ax
 {
@@ -30,6 +30,6 @@ private:
     Director* _director;
 };
 
-}
+}  // namespace ax
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

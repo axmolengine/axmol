@@ -39,10 +39,10 @@ NS_AX_EXT_BEGIN
 
 #define SCROLL_DEACCEL_RATE 0.95f
 #define SCROLL_DEACCEL_DIST 1.0f
-#define BOUNCE_DURATION 0.15f
-#define INSET_RATIO 0.2f
-#define MOVE_INCH 7.0f / 160.0f
-#define BOUNCE_BACK_FACTOR 0.35f
+#define BOUNCE_DURATION     0.15f
+#define INSET_RATIO         0.2f
+#define MOVE_INCH           7.0f / 160.0f
+#define BOUNCE_BACK_FACTOR  0.35f
 
 static float convertDistanceFromPointToInch(float pointDis)
 {
@@ -566,12 +566,12 @@ void ScrollView::addChild(Node* child, int zOrder, std::string_view name)
 void ScrollView::beforeDraw()
 {
 
-    //ScrollView don't support drawing in 3D space
-     //_beforeDrawCommand.init(_globalZOrder);
-     //_beforeDrawCommand.func = AX_CALLBACK_0(ScrollView::onBeforeDraw, this);
-     Director::getInstance()->getRenderer()->addCallbackCommand(AX_CALLBACK_0(ScrollView::onBeforeDraw, this),
-                                                                _globalZOrder);
- }
+    // ScrollView don't support drawing in 3D space
+    //_beforeDrawCommand.init(_globalZOrder);
+    //_beforeDrawCommand.func = AX_CALLBACK_0(ScrollView::onBeforeDraw, this);
+    Director::getInstance()->getRenderer()->addCallbackCommand(AX_CALLBACK_0(ScrollView::onBeforeDraw, this),
+                                                               _globalZOrder);
+}
 
 /**
  * clip this view so that outside of the visible bounds can be hidden.
@@ -582,35 +582,39 @@ void ScrollView::onBeforeDraw()
     if (_clippingToBounds)
     {
         _scissorRestored = false;
-        Rect frame = getViewRect();
-        auto renderView = Director::getInstance()->getRenderView();
+        Rect frame       = getViewRect();
+        auto renderView  = Director::getInstance()->getRenderView();
 
-            if (renderView->isScissorEnabled()) {
-                _scissorRestored = true;
-                _parentScissorRect = renderView->getScissorRect();
-                //set the intersection of _parentScissorRect and frame as the new scissor rect
-                if (frame.intersectsRect(_parentScissorRect)) {
-                    float x = MAX(frame.origin.x, _parentScissorRect.origin.x);
-                    float y = MAX(frame.origin.y, _parentScissorRect.origin.y);
-                    float xx = MIN(frame.origin.x + frame.size.width, _parentScissorRect.origin.x + _parentScissorRect.size.width);
-                    float yy = MIN(frame.origin.y + frame.size.height, _parentScissorRect.origin.y + _parentScissorRect.size.height);
-                    renderView->setScissorInPoints(x, y, xx - x, yy - y);
-                }
+        if (renderView->isScissorEnabled())
+        {
+            _scissorRestored   = true;
+            _parentScissorRect = renderView->getScissorRect();
+            // set the intersection of _parentScissorRect and frame as the new scissor rect
+            if (frame.intersectsRect(_parentScissorRect))
+            {
+                float x = MAX(frame.origin.x, _parentScissorRect.origin.x);
+                float y = MAX(frame.origin.y, _parentScissorRect.origin.y);
+                float xx =
+                    MIN(frame.origin.x + frame.size.width, _parentScissorRect.origin.x + _parentScissorRect.size.width);
+                float yy = MIN(frame.origin.y + frame.size.height,
+                               _parentScissorRect.origin.y + _parentScissorRect.size.height);
+                renderView->setScissorInPoints(x, y, xx - x, yy - y);
             }
-            else {
+        }
+        else
+        {
 
-                  Director::getInstance()->getRenderer()->setScissorTest(true);
-                renderView->setScissorInPoints(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
-            }
-
+            Director::getInstance()->getRenderer()->setScissorTest(true);
+            renderView->setScissorInPoints(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+        }
     }
 }
 
 void ScrollView::afterDraw()
 {
-    
-     Director::getInstance()->getRenderer()->addCallbackCommand(AX_CALLBACK_0(ScrollView::onAfterDraw, this),
-                                                                _globalZOrder);
+
+    Director::getInstance()->getRenderer()->addCallbackCommand(AX_CALLBACK_0(ScrollView::onAfterDraw, this),
+                                                               _globalZOrder);
 }
 
 /**
@@ -623,14 +627,16 @@ void ScrollView::onAfterDraw()
     if (_clippingToBounds)
     {
         auto renderView = Director::getInstance()->getRenderView();
-        
-        if (_scissorRestored) {//restore the parent's scissor rect
-            renderView->setScissorInPoints(_parentScissorRect.origin.x, _parentScissorRect.origin.y, _parentScissorRect.size.width, _parentScissorRect.size.height);
+
+        if (_scissorRestored)
+        {  // restore the parent's scissor rect
+            renderView->setScissorInPoints(_parentScissorRect.origin.x, _parentScissorRect.origin.y,
+                                           _parentScissorRect.size.width, _parentScissorRect.size.height);
         }
-        else {
+        else
+        {
             Director::getInstance()->getRenderer()->setScissorTest(false);
         }
-        
     }
 }
 

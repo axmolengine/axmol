@@ -213,13 +213,15 @@ void LayerTestCascadingColorA::onEnter()
     sister2->setPosition(Vec2(s.width * 2 / 3, s.height / 2));
     label->setPosition(Vec2(s.width / 2, s.height / 2));
 
-    layer1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(6, Color32(255, 0, 255)), TintTo::create(6, Color32(255, 255, 255)), DelayTime::create(1), nullptr)));
+    layer1->runAction(RepeatForever::create(Sequence::create(TintTo::create(6, Color32(255, 0, 255)),
+                                                             TintTo::create(6, Color32(255, 255, 255)),
+                                                             DelayTime::create(1), nullptr)));
 
-    sister1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(0, 255, 255)),
-        TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
-        DelayTime::create(1), nullptr)));
+    sister1->runAction(RepeatForever::create(
+        Sequence::create(TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)),
+                         TintTo::create(2, Color32(0, 255, 255)), TintTo::create(2, Color32(255, 255, 255)),
+                         TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
+                         DelayTime::create(1), nullptr)));
 
     // Enable cascading in scene
     setEnableRecursiveCascading(this, true);
@@ -252,13 +254,15 @@ void LayerTestCascadingColorB::onEnter()
     sister2->setPosition(Vec2(s.width * 2 / 3, 0.0f));
     label->setPosition(Vec2(s.width / 2, 0.0f));
 
-    layer1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(6, Color32(255, 0, 255)), TintTo::create(6, Color32(255, 255, 255)), DelayTime::create(1), nullptr)));
+    layer1->runAction(RepeatForever::create(Sequence::create(TintTo::create(6, Color32(255, 0, 255)),
+                                                             TintTo::create(6, Color32(255, 255, 255)),
+                                                             DelayTime::create(1), nullptr)));
 
-    sister1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(0, 255, 255)),
-        TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
-        DelayTime::create(1), nullptr)));
+    sister1->runAction(RepeatForever::create(
+        Sequence::create(TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)),
+                         TintTo::create(2, Color32(0, 255, 255)), TintTo::create(2, Color32(255, 255, 255)),
+                         TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
+                         DelayTime::create(1), nullptr)));
 
     // Enable cascading in scene
     setEnableRecursiveCascading(this, true);
@@ -291,13 +295,15 @@ void LayerTestCascadingColorC::onEnter()
     sister2->setPosition(Vec2(s.width * 2 / 3, 0.0f));
     label->setPosition(Vec2(s.width / 2, 0.0f));
 
-    layer1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(6, Color32(255, 0, 255)), TintTo::create(6, Color32(255, 255, 255)), DelayTime::create(1), nullptr)));
+    layer1->runAction(RepeatForever::create(Sequence::create(TintTo::create(6, Color32(255, 0, 255)),
+                                                             TintTo::create(6, Color32(255, 255, 255)),
+                                                             DelayTime::create(1), nullptr)));
 
-    sister1->runAction(RepeatForever::create(Sequence::create(
-        TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(0, 255, 255)),
-        TintTo::create(2, Color32(255, 255, 255)), TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
-        DelayTime::create(1), nullptr)));
+    sister1->runAction(RepeatForever::create(
+        Sequence::create(TintTo::create(2, Color32(255, 255, 0)), TintTo::create(2, Color32(255, 255, 255)),
+                         TintTo::create(2, Color32(0, 255, 255)), TintTo::create(2, Color32(255, 255, 255)),
+                         TintTo::create(2, Color32(255, 0, 255)), TintTo::create(2, Color32(255, 255, 255)),
+                         DelayTime::create(1), nullptr)));
 }
 
 std::string LayerTestCascadingColorC::subtitle() const

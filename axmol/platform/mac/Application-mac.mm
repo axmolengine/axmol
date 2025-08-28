@@ -64,8 +64,8 @@ int Application::run()
 
     constexpr std::chrono::nanoseconds _1ms{1000000};
 
-    auto director = Director::getInstance();
-    auto renderView   = director->getRenderView();
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
 
     // Retain renderView to avoid renderView being released in the while loop
     renderView->retain();
@@ -77,7 +77,7 @@ int Application::run()
         director->mainLoop();
         renderView->pollEvents();
 
-        auto interval = std::chrono::steady_clock::now() - lastTime;
+        auto interval     = std::chrono::steady_clock::now() - lastTime;
         auto waitDuration = _animationInterval - interval - _1ms;
         if (waitDuration.count() > 0)
             std::this_thread::sleep_for(waitDuration);
@@ -179,4 +179,4 @@ std::string_view Application::getStartupScriptFilename()
     return _startupScriptFilename;
 }
 
-}
+}  // namespace ax

@@ -183,7 +183,7 @@ void PhysicsJoint::deatchFromBody()
 {
     for (auto& joint : _b2Joints)
     {
-        if(b2Joint_IsValid(joint))
+        if (b2Joint_IsValid(joint))
             b2DestroyJoint(joint);
     }
     _b2Joints.clear();
@@ -214,7 +214,8 @@ bool PhysicsJoint::initJoint()
     if (_initDirty)
     {
         auto ret = buildConstraints();
-        if (ret) {
+        if (ret)
+        {
             for (auto&& joint : _b2Joints)
                 b2JointSetMaxForce(joint, _maxForce);
         }
@@ -401,11 +402,11 @@ bool PhysicsJointPin::buildConstraints()
 }
 
 PhysicsJointLimit* PhysicsJointLimit::instantiate(PhysicsBody* a,
-                                                PhysicsBody* b,
-                                                const Vec2& anchr1,
-                                                const Vec2& anchr2,
-                                                float min,
-                                                float max)
+                                                  PhysicsBody* b,
+                                                  const Vec2& anchr1,
+                                                  const Vec2& anchr2,
+                                                  float min,
+                                                  float max)
 {
     auto joint = new PhysicsJointLimit();
 
@@ -423,7 +424,10 @@ PhysicsJointLimit* PhysicsJointLimit::instantiate(PhysicsBody* a,
     return nullptr;
 }
 
-PhysicsJointLimit* PhysicsJointLimit::instantiate(PhysicsBody* a, PhysicsBody* b, const Vec2& anchr1, const Vec2& anchr2)
+PhysicsJointLimit* PhysicsJointLimit::instantiate(PhysicsBody* a,
+                                                  PhysicsBody* b,
+                                                  const Vec2& anchr1,
+                                                  const Vec2& anchr2)
 {
     return instantiate(a, b, anchr1, anchr2, 0, b->local2World(anchr1).getDistance(a->local2World(anchr2)));
 }
@@ -514,9 +518,9 @@ void PhysicsJointLimit::setAnchr2(const Vec2& anchr)
 }
 
 PhysicsJointDistance* PhysicsJointDistance::instantiate(PhysicsBody* a,
-                                                      PhysicsBody* b,
-                                                      const Vec2& anchr1,
-                                                      const Vec2& anchr2)
+                                                        PhysicsBody* b,
+                                                        const Vec2& anchr1,
+                                                        const Vec2& anchr2)
 {
     auto joint = new PhysicsJointDistance();
 
@@ -574,11 +578,11 @@ void PhysicsJointDistance::setDistance(float distance)
 }
 
 PhysicsJointSpring* PhysicsJointSpring::instantiate(PhysicsBody* a,
-                                                  PhysicsBody* b,
-                                                  const Vec2& anchr1,
-                                                  const Vec2& anchr2,
-                                                  float stiffness,
-                                                  float damping)
+                                                    PhysicsBody* b,
+                                                    const Vec2& anchr1,
+                                                    const Vec2& anchr2,
+                                                    float stiffness,
+                                                    float damping)
 {
     auto joint = new PhysicsJointSpring();
 
@@ -688,10 +692,10 @@ void PhysicsJointSpring::setDamping(float damping)
 }
 
 PhysicsJointGroove* PhysicsJointGroove::instantiate(PhysicsBody* a,
-                                                  PhysicsBody* b,
-                                                  const Vec2& grooveA,
-                                                  const Vec2& grooveB,
-                                                  const Vec2& anchr2)
+                                                    PhysicsBody* b,
+                                                    const Vec2& grooveA,
+                                                    const Vec2& grooveB,
+                                                    const Vec2& anchr2)
 {
     auto joint = new PhysicsJointGroove();
 
@@ -772,9 +776,9 @@ void PhysicsJointGroove::setAnchr2(const Vec2& anchr2)
 }
 
 PhysicsJointRotarySpring* PhysicsJointRotarySpring::instantiate(PhysicsBody* a,
-                                                              PhysicsBody* b,
-                                                              float stiffness,
-                                                              float damping)
+                                                                PhysicsBody* b,
+                                                                float stiffness,
+                                                                float damping)
 {
     auto joint = new PhysicsJointRotarySpring();
 
@@ -801,8 +805,8 @@ bool PhysicsJointRotarySpring::buildConstraints()
         b2MotorJointDef motorDef = b2DefaultMotorJointDef();
         motorDef.bodyIdA         = _bodyA->getB2Body();
         motorDef.bodyIdB         = _bodyB->getB2Body();
-        motorDef.angularOffset   = AX_DEGREES_TO_RADIANS(_bodyB->getRotation()) -
-                                 AX_DEGREES_TO_RADIANS(_bodyA->getRotation()); 
+        motorDef.angularOffset =
+            AX_DEGREES_TO_RADIANS(_bodyB->getRotation()) - AX_DEGREES_TO_RADIANS(_bodyA->getRotation());
         motorDef.maxTorque        = 10000.0f;
         motorDef.correctionFactor = 1.0f;
         auto offset               = _bodyA->getPosition() - _bodyB->getPosition();
@@ -884,9 +888,9 @@ bool PhysicsJointRotaryLimit::buildConstraints()
         def.bodyIdA            = _bodyA->getB2Body();
         def.bodyIdB            = _bodyB->getB2Body();
 
-        def.enableLimit        = true;
-        def.lowerAngle         = _min;  // Set the lower angle limit
-        def.upperAngle         = _max;  // Set the upper angle limit
+        def.enableLimit = true;
+        def.lowerAngle  = _min;  // Set the lower angle limit
+        def.upperAngle  = _max;  // Set the upper angle limit
 
         auto joint = b2CreateRevoluteJoint(_bodyA->getWorld()->getB2World(), &def);  // FIXME:
         AX_BREAK_IF(!b2Joint_IsValid(joint));
@@ -1028,15 +1032,16 @@ bool PhysicsJointGear::buildConstraints()
     do
     {
         // auto joint = cpGearJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), _phase, _ratio);
-        // gear and pulley joint removed (temporarily) in box2d-3.x, see https://box2d.org/documentation/md_migration.html
+        // gear and pulley joint removed (temporarily) in box2d-3.x, see
+        // https://box2d.org/documentation/md_migration.html
         auto world = _bodyA->getWorld()->getB2World();
         auto bodyA = _bodyA->getB2Body();
         auto bodyB = _bodyB->getB2Body();
 
         // bodyA, bodyB, phase, ratio
         b2MotorJointDef motorDef = b2DefaultMotorJointDef();
-        motorDef.bodyIdA = bodyA;
-        motorDef.bodyIdB = bodyB;
+        motorDef.bodyIdA         = bodyA;
+        motorDef.bodyIdB         = bodyB;
 
         b2Vec2 posA           = b2Body_GetWorldCenterOfMass(bodyA);
         b2Vec2 posB           = b2Body_GetWorldCenterOfMass(bodyB);
@@ -1111,13 +1116,13 @@ bool PhysicsJointMotor::buildConstraints()
         def.bodyIdA            = _bodyA->getB2Body();
         def.bodyIdB            = _bodyB->getB2Body();
 
-        def.localAnchorA       = b2Vec2_zero;  // Set the local anchor points as required
-        def.localAnchorB       = b2Vec2_zero;  // Set the local anchor points as required
+        def.localAnchorA = b2Vec2_zero;  // Set the local anchor points as required
+        def.localAnchorB = b2Vec2_zero;  // Set the local anchor points as required
 
-        def.referenceAngle     = 0.0f;         // Set the reference angle
-        def.enableMotor        = true;
-        def.motorSpeed         = _rate;    // Set the motor speed (rate)
-        def.maxMotorTorque     = 10000.0f;  // Set the maximum torque the motor can apply
+        def.referenceAngle = 0.0f;  // Set the reference angle
+        def.enableMotor    = true;
+        def.motorSpeed     = _rate;     // Set the motor speed (rate)
+        def.maxMotorTorque = 10000.0f;  // Set the maximum torque the motor can apply
 
         auto joint = b2CreateRevoluteJoint(_bodyA->getWorld()->getB2World(), &def);  // FIXME:
         setRate(_rate);

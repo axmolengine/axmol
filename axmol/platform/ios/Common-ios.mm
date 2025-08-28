@@ -60,4 +60,4 @@ void messageBox(const char* msg, const char* title)
 #endif
 }
 
-}
+}  // namespace ax

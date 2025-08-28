@@ -37,11 +37,10 @@ class PUTextureAnimatorTranslator : public PUScriptTranslator
 {
 public:
     PUTextureAnimatorTranslator();
-    virtual ~PUTextureAnimatorTranslator(){};
+    virtual ~PUTextureAnimatorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

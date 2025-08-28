@@ -48,4 +48,3 @@ public:
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textFieldOptions);
 };
 }  // namespace cocostudio
-

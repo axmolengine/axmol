@@ -509,4 +509,4 @@ CatmullRomBy* CatmullRomBy::reverse() const
     return CatmullRomBy::create(_duration, reverse);
 }
 
-}
+}  // namespace ax

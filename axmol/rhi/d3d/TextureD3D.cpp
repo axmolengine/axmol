@@ -158,11 +158,7 @@ void TextureImpl::updateTextureDesc(const TextureDesc& desc)
     updateSamplerDesc(desc.samplerDesc);
 }
 
-void TextureImpl::updateData(const void* data,
-                             int width,
-                             int height,
-                             int level,
-                             int layerIndex /*=0*/)
+void TextureImpl::updateData(const void* data, int width, int height, int level, int layerIndex /*=0*/)
 {
     updateSubData(0, 0, width, height, level, data, layerIndex);
 }
@@ -188,7 +184,7 @@ void TextureImpl::updateSubData(int xoffset,
     assert(_desc.textureType == TextureType::TEXTURE_2D);
     ensureNativeTexture();
 
-    if(!data) [[unlikely]]
+    if (!data) [[unlikely]]
         return;
 
     D3D11_BOX box{};
@@ -202,7 +198,7 @@ void TextureImpl::updateSubData(int xoffset,
     auto rowPitch   = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(width));
     UINT slicePitch = rowPitch * static_cast<UINT>(height);
 
-    auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
+    auto context     = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
     UINT subresource = D3D11CalcSubresource(level, layerIndex, _desc.mipLevels);
     context->UpdateSubresource(_nativeTexture, subresource, &box, data, rowPitch, slicePitch);
 
@@ -230,7 +226,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     box.bottom = static_cast<UINT>(yoffset + height);
     box.back   = 1;
 
-    auto context = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
+    auto context     = static_cast<DriverImpl*>(DriverBase::getInstance())->getContext();
     UINT subresource = D3D11CalcSubresource(level, layerIndex, _desc.mipLevels);
     context->UpdateSubresource(_nativeTexture, subresource, &box, data, 0, 0);
 
@@ -255,7 +251,7 @@ void TextureImpl::updateFaceData(TextureCubeFace side, const void* data)
     //-------------------------------------------------------------------
     // 2. compute RowPitch / SlicePitch
     //-------------------------------------------------------------------
-    const uint32_t rowPitch = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(_desc.width));
+    const uint32_t rowPitch   = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(_desc.width));
     const uint32_t slicePitch = _desc.height * rowPitch;
 
     //-------------------------------------------------------------------
@@ -323,8 +319,8 @@ void TextureImpl::ensureNativeTexture()
         }
         else
         {
-            srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-            srvDesc.Texture2DArray.MipLevels = -1;
+            srvDesc.ViewDimension                  = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+            srvDesc.Texture2DArray.MipLevels       = -1;
             srvDesc.Texture2DArray.MostDetailedMip = 0;
             srvDesc.Texture2DArray.ArraySize       = texDesc.ArraySize;
         }
@@ -342,7 +338,6 @@ void TextureImpl::ensureNativeTexture()
 
     _nativeTexture = TextureHandle{texture.Detach(), srv.Detach()};
 }
-
 
 // ------------------------------------------------------------
 // generateMipmaps

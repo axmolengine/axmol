@@ -99,4 +99,4 @@ bool EventListenerKeyboard::init()
     return false;
 }
 
-}
+}  // namespace ax

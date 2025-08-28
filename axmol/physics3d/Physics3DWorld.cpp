@@ -285,9 +285,7 @@ void Physics3DWorld::debugDraw(Renderer* renderer)
     }
 }
 
-bool Physics3DWorld::rayCast(const ax::Vec3& startPos,
-                             const ax::Vec3& endPos,
-                             Physics3DWorld::HitResult* result)
+bool Physics3DWorld::rayCast(const ax::Vec3& startPos, const ax::Vec3& endPos, Physics3DWorld::HitResult* result)
 {
     auto btStart = convertVec3TobtVector3(startPos);
     auto btEnd   = convertVec3TobtVector3(endPos);
@@ -421,6 +419,6 @@ void Physics3DWorld::setGhostPairCallback()
     }
 }
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)

@@ -178,4 +178,4 @@ AmbientLight::AmbientLight() {}
 
 AmbientLight::~AmbientLight() {}
 
-}
+}  // namespace ax

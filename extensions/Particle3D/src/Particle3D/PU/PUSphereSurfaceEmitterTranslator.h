@@ -37,10 +37,10 @@ class PUSphereSurfaceEmitterTranslator : public PUScriptTranslator
 {
 public:
     PUSphereSurfaceEmitterTranslator();
-    virtual ~PUSphereSurfaceEmitterTranslator(){};
+    virtual ~PUSphereSurfaceEmitterTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
+}  // namespace ax

@@ -66,12 +66,13 @@ RenderTexture::RenderTexture()
         EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, AX_CALLBACK_1(RenderTexture::listenToForeground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toForegroundListener, this);
 
-     // Listen this event to restored texture id after coming to foreground on GLES.
+    // Listen this event to restored texture id after coming to foreground on GLES.
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         TextureSliceData emptyData[] = {TextureSliceData{}};
         // Invalidate _depthStencilTexture contents and reinitializing GPU resources (e.g., after context loss)
         // Note: VolatileTextureMgr is responsible for resetting _colorTexture
-        if(_depthStencilTexture) {
+        if (_depthStencilTexture)
+        {
             _depthStencilTexture->invalidate();
             _depthStencilTexture->updateData(emptyData);
         }
@@ -82,7 +83,7 @@ RenderTexture::RenderTexture()
 
 RenderTexture::~RenderTexture()
 {
-#    if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _eventDispatcher->removeEventListener(_rendererRecreatedListener);
 #endif
 
@@ -209,12 +210,13 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
 
         rhi::TextureDesc desc;
-        desc.width         = powW;
-        desc.height        = powH;
-        desc.textureUsage  = TextureUsage::RENDER_TARGET;
-        desc.pixelFormat = PixelFormat::RGBA8;
-        _colorTexture                = new Texture2D();
-        _colorTexture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA, PixelFormat::NONE, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
+        desc.width        = powW;
+        desc.height       = powH;
+        desc.textureUsage = TextureUsage::RENDER_TARGET;
+        desc.pixelFormat  = PixelFormat::RGBA8;
+        _colorTexture     = new Texture2D();
+        _colorTexture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA, PixelFormat::NONE,
+                                    !!AX_ENABLE_PREMULTIPLIED_ALPHA);
 
         if (PixelFormat::D24S8 == depthStencilFormat || sharedRenderTarget)
         {
@@ -235,9 +237,9 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         }
         else
         {
-            _renderTarget = axdrv->createRenderTarget(
-                _colorTexture ? _colorTexture->getRHITexture() : nullptr,
-                _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
+            _renderTarget =
+                axdrv->createRenderTarget(_colorTexture ? _colorTexture->getRHITexture() : nullptr,
+                                          _depthStencilTexture ? _depthStencilTexture->getRHITexture() : nullptr);
         }
 
         _renderTarget->setColorAttachment(_colorTexture ? _colorTexture->getRHITexture() : nullptr);

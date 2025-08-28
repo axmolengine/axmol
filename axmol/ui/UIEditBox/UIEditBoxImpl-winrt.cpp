@@ -1,51 +1,51 @@
 ///****************************************************************************
-//Copyright (c) 2014 cocos2d-x.org
-//Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-//Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+// Copyright (c) 2014 cocos2d-x.org
+// Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 //
-//https://axmol.dev/
+// https://axmol.dev/
 //
 //* Portions Copyright (c) Microsoft Open Technologies, Inc.
 //* All Rights Reserved
 //
-//Permission is hereby granted, free of charge, to any person obtaining a copy
-//of this software and associated documentation files (the "Software"), to deal
-//in the Software without restriction, including without limitation the rights
-//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//copies of the Software, and to permit persons to whom the Software is
-//furnished to do so, subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//The above copyright notice and this permission notice shall be included in
-//all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
-//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//THE SOFTWARE.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 //****************************************************************************/
 
 #include "axmol/platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
-#include "axmol/ui/UIEditBox/UIEditBoxImpl-winrt.h"
-#include "axmol/platform/winrt/WinRTUtils.h"
-#include "axmol/platform/winrt/RenderViewImpl-winrt.h"
-#include "axmol/2d/FontFreeType.h"
+#    include "axmol/ui/UIEditBox/UIEditBoxImpl-winrt.h"
+#    include "axmol/platform/winrt/WinRTUtils.h"
+#    include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#    include "axmol/2d/FontFreeType.h"
 
-#include <winrt/Windows.UI.Xaml.Input.h>
-#include <winrt/Windows.UI.ViewManagement.h>
-#include <winrt/Windows.Foundation.Collections.h>
-#include <winrt/Windows.UI.Xaml.Media.h>
+#    include <winrt/Windows.UI.Xaml.Input.h>
+#    include <winrt/Windows.UI.ViewManagement.h>
+#    include <winrt/Windows.Foundation.Collections.h>
+#    include <winrt/Windows.UI.Xaml.Media.h>
 
-#if defined(WINAPI_FAMILY) && WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
-#define XAML_TOP_PADDING 10.0f
-#else
-#define XAML_TOP_PADDING 0.0f
-#endif
+#    if defined(WINAPI_FAMILY) && WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
+#        define XAML_TOP_PADDING 10.0f
+#    else
+#        define XAML_TOP_PADDING 0.0f
+#    endif
 
-#define EDIT_BOX_PADDING 5.0f
+#    define EDIT_BOX_PADDING 5.0f
 
 namespace ax
 {
@@ -508,8 +508,8 @@ void UIEditBoxImplWinrt::nativeOpenKeyboard()
     // Update the text
     _system_control->setText(PlatformStringFromString(getText()));
     // Size
-    auto renderView    = ax::Director::getInstance()->getRenderView();
-    auto transform = _editBox->getNodeToWorldTransform();
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    auto transform  = _editBox->getNodeToWorldTransform();
     ax::Vec3 scale;
     transform.getScale(&scale);
     Windows::Foundation::Size xamlSize = {_editBox->getContentSize().width * renderView->getScaleX() * scale.x,
@@ -545,7 +545,7 @@ void UIEditBoxImplWinrt::setNativeMaxLength(int maxLength)
 
 ax::Vec2 UIEditBoxImplWinrt::convertDesignCoordToXamlCoord(const ax::Vec2& designCoord)
 {
-    auto renderView      = ax::Director::getInstance()->getRenderView();
+    auto renderView  = ax::Director::getInstance()->getRenderView();
     float viewH      = renderView->getFrameSize().height;
     Vec2 visiblePos  = Vec2(designCoord.x * renderView->getScaleX(), designCoord.y * renderView->getScaleY());
     Vec2 screenGLPos = visiblePos + renderView->getViewPortRect().origin;
@@ -557,4 +557,4 @@ ax::Vec2 UIEditBoxImplWinrt::convertDesignCoordToXamlCoord(const ax::Vec2& desig
 
 }  // namespace ax
 
-#endif // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
+#endif  // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)

@@ -29,7 +29,8 @@
 
 #include "axmol/rhi/RHITypes.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 class Texture;
 /**
@@ -75,4 +76,4 @@ struct RenderPassDesc
 };
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

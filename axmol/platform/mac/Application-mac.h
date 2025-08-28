@@ -104,4 +104,4 @@ protected:
     std::string _startupScriptFilename;
 };
 
-}
+}  // namespace ax

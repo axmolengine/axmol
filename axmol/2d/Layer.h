@@ -60,7 +60,6 @@ All features from Layer are valid, plus the following new features:
 class AX_DLL LayerColor : public Sprite
 {
 public:
-
     /** Creates a fullscreen black layer.
      *
      * @return An autoreleased LayerColor object.
@@ -73,13 +72,13 @@ public:
      * @param height The height of layer.
      * @return An autoreleased LayerColor object.
      */
-    static LayerColor * create(const Color32& color, float width, float height);
+    static LayerColor* create(const Color32& color, float width, float height);
     /** Creates a Layer with color. Width and height are the window size.
      *
      * @param color The color of layer.
      * @return An autoreleased LayerColor object.
      */
-    static LayerColor * create(const Color32& color);
+    static LayerColor* create(const Color32& color);
 
     /** Change width in Points.
      *
@@ -105,7 +104,6 @@ public:
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(LayerColor);
-
 };
 
 //
@@ -312,10 +310,10 @@ public:
                        float expand);
 
 private:
-    Color32 _startColor     = Color32::BLACK;
+    Color32 _startColor   = Color32::BLACK;
     Color _startColorRend = Color::BLACK;  // start color used in shader
 
-    Color32 _endColor     = Color32::BLACK;
+    Color32 _endColor   = Color32::BLACK;
     Color _endColorRend = Color::BLACK;  // end color used in shader
 
     Vec2 _vertices[4];
@@ -431,4 +429,4 @@ private:
 // end of _2d group
 /// @}
 
-}
+}  // namespace ax

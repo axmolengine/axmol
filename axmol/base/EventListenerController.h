@@ -71,7 +71,7 @@ protected:
     bool init();
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

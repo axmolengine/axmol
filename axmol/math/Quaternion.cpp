@@ -27,9 +27,8 @@
 NS_AX_MATH_BEGIN
 
 #if defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
-    const Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
+const Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
 #endif
-
 
 Quaternion::Quaternion(const Mat4& m)
 {

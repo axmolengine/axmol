@@ -342,7 +342,8 @@ TEST_SUITE("math/MathUtil" * SKIP_SIMD_TEST)
         MathUtilNeon::transformVec4(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<const float*>(inVec4),
                                     reinterpret_cast<float*>(outVec4Opt));
 #elif defined(AX_SSE_INTRINSICS)
-        MathUtilSSE::transformVec4(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<const float*>(inVec4), reinterpret_cast<float*>(outVec4Opt));
+        MathUtilSSE::transformVec4(reinterpret_cast<const _xm128_t*>(inMat41), reinterpret_cast<const float*>(inVec4),
+                                   reinterpret_cast<float*>(outVec4Opt));
 #endif
 
         __checkMathUtilResult("inline static void transformVec4(const float* m, const float* v, float* dst);", outVec4C,

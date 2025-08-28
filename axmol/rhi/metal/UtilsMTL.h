@@ -30,10 +30,12 @@
 #import <Metal/Metal.h>
 #include <functional>
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 class Texture;
 
-namespace mtl {
+namespace mtl
+{
 
 /**
  * @addtogroup _metal
@@ -98,8 +100,8 @@ private:
     static id<MTLTexture> _defaultDepthStencilAttachmentTexture;
 };
 
-}
+}  // namespace mtl
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi

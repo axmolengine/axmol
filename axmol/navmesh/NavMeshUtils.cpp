@@ -72,26 +72,26 @@ void LinearAllocator::resize(const int cap)
 
 int FastLZCompressor::maxCompressedSize(const int bufferSize)
 {
-    return (int)(bufferSize* 1.05f);
+    return (int)(bufferSize * 1.05f);
 }
 
 dtStatus ax::FastLZCompressor::decompress(const unsigned char* compressed,
-                                            const int compressedSize,
-                                            unsigned char* buffer,
-                                            const int maxBufferSize,
-                                            int* bufferSize)
+                                          const int compressedSize,
+                                          unsigned char* buffer,
+                                          const int maxBufferSize,
+                                          int* bufferSize)
 {
     *bufferSize = fastlz_decompress(compressed, compressedSize, buffer, maxBufferSize);
     return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
 }
 
 dtStatus ax::FastLZCompressor::compress(const unsigned char* buffer,
-                                          const int bufferSize,
-                                          unsigned char* compressed,
-                                          const int maxCompressedSize,
-                                          int* compressedSize)
+                                        const int bufferSize,
+                                        unsigned char* compressed,
+                                        const int maxCompressedSize,
+                                        int* compressedSize)
 {
-    *compressedSize = fastlz_compress((const void *const)buffer, bufferSize, compressed);
+    *compressedSize = fastlz_compress((const void* const)buffer, bufferSize, compressed);
     return DT_SUCCESS;
 }
 
@@ -291,6 +291,6 @@ bool inRange(const float* v1, const float* v2, const float r, const float h)
     return (dx * dx + dz * dz) < r * r && fabsf(dy) < h;
 }
 
-}
+}  // namespace ax
 
 #endif  // AX_ENABLE_NAVMESH

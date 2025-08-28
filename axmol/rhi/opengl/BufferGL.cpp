@@ -30,7 +30,8 @@
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 namespace
 {
@@ -138,4 +139,4 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     }
 }
 
-}
+}  // namespace ax::rhi::gl

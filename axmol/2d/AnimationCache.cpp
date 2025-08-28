@@ -267,4 +267,4 @@ void AnimationCache::addAnimationsWithFile(std::string_view plist)
     addAnimationsWithDictionary(dict, plist);
 }
 
-}
+}  // namespace ax

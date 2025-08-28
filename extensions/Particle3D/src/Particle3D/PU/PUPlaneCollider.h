@@ -66,5 +66,4 @@ protected:
     Vec3 _predictedPosition;
     PUPlane _plane;
 };
-}
-
+}  // namespace ax

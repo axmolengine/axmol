@@ -60,7 +60,7 @@ tolua_lerror:
 
 static int lua_set_AudioProfile_name(lua_State* L)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -130,7 +130,7 @@ tolua_lerror:
 
 static int lua_set_AudioProfile_maxInstances(lua_State* L)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -200,7 +200,7 @@ tolua_lerror:
 
 static int lua_set_AudioProfile_minDelay(lua_State* L)
 {
-    int argc                    = 0;
+    int argc               = 0;
     ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1

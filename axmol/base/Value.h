@@ -287,4 +287,4 @@ inline const ax::Value& optValue(const ValueMap& dictionary, std::string_view ke
 
 /** @} */
 
-}
+}  // namespace ax

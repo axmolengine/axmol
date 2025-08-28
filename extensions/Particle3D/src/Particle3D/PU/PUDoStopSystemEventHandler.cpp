@@ -46,4 +46,4 @@ PUDoStopSystemEventHandler* PUDoStopSystemEventHandler::create()
     return peh;
 }
 
-}
+}  // namespace ax

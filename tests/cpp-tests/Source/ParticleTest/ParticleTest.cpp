@@ -473,13 +473,13 @@ void DemoSnow::onEnter()
     _emitter->setSpeedVar(30);
 
     Color startColor = _emitter->getStartColor();
-    startColor.r       = 0.9f;
-    startColor.g       = 0.9f;
-    startColor.b       = 0.9f;
+    startColor.r     = 0.9f;
+    startColor.g     = 0.9f;
+    startColor.b     = 0.9f;
     _emitter->setStartColor(startColor);
 
     Color startColorVar = _emitter->getStartColorVar();
-    startColorVar.b       = 0.1f;
+    startColorVar.b     = 0.1f;
     _emitter->setStartColorVar(startColorVar);
 
     _emitter->setEmissionRate(_emitter->getTotalParticles() / _emitter->getLife());
@@ -1003,7 +1003,8 @@ void DemoLifeAnimationAtlas::onEnter()
 
 std::string DemoLifeAnimationAtlas::subtitle() const
 {
-    return "Particle life animation, particles should show 0 to 9 based on their life based on a texture atlas NOT using sprite frames";
+    return "Particle life animation, particles should show 0 to 9 based on their life based on a texture atlas NOT "
+           "using sprite frames";
 }
 
 //------------------------------------------------------------------
@@ -1289,7 +1290,8 @@ void DemoEmitterAnimationDescriptor::onEnter()
 
 std::string DemoEmitterAnimationDescriptor::subtitle() const
 {
-    return "Particle emitter animation, particles should have their index changed every one second with a 0.5 variance to a random index";
+    return "Particle emitter animation, particles should have their index changed every one second with a 0.5 variance "
+           "to a random index";
 }
 
 //------------------------------------------------------------------
@@ -2319,7 +2321,7 @@ void ParticleDemo::update(float dt)
     {
         auto atlas  = (LabelAtlas*)getChildByTag(kTagParticleCount);
         char buf[5] = {0};
-        auto str = fmt::format_to_z(buf, "%04d", _emitter->getParticleCount());
+        auto str    = fmt::format_to_z(buf, "%04d", _emitter->getParticleCount());
         atlas->setString(str);
     }
 }
@@ -2740,7 +2742,7 @@ void MultipleParticleSystemsBatched::update(float dt)
     }
 
     char buf[50] = {0};
-    auto str = fmt::format_to_z(buf, "{:4d}", count);
+    auto str     = fmt::format_to_z(buf, "{:4d}", count);
     atlas->setString(str);
 }
 

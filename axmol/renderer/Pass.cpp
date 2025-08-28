@@ -362,4 +362,4 @@ void Pass::setUniformAmbientLigthColor(const void* data, size_t dataLen)
     TRY_SET_UNIFORM(_locAmbientLigthColor);
 }
 
-}
+}  // namespace ax

@@ -34,7 +34,8 @@ class MeshVertexData;
 class MeshIndexData;
 }  // namespace ax
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 /**
  * @addtogroup _rhi
@@ -98,4 +99,4 @@ protected:
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

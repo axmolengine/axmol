@@ -180,4 +180,4 @@ PUSlaveEmitter* PUSlaveEmitter::clone()
     return be;
 }
 
-}
+}  // namespace ax

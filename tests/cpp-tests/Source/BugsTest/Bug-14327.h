@@ -40,9 +40,8 @@ public:
     virtual std::string title() const override { return "Bug14327"; }
 
     virtual void editBoxEditingDidBegin(ax::ui::EditBox* editBox) override;
-    virtual void editBoxEditingDidEndWithAction(
-        ax::ui::EditBox* editBox,
-        ax::ui::EditBoxDelegate::EditBoxEndAction EditBoxEndAction) override;
+    virtual void editBoxEditingDidEndWithAction(ax::ui::EditBox* editBox,
+                                                ax::ui::EditBoxDelegate::EditBoxEndAction EditBoxEndAction) override;
     virtual void editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view text) override;
     virtual void editBoxReturn(ax::ui::EditBox* editBox) override;
 

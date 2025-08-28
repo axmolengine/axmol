@@ -33,25 +33,20 @@ THE SOFTWARE.
 using namespace ax;
 
 extern "C" {
-JNIEXPORT void JNICALL
-Java_dev_axmol_lib_AxmolRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
     ax::Director::getInstance()->getRenderView()->handleTouchesBegin(1, &idlong, &x, &y);
 }
 
-JNIEXPORT void JNICALL
-Java_dev_axmol_lib_AxmolRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
     ax::Director::getInstance()->getRenderView()->handleTouchesEnd(1, &idlong, &x, &y);
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesMove(JNIEnv* env,
-                                                                                jclass,
-                                                                                jintArray ids,
-                                                                                jfloatArray xs,
-                                                                                jfloatArray ys)
+JNIEXPORT void JNICALL
+Java_dev_axmol_lib_AxmolRenderer_nativeTouchesMove(JNIEnv* env, jclass, jintArray ids, jfloatArray xs, jfloatArray ys)
 {
     int size = env->GetArrayLength(ids);
     jint id[size];
@@ -69,11 +64,8 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesMove(JNIEnv
     ax::Director::getInstance()->getRenderView()->handleTouchesMove(size, idlong, x, y);
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesCancel(JNIEnv* env,
-                                                                                  jclass,
-                                                                                  jintArray ids,
-                                                                                  jfloatArray xs,
-                                                                                  jfloatArray ys)
+JNIEXPORT void JNICALL
+Java_dev_axmol_lib_AxmolRenderer_nativeTouchesCancel(JNIEnv* env, jclass, jintArray ids, jfloatArray xs, jfloatArray ys)
 {
     int size = env->GetArrayLength(ids);
     jint id[size];
@@ -91,14 +83,14 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeTouchesCancel(JNIE
     ax::Director::getInstance()->getRenderView()->handleTouchesCancel(size, idlong, x, y);
 }
 
-#define KEYCODE_BACK 0x04
-#define KEYCODE_MENU 0x52
-#define KEYCODE_DPAD_UP 0x13
-#define KEYCODE_DPAD_DOWN 0x14
-#define KEYCODE_DPAD_LEFT 0x15
-#define KEYCODE_DPAD_RIGHT 0x16
-#define KEYCODE_ENTER 0x42
-#define KEYCODE_PLAY 0x7e
+#define KEYCODE_BACK        0x04
+#define KEYCODE_MENU        0x52
+#define KEYCODE_DPAD_UP     0x13
+#define KEYCODE_DPAD_DOWN   0x14
+#define KEYCODE_DPAD_LEFT   0x15
+#define KEYCODE_DPAD_RIGHT  0x16
+#define KEYCODE_ENTER       0x42
+#define KEYCODE_PLAY        0x7e
 #define KEYCODE_DPAD_CENTER 0x17
 
 static std::unordered_map<int, ax::EventKeyboard::KeyCode> g_keyCodeMap = {
@@ -115,9 +107,9 @@ static std::unordered_map<int, ax::EventKeyboard::KeyCode> g_keyCodeMap = {
 };
 
 JNIEXPORT jboolean JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeKeyEvent(JNIEnv*,
-                                                                                 jclass,
-                                                                                 jint keyCode,
-                                                                                 jboolean isPressed)
+                                                                           jclass,
+                                                                           jint keyCode,
+                                                                           jboolean isPressed)
 {
     auto iterKeyCode = g_keyCodeMap.find(keyCode);
     if (iterKeyCode == g_keyCodeMap.end())

@@ -131,7 +131,7 @@ void PhysicsDemo::onEnter()
 
 bool PhysicsDemo::onMouseDown(Event* event)
 {
-    EventMouse* e   = (EventMouse*)event;
+    EventMouse* e = (EventMouse*)event;
     AXLOGI("PhysicsDemo::onMouseDown: ({},{})", e->getLocation().x, e->getLocation().y);
     return true;
 }
@@ -519,8 +519,10 @@ void PhysicsDemoRayCast::onEnter()
 
     auto node = DrawNode::create();
     node->addComponent(PhysicsBody::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
-                                                      VisibleRect::rightBottom() + Vec2(0.0f, 50.0f), PHYSICSBODY_MATERIAL_DEFAULT, 0.5f));
-    node->drawSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f), VisibleRect::rightBottom() + Vec2(0.0f, 50.0f), 0.5f, STATIC_COLOR);
+                                                      VisibleRect::rightBottom() + Vec2(0.0f, 50.0f),
+                                                      PHYSICSBODY_MATERIAL_DEFAULT, 0.5f));
+    node->drawSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f), VisibleRect::rightBottom() + Vec2(0.0f, 50.0f),
+                      0.5f, STATIC_COLOR);
     this->addChild(node);
 
     MenuItemFont::setFontSize(18);
@@ -828,7 +830,7 @@ void PhysicsDemoJoints::onEnter()
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
                 PhysicsJointLimit* joint = PhysicsJointLimit::instantiate(sp1PhysicsBody, sp2PhysicsBody, Point::ZERO,
-                                                                        Point::ZERO, 30.0f, 60.0f);
+                                                                          Point::ZERO, 30.0f, 60.0f);
                 getPhysicsWorld()->addJoint(joint);
 
                 this->addChild(sp1);
@@ -846,7 +848,7 @@ void PhysicsDemoJoints::onEnter()
                 sp2PhysicsBody->setTag(DRAG_BODYS_TAG);
 
                 PhysicsJointSpring* joint = PhysicsJointSpring::instantiate(sp1PhysicsBody, sp2PhysicsBody, Point::ZERO,
-                                                                          Point::ZERO, 500.0f, 0.3f);
+                                                                            Point::ZERO, 500.0f, 0.3f);
                 getPhysicsWorld()->addJoint(joint);
 
                 this->addChild(sp1);
@@ -883,9 +885,9 @@ void PhysicsDemoJoints::onEnter()
 
                 getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp1PhysicsBody, box, sp1->getPosition()));
                 getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp2PhysicsBody, box, sp2->getPosition()));
-                 PhysicsJointRotarySpring* joint =
-                     PhysicsJointRotarySpring::instantiate(sp1PhysicsBody, sp2PhysicsBody, 3000.0f, 60.0f);
-                 getPhysicsWorld()->addJoint(joint);
+                PhysicsJointRotarySpring* joint =
+                    PhysicsJointRotarySpring::instantiate(sp1PhysicsBody, sp2PhysicsBody, 3000.0f, 60.0f);
+                getPhysicsWorld()->addJoint(joint);
 
                 this->addChild(sp1);
                 this->addChild(sp2);
@@ -962,7 +964,8 @@ void PhysicsDemoJoints::onEnter()
 
                 getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp1PhysicsBody, box, sp1->getPosition()));
                 getPhysicsWorld()->addJoint(PhysicsJointPin::instantiate(sp2PhysicsBody, box, sp2->getPosition()));
-                PhysicsJointMotor* joint = PhysicsJointMotor::instantiate(sp1PhysicsBody, sp2PhysicsBody, (float)M_PI_2);
+                PhysicsJointMotor* joint =
+                    PhysicsJointMotor::instantiate(sp1PhysicsBody, sp2PhysicsBody, (float)M_PI_2);
                 getPhysicsWorld()->addJoint(joint);
 
                 this->addChild(sp1);
@@ -1059,7 +1062,8 @@ void PhysicsDemoPump::onEnter()
     this->addChild(sgear);
 
     _physicsWorld->addJoint(PhysicsJointPin::instantiate(nodeBody, sgearBody, sgear->getPosition()));
-    _physicsWorld->addJoint(PhysicsJointDistance::instantiate(pumpBody, sgearBody, Vec2(0.0f, 0.0f), Vec2(0.0f, -44.0f)));
+    _physicsWorld->addJoint(
+        PhysicsJointDistance::instantiate(pumpBody, sgearBody, Vec2(0.0f, 0.0f), Vec2(0.0f, -44.0f)));
 
     // big gear
     auto bgearBody = PhysicsBody::createCircle(100);
@@ -1479,22 +1483,22 @@ void PhysicsContactTest::resetTest()
     std::string strNum;
     char buf[10];
 
-    auto mark = fmt::format_to_z(buf, "{}", _yellowBoxNum);
+    auto mark  = fmt::format_to_z(buf, "{}", _yellowBoxNum);
     auto label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos));
 
-    mark = fmt::format_to_z(buf, "{}", _blueBoxNum);
+    mark  = fmt::format_to_z(buf, "{}", _blueBoxNum);
     label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
 
-    mark = fmt::format_to_z(buf, "{}", _yellowTriangleNum);
+    mark  = fmt::format_to_z(buf, "{}", _yellowTriangleNum);
     label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));
 
-    mark = fmt::format_to_z(buf, "{}", _blueTriangleNum);
+    mark  = fmt::format_to_z(buf, "{}", _blueTriangleNum);
     label = Label::createWithTTF(mark, "fonts/arial.ttf", 32);
     root->addChild(label, 1);
     label->setPosition(Vec2(s.width / 2, prevMenuPos -= menuStep));

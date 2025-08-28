@@ -600,10 +600,10 @@ void ColorFrame::onEnter(Frame* nextFrame, int /*currentFrameIndex*/)
 
     if (_tween)
     {
-        auto& color = static_cast<ColorFrame*>(nextFrame)->_color;
-        _betweenRed          = color.r - _color.r;
-        _betweenGreen        = color.g - _color.g;
-        _betweenBlue         = color.b - _color.b;
+        auto& color   = static_cast<ColorFrame*>(nextFrame)->_color;
+        _betweenRed   = color.r - _color.r;
+        _betweenGreen = color.g - _color.g;
+        _betweenBlue  = color.b - _color.b;
     }
 }
 

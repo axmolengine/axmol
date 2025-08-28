@@ -78,7 +78,7 @@ Offset<Table> Light3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectD
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        attriname         = attribute.name();
+        attriname              = attribute.name();
         std::string_view value = attribute.value();
 
         if (attriname == "Type")

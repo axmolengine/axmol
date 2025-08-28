@@ -119,7 +119,7 @@ bool Director::init()
     _lastUpdate = std::chrono::steady_clock::now();
 
     auto concurrency = Configuration::getInstance()->getValue("axmol.concurrency", Value{-1}).asInt();
-    _jobSystem = new JobSystem(concurrency);
+    _jobSystem       = new JobSystem(concurrency);
 
 #ifdef AX_ENABLE_CONSOLE
     _console = new Console();
@@ -299,8 +299,7 @@ void Director::drawScene()
 
     if (_runningScene)
     {
-#if (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || \
-     defined(AX_ENABLE_NAVMESH))
+#if (defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH))
         _runningScene->stepPhysicsAndNavigation(_deltaTime);
 #endif
         // clear draw stats
@@ -666,7 +665,7 @@ void Director::purgeCachedData()
 {
     FontFNT::purgeCachedData();
     FontAtlasCache::purgeCachedData();
-    
+
     if (s_SharedDirector->getRenderView())
     {
         SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
@@ -1582,4 +1581,4 @@ void Director::setAnimationInterval(float interval, SetIntervalReason reason)
     }
 }
 
-}
+}  // namespace ax

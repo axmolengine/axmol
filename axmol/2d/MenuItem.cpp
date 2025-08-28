@@ -65,8 +65,8 @@ bool MenuItem::initWithCallback(const ccMenuCallback& callbackClick)
 {
     setAnchorPoint(Vec2(0.5f, 0.5f));
     _callbackClick = callbackClick;
-    _enabled  = true;
-    _selected = false;
+    _enabled       = true;
+    _selected      = false;
     return true;
 }
 
@@ -883,4 +883,4 @@ MenuItem* MenuItemToggle::getSelectedItem()
     return _subItems.at(_selectedIndex);
 }
 
-}
+}  // namespace ax

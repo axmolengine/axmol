@@ -107,7 +107,7 @@ void CustomCommand::assign(CustomCommand&& rhs)
         _afterCallback  = std::move(rhs._afterCallback);
 
         rhs._vertexBuffer = rhs._indexBuffer = nullptr;
-        rhs._pipelineDesc.programState = nullptr;
+        rhs._pipelineDesc.programState       = nullptr;
         rhs._pipelineDesc.vertexLayout       = nullptr;
     }
 }
@@ -144,15 +144,13 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
     _vertexCapacity  = capacity;
     _vertexDrawCount = capacity;
 
-    _vertexBuffer =
-        axdrv->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
+    _vertexBuffer = axdrv->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
 }
 
 void CustomCommand::createInstanceBuffer(std::size_t vertexSize, int capacity, BufferUsage usage)
 {
     AX_SAFE_RELEASE(_instanceBuffer);
-    _instanceBuffer =
-        axdrv->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
+    _instanceBuffer   = axdrv->createBuffer(vertexSize * capacity, rhi::BufferType::VERTEX, usage);
     _instanceCapacity = capacity;
     _instanceCount    = capacity;
 }
@@ -162,8 +160,8 @@ void CustomCommand::setInstanceBuffer(rhi::Buffer* instanceBuffer, int count)
     if (_instanceBuffer != instanceBuffer)
     {
         AX_SAFE_RELEASE(_instanceBuffer);
-        _instanceBuffer = instanceBuffer;
-        _instanceCount  = count;
+        _instanceBuffer   = instanceBuffer;
+        _instanceCount    = count;
         _instanceCapacity = count;
         AX_SAFE_RETAIN(_instanceBuffer);
     }
@@ -178,8 +176,7 @@ void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, 
     _indexCapacity  = capacity;
     _indexDrawCount = capacity;
 
-    _indexBuffer =
-        axdrv->createBuffer(_indexSize * capacity, rhi::BufferType::INDEX, usage);
+    _indexBuffer = axdrv->createBuffer(_indexSize * capacity, rhi::BufferType::INDEX, usage);
 }
 
 void CustomCommand::updateVertexBuffer(const void* data, std::size_t offset, std::size_t length)
@@ -219,7 +216,7 @@ void CustomCommand::setIndexBuffer(rhi::Buffer* indexBuffer, IndexFormat format)
     _indexFormat = format;
     _indexSize   = computeIndexSize();
 
-    if(!_indexBuffer)
+    if (!_indexBuffer)
         _indexCapacity = _indexDrawCount = 0;
 }
 

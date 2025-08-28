@@ -99,8 +99,8 @@ bool AtlasNode::setProgramState(rhi::ProgramState* programState, bool ownPS /*= 
     if (Node::setProgramState(programState, ownPS))
     {
         _quadCommand.setWeakPSVL(_programState, _vertexLayout);
-        
-        _mvpMatrixLocation              = _programState->getUniformLocation("u_MVPMatrix");
+
+        _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
 
         updateProgramStateTexture(_textureAtlas->getTexture());
         return true;
@@ -273,4 +273,4 @@ void AtlasNode::setQuadsToDraw(ssize_t quadsToDraw)
     _quadsToDraw = quadsToDraw;
 }
 
-}
+}  // namespace ax

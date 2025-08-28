@@ -30,21 +30,21 @@
 
 #include <functional>
 
-#define QUEUEBUFFER_NUM (3)
+#define QUEUEBUFFER_NUM       (3)
 #define QUEUEBUFFER_TIME_STEP (0.05f)
 
-#define QUOTEME_(x) #x
-#define QUOTEME(x) QUOTEME_(x)
+#define QUOTEME_(x)           #x
+#define QUOTEME(x)            QUOTEME_(x)
 
 #if defined(_AX_DEBUG) && _AX_DEBUG > 0
-#    define CHECK_AL_ERROR_DEBUG()                                                                     \
-        do                                                                                             \
-        {                                                                                              \
-            ALenum __error = alGetError();                                                             \
-            if (__error)                                                                               \
-            {                                                                                          \
+#    define CHECK_AL_ERROR_DEBUG()                                                                        \
+        do                                                                                                \
+        {                                                                                                 \
+            ALenum __error = alGetError();                                                                \
+            if (__error)                                                                                  \
+            {                                                                                             \
                 AXLOGE("OpenAL error 0x{:04X} in {} {} {}\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-            }                                                                                          \
+            }                                                                                             \
         } while (false)
 #else
 #    define CHECK_AL_ERROR_DEBUG()
@@ -56,11 +56,11 @@
         break;              \
     }
 
-#define BREAK_IF_ERR_LOG(condition, fmt, ...)                                   \
-    if (!!(condition))                                                          \
-    {                                                                           \
+#define BREAK_IF_ERR_LOG(condition, fmt, ...)                                    \
+    if (!!(condition))                                                           \
+    {                                                                            \
         AXLOGE("(" QUOTEME(condition) ") failed, message: " fmt, ##__VA_ARGS__); \
-        break;                                                                  \
+        break;                                                                   \
     }
 
 #define AUDIO_ID int

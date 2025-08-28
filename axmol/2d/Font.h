@@ -46,7 +46,6 @@ public:
     virtual int getFontMaxHeight() const { return 0; }
 };
 
-}
+}  // namespace ax
 
 /// @endcond
-

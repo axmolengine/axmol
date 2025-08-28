@@ -62,4 +62,3 @@ public:
                                  pugi::xml_node objectData);  // cocos2d-x-3.3rc1@libccs19 spec
 };
 }  // namespace cocostudio
-

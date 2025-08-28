@@ -53,10 +53,7 @@ class IndexArray
 {
 public:
     static constexpr unsigned int formatToStride(rhi::IndexFormat format) { return 1 << (int)format; }
-    static constexpr rhi::IndexFormat strideToFormat(unsigned int stride)
-    {
-        return (rhi::IndexFormat)(stride >> 1);
-    }
+    static constexpr rhi::IndexFormat strideToFormat(unsigned int stride) { return (rhi::IndexFormat)(stride >> 1); }
 
     IndexArray() : _stride(formatToStride(rhi::IndexFormat::U_SHORT)) {}
     IndexArray(rhi::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
@@ -191,7 +188,7 @@ public:
     size_t bsize() const { return _buffer.size(); }
 
     /** Resizes the count of indices in the container. */
-    void resize(size_t size) {_buffer.resize(static_cast<yasio::byte_buffer::size_type>(size * _stride)); }
+    void resize(size_t size) { _buffer.resize(static_cast<yasio::byte_buffer::size_type>(size * _stride)); }
     /** Resizes the container in bytes. */
     void bresize(size_t size) { _buffer.resize(static_cast<yasio::byte_buffer::size_type>(size)); }
 
@@ -559,5 +556,4 @@ struct Reference
     unsigned int offset;
 };
 
-}
-
+}  // namespace ax

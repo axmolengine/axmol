@@ -76,7 +76,7 @@ Vec2 MeshReader::getVec2Attribute(pugi::xml_attribute attribute) const
 
     while (attribute)
     {
-        attriname         = attribute.name();
+        attriname              = attribute.name();
         std::string_view value = attribute.value();
 
         if (attriname == "X")
@@ -95,7 +95,7 @@ Vec2 MeshReader::getVec2Attribute(pugi::xml_attribute attribute) const
 }
 
 Offset<Table> MeshReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
-                                                           flatbuffers::FlatBufferBuilder* builder)
+                                                       flatbuffers::FlatBufferBuilder* builder)
 {
     auto temp          = Node3DReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
     auto node3DOptions = *(Offset<Node3DOption>*)(&temp);
@@ -110,7 +110,7 @@ Offset<Table> MeshReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        attriname         = attribute.name();
+        attriname              = attribute.name();
         std::string_view value = attribute.value();
 
         if (attriname == "RunAction3D")
@@ -166,7 +166,7 @@ Offset<Table> MeshReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")

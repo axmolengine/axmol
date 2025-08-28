@@ -64,27 +64,27 @@ private:
     float _alphaThreshold = 1.f;
     bool _inverted        = false;
 
-    bool _currentStencilEnabled                            = false;
-    unsigned int _currentStencilWriteMask                  = ~0;
-    rhi::CompareFunc _currentStencilFunc           = rhi::CompareFunc::ALWAYS;
-    unsigned int _currentStencilRef                        = 0;
-    unsigned int _currentStencilReadMask                   = ~0;
+    bool _currentStencilEnabled                 = false;
+    unsigned int _currentStencilWriteMask       = ~0;
+    rhi::CompareFunc _currentStencilFunc        = rhi::CompareFunc::ALWAYS;
+    unsigned int _currentStencilRef             = 0;
+    unsigned int _currentStencilReadMask        = ~0;
     rhi::StencilOp _currentStencilFail          = rhi::StencilOp::KEEP;
     rhi::StencilOp _currentStencilPassDepthFail = rhi::StencilOp::KEEP;
     rhi::StencilOp _currentStencilPassDepthPass = rhi::StencilOp::KEEP;
-    bool _currentDepthWriteMask                            = true;
+    bool _currentDepthWriteMask                 = true;
 
     unsigned int _mask_layer_le = 0;
     int _currentLayerMask       = 0;
 
     CustomCommand _customCommand;
-    //CallbackCommand _afterDrawStencilCmd;
-    //CallbackCommand _afterVisitCmd;
+    // CallbackCommand _afterDrawStencilCmd;
+    // CallbackCommand _afterVisitCmd;
 
     rhi::UniformLocation _mvpMatrixLocaiton;
     rhi::UniformLocation _colorUniformLocation;
 };
 
-}
+}  // namespace ax
 // end of base group
 /** @} */

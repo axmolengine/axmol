@@ -429,7 +429,7 @@ void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 {
     // LOGD("editBoxTextChanged...");
     ax::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
-    _text                                   = text;
+    _text                              = text;
     if (pDelegate != nullptr)
     {
         pDelegate->editBoxTextChanged(_editBox, text);
@@ -447,4 +447,4 @@ void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 
 }  // namespace ui
 
-}
+}  // namespace ax

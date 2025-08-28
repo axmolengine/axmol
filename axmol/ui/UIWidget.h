@@ -642,7 +642,7 @@ public:
      */
     bool isSwallowTouches() const;
 
-     /**
+    /**
      * Toggle widget swallow mouse option.
      * @brief Specify widget to swallow mouse or not
      * @param swallow True to swallow mouse, false otherwise.
@@ -654,7 +654,6 @@ public:
      * @return Whether mouse is swallowed.
      */
     bool isSwallowMouse() const;
-
 
     /**
      * Query whether widget is focused or not.
@@ -820,7 +819,7 @@ protected:
     virtual void releaseUpEvent();
     virtual void cancelUpEvent();
 
-    virtual void adaptRenderers(){};
+    virtual void adaptRenderers() {};
     void updateChildrenDisplayedRGBA();
 
     void copyProperties(Widget* model);
@@ -902,7 +901,6 @@ private:
 };
 }  // namespace ui
 
-}
+}  // namespace ax
 // end of ui group
 /// @}
-

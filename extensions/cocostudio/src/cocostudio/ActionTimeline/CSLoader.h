@@ -173,5 +173,4 @@ protected:
     std::string _csBuildID;
 };
 
-}
-
+}  // namespace ax

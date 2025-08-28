@@ -140,7 +140,6 @@ protected:
 
 // end of 3d group
 /// @}
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
-

@@ -737,4 +737,4 @@ void Twirl::update(float time)
     }
 }
 
-}
+}  // namespace ax

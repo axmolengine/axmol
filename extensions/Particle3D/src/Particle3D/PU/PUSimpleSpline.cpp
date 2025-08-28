@@ -236,4 +236,4 @@ void PUSimpleSpline::setAutoCalculate(bool autoCalc)
 {
     _autoCalc = autoCalc;
 }
-}
+}  // namespace ax

@@ -74,12 +74,11 @@ public:
     void copyAttributesTo(PUEmitter* emitter) override;
 
     PUPositionEmitter();
-    virtual ~PUPositionEmitter(){};
+    virtual ~PUPositionEmitter() {};
 
 protected:
     std::vector<Vec3> _positionList;
     bool _randomized;
     size_t _index;
 };
-}
-
+}  // namespace ax

@@ -87,10 +87,10 @@ public:
     virtual ~MeshIndexData();
 
 protected:
-    rhi::Buffer* _indexBuffer = nullptr;  // index buffer
-    MeshVertexData* _vertexData   = nullptr;  // vertex buffer, weak ref
-    AABB _aabb;                               // original aabb of the submesh
-    std::string _id;                          // id
+    rhi::Buffer* _indexBuffer   = nullptr;  // index buffer
+    MeshVertexData* _vertexData = nullptr;  // vertex buffer, weak ref
+    AABB _aabb;                             // original aabb of the submesh
+    std::string _id;                        // id
     MeshCommand::PrimitiveType _primitiveType = MeshCommand::PrimitiveType::TRIANGLE;
     MeshData::IndexArray _indexData;
 
@@ -112,7 +112,8 @@ class AX_DLL MeshVertexData : public Object
 
 public:
     /**create*/
-    static MeshVertexData* create(const MeshData& meshdata, CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
+    static MeshVertexData* create(const MeshData& meshdata,
+                                  CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
 
     /** get vertexbuffer */
     rhi::Buffer* getVertexBuffer() const { return _vertexBuffer; }
@@ -143,9 +144,9 @@ public:
 
 protected:
     rhi::Buffer* _vertexBuffer = nullptr;  // vertex buffer
-    ssize_t _sizePerVertex         = -1;
-    Vector<MeshIndexData*> _indices;           // index data
-    axstd::pod_vector<MeshVertexAttrib> _attribs;    // vertex attributes
+    ssize_t _sizePerVertex     = -1;
+    Vector<MeshIndexData*> _indices;               // index data
+    axstd::pod_vector<MeshVertexAttrib> _attribs;  // vertex attributes
 
     int _vertexCount = 0;  // vertex count
     std::vector<float> _vertexData;
@@ -157,4 +158,4 @@ protected:
 // end of 3d group
 /// @}
 
-}
+}  // namespace ax

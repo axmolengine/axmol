@@ -42,4 +42,4 @@ bool PUSlaveBehaviourTranslator::translateChildObject(PUScriptCompiler* /*compil
     return false;
 }
 
-}
+}  // namespace ax

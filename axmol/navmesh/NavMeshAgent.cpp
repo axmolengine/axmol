@@ -424,6 +424,6 @@ Vec3 NavMeshAgent::getVelocity() const
     return Vec3::ZERO;
 }
 
-}
+}  // namespace ax
 
 #endif  // AX_ENABLE_NAVMESH

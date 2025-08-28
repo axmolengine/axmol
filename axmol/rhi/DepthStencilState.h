@@ -28,7 +28,8 @@
 
 #include "axmol/base/Object.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 class RenderTarget;
 /**
@@ -43,12 +44,12 @@ struct StencilDesc
 {
     bool operator==(const StencilDesc& rhs) const;
 
-    StencilOp stencilFailureOp   = StencilOp::KEEP;
-    StencilOp depthFailureOp     = StencilOp::KEEP;
-    StencilOp depthStencilPassOp = StencilOp::KEEP;
-    CompareFunc stencilCompareFunc  = CompareFunc::ALWAYS;
-    unsigned int readMask               = 0;
-    unsigned int writeMask              = 0;
+    StencilOp stencilFailureOp     = StencilOp::KEEP;
+    StencilOp depthFailureOp       = StencilOp::KEEP;
+    StencilOp depthStencilPassOp   = StencilOp::KEEP;
+    CompareFunc stencilCompareFunc = CompareFunc::ALWAYS;
+    unsigned int readMask          = 0;
+    unsigned int writeMask         = 0;
 };
 
 /**
@@ -81,10 +82,10 @@ protected:
     DepthStencilState() = default;
     virtual ~DepthStencilState();
 
-    DepthStencilDesc _dsDesc{};  ///< depth and stencil descriptor.
-    bool _isBackFrontStencilEqual = false;       ///< Does front stencil status equals to back stencil's.
+    DepthStencilDesc _dsDesc{};             ///< depth and stencil descriptor.
+    bool _isBackFrontStencilEqual = false;  ///< Does front stencil status equals to back stencil's.
 };
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax::rhi

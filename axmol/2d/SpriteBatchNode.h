@@ -276,4 +276,4 @@ protected:
 // end of sprite_nodes group
 /** @} */
 
-}
+}  // namespace ax

@@ -79,9 +79,7 @@ protected:
     void updateVertices() override;
     void updateColor() override;
 
-    virtual void visit(ax::Renderer* renderer,
-                       const ax::Mat4& parentTransform,
-                       uint32_t parentFlags) override;
+    virtual void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
     void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:

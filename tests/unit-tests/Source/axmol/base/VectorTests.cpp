@@ -28,9 +28,10 @@
 
 using namespace ax;
 
-
-TEST_SUITE("base/Vector") {
-    TEST_CASE("old_tests") {
+TEST_SUITE("base/Vector")
+{
+    TEST_CASE("old_tests")
+    {
         Vector<Node*> vec;
         CHECK(vec.empty());
         CHECK(vec.capacity() == 0);
@@ -261,8 +262,9 @@ TEST_SUITE("base/Vector") {
         auto seed = (unsigned)time(nullptr);
         std::srand(seed);
         Vector<Node*> vecForRandom = createVector();
-        auto different = 0;
-        for (int i = 0; i < vecForRandom.size(); ++i) {
+        auto different             = 0;
+        for (int i = 0; i < vecForRandom.size(); ++i)
+        {
             auto a = vecForRandom.getRandomObject();
             auto b = vecForRandom.getRandomObject();
             if (a->getTag() != b->getTag())

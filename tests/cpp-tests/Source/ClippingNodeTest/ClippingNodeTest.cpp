@@ -515,7 +515,7 @@ void ScrollViewDemo::onTouchesEnded(const std::vector<Touch*>& touches, Event* e
 
 // RawStencilBufferTests
 
-//#if _AX_DEBUG > 1
+// #if _AX_DEBUG > 1
 
 static const float _alphaThreshold = 0.05f;
 
@@ -557,12 +557,12 @@ void RawStencilBufferTest::setup()
 
 void RawStencilBufferTest::initCommands()
 {
-//    auto renderer               = Director::getInstance()->getRenderer();
-//    _enableStencilCallback.func = [=]() { renderer->setStencilTest(true); };
-//    _enableStencilCallback.init(_globalZOrder);
-//
-//    _disableStencilCallback.func = [=]() { renderer->setStencilTest(false); };
-//    _disableStencilCallback.init(_globalZOrder);
+    //    auto renderer               = Director::getInstance()->getRenderer();
+    //    _enableStencilCallback.func = [=]() { renderer->setStencilTest(true); };
+    //    _enableStencilCallback.init(_globalZOrder);
+    //
+    //    _disableStencilCallback.func = [=]() { renderer->setStencilTest(false); };
+    //    _disableStencilCallback.init(_globalZOrder);
 
     auto program              = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_UCOLOR);
     _programState             = new rhi::ProgramState(program);
@@ -670,8 +670,7 @@ void RawStencilBufferTest::setupStencilForClippingOnPlane(int plane)
     unsigned int planeMask = 0x1 << plane;
     renderer->setStencilWriteMask(planeMask);
     renderer->setStencilCompareFunc(rhi::CompareFunc::NEVER, planeMask, planeMask);
-    renderer->setStencilOp(rhi::StencilOp::REPLACE, rhi::StencilOp::KEEP,
-                                  rhi::StencilOp::KEEP);
+    renderer->setStencilOp(rhi::StencilOp::REPLACE, rhi::StencilOp::KEEP, rhi::StencilOp::KEEP);
 }
 
 void RawStencilBufferTest::setupStencilForDrawingOnPlane(int plane)
@@ -679,8 +678,7 @@ void RawStencilBufferTest::setupStencilForDrawingOnPlane(int plane)
     auto renderer          = Director::getInstance()->getRenderer();
     unsigned int planeMask = 0x1 << plane;
     renderer->setStencilCompareFunc(rhi::CompareFunc::EQUAL, planeMask, planeMask);
-    renderer->setStencilOp(rhi::StencilOp::KEEP, rhi::StencilOp::KEEP,
-                                  rhi::StencilOp::KEEP);
+    renderer->setStencilOp(rhi::StencilOp::KEEP, rhi::StencilOp::KEEP, rhi::StencilOp::KEEP);
 }
 
 //@implementation RawStencilBufferTest2
@@ -728,7 +726,7 @@ void RawStencilBufferTestAlphaTest::setup()
     RawStencilBufferTest::setup();
     for (int i = 0; i < _planeCount; ++i)
     {
-        auto program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
+        auto program      = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
         auto programState = new rhi::ProgramState(program);
         programState->setUniform(programState->getUniformLocation("u_alpha_value"), &_alphaThreshold,
                                  sizeof(_alphaThreshold));
@@ -795,8 +793,7 @@ void RawStencilBufferTest6::setupStencilForClippingOnPlane(int plane)
     int planeMask = 0x1 << plane;
     auto renderer = Director::getInstance()->getRenderer();
     renderer->setStencilCompareFunc(rhi::CompareFunc::NEVER, planeMask, planeMask);
-    renderer->setStencilOp(rhi::StencilOp::REPLACE, rhi::StencilOp::KEEP,
-                                  rhi::StencilOp::KEEP);
+    renderer->setStencilOp(rhi::StencilOp::REPLACE, rhi::StencilOp::KEEP, rhi::StencilOp::KEEP);
     renderer->setDepthTest(false);
     renderer->setDepthWrite(false);
 }
@@ -808,7 +805,7 @@ void RawStencilBufferTest6::setupStencilForDrawingOnPlane(int plane)
     RawStencilBufferTest::setupStencilForDrawingOnPlane(plane);
 }
 
-//#endif // _AX_DEBUG > 1
+// #endif // _AX_DEBUG > 1
 
 // ClippingToRenderTextureTest
 
@@ -993,9 +990,10 @@ void ClippingNodePerformanceTest::setup()
     countLabel->setPosition(Vec2(s.width / 2, s.height - 120));
     addChild(countLabel, 1);
 
-    auto addClippingNode = [this, s, countLabel] (int count) -> void {
-        for (int i = 0; i < count; i++) {
-            Vec2 pos = Vec2(random(0, (int) s.width), random(0, (int) s.height));
+    auto addClippingNode = [this, s, countLabel](int count) -> void {
+        for (int i = 0; i < count; i++)
+        {
+            Vec2 pos     = Vec2(random(0, (int)s.width), random(0, (int)s.height));
             auto stencil = Sprite::create("Images/stars2.png");
             auto clipper = ClippingNode::create(stencil);
             clipper->setPosition(pos);
@@ -1014,9 +1012,7 @@ void ClippingNodePerformanceTest::setup()
 
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
-    auto increase = MenuItemFont::create(" + ", [=] (Object*) -> void {
-        addClippingNode(10);
-    });
+    auto increase = MenuItemFont::create(" + ", [=](Object*) -> void { addClippingNode(10); });
     increase->setColor(Color32(0, 200, 20));
     auto menu = Menu::create(increase, nullptr);
     menu->setPosition(Vec2(s.width / 2, s.height - 80));

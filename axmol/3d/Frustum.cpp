@@ -100,4 +100,4 @@ void Frustum::createPlane(const Camera* camera)
                         (mat.m[15] - mat.m[14]));  // far
 }
 
-}
+}  // namespace ax

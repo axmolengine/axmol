@@ -58,10 +58,10 @@ bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
     Texture2D* texture = new Texture2D();
 
     rhi::TextureDesc desc;
-    desc.width         = POTWide;
-    desc.height        = POTHigh;
-    desc.textureUsage  = rhi::TextureUsage::RENDER_TARGET;
-    desc.pixelFormat   = rhi::PixelFormat::RGBA8;
+    desc.width        = POTWide;
+    desc.height       = POTHigh;
+    desc.textureUsage = rhi::TextureUsage::RENDER_TARGET;
+    desc.pixelFormat  = rhi::PixelFormat::RGBA8;
 
     texture->initWithSpec(desc, Texture2D::DEFAULT_SLICE_DATA);
 
@@ -187,7 +187,7 @@ void GridBase::beforeDraw()
     // save projection
     Director* director = Director::getInstance();
 
-    auto* renderer = director->getRenderer();
+    auto* renderer     = director->getRenderer();
     auto* groupCommand = renderer->getNextGroupCommand();
     renderer->addCommand(groupCommand);
     renderer->pushGroup(groupCommand->getRenderQueueID());
@@ -200,8 +200,7 @@ void GridBase::beforeDraw()
 
         _oldRenderTarget = renderer->getRenderTarget();
         AX_SAFE_RELEASE(_renderTarget);
-        _renderTarget =
-            axdrv->createRenderTarget(_texture->getRHITexture());
+        _renderTarget = axdrv->createRenderTarget(_texture->getRHITexture());
         renderer->setRenderTarget(_renderTarget);
     };
     renderer->addCallbackCommand(beforeDrawCommandFunc);
@@ -364,7 +363,7 @@ void Grid3D::blit()
     _drawCommand.init(0, _blendFunc);
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
     ax::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto programState           = _drawCommand.unsafePS();
+    auto programState      = _drawCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
 }
@@ -614,7 +613,7 @@ void TiledGrid3D::blit()
     updateVertexBuffer();
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
     ax::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto programState           = _drawCommand.unsafePS();
+    auto programState      = _drawCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
 }
@@ -778,4 +777,4 @@ void TiledGrid3D::updateVertexAndTexCoordinate()
     _drawCommand.updateIndexBuffer(_indices, gradSize * 6 * sizeof(unsigned short));
 }
 
-}
+}  // namespace ax

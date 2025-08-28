@@ -39,4 +39,3 @@ Copyright (c) 2013-2017 Chukong Technologies
 #    define NS_TIMELINE_END
 #    define USING_NS_TIMELINE
 #endif
-

@@ -69,7 +69,7 @@ std::string s_uniformSamplerName[] = {
 // helpers
 void Mesh::resetLightUniformValues()
 {
-    const auto& conf  = Configuration::getInstance();
+    const auto& conf            = Configuration::getInstance();
     constexpr int maxDirLight   = AX_MAX_DIRECTIONAL_LIGHT;
     constexpr int maxPointLight = AX_MAX_POINT_LIGHT;
     constexpr int maxSpotLight  = AX_MAX_SPOT_LIGHT;
@@ -125,11 +125,12 @@ Mesh::~Mesh()
 
 void Mesh::enableInstancing(bool instance, int count)
 {
-    _instancing = instance;
+    _instancing    = instance;
     _instanceCount = count;
 }
 
-void Mesh::setInstanceCount(int count) {
+void Mesh::setInstanceCount(int count)
+{
     AXASSERT(_instancing, "Instancing should be enabled on this mesh.");
 
     _instanceCount = count;
@@ -384,7 +385,7 @@ void Mesh::setMaterial(Material* material)
         {
             // allocate MeshCommand vector for technique
             // allocate MeshCommand for each pass
-            auto& list                          = _meshCommands[technique->getName()];
+            auto& list = _meshCommands[technique->getName()];
             list.resize(technique->getPasses().size());
 
             int i = 0;
@@ -395,14 +396,15 @@ void Mesh::setMaterial(Material* material)
                 if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {
                     auto program        = pass->getProgramState()->getProgram();
-                    auto& vertexInputs     = program->getActiveVertexInputs();
+                    auto& vertexInputs  = program->getActiveVertexInputs();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
-                    //AXASSERT(vertexInputs.size() <= attributeCount, "missing attribute data");
+                    // AXASSERT(vertexInputs.size() <= attributeCount, "missing attribute data");
                 }
 #endif
                 // TODO
-                auto vertexInputBinding = VertexInputBinding::spawn(_meshIndexData, pass, &list[i], _instanceCount > 0 && _instancing);
+                auto vertexInputBinding =
+                    VertexInputBinding::spawn(_meshIndexData, pass, &list[i], _instanceCount > 0 && _instancing);
                 pass->setVertexInputBinding(vertexInputBinding);
                 i += 1;
             }
@@ -449,8 +451,8 @@ void Mesh::draw(Renderer* renderer,
             AX_SAFE_RELEASE(_instanceTransformBuffer);
             AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
 
-            _instanceTransformBuffer = axdrv->createBuffer(
-                _instanceCount * 64, rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+            _instanceTransformBuffer =
+                axdrv->createBuffer(_instanceCount * 64, rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
             _instanceMatrixCache = new float[_instanceCount * 16];
             for (int i = 0; i < _instanceCount; i++)
@@ -642,11 +644,11 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
     AXASSERT(pass, "Invalid Pass");
     AXASSERT(scene, "Invalid scene");
 
-    const auto& conf  = Configuration::getInstance();
+    const auto& conf            = Configuration::getInstance();
     constexpr int maxDirLight   = AX_MAX_DIRECTIONAL_LIGHT;
     constexpr int maxPointLight = AX_MAX_POINT_LIGHT;
     constexpr int maxSpotLight  = AX_MAX_SPOT_LIGHT;
-    auto& lights      = scene->getLights();
+    auto& lights                = scene->getLights();
 
     auto bindings = pass->getVertexAttributeBinding();
 
@@ -854,4 +856,4 @@ rhi::Buffer* Mesh::getIndexBuffer() const
 {
     return _meshIndexData->getIndexBuffer();
 }
-}
+}  // namespace ax

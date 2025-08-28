@@ -95,4 +95,4 @@ GroupCommand::~GroupCommand()
     Director::getInstance()->getRenderer()->getGroupCommandManager()->releaseGroupID(_renderQueueID);
 }
 
-}
+}  // namespace ax

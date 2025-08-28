@@ -33,4 +33,4 @@ Event::Event(Type type) : _type(type), _isStopped(false), _currentTarget(nullptr
 
 Event::~Event() {}
 
-}
+}  // namespace ax

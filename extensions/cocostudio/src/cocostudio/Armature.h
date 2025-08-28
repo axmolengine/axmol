@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 #pragma once
 
-
 #include "ArmatureDefine.h"
 #include "Bone.h"
 #include "BatchNode.h"
@@ -125,9 +124,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void visit(ax::Renderer* renderer,
-                       const ax::Mat4& parentTransform,
-                       uint32_t parentFlags) override;
+    virtual void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
     void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
     void update(float dt) override;
 
@@ -217,9 +214,8 @@ protected:
 
     mutable bool _armatureTransformDirty;
 
-    ax::StringMap<Bone*>
-        _boneDic;  //! The dictionary of the bones, include all bones in the armature, no matter it is the direct bone
-                   //! or the indirect bone. It is different from m_pChindren.
+    ax::StringMap<Bone*> _boneDic;  //! The dictionary of the bones, include all bones in the armature, no matter it is
+                                    //! the direct bone or the indirect bone. It is different from m_pChindren.
 
     ax::Vector<Bone*> _topBoneList;
 

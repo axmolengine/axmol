@@ -103,4 +103,4 @@ void PUCollisionAvoidanceAffector::copyAttributesTo(PUAffector* affector)
     collisionAvoidanceAffector->_radius                      = _radius;
 }
 
-}
+}  // namespace ax

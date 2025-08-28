@@ -110,12 +110,12 @@ void WindowTestResizedAndPositioned::onEnter()
 {
     WindowTest::onEnter();
 
-    auto s = _director->getWinSize();
+    auto s          = _director->getWinSize();
     auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
 
-    int x = 0;
-    int y = 0;
-    int width = 0;
+    int x      = 0;
+    int y      = 0;
+    int width  = 0;
     int height = 0;
     renderView->getWindowPosition(&x, &y);
     renderView->getWindowSize(&width, &height);
@@ -132,8 +132,7 @@ void WindowTestResizedAndPositioned::onEnter()
         RenderViewImpl::EVENT_WINDOW_POSITIONED,
         AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowPositioned, this));
     _director->getEventDispatcher()->addCustomEventListener(
-        RenderViewImpl::EVENT_WINDOW_RESIZED,
-        AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowResized, this));
+        RenderViewImpl::EVENT_WINDOW_RESIZED, AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowResized, this));
 }
 
 void WindowTestResizedAndPositioned::onExit()
@@ -193,7 +192,7 @@ void WindowTestClose::onWindowClose(EventCustom* e)
     if (isClose == nullptr)
         return;
 
-    // false prevents the window from closing 
+    // false prevents the window from closing
     *isClose = false;
 
     this->stopActionByTag(1);
@@ -209,15 +208,13 @@ void WindowTestClose::onWindowClose(EventCustom* e)
     addChild(label);
 
     auto delay    = DelayTime::create(3.0);
-    auto callFunc = CallFunc::create(
-        [this]()
+    auto callFunc = CallFunc::create([this]() {
+        if (label != nullptr)
         {
-            if (label != nullptr)
-            {
-                label->removeFromParent();
-                label = nullptr;
-            }
-        });
+            label->removeFromParent();
+            label = nullptr;
+        }
+    });
     auto sequence = Sequence::create(delay, callFunc, nullptr);
     sequence->setTag(1);
     this->runAction(sequence);

@@ -92,4 +92,4 @@ void PUDoScaleEventHandler::copyAttributesTo(PUEventHandler* eventHandler)
     doScaleEventHandler->setScaleType(_scaleType);
 }
 
-}
+}  // namespace ax

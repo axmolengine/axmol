@@ -39,11 +39,13 @@ using namespace std;
 namespace ax
 {
 
-static std::string _checkPath(const char* path) {
+static std::string _checkPath(const char* path)
+{
     std::string ret;
     ret.resize(PATH_MAX - 1);
     int n = readlink(path, &ret.front(), PATH_MAX);
-    if (n > 0) {
+    if (n > 0)
+    {
         ret.resize(n);
         return ret;
     }
@@ -72,8 +74,9 @@ FileUtilsLinux::FileUtilsLinux() {}
 bool FileUtilsLinux::init()
 {
     // application path
-    if (s_exeDir.empty()) {
-        s_exeDir = _checkPath("/proc/self/exe");
+    if (s_exeDir.empty())
+    {
+        s_exeDir   = _checkPath("/proc/self/exe");
         auto slash = s_exeDir.find_last_of('/');
         assert(slash != std::string::npos);
         s_exeName = s_exeDir.substr(slash + 1);
@@ -140,4 +143,4 @@ bool FileUtilsLinux::isFileExistInternal(std::string_view path) const
     return (stat(path.data(), &sts) == 0) && S_ISREG(sts.st_mode);
 }
 
-}
+}  // namespace ax

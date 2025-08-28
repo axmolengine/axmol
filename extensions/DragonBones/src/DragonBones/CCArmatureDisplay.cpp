@@ -48,7 +48,8 @@ void CCArmatureDisplay::dbUpdate()
     {
         _debugDraw = drawed;
         if (_debugDraw)
-        {}
+        {
+        }
         else
         {
             // TODO

@@ -117,4 +117,4 @@ ax::Vec3 PUUtil::perpendicular(const Vec3& src)
     return perp;
 }
 
-}
+}  // namespace ax

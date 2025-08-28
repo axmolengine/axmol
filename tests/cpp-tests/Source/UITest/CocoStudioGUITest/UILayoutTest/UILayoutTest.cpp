@@ -886,7 +886,7 @@ bool UILayoutComponentTest::init()
 
         Button* button = Button::create("cocosui/animationbuttonnormal.png");
         AXLOGD("content size should be greater than 0:  width = {}, height = {}", button->getContentSize().width,
-              button->getContentSize().height);
+               button->getContentSize().height);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->addTouchEventListener(AX_CALLBACK_2(UILayoutComponentTest::touchEvent, this));
         button->setZoomScale(0.4f);

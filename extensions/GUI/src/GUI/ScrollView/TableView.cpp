@@ -351,7 +351,7 @@ Vec2 TableView::__offsetFromIndex(ssize_t index)
 
 ssize_t TableView::_indexFromOffset(Vec2 offset)
 {
-    ssize_t index        = 0;
+    ssize_t index     = 0;
     const auto maxIdx = _dataSource->numberOfCellsInTableView(this) - 1;
 
     if (_vordering == VerticalFillOrder::TOP_DOWN)
@@ -388,7 +388,7 @@ ssize_t TableView::__indexFromOffset(Vec2 offset)
 
     while (high >= low)
     {
-        ssize_t index      = low + (high - low) / 2;
+        ssize_t index   = low + (high - low) / 2;
         float cellStart = _vCellsPositions[index];
         float cellEnd   = _vCellsPositions[index + 1];
 

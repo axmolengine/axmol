@@ -58,4 +58,4 @@ void GLToCGAffine(const float* m, AffineTransform* t)
     t->ty = m[13];
 }
 
-}  // namespace   cocos2d
+}  // namespace ax

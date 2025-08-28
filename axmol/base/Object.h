@@ -54,7 +54,7 @@ public:
     /**
      * @lua NA
      */
-    virtual ~Clonable(){};
+    virtual ~Clonable() {};
 };
 
 /**
@@ -192,7 +192,7 @@ typedef void (Object::*SEL_SCHEDULE)(float);
 #define AX_MENU_SELECTOR(_SELECTOR)       static_cast<ax::SEL_MenuHandler>(&_SELECTOR)
 #define AX_SCHEDULE_SELECTOR(_SELECTOR)   static_cast<ax::SEL_SCHEDULE>(&_SELECTOR)
 
-}
+}  // namespace ax
 // end of base group
 /** @} */
 

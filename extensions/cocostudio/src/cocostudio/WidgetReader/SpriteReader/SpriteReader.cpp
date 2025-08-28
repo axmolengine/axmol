@@ -114,7 +114,7 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -145,7 +145,7 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             attribute = child.first_attribute();
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Src")
@@ -165,7 +165,7 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             attribute = child.first_attribute();
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "X")
@@ -189,7 +189,7 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             attribute = child.first_attribute();
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "X")
@@ -288,8 +288,8 @@ void SpriteReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     if (f_blendFunc)
     {
         ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
-        blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
-        blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
+        blendFunc.src           = utils::toBackendBlendFactor(f_blendFunc->src());
+        blendFunc.dst           = utils::toBackendBlendFactor(f_blendFunc->dst());
         sprite->setBlendFunc(blendFunc);
     }
 

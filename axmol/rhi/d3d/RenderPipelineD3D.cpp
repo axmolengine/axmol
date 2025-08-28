@@ -200,7 +200,7 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDesc& desc)
     ComPtr<ID3D11BlendState> blendState;
 
     auto key = hashBlendDesc(desc.blendDesc);
-    auto it      = _blendCache.find(key);
+    auto it  = _blendCache.find(key);
 
     if (it != _blendCache.end())
     {

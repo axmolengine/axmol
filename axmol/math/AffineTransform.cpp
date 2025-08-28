@@ -137,7 +137,7 @@ AffineTransform AffineTransformRotate(const AffineTransform& t, float anAngle)
     float cosine = cosf(anAngle);
 
     return AffineTransformMake(t.a * cosine + t.c * sine, t.b * cosine + t.d * sine, t.c * cosine - t.a * sine,
-                                   t.d * cosine - t.b * sine, t.tx, t.ty);
+                               t.d * cosine - t.b * sine, t.tx, t.ty);
 }
 
 /* Concatenate `t2' to `t1' and return the result:
@@ -145,9 +145,9 @@ AffineTransform AffineTransformRotate(const AffineTransform& t, float anAngle)
 AffineTransform AffineTransformConcat(const AffineTransform& t1, const AffineTransform& t2)
 {
     return AffineTransformMake(t1.a * t2.a + t1.b * t2.c, t1.a * t2.b + t1.b * t2.d,  // a,b
-                                   t1.c * t2.a + t1.d * t2.c, t1.c * t2.b + t1.d * t2.d,  // c,d
-                                   t1.tx * t2.a + t1.ty * t2.c + t2.tx,                   // tx
-                                   t1.tx * t2.b + t1.ty * t2.d + t2.ty);                  // ty
+                               t1.c * t2.a + t1.d * t2.c, t1.c * t2.b + t1.d * t2.d,  // c,d
+                               t1.tx * t2.a + t1.ty * t2.c + t2.tx,                   // tx
+                               t1.tx * t2.b + t1.ty * t2.d + t2.ty);                  // ty
 }
 
 Mat4 TransformConcat(const Mat4& t1, const Mat4& t2)
@@ -166,7 +166,7 @@ AffineTransform AffineTransformInvert(const AffineTransform& t)
     float determinant = 1 / (t.a * t.d - t.b * t.c);
 
     return AffineTransformMake(determinant * t.d, -determinant * t.b, -determinant * t.c, determinant * t.a,
-                                   determinant * (t.c * t.ty - t.d * t.tx), determinant * (t.b * t.tx - t.a * t.ty));
+                               determinant * (t.c * t.ty - t.d * t.tx), determinant * (t.b * t.tx - t.a * t.ty));
 }
 
-}
+}  // namespace ax

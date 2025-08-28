@@ -122,10 +122,10 @@ const Mat4& Camera::getViewMatrix() const
     {
         _viewProjectionDirty = true;
 #if defined(AX_ENABLE_3D)
-        _frustumDirty        = true;
+        _frustumDirty = true;
 #endif
-        _viewInv             = viewInv;
-        _view                = viewInv.getInversed();
+        _viewInv = viewInv;
+        _view    = viewInv.getInversed();
     }
     return _view;
 }
@@ -151,10 +151,10 @@ void Camera::lookAt(const Vec3& lookAtPos, const Vec3& up)
     rotation.m[2] = xaxis.z;
     rotation.m[3] = 0;
 
-    rotation.m[4]  = yaxis.x;
-    rotation.m[5]  = yaxis.y;
-    rotation.m[6]  = yaxis.z;
-    rotation.m[7]  = 0;
+    rotation.m[4] = yaxis.x;
+    rotation.m[5] = yaxis.y;
+    rotation.m[6] = yaxis.z;
+    rotation.m[7] = 0;
 
     rotation.m[8]  = zaxis.x;
     rotation.m[9]  = zaxis.y;
@@ -190,31 +190,31 @@ void Camera::initDefault()
     auto& size = _director->getWinSize();
     switch (_director->getProjection())
     {
-        case Director::Projection::_2D:
-        {
-            _fieldOfView = 60.0F;
-            _nearPlane   = -1024.0F;
-            _farPlane    = 1024.0F;
-            initOrthographic(size.width, size.height, _nearPlane, _farPlane);
-            setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
-            setRotation3D(Vec3(0.f, 0.f, 0.f));
-            break;
-        }
+    case Director::Projection::_2D:
+    {
+        _fieldOfView = 60.0F;
+        _nearPlane   = -1024.0F;
+        _farPlane    = 1024.0F;
+        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
+        setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
+        setRotation3D(Vec3(0.f, 0.f, 0.f));
+        break;
+    }
 
-        case Director::Projection::_3D:
-        {
-            float zeye   = _director->getZEye();
-            _fieldOfView = 60.0F;
-            _nearPlane   = 0.5F;
-            _farPlane    = zeye + size.height / 2.0f;
-            initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
-            Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
-                up(0.0f, 1.0f, 0.0f);
-            setPosition3D(eye);
-            lookAt(center, up);
-            _eyeZdistance = eye.z;
-            break;
-        }
+    case Director::Projection::_3D:
+    {
+        float zeye   = _director->getZEye();
+        _fieldOfView = 60.0F;
+        _nearPlane   = 0.5F;
+        _farPlane    = zeye + size.height / 2.0f;
+        initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
+        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
+            up(0.0f, 1.0f, 0.0f);
+        setPosition3D(eye);
+        lookAt(center, up);
+        _eyeZdistance = eye.z;
+        break;
+    }
     }
 
     setDepth(0);
@@ -229,29 +229,29 @@ void Camera::updateTransform()
     // create default camera
     switch (_director->getProjection())
     {
-        case Director::Projection::_2D:
-        {
-            initOrthographic(size.width, size.height, _nearPlane, _farPlane);
-            break;
-        }
+    case Director::Projection::_2D:
+    {
+        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
+        break;
+    }
 
-        case Director::Projection::_3D:
-        {
-            float zeye = _director->getZEye();
-            initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
-            Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
-                up(0.0f, 1.0f, 0.0f);
-            _eyeZdistance = eye.z;
-            break;
-        }
+    case Director::Projection::_3D:
+    {
+        float zeye = _director->getZEye();
+        initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
+        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
+            up(0.0f, 1.0f, 0.0f);
+        _eyeZdistance = eye.z;
+        break;
+    }
     }
 }
 
 bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
-    _fieldOfView        = fieldOfView;
-    _nearPlane          = nearPlane;
-    _farPlane           = farPlane;
+    _fieldOfView = fieldOfView;
+    _nearPlane   = nearPlane;
+    _farPlane    = farPlane;
 
     if (_zoomFactorFarPlane == 1024)
         _zoomFactorFarPlane = farPlane;
@@ -556,4 +556,4 @@ bool Camera::isBrushValid()
     return _clearBrush != nullptr && _clearBrush->isValid();
 }
 
-}
+}  // namespace ax

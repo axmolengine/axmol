@@ -29,37 +29,40 @@
 #include "axmol/network/Downloader.h"
 #include <emscripten/fetch.h>
 
-namespace ax {
-    class Scheduler;
+namespace ax
+{
+class Scheduler;
 }
 
-namespace ax { namespace network
+namespace ax
 {
-    class DownloadContextEmscripten;
+namespace network
+{
+class DownloadContextEmscripten;
 
-    class DownloaderEmscripten : public IDownloaderImpl
-    {
-    public:
-        DownloaderEmscripten(const DownloaderHints& hints);
-        virtual ~DownloaderEmscripten();
+class DownloaderEmscripten : public IDownloaderImpl
+{
+public:
+    DownloaderEmscripten(const DownloaderHints& hints);
+    virtual ~DownloaderEmscripten();
 
-        void startTask(std::shared_ptr<DownloadTask>& task) override;
+    void startTask(std::shared_ptr<DownloadTask>& task) override;
 
-    protected:
-        int _id;
+protected:
+    int _id;
 
-        DownloaderHints hints;
+    DownloaderHints hints;
 
-        std::unordered_map<unsigned int, DownloadContextEmscripten*> _taskMap;
+    std::unordered_map<unsigned int, DownloadContextEmscripten*> _taskMap;
 
-        static void onError(emscripten_fetch_t *fetch);
+    static void onError(emscripten_fetch_t* fetch);
 
-        static void onProgress(emscripten_fetch_t *fetch);
+    static void onProgress(emscripten_fetch_t* fetch);
 
-        static void onDataLoad(emscripten_fetch_t *fetch);
+    static void onDataLoad(emscripten_fetch_t* fetch);
 
-        static void onLoad(emscripten_fetch_t *fetch);
-    };
+    static void onLoad(emscripten_fetch_t* fetch);
+};
 
-}}  // namespace ax::network
-
+}  // namespace network
+}  // namespace ax

@@ -68,9 +68,7 @@ public:
 private:
     struct Locations
     {
-        Locations(ax::rhi::ProgramState* ps, ax::rhi::UniformLocation loc)
-            : programState(ps), location(loc)
-        {}
+        Locations(ax::rhi::ProgramState* ps, ax::rhi::UniformLocation loc) : programState(ps), location(loc) {}
 
         ax::rhi::ProgramState* programState = nullptr;
         ax::rhi::UniformLocation location;
@@ -94,7 +92,7 @@ public:
 
 private:
     ax::rhi::UniformLocation _locationTime;
-    EffectAutoBindingResolver* _resolver               = nullptr;
+    EffectAutoBindingResolver* _resolver      = nullptr;
     ax::rhi::ProgramState* _noiseProgramState = nullptr;
 };
 

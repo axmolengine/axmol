@@ -44,7 +44,7 @@ PUOnTimeObserver::PUOnTimeObserver()
     : PUObserver()
     , _threshold(DEFAULT_THRESHOLD)
     , _compare(CO_GREATER_THAN)
-    , _sinceStartSystem(DEFAULT_SINCE_START_SYSTEM){};
+    , _sinceStartSystem(DEFAULT_SINCE_START_SYSTEM) {};
 //-----------------------------------------------------------------------
 void PUOnTimeObserver::preUpdateObserver(float deltaTime)
 {
@@ -122,4 +122,4 @@ void PUOnTimeObserver::copyAttributesTo(PUObserver* observer)
     onTimeObserver->_sinceStartSystem = _sinceStartSystem;
 }
 
-}
+}  // namespace ax

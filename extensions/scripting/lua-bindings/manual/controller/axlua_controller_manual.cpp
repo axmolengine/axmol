@@ -98,7 +98,7 @@ static int toaxlua_EventListenerController_clone(lua_State* tolua_S)
     if (nullptr == tolua_S)
         return 0;
 
-    int argc                               = 0;
+    int argc                          = 0;
     ax::EventListenerController* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -153,7 +153,7 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
     if (nullptr == tolua_S)
         return 0;
 
-    int argc                               = 0;
+    int argc                          = 0;
     ax::EventListenerController* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -165,8 +165,7 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S,
-                    "invalid 'self' in function 'toaxlua_EventListenerController_registerScriptHandler'\n",
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerController_registerScriptHandler'\n",
                     nullptr);
         return 0;
     }
@@ -307,7 +306,7 @@ static int toaxlua_Controller_getKeyStatus(lua_State* tolua_S)
     if (nullptr == tolua_S)
         return 0;
 
-    int argc                  = 0;
+    int argc             = 0;
     ax::Controller* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -332,7 +331,7 @@ static int toaxlua_Controller_getKeyStatus(lua_State* tolua_S)
         if (!tolua_isnumber(tolua_S, 2, 0, &tolua_err))
             goto tolua_lerror;
 #    endif
-        int keyCode                              = (int)tolua_tonumber(tolua_S, 2, 0);
+        int keyCode                         = (int)tolua_tonumber(tolua_S, 2, 0);
         ax::Controller::KeyStatus keyStatus = self->getKeyStatus(keyCode);
 
         lua_newtable(tolua_S);                                /* L: table */
@@ -381,4 +380,4 @@ int register_all_ax_controller_manual(lua_State* L)
     return 0;
 }
 
-#endif  //#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)

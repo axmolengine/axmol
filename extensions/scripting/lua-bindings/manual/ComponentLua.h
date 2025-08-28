@@ -77,4 +77,4 @@ private:
     static const std::string UPDATE;
 };
 
-}
+}  // namespace ax

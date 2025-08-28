@@ -85,5 +85,4 @@ protected:
     Vec3 _eventHandlerScale;
 };
 
-}
-
+}  // namespace ax

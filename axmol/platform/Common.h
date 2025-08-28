@@ -73,6 +73,6 @@ enum class LanguageType
 // END of platform group
 /// @}
 
-}
+}  // namespace ax
 
 /// @endcond

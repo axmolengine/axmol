@@ -84,7 +84,7 @@ AudioDecoderOpus::~AudioDecoderOpus()
 bool AudioDecoderOpus::open(IFileStream* stream)
 {
     static OpusFileCallbacks OP_CALLBACKS_POSIX = {op_fread_r, op_fseek_r, op_ftell_r, op_fclose_r};
-    _of = op_open_callbacks(stream, &OP_CALLBACKS_POSIX, 0, 0, nullptr);
+    _of                                         = op_open_callbacks(stream, &OP_CALLBACKS_POSIX, 0, 0, nullptr);
     if (_of)
     {
         auto vi        = op_head(_of, -1);

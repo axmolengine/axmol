@@ -52,7 +52,10 @@ class AX_DLL RenderViewImpl : public RenderView
 {
 public:
     static RenderViewImpl* create(std::string_view viewName);
-    static RenderViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f, bool resizable = false);
+    static RenderViewImpl* createWithRect(std::string_view viewName,
+                                          const Rect& rect,
+                                          float frameZoomFactor = 1.0f,
+                                          bool resizable        = false);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
 
     /* override functions */
@@ -200,5 +203,4 @@ private:
     ax::EventListenerKeyboard* m_backButtonListener;
 };
 
-}
-
+}  // namespace ax

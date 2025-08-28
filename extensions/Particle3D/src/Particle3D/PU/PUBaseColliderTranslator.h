@@ -37,11 +37,10 @@ class AX_EX_DLL PUBaseColliderTranslator : public PUScriptTranslator
 {
 public:
     PUBaseColliderTranslator();
-    virtual ~PUBaseColliderTranslator(){};
+    virtual ~PUBaseColliderTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

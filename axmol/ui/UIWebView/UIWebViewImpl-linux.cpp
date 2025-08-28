@@ -73,8 +73,7 @@ static inline void set_env(const std::string& name, const std::string& value)
 // module is loaded.
 static inline bool is_using_nvidia_driver()
 {
-    struct ::stat buffer
-    {};
+    struct ::stat buffer{};
     if (::stat("/sys/module/nvidia", &buffer) != 0)
     {
         return false;
@@ -292,11 +291,11 @@ public:
         m_Window = gtk_window_new(GTK_WINDOW_POPUP);
         gtk_window_set_resizable(GTK_WINDOW(m_Window), true);
         g_signal_connect(G_OBJECT(m_Window), "destroy", G_CALLBACK(+[](GtkWidget*, gpointer arg) {
-                             auto* w = static_cast<GTKWebKit*>(arg);
-                             // Widget destroyed along with window.
-                             w->m_WebView = nullptr;
-                             w->m_Window  = nullptr;
-                         }),
+            auto* w = static_cast<GTKWebKit*>(arg);
+            // Widget destroyed along with window.
+            w->m_WebView = nullptr;
+            w->m_Window  = nullptr;
+        }),
                          this);
 
 #    if defined(AX_PLATFORM_LINUX_WAYLAND)
@@ -399,13 +398,13 @@ public:
 
         g_signal_connect(manager, "script-message-received::__webview__",
                          G_CALLBACK(+[](WebKitUserContentManager*, WebKitJavascriptResult* r, gpointer arg) {
-                             auto* w = static_cast<GTKWebKit*>(arg);
-                             // webkit2 2.22+
-                             JSCValue* value = webkit_javascript_result_get_js_value(r);
-                             char* s         = jsc_value_to_string(value);
-                             w->onMessage(s);
-                             g_free(s);
-                         }),
+            auto* w = static_cast<GTKWebKit*>(arg);
+            // webkit2 2.22+
+            JSCValue* value = webkit_javascript_result_get_js_value(r);
+            char* s         = jsc_value_to_string(value);
+            w->onMessage(s);
+            g_free(s);
+        }),
                          this);
         webkit_user_content_manager_register_script_message_handler(manager, "__webview__");
         initScript("function(message){return window.webkit.messageHandlers.__webview__.postMessage(message);}");
@@ -416,40 +415,40 @@ public:
         m_OnJsCallback       = onJsCallback;
         g_signal_connect(m_WebView, "load-changed",
                          G_CALLBACK(+[](WebKitWebView* webView, WebKitLoadEvent loadEvent, gpointer userData) {
-                             auto thiz = static_cast<GTKWebKit*>(userData);
-                             switch (loadEvent)
-                             {
-                             case WEBKIT_LOAD_COMMITTED:
-                             {
-                                 std::string_view uri = webkit_web_view_get_uri(webView);
-                                 const auto scheme    = uri.substr(0, uri.find_first_of(':'));
+            auto thiz = static_cast<GTKWebKit*>(userData);
+            switch (loadEvent)
+            {
+            case WEBKIT_LOAD_COMMITTED:
+            {
+                std::string_view uri = webkit_web_view_get_uri(webView);
+                const auto scheme    = uri.substr(0, uri.find_first_of(':'));
 
-                                 if (scheme == thiz->m_JsScheme)
-                                 {
-                                     thiz->m_OnJsCallback(uri);
-                                     return;
-                                 }
+                if (scheme == thiz->m_JsScheme)
+                {
+                    thiz->m_OnJsCallback(uri);
+                    return;
+                }
 
-                                 if (!thiz->m_ShouldStartLoading(uri))
-                                     webkit_web_view_stop_loading(webView);
-                                 break;
-                             }
-                             case WEBKIT_LOAD_FINISHED:
-                             {
-                                 std::string_view uri = webkit_web_view_get_uri(webView);
-                                 thiz->m_DidFinishLoading(uri);
-                                 break;
-                             }
-                             }
-                         }),
+                if (!thiz->m_ShouldStartLoading(uri))
+                    webkit_web_view_stop_loading(webView);
+                break;
+            }
+            case WEBKIT_LOAD_FINISHED:
+            {
+                std::string_view uri = webkit_web_view_get_uri(webView);
+                thiz->m_DidFinishLoading(uri);
+                break;
+            }
+            }
+        }),
                          this);
 
         g_signal_connect(m_WebView, "load-failed",
                          G_CALLBACK(+[](WebKitWebView* webView, WebKitLoadEvent /* loadEvent */, gchar* failingUri,
                                         gpointer /* error */, gpointer userData) {
-                             auto thiz = static_cast<GTKWebKit*>(userData);
-                             thiz->m_DidFailLoading(failingUri);
-                         }),
+            auto thiz = static_cast<GTKWebKit*>(userData);
+            thiz->m_DidFailLoading(failingUri);
+        }),
                          this);
         gtk_container_add(GTK_CONTAINER(m_Window), GTK_WIDGET(m_WebView));
         gtk_widget_show(GTK_WIDGET(m_WebView));
@@ -647,9 +646,9 @@ private:
     void dispatch_in_gtk(std::function<void()> f)
     {
         g_idle_add_full(G_PRIORITY_HIGH_IDLE, (GSourceFunc)([](void* f) -> int {
-                            (*static_cast<dispatch_fn_t*>(f))();
-                            return G_SOURCE_REMOVE;
-                        }),
+            (*static_cast<dispatch_fn_t*>(f))();
+            return G_SOURCE_REMOVE;
+        }),
                         new std::function<void()>(f), [](void* f) { delete static_cast<dispatch_fn_t*>(f); });
     }
 
@@ -703,30 +702,26 @@ namespace ui
 WebViewImpl::WebViewImpl(WebView* webView) : _createSucceeded(false), _gtkWebKit(nullptr), _webView(webView)
 {
     _gtkWebKit       = new GTKWebKit();
-    _createSucceeded = _gtkWebKit->createWebView(
-        [this](std::string_view url) -> bool {
-            const auto shouldStartLoading = _webView->getOnShouldStartLoading();
-            if (shouldStartLoading != nullptr)
-            {
-                return shouldStartLoading(_webView, url);
-            }
-            return true;
-        },
-        [this](std::string_view url) {
+    _createSucceeded = _gtkWebKit->createWebView([this](std::string_view url) -> bool {
+        const auto shouldStartLoading = _webView->getOnShouldStartLoading();
+        if (shouldStartLoading != nullptr)
+        {
+            return shouldStartLoading(_webView, url);
+        }
+        return true;
+    }, [this](std::string_view url) {
         WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
         if (didFinishLoading != nullptr)
         {
             didFinishLoading(_webView, url);
         }
-        },
-        [this](std::string_view url) {
+    }, [this](std::string_view url) {
         WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
         if (didFailLoading != nullptr)
         {
             didFailLoading(_webView, url);
         }
-    },
-    [this](std::string_view url) {
+    }, [this](std::string_view url) {
         WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
         if (onJsCallback != nullptr)
         {
@@ -915,6 +910,6 @@ void WebViewImpl::setBackgroundTransparent()
 
 }  // namespace ui
 
-}
+}  // namespace ax
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX

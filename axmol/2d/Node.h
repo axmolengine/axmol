@@ -1819,10 +1819,10 @@ public:
     virtual bool setProgramState(rhi::ProgramState* programState, bool ownPS = false);
 
     /**
-    * Sets ProgramState by programId
-    * @param progId the program id or programType used to create programState
-    * @return ProgramState* (nullable)
-    */
+     * Sets ProgramState by programId
+     * @param progId the program id or programType used to create programState
+     * @return ProgramState* (nullable)
+     */
     rhi::ProgramState* setProgramStateByProgramId(uint64_t progId);
 
     rhi::ProgramState* getProgramState() const;
@@ -1952,7 +1952,7 @@ protected:
     std::string _name;     ///< a string label, an user defined string to identify this node
     uint64_t _hashOfName;  ///< hash value of _name, used for speed in getChildByName
 
-    void* _userData;   ///< A user assigned void pointer, Can be point to any cpp object
+    void* _userData;      ///< A user assigned void pointer, Can be point to any cpp object
     Object* _userObject;  ///< A user assigned Object
 
     Scheduler* _scheduler;  ///< scheduler used to schedule timers and updates
@@ -2048,4 +2048,4 @@ bool AX_DLL isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4
 // end of _2d group
 /// @}
 
-}
+}  // namespace ax

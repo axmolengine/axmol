@@ -84,7 +84,7 @@ ShaderModuleImpl::~ShaderModuleImpl()
 void ShaderModuleImpl::releaseShader()
 {
     SafeRelease(_shader);
-	SafeRelease(_blob);
+    SafeRelease(_blob);
 }
 
 void ShaderModuleImpl::compileShader(ID3D11Device* device, ShaderStage stage, std::string_view source)
@@ -204,8 +204,8 @@ void ShaderModuleImpl::compileShader(ID3D11Device* device, ShaderStage stage, st
 #if defined(_DEBUG)
     flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
-    HRESULT hr = D3DCompile(shaderSource.data(), shaderSource.size(), nullptr, nullptr, nullptr, "main", stageToProfile(stage),
-                            flags, 0, &_blob, &errorBlob);
+    HRESULT hr = D3DCompile(shaderSource.data(), shaderSource.size(), nullptr, nullptr, nullptr, "main",
+                            stageToProfile(stage), flags, 0, &_blob, &errorBlob);
     if (FAILED(hr))
     {
         std::string_view errorDetail =

@@ -45,4 +45,3 @@ public:
 
     ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
 };
-

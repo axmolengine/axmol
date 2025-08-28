@@ -343,4 +343,4 @@ IMEDispatcher* IMEDispatcher::sharedDispatcher()
     return &s_instance;
 }
 
-}
+}  // namespace ax

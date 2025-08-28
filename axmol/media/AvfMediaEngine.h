@@ -65,9 +65,7 @@ public:
 
     void onStatusNotification(void* context);
     void onPlayerEnd();
-    bool isPlaying() const {
-        return _state == MEMediaState::Playing;
-    }
+    bool isPlaying() const { return _state == MEMediaState::Playing; }
 
     void internalPlay(bool replay = false);
     void internalPause();
@@ -76,15 +74,15 @@ private:
     std::function<void(MEMediaEventType)> _onMediaEvent;
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
     MEVideoPixelFormat _videoPF = MEVideoPixelFormat::INVALID;
-    MEMediaState _state = MEMediaState::Closed;
+    MEMediaState _state         = MEMediaState::Closed;
     int _videoRotation{0};
     MEIntPoint _videoExtent;
-    AVPlayer* _player = nil;
-    AVPlayerItem* _playerItem = nil;
-    AVPlayerItemOutput* _playerOutput = nil;
+    AVPlayer* _player                      = nil;
+    AVPlayerItem* _playerItem              = nil;
+    AVPlayerItemOutput* _playerOutput      = nil;
     AVMediaSessionHandler* _sessionHandler = nil;
 
-    bool _bAutoPlay = false;
+    bool _bAutoPlay     = false;
     bool _repeatEnabled = false;
     bool _playbackEnded = false;
 
@@ -97,13 +95,10 @@ private:
 
 struct AvfMediaEngineFactory : public MediaEngineFactory
 {
-    MediaEngine* createMediaEngine() override
-    {
-        return new AvfMediaEngine();
-    }
+    MediaEngine* createMediaEngine() override { return new AvfMediaEngine(); }
     void destroyMediaEngine(MediaEngine* me) override { delete static_cast<AvfMediaEngine*>(me); }
 };
 
-}
+}  // namespace ax
 
 #endif

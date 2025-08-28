@@ -165,12 +165,12 @@ protected:
     Node* _stencil                            = nullptr;
     StencilStateManager* _stencilStateManager = nullptr;
 
-    //CallbackCommand _afterDrawStencilCmd;
-    //CallbackCommand _afterVisitCmd;
+    // CallbackCommand _afterDrawStencilCmd;
+    // CallbackCommand _afterVisitCmd;
     std::unordered_map<Node*, rhi::ProgramState*> _originalStencilProgramState;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(ClippingNode);
 };
 /** @} */
-}
+}  // namespace ax

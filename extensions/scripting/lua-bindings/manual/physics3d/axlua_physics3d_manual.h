@@ -27,7 +27,7 @@
 
 #if defined(AX_ENABLE_3D_PHYSICS)
 
-#include "tolua++.h"
+#    include "tolua++.h"
 
 /**
  * @addtogroup lua

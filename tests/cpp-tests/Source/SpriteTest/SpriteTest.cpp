@@ -2573,7 +2573,7 @@ SpriteHybrid::SpriteHybrid()
     for (int i = 0; i < 250; i++)
     {
         const int spriteIdx = random(1, 14);
-        char str[25]  = {0};
+        char str[25]        = {0};
         fmt::format_to_z(str, "grossini_dance_{:02d}.png", spriteIdx);
         auto frame  = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
         auto sprite = Sprite::createWithSpriteFrame(frame);
@@ -5156,13 +5156,11 @@ Sprite3DRotationTest::Sprite3DRotationTest()
 
     addChild(sprite2);
 
-    schedule(
-        [&](float dt) {
-            rotation.y += 1;
-            sprite1->setRotation3D(rotation);
-            sprite2->setRotation3D(rotation);
-        },
-        "update_key");
+    schedule([&](float dt) {
+        rotation.y += 1;
+        sprite1->setRotation3D(rotation);
+        sprite2->setRotation3D(rotation);
+    }, "update_key");
 }
 
 //------------------------------------------------------------------

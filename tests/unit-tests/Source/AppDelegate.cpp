@@ -33,8 +33,6 @@ using namespace ax;
 
 static Vec2 gWindowSize = Vec2(1024, 768);
 
-
-
 void AppDelegate::initGfxContextAttrs()
 {
     // set graphics context attributes: red,green,blue,alpha,depth,stencil
@@ -42,7 +40,6 @@ void AppDelegate::initGfxContextAttrs()
 
     RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
-
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
@@ -53,26 +50,26 @@ bool AppDelegate::applicationDidFinishLaunching()
     FontFreeType::setShareDistanceFieldEnabled(true);
 
     // initialize director
-    auto director = Director::getInstance();
-    auto renderView   = director->getRenderView();
+    auto director   = Director::getInstance();
+    auto renderView = director->getRenderView();
     if (!renderView)
     {
         std::string title = "Unit Tests";
-        #ifdef AX_PLATFORM_PC
-            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
-        #else
-            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
-        #endif
+#ifdef AX_PLATFORM_PC
+        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
+#else
+        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
+#endif
         director->setRenderView(renderView);
     }
 
     director->setStatsDisplay(true);
 
-    #ifdef AX_PLATFORM_PC
-        director->setAnimationInterval(1.0f / glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate);
-    #else
-        director->setAnimationInterval(1.0f / 60);
-    #endif
+#ifdef AX_PLATFORM_PC
+    director->setAnimationInterval(1.0f / glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate);
+#else
+    director->setAnimationInterval(1.0f / 60);
+#endif
 
     auto screenSize = renderView->getFrameSize();
 
@@ -81,20 +78,18 @@ bool AppDelegate::applicationDidFinishLaunching()
     return true;
 }
 
-
 void AppDelegate::applicationDidEnterBackground()
 {
     Director::getInstance()->stopAnimation();
 }
-
 
 void AppDelegate::applicationWillEnterForeground()
 {
     Director::getInstance()->startAnimation();
 }
 
-
-int AppDelegate::run(int argc, char** argv) {
+int AppDelegate::run(int argc, char** argv)
+{
     AXLOGI("Running unit tests...\n");
     fflush(stdout);
     AXLOGI("Default resource path: {}\n", FileUtils::getInstance()->getDefaultResourceRootPath());
@@ -109,16 +104,16 @@ int AppDelegate::run(int argc, char** argv) {
 
     doctest::Context context;
 
-    //context.addFilter("test-case-exclude", "*math*"); // exclude test cases with "math" in their name
-    //context.setOption("abort-after", 5);              // stop test execution after 5 failed assertions
+    // context.addFilter("test-case-exclude", "*math*"); // exclude test cases with "math" in their name
+    // context.setOption("abort-after", 5);              // stop test execution after 5 failed assertions
 
-    //context.setOption("order-by", "name");            // sort the test cases by their name
+    // context.setOption("order-by", "name");            // sort the test cases by their name
 
     context.applyCommandLine(argc, argv);
 
     // overrides
-    context.setOption("no-breaks", true);             // don't break in the debugger when assertions fail
+    context.setOption("no-breaks", true);  // don't break in the debugger when assertions fail
 
-    int res = context.run(); // run
+    int res = context.run();  // run
     return res;
 }

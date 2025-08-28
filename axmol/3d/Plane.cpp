@@ -87,4 +87,4 @@ PointSide Plane::getSide(const Vec3& point) const
         return PointSide::IN_PLANE;
 }
 
-}
+}  // namespace ax

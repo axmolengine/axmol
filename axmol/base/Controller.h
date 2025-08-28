@@ -27,8 +27,7 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
-     defined(_WIN32) /* win32 & winuwp */ || \
-AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
+     defined(_WIN32) /* win32 & winuwp */ || AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 
 #    include "axmol/platform/PlatformMacros.h"
 #    include <string>
@@ -249,5 +248,5 @@ private:
 // end group
 /// @}
 
-}
+}  // namespace ax
 #endif

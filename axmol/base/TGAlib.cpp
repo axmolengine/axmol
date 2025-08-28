@@ -338,4 +338,4 @@ void tgaDestroy(tImageTGA* info)
         free(info);
     }
 }
-}
+}  // namespace ax

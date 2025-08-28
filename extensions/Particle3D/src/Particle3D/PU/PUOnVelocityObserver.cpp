@@ -40,7 +40,7 @@ const float PUOnVelocityObserver::DEFAULT_VELOCITY_THRESHOLD = 0.0f;
 
 //-----------------------------------------------------------------------
 PUOnVelocityObserver::PUOnVelocityObserver()
-    : PUObserver(), _threshold(DEFAULT_VELOCITY_THRESHOLD), _compare(CO_LESS_THAN){};
+    : PUObserver(), _threshold(DEFAULT_VELOCITY_THRESHOLD), _compare(CO_LESS_THAN) {};
 //-----------------------------------------------------------------------
 bool PUOnVelocityObserver::observe(PUParticle3D* particle, float /*timeElapsed*/)
 {
@@ -83,4 +83,4 @@ void PUOnVelocityObserver::copyAttributesTo(PUObserver* observer)
     onVelocityObserver->_compare             = _compare;
 }
 
-}
+}  // namespace ax

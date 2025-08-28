@@ -28,9 +28,7 @@
 
 #include "axmol/axmol.h"
 
-
 class TestController;
-
 
 class AppDelegate : private ax::Application
 {

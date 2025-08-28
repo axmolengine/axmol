@@ -57,4 +57,4 @@ PUBehaviour* PUBehaviourManager::createBehaviour(std::string_view type)
     return nullptr;
 }
 
-}
+}  // namespace ax

@@ -267,4 +267,4 @@ bool SpriteFrame::hasPolygonInfo() const
     return _polygonInfo.triangles.vertCount != 0;
 }
 
-}
+}  // namespace ax

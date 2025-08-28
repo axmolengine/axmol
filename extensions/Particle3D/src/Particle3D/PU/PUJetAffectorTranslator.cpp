@@ -101,4 +101,4 @@ bool PUJetAffectorTranslator::translateChildObject(PUScriptCompiler* compiler, P
     return false;
 }
 
-}
+}  // namespace ax

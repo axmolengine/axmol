@@ -170,4 +170,4 @@ void PUPlaneCollider::copyAttributesTo(PUAffector* affector)
     planeCollider->setNormal(_normal);
 }
 
-}
+}  // namespace ax

@@ -33,15 +33,16 @@ static void translateUsage(BufferUsage in, D3D11_USAGE& outUsage, UINT& outCpu)
     switch (in)
     {
 
-    case BufferUsage::DYNAMIC: // GPU read, CPU write
+    case BufferUsage::DYNAMIC:  // GPU read, CPU write
         outUsage = D3D11_USAGE_DYNAMIC;
         outCpu   = D3D11_CPU_ACCESS_WRITE;
         break;
-    case BufferUsage::STATIC: // GPU read/write, can use d3d API: UpdateSubresource to update data
+    case BufferUsage::STATIC:  // GPU read/write, can use d3d API: UpdateSubresource to update data
         outUsage = D3D11_USAGE_DEFAULT;
         outCpu   = 0;
         break;
-    case BufferUsage::IMMUTABLE: // GPU read, must provide inital data, axmol do delay create when first updateData called
+    case BufferUsage::IMMUTABLE:  // GPU read, must provide inital data, axmol do delay create when first updateData
+                                  // called
         outUsage = D3D11_USAGE_IMMUTABLE;
         outCpu   = 0;
         break;
@@ -91,7 +92,6 @@ BufferImpl::BufferImpl(ID3D11Device* device,
 
     _capacity = _bindFlag == D3D11_BIND_CONSTANT_BUFFER ? alignTo(size, 16) : size;
 
-
     if (initial && size)
         _defaultData.assign(static_cast<const uint8_t*>(initial), static_cast<const uint8_t*>(initial) + size);
 
@@ -135,13 +135,15 @@ void BufferImpl::updateData(const void* data, std::size_t size)
         std::memcpy(mapped.pData, data, size);
         _context->Unmap(_buffer.Get(), 0);
     }
-    else if (_nativeUsage == D3D11_USAGE_IMMUTABLE) {
+    else if (_nativeUsage == D3D11_USAGE_IMMUTABLE)
+    {
         if (!_buffer && size == _capacity)
             createNativeBuffer(data);
         else
             AXLOGE("immutable buffer must update whole data one-time");
     }
-    else {
+    else
+    {
         _context->UpdateSubresource(_buffer.Get(), 0, nullptr, data, 0, 0);
     }
 

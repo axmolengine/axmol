@@ -531,4 +531,4 @@ PUConcreteNode::~PUConcreteNode()
     }
 }
 
-}
+}  // namespace ax

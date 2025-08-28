@@ -455,4 +455,4 @@ void ProtectedNode::setGlobalZOrder(float globalZOrder)
         child->setGlobalZOrder(globalZOrder);
 }
 
-}
+}  // namespace ax
