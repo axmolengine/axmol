@@ -32,7 +32,7 @@ jobs:
       uses: DoozyX/clang-format-lint-action@v0.20
       with:
         source: './axmol ./extensions ./tests ./templates'
-        exclude: './3rdparty ./extensions/ImGui/**/im* ./extensions/fairygui ./extensions/Live2D ./extensions/Effekseer ./extensions/scripting/lua-bindings/auto ./extensions/spine ./tests/fairygui-tests ./extensions/**/*_generated.h'
+        exclude: './3rdparty ./extensions/ImGui/**/im* ./extensions/fairygui ./extensions/Live2D ./extensions/Effekseer ./extensions/scripting/lua-bindings/auto ./extensions/spine ./tests/cpp-tests/Source/Box2DTestBed/samples ./tests/fairygui-tests ./tests/live2d-tests ./extensions/**/*_generated.h'
         extensions: 'h,cpp,c,mm'
         clangFormatVersion: 20
         inplace: True
