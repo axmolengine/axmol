@@ -26,7 +26,7 @@
 #pragma once
 
 #define USE_STD_UNORDERED_MAP 1
-#define USE_ROBIN_MAP 1
+#define USE_ROBIN_MAP         1
 
 #include "axmol/base/Macros.h"
 #include "axmol/base/Object.h"
@@ -441,6 +441,6 @@ protected:
 template <typename _Valty>
 using StringMap = Map<std::string, _Valty, hlookup::string_hash, hlookup::equal_to>;
 
-}
+}  // namespace ax
 // end group
 /// @}

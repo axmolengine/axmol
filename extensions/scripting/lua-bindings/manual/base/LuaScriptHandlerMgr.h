@@ -310,7 +310,7 @@ private:
     MapObjectHandlers _mapObjectHandlers;
 };
 
-}
+}  // namespace ax
 
 // end group
 /// @}
@@ -318,4 +318,3 @@ private:
 /// @cond
 TOLUA_API int tolua_script_handler_mgr_open(lua_State* tolua_S);
 /// @endcond
-

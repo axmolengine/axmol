@@ -34,7 +34,8 @@
 
 struct XXH64_state_s;
 
-namespace ax {
+namespace ax
+{
 /**
  * @addtogroup _renderer
  * @{
@@ -94,10 +95,10 @@ public:
     * @remark the returend program type always ProgramType::CUSTOM_PROGRAM
     */
     Program* loadProgram(std::string_view vsName,
-                               std::string_view fsName,
+                         std::string_view fsName,
                          VertexLayoutKind vlk = VertexLayoutKind::Invalid);
 
-     /**
+    /**
      * Unload a program object from cache.
      * @param program Specifies the program object to move.
      */
@@ -112,6 +113,7 @@ public:
      * Unload all program objects from cache.
      */
     void unloadAllPrograms();
+
 protected:
     ProgramManager();
     virtual ~ProgramManager();
@@ -162,4 +164,4 @@ protected:
 
 // end of _rhi group
 /// @}
-}
+}  // namespace ax

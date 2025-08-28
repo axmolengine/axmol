@@ -50,11 +50,11 @@ public:
     /**
      * @lua NA
      */
-    virtual void scrollViewDidScroll(ScrollView* view){};
+    virtual void scrollViewDidScroll(ScrollView* view) {};
     /**
      * @lua NA
      */
-    virtual void scrollViewDidZoom(ScrollView* view){};
+    virtual void scrollViewDidZoom(ScrollView* view) {};
 };
 
 /**

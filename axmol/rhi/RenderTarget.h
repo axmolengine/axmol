@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "axmol/rhi/Texture.h"
 #include <assert.h>
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 class RenderTarget : public ax::Object
 {
@@ -37,7 +38,7 @@ public:
     struct RenderBuffer
     {
         Texture* texture = nullptr;
-        uint8_t level           = 0;  // level when attached to a texture
+        uint8_t level    = 0;  // level when attached to a texture
         explicit operator bool() const { return texture != nullptr; }
     };
     typedef RenderBuffer ColorAttachment[MAX_COLOR_ATTCHMENT];
@@ -100,4 +101,4 @@ protected:
     mutable TargetBufferFlags _dirtyFlags{};
 };
 
-}
+}  // namespace ax::rhi

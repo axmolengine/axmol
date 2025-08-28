@@ -110,11 +110,12 @@ private:
     VertexInputBinding& operator=(const VertexInputBinding&) = delete;
 
     bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*, bool instancing);
-    void setVertexInputPointer(VertexLayoutDesc& desc, std::string_view name,
-                                rhi::VertexFormat type,
-                                bool normalized,
-                                int offset,
-                                int flag);
+    void setVertexInputPointer(VertexLayoutDesc& desc,
+                               std::string_view name,
+                               rhi::VertexFormat type,
+                               bool normalized,
+                               int offset,
+                               int flag);
 
     ProgramState* _programState{nullptr};
     VertexLayout* _vertexLayout{nullptr};
@@ -122,4 +123,4 @@ private:
     uint32_t _vertexAttribsFlags{0};
 };
 
-}
+}  // namespace ax

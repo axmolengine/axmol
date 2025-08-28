@@ -85,7 +85,7 @@ protected:
     int _renderQueueID;
 };
 
-}
+}  // namespace ax
 
 /**
  end of support group

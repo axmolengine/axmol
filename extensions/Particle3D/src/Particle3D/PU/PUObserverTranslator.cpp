@@ -197,4 +197,4 @@ void PUObserverTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
     }
 }
 
-}
+}  // namespace ax

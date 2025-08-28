@@ -267,7 +267,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 {
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
 
-    NSString* platformPF = pixelformat_ == (int)ax::PixelFormat::RGB565 ? kEAGLColorFormatRGB565 : kEAGLColorFormatRGBA8;
+    NSString* platformPF =
+        pixelformat_ == (int)ax::PixelFormat::RGB565 ? kEAGLColorFormatRGB565 : kEAGLColorFormatRGBA8;
 
     eaglLayer.opaque = YES;
     eaglLayer.drawableProperties =
@@ -277,11 +278,11 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
     auto depth = depthFormat_ == (int)ax::PixelFormat::D24S8 ? GL_DEPTH24_STENCIL8 : 0;
     auto pixel = pixelformat_ == (int)ax::PixelFormat::RGB565 ? GL_RGB565 : GL_RGBA8_OES;
-    renderer_ = [[ES3Renderer alloc] initWithDepthFormat:depth
-                                           withPixelFormat:pixel
-                                            withSharegroup:(EAGLSharegroup*)sharegroup
-                                         withMultiSampling:multiSampling_
-                                       withNumberOfSamples:requestedSamples_];
+    renderer_  = [[ES3Renderer alloc] initWithDepthFormat:depth
+                                         withPixelFormat:pixel
+                                          withSharegroup:(EAGLSharegroup*)sharegroup
+                                       withMultiSampling:multiSampling_
+                                     withNumberOfSamples:requestedSamples_];
 
     NSAssert(renderer_, @"OpenGL ES 2.O is required.");
     if (!renderer_)
@@ -629,7 +630,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     }
     return statusBarOrientation;
 }
-}
+}  // namespace
 #endif
 
 - (void)didMoveToWindow
@@ -711,9 +712,9 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         break;
     }
 
-    auto renderView  = ax::Director::getInstance()->getRenderView();
-    float scaleX = renderView->getScaleX();
-    float scaleY = renderView->getScaleY();
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    float scaleX    = renderView->getScaleX();
+    float scaleY    = renderView->getScaleY();
 
     // Convert to pixel coordinate
     begin = CGRectApplyAffineTransform(

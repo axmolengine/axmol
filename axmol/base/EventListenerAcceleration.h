@@ -70,7 +70,7 @@ private:
     friend class LuaEventListenerAcceleration;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

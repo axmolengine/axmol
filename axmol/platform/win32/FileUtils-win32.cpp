@@ -61,7 +61,7 @@ static std::string _checkWorkingPath()
     WCHAR utf16Path[AX_MAX_PATH + 2] = {0};
     size_t nNum                      = GetCurrentDirectoryW(AX_MAX_PATH, utf16Path);
     utf16Path[nNum++]                = '\\';
-    auto workingDir                     = ntcvt::from_chars(std::wstring_view{utf16Path, static_cast<size_t>(nNum)});
+    auto workingDir                  = ntcvt::from_chars(std::wstring_view{utf16Path, static_cast<size_t>(nNum)});
     std::replace(workingDir.begin(), workingDir.end(), '\\', '/');
     return workingDir;
 }
@@ -96,11 +96,12 @@ FileUtilsWin32::FileUtilsWin32() {}
 
 bool FileUtilsWin32::init()
 {
-    if(s_exeDir.empty()) {
+    if (s_exeDir.empty())
+    {
         s_exeDir = _checkExePath();
     }
 
-    auto workingDir = _checkWorkingPath();
+    auto workingDir              = _checkWorkingPath();
     bool startedFromSelfLocation = workingDir == s_exeDir;
     if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_CONTENT_DIR))
         _defaultResRootPath = std::move(workingDir);
@@ -131,11 +132,10 @@ bool FileUtilsWin32::isFileExistInternal(std::string_view strFilePath) const
     return (attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-std::string FileUtilsWin32::getPathForFilename(std::string_view filename,
-                                               std::string_view searchPath) const
+std::string FileUtilsWin32::getPathForFilename(std::string_view filename, std::string_view searchPath) const
 {
-    std::string unixFileName            = convertPathFormatToUnixStyle(filename);
-    std::string unixSearchPath          = convertPathFormatToUnixStyle(searchPath);
+    std::string unixFileName   = convertPathFormatToUnixStyle(filename);
+    std::string unixSearchPath = convertPathFormatToUnixStyle(searchPath);
 
     return FileUtils::getPathForFilename(unixFileName, unixSearchPath);
 }
@@ -241,8 +241,7 @@ bool FileUtilsWin32::renameFile(std::string_view oldfullpath, std::string_view n
     }
     else
     {
-        AXLOGE("Fail to rename file {} to {} !Error code is 0x{:x}", oldfullpath, newfullpath,
-                   GetLastError());
+        AXLOGE("Fail to rename file {} to {} !Error code is 0x{:x}", oldfullpath, newfullpath, GetLastError());
         return false;
     }
 }
@@ -274,9 +273,8 @@ bool FileUtilsWin32::createDirectories(std::string_view dirPath) const
     bool fail = false;
     if ((GetFileAttributesW(path.c_str())) == INVALID_FILE_ATTRIBUTES)
     {
-        axstd::splitpath_cb(
-            &path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
-            [&dirPath, &fail](const wchar_t* subpath) {
+        axstd::splitpath_cb(&path.front(), [](wchar_t* ptr) { return *ptr != '\0'; },
+                            [&dirPath, &fail](const wchar_t* subpath) {
             auto attribs = GetFileAttributesW(subpath);
             if (attribs == INVALID_FILE_ATTRIBUTES)
             {
@@ -355,4 +353,4 @@ bool FileUtilsWin32::removeDirectory(std::string_view dirPath) const
     return false;
 }
 
-}
+}  // namespace ax

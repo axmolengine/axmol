@@ -46,9 +46,9 @@ class Texture2D;
 class Pass;
 class MeshCommand;
 
-using CullFaceSide  = rhi::CullMode;
-using FrontFace     = rhi::Winding;
-using DepthFunc = rhi::CompareFunc;
+using CullFaceSide = rhi::CullMode;
+using FrontFace    = rhi::Winding;
+using DepthFunc    = rhi::CompareFunc;
 
 /**
  * Defines the rendering state of the graphics device.
@@ -227,16 +227,16 @@ public:
 
         static void restoreUnmodifiedStates(int32_t flags, RenderCommand* cmd);
 
-        bool _cullFaceEnabled          = false;
-        bool _depthTestEnabled         = true;
-        bool _depthWriteEnabled        = false;
+        bool _cullFaceEnabled      = false;
+        bool _depthTestEnabled     = true;
+        bool _depthWriteEnabled    = false;
         DepthFunc _depthFunction   = DepthFunc::LESS;
-        bool _blendEnabled             = true;
+        bool _blendEnabled         = true;
         rhi::BlendFactor _blendSrc = rhi::BlendFactor::ONE;
         rhi::BlendFactor _blendDst = rhi::BlendFactor::ZERO;
-        CullFaceSide _cullFaceSide     = CullFaceSide::BACK;
-        FrontFace _frontFace           = FrontFace::COUNTER_CLOCK_WISE;
-        int32_t _modifiedBits          = 0L;
+        CullFaceSide _cullFaceSide = CullFaceSide::BACK;
+        FrontFace _frontFace       = FrontFace::COUNTER_CLOCK_WISE;
+        int32_t _modifiedBits      = 0L;
 
         mutable uint32_t _hash;
         mutable bool _hashDirty;
@@ -259,4 +259,4 @@ protected:
     std::string _name;
 };
 
-}
+}  // namespace ax

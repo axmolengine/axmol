@@ -71,6 +71,6 @@ private:
     friend class Node;
 };
 
-}
+}  // namespace ax
 
 /// @endcond

@@ -46,7 +46,7 @@ vertexLineToPolygon(Vec2* points, float stroke, V2F_T2F_C4B* vertices, unsigned 
 bool AX_DLL
 vertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float Cy, float Dx, float Dy, float* T);
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

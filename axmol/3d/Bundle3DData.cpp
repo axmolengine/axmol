@@ -29,4 +29,4 @@ int MeshVertexAttrib::getAttribSizeBytes() const
     return ret;
 }
 
-}
+}  // namespace ax

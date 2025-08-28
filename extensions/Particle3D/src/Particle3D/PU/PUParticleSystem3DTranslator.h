@@ -51,5 +51,4 @@ protected:
     PUParticleSystem3D* _system;
 };
 
-}
-
+}  // namespace ax

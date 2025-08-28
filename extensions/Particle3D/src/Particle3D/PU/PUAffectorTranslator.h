@@ -40,9 +40,8 @@ protected:
 
 public:
     PUAffectorTranslator();
-    virtual ~PUAffectorTranslator(){};
+    virtual ~PUAffectorTranslator() {};
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

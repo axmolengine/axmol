@@ -26,7 +26,8 @@
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/metal/BufferManager.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 BufferImpl::BufferImpl(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage)
     : Buffer(size, type, usage)
@@ -102,4 +103,4 @@ void BufferImpl::updateIndex()
     }
 }
 
-}
+}  // namespace ax::rhi::mtl

@@ -73,4 +73,4 @@ void AttachNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
 {
     Node::visit(renderer, parentTransform, Node::FLAGS_DIRTY_MASK);
 }
-}
+}  // namespace ax

@@ -179,4 +179,3 @@ static std::string getDataURI(const ax::Data& data, std::string_view mime_type)
 }
 
 }  // namespace webview_common
-

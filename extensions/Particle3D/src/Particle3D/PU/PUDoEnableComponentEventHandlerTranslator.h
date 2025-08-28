@@ -37,11 +37,10 @@ class PUDoEnableComponentEventHandlerTranslator : public PUScriptTranslator
 {
 public:
     PUDoEnableComponentEventHandlerTranslator();
-    virtual ~PUDoEnableComponentEventHandlerTranslator(){};
+    virtual ~PUDoEnableComponentEventHandlerTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

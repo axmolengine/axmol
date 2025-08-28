@@ -285,4 +285,4 @@ void PUScaleAffector::copyAttributesTo(PUAffector* affector)
     scaleAffector->_sinceStartSystem = _sinceStartSystem;
 }
 
-}
+}  // namespace ax

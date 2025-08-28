@@ -179,4 +179,4 @@ void PUDoEnableComponentEventHandler::copyAttributesTo(PUEventHandler* eventHand
     doEnableComponentEventHandler->setComponentEnabled(_componentEnabled);
 }
 
-}
+}  // namespace ax

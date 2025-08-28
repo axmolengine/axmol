@@ -46,4 +46,4 @@ bool PUPointEmitterTranslator::translateChildObject(PUScriptCompiler* /*compiler
     return false;
 }
 
-}
+}  // namespace ax

@@ -374,4 +374,4 @@ void PUBeamRender::copyAttributesTo(PUBeamRender* beamRender)
     beamRender->setTexCoordDirection(_texCoordDirection);
 }
 
-}
+}  // namespace ax

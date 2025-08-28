@@ -194,9 +194,7 @@ protected:
     void disableCascadeColor() override;
 
     // override Node::visit, just visit bones in children
-    void visit(ax::Renderer* renderer,
-                       const ax::Mat4& parentTransform,
-                       uint32_t parentFlags) override;
+    void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
 
     // a help function for SkeletonNode
     // for batch bone's draw to _rootSkeleton
@@ -216,10 +214,10 @@ protected:
 
     ax::BlendFunc _blendFunc = ax::BlendFunc::ALPHA_NON_PREMULTIPLIED;
 
-    bool _isRackShow            = false;
+    bool _isRackShow     = false;
     ax::Color _rackColor = ax::Color::WHITE;
-    float _rackLength           = 50.0f;
-    float _rackWidth            = 20.0f;
+    float _rackLength    = 50.0f;
+    float _rackWidth     = 20.0f;
 
     ax::Vector<BoneNode*> _childBones;
     ax::Vector<SkinNode*> _boneSkins;

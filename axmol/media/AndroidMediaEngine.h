@@ -35,7 +35,7 @@ public:
     AndroidMediaEngine();
     ~AndroidMediaEngine();
     void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
-                     std::function<void(const MEVideoFrame&)> onVideoFrame) override
+                      std::function<void(const MEVideoFrame&)> onVideoFrame) override
     {
         _onMediaEvent = std::move(onMediaEvent);
         _onVideoFrame = std::move(onVideoFrame);
@@ -91,6 +91,6 @@ struct AndroidMediaEngineFactory : public MediaEngineFactory
     void destroyMediaEngine(MediaEngine* me) override { delete static_cast<AndroidMediaEngine*>(me); }
 };
 
-}
+}  // namespace ax
 
 #endif

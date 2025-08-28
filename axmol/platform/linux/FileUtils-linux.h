@@ -65,4 +65,4 @@ private:
 // end of platform group
 /// @}
 
-}
+}  // namespace ax

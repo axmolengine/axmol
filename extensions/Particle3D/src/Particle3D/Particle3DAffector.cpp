@@ -38,4 +38,4 @@ Particle3DAffector::~Particle3DAffector()
 
 void Particle3DAffector::updateAffector(Particle3D* /*particle*/, float /*deltaTime*/) {}
 
-}
+}  // namespace ax

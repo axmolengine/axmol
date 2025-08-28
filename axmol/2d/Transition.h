@@ -133,7 +133,6 @@ protected:
     bool _isInSceneOnTop;
     bool _isSendCleanupToScene;
 
-
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(TransitionScene);
 
@@ -1061,4 +1060,4 @@ private:
 // end of _2d group
 /// @}
 
-}
+}  // namespace ax

@@ -30,7 +30,8 @@
 
 #include "tsl/robin_map.h"
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 /**
  * @addtogroup _metal
@@ -71,4 +72,4 @@ private:
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

@@ -61,7 +61,7 @@ class Renderer;
 struct AX_DLL Physics3DWorldDes
 {
     bool isDebugDrawEnabled;  // using physics debug draw?, false by default
-    ax::Vec3 gravity;    // gravity, (0, -9.8, 0)
+    ax::Vec3 gravity;         // gravity, (0, -9.8, 0)
     Physics3DWorldDes()
     {
         isDebugDrawEnabled = false;
@@ -177,7 +177,6 @@ protected:
 
 // end of 3d group
 /// @}
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
-

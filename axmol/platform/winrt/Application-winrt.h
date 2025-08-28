@@ -109,7 +109,6 @@ protected:
     static Application* sm_pSharedApplication;
 };
 
-}
+}  // namespace ax
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-

@@ -45,4 +45,4 @@ bool PUOnExpireObserverTranslator::translateChildObject(PUScriptCompiler* /*comp
     return false;
 }
 
-}
+}  // namespace ax

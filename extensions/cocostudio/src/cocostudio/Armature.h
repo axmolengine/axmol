@@ -24,7 +24,6 @@ THE SOFTWARE.
 
 #pragma once
 
-
 #include "ArmatureDefine.h"
 #include "Bone.h"
 #include "BatchNode.h"
@@ -125,9 +124,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void visit(ax::Renderer* renderer,
-                       const ax::Mat4& parentTransform,
-                       uint32_t parentFlags) override;
+    virtual void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
     void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
     void update(float dt) override;
 

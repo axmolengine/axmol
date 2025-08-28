@@ -28,24 +28,24 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "axmol/platform/wasm/devtools-wasm.h"
-#include <emscripten.h>
-#include "axmol/base/text_utils.h"
+#    include "axmol/platform/wasm/devtools-wasm.h"
+#    include <emscripten.h>
+#    include "axmol/base/text_utils.h"
 
 namespace ax
 {
 
 DevToolsImpl::DevToolsImpl()
 {
-    _director = Director::getInstance();
+    _director  = Director::getInstance();
     _scheduler = _director->getScheduler();
-    _tick = 0;
+    _tick      = 0;
 }
 
 void DevToolsImpl::update(float /*dt*/)
 {
     // tick for 2 frames becuase delta time of the 1st frame after resume is forced to 0
-    _tick ++;
+    _tick++;
     if (_tick >= 2)
     {
         _director->pause();
@@ -76,6 +76,6 @@ DevToolsImpl* DevToolsImpl::getInstance()
     return &instance;
 }
 
-}
+}  // namespace ax
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

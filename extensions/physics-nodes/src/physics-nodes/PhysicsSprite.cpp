@@ -28,9 +28,7 @@
 
 NS_AX_EXT_BEGIN
 
-PhysicsSprite::PhysicsSprite()
-    : _ignoreBodyRotation(false), _PTMRatio(0.0f), _syncTransform(nullptr)
-{}
+PhysicsSprite::PhysicsSprite() : _ignoreBodyRotation(false), _PTMRatio(0.0f), _syncTransform(nullptr) {}
 
 PhysicsSprite* PhysicsSprite::create()
 {
@@ -266,7 +264,7 @@ void PhysicsSprite::setRotation(float fRotation)
     {
         b2Vec2 p      = b2Body_GetPosition(_bodyId);
         float radians = AX_DEGREES_TO_RADIANS(fRotation);
-        auto rot = b2MakeRot(radians);
+        auto rot      = b2MakeRot(radians);
         b2Body_SetTransform(_bodyId, p, rot);
     }
 }

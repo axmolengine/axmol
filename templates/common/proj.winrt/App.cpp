@@ -50,14 +50,13 @@ using namespace AxmolAppWinRT::implementation;
 /// </summary>
 App::App()
 {
-    Suspending({ this, &App::OnSuspending });
-	Resuming({this, &App::OnResuming});
+    Suspending({this, &App::OnSuspending});
+    Resuming({this, &App::OnResuming});
 
     // Resuming({ this, &AppOnResuming });
 
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
-    UnhandledException([this](IInspectable const&, UnhandledExceptionEventArgs const& e)
-    {
+    UnhandledException([this](IInspectable const&, UnhandledExceptionEventArgs const& e) {
         if (IsDebuggerPresent())
         {
             auto errorMessage = e.Message();
@@ -74,7 +73,7 @@ App::App()
 /// <param name="e">Details about the launch request and process.</param>
 void App::OnLaunched(LaunchActivatedEventArgs const& e)
 {
-    Frame rootFrame{ nullptr };
+    Frame rootFrame{nullptr};
     auto content = Window::Current().Content();
     if (content)
     {
@@ -89,7 +88,7 @@ void App::OnLaunched(LaunchActivatedEventArgs const& e)
         // a SuspensionManager key
         rootFrame = Frame();
 
-        rootFrame.NavigationFailed({ this, &App::OnNavigationFailed });
+        rootFrame.NavigationFailed({this, &App::OnNavigationFailed});
 
         if (e.PreviousExecutionState() == ApplicationExecutionState::Terminated)
         {
@@ -135,8 +134,8 @@ void App::OnSuspending([[maybe_unused]] IInspectable const& sender, [[maybe_unus
 /// <param name="args">Details about the resume request.</param>
 void App::OnResuming(IInspectable const& sender, IInspectable const& args)
 {
-    (void)sender; // Unused parameter
-    (void)args; // Unused parameter
+    (void)sender;  // Unused parameter
+    (void)args;    // Unused parameter
 
     if (mPage)
         mPage.as<OpenGLESPage>()->SetVisibility(true);

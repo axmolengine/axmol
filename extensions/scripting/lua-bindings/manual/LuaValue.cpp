@@ -157,4 +157,4 @@ void LuaValue::copy(const LuaValue& rhs)
     }
 }
 
-}
+}  // namespace ax

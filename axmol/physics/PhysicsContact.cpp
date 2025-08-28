@@ -89,7 +89,7 @@ void PhysicsContact::generateContactData()
         return;
     }
 
-    auto count = b2Body_GetContactCapacity(b2_nullBodyId); // FIXME
+    auto count         = b2Body_GetContactCapacity(b2_nullBodyId);  // FIXME
     b2ContactData* arb = static_cast<b2ContactData*>(_contactInfo);
     AX_SAFE_DELETE(_preContactData);
     _preContactData     = _contactData;
@@ -112,19 +112,19 @@ float PhysicsContactPreSolve::getRestitution() const
 {
     //return cpArbiterGetRestitution(static_cast<cpArbiter*>(_contactInfo));
 
-    return 0; // FIXME
+    return 0;  // FIXME
 }
 
 float PhysicsContactPreSolve::getFriction() const
 {
     //return cpArbiterGetFriction(static_cast<cpArbiter*>(_contactInfo));
-    return 0; // FIXME
+    return 0;  // FIXME
 }
 
 Vec2 PhysicsContactPreSolve::getSurfaceVelocity() const
 {
     //return PhysicsHelper::cpv2vec2(cpArbiterGetSurfaceVelocity(static_cast<cpArbiter*>(_contactInfo)));
-    return 0; // FIXME
+    return 0;  // FIXME
 }
 
 void PhysicsContactPreSolve::setRestitution(float restitution)
@@ -445,5 +445,5 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::clon
     return nullptr;
 }
 
-}
+}  // namespace ax
 #endif  // defined(AX_ENABLE_PHYSICS)

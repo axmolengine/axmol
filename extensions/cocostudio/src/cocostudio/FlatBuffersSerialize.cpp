@@ -171,7 +171,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, s
     pugi::xml_document& document = *reinterpret_cast<pugi::xml_document*>(opaque);
 
     pugi::xml_node rootElement = document.document_element();  // Root
-                                                               //    AXLOGD("rootElement name = {}", rootelement.name());
+    //    AXLOGD("rootElement name = {}", rootelement.name());
 
     pugi::xml_node element = rootElement.first_child();
 
@@ -1244,7 +1244,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
         document.load_buffer_inplace(&content.front(), content.length());
 
     pugi::xml_node rootElement = document.document_element();  // Root
-                                                               //    AXLOGD("rootElement name = {}", rootelement.name());
+    //    AXLOGD("rootElement name = {}", rootelement.name());
 
     pugi::xml_node element = rootElement.first_child();
 
@@ -1494,7 +1494,7 @@ Offset<ProjectNodeOptions> FlatBuffersSerialize::createProjectNodeOptionsForSimu
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")

@@ -465,7 +465,6 @@ protected:
 };
 
 }  // namespace ui
-}
+}  // namespace ax
 // end of ui group
 /// @}
-

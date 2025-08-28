@@ -101,7 +101,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     Color32 bgColor;
     Color32 bgStartColor;
     Color32 bgEndColor;
-    int colorType          = 0;
+    int colorType = 0;
     Vec2 colorVector(0.0f, -0.5f);
     Rect capInsets;
     Size scale9Size;
@@ -191,7 +191,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             auto attributeInnerNodeSize = child.first_attribute();
             while (attributeInnerNodeSize)
             {
-                name              = attributeInnerNodeSize.name();
+                name       = attributeInnerNodeSize.name();
                 auto value = attributeInnerNodeSize.value();
 
                 if (name == "Width")
@@ -212,7 +212,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (attributeSize)
             {
-                name              = attributeSize.name();
+                name       = attributeSize.name();
                 auto value = attributeSize.value();
 
                 if (name == "X")
@@ -233,7 +233,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (attributeSingleColor)
             {
-                name              = attributeSingleColor.name();
+                name       = attributeSingleColor.name();
                 auto value = attributeSingleColor.value();
 
                 if (name == "R")
@@ -258,7 +258,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (attributeEndColor)
             {
-                name              = attributeEndColor.name();
+                name       = attributeEndColor.name();
                 auto value = attributeEndColor.value();
 
                 if (name == "R")
@@ -283,7 +283,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (attributeFirstColor)
             {
-                name              = attributeFirstColor.name();
+                name       = attributeFirstColor.name();
                 auto value = attributeFirstColor.value();
 
                 if (name == "R")
@@ -307,7 +307,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             auto attributeColorVector = child.first_attribute();
             while (attributeColorVector)
             {
-                name              = attributeColorVector.name();
+                name       = attributeColorVector.name();
                 auto value = attributeColorVector.value();
 
                 if (name == "ScaleX")
@@ -331,7 +331,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (attributeFileData)
             {
-                name              = attributeFileData.name();
+                name       = attributeFileData.name();
                 auto value = attributeFileData.value();
 
                 if (name == "Path")
@@ -372,8 +372,8 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto options = CreateListViewOptions(
         *builder, widgetOptions,
         CreateResourceData(*builder, builder->CreateString(path), builder->CreateString(plistFile), resourceType),
-        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColor.a, &f_colorVector,
-        &f_capInsets, &f_scale9Size, backGroundScale9Enabled, &f_innerSize, direction, bounceEnabled, itemMargin,
+        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColor.a, &f_colorVector, &f_capInsets,
+        &f_scale9Size, backGroundScale9Enabled, &f_innerSize, direction, bounceEnabled, itemMargin,
         builder->CreateString(directionType), builder->CreateString(horizontalType),
         builder->CreateString(verticalType));
 
@@ -391,8 +391,8 @@ void ListViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
     bool backGroundScale9Enabled = options->backGroundScale9Enabled() != 0;
     listView->setBackGroundImageScale9Enabled(backGroundScale9Enabled);
 
-    auto f_bgColor = options->bgColor();
-    int bgColorOpacity = options->bgColorOpacity(); // FIXME: redundant, should we use f_bgColor->a() instead?
+    auto f_bgColor     = options->bgColor();
+    int bgColorOpacity = options->bgColorOpacity();  // FIXME: redundant, should we use f_bgColor->a() instead?
     Color32 bgColor(f_bgColor->r(), f_bgColor->g(), f_bgColor->b(), bgColorOpacity);
     auto f_bgStartColor = options->bgStartColor();
     Color32 bgStartColor(f_bgStartColor->r(), f_bgStartColor->g(), f_bgStartColor->b(), f_bgStartColor->a());
@@ -472,7 +472,7 @@ void ListViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
 
     auto widgetOptions = options->widgetOptions();
     auto f_color       = widgetOptions->color();
-    int opacity = widgetOptions->alpha(); // FIXME: redundant, should we use f_color->a() instead?
+    int opacity        = widgetOptions->alpha();  // FIXME: redundant, should we use f_color->a() instead?
     Color32 color(f_color->r(), f_color->g(), f_color->b(), opacity);
     listView->setColor(color);
 

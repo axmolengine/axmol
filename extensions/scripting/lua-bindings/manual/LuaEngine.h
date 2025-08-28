@@ -170,7 +170,7 @@ public:
     virtual int executeAccelerometerEvent(Layer* pLayer, Acceleration* pAccelerationValue);
     virtual int executeEvent(int nHandler,
                              const char* pEventName,
-                             Object* pEventSource                 = NULL,
+                             Object* pEventSource              = NULL,
                              const char* pEventSourceClassName = NULL);
     /**
      * Handle the assert message.
@@ -258,8 +258,7 @@ private:
     LuaStack* _stack;
 };
 
-}
+}  // namespace ax
 
 // end group
 /// @}
-

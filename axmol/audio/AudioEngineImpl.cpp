@@ -46,8 +46,8 @@
 #    import <UIKit/UIKit.h>
 #endif
 
-static ALCdevice* s_ALDevice       = nullptr;
-static ALCcontext* s_ALContext     = nullptr;
+static ALCdevice* s_ALDevice           = nullptr;
+static ALCcontext* s_ALContext         = nullptr;
 static ax::AudioEngineImpl* s_instance = nullptr;
 
 namespace ax
@@ -74,7 +74,7 @@ static void resumeAudioDevice()
     alcMakeContextCurrent(s_ALContext);
 #endif
 }
-}
+}  // namespace ax
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
@@ -182,7 +182,7 @@ static void resumeAudioDevice()
             resumeOnBecomingActive = false;
             if (!isAudioSessionInterrupted)
                 ax::pauseAudioDevice();
-            
+
             AXLOGD("UIApplicationDidBecomeActiveNotification, resume audio device");
             NSError* error = nil;
             BOOL success   = [[AVAudioSession sharedInstance] setCategory:AVAUDIOSESSION_DEFAULT_CATEGORY error:&error];
@@ -209,12 +209,12 @@ static void resumeAudioDevice()
          Note: older device (e.g iphone7) will not receive route change notifiaction when app in background
          */
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
-        { // older device (e.g iphone7)
+        {  // older device (e.g iphone7)
             ax::pauseAudioDevice();
             ax::resumeAudioDevice();
         }
         else
-        { // newer device (at least iphone13)
+        {  // newer device (at least iphone13)
             AXLOGD(
                 "AVAudioSessionRouteChangeNotification, application != UIApplicationStateActive, "
                 "resumeOnBecomingActive = true");
@@ -245,7 +245,7 @@ static id s_AudioEngineSessionHandler = nullptr;
 #    endif
 static void alcReopenDeviceOnAxmolThread()
 {
-  ax::Director::getInstance()->queueOperation([](void*) {
+    ax::Director::getInstance()->queueOperation([](void*) {
         auto alcReopenDeviceSOFTProc =
             (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
         if (alcReopenDeviceSOFTProc)
@@ -1001,4 +1001,4 @@ void AudioEngineImpl::uncacheAll()
 
     _audioCaches.clear();
 }
-}
+}  // namespace ax

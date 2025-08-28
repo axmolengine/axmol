@@ -87,7 +87,8 @@ static D3D11_DEPTH_STENCILOP_DESC make_op_desc(const StencilDesc& s)
 }
 }  // namespace
 
-DepthStencilStateImpl::DepthStencilStateImpl(ID3D11Device* device) : _device(device) {
+DepthStencilStateImpl::DepthStencilStateImpl(ID3D11Device* device) : _device(device)
+{
     D3D11_DEPTH_STENCIL_DESC dsDesc = {};
     dsDesc.DepthEnable              = FALSE;
     dsDesc.DepthWriteMask           = D3D11_DEPTH_WRITE_MASK_ZERO;
@@ -100,7 +101,7 @@ DepthStencilStateImpl::DepthStencilStateImpl(ID3D11Device* device) : _device(dev
 
 void DepthStencilStateImpl::update(const DepthStencilDesc& desc)
 {
-    DepthStencilState::update(desc); 
+    DepthStencilState::update(desc);
 
     if (!isEnabled())
     {
@@ -151,7 +152,7 @@ void DepthStencilStateImpl::update(const DepthStencilDesc& desc)
 void DepthStencilStateImpl::apply(ID3D11DeviceContext* ctx, UINT stencilRef) const
 {
     if (ctx && _activeState)
-         ctx->OMSetDepthStencilState(_activeState.Get(), stencilRef);
+        ctx->OMSetDepthStencilState(_activeState.Get(), stencilRef);
 }
 
 }  // namespace ax::rhi::d3d

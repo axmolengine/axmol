@@ -73,4 +73,4 @@ private:
 // end of base group
 /** @} */
 
-}  // namespace ax::simdjson
+}  // namespace simdjson

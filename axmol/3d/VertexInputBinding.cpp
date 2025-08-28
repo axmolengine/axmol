@@ -43,7 +43,8 @@ static tsl::robin_map<uint32_t, VertexInputBinding*>& _bindingCache()
     return __vertexInputBindingCache;
 }
 
-void VertexInputBinding::clearCache() {
+void VertexInputBinding::clearCache()
+{
     auto& cache = _bindingCache();
     for (auto& [_, vib] : cache)
         AX_SAFE_RELEASE(vib);
@@ -125,7 +126,7 @@ bool VertexInputBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshComm
                        rhi::VertexFormat::MAT4, 0, false, 1);
     }
 
-   /*
+    /*
      * If certain vertex inputs are missing in the shader (e.g., 'a_normal'),
      * set the stride manually to match the vertex data in MeshIndexData
      * instead of relying on the automatically computed stride.

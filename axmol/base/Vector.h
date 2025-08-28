@@ -109,10 +109,7 @@ public:
     const_reverse_iterator crend() const { return _data.crend(); }
 
     /** Constructor. */
-    Vector() : _data()
-    {
-        static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!");
-    }
+    Vector() : _data() { static_assert(axstd::is_ref_counted_v<T>, "Invalid Type for ax::Vector!"); }
 
     /**
      * Constructor with a capacity.
@@ -245,10 +242,7 @@ public:
         return _data[index];
     }
 
-    T operator[](ssize_t index) const
-    {
-        return this->at(index);
-    }
+    T operator[](ssize_t index) const { return this->at(index); }
 
     /** Returns the first element in the Vector. */
     T front() const { return _data.front(); }
@@ -480,4 +474,4 @@ protected:
 // end of base group
 /** @} */
 
-}
+}  // namespace ax

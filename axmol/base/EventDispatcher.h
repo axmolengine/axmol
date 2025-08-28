@@ -362,8 +362,7 @@ protected:
     std::set<std::string> _internalCustomListenerIDs;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}
-

@@ -124,4 +124,4 @@ void PUScaleVelocityAffector::copyAttributesTo(PUAffector* affector)
     scaleVelocityAffector->_stopAtFlip       = _stopAtFlip;
 }
 
-}
+}  // namespace ax

@@ -159,4 +159,4 @@ float PUPlane::normalize()
 
     return fLength;
 }
-}
+}  // namespace ax

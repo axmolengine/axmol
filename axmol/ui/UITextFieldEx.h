@@ -211,5 +211,4 @@ protected:
 
 };  // namespace ui
 
-}
-
+}  // namespace ax

@@ -745,4 +745,4 @@ public:
 
     virtual bool isParticleSystemTranslator() const { return false; }
 };
-}
+}  // namespace ax

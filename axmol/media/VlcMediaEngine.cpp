@@ -476,6 +476,6 @@ bool VlcMediaEngine::transferVideoFrame()
     return false;
 }
 
-}
+}  // namespace ax
 
 #endif

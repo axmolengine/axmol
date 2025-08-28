@@ -295,8 +295,8 @@ public:
      * when the stencil test passes and either there is no depth buffer or depth testing is not enabled.
      */
     void setStencilOp(rhi::StencilOp stencilFailureOp,
-                             rhi::StencilOp depthFailureOp,
-                             rhi::StencilOp stencilDepthPassOp);
+                      rhi::StencilOp depthFailureOp,
+                      rhi::StencilOp stencilDepthPassOp);
 
     /**
      * Control the front and back writing of individual bits in the stencil planes.
@@ -406,7 +406,7 @@ public:
     bool getScissorTest() const;                ///< Get whether scissor test is enabled or not.
     const ScissorRect& getScissorRect() const;  ///< Get scissor rectangle.
 
-    rhi::CommandBuffer* getCommandBuffer() const { return _commandBuffer ; }
+    rhi::CommandBuffer* getCommandBuffer() const { return _commandBuffer; }
 
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Vec2& size);
@@ -569,15 +569,15 @@ protected:
 
     struct StateBlock
     {
-        bool depthTest             = false;
-        bool depthWrite            = false;
+        bool depthTest         = false;
+        bool depthWrite        = false;
         rhi::CullMode cullMode = rhi::CullMode::NONE;
     };
 
     std::deque<StateBlock> _stateBlockStack;
 };
 
-}
+}  // namespace ax
 
 /**
  end of support group

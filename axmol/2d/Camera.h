@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "axmol/2d/Node.h"
 #if defined(AX_ENABLE_3D)
-#include "axmol/3d/Frustum.h"
+#    include "axmol/3d/Frustum.h"
 #endif
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/renderer/CustomCommand.h"
@@ -364,18 +364,19 @@ protected:
     bool _viewProjectionUpdated = false;  // Whether or not the viewprojection matrix was updated since the last frame.
     CameraFlag _cameraFlag      = CameraFlag::DEFAULT;  // camera flag
 #if defined(AX_ENABLE_3D)
-    mutable Frustum _frustum;                           // camera frustum
+    mutable Frustum _frustum;  // camera frustum
     mutable bool _frustumDirty = true;
 #endif
     int8_t _depth = -1;  // camera depth, the depth of camera with CameraFlag::DEFAULT flag is 0 by default, a camera
                          // with larger depth is drawn on top of camera with smaller depth
 
-    float _eyeZdistance; // Z eye projection distance for 2D in 3D projection.
-    float _zoomFactor = 1.0F; // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
+    float _eyeZdistance;  // Z eye projection distance for 2D in 3D projection.
+    float _zoomFactor =
+        1.0F;  // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
     float _zoomFactorFarPlane;
     float _zoomFactorNearPlane;
 
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
 };
 
-}
+}  // namespace ax

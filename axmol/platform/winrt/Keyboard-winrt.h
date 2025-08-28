@@ -50,13 +50,14 @@ public:
 private:
     void OnTextChanged(const Windows::Foundation::IInspectable& sender,
                        Windows::UI::Xaml::Controls::TextChangedEventArgs const& args);
-	void OnTextCompositionStarted(Windows::UI::Xaml::Controls::TextBox, Windows::UI::Xaml::Controls::TextCompositionStartedEventArgs const& args);
+    void OnTextCompositionStarted(Windows::UI::Xaml::Controls::TextBox,
+                                  Windows::UI::Xaml::Controls::TextCompositionStartedEventArgs const& args);
     void OnTextCompositionEnded(Windows::UI::Xaml::Controls::TextBox,
                                 Windows::UI::Xaml::Controls::TextCompositionEndedEventArgs const& args);
 
     Windows::UI::Xaml::Controls::TextBox m_textBox{nullptr};
 
-	bool m_useInputMethod;
+    bool m_useInputMethod;
 };
 
-}
+}  // namespace ax

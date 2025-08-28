@@ -24,13 +24,13 @@
 
 #if !defined(__EMSCRIPTEN__)
 
-#include "axmol/platform/PlatformConfig.h"
-#include "CurlTest.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "curl/curl.h"
+#    include "axmol/platform/PlatformConfig.h"
+#    include "CurlTest.h"
+#    include "stdio.h"
+#    include "stdlib.h"
+#    include "curl/curl.h"
 
-#include "axmol/base/format.h"
+#    include "axmol/base/format.h"
 
 using namespace ax;
 

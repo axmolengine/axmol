@@ -509,7 +509,7 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
             if (_fontAtlas)
             {
                 FontAtlasCache::releaseFontAtlas(_fontAtlas);
-                _fontAtlas      = nullptr;
+                _fontAtlas = nullptr;
             }
 
             auto lineHeight = _lineHeight;
@@ -688,8 +688,7 @@ void Label::updateShaderProgram()
         auto texture = _getTexture(this);
         if (texture)
         {
-            programType =
-                ProgramStateRegistry::getInstance()->getProgramType(programType, texture->getSamplerFlags());
+            programType = ProgramStateRegistry::getInstance()->getProgramType(programType, texture->getSamplerFlags());
         }
     }
     else
@@ -706,8 +705,8 @@ void Label::updateShaderProgram()
                 auto texture = _getTexture(this);
                 if (texture)
                 {
-                    programType = ProgramStateRegistry::getInstance()->getProgramType(
-                        programType, texture->getSamplerFlags());
+                    programType =
+                        ProgramStateRegistry::getInstance()->getProgramType(programType, texture->getSamplerFlags());
                 }
             }
             break;
@@ -1352,8 +1351,8 @@ void Label::enableGlow(const Color32& glowColor)
 {
     if (_currentLabelType == LabelType::TTF)
     {
-        auto config                 = _fontConfig;
-        int mods                    = 0;
+        auto config = _fontConfig;
+        int mods    = 0;
         if (config.outlineSize > 0)
         {
             config.outlineSize = 0;
@@ -1372,10 +1371,10 @@ void Label::enableGlow(const Color32& glowColor)
             updateShaderProgram();
         }
         _currLabelEffect = LabelEffect::GLOW;
-        _effectColor.r  = glowColor.r / 255.0f;
-        _effectColor.g  = glowColor.g / 255.0f;
-        _effectColor.b  = glowColor.b / 255.0f;
-        _effectColor.a  = glowColor.a / 255.0f;
+        _effectColor.r   = glowColor.r / 255.0f;
+        _effectColor.g   = glowColor.g / 255.0f;
+        _effectColor.b   = glowColor.b / 255.0f;
+        _effectColor.a   = glowColor.a / 255.0f;
         updateShaderProgram();
     }
 }
@@ -1408,10 +1407,10 @@ void Label::enableOutline(const Color32& outlineColor, int outlineSize /* = -1 *
         }
         else if (_effectColor != outlineColor || _outlineSize != outlineSize)
         {
-            _effectColor.r  = outlineColor.r / 255.f;
-            _effectColor.g  = outlineColor.g / 255.f;
-            _effectColor.b  = outlineColor.b / 255.f;
-            _effectColor.a  = outlineColor.a / 255.f;
+            _effectColor.r   = outlineColor.r / 255.f;
+            _effectColor.g   = outlineColor.g / 255.f;
+            _effectColor.b   = outlineColor.b / 255.f;
+            _effectColor.a   = outlineColor.a / 255.f;
             _currLabelEffect = LabelEffect::OUTLINE;
             _contentDirty    = true;
         }
@@ -1897,8 +1896,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
     {
         updateBuffer(textureAtlas, batch.shadowCommand);
         auto shadowMatrix = matrixProjection * _shadowTransform;
-        batch.shadowCommand.unsafePS()->setUniform(_mvpMatrixLocation, shadowMatrix.m,
-                                                                             sizeof(shadowMatrix.m));
+        batch.shadowCommand.unsafePS()->setUniform(_mvpMatrixLocation, shadowMatrix.m, sizeof(shadowMatrix.m));
     }
 
     if (_currentLabelType == LabelType::TTF)
@@ -1912,7 +1910,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             // draw shadow
             if (_shadowEnabled)
             {
-                effectType               = 2;
+                effectType              = 2;
                 auto programStateShadow = batch.shadowCommand.unsafePS();
                 programStateShadow->setUniform(_effectColorLocation, &_shadowColor, sizeof(ax::Color));
                 programStateShadow->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
@@ -1923,8 +1921,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             if (_useDistanceField)
             {  // distance outline
                 effectColor.w = _outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize;
-                batch.textCommand.unsafePS()->setUniform(_effectColorLocation, &effectColor,
-                                                                                   sizeof(ax::Color));
+                batch.textCommand.unsafePS()->setUniform(_effectColorLocation, &effectColor, sizeof(ax::Color));
             }
             else
             {
@@ -1941,7 +1938,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
 
                 // draw text
                 {
-                    effectType             = 0;
+                    effectType            = 0;
                     auto programStateText = batch.textCommand.unsafePS();
 
                     programStateText->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
@@ -1973,8 +1970,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 renderer->addCommand(&batch.shadowCommand);
             }
 
-            batch.textCommand.unsafePS()->setUniform(_effectColorLocation, &_effectColor,
-                                                                               sizeof(Vec4));
+            batch.textCommand.unsafePS()->setUniform(_effectColorLocation, &_effectColor, sizeof(Vec4));
         }
         break;
         default:
@@ -1987,7 +1983,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
             Color32 oldColor   = _realColor;
             uint8_t oldOPacity = _displayedColor.a;
-            _displayedColor.a    = _shadowColor.a * (oldOPacity / 255.0f) * 255;
+            _displayedColor.a  = _shadowColor.a * (oldOPacity / 255.0f) * 255;
             setColor(Color32{_shadowColor});
             batch.shadowCommand.updateVertexBuffer(
                 textureAtlas->getQuads(), (unsigned int)(textureAtlas->getTotalQuads() * sizeof(V3F_T2F_C4B_Quad)));
@@ -2041,7 +2037,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
             if (!textureAtlas->getTotalQuads())
                 return;
 
-            auto texture       = textureAtlas->getTexture();
+            auto texture    = textureAtlas->getTexture();
             auto pipelinePS = _quadCommand.unsafePS();
             pipelinePS->setUniform(_mvpMatrixLocation, matrixProjection.m, sizeof(matrixProjection.m));
             pipelinePS->setTexture(texture->getRHITexture());
@@ -2080,10 +2076,8 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
                     programState->setUniform(_textColorLocation, &_textColor, sizeof(_textColor));
                     programState->setTexture(textureAtlas->getTexture()->getRHITexture());
                 }
-                batch.textCommand.unsafePS()->setUniform(_mvpMatrixLocation, matrixMVP.m,
-                                                                                   sizeof(matrixMVP.m));
-                batch.outLineCommand.unsafePS()->setUniform(_mvpMatrixLocation, matrixMVP.m,
-                                                                                      sizeof(matrixMVP.m));
+                batch.textCommand.unsafePS()->setUniform(_mvpMatrixLocation, matrixMVP.m, sizeof(matrixMVP.m));
+                batch.outLineCommand.unsafePS()->setUniform(_mvpMatrixLocation, matrixMVP.m, sizeof(matrixMVP.m));
                 updateEffectUniforms(batch, textureAtlas, renderer, transform);
             }
         }
@@ -2467,7 +2461,7 @@ void Label::setTextColor(const Color32& color)
             break;
         }
 
-        _textColor = color;
+        _textColor   = color;
         _textColor32 = color;
     }
 

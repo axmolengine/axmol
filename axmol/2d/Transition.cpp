@@ -137,7 +137,7 @@ void TransitionScene::finish()
 {
     _waitForFinishCount--;
 
-    if(_waitForFinishCount == 0)
+    if (_waitForFinishCount == 0)
     {
         // clean up
         _inScene->setVisible(true);
@@ -479,7 +479,8 @@ void TransitionSlideInL::onEnter()
     ActionInterval* in  = this->action();
     ActionInterval* out = this->action();
 
-    ActionInterval* inAction = Sequence::create(easeActionWithAction(in), CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
+    ActionInterval* inAction = Sequence::create(
+        easeActionWithAction(in), CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     ActionInterval* outAction = Sequence::create(
         easeActionWithAction(out), CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
@@ -1507,4 +1508,4 @@ ActionInterval* TransitionFadeDown::actionWithSize(const Vec2& size)
     return FadeOutDownTiles::create(_duration, size);
 }
 
-}
+}  // namespace ax

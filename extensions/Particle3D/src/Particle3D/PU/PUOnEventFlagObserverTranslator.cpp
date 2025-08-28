@@ -63,4 +63,4 @@ bool PUOnEventFlagObserverTranslator::translateChildObject(PUScriptCompiler* /*c
     return false;
 }
 
-}
+}  // namespace ax

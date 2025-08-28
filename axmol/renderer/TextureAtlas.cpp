@@ -478,4 +478,4 @@ void TextureAtlas::fillWithEmptyQuadsFromIndex(ssize_t index, ssize_t amount)
     }
 }
 
-}
+}  // namespace ax

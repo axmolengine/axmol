@@ -163,9 +163,9 @@ void PUBillboardChain::setupBuffers()
         V3F_T2F_C4F vi = {Vec3(0.0f, 0.0f, 0.0f), Vec2(0.0f, 0.0f), Color::WHITE};
         _vertices.resize(_chainElementList.size() * 2, vi);
 
-        _indexBuffer = rhi::DriverBase::getInstance()->createBuffer(
-            _chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
-                                                      rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
+        _indexBuffer =
+            rhi::DriverBase::getInstance()->createBuffer(_chainCount * _maxElementsPerChain * 6 * sizeof(uint16_t),
+                                                         rhi::BufferType::VERTEX, rhi::BufferUsage::DYNAMIC);
 
         _indices.resize(_chainCount * _maxElementsPerChain * 6, 0);
 
@@ -556,7 +556,7 @@ void PUBillboardChain::updateVertexBuffer(const Mat4& camMat)
                 laste = e;
                 // vertexIndex += 2;
             }  // element
-        }      // segment valid?
+        }  // segment valid?
 
     }  // each segment
 
@@ -785,4 +785,4 @@ void PUBillboardChain::onAfterDraw()
 //}
 //---------------------------------------------------------------------
 
-}
+}  // namespace ax

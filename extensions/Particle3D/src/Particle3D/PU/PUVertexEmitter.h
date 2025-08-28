@@ -166,5 +166,4 @@ namespace ax
 //	*/
 //	unsigned short _calculateRequestedParticles(float timeElapsed);
 //};
-}
-
+}  // namespace ax

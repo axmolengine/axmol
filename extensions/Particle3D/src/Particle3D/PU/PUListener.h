@@ -53,5 +53,4 @@ public:
     virtual void particleExpired(PUParticleSystem3D* particleSystem, PUParticle3D* particle) = 0;
 };
 
-}
-
+}  // namespace ax

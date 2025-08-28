@@ -37,11 +37,10 @@ class PUFlockCenteringAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUFlockCenteringAffectorTranslator();
-    virtual ~PUFlockCenteringAffectorTranslator(){};
+    virtual ~PUFlockCenteringAffectorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

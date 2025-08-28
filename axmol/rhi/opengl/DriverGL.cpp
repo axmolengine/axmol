@@ -165,7 +165,6 @@ DriverImpl::DriverImpl()
     // reset gl state
     resetState();
 
-
     CHECK_GL_ERROR_DEBUG();
 }
 
@@ -211,7 +210,6 @@ ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, std::string_view
     return new ShaderModuleImpl(stage, source);
 }
 
-
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 {
     GLuint sampler = 0;
@@ -241,7 +239,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         case SamplerFilter::MIP_LINEAR:
             minFilterGL = GL_NEAREST_MIPMAP_LINEAR;
             break;
-        default: // MIP_DEFAULT
+        default:  // MIP_DEFAULT
             minFilterGL = GL_NEAREST;
         }
     }
@@ -449,8 +447,8 @@ static bool checkASTCRenderability()
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         error     = glGetError();
         supported = !error && pixels[0] == 255 && pixels[1] == 128;
-#else  // GLES no API: glGetTexImage
-       // prepare a back frame buffer
+#else   // GLES no API: glGetTexImage
+        // prepare a back frame buffer
         GLuint defaultFBO{0};
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, reinterpret_cast<GLint*>(&defaultFBO));
 

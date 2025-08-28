@@ -57,5 +57,4 @@ public:
 protected:
     float _radius;
 };
-}
-
+}  // namespace ax

@@ -81,7 +81,7 @@ protected:
     static uint16_t* __indices;
 };
 
-}
+}  // namespace ax
 
 /**
  end of support group

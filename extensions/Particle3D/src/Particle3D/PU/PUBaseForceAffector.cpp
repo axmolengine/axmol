@@ -70,4 +70,4 @@ void PUBaseForceAffector::copyAttributesTo(PUAffector* affector)
     baseForceAffector->_forceApplication   = _forceApplication;
 }
 
-}
+}  // namespace ax

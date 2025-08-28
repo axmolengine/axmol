@@ -450,4 +450,4 @@ float PUDynamicAttributeHelper::calculate(PUDynamicAttribute* dyn, float x, floa
 
     return defaultValue;
 }
-}
+}  // namespace ax

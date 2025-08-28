@@ -34,4 +34,4 @@ EventTouch::EventTouch() : Event(Type::TOUCH)
     _touches.reserve(MAX_TOUCHES);
 }
 
-}
+}  // namespace ax

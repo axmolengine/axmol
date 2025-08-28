@@ -36,15 +36,16 @@ extern "C" {
 #include "axmol/network/WebSocket.h"
 
 ///@cond
-class LuaWebSocket: public ax::network::WebSocket, public ax::network::WebSocket::Delegate
+class LuaWebSocket : public ax::network::WebSocket, public ax::network::WebSocket::Delegate
 {
 public:
-    ~LuaWebSocket() override;;
+    ~LuaWebSocket() override;
+    ;
     void onOpen(WebSocket* ws) override;
     void onMessage(WebSocket* ws, const WebSocket::Data& data) override;
     void onClose(WebSocket* ws, uint16_t code, std::string_view reason) override;
     void onError(WebSocket* ws, const WebSocket::ErrorCode& error) override;
-    
+
     enum WebSocketScriptHandlerType
     {
         kWebSocketScriptHandlerOpen,
@@ -57,4 +58,3 @@ public:
 TOLUA_API int tolua_web_socket_open(lua_State* tolua_S);
 TOLUA_API int register_web_socket_manual(lua_State* tolua_S);
 ///@endcond
-

@@ -534,4 +534,4 @@ float bezieratFunction(float a, float b, float c, float d, float t)
 
 }  // namespace tweenfunc
 
-}
+}  // namespace ax

@@ -52,8 +52,8 @@ public:
     virtual std::string title() const override;
 
     void update(float delta) override;
-    void visit(ax::Renderer *renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
-    
+    void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
+
 protected:
     std::string _title;
 
@@ -66,10 +66,9 @@ protected:
 
     您将efk :: EffectManager *添加到图层成员变量。 这个类管理效果。
 	*/
-	efk::EffectManager*		manager = nullptr;
+    efk::EffectManager* manager = nullptr;
 
-	int count = 0;
+    int count = 0;
 };
-
 
 #endif  // _EFFEKSEERTEST_H_

@@ -118,12 +118,12 @@ protected:
     Triangles _triangles;
 
     // Cached value to determine to generate material id or not.
-    BlendFunc _blendType              = BlendFunc::DISABLE;
-    uint64_t _batchId                 = 0;
+    BlendFunc _blendType   = BlendFunc::DISABLE;
+    uint64_t _batchId      = 0;
     rhi::Texture* _texture = nullptr;
 };
 
-}
+}  // namespace ax
 /**
  end of support group
  @}

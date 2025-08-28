@@ -280,8 +280,8 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
         });
         if (timerIt != timers.end())
         {
-            AXLOGD("Scheduler#schedule. Reiniting timer with interval {:.4f}, repeat {}, delay {:.4f}", interval, repeat,
-                  delay);
+            AXLOGD("Scheduler#schedule. Reiniting timer with interval {:.4f}, repeat {}, delay {:.4f}", interval,
+                   repeat, delay);
             (*timerIt)->setupTimerWithInterval(interval, repeat, delay);
             return;
         }
@@ -453,9 +453,9 @@ bool Scheduler::isScheduled(std::string_view key, const void* target) const
 
     auto&& timers    = timerIt->second.timers;
     const bool found = !timers.empty() && std::find_if(timers.begin(), timers.end(), [&key](Timer* const itimer) {
-                                              auto timer = dynamic_cast<TimerTargetCallback*>(itimer);
-                                              return (timer && !timer->isExhausted() && key == timer->getKey());
-                                          }) != timers.end();
+        auto timer = dynamic_cast<TimerTargetCallback*>(itimer);
+        return (timer && !timer->isExhausted() && key == timer->getKey());
+    }) != timers.end();
 
     return found;
 }
@@ -535,7 +535,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
         }
     }
 
-    for (auto target: targets)
+    for (auto target : targets)
         unscheduleUpdate(target);
 
 #if AX_ENABLE_SCRIPT_BINDING
@@ -911,7 +911,7 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
         if (timerIt != timers.end())
         {
             AXLOGD("Scheduler#schedule. Reiniting timer with interval {:.4}, repeat {}, delay {:.4f}", interval, repeat,
-                  delay);
+                   delay);
             (*timerIt)->setupTimerWithInterval(interval, repeat, delay);
             return;
         }
@@ -939,12 +939,11 @@ bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Object* target) const
         return false;
     }
 
-    auto&& timers = timerIt->second.timers;
-    const auto found =
-        !timers.empty() && std::find_if(timers.begin(), timers.end(), [selector](Timer* const itimer) {
-                               auto timer = dynamic_cast<TimerTargetSelector*>(itimer);
-                               return (timer && !timer->isExhausted() && selector == timer->getSelector());
-                           }) != timers.end();
+    auto&& timers    = timerIt->second.timers;
+    const auto found = !timers.empty() && std::find_if(timers.begin(), timers.end(), [selector](Timer* const itimer) {
+        auto timer = dynamic_cast<TimerTargetSelector*>(itimer);
+        return (timer && !timer->isExhausted() && selector == timer->getSelector());
+    }) != timers.end();
 
     return found;
 }
@@ -1000,4 +999,4 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Object* target)
     }
 }
 
-}
+}  // namespace ax

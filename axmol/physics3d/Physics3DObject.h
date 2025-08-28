@@ -135,7 +135,7 @@ protected:
  */
 struct AX_DLL Physics3DRigidBodyDes
 {
-    float mass;                  // Note: mass equals zero means static, default 0
+    float mass;             // Note: mass equals zero means static, default 0
     ax::Vec3 localInertia;  // default (0, 0, 0)
     Physics3DShape* shape;
     ax::Mat4 originalTransform;
@@ -492,7 +492,6 @@ protected:
 // end of 3d group
 /// @}
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_3D_PHYSICS)
-

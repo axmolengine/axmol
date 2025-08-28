@@ -105,17 +105,16 @@ void UISliderTest::printWidgetResources(ax::Object* /*sender*/)
     ax::ResourceData textureFile = _slider->getBackFile();
     AXLOGD("textureFile  Name : {}, Type: {}", textureFile.file, textureFile.type);
     ax::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
-    AXLOGD("progressBarTextureFile  Name : {}, Type: {}", progressBarTextureFile.file,
-          progressBarTextureFile.type);
+    AXLOGD("progressBarTextureFile  Name : {}, Type: {}", progressBarTextureFile.file, progressBarTextureFile.type);
     ax::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
     AXLOGD("slidBallNormalTextureFile  Name : {}, Type: {}", slidBallNormalTextureFile.file,
-          slidBallNormalTextureFile.type);
+           slidBallNormalTextureFile.type);
     ax::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
     AXLOGD("slidBallPressedTextureFile  Name : {}, Type: {}", slidBallPressedTextureFile.file,
-          slidBallPressedTextureFile.type);
+           slidBallPressedTextureFile.type);
     ax::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
     AXLOGD("slidBallDisabledTextureFile  Name : {}, Type: {}", slidBallDisabledTextureFile.file,
-          slidBallDisabledTextureFile.type);
+           slidBallDisabledTextureFile.type);
 }
 
 // UISliderTest_Scale9

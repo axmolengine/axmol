@@ -76,7 +76,9 @@ RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 }
 
 RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
-                                       const Rect& rect, float frameZoomFactor, bool /*resizable*/)
+                                               const Rect& rect,
+                                               float frameZoomFactor,
+                                               bool /*resizable*/)
 {
     auto ret = new RenderViewImpl;
     if (ret && ret->initWithRect(viewName, rect, frameZoomFactor))
@@ -117,8 +119,8 @@ RenderViewImpl::RenderViewImpl()
     , _lastMouseButtonPressed(EventMouse::MouseButton::BUTTON_UNSET)
 {
     s_renderView = this;
-    _viewName  = "axmol2";
-    m_keyboard = KeyBoardWinRT();
+    _viewName    = "axmol2";
+    m_keyboard   = KeyBoardWinRT();
 
     m_backButtonListener                = EventListenerKeyboard::create();
     m_backButtonListener->onKeyReleased = AX_CALLBACK_2(RenderViewImpl::BackButtonListener, this);
@@ -170,13 +172,13 @@ bool RenderViewImpl::ShowMessageBox(const winrt::hstring& title, const winrt::hs
     if (m_dispatcher)
     {
         m_dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal,
-                                     Windows::UI::Core::DispatchedHandler([title, message]() {
-                                         // Show the message dialog
-                                         auto msg = Windows::UI::Popups::MessageDialog(message, title);
-                                         // Set the command to be invoked when a user presses 'ESC'
-                                         msg.CancelCommandIndex(1);
-                                         msg.ShowAsync();
-                                     }));
+                                    Windows::UI::Core::DispatchedHandler([title, message]() {
+            // Show the message dialog
+            auto msg = Windows::UI::Popups::MessageDialog(message, title);
+            // Set the command to be invoked when a user presses 'ESC'
+            msg.CancelCommandIndex(1);
+            msg.ShowAsync();
+        }));
 
         return true;
     }
@@ -209,7 +211,7 @@ void RenderViewImpl::end()
 }
 
 void RenderViewImpl::OnSuspending(Windows::Foundation::IInspectable const& sender,
-                              Windows::ApplicationModel::SuspendingEventArgs const& args)
+                                  Windows::ApplicationModel::SuspendingEventArgs const& args)
 {}
 
 void RenderViewImpl::OnResuming(Windows::Foundation::IInspectable const& sender) {}
@@ -263,7 +265,7 @@ bool RenderViewImpl::AppShouldExit()
 }
 
 void RenderViewImpl::OnPointerPressed(Windows::UI::Core::CoreWindow const& sender,
-                                  Windows::UI::Core::PointerEventArgs const& args)
+                                      Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerPressed(args);
 }
@@ -276,7 +278,7 @@ void RenderViewImpl::OnPointerPressed(Windows::UI::Core::PointerEventArgs const&
 }
 
 void RenderViewImpl::OnPointerWheelChanged(Windows::UI::Core::CoreWindow const& sender,
-                                       Windows::UI::Core::PointerEventArgs const& args)
+                                           Windows::UI::Core::PointerEventArgs const& args)
 {
     float direction = (float)args.CurrentPoint().Properties().MouseWheelDelta();
     intptr_t id     = 0;
@@ -288,19 +290,19 @@ void RenderViewImpl::OnPointerWheelChanged(Windows::UI::Core::CoreWindow const& 
 }
 
 void RenderViewImpl::OnVisibilityChanged(Windows::UI::Core::CoreWindow const& sender,
-                                     Windows::UI::Core::VisibilityChangedEventArgs const& args)
+                                         Windows::UI::Core::VisibilityChangedEventArgs const& args)
 {
     m_windowVisible = args.Visible();
 }
 
 void RenderViewImpl::OnWindowClosed(Windows::UI::Core::CoreWindow const& sender,
-                                Windows::UI::Core::CoreWindowEventArgs const& args)
+                                    Windows::UI::Core::CoreWindowEventArgs const& args)
 {
     m_windowClosed = true;
 }
 
 void RenderViewImpl::OnPointerMoved(Windows::UI::Core::CoreWindow const& sender,
-                                Windows::UI::Core::PointerEventArgs const& args)
+                                    Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerMoved(args);
 }
@@ -326,7 +328,7 @@ void RenderViewImpl::OnPointerMoved(Windows::UI::Core::PointerEventArgs const& a
 }
 
 void RenderViewImpl::OnPointerReleased(Windows::UI::Core::CoreWindow const& sender,
-                                   Windows::UI::Core::PointerEventArgs const& args)
+                                       Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerReleased(args);
 }
@@ -418,7 +420,7 @@ void ax::RenderViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs
     Vec2 pt = GetPoint(args);
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
     // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
-    float delta   = static_cast<float>(args.CurrentPoint().Properties().MouseWheelDelta());
+    float delta = static_cast<float>(args.CurrentPoint().Properties().MouseWheelDelta());
     if (args.CurrentPoint().Properties().IsHorizontalMouseWheel())
     {
         event.setScrollData(delta / WHEEL_DELTA, 0.0f);
@@ -596,4 +598,4 @@ void RenderViewImpl::queueOperation(AsyncOperation op, void* param)
         mQueueOperationCb(std::move(op), param);
 }
 
-}
+}  // namespace ax

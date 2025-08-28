@@ -43,7 +43,7 @@ static AppDelegate s_sharedApplication;
 
     ax::Application* app = ax::Application::getInstance();
     app->initGfxContextAttrs();
-    
+
     // Override point for customization after application launch.
 
     auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");

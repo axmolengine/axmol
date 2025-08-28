@@ -1,4 +1,4 @@
- /****************************************************************************
+/****************************************************************************
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -359,7 +359,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dict,
         }
     }
 
-    Texture2D* texture                                                        = nullptr;
+    Texture2D* texture                                                    = nullptr;
     static std::unordered_map<std::string, rhi::PixelFormat> pixelFormats = {
         {"RGBA8888", rhi::PixelFormat::RGBA8},
         {"RGBA4444", rhi::PixelFormat::RGBA4},
@@ -374,7 +374,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dict,
     const auto pixelFormatIt = pixelFormats.find(pixelFormatName);
     if (pixelFormatIt != pixelFormats.end())
     {
-        const rhi::PixelFormat pixelFormat        = (*pixelFormatIt).second;
+        const rhi::PixelFormat pixelFormat = (*pixelFormatIt).second;
         texture = Director::getInstance()->getTextureCache()->addImage(texturePath, pixelFormat);
     }
     else
@@ -506,4 +506,4 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
     }
 }
 
-}
+}  // namespace ax

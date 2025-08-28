@@ -28,7 +28,8 @@
 
 #include "xxhash/xxhash.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 
 static ShaderCache* s_instance;
 
@@ -70,8 +71,8 @@ rhi::ShaderModule* ShaderCache::acquireFragmentShaderModule(std::string_view sha
 
 rhi::ShaderModule* ShaderCache::acquireShaderModule(rhi::ShaderStage stage, std::string_view shaderSource)
 {
-    const auto key = XXH64(shaderSource.data(), shaderSource.size(), 0);
-    const auto iter       = _cachedShaders.find(key);
+    const auto key  = XXH64(shaderSource.data(), shaderSource.size(), 0);
+    const auto iter = _cachedShaders.find(key);
 
     if (_cachedShaders.end() != iter)
     {
@@ -107,4 +108,4 @@ void ShaderCache::removeUnusedShader()
     }
 }
 
-}
+}  // namespace ax::rhi

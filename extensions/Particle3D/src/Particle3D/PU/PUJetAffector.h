@@ -60,5 +60,4 @@ protected:
      */
     PUDynamicAttribute* _dynAcceleration;
 };
-}
-
+}  // namespace ax

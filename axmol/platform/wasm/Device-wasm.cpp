@@ -65,8 +65,8 @@ Data Device::getTextureDataForText(std::string_view text,
                                    bool& hasPremultipliedAlpha)
 {
     char color[10];
-    fmt::format_to_z(color, "#{:02x}{:02x}{:02x}{:02x}", textDefinition._fontFillColor.r, textDefinition._fontFillColor.g,
-            textDefinition._fontFillColor.b, textDefinition._fontFillColor.a);
+    fmt::format_to_z(color, "#{:02x}{:02x}{:02x}{:02x}", textDefinition._fontFillColor.r,
+                     textDefinition._fontFillColor.g, textDefinition._fontFillColor.b, textDefinition._fontFillColor.a);
     // clang-format off
     unsigned char* ptr = (unsigned char*)EM_ASM_PTR({
         var lines = UTF8ToString($0).split("\n");

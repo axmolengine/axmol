@@ -281,4 +281,4 @@ void PUBoxCollider::copyAttributesTo(PUAffector* affector)
     boxCollider->_innerCollision = _innerCollision;
 }
 
-}
+}  // namespace ax

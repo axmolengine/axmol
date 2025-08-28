@@ -292,11 +292,11 @@ void TriggerObj::serialize(cocostudio::CocoLoader* pCocoLoader, cocostudio::stEx
 
                 EventListenerCustom* listener =
                     EventListenerCustom::create(custom_event_name, [this](EventCustom* /*evt*/) {
-                        if (detect())
-                        {
-                            done();
-                        }
-                    });
+                    if (detect())
+                    {
+                        done();
+                    }
+                });
                 _listeners.pushBack(listener);
                 TriggerMng::getInstance()->addEventListenerWithFixedPriority(listener, 1);
             }

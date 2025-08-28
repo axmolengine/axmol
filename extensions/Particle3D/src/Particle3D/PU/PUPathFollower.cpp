@@ -83,4 +83,4 @@ void PUPathFollower::copyAttributesTo(PUAffector* affector)
     }
 }
 
-}
+}  // namespace ax

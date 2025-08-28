@@ -566,7 +566,8 @@ void Scene3DTestScene::createPlayerDlg()
     item->setScale(1.5);
     item->setAnchorPoint(itemAnchor);
     item->setPosition(itemPos);
-    item->addClickEventListener([this](Object* sender) { this->_detailDlg->setVisible(!this->_detailDlg->isVisible()); });
+    item->addClickEventListener(
+        [this](Object* sender) { this->_detailDlg->setVisible(!this->_detailDlg->isVisible()); });
     _playerDlg->addChild(item);
 
     // second, add 3d actor, which on dialog layer
@@ -643,21 +644,19 @@ void Scene3DTestScene::createDetailDlg()
         Director::getInstance()->getTextureCache()->removeTextureForKey(_snapshotFile);
         _osdScene->removeChildByTag(SNAPSHOT_TAG);
         _snapshotFile = "CaptureScreenTest.png";
-        utils::captureScreen(
-            [this](bool succeed, std::string_view outputFile) {
-                if (!succeed)
-                {
-                    AXLOGW("Capture screen failed.");
-                    return;
-                }
-                auto sp = Sprite::create(outputFile);
-                _osdScene->addChild(sp, 0, SNAPSHOT_TAG);
-                Size s = Director::getInstance()->getWinSize();
-                sp->setPosition(s.width / 2, s.height / 2);
-                sp->setScale(0.25);
-                _snapshotFile = outputFile;
-            },
-            _snapshotFile);
+        utils::captureScreen([this](bool succeed, std::string_view outputFile) {
+            if (!succeed)
+            {
+                AXLOGW("Capture screen failed.");
+                return;
+            }
+            auto sp = Sprite::create(outputFile);
+            _osdScene->addChild(sp, 0, SNAPSHOT_TAG);
+            Size s = Director::getInstance()->getWinSize();
+            sp->setPosition(s.width / 2, s.height / 2);
+            sp->setScale(0.25);
+            _snapshotFile = outputFile;
+        }, _snapshotFile);
     });
     capture->setTitleText("Take Snapshot");
     capture->setName("Take Snapshot");

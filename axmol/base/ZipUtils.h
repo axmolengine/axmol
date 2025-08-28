@@ -77,7 +77,7 @@ enum
 class AX_DLL ZipUtils
 {
 public:
-    template<typename _Ty, size_t _Extent = std::dynamic_extent>
+    template <typename _Ty, size_t _Extent = std::dynamic_extent>
     inline static yasio::byte_buffer compressGZ(std::span<_Ty, _Extent> in, int level = -1)
     {
         return compressGZ(in.data(), in.size_bytes(), level);
@@ -309,19 +309,19 @@ public:
     void vclose(ZipEntryInfo*);
     int64_t vsize(ZipEntryInfo*);
 
-    static ZipFile *createWithBuffer(const void* buffer, unsigned long size);
+    static ZipFile* createWithBuffer(const void* buffer, unsigned long size);
 
 private:
     ZipFile();
 
-    bool initWithBuffer(const void *buffer, unsigned long size);
+    bool initWithBuffer(const void* buffer, unsigned long size);
     int getCurrentFileInfo(std::string* filename, unz_file_info_s* info);
 
     /** Internal data like zip file pointer / file list array and so on */
     ZipFilePrivate* _data;
 };
 
-} // end of namespace ax
+}  // end of namespace ax
 
 // end group
 /// @}

@@ -33,7 +33,8 @@
 
 #include "xxhash/xxhash.h"
 
-namespace ax {
+namespace ax
+{
 
 ProgramManager* ProgramManager::_instance = nullptr;
 
@@ -128,10 +129,10 @@ void ProgramManager::init()
                     VertexLayoutKind::Texture);
     registerProgram(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert,
                     positionTextureColorAlphaTest_frag, VertexLayoutKind::Sprite);
-    registerProgram(ProgramType::POSITION_TEXTURE_GRAY_ALPHA, positionTextureColor_vert,
-                    positionTextureGrayAlpha_frag, VertexLayoutKind::Sprite);
-    registerProgram(ProgramType::POSITION_TEXTURE_GRAY, positionTextureColor_vert,
-                    positionTextureGray_frag, VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::POSITION_TEXTURE_GRAY_ALPHA, positionTextureColor_vert, positionTextureGrayAlpha_frag,
+                    VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::POSITION_TEXTURE_GRAY, positionTextureColor_vert, positionTextureGray_frag,
+                    VertexLayoutKind::Sprite);
     registerProgram(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag, VertexLayoutKind::Pos);
     registerProgram(ProgramType::DUAL_SAMPLER_GRAY, positionTextureColor_vert, dualSampler_gray_frag,
                     VertexLayoutKind::Sprite);
@@ -145,10 +146,8 @@ void ProgramManager::init()
                     colorNormalTexture_frag, VertexLayoutKind::Invalid);
     registerProgram(ProgramType::POSITION_NORMAL_TEXTURE_3D, positionNormalTexture_vert, colorNormalTexture_frag,
                     VertexLayoutKind::Invalid);
-    registerProgram(ProgramType::UNLIT, unlit_vert, colorTexture_frag,
-                    VertexLayoutKind::Invalid);
-    registerProgram(ProgramType::UNLIT_INSTANCE, unlit_instance_vert, colorTexture_frag,
-                    VertexLayoutKind::Instanced);
+    registerProgram(ProgramType::UNLIT, unlit_vert, colorTexture_frag, VertexLayoutKind::Invalid);
+    registerProgram(ProgramType::UNLIT_INSTANCE, unlit_instance_vert, colorTexture_frag, VertexLayoutKind::Instanced);
     registerProgram(ProgramType::POSITION_3D, position_vert, color_frag, VertexLayoutKind::Invalid);
     registerProgram(ProgramType::POSITION_NORMAL_3D, positionNormalTexture_vert, colorNormal_frag,
                     VertexLayoutKind::Invalid);
@@ -329,4 +328,4 @@ void ProgramManager::unloadAllPrograms()
     _cachedPrograms.clear();
 }
 
-}
+}  // namespace ax

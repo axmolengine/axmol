@@ -49,7 +49,7 @@ namespace ax
 
 ParticleBatchNode::ParticleBatchNode()
 {
-    auto program    = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
+    auto program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR);
     //!!! ParticleBatchNode private programState don't want affect by Node::_programState, so store at _customCommand
     //!!! support etc1 with alpha?
     auto ps = new rhi::ProgramState(program);
@@ -436,8 +436,8 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
 
     // Texture is set in TextureAtlas.
     const ax::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    Mat4 finalMat                      = projectionMat * transform;
-    auto programState                  = _customCommand.unsafePS();
+    Mat4 finalMat                 = projectionMat * transform;
+    auto programState             = _customCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(finalMat.m));
     if (_textureAtlas->isDirty())
     {
@@ -462,7 +462,7 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
 void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
 {
     AXLOGD("axmol: ParticleBatchNode: resizing TextureAtlas capacity from [{}] to [{}].",
-          (int)_textureAtlas->getCapacity(), (int)quantity);
+           (int)_textureAtlas->getCapacity(), (int)quantity);
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
@@ -475,7 +475,7 @@ void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
 // sets a 0'd quad into the quads array
 void ParticleBatchNode::disableParticle(int particleIndex)
 {
-    auto quad = &((_textureAtlas->getQuads())[particleIndex]);
+    auto quad           = &((_textureAtlas->getQuads())[particleIndex]);
     quad->br.position.x = quad->br.position.y = quad->tr.position.x = quad->tr.position.y = quad->tl.position.x =
         quad->tl.position.y = quad->bl.position.x = quad->bl.position.y = 0.0f;
 }
@@ -563,4 +563,4 @@ const BlendFunc& ParticleBatchNode::getBlendFunc() const
     return _blendFunc;
 }
 
-}
+}  // namespace ax

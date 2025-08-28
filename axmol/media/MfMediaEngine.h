@@ -13,19 +13,19 @@
 #pragma once
 
 #if defined(_WIN32)
-#include <winapifamily.h>
-#include "axmol/media/MediaEngine.h"
+#    include <winapifamily.h>
+#    include "axmol/media/MediaEngine.h"
 
 #    if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP || defined(AXME_USE_IMFME))
 
-#include <stdint.h>
-#include <mfapi.h>
+#        include <stdint.h>
+#        include <mfapi.h>
 
-#include <mfmediaengine.h>
-#include <wincodec.h>
-#include <wrl/client.h>
+#        include <mfmediaengine.h>
+#        include <wincodec.h>
+#        include <wrl/client.h>
 
-#include "axmol/media/MFUtils.h"
+#        include "axmol/media/MFUtils.h"
 
 namespace ax
 {
@@ -71,7 +71,7 @@ public:
     }
 
     void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
-                     std::function<void(const MEVideoFrame&)> onVideoFrame) override
+                      std::function<void(const MEVideoFrame&)> onVideoFrame) override
     {
         _onMediaEvent = std::move(onMediaEvent);
         _onVideoFrame = std::move(onVideoFrame);
@@ -114,11 +114,11 @@ private:
 
     MFARGB m_bkgColor;
 
-    bool m_readyToPlay = false;
-    bool m_stopping = false;
+    bool m_readyToPlay    = false;
+    bool m_stopping       = false;
     bool m_bPlaybackEnded = false;
 
-    bool m_autoPlay = false;
+    bool m_autoPlay      = false;
     MEMediaState m_state = MEMediaState::Closed;
 
     MEIntPoint m_videoExtent;
@@ -127,20 +127,18 @@ private:
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
 };
 
-struct MfMediaEngineFactory : public MediaEngineFactory {
+struct MfMediaEngineFactory : public MediaEngineFactory
+{
     MediaEngine* createMediaEngine() override
     {
         auto engine = new MfMediaEngine();
         engine->Initialize();
         return engine;
     }
-    void destroyMediaEngine(MediaEngine* me) override
-    {
-        delete static_cast<MfMediaEngine*>(me);
-    }
+    void destroyMediaEngine(MediaEngine* me) override { delete static_cast<MfMediaEngine*>(me); }
 };
 
-}
+}  // namespace ax
 
-#endif
+#    endif
 #endif

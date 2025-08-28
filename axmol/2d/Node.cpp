@@ -207,7 +207,8 @@ bool Node::init()
     return true;
 }
 
-bool Node::initLayer() {
+bool Node::initLayer()
+{
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
     setContentSize(_director->getWinSize());
@@ -672,7 +673,7 @@ bool Node::isRunning() const
 /// parent setter
 void Node::setParent(Node* parent)
 {
-    _parent           = parent;
+    _parent                  = parent;
     _normalizedPositionDirty = true;
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
@@ -1945,7 +1946,8 @@ void Node::setWorldPosition(const Vec2& position)
         auto v = m.getInversed() * (Vec3(-m.m[12], -m.m[13], 0) + Vec3(position.x, position.y, 0));
         setPosition(Vec2(v.x, v.y));
     }
-    else setPosition(position);
+    else
+        setPosition(position);
 }
 
 void Node::updateTransform()
@@ -2076,7 +2078,7 @@ void Node::updateCascadeOpacity()
 
 void Node::disableCascadeOpacity()
 {
-  _displayedColor.a = _realColor.a;
+    _displayedColor.a = _realColor.a;
 
     for (const auto& child : _children)
     {
@@ -2247,7 +2249,7 @@ void Node::setProgramStateWithRegistry(uint32_t programType, Texture2D* texture)
     setProgramState(programState, true);
 }
 
-bool Node::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
+bool Node::setProgramState(rhi::ProgramState* programState, bool ownPS /* = false*/)
 {
     if (_programState != programState)
     {
@@ -2287,4 +2289,4 @@ rhi::ProgramState* Node::getProgramState() const
     return _programState;
 }
 
-}
+}  // namespace ax

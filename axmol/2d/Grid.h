@@ -300,4 +300,4 @@ protected:
 // end of effects group
 /// @}
 
-}
+}  // namespace ax

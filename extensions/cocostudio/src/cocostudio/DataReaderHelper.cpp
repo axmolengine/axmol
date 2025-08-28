@@ -459,7 +459,7 @@ void DataReaderHelper::addDataAsyncCallBack(float /*dt*/)
             pDataInfo->configFileQueue.pop();
         }
 
-        Object* target           = pAsyncStruct->target;
+        Object* target        = pAsyncStruct->target;
         SEL_SCHEDULE selector = pAsyncStruct->selector;
 
         --_asyncRefCount;
@@ -590,7 +590,7 @@ ArmatureData* DataReaderHelper::decodeArmature(pugi::xml_node& armatureXML, Data
         pugi::xml_node parentXML;
         if (!parentName.empty())
         {
-            parentXML                 = armatureXML.child(BONE);
+            parentXML          = armatureXML.child(BONE);
             auto parentNameStr = parentName;
             while (parentXML)
             {
@@ -713,8 +713,8 @@ MovementData* DataReaderHelper::decodeMovement(pugi::xml_node& movementXML,
 {
     MovementData* movementData = new MovementData();
 
-    auto movName = movementXML.attribute(A_NAME).as_string();
-    movementData->name  = movName;
+    auto movName       = movementXML.attribute(A_NAME).as_string();
+    movementData->name = movName;
 
     pugiext::query_attribute(movementXML, A_DURATION, &movementData->duration);
     pugiext::query_attribute(movementXML, A_DURATION_TO, &movementData->durationTo);
@@ -1131,7 +1131,7 @@ void DataReaderHelper::addDataFromJsonCache(std::string_view fileContent, DataIn
     json.ParseStream<0>(stream);
     if (json.HasParseError())
     {
-        AXLOGD("GetParseError {}\n",  static_cast<int>(json.GetParseError()));
+        AXLOGD("GetParseError {}\n", static_cast<int>(json.GetParseError()));
     }
 
     dataInfo->contentScale = DICTOOL->getFloatValue_json(json, CONTENT_SCALE, 1.0f);
@@ -1417,8 +1417,7 @@ MovementData* DataReaderHelper::decodeMovement(const rapidjson::Value& json, Dat
     {
         movementData->scale = DICTOOL->getFloatValue_json(json, A_MOVEMENT_SCALE, 1.0f);
     }
-    movementData->tweenEasing =
-        (TweenType)(DICTOOL->getIntValue_json(json, A_TWEEN_EASING, ax::tweenfunc::Linear));
+    movementData->tweenEasing = (TweenType)(DICTOOL->getIntValue_json(json, A_TWEEN_EASING, ax::tweenfunc::Linear));
 
     const char* name = DICTOOL->getStringValue_json(json, A_NAME);
     if (name != nullptr)

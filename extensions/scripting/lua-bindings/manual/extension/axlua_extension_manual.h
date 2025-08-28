@@ -62,4 +62,3 @@ struct LuaTableViewEventData
     // Constructor
     LuaTableViewEventData(void* _value = nullptr) : value(_value) {}
 };
-

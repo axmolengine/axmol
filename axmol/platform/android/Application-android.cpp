@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <jni.h>
 #include <cstring>
 
-#define LOG_TAG "Application_android Debug"
+#define LOG_TAG   "Application_android Debug"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 static const char* applicationHelperClassName = "dev.axmol.lib.AxmolEngine";
@@ -112,7 +112,7 @@ bool Application::openURL(std::string_view url)
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
-}
+}  // namespace ax
 
 #undef LOGD
 #undef LOG_TAG

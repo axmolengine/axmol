@@ -188,7 +188,9 @@ void ArmatureDataManager::addArmatureFileInfo(std::string_view configFilePath)
     DataReaderHelper::getInstance()->addDataFromFile(configFilePath);
 }
 
-void ArmatureDataManager::addArmatureFileInfoAsync(std::string_view configFilePath, Object* target, SEL_SCHEDULE selector)
+void ArmatureDataManager::addArmatureFileInfoAsync(std::string_view configFilePath,
+                                                   Object* target,
+                                                   SEL_SCHEDULE selector)
 {
     addRelativeData(configFilePath);
 

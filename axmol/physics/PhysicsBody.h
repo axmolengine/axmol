@@ -513,7 +513,6 @@ protected:
     void afterSimulation(const Mat4& parentToWorldTransform, float parentRotation);
 
 protected:
-
     void deatchFromWOrld();
 
     std::vector<PhysicsJoint*> _joints;
@@ -561,6 +560,6 @@ protected:
 /** @} */
 /** @} */
 
-}
+}  // namespace ax
 
 #endif  // defined(AX_ENABLE_PHYSICS)

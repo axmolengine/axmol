@@ -70,4 +70,4 @@ void PUSphere::merge(const PUSphere& oth)
     _radius = newRadius;
 }
 
-}
+}  // namespace ax

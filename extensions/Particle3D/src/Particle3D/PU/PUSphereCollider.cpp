@@ -199,4 +199,4 @@ void PUSphereCollider::copyAttributesTo(PUAffector* affector)
     sphereCollider->_innerCollision  = _innerCollision;
 }
 
-}
+}  // namespace ax

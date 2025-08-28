@@ -340,4 +340,4 @@ void PUObserver::copyAttributesTo(PUObserver* observer)
     }
 }
 
-}
+}  // namespace ax

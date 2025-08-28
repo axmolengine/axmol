@@ -79,4 +79,3 @@ protected:
     cocostudio::timeline::ActionTimelineData* _timelineData;
 };
 }  // namespace cocostudio
-

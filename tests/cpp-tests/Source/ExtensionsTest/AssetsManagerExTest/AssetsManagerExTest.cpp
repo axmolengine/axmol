@@ -30,9 +30,9 @@ using namespace ax;
 USING_NS_AX_EXT;
 
 const char* sceneManifests[]  = {"Manifests/AMTestScene1/project.manifest", "Manifests/AMTestScene2/project.manifest",
-                                "Manifests/AMTestScene3/project.manifest"};
+                                 "Manifests/AMTestScene3/project.manifest"};
 const char* storagePaths[]    = {"CppTests/AssetsManagerExTest/scene1/", "CppTests/AssetsManagerExTest/scene2/",
-                              "CppTests/AssetsManagerExTest/scene3"};
+                                 "CppTests/AssetsManagerExTest/scene3"};
 const char* backgroundPaths[] = {"Images/assetMgrBackground1.jpg", "Images/assetMgrBackground2.png",
                                  "Images/assetMgrBackground3.png"};
 
@@ -126,84 +126,83 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Object* sender)
     }
     else
     {
-        _amListener =
-            ax::extension::EventListenerAssetsManagerEx::create(_am, [this](EventAssetsManagerEx* event) {
-                static int failCount = 0;
-                switch (event->getEventCode())
+        _amListener = ax::extension::EventListenerAssetsManagerEx::create(_am, [this](EventAssetsManagerEx* event) {
+            static int failCount = 0;
+            switch (event->getEventCode())
+            {
+            case EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST:
+            {
+                AXLOGD("No local manifest file found, skip assets update.");
+                this->onLoadEnd();
+            }
+            break;
+            case EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION:
+            {
+                std::string assetId = event->getAssetId();
+                float percent       = event->getPercent();
+                std::string str;
+                if (assetId == AssetsManagerEx::VERSION_ID)
                 {
-                case EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST:
-                {
-                    AXLOGD("No local manifest file found, skip assets update.");
-                    this->onLoadEnd();
+                    str = fmt::format("Version file: {:.2}%", percent);
                 }
-                break;
-                case EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION:
+                else if (assetId == AssetsManagerEx::MANIFEST_ID)
                 {
-                    std::string assetId = event->getAssetId();
-                    float percent       = event->getPercent();
-                    std::string str;
-                    if (assetId == AssetsManagerEx::VERSION_ID)
-                    {
-                        str = fmt::format("Version file: {:.2}%", percent);
-                    }
-                    else if (assetId == AssetsManagerEx::MANIFEST_ID)
-                    {
-                        str = fmt::format("Manifest file: {:.2}%", percent);
-                    }
-                    else
-                    {
-                        str = fmt::format("{:.2}%", percent);
-                        AXLOGD("{:.2} Percent", percent);
-                    }
-                    if (this->_progress != nullptr)
-                        this->_progress->setString(str);
+                    str = fmt::format("Manifest file: {:.2}%", percent);
                 }
-                break;
-                case EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST:
-                case EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST:
+                else
                 {
-                    AXLOGD("Fail to download manifest file, update skipped.");
-                    this->onLoadEnd();
+                    str = fmt::format("{:.2}%", percent);
+                    AXLOGD("{:.2} Percent", percent);
                 }
-                break;
-                case EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE:
-                case EventAssetsManagerEx::EventCode::UPDATE_FINISHED:
-                {
-                    AXLOGD("Update finished. {}", event->getMessage());
-                    this->onLoadEnd();
-                }
-                break;
-                case EventAssetsManagerEx::EventCode::UPDATE_FAILED:
-                {
-                    AXLOGD("Update failed. {}", event->getMessage());
+                if (this->_progress != nullptr)
+                    this->_progress->setString(str);
+            }
+            break;
+            case EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST:
+            case EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST:
+            {
+                AXLOGD("Fail to download manifest file, update skipped.");
+                this->onLoadEnd();
+            }
+            break;
+            case EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE:
+            case EventAssetsManagerEx::EventCode::UPDATE_FINISHED:
+            {
+                AXLOGD("Update finished. {}", event->getMessage());
+                this->onLoadEnd();
+            }
+            break;
+            case EventAssetsManagerEx::EventCode::UPDATE_FAILED:
+            {
+                AXLOGD("Update failed. {}", event->getMessage());
 
-                    failCount++;
-                    if (failCount < 5)
-                    {
-                        _am->downloadFailedAssets();
-                    }
-                    else
-                    {
-                        AXLOGD("Reach maximum fail count, exit update process");
-                        failCount = 0;
-                        this->onLoadEnd();
-                    }
-                }
-                break;
-                case EventAssetsManagerEx::EventCode::ERROR_UPDATING:
+                failCount++;
+                if (failCount < 5)
                 {
-                    AXLOGD("Asset {} : {}", event->getAssetId().c_str(), event->getMessage());
+                    _am->downloadFailedAssets();
                 }
-                break;
-                case EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS:
+                else
                 {
-                    AXLOGD("{}", event->getMessage());
+                    AXLOGD("Reach maximum fail count, exit update process");
+                    failCount = 0;
+                    this->onLoadEnd();
                 }
+            }
+            break;
+            case EventAssetsManagerEx::EventCode::ERROR_UPDATING:
+            {
+                AXLOGD("Asset {} : {}", event->getAssetId().c_str(), event->getMessage());
+            }
+            break;
+            case EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS:
+            {
+                AXLOGD("{}", event->getMessage());
+            }
+            break;
+            default:
                 break;
-                default:
-                    break;
-                }
-            });
+            }
+        });
         Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_amListener, 1);
 
         _am->update();

@@ -113,4 +113,4 @@ protected:
 
 /// @endcond
 
-}
+}  // namespace ax

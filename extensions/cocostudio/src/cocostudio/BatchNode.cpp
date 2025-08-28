@@ -44,9 +44,7 @@ BatchNode* BatchNode::create()
     return nullptr;
 }
 BatchNode::BatchNode() /*: _groupCommand(nullptr)*/ {}
-BatchNode::~BatchNode()
-{
-}
+BatchNode::~BatchNode() {}
 
 bool BatchNode::init()
 {

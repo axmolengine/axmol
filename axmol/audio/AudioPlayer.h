@@ -100,4 +100,4 @@ protected:
     friend class AudioEngineImpl;
 };
 
-}
+}  // namespace ax

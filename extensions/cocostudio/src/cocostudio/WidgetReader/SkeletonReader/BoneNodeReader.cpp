@@ -65,7 +65,7 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto temp        = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
 
-    float length                 = 0;
+    float length            = 0;
     ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
 
     auto attribute = objectData.first_attribute();
@@ -91,7 +91,7 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (battribute)
             {
-                name              = battribute.name();
+                name                   = battribute.name();
                 std::string_view value = battribute.value();
 
                 if (name == "Src")
@@ -129,8 +129,8 @@ void BoneNodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
     if (f_blendFunc)
     {
         ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
-        blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
-        blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
+        blendFunc.src           = utils::toBackendBlendFactor(f_blendFunc->src());
+        blendFunc.dst           = utils::toBackendBlendFactor(f_blendFunc->dst());
         bone->setBlendFunc(blendFunc);
     }
 }

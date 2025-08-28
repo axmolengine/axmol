@@ -28,4 +28,3 @@
 #include "axmol/platform/PlatformDefine.h"
 
 #define AX_GUI_DLL AX_API
-

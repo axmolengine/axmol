@@ -92,22 +92,70 @@ void LayoutReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
         // read all color related properties of widget
         AX_COLOR_PROPERTY_BINARY_READER
 
-        else if (key == P_AdaptScreen) { _isAdaptScreen = valueToBool(value); }
-        else if (key == P_ClipAble) { panel->setClippingEnabled(valueToBool(value)); }
-        else if (key == P_BackGroundScale9Enable) { panel->setBackGroundImageScale9Enabled(valueToBool(value)); }
-        else if (key == P_BgColorR) { cr = valueToInt(value); }
-        else if (key == P_BgColorG) { cg = valueToInt(value); }
-        else if (key == P_BgColorB) { cb = valueToInt(value); }
-        else if (key == P_BgStartColorR) { scr = valueToInt(value); }
-        else if (key == P_BgStartColorG) { scg = valueToInt(value); }
-        else if (key == P_BgStartColorB) { scb = valueToInt(value); }
-        else if (key == P_BgEndColorR) { ecr = valueToInt(value); }
-        else if (key == P_BgEndColorG) { ecg = valueToInt(value); }
-        else if (key == P_BgEndColorB) { ecb = valueToInt(value); }
-        else if (key == P_VectorX) { bgcv1 = valueToFloat(value); }
-        else if (key == P_VectorY) { bgcv2 = valueToFloat(value); }
-        else if (key == P_BgColorOpacity) { bgColorOpacity = valueToInt(value); }
-        else if (key == P_ColorType) { panel->setBackGroundColorType(Layout::BackGroundColorType(valueToInt(value))); }
+        else if (key == P_AdaptScreen)
+        {
+            _isAdaptScreen = valueToBool(value);
+        }
+        else if (key == P_ClipAble)
+        {
+            panel->setClippingEnabled(valueToBool(value));
+        }
+        else if (key == P_BackGroundScale9Enable)
+        {
+            panel->setBackGroundImageScale9Enabled(valueToBool(value));
+        }
+        else if (key == P_BgColorR)
+        {
+            cr = valueToInt(value);
+        }
+        else if (key == P_BgColorG)
+        {
+            cg = valueToInt(value);
+        }
+        else if (key == P_BgColorB)
+        {
+            cb = valueToInt(value);
+        }
+        else if (key == P_BgStartColorR)
+        {
+            scr = valueToInt(value);
+        }
+        else if (key == P_BgStartColorG)
+        {
+            scg = valueToInt(value);
+        }
+        else if (key == P_BgStartColorB)
+        {
+            scb = valueToInt(value);
+        }
+        else if (key == P_BgEndColorR)
+        {
+            ecr = valueToInt(value);
+        }
+        else if (key == P_BgEndColorG)
+        {
+            ecg = valueToInt(value);
+        }
+        else if (key == P_BgEndColorB)
+        {
+            ecb = valueToInt(value);
+        }
+        else if (key == P_VectorX)
+        {
+            bgcv1 = valueToFloat(value);
+        }
+        else if (key == P_VectorY)
+        {
+            bgcv2 = valueToFloat(value);
+        }
+        else if (key == P_BgColorOpacity)
+        {
+            bgColorOpacity = valueToInt(value);
+        }
+        else if (key == P_ColorType)
+        {
+            panel->setBackGroundColorType(Layout::BackGroundColorType(valueToInt(value)));
+        }
         else if (key == P_BackGroundImageData)
         {
 
@@ -122,11 +170,26 @@ void LayoutReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLo
                 panel->setBackGroundImage(backgroundValue, imageFileNameType);
             }
         }
-        else if (key == P_CapInsetsX) { capsx = valueToFloat(value); }
-        else if (key == P_CapInsetsY) { capsy = valueToFloat(value); }
-        else if (key == P_CapInsetsWidth) { capsWidth = valueToFloat(value); }
-        else if (key == P_CapInsetsHeight) { capsHeight = valueToFloat(value); }
-        else if (key == P_LayoutType) { layoutType = (Layout::Type)valueToInt(value); }
+        else if (key == P_CapInsetsX)
+        {
+            capsx = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsY)
+        {
+            capsy = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsWidth)
+        {
+            capsWidth = valueToFloat(value);
+        }
+        else if (key == P_CapInsetsHeight)
+        {
+            capsHeight = valueToFloat(value);
+        }
+        else if (key == P_LayoutType)
+        {
+            layoutType = (Layout::Type)valueToInt(value);
+        }
     }
 
     panel->setBackGroundColor(Color32(scr, scg, scb, 255), Color32(ecr, ecg, ecb, 255));
@@ -281,9 +344,9 @@ void LayoutReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
         panel->setLayoutType((Layout::Type)DICTOOL->getIntValue_json(options, P_LayoutType));
     }
 
-    int bgimgcr = DICTOOL->getIntValue_json(options, P_ColorR, 255);
-    int bgimgcg = DICTOOL->getIntValue_json(options, P_ColorG, 255);
-    int bgimgcb = DICTOOL->getIntValue_json(options, P_ColorB, 255);
+    int bgimgcr      = DICTOOL->getIntValue_json(options, P_ColorR, 255);
+    int bgimgcg      = DICTOOL->getIntValue_json(options, P_ColorG, 255);
+    int bgimgcb      = DICTOOL->getIntValue_json(options, P_ColorB, 255);
     int bgimgopacity = DICTOOL->getIntValue_json(options, P_Opacity, 255);
     panel->setBackGroundImageColor(Color32(bgimgcr, bgimgcg, bgimgcb, bgimgopacity));
 
@@ -300,11 +363,11 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     std::string plistFile;
     int resourceType = 0;
 
-    bool clipEnabled = false;
-    Color32 bgColor = Color32::WHITE;
+    bool clipEnabled     = false;
+    Color32 bgColor      = Color32::WHITE;
     Color32 bgStartColor = Color32::WHITE;
-    Color32 bgEndColor = Color32::WHITE;
-    int colorType          = 0;
+    Color32 bgEndColor   = Color32::WHITE;
+    int colorType        = 0;
     Vec2 colorVector(0.0f, -0.5f);
     Rect capInsets;
     Size scale9Size;
@@ -368,7 +431,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "X")
@@ -389,7 +452,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "R")
@@ -414,7 +477,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "R")
@@ -439,7 +502,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "R")
@@ -463,7 +526,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             attribute = child.first_attribute();
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "ScaleX")
@@ -487,7 +550,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -527,8 +590,8 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     auto options = CreatePanelOptions(
         *builder, widgetOptions,
         CreateResourceData(*builder, builder->CreateString(path), builder->CreateString(plistFile), resourceType),
-        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColor.a, &f_colorVector,
-        &f_capInsets, &f_scale9Size, backGroundScale9Enabled);
+        clipEnabled, &f_bgColor, &f_bgStartColor, &f_bgEndColor, colorType, bgColor.a, &f_colorVector, &f_capInsets,
+        &f_scale9Size, backGroundScale9Enabled);
 
     return *(Offset<Table>*)(&options);
 }
@@ -544,7 +607,7 @@ void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     bool backGroundScale9Enabled = options->backGroundScale9Enabled() != 0;
     panel->setBackGroundImageScale9Enabled(backGroundScale9Enabled);
 
-    int bgColorOpacity = options->bgColorOpacity(); // FIXME: redundant field, use f_bgColor->a()
+    int bgColorOpacity = options->bgColorOpacity();  // FIXME: redundant field, use f_bgColor->a()
 
     auto f_bgColor = options->bgColor();
     Color32 bgColor(f_bgColor->r(), f_bgColor->g(), f_bgColor->b(), bgColorOpacity);
@@ -556,8 +619,6 @@ void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
     auto f_colorVecor = options->colorVector();
     Vec2 colorVector(f_colorVecor->x(), f_colorVecor->y());
     panel->setBackGroundColorVector(colorVector);
-
-
 
     int colorType = options->colorType();
     panel->setBackGroundColorType(Layout::BackGroundColorType(colorType));
@@ -628,7 +689,7 @@ void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
 
     auto widgetOptions = options->widgetOptions();
     auto f_color       = widgetOptions->color();
-    int opacity = widgetOptions->alpha(); // FIXME: redundant field, use f_color->a() ?
+    int opacity        = widgetOptions->alpha();  // FIXME: redundant field, use f_color->a() ?
     Color32 color(f_color->r(), f_color->g(), f_color->b(), opacity);
     panel->setColor(color);
 

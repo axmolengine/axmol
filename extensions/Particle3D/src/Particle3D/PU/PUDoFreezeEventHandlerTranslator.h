@@ -37,11 +37,10 @@ class PUDoFreezeEventHandlerTranslator : public PUScriptTranslator
 {
 public:
     PUDoFreezeEventHandlerTranslator();
-    virtual ~PUDoFreezeEventHandlerTranslator(){};
+    virtual ~PUDoFreezeEventHandlerTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

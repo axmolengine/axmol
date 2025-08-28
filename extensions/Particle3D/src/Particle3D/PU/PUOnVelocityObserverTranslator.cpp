@@ -81,4 +81,4 @@ bool PUOnVelocityObserverTranslator::translateChildObject(PUScriptCompiler* /*co
     return false;
 }
 
-}
+}  // namespace ax

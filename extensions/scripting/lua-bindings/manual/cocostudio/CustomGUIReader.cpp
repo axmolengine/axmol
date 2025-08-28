@@ -41,7 +41,7 @@ CustomGUIReader* CustomGUIReader::create(std::string& className, int createFunc,
 
 Object* CustomGUIReader::createInstance()
 {
-    Object* result     = nullptr;
+    Object* result  = nullptr;
     LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
     stack->executeFunction(_createFunc, 0, 1, [&result](lua_State* L, int numReturn) {
         result = static_cast<Object*>(tolua_tousertype(L, -1, nullptr));

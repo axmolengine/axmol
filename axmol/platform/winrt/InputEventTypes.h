@@ -26,10 +26,8 @@ THE SOFTWARE.
 
 #pragma once
 
-
 namespace ax
 {
-
 
 enum class AxmolKeyEvent : int
 {
@@ -40,6 +38,3 @@ enum class AxmolKeyEvent : int
 };
 
 }
-
-
-

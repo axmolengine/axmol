@@ -46,4 +46,4 @@ bool PUFlockCenteringAffectorTranslator::translateChildObject(PUScriptCompiler* 
     return false;
 }
 
-}
+}  // namespace ax

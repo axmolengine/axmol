@@ -127,7 +127,7 @@ void SpriteBatchNode::setVertexLayout()
     Object::adopt(_vertexLayout, axvlm->acquireBuiltinVertexLayout(rhi::VertexLayoutKind::Sprite));
 }
 
-bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
+bool SpriteBatchNode::setProgramState(rhi::ProgramState* programState, bool ownPS /* = false*/)
 {
     AXASSERT(programState, "programState should not be nullptr");
     if (Node::setProgramState(programState, ownPS))
@@ -442,7 +442,7 @@ void SpriteBatchNode::increaseAtlasCapacity()
     ssize_t quantity = (_textureAtlas->getCapacity() + 1) * 4 / 3;
 
     AXLOGD("SpriteBatchNode: resizing TextureAtlas capacity from [{}] to [{}].",
-          static_cast<int>(_textureAtlas->getCapacity()), static_cast<int>(quantity));
+           static_cast<int>(_textureAtlas->getCapacity()), static_cast<int>(quantity));
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
@@ -785,4 +785,4 @@ std::string SpriteBatchNode::getDescription() const
     return fmt::format("<SpriteBatchNode | tag = {}>", _tag);
 }
 
-}
+}  // namespace ax

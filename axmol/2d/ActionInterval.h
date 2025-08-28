@@ -1585,8 +1585,8 @@ public:
     ActionFloat* reverse() const override;
     ActionFloat* clone() const override;
 
-    ActionFloat(){};
-    virtual ~ActionFloat(){};
+    ActionFloat() {};
+    virtual ~ActionFloat() {};
 
     bool initWithDuration(float duration, float from, float to, ActionFloatCallback callback);
 
@@ -1608,5 +1608,4 @@ private:
 // end of actions group
 /// @}
 
-}
-
+}  // namespace ax

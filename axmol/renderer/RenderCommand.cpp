@@ -95,7 +95,7 @@ void RenderCommand::setOwnPSVL(rhi::ProgramState* ps, rhi::VertexLayout* vl, uns
 
     _pipelineDesc.programState = ps;
     _pipelineDesc.vertexLayout = vl;
-    _ownsPSVL = true;
+    _ownsPSVL                  = true;
 }
 
 void RenderCommand::releasePSVL()

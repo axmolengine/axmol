@@ -176,4 +176,4 @@ void SAXParser::setDelegator(SAXDelegator* delegator)
     _delegator = delegator;
 }
 
-}
+}  // namespace ax

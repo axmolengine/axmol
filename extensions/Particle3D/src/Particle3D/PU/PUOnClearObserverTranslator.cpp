@@ -45,4 +45,4 @@ bool PUOnClearObserverTranslator::translateChildObject(PUScriptCompiler* /*compi
     return false;
 }
 
-}
+}  // namespace ax

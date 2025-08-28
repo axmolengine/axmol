@@ -128,4 +128,4 @@ bool CCPUBoxEmitterTranslator::translateChildObject(PUScriptCompiler* /*compiler
     return false;
 }
 
-}
+}  // namespace ax

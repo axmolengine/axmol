@@ -141,11 +141,11 @@ protected:
 
     Node* getTarget() const;
 
-    VertexInputBinding* _vertexInputBinding   = nullptr;
-    rhi::ProgramState* _programState          = nullptr;
-    rhi::VertexLayout* _vertexLayout          = nullptr;
-    Technique* _technique                     = nullptr;
-    bool _hashDirty                           = true;
+    VertexInputBinding* _vertexInputBinding = nullptr;
+    rhi::ProgramState* _programState        = nullptr;
+    rhi::VertexLayout* _vertexLayout        = nullptr;
+    Technique* _technique                   = nullptr;
+    bool _hashDirty                         = true;
     RenderState _renderState;
     std::string _name;
 
@@ -189,4 +189,4 @@ private:
     bool _rendererDepthWrite               = false;
 };
 
-}
+}  // namespace ax

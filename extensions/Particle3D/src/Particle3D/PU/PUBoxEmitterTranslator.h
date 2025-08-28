@@ -37,10 +37,10 @@ class CCPUBoxEmitterTranslator : public PUScriptTranslator
 {
 public:
     CCPUBoxEmitterTranslator();
-    virtual ~CCPUBoxEmitterTranslator(){};
+    virtual ~CCPUBoxEmitterTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
+}  // namespace ax

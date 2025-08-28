@@ -191,9 +191,7 @@ class TestCustomTableView;
 /**
  * An instance of TestList is a means for displaying hierarchical lists of TestSuite.
  */
-class TestList : public TestBase,
-                 public ax::extension::TableViewDataSource,
-                 public ax::extension::TableViewDelegate
+class TestList : public TestBase, public ax::extension::TableViewDataSource, public ax::extension::TableViewDelegate
 {
 public:
     TestList();
@@ -203,10 +201,8 @@ public:
 
     virtual void runThisTest() override;
 
-    virtual void tableCellTouched(ax::extension::TableView* table,
-                                  ax::extension::TableViewCell* cell) override;
-    virtual ax::extension::TableViewCell* tableCellAtIndex(ax::extension::TableView* table,
-                                                                ssize_t idx) override;
+    virtual void tableCellTouched(ax::extension::TableView* table, ax::extension::TableViewCell* cell) override;
+    virtual ax::extension::TableViewCell* tableCellAtIndex(ax::extension::TableView* table, ssize_t idx) override;
     virtual ax::Size tableCellSizeForIndex(ax::extension::TableView* table, ssize_t idx) override;
     virtual ssize_t numberOfCellsInTableView(ax::extension::TableView* table) override;
 
@@ -224,7 +220,7 @@ private:
     TestCustomTableView* _tableView{};
 };
 
-#define ADD_TEST(__className__) addTest(#__className__, []() { return new __className__; });
+#define ADD_TEST(__className__)      addTest(#__className__, []() { return new __className__; });
 
 #define ADD_TEST_CASE(__className__) addTestCase(#__className__, []() { return __className__::create(); });
 

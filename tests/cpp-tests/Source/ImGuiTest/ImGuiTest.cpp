@@ -3,14 +3,13 @@
 
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
 
-#include "ImGui/ImGuiPresenter.h"
-#if !defined(__ANDROID__)
-#   include "SDFGen/SDFGen.h"
-#endif
+#    include "ImGui/ImGuiPresenter.h"
+#    if !defined(__ANDROID__)
+#        include "SDFGen/SDFGen.h"
+#    endif
 
 using namespace ax;
 USING_NS_AX_EXT;
-
 
 static bool show_test_window    = true;
 static bool show_another_window = true;
@@ -28,7 +27,7 @@ void ImGuiTest::onEnter()
     TestCase::onEnter();
 #    if !defined(__ANDROID__)
     SDFGen::getInstance()->open();
-#endif
+#    endif
 
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("animations/grossini.plist");

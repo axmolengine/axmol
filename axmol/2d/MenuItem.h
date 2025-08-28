@@ -99,8 +99,12 @@ public:
 
     /**
      */
-    MenuItem() : _selected(false), _enabled(false), _callbackClick(nullptr)
-               , _callbackSelected(nullptr), _callbackUnSelected(nullptr)
+    MenuItem()
+        : _selected(false)
+        , _enabled(false)
+        , _callbackClick(nullptr)
+        , _callbackSelected(nullptr)
+        , _callbackUnSelected(nullptr)
     {}
     /**
      * @lua NA
@@ -497,4 +501,4 @@ private:
 // end of 2d group
 /// @}
 
-}
+}  // namespace ax

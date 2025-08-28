@@ -45,4 +45,4 @@ PUOnEmissionObserver* PUOnEmissionObserver::create()
     return peo;
 }
 
-}
+}  // namespace ax

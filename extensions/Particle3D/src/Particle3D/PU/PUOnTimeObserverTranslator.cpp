@@ -94,4 +94,4 @@ bool PUOnTimeObserverTranslator::translateChildObject(PUScriptCompiler* /*compil
     return false;
 }
 
-}
+}  // namespace ax

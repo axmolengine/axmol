@@ -29,7 +29,8 @@
 #include "axmol/rhi/opengl/OpenGLState.h"
 #include "axmol/base/hlookup.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 /**
  * @addtogroup _opengl
  * @{
@@ -85,8 +86,7 @@ public:
     Texture* createTexture(const TextureDesc& descriptor) override;
 
     RenderTarget* createDefaultRenderTarget() override;
-    RenderTarget* createRenderTarget(Texture* colorAttachment,
-                                  Texture* depthStencilAttachment) override;
+    RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 
     DepthStencilState* createDepthStencilState() override;
 
@@ -188,4 +188,4 @@ private:
 };
 // end of _opengl group
 /// @}
-}
+}  // namespace ax::rhi::gl

@@ -125,7 +125,6 @@ public:
     CREATE_FUNC(UILayoutTest_Layout_Linear_CenterHorizontal);
 };
 
-
 class UILayoutTest_Layout_Relative_Align_Parent : public UIScene
 {
 public:

@@ -32,7 +32,7 @@
 static int axlua_WebView_setOnShouldStartLoading(lua_State* L)
 {
 
-    int argc                   = 0;
+    int argc              = 0;
     ax::ui::WebView* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -88,7 +88,7 @@ tolua_lerror:
 static int axlua_WebView_setOnDidFinishLoading(lua_State* L)
 {
 
-    int argc                   = 0;
+    int argc              = 0;
     ax::ui::WebView* self = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -143,7 +143,7 @@ tolua_lerror:
 static int axlua_WebView_setOnDidFailLoading(lua_State* L)
 {
 
-    int argc                   = 0;
+    int argc              = 0;
     ax::ui::WebView* self = nullptr;
 
 #if _AX_DEBUG >= 1

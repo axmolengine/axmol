@@ -268,4 +268,4 @@ bool PUForceFieldAffectorTranslator::translateChildObject(PUScriptCompiler* /*co
     return false;
 }
 
-}
+}  // namespace ax

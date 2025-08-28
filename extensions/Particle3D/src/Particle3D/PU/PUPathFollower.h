@@ -63,5 +63,4 @@ public:
 protected:
     PUSimpleSpline _spline;
 };
-}
-
+}  // namespace ax

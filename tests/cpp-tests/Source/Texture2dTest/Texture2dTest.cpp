@@ -497,7 +497,7 @@ void TextureWEBP::onEnter()
     AXLOGI("{}\n", Director::getInstance()->getTextureCache()->getCachedTextureInfo());
     Texture2D* texture = Director::getInstance()->getTextureCache()->getTextureForKey("Images/test_image.webp");
     AXLOGD("pixel format:{}, premultiplied alpha:{}\n", static_cast<int>(texture->getPixelFormat()),
-        texture->hasPremultipliedAlpha());
+           texture->hasPremultipliedAlpha());
 }
 
 std::string TextureWEBP::title() const
@@ -522,7 +522,7 @@ void TextureWEBPNoAlpha::onEnter()
     Texture2D* texture =
         Director::getInstance()->getTextureCache()->getTextureForKey("Images/test_image_no_alpha.webp");
     AXLOGD("pixel format:{}, premultiplied alpha:{}\n", static_cast<int>(texture->getPixelFormat()),
-        texture->hasPremultipliedAlpha());
+           texture->hasPremultipliedAlpha());
 }
 
 std::string TextureWEBPNoAlpha::title() const
@@ -1629,7 +1629,7 @@ void TexturePixelFormat::onEnter()
     Director::getInstance()->getTextureCache()->removeTexture(sprite5->getTexture());
 
     // A8 image (8-bit)
-    auto sprite6 = Sprite::create("Images/test-rgba1.png", PixelFormat::R8); //
+    auto sprite6 = Sprite::create("Images/test-rgba1.png", PixelFormat::R8);  //
     sprite6->setPosition(Vec2(6 * s.width / 7, s.height / 2 - 32));
     addChild(sprite6, 0);
 
@@ -1849,7 +1849,8 @@ void TextureGlRepeat::onEnter()
     auto sprite = Sprite::create("Images/pattern1.png", Rect(0, 0, 4096, 4096));
     addChild(sprite, -1, kTagSprite1);
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
-    Texture2D::TexParams desc{.sAddressMode = rhi::SamplerAddressMode::REPEAT, .tAddressMode = rhi::SamplerAddressMode::REPEAT};
+    Texture2D::TexParams desc{.sAddressMode = rhi::SamplerAddressMode::REPEAT,
+                              .tAddressMode = rhi::SamplerAddressMode::REPEAT};
     sprite->getTexture()->setTexParameters(desc);
 
     auto rotate = RotateBy::create(4, 360);

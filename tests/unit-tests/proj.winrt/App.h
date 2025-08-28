@@ -33,14 +33,14 @@ using namespace winrt;
 
 namespace winrt::AxmolAppWinRT::implementation
 {
-    struct App : AppT<App>
-    {
-        App();
-        void OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs const&);
-        void OnSuspending(IInspectable const&, Windows::ApplicationModel::SuspendingEventArgs const&);
-        void OnResuming(IInspectable const&, IInspectable const&);
-        void OnNavigationFailed(IInspectable const&, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs const&);
-        Windows::Foundation::IInspectable mPage;
-        OpenGLES mOpenGLES;
-    };
-}
+struct App : AppT<App>
+{
+    App();
+    void OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs const&);
+    void OnSuspending(IInspectable const&, Windows::ApplicationModel::SuspendingEventArgs const&);
+    void OnResuming(IInspectable const&, IInspectable const&);
+    void OnNavigationFailed(IInspectable const&, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs const&);
+    Windows::Foundation::IInspectable mPage;
+    OpenGLES mOpenGLES;
+};
+}  // namespace winrt::AxmolAppWinRT::implementation

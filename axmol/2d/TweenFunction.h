@@ -293,4 +293,4 @@ float AX_DLL bounceEaseInOut(float time);
 float AX_DLL customEase(float time, float* easingParam);
 }  // namespace tweenfunc
 
-}
+}  // namespace ax

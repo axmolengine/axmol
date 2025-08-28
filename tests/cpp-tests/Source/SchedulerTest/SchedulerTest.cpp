@@ -1071,35 +1071,29 @@ void SchedulerIssueWithReschedule::onEnter()
     auto verified = std::make_shared<bool>();
     *verified     = false;
 
-    _scheduler->schedule(
-        [this, verified](float dt) {
-           AXLOGD("SchedulerIssueWithReschedule - first timer");
+    _scheduler->schedule([this, verified](float dt) {
+        AXLOGD("SchedulerIssueWithReschedule - first timer");
 
-            _scheduler->schedule(
-                [verified](float dt) {
-                   AXLOGD("SchedulerIssueWithReschedule - second timer. OK");
-                    *verified = true;
-                },
-                this, 0.1f, 0, 0, false, "test_timer");
-        },
-        this, 0.1f, 0, 0, false, "test_timer");
+        _scheduler->schedule([verified](float dt) {
+            AXLOGD("SchedulerIssueWithReschedule - second timer. OK");
+            *verified = true;
+        }, this, 0.1f, 0, 0, false, "test_timer");
+    }, this, 0.1f, 0, 0, false, "test_timer");
 
-    _scheduler->schedule(
-        [verified, status_text](float dt) {
-            if (*verified)
-            {
-                AXLOGD("SchedulerIssueWithReschedule - test OK");
-                status_text->setString("OK");
-                status_text->setColor(Color32(0, 255, 0));
-            }
-            else
-            {
-                AXLOGD("SchedulerIssueWithReschedule - test failed!");
-                status_text->setString("Failed");
-                status_text->setColor(Color32(255, 0, 0));
-            }
-        },
-        this, 0.5f, 0, 0, false, "test_verify_timer");
+    _scheduler->schedule([verified, status_text](float dt) {
+        if (*verified)
+        {
+            AXLOGD("SchedulerIssueWithReschedule - test OK");
+            status_text->setString("OK");
+            status_text->setColor(Color32(0, 255, 0));
+        }
+        else
+        {
+            AXLOGD("SchedulerIssueWithReschedule - test failed!");
+            status_text->setString("Failed");
+            status_text->setColor(Color32(255, 0, 0));
+        }
+    }, this, 0.5f, 0, 0, false, "test_verify_timer");
 }
 
 std::string SchedulerIssueWithReschedule::title() const

@@ -54,8 +54,8 @@ typedef struct _ttfConfig
     std::string customGlyphs;
 
     GlyphCollection glyphs;
-    float fontSize; // The desired render font size
-    int faceSize; // The original face size of font, used when distanceFieldEnabled == true
+    float fontSize;  // The desired render font size
+    int faceSize;    // The original face size of font, used when distanceFieldEnabled == true
     int outlineSize;
 
     bool distanceFieldEnabled;
@@ -85,8 +85,7 @@ typedef struct _ttfConfig
         , bold(useBold)
         , underline(useUnderline)
         , strikethrough(useStrikethrough)
-    {
-    }
+    {}
 } TTFConfig;
 
 class Sprite;
@@ -728,7 +727,7 @@ protected:
         ~BatchCommand();
 
         BatchCommand& operator=(const BatchCommand& rhs) = delete;
-        BatchCommand& operator=(BatchCommand&& rhs) = default;
+        BatchCommand& operator=(BatchCommand&& rhs)      = default;
 
         void setProgramState(rhi::ProgramState* state);
 
@@ -855,7 +854,7 @@ protected:
     LabelEffect _currLabelEffect;
     float _shadowBlurRadius;
     float _bmFontSize;
-    float _fontScale; // The bmFontScale or ttfFontScale(SDF rendering mode)
+    float _fontScale;  // The bmFontScale or ttfFontScale(SDF rendering mode)
 
     Overflow _overflow;
     float _originalFontSize;
@@ -923,4 +922,4 @@ private:
 // end group
 /// @}
 
-}
+}  // namespace ax

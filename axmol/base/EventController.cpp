@@ -45,4 +45,4 @@ EventController::EventController(ControllerEventType type, Controller* controlle
     , _isConnected(isConnected)
 {}
 
-}
+}  // namespace ax

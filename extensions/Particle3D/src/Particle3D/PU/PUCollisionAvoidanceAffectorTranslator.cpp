@@ -63,4 +63,4 @@ bool PUCollisionAvoidanceAffectorTranslator::translateChildObject(PUScriptCompil
     return false;
 }
 
-}
+}  // namespace ax

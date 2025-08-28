@@ -72,11 +72,11 @@ ConsoleCustomCommand::ConsoleCustomCommand()
     static Console::Command commands[] = {
         {"hello", "This is just a user generated command",
          [](int fd, std::string_view args) {
-             const char msg[] = "how are you?\nArguments passed: ";
-             send(fd, msg, sizeof(msg), 0);
-             send(fd, args.data(), args.length(), 0);
-             send(fd, "\n", 1, 0);
-         }},
+        const char msg[] = "how are you?\nArguments passed: ";
+        send(fd, msg, sizeof(msg), 0);
+        send(fd, args.data(), args.length(), 0);
+        send(fd, "\n", 1, 0);
+    }},
     };
     _console->addCommand(commands[0]);
 }
@@ -107,7 +107,7 @@ std::string ConsoleCustomCommand::subtitle() const
 ConsoleUploadFile::ConsoleUploadFile()
 {
     std::srand((unsigned)time(nullptr));
-    int id = rand() % 100000;
+    int id          = rand() % 100000;
     _targetFileName = fmt::format("grossini{}.png", id);
 
     std::thread t = std::thread(&ConsoleUploadFile::uploadFile, this);

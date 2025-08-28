@@ -40,7 +40,6 @@
 #include <fcntl.h>
 #include <ranges>
 
-
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <io.h>
 #    define bzero(a, b) memset(a, 0, b)
@@ -1031,7 +1030,7 @@ void Console::commandHelp(socket_native_type fd, std::string_view /*args*/)
 void Console::commandProjection(socket_native_type fd, std::string_view /*args*/)
 {
     auto director = Director::getInstance();
-    auto proj = director->getProjection();
+    auto proj     = director->getProjection();
     const char* name;
     switch (proj)
     {
@@ -1076,7 +1075,7 @@ void Console::commandResolution(socket_native_type /*fd*/, std::string_view args
     Scheduler* sched = Director::getInstance()->getScheduler();
     sched->runOnAxmolThread([=]() {
         Director::getInstance()->getRenderView()->setDesignResolutionSize(width, height,
-                                                                      static_cast<ResolutionPolicy>(policy));
+                                                                          static_cast<ResolutionPolicy>(policy));
     });
 }
 
@@ -1085,7 +1084,7 @@ void Console::commandResolutionSubCommandEmpty(socket_native_type fd, std::strin
     auto director        = Director::getInstance();
     Vec2 points          = director->getWinSize();
     Vec2 pixels          = director->getWinSizeInPixels();
-    auto renderView          = director->getRenderView();
+    auto renderView      = director->getRenderView();
     Vec2 design          = renderView->getDesignResolutionSize();
     ResolutionPolicy res = renderView->getResolutionPolicy();
     Rect visibleRect     = renderView->getVisibleRect();

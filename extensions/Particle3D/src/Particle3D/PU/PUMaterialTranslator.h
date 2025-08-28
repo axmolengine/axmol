@@ -49,22 +49,22 @@ protected:
 class PUMaterialTechniqueTranslator : public PUScriptTranslator
 {
 public:
-    PUMaterialTechniqueTranslator(){};
+    PUMaterialTechniqueTranslator() {};
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
 class PUMaterialPassTranslator : public PUScriptTranslator
 {
 public:
-    PUMaterialPassTranslator(){};
+    PUMaterialPassTranslator() {};
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
 class PUMaterialTextureUnitTranslator : public PUScriptTranslator
 {
 public:
-    PUMaterialTextureUnitTranslator(){};
+    PUMaterialTextureUnitTranslator() {};
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
+}  // namespace ax

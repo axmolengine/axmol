@@ -60,19 +60,16 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_EditBoxHelper_editBoxEditingDidBegin(J
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_EditBoxHelper_editBoxEditingChanged(JNIEnv* env,
-                                                                                         jclass,
-                                                                                         jint index,
-                                                                                         jstring text)
+                                                                              jclass,
+                                                                              jint index,
+                                                                              jstring text)
 {
     std::string textString = text_utils::getStringUTFCharsJNI(env, text);
     editBoxEditingDidChanged(index, textString);
 }
 
-JNIEXPORT void JNICALL Java_dev_axmol_lib_EditBoxHelper_editBoxEditingDidEnd(JNIEnv* env,
-                                                                                        jclass,
-                                                                                        jint index,
-                                                                                        jstring text,
-                                                                                        jint action)
+JNIEXPORT void JNICALL
+Java_dev_axmol_lib_EditBoxHelper_editBoxEditingDidEnd(JNIEnv* env, jclass, jint index, jstring text, jint action)
 {
     std::string textString = text_utils::getStringUTFCharsJNI(env, text);
     editBoxEditingDidEnd(index, textString, action);
@@ -96,9 +93,9 @@ EditBoxImplAndroid::~EditBoxImplAndroid()
 
 void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 {
-    auto director  = ax::Director::getInstance();
-    auto renderView    = director->getRenderView();
-    auto frameSize = renderView->getFrameSize();
+    auto director   = ax::Director::getInstance();
+    auto renderView = director->getRenderView();
+    auto frameSize  = renderView->getFrameSize();
 
     auto winSize    = director->getWinSize();
     auto leftBottom = _editBox->convertToWorldSpace(Point::ZERO);
@@ -119,7 +116,7 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
 {
     auto director            = ax::Director::getInstance();
-    auto renderView              = director->getRenderView();
+    auto renderView          = director->getRenderView();
     auto isFontFileExists    = ax::FileUtils::getInstance()->isFileExist(pFontName);
     std::string realFontPath = pFontName;
     if (isFontFileExists)
@@ -236,8 +233,8 @@ void editBoxEditingDidEnd(int index, std::string_view text, int action)
     auto it = s_allEditBoxes.find(index);
     if (it != s_allEditBoxes.end())
     {
-        s_allEditBoxes[index]->editBoxEditingDidEnd(
-            text, static_cast<ax::ui::EditBoxDelegate::EditBoxEndAction>(action));
+        s_allEditBoxes[index]->editBoxEditingDidEnd(text,
+                                                    static_cast<ax::ui::EditBoxDelegate::EditBoxEndAction>(action));
     }
 }
 
@@ -248,8 +245,8 @@ const char* EditBoxImplAndroid::getNativeDefaultFontName()
 
 }  // namespace ui
 
-}
+}  // namespace ax
 
-#undef LOGD
+#    undef LOGD
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) */

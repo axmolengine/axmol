@@ -144,7 +144,7 @@ protected:
 
 public:
     Slot() : _deformVertices(nullptr), _rawDisplay(nullptr), _meshDisplay(nullptr) {}
-    virtual ~Slot(){};
+    virtual ~Slot() {};
 
 protected:
     virtual void _onClear() override;

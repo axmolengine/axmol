@@ -60,5 +60,4 @@ protected:
     bool _resize;
     PUParticle3D* _previousParticle;
 };
-}
-
+}  // namespace ax

@@ -327,7 +327,7 @@ protected:
     int _callFromLua;
 };
 
-}
+}  // namespace ax
 
 // end group
 /// @}

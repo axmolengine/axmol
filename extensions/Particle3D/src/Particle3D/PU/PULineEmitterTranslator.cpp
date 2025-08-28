@@ -154,4 +154,4 @@ bool PULineEmitterTranslator::translateChildObject(PUScriptCompiler* /*compiler*
     return false;
 }
 
-}
+}  // namespace ax

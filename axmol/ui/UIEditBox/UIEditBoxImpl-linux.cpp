@@ -33,7 +33,7 @@
 #    include "axmol/2d/Label.h"
 #    include "axmol/base/text_utils.h"
 
-#include <dlfcn.h>
+#    include <dlfcn.h>
 
 extern "C" {
 
@@ -123,7 +123,7 @@ typedef unsigned long GType;
 typedef void (*GCallback)(void);
 typedef void (*GClosureNotify)(gpointer data, GClosure* closure);
 
-#define	G_CALLBACK(f)			 ((GCallback) (f))
+#    define G_CALLBACK(f) ((GCallback)(f))
 
 static GType (*gtk_dialog_get_type)(void) G_GNUC_CONST;
 static GType (*gtk_container_get_type)(void) G_GNUC_CONST;
@@ -202,21 +202,28 @@ static void dialogFocusOutCallback(GtkWidget* widget, gpointer user_data)
     gtk_widget_destroy(widget);
 }
 
-#define GTK_DLSYM(func)  do { \
-    func = reinterpret_cast<decltype(func)>(dlsym(gtk3, #func)); \
-    if (!func) throw std::runtime_error(#func); \
-} while(0)
+#    define GTK_DLSYM(func)                                              \
+        do                                                               \
+        {                                                                \
+            func = reinterpret_cast<decltype(func)>(dlsym(gtk3, #func)); \
+            if (!func)                                                   \
+                throw std::runtime_error(#func);                         \
+        } while (0)
 
-static bool load_gtk3() {
+static bool load_gtk3()
+{
     static bool s_loaded = false;
-    static void* gtk3 = 0;
+    static void* gtk3    = 0;
 
-    if(!s_loaded) {
+    if (!s_loaded)
+    {
         s_loaded = true;
 
         gtk3 = dlopen("libgtk-3.so", RTLD_LAZY | RTLD_LOCAL);
-        if(gtk3) {
-            try {
+        if (gtk3)
+        {
+            try
+            {
                 GTK_DLSYM(gtk_dialog_get_type);
                 GTK_DLSYM(gtk_container_get_type);
                 GTK_DLSYM(gtk_entry_get_type);
@@ -238,7 +245,9 @@ static bool load_gtk3() {
                 GTK_DLSYM(gtk_entry_get_text);
                 GTK_DLSYM(g_main_context_iteration);
                 GTK_DLSYM(g_type_check_instance_cast);
-            } catch(const std::exception& ex) {
+            }
+            catch (const std::exception& ex)
+            {
                 AXLOGE("load gtk function: {} fail", ex.what());
                 dlclose(gtk3);
                 gtk3 = nullptr;
@@ -251,7 +260,8 @@ static bool load_gtk3() {
 
 static bool LinuxInputBox(std::string& entryLine)
 {
-    if(!load_gtk3()) {
+    if (!load_gtk3())
+    {
         throw std::runtime_error("missing library gtk3");
     }
 
@@ -325,6 +335,6 @@ void EditBoxImplLinux::nativeOpenKeyboard()
 
 }  // namespace ui
 
-}
+}  // namespace ax
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) */

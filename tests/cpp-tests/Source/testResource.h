@@ -25,8 +25,7 @@
 #ifndef _TEST_RESOURCE_H_
 #define _TEST_RESOURCE_H_
 
-
-static const char s_pathAxmolLogo[]   ="Hello.png";
+static const char s_pathAxmolLogo[]  = "Hello.png";
 static const char s_pathGrossini[]   = "Images/grossini.png";
 static const char s_pathSister1[]    = "Images/grossinis_sister1.png";
 static const char s_pathSister2[]    = "Images/grossinis_sister2.png";

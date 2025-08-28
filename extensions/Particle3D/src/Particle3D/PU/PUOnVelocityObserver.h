@@ -62,12 +62,11 @@ public:
     void copyAttributesTo(PUObserver* observer) override;
 
     PUOnVelocityObserver();
-    virtual ~PUOnVelocityObserver(){};
+    virtual ~PUOnVelocityObserver() {};
 
 protected:
     float _threshold;
     PUComparisionOperator _compare;
 };
 
-}
-
+}  // namespace ax

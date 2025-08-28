@@ -548,7 +548,7 @@ protected:
     Scale9Sprite::RenderingType _renderingType;
 };
 
-}
-}  // end of namespace
+}  // namespace ui
+}  // namespace ax
 // end of ui group
 /// @}

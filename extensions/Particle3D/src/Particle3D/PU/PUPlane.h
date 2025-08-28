@@ -133,5 +133,4 @@ public:
 };
 
 typedef std::vector<PUPlane> PlaneList;
-}
-
+}  // namespace ax

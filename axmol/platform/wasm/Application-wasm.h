@@ -31,9 +31,9 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "axmol/platform/Common.h"
-#include "axmol/platform/ApplicationBase.h"
-#include <string>
+#    include "axmol/platform/Common.h"
+#    include "axmol/platform/ApplicationBase.h"
+#    include <string>
 
 namespace ax
 {
@@ -74,7 +74,7 @@ public:
     @brief Get current language iso 639-1 code
     @return Current language iso 639-1 code
     */
-    const char * getCurrentLanguageCode() override;
+    const char* getCurrentLanguageCode() override;
 
     /**
     @brief Get application version
@@ -92,13 +92,13 @@ public:
      @brief Get target platform
      */
     Platform getTargetPlatform() override;
+
 protected:
     std::string _resourceRootPath;
 
-    static Application * sm_pSharedApplication;
+    static Application* sm_pSharedApplication;
 };
 
-}
+}  // namespace ax
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
-
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

@@ -299,4 +299,4 @@ void Follow::stop()
     Action::stop();
 }
 
-}
+}  // namespace ax

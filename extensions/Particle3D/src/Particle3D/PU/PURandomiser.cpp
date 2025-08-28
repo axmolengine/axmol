@@ -166,4 +166,4 @@ void PURandomiser::copyAttributesTo(PUAffector* affector)
     randomiser->_randomDirection = _randomDirection;
 }
 
-}
+}  // namespace ax

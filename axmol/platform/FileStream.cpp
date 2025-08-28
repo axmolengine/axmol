@@ -397,4 +397,4 @@ bool FileStream::isOpen() const
     return !!_iof;
 }
 
-}
+}  // namespace ax

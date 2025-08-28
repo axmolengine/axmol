@@ -558,7 +558,7 @@ void CommandBufferImpl::prepareDrawing()
 
     // bind uniform buffer: glsl-optimizer is bound to index 1, axslcc: bound to 0
     constexpr int bindingIndex = DriverImpl::VBO_BINDING_INDEX_START;
-    auto vertUB         = _programState->getVertexUniformBuffer();
+    auto vertUB                = _programState->getVertexUniformBuffer();
     if (!vertUB.empty())
     {
         program->bindVertexUniformBuffer(context, vertUB.data(), vertUB.size(), bindingIndex);
@@ -580,7 +580,7 @@ void CommandBufferImpl::prepareDrawing()
         for (size_t k = 0; k < arraySize; ++k)
         {
             const auto slot  = bindingIndex + k;
-            auto textureImpl    = static_cast<TextureImpl*>(texs[k]);
+            auto textureImpl = static_cast<TextureImpl*>(texs[k]);
             context->PSSetShaderResources(slot, 1, &textureImpl->internalHandle().srv);
             auto samplerState = textureImpl->getSamplerState();
             context->PSSetSamplers(slot, 1, &samplerState);

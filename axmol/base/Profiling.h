@@ -145,4 +145,4 @@ extern bool kProfilerCategoryParticles;
 // end of global group
 /// @}
 
-}
+}  // namespace ax

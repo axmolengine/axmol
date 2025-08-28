@@ -68,10 +68,19 @@ void TextReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoad
         // read all color related properties of widget
         AX_COLOR_PROPERTY_BINARY_READER
 
-        else if (key == P_TouchScaleEnable) { label->setTouchScaleChangeEnabled(valueToBool(value)); }
+        else if (key == P_TouchScaleEnable)
+        {
+            label->setTouchScaleChangeEnabled(valueToBool(value));
+        }
 
-        else if (key == P_Text) { label->setString(value); }
-        else if (key == P_FontSize) { label->setFontSize(valueToInt(value)); }
+        else if (key == P_Text)
+        {
+            label->setString(value);
+        }
+        else if (key == P_FontSize)
+        {
+            label->setFontSize(valueToInt(value));
+        }
         else if (key == P_FontName)
         {
             auto& fontFilePath = binaryFilePath.append(value);
@@ -85,8 +94,14 @@ void TextReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoad
         {
             label->setTextAreaSize(Size(label->getTextAreaSize().width, valueToFloat(value)));
         }
-        else if (key == P_HAlignment) { label->setTextHorizontalAlignment((TextHAlignment)valueToInt(value)); }
-        else if (key == P_VAlignment) { label->setTextVerticalAlignment((TextVAlignment)valueToInt(value)); }
+        else if (key == P_HAlignment)
+        {
+            label->setTextHorizontalAlignment((TextHAlignment)valueToInt(value));
+        }
+        else if (key == P_VAlignment)
+        {
+            label->setTextVerticalAlignment((TextVAlignment)valueToInt(value));
+        }
 
     }  // end of for loop
     this->endSetBasicProperties(widget);
@@ -303,7 +318,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "Path")
@@ -328,7 +343,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "A")
@@ -357,7 +372,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "A")
@@ -386,7 +401,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                name              = attribute.name();
+                name                   = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (name == "A")

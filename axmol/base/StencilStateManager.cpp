@@ -36,8 +36,8 @@ int StencilStateManager::s_layer = -1;
 
 StencilStateManager::StencilStateManager()
 {
-    auto* program                   = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_UCOLOR);
-    auto programState                   = new rhi::ProgramState(program);
+    auto* program     = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_UCOLOR);
+    auto programState = new rhi::ProgramState(program);
 
     _mvpMatrixLocaiton    = programState->getUniformLocation("u_MVPMatrix");
     _colorUniformLocation = programState->getUniformLocation("u_color");
@@ -151,8 +151,8 @@ void StencilStateManager::onBeforeDrawQuadCmd()
     //     if not in inverted mode: set the current layer value to 0 in the stencil buffer
     //     if in inverted mode: set the current layer value to 1 in the stencil buffer
     renderer->setStencilCompareFunc(rhi::CompareFunc::NEVER, _currentLayerMask, _currentLayerMask);
-    renderer->setStencilOp(!_inverted ? rhi::StencilOp::ZERO : rhi::StencilOp::REPLACE,
-                                  rhi::StencilOp::KEEP, rhi::StencilOp::KEEP);
+    renderer->setStencilOp(!_inverted ? rhi::StencilOp::ZERO : rhi::StencilOp::REPLACE, rhi::StencilOp::KEEP,
+                           rhi::StencilOp::KEEP);
 }
 
 void StencilStateManager::onAfterDrawQuadCmd()
@@ -160,8 +160,8 @@ void StencilStateManager::onAfterDrawQuadCmd()
     auto renderer = Director::getInstance()->getRenderer();
     renderer->setStencilCompareFunc(rhi::CompareFunc::NEVER, _currentLayerMask, _currentLayerMask);
 
-    renderer->setStencilOp(!_inverted ? rhi::StencilOp::REPLACE : rhi::StencilOp::ZERO,
-                                  rhi::StencilOp::KEEP, rhi::StencilOp::KEEP);
+    renderer->setStencilOp(!_inverted ? rhi::StencilOp::REPLACE : rhi::StencilOp::ZERO, rhi::StencilOp::KEEP,
+                           rhi::StencilOp::KEEP);
 }
 
 void StencilStateManager::onAfterDrawStencil()
@@ -185,8 +185,7 @@ void StencilStateManager::onAfterDrawStencil()
     //         do not draw the pixel but keep the current layer in the stencil buffer
     renderer->setStencilCompareFunc(rhi::CompareFunc::EQUAL, _mask_layer_le, _mask_layer_le);
 
-    renderer->setStencilOp(rhi::StencilOp::KEEP, rhi::StencilOp::KEEP,
-                                  rhi::StencilOp::KEEP);
+    renderer->setStencilOp(rhi::StencilOp::KEEP, rhi::StencilOp::KEEP, rhi::StencilOp::KEEP);
 
     // draw (according to the stencil test function) this node and its children
 }
@@ -212,4 +211,4 @@ void StencilStateManager::onAfterVisit()
     s_layer--;
 }
 
-}
+}  // namespace ax

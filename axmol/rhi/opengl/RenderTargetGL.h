@@ -3,7 +3,8 @@
 #include "axmol/platform/GL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 class DriverImpl;
 
@@ -28,4 +29,4 @@ public:
 #endif
 };
 
-}
+}  // namespace ax::rhi::gl

@@ -322,4 +322,4 @@ cardinalSplineAt(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec2& p3,
 // end of actions group
 /// @}
 
-}
+}  // namespace ax

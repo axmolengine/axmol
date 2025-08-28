@@ -29,11 +29,11 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "axmol/platform/FileUtils.h"
-#include "axmol/platform/PlatformMacros.h"
-#include "axmol/base/Types.h"
-#include <string>
-#include <vector>
+#    include "axmol/platform/FileUtils.h"
+#    include "axmol/platform/PlatformMacros.h"
+#    include "axmol/base/Types.h"
+#    include <string>
+#    include <vector>
 
 namespace ax
 {
@@ -47,13 +47,16 @@ namespace ax
 class AX_DLL FileUtilsEmscripten : public FileUtils
 {
     friend class FileUtils;
+
 protected:
     FileUtilsEmscripten();
+
 public:
     /* override functions */
     bool init() override;
     std::string getWritablePath() const override;
     std::string getNativeWritableAbsolutePath() const override;
+
 private:
     bool isFileExistInternal(std::string_view path) const override;
 };
@@ -61,7 +64,6 @@ private:
 // end of platform group
 /// @}
 
-}
+}  // namespace ax
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
-
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

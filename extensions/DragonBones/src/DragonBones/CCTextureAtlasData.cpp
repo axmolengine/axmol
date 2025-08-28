@@ -37,8 +37,8 @@ void CCTextureAtlasData::setRenderTexture(ax::Texture2D* value)
             if (textureData->spriteFrame == nullptr)
             {
                 ax::Rect rect(textureData->region.x, textureData->region.y,
-                                   textureData->rotated ? textureData->region.height : textureData->region.width,
-                                   textureData->rotated ? textureData->region.width : textureData->region.height);
+                              textureData->rotated ? textureData->region.height : textureData->region.width,
+                              textureData->rotated ? textureData->region.width : textureData->region.height);
                 ax::Vec2 offset(0.0f, 0.0f);
                 ax::Size originSize(rect.size.width, rect.size.height);
                 textureData->spriteFrame = ax::SpriteFrame::createWithTexture(

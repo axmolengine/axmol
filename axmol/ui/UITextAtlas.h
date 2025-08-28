@@ -166,5 +166,4 @@ protected:
 // end of ui group
 /// @}
 
-}
-
+}  // namespace ax

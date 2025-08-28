@@ -105,7 +105,7 @@ Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node object
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "Path")

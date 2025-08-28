@@ -42,5 +42,4 @@ public:
     PUPointEmitter();
     virtual ~PUPointEmitter();
 };
-}
-
+}  // namespace ax

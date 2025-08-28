@@ -27,7 +27,8 @@
 #include "axmol/rhi/Program.h"
 #import <Metal/Metal.h>
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 class ShaderModuleImpl;
 
@@ -128,4 +129,4 @@ private:
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

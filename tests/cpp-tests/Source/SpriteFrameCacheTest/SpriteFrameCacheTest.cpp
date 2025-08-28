@@ -71,8 +71,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
     loadSpriteFrames("Images/sprite_frames_test/test_NoFormat.plist", rhi::PixelFormat::RGBA8);
 }
 
-void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
-                                                       ax::rhi::PixelFormat expectedFormat)
+void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file, ax::rhi::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
@@ -81,8 +80,8 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
     const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
 
-    const std::string textureInfo = fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(),
-                                                        texture->getStringForFormat(), memorySize);
+    const std::string textureInfo =
+        fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(), texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
 
     SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(file);
@@ -100,8 +99,7 @@ SpriteFrameCacheLoadMultipleTimes::SpriteFrameCacheLoadMultipleTimes()
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", rhi::PixelFormat::RGBA8);
 }
 
-void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file,
-                                                         ax::rhi::PixelFormat expectedFormat)
+void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file, ax::rhi::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
@@ -447,8 +445,7 @@ SpriteFrameCacheJsonAtlasTest::~SpriteFrameCacheJsonAtlasTest()
     cache->deregisterSpriteSheetLoader(GenericJsonArraySpriteSheetLoader::FORMAT);
 }
 
-void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
-                                                     ax::rhi::PixelFormat expectedFormat)
+void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file, ax::rhi::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::FORMAT);
     SpriteFrame* spriteFrame =
@@ -457,8 +454,8 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB = 8 * 1024;
     const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-    const std::string textureInfo = fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(),
-                                                        texture->getStringForFormat(), memorySize);
+    const std::string textureInfo =
+        fmt::format("{}{}: {:.2} KB\r\n", infoLabel->getString(), texture->getStringForFormat(), memorySize);
     infoLabel->setString(textureInfo);
 
     SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(file);

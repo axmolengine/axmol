@@ -265,5 +265,4 @@ protected:
 // end of platform group
 /// @}
 
-}
-
+}  // namespace ax

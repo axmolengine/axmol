@@ -69,4 +69,4 @@ void PUOnRandomObserver::copyAttributesTo(PUObserver* observer)
     onRandomObserver->_threshold         = _threshold;
 }
 
-}
+}  // namespace ax

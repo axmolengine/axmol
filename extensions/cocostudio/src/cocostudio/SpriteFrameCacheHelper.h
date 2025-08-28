@@ -44,7 +44,6 @@ namespace cocostudio
 class CCS_DLL SpriteFrameCacheHelper
 {
 public:
-
     static SpriteFrameCacheHelper* getInstance();
 
     static void destroyInstance();

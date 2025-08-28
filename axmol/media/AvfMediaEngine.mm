@@ -32,13 +32,13 @@
 #    include "yasio/string_view.hpp"
 #    include "yasio/endian_portable.hpp"
 
-#if TARGET_OS_IPHONE
-#    import <UIKit/UIKit.h>
-#endif
+#    if TARGET_OS_IPHONE
+#        import <UIKit/UIKit.h>
+#    endif
 
 using namespace ax;
 
-#define AX_ALIGN_ANY(x, a) ((((x) + (a) - 1) / (a)) * (a))
+#    define AX_ALIGN_ANY(x, a) ((((x) + (a) - 1) / (a)) * (a))
 
 @interface AVMediaSessionHandler : NSObject
 - (AVMediaSessionHandler*)initWithMediaEngine:(AvfMediaEngine*)me;
@@ -60,21 +60,15 @@ using namespace ax;
 
 - registerUINotifications
 {
-#if TARGET_OS_IPHONE
+#    if TARGET_OS_IPHONE
     auto nc = [NSNotificationCenter defaultCenter];
 
     [nc addObserver:self
            selector:@selector(handleAudioRouteChange:)
                name:AVAudioSessionRouteChangeNotification
              object:[AVAudioSession sharedInstance]];
-    [nc addObserver:self
-           selector:@selector(handleActive:)
-               name:UIApplicationDidBecomeActiveNotification
-             object:nil];
-    [nc addObserver:self
-           selector:@selector(handleDeactive:)
-               name:UIApplicationWillResignActiveNotification
-             object:nil];
+    [nc addObserver:self selector:@selector(handleActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [nc addObserver:self selector:@selector(handleDeactive:) name:UIApplicationWillResignActiveNotification object:nil];
     [nc addObserver:self
            selector:@selector(handleEnterBackround:)
                name:UIApplicationDidEnterBackgroundNotification
@@ -83,10 +77,10 @@ using namespace ax;
            selector:@selector(handleEnterForground:)
                name:UIApplicationWillEnterForegroundNotification
              object:nil];
-#endif
+#    endif
 }
 
-#if TARGET_OS_IPHONE
+#    if TARGET_OS_IPHONE
 - (void)handleAudioRouteChange:(NSNotification*)notification
 {
     if (_me->isPlaying())
@@ -105,7 +99,6 @@ using namespace ax;
         _me->internalPause();
 }
 
-
 - (void)handleEnterForground:(NSNotification*)notification
 {
     if (_me->isPlaying())
@@ -117,28 +110,18 @@ using namespace ax;
     if (_me->isPlaying())
         _me->internalPause();
 }
-#endif
+#    endif
 
 - deregisterUINotifications
 {
-#if TARGET_OS_IPHONE
+#    if TARGET_OS_IPHONE
     auto nc = [NSNotificationCenter defaultCenter];
-    [nc removeObserver:self
-               name:AVAudioSessionRouteChangeNotification
-             object:nil];
-    [nc removeObserver:self
-                  name:UIApplicationDidBecomeActiveNotification
-                object:nil];
-    [nc removeObserver:self
-                  name:UIApplicationWillResignActiveNotification
-                object:nil];
-    [nc removeObserver:self
-                  name:UIApplicationDidEnterBackgroundNotification
-                object:nil];
-    [nc removeObserver:self
-                  name:UIApplicationWillEnterForegroundNotification
-                object:nil];
-#endif
+    [nc removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+    [nc removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [nc removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [nc removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [nc removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+#    endif
 }
 
 - (void)dealloc
@@ -168,10 +151,11 @@ namespace ax
 void AvfMediaEngine::onPlayerEnd()
 {
     _playbackEnded = true;
-    _state = MEMediaState::Stopped;
+    _state         = MEMediaState::Stopped;
     fireMediaEvent(MEMediaEventType::Stopped);
 
-    if (_repeatEnabled) {
+    if (_repeatEnabled)
+    {
         this->setCurrentTime(0);
         this->play();
     }
@@ -194,14 +178,18 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
         // Media Framework doesn't percent encode the URL, so the path portion is just a native file path.
         // Extract it and then use it create a proper URL.
         Path             = sourceUri.substr(7);
-        NSString* nsPath = [[NSString alloc] initWithBytes:Path.data() length:Path.size() encoding:NSUTF8StringEncoding];
+        NSString* nsPath = [[NSString alloc] initWithBytes:Path.data()
+                                                    length:Path.size()
+                                                  encoding:NSUTF8StringEncoding];
         nsMediaUrl       = [NSURL fileURLWithPath:nsPath isDirectory:NO];
     }
     else
     {
         // Assume that this has been percent encoded for now - when we support HTTP Live Streaming we will need to check
         // for that.
-        NSString* nsUri = [[NSString alloc] initWithBytes:sourceUri.data() length:sourceUri.size() encoding:NSUTF8StringEncoding];
+        NSString* nsUri = [[NSString alloc] initWithBytes:sourceUri.data()
+                                                   length:sourceUri.size()
+                                                 encoding:NSUTF8StringEncoding];
         nsMediaUrl      = [NSURL URLWithString:nsUri];
     }
 
@@ -242,28 +230,28 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
     _state = MEMediaState::Preparing;
 
     // load tracks
-    [[_playerItem asset] loadValuesAsynchronouslyForKeys:@[ @"tracks" ]
-                                       completionHandler:^{
-                                         NSError* nsError = nil;
+    [[_playerItem asset]
+        loadValuesAsynchronouslyForKeys:@[ @"tracks" ]
+                      completionHandler:^{
+                        NSError* nsError = nil;
 
-                                         if ([[_playerItem asset] statusOfValueForKey:@"tracks" error:&nsError] ==
-                                             AVKeyValueStatusLoaded)
-                                         {
-                                             // File movies will be ready now
-                                             if (_playerItem.status == AVPlayerItemStatusReadyToPlay)
-                                             {
-                                                 onStatusNotification(_playerItem);
-                                             }
-                                         }
-                                         else if (nsError != nullptr)
-                                         {
-                                             NSDictionary* errDetail = [nsError userInfo];
-                                             NSString* errStr =
-                                                 [[errDetail objectForKey:NSUnderlyingErrorKey] localizedDescription];
-                                             NSString* errorReason = [errDetail objectForKey:NSLocalizedFailureReasonErrorKey];
-                                             AXME_TRACE("Load media asset failed, {}, {}", errStr.UTF8String, errorReason.UTF8String);
-                                         }
-                                       }];
+                        if ([[_playerItem asset] statusOfValueForKey:@"tracks"
+                                                               error:&nsError] == AVKeyValueStatusLoaded)
+                        {
+                            // File movies will be ready now
+                            if (_playerItem.status == AVPlayerItemStatusReadyToPlay)
+                            {
+                                onStatusNotification(_playerItem);
+                            }
+                        }
+                        else if (nsError != nullptr)
+                        {
+                            NSDictionary* errDetail = [nsError userInfo];
+                            NSString* errStr = [[errDetail objectForKey:NSUnderlyingErrorKey] localizedDescription];
+                            NSString* errorReason = [errDetail objectForKey:NSLocalizedFailureReasonErrorKey];
+                            AXME_TRACE("Load media asset failed, {}, {}", errStr.UTF8String, errorReason.UTF8String);
+                        }
+                      }];
 
     [[NSNotificationCenter defaultCenter] addObserver:_sessionHandler
                                              selector:@selector(playerItemDidPlayToEndTime:)
@@ -299,8 +287,8 @@ void AvfMediaEngine::onStatusNotification(void* context)
         {  // we only care about video
 
             auto naturalSize = [assetTrack naturalSize];
-            _videoExtent.x = naturalSize.width;
-            _videoExtent.y = naturalSize.height;
+            _videoExtent.x   = naturalSize.width;
+            _videoExtent.y   = naturalSize.height;
 
             NSMutableDictionary* outputAttrs = [NSMutableDictionary dictionary];
             CMFormatDescriptionRef DescRef   = (CMFormatDescriptionRef)[assetTrack.formatDescriptions objectAtIndex:0];
@@ -324,9 +312,9 @@ void AvfMediaEngine::onStatusNotification(void* context)
             }
 
             CGAffineTransform transform = [assetTrack preferredTransform];
-            double radians = atan2(transform.b, transform.a);
-            int degrees = static_cast<int>(radians * 180.0 / M_PI);
-            _videoRotation = AX_ALIGN_ANY(degrees, 90);
+            double radians              = atan2(transform.b, transform.a);
+            int degrees                 = static_cast<int>(radians * 180.0 / M_PI);
+            _videoRotation              = AX_ALIGN_ANY(degrees, 90);
 
             _bFullColorRange = false;
             switch (videoOutputPF)
@@ -360,19 +348,20 @@ void AvfMediaEngine::onStatusNotification(void* context)
         }
     }
 
-    if (_bAutoPlay) {
+    if (_bAutoPlay)
+    {
         /* Fix issue: #2371 for tvOS
         delay one frame to invoke [player play] to fix player.timeControlStatus
         maybe AVPlayerTimeControlStatusPaused at first app startup
         */
         __weak AVPlayer* player = _player;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (player != nil)
-                [player play];
+          if (player != nil)
+              [player play];
         });
-        
+
         _playbackEnded = false;
-        _state = MEMediaState::Playing;
+        _state         = MEMediaState::Playing;
         fireMediaEvent(MEMediaEventType::Playing);
     }
 }
@@ -417,17 +406,18 @@ bool AvfMediaEngine::transferVideoFrame()
         // Windows:
         //    - H264: BufferDimX align videoDim.x with 16, BufferDimY as-is
         //    - HEVC(H265): BufferDim(X,Y) align videoDim(X,Y) with 32
-        MEVideoFrame frame{frameYData, frameCbCrData, static_cast<size_t>(YDataLen + UVDataLen), MEVideoPixelDesc{_videoPF, MEIntPoint{YPitch, YHeight}}, videoDim};
+        MEVideoFrame frame{frameYData, frameCbCrData, static_cast<size_t>(YDataLen + UVDataLen),
+                           MEVideoPixelDesc{_videoPF, MEIntPoint{YPitch, YHeight}}, videoDim};
         frame._vpd._rotation = _videoRotation;
-#if defined(_DEBUG) || !defined(_NDEBUG)
-        auto& ycbcrDesc = frame._ycbcrDesc;
-        ycbcrDesc.YDim.x = YWidth;
-        ycbcrDesc.YDim.y = YHeight;
+#    if defined(_DEBUG) || !defined(_NDEBUG)
+        auto& ycbcrDesc     = frame._ycbcrDesc;
+        ycbcrDesc.YDim.x    = YWidth;
+        ycbcrDesc.YDim.y    = YHeight;
         ycbcrDesc.CbCrDim.x = UVWidth;
         ycbcrDesc.CbCrDim.y = UVHeight;
-        ycbcrDesc.YPitch = YPitch;
+        ycbcrDesc.YPitch    = YPitch;
         ycbcrDesc.CbCrPitch = UVPitch;
-#endif
+#    endif
         _onVideoFrame(frame);
     }
     else
@@ -495,7 +485,8 @@ bool AvfMediaEngine::setCurrentTime(double fSeekTimeInSec)
 
 double AvfMediaEngine::getCurrentTime()
 {
-    if (_player != nil) {
+    if (_player != nil)
+    {
         CMTime currTime = [_player currentTime];
         if (CMTIME_IS_VALID(currTime))
             return CMTimeGetSeconds(currTime);
@@ -506,8 +497,10 @@ double AvfMediaEngine::getCurrentTime()
 
 double AvfMediaEngine::getDuration()
 {
-    if (_player != nil) {
-        if (_player.currentItem != nil) {
+    if (_player != nil)
+    {
+        if (_player.currentItem != nil)
+        {
             CMTime duration = _player.currentItem.asset.duration;
             return CMTimeGetSeconds(duration);
         }
@@ -521,14 +514,15 @@ bool AvfMediaEngine::play()
     {
         [_player play];
         _playbackEnded = false;
-        _state = MEMediaState::Playing;
+        _state         = MEMediaState::Playing;
         fireMediaEvent(MEMediaEventType::Playing);
     }
     return true;
 }
 void AvfMediaEngine::internalPlay(bool replay)
 {
-    if (_player != nil) {
+    if (_player != nil)
+    {
         if (replay)
             [_player pause];
         [_player play];
@@ -567,6 +561,6 @@ MEMediaState AvfMediaEngine::getState() const
     return _state;
 }
 
-}
+}  // namespace ax
 
 #endif

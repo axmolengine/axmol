@@ -106,6 +106,6 @@ private:
     bool _rendererDepthTestEnabled = true;
 };
 
-}
+}  // namespace ax
 
 #endif  // __DRAW_NODE_3D_H__

@@ -147,4 +147,4 @@ PUObserver* PUObserverManager::createObserver(std::string_view type)
     return nullptr;
 }
 
-}
+}  // namespace ax

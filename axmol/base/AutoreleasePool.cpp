@@ -91,8 +91,7 @@ bool AutoreleasePool::contains(Object* object) const
 
 void AutoreleasePool::dump()
 {
-    AXLOGD("autorelease pool: {}, number of managed object {}\n", _name,
-          static_cast<int>(_managedObjectArray.size()));
+    AXLOGD("autorelease pool: {}, number of managed object {}\n", _name, static_cast<int>(_managedObjectArray.size()));
     AXLOGD("{}\t{}\t{}", "Object pointer", "Object id", "reference count");
     for (const auto& obj : _managedObjectArray)
     {
@@ -168,4 +167,4 @@ void PoolManager::pop()
     _releasePoolStack.pop_back();
 }
 
-}
+}  // namespace ax

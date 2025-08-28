@@ -73,9 +73,9 @@ private:
     void _play2d(AudioCache* cache, AUDIO_ID audioID);
     void _unscheduleUpdate();
     ALuint findValidSource();
-#if defined(__APPLE__) && !AX_USE_ALSOFT
+#    if defined(__APPLE__) && !AX_USE_ALSOFT
     static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
-#endif
+#    endif
     ALuint _alSources[MAX_AUDIOINSTANCES];
 
     // available sources
@@ -97,5 +97,5 @@ private:
     Scheduler* _scheduler;
 };
 
-}
+}  // namespace ax
 #endif  // __AUDIO_ENGINE_INL_H_

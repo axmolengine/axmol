@@ -189,7 +189,7 @@ public:
      *  @brief Gets current state of connection.
      *  @return State the state value could be State::CONNECTING, State::OPEN, State::CLOSING or State::CLOSED
      */
-    State getReadyState() const {  return _state; }
+    State getReadyState() const { return _state; }
 
     /**
      *  @brief Gets the URL of websocket connection.
@@ -202,13 +202,15 @@ public:
     std::string_view getProtocol() const { return _selectedProtocol; }
 
 protected:
-    static EM_BOOL em_ws_onopen(int eventType, const EmscriptenWebSocketOpenEvent *websocketEvent, void *userData);
-    static EM_BOOL em_ws_onerror(int eventType, const EmscriptenWebSocketErrorEvent *websocketEvent, void *userData);
-    static EM_BOOL em_ws_onclose(int eventType, const EmscriptenWebSocketCloseEvent *websocketEvent, void *userData);
-    static EM_BOOL em_ws_onmessage(int eventType, const EmscriptenWebSocketMessageEvent *websocketEvent, void *userData);
+    static EM_BOOL em_ws_onopen(int eventType, const EmscriptenWebSocketOpenEvent* websocketEvent, void* userData);
+    static EM_BOOL em_ws_onerror(int eventType, const EmscriptenWebSocketErrorEvent* websocketEvent, void* userData);
+    static EM_BOOL em_ws_onclose(int eventType, const EmscriptenWebSocketCloseEvent* websocketEvent, void* userData);
+    static EM_BOOL em_ws_onmessage(int eventType,
+                                   const EmscriptenWebSocketMessageEvent* websocketEvent,
+                                   void* userData);
 
 protected:
-    int _wsfd = -1;
+    int _wsfd    = -1;
     State _state = State::CLOSED;
     std::string _url;
     std::string _subProtocols;
@@ -218,4 +220,4 @@ protected:
 };
 }  // namespace network
 
-}
+}  // namespace ax

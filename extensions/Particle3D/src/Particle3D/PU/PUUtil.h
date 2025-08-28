@@ -39,5 +39,4 @@ public:
     static Vec3 perpendicular(const Vec3& src);
     static Vec3 randomDeviant(const Vec3& src, float angle, const Vec3& up = Vec3::ZERO);
 };
-}
-
+}  // namespace ax

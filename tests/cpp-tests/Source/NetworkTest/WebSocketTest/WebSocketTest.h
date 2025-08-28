@@ -41,8 +41,7 @@
 
 DEFINE_TEST_SUITE(WebSocketTests);
 
-class WebSocketTest : public TestCase
-, public ax::network::WebSocket::Delegate
+class WebSocketTest : public TestCase, public ax::network::WebSocket::Delegate
 {
 public:
     CREATE_FUNC(WebSocketTest);
@@ -51,16 +50,16 @@ public:
     virtual ~WebSocketTest();
 
     virtual void onExit() override;
-    
-    virtual void onOpen(ax::network::WebSocket* ws)override;
-    virtual void onMessage(ax::network::WebSocket* ws, const ax::network::WebSocket::Data& data)override;
-    virtual void onClose(ax::network::WebSocket* ws, uint16_t code, std::string_view reason)override;
-    virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error)override;
-    
+
+    virtual void onOpen(ax::network::WebSocket* ws) override;
+    virtual void onMessage(ax::network::WebSocket* ws, const ax::network::WebSocket::Data& data) override;
+    virtual void onClose(ax::network::WebSocket* ws, uint16_t code, std::string_view reason) override;
+    virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error) override;
+
     // Menu Callbacks
-    void onMenuSendTextClicked(ax::Object *sender);
-    void onMenuSendMultipleTextClicked(ax::Object *sender);
-    void onMenuSendBinaryClicked(ax::Object *sender);
+    void onMenuSendTextClicked(ax::Object* sender);
+    void onMenuSendMultipleTextClicked(ax::Object* sender);
+    void onMenuSendBinaryClicked(ax::Object* sender);
 
     virtual std::string title() const override { return "WebSocket Test"; }
     void startTestCallback(ax::Object* sender);
@@ -69,26 +68,25 @@ private:
     ax::network::WebSocket* _wsiSendText;
     ax::network::WebSocket* _wsiSendBinary;
     ax::network::WebSocket* _wsiError;
-    
+
     ax::Label* _sendTextStatus;
     ax::Label* _sendBinaryStatus;
     ax::Label* _errorStatus;
     ax::Menu* _startTestMenu;
-    
+
     int _sendTextTimes;
     int _sendBinaryTimes;
 };
 
-class WebSocketCloseTest : public TestCase
-    , public ax::network::WebSocket::Delegate
+class WebSocketCloseTest : public TestCase, public ax::network::WebSocket::Delegate
 {
 public:
     CREATE_FUNC(WebSocketCloseTest);
 
-    virtual void onOpen(ax::network::WebSocket* ws)override;
-    virtual void onMessage(ax::network::WebSocket* ws, const ax::network::WebSocket::Data& data)override;
-    virtual void onClose(ax::network::WebSocket* ws, uint16_t code, std::string_view reason)override;
-    virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error)override;
+    virtual void onOpen(ax::network::WebSocket* ws) override;
+    virtual void onMessage(ax::network::WebSocket* ws, const ax::network::WebSocket::Data& data) override;
+    virtual void onClose(ax::network::WebSocket* ws, uint16_t code, std::string_view reason) override;
+    virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error) override;
 
     WebSocketCloseTest();
     virtual ~WebSocketCloseTest();
@@ -100,8 +98,7 @@ private:
     ax::network::WebSocket* _wsiTest;
 };
 
-class WebSocketDelayTest : public TestCase
-, public ax::network::WebSocket::Delegate
+class WebSocketDelayTest : public TestCase, public ax::network::WebSocket::Delegate
 {
 public:
     CREATE_FUNC(WebSocketDelayTest);
@@ -110,14 +107,14 @@ public:
     virtual ~WebSocketDelayTest();
 
     virtual void onExit() override;
-    
-    virtual void onOpen(ax::network::WebSocket* ws)override;
-    virtual void onMessage(ax::network::WebSocket* ws, const ax::network::WebSocket::Data& data)override;
-    virtual void onClose(ax::network::WebSocket* ws, uint16_t code, std::string_view reason)override;
-    virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error)override;
-    
+
+    virtual void onOpen(ax::network::WebSocket* ws) override;
+    virtual void onMessage(ax::network::WebSocket* ws, const ax::network::WebSocket::Data& data) override;
+    virtual void onClose(ax::network::WebSocket* ws, uint16_t code, std::string_view reason) override;
+    virtual void onError(ax::network::WebSocket* ws, const ax::network::WebSocket::ErrorCode& error) override;
+
     // Menu Callbacks
-    void onMenuSendTextClicked(ax::Object *sender);
+    void onMenuSendTextClicked(ax::Object* sender);
 
     virtual std::string title() const override { return "WebSocket Delay Test"; }
     void startTestCallback(ax::Object* sender);
@@ -133,16 +130,16 @@ public:
 
 private:
     ax::network::WebSocket* _wsiSendText;
-    
+
     ax::Label* _sendTextStatus;
     ax::Label* _progressStatus;
     ax::Menu* _startTestMenu;
-   
-    int64_t _totalDelayMircoSec = 0;
-    int64_t _sendTimeMircoSec = 0;
+
+    int64_t _totalDelayMircoSec  = 0;
+    int64_t _sendTimeMircoSec    = 0;
     int64_t _receiveTimeMircoSec = 0;
 
-    int _sendTextTimes = 0;
+    int _sendTextTimes    = 0;
     int _receiveTextTimes = 0;
 };
 

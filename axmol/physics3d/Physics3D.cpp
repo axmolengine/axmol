@@ -36,7 +36,7 @@ AX_DLL const char* physics3dVersion()
     return "bullet3.25";
 }
 
-}
+}  // namespace ax
 
 ax::Vec3 convertbtVector3ToVec3(const btVector3& btVec3)
 {

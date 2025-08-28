@@ -140,7 +140,7 @@ public:
      * Default destructor.
      * @lua NA
      */
-    virtual ~LayoutParameter(){};
+    virtual ~LayoutParameter() {};
 
     /**
      * Create a empty LayoutParameter.
@@ -247,7 +247,7 @@ public:
      *
      * @lua NA
      */
-    virtual ~LinearLayoutParameter(){};
+    virtual ~LinearLayoutParameter() {};
 
     /**
      * Create a empty LinearLayoutParameter instance.
@@ -335,7 +335,7 @@ public:
      *
      * @lua NA
      */
-    virtual ~RelativeLayoutParameter(){};
+    virtual ~RelativeLayoutParameter() {};
 
     /**
      * Create a RelativeLayoutParameter instance.
@@ -399,7 +399,6 @@ protected:
 };
 
 }  // namespace ui
-}
+}  // namespace ax
 // end of ui group
 /// @}
-

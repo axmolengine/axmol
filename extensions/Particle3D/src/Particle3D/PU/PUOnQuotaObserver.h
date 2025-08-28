@@ -49,11 +49,10 @@ public:
     void postUpdateObserver(float deltaTime) override;
 
     PUOnQuotaObserver() : PUObserver(), _result(false) {}
-    virtual ~PUOnQuotaObserver(){};
+    virtual ~PUOnQuotaObserver() {};
 
 protected:
     bool _result;
 };
 
-}
-
+}  // namespace ax

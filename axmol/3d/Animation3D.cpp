@@ -122,7 +122,6 @@ bool Animation3D::init(const Animation3DData& data)
             if (iter.second.empty())
                 continue;
 
-
             axstd::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
                                         [](const auto& keyIter) { return keyIter._time; });
             axstd::resize_and_transform(iter.second.begin(), iter.second.end(), values,
@@ -251,4 +250,4 @@ Animation3DCache::~Animation3DCache()
     removeAllAnimations();
 }
 
-}
+}  // namespace ax

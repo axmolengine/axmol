@@ -187,4 +187,4 @@ void PUParticle3DInterParticleCollider::copyAttributesTo(PUAffector* affector)
     interParticleCollider->_interParticleCollisionResponse = _interParticleCollisionResponse;
 }
 
-}
+}  // namespace ax

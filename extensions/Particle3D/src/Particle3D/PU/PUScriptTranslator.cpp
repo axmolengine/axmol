@@ -773,4 +773,4 @@ void PUScriptTranslator::processNode(PUScriptCompiler* compiler, PUAbstractNode*
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-}
+}  // namespace ax

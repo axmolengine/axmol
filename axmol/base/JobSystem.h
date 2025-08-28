@@ -102,7 +102,7 @@ public:
     void enqueue(std::function<void()> task, std::function<void()> done);
     void enqueue(std::shared_ptr<JobThreadTask> task);
 
- protected:
+protected:
     void init(const std::span<std::shared_ptr<JobThreadData>>& tdds);
 
 private:
@@ -110,4 +110,4 @@ private:
     JobThreadData* _mainThreadData{nullptr};
 };
 
-}
+}  // namespace ax

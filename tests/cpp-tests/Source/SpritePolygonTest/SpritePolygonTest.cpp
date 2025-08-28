@@ -103,7 +103,7 @@ bool SpritePolygonTestCase::init()
             auto menu = Menu::create(menuItem, nullptr);
             menu->setPosition(Vec2::ZERO);
             menuItem->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-            menuItem->setPosition(VisibleRect::leftBottom() + Vec2(0.0f, VisibleRect::leftTop().y/4));
+            menuItem->setPosition(VisibleRect::leftBottom() + Vec2(0.0f, VisibleRect::leftTop().y / 4));
             this->addChild(menu, 9999);
         }
         return true;
@@ -149,7 +149,7 @@ bool SpritePolygonTestDemo::init()
 {
     if (SpritePolygonTestCase::init())
     {
-        _polygonSprite = nullptr;
+        _polygonSprite     = nullptr;
         _polygonSprite_fix = nullptr;
         initSprites();
         initTouches();
@@ -300,7 +300,7 @@ bool SpritePolygonTestSlider::init()
 
 void SpritePolygonTestSlider::initSliders()
 {
-    auto vsize                  = Director::getInstance()->getVisibleSize();
+    auto vsize             = Director::getInstance()->getVisibleSize();
     ax::ui::Slider* slider = ax::ui::Slider::create();
     slider->loadBarTexture("cocosui/sliderTrack.png");
     slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
@@ -333,8 +333,8 @@ void SpritePolygonTestSlider::changeEpsilon(ax::Object* pSender, ax::ui::Slider:
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
         ax::ui::Slider* slider = dynamic_cast<ax::ui::Slider*>(pSender);
-        float epsilon               = powf(slider->getPercent() / 100.0, 2) * 19.0f + 1.0f;
-        for (auto&&child : _children)
+        float epsilon          = powf(slider->getPercent() / 100.0, 2) * 19.0f + 1.0f;
+        for (auto&& child : _children)
         {
             if (child->getName().size())
             {
@@ -381,8 +381,8 @@ Sprite* SpritePolygonTestSlider::makeSprite(std::string_view filename, const Vec
     // Label
     auto ttfConfig = TTFConfig("fonts/arial.ttf", 8);
     auto spArea    = Label::createWithTTF(
-           ttfConfig, (std::string)filename + "\nVerts: " + Value((int)pinfo.getVertCount()).asString() +
-                          "\nPixels: " + Value((int)(pinfo.getArea() / originalSize * 100)).asString() + "%");
+        ttfConfig, (std::string)filename + "\nVerts: " + Value((int)pinfo.getVertCount()).asString() +
+                       "\nPixels: " + Value((int)(pinfo.getArea() / originalSize * 100)).asString() + "%");
     ret->addChild(spArea);
     spArea->setAnchorPoint(Vec2(0.0f, 1.0f));
     spArea->setName(filename);
@@ -786,7 +786,7 @@ void SpritePolygonTestFrameAnim::initSprites()
     for (int i = 0; i < 10; i++)
     {
         auto name = fmt::format_to_z(buf, "grossini_dance_{:02d}.png", i + 1);
-        sprite = Sprite::createWithSpriteFrameName(name);
+        sprite    = Sprite::createWithSpriteFrameName(name);
 
         sprite->setPosition(Vec2(screen.width / 6 * (i % 5 + 1), screen.height * 2 / 3 - screen.height * (i / 5) / 3));
 
@@ -828,9 +828,9 @@ Issue14017Test::Issue14017Test()
 
 void Issue14017Test::initSprites()
 {
-    auto s        = Director::getInstance()->getWinSize();
-    auto offset   = Vec2(0.3 * s.width, 0);
-    auto filename = "Images/bug14017.png";
+    auto s            = Director::getInstance()->getWinSize();
+    auto offset       = Vec2(0.3 * s.width, 0);
+    auto filename     = "Images/bug14017.png";
     auto filename_fix = "Images/bug14017_fix.png";
 
     // Sprite
@@ -840,7 +840,7 @@ void Issue14017Test::initSprites()
     addChild(_polygonSprite);
     _polygonSprite->setPosition(Vec2(s) / 2);
 
-    auto pinfo_fix = AutoPolygon::generatePolygon(filename_fix);
+    auto pinfo_fix     = AutoPolygon::generatePolygon(filename_fix);
     _polygonSprite_fix = Sprite::create(pinfo_fix);
     _polygonSprite_fix->setTag(102);
     addChild(_polygonSprite_fix);
@@ -884,7 +884,7 @@ void Issue14017Test::initSprites()
     _polygonSprite->addChild(sppArea);
     sppArea->setAnchorPoint(Vec2(0, 1));
 
-    temp           = "SpritePolygon:\nPixels drawn: ";
+    temp            = "SpritePolygon:\nPixels drawn: ";
     auto vertCount1 = "\nverts:" + Value((int)pinfo_fix.getVertCount()).asString();
     auto spppArea   = Label::createWithTTF(ttfConfig, temp + Value((int)pinfo_fix.getArea()).asString() + vertCount1);
     _polygonSprite_fix->addChild(spppArea);
@@ -913,7 +913,7 @@ SpritePolygonTestPerformance::SpritePolygonTestPerformance()
 void SpritePolygonTestPerformance::createSprite()
 {
     static PolygonInfo pinfo;
-    Size s         = Director::getInstance()->getWinSize();
+    Size s = Director::getInstance()->getWinSize();
 
     if (pinfo.getFilename() == "")
     {

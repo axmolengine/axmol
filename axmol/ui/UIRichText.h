@@ -72,9 +72,9 @@ public:
     void setColor(const Color32& color);
 
 protected:
-    Type _type{};       /*!< Rich element type. */
-    int _tag{};         /*!< A integer tag value. */
-    Color32 _color{};   /*!< A color in `Color32`. */
+    Type _type{};     /*!< Rich element type. */
+    int _tag{};       /*!< A integer tag value. */
+    Color32 _color{}; /*!< A color in `Color32`. */
     friend class RichText;
 };
 
@@ -197,7 +197,7 @@ public:
      * @lua new
      *
      */
-    RichElementImage(): _textureType(), _width(0), _height(0), _scaleX(0), _scaleY(0) { _type = Type::IMAGE; }
+    RichElementImage() : _textureType(), _width(0), _height(0), _scaleX(0), _scaleY(0) { _type = Type::IMAGE; }
 
     /**
      * @brief Initialize a RichElementImage with various arguments.
@@ -294,10 +294,7 @@ public:
      * @param id ID of element
      * @return A RichElementCustomNode instance.
      */
-    static RichElementCustomNode* create(int tag,
-                                         const Color32& color,
-                                         Node* customNode,
-                                         std::string_view id = ""sv);
+    static RichElementCustomNode* create(int tag, const Color32& color, Node* customNode, std::string_view id = ""sv);
 
 protected:
     Node* _customNode{};
@@ -512,7 +509,7 @@ public:
     void setHorizontalAlignment(
         HorizontalAlignment a); /*!< sets the horizontal alignment mode: LEFT, CENTER, or RIGHT */
     HorizontalAlignment getHorizontalAlignment() const; /*!< returns the current horizontal alignment mode */
-    void setVerticalAlignment(VerticalAlignment a); /*!< sets the vertical alignment mode: TOP, CENTER, or BOTTOM */
+    void setVerticalAlignment(VerticalAlignment a);     /*!< sets the vertical alignment mode: TOP, CENTER, or BOTTOM */
     VerticalAlignment getVerticalAlignment() const;     /*!< returns the current vertical alignment mode */
     void setFontColor(
         std::string_view color);             /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
@@ -553,7 +550,7 @@ public:
     void setDefaults(const ValueMap& defaults); /*!< set the default values */
     ValueMap getDefaults() const;               /*!< returns the default values */
 
-    static ax::Color32 parseColor32(std::string_view color);     /*!< convert a color string into a Color32. */
+    static ax::Color32 parseColor32(std::string_view color);      /*!< convert a color string into a Color32. */
     static std::string formatColor32(const ax::Color32& Color32); /*!< convert a Color32 into a color string. */
 
     /**
@@ -641,4 +638,4 @@ protected:
 
 // end of ui group
 /// @}
-}
+}  // namespace ax

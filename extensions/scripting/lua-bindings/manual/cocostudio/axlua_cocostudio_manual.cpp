@@ -113,18 +113,18 @@ static int axlua_ArmatureAnimation_setMovementEventCallFunc(lua_State* L)
 
         self->setMovementEventCallFunc(
             [=](Armature* armature, MovementEventType movementType, std::string_view movementID) {
-                if (0 != handler)
-                {
-                    LuaArmatureMovementEventData movementData(armature, (int)movementType, movementID);
+            if (0 != handler)
+            {
+                LuaArmatureMovementEventData movementData(armature, (int)movementType, movementID);
 
-                    LuaArmatureWrapperEventData wrapperData(
-                        LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::MOVEMENT_EVENT, (void*)&movementData);
+                LuaArmatureWrapperEventData wrapperData(
+                    LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::MOVEMENT_EVENT, (void*)&movementData);
 
-                    BasicScriptData data((void*)vec.at(0), (void*)&wrapperData);
+                BasicScriptData data((void*)vec.at(0), (void*)&wrapperData);
 
-                    LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::ARMATURE_EVENT, (void*)&data);
-                }
-            });
+                LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::ARMATURE_EVENT, (void*)&data);
+            }
+        });
         return 0;
     }
 
@@ -189,20 +189,20 @@ static int axlua_ArmatureAnimation_setFrameEventCallFunc(lua_State* L)
 
         self->setFrameEventCallFunc(
             [=](cocostudio::Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex) {
-                if (0 != handler)
-                {
-                    std::string strFrameEventName(frameEventName);
+            if (0 != handler)
+            {
+                std::string strFrameEventName(frameEventName);
 
-                    LuaArmatureFrameEventData frameData(bone, frameEventName, originFrameIndex, currentFrameIndex);
+                LuaArmatureFrameEventData frameData(bone, frameEventName, originFrameIndex, currentFrameIndex);
 
-                    LuaArmatureWrapperEventData wrapperData(
-                        LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::FRAME_EVENT, (void*)&frameData);
+                LuaArmatureWrapperEventData wrapperData(
+                    LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::FRAME_EVENT, (void*)&frameData);
 
-                    BasicScriptData data((void*)vec.at(0), (void*)&wrapperData);
+                BasicScriptData data((void*)vec.at(0), (void*)&wrapperData);
 
-                    LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::ARMATURE_EVENT, (void*)&data);
-                }
-            });
+                LuaEngine::getInstance()->handleEvent(ScriptHandlerMgr::HandlerType::ARMATURE_EVENT, (void*)&data);
+            }
+        });
 
         return 0;
     }
@@ -250,8 +250,7 @@ static int axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_State*
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(L,
-                    "invalid 'self' in function 'axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc'\n",
+        tolua_error(L, "invalid 'self' in function 'axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc'\n",
                     NULL);
         return 0;
     }
@@ -325,8 +324,7 @@ static void extendArmatureDataManager(lua_State* L)
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        tolua_function(L, "addArmatureFileInfoAsync",
-                       axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc);
+        tolua_function(L, "addArmatureFileInfoAsync", axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc);
     }
     lua_pop(L, 1);
 }
@@ -473,7 +471,7 @@ static int axlua_ActionTimeline_setFrameEventCallFunc(lua_State* L)
         self->setFrameEventCallFunc([=](cocostudio::timeline::Frame* frame) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
             toluafix_pushusertype_object(stack->getLuaState(), frame->_ID, &frame->_luaID, (void*)frame,
-                                           getLuaTypeName(frame, "ccs.Frame"));
+                                         getLuaTypeName(frame, "ccs.Frame"));
             stack->executeFunctionByHandler(handler, 1);
         });
 

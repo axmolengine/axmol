@@ -58,7 +58,7 @@ public:
     Vec3 en3;            // Normal of edge v3-v1
 
     /** Constructor **/
-    PUTriangle(){};
+    PUTriangle() {};
 
     /** Calculate the (square) surface of the triangle **/
     void calculateSquareSurface();
@@ -248,5 +248,4 @@ protected:
     bool _directionSet;
 };
 
-}
-
+}  // namespace ax

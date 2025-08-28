@@ -76,4 +76,4 @@ void PUFlockCenteringAffector::copyAttributesTo(PUAffector* affector)
     flockCenteringAffector->_count                   = _count;
 }
 
-}
+}  // namespace ax

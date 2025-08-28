@@ -211,5 +211,4 @@ private:
 // end of _3d group
 /// @}
 
-}
-
+}  // namespace ax

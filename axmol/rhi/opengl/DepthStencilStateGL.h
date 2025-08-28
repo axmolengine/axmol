@@ -26,7 +26,8 @@
 
 #include "axmol/rhi/DepthStencilState.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 /**
  * @addtogroup _opengl
  * @{
@@ -55,4 +56,4 @@ public:
 };
 // end of _opengl group
 /// @}
-}
+}  // namespace ax::rhi::gl

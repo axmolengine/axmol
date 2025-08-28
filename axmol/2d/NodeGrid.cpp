@@ -179,4 +179,4 @@ void NodeGrid::setGrid(GridBase* grid)
     _nodeGrid = grid;
 }
 
-}
+}  // namespace ax

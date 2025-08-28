@@ -440,12 +440,11 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
 
         if (charUTF8 == "\n")
             charUTF8 = "\\n";
-        AXLOGW("The font face: {} doesn't contains char: <{}>", _fontFace->charmap->face->family_name,
-                     charUTF8);
+        AXLOGW("The font face: {} doesn't contains char: <{}>", _fontFace->charmap->face->family_name, charUTF8);
 #endif
 
         if (ppFallbackInfo && s_FontEngine)
-        { // try fallback
+        {  // try fallback
             auto faceInfo = s_FontEngine->lookupFontFaceForCodepoint(charCode);
             if (faceInfo)
             {
@@ -454,13 +453,14 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
             }
         }
 
-		// Not found charCode in system fallback fonts
-		if (_mssingGlyphCharacter != 0)
+        // Not found charCode in system fallback fonts
+        if (_mssingGlyphCharacter != 0)
         {
-            if (_mssingGlyphCharacter == 0x1A) {
-			    xAdvance = 0;
+            if (_mssingGlyphCharacter == 0x1A)
+            {
+                xAdvance = 0;
                 return nullptr;  // don't render anything for this character
-			}
+            }
             // Try get new glyph index with missing glyph character code
             glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(_mssingGlyphCharacter));
         }
@@ -710,4 +710,4 @@ void FontFreeType::releaseFont(std::string_view fontName)
     }
 }
 
-}
+}  // namespace ax

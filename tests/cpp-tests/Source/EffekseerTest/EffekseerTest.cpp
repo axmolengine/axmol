@@ -29,7 +29,6 @@
 
 using namespace ax;
 
-
 //------------------------------------------------------------------
 //
 // SpineTestScene
@@ -52,7 +51,8 @@ EffekseerTests::~EffekseerTests()
 
 EffekseerTest::EffekseerTest() : _title("EffekseerTest") {}
 
-EffekseerTest::~EffekseerTest() {
+EffekseerTest::~EffekseerTest()
+{
     /**
     終了時にマネージャーを破棄します。
 
@@ -62,7 +62,7 @@ EffekseerTest::~EffekseerTest() {
 
     你会在最后摧毁经理。
 	*/
-	manager->release();
+    manager->release();
 }
 
 std::string EffekseerTest::title() const
@@ -75,17 +75,16 @@ bool EffekseerTest::init()
     if (!TestCase::init())
         return false;
 
-
     auto rsize = _director->getRenderView()->getDesignResolutionSize();
 
-	//auto sprite = Sprite::create("HelloWorld.png");
-	//sprite->setPosition(Vec2(320, 200));
-	//this->addChild(sprite, 0);
+    //auto sprite = Sprite::create("HelloWorld.png");
+    //sprite->setPosition(Vec2(320, 200));
+    //this->addChild(sprite, 0);
 
-	// for update
-	this->scheduleUpdate();
+    // for update
+    this->scheduleUpdate();
 
-	/**
+    /**
 		efk::EffectManagerのインスタンスを生成します。
 
 		You create an instance of efk::EffectManager.
@@ -94,17 +93,17 @@ bool EffekseerTest::init()
 
 		您创建一个efk::EffectManager的实例。
 	*/
-	manager = efk::EffectManager::create(rsize);
+    manager = efk::EffectManager::create(rsize);
 
     return true;
 }
 
 void EffekseerTest::update(float delta)
 {
-	// Effect1
-	if (count % 300 == 0)
-	{
-		/**
+    // Effect1
+    if (count % 300 == 0)
+    {
+        /**
 			拡大率を指定してエフェクトファイルを読み込みます。
 
 			You read an effect file with specifying scale.
@@ -113,10 +112,10 @@ void EffekseerTest::update(float delta)
 
 			您通过指定比例读取效果文件。
 		*/
-		auto effect = efk::Effect::create("Laser01.efk", 13.0f);
-		if (effect != nullptr)
-		{
-			/**
+        auto effect = efk::Effect::create("Laser01.efk", 13.0f);
+        if (effect != nullptr)
+        {
+            /**
 				エミッターを生成し、パラメーターを設定してレイヤーに追加します。
 
 				You generate an emitter, set parameters and add it to the layer.
@@ -126,25 +125,25 @@ void EffekseerTest::update(float delta)
 				您会生成一个发射极，并通过将参数添加到该层。
 			*/
 
-			auto emitter = efk::EffectEmitter::create(manager);
-			emitter->setEffect(effect);
-			emitter->setPlayOnEnter(true);
+            auto emitter = efk::EffectEmitter::create(manager);
+            emitter->setEffect(effect);
+            emitter->setPlayOnEnter(true);
 
-			emitter->setRotation3D(cocos2d::Vec3(0, 90, 0));
-			emitter->setPosition(Vec2(320, 150));
+            emitter->setRotation3D(cocos2d::Vec3(0, 90, 0));
+            emitter->setPosition(Vec2(320, 150));
 
-			// emitter->setScale(13);
-			this->addChild(emitter, 0);
+            // emitter->setScale(13);
+            this->addChild(emitter, 0);
 
-			// No need (because it uses autorelease after 1.41)
-			//effect->release();
-		}
-	}
+            // No need (because it uses autorelease after 1.41)
+            //effect->release();
+        }
+    }
 
-	// Effect2
-	if (count % 300 == 120)
-	{
-		/**
+    // Effect2
+    if (count % 300 == 120)
+    {
+        /**
 		エフェクトファイルを読み込みます。
 
 		You read an effect file.
@@ -153,10 +152,10 @@ void EffekseerTest::update(float delta)
 
 		您读取效果文件。
 		*/
-		auto effect = efk::Effect::create("Homing_Laser01.efk");
-		if (effect != nullptr)
-		{
-			/**
+        auto effect = efk::Effect::create("Homing_Laser01.efk");
+        if (effect != nullptr)
+        {
+            /**
 			エミッターを生成し、パラメーターを設定してレイヤーに追加します。
 
 			You generate an emitter, set parameters and add it to the layer.
@@ -166,27 +165,27 @@ void EffekseerTest::update(float delta)
 			您会生成一个发射极，并通过将参数添加到该层。
 			*/
 
-			auto emitter = efk::EffectEmitter::create(manager);
-			emitter->setEffect(effect);
-			emitter->setPlayOnEnter(true);
+            auto emitter = efk::EffectEmitter::create(manager);
+            emitter->setEffect(effect);
+            emitter->setPlayOnEnter(true);
 
-			emitter->setPosition(Vec2(320, 150));
-			emitter->setScale(4);
-			this->addChild(emitter, 0);
+            emitter->setPosition(Vec2(320, 150));
+            emitter->setScale(4);
+            this->addChild(emitter, 0);
 
-			/**
+            /**
 			Some parameters are required to set after addChild
 
 			一部のパラメーターはAddChildした後に設定する必要があります。
 			*/
-			emitter->setTargetPosition(cocos2d::Vec3(320, 480, 0));
+            emitter->setTargetPosition(cocos2d::Vec3(320, 480, 0));
 
-			// No need (because it uses autorelease after 1.41)
-			//effect->release();
-		}
-	}
+            // No need (because it uses autorelease after 1.41)
+            //effect->release();
+        }
+    }
 
-	/**
+    /**
 		毎フレーム、マネージャーを更新します。
 
 		You update the manager every frame.
@@ -195,14 +194,14 @@ void EffekseerTest::update(float delta)
 
 		您将更新每一帧，经理。
 	*/
-	manager->update();
+    manager->update();
 
-	count++;
+    count++;
 }
 
-void EffekseerTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+void EffekseerTest::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
 {
-	/**
+    /**
 		visitを継承して、エフェクトを実際に描画する処理を追加します。
 
 		You inherit visit and add a process to actually draw the effect.
@@ -211,8 +210,7 @@ void EffekseerTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4& pare
 
 		你继承的visit，然后添加的实际绘制效果的过程。
 	*/
-	manager->begin(renderer, _globalZOrder);
-	cocos2d::Scene::visit(renderer, parentTransform, parentFlags);
-	manager->end(renderer, _globalZOrder);
+    manager->begin(renderer, _globalZOrder);
+    cocos2d::Scene::visit(renderer, parentTransform, parentFlags);
+    manager->end(renderer, _globalZOrder);
 }
-

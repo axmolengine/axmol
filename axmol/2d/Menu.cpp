@@ -559,4 +559,4 @@ std::string Menu::getDescription() const
     return fmt::format("<Menu | Tag = {}>", _tag);
 }
 
-}
+}  // namespace ax

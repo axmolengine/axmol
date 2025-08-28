@@ -104,15 +104,15 @@ void UICheckBoxTest::printWidgetResources(ax::Object* sender)
     AXLOGD("backGroundFile  Name : {}, Type: {}", backGroundFileName.file, backGroundFileName.type);
     ax::ResourceData backGroundSelectedFileName = _checkBox->getBackPressedFile();
     AXLOGD("backGroundSelectedFile  Name : {}, Type: {}", backGroundSelectedFileName.file,
-          backGroundSelectedFileName.type);
+           backGroundSelectedFileName.type);
     ax::ResourceData backGroundDisabledFileName = _checkBox->getBackDisabledFile();
     AXLOGD("backGroundDisabledFile  Name : {}, Type: {}", backGroundDisabledFileName.file,
-          backGroundDisabledFileName.type);
+           backGroundDisabledFileName.type);
     ax::ResourceData frontCrossFileName = _checkBox->getCrossNormalFile();
     AXLOGD("frontCrossFile  Name : {}, Type: {}", frontCrossFileName.file, frontCrossFileName.type);
     ax::ResourceData frontCrossDisabledFileName = _checkBox->getCrossDisabledFile();
     AXLOGD("frontCrossDisabledFile  Name : {}, Type: {}", frontCrossDisabledFileName.file,
-          frontCrossDisabledFileName.type);
+           frontCrossDisabledFileName.type);
 }
 
 // UICheckBoxDefaultBehaviorTest

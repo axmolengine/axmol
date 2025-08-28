@@ -166,7 +166,7 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
     auto alphaThreshold = this->getAlphaThreshold();
     if (alphaThreshold < 1)
     {
-        auto* program = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
+        auto* program      = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
         auto programState  = new rhi::ProgramState(program);
         auto alphaLocation = programState->getUniformLocation("u_alpha_value");
         programState->setUniform(alphaLocation, &alphaThreshold, sizeof(alphaThreshold));
@@ -175,7 +175,6 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
         AX_SAFE_RELEASE_NULL(programState);
     }
     _stencil->visit(renderer, _modelViewTransform, flags);
-
 
     auto afterDrawStencilCmd = renderer->nextCallbackCommand();
     afterDrawStencilCmd->init(_globalZOrder);
@@ -235,7 +234,8 @@ void ClippingNode::setGlobalZOrder(float globalZOrder)
 {
     Node::setGlobalZOrder(globalZOrder);
 
-    if (_stencil) {
+    if (_stencil)
+    {
         // Make sure our stencil stays on the same globalZOrder:
         _stencil->setGlobalZOrder(globalZOrder);
     }
@@ -281,7 +281,7 @@ void ClippingNode::setStencil(Node* stencil, bool uniqueChildStencils)
 
     // initialise new stencil
     _uniqueChildStencils = uniqueChildStencils;
-    _stencil = stencil;
+    _stencil             = stencil;
     AX_SAFE_RETAIN(_stencil);
     if (_stencil != nullptr && this->isRunning())
     {
@@ -384,4 +384,4 @@ void ClippingNode::restoreAllProgramStates()
     }
 }
 
-}
+}  // namespace ax

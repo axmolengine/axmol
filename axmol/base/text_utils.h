@@ -275,7 +275,7 @@ public:
     std::size_t size_bytes() const { return _size_bytes; }
 
     bool empty() const { return _str.empty(); }
-    
+
     const value_type& at(size_t pos) const { return _str.at(pos); }
 
     std::string_view view() const;

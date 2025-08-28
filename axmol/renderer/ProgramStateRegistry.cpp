@@ -1,6 +1,7 @@
 #include "axmol/renderer/ProgramStateRegistry.h"
 
-namespace ax {
+namespace ax
+{
 
 static ProgramStateRegistry* _sharedStateRegistry = nullptr;
 /** returns the shared instance */
@@ -62,4 +63,4 @@ uint32_t ProgramStateRegistry::getProgramType(uint32_t programType, int textureS
 }
 // end of _renderer group
 /// @}
-}
+}  // namespace ax

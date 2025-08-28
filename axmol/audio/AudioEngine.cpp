@@ -55,7 +55,7 @@ AudioEngine::ProfileHelper* AudioEngine::_defaultProfileHelper = nullptr;
 std::unordered_map<AUDIO_ID, AudioEngine::AudioInfo> AudioEngine::_audioIDInfoMap;
 AudioEngineImpl* AudioEngine::_audioEngineImpl = nullptr;
 
-bool AudioEngine::_isEnabled                                  = true;
+bool AudioEngine::_isEnabled = true;
 
 AudioEngine::AudioInfo::AudioInfo()
     : profileHelper(nullptr), volume(1.0f), loop(false), duration(TIME_UNKNOWN), state(AudioState::INITIALIZING)
@@ -97,7 +97,9 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
     return play2d(filePath, ax::AudioPlayerSettings{loop, volume, 0.0f});
 }
 
-AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSettings& settings, const AudioProfile* profile)
+AUDIO_ID AudioEngine::play2d(std::string_view filePath,
+                             const AudioPlayerSettings& settings,
+                             const AudioProfile* profile)
 {
     AUDIO_ID ret = AudioEngine::INVALID_AUDIO_ID;
 
@@ -551,4 +553,4 @@ bool AudioEngine::isEnabled()
 {
     return _isEnabled;
 }
-}
+}  // namespace ax

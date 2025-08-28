@@ -33,7 +33,8 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 #include <assert.h>
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 void RenderPipelineImpl::update(const RenderTarget*, const PipelineDesc& pipelineDesc)
 {
@@ -50,8 +51,8 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDesc& pipelin
 void RenderPipelineImpl::updateBlendState(const BlendDesc& descriptor)
 {
     auto blendEnabled                = descriptor.blendEnabled;
-    auto rgbBlendOp           = UtilsGL::toGLBlendOp(descriptor.rgbBlendOp);
-    auto alphaBlendOp         = UtilsGL::toGLBlendOp(descriptor.alphaBlendOp);
+    auto rgbBlendOp                  = UtilsGL::toGLBlendOp(descriptor.rgbBlendOp);
+    auto alphaBlendOp                = UtilsGL::toGLBlendOp(descriptor.alphaBlendOp);
     auto sourceRGBBlendFactor        = UtilsGL::toGLBlendFactor(descriptor.sourceRGBBlendFactor);
     auto destinationRGBBlendFactor   = UtilsGL::toGLBlendFactor(descriptor.destinationRGBBlendFactor);
     auto sourceAlphaBlendFactor      = UtilsGL::toGLBlendFactor(descriptor.sourceAlphaBlendFactor);
@@ -67,7 +68,7 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& descriptor)
 
         __state->blendEquationSeparate(rgbBlendOp, alphaBlendOp);
         __state->blendFuncSeparate(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
-                               destinationAlphaBlendFactor);
+                                   destinationAlphaBlendFactor);
     }
     else
         __state->disableBlend();
@@ -80,4 +81,4 @@ RenderPipelineImpl::~RenderPipelineImpl()
     AX_SAFE_RELEASE(_programImpl);
 }
 
-}
+}  // namespace ax::rhi::gl

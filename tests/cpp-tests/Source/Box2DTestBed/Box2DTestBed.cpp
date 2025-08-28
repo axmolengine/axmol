@@ -203,9 +203,9 @@ bool Box2DTestBed::onMouseDown(Event* event)
 bool Box2DTestBed::onMouseUp(Event* event)
 {
     const auto ratio = _debugDraw->getPTMRatio();
-    _draging      = false;
-    EventMouse* e = static_cast<EventMouse*>(event);
-    auto location = e->getLocation() - _debugDraw->getWorldOffset();
+    _draging         = false;
+    EventMouse* e    = static_cast<EventMouse*>(event);
+    auto location    = e->getLocation() - _debugDraw->getWorldOffset();
     b2Vec2 pos       = {location.x / ratio, location.y / ratio};
     m_sample->MouseUp(pos, static_cast<int>(e->getMouseButton()));
     return true;
@@ -214,7 +214,7 @@ bool Box2DTestBed::onMouseUp(Event* event)
 bool Box2DTestBed::onMouseMove(Event* event)
 {
     const auto ratio = _debugDraw->getPTMRatio();
-    EventMouse* e = static_cast<EventMouse*>(event);
+    EventMouse* e    = static_cast<EventMouse*>(event);
 
     auto location = e->getLocation() - _debugDraw->getWorldOffset();
     b2Vec2 pos{location.x / ratio, location.y / ratio};
@@ -257,7 +257,7 @@ void Box2DTestBed::initPhysics()
     auto& b2dw      = _debugDraw->getB2DebugDraw();
     b2dw.drawShapes = true;
     b2dw.drawJoints = true;
-    b2dw.drawBounds  = false;
+    b2dw.drawBounds = false;
 
     _debugDraw->setWorldOffset({250, 70});
     _debugDraw->setPTMRatio(3.0f);
@@ -274,8 +274,8 @@ void Box2DTestBed::renderSamples()
 {
     _debugDraw->clear();
 
-    float menuWidth       = 180.0f;
-    auto cursorPos        = ImGui::GetCursorScreenPos();
+    float menuWidth = 180.0f;
+    auto cursorPos  = ImGui::GetCursorScreenPos();
 
     ImVec2 statsWindowPos  = {cursorPos.x + m_statsWindowOffset.x, cursorPos.y + m_statsWindowOffset.y};
     ImVec2 statsWindowSize = {g_camera.m_width - 10, g_camera.m_height - 10};
@@ -307,7 +307,7 @@ void Box2DTestBed::renderSamples()
         ImGui::SetNextWindowPos(toolWindowPos, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(toolWindowSize, ImGuiCond_FirstUseEver);
         ImGui::Begin("Tools", &g_draw.m_showUI,
-                     /*ImGuiWindowFlags_NoMove | */ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+                     /*ImGuiWindowFlags_NoMove | */ ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
         if (ImGui::BeginTabBar("ControlTabs", ImGuiTabBarFlags_None))
         {

@@ -37,11 +37,10 @@ class PUJetAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUJetAffectorTranslator();
-    virtual ~PUJetAffectorTranslator(){};
+    virtual ~PUJetAffectorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

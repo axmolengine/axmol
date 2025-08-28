@@ -182,6 +182,6 @@ int ScriptEngineManager::sendEventToLua(const ScriptEvent& event)
     return 0;
 }
 
-}
+}  // namespace ax
 
 #endif  // #if AX_ENABLE_SCRIPT_BINDING

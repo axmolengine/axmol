@@ -36,7 +36,7 @@ public:
     RenderPipelineImpl(ID3D11Device* device, ID3D11DeviceContext* context) : _device(device), _context(context) {}
     void update(const RenderTarget*, const PipelineDesc& desc) override;
 
-    private:
+private:
     ID3D11Device* _device         = nullptr;
     ID3D11DeviceContext* _context = nullptr;
 

@@ -27,9 +27,10 @@
 #include <float.h>
 #include "axmol/math/FastRNG.h"
 
-
-TEST_SUITE("math/FastRNG") {
-    TEST_CASE("next") {
+TEST_SUITE("math/FastRNG")
+{
+    TEST_CASE("next")
+    {
         auto rng = ax::FastRNG();
         rng.seed(1);
 
@@ -74,7 +75,8 @@ TEST_SUITE("math/FastRNG") {
         CHECK_EQ(doctest::Approx(9.94378e+307), rng.nextReal<double>(DBL_MIN, DBL_MAX));
     }
 
-    TEST_CASE("range") {
+    TEST_CASE("range")
+    {
         auto rng = ax::FastRNG();
         rng.seed(12345);
 
@@ -99,8 +101,8 @@ TEST_SUITE("math/FastRNG") {
         CHECK_EQ(317290896, rng.max());
     }
 
-
-    TEST_CASE("rangeu") {
+    TEST_CASE("rangeu")
+    {
         auto rng = ax::FastRNG();
         rng.seed(1);
 
@@ -121,7 +123,8 @@ TEST_SUITE("math/FastRNG") {
         CHECK_EQ(634581792, rng.maxu());
     }
 
-    TEST_CASE("rangef") {
+    TEST_CASE("rangef")
+    {
         auto rng = ax::FastRNG();
         rng.seed(1);
 
@@ -133,8 +136,8 @@ TEST_SUITE("math/FastRNG") {
         // CHECK_EQ(doctest::Approx(1.0), rng.rangef(-FLT_MAX, FLT_MAX));
     }
 
-
-    TEST_CASE("maxf") {
+    TEST_CASE("maxf")
+    {
         auto rng = ax::FastRNG();
         rng.seed(1);
 
@@ -167,7 +170,8 @@ TEST_SUITE("math/FastRNG") {
         CHECK_EQ(doctest::Approx(1.19643e+308), rng.maxd(DBL_MAX));
     }
 
-    TEST_CASE("float01") {
+    TEST_CASE("float01")
+    {
         auto rng = ax::FastRNG();
         rng.seed(1);
 
@@ -188,16 +192,21 @@ TEST_SUITE("math/FastRNG") {
         CHECK_EQ(doctest::Approx(0.879563), rng.double01());
     }
 
-    TEST_CASE("bool01") {
+    TEST_CASE("bool01")
+    {
         auto rng = ax::FastRNG();
         rng.seed(1);
 
         auto t = 0;
         auto f = 0;
-        for (auto i = 0; i < 100; i++) {
-            if (rng.bool01()) {
+        for (auto i = 0; i < 100; i++)
+        {
+            if (rng.bool01())
+            {
                 t++;
-            } else {
+            }
+            else
+            {
                 f++;
             }
         }

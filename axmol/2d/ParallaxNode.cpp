@@ -70,9 +70,7 @@ ParallaxNode::ParallaxNode()
     _lastPosition.set(-100.0f, -100.0f);
 }
 
-ParallaxNode::~ParallaxNode()
-{
-}
+ParallaxNode::~ParallaxNode() {}
 
 ParallaxNode* ParallaxNode::create()
 {
@@ -153,8 +151,8 @@ void ParallaxNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
         for (auto item : _parallaxArray)
         {
             auto point = static_cast<PointObject*>(item);
-            float x            = -pos.x + pos.x * point->getRatio().x + point->getOffset().x;
-            float y            = -pos.y + pos.y * point->getRatio().y + point->getOffset().y;
+            float x    = -pos.x + pos.x * point->getRatio().x + point->getOffset().x;
+            float y    = -pos.y + pos.y * point->getRatio().y + point->getOffset().y;
             point->getChild()->setPosition(x, y);
         }
         _lastPosition = pos;
@@ -162,4 +160,4 @@ void ParallaxNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
     Node::visit(renderer, parentTransform, parentFlags);
 }
 
-}
+}  // namespace ax

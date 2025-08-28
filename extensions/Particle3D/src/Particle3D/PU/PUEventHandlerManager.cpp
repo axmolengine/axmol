@@ -111,4 +111,4 @@ PUEventHandler* PUEventHandlerManager::createEventHandler(std::string_view type)
     return nullptr;
 }
 
-}
+}  // namespace ax

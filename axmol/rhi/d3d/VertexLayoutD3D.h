@@ -38,7 +38,6 @@ public:
     void apply(ID3D11DeviceContext* context, Program* program) const;
 
 private:
-
     mutable ID3D11InputLayout* _d3dVL{nullptr};
 };
 }  // namespace ax::rhi::d3d

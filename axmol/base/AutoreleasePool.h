@@ -172,5 +172,4 @@ private:
  * @endcond
  */
 
-}
-
+}  // namespace ax

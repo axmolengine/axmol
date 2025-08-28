@@ -60,8 +60,7 @@ public:
     void copyAttributesTo(PUObserver* observer) override;
 
     PUOnEventFlagObserver();
-    virtual ~PUOnEventFlagObserver(){};
+    virtual ~PUOnEventFlagObserver() {};
 };
 
-}
-
+}  // namespace ax

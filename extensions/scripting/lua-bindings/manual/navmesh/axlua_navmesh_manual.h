@@ -27,7 +27,7 @@
 
 #if defined(AX_ENABLE_NAVMESH)
 
-#include "tolua++.h"
+#    include "tolua++.h"
 
 /**
  * @addtogroup lua

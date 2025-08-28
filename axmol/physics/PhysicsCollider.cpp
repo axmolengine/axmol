@@ -470,7 +470,7 @@ bool PhysicsColliderPolygon::init(const Vec2* points,
 
         b2ShapeDef shapeDef = b2DefaultShapeDef();
         auto hull           = b2ComputeHull(reinterpret_cast<const b2Vec2*>(points), count);
-        auto polygon        = b2MakeOffsetPolygon(&hull,  PhysicsHelper::tob2Vec2(offset), b2MakeRot(radius));
+        auto polygon        = b2MakeOffsetPolygon(&hull, PhysicsHelper::tob2Vec2(offset), b2MakeRot(radius));
         auto shape          = b2CreatePolygonShape(_body->getB2Body(), &shapeDef, &polygon);
 
         AX_BREAK_IF(!b2Shape_IsValid(shape));
@@ -559,9 +559,9 @@ void PhysicsColliderPolygon::updateScale()
     }
 
     // FIXME: apply radius and offset
-    auto transform      = b2Transform_identity;
-    auto hull           = b2ComputeHull(reinterpret_cast<const b2Vec2*>(polygon.vertices), count);
-    auto polygon1        = b2MakePolygon(&hull, 0);
+    auto transform = b2Transform_identity;
+    auto hull      = b2ComputeHull(reinterpret_cast<const b2Vec2*>(polygon.vertices), count);
+    auto polygon1  = b2MakePolygon(&hull, 0);
 
     b2Shape_SetPolygon(shape, &polygon1);
 
@@ -652,7 +652,7 @@ bool PhysicsColliderEdgePolygon::init(const Vec2* points,
 
         auto def = b2DefaultShapeDef();
 
-        int i    = 0;
+        int i = 0;
         for (; i < count; ++i)
         {
             b2Segment segment{PhysicsHelper::tob2Vec2(points[i]), PhysicsHelper::tob2Vec2(points[(i + 1) % count])};

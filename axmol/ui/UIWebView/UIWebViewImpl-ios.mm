@@ -132,7 +132,7 @@
     }
     if (!self.wkWebView.superview)
     {
-        auto view     = ax::Director::getInstance()->getRenderView();
+        auto view   = ax::Director::getInstance()->getRenderView();
         auto eaView = (__bridge EARenderView*)view->getEARenderView();
         [eaView addSubview:self.wkWebView];
     }
@@ -499,9 +499,9 @@ void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32
     if (flags & ax::Node::FLAGS_TRANSFORM_DIRTY)
     {
 
-        auto director  = ax::Director::getInstance();
-        auto renderView    = director->getRenderView();
-        auto frameSize = renderView->getFrameSize();
+        auto director   = ax::Director::getInstance();
+        auto renderView = director->getRenderView();
+        auto frameSize  = renderView->getFrameSize();
 
         auto scaleFactor = [static_cast<EARenderView*>(renderView->getEARenderView()) contentScaleFactor];
 
@@ -509,11 +509,11 @@ void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32
 
         auto leftBottom = this->_webView->convertToWorldSpace(ax::Vec2::ZERO);
         auto rightTop   = this->_webView->convertToWorldSpace(
-              ax::Vec2(this->_webView->getContentSize().width, this->_webView->getContentSize().height));
+            ax::Vec2(this->_webView->getContentSize().width, this->_webView->getContentSize().height));
 
-        auto x      = (frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * renderView->getScaleX()) / scaleFactor;
-        auto y      = (frameSize.height / 2 - (rightTop.y - winSize.height / 2) * renderView->getScaleY()) / scaleFactor;
-        auto width  = (rightTop.x - leftBottom.x) * renderView->getScaleX() / scaleFactor;
+        auto x     = (frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * renderView->getScaleX()) / scaleFactor;
+        auto y     = (frameSize.height / 2 - (rightTop.y - winSize.height / 2) * renderView->getScaleY()) / scaleFactor;
+        auto width = (rightTop.x - leftBottom.x) * renderView->getScaleX() / scaleFactor;
         auto height = (rightTop.y - leftBottom.y) * renderView->getScaleY() / scaleFactor;
 
         [_uiWebViewWrapper setFrameWithX:x y:y width:width height:height];

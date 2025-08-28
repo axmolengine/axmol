@@ -39,7 +39,8 @@
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
 #include <algorithm>
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 // !!Note: WebGL 2.0 on (Open GELS 3.0) not support map buffer range
 #if AX_TARGET_PLATFORM != AX_PLATFORM_WASM
@@ -222,7 +223,11 @@ void CommandBufferImpl::drawArrays(PrimitiveType primitiveType, std::size_t star
     cleanResources();
 }
 
-void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType, std::size_t start, std::size_t count, int instanceCount, bool wireframe)
+void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType,
+                                            std::size_t start,
+                                            std::size_t count,
+                                            int instanceCount,
+                                            bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -241,10 +246,10 @@ void CommandBufferImpl::drawArraysInstanced(PrimitiveType primitiveType, std::si
 }
 
 void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
-                                   IndexFormat indexType,
-                                   std::size_t count,
-                                   std::size_t offset,
-                                   bool wireframe)
+                                     IndexFormat indexType,
+                                     std::size_t count,
+                                     std::size_t offset,
+                                     bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -266,11 +271,11 @@ void CommandBufferImpl::drawElements(PrimitiveType primitiveType,
 }
 
 void CommandBufferImpl::drawElementsInstanced(PrimitiveType primitiveType,
-                                            IndexFormat indexType,
-                                            std::size_t count,
-                                            std::size_t offset,
-                                            int instanceCount,
-                                            bool wireframe)
+                                              IndexFormat indexType,
+                                              std::size_t count,
+                                              std::size_t offset,
+                                              int instanceCount,
+                                              bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -298,9 +303,7 @@ void CommandBufferImpl::endRenderPass()
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
-void CommandBufferImpl::endFrame()
-{
-}
+void CommandBufferImpl::endFrame() {}
 
 void CommandBufferImpl::prepareDrawing() const
 {
@@ -345,13 +348,13 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
         for (auto&& cb : callbacks)
             cb.second(_programState, cb.first);
 
-        auto&& buffer            = _programState->getUniformBuffer();
+        auto&& buffer = _programState->getUniformBuffer();
         program->bindUniformBuffers(buffer.data(), buffer.size());
 
         for (const auto& [location, bindingSet] : _programState->getTextureBindingSets())
         {
-            auto& slots = bindingSet.slots;
-            auto& texs = bindingSet.texs;
+            auto& slots          = bindingSet.slots;
+            auto& texs           = bindingSet.texs;
             const auto arraySize = slots.size();
             if (!arraySize) [[unlikely]]
                 continue;
@@ -362,13 +365,13 @@ void CommandBufferImpl::bindUniforms(ProgramImpl* program) const
             auto loc = location;
 #endif
             if (arraySize == 1)
-            { // perform bind for 'uniform sampler2D u_tex;' or 'uniform sampler2DArray u_texs;'
+            {  // perform bind for 'uniform sampler2D u_tex;' or 'uniform sampler2DArray u_texs;'
                 static_cast<TextureImpl*>(texs[0])->apply(slots[0]);
                 glUniform1i(loc, slots[0]);
             }
             else
-            { // perform bind for 'uniform sampler2D u_details[4];' in shader
-                for(size_t i = 0; i < arraySize; ++i)
+            {  // perform bind for 'uniform sampler2D u_details[4];' in shader
+                for (size_t i = 0; i < arraySize; ++i)
                     static_cast<TextureImpl*>(texs[i])->apply(slots[i]);
                 glUniform1iv(loc, static_cast<GLsizei>(arraySize), static_cast<const GLint*>(slots.data()));
             }
@@ -411,13 +414,13 @@ void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const Pi
 }
 
 void CommandBufferImpl::readPixels(RenderTarget* rt,
-                                 int x,
-                                 int y,
-                                 uint32_t width,
-                                 uint32_t height,
-                                 uint32_t bytesPerRow,
-                                 bool eglCacheHint,
-                                 PixelBufferDesc& pbd)
+                                   int x,
+                                   int y,
+                                   uint32_t width,
+                                   uint32_t height,
+                                   uint32_t bytesPerRow,
+                                   bool eglCacheHint,
+                                   PixelBufferDesc& pbd)
 {
     auto rtGL = static_cast<RenderTargetImpl*>(rt);
     rtGL->bindFrameBuffer();
@@ -480,4 +483,4 @@ void CommandBufferImpl::readPixels(RenderTarget* rt,
         rtGL->unbindFrameBuffer();
 }
 
-}
+}  // namespace ax::rhi::gl

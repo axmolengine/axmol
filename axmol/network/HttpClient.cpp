@@ -28,12 +28,12 @@
 
 #if !defined(__EMSCRIPTEN__)
 
-#include "axmol/network/HttpClient.h"
-#include <errno.h>
-#include "axmol/base/Utils.h"
-#include "axmol/base/Director.h"
-#include "axmol/platform/FileUtils.h"
-#include "yasio/yasio.hpp"
+#    include "axmol/network/HttpClient.h"
+#    include <errno.h>
+#    include "axmol/base/Utils.h"
+#    include "axmol/base/Director.h"
+#    include "axmol/platform/FileUtils.h"
+#    include "yasio/yasio.hpp"
 
 using namespace yasio;
 
@@ -125,7 +125,7 @@ HttpClient::HttpClient()
     _scheduler = Director::getInstance()->getScheduler();
 
     _service = new yasio::io_service(HttpClient::MAX_CHANNELS);
-    _service->set_option(yasio::YOPT_S_FORWARD_PACKET, 1); // forward packet immediately when got data from OS kernel
+    _service->set_option(yasio::YOPT_S_FORWARD_PACKET, 1);  // forward packet immediately when got data from OS kernel
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
@@ -161,7 +161,6 @@ void HttpClient::setDispatchOnWorkThread(bool bVal)
     if (!bVal)
         _scheduler->schedule([this](float) { tickInput(); }, this, 0, false, "#");
 }
-
 
 // Poll and notify main thread if responses exists in queue
 void HttpClient::tickInput()
@@ -228,8 +227,8 @@ void HttpClient::processResponse(HttpResponse* response, int channelIndex)
 
         if (channelIndex != -1)
         {
-            auto channelHandle = _service->channel_at(channelIndex);
-            auto& requestUri = response->getRequestUri();
+            auto channelHandle     = _service->channel_at(channelIndex);
+            auto& requestUri       = response->getRequestUri();
             channelHandle->ud_.ptr = response;
             _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().data(),
                                  (int)requestUri.getPort());
@@ -358,11 +357,11 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
                 if (!(headerFlags & HeaderFlag::CONTENT_TYPE))
                     obs.write_bytes("Content-Type: application/x-www-form-urlencoded;charset=UTF-8\r\n");
 
-                auto requestData           = request->getRequestData();
-                auto requestDataSize       = request->getRequestDataSize();
+                auto requestData     = request->getRequestData();
+                auto requestDataSize = request->getRequestDataSize();
                 char buf[128];
-                auto strConentLen = fmt::format_to_z(buf, "Content-Length: %d\r\n\r\n",
-                         static_cast<int>(requestDataSize));
+                auto strConentLen =
+                    fmt::format_to_z(buf, "Content-Length: %d\r\n\r\n", static_cast<int>(requestDataSize));
                 obs.write_bytes(strConentLen);
 
                 if (requestData && requestDataSize > 0)
@@ -527,6 +526,6 @@ std::string_view HttpClient::getSSLVerification()
 
 }  // namespace network
 
-}
+}  // namespace ax
 
 #endif

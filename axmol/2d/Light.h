@@ -284,4 +284,4 @@ public:
     virtual ~AmbientLight();
 };
 
-}
+}  // namespace ax

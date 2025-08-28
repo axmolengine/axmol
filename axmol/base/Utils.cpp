@@ -148,8 +148,7 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 
         RenderTexture* finalRtx = nullptr;
 
-        auto rtx =
-            RenderTexture::create(size.width, size.height, rhi::PixelFormat::RGBA8, PixelFormat::D24S8, false);
+        auto rtx = RenderTexture::create(size.width, size.height, rhi::PixelFormat::RGBA8, PixelFormat::D24S8, false);
         // rtx->setKeepMatrix(true);
         Point savedPos = startNode->getPosition();
         Point anchor;

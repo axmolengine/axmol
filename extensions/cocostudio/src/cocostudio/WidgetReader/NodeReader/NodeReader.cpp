@@ -258,7 +258,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "X")
@@ -279,7 +279,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "ScaleX")
@@ -300,7 +300,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "ScaleX")
@@ -321,7 +321,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "A")
@@ -350,7 +350,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "X")
@@ -371,7 +371,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "X")
@@ -392,7 +392,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
 
             while (attribute)
             {
-                attriname         = attribute.name();
+                attriname              = attribute.name();
                 std::string_view value = attribute.value();
 
                 if (attriname == "X")
@@ -451,7 +451,7 @@ void NodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Tabl
     bool visible        = options->visible() != 0;
     float w             = options->size()->width();
     float h             = options->size()->height();
-    int alpha           = options->alpha(); // FIXME: redundant, should we use options->color()->a() instead?
+    int alpha           = options->alpha();  // FIXME: redundant, should we use options->color()->a() instead?
     Color32 color(options->color()->r(), options->color()->g(), options->color()->b(), alpha);
 
     // x-studio 10.0.593.0: read from .csb.

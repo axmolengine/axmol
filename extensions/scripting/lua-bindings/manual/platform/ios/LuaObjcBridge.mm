@@ -287,4 +287,4 @@ void LuaObjcBridge::pushValue(lua_State* L, void* val)
     }
 }
 
-}
+}  // namespace ax

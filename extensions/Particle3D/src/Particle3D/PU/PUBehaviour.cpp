@@ -55,4 +55,4 @@ void PUBehaviour::copyAttributesTo(PUBehaviour* behaviour)
     behaviour->_behaviourScale = _behaviourScale;
 }
 
-}
+}  // namespace ax

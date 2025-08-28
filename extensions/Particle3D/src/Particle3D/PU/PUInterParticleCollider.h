@@ -81,5 +81,4 @@ protected:
     float _adjustment;
     InterParticleCollisionResponse _interParticleCollisionResponse;
 };
-}
-
+}  // namespace ax

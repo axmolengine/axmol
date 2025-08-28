@@ -15,30 +15,25 @@
 namespace ax
 {
 
-namespace base64 {
+namespace base64
+{
 
 AX_DLL
-char const*
-get_alphabet();
+char const* get_alphabet();
 
 AX_DLL
-signed char const*
-get_inverse();
+signed char const* get_inverse();
 
 /// Returns max chars needed to encode a base64 string
-inline
-std::size_t constexpr
-encoded_size(std::size_t n)
+inline std::size_t constexpr encoded_size(std::size_t n)
 {
     return 4 * ((n + 2) / 3);
 }
 
 /// Returns max bytes needed to decode a base64 string
-inline
-std::size_t constexpr
-decoded_size(std::size_t n)
+inline std::size_t constexpr decoded_size(std::size_t n)
 {
-    return n / 4 * 3; // requires n&3==0, smaller
+    return n / 4 * 3;  // requires n&3==0, smaller
 }
 
 /** Encode a series of octets as a padded, base64 string.
@@ -54,8 +49,7 @@ decoded_size(std::size_t n)
     will exclude any null termination.
 */
 AX_DLL
-std::size_t
-encode(void* dest, void const* src, std::size_t len);
+std::size_t encode(void* dest, void const* src, std::size_t len);
 
 /** Decode a padded base64 string into a series of octets.
 
@@ -69,6 +63,6 @@ encode(void* dest, void const* src, std::size_t len);
 AX_DLL
 std::size_t decode(void* dest, char const* src, std::size_t len);
 
-} // base64
+}  // namespace base64
 
-}
+}  // namespace ax

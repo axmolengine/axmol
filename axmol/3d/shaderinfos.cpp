@@ -119,4 +119,4 @@ const std::string_view getAttributeName(const VertexKey& key)
 }
 };  // namespace shaderinfos
 
-}
+}  // namespace ax

@@ -44,7 +44,7 @@ bool UIEditBoxTest::init()
 {
     if (UIScene::init())
     {
-        auto renderView        = Director::getInstance()->getRenderView();
+        auto renderView    = Director::getInstance()->getRenderView();
         auto visibleOrigin = renderView->getVisibleOrigin();
         auto visibleSize   = renderView->getVisibleSize();
 
@@ -79,7 +79,8 @@ bool UIEditBoxTest::init()
         auto buttonSize = button->getContentSize();
         button->setTitleText("Single Line");
         button->setPosition(_editName->getPosition() + Vec2(editBoxSize.width / 2 + buttonSize.width / 2, 0.0f));
-        button->addClickEventListener([this](Object* /*sender*/) { _editName->setInputMode(ui::EditBox::InputMode::SINGLE_LINE); });
+        button->addClickEventListener(
+            [this](Object* /*sender*/) { _editName->setInputMode(ui::EditBox::InputMode::SINGLE_LINE); });
         addChild(button);
 
         // middle
@@ -129,7 +130,8 @@ bool UIEditBoxTest::init()
         buttonEmail->setTitleText("Multiline");
         buttonEmail->setPosition(_editEmailParent->getPosition() +
                                  Vec2(editBoxSize.width / 2 + buttonSize.width / 2, 0.0f));
-        buttonEmail->addClickEventListener([this](Object* /*sender*/) { _editEmail->setInputMode(ui::EditBox::InputMode::ANY); });
+        buttonEmail->addClickEventListener(
+            [this](Object* /*sender*/) { _editEmail->setInputMode(ui::EditBox::InputMode::ANY); });
         addChild(buttonEmail);
 
         return true;
@@ -178,7 +180,7 @@ bool UIEditBoxTestToggleVisibility::init()
 {
     if (UIScene::init())
     {
-        auto renderView        = Director::getInstance()->getRenderView();
+        auto renderView    = Director::getInstance()->getRenderView();
         auto visibleOrigin = renderView->getVisibleOrigin();
         auto visibleSize   = renderView->getVisibleSize();
 
@@ -262,7 +264,8 @@ bool UIEditBoxTestToggleVisibility::init()
         buttonEmail->setTitleText("Toggle Visibility");
         buttonEmail->setPosition(_editEmailParent->getPosition() +
                                  Vec2(editBoxSize.width / 2 + buttonSize.width / 2, 0.0f));
-        buttonEmail->addClickEventListener([this](Object* /*sender*/) { _editEmail->setVisible(!_editEmail->isVisible()); });
+        buttonEmail->addClickEventListener(
+            [this](Object* /*sender*/) { _editEmail->setVisible(!_editEmail->isVisible()); });
         addChild(buttonEmail);
 
         return true;
@@ -307,7 +310,7 @@ bool UIEditBoxTestTextHorizontalAlignment::init()
         return false;
     }
 
-    const auto renderView        = Director::getInstance()->getRenderView();
+    const auto renderView    = Director::getInstance()->getRenderView();
     const auto visibleOrigin = renderView->getVisibleOrigin();
     const auto visibleSize   = renderView->getVisibleSize();
     const auto editBoxSize   = Size(visibleSize.width - 100, visibleSize.height * 0.1f);
@@ -343,7 +346,7 @@ bool UIEditBoxTestPressedAndDisabled::init()
         return false;
     }
 
-    auto renderView            = Director::getInstance()->getRenderView();
+    auto renderView        = Director::getInstance()->getRenderView();
     auto visibleOrigin     = renderView->getVisibleOrigin();
     auto visibleSize       = renderView->getVisibleSize();
     const auto editBoxSize = Size(visibleSize.width - 100, visibleSize.height * 0.1f);

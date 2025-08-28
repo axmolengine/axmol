@@ -33,8 +33,8 @@ DEFINE_TEST_SUITE(UIRichTextTests);
 class UIRichTextTestBase : public UIScene
 {
 public:
-    UIRichTextTestBase() = default;
-    ~UIRichTextTestBase() override = 0; // Pure virtual to prevent instancing this class
+    UIRichTextTestBase()           = default;
+    ~UIRichTextTestBase() override = 0;  // Pure virtual to prevent instancing this class
 
     bool init() override;
     virtual void touchEvent(Object* pSender, ax::ui::Widget::TouchEventType type);
@@ -50,7 +50,6 @@ protected:
 };
 
 inline UIRichTextTestBase::~UIRichTextTestBase() = default;
-
 
 class UIRichTextTest : public UIRichTextTestBase
 {

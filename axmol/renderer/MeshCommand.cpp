@@ -85,4 +85,4 @@ MeshCommand::~MeshCommand()
 void MeshCommand::listenRendererRecreated(EventCustom* event) {}
 #endif
 
-}
+}  // namespace ax

@@ -67,4 +67,4 @@ void PULinearForceAffector::copyAttributesTo(PUAffector* affector)
     PUBaseForceAffector::copyAttributesTo(affector);
 }
 
-}
+}  // namespace ax

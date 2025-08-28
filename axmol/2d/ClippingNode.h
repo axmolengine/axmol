@@ -173,4 +173,4 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(ClippingNode);
 };
 /** @} */
-}
+}  // namespace ax

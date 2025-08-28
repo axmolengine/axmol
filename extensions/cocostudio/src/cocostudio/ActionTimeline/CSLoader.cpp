@@ -232,7 +232,7 @@ CSLoader::CSLoader()
 
 #if defined(AX_ENABLE_EXT_PARTICLE3D)
     CREATE_CLASS_NODE_READER_INFO(Particle3DReader);
-#endif // defined(AX_ENABLE_EXT_PARTICLE3D)
+#endif  // defined(AX_ENABLE_EXT_PARTICLE3D)
 
     CREATE_CLASS_NODE_READER_INFO(GameNode3DReader);
     CREATE_CLASS_NODE_READER_INFO(Light3DReader);
@@ -454,7 +454,7 @@ Node* CSLoader::loadNodeWithContent(std::string_view content)
     doc.Parse<0>(content.data(), content.length());
     if (doc.HasParseError())
     {
-        AXLOGD("GetParseError {}\n",  static_cast<int>(doc.GetParseError()));
+        AXLOGD("GetParseError {}\n", static_cast<int>(doc.GetParseError()));
     }
 
     // cocos2dx version mono editor is based on
@@ -800,7 +800,7 @@ Node* CSLoader::loadWidget(const rapidjson::Value& json)
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                AXLOGD("GetParseError {}\n",  static_cast<int>(customJsonDict.GetParseError()));
+                AXLOGD("GetParseError {}\n", static_cast<int>(customJsonDict.GetParseError()));
             }
 
             widgetPropertiesReader.setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
@@ -935,12 +935,12 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
                     break;
                 }
             });
-#    if _AX_DEBUG > 0
-            std::string prompt = fmt::format(
-                    "{}{}{}{}{}{}{}{}{}{}", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                    ") and the reader build id in your axmol(", loader->_csBuildID.c_str(),
-                    ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                    "https://github.com/axmolengine/axmol", " and replace it in your axmol");
+#if _AX_DEBUG > 0
+            std::string prompt =
+                fmt::format("{}{}{}{}{}{}{}{}{}{}", "The reader build id of your Cocos exported file(",
+                            csBuildId->c_str(), ") and the reader build id in your axmol(", loader->_csBuildID.c_str(),
+                            ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(),
+                            ")from ", "https://github.com/axmolengine/axmol", " and replace it in your axmol");
             AXASSERT(readerVersion >= writterVersion, prompt.c_str());
 #endif
         }
@@ -1055,19 +1055,18 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
                 break;
             }
         });
-#    if _AX_DEBUG > 0
-        auto prompt = fmt::format(
-                "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                ") and the reader build id in your axmol(", _csBuildID, ") are not match.\n",
-                "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                "https://github.com/axmolengine/axmol", " and replace it in your axmol");
+#if _AX_DEBUG > 0
+        auto prompt = fmt::format("%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(",
+                                  csBuildId->c_str(), ") and the reader build id in your axmol(", _csBuildID,
+                                  ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(),
+                                  ")from ", "https://github.com/axmolengine/axmol", " and replace it in your axmol");
         AXASSERT(readerVersion >= writterVersion, prompt.c_str());
 #endif
         if (readerVersion < writterVersion)
         {
             auto exceptionMsg =
                 fmt::format("error: The csloader version not match, require version is:{}, but {} provided!",
-                                    csBuildId->c_str(), _csBuildID);
+                            csBuildId->c_str(), _csBuildID);
             throw std::logic_error(exceptionMsg.c_str());
             return nullptr;
         }
@@ -1580,4 +1579,4 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nod
     return node;
 }
 
-}
+}  // namespace ax

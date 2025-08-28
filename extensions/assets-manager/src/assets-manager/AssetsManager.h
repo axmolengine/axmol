@@ -206,7 +206,7 @@ private:
 class AssetsManagerDelegateProtocol
 {
 public:
-    virtual ~AssetsManagerDelegateProtocol(){};
+    virtual ~AssetsManagerDelegateProtocol() {};
 
 public:
     /* @brief Call back function for error
@@ -229,4 +229,3 @@ public:
 };
 
 NS_AX_EXT_END
-

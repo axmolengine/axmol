@@ -451,9 +451,9 @@ RenderViewImpl* RenderViewImpl::create(std::string_view viewName, bool resizable
 }
 
 RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
-                                       const ax::Rect& rect,
-                                       float frameZoomFactor,
-                                       bool resizable)
+                                               const ax::Rect& rect,
+                                               float frameZoomFactor,
+                                               bool resizable)
 {
     auto ret = new RenderViewImpl;
     if (ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
@@ -478,8 +478,8 @@ RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
 }
 
 RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName,
-                                             const GLFWvidmode& videoMode,
-                                             GLFWmonitor* monitor)
+                                                     const GLFWvidmode& videoMode,
+                                                     GLFWmonitor* monitor)
 {
     auto ret = new RenderViewImpl();
     if (ret->initWithFullscreen(viewName, videoMode, monitor))
@@ -491,7 +491,10 @@ RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName,
     return nullptr;
 }
 
-bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, float frameZoomFactor, bool resizable)
+bool RenderViewImpl::initWithRect(std::string_view viewName,
+                                  const ax::Rect& rect,
+                                  float frameZoomFactor,
+                                  bool resizable)
 {
     setViewName(viewName);
 
@@ -510,7 +513,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
 #    endif
-#else // Other Graphics driver, don't create gl context.
+#else  // Other Graphics driver, don't create gl context.
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
 
@@ -640,9 +643,9 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-#if AX_RENDER_API == AX_RENDER_API_GL
+#    if AX_RENDER_API == AX_RENDER_API_GL
     loadGL();
-#endif
+#    endif
 
     // Init driver after load GL
     axdrv;
@@ -968,8 +971,7 @@ Vec2 RenderViewImpl::getMonitorSize() const
     return Vec2::ZERO;
 }
 
-void RenderViewImpl::setWindowSizeLimits(int minwidth, int minheight,
-                                     int maxwidth, int maxheight)
+void RenderViewImpl::setWindowSizeLimits(int minwidth, int minheight, int maxwidth, int maxheight)
 {
     if (_mainWindow == NULL)
         return;
@@ -1283,8 +1285,8 @@ void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*sc
             break;
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
             director->resume();
-            director->getScheduler()->schedule([director](float) { director->pause();
-                }, director, 0, 0, 0, false, "step");
+            director->getScheduler()->schedule([director](float) { director->pause(); }, director, 0, 0, 0, false,
+                                               "step");
             break;
         }
     }
@@ -1360,11 +1362,13 @@ void RenderViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focus
 {
     if (focused == GL_TRUE)
     {
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_FOCUSED, nullptr);
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_FOCUSED,
+                                                                           nullptr);
     }
     else
     {
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_UNFOCUSED, nullptr);
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_UNFOCUSED,
+                                                                           nullptr);
     }
 }
 
@@ -1502,11 +1506,10 @@ bool RenderViewImpl::loadGL()
 }  // namespace ax
 
 #if defined(__EMSCRIPTEN__)
-extern "C"
+extern "C" {
+void axmol_onwebclickcallback()
 {
-    void axmol_onwebclickcallback()
-    {
-        ax::GLFWEventHandler::onWebClickCallback();
-    }
+    ax::GLFWEventHandler::onWebClickCallback();
+}
 }
 #endif

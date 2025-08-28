@@ -285,7 +285,6 @@ private:
     LengthStack* _lens;
 };
 
-}
+}  // namespace ax
 // end of ui group
 /// @}
-

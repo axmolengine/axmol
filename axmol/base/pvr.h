@@ -22,4 +22,3 @@ int PVRTDecompressPVRTC(const void* const pCompressedData,
                         const int YDim,
                         void* pDestData,
                         const bool Do2bitMode);
-

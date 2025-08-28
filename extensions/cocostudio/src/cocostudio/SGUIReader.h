@@ -55,7 +55,6 @@ typedef void (ax::Object::*SEL_ParseEvent)(std::string_view, ax::Object*, const 
 class CCS_DLL GUIReader : public ax::Object
 {
 public:
-
     static GUIReader* getInstance();
     static void destroyInstance();
 
@@ -104,11 +103,9 @@ public:
 class CCS_DLL WidgetPropertiesReader : public ax::Object
 {
 public:
-    virtual ax::ui::Widget* createWidget(const rapidjson::Value& dic,
-                                              const char* fullPath,
-                                              const char* fileName) = 0;
+    virtual ax::ui::Widget* createWidget(const rapidjson::Value& dic, const char* fullPath, const char* fileName) = 0;
 
-    virtual ax::ui::Widget* widgetFromJsonDictionary(const rapidjson::Value& data)  = 0;
+    virtual ax::ui::Widget* widgetFromJsonDictionary(const rapidjson::Value& data)       = 0;
     virtual void setPropsForAllWidgetFromJsonDictionary(WidgetReaderProtocol* reader,
                                                         ax::ui::Widget* widget,
                                                         const rapidjson::Value& options) = 0;
@@ -119,13 +116,13 @@ public:
 
     // add binary parsing
     virtual ax::ui::Widget* createWidgetFromBinary(CocoLoader* cocoLoader,
-                                                        stExpCocoNode* pCocoNode,
-                                                        const char* fileName)                       = 0;
+                                                   stExpCocoNode* pCocoNode,
+                                                   const char* fileName)                       = 0;
     virtual ax::ui::Widget* widgetFromBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) = 0;
     virtual void setPropsForAllWidgetFromBinary(WidgetReaderProtocol* reader,
                                                 ax::ui::Widget* widget,
                                                 CocoLoader* cocoLoader,
-                                                stExpCocoNode* pCocoNode)                           = 0;
+                                                stExpCocoNode* pCocoNode)                      = 0;
 
 protected:
     void setAnchorPointForWidget(ax::ui::Widget* widget, const rapidjson::Value& options);
@@ -144,19 +141,19 @@ class CCS_DLL WidgetPropertiesReader0250 : public WidgetPropertiesReader
 {
 
 public:
-    WidgetPropertiesReader0250(){};
-    virtual ~WidgetPropertiesReader0250(){};
+    WidgetPropertiesReader0250() {};
+    virtual ~WidgetPropertiesReader0250() {};
 
     virtual ax::ui::Widget* createWidget(const rapidjson::Value& dic,
-                                              const char* fullPath,
-                                              const char* fileName) override;
+                                         const char* fullPath,
+                                         const char* fileName) override;
 
     ax::ui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic) override;
 
     // added for binary parsing
     virtual ax::ui::Widget* createWidgetFromBinary(CocoLoader* cocoLoader,
-                                                        stExpCocoNode* pCocoNode,
-                                                        const char* fileName) override;
+                                                   stExpCocoNode* pCocoNode,
+                                                   const char* fileName) override;
 
     ax::ui::Widget* widgetFromBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
 
@@ -193,17 +190,17 @@ class CCS_DLL WidgetPropertiesReader0300 : public WidgetPropertiesReader
 {
 
 public:
-    WidgetPropertiesReader0300(){};
-    virtual ~WidgetPropertiesReader0300(){};
+    WidgetPropertiesReader0300() {};
+    virtual ~WidgetPropertiesReader0300() {};
 
     virtual ax::ui::Widget* createWidget(const rapidjson::Value& dic,
-                                              const char* fullPath,
-                                              const char* fileName) override;
+                                         const char* fullPath,
+                                         const char* fileName) override;
 
     // add bin parse support
     virtual ax::ui::Widget* createWidgetFromBinary(CocoLoader* cocoLoader,
-                                                        stExpCocoNode* pCocoNode,
-                                                        const char* fileName) override;
+                                                   stExpCocoNode* pCocoNode,
+                                                   const char* fileName) override;
 
     ax::ui::Widget* widgetFromBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
 

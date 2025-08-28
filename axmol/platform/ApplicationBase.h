@@ -48,17 +48,17 @@ public:
     enum class Platform
     {
         Unknown,
-        Win32, /**< Win32 Apps */
-        WinUWP, /**< WinUWP */
+        Win32,   /**< Win32 Apps */
+        WinUWP,  /**< WinUWP */
         Linux,   /**< Linux */
         OSX,     /**< macOS */
         Android, /**< Android */
         iOS,     /**< Apple iOS */
         tvOS,    /**< Apple tvOS */
-        Wasm,  /**< aka WebAssembly/Emscripten */
+        Wasm,    /**< aka WebAssembly/Emscripten */
         /* alias */
-        Windows = Win32,
-        macOS = OSX,
+        Windows    = Win32,
+        macOS      = OSX,
         Emscripten = Wasm
     };
 
@@ -144,5 +144,4 @@ using ApplicationProtocol = ApplicationBase;
 // end of platform group
 /** @} */
 
-}
-
+}  // namespace ax

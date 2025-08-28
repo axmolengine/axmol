@@ -37,11 +37,10 @@ class PUCollisionAvoidanceAffectorTranslator : public PUScriptTranslator
 {
 public:
     PUCollisionAvoidanceAffectorTranslator();
-    virtual ~PUCollisionAvoidanceAffectorTranslator(){};
+    virtual ~PUCollisionAvoidanceAffectorTranslator() {};
 
     virtual bool translateChildProperty(PUScriptCompiler* compiler, PUAbstractNode* node);
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-}
-
+}  // namespace ax

@@ -150,8 +150,7 @@ void TestList::addTest(std::string_view testName, std::function<TestBase*()> cal
 {
     if (!testName.empty())
     {
-        _childTestNames.emplace_back(
-            fmt::format("{}:{}", static_cast<int>(_childTestNames.size() + 1), testName));
+        _childTestNames.emplace_back(fmt::format("{}:{}", static_cast<int>(_childTestNames.size() + 1), testName));
         _testCallbacks.emplace_back(callback);
     }
 }
@@ -217,8 +216,8 @@ void TestList::runThisTest()
         closeItem->setPosition(VisibleRect::right().x - 30, VisibleRect::top().y - 30);
 
         auto autoTestLabel = Label::createWithTTF("Start AutoTest", "fonts/arial.ttf", 16);
-        auto autoTestItem =
-            MenuItemLabel::create(autoTestLabel, [&](Object* sender) { TestController::getInstance()->startAutoTest(); });
+        auto autoTestItem  = MenuItemLabel::create(
+            autoTestLabel, [&](Object* sender) { TestController::getInstance()->startAutoTest(); });
         autoTestItem->setPosition(Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + 50));
 
         auto menu = Menu::create(closeItem, autoTestItem, nullptr);
@@ -346,7 +345,8 @@ void TestSuite::enterNextTest()
     Director::getInstance()->replaceScene(scene);
 }
 
-void TestSuite::enterTest(int index) {
+void TestSuite::enterTest(int index)
+{
     _currTestIndex = index % _childTestNames.size();
 
     auto scene    = _testCallbacks[_currTestIndex]();
@@ -428,8 +428,7 @@ bool TestCase::init()
 {
     if (Scene::init())
     {
-        const char* const autotest_capture =
-          std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
+        const char* const autotest_capture = std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
         // Disable the inspector if we are capturing the scene because its
         // rendering changes from one run to the next.
         _enableInspector = !autotest_capture || !autotest_capture[0];
@@ -485,8 +484,7 @@ void TestCase::onEnter()
 
     if (_testSuite)
     {
-        _titleLabel->setString(fmt::format("{}:{}", static_cast<int>(_testSuite->getCurrTestIndex() + 1),
-                               title()));
+        _titleLabel->setString(fmt::format("{}:{}", static_cast<int>(_testSuite->getCurrTestIndex() + 1), title()));
     }
     else
     {
@@ -501,20 +499,20 @@ void TestCase::onEnter()
         _restartTestItem->setVisible(false);
     }
 #if AX_ENABLE_EXT_IMGUI
-#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
+#    if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
     if (_enableInspector)
         extension::Inspector::getInstance()->openForScene(this);
-#endif
+#    endif
 #endif
 }
 
 void TestCase::onExit()
 {
 #if AX_ENABLE_EXT_IMGUI
-#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
+#    if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
     if (_enableInspector)
         extension::Inspector::getInstance()->close();
-#endif
+#    endif
 #endif
     Scene::onExit();
 }

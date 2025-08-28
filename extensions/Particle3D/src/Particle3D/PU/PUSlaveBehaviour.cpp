@@ -62,4 +62,4 @@ void PUSlaveBehaviour::copyAttributesTo(PUBehaviour* behaviour)
     PUBehaviour::copyAttributesTo(behaviour);
 }
 
-}
+}  // namespace ax

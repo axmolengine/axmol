@@ -303,7 +303,6 @@ public:
 
 private:
     std::unordered_map<uint32_t, ParticleEmissionMaskDesc> masks;
-
 };
 
 // typedef void (*AX_UPDATE_PARTICLE_IMP)(id, SEL, tParticle*, Vec2);
@@ -1180,10 +1179,10 @@ public:
      * @param reverse Should the animation indicies be played backwards? (default: false)
      */
     void setAnimationDesc(unsigned short indexOfDesc,
-                                float time,
-                                float timeVariance,
-                                const std::vector<unsigned short>& indices,
-                                bool reverse = false);
+                          float time,
+                          float timeVariance,
+                          const std::vector<unsigned short>& indices,
+                          bool reverse = false);
 
     /** Add a particle animation descriptor with the index 0.
      *
@@ -1684,4 +1683,4 @@ private:
 // end of _2d group
 /// @}
 
-}
+}  // namespace ax

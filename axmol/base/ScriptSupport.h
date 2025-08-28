@@ -787,10 +787,9 @@ private:
     ScriptEngineProtocol* _scriptEngine;
 };
 
-}
+}  // namespace ax
 
 #endif  // #if AX_ENABLE_SCRIPT_BINDING
 
 // end group
 /// @}
-

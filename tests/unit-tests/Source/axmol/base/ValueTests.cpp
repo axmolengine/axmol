@@ -28,9 +28,10 @@
 
 using namespace ax;
 
-
-TEST_SUITE("base/Value") {
-    TEST_CASE("old_tests") {
+TEST_SUITE("base/Value")
+{
+    TEST_CASE("old_tests")
+    {
         Value v1;
         CHECK(v1.getType() == Value::Type::NONE);
         CHECK(v1.isNull());

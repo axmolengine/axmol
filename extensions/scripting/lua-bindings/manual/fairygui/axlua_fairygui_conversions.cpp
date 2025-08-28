@@ -30,7 +30,7 @@ bool luaval_to_margin(lua_State* L, int lo, fairygui::Margin* outValue, const ch
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if _AX_DEBUG >=1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;

@@ -176,7 +176,7 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
     int durationTween = _movementData->durationTween == 0 ? _rawDuration : _movementData->durationTween;
 
     ax::tweenfunc::TweenType tweenEasing = _movementData->tweenEasing;
-    loop                                      = (loop < 0) ? _movementData->loop : loop;
+    loop                                 = (loop < 0) ? _movementData->loop : loop;
 
     _onMovementList = false;
 
@@ -386,7 +386,8 @@ void ArmatureAnimation::updateHandler()
             _currentPercent = _currentFrame / _durationTween;
 
             if (_currentPercent >= 1.0f)
-            {}
+            {
+            }
             else
             {
                 _nextFrameIndex = _durationTween;

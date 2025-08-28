@@ -35,7 +35,8 @@
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/base/Macros.h"
 
-namespace ax::rhi {
+namespace ax::rhi
+{
 DriverBase* DriverBase::getInstance()
 {
     if (!_instance)
@@ -46,11 +47,13 @@ DriverBase* DriverBase::getInstance()
 
 void DriverBase::destroyInstance()
 {
-    if(_instance) delete _instance;
+    if (_instance)
+        delete _instance;
 }
-}
+}  // namespace ax::rhi
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 inline FeatureSet operator--(FeatureSet& x)
 {
@@ -395,7 +398,7 @@ bool supportS3TC(FeatureSet featureSet)
     }
     return false;
 }
-}
+}  // namespace
 
 bool DriverImpl::_isDepth24Stencil8PixelFormatSupported = false;
 
@@ -453,9 +456,7 @@ DriverImpl::DriverImpl()
     _maxTextureSize    = getMaxTextureWidthHeight(_featureSet);
 }
 
-DriverImpl::~DriverImpl()
-{
-}
+DriverImpl::~DriverImpl() {}
 
 CommandBuffer* DriverImpl::createCommandBuffer(void*)
 {
@@ -477,8 +478,7 @@ RenderTarget* DriverImpl::createDefaultRenderTarget()
     return new RenderTargetImpl(true);
 }
 
-RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment,
-                                         Texture* depthStencilAttachment)
+RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rtMTL = new RenderTargetImpl(false);
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
@@ -514,41 +514,44 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     // --- Min & Mag Filter ---
     switch (desc.minFilter)
     {
-        case SamplerFilter::MIN_NEAREST:
-            samplerDesc.minFilter = MTLSamplerMinMagFilterNearest;
-            break;
-        case SamplerFilter::MIN_LINEAR:
-        case SamplerFilter::MIN_ANISOTROPIC:
-            samplerDesc.minFilter = MTLSamplerMinMagFilterLinear;
-            break;
+    case SamplerFilter::MIN_NEAREST:
+        samplerDesc.minFilter = MTLSamplerMinMagFilterNearest;
+        break;
+    case SamplerFilter::MIN_LINEAR:
+    case SamplerFilter::MIN_ANISOTROPIC:
+        samplerDesc.minFilter = MTLSamplerMinMagFilterLinear;
+        break;
     }
 
-    samplerDesc.magFilter = (desc.magFilter == SamplerFilter::MAG_NEAREST)
-                            ? MTLSamplerMinMagFilterNearest
-                            : MTLSamplerMinMagFilterLinear;
+    samplerDesc.magFilter =
+        (desc.magFilter == SamplerFilter::MAG_NEAREST) ? MTLSamplerMinMagFilterNearest : MTLSamplerMinMagFilterLinear;
 
     // --- Mip Filter ---
     switch (desc.mipFilter)
     {
-        case SamplerFilter::MIP_DEFAULT:
-            samplerDesc.mipFilter = MTLSamplerMipFilterNotMipmapped;
-            break;
-        case SamplerFilter::MIP_NEAREST:
-            samplerDesc.mipFilter = MTLSamplerMipFilterNearest;
-            break;
-        case SamplerFilter::MIP_LINEAR:
-            samplerDesc.mipFilter = MTLSamplerMipFilterLinear;
-            break;
+    case SamplerFilter::MIP_DEFAULT:
+        samplerDesc.mipFilter = MTLSamplerMipFilterNotMipmapped;
+        break;
+    case SamplerFilter::MIP_NEAREST:
+        samplerDesc.mipFilter = MTLSamplerMipFilterNearest;
+        break;
+    case SamplerFilter::MIP_LINEAR:
+        samplerDesc.mipFilter = MTLSamplerMipFilterLinear;
+        break;
     }
 
     // --- Address Modes ---
     auto toMTLAddressMode = [](SamplerAddressMode mode) -> MTLSamplerAddressMode {
         switch (mode)
         {
-            case SamplerAddressMode::REPEAT: return MTLSamplerAddressModeRepeat;
-            case SamplerAddressMode::MIRROR: return MTLSamplerAddressModeMirrorRepeat;
-            case SamplerAddressMode::CLAMP: return MTLSamplerAddressModeClampToEdge;
-            case SamplerAddressMode::BORDER: return MTLSamplerAddressModeClampToBorderColor;
+        case SamplerAddressMode::REPEAT:
+            return MTLSamplerAddressModeRepeat;
+        case SamplerAddressMode::MIRROR:
+            return MTLSamplerAddressModeMirrorRepeat;
+        case SamplerAddressMode::CLAMP:
+            return MTLSamplerAddressModeClampToEdge;
+        case SamplerAddressMode::BORDER:
+            return MTLSamplerAddressModeClampToBorderColor;
         }
         return MTLSamplerAddressModeRepeat;
     };
@@ -558,27 +561,34 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     samplerDesc.rAddressMode = toMTLAddressMode(desc.wAddressMode);
 
     // --- Border Color ---
-    if (desc.sAddressMode == SamplerAddressMode::BORDER ||
-        desc.tAddressMode == SamplerAddressMode::BORDER ||
+    if (desc.sAddressMode == SamplerAddressMode::BORDER || desc.tAddressMode == SamplerAddressMode::BORDER ||
         desc.wAddressMode == SamplerAddressMode::BORDER)
     {
         samplerDesc.borderColor = MTLSamplerBorderColorTransparentBlack;
     }
 
     // --- Compare Function ---
-    auto toMTLCompareFunc = [](CompareFunc func) ->MTLCompareFunction {
-        if(func == CompareFunc::NEVER)
+    auto toMTLCompareFunc = [](CompareFunc func) -> MTLCompareFunction {
+        if (func == CompareFunc::NEVER)
             return MTLCompareFunctionNever;
         switch (func)
         {
-            case CompareFunc::LESS:          return MTLCompareFunctionLess;
-            case CompareFunc::EQUAL:         return MTLCompareFunctionEqual;
-            case CompareFunc::LESS_EQUAL:    return MTLCompareFunctionLessEqual;
-            case CompareFunc::GREATER:       return MTLCompareFunctionGreater;
-            case CompareFunc::NOT_EQUAL:     return MTLCompareFunctionNotEqual;
-            case CompareFunc::GREATER_EQUAL: return MTLCompareFunctionGreaterEqual;
-            case CompareFunc::ALWAYS:        return MTLCompareFunctionAlways;
-            default:                         return MTLCompareFunctionNever;
+        case CompareFunc::LESS:
+            return MTLCompareFunctionLess;
+        case CompareFunc::EQUAL:
+            return MTLCompareFunctionEqual;
+        case CompareFunc::LESS_EQUAL:
+            return MTLCompareFunctionLessEqual;
+        case CompareFunc::GREATER:
+            return MTLCompareFunctionGreater;
+        case CompareFunc::NOT_EQUAL:
+            return MTLCompareFunctionNotEqual;
+        case CompareFunc::GREATER_EQUAL:
+            return MTLCompareFunctionGreaterEqual;
+        case CompareFunc::ALWAYS:
+            return MTLCompareFunctionAlways;
+        default:
+            return MTLCompareFunctionNever;
         }
     };
     samplerDesc.compareFunction = toMTLCompareFunc(desc.compareFunc);
@@ -595,7 +605,8 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 
 void DriverImpl::destroySampler(SamplerHandle& sampler)
 {
-    if(sampler) {
+    if (sampler)
+    {
         [reinterpret_cast<id<MTLSamplerState>>(sampler) release];
         sampler = nullptr;
     }
@@ -651,4 +662,4 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
     return featureSupported;
 }
 
-}
+}  // namespace ax::rhi::mtl

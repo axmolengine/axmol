@@ -108,4 +108,4 @@ void QuadCommand::init(float globalOrder,
     TrianglesCommand::init(globalOrder, texture, blendType, triangles, mv, flags);
 }
 
-}
+}  // namespace ax

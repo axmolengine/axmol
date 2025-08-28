@@ -39,4 +39,4 @@ AX_DLL const char* axmolVersion()
     return AX_VERSION_STR_FULL;
 }
 
-}
+}  // namespace ax

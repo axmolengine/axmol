@@ -14,16 +14,16 @@ namespace ax
 class Node;
 class Scene;
 
-}
+}  // namespace ax
 
 NS_AX_EXT_BEGIN
 
 class InspectPropertyHandler
 {
 public:
-    virtual ~InspectPropertyHandler() = default;
+    virtual ~InspectPropertyHandler()        = default;
     virtual bool isSupportedType(Node* node) = 0;
-    virtual void drawProperties(Node* node) = 0;
+    virtual void drawProperties(Node* node)  = 0;
 };
 
 class InspectorNodePropertyHandler : public InspectPropertyHandler
@@ -52,7 +52,7 @@ public:
 
 class Inspector
 {
-  public:
+public:
     static Inspector* getInstance();
     static void destroyInstance();
     static std::string getNodeTypeName(Node*);
@@ -71,7 +71,7 @@ class Inspector
     void setFontPath(std::string_view fontPath);
     void setFontSize(float fontSize);
 
-  private:
+private:
     void init();
     void cleanup();
     void mainLoop();
@@ -79,7 +79,7 @@ class Inspector
     void drawProperties();
 
     ax::RefPtr<ax::Node> _selected_node = nullptr;
-    ax::Scene* _target = nullptr;
+    ax::Scene* _target                  = nullptr;
 
     std::unordered_map<std::string, std::unique_ptr<InspectPropertyHandler>> _propertyHandlers;
     RefPtr<EventListenerCustom> _beforeNewSceneEventListener;

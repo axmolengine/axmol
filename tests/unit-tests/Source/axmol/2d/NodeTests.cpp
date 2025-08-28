@@ -28,10 +28,12 @@
 
 using namespace ax;
 
-TEST_SUITE("2d/Node") {
-    TEST_CASE("normalized_position") {
+TEST_SUITE("2d/Node")
+{
+    TEST_CASE("normalized_position")
+    {
         auto parent = Node();
-        auto node = Node();
+        auto node   = Node();
 
         parent.setContentSize(Vec2(200.0f, 100.0f));
         node.setParent(&parent);

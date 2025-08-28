@@ -418,20 +418,16 @@ SchedulerCallbackTest::SchedulerCallbackTest()
     node->setName("a node");
 
     _total = 0;
-    node->schedule(
-        [&](float dt) {
-            _total += dt;
-            AXLOGD("hello world: {} - total: {}", dt, _total);
-        },
-        0.5, "some_key");
+    node->schedule([&](float dt) {
+        _total += dt;
+        AXLOGD("hello world: {} - total: {}", dt, _total);
+    }, 0.5, "some_key");
 
-    node->scheduleOnce(
-        [&](float dt) {
-            // the local variable "node" will go out of scope, so I have to get it from "this"
-            auto anode = this->getChildByName("a node");
-            anode->unschedule("some_key");
-        },
-        5, "ignore_key");
+    node->scheduleOnce([&](float dt) {
+        // the local variable "node" will go out of scope, so I have to get it from "this"
+        auto anode = this->getChildByName("a node");
+        anode->unschedule("some_key");
+    }, 5, "ignore_key");
 }
 
 void SchedulerCallbackTest::onEnter()
@@ -954,7 +950,7 @@ protected:
     CustomCommand _customCommand;
 };
 
-bool MySprite::setProgramState(rhi::ProgramState* programState, bool ownPS/* = false*/)
+bool MySprite::setProgramState(rhi::ProgramState* programState, bool ownPS /* = false*/)
 {
     if (Sprite::setProgramState(programState, ownPS))
     {
@@ -1370,7 +1366,7 @@ void NodeNameTest::test(float dt)
         for (int k = 0; k < 10; ++k)
         {
             auto child = Node::create();
-            auto name = fmt::format_to_z(tmp, "node{}", k);
+            auto name  = fmt::format_to_z(tmp, "node{}", k);
             child->setName(name);
             node->addChild(child);
         }
@@ -1427,7 +1423,7 @@ void Issue16100Test::onEnter()
         auto camera = Camera::createOrthographic(s.width * 2, s.height * 2, -1024, 1024);
         camera->setCameraFlag(CameraFlag::USER1);
         addChild(camera);
-        });
+    });
     this->runAction(Sequence::createWithTwoActions(delay, f));
 
     // grossini using default camera
@@ -1564,5 +1560,6 @@ std::string NodeWorldSpace::title() const
 
 std::string NodeWorldSpace::subtitle() const
 {
-    return "Child sprite (small one) should always stay at the center of screen\nthe child sprite is a child of the moving parent sprite";
+    return "Child sprite (small one) should always stay at the center of screen\nthe child sprite is a child of the "
+           "moving parent sprite";
 }

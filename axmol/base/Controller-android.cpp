@@ -44,10 +44,10 @@ public:
 
     static std::vector<Controller*>::iterator findController(std::string_view deviceName, int deviceId)
     {
-        auto iter = std::find_if(
-            Controller::s_allController.begin(), Controller::s_allController.end(), [&](Controller* controller) {
-                return (deviceName == controller->_deviceName) && (deviceId == controller->_deviceId);
-            });
+        auto iter = std::find_if(Controller::s_allController.begin(), Controller::s_allController.end(),
+                                 [&](Controller* controller) {
+            return (deviceName == controller->_deviceName) && (deviceId == controller->_deviceId);
+        });
 
         return iter;
     }
@@ -165,51 +165,50 @@ void Controller::receiveExternalKeyEvent(int externalKeyCode, bool receive)
                                     externalKeyCode, receive);
 }
 
-}
+}  // namespace ax
 
 extern "C" {
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_GameControllerAdapter_nativeControllerConnected(JNIEnv*,
-                                                                                             jclass,
-                                                                                             jstring deviceName,
-                                                                                             jint controllerID)
+                                                                                          jclass,
+                                                                                          jstring deviceName,
+                                                                                          jint controllerID)
 {
     AXLOGD("controller id: {} connected!", controllerID);
     ax::ControllerImpl::onConnected(ax::JniHelper::jstring2string(deviceName), controllerID);
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_GameControllerAdapter_nativeControllerDisconnected(JNIEnv*,
-                                                                                                jclass,
-                                                                                                jstring deviceName,
-                                                                                                jint controllerID)
+                                                                                             jclass,
+                                                                                             jstring deviceName,
+                                                                                             jint controllerID)
 {
     AXLOGD("controller id: {} disconnected!", controllerID);
     ax::ControllerImpl::onDisconnected(ax::JniHelper::jstring2string(deviceName), controllerID);
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_GameControllerAdapter_nativeControllerButtonEvent(JNIEnv*,
-                                                                                               jclass,
-                                                                                               jstring deviceName,
-                                                                                               jint controllerID,
-                                                                                               jint button,
-                                                                                               jboolean isPressed,
-                                                                                               jfloat value,
-                                                                                               jboolean isAnalog)
+                                                                                            jclass,
+                                                                                            jstring deviceName,
+                                                                                            jint controllerID,
+                                                                                            jint button,
+                                                                                            jboolean isPressed,
+                                                                                            jfloat value,
+                                                                                            jboolean isAnalog)
 {
-    ax::ControllerImpl::onButtonEvent(ax::JniHelper::jstring2string(deviceName), controllerID, button,
-                                           isPressed, value, isAnalog);
+    ax::ControllerImpl::onButtonEvent(ax::JniHelper::jstring2string(deviceName), controllerID, button, isPressed, value,
+                                      isAnalog);
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_GameControllerAdapter_nativeControllerAxisEvent(JNIEnv*,
-                                                                                             jclass,
-                                                                                             jstring deviceName,
-                                                                                             jint controllerID,
-                                                                                             jint axis,
-                                                                                             jfloat value,
-                                                                                             jboolean isAnalog)
+                                                                                          jclass,
+                                                                                          jstring deviceName,
+                                                                                          jint controllerID,
+                                                                                          jint axis,
+                                                                                          jfloat value,
+                                                                                          jboolean isAnalog)
 {
-    ax::ControllerImpl::onAxisEvent(ax::JniHelper::jstring2string(deviceName), controllerID, axis, value,
-                                         isAnalog);
+    ax::ControllerImpl::onAxisEvent(ax::JniHelper::jstring2string(deviceName), controllerID, axis, value, isAnalog);
 }
 
 }  // extern "C" {

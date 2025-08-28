@@ -94,7 +94,7 @@ private:
     friend class RenderView;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

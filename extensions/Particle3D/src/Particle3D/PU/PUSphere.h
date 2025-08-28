@@ -86,5 +86,4 @@ public:
     /** Merges another Sphere into the current sphere */
     void merge(const PUSphere& oth);
 };
-}
-
+}  // namespace ax

@@ -135,4 +135,4 @@ void PUTranslateManager::translateMaterialSystem(PUMaterialCache* ms, const PUAb
     }
 }
 
-}
+}  // namespace ax

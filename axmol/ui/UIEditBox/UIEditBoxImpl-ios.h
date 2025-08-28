@@ -82,9 +82,8 @@ private:
     UIEditBoxImplIOS_objc* _systemControl;
 };
 
-}
+}  // namespace ui
 
-}
+}  // namespace ax
 
 #endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */
-

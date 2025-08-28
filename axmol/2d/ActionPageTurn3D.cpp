@@ -131,4 +131,4 @@ void PageTurn3D::update(float time)
     }
 }
 
-}
+}  // namespace ax

@@ -55,11 +55,10 @@ public:
     void copyAttributesTo(PUEmitter* emitter) override;
 
     PUSphereSurfaceEmitter();
-    virtual ~PUSphereSurfaceEmitter(){};
+    virtual ~PUSphereSurfaceEmitter() {};
 
 protected:
     float _radius;
     Vec3 _randomVector;
 };
-}
-
+}  // namespace ax

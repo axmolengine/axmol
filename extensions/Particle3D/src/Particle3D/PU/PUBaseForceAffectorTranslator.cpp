@@ -114,4 +114,4 @@ bool PUBaseForceAffectorTranslator::translateChildObject(PUScriptCompiler* /*com
     return false;
 }
 
-}
+}  // namespace ax

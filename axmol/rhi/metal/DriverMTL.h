@@ -29,7 +29,8 @@
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
 
-namespace ax::rhi::mtl {
+namespace ax::rhi::mtl
+{
 
 enum class FeatureSet : int32_t
 {
@@ -65,7 +66,6 @@ enum class FeatureSet : int32_t
     FeatureSet_macOS_GPUFamily1_v4 = 10004,
     FeatureSet_macOS_GPUFamily2_v1 = 10005,
 };
-
 
 /**
  * @addtogroup _metal
@@ -150,8 +150,7 @@ public:
     Texture* createTexture(const TextureDesc& descriptor) override;
 
     RenderTarget* createDefaultRenderTarget() override;
-    RenderTarget* createRenderTarget(Texture* colorAttachment,
-                                  Texture* depthStencilAttachment) override;
+    RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 
     /**
      * New a DepthStencilState object.
@@ -197,7 +196,7 @@ public:
     inline id<MTLCommandQueue> getMTLCommandQueue() const { return _mtlCommandQueue; }
 
     /// below is driver info
-\
+
     /// @name Setters & Getters
     /**
      * Get vendor device name.
@@ -234,7 +233,7 @@ protected:
      * @return A ShaderModule object.
      */
     ShaderModule* createShaderModule(ShaderStage stage, std::string_view source) override;
-    
+
     SamplerHandle createSampler(const SamplerDesc& desc) override;
     void destroySampler(SamplerHandle& sampler) override;
 
@@ -252,4 +251,4 @@ private:
 
 // end of _metal group
 /// @}
-}
+}  // namespace ax::rhi::mtl

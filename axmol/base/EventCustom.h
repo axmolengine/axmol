@@ -71,7 +71,7 @@ protected:
     std::string _eventName;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}

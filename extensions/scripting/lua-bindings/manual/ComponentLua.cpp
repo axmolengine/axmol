@@ -238,10 +238,10 @@ void ComponentLua::storeLuaTable()
 
     // add table's elements to userdata's metatable
     object_to_luaval<ax::ComponentLua>(l, "ax.ComponentLua", this);  // stack: table_return_from_lua userdata
-    lua_getmetatable(l, -1);                                              // stack: table_return_from_lua userdata mt
-    lua_remove(l, -2);                                                    // stack: table_return_from_lua mt
-    lua_pushnil(l);                                                       // stack: table_return_from_lua mt nil
-    while (lua_next(l, -3))                                               // stack: table_return_from_lua mt key value
+    lua_getmetatable(l, -1);                                         // stack: table_return_from_lua userdata mt
+    lua_remove(l, -2);                                               // stack: table_return_from_lua mt
+    lua_pushnil(l);                                                  // stack: table_return_from_lua mt nil
+    while (lua_next(l, -3))                                          // stack: table_return_from_lua mt key value
     {
         lua_pushvalue(l, -2);  // stack: table_return_from_lua mt key value key
         lua_insert(l, -2);     // stack: table_return_from_lua mt key key value
@@ -272,4 +272,4 @@ void ComponentLua::getUserData()
     object_to_luaval<ax::ComponentLua>(l, "ax.ComponentLua", this);
 }
 
-}
+}  // namespace ax

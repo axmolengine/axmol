@@ -319,4 +319,4 @@ private:
 // end of textures group
 /// @}
 
-}
+}  // namespace ax

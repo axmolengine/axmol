@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
 
-namespace ax::rhi::gl {
+namespace ax::rhi::gl
+{
 
 RenderTargetImpl::RenderTargetImpl(bool defaultRenderTarget, DriverImpl* driver) : RenderTarget(defaultRenderTarget)
 {
@@ -122,4 +123,4 @@ void RenderTargetImpl::update() const
     _dirtyFlags = TargetBufferFlags::NONE;
 }
 
-}
+}  // namespace ax::rhi::gl

@@ -76,7 +76,6 @@ AX_GUI_DLL const char* axmolUIVersion();
 
 }  // namespace ui
 
-}
+}  // namespace ax
 // end of ui group
 /// @}
-

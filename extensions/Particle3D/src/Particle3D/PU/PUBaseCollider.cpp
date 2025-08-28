@@ -128,4 +128,4 @@ void PUBaseCollider::copyAttributesTo(PUAffector* affector)
     baseCollider->_collisionType    = _collisionType;
 }
 
-}
+}  // namespace ax

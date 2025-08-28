@@ -35,22 +35,22 @@ public:
     AxmolRenderer(int width,
                   int height,
                   float dpi,
-        Windows::Graphics::Display::DisplayOrientations orientation,
-        Windows::UI::Core::CoreDispatcher const& dispatcher, Windows::UI::Xaml::Controls::Panel const& panel);
+                  Windows::Graphics::Display::DisplayOrientations orientation,
+                  Windows::UI::Core::CoreDispatcher const& dispatcher,
+                  Windows::UI::Xaml::Controls::Panel const& panel);
     AxmolRenderer(const AxmolRenderer&) = delete;
     ~AxmolRenderer();
     void SetQueueOperationCb(std::function<void(ax::AsyncOperation, void*)> op);
     void Draw(size_t width, size_t height, float dpi, Windows::Graphics::Display::DisplayOrientations orientation);
-	void QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs const& args);
+    void QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs const& args);
     void QueueKeyboardEvent(ax::WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
-	void QueueBackButtonEvent();
+    void QueueBackButtonEvent();
     void Pause();
     void Resume();
     void DeviceLost();
     bool AppShouldExit();
 
 private:
-
     int m_width;
     int m_height;
     float m_dpi;

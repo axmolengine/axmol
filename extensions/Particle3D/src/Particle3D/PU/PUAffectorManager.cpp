@@ -282,4 +282,4 @@ PUAffector* PUAffectorManager::createAffector(std::string_view type)
     return nullptr;
 }
 
-}
+}  // namespace ax

@@ -110,5 +110,4 @@ protected:
     Vec3 _predictedPosition;
     bool _innerCollision;
 };
-}
-
+}  // namespace ax

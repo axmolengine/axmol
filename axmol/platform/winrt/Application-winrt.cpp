@@ -165,9 +165,9 @@ bool Application::openURL(std::string_view url)
 {
     auto dispatcher = ax::RenderViewImpl::sharedRenderView()->getDispatcher();
     dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, DispatchedHandler([url]() {
-                                  auto uri = Windows::Foundation::Uri(PlatformStringFromString(url));
-                                  Windows::System::Launcher::LaunchUriAsync(uri);
-                              }));
+        auto uri = Windows::Foundation::Uri(PlatformStringFromString(url));
+        Windows::System::Launcher::LaunchUriAsync(uri);
+    }));
     return true;
 }
 
@@ -177,4 +177,4 @@ void Application::setStartupScriptFilename(const std::string& startupScriptFile)
     std::replace(m_startupScriptFilename.begin(), m_startupScriptFilename.end(), '\\', '/');
 }
 
-}
+}  // namespace ax

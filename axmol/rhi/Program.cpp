@@ -29,9 +29,7 @@
 namespace ax::rhi
 {
 
-Program::Program(std::string_view vs, std::string_view fs) : _vsSource(vs), _fsSource(fs)
-{
-}
+Program::Program(std::string_view vs, std::string_view fs) : _vsSource(vs), _fsSource(fs) {}
 
 Program::~Program()
 {

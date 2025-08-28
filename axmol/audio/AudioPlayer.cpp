@@ -248,8 +248,8 @@ bool AudioPlayer::play2d()
         ALint state;
         alGetSourcei(_alSource, AL_SOURCE_STATE, &state);
         if (state != AL_PLAYING)
-             AXLOGE("state isn't playing, {}, {}, cache id={}, player id={}", state, _audioCache->_fileFullPath,
-                  _audioCache->_id, _id);
+            AXLOGE("state isn't playing, {}, {}, cache id={}, player id={}", state, _audioCache->_fileFullPath,
+                   _audioCache->_id, _id);
 
         // OpenAL framework: sometime when switch audio too fast, the result state will error, but there is no any
         // alError, so just skip for workaround.
@@ -457,4 +457,4 @@ bool AudioPlayer::setTime(float time)
     }
     return false;
 }
-}
+}  // namespace ax

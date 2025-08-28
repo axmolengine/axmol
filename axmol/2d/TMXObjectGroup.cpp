@@ -69,4 +69,4 @@ Value TMXObjectGroup::getProperty(std::string_view propertyName) const
     return Value();
 }
 
-}
+}  // namespace ax

@@ -143,17 +143,16 @@ class AX_DLL VertexLayout : public Object
     friend class ::ax::VertexLayoutManager;
 
 protected:
-    VertexLayout()                    = default;
+    VertexLayout() = default;
     explicit VertexLayout(VertexLayoutDesc&& desc) noexcept : _desc(std::move(desc)) {}
     VertexLayout(const VertexLayout& rhs) = delete;
     void setBuiltinId(int id) { _builtinId = id; }
 
 public:
-
     virtual ~VertexLayout() = default;
 
     const VertexLayoutDesc& getDesc() const { return _desc; }
-    
+
     uint32_t getStride() const { return _desc.getStride(); }
     uint32_t getInstanceStride() const { return _desc.getInstanceStride(); }
 

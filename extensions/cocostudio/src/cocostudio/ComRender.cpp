@@ -305,7 +305,7 @@ bool ComRender::serialize(void* r)
                 if (fileExtension == ".json" || fileExtension == ".exportjson")
                 {
                     ax::ui::Widget* widget = GUIReader::getInstance()->widgetFromJsonFile(filePath.c_str());
-                    _render                     = widget;
+                    _render                = widget;
                     _render->retain();
 
                     ret = true;
@@ -313,7 +313,7 @@ bool ComRender::serialize(void* r)
                 else if (fileExtension == ".csb")
                 {
                     ax::ui::Widget* widget = GUIReader::getInstance()->widgetFromBinaryFile(filePath.c_str());
-                    _render                     = widget;
+                    _render                = widget;
                     _render->retain();
 
                     ret = true;
