@@ -64,7 +64,26 @@ IndentPPDirectives: AfterHash
 
 # Include blocks style
 IncludeBlocks: Preserve
+
 UseTab: Never
+
 BreakConstructorInitializers: BeforeComma
 
 AlignConsecutiveMacros: AcrossEmptyLines
+
+# ReflowComments: true can cause non-idempotent (two-pass) formatting in some cases:
+#
+#   1. First pass:
+#      - clang-format wraps long line comments to respect ColumnLimit.
+#      - Newly wrapped lines are treated as standalone comments, so the configured
+#        space after "//" (e.g. from SpaceAfterLineComment or SpacesInLineCommentPrefix)
+#        is not applied to them.
+#
+#   2. Second pass:
+#      - clang-format now sees those wrapped lines as eligible for the spacing rule
+#        and inserts the missing space after "//", completing the intended format.
+#
+# Because wrapping and spacing are applied in separate passes, some files may need
+# to be formatted twice to reach the final consistent output.
+# To avoid this two-pass behavior, disable comment reflow:
+ReflowComments: false
