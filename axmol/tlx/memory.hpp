@@ -80,7 +80,7 @@ public:
     typedef Traits traits_type;
 
     constexpr retain_ptr() noexcept : px(nullptr) {}
-
+    retain_ptr(std::nullptr_t) noexcept : px(nullptr) {}
     explicit retain_ptr(T* p) noexcept : this_type(p, traits_type::default_action()) {}
 
     retain_ptr(T* p, retain_object_t) noexcept : this_type(p, adopt_object) { traits_type::retain(p); }
