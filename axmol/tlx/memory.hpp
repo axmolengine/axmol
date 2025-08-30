@@ -81,7 +81,7 @@ public:
 
     constexpr retain_ptr() noexcept : px(nullptr) {}
 
-    retain_ptr(T* p) noexcept : this_type(p, traits_type::default_action()) {}
+    explicit retain_ptr(T* p) noexcept : this_type(p, traits_type::default_action()) {}
 
     retain_ptr(T* p, retain_object_t) noexcept : this_type(p, adopt_object) { traits_type::retain(p); }
     retain_ptr(T* p, adopt_object_t) noexcept : px(p) {}

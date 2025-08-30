@@ -29,11 +29,10 @@
 #include "axmol/base/Object.h"
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/rhi/ShaderCache.h"
+#include "axmol/tlx/hlookup.hpp"
 
 #include <functional>
-#include <string>
 #include <vector>
-#include <unordered_map>
 
 namespace ax
 {

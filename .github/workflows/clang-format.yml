@@ -14,18 +14,50 @@ on:
           - check_only
           - create_pr
           - auto_commit
+  issue_comment:
+    types: [created] # Listen for new comments on issues/PRs
 
 env:
-  lint_mode: "${{ inputs.lint_mode || 'check_only' }}"
+  LINT_MODE: "${{ inputs.lint_mode || 'check_only' }}"
 
 jobs:
   clang-format-lint:
     runs-on: ubuntu-latest
+    # Run if:
+    # - PR event
+    # - workflow_dispatch
+    # - issue_comment on a PR with /clang-format AND commenter is halx99
+    if: |
+      (github.event_name == 'pull_request') ||
+      (github.event_name == 'workflow_dispatch') ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request != null &&
+       startsWith(github.event.comment.body, '/clang-format') &&
+       github.event.comment.user.login == 'halx99')
 
     steps:
-    - uses: actions/checkout@v5
+    # Override LINT_MODE to auto_commit if triggered by /clang-format comment from halx99
+    - name: Override LINT_MODE for comment trigger
+      if: github.event_name == 'issue_comment'
+      run: echo "LINT_MODE=auto_commit" >> $GITHUB_ENV
 
-    - name: Set LAST_COMMIT_HASH (short)
+    # Get PR info when triggered by a comment
+    - name: Get PR info (for comment trigger)
+      if: github.event_name == 'issue_comment'
+      id: pr
+      uses: actions-ecosystem/action-get-merged-pull-request@v1
+      with:
+        github_token: ${{ secrets.AX_BOT_TOKEN }}
+        number: ${{ github.event.issue.number }}
+
+    # Checkout correct branch
+    - uses: actions/checkout@v5
+      with:
+        ref: ${{ github.event_name == 'issue_comment' && steps.pr.outputs.head_ref || github.head_ref || github.ref_name }}
+        repository: ${{ github.event_name == 'issue_comment' && steps.pr.outputs.head_repo || github.repository }}
+        token: ${{ secrets.AX_BOT_TOKEN }}
+
+    - name: Prepare clang-format lint
       run: echo "LAST_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
     - name: Run clang-format lint
@@ -37,8 +69,9 @@ jobs:
         clangFormatVersion: 20
         inplace: True
 
+    # check_only mode
     - name: Check for uncommitted changes
-      if: ${{ env.lint_mode == 'check_only' }}
+      if: ${{ env.LINT_MODE == 'check_only' }}
       shell: pwsh
       run: |
         git diff --quiet
@@ -53,8 +86,9 @@ jobs:
           Write-Host "✅ clang-format check passed: No formatting changes needed."
         }
 
+    # create_pr mode
     - name: Create pull request
-      if: ${{ env.lint_mode == 'create_pr' }}
+      if: ${{ env.LINT_MODE == 'create_pr' }}
       id: cpr
       uses: peter-evans/create-pull-request@v7
       with:
@@ -79,13 +113,14 @@ jobs:
         draft: false
 
     - name: Check pull request outputs
-      if: ${{ env.lint_mode == 'create_pr' && steps.cpr.outputs.pull-request-number }}
+      if: ${{ env.LINT_MODE == 'create_pr' && steps.cpr.outputs.pull-request-number }}
       run: |
         echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
         echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
 
+    # auto_commit mode (including comment trigger)
     - name: Commit clang-format changes to PR source branch
-      if: ${{ env.lint_mode == 'auto_commit' && github.head_ref }}
+      if: ${{ env.LINT_MODE == 'auto_commit' }}
       uses: EndBug/add-and-commit@v9
       with:
         author_name: axmol-bot
@@ -93,6 +128,6 @@ jobs:
         committer_name: GitHub Actions
         committer_email: 41898282+github-actions[bot]@users.noreply.github.com
         message: 'Committing clang-format changes'
-        new_branch: ${{ github.head_ref || github.ref_name }}
+        new_branch: ${{ github.head_ref || github.ref_name || steps.pr.outputs.head_ref }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.AX_BOT_TOKEN }}
