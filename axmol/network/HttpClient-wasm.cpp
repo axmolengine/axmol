@@ -250,7 +250,7 @@ void HttpClient::processResponse(HttpResponse* response, bool isAlone)
 void HttpClient::onRequestComplete(emscripten_fetch_t* fetch)
 {
     fetchUserData* userData = reinterpret_cast<fetchUserData*>(fetch->userData);
-    RefPtr<HttpResponse> response{ReferencedObject<HttpResponse>(userData->response)};
+    axstd::retain_ptr<HttpResponse> response{userData->response, axstd::adopt_object};
     HttpRequest* request = response->getHttpRequest();
 
     // get response
