@@ -195,26 +195,3 @@ typedef void (Object::*SEL_SCHEDULE)(float);
 }  // namespace ax
 // end of base group
 /** @} */
-
-namespace axstd
-{
-template <typename _Ty, typename Enable = void>
-struct is_ref_counted : std::false_type
-{};
-
-template <typename... _Types>
-struct is_ref_counted_helper
-{};
-
-template <typename _Ty>
-struct is_ref_counted<_Ty,
-                      std::conditional_t<false,
-                                         is_ref_counted_helper<decltype(std::declval<_Ty>().retain()),
-                                                               decltype(std::declval<_Ty>().release()),
-                                                               decltype(std::declval<_Ty>().getReferenceCount())>,
-                                         void>> : public std::true_type
-{};
-
-template <typename _Ty>
-inline constexpr bool is_ref_counted_v = is_ref_counted<std::remove_pointer_t<_Ty>>::value;
-}  // namespace axstd

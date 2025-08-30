@@ -38,7 +38,8 @@ using namespace ax;
 #include "axmol/rhi/Buffer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Types.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/utility.hpp"
 #include "axmol/base/EventType.h"
 #include "axmol/2d/Camera.h"
 #include "axmol/platform/Image.h"
@@ -1313,8 +1314,9 @@ void Terrain::Chunk::updateIndicesLOD()
 
 void Terrain::Chunk::calculateAABB()
 {
-    auto pos = axstd::pod_vector_from<Vec3>(_originalVertices.begin(), _originalVertices.end(),
-                                            [](const auto& it) { return it._position; });
+    axstd::pod_vector<Vec3> pos;
+    axstd::resize_and_transform(_originalVertices.begin(), _originalVertices.end(), pos,
+                                [](const auto& it) { return it._position; });
     _aabb.updateMinMax(&pos[0], pos.size());
 }
 

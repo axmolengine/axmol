@@ -27,7 +27,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "axmol/base/hlookup.h"
+#include "axmol/tlx/hlookup.hpp"
 
 namespace tinyobj
 {
@@ -77,7 +77,7 @@ public:
 
     virtual std::string operator()(std::string_view matId,
                                    std::vector<material_t>& materials,
-                                   hlookup::string_map<int>& matMap) = 0;
+                                   axstd::string_map<int>& matMap) = 0;
 };
 
 class MaterialFileReader : public MaterialReader
@@ -87,7 +87,7 @@ public:
     virtual ~MaterialFileReader() {}
     virtual std::string operator()(std::string_view matId,
                                    std::vector<material_t>& materials,
-                                   hlookup::string_map<int>& matMap);
+                                   axstd::string_map<int>& matMap);
 
 private:
     std::string m_mtlBasePath;
@@ -113,5 +113,5 @@ std::string LoadObj(std::vector<shape_t>& shapes,        // [output]
 
 /// Loads materials into std::map
 /// Returns an empty string if successful
-std::string LoadMtl(hlookup::string_map<int>& material_map, std::vector<material_t>& materials, std::istream& inStream);
+std::string LoadMtl(axstd::string_map<int>& material_map, std::vector<material_t>& materials, std::istream& inStream);
 }  // namespace tinyobj

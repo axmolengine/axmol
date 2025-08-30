@@ -845,7 +845,7 @@ extern bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3
 
 extern bool luaval_to_std_map_string_string(lua_State* L,
                                             int lo,
-                                            hlookup::string_map<std::string>* ret,
+                                            axstd::string_map<std::string>* ret,
                                             const char* funcName);
 
 /**@}**/
@@ -1320,7 +1320,7 @@ AX_LUA_DLL bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::Unifor
  */
 AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& desc);
 
-AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::rhi::VertexInputDesc>& map);
+AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L, const axstd::string_map<ax::rhi::VertexInputDesc>& map);
 
 /**
  * convert ax::ResourceData to lua object

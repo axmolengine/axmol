@@ -94,13 +94,13 @@ public:
      * Get active attribute informations.
      * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
      */
-    inline const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
+    inline const axstd::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
 
     /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const hlookup::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
+    inline const axstd::string_map<UniformInfo>& getActiveUniformInfos() const { return _activeUniformInfos; }
 
     /**
      * Get maximum uniform location.
@@ -123,8 +123,8 @@ private:
 
     id<MTLFunction> _mtlFunction = nil;
 
-    hlookup::string_map<VertexInputDesc> _activeVertexInputs;
-    hlookup::string_map<UniformInfo> _activeUniformInfos;
+    axstd::string_map<VertexInputDesc> _activeVertexInputs;
+    axstd::string_map<UniformInfo> _activeUniformInfos;
 
     const VertexInputDesc* _builtinVertexInputs[VIK_COUNT];
 

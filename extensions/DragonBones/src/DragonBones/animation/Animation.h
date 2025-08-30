@@ -64,7 +64,7 @@ private:
     float _inheritTimeScale;
     std::vector<std::string> _animationNames;
     std::vector<AnimationState*> _animationStates;
-    hlookup::string_map<AnimationData*> _animations;
+    axstd::string_map<AnimationData*> _animations;
     Armature* _armature;
     AnimationConfig* _animationConfig;
     AnimationState* _lastAnimationState;
@@ -441,8 +441,8 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline const hlookup::string_map<AnimationData*>& getAnimations() const { return _animations; }
-    void setAnimations(const hlookup::string_map<AnimationData*>& value);
+    inline const axstd::string_map<AnimationData*>& getAnimations() const { return _animations; }
+    void setAnimations(const axstd::string_map<AnimationData*>& value);
     /**
      * - An AnimationConfig instance that can be used quickly.
      * @see dragonBones.AnimationConfig

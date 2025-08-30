@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/base/Protocols.h"
 #include "axmol/2d/Node.h"
 #include "axmol/renderer/CustomCommand.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
 
 namespace ax
 {

@@ -54,8 +54,9 @@ THE SOFTWARE.
 #include "axmol/2d/RenderTexture.h"
 
 #include "axmol/base/base64.h"
-#include "axmol/base/axstd.h"
-#include "axmol/base/charconv.h"
+#include "axmol/tlx/byte_buffer.hpp"
+#include "axmol/tlx/charconv.hpp"
+#include "axmol/tlx/utility.hpp"
 #include "yasio/string_view.hpp"
 
 using namespace std::string_view_literals;
@@ -846,12 +847,9 @@ AX_DLL std::string base64Encode(const void* in, size_t inlen)
          *    - https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
          *
          */
-#if _AX_HAS_CXX23
-        ret.resize_and_overwrite(n, [in, inlen](char* out, size_t) { return ax::base64::encode(out, in, inlen); });
-#else
-        ret.resize(n);
-        ret.resize(ax::base64::encode(&ret.front(), in, inlen));
-#endif
+
+        axstd::resize_and_overrite(ret, n,
+                                   [in, inlen](char* out, size_t) { return ax::base64::encode(out, in, inlen); });
 
         return ret;
     }

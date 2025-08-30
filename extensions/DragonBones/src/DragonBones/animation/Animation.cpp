@@ -581,7 +581,7 @@ std::string_view Animation::getLastAnimationName() const
     return DEFAULT_NAME;
 }
 
-void Animation::setAnimations(const hlookup::string_map<AnimationData*>& value)
+void Animation::setAnimations(const axstd::string_map<AnimationData*>& value)
 {
     if (_animations == value)
     {

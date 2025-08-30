@@ -31,9 +31,6 @@ THE SOFTWARE.
 
 #pragma once
 
-#include <set>
-#include <unordered_map>
-#include <string>
 #include "axmol/2d/SpriteFrame.h"
 #include "axmol/2d/SpriteSheetLoader.h"
 #include "axmol/base/Object.h"
@@ -300,8 +297,8 @@ protected:
 
 private:
     ax::Map<uint64_t, SpriteFrame*> _spriteFrames;
-    tsl::robin_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteSheets;
-    tsl::robin_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
+    axstd::hash_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteSheets;
+    axstd::hash_map<uint64_t, std::shared_ptr<SpriteSheet>> _spriteFrameToSpriteSheetMap;
 
     std::map<uint32_t, std::shared_ptr<ISpriteSheetLoader>> _spriteSheetLoaders;
 };

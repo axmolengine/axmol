@@ -113,23 +113,23 @@ public:
     /**
      * @private
      */
-    hlookup::string_map<BoneData*> bones;
+    axstd::string_map<BoneData*> bones;
     /**
      * @private
      */
-    hlookup::string_map<SlotData*> slots;
+    axstd::string_map<SlotData*> slots;
     /**
      * @private
      */
-    hlookup::string_map<ConstraintData*> constraints;
+    axstd::string_map<ConstraintData*> constraints;
     /**
      * @private
      */
-    hlookup::string_map<SkinData*> skins;
+    axstd::string_map<SkinData*> skins;
     /**
      * @private
      */
-    hlookup::string_map<AnimationData*> animations;
+    axstd::string_map<AnimationData*> animations;
     /**
      * - The default skin data.
      * @version DragonBones 4.5

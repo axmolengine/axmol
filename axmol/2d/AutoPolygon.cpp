@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "axmol/2d/AutoPolygon.h"
 #include "poly2tri/poly2tri.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
 #include "axmol/renderer/TextureCache.h"
 #include "clipper2/clipper.h"
 #include <algorithm>

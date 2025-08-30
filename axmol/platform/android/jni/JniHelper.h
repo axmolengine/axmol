@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/math/Vec3.h"
 #include "jni/jni.hpp"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
 
 namespace jni
 {

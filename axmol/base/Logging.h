@@ -24,7 +24,8 @@
 
 #pragma once
 
-#include "axmol/base/bitmask.h"
+#include "axmol/tlx/bitmask.hpp"
+#include "axmol/tlx/hlookup.hpp"
 #include "axmol/platform/PlatformMacros.h"
 
 #include "fmt/compile.h"

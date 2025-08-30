@@ -27,7 +27,7 @@
 #include "axmol/rhi/DriverBase.h"
 #include "axmol/platform/GL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
-#include "axmol/base/hlookup.h"
+#include "axmol/tlx/hlookup.hpp"
 
 namespace ax::rhi::gl
 {

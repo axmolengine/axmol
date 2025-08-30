@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "axmol/2d/FontAtlas.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/base/filesystem.h"
+#include "axmol/tlx/filesystem.hpp"
 #include "freetype/ftmodapi.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/platform/FileStream.h"
@@ -68,7 +68,7 @@ typedef struct _DataRef
     unsigned int referenceCount = 0;
 } DataRef;
 
-static hlookup::string_map<DataRef> s_cacheFontData;
+static axstd::string_map<DataRef> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
 static unsigned long ft_stream_read_callback(FT_Stream stream,

@@ -311,7 +311,7 @@ protected:
 
     Vector<MeshVertexData*> _meshVertexDatas;
 
-    hlookup::string_map<AttachNode*> _attachments;
+    axstd::string_map<AttachNode*> _attachments;
 
     BlendFunc _blend;
 
@@ -395,7 +395,7 @@ public:
 
 protected:
     static MeshRendererCache* _cacheInstance;
-    hlookup::string_map<MeshRenderData*> _meshDatas;  // cached mesh data
+    axstd::string_map<MeshRenderData*> _meshDatas;  // cached mesh data
 };
 
 // end of 3d group

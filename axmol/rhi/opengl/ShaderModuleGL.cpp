@@ -27,7 +27,7 @@
 
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Macros.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/utility.hpp"
 
 namespace ax::rhi::gl
 {

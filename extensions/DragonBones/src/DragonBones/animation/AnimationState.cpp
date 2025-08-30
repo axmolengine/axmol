@@ -83,7 +83,7 @@ void AnimationState::_onClear()
 void AnimationState::_updateTimelines()
 {
     {  // Update constraint timelines.
-        hlookup::string_map<std::vector<ConstraintTimelineState*>> constraintTimelines;
+        axstd::string_map<std::vector<ConstraintTimelineState*>> constraintTimelines;
         for (const auto timeline : _constraintTimelines)  // Create constraint timelines map.
         {
             constraintTimelines[timeline->constraint->getName()].push_back(timeline);
@@ -137,7 +137,7 @@ void AnimationState::_updateTimelines()
 void AnimationState::_updateBoneAndSlotTimelines()
 {
     {  // Update bone timelines.
-        hlookup::string_map<std::vector<BoneTimelineState*>> boneTimelines;
+        axstd::string_map<std::vector<BoneTimelineState*>> boneTimelines;
         for (const auto timeline : _boneTimelines)  // Create bone timelines map.
         {
             boneTimelines[timeline->bone->getName()].push_back(timeline);
@@ -238,7 +238,7 @@ void AnimationState::_updateBoneAndSlotTimelines()
     }
 
     {  // Update slot timelines.
-        hlookup::string_map<std::vector<SlotTimelineState*>> slotTimelines;
+        axstd::string_map<std::vector<SlotTimelineState*>> slotTimelines;
         std::vector<unsigned> ffdFlags;
         for (const auto timeline : _slotTimelines)  // Create slot timelines map.
         {

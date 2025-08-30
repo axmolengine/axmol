@@ -200,16 +200,16 @@ bool Manifest::versionGreater(
     return greater;
 }
 
-hlookup::string_map<Manifest::AssetDiff> Manifest::genDiff(const Manifest* b) const
+axstd::string_map<Manifest::AssetDiff> Manifest::genDiff(const Manifest* b) const
 {
-    hlookup::string_map<AssetDiff> diff_map;
+    axstd::string_map<AssetDiff> diff_map;
     auto& bAssets = b->getAssets();
 
     std::string key;
     Asset valueA;
     Asset valueB;
 
-    hlookup::string_map<Asset>::const_iterator valueIt, it;
+    axstd::string_map<Asset>::const_iterator valueIt, it;
     for (it = _assets.begin(); it != _assets.end(); ++it)
     {
         key    = it->first;
@@ -342,7 +342,7 @@ const std::vector<std::string>& Manifest::getGroups() const
     return _groups;
 }
 
-const hlookup::string_map<std::string>& Manifest::getGroupVerions() const
+const axstd::string_map<std::string>& Manifest::getGroupVerions() const
 {
     return _groupVer;
 }
@@ -352,7 +352,7 @@ std::string_view Manifest::getGroupVersion(std::string_view group) const
     return _groupVer.at(group);
 }
 
-const hlookup::string_map<Manifest::Asset>& Manifest::getAssets() const
+const axstd::string_map<Manifest::Asset>& Manifest::getAssets() const
 {
     return _assets;
 }

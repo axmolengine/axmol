@@ -244,7 +244,7 @@ protected:
 
     int _asyncRefCount;
 
-    hlookup::string_map<Texture2D*> _textures;
+    axstd::string_map<Texture2D*> _textures;
 
     static std::string s_etc1AlphaFileSuffix;
 };

@@ -36,6 +36,7 @@
 #include "axmol/base/EventListener.h"
 #include "axmol/base/Event.h"
 #include "axmol/platform/StdC.h"
+#include "axmol/tlx/hlookup.hpp"
 
 /**
  * @addtogroup base
@@ -328,10 +329,10 @@ protected:
     void cleanToRemovedListeners();
 
     /** Listeners map */
-    hlookup::string_map<EventListenerVector*> _listenerMap;
+    axstd::string_map<EventListenerVector*> _listenerMap;
 
     /** The map of dirty flag */
-    hlookup::string_map<DirtyFlag> _priorityDirtyFlagMap;
+    axstd::string_map<DirtyFlag> _priorityDirtyFlagMap;
 
     /** The map of node and event listeners */
     std::unordered_map<Node*, std::vector<EventListener*>*> _nodeListenersMap;

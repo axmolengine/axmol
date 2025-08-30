@@ -2925,7 +2925,7 @@ void std_map_string_string_to_luaval(lua_State* L, const std::map<std::string, s
     }
 }
 
-bool luaval_to_std_map_string_string(lua_State* L, int lo, hlookup::string_map<std::string>* ret, const char* funcName)
+bool luaval_to_std_map_string_string(lua_State* L, int lo, axstd::string_map<std::string>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -3118,7 +3118,7 @@ void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc
     lua_rawset(L, -3);
 }
 
-void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::rhi::VertexInputDesc>& attrs)
+void program_activeattrs_to_luaval(lua_State* L, const axstd::string_map<ax::rhi::VertexInputDesc>& attrs)
 {
     if (L == nullptr)
         return;

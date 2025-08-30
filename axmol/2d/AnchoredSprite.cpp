@@ -28,7 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/2d/AnchoredSprite.h"
 #include "axmol/rhi/DriverBase.h"
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 namespace ax
 {

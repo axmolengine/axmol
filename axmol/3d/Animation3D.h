@@ -82,7 +82,7 @@ public:
     Curve* getBoneCurveByName(std::string_view name) const;
 
     /**get the bone Curves set*/
-    const hlookup::string_map<Curve*>& getBoneCurves() const { return _boneCurves; }
+    const axstd::string_map<Curve*>& getBoneCurves() const { return _boneCurves; }
 
     Animation3D();
     virtual ~Animation3D();
@@ -93,7 +93,7 @@ public:
     bool initWithFile(std::string_view filename, std::string_view animationName);
 
 protected:
-    hlookup::string_map<Curve*> _boneCurves;  // bone curves map, key bone name, value AnimationCurve
+    axstd::string_map<Curve*> _boneCurves;  // bone curves map, key bone name, value AnimationCurve
 
     float _duration;  // animation duration
 };
@@ -125,7 +125,7 @@ protected:
 
     static Animation3DCache* _cacheInstance;  // cache instance
 
-    hlookup::string_map<Animation3D*> _animations;  // cached animations
+    axstd::string_map<Animation3D*> _animations;  // cached animations
 };
 
 // end of 3d group

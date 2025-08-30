@@ -36,7 +36,7 @@
 #include <string>
 
 #include "axmol/3d/shaderinfos.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
 
 namespace ax
 {
@@ -521,9 +521,9 @@ public:
     };
 
 public:
-    hlookup::string_map<std::vector<Vec3Key>> _translationKeys;
-    hlookup::string_map<std::vector<QuatKey>> _rotationKeys;
-    hlookup::string_map<std::vector<Vec3Key>> _scaleKeys;
+    axstd::string_map<std::vector<Vec3Key>> _translationKeys;
+    axstd::string_map<std::vector<QuatKey>> _rotationKeys;
+    axstd::string_map<std::vector<Vec3Key>> _scaleKeys;
 
     float _totalTime;
 

@@ -1,32 +1,47 @@
+/****************************************************************************
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 #pragma once
 
 #include <type_traits>
 #include <memory>
 #include <string_view>
-#include <span>
-#include "yasio/byte_buffer.hpp"
 
-// Tests whether compiler has c++23 support
-#if (defined(__cplusplus) && __cplusplus > 202002L) || \
-    (defined(_MSC_VER) && _MSC_VER > 1934 &&           \
-     ((defined(_HAS_CXX23) && _HAS_CXX23 == 1) || (defined(_MSVC_LANG) && (_MSVC_LANG > 202002L))))
-#    ifndef _AX_HAS_CXX23
-#        define _AX_HAS_CXX23 1
-#    endif  // C++23 features macro
-#endif      // C++23 features check
-#if !defined(_AX_HAS_CXX23)
-#    define _AX_HAS_CXX23 0
-#endif
+#include "axmol/tlx/feature_test.hpp"
 
 namespace axstd
 {
-using byte_buffer  = yasio::byte_buffer;
-using sbyte_buffer = yasio::sbyte_buffer;
-template <typename _Elem, typename _Alloc = yasio::buffer_allocator<_Elem>>
-using pod_vector = yasio::pod_vector<_Elem, _Alloc>;
-using yasio::erase;
-using yasio::erase_if;
-using yasio::insert_sorted;
+
+template <typename, typename = void>
+struct has_resize_and_overwrite : std::false_type
+{};
+
+template <typename T>
+struct has_resize_and_overwrite<
+    T,
+    std::void_t<decltype(std::declval<T&>().resize_and_overwrite(std::declval<typename T::size_type>(),
+                                                                 std::declval<int>()))>> : std::true_type
+{};
 
 /* make_unique_for_overwrite since c++20, but not all platformm support */
 template <class _Ty, std::enable_if_t<!std::is_array_v<_Ty>, int> = 0>
@@ -61,13 +76,17 @@ inline auto resize_and_transform(const _InIt _First, const _InIt _Last, _OutCont
     _Dest.resize(static_cast<size_t>(count));
     return std::transform(_First, _Last, _Dest.begin(), _Func);
 }
-template <class _Ty, class _InIt, class _Fn>
-inline pod_vector<_Ty> pod_vector_from(const _InIt _First, const _InIt _Last, _Fn _Func)
-{
-    auto count = std::distance(_First, _Last);
-    pod_vector<_Ty> dest(static_cast<size_t>(count));
-    std::transform(_First, _Last, dest.begin(), _Func);
-    return dest;
+
+template<typename _SeqCont, typename _Operation>
+inline void resize_and_overrite(_SeqCont& cont, size_t size, _Operation op) {
+    if constexpr (has_resize_and_overwrite<_SeqCont>::value) {
+        cont.resize_and_overwrite(size, op);
+    } else {
+        cont.resize(size);
+        const auto ret = op(cont.data(), size);
+        if (ret < size)
+            cont.resize(ret);
+    }
 }
 
 template <typename _CStr, typename _Fn>

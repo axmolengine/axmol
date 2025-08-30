@@ -35,8 +35,9 @@
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
 
-#include "axmol/base/axstd.h"
-#include "axmol/base/format.h"
+#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/format.hpp"
 #include "xxhash/xxhash.h"
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)

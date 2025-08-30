@@ -66,7 +66,7 @@ public:
     void reset() { _durations.clear(); }
 
 private:
-    hlookup::string_map<int64_t> _durations;
+    axstd::string_map<int64_t> _durations;
 };
 
 NewRendererTests::NewRendererTests()

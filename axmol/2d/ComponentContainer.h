@@ -65,7 +65,7 @@ public:
     bool isEmpty() const { return _componentMap.empty(); }
 
 private:
-    hlookup::string_map<Component*> _componentMap;
+    axstd::string_map<Component*> _componentMap;
     Node* _owner;
 
     friend class Node;

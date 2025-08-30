@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <functional>
 #include <mutex>
 #include <set>
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
 #include "axmol/base/Object.h"
 #include "axmol/base/Vector.h"
 

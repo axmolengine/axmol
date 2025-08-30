@@ -196,7 +196,7 @@ public:
 
 protected:
     static MeshMaterialCache* _cacheInstance;    // cache instance
-    hlookup::string_map<Texture2D*> _materials;  // cached materials
+    axstd::string_map<Texture2D*> _materials;  // cached materials
 };
 
 // end of 3d group

@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <string>
 #include <ctype.h>
 
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/utility.hpp"
 #include "axmol/base/Config.h"  // AX_USE_JPEG, AX_USE_WEBP
 
 #define STBI_NO_JPEG

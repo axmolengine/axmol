@@ -40,7 +40,7 @@ public:
 
 private:
     ID3D11Device* _device = nullptr;  // weak ref
-    tsl::robin_map<uint32_t, ComPtr<ID3D11DepthStencilState>> _stateCache;
+    axstd::hash_map<uint32_t, ComPtr<ID3D11DepthStencilState>> _stateCache;
 
     ComPtr<ID3D11DepthStencilState> _activeState;
     ComPtr<ID3D11DepthStencilState> _disableState;

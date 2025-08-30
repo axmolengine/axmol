@@ -30,7 +30,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 using namespace std;
 

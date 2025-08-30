@@ -29,7 +29,7 @@
 #define AXMOL__TEXT_UTILS_H
 
 #include "axmol/platform/PlatformMacros.h"
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 #include <vector>
 #include <string>
 #include <sstream>

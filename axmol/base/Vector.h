@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include "axmol/base/Macros.h"
 #include "axmol/base/Object.h"
+#include "axmol/tlx/type_traits.hpp"
 #include <vector>
 #include <functional>
 #include <algorithm>  // for std::find

@@ -1,5 +1,5 @@
 #include "UBBParser.h"
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 NS_FGUI_BEGIN
 using namespace ax;

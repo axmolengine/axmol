@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "axmol/platform/RenderView.h"
 #include "GLFW/glfw3.h"
 #if defined(__EMSCRIPTEN__)
-#    include "axmol/base/axstd.h"
+#    include "axmol/tlx/pod_vector.hpp"
 struct EmscriptenMouseEvent;
 struct EmscriptenTouchEvent;
 #endif

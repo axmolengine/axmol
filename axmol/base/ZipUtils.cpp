@@ -659,7 +659,7 @@ struct ZipFilePrivate
     std::unique_ptr<ourmemory_s> memfs;
 
     // std::unordered_map is faster if available on the platform
-    typedef hlookup::string_map<struct ZipEntryInfo> FileListContainer;
+    typedef axstd::string_map<struct ZipEntryInfo> FileListContainer;
     FileListContainer fileList;
 
     zlib_filefunc64_def functionOverrides{};
@@ -818,10 +818,14 @@ bool ZipFile::getFileData(std::string_view fileName, ResizableBuffer* buffer)
         nRet = unzOpenCurrentFile(_data->zipFile);
         AX_BREAK_IF(UNZ_OK != nRet);
 
-        buffer->resize(fileInfo.uncompressed_size);
-        int AX_UNUSED nSize =
-            unzReadCurrentFile(_data->zipFile, buffer->buffer(), static_cast<unsigned int>(fileInfo.uncompressed_size));
-        AXASSERT(nSize == 0 || nSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
+        buffer->resize_and_overwrite(fileInfo.uncompressed_size, [&fileInfo, this](void* out, size_t) {
+            int AX_UNUSED nSize =
+                unzReadCurrentFile(_data->zipFile, out,
+                                                     static_cast<unsigned int>(fileInfo.uncompressed_size));
+            AXASSERT(nSize == 0 || nSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
+            return static_cast<size_t>(nSize);
+        });
+
         unzCloseCurrentFile(_data->zipFile);
         res = true;
     } while (0);

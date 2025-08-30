@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/GroupCommand.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 using namespace ax;
 using namespace ax::ui;

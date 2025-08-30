@@ -23,8 +23,8 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/base/axstd.h"
-#include "axmol/base/hlookup.h"
+#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/hlookup.hpp"
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/VertexLayout.h"
 
@@ -74,7 +74,7 @@ private:
     VertexLayout* acquireBuiltinVertexLayout(VertexLayoutKind kind, rhi::Program* prog);
 
     axstd::pod_vector<VertexLayout*> _builtinVertexLayouts;
-    tsl::robin_map<uint32_t, VertexLayout*> _customVertexLayouts;
+    axstd::hash_map<uint32_t, VertexLayout*> _customVertexLayouts;
 
     std::vector<VertexLayoutDesc> _vertexLayoutDescPool;
 };

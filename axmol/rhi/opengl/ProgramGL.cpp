@@ -29,7 +29,8 @@
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/pod_vector.hpp"
 #include "yasio/byte_buffer.hpp"
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
@@ -433,12 +434,12 @@ int ProgramImpl::getOriginalLocation(int location) const
 }
 #endif
 
-const hlookup::string_map<VertexInputDesc>& ProgramImpl::getActiveVertexInputs() const
+const axstd::string_map<VertexInputDesc>& ProgramImpl::getActiveVertexInputs() const
 {
     return _activeVertexInputs;
 }
 
-const hlookup::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage /*stage*/) const
+const axstd::string_map<UniformInfo>& ProgramImpl::getActiveUniformInfos(ShaderStage /*stage*/) const
 {
     return _activeUniformInfos;
 }

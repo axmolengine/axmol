@@ -281,7 +281,7 @@ protected:
     void resetLightUniformValues();
     void setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigned int lightmask);
     void bindMeshCommand();
-    hlookup::hash_map<NTextureData::Usage, Texture2D*> _textures;  // textures that submesh is using
+    axstd::hash_map<NTextureData::Usage, Texture2D*> _textures;  // textures that submesh is using
     MeshSkin* _skin;                                               // skin
     bool _visible;                                                 // is the submesh visible
 
@@ -304,7 +304,7 @@ protected:
     Material* _material;
     AABB _aabb;
     std::function<void()> _visibleChanged;
-    hlookup::string_map<std::vector<MeshCommand>> _meshCommands;
+    axstd::string_map<std::vector<MeshCommand>> _meshCommands;
 
     /// light parameters
     std::vector<Vec3> _dirLightUniformColorValues;

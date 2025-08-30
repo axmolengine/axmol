@@ -24,7 +24,7 @@
 
 #include "TextureCacheTest.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 using namespace ax;
 

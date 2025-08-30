@@ -328,7 +328,7 @@ const Value& Configuration::getValue(std::string_view key, const Value& defaultV
 
 void Configuration::setValue(std::string_view key, const Value& value)
 {
-    hlookup::set_item(_valueDict, key, value);  // _valueDict[key] = value;
+    axstd::set_item(_valueDict, key, value);  // _valueDict[key] = value;
 }
 
 //

@@ -34,7 +34,7 @@
 
 #include "Bug-14327.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 

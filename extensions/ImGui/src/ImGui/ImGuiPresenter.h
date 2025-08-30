@@ -180,7 +180,7 @@ private:
 
     int64_t _beginFrames = 0;
 
-    hlookup::string_map<float> _fontsInfoMap;
+    axstd::string_map<float> _fontsInfoMap;
 
     bool _purgeNextLoop = false;
 };

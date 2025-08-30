@@ -33,7 +33,7 @@
 #pragma once
 
 #include "axmol/2d/Node.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
 #include "axmol/base/Types.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/math/Math.h"

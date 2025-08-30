@@ -28,12 +28,11 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <map>
 #include <tuple>
 #include <functional>
 #include <sstream>
 #include <assert.h>
-#include "axmol/base/hlookup.h"
+#include "axmol/tlx/hlookup.hpp"
 // dragonBones assert
 #define DRAGONBONES_ASSERT(cond, msg) \
     do                                \

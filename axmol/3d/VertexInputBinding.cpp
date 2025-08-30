@@ -37,9 +37,9 @@ namespace ax
  * older version: cache miss always due to programState always changes when switch
  * render objects
  */
-static tsl::robin_map<uint32_t, VertexInputBinding*>& _bindingCache()
+static axstd::hash_map<uint32_t, VertexInputBinding*>& _bindingCache()
 {
-    static tsl::robin_map<uint32_t, VertexInputBinding*> __vertexInputBindingCache;
+    static axstd::hash_map<uint32_t, VertexInputBinding*> __vertexInputBindingCache;
     return __vertexInputBindingCache;
 }
 

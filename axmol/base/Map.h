@@ -30,13 +30,8 @@
 
 #include "axmol/base/Macros.h"
 #include "axmol/base/Object.h"
+#include "axmol/tlx/hlookup.hpp"
 #include <vector>
-
-#if USE_STD_UNORDERED_MAP
-#    include <unordered_map>
-#else
-#    include <map>
-#endif
 
 /**
  * @addtogroup base
@@ -440,7 +435,7 @@ protected:
 };
 
 template <typename _Valty>
-using StringMap = Map<std::string, _Valty, hlookup::string_hash, hlookup::equal_to>;
+using StringMap = Map<std::string, _Valty, axstd::string_hash, axstd::equal_to>;
 
 }  // namespace ax
 // end group

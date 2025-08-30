@@ -48,8 +48,8 @@ using std::max;
 
 namespace {
 
-	std::shared_ptr<rhi::ProgramState> __twoColorProgramState = nullptr;
-    static ax::RefPtr<rhi::VertexLayout> __twoColorVertexLayout;
+	static ax::retain_ptr<rhi::ProgramState> __twoColorProgramState;
+    static ax::retain_ptr<rhi::VertexLayout> __twoColorVertexLayout;
 	rhi::UniformLocation __locPMatrix;
 	rhi::UniformLocation __locTexture;
 
@@ -89,9 +89,9 @@ namespace {
 
         rhi::VertexLayout* layout{nullptr};
         updateProgramStateLayout(programState, layout);
-        __twoColorVertexLayout = ax::ReferencedObject<VertexLayout>(layout);
+        __twoColorVertexLayout.reset(layout, axstd::adopt_object);
 
-		__twoColorProgramState = std::shared_ptr<rhi::ProgramState>(programState);
+		__twoColorProgramState.reset(programState, axstd::adopt_object);
 	}
 
 }// namespace

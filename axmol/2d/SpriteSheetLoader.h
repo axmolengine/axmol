@@ -30,9 +30,6 @@ THE SOFTWARE.
 
 #pragma once
 
-#include <set>
-#include <unordered_map>
-#include <string>
 #include "axmol/2d/SpriteFrame.h"
 #include "axmol/base/Object.h"
 #include "axmol/base/Value.h"
@@ -67,7 +64,7 @@ public:
     std::string path;
     uint32_t format;
     uint64_t pathId = (uint64_t)-1;
-    tsl::robin_set<uint64_t> frames;
+    axstd::hash_set<uint64_t> frames;
     bool full = false;
 };
 

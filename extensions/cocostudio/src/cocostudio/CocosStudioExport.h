@@ -1,6 +1,6 @@
 #pragma once
 
-#include "axmol/base/hlookup.h"
+#include "axmol/tlx/hlookup.hpp"
 #include "axmol/platform/PlatformMacros.h"
 
 #if defined(_WIN32)

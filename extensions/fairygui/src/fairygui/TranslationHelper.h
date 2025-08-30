@@ -11,7 +11,7 @@ class PackageItem;
 class TranslationHelper
 {
 public:
-    static hlookup::string_map<hlookup::string_map<std::string>> strings;
+    static axstd::string_map<axstd::string_map<std::string>> strings;
 
     static void loadFromXML(const char *xmlString, size_t nBytes);
     static void translateComponent(PackageItem* item);

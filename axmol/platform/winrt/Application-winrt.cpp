@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "axmol/platform/Application.h"
 
 #include "pugixml/pugixml.hpp"
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 #include <winrt/Windows.ApplicationModel.h>
 #include <winrt/Windows.System.UserProfile.h>

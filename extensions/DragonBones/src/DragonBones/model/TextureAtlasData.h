@@ -84,7 +84,7 @@ public:
     /**
      * @private
      */
-    hlookup::string_map<TextureData*> textures;
+    axstd::string_map<TextureData*> textures;
     /**
      * @private
      */
@@ -106,7 +106,7 @@ protected:
     virtual void _onClear() override;
 
 public:  // For WebAssembly.
-    const hlookup::string_map<TextureData*>& getTextures() const { return textures; }
+    const axstd::string_map<TextureData*>& getTextures() const { return textures; }
 };
 /**
  * @internal

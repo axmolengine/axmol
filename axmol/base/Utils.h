@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/math/Mat4.h"
 #include "axmol/math/Mat3.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/memory.hpp"
 
 /** @file ccUtils.h
 Misc free functions
@@ -288,7 +288,7 @@ AX_DLL void killCurrentProcess();
 template <typename T, typename F, typename... Ts>
 static RefPtr<T> makeInstance(F&& memf, Ts&&... args)
 {
-    RefPtr<T> pRet(ReferencedObject<T>{new T()});
+    RefPtr<T> pRet(new T(), axstd::adopt_object);
     if (pRet && std::mem_fn(memf)(pRet.get(), std::forward<Ts>(args)...))
         return pRet;
 

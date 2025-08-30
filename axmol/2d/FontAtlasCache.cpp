@@ -33,12 +33,12 @@
 #include "axmol/2d/FontCharMap.h"
 #include "axmol/2d/Label.h"
 #include "axmol/platform/FileUtils.h"
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 namespace ax
 {
 
-hlookup::string_map<FontAtlas*> FontAtlasCache::_atlasMap;
+axstd::string_map<FontAtlas*> FontAtlasCache::_atlasMap;
 
 void FontAtlasCache::purgeCachedData()
 {

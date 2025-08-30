@@ -259,7 +259,7 @@ protected:
     void updateValueForKey(std::string_view key, std::string_view value);
 
 protected:
-    hlookup::string_map<std::string> _values;
+    axstd::string_map<std::string> _values;
 
     static UserDefault* _userDefault;
     static std::string _userDefaultFileName;

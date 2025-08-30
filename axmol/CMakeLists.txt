@@ -229,6 +229,7 @@ endif()
 
 include(rhi/CMakeLists.txt)
 include(renderer/CMakeLists.txt)
+include(tlx/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
@@ -256,6 +257,7 @@ set(_AX_HEADER axmol.h
   ${_AX_BASE_HEADER}
   ${_AX_UI_HEADER}
   ${_AX_NETWORK_HEADER}
+  ${_AX_TLX_FILES}
 )
 
 set(_AX_SRC axmol.cpp

@@ -38,6 +38,7 @@
 #include "axmol/base/Director.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/Logging.h"
+#include "axmol/tlx/utility.hpp"
 
 #include <sstream>
 

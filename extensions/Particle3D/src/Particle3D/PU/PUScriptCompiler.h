@@ -73,7 +73,7 @@ public:
 class AX_EX_DLL PUObjectAbstractNode : public PUAbstractNode
 {
 private:
-    hlookup::string_map<std::string> _env;
+    axstd::string_map<std::string> _env;
 
 public:
     std::string name, cls;
@@ -92,7 +92,7 @@ public:
     void addVariable(std::string_view name);
     void setVariable(std::string_view name, std::string_view value);
     std::pair<bool, std::string> getVariable(std::string_view name) const;
-    const hlookup::string_map<std::string>& getVariables() const;
+    const axstd::string_map<std::string>& getVariables() const;
 };
 
 /** This abstract node represents a script property */
@@ -131,7 +131,7 @@ class AX_EX_DLL PUScriptCompiler
 {
 
 private:
-    hlookup::string_map<PUAbstractNodeList>::iterator compile(const PUConcreteNodeList& nodes, std::string_view file);
+    axstd::string_map<PUAbstractNodeList>::iterator compile(const PUConcreteNodeList& nodes, std::string_view file);
     // is it excluded?//
     bool isNameExcluded(std::string_view cls, PUAbstractNode* parent);
 
@@ -156,7 +156,7 @@ private:
     void visit(PUConcreteNode* node);
 
 private:
-    hlookup::string_map<PUAbstractNodeList> _compiledScripts;
+    axstd::string_map<PUAbstractNodeList> _compiledScripts;
     PUAbstractNode* _current;
     PUAbstractNodeList* _nodes;
     PUParticleSystem3D* _PUParticleSystem3D;

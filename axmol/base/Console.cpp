@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "axmol/base/Console.h"
-#include "axmol/base/charconv.h"
+#include "axmol/tlx/charconv.hpp"
 
 #include <thread>
 #include <algorithm>
@@ -740,7 +740,7 @@ void Console::performCommand(socket_native_type fd, std::string_view command)
     }
 
     int index = 0;
-    hlookup::string_map<Command*>::iterator it;
+    axstd::string_map<Command*>::iterator it;
     std::string cmd_args;
     for (auto rgn : std::views::split(command, ' '))
     {
@@ -1406,7 +1406,7 @@ void Console::printFileUtils(socket_native_type fd)
     Console::Utility::sendPrompt(fd);
 }
 
-void Console::sendHelp(socket_native_type fd, const hlookup::string_map<Command*>& commands, const char* msg)
+void Console::sendHelp(socket_native_type fd, const axstd::string_map<Command*>& commands, const char* msg)
 {
     Console::Utility::sendToConsole(fd, msg, strlen(msg));
     for (auto&& it : commands)

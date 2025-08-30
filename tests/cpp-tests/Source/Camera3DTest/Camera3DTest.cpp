@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "axmol/ui/UISlider.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/rhi/DriverBase.h"
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 using namespace ax;
 

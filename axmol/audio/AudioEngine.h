@@ -386,10 +386,10 @@ protected:
     static std::unordered_map<AUDIO_ID, AudioInfo> _audioIDInfoMap;
 
     // audio file path,audio IDs
-    static hlookup::string_map<std::list<AUDIO_ID>> _audioPathIDMap;
+    static axstd::string_map<std::list<AUDIO_ID>> _audioPathIDMap;
 
     // profileName,ProfileHelper
-    static hlookup::string_map<ProfileHelper> _audioPathProfileHelperMap;
+    static axstd::string_map<ProfileHelper> _audioPathProfileHelperMap;
 
     static unsigned int _maxInstances;
 

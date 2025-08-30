@@ -51,7 +51,7 @@ THE SOFTWARE.
 #include "pugixml/pugixml.hpp"
 #include "axmol/base/Utils.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 #define USER_DEFAULT_PLAIN_MODE 0
 

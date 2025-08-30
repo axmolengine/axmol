@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/base/Utils.h"
 #include "axmol/platform/FileUtils.h"
+#include "axmol/tlx/utility.hpp"
 #include <ranges>
 #include <charconv>
 

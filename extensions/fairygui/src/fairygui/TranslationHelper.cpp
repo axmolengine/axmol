@@ -8,14 +8,14 @@
 #endif
 #include "utils/ByteBuffer.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 using namespace ax;
 NS_FGUI_BEGIN
 
 using namespace std;
 
-hlookup::string_map<hlookup::string_map<std::string> > TranslationHelper::strings;
+axstd::string_map<axstd::string_map<std::string> > TranslationHelper::strings;
 
 void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
 {

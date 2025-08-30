@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "axmol/base/Data.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/Director.h"
+#include "axmol/tlx/utility.hpp"
+#include "axmol/tlx/type_traits.hpp"
 
 #define AX_CONTENT_DIR     "Content/"
 #define AX_CONTENT_DIR_LEN (sizeof("Content/") - 1)
@@ -56,45 +58,33 @@ class ResizableBuffer
 {
 public:
     virtual ~ResizableBuffer() {}
-    virtual void resize(size_t size) = 0;
-    virtual void* buffer() const     = 0;
-    virtual size_t size() const      = 0;
+    virtual void resize_and_overwrite(size_t num_of_bytes, std::function<size_t(void*, size_t num_of_bytes)> op) = 0;
+    virtual size_t size_in_bytes() const      = 0;
 };
 
-template <typename T, typename Enable = void>
-struct is_resizable_container : std::false_type
-{};
-
-template <typename... Ts>
-struct is_resizable_container_helper
-{};
-
-template <typename T>
-struct is_resizable_container<T,
-                              std::conditional_t<false,
-                                                 is_resizable_container_helper<typename T::value_type,
-                                                                               decltype(std::declval<T>().size()),
-                                                                               decltype(std::declval<T>().resize(0)),
-                                                                               decltype(std::declval<T>().data())>,
-                                                 void>> : public std::true_type
-{};
-
-template <typename _T>
-inline constexpr bool is_resizable_container_v = is_resizable_container<_T>::value;
-
-template <typename T>
+template <typename _SeqCont>
 class ResizableBufferAdapter : public ResizableBuffer
 {
-    T* _buffer;
+    _SeqCont* _cont;
+    enum : size_t
+    {
+        element_size = sizeof(typename _SeqCont::value_type)
+    };
 
 public:
-    explicit ResizableBufferAdapter(T* buffer) : _buffer(buffer) {}
-    void resize(size_t size) override
+    explicit ResizableBufferAdapter(_SeqCont* buffer) : _cont(buffer) {}
+    void resize_and_overwrite(size_t num_of_bytes, std::function<size_t(void*, size_t)> op) override
     {
-        _buffer->resize((size + sizeof(typename T::value_type) - 1) / sizeof(typename T::value_type));
+        if constexpr (element_size == 1)
+            axstd::resize_and_overrite(*_cont, num_of_bytes, std::move(op));
+        else
+            axstd::resize_and_overrite(*_cont, count_element(num_of_bytes), [op_ = std::move(op)](void* out, size_t count) {
+                const auto num_of_bytes = op_(out, count * element_size);
+                return count_element(num_of_bytes);
+            });
     }
-    void* buffer() const override { return _buffer->data(); }
-    size_t size() const override { return _buffer->size() * sizeof(typename T::value_type); }
+    size_t size_in_bytes() const override { return _cont->size() * element_size; }
+    static size_t count_element(size_t num_of_bytes) { return (num_of_bytes + element_size - 1) / element_size; }
 };
 
 /** Helper class to handle file operations. */
@@ -196,10 +186,10 @@ public:
      *      ResizableBufferAdapter(AlreadyExistsBuffer* buffer)  {
      *          // your code here
      *      }
-     *      virtual void resize(size_t size) override  {
+     *      void resize_and_overwrite(size_t num_of_bytes, std::function<size_t(void*, size_t)> op) override  {
      *          // your code here
      *      }
-     *      virtual void* buffer() const override {
+     *      size_t size_in_bytes() const override {
      *          // your code here
      *      }
      *  NS_AX_END
@@ -216,7 +206,7 @@ public:
      *      - Status::TooLarge when there file to be read is too large (> 2^32-1), the buffer will not changed.
      *      - Status::ObtainSizeFailed when failed to obtain the file size, the buffer will not changed.
      */
-    template <typename T, typename Enable = std::enable_if_t<is_resizable_container_v<T>>>
+    template <typename T, typename E = std::enable_if_t<axstd::is_resizable_container_v<T>>>
     Status getContents(std::string_view filename, T* buffer) const
     {
         ResizableBufferAdapter<T> buf(buffer);
@@ -571,10 +561,10 @@ public:
     virtual void listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const;
 
     /** Returns the full path cache. */
-    const hlookup::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
+    const axstd::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
 
     /** Returns the full path cache. */
-    const hlookup::string_map<std::string> getFullPathCacheDir() const { return _fullPathCacheDir; }
+    const axstd::string_map<std::string> getFullPathCacheDir() const { return _fullPathCacheDir; }
 
     /**
      *  Checks whether a file exists without considering search paths and resolution orders.
@@ -664,13 +654,13 @@ protected:
      *  The full path cache for normal files. When a file is found, it will be added into this cache.
      *  This variable is used for improving the performance of file search.
      */
-    mutable hlookup::string_map<std::string> _fullPathCache;
+    mutable axstd::string_map<std::string> _fullPathCache;
 
     /**
      *  The full path cache for directories. When a diretory is found, it will be added into this cache.
      *  This variable is used for improving the performance of file search.
      */
-    mutable hlookup::string_map<std::string> _fullPathCacheDir;
+    mutable axstd::string_map<std::string> _fullPathCacheDir;
 
     /**
      * Writable path.

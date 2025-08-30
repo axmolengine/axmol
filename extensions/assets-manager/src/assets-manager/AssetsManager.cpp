@@ -39,7 +39,7 @@
 #endif
 #include <ioapi.h>
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 NS_AX_EXT_BEGIN
 

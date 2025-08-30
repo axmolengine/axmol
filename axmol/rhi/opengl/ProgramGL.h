@@ -37,7 +37,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
 
 namespace ax::rhi::gl
 {
@@ -146,7 +146,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
+    const axstd::string_map<VertexInputDesc>& getActiveVertexInputs() const override;
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
@@ -159,7 +159,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    const hlookup::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
+    const axstd::string_map<UniformInfo>& getActiveUniformInfos(ShaderStage stage) const override;
 
     void bindUniformBuffers(const char* buffer, size_t bufferSize);
 
@@ -191,8 +191,8 @@ private:
 
     std::vector<AttributeInfo> _attributeInfos;
 
-    hlookup::string_map<VertexInputDesc> _activeVertexInputs;
-    hlookup::string_map<UniformInfo> _activeUniformInfos;
+    axstd::string_map<VertexInputDesc> _activeVertexInputs;
+    axstd::string_map<UniformInfo> _activeUniformInfos;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     std::unordered_map<std::string, int>

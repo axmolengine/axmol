@@ -17,7 +17,6 @@ endif()
 set(_AX_BASE_HEADER
   base/astc.h
   base/pvr.h
-  base/format.h
   base/Value.h
   base/EventListenerMouse.h
   base/atitc.h

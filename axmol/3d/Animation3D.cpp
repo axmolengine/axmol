@@ -27,7 +27,8 @@
 #include "axmol/3d/Animation3D.h"
 #include "axmol/3d/Bundle3D.h"
 #include "axmol/platform/FileUtils.h"
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/pod_vector.hpp"
+#include "axmol/tlx/utility.hpp"
 
 namespace ax
 {

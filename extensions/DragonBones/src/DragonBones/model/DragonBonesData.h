@@ -107,7 +107,7 @@ public:
     /**
      * @private
      */
-    hlookup::string_map<ArmatureData*> armatures;
+    axstd::string_map<ArmatureData*> armatures;
     /**
      * @internal
      */

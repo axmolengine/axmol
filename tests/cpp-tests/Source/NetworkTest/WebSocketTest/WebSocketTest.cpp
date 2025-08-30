@@ -27,7 +27,7 @@
 #include "../NetworkTest.h"
 #include "testResource.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 /* "ws://echo.websocket.org no longer avaiable: https://www.lob.com/blog/websocket-org-is-down-here-is-an-alternative
  list of public test servers:

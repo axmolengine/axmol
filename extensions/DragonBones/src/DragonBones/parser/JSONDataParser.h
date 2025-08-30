@@ -160,10 +160,10 @@ private:
     std::vector<const rapidjson::Value*> _cacheRawMeshes;
     std::vector<MeshDisplayData*> _cacheMeshes;
     std::vector<ActionFrame> _actionFrames;
-    hlookup::string_map<const rapidjson::Value*> _weightSlotPose;
-    hlookup::string_map<const rapidjson::Value*> _weightBonePoses;
-    hlookup::string_map<std::vector<BoneData*>> _cacheBones;
-    hlookup::string_map<std::vector<ActionData*>> _slotChildActions;
+    axstd::string_map<const rapidjson::Value*> _weightSlotPose;
+    axstd::string_map<const rapidjson::Value*> _weightBonePoses;
+    axstd::string_map<std::vector<BoneData*>> _cacheBones;
+    axstd::string_map<std::vector<ActionData*>> _slotChildActions;
 
 public:
     JSONDataParser()

@@ -51,7 +51,7 @@ THE SOFTWARE.
 
 #include "pugixml/pugixml.hpp"
 
-#include "axmol/base/filesystem.h"
+#include "axmol/tlx/filesystem.hpp"
 
 #if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
@@ -176,7 +176,7 @@ public:
                 // add a new dictionary into the pre dictionary
                 AXASSERT(!_dictStack.empty(), "The state is wrong!");
                 ValueMap* preDict = _dictStack.top();
-                auto& curVal      = hlookup::set_item(*preDict, _curKey, Value(ValueMap()))->second;
+                auto& curVal      = axstd::set_item(*preDict, _curKey, Value(ValueMap()))->second;
                 _curDict          = &curVal.asValueMap();
             }
 
@@ -562,21 +562,17 @@ FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuf
         return Status::TooLarge;
     }
 
-    buffer->resize((size_t)size);
-    const auto sizeRead = fileStream.read(buffer->buffer(), (unsigned)size);
-    if (sizeRead < size)
-    {
-        buffer->resize(sizeRead);
-        return Status::ReadFailed;
-    }
+    buffer->resize_and_overwrite(static_cast<size_t>(size), [&fileStream](void* out, size_t num_of_bytes) {
+        return fileStream.read(out, (unsigned)num_of_bytes);
+    });
 
-    return Status::OK;
+    return buffer->size_in_bytes() == size ? Status::OK : Status::ReadFailed;
 }
 
 std::string FileUtils::getPathForFilename(std::string_view filename, std::string_view searchPath) const
 {
     auto file                  = filename;
-    std::string_view file_path = hlookup::empty_sv;
+    std::string_view file_path = axstd::empty_sv;
     size_t pos                 = filename.find_last_of('/');
     if (pos != std::string::npos)
     {

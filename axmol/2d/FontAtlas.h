@@ -68,7 +68,7 @@ public:
     static const int CacheTextureWidth;
     static const int CacheTextureHeight;
     static const char* CMD_RESET_FONTATLAS;
-    static void loadFontAtlas(std::string_view fontatlasFile, hlookup::string_map<FontAtlas*>& outAtlasMap);
+    static void loadFontAtlas(std::string_view fontatlasFile, axstd::string_map<FontAtlas*>& outAtlasMap);
     /**
      */
     FontAtlas(Font* theFont);

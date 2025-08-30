@@ -195,7 +195,7 @@ private:
 
     bool _autoLoadSpriteFile;
 
-    hlookup::string_map<RelativeData> _relativeDatas;
+    axstd::string_map<RelativeData> _relativeDatas;
 };
 
 }  // namespace cocostudio

@@ -31,8 +31,6 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  * Define some platform specific macros.
  */
 #include "axmol/base/Config.h"
-#include "axmol/base/hlookup.h"
-#include "axmol/platform/PlatformConfig.h"
 #include "axmol/platform/PlatformDefine.h"
 
 /** @def CREATE_FUNC(__TYPE__)

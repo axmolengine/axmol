@@ -166,7 +166,7 @@ public:
         return _program->getVertexInputDesc(name);
     }
 
-    const hlookup::string_map<VertexInputDesc>& getActiveVertexInputs() const
+    const axstd::string_map<VertexInputDesc>& getActiveVertexInputs() const
     {
         return _program->getActiveVertexInputs();
     }

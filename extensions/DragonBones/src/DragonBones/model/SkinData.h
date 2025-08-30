@@ -24,7 +24,7 @@
 #define DRAGONBONES_SKIN_DATA_H
 
 #include "../core/BaseObject.h"
-#include "axmol/base/hlookup.h"
+#include "axmol/tlx/hlookup.hpp"
 
 DRAGONBONES_NAMESPACE_BEGIN
 /**
@@ -56,7 +56,7 @@ public:
     /**
      * @private
      */
-    hlookup::string_map<std::vector<DisplayData*>> displays;
+    axstd::string_map<std::vector<DisplayData*>> displays;
     /**
      * @private
      */
@@ -80,7 +80,7 @@ public:
     std::vector<DisplayData*>* getDisplays(std::string_view slotName) { return mapFindB(displays, slotName); }
 
 public:  // For WebAssembly. TODO parent
-    const hlookup::string_map<std::vector<DisplayData*>>& getSlotDisplays() const { return displays; }
+    const axstd::string_map<std::vector<DisplayData*>>& getSlotDisplays() const { return displays; }
 };
 
 DRAGONBONES_NAMESPACE_END

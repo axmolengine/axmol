@@ -32,7 +32,7 @@
 #include "axmol/ui/UIButton.h"
 #include "axmol/network/Downloader.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 using namespace ax;
 

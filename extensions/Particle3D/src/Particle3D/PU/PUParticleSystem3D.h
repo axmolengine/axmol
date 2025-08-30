@@ -207,7 +207,7 @@ struct AX_EX_DLL PUParticle3D : public Particle3D
 class AX_EX_DLL PUParticleSystem3D : public ParticleSystem3D
 {
 public:
-    typedef hlookup::string_map<ParticlePool> ParticlePoolMap;
+    typedef axstd::string_map<ParticlePool> ParticlePoolMap;
 
     static const float DEFAULT_WIDTH;
     static const float DEFAULT_HEIGHT;

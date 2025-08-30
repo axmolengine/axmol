@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "axmol/base/hlookup.h"
+#include "axmol/tlx/hlookup.hpp"
 #include "RHITypes.h"
 
 namespace ax::rhi
@@ -44,6 +44,6 @@ public:
     SamplerHandle getSampler(const SamplerDesc& desc);
 
 private:
-    tsl::robin_map<uint32_t, SamplerHandle> _samplers;
+    axstd::hash_map<uint32_t, SamplerHandle> _samplers;
 };
 }  // namespace ax::rhi

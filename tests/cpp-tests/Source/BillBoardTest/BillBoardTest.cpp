@@ -30,7 +30,7 @@
 #include <algorithm>
 #include "../testResource.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 using namespace ax;
 USING_NS_AX_EXT;

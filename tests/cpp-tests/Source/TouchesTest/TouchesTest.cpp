@@ -27,7 +27,7 @@
 #include "Paddle.h"
 #include "../testResource.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 
 using namespace ax;
 

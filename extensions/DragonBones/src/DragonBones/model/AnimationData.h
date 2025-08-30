@@ -126,23 +126,23 @@ public:
     /**
      * @private
      */
-    hlookup::string_map<std::vector<TimelineData*>> boneTimelines;
+    axstd::string_map<std::vector<TimelineData*>> boneTimelines;
     /**
      * @private
      */
-    hlookup::string_map<std::vector<TimelineData*>> slotTimelines;
+    axstd::string_map<std::vector<TimelineData*>> slotTimelines;
     /**
      * @private
      */
-    hlookup::string_map<std::vector<TimelineData*>> constraintTimelines;
+    axstd::string_map<std::vector<TimelineData*>> constraintTimelines;
     /**
      * @private
      */
-    hlookup::string_map<std::vector<int>> boneCachedFrameIndices;
+    axstd::string_map<std::vector<int>> boneCachedFrameIndices;
     /**
      * @private
      */
-    hlookup::string_map<std::vector<int>> slotCachedFrameIndices;
+    axstd::string_map<std::vector<int>> slotCachedFrameIndices;
     /**
      * @private
      */

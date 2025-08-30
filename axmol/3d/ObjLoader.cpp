@@ -458,7 +458,7 @@ static std::string& replacePathSeperator(std::string& path)
     return path;
 }
 
-std::string LoadMtl(hlookup::string_map<int>& material_map, std::vector<material_t>& materials, std::istream& inStream)
+std::string LoadMtl(axstd::string_map<int>& material_map, std::vector<material_t>& materials, std::istream& inStream)
 {
     std::stringstream err;
 
@@ -681,7 +681,7 @@ std::string LoadMtl(hlookup::string_map<int>& material_map, std::vector<material
 
 std::string MaterialFileReader::operator()(std::string_view matId,
                                            std::vector<material_t>& materials,
-                                           hlookup::string_map<int>& matMap)
+                                           axstd::string_map<int>& matMap)
 {
     std::string filepath;
 
@@ -749,7 +749,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
     std::string name;
 
     // material
-    hlookup::string_map<int> material_map;
+    axstd::string_map<int> material_map;
     std::map<vertex_index, unsigned int> vertexCache;
     int material = -1;
 

@@ -61,7 +61,7 @@ bool ComponentContainer::add(Component* com)
             AXASSERT(false, "ComponentContainer already have this kind of component");
             break;
         }
-        hlookup::set_item(_componentMap, componentName, com);  //_componentMap[componentName] = com;
+        axstd::set_item(_componentMap, componentName, com);  //_componentMap[componentName] = com;
         com->retain();
         com->setOwner(_owner);
         com->onAdd();

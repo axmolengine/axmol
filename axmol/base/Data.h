@@ -31,7 +31,7 @@
 #include <stdint.h>               // for ssize_t on android
 #include <string>                 // for ssize_t on linux
 #include "axmol/platform/StdC.h"  // for ssize_t on window
-#include "axmol/base/axstd.h"
+#include "axmol/tlx/byte_buffer.hpp"
 
 /**
  * @addtogroup base

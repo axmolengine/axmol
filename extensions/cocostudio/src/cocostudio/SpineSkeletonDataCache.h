@@ -38,7 +38,7 @@ public:
     void removeAllUnusedData(void);
 
 public:
-    hlookup::string_map<SkeletonData*> _cacheTable;
+    axstd::string_map<SkeletonData*> _cacheTable;
 };
 
 #    else
@@ -72,7 +72,7 @@ public:
     void removeAllUnusedData(void);
 
 public:
-    hlookup::string_map<SkeletonData*> _cacheTable;
+    axstd::string_map<SkeletonData*> _cacheTable;
 };
 
 #    endif

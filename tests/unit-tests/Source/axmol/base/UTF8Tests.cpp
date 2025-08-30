@@ -25,6 +25,7 @@
 
 #include <doctest.h>
 #include "axmol/base/text_utils.h"
+#include "axmol/tlx/utility.hpp"
 
 using namespace ax;
 
@@ -51,6 +52,14 @@ TEST_SUITE("base/UTF8")
 
         std::string originalUTF8     = (const char*)__utf8Code;
         std::u16string originalUTF16 = __utf16Code;
+
+        auto encoded = utils::base64Encode(__utf8Code, sizeof(__utf8Code));
+
+        yasio::byte_buffer bb;
+        axstd::resize_and_overrite(bb, 10, [](uint8_t* out, size_t sz) {
+            memset(out, '1', sz);
+            return sz;
+        });
 
         //---------------------------
         std::string utf8Str;

@@ -43,7 +43,7 @@ namespace ax
 class Value;
 
 typedef std::vector<Value> ValueVector;
-typedef hlookup::string_map<Value> ValueMap;
+typedef axstd::string_map<Value> ValueMap;
 typedef std::unordered_map<int, Value> ValueMapIntKey;
 
 AX_DLL extern const ValueVector ValueVectorNull;

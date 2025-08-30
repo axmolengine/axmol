@@ -1417,7 +1417,7 @@ std::string_view CSLoader::getWidgetReaderClassName(Widget* widget)
         readerName = "WidgetReader";
     }
     else
-        readerName = hlookup::empty_sv;
+        readerName = axstd::empty_sv;
 
     return readerName;
 }

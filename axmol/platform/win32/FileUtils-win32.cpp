@@ -36,6 +36,8 @@ THE SOFTWARE.
 
 #include "ntcvt/ntcvt.hpp"
 
+#include "axmol/tlx/utility.hpp"
+
 namespace ax
 {
 

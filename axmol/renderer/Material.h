@@ -209,7 +209,7 @@ protected:
     // weak reference
     Node* _target = nullptr;
 
-    hlookup::string_map<int> _textureSlots;
+    axstd::string_map<int> _textureSlots;
     int _textureSlotIndex = 0;
 
     bool _isTransparent = false;  // is this mesh transparent.

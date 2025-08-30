@@ -41,10 +41,10 @@
 #include "axmol/2d/Label.h"
 #include "axmol/2d/Sprite.h"
 #include "axmol/base/text_utils.h"
-#include "axmol/base/charconv.h"
+#include "axmol/tlx/charconv.hpp"
 #include "axmol/ui/UIHelper.h"
 
-#include "axmol/base/format.h"
+#include "axmol/tlx/format.hpp"
 #include "axmol/platform/SAXParser.h"
 
 using namespace ax;
@@ -377,7 +377,7 @@ private:
         RichText::VisitEnterHandler handleVisitEnter;
         RichText::VisitExitHandler handleVisitExit;
     };
-    typedef hlookup::string_map<TagBehavior> TagTables;
+    typedef axstd::string_map<TagBehavior> TagTables;
 
     static TagTables _tagTables;
 
@@ -1181,7 +1181,7 @@ void MyXMLVisitor::setTagDescription(std::string_view tag,
                                      RichText::VisitExitHandler&& handleVisitExit)
 {
     // MyXMLVisitor::_tagTables[tag] = {isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)};
-    hlookup::set_item(MyXMLVisitor::_tagTables, tag,
+    axstd::set_item(MyXMLVisitor::_tagTables, tag,
                       TagBehavior{isFontElement, std::move(handleVisitEnter), std::move(handleVisitExit)});
 }
 

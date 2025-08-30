@@ -50,7 +50,7 @@ const int FontAtlas::CacheTextureWidth     = 512;
 const int FontAtlas::CacheTextureHeight    = 512;
 const char* FontAtlas::CMD_RESET_FONTATLAS = "__ax_RESET_FONTATLAS";
 
-void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_map<FontAtlas*>& outAtlasMap)
+void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, axstd::string_map<FontAtlas*>& outAtlasMap)
 {
     using namespace ::simdjson;
 
