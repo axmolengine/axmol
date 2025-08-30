@@ -26,8 +26,6 @@
 
 #pragma once
 
-#include "axmol/platform/PlatformConfig.h"
-
 #include <string>
 #include <condition_variable>
 #include <mutex>

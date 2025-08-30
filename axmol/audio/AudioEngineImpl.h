@@ -24,18 +24,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#ifndef __AUDIO_ENGINE_IMPL_H_
-#    define __AUDIO_ENGINE_IMPL_H_
 
-#    include "axmol/platform/PlatformConfig.h"
+#include <queue>
+#include <memory>
 
-#    include <unordered_map>
-#    include <queue>
-
-#    include "axmol/base/Object.h"
-#    include "axmol/audio/AudioMacros.h"
-#    include "axmol/audio/AudioCache.h"
-#    include "axmol/audio/AudioPlayer.h"
+#include "axmol/base/Object.h"
+#include "axmol/audio/AudioMacros.h"
+#include "axmol/audio/AudioCache.h"
+#include "axmol/audio/AudioPlayer.h"
 
 namespace ax
 {
@@ -73,9 +69,9 @@ private:
     void _play2d(AudioCache* cache, AUDIO_ID audioID);
     void _unscheduleUpdate();
     ALuint findValidSource();
-#    if defined(__APPLE__) && !AX_USE_ALSOFT
+#if defined(__APPLE__) && !AX_USE_ALSOFT
     static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
-#    endif
+#endif
     ALuint _alSources[MAX_AUDIOINSTANCES];
 
     // available sources
@@ -98,4 +94,3 @@ private:
 };
 
 }  // namespace ax
-#endif  // __AUDIO_ENGINE_INL_H_

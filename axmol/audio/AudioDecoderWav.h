@@ -25,7 +25,6 @@
 #pragma once
 
 #include "axmol/audio/AudioDecoder.h"
-#include <memory>
 
 #if !defined(MAKE_FOURCC)
 #    define MAKE_FOURCC(a, b, c, d) ((uint32_t)((a) | ((b) << 8) | ((c) << 16) | (((uint32_t)(d)) << 24)))
