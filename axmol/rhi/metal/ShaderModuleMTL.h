@@ -30,7 +30,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <unordered_map>
+#include "axmol/tlx/hlookup.hpp"
 #import <Metal/Metal.h>
 
 namespace ax::rhi::mtl
