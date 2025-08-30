@@ -43,7 +43,6 @@ using retain_ptr = axstd::retain_ptr<T, axstd::retain_traits<Object>>;
 template <typename T>
 using RefPtr = retain_ptr<T>;
 
-
 }  // namespace ax
 
 /// @endcond

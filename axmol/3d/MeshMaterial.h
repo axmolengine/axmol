@@ -195,7 +195,7 @@ public:
     ~MeshMaterialCache();
 
 protected:
-    static MeshMaterialCache* _cacheInstance;    // cache instance
+    static MeshMaterialCache* _cacheInstance;  // cache instance
     axstd::string_map<Texture2D*> _materials;  // cached materials
 };
 

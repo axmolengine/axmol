@@ -1645,10 +1645,10 @@ void WidgetPropertiesReader0300::setPropsForAllCustomWidgetFromJsonDictionary(st
     GUIReader* guiReader = GUIReader::getInstance();
 
     axstd::string_map<Object*>* object_map = guiReader->getParseObjectMap();
-    Object* object                           = (*object_map)[classType];
+    Object* object                         = (*object_map)[classType];
 
     axstd::string_map<SEL_ParseEvent>* selector_map = guiReader->getParseCallBackMap();
-    SEL_ParseEvent selector                           = (*selector_map)[classType];
+    SEL_ParseEvent selector                         = (*selector_map)[classType];
 
     if (object && selector)
     {

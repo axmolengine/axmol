@@ -59,7 +59,7 @@ class ResizableBuffer
 public:
     virtual ~ResizableBuffer() {}
     virtual void resize_and_overwrite(size_t num_of_bytes, std::function<size_t(void*, size_t num_of_bytes)> op) = 0;
-    virtual size_t size_in_bytes() const      = 0;
+    virtual size_t size_in_bytes() const                                                                         = 0;
 };
 
 template <typename _SeqCont>
@@ -78,7 +78,8 @@ public:
         if constexpr (element_size == 1)
             axstd::resize_and_overrite(*_cont, num_of_bytes, std::move(op));
         else
-            axstd::resize_and_overrite(*_cont, count_element(num_of_bytes), [op_ = std::move(op)](void* out, size_t count) {
+            axstd::resize_and_overrite(*_cont, count_element(num_of_bytes),
+                                       [op_ = std::move(op)](void* out, size_t count) {
                 const auto num_of_bytes = op_(out, count * element_size);
                 return count_element(num_of_bytes);
             });

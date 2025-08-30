@@ -820,8 +820,7 @@ bool ZipFile::getFileData(std::string_view fileName, ResizableBuffer* buffer)
 
         buffer->resize_and_overwrite(fileInfo.uncompressed_size, [&fileInfo, this](void* out, size_t) {
             int AX_UNUSED nSize =
-                unzReadCurrentFile(_data->zipFile, out,
-                                                     static_cast<unsigned int>(fileInfo.uncompressed_size));
+                unzReadCurrentFile(_data->zipFile, out, static_cast<unsigned int>(fileInfo.uncompressed_size));
             AXASSERT(nSize == 0 || nSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
             return static_cast<size_t>(nSize);
         });

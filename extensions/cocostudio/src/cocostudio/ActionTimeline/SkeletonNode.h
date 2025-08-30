@@ -95,8 +95,7 @@ private:
     ax::Vec2 _squareVertices[8];
     VertexData _vertexData[8];
 
-    axstd::string_map<axstd::string_map<std::string>>
-        _skinGroupMap;  // map< suit name, map< bone name, skin name> >
+    axstd::string_map<axstd::string_map<std::string>> _skinGroupMap;  // map< suit name, map< bone name, skin name> >
     AX_DISALLOW_COPY_AND_ASSIGN(SkeletonNode);
 
     void checkSubBonesDirty();
