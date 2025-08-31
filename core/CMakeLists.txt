@@ -32,7 +32,7 @@
 # include_guard (GLOBAL)
 
 # The version number
-set(_AX_VERSION 2.7)
+set(_AX_VERSION 2.8)
 
 if(NOT DEFINED _AX_CORE_LIB)
   set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name")
@@ -409,27 +409,26 @@ if(WINDOWS)
   endif()
 
   if(WINDOWS_STORE)
-    file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} AX_TOP_SOLUTION_DIR)
     configure_file(${_AX_ROOT}/cmake/CppWinRT.props.in ${CMAKE_BINARY_DIR}/CppWinRT.props @ONLY)
 
     # intsall cppwinrt package for xaml apps
     execute_process(COMMAND "${NUGET_EXE}"
-      install "Microsoft.Windows.CppWinRT" -Version ${AX_CPPWINRT_VERSION} -ExcludeVersion -OutputDirectory "${CMAKE_BINARY_DIR}/packages")
+      install "Microsoft.Windows.CppWinRT" -Version ${AX_CPPWINRT_VERSION} -ExcludeVersion -OutputDirectory "${_NUGET_PACKAGE_DIR}")
     set_target_properties(${_AX_CORE_LIB} PROPERTIES
-      VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
+      VS_PROJECT_IMPORT ${_NUGET_PACKAGE_DIR}/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
     )
-    target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
+    target_link_libraries(${_AX_CORE_LIB} ${_NUGET_PACKAGE_DIR}/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
   endif()
 
   if(AX_ENABLE_MSEDGE_WEBVIEW2)
     execute_process(COMMAND "${NUGET_EXE}"
-      install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory "${CMAKE_BINARY_DIR}/packages")
+      install "Microsoft.Web.WebView2" -Version ${AX_MSEDGE_WEBVIEW2_VERSION} -ExcludeVersion -OutputDirectory "${_NUGET_PACKAGE_DIR}")
 
     if(CMAKE_GENERATOR MATCHES "Ninja")
-      target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
-      target_include_directories(${_AX_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+      target_link_libraries(${_AX_CORE_LIB} ${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
+      target_include_directories(${_AX_CORE_LIB} PUBLIC ${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/include)
     else()
-      target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+      target_link_libraries(${_AX_CORE_LIB} ${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
     endif()
   endif()
 endif()

@@ -23,7 +23,7 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.22...4.1)
 
 set(APP_NAME Dummy)
 

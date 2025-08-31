@@ -93,7 +93,7 @@ $latest_branch = $remote_default_branch
 
 Write-Host "remote_default_branch=$remote_default_branch"
 
-function parse_laset_rev() {
+function parse_latest_rev() {
     git checkout $latest_branch | Out-Host
     $axver_file = (Resolve-Path $AX_ROOT/axmol/axmolver.h.in).Path
     $axver_content = $(Get-Content -Path $axver_file)
@@ -145,7 +145,7 @@ foreach ($item in $release_tags) {
 
 $verList = $verMap.GetEnumerator() | Sort-Object Value -Descending | ForEach-Object { $_.Key }
 
-$verMap['latest'] = parse_laset_rev
+$verMap['latest'] = parse_latest_rev
 
 $strVerList = "'latest','$($verList -join "','")'"
 Write-Host "$(Out-String -InputObject $verMap)"

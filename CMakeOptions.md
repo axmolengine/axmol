@@ -41,7 +41,7 @@
   - win32: whether use ANGLE GLES backend
   - osx: whether use OpenGL instead Metal backend
   - ios/tvos: whether use GLES instead Metal backend
-- AX_CORE_PROFILE: whether strip all deprecated features, default `FALSE`, it's useful to pre-upgrade your game project to adapte future axmol versions
+- AX_CORE_PROFILE: whether strip all deprecated features, default `FALSE`, Setting this to `TRUE` before upgrading your game project helps ensure compatibility with future Axmol versions.
 - AX_ISA_LEVEL: specifiy SIMD Instructions Acceleration Level: 0~4, 0: disabled, 1: SSE2, 2: SSE4.1/NEON, 3: SSE4.2, 4: AVX2, default: 2
 - AX_GLES_PROFILE: specify GLES profile version for GLES backend, valid value `200`, `300`
 - AX_WASM_THREADS: specify wasm thread count, valid value: number: `>=0` , string: must be: `auto` or `navigator.hardwareConcurrency`(default), 

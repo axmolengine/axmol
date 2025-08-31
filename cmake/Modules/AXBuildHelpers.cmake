@@ -243,7 +243,7 @@ function(ax_sync_target_dlls ax_target)
     if(CMAKE_GENERATOR MATCHES "Ninja")
       add_custom_command(TARGET ${ax_target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+        "${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
         $<TARGET_FILE_DIR:${ax_target}>)
     endif()
   endif()
@@ -609,7 +609,7 @@ macro(ax_setup_app_props app_name)
       VS_GLOBAL_AppContainerApplication true
       VS_GLOBAL_RootNameSpace "AxmolAppWinRT" # this is important for cppwinrt to fix Generated Files\XamlMetaDataProvider.idl(4): error MIDL2025: [msg]syntax error [context]: expecting NamespaceTag near "{"
     )
-    target_link_libraries(${APP_NAME} ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
+    target_link_libraries(${APP_NAME} ${_NUGET_PACKAGE_DIR}/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
   elseif(WASM)
     get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")

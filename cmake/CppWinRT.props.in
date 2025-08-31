@@ -1,6 +1,6 @@
 <Project>
   <!-- CppWinRT.props for Axmol Universal Apps -->
-  <Import Project="@AX_TOP_SOLUTION_DIR@\packages\Microsoft.Windows.CppWinRT\build\native\Microsoft.Windows.CppWinRT.props" />
+  <Import Project="@_NUGET_PACKAGE_DIR_N@\Microsoft.Windows.CppWinRT\build\native\Microsoft.Windows.CppWinRT.props" />
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
   </ItemGroup>

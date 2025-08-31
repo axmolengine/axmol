@@ -11,6 +11,12 @@ if(MSVC)
   cmake_minimum_required(VERSION 3.25...4.1)
   cmake_policy(SET CMP0141 NEW)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>")
+
+  set(AX_MSEDGE_WEBVIEW2_VERSION "1.0.3405.78" CACHE STRING "")
+
+  set(_NUGET_PACKAGE_DIR "${_AX_ROOT}/cache/packages" CACHE INTERNAL "" FORCE)
+  file(TO_NATIVE_PATH ${_NUGET_PACKAGE_DIR} _NUGET_PACKAGE_DIR_N)
+  set(_NUGET_PACKAGE_DIR_N "${_NUGET_PACKAGE_DIR_N}" CACHE INTERNAL "" FORCE)
 endif()
 
 # UWP min deploy target support, VS property: targetPlatformMinVersion

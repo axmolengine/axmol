@@ -1,16 +1,24 @@
 # The axmol sdk & tools references
 
-## cppwinrt
+## Microsoft.Windows.CppWinRT
 
-- [![Upstream](https://img.shields.io/github/v/release/microsoft/cppwinrt?label=Upstream)](https://github.com/microsoft/cppwinrt)
+- [![nuget](https://img.shields.io/nuget/v/Microsoft.Windows.CppWinRT?label=Upstream)](https://www.nuget.org/packages/Microsoft.Windows.CppWinRT)
 - Version: 2.0.250303.1
 - License: MIT
 - Platform: WinRT/WinUWP
 - Manged by: `cmake/Modules/AXConfigDefine.cmake`
 
+## Microsoft.Web.WebView2
+
+- [![nuget](https://img.shields.io/nuget/v/Microsoft.Web.WebView2?label=Upstream)](https://www.nuget.org/packages/Microsoft.Web.WebView2)
+- Version: 1.0.3045.78
+- License: https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.3405.78/License
+- Platform: Win32
+- Managed by: `cmake/Modules/AXConfigDefine.cmake`
+
 ## gradle
 
-- [![Upstream](https://img.shields.io/github/v/release/gradle/gradle?label=Upstream)](https://github.com/gradle/gradle)
+- [![github](https://img.shields.io/github/v/release/gradle/gradle?label=Upstream)](https://github.com/gradle/gradle)
 - Version: 9.0.0
 - License: Apache-2.0
 - Platform: Android

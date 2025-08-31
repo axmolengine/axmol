@@ -23,7 +23,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   # stupid: exclude CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG to avoid cmake generate
   # .vcxproj with incorrect debug msvc runtime, should be /MDd but got /MD
   set(AXSLCC_OUT_DIR_PROJ "${AXSLCC_OUT_DIR}")
-  load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" EXCLUDE thirdparty_LIB_DEPENDS CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG)
+  load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" INCLUDE_INTERNALS _NUGET_PACKAGE_DIR EXCLUDE thirdparty_LIB_DEPENDS CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG)
   set(AXSLCC_OUT_DIR_ENGINE ${AXSLCC_OUT_DIR})
   set(AXSLCC_OUT_DIR "${AXSLCC_OUT_DIR_PROJ}" CACHE STRING "" FORCE)
   unset(AXSLCC_OUT_DIR_PROJ)
@@ -44,6 +44,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   message(STATUS "AX_ENABLE_EXT_EFFEKSEER=${AX_ENABLE_EXT_EFFEKSEER}")
   message(STATUS "AX_ENABLE_EXT_LUA=${AX_ENABLE_EXT_LUA}")
   message(STATUS "AX_ENABLE_EXT_DRAWNODEEX=${AX_ENABLE_EXT_DRAWNODEEX}")
+  message(STATUS "_NUGET_PACKAGE_DIR=${_NUGET_PACKAGE_DIR}")
 
   # compile defines can't inherit when link prebuits, so need add manually
   target_compile_definitions(${APP_NAME}
@@ -262,24 +263,24 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if(AX_GLES_PROFILE)
       add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
-        ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-        ${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
+        "${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll"
+        "${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll"
+        "${AX_ROOT_DIR}/3rdparty/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll"
         $<TARGET_FILE_DIR:${APP_NAME}>
       )
     endif()
 
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
       if(CMAKE_GENERATOR MATCHES "Ninja")
-        target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
-        target_include_directories(${APP_NAME} PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+        target_link_libraries(${APP_NAME} "${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib")
+        target_include_directories(${APP_NAME} PRIVATE "${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/include")
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
           COMMAND ${CMAKE_COMMAND} -E copy_if_different
-          "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+          "${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
           $<TARGET_FILE_DIR:${APP_NAME}>
         )
       else()
-        target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+        target_link_libraries(${APP_NAME} "${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets")
       endif()
     endif()
   endif()
