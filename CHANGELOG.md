@@ -1,4 +1,4 @@
-# axmol-2.8.0 Sep.1 2025
+# axmol-2.8.0 ?? 2025
 
 ## Bug fixes
 
@@ -12,6 +12,7 @@
 - Fix Label SDF rendering issues with font resizing and other bugs by @halx99 in https://github.com/axmolengine/axmol/pull/2625
 - Fix compile error when project contains swift code by @halx99 in https://github.com/axmolengine/axmol/pull/2632
 - Fix wasm Downloader open file with wrong permision (#2666) by @AlexandreK38 in https://github.com/axmolengine/axmol/pull/2666
+- Fix failure in CMake 4.1 when targeting Windows: assembler not found by @halx99
 
 ## Improvements
 
@@ -32,12 +33,13 @@
 - Improve tests (Naming of menu entries on cpp-/lua- tests) by @aismann in https://github.com/axmolengine/axmol/pull/2640
 - Move SIMD availability detection into its own CMake file by @j-jorge in https://github.com/axmolengine/axmol/pull/2642
 - Setting CMAKE_MSVC_DEBUG_INFORMATION_FORMAT to Embedded to resolve pdb too large problem by @halx99
+- Improve NuGet package management by @halx99 in https://github.com/axmolengine/axmol/pull/2671
 
 ## SDK & Tools updates
 
 - agp: 8.11.0 => 8.11.1
 - gradle: 8.14.3 => 9.0.0
-- cmake: 4.0.3 => 4.1.0
+- cmake: 4.0.3 => 4.1.1
 
 ## 3rdparty updates
 
