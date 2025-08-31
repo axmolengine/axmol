@@ -182,7 +182,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* presentTarget)
 
     if (SUCCEEDED(factory->QueryInterface(IID_PPV_ARGS(&factory2))))
     {
-        // 0 means auto matched by DXGI or use SwapChainPanel::ActualWidth/Height * DPI
+        // The swapchain size can't be zero for WinRT, maybe SwapChainPanel::ActualWidth/Height * DPI
         _screenWidth  = static_cast<UINT>(presentDesc->width);
         _screenHeight = static_cast<UINT>(presentDesc->height);
 
