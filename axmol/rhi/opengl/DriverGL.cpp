@@ -124,6 +124,7 @@ DriverImpl::DriverImpl()
             "OpeGL ES {}.{}+ is required (your version is {}). Please upgrade the driver of your video card.",
             REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
 #endif
+        AXLOGE("{}", msg);
         messageBox(msg.c_str(), "OpenGL version too old");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return;
@@ -351,7 +352,7 @@ void DriverImpl::destroySampler(SamplerHandle& h)
 {
     if (h)
     {
-        GLuint sampler = reinterpret_cast<uintptr_t>(h);
+        GLuint sampler = static_cast<GLuint>(reinterpret_cast<uintptr_t>(h));
         __state->deleteSampler(sampler);
     }
 }

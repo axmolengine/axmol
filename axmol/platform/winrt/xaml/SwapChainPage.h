@@ -1,8 +1,9 @@
 /*
- * cocos2d-x   https://axmol.dev/
- *
  * Copyright (c) 2010-2014 - cocos2d-x community
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ *
+ * https://axmol.dev/
  *
  * Portions Copyright (c) Microsoft Open Technologies, Inc.
  * All Rights Reserved
@@ -46,7 +47,7 @@ struct SwapChainPage : SwapChainPageT<SwapChainPage>
 {
 public:
     SwapChainPage();
-    virtual ~SwapChainPage();
+    ~SwapChainPage() override;
     void SetVisibility(bool isVisible);
 
     void ProcessOperations();
@@ -111,13 +112,23 @@ public:
 
     std::mutex m_sleepMutex;
 
-public:
+private:
+    // must call at UI thread
+    void UpdateCanvasSize();
+
+    // !!! Ensure Renderer available
+    // - opengl : must call at render thread, otherwise rhi::gl::DriverImpl init will fail due to
+    //            eglContext makeCurrent not called
+    // - d3d    : This call must run on the main UI thread; otherwise SetSwapChain will fail with RPC_E_WRONG_THREAD
+    //            and the renderer will display only a black frame.
+    void EnsureRenderer(const winrt::Windows::UI::Core::CoreDispatcher& dispatcher);
+
     std::condition_variable m_sleepCondition;
 
     Concurrency::concurrent_queue<std::function<void()>> m_operations;
 
-    double m_surfaceWidth{0};
-    double m_surfaceHeight{0};
+    double m_canvasWidth{0};
+    double m_canvasHeight{0};
 };
 }  // namespace winrt::AxmolAppWinRT::implementation
 

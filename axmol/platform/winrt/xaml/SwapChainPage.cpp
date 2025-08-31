@@ -1,9 +1,9 @@
 /*
- * cocos2d-x   https://axmol.dev/
- *
  * Copyright (c) 2010-2014 - cocos2d-x community
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ *
+ * https://axmol.dev/
  *
  * Portions Copyright (c) Microsoft Open Technologies, Inc.
  * All Rights Reserved
@@ -146,13 +146,12 @@ void SwapChainPage::OnPageLoaded(Windows::Foundation::IInspectable const& /*send
 void SwapChainPage::OnPanelSizeChanged(Windows::Foundation::IInspectable const& /*sender*/,
                                        Windows::UI::Xaml::RoutedEventArgs const& /*e*/)
 {
-    auto panel      = swapChainPanel();
-    m_surfaceWidth  = panel.ActualWidth();
-    m_surfaceHeight = panel.ActualHeight();
+    UpdateCanvasSize();
 }
 
 void SwapChainPage::CreateRenderSurface()
 {
+    UpdateCanvasSize();
 #if AX_RENDER_API == AX_RENDER_API_GL
     if (m_eglSurfaceProvider && m_eglSurface == EGL_NO_SURFACE)
     {
@@ -173,22 +172,29 @@ void SwapChainPage::CreateRenderSurface()
         // m_eglSurface = m_eglSurfaceProvider->CreateSurface(swapChainPanel, nullptr, &customResolutionScale);
         //
     }
+#else
+    EnsureRenderer(Windows::UI::Xaml::Window::Current().CoreWindow().Dispatcher());
 #endif
+}
 
+void SwapChainPage::EnsureRenderer(const winrt::Windows::UI::Core::CoreDispatcher& dispatcher)
+{
     if (!m_renderer)
     {
-        auto panel      = swapChainPanel();
-        m_surfaceWidth  = panel.ActualWidth();
-        m_surfaceHeight = panel.ActualHeight();
-
-        auto dispatcher = Windows::UI::Xaml::Window::Current().CoreWindow().Dispatcher();
-        m_renderer =
-            std::make_shared<AxmolRenderer>(m_surfaceWidth, m_surfaceHeight, m_dpi, m_orientation, dispatcher, panel);
+        m_renderer = std::make_shared<AxmolRenderer>(m_canvasWidth, m_canvasHeight, m_dpi, m_orientation, dispatcher,
+                                                     swapChainPanel());
 
         // !!! This call must run on the main UI thread; otherwise SetSwapChain will fail with RPC_E_WRONG_THREAD
         // and the renderer will display only a black frame.
         m_renderer->CreateRenderView();
     }
+}
+
+void SwapChainPage::UpdateCanvasSize()
+{
+    auto panel     = swapChainPanel();
+    m_canvasWidth  = panel.ActualWidth();
+    m_canvasHeight = panel.ActualHeight();
 }
 
 void SwapChainPage::DestroyRenderSurface()
@@ -257,21 +263,24 @@ void SwapChainPage::StartRenderLoop()
 
     // Create a task for rendering that will be run on a background thread.
     auto renderMainLoop = ([this, dispatcher](Windows::Foundation::IAsyncAction const& action) {
-        // !!!Start the engine renderer on the render thread so that WICImageDecoder
-        // initializes COM in multi-threaded apartment (MTA) mode.
-        m_renderer->Start();
-
 #if AX_RENDER_API == AX_RENDER_API_GL
         m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
 
         GLsizei panelWidth  = 0;
         GLsizei panelHeight = 0;
         m_eglSurfaceProvider->GetSurfaceDimensions(m_eglSurface, &panelWidth, &panelHeight);
+
+        if (!m_renderer)
+            EnsureRenderer(dispatcher);
 #else
         auto panel       = swapChainPanel();
         auto panelWidth  = m_surfaceWidth;
         auto panelHeight = m_surfaceHeight;
 #endif
+
+        // !!!Start the engine renderer on the render thread so that WICImageDecoder
+        // initializes COM in multi-threaded apartment (MTA) mode.
+        m_renderer->Start();
 
         m_renderer->Resume();
 
