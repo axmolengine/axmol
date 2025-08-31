@@ -138,14 +138,16 @@ THE SOFTWARE.
 #    endif
 #endif
 
-/*
-The google/angle is library which translate native graphics API to GLES3+ APIs
-repo: https://github.com/google/angle
-windows: d3d9/d3d11/Desktop GL/Vulkan
-macOS/iOS: Metal
-Android: GLES/Vulkan
-Linux: Desktop GL/Vulkan
+/** 
+ * The goal of ANGLE is to allow users of multiple operating systems to seamlessly run WebGL and other OpenGL ES content 
+ * by translating OpenGL ES API calls to one of the hardware-supported APIs available for that platform.
+ * repo: https://github.com/google/angle
+ * windows: d3d9/d3d11/Desktop GL/Vulkan
+ * macOS/iOS: Metal
+ * Android: GLES/Vulkan
+ * Linux: Desktop GL/Vulkan
 */
+
 // 0: indicate: not use GLES
 // mac/iOS/android use system builtin GL/GLES, not ANGLE
 // Windows: use ANGLE GLES

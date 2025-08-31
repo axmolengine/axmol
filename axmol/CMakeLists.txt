@@ -103,9 +103,12 @@ if(AX_RENDER_API STREQUAL "gl")
   else() # Force disable GLES due to platform not support
     unset(AX_GLES_PROFILE CACHE)
   endif()
-  string(APPEND _RENDER_NOTICE ", AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 else()
   unset(AX_GLES_PROFILE CACHE)
+endif()
+
+if(AX_GLES_PROFILE)
+  string(APPEND _RENDER_NOTICE ", AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 endif()
 
 message(AUTHOR_WARNING "${_RENDER_NOTICE}")

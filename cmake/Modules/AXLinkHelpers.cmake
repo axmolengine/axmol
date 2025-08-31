@@ -48,12 +48,15 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   # compile defines can't inherit when link prebuits, so need add manually
   target_compile_definitions(${APP_NAME}
     PRIVATE YASIO_SSL_BACKEND=1
-    PRIVATE AX_GLES_PROFILE=${AX_GLES_PROFILE}
     PRIVATE OPENSSL_SUPPRESS_DEPRECATED=1
     PRIVATE NOUNCRYPT=1
     PRIVATE P2T_STATIC_EXPORTS=1
     PRIVATE BT_USE_SSE_IN_API=1
   )
+  
+  if(AX_GLES_PROFILE)
+    arget_compile_definitions(${APP_NAME} PRIVATE AX_GLES_PROFILE=${AX_GLES_PROFILE})
+  endif()
 
   ax_config_pred(${APP_NAME} AX_USE_ALSOFT)
   ax_config_pred(${APP_NAME} AX_ENABLE_MSEDGE_WEBVIEW2)
