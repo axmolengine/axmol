@@ -50,14 +50,12 @@ endif()
 
 include(CMakeDependentOption)
 
-# by default: use angle on win32
-cmake_dependent_option(AX_USE_ANGLE "Whether use angle as gles API provider" ${WIN32} "WIN32 OR APPLE" OFF)
-
 # set(AX_RENDER_API_GL  1 CACHE INTERNAL "" FORCE)
 # set(AX_RENDER_API_MTL 2 CACHE INTERNAL "" FORCE)
 # set(AX_RENDER_API_D3D 3 CACHE INTERNAL "" FORCE)
 set(AX_RENDER_API "auto" CACHE STRING "Specify axmol graphics render API")
 
+# Determine AX_RENDER_API
 if(AX_RENDER_API STREQUAL "auto")
   if(APPLE)
     set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)
@@ -80,28 +78,35 @@ else()
   endif()
 endif()
 
-# macos, linux or (win32, ios, tvos) not use GLES profile
-set(_GLES_PROFILE 0) # _GLES_PROFILE is the default GLES profile
+set(_RENDER_NOTICE "AX_RENDER_API=${AX_RENDER_API}")
 
+# Determine AX_GLES_PROFILE
 if(AX_RENDER_API STREQUAL "gl")
-  if(ANDROID OR WASM OR (WINDOWS AND AX_USE_ANGLE) OR IOS OR TVOS)
+  if(WIN32 OR ANDROID OR IOS OR TVOS OR WASM)
     set(_GLES_PROFILE 300)
+  else()
+    set(_GLES_PROFILE 0)
   endif()
+
+  if(_GLES_PROFILE)
+    set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "")
+
+    if(AX_GLES_PROFILE LESS _GLES_PROFILE)
+      if(WINRT OR NOT WIN32)
+        set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "" FORCE)
+        message(AUTHOR_WARNING "Forcing GLES profile to ${_GLES_PROFILE} for OpenGL ES")
+      else()
+        # Win32 Desktop Apps can use desktop gl, so disable gles profile
+        set(AX_GLES_PROFILE 0 CACHE STRING "" FORCE)
+      endif()
+    endif()
+  else() # Force disable GLES due to platform not support
+    set(AX_GLES_PROFILE 0 CACHE STRING "" FORCE)
+  endif()
+  string(APPEND _RENDER_NOTICE ", AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 endif()
 
-if(_GLES_PROFILE)
-  set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "")
-
-  if(AX_GLES_PROFILE LESS 300)
-    set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "" FORCE)
-    message(AUTHOR_WARNING "Forcing GLES profile to ${_GLES_PROFILE} for OpenGL ES")
-  endif()
-else() # force disable GLES profile
-  set(AX_GLES_PROFILE 0 CACHE STRING "" FORCE)
-endif()
-
-# print renderer backend profile
-message(AUTHOR_WARNING "AX_RENDER_API=${AX_RENDER_API}, AX_GLES_PROFILE=${AX_GLES_PROFILE}")
+message(AUTHOR_WARNING "${_RENDER_NOTICE}")
 
 if(LINUX)
   include(CheckIncludeFile)

@@ -379,7 +379,7 @@ if(AX_WITH_KCP)
   ax_add_3rd(${kcp_SOURCE_DIR} TARGETS kcp)
 endif()
 
-if(WIN32 AND AX_USE_ANGLE)
+if(WIN32 AND AX_GLES_PROFILE)
   if(WINRT)
     ax_add_3rd(angle TARGETS angle::GLESv2;angle::EGL)
   else()
