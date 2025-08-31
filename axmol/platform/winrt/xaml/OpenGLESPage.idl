@@ -1,8 +1,0 @@
-namespace AxmolAppWinRT
-{
-    [default_interface]
-    runtimeclass OpenGLESPage : Windows.UI.Xaml.Controls.Page
-    {
-        OpenGLESPage();
-    }
-}

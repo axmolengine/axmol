@@ -34,11 +34,11 @@
 
 using namespace winrt;
 
-class OpenGLES
+class EGLSurfaceProvider
 {
 public:
-    OpenGLES();
-    ~OpenGLES();
+    EGLSurfaceProvider();
+    ~EGLSurfaceProvider();
 
     EGLSurface CreateSurface(Windows::UI::Xaml::Controls::SwapChainPanel const& panel,
                              const Windows::Foundation::Size* renderSurfaceSize,

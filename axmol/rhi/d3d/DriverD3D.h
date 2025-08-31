@@ -64,7 +64,7 @@ public:
      * Create a CommandBuffer object.
      * @return A CommandBuffer object.
      */
-    CommandBuffer* createCommandBuffer(void*) override;
+    CommandBuffer* createCommandBuffer(void* presentTarget) override;
 
     /**
      * Create a Buffer object.

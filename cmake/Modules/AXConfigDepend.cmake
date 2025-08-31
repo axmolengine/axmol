@@ -9,7 +9,7 @@ macro(ax_depend)
 
     if(WINRT)
       list(APPEND PLATFORM_SPECIFIC_LIBS windowscodecs Advapi32 runtimeobject Dwrite)
-    elseif(NOT AX_USE_ANGLE) # ONLY Win32 Apps support DesktopGL if not use ANGLE
+    elseif(AX_RENDER_API STREQUAL "gl" AND NOT AX_GLES_PROFILE) # ONLY Win32 Apps support DesktopGL if not use ANGLE
       list(APPEND PLATFORM_SPECIFIC_LIBS opengl32)
     endif()
   elseif(LINUX)

@@ -95,6 +95,14 @@ struct GfxContextAttrs
 
 namespace ax
 {
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+struct PresentTarget
+{
+    IUnknown* swapChainPanel{nullptr};
+    float width{1};
+    float height{1};
+};
+#endif
 
 class Scene;
 class Renderer;
@@ -410,6 +418,8 @@ public:
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     virtual HWND getWin32Window() = 0;
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
+    virtual PresentTarget* getPresentTarget() const = 0;
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     virtual void* getCocoaWindow() = 0;
     virtual void* getNSGLContext() = 0;  // stevetranby: added

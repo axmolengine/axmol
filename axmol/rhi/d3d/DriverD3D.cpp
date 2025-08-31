@@ -180,7 +180,7 @@ DriverImpl::DriverImpl()
     }
 #endif
 
-    UINT createDeviceFlags = 0;
+    UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
 #if defined(_DEBUG)
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -261,9 +261,9 @@ DriverImpl::~DriverImpl()
     SafeRelease(_device);
 }
 
-CommandBuffer* DriverImpl::createCommandBuffer(void* hwnd)
+CommandBuffer* DriverImpl::createCommandBuffer(void* presentTarget)
 {
-    return new CommandBufferImpl(this, (HWND)hwnd);
+    return new CommandBufferImpl(this, presentTarget);
 }
 
 Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage)

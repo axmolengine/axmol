@@ -50,7 +50,7 @@ class VertexLayout;
 
 class SamplerCache;
 
-class VertexLayoutDesc;
+struct VertexLayoutDesc;
 
 enum class FeatureType : uint32_t
 {
@@ -93,10 +93,10 @@ public:
 
     /**
      * New a CommandBuffer object, not auto released.
-     * @param windowHandle, current is win32 HWND
+     * @param presentTarget, current is win32 HWND or swapChainPanel
      * @return A CommandBuffer object.
      */
-    virtual CommandBuffer* createCommandBuffer(void* windowHandle) = 0;
+    virtual CommandBuffer* createCommandBuffer(void* presentTarget) = 0;
 
     /**
      * New a Buffer object, not auto released.

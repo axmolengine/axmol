@@ -27,7 +27,6 @@
 #include "pch.h"
 
 #include "App.xaml.g.h"
-#include "OpenGLES.h"
 
 using namespace winrt;
 
@@ -41,6 +40,5 @@ struct App : AppT<App>
     void OnResuming(IInspectable const&, IInspectable const&);
     void OnNavigationFailed(IInspectable const&, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs const&);
     Windows::Foundation::IInspectable mPage;
-    OpenGLES mOpenGLES;
 };
 }  // namespace winrt::AxmolAppWinRT::implementation

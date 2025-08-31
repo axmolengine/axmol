@@ -188,21 +188,18 @@ THE SOFTWARE.
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include "axmol/platform/android/Application-android.h"
 #    include "axmol/platform/android/RenderViewImpl-android.h"
-#    include "axmol/platform/android/GL-android.h"
 #    include "axmol/platform/android/StdC-android.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include "axmol/platform/win32/Application-win32.h"
 #    include "axmol/platform/RenderViewImpl.h"
-#    include "axmol/platform/win32/GL-win32.h"
 #    include "axmol/platform/win32/StdC-win32.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 #    include "axmol/platform/winrt/Application-winrt.h"
 #    include "axmol/platform/winrt/RenderViewImpl-winrt.h"
-#    include "axmol/platform/winrt/GL-winrt.h"
 #    include "axmol/platform/winrt/StdC-winrt.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 
@@ -215,16 +212,18 @@ THE SOFTWARE.
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    include "axmol/platform/linux/Application-linux.h"
 #    include "axmol/platform/RenderViewImpl.h"
-#    include "axmol/platform/linux/GL-linux.h"
 #    include "axmol/platform/linux/StdC-linux.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 #    include "axmol/platform/wasm/Application-wasm.h"
 #    include "axmol/platform/RenderViewImpl.h"
-#    include "axmol/platform/wasm/GL-wasm.h"
 #    include "axmol/platform/wasm/StdC-wasm.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+
+#if AX_RENDER_API == AX_RENDER_API_GL
+#    include "axmol/platform/GL.h"
+#endif
 
 // script_support
 #include "axmol/base/ScriptSupport.h"

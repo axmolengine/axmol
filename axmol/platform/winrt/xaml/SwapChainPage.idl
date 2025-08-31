@@ -1,0 +1,8 @@
+namespace AxmolAppWinRT
+{
+    [default_interface]
+    runtimeclass SwapChainPage : Windows.UI.Xaml.Controls.Page
+    {
+        SwapChainPage();
+    }
+}

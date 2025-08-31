@@ -17,7 +17,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-#include "axmol/platform/winrt/xaml/OpenGLES.h"
+#include "axmol/platform/winrt/xaml/EGLSurfaceProvider.h"
 
 #include <winrt/windows.foundation.collections.h>
 
@@ -25,17 +25,17 @@ using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::Foundation;
 using namespace Windows::Foundation::Collections;
 
-OpenGLES::OpenGLES() : mEglDisplay(EGL_NO_DISPLAY), mEglContext(EGL_NO_CONTEXT), mEglConfig(nullptr)
+EGLSurfaceProvider::EGLSurfaceProvider() : mEglDisplay(EGL_NO_DISPLAY), mEglContext(EGL_NO_CONTEXT), mEglConfig(nullptr)
 {
     Initialize();
 }
 
-OpenGLES::~OpenGLES()
+EGLSurfaceProvider::~EGLSurfaceProvider()
 {
     Cleanup();
 }
 
-void OpenGLES::Initialize()
+void EGLSurfaceProvider::Initialize()
 {
     const EGLint configAttributes[] = {EGL_RED_SIZE,   8, EGL_GREEN_SIZE,   8, EGL_BLUE_SIZE, 8, EGL_ALPHA_SIZE, 8,
                                        EGL_DEPTH_SIZE, 8, EGL_STENCIL_SIZE, 8, EGL_NONE};
@@ -167,7 +167,7 @@ void OpenGLES::Initialize()
     }
 }
 
-void OpenGLES::Cleanup()
+void EGLSurfaceProvider::Cleanup()
 {
     if (mEglDisplay != EGL_NO_DISPLAY && mEglContext != EGL_NO_CONTEXT)
     {
@@ -182,13 +182,13 @@ void OpenGLES::Cleanup()
     }
 }
 
-void OpenGLES::Reset()
+void EGLSurfaceProvider::Reset()
 {
     Cleanup();
     Initialize();
 }
 
-EGLSurface OpenGLES::CreateSurface(SwapChainPanel const& panel,
+EGLSurface EGLSurfaceProvider::CreateSurface(SwapChainPanel const& panel,
                                    const Size* renderSurfaceSize,
                                    const float* resolutionScale)
 {
@@ -240,13 +240,13 @@ EGLSurface OpenGLES::CreateSurface(SwapChainPanel const& panel,
     return surface;
 }
 
-void OpenGLES::GetSurfaceDimensions(const EGLSurface surface, EGLint* width, EGLint* height)
+void EGLSurfaceProvider::GetSurfaceDimensions(const EGLSurface surface, EGLint* width, EGLint* height)
 {
     eglQuerySurface(mEglDisplay, surface, EGL_WIDTH, width);
     eglQuerySurface(mEglDisplay, surface, EGL_HEIGHT, height);
 }
 
-void OpenGLES::DestroySurface(const EGLSurface surface)
+void EGLSurfaceProvider::DestroySurface(const EGLSurface surface)
 {
     if (mEglDisplay != EGL_NO_DISPLAY && surface != EGL_NO_SURFACE)
     {
@@ -254,7 +254,7 @@ void OpenGLES::DestroySurface(const EGLSurface surface)
     }
 }
 
-void OpenGLES::MakeCurrent(const EGLSurface surface)
+void EGLSurfaceProvider::MakeCurrent(const EGLSurface surface)
 {
     if (eglMakeCurrent(mEglDisplay, surface, surface, mEglContext) == EGL_FALSE)
     {
@@ -262,7 +262,7 @@ void OpenGLES::MakeCurrent(const EGLSurface surface)
     }
 }
 
-EGLBoolean OpenGLES::SwapBuffers(const EGLSurface surface)
+EGLBoolean EGLSurfaceProvider::SwapBuffers(const EGLSurface surface)
 {
     return (eglSwapBuffers(mEglDisplay, surface));
 }

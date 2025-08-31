@@ -255,7 +255,7 @@ void Director::setDefaultValues()
 void Director::setGLDefaultValues()
 {
     // This method SHOULD be called only after _renderView was initialized
-    AXASSERT(_renderView, "opengl view should not be null");
+    AXASSERT(_renderView, "render view should not be null");
 
     _renderer->setDepthTest(false);
     _renderer->setDepthCompareFunc(rhi::CompareFunc::LESS_EQUAL);

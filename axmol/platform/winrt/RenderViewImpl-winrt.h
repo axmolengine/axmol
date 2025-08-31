@@ -43,6 +43,8 @@ THE SOFTWARE.
 
 using namespace winrt;
 
+class AxmolRenderer;
+
 namespace ax
 {
 
@@ -50,6 +52,8 @@ class RenderViewImpl;
 
 class AX_DLL RenderViewImpl : public RenderView
 {
+    friend class ::AxmolRenderer;
+
 public:
     static RenderViewImpl* create(std::string_view viewName);
     static RenderViewImpl* createWithRect(std::string_view viewName,
@@ -121,8 +125,6 @@ public:
     int Run();
     void Render();
 
-    void resize(int width, int height);
-
     float getFrameZoomFactor();
     void centerWindow();
 
@@ -142,6 +144,8 @@ public:
     void queueOperation(AsyncOperation op, void* param) override;
 
     void SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb);
+
+    PresentTarget* getPresentTarget() const override { return &m_presentTarget; }
 
 protected:
     RenderViewImpl();
@@ -190,6 +194,8 @@ private:
     bool m_running;
     bool m_initialized;
     bool m_appShouldExit;
+
+    mutable PresentTarget m_presentTarget;
 
     Concurrency::concurrent_queue<std::shared_ptr<InputEvent>> mInputEvents;
 

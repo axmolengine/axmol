@@ -33,6 +33,10 @@
 #include <VersionHelpers.h>
 #include "axmol/base/Logging.h"
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#    include <windows.ui.xaml.media.dxinterop.h>
+#endif
+
 namespace ax::rhi::d3d
 {
 static D3D11_PRIMITIVE_TOPOLOGY toD3DPrimitiveTopology(PrimitiveType type, bool wireframe)
@@ -71,6 +75,7 @@ static DXGI_FORMAT toDXGIFormat(IndexFormat format)
 
 typedef LONG(WINAPI* PFN_RtlVerifyVersionInfo)(OSVERSIONINFOEXW*, ULONG, ULONGLONG);
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 static BOOL _axmolIsWindows10BuildOrGreaterWin32(WORD build)
 {
     OSVERSIONINFOEXW osvi = {sizeof(osvi), 10, 0, build};
@@ -86,19 +91,13 @@ static BOOL _axmolIsWindows10BuildOrGreaterWin32(WORD build)
         (PFN_RtlVerifyVersionInfo)GetProcAddress(GetModuleHandleW(L"ntdll"), "RtlVerifyVersionInfo");
     return RtlVerifyVersionInfo(&osvi, mask, cond) == 0;
 }
+#endif
 
 static constexpr DXGI_FORMAT _AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
+CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* presentTarget)
 {
     _driverImpl = driver;
-    // TODO: listen window size changed, to call swapChain->ResizeBuffers ?
-    // auto hwnd = Director::getInstance()->getRenderView()->getWin32Window();
-
-    RECT clientRect;
-    GetClientRect(hwnd, &clientRect);
-    _screenWidth  = clientRect.right - clientRect.left;
-    _screenHeight = clientRect.bottom - clientRect.top;
 
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
@@ -116,7 +115,14 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
     ComPtr<IDXGISwapChain> swapChain;
     ComPtr<IDXGIFactory2> factory2;
 
+#if AX_TARGET_PALTFORM == AX_PLATFORM_WIN32
     DXGI_SWAP_EFFECT swapEffect = DXGI_SWAP_EFFECT_DISCARD;  // Default is blt mode
+
+    RECT clientRect;
+    auto hwnd = (HWND)presentTarget;
+    GetClientRect(hwnd, &clientRect);
+    _screenWidth  = clientRect.right - clientRect.left;
+    _screenHeight = clientRect.bottom - clientRect.top;
 
     if (SUCCEEDED(factory->QueryInterface(IID_PPV_ARGS(&factory2))))
     {
@@ -169,8 +175,68 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, HWND hwnd)
         scDesc.Windowed                           = TRUE;
         scDesc.SwapEffect                         = DXGI_SWAP_EFFECT_DISCARD;
 
-        factory->CreateSwapChain(device, &scDesc, &swapChain);
+        hr = factory->CreateSwapChain(device, &scDesc, &swapChain);
     }
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
+    auto presentDesc = static_cast<ax::PresentTarget*>(presentTarget);
+
+    if (SUCCEEDED(factory->QueryInterface(IID_PPV_ARGS(&factory2))))
+    {
+        // 0 means auto matched by DXGI or use SwapChainPanel::ActualWidth/Height * DPI
+        _screenWidth  = static_cast<UINT>(presentDesc->width);
+        _screenHeight = static_cast<UINT>(presentDesc->height);
+
+        DXGI_SWAP_CHAIN_DESC1 desc1 = {};
+        desc1.Width                 = _screenWidth;
+        desc1.Height                = _screenHeight;
+        desc1.Format                = _AX_SWAPCHAIN_FORMAT;
+        desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
+        desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        desc1.BufferCount           = 2;
+        desc1.SwapEffect            = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;  // UWP recommanded
+        desc1.Scaling               = DXGI_SCALING_STRETCH;
+        desc1.AlphaMode             = DXGI_ALPHA_MODE_IGNORE;
+
+        ComPtr<IDXGISwapChain1> swapChain1;
+        HRESULT hr = factory2->CreateSwapChainForComposition(device, &desc1, nullptr, &swapChain1);
+        assert(SUCCEEDED(hr) && "CreateSwapChainForComposition fail");
+        if (FAILED(hr))
+            return;
+
+        // bind ISwapChainPanelNative to xaml control
+        ComPtr<ISwapChainPanelNative> panelNative;
+        hr = presentDesc->swapChainPanel->QueryInterface(IID_PPV_ARGS(&panelNative));
+        assert(SUCCEEDED(hr) && "Query ISwapChainPanelNative fail");
+        if (FAILED(hr))
+            return;
+
+        auto director = Director::getInstance();
+        hr            = panelNative->SetSwapChain(swapChain1.Get());
+        assert(SUCCEEDED(hr) && "SetSwapChain fail");
+        if (FAILED(hr))
+            return;
+
+        swapChain1.As(&swapChain);
+
+        DXGI_SWAP_CHAIN_DESC1 actualDesc = {};
+        swapChain1->GetDesc1(&actualDesc);
+
+        _screenWidth  = actualDesc.Width;
+        _screenHeight = actualDesc.Height;
+
+        /* maybe: when ui extent changes
+        auto panel = reinterpret_cast<winrt::Windows::UI::Xaml::Controls::SwapChainPanel*>(outputContext);
+        float logicalWidth  = panel->ActualWidth();
+        float logicalHeight = panel->ActualHeight();
+
+        auto displayInfo = winrt::Windows::Graphics::Display::DisplayInformation::GetForCurrentView();
+        float dpi = displayInfo.LogicalDpi();
+
+        _screenWidth  = static_cast<uint32_t>(logicalWidth  * dpi / 96.0f + 0.5f);
+        _screenHeight = static_cast<uint32_t>(logicalHeight * dpi / 96.0f + 0.5f);
+        */
+    }
+#endif
 
     _swapChain = swapChain.Detach();
 

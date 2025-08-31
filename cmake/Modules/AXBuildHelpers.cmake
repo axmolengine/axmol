@@ -678,15 +678,20 @@ macro(ax_setup_winrt_sources)
     proj.winrt/App.h
     proj.winrt/App.cpp
     proj.winrt/Package.appxmanifest
-    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.xaml
-    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.idl
-    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.h
-    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.cpp
-    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLES.h
-    ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLES.cpp
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.xaml
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.idl
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.h
+    ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.cpp
     ${_AX_ROOT}/axmol/platform/winrt/xaml/AxmolRenderer.h
     ${_AX_ROOT}/axmol/platform/winrt/xaml/AxmolRenderer.cpp
   )
+
+  if(AX_RENDER_API STREQUAL "gl")
+    list(APPEND PLATFORM_SOURCES
+      ${_AX_ROOT}/axmol/platform/winrt/xaml/EGLSurfaceProvider.h
+      ${_AX_ROOT}/axmol/platform/winrt/xaml/EGLSurfaceProvider.cpp
+    )
+  endif()
 
   file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/proj.winrt/App.xaml" APP_XAML_FULL_PATH)
   set_property(
@@ -694,9 +699,9 @@ macro(ax_setup_winrt_sources)
     PROPERTY VS_SETTINGS
     "DependentUpon=${APP_XAML_FULL_PATH}"
   )
-  file(TO_NATIVE_PATH "${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.xaml" MAINPAGE_XAML_FULL_PATH)
+  file(TO_NATIVE_PATH "${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.xaml" MAINPAGE_XAML_FULL_PATH)
   set_property(
-    SOURCE ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.h ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.cpp ${_AX_ROOT}/axmol/platform/winrt/xaml/OpenGLESPage.idl
+    SOURCE ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.h ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.cpp ${_AX_ROOT}/axmol/platform/winrt/xaml/SwapChainPage.idl
     PROPERTY VS_SETTINGS
     "DependentUpon=${MAINPAGE_XAML_FULL_PATH}"
   )

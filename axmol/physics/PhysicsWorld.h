@@ -450,7 +450,7 @@ protected:
     friend class PhysicsBody;
     friend class PhysicsCollider;
     friend class PhysicsJoint;
-    friend class PhysicsWorldCallback;
+    friend struct PhysicsWorldCallback;
     friend class PhysicsDebugDraw;
 };
 

@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  https://axmol.dev/
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,7 @@
 
 #include "App.h"
 
-#include "OpenGLESPage.h"
+#include "SwapChainPage.h"
 
 using namespace winrt;
 using namespace Windows::ApplicationModel;
@@ -104,8 +104,8 @@ void App::OnLaunched(LaunchActivatedEventArgs const& e)
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
-            rootFrame.Content(winrt::make<OpenGLESPage>(&mOpenGLES));
-            //rootFrame.Navigate(xaml_typename<AxmolAppWinRT::OpenGLESPage>(), box_value(e.Arguments()));
+            rootFrame.Content(winrt::make<SwapChainPage>());
+            //rootFrame.Navigate(xaml_typename<AxmolAppWinRT::SwapChainPage>(), box_value(e.Arguments()));
             mPage = rootFrame.Content();
         }
         // Place the frame in the current Window
@@ -138,7 +138,7 @@ void App::OnResuming(IInspectable const& sender, IInspectable const& args)
     (void)args; // Unused parameter
 
     if (mPage)
-        mPage.as<OpenGLESPage>()->SetVisibility(true);
+        mPage.as<SwapChainPage>()->SetVisibility(true);
 }
 
 /// <summary>

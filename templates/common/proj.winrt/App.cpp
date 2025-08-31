@@ -25,7 +25,7 @@
 
 #include "App.h"
 
-#include "OpenGLESPage.h"
+#include "SwapChainPage.h"
 
 using namespace winrt;
 using namespace Windows::ApplicationModel;
@@ -104,8 +104,8 @@ void App::OnLaunched(LaunchActivatedEventArgs const& e)
             // When the navigation stack isn't restored navigate to the first page,
             // configuring the new page by passing required information as a navigation
             // parameter
-            rootFrame.Content(winrt::make<OpenGLESPage>(&mOpenGLES));
-            // rootFrame.Navigate(xaml_typename<AxmolAppWinRT::OpenGLESPage>(), box_value(e.Arguments()));
+            rootFrame.Content(winrt::make<SwapChainPage>());
+            // rootFrame.Navigate(xaml_typename<AxmolAppWinRT::SwapChainPage>(), box_value(e.Arguments()));
             mPage = rootFrame.Content();
         }
         // Place the frame in the current Window
@@ -138,7 +138,7 @@ void App::OnResuming(IInspectable const& sender, IInspectable const& args)
     (void)args;    // Unused parameter
 
     if (mPage)
-        mPage.as<OpenGLESPage>()->SetVisibility(true);
+        mPage.as<SwapChainPage>()->SetVisibility(true);
 }
 
 /// <summary>

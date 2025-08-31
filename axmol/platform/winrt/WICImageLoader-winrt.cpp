@@ -546,6 +546,11 @@ IWICImagingFactory* WICImageLoader::getWICFactory()
             hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory,
                                   (LPVOID*)&_wicFactory);
         }
+        else
+        {
+            AXLOGE("CoInitializeEx fail:{}", hr);
+            assert(false);
+        }
 
         if (FAILED(hr))
         {

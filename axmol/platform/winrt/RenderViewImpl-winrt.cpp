@@ -119,7 +119,7 @@ RenderViewImpl::RenderViewImpl()
     , _lastMouseButtonPressed(EventMouse::MouseButton::BUTTON_UNSET)
 {
     s_renderView = this;
-    _viewName    = "axmol2";
+    _viewName    = "axmol3";
     m_keyboard   = KeyBoardWinRT();
 
     m_backButtonListener                = EventListenerKeyboard::create();
@@ -133,12 +133,16 @@ RenderViewImpl::~RenderViewImpl()
     s_renderView = nullptr;
 }
 
-bool RenderViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor)
+bool RenderViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float /*frameZoomFactor*/)
 {
     setViewName(viewName);
-    setFrameSize(rect.size.width, rect.size.height);
-    setFrameZoomFactor(frameZoomFactor);
-    UpdateForWindowSizeChange(rect.size.width, rect.size.height);
+
+    m_width  = rect.size.width;
+    m_height = rect.size.height;
+    UpdateWindowSize();
+
+    m_initialized = true;
+
     return true;
 }
 
@@ -160,6 +164,8 @@ void RenderViewImpl::setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispa
 void RenderViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel)
 {
     m_panel = panel;
+
+    m_presentTarget.swapChainPanel = winrt::get_unknown(m_panel.get());
 }
 
 void RenderViewImpl::setIMEKeyboardState(bool bOpen)
@@ -433,13 +439,9 @@ void ax::RenderViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void RenderViewImpl::resize(int width, int height) {}
-
-void RenderViewImpl::setFrameZoomFactor(float fZoomFactor)
+void RenderViewImpl::setFrameZoomFactor(float /*fZoomFactor*/)
 {
-    _frameZoomFactor = fZoomFactor;
-    Director::getInstance()->setProjection(Director::getInstance()->getProjection());
-    // resize(m_obScreenSize.width * fZoomFactor, m_obScreenSize.height * fZoomFactor);
+    AXLOGD("Windows UWP not support setFrameZoomFactor other than 1.0f");
 }
 
 float RenderViewImpl::getFrameZoomFactor()
@@ -495,34 +497,21 @@ void RenderViewImpl::UpdateForWindowSizeChange(float width, float height)
         m_width  = width;
         m_height = height;
         UpdateWindowSize();
+
+#if AX_RENDER_API == AX_RENDER_API_D3D
+        Director::getInstance()->getRenderer()->resizeSwapChain(m_width, m_height);
+#endif
     }
 }
 
 void RenderViewImpl::UpdateWindowSize()
 {
-    float width, height;
+    m_presentTarget.width = m_width;
+    m_presentTarget.height = m_height;
 
-    width  = m_width;
-    height = m_height;
+    RenderView::setFrameSize(m_width / _frameZoomFactor, m_height / _frameZoomFactor);
 
-    // CCSize designSize = getDesignResolutionSize();
-    if (!m_initialized)
-    {
-        m_initialized = true;
-        RenderView::setFrameSize(width, height);
-    }
-
-    auto view = Director::getInstance()->getRenderView();
-    if (view && view->getResolutionPolicy() != ResolutionPolicy::UNKNOWN)
-    {
-        Size resSize               = view->getDesignResolutionSize();
-        ResolutionPolicy resPolicy = view->getResolutionPolicy();
-        view->setFrameSize(width, height);
-        view->setDesignResolutionSize(resSize.width, resSize.height, resPolicy);
-        auto director = Director::getInstance();
-        director->setViewport();
-        director->setProjection(director->getProjection());
-    }
+    updateDesignResolutionSize();
 }
 
 ax::Vec2 RenderViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)

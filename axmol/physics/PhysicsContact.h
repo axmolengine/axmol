@@ -145,7 +145,7 @@ private:
     PhysicsContactData* _preContactData;
 
     friend class EventListenerPhysicsContact;
-    friend class PhysicsWorldCallback;
+    friend struct PhysicsWorldCallback;
     friend class PhysicsWorld;
 };
 

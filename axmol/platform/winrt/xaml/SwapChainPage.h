@@ -19,9 +19,8 @@
 
 #pragma once
 
-#include "OpenGLESPage.g.h"
+#include "SwapChainPage.g.h"
 
-#include "axmol/platform/winrt/xaml/OpenGLES.h"
 #include <memory>
 #include <condition_variable>
 #include <mutex>
@@ -35,21 +34,25 @@
 #include <winrt/Windows.UI.Xaml.Markup.h>
 #include <winrt/Windows.Devices.Input.h>
 
+#if AX_RENDER_API == AX_RENDER_API_GL
+#include "axmol/platform/winrt/xaml/EGLSurfaceProvider.h"
+#endif
+
 using namespace winrt;
 
 namespace winrt::AxmolAppWinRT::implementation
 {
-struct OpenGLESPage : OpenGLESPageT<OpenGLESPage>
+struct SwapChainPage : SwapChainPageT<SwapChainPage>
 {
 public:
-    OpenGLESPage();
-    OpenGLESPage(OpenGLES* openGLES);
-    virtual ~OpenGLESPage();
+    SwapChainPage();
+    virtual ~SwapChainPage();
     void SetVisibility(bool isVisible);
 
     void ProcessOperations();
 
     void OnPageLoaded(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& e);
+    void OnPanelSizeChanged(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& e);
     void OnVisibilityChanged(Windows::UI::Core::CoreWindow const& sender,
                              Windows::UI::Core::VisibilityChangedEventArgs const& args);
 #if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP) || _MSC_VER >= 1900
@@ -65,16 +68,18 @@ public:
 
     void CreateInput();
 
-    OpenGLES* mOpenGLES;
-    std::shared_ptr<AxmolRenderer> mRenderer;
+#if AX_RENDER_API == AX_RENDER_API_GL
+    EGLSurfaceProvider* m_eglSurfaceProvider{nullptr};
+    EGLSurface m_eglSurface{EGL_NO_SURFACE};  // This surface is associated with a swapChainPanel on the page
+    Concurrency::critical_section m_eglSurfaceCriticalSection{};
+#endif
+    std::shared_ptr<AxmolRenderer> m_renderer{};
 
-    EGLSurface mRenderSurface;  // This surface is associated with a swapChainPanel on the page
-    Concurrency::critical_section mRenderSurfaceCriticalSection;
-    Windows::Foundation::IAsyncAction mRenderLoopWorker;
+    Windows::Foundation::IAsyncAction m_renderLoopWorker{};
 
     // Track user input on a background worker thread.
-    Windows::Foundation::IAsyncAction mInputLoopWorker;
-    Windows::UI::Core::CoreIndependentInputSource mCoreInput;
+    Windows::Foundation::IAsyncAction m_inputLoopWorker{};
+    Windows::UI::Core::CoreIndependentInputSource m_coreInput{nullptr};
 
     // Independent touch and pen handling functions.
     // !!!Note: cppwinrt generator will Xaml::RoutedEventArgs, so add underline prefix
@@ -97,23 +102,26 @@ public:
     void OnOrientationChanged(Windows::Graphics::Display::DisplayInformation const& sender,
                               Windows::Foundation::IInspectable const& args);
 
-    float mDpi;
-    bool mDeviceLost;
-    bool mVisible;
-    bool mCursorVisible;
-    Windows::Graphics::Display::DisplayOrientations mOrientation;
+    float m_dpi;
+    bool m_deviceLost;
+    bool m_visible;
+    bool m_cursorVisible;
+    Windows::Graphics::Display::DisplayOrientations m_orientation;
 
-    std::mutex mSleepMutex;
+    std::mutex m_sleepMutex;
 
 public:
-    std::condition_variable mSleepCondition;
+    std::condition_variable m_sleepCondition;
 
-    Concurrency::concurrent_queue<std::function<void()>> mOperations;
+    Concurrency::concurrent_queue<std::function<void()>> m_operations;
+
+    double m_surfaceWidth{0};
+    double m_surfaceHeight{0};
 };
 }  // namespace winrt::AxmolAppWinRT::implementation
 
 namespace winrt::AxmolAppWinRT::factory_implementation
 {
-struct OpenGLESPage : OpenGLESPageT<OpenGLESPage, implementation::OpenGLESPage>
+struct SwapChainPage : SwapChainPageT<SwapChainPage, implementation::SwapChainPage>
 {};
 }  // namespace winrt::AxmolAppWinRT::factory_implementation

@@ -487,11 +487,12 @@ elseif(WINRT)
     if(NOT DEFINED BUILD_ENGINE_DONE)
         set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
     endif()
+    target_link_options(${APP_NAME} PRIVATE "/pdbpagesize:32768")
 endif()
 
 if((NOT IOS) AND (NOT WINRT))
     message(STATUS "CMake precompile headers for ${APP_NAME}")
-    target_precompile_headers(${APP_NAME} PRIVATE 
+    target_precompile_headers(${APP_NAME} PRIVATE
       "$<$<COMPILE_LANGUAGE:CXX>:axmol/axmol.h>"
     )
 endif()

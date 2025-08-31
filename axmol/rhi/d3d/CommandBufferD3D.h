@@ -64,9 +64,10 @@ class CommandBufferImpl : public CommandBuffer
 public:
     /// @name Constructor, Destructor and Initializers
     /**
-     * @param driver The device for which MTLCommandQueue object was created.
+     * @param driver The device for which d3d::DriverImpl object was created.
+     * @param presentTarget hwnd or IUnkown*(SwapChainPanel)
      */
-    CommandBufferImpl(DriverImpl* driver, HWND hwnd);
+    CommandBufferImpl(DriverImpl* driver, void* presentTarget);
     ~CommandBufferImpl() override;
 
     bool resizeSwapChain(uint32_t width, uint32_t height) override;

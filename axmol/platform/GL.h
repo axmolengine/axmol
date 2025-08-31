@@ -38,7 +38,9 @@ THE SOFTWARE.
 #        include "axmol/platform/win32/GL-win32.h"
 #    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#    if AX_RENDER_API == AX_RENDER_API_GL
 #    include "axmol/platform/winrt/GL-winrt.h"
+#endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "axmol/platform/linux/GL-linux.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM

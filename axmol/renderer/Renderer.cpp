@@ -205,8 +205,12 @@ void Renderer::init()
 
     auto driver = axdrv;
 #if AX_RENDER_API == AX_RENDER_API_D3D
-    auto mainWindowHandle = Director::getInstance()->getRenderView()->getWin32Window();
-    _commandBuffer        = driver->createCommandBuffer(mainWindowHandle);
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    auto presentTarget = Director::getInstance()->getRenderView()->getWin32Window();
+#    else
+    auto presentTarget = Director::getInstance()->getRenderView()->getPresentTarget();
+#    endif
+    _commandBuffer = driver->createCommandBuffer(presentTarget);
 #else
     _commandBuffer = driver->createCommandBuffer(nullptr);
 #endif
