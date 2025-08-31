@@ -35,7 +35,6 @@ using namespace Microsoft::WRL;
  * @{
  */
 
-
 /**
  * @brief A D3D11-based DepthStencilState implementation
  *
@@ -60,5 +59,3 @@ private:
 /** @} */
 
 }  // namespace ax::rhi::d3d
-
-

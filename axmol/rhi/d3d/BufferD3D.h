@@ -38,7 +38,6 @@ namespace ax::rhi::d3d
  * @{
  */
 
-
 /**
  * @brief A D3D11-based Buffer implementation
  *
