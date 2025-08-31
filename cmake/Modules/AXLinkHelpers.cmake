@@ -55,7 +55,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   )
   
   if(AX_GLES_PROFILE)
-    arget_compile_definitions(${APP_NAME} PRIVATE AX_GLES_PROFILE=${AX_GLES_PROFILE})
+    target_compile_definitions(${APP_NAME} PRIVATE AX_GLES_PROFILE=${AX_GLES_PROFILE})
   endif()
 
   ax_config_pred(${APP_NAME} AX_USE_ALSOFT)
