@@ -97,13 +97,15 @@ if(AX_RENDER_API STREQUAL "gl")
         message(AUTHOR_WARNING "Forcing GLES profile to ${_GLES_PROFILE} for OpenGL ES")
       else()
         # Win32 Desktop Apps can use desktop gl, so disable gles profile
-        set(AX_GLES_PROFILE 0 CACHE STRING "" FORCE)
+        unset(AX_GLES_PROFILE CACHE)
       endif()
     endif()
   else() # Force disable GLES due to platform not support
-    set(AX_GLES_PROFILE 0 CACHE STRING "" FORCE)
+    unset(AX_GLES_PROFILE CACHE)
   endif()
   string(APPEND _RENDER_NOTICE ", AX_GLES_PROFILE=${AX_GLES_PROFILE}")
+else()
+  unset(AX_GLES_PROFILE CACHE)
 endif()
 
 message(AUTHOR_WARNING "${_RENDER_NOTICE}")

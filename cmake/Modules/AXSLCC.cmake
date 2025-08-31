@@ -105,25 +105,27 @@ function(ax_target_compile_shaders target_name)
     # shader lang
     set(SC_PROFILE "")
 
-    if(AX_GLES_PROFILE)
-      # version 300 es
-      set(OUT_LANG "ESSL")
-      if(AX_GLES_PROFILE GREATER_EQUAL 300)
-        set(SC_PROFILE "300")
-        set(SC_DEFINES "AXSLC_TARGET_GLES")
+    if(AX_RENDER_API STREQUAL "gl")
+      if(AX_GLES_PROFILE)
+        # version 300 es
+        set(OUT_LANG "ESSL")
+        if(AX_GLES_PROFILE GREATER_EQUAL 300)
+          set(SC_PROFILE "300")
+          set(SC_DEFINES "AXSLC_TARGET_GLES")
+        else()
+          # GLSL2 use glsl100 syntax es profile aka essl100
+          set(SC_PROFILE "100")
+          set(SC_DEFINES "AXSLC_TARGET_GLES2")
+        endif()
+        set(SC_DEFINES "AXSLC_TARGET_GLSL,${SC_DEFINES}")
+        list(APPEND SC_FLAGS "--lang=gles" "--profile=${SC_PROFILE}")
       else()
-        # GLSL2 use glsl100 syntax es profile aka essl100
-        set(SC_PROFILE "100")
-        set(SC_DEFINES "AXSLC_TARGET_GLES2")
+        # version 330
+        set(OUT_LANG "GLSL")
+        set(SC_PROFILE "330")
+        set(SC_DEFINES "AXSLC_TARGET_GLSL")
+        list(APPEND SC_FLAGS "--lang=glsl" "--profile=${SC_PROFILE}")
       endif()
-      set(SC_DEFINES "AXSLC_TARGET_GLSL,${SC_DEFINES}")
-      list(APPEND SC_FLAGS "--lang=gles" "--profile=${SC_PROFILE}")
-    elseif(AX_RENDER_API STREQUAL "gl")
-      # version 330
-      set(OUT_LANG "GLSL")
-      set(SC_PROFILE "330")
-      set(SC_DEFINES "AXSLC_TARGET_GLSL")
-      list(APPEND SC_FLAGS "--lang=glsl" "--profile=${SC_PROFILE}")
     elseif(AX_RENDER_API STREQUAL "d3d")
       set(OUT_LANG "HLSL")
       set(SC_PROFILE "50") # D3D11 HLSL 5.0

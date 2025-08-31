@@ -273,9 +273,8 @@ void SwapChainPage::StartRenderLoop()
         if (!m_renderer)
             EnsureRenderer(dispatcher);
 #else
-        auto panel       = swapChainPanel();
-        auto panelWidth  = m_surfaceWidth;
-        auto panelHeight = m_surfaceHeight;
+        size_t panelWidth  = static_cast<size_t>(m_canvasWidth);
+        size_t panelHeight = static_cast<size_t>(m_canvasHeight);
 #endif
 
         // !!!Start the engine renderer on the render thread so that WICImageDecoder
@@ -325,8 +324,8 @@ void SwapChainPage::StartRenderLoop()
 #if AX_RENDER_API == AX_RENDER_API_GL
             m_eglSurfaceProvider->GetSurfaceDimensions(m_eglSurface, &panelWidth, &panelHeight);
 #else
-            panelWidth  = m_surfaceWidth;
-            panelHeight = m_surfaceHeight;
+            panelWidth  = static_cast<size_t>(m_canvasWidth);
+            panelHeight = static_cast<size_t>(m_canvasHeight);
 #endif
             m_renderer->Draw(panelWidth, panelHeight, m_dpi, m_orientation);
 
