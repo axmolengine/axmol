@@ -28,6 +28,11 @@
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/rhi/RHITypes.h"
 
+/**
+ * @addtogroup _rhi
+ * @{
+ */
+
 namespace ax::rhi
 {
 namespace RHIUtils
@@ -75,3 +80,6 @@ inline uint8_t computeMipLevels(int width, int height)
 }
 }  // namespace RHIUtils
 }  // namespace ax::rhi
+
+// end of _rhi group
+/// @}

@@ -29,7 +29,15 @@
 
 namespace ax::rhi::d3d
 {
+/**
+ * @addtogroup _d3d
+ * @{
+ */
 
+/**
+ * @brief A D3D11-based Shader RenderTarget implementation
+ *
+ */
 class RenderTargetImpl : public RenderTarget
 {
 public:
@@ -58,4 +66,7 @@ private:
     mutable std::array<ID3D11RenderTargetView*, MAX_COLOR_ATTCHMENT> _rtvs{};
     mutable ID3D11DepthStencilView* _dsv = nullptr;
 };
+
+/** @} */
+
 }  // namespace ax::rhi::d3d

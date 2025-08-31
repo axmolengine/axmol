@@ -32,6 +32,14 @@ THE SOFTWARE.
 namespace ax::rhi
 {
 
+/**
+ * @addtogroup _rhi
+ * @{
+ */
+
+/**
+ * Render Target
+ */
 class RenderTarget : public ax::Object
 {
 public:
@@ -100,5 +108,6 @@ protected:
     bool _defaultRenderTarget = false;
     mutable TargetBufferFlags _dirtyFlags{};
 };
-
+// end of _rhi group
+/// @}
 }  // namespace ax::rhi

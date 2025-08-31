@@ -50,11 +50,6 @@ class VertexLayout;
  */
 
 /**
- * @addtogroup _rhi
- * @{
- */
-
-/**
  * A program.
  */
 class AX_DLL Program : public Object

@@ -32,6 +32,11 @@ namespace ax::rhi::d3d
 {
 class DriverImpl;
 
+/**
+ * @addtogroup _d3d
+ * @{
+ */
+
 struct PixelFormatInfo
 {
     DXGI_FORMAT format;
@@ -68,5 +73,7 @@ inline void SafeRelease(T& resource)
         resource = nullptr;
     }
 }
+
+/** @} */
 
 }  // namespace ax::rhi::d3d

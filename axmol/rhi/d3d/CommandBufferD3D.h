@@ -30,6 +30,12 @@
 namespace ax::rhi::d3d
 {
 using namespace Microsoft::WRL;
+
+/**
+ * @addtogroup _d3d
+ * @{
+ */
+
 class BufferImpl;
 class DepthStencilStateImpl;
 class RenderPipelineImpl;
@@ -51,13 +57,8 @@ struct RasterStateDesc
 };
 
 /**
- * @addtogroup _d3d
- * @{
- */
-
-/**
- * @brief Store encoded commands for the GPU to execute.
- * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
+ * @brief A D3D11-based CommandBuffer implementation
+ *
  */
 class CommandBufferImpl : public CommandBuffer
 {
@@ -243,6 +244,6 @@ protected:
     UINT _textureBounds{0};
 };
 
-// end of _metal group
-/// @}
+/** @} */
+
 }  // namespace ax::rhi::d3d

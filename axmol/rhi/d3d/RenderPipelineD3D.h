@@ -28,8 +28,20 @@
 #include <wrl/client.h>
 using Microsoft::WRL::ComPtr;
 
+
 namespace ax::rhi::d3d
 {
+
+/**
+ * @addtogroup _d3d
+ * @{
+ */
+
+
+/**
+ * @brief A D3D11-based Shader RenderPipeline implementation
+ *
+ */
 class RenderPipelineImpl : public RenderPipeline
 {
 public:
@@ -42,4 +54,7 @@ private:
 
     axstd::hash_map<uint32_t, ComPtr<ID3D11BlendState>> _blendCache;
 };
+
+/** @} */
+
 }  // namespace ax::rhi::d3d

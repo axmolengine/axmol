@@ -32,8 +32,6 @@
 namespace ax::rhi
 {
 
-// #define AX_USE_UNIFORM_FULL_NAME
-
 /**
  * @addtogroup _rhi
  * @{

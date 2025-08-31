@@ -29,15 +29,33 @@
 
 namespace ax::rhi::d3d
 {
+/**
+ * @addtogroup _d3d
+ * @{
+ */
+
+/**
+ * @brief A D3D11-based VertexLayout implementation
+ *
+ */
 class VertexLayoutImpl : public VertexLayout
 {
 public:
     explicit VertexLayoutImpl(VertexLayoutDesc&&);
     ~VertexLayoutImpl() override;
 
+    /**
+     * @brief apply vertex layout
+     *
+     * @param context
+     * @param program
+     */
     void apply(ID3D11DeviceContext* context, Program* program) const;
 
 private:
     mutable ID3D11InputLayout* _d3dVL{nullptr};
 };
+
+/** @} */
+
 }  // namespace ax::rhi::d3d

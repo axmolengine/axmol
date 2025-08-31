@@ -36,7 +36,8 @@ namespace ax::rhi::d3d
  */
 
 /**
- * Create resources from MTLDevice.
+ * @brief A D3D11-based Driver implementation
+ *
  */
 class DriverImpl : public DriverBase
 {
@@ -183,6 +184,6 @@ private:
     D3D_FEATURE_LEVEL _featureLevel{};
 };
 
-// end of _metal group
-/// @}
+/** @} */
+
 }  // namespace ax::rhi::d3d

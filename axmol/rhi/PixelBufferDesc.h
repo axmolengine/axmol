@@ -28,7 +28,13 @@
 
 namespace ax::rhi
 {
-
+/**
+ * @addtogroup _rhi
+ * @{
+ */
+/**
+ * A PixelBufferDesc.
+ */
 struct PixelBufferDesc
 {
     PixelBufferDesc()                       = default;
@@ -43,5 +49,8 @@ struct PixelBufferDesc
     int _width  = 0;
     int _height = 0;
 };
+
+// end of _rhi group
+/// @}
 
 }  // namespace ax::rhi

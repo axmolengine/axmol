@@ -28,8 +28,17 @@
 
 namespace ax::rhi::d3d
 {
+/**
+ * @addtogroup _d3d
+ * @{
+ */
+
 struct SLCReflectContext;
 
+/**
+ * @brief A D3D11-based ShaderModule implementation
+ *
+ */
 class ShaderModuleImpl : public ShaderModule
 {
 public:
@@ -114,5 +123,7 @@ private:
 
     std::size_t _uniformBufferSize = 0;
 };
+
+/** @} */
 
 }  // namespace ax::rhi::d3d

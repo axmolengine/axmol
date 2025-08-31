@@ -29,6 +29,11 @@
 
 namespace ax::rhi
 {
+/**
+ * @addtogroup _rhi
+ * @{
+ */
+
 class SamplerCache
 {
 public:
@@ -46,4 +51,8 @@ public:
 private:
     axstd::hash_map<uint32_t, SamplerHandle> _samplers;
 };
+
+// end of _rhi group
+/// @}
+
 }  // namespace ax::rhi

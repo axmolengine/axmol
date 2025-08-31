@@ -36,6 +36,15 @@ namespace ax::rhi::d3d
 {
 using namespace Microsoft::WRL;
 
+/**
+ * @addtogroup _d3d
+ * @{
+ */
+
+/**
+ * @brief A TxtureHandle hold D3D11 Texture2D & ShaderResourceView
+ *
+ */
 struct TextureHandle
 {
     explicit operator bool() const { return tex2d != nullptr; }
@@ -59,11 +68,6 @@ struct TextureHandle
     ID3D11Texture2D* tex2d{};
     ID3D11ShaderResourceView* srv{};  // Note: default color attachment not create srv yet.
 };
-
-/**
- * @addtogroup _d3d
- * @{
- */
 
 /**
  * The texture implementation supports 2D, cubemap, and 2D array textures.
@@ -175,6 +179,6 @@ private:
     ID3D11SamplerState* _samplerState = nullptr;
 };
 
-// end of d3d group
-/// @}
+/** @} */
+
 }  // namespace ax::rhi::d3d

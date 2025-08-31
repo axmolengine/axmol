@@ -27,9 +27,19 @@
 
 #include "axmol/rhi/d3d/ShaderModuleD3D.h"
 
+/**
+ * @addtogroup _d3d
+ * @{
+ */
+
 namespace ax::rhi::d3d
 {
 class BufferImpl;
+
+/**
+ * @brief A D3D11-based ShaderProgram implementation
+ *
+ */
 class ProgramImpl : public Program
 {
 public:
@@ -125,3 +135,5 @@ private:
     BufferImpl* _fsUniformBuffer{nullptr};
 };
 }  // namespace ax::rhi::d3d
+
+/** @} */
