@@ -13,6 +13,12 @@ if(MSVC)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>")
 endif()
 
+if(WINDOWS)
+  set(_NUGET_PACKAGE_DIR "${_AX_ROOT}/cache/packages" CACHE INTERNAL "" FORCE)
+  file(TO_NATIVE_PATH ${_NUGET_PACKAGE_DIR} _NUGET_PACKAGE_DIR_N)
+  set(_NUGET_PACKAGE_DIR_N "${_NUGET_PACKAGE_DIR_N}" CACHE INTERNAL "" FORCE)
+endif()
+
 # UWP min deploy target support, VS property: targetPlatformMinVersion
 if(WINRT)
   # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
@@ -25,10 +31,6 @@ if(WINRT)
   set(CMAKE_CXX_FLAGS "/sdl- ${CMAKE_CXX_FLAGS}")
 elseif(WIN32)
   set(AX_MSEDGE_WEBVIEW2_VERSION "1.0.3405.78" CACHE STRING "")
-
-  set(_NUGET_PACKAGE_DIR "${_AX_ROOT}/cache/packages" CACHE INTERNAL "" FORCE)
-  file(TO_NATIVE_PATH ${_NUGET_PACKAGE_DIR} _NUGET_PACKAGE_DIR_N)
-  set(_NUGET_PACKAGE_DIR_N "${_NUGET_PACKAGE_DIR_N}" CACHE INTERNAL "" FORCE)
 endif()
 
 # config c standard
@@ -284,6 +286,7 @@ if(MSVC)
 else()
   enable_language(ASM OPTIONAL)
 endif()
+
 enable_language(ASM_NASM OPTIONAL)
 
 # we don't need cmake BUILD_TESTING feature
