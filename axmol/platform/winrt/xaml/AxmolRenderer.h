@@ -47,9 +47,9 @@ public:
     void QueueBackButtonEvent();
 
     /**  Create render view
-    * @remark: this API must call at main ui thread, others API should call at render thread
-    */
-    void CreateRenderView(); 
+     * @remark: this API must call at main ui thread, others API should call at render thread
+     */
+    void CreateRenderView();
 
     void Start();
     void Pause();

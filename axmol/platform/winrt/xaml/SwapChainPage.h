@@ -35,7 +35,7 @@
 #include <winrt/Windows.Devices.Input.h>
 
 #if AX_RENDER_API == AX_RENDER_API_GL
-#include "axmol/platform/winrt/xaml/EGLSurfaceProvider.h"
+#    include "axmol/platform/winrt/xaml/EGLSurfaceProvider.h"
 #endif
 
 using namespace winrt;
@@ -52,7 +52,8 @@ public:
     void ProcessOperations();
 
     void OnPageLoaded(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& e);
-    void OnPanelSizeChanged(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& e);
+    void OnPanelSizeChanged(Windows::Foundation::IInspectable const& sender,
+                            Windows::UI::Xaml::RoutedEventArgs const& e);
     void OnVisibilityChanged(Windows::UI::Core::CoreWindow const& sender,
                              Windows::UI::Core::VisibilityChangedEventArgs const& args);
 #if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP) || _MSC_VER >= 1900

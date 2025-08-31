@@ -189,8 +189,8 @@ void EGLSurfaceProvider::Reset()
 }
 
 EGLSurface EGLSurfaceProvider::CreateSurface(SwapChainPanel const& panel,
-                                   const Size* renderSurfaceSize,
-                                   const float* resolutionScale)
+                                             const Size* renderSurfaceSize,
+                                             const float* resolutionScale)
 {
     if (!panel)
     {

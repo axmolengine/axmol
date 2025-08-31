@@ -506,7 +506,7 @@ void RenderViewImpl::UpdateForWindowSizeChange(float width, float height)
 
 void RenderViewImpl::UpdateWindowSize()
 {
-    m_presentTarget.width = m_width;
+    m_presentTarget.width  = m_width;
     m_presentTarget.height = m_height;
 
     RenderView::setFrameSize(m_width / _frameZoomFactor, m_height / _frameZoomFactor);
