@@ -215,8 +215,8 @@ namespace ax { namespace network {
                 return;
             }
 
-            if (dlTotal == 0) {
-                AXLOGD("DownloaderEmscripten::onProgress dlTotal unknown, usually caused by unknown content-length header {}", fmt::ptr(fetch));
+            if (fetch->totalBytes == 0) {
+                AXLOGD("DownloaderEmscripten::onProgress fetch totalBytes unknown, usually caused by unknown content-length header {}", fmt::ptr(fetch));
                 return;
             }
 
