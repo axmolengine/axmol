@@ -25660,6 +25660,103 @@ int lua_ax_base_Director_setRenderView(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Director_setPowerPreference(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setPowerPreference'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::rhi::PowerPreference arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:setPowerPreference");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setPowerPreference'", nullptr);
+            return 0;
+        }
+        cobj->setPowerPreference(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:setPowerPreference",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_setPowerPreference'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Director_getPowerPreference(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getPowerPreference'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getPowerPreference'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getPowerPreference();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getPowerPreference",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getPowerPreference'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Director_getTextureCache(lua_State* tolua_S)
 {
     int argc = 0;
@@ -28550,6 +28647,8 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"setStatsAnchor",lua_ax_base_Director_setStatsAnchor);
         tolua_function(tolua_S,"getRenderView",lua_ax_base_Director_getRenderView);
         tolua_function(tolua_S,"setRenderView",lua_ax_base_Director_setRenderView);
+        tolua_function(tolua_S,"setPowerPreference",lua_ax_base_Director_setPowerPreference);
+        tolua_function(tolua_S,"getPowerPreference",lua_ax_base_Director_getPowerPreference);
         tolua_function(tolua_S,"getTextureCache",lua_ax_base_Director_getTextureCache);
         tolua_function(tolua_S,"isNextDeltaTimeZero",lua_ax_base_Director_isNextDeltaTimeZero);
         tolua_function(tolua_S,"setNextDeltaTimeZero",lua_ax_base_Director_setNextDeltaTimeZero);
