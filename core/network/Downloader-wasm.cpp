@@ -93,7 +93,7 @@ namespace ax { namespace network {
 
         void DownloaderEmscripten::onDataLoad(emscripten_fetch_t *fetch)
         {
-            int64_t size = fetch->numBytes;
+            int64_t size = fetch->totalBytes;
             AXLOGD("DownloaderEmscripten::onDataLoad(fetch: {}, size: {})", fmt::ptr(fetch), size);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
             auto iter = downloader->_taskMap.find(fetch);
@@ -121,7 +121,7 @@ namespace ax { namespace network {
 
         void DownloaderEmscripten::onLoad(emscripten_fetch_t *fetch)
         {
-            uint64_t size = fetch->numBytes;
+            int64_t size = fetch->totalBytes;
             AXLOGD("DownloaderEmscripten::onLoad(fetch: {}, size: {})", fmt::ptr(fetch), size);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
             auto iter = downloader->_taskMap.find(fetch);
@@ -206,9 +206,7 @@ namespace ax { namespace network {
 
         void DownloaderEmscripten::onProgress(emscripten_fetch_t *fetch)
         {
-            int64_t dlTotal = fetch->totalBytes;
-            int64_t dlNow = fetch->dataOffset;
-            AXLOGD("DownloaderEmscripten::onProgress(fetch: {}, dlnow: {}, dltotal: {})", fmt::ptr(fetch), dlNow, dlTotal);
+            AXLOGD("DownloaderEmscripten::onProgress(fetch: {}, dlnow: {}, dltotal: {})", fmt::ptr(fetch), fetch->dataOffset, fetch->totalBytes);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
             auto iter = downloader->_taskMap.find(fetch);
             if (downloader->_taskMap.end() == iter)
