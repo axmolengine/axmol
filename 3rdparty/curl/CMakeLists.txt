@@ -29,3 +29,7 @@ else()
     IMPORTED_LOCATION "${curl_LIB_DIR}/lib${lib_name}.a"
   )
 endif()
+
+if(ANDROID OR LINUX)
+  target_link_libraries(curl INTERFACE OpenSSL::SSL)
+endif()

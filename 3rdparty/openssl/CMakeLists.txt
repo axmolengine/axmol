@@ -55,3 +55,7 @@ set_openssl_sub_target(${target_name})
 # -----sub target 2: crypto-----
 set(target_name OpenSSL::Crypto crypto)
 set_openssl_sub_target(${target_name})
+
+# Ensure OpenSSL::SSL automatically propagates its dependency on OpenSSL::Crypto
+target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
+target_compile_definitions(OpenSSL::SSL INTERFACE OPENSSL_SUPPRESS_DEPRECATED=1)

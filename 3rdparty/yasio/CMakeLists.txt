@@ -1,4 +1,3 @@
-
 set(lib_name yasio)
 set(target_name ${lib_name})
 
@@ -39,4 +38,8 @@ target_compile_definitions(${target_name} PUBLIC YASIO_SSL_BACKEND=1)
 if(kcp_SOURCE_DIR)
   target_compile_definitions(${target_name} PUBLIC YASIO_ENABLE_KCP=1)
   target_include_directories(${target_name} PUBLIC ${kcp_SOURCE_DIR})
+endif()
+
+if(ANDROID OR LINUX)
+    target_link_libraries(yasio INTERFACE OpenSSL::SSL)
 endif()

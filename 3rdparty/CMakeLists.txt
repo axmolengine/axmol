@@ -205,18 +205,7 @@ if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
   ax_add_3rd(jpeg-turbo)
 endif()
 
-add_subdirectory(openssl)
-
-if(ANDROID OR LINUX)
-  target_link_libraries(OpenSSL::SSL INTERFACE OpenSSL::Crypto)
-  target_link_libraries(3rdparty INTERFACE OpenSSL::SSL)
-else()
-  target_link_libraries(3rdparty
-    INTERFACE OpenSSL::Crypto
-    INTERFACE OpenSSL::SSL)
-endif()
-
-target_compile_definitions(3rdparty INTERFACE OPENSSL_SUPPRESS_DEPRECATED=1)
+ax_add_3rd(openssl TARGETS OpenSSL::SSL)
 
 if(AX_WITH_WEBP)
   ax_add_3rd(webp)
@@ -260,10 +249,6 @@ endif()
 
 if(AX_WITH_CURL AND NOT EMSCRIPTEN)
   ax_add_3rd(curl)
-
-  if(ANDROID OR LINUX)
-    target_link_libraries(curl INTERFACE OpenSSL::SSL)
-  endif()
 endif()
 
 if(AX_ENABLE_AUDIO)
