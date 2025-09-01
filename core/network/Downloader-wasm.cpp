@@ -35,10 +35,8 @@ namespace ax { namespace network {
 
         struct DownloadContextEmscripten : public IDownloadContext
         {
-            explicit DownloadContextEmscripten(unsigned int id_)
-            :id(id_)
-            ,bytesReceived(0)
-            ,fetch(NULL)
+            explicit DownloadContextEmscripten(emscripten_fetch_t* fetch_)
+            :fetch(fetch_)
             {
                 AXLOGD("Construct DownloadContextEmscripten: {}", fmt::ptr(this));
             }
@@ -47,10 +45,8 @@ namespace ax { namespace network {
                 AXLOGD("Destruct DownloadContextEmscripten: {}", fmt::ptr(this));
             }
 
-            int bytesReceived;
-            unsigned int id;
             emscripten_fetch_t * fetch;
-            shared_ptr<const DownloadTask> task;    // reference to DownloadTask, when task finish, release
+            shared_ptr<DownloadTask> task;    // reference to DownloadTask, when task finish, release
         };
 
         DownloaderEmscripten::DownloaderEmscripten(const DownloaderHints& hints)
@@ -88,26 +84,26 @@ namespace ax { namespace network {
             emscripten_fetch_t *fetch = emscripten_fetch(&attr, task->requestURL.c_str());
             fetch->userData = this;
 
-            auto context = new DownloadContextEmscripten(fetch->id);
+            auto context = new DownloadContextEmscripten(fetch);
             context->task = task;
 
-            AXLOGD("DownloaderEmscripten::startTask context-id: {}", context->id);
-            _taskMap.emplace(context->id, context);
+            AXLOGD("DownloaderEmscripten::startTask fetch: {}", fmt::ptr(fetch));
+            _taskMap.emplace(fetch, context);
         }
 
         void DownloaderEmscripten::onDataLoad(emscripten_fetch_t *fetch)
         {
-            unsigned int taskId = fetch->id;
-            uint64_t size = fetch->numBytes;
-            AXLOGD("DownloaderEmscripten::onDataLoad(taskId: {}, size: {})", taskId, size);
+            int64_t size = fetch->numBytes;
+            AXLOGD("DownloaderEmscripten::onDataLoad(fetch: {}, size: {})", fmt::ptr(fetch), size);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
-            auto iter = downloader->_taskMap.find(taskId);
+            auto iter = downloader->_taskMap.find(fetch);
             if (downloader->_taskMap.end() == iter)
             {
-                AXLOGD("DownloaderEmscripten::onDataLoad can't find task with id: {}, size: {}", taskId, size);
+                AXLOGD("DownloaderEmscripten::onDataLoad can't find task with fetch: {}, size: {}", fmt::ptr(fetch), size);
                 return;
             }
             auto context = iter->second;
+            updateTaskProgressInfo(*context->task, fetch);
             std::vector<unsigned char> buf(reinterpret_cast<const uint8_t*>(fetch->data), reinterpret_cast<const uint8_t*>(fetch->data) + size);
             emscripten_fetch_close(fetch);
             context->fetch = fetch = NULL;
@@ -125,17 +121,17 @@ namespace ax { namespace network {
 
         void DownloaderEmscripten::onLoad(emscripten_fetch_t *fetch)
         {
-            unsigned int taskId = fetch->id;
             uint64_t size = fetch->numBytes;
-            AXLOGD("DownloaderEmscripten::onLoad(taskId: {}, size: {})", taskId, size);
+            AXLOGD("DownloaderEmscripten::onLoad(fetch: {}, size: {})", fmt::ptr(fetch), size);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
-            auto iter = downloader->_taskMap.find(taskId);
+            auto iter = downloader->_taskMap.find(fetch);
             if (downloader->_taskMap.end() == iter)
             {
-                AXLOGD("DownloaderEmscripten::onLoad can't find task with id: {}, size: {}", taskId, size);
+                AXLOGD("DownloaderEmscripten::onLoad can't find task with fetch: {}, size: {}", fmt::ptr(fetch), size);
                 return;
             }
             auto context = iter->second;
+            updateTaskProgressInfo(*context->task, fetch);
             vector<unsigned char> buf;
             downloader->_taskMap.erase(iter);
 
@@ -210,41 +206,40 @@ namespace ax { namespace network {
 
         void DownloaderEmscripten::onProgress(emscripten_fetch_t *fetch)
         {
-            uint64_t dlTotal = fetch->totalBytes;
-            uint64_t dlNow = fetch->dataOffset;
-            unsigned int taskId = fetch->id;
-            AXLOGD("DownloaderEmscripten::onProgress(taskId: {}, dlnow: {}, dltotal: {})", taskId, dlNow, dlTotal);
+            int64_t dlTotal = fetch->totalBytes;
+            int64_t dlNow = fetch->dataOffset;
+            AXLOGD("DownloaderEmscripten::onProgress(fetch: {}, dlnow: {}, dltotal: {})", fmt::ptr(fetch), dlNow, dlTotal);
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
-            auto iter = downloader->_taskMap.find(taskId);
+            auto iter = downloader->_taskMap.find(fetch);
             if (downloader->_taskMap.end() == iter)
             {
-                AXLOGD("DownloaderEmscripten::onProgress can't find task with id: {}", taskId);
+                AXLOGD("DownloaderEmscripten::onProgress can't find task with fetch: {}", fmt::ptr(fetch));
                 return;
             }
 
             if (dlTotal == 0) {
-                AXLOGD("DownloaderEmscripten::onProgress dlTotal unknown, usually caused by unknown content-length header {}", taskId);
+                AXLOGD("DownloaderEmscripten::onProgress dlTotal unknown, usually caused by unknown content-length header {}", fmt::ptr(fetch));
                 return;
             }
 
             auto context = iter->second;
-            context->bytesReceived = dlNow;
+            updateTaskProgressInfo(*context->task, fetch);
             downloader->onTaskProgress(*context->task);
         }
 
         void DownloaderEmscripten::onError(emscripten_fetch_t *fetch)
         {
-            unsigned int taskId = fetch->id;
-            AXLOGD("DownloaderEmscripten::onLoad(taskId: {})", taskId);
+            AXLOGD("DownloaderEmscripten::onLoad(fetch: {})", fmt::ptr(fetch));
             DownloaderEmscripten* downloader = reinterpret_cast<DownloaderEmscripten*>(fetch->userData);
-            auto iter = downloader->_taskMap.find(taskId);
+            auto iter = downloader->_taskMap.find(fetch);
             if (downloader->_taskMap.end() == iter)
             {
                 emscripten_fetch_close(fetch);
-                AXLOGD("DownloaderEmscripten::onLoad can't find task with id: {}", taskId);
+                AXLOGD("DownloaderEmscripten::onLoad can't find task with fetch: {}", fmt::ptr(fetch));
                 return;
             }
             auto context = iter->second;
+            updateTaskProgressInfo(*context->task, fetch);
             vector<unsigned char> buf;
             downloader->_taskMap.erase(iter);
             downloader->onTaskFinish(*context->task,
@@ -257,6 +252,13 @@ namespace ax { namespace network {
             emscripten_fetch_close(fetch);
             context->fetch = fetch = NULL;
             context->task.reset();
+        }
+
+        void DownloaderEmscripten::updateTaskProgressInfo(DownloadTask& task, emscripten_fetch_t *fetch)
+        {
+            task.progressInfo.bytesReceived      = fetch->numBytes;
+            task.progressInfo.totalBytesReceived = fetch->dataOffset;
+            task.progressInfo.totalBytesExpected = fetch->totalBytes;
         }
     }
 }  // namespace ax::network
