@@ -50,7 +50,7 @@ namespace ax { namespace network
 
         DownloaderHints hints;
 
-        std::unordered_map<unsigned int, DownloadContextEmscripten*> _taskMap;
+        std::unordered_map<emscripten_fetch_t *, DownloadContextEmscripten*> _taskMap;
 
         static void onError(emscripten_fetch_t *fetch);
 
@@ -59,6 +59,8 @@ namespace ax { namespace network
         static void onDataLoad(emscripten_fetch_t *fetch);
 
         static void onLoad(emscripten_fetch_t *fetch);
+
+        static void updateTaskProgressInfo(DownloadTask& task, emscripten_fetch_t *fetch);
     };
 
 }}  // namespace ax::network
