@@ -140,17 +140,13 @@ function  configure_file($infile, $outfile, $vars) {
 
 # build manuals
 
-# collection ver_list
-# doc_ver   2.4         latest
-# ref       v2.4.1      dev/v3
-# 
+# collection ver_map
+# key   (doc_ver)
+# value (head_ref)
 $release_tags = $(git tag)
-$ver_list = [System.Collections.ArrayList]::new()
+$ver_map = @{}
 
-$ver_list.Add([PSCustomObject]@{
-        doc_ver  = 'latest'
-        head_ref = $latest_branch
-    }) | Out-Null
+$ver_map['latest'] = $latest_branch
 
 foreach ($item in $release_tags) {
     if ([Regex]::Match($item, '^v[0-9]+\.[0-9]+\.[0-9]+$').Success) {
@@ -158,17 +154,16 @@ foreach ($item in $release_tags) {
         if ($doc_ver -lt $min_ver) {
             continue
         }
-        $ver_list.Add([PSCustomObject]@{
-                doc_ver  = $doc_ver
-                head_ref = $item
-            }) | Out-Null
+        $ver_map[$doc_ver] = $item
     }
 }
 
-$ver_list.Sort([System.Collections.Generic.Comparer[object]]::Create({
-            param($x, $y)
-            return [System.Collections.Comparer]::Default.Compare($y.doc_ver, $x.doc_ver)
-        }))
+$ver_list = $ver_map.GetEnumerator() | Sort-Object Key -Descending | ForEach-Object {
+    [PSCustomObject]@{
+        doc_ver  = $_.Key
+        head_ref = $_.Value
+    }
+}
 $ver_list | Format-Table doc_ver, head_ref -AutoSize
 
 $menu_ver_list = ($ver_list | ForEach-Object { "'$($_.doc_ver)'" }) -join ','
