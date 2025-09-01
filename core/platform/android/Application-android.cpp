@@ -79,11 +79,13 @@ Application* Application::getInstance()
     return sm_pSharedApplication;
 }
 
+#ifndef AX_CORE_PROFILE
 // @deprecated Use getInstance() instead
 Application* Application::sharedApplication()
 {
     return Application::getInstance();
 }
+#endif
 
 const char* Application::getCurrentLanguageCode()
 {
