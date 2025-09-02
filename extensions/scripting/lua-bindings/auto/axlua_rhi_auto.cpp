@@ -165,21 +165,6 @@ int lua_register_ax_rhi_IndexFormat(lua_State* tolua_S)
 }
 
 
-int lua_register_ax_rhi_VertexStepMode(lua_State* tolua_S)
-{
-    tolua_module(tolua_S, "VertexStepMode", 0);
-    tolua_beginmodule(tolua_S,"VertexStepMode");
-        tolua_constant(tolua_S, "VERTEX", 0);
-        tolua_constant(tolua_S, "INSTANCE", 1);
-    tolua_endmodule(tolua_S);
-
-    auto typeName = typeid(ax::rhi::VertexStepMode).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axrhi.VertexStepMode";
-    g_typeCast[typeName] = "axrhi.VertexStepMode";
-    return 1;
-}
-
-
 int lua_register_ax_rhi_PrimitiveType(lua_State* tolua_S)
 {
     tolua_module(tolua_S, "PrimitiveType", 0);
@@ -1060,53 +1045,6 @@ int lua_ax_rhi_VertexLayout_getHash(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_rhi_VertexLayout_getVertexStepMode(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::rhi::VertexLayout* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axrhi.VertexLayout",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_VertexLayout_getVertexStepMode'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getVertexStepMode'", nullptr);
-            return 0;
-        }
-        int ret = (int)cobj->getVertexStepMode();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.VertexLayout:getVertexStepMode",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getVertexStepMode'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_rhi_VertexLayout_getBuiltinId(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1170,7 +1108,6 @@ int lua_register_ax_rhi_VertexLayout(lua_State* tolua_S)
         tolua_function(tolua_S,"getStride",lua_ax_rhi_VertexLayout_getStride);
         tolua_function(tolua_S,"getInstanceStride",lua_ax_rhi_VertexLayout_getInstanceStride);
         tolua_function(tolua_S,"getHash",lua_ax_rhi_VertexLayout_getHash);
-        tolua_function(tolua_S,"getVertexStepMode",lua_ax_rhi_VertexLayout_getVertexStepMode);
         tolua_function(tolua_S,"getBuiltinId",lua_ax_rhi_VertexLayout_getBuiltinId);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::rhi::VertexLayout).name(); // rtti is literal storage
@@ -3323,7 +3260,6 @@ TOLUA_API int register_all_ax_rhi(lua_State* tolua_S)
     lua_register_ax_rhi_PixelFormat(tolua_S);
     lua_register_ax_rhi_TextureUsage(tolua_S);
     lua_register_ax_rhi_IndexFormat(tolua_S);
-    lua_register_ax_rhi_VertexStepMode(tolua_S);
     lua_register_ax_rhi_PrimitiveType(tolua_S);
     lua_register_ax_rhi_BlendFactor(tolua_S);
     lua_register_ax_rhi_ColorWriteMask(tolua_S);
