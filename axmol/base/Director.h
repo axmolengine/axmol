@@ -178,13 +178,13 @@ public:
     void setRenderView(RenderView* renderView);
 
     /**
-    * Sets GPU Power Preference, only affects d3d render API currently.
-    */
+     * Sets GPU Power Preference, only affects d3d render API currently.
+     */
     void setPowerPreference(PowerPreference value) { _powerPreference = value; }
 
     /**
-    * Gets GPU Power Preference
-    */
+     * Gets GPU Power Preference
+     */
     PowerPreference getPowerPreference() const { return _powerPreference; }
 
     /*

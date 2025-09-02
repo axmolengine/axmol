@@ -72,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     Configuration::getInstance()->loadConfigFile("configs/config-example.plist");
 
     // initialize director
-    auto director   = Director::getInstance();
+    auto director = Director::getInstance();
     director->setPowerPreference(PowerPreference::HighPerformance);
     auto renderView = director->getRenderView();
     if (!renderView)
