@@ -88,16 +88,6 @@ private:
     static IWICImagingFactory* _wicFactory;
 };
 
-template <typename T>
-void SafeRelease(T** ppObj)
-{
-    if (*ppObj != NULL)
-    {
-        (*ppObj)->Release();
-        *ppObj = NULL;
-    }
-}
-
 }  // namespace ax
 
 #endif

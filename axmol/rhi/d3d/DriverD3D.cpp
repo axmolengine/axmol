@@ -31,10 +31,9 @@
 #include "axmol/rhi/d3d/RenderPipelineD3D.h"
 #include "axmol/rhi/d3d/DepthStencilStateD3D.h"
 #include "axmol/rhi/d3d/VertexLayoutD3D.h"
+#include "axmol/rhi/d3d/UtilsD3D.h"
 #include "axmol/base/Logging.h"
 #include "ntcvt/ntcvt.hpp"
-
-#include <wrl/client.h>
 
 #pragma comment(lib, "D3D11.lib")
 #pragma comment(lib, "DXGI.lib")
@@ -110,7 +109,10 @@ std::string_view GetVendorString(uint32_t vendorId)
 DriverBase* DriverBase::getInstance()
 {
     if (!_instance)
+    {
         _instance = new d3d::DriverImpl();
+        static_cast<d3d::DriverImpl*>(_instance)->init();
+    }
 
     return _instance;
 }
@@ -159,74 +161,12 @@ static uint32_t FindMaxMsaaSamples(ID3D11Device* device, DXGI_FORMAT format)
     }
     return best;
 }
-
-static Microsoft::WRL::ComPtr<IDXGIAdapter> ChooseAdapter(PowerPreference pref)
-{
-    if (pref == PowerPreference::Auto)
-        return {};
-
-    Microsoft::WRL::ComPtr<IDXGIFactory1> factory;
-    if (FAILED(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&factory)))
-        return nullptr;
-
-    Microsoft::WRL::ComPtr<IDXGIAdapter> bestAdapter;
-    int bestScore = std::numeric_limits<int>::min();
-
-    UINT i = 0;
-    Microsoft::WRL::ComPtr<IDXGIAdapter> adapter;
-    while (factory->EnumAdapters(i, adapter.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND)
-    {
-        DXGI_ADAPTER_DESC desc;
-        adapter->GetDesc(&desc);
-
-        // Skip Microsoft Basic Render Driver (software adapter)
-        if (desc.VendorId == 0x1414 && desc.DeviceId == 0x8c)
-        {
-            ++i;
-            continue;
-        }
-
-        int score = 0;
-
-        // 1. Base score by GPU type
-        bool isDiscrete = desc.DedicatedVideoMemory > 0;
-        if (isDiscrete)
-            score += 1000;  // Higher base score for discrete GPU
-        else
-            score += 500;  // Lower base score for integrated GPU
-
-        // 2. Adjust score based on PowerPreference
-        if (pref == PowerPreference::HighPerformance && isDiscrete)
-            score += 500;
-        else if (pref == PowerPreference::LowPower && !isDiscrete)
-            score += 500;
-
-        // 3. Adjust score based on VRAM size
-        if (pref == PowerPreference::HighPerformance)
-            score += static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));  // More VRAM = higher score
-        else if (pref == PowerPreference::LowPower)
-            score -= static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));  // Less VRAM = higher score
-
-        // Keep the adapter with the highest score
-        if (score > bestScore)
-        {
-            bestScore   = score;
-            bestAdapter = adapter;
-        }
-
-        ++i;
-    }
-
-    return bestAdapter;
-}
 }  // namespace
 
-DriverImpl::DriverImpl()
-{
-    // Choose Adapter
-    const auto powerPreferrence = Director::getInstance()->getPowerPreference();
-    auto requestAdapter         = ChooseAdapter(powerPreferrence);
+DriverImpl::DriverImpl() {}
 
+void DriverImpl::init()
+{
     UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
 #if defined(_DEBUG)
@@ -238,8 +178,10 @@ DriverImpl::DriverImpl()
         D3D_FEATURE_LEVEL_11_0,
     };
 
-    auto requestDriverType = requestAdapter ? D3D_DRIVER_TYPE_UNKNOWN : D3D_DRIVER_TYPE_HARDWARE;
-    HRESULT hr             = D3D11CreateDevice(requestAdapter.Get(),      // Adapter
+    initializeAdapter();
+
+    auto requestDriverType = _dxgiAdapter ? D3D_DRIVER_TYPE_UNKNOWN : D3D_DRIVER_TYPE_HARDWARE;
+    HRESULT hr             = D3D11CreateDevice(_dxgiAdapter.Get(),        // Adapter
                                                requestDriverType,         // Driver Type
                                                nullptr,                   // Software
                                                createDeviceFlags,         // Flags
@@ -266,28 +208,32 @@ DriverImpl::DriverImpl()
                                &_featureLevel,            // Feature Level
                                &_context);
     }
+
     if (FAILED(hr))
+        fatalError("D3D11CreateDevice"sv, hr);
+
+    if (!_dxgiAdapter)
     {
-        auto msg = fmt::format("D3D11 required, please upgrade the driver of your video card.");
-        AXLOGE("{}", msg);
-        messageBox(msg.c_str(), "Failed to create D3D11 device.");
-        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
+        ComPtr<IDXGIDevice> dxgiDevice;
+        AX_D3D_FAST_FAIL(
+            hr = _device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgiDevice.GetAddressOf())));
+
+        AX_D3D_FAST_FAIL(hr = dxgiDevice->GetAdapter(&_dxgiAdapter));
     }
 
-    Microsoft::WRL::ComPtr<IDXGIDevice> dxgiDevice;
-    _device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgiDevice.GetAddressOf()));
+    if (!_dxgiFactory)
+    {
+        AX_D3D_FAST_FAIL(hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.GetAddressOf()));
+    }
 
-    Microsoft::WRL::ComPtr<IDXGIAdapter> dxgiAdapter;
-    dxgiDevice->GetAdapter(&dxgiAdapter);
-
-    dxgiAdapter->GetDesc(&_adapterDesc);
+    _dxgiAdapter->GetDesc(&_adapterDesc);
 
     LARGE_INTEGER version;
-    hr = dxgiAdapter->CheckInterfaceSupport(__uuidof(IDXGIDevice), &version);
+    hr = _dxgiAdapter->CheckInterfaceSupport(__uuidof(IDXGIDevice), &version);
     if (FAILED(hr))
     {
         _driverVersion.reset();
-        AXLOGE("Error querying driver version from DXGI Adapter.");
+        AXLOGW("Error querying driver version from DXGI Adapter.");
     }
     else
     {
@@ -309,8 +255,71 @@ DriverImpl::DriverImpl()
 
 DriverImpl::~DriverImpl()
 {
+    _dxgiFactory.Reset();
+    _dxgiAdapter.Reset();
     SafeRelease(_context);
     SafeRelease(_device);
+}
+
+void DriverImpl::initializeAdapter()
+{
+    const auto powerPreferrence = Director::getInstance()->getPowerPreference();
+
+    if (powerPreferrence == PowerPreference::Auto)
+        return;
+
+    if (FAILED(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&_dxgiFactory)))
+        return;
+
+    ComPtr<IDXGIAdapter> bestAdapter;
+    int bestScore = std::numeric_limits<int>::min();
+
+    UINT i = 0;
+    ComPtr<IDXGIAdapter> adapter;
+    while (_dxgiFactory->EnumAdapters(i, adapter.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND)
+    {
+        DXGI_ADAPTER_DESC desc;
+        adapter->GetDesc(&desc);
+
+        // Skip Microsoft Basic Render Driver (software adapter)
+        if (desc.VendorId == 0x1414 && desc.DeviceId == 0x8c)
+        {
+            ++i;
+            continue;
+        }
+
+        int score = 0;
+
+        // 1. Base score by GPU type
+        bool isDiscrete = desc.DedicatedVideoMemory > 0;
+        if (isDiscrete)
+            score += 1000;  // Higher base score for discrete GPU
+        else
+            score += 500;  // Lower base score for integrated GPU
+
+        // 2. Adjust score based on PowerPreference
+        if (powerPreferrence == PowerPreference::HighPerformance && isDiscrete)
+            score += 500;
+        else if (powerPreferrence == PowerPreference::LowPower && !isDiscrete)
+            score += 500;
+
+        // 3. Adjust score based on VRAM size
+        if (powerPreferrence == PowerPreference::HighPerformance)
+            score += static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));  // More VRAM = higher score
+        else if (powerPreferrence == PowerPreference::LowPower)
+            score -= static_cast<int>(desc.DedicatedVideoMemory / (1024 * 1024));  // Less VRAM = higher score
+
+        // Keep the adapter with the highest score
+        if (score > bestScore)
+        {
+            bestScore   = score;
+            bestAdapter = adapter;
+        }
+
+        ++i;
+    }
+
+    _dxgiAdapter = std::move(bestAdapter);
 }
 
 CommandBuffer* DriverImpl::createCommandBuffer(void* presentTarget)
@@ -444,7 +453,6 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 
 void DriverImpl::destroySampler(SamplerHandle& h)
 {
-
     SafeRelease(reinterpret_cast<ID3D11SamplerState*&>(h));
 }
 

@@ -98,7 +98,7 @@ namespace ax
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 struct PresentTarget
 {
-    IUnknown* swapChainPanel{nullptr};
+    void* surface{nullptr};
     float width{1};
     float height{1};
 };

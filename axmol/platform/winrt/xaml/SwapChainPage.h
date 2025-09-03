@@ -116,13 +116,6 @@ private:
     // must call at UI thread
     void UpdateCanvasSize();
 
-    // !!! Ensure Renderer available
-    // - opengl : must call at the render thread, otherwise rhi::gl::DriverImpl init will fail due to
-    //            eglContext makeCurrent not called
-    // - d3d    : must call the main UI thread; otherwise SetSwapChain will fail with RPC_E_WRONG_THREAD
-    //            and the renderer will display only a black frame.
-    void EnsureRenderer(const winrt::Windows::UI::Core::CoreDispatcher& dispatcher);
-
     std::condition_variable m_sleepCondition;
 
     Concurrency::concurrent_queue<std::function<void()>> m_operations;

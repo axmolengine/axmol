@@ -21,37 +21,31 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+
 #pragma once
 
-#include "axmol/rhi/RenderPipeline.h"
-#include "axmol/platform/win32/ComPtr.h"
+#include <wrl/client.h>
 
-#include <d3d11.h>
-
-namespace ax::rhi::d3d
+namespace ax
 {
-/**
- * @addtogroup _d3d
- * @{
- */
+using Microsoft::WRL::ComPtr;
 
-/**
- * @brief A D3D11-based Shader RenderPipeline implementation
- *
- */
-class RenderPipelineImpl : public RenderPipeline
+template <typename T, unsigned int N>
+inline void SafeRelease(T (&resourceBlock)[N])
 {
-public:
-    RenderPipelineImpl(ID3D11Device* device, ID3D11DeviceContext* context) : _device(device), _context(context) {}
-    void update(const RenderTarget*, const PipelineDesc& desc) override;
+    for (unsigned int i = 0; i < N; i++)
+    {
+        SafeRelease(resourceBlock[i]);
+    }
+}
 
-private:
-    ID3D11Device* _device         = nullptr;
-    ID3D11DeviceContext* _context = nullptr;
-
-    axstd::hash_map<uint32_t, ComPtr<ID3D11BlendState>> _blendCache;
-};
-
-/** @} */
-
-}  // namespace ax::rhi::d3d
+template <typename T>
+inline void SafeRelease(T& resource)
+{
+    if (resource)
+    {
+        resource->Release();
+        resource = nullptr;
+    }
+}
+}

@@ -1,7 +1,5 @@
 /****************************************************************************
-Copyright (c) 2011      Laschweinski
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
@@ -25,25 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "axmol/platform/PlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#pragma once
 
-#    include "axmol/platform/Common.h"
-#    include "axmol/platform/wasm/StdC-wasm.h"
-#    include "axmol/base/Logging.h"
-#    include <emscripten/emscripten.h>
+#import <Foundation/NSString.h>
 
 namespace ax
 {
-
-AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
+static NSString* svtons(std::string_view str)
 {
-    auto pszMsg = msg.data();
-    auto pszTitle = title.data();
-    EM_ASM_ARGS({ window.alert(UTF8ToString($0) + ": " + UTF8ToString($1)); }, pszTitle, pszTitle);
-    return AlertResult::None;
+    return !str.empty() ? [[NSString alloc] initWithBytes:str.data() length:str.length() encoding:NSUTF8StringEncoding]
+                        : nil;
 }
-
 }  // namespace ax
-
-#endif  //  AX_TARGET_PLATFORM == AX_PLATFORM_WASM

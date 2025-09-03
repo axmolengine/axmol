@@ -30,6 +30,7 @@ obtained from https://directxtk.codeplex.com
 ****************************************************************************/
 #include "axmol/platform/winrt/WICImageLoader-winrt.h"
 #include "axmol/platform/winrt/WinRTUtils.h"
+#include "axmol/platform/win32/ComPtr.h"
 #include "ntcvt/ntcvt.hpp"
 
 namespace ax
@@ -254,8 +255,8 @@ bool WICImageLoader::decodeImageData(const uint8_t* blob, size_t size)
 
     bRet = processImage(pDecoder);
 
-    SafeRelease(&pWicStream);
-    SafeRelease(&pDecoder);
+    SafeRelease(pWicStream);
+    SafeRelease(pDecoder);
 
     return bRet;
 }
@@ -315,8 +316,8 @@ bool WICImageLoader::processImage(IWICBitmapDecoder* pDecoder)
         }
     }
 
-    SafeRelease(&pFrame);
-    SafeRelease(&pConv);
+    SafeRelease(pFrame);
+    SafeRelease(pConv);
     return SUCCEEDED(hr);
 }
 
@@ -408,8 +409,8 @@ size_t WICImageLoader::getBitsPerPixel(WICPixelFormatGUID format)
         hr = pPInfo->GetBitsPerPixel(&bpp);
     }
 
-    SafeRelease(&pCInfo);
-    SafeRelease(&pPInfo);
+    SafeRelease(pCInfo);
+    SafeRelease(pPInfo);
     return bpp;
 }
 
@@ -530,11 +531,11 @@ bool WICImageLoader::encodeImageData(std::string_view path,
         hr = pEnc->Commit();
     }
 
-    SafeRelease(&outStream);
-    SafeRelease(&pStream);
-    SafeRelease(&pEnc);
-    SafeRelease(&pFrame);
-    SafeRelease(&pProp);
+    SafeRelease(outStream);
+    SafeRelease(pStream);
+    SafeRelease(pEnc);
+    SafeRelease(pFrame);
+    SafeRelease(pProp);
     return SUCCEEDED(hr);
 }
 
@@ -557,7 +558,7 @@ IWICImagingFactory* WICImageLoader::getWICFactory()
 
         if (FAILED(hr))
         {
-            SafeRelease(&_wicFactory);
+            SafeRelease(_wicFactory);
         }
     }
 

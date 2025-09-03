@@ -35,6 +35,12 @@
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 #    include <windows.ui.xaml.media.dxinterop.h>
+#    include <windows.ui.xaml.controls.h>
+#    include <windows.ui.core.h>
+#    include <windows.foundation.h>
+#    include <wrl/event.h>
+#    include <wrl/implements.h>
+
 #endif
 
 namespace ax::rhi::d3d
@@ -91,6 +97,95 @@ static BOOL _axmolIsWindows10BuildOrGreaterWin32(WORD build)
         (PFN_RtlVerifyVersionInfo)GetProcAddress(GetModuleHandleW(L"ntdll"), "RtlVerifyVersionInfo");
     return RtlVerifyVersionInfo(&osvi, mask, cond) == 0;
 }
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+
+using ICoreDispatcher    = ABI::Windows::UI::Core::ICoreDispatcher;
+using IDispatchedHandler = ABI::Windows::UI::Core::IDispatchedHandler;
+using IAsyncAction       = ABI::Windows::Foundation::IAsyncAction;
+using ISwapChainPanel    = ABI::Windows::UI::Xaml::Controls::ISwapChainPanel;
+using IDependencyObject  = ABI::Windows::UI::Xaml::IDependencyObject;
+
+// Creates a COM/WinRT callback object for the specified interface type (_Ty)
+// that is implemented with Free‑Threaded Marshaler (FtmBase) support.
+//
+// This helper wraps Microsoft::WRL::Callback with an Implements<> type that
+// includes FtmBase, making the resulting object agile across threads.
+// This is especially useful when passing the handler to APIs like
+// ICoreDispatcher::RunAsync, which may invoke the callback on a different thread.
+//
+// Template parameters:
+//   _Ty  - The COM/WinRT interface type to implement (e.g. ABI::Windows::UI::Core::IDispatchedHandler)
+//   _Fty - The callable type (lambda, functor, etc.) providing the implementation
+//
+// Parameters:
+//   func - A callable object implementing the interface's Invoke method
+//
+// Returns:
+//   A Microsoft::WRL::ComPtr-compatible callback object implementing _Ty with FTM support.
+template <typename _Ty, typename _Fty>
+static auto makeFtmHandler(_Fty&& func)
+{
+    using Impl = Microsoft::WRL::Implements<Microsoft::WRL::RuntimeClassFlags<Microsoft::WRL::ClassicCom>, _Ty,
+                                            Microsoft::WRL::FtmBase>;
+    return Microsoft::WRL::Callback<Impl>(std::forward<_Fty>(func));
+}
+
+template <typename _Fty>
+static HRESULT runOnUIThread(const ComPtr<ICoreDispatcher>& dispatcher, _Fty&& func)
+{
+    using namespace ABI::Windows::UI::Core;
+
+    boolean hasThreadAccess = FALSE;
+    HRESULT hr              = dispatcher->get_HasThreadAccess(&hasThreadAccess);
+    if (FAILED(hr))
+        return hr;
+
+    if (hasThreadAccess)
+    {
+        return func();
+    }
+
+    struct AutoHandle
+    {
+        explicit AutoHandle(HANDLE h) : _h(h) {}
+        ~AutoHandle()
+        {
+            if (_h)
+                ::CloseHandle(_h);
+        }
+        HANDLE get() const { return _h; }
+        explicit operator bool() const { return _h != nullptr; }
+
+    private:
+        HANDLE _h;
+    };
+
+    AutoHandle waitEvent{::CreateEventExW(nullptr, nullptr, CREATE_EVENT_MANUAL_RESET, EVENT_ALL_ACCESS)};
+    if (!waitEvent)
+        return E_FAIL;
+
+    HRESULT hr2 = E_FAIL;
+
+    auto handler = makeFtmHandler<IDispatchedHandler>([&]() -> HRESULT {
+        hr2 = func();
+        ::SetEvent(waitEvent.get());
+        return S_OK;
+    });
+
+    ComPtr<IAsyncAction> asyncAction;
+    hr = dispatcher->RunAsync(CoreDispatcherPriority_Normal, handler.Get(), &asyncAction);
+    if (FAILED(hr))
+        return hr;
+
+    auto waitResult = ::WaitForSingleObjectEx(waitEvent.get(), 10 * 1000, TRUE);
+    if (waitResult != WAIT_OBJECT_0)
+    {
+        std::terminate();
+        return E_FAIL;
+    }
+
+    return hr2;
+}
 #endif
 
 static constexpr DXGI_FORMAT _AX_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -102,20 +197,14 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* presentTarget)
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
 
-    HRESULT hr = S_OK;
-
-    ComPtr<IDXGIDevice> dxgiDevice;
-    device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.GetAddressOf());
-
-    ComPtr<IDXGIAdapter> dxgiAdapter;
-    dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf());
-
-    ComPtr<IDXGIFactory> factory;
-    dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)factory.GetAddressOf());
+    auto& factory = driver->getDXGIFactory();
+    auto& adapter = driver->getDXGIAdapter();
 
     // create swapchain
     ComPtr<IDXGISwapChain> swapChain;
     ComPtr<IDXGIFactory2> factory2;
+
+    HRESULT hr = factory->QueryInterface(IID_PPV_ARGS(&factory2));
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     DXGI_SWAP_EFFECT swapEffect = DXGI_SWAP_EFFECT_DISCARD;  // Default is blt mode
@@ -126,7 +215,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* presentTarget)
     _screenWidth  = clientRect.right - clientRect.left;
     _screenHeight = clientRect.bottom - clientRect.top;
 
-    if (SUCCEEDED(factory->QueryInterface(IID_PPV_ARGS(&factory2))))
+    if (factory2)
     {
         // DXGI 1.2+ support Flip mode
         DXGI_SWAP_CHAIN_DESC1 desc1 = {};
@@ -179,65 +268,82 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* presentTarget)
         hr = factory->CreateSwapChain(device, &scDesc, &swapChain);
     }
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP
-    auto presentDesc = static_cast<ax::PresentTarget*>(presentTarget);
-
-    if (SUCCEEDED(factory->QueryInterface(IID_PPV_ARGS(&factory2))))
+    if (factory2)
     {
-        // The swapchain size can't be zero for WinRT, maybe SwapChainPanel::ActualWidth/Height * DPI
-        _screenWidth  = static_cast<UINT>(presentDesc->width);
-        _screenHeight = static_cast<UINT>(presentDesc->height);
+        do
+        {
+            auto presentDesc = static_cast<ax::PresentTarget*>(presentTarget);
 
-        DXGI_SWAP_CHAIN_DESC1 desc1 = {};
-        desc1.Width                 = _screenWidth;
-        desc1.Height                = _screenHeight;
-        desc1.Format                = _AX_SWAPCHAIN_FORMAT;
-        desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
-        desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        desc1.BufferCount           = 2;
-        desc1.SwapEffect            = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;  // UWP recommanded
-        desc1.Scaling               = DXGI_SCALING_STRETCH;
-        desc1.AlphaMode             = DXGI_ALPHA_MODE_IGNORE;
+            // The swapchain size can't be zero for WinRT, maybe SwapChainPanel::ActualWidth/Height * DPI
+            _screenWidth  = static_cast<UINT>(presentDesc->width);
+            _screenHeight = static_cast<UINT>(presentDesc->height);
 
-        ComPtr<IDXGISwapChain1> swapChain1;
-        hr = factory2->CreateSwapChainForComposition(device, &desc1, nullptr, &swapChain1);
-        assert(SUCCEEDED(hr) && "CreateSwapChainForComposition fail");
-        if (FAILED(hr))
-            return;
+            DXGI_SWAP_CHAIN_DESC1 desc1 = {};
+            desc1.Width                 = _screenWidth;
+            desc1.Height                = _screenHeight;
+            desc1.Format                = _AX_SWAPCHAIN_FORMAT;
+            desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
+            desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            desc1.BufferCount           = 2;
+            desc1.SwapEffect            = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;  // UWP recommanded
+            desc1.Scaling               = DXGI_SCALING_STRETCH;
+            desc1.AlphaMode             = DXGI_ALPHA_MODE_IGNORE;
 
-        // bind ISwapChainPanelNative to xaml control
-        ComPtr<ISwapChainPanelNative> panelNative;
-        hr = presentDesc->swapChainPanel->QueryInterface(IID_PPV_ARGS(&panelNative));
-        assert(SUCCEEDED(hr) && "Query ISwapChainPanelNative fail");
-        if (FAILED(hr))
-            return;
+            ComPtr<IDXGISwapChain1> swapChain1;
+            hr = factory2->CreateSwapChainForComposition(device, &desc1, nullptr, &swapChain1);
+            AX_BREAK_IF(FAILED(hr));
 
-        auto director = Director::getInstance();
-        hr            = panelNative->SetSwapChain(swapChain1.Get());
-        assert(SUCCEEDED(hr) && "SetSwapChain fail");
-        if (FAILED(hr))
-            return;
+            // ISwapChainPanel
+            ComPtr<IUnknown> surfaceHold = reinterpret_cast<IUnknown*>(presentDesc->surface);
+            ComPtr<ISwapChainPanel> swapChainPanel;
+            hr = surfaceHold.As(&swapChainPanel);
+            AX_BREAK_IF(FAILED(hr));
 
-        swapChain1.As(&swapChain);
+            // dispatcher
+            ComPtr<IDependencyObject> swapChainPanelDependencyObject;
+            hr = swapChainPanel.As(&swapChainPanelDependencyObject);
+            AX_BREAK_IF(FAILED(hr));
 
-        DXGI_SWAP_CHAIN_DESC1 actualDesc = {};
-        swapChain1->GetDesc1(&actualDesc);
+            ComPtr<ICoreDispatcher> dispatcher;
+            hr = swapChainPanelDependencyObject->get_Dispatcher(dispatcher.GetAddressOf());
+            AX_BREAK_IF(FAILED(hr));
 
-        _screenWidth  = actualDesc.Width;
-        _screenHeight = actualDesc.Height;
+            // ISwapChainPanelNative
+            ComPtr<ISwapChainPanelNative> swapChainPanelNative;
+            hr = swapChainPanel.As(&swapChainPanelNative);
+            AX_BREAK_IF(FAILED(hr));
 
-        /* maybe: when ui extent changes
-        auto panel = reinterpret_cast<winrt::Windows::UI::Xaml::Controls::SwapChainPanel*>(outputContext);
-        float logicalWidth  = panel->ActualWidth();
-        float logicalHeight = panel->ActualHeight();
+            hr = runOnUIThread(dispatcher, [swapChainPanelNative, swapChain1] {
+                return swapChainPanelNative->SetSwapChain(swapChain1.Get());
+            });
 
-        auto displayInfo = winrt::Windows::Graphics::Display::DisplayInformation::GetForCurrentView();
-        float dpi = displayInfo.LogicalDpi();
+            AX_BREAK_IF(FAILED(hr));
 
-        _screenWidth  = static_cast<uint32_t>(logicalWidth  * dpi / 96.0f + 0.5f);
-        _screenHeight = static_cast<uint32_t>(logicalHeight * dpi / 96.0f + 0.5f);
-        */
+            swapChain1.As(&swapChain);
+
+            DXGI_SWAP_CHAIN_DESC1 actualDesc = {};
+            swapChain1->GetDesc1(&actualDesc);
+
+            _screenWidth  = actualDesc.Width;
+            _screenHeight = actualDesc.Height;
+
+            /* maybe: when ui extent changes
+            auto panel = reinterpret_cast<winrt::Windows::UI::Xaml::Controls::SwapChainPanel*>(outputContext);
+            float logicalWidth  = panel->ActualWidth();
+            float logicalHeight = panel->ActualHeight();
+
+            auto displayInfo = winrt::Windows::Graphics::Display::DisplayInformation::GetForCurrentView();
+            float dpi = displayInfo.LogicalDpi();
+
+            _screenWidth  = static_cast<uint32_t>(logicalWidth  * dpi / 96.0f + 0.5f);
+            _screenHeight = static_cast<uint32_t>(logicalHeight * dpi / 96.0f + 0.5f);
+            */
+        } while (false);
     }
 #endif
+
+    if (FAILED(hr))
+        fatalError("CreateSwapChain", hr);
 
     _swapChain = swapChain.Detach();
 
@@ -358,8 +464,8 @@ void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
 void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     D3D11_VIEWPORT viewport = {};
-    viewport.TopLeftX       = x;
-    viewport.TopLeftY       = (int)(_renderTargetHeight - y - h);
+    viewport.TopLeftX       = static_cast<FLOAT>(x);
+    viewport.TopLeftY       = static_cast<FLOAT>(_renderTargetHeight - y - h);
     viewport.Width          = static_cast<FLOAT>(w);
     viewport.Height         = static_cast<FLOAT>(h);
     viewport.MinDepth       = 0.0f;
@@ -643,8 +749,8 @@ void CommandBufferImpl::prepareDrawing()
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
         auto& texs     = bindingSet.texs;
-        auto arraySize = texs.size();
-        for (size_t k = 0; k < arraySize; ++k)
+        auto arraySize = static_cast<UINT>(texs.size());
+        for (UINT k = 0; k < arraySize; ++k)
         {
             const auto slot  = bindingIndex + k;
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);

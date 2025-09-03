@@ -120,7 +120,7 @@ public:
     void QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
     void QueueEvent(std::shared_ptr<InputEvent>& event);
 
-    bool ShowMessageBox(const winrt::hstring& title, const winrt::hstring& message);
+    AlertResult ShowAlertDialog(const winrt::hstring& title, const winrt::hstring& message, AlertStyle style);
 
     int Run();
     void Render();

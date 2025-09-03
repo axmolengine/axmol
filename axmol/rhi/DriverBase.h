@@ -33,8 +33,6 @@
 
 #include "axmol/base/Object.h"
 
-#include <string>
-
 namespace ax::rhi
 {
 

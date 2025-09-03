@@ -36,12 +36,12 @@ THE SOFTWARE.
 namespace ax
 {
 
-void messageBox(const char* pszMsg, const char* pszTitle)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle style)
 {
     // Create the message dialog and set its content
-    auto message = PlatformStringFromString(pszMsg);
-    auto title   = PlatformStringFromString(pszTitle);
-    RenderViewImpl::sharedRenderView()->ShowMessageBox(title, message);
+    auto hmsg   = PlatformStringFromString(msg);
+    auto htitle = PlatformStringFromString(title);
+    return RenderViewImpl::sharedRenderView()->ShowAlertDialog(hmsg, htitle, style);
 }
 
 }  // namespace ax

@@ -33,11 +33,33 @@ namespace ax
 
 #define MAX_LEN (ax::kMaxLogLen + 1)
 
-void messageBox(const char* pszMsg, const char* pszTitle)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle style)
 {
-    std::wstring wsMsg   = ntcvt::from_chars(pszMsg);
-    std::wstring wsTitle = ntcvt::from_chars(pszTitle);
-    MessageBoxW(nullptr, wsMsg.c_str(), wsTitle.c_str(), MB_OK | MB_TOPMOST);
+    std::wstring wsMsg       = ntcvt::from_chars(msg);
+    std::wstring wsTitle     = ntcvt::from_chars(title);
+    UINT flags               = MB_TOPMOST;
+
+    // level
+    if (bitmask::any(style, AlertStyle::IconError))
+        flags |= MB_ICONERROR;
+    else if (bitmask::any(style, AlertStyle::IconWarning))
+        flags |= MB_ICONWARNING;
+    else if (bitmask::any(style, AlertStyle::IconInfo))
+        flags |= MB_ICONINFORMATION;
+
+    // buttons
+    if (bitmask::any(style, AlertStyle::OkCancel))
+        flags |= MB_OKCANCEL;
+    else if (bitmask::any(style, AlertStyle::YesNo))
+        flags |= MB_YESNO;
+    else if (bitmask::any(style, AlertStyle::YesNoCancel))
+        flags |= MB_YESNOCANCEL;
+    else if (bitmask::any(style, AlertStyle::Ok))
+        flags |= MB_OK;
+
+    ::MessageBoxW(nullptr, wsMsg.c_str(), wsTitle.c_str(), flags);
+
+    return AlertResult::Ok;
 }
 
 }  // namespace ax

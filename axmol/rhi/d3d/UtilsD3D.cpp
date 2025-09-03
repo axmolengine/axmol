@@ -36,14 +36,14 @@
 
 #include "axmol/rhi/d3d/UtilsD3D.h"
 #include "axmol/rhi/d3d/DriverD3D.h"
-#include <dxgiformat.h>
-#include <wrl/client.h>
+#include "axmol/rhi/RHIUtils.h"
 
 #include "axmol/base/Logging.h"
 
-#include "axmol/rhi/RHIUtils.h"
+#include "ntcvt/ntcvt.hpp"
 
-using namespace Microsoft::WRL;
+#include <dxgiformat.h>
+#include <comdef.h>
 
 namespace ax::rhi::d3d
 {
@@ -204,9 +204,17 @@ TextureImpl* UtilsD3D::getDefaultColorAttachment()
 {
     return s_defaultColorAttachment;
 }
+
 TextureImpl* UtilsD3D::getDefaultDepthStencilAttachment()
 {
     return s_defaultDepthStencilAttachment;
+}
+
+void UtilsD3D::fatalError(std::string_view op, HRESULT hr) {
+    _com_error err(hr, nullptr);
+    auto msg = fmt::format("{}:{}", op, ntcvt::from_chars(err.ErrorMessage()));
+    showAlert(msg, "Axmol: Fatal Error", AlertStyle::IconError | AlertStyle::RequireSync);
+    utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
 }
 
 }  // namespace ax::rhi::d3d

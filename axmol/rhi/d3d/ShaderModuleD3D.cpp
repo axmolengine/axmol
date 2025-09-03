@@ -23,7 +23,7 @@
  ****************************************************************************/
 // refer: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics
 #include "axmol/rhi/d3d/ShaderModuleD3D.h"
-#include <wrl/client.h>
+#include "axmol/platform/win32/ComPtr.h"
 #include "axmol/base/Logging.h"
 #include "yasio/ibstream.hpp"
 #include "axmol/rhi/axslc-spec.h"
@@ -199,7 +199,7 @@ void ShaderModuleImpl::compileShader(ID3D11Device* device, ShaderStage stage, st
         assert(ibs.eof());
     } while (false);  // iterator stages, current only 1 stage
 
-    Microsoft::WRL::ComPtr<ID3DBlob> errorBlob;
+    ComPtr<ID3DBlob> errorBlob;
     UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2 | D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined(_DEBUG)
     flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;

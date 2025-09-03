@@ -243,7 +243,7 @@ struct PrivateVideoContext
                     .pixelFormat = PixelFormat::BGRA8,
                 },
                 Texture2D::DEFAULT_SLICE_DATA);
-            _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_BGR32);
+            _vrender->setProgramState(rhi::ProgramType::VIDEO_TEXTURE_RGB32);
             _renderFrameFunc = [this](const MEVideoFrame& frame) {
                 if (_vtexture)
                 {

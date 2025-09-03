@@ -25,7 +25,6 @@
 
 #pragma once
 
-#include <array>
 #include "axmol/rhi/Texture.h"
 #include "axmol/platform/GL.h"
 #include "axmol/base/EventListenerCustom.h"

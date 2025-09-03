@@ -28,7 +28,6 @@
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/metal/DriverMTL.h"
 #import <Metal/Metal.h>
-#include <array>
 
 namespace ax::rhi::mtl
 {

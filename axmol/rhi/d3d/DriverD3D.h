@@ -24,8 +24,12 @@
 #pragma once
 
 #include "axmol/rhi/DriverBase.h"
-#include <optional>
+#include "axmol/platform/win32/ComPtr.h"
+
 #include <d3d11.h>
+#include <dxgi.h>
+
+#include <optional>
 
 namespace ax::rhi::d3d
 {
@@ -59,6 +63,8 @@ public:
     /// @name Constructor, Destructor and Initializers
     DriverImpl();
     ~DriverImpl();
+
+    void init();
 
     /// @name Setters & Getters
     /**
@@ -154,8 +160,10 @@ public:
     bool checkForFeatureSupported(FeatureType feature) override;
 
     inline ID3D11Device* getDevice() const { return _device; }
-
     inline ID3D11DeviceContext* getContext() const { return _context; }
+
+    const ComPtr<IDXGIFactory>& getDXGIFactory() const { return _dxgiFactory; }
+    const ComPtr<IDXGIAdapter> getDXGIAdapter() const { return _dxgiAdapter; }
 
     static bool supportD24S8() { return _isDepth24Stencil8PixelFormatSupported; }
 
@@ -171,10 +179,15 @@ protected:
     void destroySampler(SamplerHandle& h) override;
 
 private:
+    void initializeAdapter();
+
     ID3D11Device* _device         = nullptr;
     ID3D11DeviceContext* _context = nullptr;
 
-    DXGI_ADAPTER_DESC _adapterDesc;
+    ComPtr<IDXGIFactory> _dxgiFactory;
+    ComPtr<IDXGIAdapter> _dxgiAdapter;
+
+    DXGI_ADAPTER_DESC _adapterDesc{};
 
     // FeatureSet _featureSet = FeatureSet::Unknown;
     static bool _isDepth24Stencil8PixelFormatSupported;

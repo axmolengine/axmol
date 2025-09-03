@@ -25,12 +25,10 @@
 
 #include "axmol/rhi/CommandBuffer.h"
 #include "axmol/rhi/d3d/DriverD3D.h"
-#include <wrl/client.h>
+#include "axmol/platform/win32/ComPtr.h"
 
 namespace ax::rhi::d3d
 {
-using namespace Microsoft::WRL;
-
 /**
  * @addtogroup _d3d
  * @{

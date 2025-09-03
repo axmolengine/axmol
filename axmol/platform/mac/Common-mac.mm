@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -24,6 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/platform/Common.h"
+#include "axmol/platform/apple/FoundationBridge.h"
 
 #include "axmol/base/Director.h"
 
@@ -34,11 +36,11 @@ THE SOFTWARE.
 namespace ax
 {
 
-// ios no MessageBox, use log instead
-void messageBox(const char* msg, const char* title)
+AlertResult showAlert(std::string_view msg, std::string_view title，AlertStyle)
 {
-    NSString* tmpTitle = (title) ? [NSString stringWithUTF8String:title] : nil;
-    NSString* tmpMsg   = (msg) ? [NSString stringWithUTF8String:msg] : nil;
+
+    NSString* tmpTitle = sv2ns(title);
+    NSString* tmpMsg   = sv2ns(msg);
 
     NSAlert* alert = [[[NSAlert alloc] init] autorelease];
     [alert addButtonWithTitle:@"OK"];
@@ -49,6 +51,8 @@ void messageBox(const char* msg, const char* title)
     auto renderView = Director::getInstance()->getRenderView();
     id window       = (id)renderView->getCocoaWindow();
     [alert beginSheetModalForWindow:window completionHandler:nil];
+
+    return AlertResult::None;
 }
 
 }  // namespace ax

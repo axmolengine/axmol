@@ -26,6 +26,7 @@
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/PixelBufferDesc.h"
 #include "axmol/rhi/d3d/TextureD3D.h"
+#include <utility>
 #include <dxgi.h>
 
 namespace ax::rhi::d3d
@@ -45,35 +46,27 @@ struct PixelFormatInfo
     DXGI_FORMAT fmtSrgb;  // fmtSrgb
 };
 
-struct UtilsD3D
+inline namespace UtilsD3D
 {
-    static const PixelFormatInfo* toDxgiFormatInfo(PixelFormat pf);
+const PixelFormatInfo* toDxgiFormatInfo(PixelFormat pf);
 
-    static void updateDefaultRenderTargetAttachments(DriverImpl*, IDXGISwapChain*);
+void updateDefaultRenderTargetAttachments(DriverImpl*, IDXGISwapChain*);
 
-    static TextureImpl* getDefaultColorAttachment();
-    static TextureImpl* getDefaultDepthStencilAttachment();
-};
+TextureImpl* getDefaultColorAttachment();
+TextureImpl* getDefaultDepthStencilAttachment();
 
-template <typename T, unsigned int N>
-inline void SafeRelease(T (&resourceBlock)[N])
-{
-    for (unsigned int i = 0; i < N; i++)
-    {
-        SafeRelease(resourceBlock[i]);
-    }
-}
+void fatalError(std::string_view op, HRESULT hr);
 
-template <typename T>
-inline void SafeRelease(T& resource)
-{
-    if (resource)
-    {
-        resource->Release();
-        resource = nullptr;
-    }
-}
+};  // namespace UtilsD3D
 
 /** @} */
 
 }  // namespace ax::rhi::d3d
+
+#define AX_D3D_FAST_FAIL(expr)                                  \
+    do                                                          \
+    {                                                           \
+        HRESULT _hr = (expr);                                   \
+        if (FAILED(_hr))                                        \
+            ::ax::rhi::d3d::fatalError(#expr " failed"sv, _hr); \
+    } while (0)

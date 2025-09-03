@@ -586,17 +586,12 @@ HRESULT WmfMediaEngine::HandleEvent(IMFMediaEvent* pEvent)
     ::MediaEventType meType  = MEUnknown;              // Event type
     MF_TOPOSTATUS TopoStatus = MF_TOPOSTATUS_INVALID;  // Used with MESessionTopologyStatus event.
 
-    // auto pUnk = MFUtils::ReferencedPtrToComPtr((IUnknown*)pUnkPtr);
-    // TComPtr<IMFMediaEvent> pEvent;
-
     PROPVARIANT var;
 
     if (!pEvent)
     {
         return E_POINTER;
     }
-
-    // CHECK_HR(hr = pUnk->QueryInterface(__uuidof(IMFMediaEvent), (void**)&pEvent));
 
     // Get the event type.
     CHECK_HR(hr = pEvent->GetType(&meType));

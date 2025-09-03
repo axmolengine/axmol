@@ -32,15 +32,6 @@ inline TComPtr<_Ty> MakeComPtr(_Types&&... args)
     return obj;
 }
 
-template <typename _Ty>
-inline TComPtr<_Ty> ReferencedPtrToComPtr(_Ty* ptr)
-{
-    TComPtr<_Ty> obj;
-    _Ty** ppv = &obj;
-    *ppv      = ptr;
-    return obj;
-}
-
 template <typename T>
 inline HRESULT CreateInstance(REFCLSID clsid, Microsoft::WRL::ComPtr<T>& ptr)
 {

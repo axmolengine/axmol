@@ -47,12 +47,6 @@ public:
     void QueueKeyboardEvent(ax::WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
     void QueueBackButtonEvent();
 
-    /**  Create render view
-     * @remark: this API must call at main ui thread, others API should call at render thread
-     */
-    void CreateRenderView();
-
-    void Start();
     void Pause();
     void Resume();
     void DeviceLost();

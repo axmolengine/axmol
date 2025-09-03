@@ -137,7 +137,7 @@ void DepthStencilStateImpl::update(const DepthStencilDesc& desc)
     d.FrontFace        = make_op_desc(desc.frontFaceStencil);
     d.BackFace         = make_op_desc(desc.backFaceStencil);
 
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilState> newState;
+    ComPtr<ID3D11DepthStencilState> newState;
     HRESULT hr = _device->CreateDepthStencilState(&d, newState.GetAddressOf());
     if (FAILED(hr))
     {

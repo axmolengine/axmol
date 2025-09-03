@@ -172,22 +172,7 @@ void SwapChainPage::CreateRenderSurface()
         // m_eglSurface = m_eglSurfaceProvider->CreateSurface(swapChainPanel, nullptr, &customResolutionScale);
         //
     }
-#else
-    EnsureRenderer(Windows::UI::Xaml::Window::Current().CoreWindow().Dispatcher());
 #endif
-}
-
-void SwapChainPage::EnsureRenderer(const winrt::Windows::UI::Core::CoreDispatcher& dispatcher)
-{
-    if (!m_renderer)
-    {
-        m_renderer = std::make_shared<AxmolRenderer>(m_canvasWidth, m_canvasHeight, m_dpi, m_orientation, dispatcher,
-                                                     swapChainPanel());
-
-        // !!! This call must run on the main UI thread; otherwise SetSwapChain will fail with RPC_E_WRONG_THREAD
-        // and the renderer will display only a black frame.
-        m_renderer->CreateRenderView();
-    }
 }
 
 void SwapChainPage::UpdateCanvasSize()
@@ -269,18 +254,19 @@ void SwapChainPage::StartRenderLoop()
         GLsizei panelWidth  = 0;
         GLsizei panelHeight = 0;
         m_eglSurfaceProvider->GetSurfaceDimensions(m_eglSurface, &panelWidth, &panelHeight);
-
-        if (!m_renderer)
-            EnsureRenderer(dispatcher);
 #else
         size_t panelWidth  = static_cast<size_t>(m_canvasWidth);
         size_t panelHeight = static_cast<size_t>(m_canvasHeight);
 #endif
 
+        if (!m_renderer)
+        {
+            m_renderer = std::make_shared<AxmolRenderer>(m_canvasWidth, m_canvasHeight, m_dpi, m_orientation,
+                                                         dispatcher, swapChainPanel());
+        }
+
         // !!!Start the engine renderer on the render thread so that WICImageDecoder
         // initializes COM in multi-threaded apartment (MTA) mode.
-        m_renderer->Start();
-
         m_renderer->Resume();
 
         void* thiz = (void*)this;

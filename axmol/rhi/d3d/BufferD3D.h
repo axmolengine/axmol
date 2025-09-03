@@ -26,9 +26,9 @@
 #include <vector>
 #include <cassert>
 #include <d3d11.h>
-#include <wrl/client.h>
 
 #include "axmol/rhi/Buffer.h"
+#include "axmol/platform/win32/ComPtr.h"
 
 namespace ax::rhi::d3d
 {
@@ -77,7 +77,7 @@ private:
 
     ID3D11Device* _device;          // weak ref
     ID3D11DeviceContext* _context;  // weak ref
-    Microsoft::WRL::ComPtr<ID3D11Buffer> _buffer;
+    ComPtr<ID3D11Buffer> _buffer;
 
     D3D11_USAGE _nativeUsage  = D3D11_USAGE_DYNAMIC;
     UINT _cpuAccess           = D3D11_CPU_ACCESS_WRITE;

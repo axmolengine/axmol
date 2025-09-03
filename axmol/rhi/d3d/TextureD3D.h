@@ -23,19 +23,14 @@
  ****************************************************************************/
 #pragma once
 
-#include <array>
 #include "axmol/rhi/Texture.h"
 #include "axmol/base/EventListenerCustom.h"
-
+#include "axmol/platform/win32/ComPtr.h"
 #include <d3d11.h>
 #include <dxgi.h>
-#include <wrl/client.h>
-#include <array>  // std::array
 
 namespace ax::rhi::d3d
 {
-using namespace Microsoft::WRL;
-
 /**
  * @addtogroup _d3d
  * @{
