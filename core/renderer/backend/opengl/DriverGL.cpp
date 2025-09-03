@@ -119,6 +119,10 @@ DriverGL::DriverGL()
             _verInfo.minor = (_version[2] - '0');
         }
     }
+    else
+    {
+        _version = "null";
+    }
 
     // check OpenGL version at first
     constexpr int REQUIRED_GLES_MAJOR = (AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
@@ -134,7 +138,7 @@ DriverGL::DriverGL()
             "OpeGL ES {}.{}+ is required (your version is {}). Please upgrade the driver of your video card.",
             REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
 #endif
-        messageBox(msg.c_str(), "OpenGL version too old");
+        showAlert(msg, "OpenGL version too old");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return;
     }

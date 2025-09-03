@@ -544,7 +544,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
             message.append(_glfwError);
         }
 
-        messageBox(message.c_str(), "Error launch application");
+        showAlert(message, "Error launch application");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
     }
@@ -597,7 +597,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
     glfwMakeContextCurrent(_mainWindow);
     glfwSetWindowUserPointer(_mainWindow, backend::__gl);
 #endif
-    
+
 #if !defined(__APPLE__)
     handleWindowSize(static_cast<int>(windowSize.width), static_cast<int>(windowSize.height));
 #else
