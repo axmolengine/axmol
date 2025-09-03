@@ -83,11 +83,6 @@ enum class AlertResult
  */
 AlertResult AX_DLL showAlert(std::string_view msg, std::string_view title, AlertStyle style = AlertStyle::Ok);
 
-AX_DEPRECATED(3.0) inline void messageBox(const char* msg, const char* title)
-{
-    showAlert(msg, title);
-}
-
 /**
 @brief Enum the language type supported now
 */

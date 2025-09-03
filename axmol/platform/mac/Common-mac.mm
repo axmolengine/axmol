@@ -39,8 +39,8 @@ namespace ax
 AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
 
-    NSString* tmpTitle = sv2ns(title);
-    NSString* tmpMsg   = sv2ns(msg);
+    NSString* tmpTitle = svtons(title);
+    NSString* tmpMsg   = svtons(msg);
 
     NSAlert* alert = [[[NSAlert alloc] init] autorelease];
     [alert addButtonWithTitle:@"OK"];
