@@ -35,11 +35,14 @@ THE SOFTWARE.
 #include "platform/winrt/WinRTUtils.h"
 #include "base/EventDispatcher.h"
 #include "base/EventMouse.h"
-#include <map>
+#include <future>
 
 #include <winrt/Windows.UI.Xaml.Controls.h>
 #include <winrt/Windows.UI.Popups.h>
 #include <winrt/Windows.UI.Input.h>
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.UI.Core.h>
 
 namespace ax
 {
@@ -165,22 +168,75 @@ void RenderViewImpl::setIMEKeyboardState(bool bOpen)
     setIMEKeyboardState(bOpen, "");
 }
 
-bool RenderViewImpl::ShowMessageBox(const winrt::hstring& title, const winrt::hstring& message)
+AlertResult RenderViewImpl::ShowAlertDialog(const winrt::hstring& title,
+                                            const winrt::hstring& message,
+                                            AlertStyle style)
 {
-    if (m_dispatcher)
-    {
-        m_dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal,
-                                     Windows::UI::Core::DispatchedHandler([title, message]() {
-                                         // Show the message dialog
-                                         auto msg = Windows::UI::Popups::MessageDialog(message, title);
-                                         // Set the command to be invoked when a user presses 'ESC'
-                                         msg.CancelCommandIndex(1);
-                                         msg.ShowAsync();
-                                     }));
+    using namespace winrt::Windows::UI::Core;
+    using namespace winrt::Windows::UI::Popups;
 
-        return true;
+    if (!m_dispatcher)
+        return AlertResult::No;
+
+    bool isOnMainUIThread = m_dispatcher.get().HasThreadAccess();
+    bool canPromise       = !isOnMainUIThread && bitmask::any(style, AlertStyle::RequireSync);
+
+    auto promisePtr = std::make_shared<std::promise<AlertResult>>();
+    auto future     = promisePtr->get_future();
+
+    auto addCommand = [canPromise](MessageDialog& dlg, std::wstring_view btnTitle, AlertResult ret,
+                                   std::shared_ptr<std::promise<AlertResult>> promisePtr) {
+        dlg.Commands().Append(UICommand(btnTitle, [promisePtr, ret, canPromise](auto&&) {
+            if (canPromise)
+            {
+                try
+                {
+                    promisePtr->set_value(ret);
+                }
+                catch (...)
+                {}
+            }
+        }));
+    };
+
+    auto showDialogAsync = [title, message, style, addCommand, promisePtr]() mutable {
+        MessageDialog dlg(message, title);
+        dlg.CancelCommandIndex(1);
+
+        if (bitmask::any(style, AlertStyle::OkCancel))
+        {
+            addCommand(dlg, L"OK", AlertResult::Ok, promisePtr);
+            addCommand(dlg, L"Cancel", AlertResult::Cancel, promisePtr);
+        }
+        else if (bitmask::any(style, AlertStyle::YesNo))
+        {
+            addCommand(dlg, L"Yes", AlertResult::Yes, promisePtr);
+            addCommand(dlg, L"No", AlertResult::No, promisePtr);
+        }
+        else if (bitmask::any(style, AlertStyle::YesNoCancel))
+        {
+            addCommand(dlg, L"Yes", AlertResult::Yes, promisePtr);
+            addCommand(dlg, L"No", AlertResult::No, promisePtr);
+            addCommand(dlg, L"Cancel", AlertResult::Cancel, promisePtr);
+        }
+        else
+        {
+            addCommand(dlg, L"OK", AlertResult::Ok, promisePtr);
+        }
+
+        dlg.ShowAsync();
+    };
+
+    if (!isOnMainUIThread)
+    {
+        m_dispatcher.get().RunAsync(CoreDispatcherPriority::Normal, showDialogAsync);
     }
-    return false;
+    else
+    {
+        showDialogAsync();
+    }
+
+    return canPromise ? future.get() : AlertResult::None;
 }
 
 void RenderViewImpl::setIMEKeyboardState(bool bOpen, std::string_view str)
