@@ -187,15 +187,15 @@ AlertResult RenderViewImpl::ShowAlertDialog(const winrt::hstring& title,
         return AlertResult::No;
 
     bool isOnMainUIThread = m_dispatcher.get().HasThreadAccess();
-    bool needPromise      = !isOnMainUIThread && bitmask::any(style, AlertStyle::RequireSync);
+    bool canPromise      = !isOnMainUIThread && bitmask::any(style, AlertStyle::RequireSync);
 
     auto promisePtr = std::make_shared<std::promise<AlertResult>>();
     auto future     = promisePtr->get_future();
 
-    auto addCommand = [needPromise](MessageDialog& dlg, std::wstring_view btnTitle, AlertResult ret,
+    auto addCommand = [canPromise](MessageDialog& dlg, std::wstring_view btnTitle, AlertResult ret,
                                     std::shared_ptr<std::promise<AlertResult>> promisePtr) {
-        dlg.Commands().Append(UICommand(btnTitle, [promisePtr, ret, needPromise](auto&&) {
-            if (needPromise)
+        dlg.Commands().Append(UICommand(btnTitle, [promisePtr, ret, canPromise](auto&&) {
+            if (canPromise)
             {
                 try
                 {
@@ -244,7 +244,7 @@ AlertResult RenderViewImpl::ShowAlertDialog(const winrt::hstring& title,
         showDialogAsync();
     }
 
-    return needPromise ? future.get() : AlertResult::None;
+    return canPromise ? future.get() : AlertResult::None;
 }
 
 void RenderViewImpl::setIMEKeyboardState(bool bOpen, std::string_view str)
