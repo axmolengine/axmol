@@ -38,7 +38,7 @@ namespace ax
 
 AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
-    auto pszMsg = msg.data();
+    auto pszMsg   = msg.data();
     auto pszTitle = title.data();
     EM_ASM_ARGS({ window.alert(UTF8ToString($0) + ": " + UTF8ToString($1)); }, pszTitle, pszTitle);
     return AlertResult::None;

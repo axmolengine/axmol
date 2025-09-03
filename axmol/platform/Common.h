@@ -68,7 +68,6 @@ enum class AlertResult
     No
 };
 
-
 /** @brief Display a modal alert dialog with configurable icon and buttons.
  *
  * @param msg         The message text to display, in UTF-8 encoding.

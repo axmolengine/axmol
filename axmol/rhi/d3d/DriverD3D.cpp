@@ -221,7 +221,8 @@ void DriverImpl::init()
 
         AX_D3D_FAST_FAIL(hr = dxgiDevice->GetAdapter(&_dxgiAdapter));
 
-        AX_D3D_FAST_FAIL(hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
+        AX_D3D_FAST_FAIL(
+            hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
     }
 
     _dxgiAdapter->GetDesc(&_adapterDesc);

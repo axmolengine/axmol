@@ -35,9 +35,9 @@ namespace ax
 
 AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle style)
 {
-    std::wstring wsMsg       = ntcvt::from_chars(msg);
-    std::wstring wsTitle     = ntcvt::from_chars(title);
-    UINT flags               = MB_TOPMOST;
+    std::wstring wsMsg   = ntcvt::from_chars(msg);
+    std::wstring wsTitle = ntcvt::from_chars(title);
+    UINT flags           = MB_TOPMOST;
 
     // level
     if (bitmask::any(style, AlertStyle::IconError))

@@ -48,4 +48,4 @@ inline void SafeRelease(T& resource)
         resource = nullptr;
     }
 }
-}
+}  // namespace ax

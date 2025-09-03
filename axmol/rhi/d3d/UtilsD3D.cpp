@@ -210,7 +210,8 @@ TextureImpl* UtilsD3D::getDefaultDepthStencilAttachment()
     return s_defaultDepthStencilAttachment;
 }
 
-void UtilsD3D::fatalError(std::string_view op, HRESULT hr) {
+void UtilsD3D::fatalError(std::string_view op, HRESULT hr)
+{
     _com_error err(hr, nullptr);
     auto msg = fmt::format("{}:{}", op, ntcvt::from_chars(err.ErrorMessage()));
     showAlert(msg, "Axmol: Fatal Error", AlertStyle::IconError | AlertStyle::RequireSync);

@@ -187,13 +187,13 @@ AlertResult RenderViewImpl::ShowAlertDialog(const winrt::hstring& title,
         return AlertResult::No;
 
     bool isOnMainUIThread = m_dispatcher.get().HasThreadAccess();
-    bool canPromise      = !isOnMainUIThread && bitmask::any(style, AlertStyle::RequireSync);
+    bool canPromise       = !isOnMainUIThread && bitmask::any(style, AlertStyle::RequireSync);
 
     auto promisePtr = std::make_shared<std::promise<AlertResult>>();
     auto future     = promisePtr->get_future();
 
     auto addCommand = [canPromise](MessageDialog& dlg, std::wstring_view btnTitle, AlertResult ret,
-                                    std::shared_ptr<std::promise<AlertResult>> promisePtr) {
+                                   std::shared_ptr<std::promise<AlertResult>> promisePtr) {
         dlg.Commands().Append(UICommand(btnTitle, [promisePtr, ret, canPromise](auto&&) {
             if (canPromise)
             {
