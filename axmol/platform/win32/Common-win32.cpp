@@ -31,8 +31,6 @@ THE SOFTWARE.
 namespace ax
 {
 
-#define MAX_LEN (ax::kMaxLogLen + 1)
-
 AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle style)
 {
     std::wstring wsMsg   = ntcvt::from_chars(msg);
