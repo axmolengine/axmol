@@ -552,7 +552,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
             message.append(_glfwError);
         }
 
-        messageBox(message.c_str(), "Error launch application");
+        showAlert(message, "Error launch application");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
     }

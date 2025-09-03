@@ -29,8 +29,8 @@ THE SOFTWARE.
 /// @cond DO_NOT_SHOW
 
 #include "axmol/platform/PlatformMacros.h"
-
 #include "axmol/tlx/bitmask.hpp"
+#include <string_view>
 
 namespace ax
 {

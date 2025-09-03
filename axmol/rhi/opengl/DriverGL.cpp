@@ -125,7 +125,7 @@ DriverImpl::DriverImpl()
             REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
 #endif
         AXLOGE("{}", msg);
-        messageBox(msg.c_str(), "OpenGL version too old");
+        showAlert(msg, "OpenGL version too old");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return;
     }

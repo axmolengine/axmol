@@ -193,6 +193,7 @@ void DriverImpl::init()
                                                &_context);
     if (hr == DXGI_ERROR_UNSUPPORTED)
     {
+        _dxgiAdapter.Reset();
         // Try again with software driver type
         requestDriverType = D3D_DRIVER_TYPE_WARP;
         // windows 7: D3D11 software adapter not support create debug device
@@ -219,11 +220,8 @@ void DriverImpl::init()
             hr = _device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgiDevice.GetAddressOf())));
 
         AX_D3D_FAST_FAIL(hr = dxgiDevice->GetAdapter(&_dxgiAdapter));
-    }
 
-    if (!_dxgiFactory)
-    {
-        AX_D3D_FAST_FAIL(hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.GetAddressOf()));
+        AX_D3D_FAST_FAIL(hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
     }
 
     _dxgiAdapter->GetDesc(&_adapterDesc);
