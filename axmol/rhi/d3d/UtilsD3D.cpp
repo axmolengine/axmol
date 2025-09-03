@@ -210,10 +210,9 @@ TextureImpl* UtilsD3D::getDefaultDepthStencilAttachment()
     return s_defaultDepthStencilAttachment;
 }
 
-
 void UtilsD3D::fatalError(std::string_view op, HRESULT hr)
 {
-    auto msg  = fmt::format("{}: 0x{:08X}", op, static_cast<unsigned>(hr));
+    auto msg = fmt::format("{}: 0x{:08X}", op, static_cast<unsigned>(hr));
     showAlert(msg, "D3D: Fatal Error", AlertStyle::IconError | AlertStyle::RequireSync);
     utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
 }
