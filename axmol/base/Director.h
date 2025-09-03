@@ -187,6 +187,29 @@ public:
      */
     PowerPreference getPowerPreference() const { return _powerPreference; }
 
+    /**
+     * @brief Enable or disable the graphics API debug layer.
+     *
+     * When enabled, the underlying RHI (e.g. Direct3D, Metal, Vulkan) will
+     * activate its validation/debug layer if supported. This can provide
+     * detailed diagnostic messages, GPU state validation, and error reporting
+     * useful during development.
+     *
+     * @note Must be set before the graphics device is created to take effect.
+     *       Enabling the debug layer may impact performance and should be
+     *       disabled in production builds.
+     *
+     * @param value true to enable the debug layer, false to disable it.
+     */
+    void setDebugLayerEnabled(bool value) { _debugLayerEnabled = value; }
+
+    /**
+     * @brief Check whether the graphics API debug layer is enabled.
+     *
+     * @return true if the debug layer is enabled, false otherwise.
+     */
+    bool isDebugLayerEnabled() const { return _debugLayerEnabled; }
+
     /*
      * Gets singleton of TextureCache.
      */
@@ -665,6 +688,7 @@ protected:
 
     bool _childrenIndexerEnabled = false;
 
+    bool _debugLayerEnabled          = false;
     PowerPreference _powerPreference = PowerPreference::Auto;
 
     /* axmol thread id */

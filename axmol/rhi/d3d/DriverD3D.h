@@ -60,6 +60,11 @@ public:
     /* The default attribs binding index */
     static constexpr uint32_t DEFAULT_ATTRIBS_BINDING_INDEX = VBO_BINDING_INDEX_START + MAX_VERTEX_ATTRIBS;
 
+    static constexpr D3D_FEATURE_LEVEL DEFAULT_REATURE_LEVELS[2] = {
+        D3D_FEATURE_LEVEL_11_1,
+        D3D_FEATURE_LEVEL_11_0,
+    };
+
     /// @name Constructor, Destructor and Initializers
     DriverImpl();
     ~DriverImpl();
@@ -165,8 +170,6 @@ public:
     const ComPtr<IDXGIFactory>& getDXGIFactory() const { return _dxgiFactory; }
     const ComPtr<IDXGIAdapter> getDXGIAdapter() const { return _dxgiAdapter; }
 
-    static bool supportD24S8() { return _isDepth24Stencil8PixelFormatSupported; }
-
 protected:
     /**
      * Create a shaderModule.
@@ -180,6 +183,8 @@ protected:
 
 private:
     void initializeAdapter();
+    void initializeDevice();
+    HRESULT createD3DDevice(int requestDriverType, int createFlags);
 
     ID3D11Device* _device         = nullptr;
     ID3D11DeviceContext* _context = nullptr;
@@ -189,12 +194,11 @@ private:
 
     DXGI_ADAPTER_DESC _adapterDesc{};
 
+    D3D_FEATURE_LEVEL _featureLevel{};
+
     // FeatureSet _featureSet = FeatureSet::Unknown;
-    static bool _isDepth24Stencil8PixelFormatSupported;
 
     std::optional<LARGE_INTEGER> _driverVersion;
-
-    D3D_FEATURE_LEVEL _featureLevel{};
 };
 
 /** @} */

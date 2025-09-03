@@ -167,52 +167,10 @@ DriverImpl::DriverImpl() {}
 
 void DriverImpl::init()
 {
-    UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-
-#if defined(_DEBUG)
-    createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
-    D3D_FEATURE_LEVEL featureLevels[] = {
-        D3D_FEATURE_LEVEL_11_1,
-        D3D_FEATURE_LEVEL_11_0,
-    };
-
     initializeAdapter();
+    initializeDevice();
 
-    auto requestDriverType = _dxgiAdapter ? D3D_DRIVER_TYPE_UNKNOWN : D3D_DRIVER_TYPE_HARDWARE;
-    HRESULT hr             = D3D11CreateDevice(_dxgiAdapter.Get(),        // Adapter
-                                               requestDriverType,         // Driver Type
-                                               nullptr,                   // Software
-                                               createDeviceFlags,         // Flags
-                                               featureLevels,             // Feature Levels
-                                               ARRAYSIZE(featureLevels),  // Num Feature Levels
-                                               D3D11_SDK_VERSION,         // SDK Version
-                                               &_device,                  // Device
-                                               &_featureLevel,            // Feature Level
-                                               &_context);
-    if (hr == DXGI_ERROR_UNSUPPORTED)
-    {
-        _dxgiAdapter.Reset();
-        // Try again with software driver type
-        requestDriverType = D3D_DRIVER_TYPE_WARP;
-        // windows 7: D3D11 software adapter not support create debug device
-        createDeviceFlags &= ~D3D11_CREATE_DEVICE_DEBUG;
-        hr = D3D11CreateDevice(nullptr,                   // Adapter
-                               requestDriverType,         // Driver Type
-                               nullptr,                   // Software
-                               createDeviceFlags,         // Flags
-                               featureLevels,             // Feature Levels
-                               ARRAYSIZE(featureLevels),  // Num Feature Levels
-                               D3D11_SDK_VERSION,         // SDK Version
-                               &_device,                  // Device
-                               &_featureLevel,            // Feature Level
-                               &_context);
-    }
-
-    if (FAILED(hr))
-        fatalError("D3D11CreateDevice"sv, hr);
-
+    HRESULT hr{E_FAIL};
     if (!_dxgiAdapter)
     {
         ComPtr<IDXGIDevice> dxgiDevice;
@@ -225,8 +183,6 @@ void DriverImpl::init()
             hr = _dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), (void**)_dxgiFactory.ReleaseAndGetAddressOf()));
     }
 
-    _dxgiAdapter->GetDesc(&_adapterDesc);
-
     LARGE_INTEGER version;
     hr = _dxgiAdapter->CheckInterfaceSupport(__uuidof(IDXGIDevice), &version);
     if (FAILED(hr))
@@ -238,6 +194,8 @@ void DriverImpl::init()
     {
         _driverVersion = version;
     }
+    _dxgiAdapter->GetDesc(&_adapterDesc);
+
     // _maxAttributes = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;
     // _maxTextureSize    = 16384;
     // _maxTextureUnits = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
@@ -258,6 +216,48 @@ DriverImpl::~DriverImpl()
     _dxgiAdapter.Reset();
     SafeRelease(_context);
     SafeRelease(_device);
+}
+
+void DriverImpl::initializeDevice()
+{
+    constexpr UINT releaseFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+    constexpr UINT debugFlags   = releaseFlags | D3D11_CREATE_DEVICE_DEBUG;
+
+    HRESULT hr              = E_FAIL;
+    const bool isDebugLayer = Director::getInstance()->isDebugLayerEnabled();
+
+    if (isDebugLayer) [[unlikely]]
+    {
+        hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, debugFlags);
+        if (SUCCEEDED(hr))
+            return;
+
+        if (hr != DXGI_ERROR_UNSUPPORTED)
+        {
+            AXLOGI("Failed creating Debug D3D11 device - falling back to release runtime.");
+            goto L_ReleaseRuntime;
+        }
+        else
+        {
+            goto L_WarpRuntime;
+        }
+    }
+
+L_ReleaseRuntime:
+    hr = createD3DDevice(D3D_DRIVER_TYPE_HARDWARE, releaseFlags);
+    if (hr == DXGI_ERROR_UNSUPPORTED) [[unlikely]]
+    {
+    L_WarpRuntime:
+        AXLOGI("Failed creating hardware D3D11 device - falling back to software runtime.");
+        // Reset adapter to null before using D3D_DRIVER_TYPE_WARP,
+        // otherwise D3D11CreateDevice will return E_INVALIDARG when both
+        // a non-null adapter and a non-matching driver type are specified.
+        _dxgiAdapter.Reset();
+        hr = createD3DDevice(D3D_DRIVER_TYPE_WARP, releaseFlags);
+    }
+
+    if (FAILED(hr)) [[unlikely]]
+        fatalError("initializeDevice"sv, hr);
 }
 
 void DriverImpl::initializeAdapter()
@@ -319,6 +319,22 @@ void DriverImpl::initializeAdapter()
     }
 
     _dxgiAdapter = std::move(bestAdapter);
+}
+
+HRESULT DriverImpl::createD3DDevice(int requestDriverType, int createFlags)
+{
+    if (_dxgiAdapter)
+        requestDriverType = D3D_DRIVER_TYPE_UNKNOWN;
+    return ::D3D11CreateDevice(_dxgiAdapter.Get(),                  // Adapter
+                               (D3D_DRIVER_TYPE)requestDriverType,  // Driver Type
+                               nullptr,                             // Software
+                               createFlags,                         // Flags
+                               DEFAULT_REATURE_LEVELS,              // Feature Levels
+                               ARRAYSIZE(DEFAULT_REATURE_LEVELS),   // Num Feature Levels
+                               D3D11_SDK_VERSION,                   // SDK Version
+                               &_device,                            // Device
+                               &_featureLevel,                      // Feature Level
+                               &_context);
 }
 
 CommandBuffer* DriverImpl::createCommandBuffer(void* presentTarget)
