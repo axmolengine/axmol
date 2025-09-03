@@ -210,46 +210,10 @@ TextureImpl* UtilsD3D::getDefaultDepthStencilAttachment()
     return s_defaultDepthStencilAttachment;
 }
 
-static std::string hresultToString(HRESULT hr)
-{
-    LPWSTR buf = nullptr;
-    DWORD len =
-        FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                       nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&buf, 0, nullptr);
-
-    std::string result;
-    if (buf)
-    {
-        result = ntcvt::from_chars(std::wstring_view(buf, len));
-        LocalFree(buf);
-    }
-
-    if (result.empty())
-    {
-        switch (hr)
-        {
-        case DXGI_ERROR_UNSUPPORTED:
-            result = "The specified device interface or feature level is not supported on this system.";
-            break;
-        case DXGI_ERROR_DEVICE_REMOVED:
-            result = "The video card has been physically removed or a driver upgrade for the video card has occurred.";
-            break;
-        case DXGI_ERROR_DEVICE_HUNG:
-            result = "The application's device failed due to badly formed commands sent by the application.";
-            break;
-        default:
-            result = "Unknown error.";
-            break;
-        }
-    }
-
-    return result;
-}
 
 void UtilsD3D::fatalError(std::string_view op, HRESULT hr)
 {
-    auto desc = hresultToString(hr);
-    auto msg  = fmt::format("{}: 0x{:08X} ({})", op, static_cast<unsigned>(hr), desc);
+    auto msg  = fmt::format("{}: 0x{:08X}", op, static_cast<unsigned>(hr));
     showAlert(msg, "D3D: Fatal Error", AlertStyle::IconError | AlertStyle::RequireSync);
     utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
 }
