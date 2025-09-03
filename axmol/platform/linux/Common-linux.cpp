@@ -31,7 +31,7 @@ THE SOFTWARE.
 namespace ax
 {
 
-AlertResult showAlert(std::string_view msg, std::string_view title，AlertStyle)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
     AXLOGI("{}: {}", title, msg);
     return AlertResult::None;

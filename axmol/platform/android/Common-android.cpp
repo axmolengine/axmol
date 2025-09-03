@@ -35,9 +35,9 @@ namespace ax
 
 #define MAX_LEN (ax::kMaxLogLen + 1)
 
-AlertResult showAlert(std::string_view msg, std::string_view title，AlertStyle)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
-    JniHelper::callStaticVoidMethod("dev.axmol.lib.AxmolEngine", "showDialog", msg, title，AlertStyle);
+    JniHelper::callStaticVoidMethod("dev.axmol.lib.AxmolEngine", "showDialog", msg, title);
     return AlertResult::None;
 }
 

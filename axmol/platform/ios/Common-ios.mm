@@ -38,7 +38,7 @@
 namespace ax
 {
 
-AlertResult showAlert(std::string_view msg, std::string_view title，AlertStyle)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
     // only enable it on iOS.
     // FIXME: Implement it for tvOS
