@@ -36,13 +36,14 @@ THE SOFTWARE.
 namespace ax
 {
 
-void messageBox(const char * msg, const char * title)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
-    EM_ASM_ARGS({
-        window.alert(UTF8ToString($0) + ": " + UTF8ToString($1));
-    }, title, msg);
+    auto pszMsg   = msg.data();
+    auto pszTitle = title.data();
+    EM_ASM_ARGS({ window.alert(UTF8ToString($0) + ": " + UTF8ToString($1)); }, pszTitle, pszTitle);
+    return AlertResult::None;
 }
 
-}
+}  // namespace ax
 
-#endif //  AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#endif  //  AX_TARGET_PLATFORM == AX_PLATFORM_WASM

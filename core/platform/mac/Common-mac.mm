@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "platform/Common.h"
+#include "platform/apple/FoundationBridge.h"
 
 #include "base/Director.h"
 
@@ -34,11 +35,11 @@ THE SOFTWARE.
 namespace ax
 {
 
-// ios no MessageBox, use log instead
-void messageBox(const char* msg, const char* title)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
-    NSString* tmpTitle = (title) ? [NSString stringWithUTF8String:title] : nil;
-    NSString* tmpMsg   = (msg) ? [NSString stringWithUTF8String:msg] : nil;
+
+    NSString* tmpTitle = svtons(title);
+    NSString* tmpMsg   = svtons(msg);
 
     NSAlert* alert = [[[NSAlert alloc] init] autorelease];
     [alert addButtonWithTitle:@"OK"];
@@ -47,8 +48,10 @@ void messageBox(const char* msg, const char* title)
     [alert setAlertStyle:NSAlertStyleWarning];
 
     auto renderView = Director::getInstance()->getRenderView();
-    id window   = (id)renderView->getCocoaWindow();
+    id window       = (id)renderView->getCocoaWindow();
     [alert beginSheetModalForWindow:window completionHandler:nil];
+
+    return AlertResult::None;
 }
 
-}
+}  // namespace ax

@@ -365,12 +365,15 @@ public:
     /** Sets the default values based on the Configuration info. */
     void setDefaultValues();
 
-    // OpenGL Helper
+    // Render Helper
 
-    /** Sets the OpenGL default values.
+    /** Sets the Render default values.
      * It will enable alpha blending, disable depth test.
      */
-    void setGLDefaultValues();
+    void setRenderDefaults();
+#ifndef AX_CORE_PROFILE
+    AX_DEPRECATED(2.9) void setGLDefaultValues() { setRenderDefaults(); }
+#endif
 
     /** Sets clear values for the color buffers,
      * value range of each element is [0.0, 1.0].

@@ -31,9 +31,10 @@ THE SOFTWARE.
 namespace ax
 {
 
-void messageBox(const char* msg, const char* title)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
-    AXLOGE("{}: {}", title, msg);
+    AXLOGI("{}: {}", title, msg);
+    return AlertResult::None;
 }
 
-}
+}  // namespace ax

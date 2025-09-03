@@ -2,6 +2,7 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -32,18 +33,18 @@
 #import <UIKit/UIWindow.h>
 #include "base/Director.h"
 #include "base/Logging.h"
+#include "platform/apple/FoundationBridge.h"
 
 namespace ax
 {
 
-// ios no MessageBox, use log instead
-void messageBox(const char* msg, const char* title)
+AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
 {
     // only enable it on iOS.
     // FIXME: Implement it for tvOS
 #if !defined(AX_TARGET_OS_TVOS)
-    NSString* tmpTitle = (title) ? [NSString stringWithUTF8String:title] : nil;
-    NSString* tmpMsg   = (msg) ? [NSString stringWithUTF8String:msg] : nil;
+    NSString* tmpTitle = svtons(title);
+    NSString* tmpMsg   = svtons(msg);
 
     UIAlertController* alertController = [UIAlertController alertControllerWithTitle:tmpTitle
                                                                              message:tmpMsg
@@ -57,7 +58,10 @@ void messageBox(const char* msg, const char* title)
     [alertController addAction:defaultAction];
     auto rootViewController = [UIApplication sharedApplication].windows[0].rootViewController;
     [rootViewController presentViewController:alertController animated:YES completion:nil];
+#else
+    AXLOGI("{}: {}", title, msg);
 #endif
+    return AlertResult::None;
 }
 
-}
+}  // namespace ax

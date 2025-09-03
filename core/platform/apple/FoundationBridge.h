@@ -1,7 +1,5 @@
 /****************************************************************************
-Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
@@ -24,40 +22,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include "platform/Common.h"
-#include "platform/StdC.h"
-#include "ntcvt/ntcvt.hpp"
+
+#pragma once
+
+#import <Foundation/NSString.h>
 
 namespace ax
 {
-
-AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle style)
+static NSString* svtons(std::string_view str)
 {
-    std::wstring wsMsg   = ntcvt::from_chars(msg);
-    std::wstring wsTitle = ntcvt::from_chars(title);
-    UINT flags           = MB_TOPMOST;
-
-    // level
-    if (bitmask::any(style, AlertStyle::IconError))
-        flags |= MB_ICONERROR;
-    else if (bitmask::any(style, AlertStyle::IconWarning))
-        flags |= MB_ICONWARNING;
-    else if (bitmask::any(style, AlertStyle::IconInfo))
-        flags |= MB_ICONINFORMATION;
-
-    // buttons
-    if (bitmask::any(style, AlertStyle::OkCancel))
-        flags |= MB_OKCANCEL;
-    else if (bitmask::any(style, AlertStyle::YesNo))
-        flags |= MB_YESNO;
-    else if (bitmask::any(style, AlertStyle::YesNoCancel))
-        flags |= MB_YESNOCANCEL;
-    else if (bitmask::any(style, AlertStyle::Ok))
-        flags |= MB_OK;
-
-    ::MessageBoxW(nullptr, wsMsg.c_str(), wsTitle.c_str(), flags);
-
-    return AlertResult::Ok;
+    return !str.empty() ? [[NSString alloc] initWithBytes:str.data() length:str.length() encoding:NSUTF8StringEncoding]
+                        : nil;
 }
-
 }  // namespace ax
