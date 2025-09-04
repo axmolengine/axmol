@@ -112,6 +112,11 @@ public:
      */
     void removeControlPointAtIndex(ssize_t index);
 
+     /** Remove all control points.
+     *
+     */
+    void clear();
+
     /** Returns the number of objects of the control point array.
      *
      * @return The number of objects of the control point array.

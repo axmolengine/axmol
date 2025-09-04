@@ -123,6 +123,11 @@ void PointArray::removeControlPointAtIndex(ssize_t index)
     _controlPoints.erase(iter);
 }
 
+void PointArray::clear()
+{
+    _controlPoints.clear();
+}
+
 ssize_t PointArray::count() const
 {
     return _controlPoints.size();
