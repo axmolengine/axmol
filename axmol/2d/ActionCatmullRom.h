@@ -112,7 +112,7 @@ public:
      */
     void removeControlPointAtIndex(ssize_t index);
 
-     /** Remove all control points.
+    /** Remove all control points.
      *
      */
     void clear();

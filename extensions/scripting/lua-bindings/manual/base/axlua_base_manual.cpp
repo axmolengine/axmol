@@ -2940,24 +2940,24 @@ int axlua_Scene_getPhysicsWorld(lua_State* tolua_S)
     ax::Scene* cobj = nullptr;
     bool ok         = true;
 
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-#endif
+#    endif
 
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.Scene", 0, &tolua_err))
         goto tolua_lerror;
-#endif
+#    endif
 
     cobj = (ax::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_Scene_getPhysicsWorld'", nullptr);
         return 0;
     }
-#endif
+#    endif
 
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
@@ -2975,10 +2975,10 @@ int axlua_Scene_getPhysicsWorld(lua_State* tolua_S)
                0);
     return 0;
 
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'axlua_Scene_getPhysicsWorld'.", &tolua_err);
-#endif
+#    endif
 
     return 0;
 }
