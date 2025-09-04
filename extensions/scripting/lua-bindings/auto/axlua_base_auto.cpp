@@ -27432,7 +27432,7 @@ int lua_ax_base_Director_setDefaultValues(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Director_setGLDefaultValues(lua_State* tolua_S)
+int lua_ax_base_Director_setRenderDefaults(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* cobj = nullptr;
@@ -27452,7 +27452,7 @@ int lua_ax_base_Director_setGLDefaultValues(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setGLDefaultValues'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setRenderDefaults'", nullptr);
         return 0;
     }
 #endif
@@ -27462,19 +27462,19 @@ int lua_ax_base_Director_setGLDefaultValues(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setGLDefaultValues'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setRenderDefaults'", nullptr);
             return 0;
         }
-        cobj->setGLDefaultValues();
+        cobj->setRenderDefaults();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:setGLDefaultValues",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:setRenderDefaults",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_setGLDefaultValues'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_setRenderDefaults'.",&tolua_err);
 #endif
 
     return 0;
@@ -28781,7 +28781,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"drawScene",lua_ax_base_Director_drawScene);
         tolua_function(tolua_S,"purgeCachedData",lua_ax_base_Director_purgeCachedData);
         tolua_function(tolua_S,"setDefaultValues",lua_ax_base_Director_setDefaultValues);
-        tolua_function(tolua_S,"setGLDefaultValues",lua_ax_base_Director_setGLDefaultValues);
+        tolua_function(tolua_S,"setRenderDefaults",lua_ax_base_Director_setRenderDefaults);
         tolua_function(tolua_S,"setClearColor",lua_ax_base_Director_setClearColor);
         tolua_function(tolua_S,"mainLoop",lua_ax_base_Director_mainLoop);
         tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_Director_setContentScaleFactor);
