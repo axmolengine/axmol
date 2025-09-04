@@ -100,7 +100,7 @@ end
 
 -- LayerTestCascadingOpacityB
 local function LayerTestCascadingOpacityB()
-    local ret = createLayerDemoLayer("CCLayerColor: cascading opacity")
+    local ret = createLayerDemoLayer("LayerColor: cascading opacity")
 
     local s = cc.Director:getInstance():getWinSize()
     local layer1 = cc.LayerColor:create(cc.c4b(192, 0, 0, 255), s.width, s.height/2)

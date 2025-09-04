@@ -191,7 +191,7 @@ void TextFieldTTFDefaultTest::onEnter()
 
 std::string TextFieldTTFActionTest::subtitle() const
 {
-    return "CCTextFieldTTF with action and char limit test";
+    return "TextFieldTTF with action and char limit test";
 }
 
 void TextFieldTTFActionTest::onClickTrackNode(bool bClicked, const Vec2& touchPos)

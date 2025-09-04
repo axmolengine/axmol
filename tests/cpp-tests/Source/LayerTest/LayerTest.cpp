@@ -149,7 +149,7 @@ void LayerTestCascadingOpacityB::onEnter()
 
 std::string LayerTestCascadingOpacityB::subtitle() const
 {
-    return "CCLayerColor: cascading opacity";
+    return "LayerColor: cascading opacity";
 }
 
 // LayerTestCascadingOpacityC
@@ -187,7 +187,7 @@ void LayerTestCascadingOpacityC::onEnter()
 
 std::string LayerTestCascadingOpacityC::subtitle() const
 {
-    return "CCLayerColor: non-cascading opacity";
+    return "LayerColor: non-cascading opacity";
 }
 
 //// Example LayerTestCascadingColor
@@ -266,7 +266,7 @@ void LayerTestCascadingColorB::onEnter()
 
 std::string LayerTestCascadingColorB::subtitle() const
 {
-    return "CCLayerColor: cascading color";
+    return "LayerColor: cascading color";
 }
 
 // LayerTestCascadingColorC
@@ -302,7 +302,7 @@ void LayerTestCascadingColorC::onEnter()
 
 std::string LayerTestCascadingColorC::subtitle() const
 {
-    return "CCLayerColor: non-cascading color";
+    return "LayerColor: non-cascading color";
 }
 
 //------------------------------------------------------------------
@@ -802,12 +802,12 @@ std::string LayerBug3162B::subtitle() const
 
 std::string LayerColorOccludeBug::title() const
 {
-    return "Layer Color Occlude Bug Test";
+    return "LayerColor Occlude Bug Test";
 }
 
 std::string LayerColorOccludeBug::subtitle() const
 {
-    return "Layer Color Should not occlude titles and any sprites";
+    return "LayerColor Should not occlude titles and any sprites";
 }
 
 void LayerColorOccludeBug::onEnter()

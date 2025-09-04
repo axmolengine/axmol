@@ -1642,7 +1642,7 @@ std::string ActionCardinalSplineStacked::title() const
 
 std::string ActionCardinalSplineStacked::subtitle() const
 {
-    return "CCMoveBy + CardinalSplineBy/To at the same time";
+    return "MoveBy + CardinalSplineBy/To at the same time";
 }
 
 // Issue1305
