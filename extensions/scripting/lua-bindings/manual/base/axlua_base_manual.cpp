@@ -2189,8 +2189,8 @@ static int toaxlua_DrawNode_drawPolygon(lua_State* tolua_S)
                 lua_pop(tolua_S, 1);
             }
 
-            Color4B fillColor;
-            if (!luaval_to_color4b(tolua_S, 4, &fillColor, "ax.DrawNode:drawPolygon"))
+            Color4F fillColor;
+            if (!luaval_to_color4f(tolua_S, 4, &fillColor, "ax.DrawNode:drawPolygon"))
             {
                 AX_SAFE_DELETE_ARRAY(points);
                 return 0;
@@ -2198,8 +2198,8 @@ static int toaxlua_DrawNode_drawPolygon(lua_State* tolua_S)
 
             float borderWidth = (float)tolua_tonumber(tolua_S, 5, 0);
 
-            Color4B borderColor;
-            if (!luaval_to_color4b(tolua_S, 6, &borderColor, "ax.DrawNode:drawPolygon"))
+            Color4F borderColor;
+            if (!luaval_to_color4f(tolua_S, 6, &borderColor, "ax.DrawNode:drawPolygon"))
             {
                 AX_SAFE_DELETE_ARRAY(points);
                 return 0;
@@ -2273,9 +2273,9 @@ int toaxlua_DrawNode_drawSolidPoly(lua_State* tolua_S)
                 lua_pop(tolua_S, 1);
             }
 
-            ax::Color4B arg2;
+            ax::Color4F arg2;
 
-            ok &= luaval_to_color4b(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidPoly");
+            ok &= luaval_to_color4f(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidPoly");
             if (!ok)
                 return 0;
             self->drawSolidPoly(points, size, arg2);
@@ -2352,11 +2352,11 @@ int toaxlua_DrawNode_drawPoly(lua_State* tolua_S)
             }
 
             bool arg2;
-            ax::Color4B arg3;
+            ax::Color4F arg3;
 
             ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.DrawNode:drawPoly");
 
-            ok &= luaval_to_color4b(tolua_S, 5, &arg3, "ax.DrawNode:drawPoly");
+            ok &= luaval_to_color4f(tolua_S, 5, &arg3, "ax.DrawNode:drawPoly");
             if (!ok)
                 return 0;
 
@@ -2421,13 +2421,13 @@ int toaxlua_DrawNode_drawCardinalSpline(lua_State* tolua_S)
 
         double arg1;
         unsigned int arg2;
-        ax::Color4B arg3;
+        ax::Color4F arg3;
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCardinalSpline");
 
         ok &= luaval_to_uint32(tolua_S, 4, &arg2, "ax.DrawNode:drawCardinalSpline");
 
-        ok &= luaval_to_color4b(tolua_S, 5, &arg3, "ax.DrawNode:drawCardinalSpline");
+        ok &= luaval_to_color4f(tolua_S, 5, &arg3, "ax.DrawNode:drawCardinalSpline");
         if (!ok)
             return 0;
         self->drawCardinalSpline(config, (float)arg1, arg2, arg3);
@@ -2488,11 +2488,11 @@ int toaxlua_DrawNode_drawCatmullRom(lua_State* tolua_S)
         AX_SAFE_DELETE_ARRAY(arr);
 
         unsigned int arg1;
-        ax::Color4B arg2;
+        ax::Color4F arg2;
 
         ok &= luaval_to_uint32(tolua_S, 3, &arg1, "ax.DrawNode:drawCatmullRom");
 
-        ok &= luaval_to_color4b(tolua_S, 4, &arg2, "ax.DrawNode:drawCatmullRom");
+        ok &= luaval_to_color4f(tolua_S, 4, &arg2, "ax.DrawNode:drawCatmullRom");
         if (!ok)
             return 0;
         self->drawCatmullRom(config, arg1, arg2);
@@ -2563,9 +2563,9 @@ int toaxlua_DrawNode_drawPoints(lua_State* tolua_S)
                 lua_pop(tolua_S, 1);
             }
 
-            ax::Color4B arg2;
+            ax::Color4F arg2;
 
-            ok &= luaval_to_color4b(tolua_S, 4, &arg2, "ax.DrawNode:drawPoints");
+            ok &= luaval_to_color4f(tolua_S, 4, &arg2, "ax.DrawNode:drawPoints");
             if (!ok)
                 return 0;
             self->drawPoints(points, size, arg2);
@@ -2601,8 +2601,8 @@ int toaxlua_DrawNode_drawPoints(lua_State* tolua_S)
             }
 
             float pointSize = (float)tolua_tonumber(tolua_S, 4, 0);
-            ax::Color4B color;
-            ok &= luaval_to_color4b(tolua_S, 5, &color, "ax.DrawNode:drawPoints");
+            ax::Color4F color;
+            ok &= luaval_to_color4f(tolua_S, 5, &color, "ax.DrawNode:drawPoints");
             if (!ok)
                 return 0;
             self->drawPoints(points, size, pointSize, color);

@@ -78,7 +78,7 @@ static Vec2 cpVert2Point(const cpVect& vert)
 static void DrawShape(cpShape* shape, DrawNode* renderer)
 {
     cpBody* body  = cpShapeGetBody(shape);
-    Color4B color = ColorForBody(body);
+    Color4F color{ColorForBody(body)};
 
     switch (shape->klass->type)
     {
@@ -101,7 +101,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
     case CP_POLY_SHAPE:
     {
         cpPolyShape* poly = (cpPolyShape*)shape;
-        Color4B line      = color;
+        Color4F line      = color;
         line.a            = cpflerp(color.a, 1.0, 0.5);
         int num           = poly->count;
         Vec2* pPoints     = new Vec2[num];
@@ -109,7 +109,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
             pPoints[i] = cpVert2Point(poly->planes[i].v0);
         if (cpfmax(poly->r, 1.0) > 1.0)
         {
-            renderer->drawPolygon(pPoints, num, Color4B(127, 127, 127,0), poly->r, color);
+            renderer->drawPolygon(pPoints, num, Color4F{}, poly->r, color);
         }
         else
         {
@@ -124,7 +124,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
     }
 }
 
-static Color4B CONSTRAINT_COLOR(0, 255, 0, 127);
+static Color4F CONSTRAINT_COLOR(0, 1, 0, 0.5f);
 
 static void DrawConstraint(cpConstraint* constraint, DrawNode* renderer)
 {

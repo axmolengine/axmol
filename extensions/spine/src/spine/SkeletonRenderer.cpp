@@ -535,7 +535,7 @@ namespace spine {
 							{brect.origin.x + brect.size.width, brect.origin.y},
 							{brect.origin.x + brect.size.width, brect.origin.y + brect.size.height},
 							{brect.origin.x, brect.origin.y + brect.size.height}};
-			drawNode->drawPoly(points, 4, true, Color4B::GREEN, 2.0f);
+			drawNode->drawPoly(points, 4, true, Color4F::GREEN, 2.0f);
 		}
 
 		if (_debugSlots) {
@@ -561,7 +561,7 @@ namespace spine {
 								{worldVertices[2], worldVertices[3]},
 								{worldVertices[4], worldVertices[5]},
 								{worldVertices[6], worldVertices[7]}};
-				drawNode->drawPoly(points, 4, true, Color4B::BLUE, 2.0f);
+				drawNode->drawPoly(points, 4, true, Color4F::BLUE, 2.0f);
 			}
 		}
 
@@ -572,15 +572,15 @@ namespace spine {
 				if (!bone->isActive()) continue;
 				float x = bone->getData().getLength() * bone->getA() + bone->getWorldX();
 				float y = bone->getData().getLength() * bone->getC() + bone->getWorldY();
-				drawNode->drawLine(Vec2(bone->getWorldX(), bone->getWorldY()), Vec2(x, y), Color4B::RED, 2.0f);
+				drawNode->drawLine(Vec2(bone->getWorldX(), bone->getWorldY()), Vec2(x, y), Color4F::RED, 2.0f);
 			}
 			// Bone origins.
-			auto color = Color4B::BLUE;// Root bone is blue.
+			auto color = Color4F::BLUE;// Root bone is blue.
 			for (int i = 0, n = (int)_skeleton->getBones().size(); i < n; i++) {
 				Bone *bone = _skeleton->getBones()[i];
 				if (!bone->isActive()) continue;
 				drawNode->drawPoint(Vec2(bone->getWorldX(), bone->getWorldY()), 4, color);
-				if (i == 0) color = Color4B::GREEN;
+				if (i == 0) color = Color4F::GREEN;
 			}
 		}
 
@@ -603,7 +603,7 @@ namespace spine {
 									worldCoord + (idx0 * 2),
 									worldCoord + (idx1 * 2),
 									worldCoord + (idx2 * 2)};
-					drawNode->drawPoly(v, 3, true, Color4B::YELLOW, 2.0f);
+					drawNode->drawPoly(v, 3, true, Color4F::YELLOW, 2.0f);
 				}
 				VLA_FREE(worldCoord);
 			}

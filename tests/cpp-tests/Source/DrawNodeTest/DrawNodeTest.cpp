@@ -1675,7 +1675,7 @@ void DrawNodeMorphTest_SolidPolygon::update(float dt)
 
         drawNodeArray[n]->properties.setScale(Vec2(0.5f, 0.5f));
         drawNodeArray[n]->drawSolidPolygon(verticesObjMorph[n], segments, color[n], sliderValue[sliderType::Thickness],
-            Color4B::YELLOW);
+            Color4F::YELLOW);
     }
 }
 
@@ -1957,9 +1957,9 @@ void DrawNodeJellyFishTest::DrawFrame()
         CalculatePoint(ii, ii / 235.0, t, px, py);
         dots[i] = Vec2(px + 150, py + 50);
     }
-    drawNode->drawPoints(dots, NUM_POINTS - 1, Color4B::GREEN);
+    drawNode->drawPoints(dots, NUM_POINTS - 1, Color4F::GREEN);
     UpdateJellyPoints();
-    drawNode->drawPoints(dots, NUM_POINTS - 1, Color4B::WHITE);
+    drawNode->drawPoints(dots, NUM_POINTS - 1, Color4F::WHITE);
 }
 
 
@@ -2086,7 +2086,7 @@ void DrawNodeThicknessTest::update(float dt)
         {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
         {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
     };
-    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::TRANSPARENT,
+    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::TRANSPARENT,
         sliderValue[sliderType::Thickness] / 2, Color4F::RED);
 
     // open random color poly
@@ -2350,7 +2350,7 @@ void DrawNodeThicknessStressTest::update(float dt)
         {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
         {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f},
     };
-    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4B::TRANSPARENT,
+    drawNode->drawPolygon(vertices24, sizeof(vertices24) / sizeof(vertices24[0]), Color4F::TRANSPARENT,
         negativThickness, Color4F::RED);
 
     // open random color poly
@@ -2708,7 +2708,7 @@ void DrawNodeMethodsTest::drawAll()
             Vec2 p3 = pts->getControlPointAtIndex(i);
 
             drawNode->properties.setPosition(Vec2(-100, -100));
-            drawNode->drawQuadBezier(p1, p2, p3, 30, Color4B::RED, sliderValue[sliderType::Thickness]);
+            drawNode->drawQuadBezier(p1, p2, p3, 30, Color4F::RED, sliderValue[sliderType::Thickness]);
         }
 
         for (int i = 0; i < 360;)
@@ -2718,7 +2718,7 @@ void DrawNodeMethodsTest::drawAll()
             Vec2 p3 = pts2->getControlPointAtIndex(i);
 
             drawNode->properties.setPosition(Vec2(-100, -100));
-            drawNode->drawQuadBezier(p1, p2, p3, 30, Color4B::GREEN, sliderValue[sliderType::Thickness]);
+            drawNode->drawQuadBezier(p1, p2, p3, 30, Color4F::GREEN, sliderValue[sliderType::Thickness]);
         }
 
         break;
@@ -2812,13 +2812,13 @@ void DrawNodeMethodsTest::drawAll()
     {
         Vec2 vertices[5] = { {0.0f, 0.0f}, {50.0f, 50.0f}, {100.0f, 50.0f}, {100.0f, 100.0f}, {50.0f, 100.0f} };
         drawNode->properties.setPosition(Vec2(-200, -300));
-        drawNode->drawPoly(vertices, 5, false, Color4B::BLUE, sliderValue[sliderType::Thickness]);
+        drawNode->drawPoly(vertices, 5, false, Color4F::BLUE, sliderValue[sliderType::Thickness]);
 
         Vec2 vertices2[3] = { {30.0f, 130.0f}, {30.0f, 230.0f}, {50.0f, 200.0f} };
-        drawNode->drawPoly(vertices2, 3, true, Color4B::GREEN, sliderValue[sliderType::Thickness]);
+        drawNode->drawPoly(vertices2, 3, true, Color4F::GREEN, sliderValue[sliderType::Thickness]);
 
         drawNode->properties.setDefaultValues();
-        drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color4B::RED,
+        drawNode->drawPoly(vertices1, sizeof(vertices1) / sizeof(vertices1[0]), true, Color4F::RED,
             sliderValue[sliderType::Thickness]);
 
         drawNode->properties.setPosition(Vec2(0, -300));
@@ -2928,14 +2928,14 @@ void DrawNodeMethodsTest::drawAll()
     }
     case drawMethodes::Triangle:
     {
-        static Color4B color3[] = { Color4B::GREEN, Color4B::BLUE, Color4B::RED };
+        static Color4F color3[] = { Color4F::GREEN, Color4F::BLUE, Color4F::RED };
         drawNode->properties.setPosition(center);
         drawNode->properties.setScale(Vec2(10, 10));
 
         {
             drawNode->drawTriangle(Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
                 Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
-                Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20, Color4B::RED);
+                                   Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20, Color4F::RED);
         }
         {
             Vec2 triangle[] = { Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
@@ -2958,11 +2958,11 @@ void DrawNodeMethodsTest::drawAll()
 
             drawNode->drawSolidTriangle(Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
                 Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20,
-                Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20, Color4B::RED,
-                Color4B::BLUE, sliderValue[sliderType::Thickness]);
+                                        Vec2(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()) * 20, Color4F::RED,
+                                        Color4F::BLUE, sliderValue[sliderType::Thickness]);
 
             drawNode->properties.setPosition(center - Vec2(200, 200));
-            drawNode->drawSolidTriangle(triangle, Color4B::GREEN, Color4B::BLUE, sliderValue[sliderType::Thickness]);
+            drawNode->drawSolidTriangle(triangle, Color4F::GREEN, Color4F::BLUE, sliderValue[sliderType::Thickness]);
         }
         break;
     }
@@ -3178,7 +3178,7 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
 
     drawNode->clear();
 
-    drawNode->drawLine(Vec2(20, 140), Vec2(450, 110), Color4B::RED, 20.0f);
+    drawNode->drawLine(Vec2(20, 140), Vec2(450, 110), Color4F::RED, 20.0f);
 
     for (int i = 0; i < 200; i++)
     {
@@ -3190,7 +3190,7 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
         drawNode->drawPoints(position1, 4, 10, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
     }
 
-    drawNode->drawSolidRect(Vec2(150, 80), Vec2(400, 220), Color4B::YELLOW);
+    drawNode->drawSolidRect(Vec2(150, 80), Vec2(400, 220), Color4F::YELLOW);
 
     for (int i = 0; i < 50; i++)
     {
@@ -3198,9 +3198,9 @@ void DrawNodeDrawInWrongOrder_Issue1888::update(float dt)
             Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     }
 
-    drawNode->drawLine(Vec2(20, 100), Vec2(450, 220), Color4B::GREEN, 8.0f);
+    drawNode->drawLine(Vec2(20, 100), Vec2(450, 220), Color4F::GREEN, 8.0f);
 
-    drawNode->drawLine(Vec2(200, 100), Vec2(450, 250), Color4B::BLUE, 6.0f);
+    drawNode->drawLine(Vec2(200, 100), Vec2(450, 250), Color4F::BLUE, 6.0f);
 }
 
 DrawNodeAxmolTest2::DrawNodeAxmolTest2()
@@ -3488,7 +3488,7 @@ DrawNodeIssueTester::DrawNodeIssueTester()
         drawNode->drawLine(Vec2(140, y), Vec2(180, y), Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f),
             thick);
     }
-    drawNode->drawPie(Vec2(-220, 150), 20, 0, 100, 300, 1, 1, Color4B::TRANSPARENT, Color4B::BLUE,
+    drawNode->drawPie(Vec2(-220, 150), 20, 0, 100, 300, 1, 1, Color4F::TRANSPARENT, Color4F::BLUE,
         DrawNode::DrawMode::Line, 10);
 
     drawNode->properties.setPosition(Vec2(50, -100));
