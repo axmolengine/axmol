@@ -8,6 +8,7 @@
 - Fix missing processor endif in platform/mac/GL-mac.h by @halx99
 - Fix package name for lua-tests, live2d-tests by @halx99
 - Fix AccelerometerTest of lua-tests not work by @halx99
+- Fix wasm downloader by @AlexandreK38 in [#2676](https://github.com/axmolengine/axmol/pull/2676)
 
 ## Deprecated
 
