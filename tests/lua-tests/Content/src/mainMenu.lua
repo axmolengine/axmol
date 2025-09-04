@@ -16,7 +16,7 @@ require "ClickAndMoveTest/ClickAndMoveTest"
 require "ComponentTest/main"
 require "CurrentLanguageTest/CurrentLanguageTest"
 require "DownloaderTest/DownloaderTest"
-require "DrawPrimitivesTest/DrawPrimitivesTest"
+require "DrawNodeTest/DrawNodeTest"
 require "EffectsTest/EffectsTest"
 require "EffectsAdvancedTest/EffectsAdvancedTest"
 require "ExtensionTest/ExtensionTest"
@@ -86,7 +86,7 @@ local _allTests = {
     { isSupported = true,  name = "ComponentTest"          , create_func   =         ComponentTestMain  },
     { isSupported = true,  name = "CurrentLanguageTest"    , create_func   =   CurrentLanguageTestMain      },
     { isSupported = true,  name = "DownloaderTest"         , create_func   =            DownloaderTestMain  },
-    { isSupported = true,  name = "DrawPrimitivesTest"     , create_func   =        DrawPrimitivesTest      },
+    { isSupported = true,  name = "DrawNodeTest"     , create_func   =        DrawNodeTest     },
     { isSupported = true,  name = "EffectsTest"            , create_func   =               EffectsTest      },
     { isSupported = true,  name = "EffectAdvancedTest"     , create_func   =        EffectAdvancedTestMain  },
     { isSupported = true,  name = "ExtensionsTest"         , create_func   =        ExtensionsTestMain      },
