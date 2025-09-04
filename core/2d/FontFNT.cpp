@@ -128,7 +128,7 @@ BMFontConfiguration::~BMFontConfiguration()
 std::string BMFontConfiguration::description() const
 {
     return fmt::format(
-        "<BMFontConfiguration = " AX_FORMAT_PRINTF_SIZE_T " | Glphys:{} Kernings:{} | Image = {}>", (size_t)this,
+        "<BMFontConfiguration = {} | Glphys:{} Kernings:{} | Image = {}>", fmt::ptr(this),
         static_cast<int>(_fontDefDictionary.size()), static_cast<int>(_kerningDictionary.size()), _atlasName);
 }
 

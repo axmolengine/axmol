@@ -52,7 +52,7 @@ bool AudioDecoderEXT::open(std::string_view fullPath)
         BREAK_IF_ERR_LOG(fullPath.empty(), "Invalid path!");
 
         _fileStream = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
-        BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: %s", fullPath.data());
+        BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: {}", fullPath);
         if (_fileStream)
         {
             _streamSize = _fileStream->size();  // cache the stream size
@@ -60,12 +60,12 @@ bool AudioDecoderEXT::open(std::string_view fullPath)
 
         OSStatus status = AudioFileOpenWithCallbacks(this, &AudioDecoderEXT::readCallback, nullptr,
                                                      &AudioDecoderEXT::getSizeCallback, nullptr, 0, &_audioFileId);
-        BREAK_IF_ERR_LOG(status != noErr, "AudioFileOpenWithCallbacks FAILED, Error = %d", (int)status);
+        BREAK_IF_ERR_LOG(status != noErr, "AudioFileOpenWithCallbacks FAILED, Error = {}", (int)status);
 
         status = ExtAudioFileWrapAudioFileID(_audioFileId, false, &_extRef);
-        BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileWrapAudioFileID FAILED, Error = %d", (int)status);
+        BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileWrapAudioFileID FAILED, Error = {}", (int)status);
 
-        BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileOpenURL FAILED, Error = %d", (int)status);
+        BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileOpenURL FAILED, Error = {}", (int)status);
 
         AudioStreamBasicDescription fileFormat;
         UInt32 propertySize = sizeof(fileFormat);
@@ -73,7 +73,7 @@ bool AudioDecoderEXT::open(std::string_view fullPath)
         // Get the audio data format
         status = ExtAudioFileGetProperty(_extRef, kExtAudioFileProperty_FileDataFormat, &propertySize, &fileFormat);
         BREAK_IF_ERR_LOG(status != noErr,
-                         "ExtAudioFileGetProperty(kExtAudioFileProperty_FileDataFormat) FAILED, Error = %d",
+                         "ExtAudioFileGetProperty(kExtAudioFileProperty_FileDataFormat) FAILED, Error = {}",
                          (int)status);
         BREAK_IF_ERR_LOG(fileFormat.mChannelsPerFrame > 2, "Unsupported Format, channel count is greater than stereo!");
 
@@ -96,16 +96,16 @@ bool AudioDecoderEXT::open(std::string_view fullPath)
 
         status = ExtAudioFileSetProperty(_extRef, kExtAudioFileProperty_ClientDataFormat, sizeof(_outputFormat),
                                          &_outputFormat);
-        BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileSetProperty FAILED, Error = %d", (int)status);
+        BREAK_IF_ERR_LOG(status != noErr, "ExtAudioFileSetProperty FAILED, Error = {}", (int)status);
 
         // Get the total frame count
         SInt64 totalFrames = 0;
         propertySize       = sizeof(totalFrames);
         status = ExtAudioFileGetProperty(_extRef, kExtAudioFileProperty_FileLengthFrames, &propertySize, &totalFrames);
         BREAK_IF_ERR_LOG(status != noErr,
-                         "ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) FAILED, Error = %d",
+                         "ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) FAILED, Error = {}",
                          (int)status);
-        BREAK_IF_ERR_LOG(totalFrames <= 0, "Total frames is 0, it's an invalid audio file: %s", fullPath.data());
+        BREAK_IF_ERR_LOG(totalFrames <= 0, "Total frames is 0, it's an invalid audio file: {}", fullPath);
         _totalFrames = static_cast<uint32_t>(totalFrames);
         _isOpened    = true;
 

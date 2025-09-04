@@ -420,12 +420,6 @@ public:                                                 \
 #    define AX_FORMAT_PRINTF(formatPos, argPos)
 #endif
 
-#if defined(_MSC_VER)
-#    define AX_FORMAT_PRINTF_SIZE_T "%08lX"
-#else
-#    define AX_FORMAT_PRINTF_SIZE_T "%08zX"
-#endif
-
 #ifdef __GNUC__
 #    define AX_UNUSED __attribute__((unused))
 #else
