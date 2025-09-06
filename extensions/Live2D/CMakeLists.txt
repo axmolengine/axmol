@@ -40,13 +40,14 @@ else()
   target_link_libraries(${LIB_NAME} Live2DCubismCore)
 endif()
 
-ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Framework/src/Rendering/axmol/shaders" LIVE2D_SHADER_SOURCES)
-ax_target_compile_shaders(${LIB_NAME} FILES ${LIVE2D_SHADER_SOURCES} CUSTOM)
-
+ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Framework/src/Rendering/axmol/shaders" live2d_shader_sources)
 if(ANDROID)
-  ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Framework/src/Rendering/axmol/shaders_tegra" LIVE2D_TEGRA_SHADER_SOURCES)
-  ax_target_compile_shaders(${LIB_NAME} FILES ${LIVE2D_TEGRA_SHADER_SOURCES} CUSTOM)
+  ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Framework/src/Rendering/axmol/shaders_tegra" live2d_tga_shader_sources)
+  list(APPEND live2d_shader_sources ${live2d_tga_shader_sources})
 endif()
+
+ax_add_shader_target(${LIB_NAME}_shaders FILES ${live2d_shader_sources} CUSTOM)
+add_dependencies(${LIB_NAME} ${LIB_NAME}_shaders)
 
 if(ANDROID)
   setup_ax_extension_config(${LIB_NAME} LINK_SCOPE PRIVATE)

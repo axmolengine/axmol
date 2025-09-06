@@ -63,7 +63,7 @@ file(GLOB_RECURSE GAME_HEADER
 file(GLOB_RECURSE GAME_SOURCE
     Source/*.cpp
     )
-    
+
 set(GAME_INC_DIRS
   "${CMAKE_CURRENT_SOURCE_DIR}/Source"
 )
@@ -83,7 +83,6 @@ if(APPLE)
 elseif(WINDOWS)
     ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
 endif()
-
 
 if(ANDROID)
     # the APP_NAME should match on AndroidManifest.xml
@@ -164,13 +163,16 @@ set(APP_SOURCES
     ${GAME_HEADER}
     ${GAME_SOURCE}
     )
+
+get_target_property(cpp_tests_shaders "cpp-tests_shaders" SOURCES)
+
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SOURCES})
     # lua-tests share shaders and other res of cpp-tests
     add_dependencies(${APP_NAME} "cpp-tests_shaders")
 else()
     add_library(${APP_NAME} SHARED ${APP_SOURCES})
-    
+
     # whole archive for jni
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 
@@ -197,7 +199,7 @@ endif()
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
 # mark app resources, resource will be copy auto after mark
-ax_setup_app_config(${APP_NAME} CONSOLE)
+ax_setup_app_config(${APP_NAME} CONSOLE DEPEND_SHADERS ${cpp_tests_shaders})
 
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")

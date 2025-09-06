@@ -374,7 +374,8 @@ set_source_files_properties(
   ${_AX_ROOT}/axmol/renderer/shaders/skinPositionNormalTexture.vert
   PROPERTIES AXSLCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
 )
-ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+ax_add_shader_target(${_AX_CORE_LIB}_shaders FILES ${BUILTIN_SHADER_SOURCES})
+add_dependencies(${_AX_CORE_LIB} ${_AX_CORE_LIB}_shaders)
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)

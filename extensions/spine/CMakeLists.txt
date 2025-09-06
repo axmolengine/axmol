@@ -25,6 +25,7 @@ target_include_directories(
 )
 
 ax_find_shaders(${CMAKE_CURRENT_LIST_DIR}/shaders SPINE_SHADER_SOURCES)
-ax_target_compile_shaders(${target_name} FILES ${SPINE_SHADER_SOURCES} CUSTOM)
+ax_add_shader_target(${target_name}_shaders FILES ${SPINE_SHADER_SOURCES} CUSTOM)
+add_dependencies(${target_name} ${target_name}_shaders)
 
 setup_ax_extension_config(${target_name})

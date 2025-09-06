@@ -78,19 +78,18 @@ endfunction()
 
 # This function allow make shader files (.frag, .vert) compiled with axslcc
 # usage:
-# - ax_target_compile_shaders(axmol FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/xxx_fs
-# - ax_target_compile_shaders(axmol FILES source_files CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/xxx_fs
-# - ax_target_compile_shaders(axmol FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
+# - ax_add_shader_target(${app_name}_shaders FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/xxx_fs
+# - ax_add_shader_target(${app_name}_shaders FILES source_files CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/xxx_fs
+# - ax_add_shader_target(${app_name}_shaders FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
 # Use global variable to control shader file extension:
 # - AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
 # - AXSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
 #
-function(ax_target_compile_shaders native_target_name)
+function(ax_add_shader_target target_name)
   set(options RUNTIME CVAR CUSTOM)
   set(multiValueArgs FILES)
   cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
 
-  set(target_name ${native_target_name}_shaders)
   if(NOT TARGET ${target_name})
     add_custom_target(${target_name})
   endif()
@@ -259,11 +258,9 @@ function(ax_target_compile_shaders native_target_name)
 
   # folder
   set_target_properties(${target_name} PROPERTIES FOLDER "Shaders")
-
-  # add dependency
-  add_dependencies(${native_target_name} ${target_name})
 endfunction()
 
+# for winrt/uwp only
 function(ax_target_embed_compiled_shaders target_name rc_output)
   set(multiValueArgs FILES)
   cmake_parse_arguments(opt "" "" "${multiValueArgs}" ${ARGN})

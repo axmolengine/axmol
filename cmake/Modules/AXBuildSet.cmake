@@ -32,7 +32,7 @@ if(ANDROID)
 endif()
 
 # import minimal axslcc.cmake for shader compiler support
-# the function: ax_target_compile_shaders avaiable from it
+# the function: ax_add_shader_target avaiable from it
 file(TO_CMAKE_PATH "${_AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH)
 file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH_ENV)
 set(AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH}")
