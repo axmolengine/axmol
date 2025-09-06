@@ -415,29 +415,32 @@ endfunction()
 # `AX_COMPILED_SHADERS` property on the target. This function uses this property to gather
 # the list of all shaders from this target and all libraries that this target depends on.
 function(get_target_compiled_shaders output_list target)
-  set(_visited_targets "")
-  set(_all_shaders "")
+  set_property(GLOBAL PROPERTY _visited_targets "")
+  set_property(GLOBAL PROPERTY _all_shaders "")
 
   function(_collect_shaders_recursive tgt)
-    list(FIND _visited_targets "${tgt}" _found)
+    get_property(_visited GLOBAL PROPERTY _visited_targets)
+    list(FIND _visited "${tgt}" _found)
     if(NOT _found EQUAL -1)
       return()
     endif()
-    list(APPEND _visited_targets "${tgt}")
-    set(_visited_targets "${_visited_targets}" PARENT_SCOPE)
+    list(APPEND _visited "${tgt}")
+    set_property(GLOBAL PROPERTY _visited_targets "${_visited}")
 
     get_target_property(_shaders "${tgt}" AX_COMPILED_SHADERS)
     if(_shaders)
-      list(APPEND _all_shaders ${_shaders})
-      set(_all_shaders "${_all_shaders}" PARENT_SCOPE)
+      get_property(_all GLOBAL PROPERTY _all_shaders)
+      list(APPEND _all ${_shaders})
+      set_property(GLOBAL PROPERTY _all_shaders "${_all}")
     endif()
 
     get_property(_depends TARGET "${tgt}" PROPERTY SHADER_DEPENDS)
     foreach(dep IN LISTS _depends)
       get_target_property(_dep_shaders "${dep}" AX_COMPILED_SHADERS)
       if(_dep_shaders)
-        list(APPEND _all_shaders ${_dep_shaders})
-        set(_all_shaders "${_all_shaders}" PARENT_SCOPE)
+        get_property(_all GLOBAL PROPERTY _all_shaders)
+        list(APPEND _all ${_dep_shaders})
+        set_property(GLOBAL PROPERTY _all_shaders "${_all}")
       endif()
     endforeach()
 
@@ -452,8 +455,10 @@ function(get_target_compiled_shaders output_list target)
   endfunction()
 
   _collect_shaders_recursive("${target}")
-  list(REMOVE_DUPLICATES _all_shaders)
-  set(${output_list} "${_all_shaders}" PARENT_SCOPE)
+
+  get_property(_all GLOBAL PROPERTY _all_shaders)
+  list(REMOVE_DUPLICATES _all)
+  set(${output_list} "${_all}" PARENT_SCOPE)
 endfunction()
 
 function(ax_add_delay_load_options target)
@@ -472,7 +477,6 @@ endfunction()
 function(ax_setup_app_config app_name)
   set(options CONSOLE)
   set(oneValueArgs RUNTIME_OUTPUT_DIR)
-  set(multiValueArgs DEPEND_SHADERS)
   cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "${multiValueArgs}"
     "" ${ARGN})
 
@@ -564,10 +568,6 @@ function(ax_setup_app_config app_name)
   set(app_shaders_dir "${_APP_SOURCE_DIR}/Source/shaders")
 
   ax_find_shaders(${app_shaders_dir} app_shaders RECURSE)
-  if(ANDROID AND opt_DEPEND_SHADERS) # lua-tests spec
-    list(APPEND app_shaders ${opt_DEPEND_SHADERS})
-  endif()
-
   if(app_shaders)
     list(LENGTH app_shaders app_shaders_count)
     message(STATUS "${app_shaders_count} shader sources found in ${app_shaders_dir}")
@@ -596,16 +596,8 @@ function(ax_setup_app_config app_name)
       endif()
     elseif(WINRT OR WASM)
       if(WINRT)
-        set(app_all_shaders)
-        list(APPEND app_all_shaders ${_AX_BUILTIN_SHADERS})
-        list(APPEND app_all_shaders ${app_shaders})
-        message(STATUS "${app_name} DEPEND_SHADERS=${opt_DEPEND_SHADERS}")
-        if(opt_DEPEND_SHADERS)
-          list(APPEND app_all_shaders ${opt_DEPEND_SHADERS})
-        endif()
-        # the app_all_shaders is shader source list, ax_target_embed_compiled_shaders will 
-        # auto get compiled shader path by source property 'SC_OUTPUT'
-        ax_target_embed_compiled_shaders(${app_name} ${rt_output} FILES ${app_all_shaders})
+        get_target_compiled_shaders(all_compiled_shaders ${app_name})
+        ax_target_embed_compiled_shaders(${app_name} ${rt_output} FILES ${all_compiled_shaders})
       else()
         # --preload-file
         # refer to: https://emscripten.org/docs/porting/files/packaging_files.html

@@ -165,13 +165,15 @@ set(APP_SOURCES
     )
 
 if(NOT ANDROID)
-    get_target_property(cpp_tests_shaders "cpp-tests_shaders" SOURCES)
     add_executable(${APP_NAME} ${APP_SOURCES})
+
     # lua-tests share shaders and other res of cpp-tests
     ax_add_shader_dependencies(${APP_NAME} "cpp-tests_shaders")
 else()
-    ax_find_shaders(${_AX_ROOT}/tests/cpp-tests/Source/shaders cpp_tests_shaders RECURSE)
     add_library(${APP_NAME} SHARED ${APP_SOURCES})
+
+    # lua-tests just use cpp-tests shaders
+    ax_add_shader_target_for(${APP_NAME} PATH "${_AX_ROOT}/tests/cpp-tests/Source/shaders")
 
     # whole archive for jni
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
@@ -199,7 +201,7 @@ endif()
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
 # mark app resources, resource will be copy auto after mark
-ax_setup_app_config(${APP_NAME} CONSOLE DEPEND_SHADERS ${cpp_tests_shaders})
+ax_setup_app_config(${APP_NAME} CONSOLE)
 
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")

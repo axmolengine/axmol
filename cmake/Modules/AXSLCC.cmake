@@ -88,7 +88,7 @@ endfunction()
 # Use global variable to control shader file extension:
 # - AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
 # - AXSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
-# 
+#
 # CUSTOM operation is deprecated
 #
 function(ax_add_shader_target target_name)
@@ -303,30 +303,22 @@ function(ax_target_embed_compiled_shaders target_name rc_output)
   string(APPEND _props_xml_content "<Project DefaultTargets=\"Build\" ToolsVersion=\"12.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\n")
   string(APPEND _props_xml_content "  <ItemGroup Label=\"axslc\">\n")
 
-  foreach(shader ${opt_FILES})
-    get_source_file_property(compiled_shaders ${shader} DIRECTORY ${CMAKE_BINARY_DIR} AXSLCC_OUTPUT)
+  foreach(compiled_shader ${opt_FILES})
+    file(RELATIVE_PATH compiled_shader_rp ${AXSLCC_OUT_DIR} ${compiled_shader})
+    file(TO_NATIVE_PATH "Content/axslc/${compiled_shader_rp}" compiled_shader_target_dir)
+    file(TO_NATIVE_PATH "${compiled_shader}" compiled_shader_path)
+    set(app_all_shaders_filters "${app_all_shaders_filters}  <ItemGroup Label=\"axslc\">\n")
+    string(APPEND _props_xml_content "    <None Include=\"${compiled_shader_path}\">\n")
+    string(APPEND _props_xml_content "      <Link>${compiled_shader_target_dir}</Link>\n")
+    string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='Debug|x64'\">true</DeploymentContent>\n")
+    string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='Release|x64'\">true</DeploymentContent>\n")
+    string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='MinSizeRel|x64'\">true</DeploymentContent>\n")
+    string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='RelWithDebInfo|x64'\">true</DeploymentContent>\n")
+    string(APPEND _props_xml_content "    </None>\n")
 
-    if(compiled_shaders STREQUAL "NOTFOUND")
-      message(FATAL_ERROR "Not found property AXSLCC_OUTPUT of file: ${shader}")
-    endif()
-
-    foreach(compiled_shader ${compiled_shaders})
-      file(RELATIVE_PATH compiled_shader_rp ${AXSLCC_OUT_DIR} ${compiled_shader})
-      file(TO_NATIVE_PATH "Content/axslc/${compiled_shader_rp}" compiled_shader_target_dir)
-      file(TO_NATIVE_PATH "${compiled_shader}" compiled_shader_path)
-      set(app_all_shaders_filters "${app_all_shaders_filters}  <ItemGroup Label=\"axslc\">\n")
-      string(APPEND _props_xml_content "    <None Include=\"${compiled_shader_path}\">\n")
-      string(APPEND _props_xml_content "      <Link>${compiled_shader_target_dir}</Link>\n")
-      string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='Debug|x64'\">true</DeploymentContent>\n")
-      string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='Release|x64'\">true</DeploymentContent>\n")
-      string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='MinSizeRel|x64'\">true</DeploymentContent>\n")
-      string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='RelWithDebInfo|x64'\">true</DeploymentContent>\n")
-      string(APPEND _props_xml_content "    </None>\n")
-
-      string(APPEND _filters_xml_content "    <None Include=\"${compiled_shader_path}\">\n")
-      string(APPEND _filters_xml_content "      <Filter>Content\\axslc</Filter>\n")
-      string(APPEND _filters_xml_content "    </None>\n")
-    endforeach()
+    string(APPEND _filters_xml_content "    <None Include=\"${compiled_shader_path}\">\n")
+    string(APPEND _filters_xml_content "      <Filter>Content\\axslc</Filter>\n")
+    string(APPEND _filters_xml_content "    </None>\n")
   endforeach()
 
   string(APPEND _props_xml_content "  </ItemGroup>\n</Project>")

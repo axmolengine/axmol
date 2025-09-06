@@ -6070,7 +6070,7 @@ static void extendPipelineDescriptor(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
-static int axlua_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
+static int axlua_rhi_ProgramState_getUniformLocation(lua_State* tolua_S)
 {
     int argc                    = 0;
     ax::rhi::ProgramState* cobj = nullptr;
@@ -6087,7 +6087,7 @@ static int axlua_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_backend_ProgramState_getUniformLocation'", nullptr);
+        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_rhi_ProgramState_getUniformLocation'", nullptr);
         return 0;
     }
 #endif
@@ -6131,7 +6131,7 @@ static int axlua_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'axlua_backend_ProgramState_getUniformLocation'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'axlua_rhi_ProgramState_getUniformLocation'.", &tolua_err);
 #endif
 
     return 0;
@@ -6213,7 +6213,7 @@ static void extendProgramState(lua_State* tolua_S)
     if (lua_istable(tolua_S, -1))
     {
         tolua_function(tolua_S, "setUniform", axlua_ProgramState_setUniform);
-        tolua_function(tolua_S, "getUniformLocation", axlua_backend_ProgramState_getUniformLocation);
+        tolua_function(tolua_S, "getUniformLocation", axlua_rhi_ProgramState_getUniformLocation);
     }
     tolua_endmodule(tolua_S);
     tolua_endmodule(tolua_S);
