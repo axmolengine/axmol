@@ -192,7 +192,7 @@ TEST_SUITE("base/Map")
                 different++;
         }
         CHECK(different > 0);
-        CHECK(different > mapForRandom.size() * 3 / 4);  // At least 75% different
+        CHECK(different >= mapForRandom.size() * 3 / 4);  // At least 75% different
 
         // Self assignment
         StringMap<Node*> mapForSelfAssign = createMap();
