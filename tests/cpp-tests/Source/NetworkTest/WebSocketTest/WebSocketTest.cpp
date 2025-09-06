@@ -40,7 +40,7 @@
    - https://blog.postman.com/introducing-postman-websocket-echo-service/
    - other https://www.lob.com/blog/websocket-org-is-down-here-is-an-alternative
 */
-#define ECHO_SERVER_URL "wss://ws.ifelse.io"
+#define ECHO_SERVER_URL  "wss://ws.ifelse.io"
 #define SOCKETIO_SERVICE "wss://ws.postman-echo.com/socketio"
 
 using namespace ax;

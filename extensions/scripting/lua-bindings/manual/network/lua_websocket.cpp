@@ -346,9 +346,10 @@ int axlua_WebSocket_registerScriptHandler00(lua_State* tolua_S)
         LuaWebSocket* self = (LuaWebSocket*)tolua_tousertype(tolua_S, 1, 0);
         if (self)
         {
-            int handler                               = (toluafix_ref_function(tolua_S, 2, 0));
-            ScriptHandlerMgr::HandlerType handlerType = (ScriptHandlerMgr::HandlerType)(
-                (int)tolua_tonumber(tolua_S, 3, 0) + (int)ScriptHandlerMgr::HandlerType::WEBSOCKET_OPEN);
+            int handler = (toluafix_ref_function(tolua_S, 2, 0));
+            ScriptHandlerMgr::HandlerType handlerType =
+                (ScriptHandlerMgr::HandlerType)((int)tolua_tonumber(tolua_S, 3, 0) +
+                                                (int)ScriptHandlerMgr::HandlerType::WEBSOCKET_OPEN);
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, handlerType);
         }
     }
@@ -373,8 +374,9 @@ int axlua_WebSocket_unregisterScriptHandler00(lua_State* tolua_S)
         LuaWebSocket* self = (LuaWebSocket*)tolua_tousertype(tolua_S, 1, 0);
         if (self)
         {
-            ScriptHandlerMgr::HandlerType handlerType = (ScriptHandlerMgr::HandlerType)(
-                (int)tolua_tonumber(tolua_S, 2, 0) + (int)ScriptHandlerMgr::HandlerType::WEBSOCKET_OPEN);
+            ScriptHandlerMgr::HandlerType handlerType =
+                (ScriptHandlerMgr::HandlerType)((int)tolua_tonumber(tolua_S, 2, 0) +
+                                                (int)ScriptHandlerMgr::HandlerType::WEBSOCKET_OPEN);
 
             ScriptHandlerMgr::getInstance()->removeObjectHandler((void*)self, handlerType);
         }
