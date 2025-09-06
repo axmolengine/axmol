@@ -46,8 +46,7 @@ if(ANDROID)
   list(APPEND live2d_shader_sources ${live2d_tga_shader_sources})
 endif()
 
-ax_add_shader_target(${LIB_NAME}_shaders FILES ${live2d_shader_sources} CUSTOM)
-add_dependencies(${LIB_NAME} ${LIB_NAME}_shaders)
+ax_add_shader_target_for(${LIB_NAME} FILES ${live2d_shader_sources})
 
 if(ANDROID)
   setup_ax_extension_config(${LIB_NAME} LINK_SCOPE PRIVATE)

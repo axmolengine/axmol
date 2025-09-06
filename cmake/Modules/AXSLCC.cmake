@@ -48,6 +48,10 @@ define_property(SOURCE PROPERTY AXSLCC_OUTPUT
   BRIEF_DOCS "The compiled sources shader output path list"
   FULL_DOCS "The compiled shaders output list, seperated with comma")
 
+define_property(TARGET PROPERTY SHADER_DEPENDS
+  BRIEF_DOCS "The shader depends of normal target"
+  FULL_DOCS "The shader depends of normal target, seperated with comma")
+
 # Find shader sources in specified directory
 # syntax: ax_find_shaders(dir shader_sources [RECURSE])
 # examples:
@@ -78,20 +82,33 @@ endfunction()
 
 # This function allow make shader files (.frag, .vert) compiled with axslcc
 # usage:
-# - ax_add_shader_target(${app_name}_shaders FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/xxx_fs
-# - ax_add_shader_target(${app_name}_shaders FILES source_files CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/xxx_fs
-# - ax_add_shader_target(${app_name}_shaders FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
+# - ax_add_shader_target(shader_target FILES source_files BUILTIN): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/xxx_fs
+# - ax_add_shader_target(shader_target FILES source_files):         output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/xxx_fs
+# - ax_add_shader_target(shader_target FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
 # Use global variable to control shader file extension:
 # - AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
 # - AXSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
+# 
+# CUSTOM operation is deprecated
 #
 function(ax_add_shader_target target_name)
-  set(options RUNTIME CVAR CUSTOM)
+  set(options BUILTIN CVAR CUSTOM)
+  set(oneValueArgs PATH)
   set(multiValueArgs FILES)
-  cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
+  cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   if(NOT TARGET ${target_name})
+    message(STATUS "Add shader build target: ${target_name}, BUILTIN:${opt_BUILTIN}")
     add_custom_target(${target_name})
+  endif()
+
+  set(_all_shader_files)
+
+  if(opt_PATH)
+    if(NOT opt_FILES)
+      set(opt_FILES "")
+    endif()
+    ax_find_shaders(${opt_PATH} opt_FILES)
   endif()
 
   set(compiled_shaders)
@@ -195,7 +212,7 @@ function(ax_add_shader_target target_name)
     # output
     set(OUT_DIR ${AXSLCC_OUT_DIR})
 
-    if(opt_CUSTOM)
+    if(NOT opt_BUILTIN)
       set(OUT_DIR "${OUT_DIR}/custom")
     endif()
 
@@ -259,6 +276,19 @@ function(ax_add_shader_target target_name)
 
   # folder
   set_target_properties(${target_name} PROPERTIES FOLDER "Shaders")
+endfunction()
+
+function(ax_add_shader_dependencies target)
+  foreach(shader_tgt IN LISTS ARGN)
+    add_dependencies(${target} ${shader_tgt})
+    set_property(TARGET ${target} APPEND PROPERTY SHADER_DEPENDS ${shader_tgt})
+  endforeach()
+endfunction()
+
+function(ax_add_shader_target_for target)
+  set(shader_tgt ${target}_shaders)
+  cmake_language(CALL ax_add_shader_target ${shader_tgt} ${ARGN})
+  ax_add_shader_dependencies(${target} ${shader_tgt})
 endfunction()
 
 # for winrt/uwp only

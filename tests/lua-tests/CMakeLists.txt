@@ -168,7 +168,7 @@ if(NOT ANDROID)
     get_target_property(cpp_tests_shaders "cpp-tests_shaders" SOURCES)
     add_executable(${APP_NAME} ${APP_SOURCES})
     # lua-tests share shaders and other res of cpp-tests
-    add_dependencies(${APP_NAME} "cpp-tests_shaders")
+    ax_add_shader_dependencies(${APP_NAME} "cpp-tests_shaders")
 else()
     ax_find_shaders(${_AX_ROOT}/tests/cpp-tests/Source/shaders cpp_tests_shaders RECURSE)
     add_library(${APP_NAME} SHARED ${APP_SOURCES})
