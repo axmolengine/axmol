@@ -205,6 +205,7 @@ function(ax_add_shader_target target_name)
 
     set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
 
+    file(TO_CMAKE_PATH "${SC_OUTPUT}" SC_OUTPUT)
     set(SC_COMMENT "[${OUT_LANG}${SC_PROFILE}] Compiling shader ${SC_FILE} to ${SC_OUTPUT} ...")
 
     get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} AXSLCC_OUTPUT1)

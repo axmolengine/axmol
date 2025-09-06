@@ -538,6 +538,9 @@ function(ax_setup_app_config app_name)
   set(app_shaders_dir "${_APP_SOURCE_DIR}/Source/shaders")
 
   ax_find_shaders(${app_shaders_dir} app_shaders RECURSE)
+  if(ANDROID AND opt_DEPEND_SHADERS) # lua-tests spec
+    list(APPEND app_shaders ${opt_DEPEND_SHADERS})
+  endif()
 
   if(app_shaders)
     list(LENGTH app_shaders app_shaders_count)
