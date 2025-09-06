@@ -166,6 +166,8 @@ set(APP_SOURCES
     )
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SOURCES})
+    # lua-tests share shaders and other res of cpp-tests
+    add_dependencies(${APP_NAME} "cpp-tests_shaders")
 else()
     add_library(${APP_NAME} SHARED ${APP_SOURCES})
     

@@ -85,10 +85,15 @@ endfunction()
 # - AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
 # - AXSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
 #
-function(ax_target_compile_shaders target_name)
+function(ax_target_compile_shaders native_target_name)
   set(options RUNTIME CVAR CUSTOM)
   set(multiValueArgs FILES)
   cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
+
+  set(target_name ${native_target_name}_shaders)
+  if(NOT TARGET ${target_name})
+    add_custom_target(${target_name})
+  endif()
 
   set(compiled_shaders)
 
@@ -201,7 +206,7 @@ function(ax_target_compile_shaders target_name)
 
     set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
 
-    set(SC_COMMENT "Compiling shader ${SC_FILE} to ${OUT_LANG}${SC_PROFILE} ...")
+    set(SC_COMMENT "[${OUT_LANG}${SC_PROFILE}] Compiling shader ${SC_FILE} to ${SC_OUTPUT} ...")
 
     get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} AXSLCC_OUTPUT1)
 
@@ -251,6 +256,12 @@ function(ax_target_compile_shaders target_name)
 
   list(APPEND target_compiled_shaders ${compiled_shaders})
   set_property(TARGET ${target_name} PROPERTY AX_COMPILED_SHADERS ${target_compiled_shaders})
+
+  # folder
+  set_target_properties(${target_name} PROPERTIES FOLDER "Shaders")
+
+  # add dependency
+  add_dependencies(${native_target_name} ${target_name})
 endfunction()
 
 function(ax_target_embed_compiled_shaders target_name rc_output)
