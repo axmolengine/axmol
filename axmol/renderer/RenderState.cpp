@@ -41,7 +41,7 @@
 namespace ax
 {
 
-std::string RenderState::getName() const
+std::string_view RenderState::getName() const
 {
     return _name;
 }

@@ -498,7 +498,7 @@ void Material::setName(std::string_view name)
     _name = name;
 }
 
-std::string Material::getName() const
+std::string_view Material::getName() const
 {
     return _name;
 }
@@ -522,7 +522,7 @@ Material::~Material() {}
 Material* Material::clone() const
 {
     auto material = new Material();
-    // RenderState::cloneInto(material);
+
     material->_renderState = _renderState;
 
     for (const auto& technique : _techniques)
@@ -533,7 +533,7 @@ Material* Material::clone() const
     }
 
     // current technique
-    auto name                   = _currentTechnique->getName();
+    auto&& name                 = _currentTechnique->getName();
     material->_currentTechnique = material->getTechniqueByName(name);
     material->_textureSlots     = material->_textureSlots;
     material->_textureSlotIndex = material->_textureSlotIndex;

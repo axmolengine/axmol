@@ -107,7 +107,7 @@ public:
               const Mat4& modelView);
 
     /// returns the material name
-    std::string getName() const;
+    std::string_view getName() const;
     /// sets the material name
     void setName(std::string_view name);
 

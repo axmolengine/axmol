@@ -69,7 +69,7 @@ public:
     void addPass(Pass* pass);
 
     /** Returns the name of the Technique */
-    std::string getName() const;
+    std::string_view getName() const;
 
     /** Returns the Pass at given index */
     Pass* getPassByIndex(ssize_t index) const;

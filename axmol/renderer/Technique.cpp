@@ -94,7 +94,7 @@ void Technique::addPass(Pass* pass)
     _passes.pushBack(pass);
 }
 
-std::string Technique::getName() const
+std::string_view Technique::getName() const
 {
     return _name;
 }

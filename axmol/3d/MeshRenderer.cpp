@@ -851,9 +851,9 @@ void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 #if AX_USE_CULLING
     // TODO new-renderer: interface isVisibleInFrustum removal
     //  camera clipping
-//    if(_children.empty() && Camera::getVisitingCamera() &&
-//    !Camera::getVisitingCamera()->isVisibleInFrustum(&getAABB()))
-//        return;
+    // if(_children.empty() && Camera::getVisitingCamera() &&
+    // !Camera::getVisitingCamera()->isVisibleInFrustum(&getAABB()))
+    //     return;
 #endif
 
     if (_skeleton)

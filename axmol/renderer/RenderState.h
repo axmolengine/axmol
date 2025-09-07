@@ -60,7 +60,7 @@ class AX_DLL RenderState : public Object
     friend class Pass;
 
 public:
-    std::string getName() const;
+    std::string_view getName() const;
 
     /**
      * Binds the render state for this RenderState and any of its parents, top-down,
@@ -237,9 +237,6 @@ public:
         CullFaceSide _cullFaceSide = CullFaceSide::BACK;
         FrontFace _frontFace       = FrontFace::COUNTER_CLOCK_WISE;
         int32_t _modifiedBits      = 0L;
-
-        mutable uint32_t _hash;
-        mutable bool _hashDirty;
     };
 
     StateBlock& getStateBlock() const;

@@ -495,17 +495,6 @@ void Mesh::draw(Renderer* renderer,
         }
     }
 
-    // TODO
-    //     _meshCommand.init(globalZ,
-    //                       _material,
-    //                       getVertexBuffer(),
-    //                       getIndexBuffer(),
-    //                       getPrimitiveType(),
-    //                       getIndexFormat(),
-    //                       getIndexCount(),
-    //                       transform,
-    //                       flags);
-
     if (isTransparent && !forceDepthWrite)
         _material->getStateBlock().setDepthWrite(false);
     else
@@ -536,13 +525,16 @@ void Mesh::draw(Renderer* renderer,
         command.setTransparent(isTransparent);
         command.set3D(!_material->isForce2DQueue());
         command.setWireframe(wireframe);
-        if (_instancing && _instances.size() > 0)
+        if (_instancing)
         {
-            command.setDrawType(CustomCommand::DrawType::ELEMENT_INSTANCED);
-            command.setInstanceBuffer(_instanceTransformBuffer, static_cast<int>(_instances.size()));
+            if (_instances.size() > 0)
+            {
+                command.setDrawType(CustomCommand::DrawType::ELEMENT_INSTANCED);
+                command.setInstanceBuffer(_instanceTransformBuffer, static_cast<int>(_instances.size()));
+            }
+            else
+                return;
         }
-        else if (_instancing)
-            return;
     }
 
     _meshIndexData->setPrimitiveType(_material->_drawPrimitive);

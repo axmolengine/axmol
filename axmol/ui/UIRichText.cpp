@@ -389,9 +389,9 @@ public:
 
     float getFontSize() const;
 
-    std::string getFace() const;
+    std::string_view getFace() const;
 
-    std::string getURL() const;
+    std::string_view getURL() const;
 
     bool getBold() const;
 
@@ -407,7 +407,7 @@ public:
 
     std::tuple<bool, Color32> getGlow() const;
 
-    std::string getName() const;
+    std::string_view getName() const;
 
     void startElement(void* ctx, const char* name, const char** atts) override;
 
@@ -771,24 +771,24 @@ float MyXMLVisitor::getFontSize() const
     return 12;
 }
 
-std::string MyXMLVisitor::getFace() const
+std::string_view MyXMLVisitor::getFace() const
 {
     for (auto i = _fontElements.rbegin(), iRend = _fontElements.rend(); i != iRend; ++i)
     {
         if (!i->face.empty())
             return i->face;
     }
-    return "fonts/Marker Felt.ttf";
+    return "fonts/Marker Felt.ttf"sv;
 }
 
-std::string MyXMLVisitor::getURL() const
+std::string_view MyXMLVisitor::getURL() const
 {
     for (auto i = _fontElements.rbegin(), iRend = _fontElements.rend(); i != iRend; ++i)
     {
         if (!i->url.empty())
             return i->url;
     }
-    return "";
+    return ""sv;
 }
 
 bool MyXMLVisitor::getBold() const
@@ -861,14 +861,14 @@ std::tuple<bool, Color32> MyXMLVisitor::getGlow() const
     return std::make_tuple(false, Color32::WHITE);
 }
 
-std::string MyXMLVisitor::getName() const
+std::string_view MyXMLVisitor::getName() const
 {
     for (auto i = _fontElements.rbegin(), iRend = _fontElements.rend(); i != iRend; ++i)
     {
         if (!i->name.empty())
             return i->name;
     }
-    return "";
+    return ""sv;
 }
 
 void MyXMLVisitor::startElement(void* /*ctx*/, const char* elementName, const char** atts)
