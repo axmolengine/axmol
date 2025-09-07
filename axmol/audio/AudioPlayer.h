@@ -67,34 +67,38 @@ protected:
     void wakeupRotateThread();
 #endif
 
-    AudioCache* _audioCache;
+    AudioCache* _audioCache{nullptr};
 
-    float _volume;
-    float _pitch;
-    bool _loop;
-    std::function<void(AUDIO_ID, std::string_view)> _finishCallbak;
+    float _volume{1.0f};
+    float _pitch{0.0f};
+    bool _loop{false};
 
-    bool _isDestroyed;
-    bool _removeByAudioEngine;
-    bool _ready;
-    ALuint _alSource;
+    bool _isDestroyed{false};
+    bool _removeByAudioEngine{false};
+    bool _ready{false};
+    ALuint _alSource{0};
 
     // play by circular buffer
-    float _currTime;
-    bool _streamingSource;
-    ALuint _bufferIds[QUEUEBUFFER_NUM];
-    std::thread* _rotateBufferThread;
-    std::condition_variable _sleepCondition;
-    std::mutex _sleepMutex;
-    bool _timeDirty;
-    bool _isRotateThreadExited;
+    float _currTime{0.0f};
+
+    ALuint _bufferIds[QUEUEBUFFER_NUM] = {0};
+
+    unsigned int _id;
+
+    bool _streamingSource{false};
+    bool _timeDirty{false};
+    bool _isRotateThreadExited{false};
 #if defined(__APPLE__)
     std::atomic_bool _needWakeupRotateThread;
 #endif
 
-    std::mutex _play2dMutex;
+    std::thread* _rotateBufferThread{nullptr};
+    std::condition_variable _sleepCondition;
+    std::mutex _sleepMutex;
 
-    unsigned int _id;
+    std::mutex _play2dMutex;
+    std::function<void(AUDIO_ID, std::string_view)> _finishCallbak;
+
     friend class AudioEngineImpl;
 };
 

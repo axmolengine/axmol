@@ -545,7 +545,7 @@ AUDIO_ID AudioEngineImpl::play2d(std::string_view filePath, bool loop, float vol
         return AudioEngine::INVALID_AUDIO_ID;
     }
 
-    auto player = new AudioPlayer;
+    auto player = new AudioPlayer();
     if (player == nullptr)
     {
         return AudioEngine::INVALID_AUDIO_ID;

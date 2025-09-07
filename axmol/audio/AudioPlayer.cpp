@@ -42,23 +42,11 @@ unsigned int __playerIdIndex = 0;
 }
 
 AudioPlayer::AudioPlayer()
-    : _audioCache(nullptr)
-    , _finishCallbak(nullptr)
-    , _isDestroyed(false)
-    , _removeByAudioEngine(false)
-    , _ready(false)
-    , _currTime(0.0f)
-    , _streamingSource(false)
-    , _rotateBufferThread(nullptr)
-    , _timeDirty(false)
-    , _isRotateThreadExited(false)
+    : _id(++__playerIdIndex)
 #if defined(__APPLE__)
     , _needWakeupRotateThread(false)
 #endif
-    , _id(++__playerIdIndex)
-{
-    memset(_bufferIds, 0, sizeof(_bufferIds));
-}
+{}
 
 AudioPlayer::~AudioPlayer()
 {
