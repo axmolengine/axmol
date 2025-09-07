@@ -3,7 +3,7 @@ name: genbindings
 on:
   push:
     branches:
-      - dev/*
+      - dev
       - release/*
     paths-ignore:
       - '**.md'

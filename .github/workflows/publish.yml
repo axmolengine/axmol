@@ -3,7 +3,7 @@ name: publish
 on:
   push:
     branches:
-      - dev/*
+      - dev
       - release/*
     paths:
       - CHANGELOG.md

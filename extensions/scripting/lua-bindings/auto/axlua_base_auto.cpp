@@ -95494,7 +95494,7 @@ int lua_ax_base_RenderState_getName(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getName();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderState:getName",argc, 0);
@@ -95665,7 +95665,7 @@ int lua_ax_base_Technique_getName(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getName();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Technique:getName",argc, 0);
@@ -96126,7 +96126,7 @@ int lua_ax_base_Material_getName(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getName();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Material:getName",argc, 0);
