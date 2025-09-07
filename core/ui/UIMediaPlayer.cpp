@@ -1042,9 +1042,10 @@ MediaPlayer::~MediaPlayer()
 
     AX_SAFE_RELEASE_NULL(_mediaController);
 
-    if (pvd->_engine)
+    if (pvd->_engine) {
+        pvd->closePlayer();
         _meFactory->destroyMediaEngine(pvd->_engine);
-
+    }
     AX_SAFE_RELEASE(pvd->_vrender);
     AX_SAFE_RELEASE(pvd->_vtexture);
     AX_SAFE_RELEASE(pvd->_vchromaTexture);

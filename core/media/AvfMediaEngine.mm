@@ -58,6 +58,12 @@ using namespace ax;
     return self;
 }
 
+- detachMediaEngine
+{
+    [self deregisterUINotifications];
+    self._me = nullptr;
+}
+
 - registerUINotifications
 {
 #if TARGET_OS_IPHONE
@@ -89,31 +95,40 @@ using namespace ax;
 #if TARGET_OS_IPHONE
 - (void)handleAudioRouteChange:(NSNotification*)notification
 {
+    if (!_me)
+        return;
     if (_me->isPlaying())
         _me->internalPlay(true);
 }
 
 - (void)handleActive:(NSNotification*)notification
 {
+    if (!_me)
+        return;
     if (_me->isPlaying())
         _me->internalPlay();
 }
 
 - (void)handleDeactive:(NSNotification*)notification
 {
+    if (!_me)
+        return;
     if (_me->isPlaying())
         _me->internalPause();
 }
 
-
 - (void)handleEnterForground:(NSNotification*)notification
 {
+    if (!_me)
+        return;
     if (_me->isPlaying())
         _me->internalPlay();
 }
 
 - (void)handleEnterBackround:(NSNotification*)notification
 {
+    if (!_me)
+        return;
     if (_me->isPlaying())
         _me->internalPause();
 }
@@ -148,6 +163,8 @@ using namespace ax;
 
 - (void)playerItemDidPlayToEndTime:(NSNotification*)notification
 {
+    if (!_me)
+        return;
     _me->onPlayerEnd();
 }
 
@@ -156,6 +173,8 @@ using namespace ax;
                         change:(NSDictionary<NSKeyValueChangeKey, id>*)change
                        context:(void*)context
 {
+    if (!_me)
+        return;
     if ((id)context == object && [keyPath isEqualToString:@"status"])
         _me->onStatusNotification(context);
 }
@@ -443,29 +462,39 @@ bool AvfMediaEngine::transferVideoFrame()
 
 bool AvfMediaEngine::close()
 {
-    if (_state == MEMediaState::Closed)
-        return true;
-    if (_playerItem != nil)
+    AXLOGD("AvfMediaEngine::close(): this:{}", fmt::ptr(this));
+    if (_playerItem)
     {
-        if (_player != nil)
-        {
-            [_sessionHandler deregisterUINotifications];
-            [[NSNotificationCenter defaultCenter] removeObserver:_sessionHandler
-                                                            name:AVPlayerItemDidPlayToEndTimeNotification
-                                                          object:_playerItem];
-            [_playerItem removeObserver:_sessionHandler forKeyPath:@"status"];
-        }
+        [_playerItem removeObserver:_sessionHandler forKeyPath:@"status"];
+
+        [[NSNotificationCenter defaultCenter] removeObserver:_sessionHandler
+                                                        name:AVPlayerItemDidPlayToEndTimeNotification
+                                                      object:_playerItem];
+
         [_playerItem release];
         _playerItem = nil;
     }
-    if (_player != nil)
+
+    if (_player)
     {
+        [_player pause];
+        [_player replaceCurrentItemWithPlayerItem:nil];
         [_player release];
         _player = nil;
     }
+
+    if (_sessionHandler)
+    {
+        [_sessionHandler detachMediaEngine];
+        [_sessionHandler release];
+        _sessionHandler = nil;
+    }
+
     _state = MEMediaState::Closed;
+    _playbackEnded = false;
     return true;
 }
+
 bool AvfMediaEngine::setLoop(bool bLooping)
 {
     _repeatEnabled = bLooping;
