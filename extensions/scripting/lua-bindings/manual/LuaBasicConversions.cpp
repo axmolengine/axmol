@@ -83,30 +83,6 @@ bool luaval_is_usertype(lua_State* L, int lo, const char* type, int def)
     return false;
 }
 
-bool luaval_to_ushort(lua_State* L, int lo, unsigned short* outValue, const char* funcName)
-{
-    if (nullptr == L || nullptr == outValue)
-        return false;
-
-    bool ok = true;
-
-    tolua_Error tolua_err;
-    if (!tolua_isnumber(L, lo, 0, &tolua_err))
-    {
-#if _AX_DEBUG >= 1
-        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
-#endif
-        ok = false;
-    }
-
-    if (ok)
-    {
-        *outValue = (unsigned short)tolua_tonumber(L, lo, 0);
-    }
-
-    return ok;
-}
-
 bool luaval_to_float(lua_State* L, int lo, float* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
@@ -131,7 +107,7 @@ bool luaval_to_float(lua_State* L, int lo, float* outValue, const char* funcName
     return ok;
 }
 
-bool luaval_to_int32(lua_State* L, int lo, int* outValue, const char* funcName)
+bool luaval_to_integer(lua_State* L, int lo, lua_Integer* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
         return false;
@@ -149,71 +125,7 @@ bool luaval_to_int32(lua_State* L, int lo, int* outValue, const char* funcName)
 
     if (ok)
     {
-        /**
-         When we want to convert the number value from the Lua to int, we would call lua_tonumber to implement.It would
-         experience two phase conversion: int -> double, double->int.But,for the 0x80000000 which the min value of int,
-         the int cast may return an undefined result,like 0x7fffffff.So we must use the (int)(unsigned
-         int)lua_tonumber() to get predictable results for 0x80000000.In this place,we didn't use lua_tointeger, because
-         it may produce different results depending on the compiler,e.g:for iPhone4s,it also get wrong value for
-         0x80000000.
-         */
-        unsigned int estimateValue = (unsigned int)lua_tonumber(L, lo);
-        if (estimateValue == std::numeric_limits<int>::min())
-        {
-            *outValue = (int)estimateValue;
-        }
-        else
-        {
-            *outValue = (int)lua_tonumber(L, lo);
-        }
-    }
-
-    return ok;
-}
-
-bool luaval_to_uint32(lua_State* L, int lo, unsigned int* outValue, const char* funcName)
-{
-    if (NULL == L || NULL == outValue)
-        return false;
-
-    bool ok = true;
-
-    tolua_Error tolua_err;
-    if (!tolua_isnumber(L, lo, 0, &tolua_err))
-    {
-#if _AX_DEBUG >= 1
-        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
-#endif
-        ok = false;
-    }
-
-    if (ok)
-    {
-        *outValue = (unsigned int)tolua_tonumber(L, lo, 0);
-    }
-
-    return ok;
-}
-
-bool luaval_to_uint16(lua_State* L, int lo, uint16_t* outValue, const char* funcName)
-{
-    if (NULL == L || NULL == outValue)
-        return false;
-
-    bool ok = true;
-
-    tolua_Error tolua_err;
-    if (!tolua_isnumber(L, lo, 0, &tolua_err))
-    {
-#if _AX_DEBUG >= 1
-        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
-#endif
-        ok = false;
-    }
-
-    if (ok)
-    {
-        *outValue = (unsigned char)tolua_tonumber(L, lo, 0);
+        *outValue = lua_tointeger(L, lo);
     }
 
     return ok;

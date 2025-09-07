@@ -357,7 +357,7 @@ static int axlua_spine_SkeletonAnimation_addAnimation(lua_State* tolua_S)
         const char* arg1;
         bool arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "sp.SkeletonAnimation:addAnimation");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "sp.SkeletonAnimation:addAnimation");
 
         std::string arg1_tmp;
         ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "sp.SkeletonAnimation:addAnimation");
@@ -378,7 +378,7 @@ static int axlua_spine_SkeletonAnimation_addAnimation(lua_State* tolua_S)
         bool arg2;
         double arg3;
 
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "sp.SkeletonAnimation:addAnimation");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "sp.SkeletonAnimation:addAnimation");
 
         std::string arg1_tmp;
         ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "sp.SkeletonAnimation:addAnimation");
@@ -438,7 +438,7 @@ static int axlua_spine_SkeletonAnimation_setAnimation(lua_State* tolua_S)
         const char* arg1;
         bool arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "sp.SkeletonAnimation:setAnimation");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "sp.SkeletonAnimation:setAnimation");
 
         std::string arg1_tmp;
         ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "sp.SkeletonAnimation:setAnimation");

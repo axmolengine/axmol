@@ -230,7 +230,7 @@ int lua_ax_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.CSLoader:setRecordJsonPath");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.CSLoader:setRecordJsonPath");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_setRecordJsonPath'", nullptr);

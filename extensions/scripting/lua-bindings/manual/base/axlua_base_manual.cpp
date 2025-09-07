@@ -1171,7 +1171,7 @@ static int tolua_Cocos2d_Node_scheduleUpdateWithPriorityLua(lua_State* tolua_S)
 
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         int priority         = 0;
-        if (luaval_to_int32(tolua_S, 3, &priority, "ax.Node:scheduleUpdateWithPriorityLua"))
+        if (luaval_to_int(tolua_S, 3, &priority, "ax.Node:scheduleUpdateWithPriorityLua"))
         {
             self->scheduleUpdateWithPriorityLua(handler, priority);
         }
@@ -2246,7 +2246,7 @@ int toaxlua_DrawNode_drawSolidPoly(lua_State* tolua_S)
     if (argc == 3)
     {
         unsigned int size;
-        luaval_to_uint32(tolua_S, 3, &size, "ax.DrawNode:drawSolidPoly");
+        luaval_to_int(tolua_S, 3, &size, "ax.DrawNode:drawSolidPoly");
         if (size > 0)
         {
             ax::Vec2* points = new ax::Vec2[size];
@@ -2324,7 +2324,7 @@ int toaxlua_DrawNode_drawPoly(lua_State* tolua_S)
     if (argc == 4)
     {
         unsigned int size;
-        luaval_to_uint32(tolua_S, 3, &size, "ax.DrawNode:drawPoly");
+        luaval_to_int(tolua_S, 3, &size, "ax.DrawNode:drawPoly");
         if (size > 0)
         {
             ax::Vec2* points = new ax::Vec2[size];
@@ -2423,7 +2423,7 @@ int toaxlua_DrawNode_drawCardinalSpline(lua_State* tolua_S)
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCardinalSpline");
 
-        ok &= luaval_to_uint32(tolua_S, 4, &arg2, "ax.DrawNode:drawCardinalSpline");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.DrawNode:drawCardinalSpline");
 
         ok &= luaval_to_color(tolua_S, 5, &arg3, "ax.DrawNode:drawCardinalSpline");
         if (!ok)
@@ -2488,7 +2488,7 @@ int toaxlua_DrawNode_drawCatmullRom(lua_State* tolua_S)
         unsigned int arg1;
         ax::Color arg2;
 
-        ok &= luaval_to_uint32(tolua_S, 3, &arg1, "ax.DrawNode:drawCatmullRom");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.DrawNode:drawCatmullRom");
 
         ok &= luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawCatmullRom");
         if (!ok)
@@ -2536,7 +2536,7 @@ int toaxlua_DrawNode_drawPoints(lua_State* tolua_S)
     if (argc == 3)
     {
         unsigned int size;
-        luaval_to_uint32(tolua_S, 3, &size, "ax.DrawNode:drawPoints");
+        luaval_to_int(tolua_S, 3, &size, "ax.DrawNode:drawPoints");
         if (size > 0)
         {
             ax::Vec2* points = new ax::Vec2[size];
@@ -2573,7 +2573,7 @@ int toaxlua_DrawNode_drawPoints(lua_State* tolua_S)
     else if (argc == 4)
     {
         unsigned int size;
-        luaval_to_uint32(tolua_S, 3, &size, "ax.DrawNode:drawPoints");
+        luaval_to_int(tolua_S, 3, &size, "ax.DrawNode:drawPoints");
         if (size > 0)
         {
             ax::Vec2* points = new ax::Vec2[size];
@@ -5104,7 +5104,7 @@ static int axlua_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "ax.TMXTiledMap:getPropertiesForGID");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "ax.TMXTiledMap:getPropertiesForGID");
 
         if (!ok)
             return 0;
@@ -5249,7 +5249,7 @@ int axlua_TMXLayer_getTileGIDAt(lua_State* tolua_S)
         int arg1;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.TMXLayer:getTileGIDAt");
-        ok &= luaval_to_int32(tolua_S, 3, &arg1, "ax.TMXLayer:getTileGIDAt");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.TMXLayer:getTileGIDAt");
 
         if (!ok)
             return 0;
@@ -5389,7 +5389,7 @@ static int axlua_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
         int arg1 = 0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.FastTMXLayer:getTileGIDAt");
-        ok &= luaval_to_int32(tolua_S, 3, &arg1, "ax.FastTMXLayer:getTileGIDAt");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.FastTMXLayer:getTileGIDAt");
 
         if (!ok)
             return 0;
@@ -6112,7 +6112,7 @@ static int axlua_rhi_ProgramState_getUniformLocation(lua_State* tolua_S)
             else if (lua_isnumber(tolua_S, -1))
             {
                 ax::rhi::Uniform arg0;
-                ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "axb.ProgramState:getUniformLocation");
+                ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "axb.ProgramState:getUniformLocation");
 
                 if (!ok)
                 {
@@ -7672,7 +7672,7 @@ static int tolua_cocos2d_bytearray_int(lua_State* L)
 #endif
         {
             int arg;
-            ok &= luaval_to_int32(L, 1, &arg, "tolua_cocos2d_bytearray_template");
+            ok &= luaval_to_int(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;
 
@@ -7761,7 +7761,7 @@ static int tolua_cocos2d_bytearray_intv(lua_State* L)
             for (auto idx = 0; idx < size; idx++)
             {
                 lua_rawgeti(L, 1, idx + 1);
-                luaval_to_int32(L, -1, &e, "tolua_cocos2d_bytearray_elev");
+                luaval_to_int(L, -1, &e, "tolua_cocos2d_bytearray_elev");
                 p[idx] = e;
                 lua_pop(L, 1);
             }

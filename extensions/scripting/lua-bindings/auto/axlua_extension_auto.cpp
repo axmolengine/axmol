@@ -117,7 +117,7 @@ int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ScrollView:setContentOffset");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ScrollView:setContentOffset");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ScrollView:setContentOffset");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContentOffset'", nullptr);
@@ -217,7 +217,7 @@ int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ScrollView:setContentOffsetInDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScrollView:setContentOffsetInDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScrollView:setContentOffsetInDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setContentOffsetInDuration'", nullptr);
@@ -308,11 +308,11 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setZoomScale");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setZoomScale");
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ScrollView:setZoomScale");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ScrollView:setZoomScale");
 
             if (!ok) { break; }
             cobj->setZoomScale(arg0, arg1);
@@ -324,7 +324,7 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
     do{
         if (argc == 1) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setZoomScale");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setZoomScale");
 
             if (!ok) { break; }
             cobj->setZoomScale(arg0);
@@ -421,9 +421,9 @@ int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setZoomScaleInDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setZoomScaleInDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScrollView:setZoomScaleInDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScrollView:setZoomScaleInDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setZoomScaleInDuration'", nullptr);
@@ -473,7 +473,7 @@ int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setMinScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setMinScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setMinScale'", nullptr);
@@ -523,7 +523,7 @@ int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:setMaxScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setMaxScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setMaxScale'", nullptr);
@@ -817,7 +817,7 @@ int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ScrollView:setTouchEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ScrollView:setTouchEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setTouchEnabled'", nullptr);
@@ -914,7 +914,7 @@ int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ScrollView:setSwallowTouches");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ScrollView:setSwallowTouches");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setSwallowTouches'", nullptr);
@@ -1105,7 +1105,7 @@ int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ScrollView:setBounceable");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ScrollView:setBounceable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setBounceable'", nullptr);
@@ -1396,7 +1396,7 @@ int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
     {
         ax::extension::ScrollView::Direction arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ScrollView:setDirection");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ScrollView:setDirection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setDirection'", nullptr);
@@ -1540,7 +1540,7 @@ int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ScrollView:setClippingToBounds");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ScrollView:setClippingToBounds");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ScrollView_setClippingToBounds'", nullptr);
@@ -1803,7 +1803,7 @@ int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
         double arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScrollView:updateTweenAction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:updateTweenAction");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.ScrollView:updateTweenAction");
         if(!ok)
@@ -2364,7 +2364,7 @@ int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
     {
         ax::extension::TableView::VerticalFillOrder arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TableView:setVerticalFillOrder");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TableView:setVerticalFillOrder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_TableView_setVerticalFillOrder'", nullptr);
@@ -3450,7 +3450,7 @@ int lua_ax_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.AssetsManager:setConnectionTimeout");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AssetsManager:setConnectionTimeout");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_setConnectionTimeout'", nullptr);
@@ -4104,7 +4104,7 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
@@ -4128,9 +4128,9 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
@@ -4155,11 +4155,11 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
@@ -4185,11 +4185,11 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
@@ -4218,11 +4218,11 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -4254,17 +4254,17 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 9,(int *)&arg7, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 9, &arg7, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
@@ -4293,19 +4293,19 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 9,(int *)&arg7, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 9, &arg7, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_constructor'", nullptr);
@@ -5117,7 +5117,7 @@ int lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AssetsManagerEx:setMaxConcurrentTask");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AssetsManagerEx:setMaxConcurrentTask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask'", nullptr);
@@ -5985,7 +5985,7 @@ int lua_ax_extension_ParticleSystem3D_removeAffector(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem3D:removeAffector");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem3D:removeAffector");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_removeAffector'", nullptr);
@@ -6129,7 +6129,7 @@ int lua_ax_extension_ParticleSystem3D_setParticleQuota(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.ParticleSystem3D:setParticleQuota");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem3D:setParticleQuota");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_setParticleQuota'", nullptr);
@@ -6320,7 +6320,7 @@ int lua_ax_extension_ParticleSystem3D_setKeepLocal(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem3D:setKeepLocal");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem3D:setKeepLocal");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_setKeepLocal'", nullptr);
@@ -6370,7 +6370,7 @@ int lua_ax_extension_ParticleSystem3D_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem3D:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem3D:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_setEnabled'", nullptr);
@@ -6544,7 +6544,7 @@ int lua_ax_extension_PUParticleSystem3D_forceUpdate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:forceUpdate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:forceUpdate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_forceUpdate'", nullptr);
@@ -6641,7 +6641,7 @@ int lua_ax_extension_PUParticleSystem3D_setParticleSystemScaleVelocity(lua_State
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:setParticleSystemScaleVelocity");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:setParticleSystemScaleVelocity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_setParticleSystemScaleVelocity'", nullptr);
@@ -6835,7 +6835,7 @@ int lua_ax_extension_PUParticleSystem3D_setDefaultWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:setDefaultWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:setDefaultWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_setDefaultWidth'", nullptr);
@@ -6932,7 +6932,7 @@ int lua_ax_extension_PUParticleSystem3D_setDefaultHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:setDefaultHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:setDefaultHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_setDefaultHeight'", nullptr);
@@ -7029,7 +7029,7 @@ int lua_ax_extension_PUParticleSystem3D_setDefaultDepth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:setDefaultDepth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:setDefaultDepth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_setDefaultDepth'", nullptr);
@@ -7220,7 +7220,7 @@ int lua_ax_extension_PUParticleSystem3D_setMaxVelocity(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:setMaxVelocity");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:setMaxVelocity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_setMaxVelocity'", nullptr);
@@ -7370,7 +7370,7 @@ int lua_ax_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::PUEmitter>(tolua_S, 2, "ax.PUEmitter",&arg0, "ax.PUParticleSystem3D:forceEmission");
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.PUParticleSystem3D:forceEmission");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.PUParticleSystem3D:forceEmission");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_forceEmission'", nullptr);
@@ -7905,7 +7905,7 @@ int lua_ax_extension_PUParticleSystem3D_setMarkedForEmission(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:setMarkedForEmission");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:setMarkedForEmission");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_setMarkedForEmission'", nullptr);
@@ -8049,7 +8049,7 @@ int lua_ax_extension_PUParticleSystem3D_setEmittedEmitterQuota(lua_State* tolua_
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:setEmittedEmitterQuota");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:setEmittedEmitterQuota");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_setEmittedEmitterQuota'", nullptr);
@@ -8146,7 +8146,7 @@ int lua_ax_extension_PUParticleSystem3D_setEmittedSystemQuota(lua_State* tolua_S
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:setEmittedSystemQuota");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:setEmittedSystemQuota");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_setEmittedSystemQuota'", nullptr);

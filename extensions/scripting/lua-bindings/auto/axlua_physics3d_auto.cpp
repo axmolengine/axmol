@@ -178,7 +178,7 @@ int lua_ax_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DShape:initSphere");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DShape:initSphere");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initSphere'", nullptr);
@@ -229,9 +229,9 @@ int lua_ax_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DShape:initCylinder");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DShape:initCylinder");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DShape:initCylinder");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DShape:initCylinder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initCylinder'", nullptr);
@@ -282,9 +282,9 @@ int lua_ax_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DShape:initCapsule");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DShape:initCapsule");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DShape:initCapsule");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DShape:initCapsule");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initCapsule'", nullptr);
@@ -358,7 +358,7 @@ int lua_ax_physics3d_Physics3DShape_createSphere(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DShape:createSphere");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DShape:createSphere");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createSphere'", nullptr);
@@ -395,8 +395,8 @@ int lua_ax_physics3d_Physics3DShape_createCylinder(lua_State* tolua_S)
     {
         double arg0;
         double arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DShape:createCylinder");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DShape:createCylinder");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DShape:createCylinder");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DShape:createCylinder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createCylinder'", nullptr);
@@ -433,8 +433,8 @@ int lua_ax_physics3d_Physics3DShape_createCapsule(lua_State* tolua_S)
     {
         double arg0;
         double arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DShape:createCapsule");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DShape:createCapsule");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DShape:createCapsule");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DShape:createCapsule");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createCapsule'", nullptr);
@@ -472,7 +472,7 @@ int lua_ax_physics3d_Physics3DShape_createConvexHull(lua_State* tolua_S)
         const ax::Vec3* arg0;
         int arg1;
         ok &= luaval_to_object<const ax::Vec3>(tolua_S, 2, "ax.Vec3",&arg0, "ax.Physics3DShape:createConvexHull");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Physics3DShape:createConvexHull");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Physics3DShape:createConvexHull");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createConvexHull'", nullptr);
@@ -971,7 +971,7 @@ int lua_ax_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Physics3DObject:setMask");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Physics3DObject:setMask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_setMask'", nullptr);
@@ -1450,7 +1450,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:applyDamping");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:applyDamping");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_applyDamping'", nullptr);
@@ -1688,7 +1688,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
     do{
         if (argc == 1) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setAngularFactor");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setAngularFactor");
 
             if (!ok) { break; }
             cobj->setAngularFactor(arg0);
@@ -1991,9 +1991,9 @@ int lua_ax_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setDamping");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setDamping");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DRigidBody:setDamping");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DRigidBody:setDamping");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setDamping'", nullptr);
@@ -2332,7 +2332,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
         double arg0;
         ax::Vec3 arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setMassProps");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setMassProps");
 
         ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.Physics3DRigidBody:setMassProps");
         if(!ok)
@@ -2525,7 +2525,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setRestitution");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setRestitution");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setRestitution'", nullptr);
@@ -2622,7 +2622,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setFriction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setFriction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setFriction'", nullptr);
@@ -2719,7 +2719,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setRollingFriction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setRollingFriction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setRollingFriction'", nullptr);
@@ -2816,7 +2816,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setHitFraction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setHitFraction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setHitFraction'", nullptr);
@@ -2913,7 +2913,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* tolua_S
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setCcdMotionThreshold");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setCcdMotionThreshold");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold'", nullptr);
@@ -3010,7 +3010,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setCcdSweptSphereRadius");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setCcdSweptSphereRadius");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius'", nullptr);
@@ -3107,7 +3107,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setKinematic");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setKinematic");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setKinematic'", nullptr);
@@ -3204,7 +3204,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:getConstraint");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:getConstraint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraint'", nullptr);
@@ -3301,7 +3301,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:setActive");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setActive");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setActive'", nullptr);
@@ -3446,7 +3446,7 @@ int lua_ax_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
     do{
         if (argc == 1) {
             unsigned int arg0;
-            ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Physics3DRigidBody:removeConstraint");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:removeConstraint");
 
             if (!ok) { break; }
             cobj->removeConstraint(arg0);
@@ -3760,7 +3760,7 @@ int lua_ax_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
     {
         ax::Physics3DComponent::PhysicsSyncFlag arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Physics3DComponent:setSyncFlag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Physics3DComponent:setSyncFlag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_setSyncFlag'", nullptr);
@@ -4049,7 +4049,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag(lua_State* tolua_S)
     {
         ax::Physics3DComponent::PhysicsSyncFlag arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.PhysicsMeshRenderer:setSyncFlag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PhysicsMeshRenderer:setSyncFlag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag'", nullptr);
@@ -4515,7 +4515,7 @@ int lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Physics3DConstraint>(tolua_S, 2, "ax.Physics3DConstraint",&arg0, "ax.Physics3DWorld:addPhysics3DConstraint");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Physics3DWorld:addPhysics3DConstraint");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Physics3DWorld:addPhysics3DConstraint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint'", nullptr);
@@ -4662,7 +4662,7 @@ int lua_ax_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DWorld:stepSimulate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DWorld:stepSimulate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_stepSimulate'", nullptr);
@@ -4712,7 +4712,7 @@ int lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DWorld:setDebugDrawEnable");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DWorld:setDebugDrawEnable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable'", nullptr);
@@ -5119,7 +5119,7 @@ int lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConstraint:setBreakingImpulse");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConstraint:setBreakingImpulse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse'", nullptr);
@@ -5216,7 +5216,7 @@ int lua_ax_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DConstraint:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DConstraint:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_setEnabled'", nullptr);
@@ -5552,7 +5552,7 @@ int lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lua_Stat
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Physics3DConstraint:setOverrideNumSolverIterations");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Physics3DConstraint:setOverrideNumSolverIterations");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations'", nullptr);
@@ -6215,7 +6215,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:setAngularOnly");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:setAngularOnly");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly'", nullptr);
@@ -6267,11 +6267,11 @@ int lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State* tolu
         double arg1;
         double arg2;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:enableAngularMotor");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:enableAngularMotor");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DHingeConstraint:enableAngularMotor");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DHingeConstraint:enableAngularMotor");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Physics3DHingeConstraint:enableAngularMotor");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Physics3DHingeConstraint:enableAngularMotor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor'", nullptr);
@@ -6321,7 +6321,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:enableMotor");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:enableMotor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_enableMotor'", nullptr);
@@ -6371,7 +6371,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State* tolu
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:setMaxMotorImpulse");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:setMaxMotorImpulse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse'", nullptr);
@@ -6422,9 +6422,9 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DHingeConstraint:setLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
@@ -6440,11 +6440,11 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
         double arg1;
         double arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Physics3DHingeConstraint:setLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
@@ -6461,13 +6461,13 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Physics3DHingeConstraint:setLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
@@ -6485,15 +6485,15 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
         double arg3;
         double arg4;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Physics3DHingeConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.Physics3DHingeConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.Physics3DHingeConstraint:setLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
@@ -7071,7 +7071,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State* tolua
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DHingeConstraint:setUseFrameOffset");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:setUseFrameOffset");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setUseFrameOffset'", nullptr);
@@ -7138,7 +7138,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
             ok &= luaval_to_vec3(tolua_S, 4, &arg2, "ax.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.Physics3DHingeConstraint:create");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             ax::Physics3DHingeConstraint* ret = ax::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::Physics3DHingeConstraint>(tolua_S, "ax.Physics3DHingeConstraint",(ax::Physics3DHingeConstraint*)ret);
@@ -7173,7 +7173,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
             ok &= luaval_to_mat4(tolua_S, 3, &arg1, "ax.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Physics3DHingeConstraint:create");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             ax::Physics3DHingeConstraint* ret = ax::Physics3DHingeConstraint::create(arg0, arg1, arg2);
             object_to_luaval<ax::Physics3DHingeConstraint>(tolua_S, "ax.Physics3DHingeConstraint",(ax::Physics3DHingeConstraint*)ret);
@@ -7232,7 +7232,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
             ok &= luaval_to_vec3(tolua_S, 7, &arg5, "ax.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             bool arg6;
-            ok &= luaval_to_boolean(tolua_S, 8,&arg6, "ax.Physics3DHingeConstraint:create");
+            ok &= luaval_to_boolean(tolua_S, 8, &arg6, "ax.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             ax::Physics3DHingeConstraint* ret = ax::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
             object_to_luaval<ax::Physics3DHingeConstraint>(tolua_S, "ax.Physics3DHingeConstraint",(ax::Physics3DHingeConstraint*)ret);
@@ -7279,7 +7279,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
             ok &= luaval_to_mat4(tolua_S, 5, &arg3, "ax.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.Physics3DHingeConstraint:create");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             ax::Physics3DHingeConstraint* ret = ax::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<ax::Physics3DHingeConstraint>(tolua_S, "ax.Physics3DHingeConstraint",(ax::Physics3DHingeConstraint*)ret);
@@ -7544,7 +7544,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setLowerLinLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setLowerLinLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit'", nullptr);
@@ -7641,7 +7641,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setUpperLinLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setUpperLinLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit'", nullptr);
@@ -7738,7 +7738,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setLowerAngLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setLowerAngLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit'", nullptr);
@@ -7835,7 +7835,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setUpperAngLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setUpperAngLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit'", nullptr);
@@ -8778,7 +8778,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State* tolu
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setSoftnessDirLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setSoftnessDirLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin'", nullptr);
@@ -8828,7 +8828,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_State* t
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setRestitutionDirLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setRestitutionDirLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin'", nullptr);
@@ -8878,7 +8878,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setDampingDirLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setDampingDirLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin'", nullptr);
@@ -8928,7 +8928,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State* tolu
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setSoftnessDirAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setSoftnessDirAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng'", nullptr);
@@ -8978,7 +8978,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_State* t
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setRestitutionDirAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setRestitutionDirAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng'", nullptr);
@@ -9028,7 +9028,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setDampingDirAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setDampingDirAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng'", nullptr);
@@ -9078,7 +9078,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State* tolu
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setSoftnessLimLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setSoftnessLimLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin'", nullptr);
@@ -9128,7 +9128,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_State* t
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setRestitutionLimLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setRestitutionLimLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin'", nullptr);
@@ -9178,7 +9178,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setDampingLimLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setDampingLimLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin'", nullptr);
@@ -9228,7 +9228,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State* tolu
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setSoftnessLimAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setSoftnessLimAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng'", nullptr);
@@ -9278,7 +9278,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_State* t
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setRestitutionLimAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setRestitutionLimAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng'", nullptr);
@@ -9328,7 +9328,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State* tolua
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setDampingLimAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setDampingLimAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng'", nullptr);
@@ -9378,7 +9378,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_State* to
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setSoftnessOrthoLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setSoftnessOrthoLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin'", nullptr);
@@ -9428,7 +9428,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_State*
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setRestitutionOrthoLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setRestitutionOrthoLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin'", nullptr);
@@ -9478,7 +9478,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_State* tol
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setDampingOrthoLin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setDampingOrthoLin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin'", nullptr);
@@ -9528,7 +9528,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_State* to
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setSoftnessOrthoAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setSoftnessOrthoAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng'", nullptr);
@@ -9578,7 +9578,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_State*
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setRestitutionOrthoAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setRestitutionOrthoAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng'", nullptr);
@@ -9628,7 +9628,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_State* tol
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setDampingOrthoAng");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setDampingOrthoAng");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng'", nullptr);
@@ -9678,7 +9678,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_State* tol
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setPoweredLinMotor");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setPoweredLinMotor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor'", nullptr);
@@ -9775,7 +9775,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(lua_Sta
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setTargetLinMotorVelocity");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setTargetLinMotorVelocity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity'", nullptr);
@@ -9872,7 +9872,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_State* to
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setMaxLinMotorForce");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setMaxLinMotorForce");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce'", nullptr);
@@ -9969,7 +9969,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_State* tol
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setPoweredAngMotor");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setPoweredAngMotor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor'", nullptr);
@@ -10066,7 +10066,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(lua_Sta
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setTargetAngMotorVelocity");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setTargetAngMotorVelocity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity'", nullptr);
@@ -10163,7 +10163,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_State* to
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setMaxAngMotorForce");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setMaxAngMotorForce");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce'", nullptr);
@@ -10401,7 +10401,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State* tolu
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DSliderConstraint:setUseFrameOffset");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DSliderConstraint:setUseFrameOffset");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset'", nullptr);
@@ -10500,7 +10500,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_create(lua_State* tolua_S)
         ok &= luaval_to_object<ax::Physics3DRigidBody>(tolua_S, 3, "ax.Physics3DRigidBody",&arg1, "ax.Physics3DSliderConstraint:create");
         ok &= luaval_to_mat4(tolua_S, 4, &arg2, "ax.Physics3DSliderConstraint:create");
         ok &= luaval_to_mat4(tolua_S, 5, &arg3, "ax.Physics3DSliderConstraint:create");
-        ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.Physics3DSliderConstraint:create");
+        ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.Physics3DSliderConstraint:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_create'", nullptr);
@@ -10672,11 +10672,11 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
         double arg1;
         double arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Physics3DConeTwistConstraint:setLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
@@ -10693,13 +10693,13 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Physics3DConeTwistConstraint:setLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
@@ -10717,15 +10717,15 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
         double arg3;
         double arg4;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.Physics3DConeTwistConstraint:setLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
@@ -10744,17 +10744,17 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
         double arg4;
         double arg5;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.Physics3DConeTwistConstraint:setLimit");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.Physics3DConeTwistConstraint:setLimit");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.Physics3DConeTwistConstraint:setLimit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
@@ -11086,7 +11086,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:setDamping");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:setDamping");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping'", nullptr);
@@ -11136,7 +11136,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* tolua_S
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:enableMotor");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:enableMotor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor'", nullptr);
@@ -11186,7 +11186,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_State* 
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:setMaxMotorImpulse");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:setMaxMotorImpulse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse'", nullptr);
@@ -11236,7 +11236,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(l
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:setMaxMotorImpulseNormalized");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:setMaxMotorImpulseNormalized");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized'", nullptr);
@@ -11333,7 +11333,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* tolua_
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:setFixThresh");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:setFixThresh");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh'", nullptr);
@@ -11384,9 +11384,9 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* to
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Physics3DConeTwistConstraint:GetPointForAngle");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DConeTwistConstraint:GetPointForAngle");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Physics3DConeTwistConstraint:GetPointForAngle");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Physics3DConeTwistConstraint:GetPointForAngle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle'", nullptr);
@@ -12106,7 +12106,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Physics3D6DofConstraint:isLimited");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Physics3D6DofConstraint:isLimited");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_isLimited'", nullptr);
@@ -12203,7 +12203,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* tolua_
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Physics3D6DofConstraint:setUseFrameOffset");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Physics3D6DofConstraint:setUseFrameOffset");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_setUseFrameOffset'", nullptr);
@@ -12248,7 +12248,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
             ok &= luaval_to_mat4(tolua_S, 3, &arg1, "ax.Physics3D6DofConstraint:create");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Physics3D6DofConstraint:create");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Physics3D6DofConstraint:create");
             if (!ok) { break; }
             ax::Physics3D6DofConstraint* ret = ax::Physics3D6DofConstraint::create(arg0, arg1, arg2);
             object_to_luaval<ax::Physics3D6DofConstraint>(tolua_S, "ax.Physics3D6DofConstraint",(ax::Physics3D6DofConstraint*)ret);
@@ -12273,7 +12273,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
             ok &= luaval_to_mat4(tolua_S, 5, &arg3, "ax.Physics3D6DofConstraint:create");
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.Physics3D6DofConstraint:create");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.Physics3D6DofConstraint:create");
             if (!ok) { break; }
             ax::Physics3D6DofConstraint* ret = ax::Physics3D6DofConstraint::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<ax::Physics3D6DofConstraint>(tolua_S, "ax.Physics3D6DofConstraint",(ax::Physics3D6DofConstraint*)ret);

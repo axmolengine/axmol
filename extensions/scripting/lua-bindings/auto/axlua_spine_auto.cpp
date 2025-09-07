@@ -80,7 +80,7 @@ int lua_ax_spine_SkeletonRenderer_setTimeScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "sp.SkeletonRenderer:setTimeScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "sp.SkeletonRenderer:setTimeScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setTimeScale'", nullptr);
@@ -177,7 +177,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "sp.SkeletonRenderer:setDebugSlotsEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "sp.SkeletonRenderer:setDebugSlotsEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled'", nullptr);
@@ -274,7 +274,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "sp.SkeletonRenderer:setDebugBonesEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "sp.SkeletonRenderer:setDebugBonesEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled'", nullptr);
@@ -371,7 +371,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "sp.SkeletonRenderer:setDebugMeshesEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "sp.SkeletonRenderer:setDebugMeshesEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled'", nullptr);
@@ -468,7 +468,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled(lua_State* tolua_S
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "sp.SkeletonRenderer:setDebugBoundingRectEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "sp.SkeletonRenderer:setDebugBoundingRectEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled'", nullptr);
@@ -824,7 +824,7 @@ int lua_ax_spine_SkeletonRenderer_setTwoColorTint(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "sp.SkeletonRenderer:setTwoColorTint");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "sp.SkeletonRenderer:setTwoColorTint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setTwoColorTint'", nullptr);
@@ -922,9 +922,9 @@ int lua_ax_spine_SkeletonRenderer_setSlotsRange(lua_State* tolua_S)
         int arg0;
         int arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "sp.SkeletonRenderer:setSlotsRange");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "sp.SkeletonRenderer:setSlotsRange");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "sp.SkeletonRenderer:setSlotsRange");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "sp.SkeletonRenderer:setSlotsRange");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setSlotsRange'", nullptr);
@@ -1088,7 +1088,7 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
 
         ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonRenderer:initWithSkeleton");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:initWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:initWithSkeleton");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
@@ -1106,9 +1106,9 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
 
         ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonRenderer:initWithSkeleton");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:initWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:initWithSkeleton");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "sp.SkeletonRenderer:initWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithSkeleton");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
@@ -1127,11 +1127,11 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
 
         ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonRenderer:initWithSkeleton");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:initWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:initWithSkeleton");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "sp.SkeletonRenderer:initWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithSkeleton");
 
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "sp.SkeletonRenderer:initWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "sp.SkeletonRenderer:initWithSkeleton");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
@@ -1198,7 +1198,7 @@ int lua_ax_spine_SkeletonRenderer_initWithData(lua_State* tolua_S)
 
         ok &= luaval_to_object<spine::SkeletonData>(tolua_S, 2, "sp.SkeletonData",&arg0, "sp.SkeletonRenderer:initWithData");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:initWithData");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:initWithData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithData'", nullptr);
@@ -1266,7 +1266,7 @@ int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonRenderer:initWithJsonFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithJsonFile");
 
             if (!ok) { break; }
             cobj->initWithJsonFile(arg0, arg1, arg2);
@@ -1302,7 +1302,7 @@ int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonRenderer:initWithJsonFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithJsonFile");
 
             if (!ok) { break; }
             cobj->initWithJsonFile(arg0, arg1, arg2);
@@ -1369,7 +1369,7 @@ int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonRenderer:initWithBinaryFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithBinaryFile");
 
             if (!ok) { break; }
             cobj->initWithBinaryFile(arg0, arg1, arg2);
@@ -1405,7 +1405,7 @@ int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonRenderer:initWithBinaryFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithBinaryFile");
 
             if (!ok) { break; }
             cobj->initWithBinaryFile(arg0, arg1, arg2);
@@ -1538,7 +1538,7 @@ int lua_ax_spine_SkeletonRenderer_createWithSkeleton(lua_State* tolua_S)
         spine::Skeleton* arg0;
         bool arg1;
         ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonRenderer:createWithSkeleton");
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:createWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:createWithSkeleton");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_createWithSkeleton'", nullptr);
@@ -1554,8 +1554,8 @@ int lua_ax_spine_SkeletonRenderer_createWithSkeleton(lua_State* tolua_S)
         bool arg1;
         bool arg2;
         ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonRenderer:createWithSkeleton");
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:createWithSkeleton");
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "sp.SkeletonRenderer:createWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:createWithSkeleton");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "sp.SkeletonRenderer:createWithSkeleton");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_createWithSkeleton'", nullptr);
@@ -1614,7 +1614,7 @@ int lua_ax_spine_SkeletonRenderer_createWithFile(lua_State* tolua_S)
             ok &= luaval_to_std_string(tolua_S, 3,&arg1, "sp.SkeletonRenderer:createWithFile");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonRenderer:createWithFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:createWithFile");
             if (!ok) { break; }
             spine::SkeletonRenderer* ret = spine::SkeletonRenderer::createWithFile(arg0, arg1, arg2);
             object_to_luaval<spine::SkeletonRenderer>(tolua_S, "sp.SkeletonRenderer",(spine::SkeletonRenderer*)ret);
@@ -1649,7 +1649,7 @@ int lua_ax_spine_SkeletonRenderer_createWithFile(lua_State* tolua_S)
             ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonRenderer:createWithFile");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonRenderer:createWithFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:createWithFile");
             if (!ok) { break; }
             spine::SkeletonRenderer* ret = spine::SkeletonRenderer::createWithFile(arg0, arg1, arg2);
             object_to_luaval<spine::SkeletonRenderer>(tolua_S, "sp.SkeletonRenderer",(spine::SkeletonRenderer*)ret);
@@ -1697,7 +1697,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             cobj = new spine::SkeletonRenderer(arg0, arg1);
@@ -1716,11 +1716,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             cobj = new spine::SkeletonRenderer(arg0, arg1, arg2);
@@ -1739,15 +1739,15 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             cobj = new spine::SkeletonRenderer(arg0, arg1, arg2, arg3);
@@ -1792,7 +1792,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             cobj = new spine::SkeletonRenderer(arg0, arg1);
@@ -1834,7 +1834,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             cobj = new spine::SkeletonRenderer(arg0, arg1, arg2);
@@ -1876,7 +1876,7 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonRenderer:SkeletonRenderer");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
             cobj = new spine::SkeletonRenderer(arg0, arg1, arg2);
@@ -1983,7 +1983,7 @@ int lua_ax_spine_SkeletonAnimation_setMix(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 3,&arg1, "sp.SkeletonAnimation:setMix");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonAnimation:setMix");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:setMix");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setMix'", nullptr);
@@ -2034,9 +2034,9 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimation(lua_State* tolua_S)
         int arg0;
         double arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "sp.SkeletonAnimation:setEmptyAnimation");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "sp.SkeletonAnimation:setEmptyAnimation");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "sp.SkeletonAnimation:setEmptyAnimation");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "sp.SkeletonAnimation:setEmptyAnimation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimation'", nullptr);
@@ -2086,7 +2086,7 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimations(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "sp.SkeletonAnimation:setEmptyAnimations");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "sp.SkeletonAnimation:setEmptyAnimations");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimations'", nullptr);
@@ -2137,9 +2137,9 @@ int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
         int arg0;
         double arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "sp.SkeletonAnimation:addEmptyAnimation");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "sp.SkeletonAnimation:addEmptyAnimation");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "sp.SkeletonAnimation:addEmptyAnimation");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "sp.SkeletonAnimation:addEmptyAnimation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_addEmptyAnimation'", nullptr);
@@ -2155,11 +2155,11 @@ int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
         double arg1;
         double arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "sp.SkeletonAnimation:addEmptyAnimation");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "sp.SkeletonAnimation:addEmptyAnimation");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "sp.SkeletonAnimation:addEmptyAnimation");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "sp.SkeletonAnimation:addEmptyAnimation");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonAnimation:addEmptyAnimation");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:addEmptyAnimation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_addEmptyAnimation'", nullptr);
@@ -2317,7 +2317,7 @@ int lua_ax_spine_SkeletonAnimation_clearTrack(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "sp.SkeletonAnimation:clearTrack");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "sp.SkeletonAnimation:clearTrack");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_clearTrack'", nullptr);
@@ -3141,7 +3141,7 @@ int lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "sp.SkeletonAnimation:setUpdateOnlyIfVisible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "sp.SkeletonAnimation:setUpdateOnlyIfVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible'", nullptr);
@@ -3236,7 +3236,7 @@ int lua_ax_spine_SkeletonAnimation_createWithJsonFile(lua_State* tolua_S)
             ok &= luaval_to_std_string(tolua_S, 3,&arg1, "sp.SkeletonAnimation:createWithJsonFile");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonAnimation:createWithJsonFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:createWithJsonFile");
             if (!ok) { break; }
             spine::SkeletonAnimation* ret = spine::SkeletonAnimation::createWithJsonFile(arg0, arg1, arg2);
             object_to_luaval<spine::SkeletonAnimation>(tolua_S, "sp.SkeletonAnimation",(spine::SkeletonAnimation*)ret);
@@ -3271,7 +3271,7 @@ int lua_ax_spine_SkeletonAnimation_createWithJsonFile(lua_State* tolua_S)
             ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonAnimation:createWithJsonFile");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonAnimation:createWithJsonFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:createWithJsonFile");
             if (!ok) { break; }
             spine::SkeletonAnimation* ret = spine::SkeletonAnimation::createWithJsonFile(arg0, arg1, arg2);
             object_to_luaval<spine::SkeletonAnimation>(tolua_S, "sp.SkeletonAnimation",(spine::SkeletonAnimation*)ret);
@@ -3328,7 +3328,7 @@ int lua_ax_spine_SkeletonAnimation_createWithBinaryFile(lua_State* tolua_S)
             ok &= luaval_to_std_string(tolua_S, 3,&arg1, "sp.SkeletonAnimation:createWithBinaryFile");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonAnimation:createWithBinaryFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:createWithBinaryFile");
             if (!ok) { break; }
             spine::SkeletonAnimation* ret = spine::SkeletonAnimation::createWithBinaryFile(arg0, arg1, arg2);
             object_to_luaval<spine::SkeletonAnimation>(tolua_S, "sp.SkeletonAnimation",(spine::SkeletonAnimation*)ret);
@@ -3363,7 +3363,7 @@ int lua_ax_spine_SkeletonAnimation_createWithBinaryFile(lua_State* tolua_S)
             ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonAnimation:createWithBinaryFile");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "sp.SkeletonAnimation:createWithBinaryFile");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonAnimation:createWithBinaryFile");
             if (!ok) { break; }
             spine::SkeletonAnimation* ret = spine::SkeletonAnimation::createWithBinaryFile(arg0, arg1, arg2);
             object_to_luaval<spine::SkeletonAnimation>(tolua_S, "sp.SkeletonAnimation",(spine::SkeletonAnimation*)ret);

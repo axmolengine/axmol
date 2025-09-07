@@ -228,7 +228,7 @@ int lua_ax_video_MediaPlayer_setLooping(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.MediaPlayer:setLooping");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.MediaPlayer:setLooping");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_MediaPlayer_setLooping'", nullptr);
@@ -278,7 +278,7 @@ int lua_ax_video_MediaPlayer_setUserInputEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.MediaPlayer:setUserInputEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.MediaPlayer:setUserInputEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_MediaPlayer_setUserInputEnabled'", nullptr);
@@ -328,7 +328,7 @@ int lua_ax_video_MediaPlayer_setStyle(lua_State* tolua_S)
     {
         ax::ui::MediaPlayer::StyleType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.MediaPlayer:setStyle");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.MediaPlayer:setStyle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_MediaPlayer_setStyle'", nullptr);
@@ -378,7 +378,7 @@ int lua_ax_video_MediaPlayer_setPlayRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.MediaPlayer:setPlayRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.MediaPlayer:setPlayRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_MediaPlayer_setPlayRate'", nullptr);
@@ -616,7 +616,7 @@ int lua_ax_video_MediaPlayer_seekTo(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.MediaPlayer:seekTo");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.MediaPlayer:seekTo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_MediaPlayer_seekTo'", nullptr);
@@ -901,7 +901,7 @@ int lua_ax_video_MediaPlayer_setKeepAspectRatioEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.MediaPlayer:setKeepAspectRatioEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.MediaPlayer:setKeepAspectRatioEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_MediaPlayer_setKeepAspectRatioEnabled'", nullptr);
@@ -998,7 +998,7 @@ int lua_ax_video_MediaPlayer_setFullScreenEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.MediaPlayer:setFullScreenEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.MediaPlayer:setFullScreenEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_MediaPlayer_setFullScreenEnabled'", nullptr);
@@ -1095,7 +1095,7 @@ int lua_ax_video_MediaPlayer_onPlayEvent(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.MediaPlayer:onPlayEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.MediaPlayer:onPlayEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_MediaPlayer_onPlayEvent'", nullptr);

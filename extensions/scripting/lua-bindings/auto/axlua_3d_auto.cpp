@@ -345,7 +345,7 @@ int lua_ax_3d_Animate3D_setSpeed(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Animate3D:setSpeed");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Animate3D:setSpeed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_setSpeed'", nullptr);
@@ -442,7 +442,7 @@ int lua_ax_3d_Animate3D_setWeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Animate3D:setWeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Animate3D:setWeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_setWeight'", nullptr);
@@ -492,7 +492,7 @@ int lua_ax_3d_Animate3D_setOriginInterval(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Animate3D:setOriginInterval");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Animate3D:setOriginInterval");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_setOriginInterval'", nullptr);
@@ -589,7 +589,7 @@ int lua_ax_3d_Animate3D_setQuality(lua_State* tolua_S)
     {
         ax::Animate3DQuality arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Animate3D:setQuality");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Animate3D:setQuality");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_setQuality'", nullptr);
@@ -687,7 +687,7 @@ int lua_ax_3d_Animate3D_setKeyFrameUserInfo(lua_State* tolua_S)
         int arg0;
         ax::ValueMap arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Animate3D:setKeyFrameUserInfo");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Animate3D:setKeyFrameUserInfo");
 
         ok &= luaval_to_ccvaluemap(tolua_S, 3, &arg1, "ax.Animate3D:setKeyFrameUserInfo");
         if(!ok)
@@ -784,11 +784,11 @@ int lua_ax_3d_Animate3D_init(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animate3D:init");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animate3D:init");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Animate3D:init");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Animate3D:init");
 
             if (!ok) { break; }
             bool ret = cobj->init(arg0, arg1, arg2);
@@ -854,11 +854,11 @@ int lua_ax_3d_Animate3D_initWithFrames(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:initWithFrames");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Animate3D:initWithFrames");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Animate3D:initWithFrames");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Animate3D:initWithFrames");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Animate3D:initWithFrames");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Animate3D:initWithFrames");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Animate3D:initWithFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_initWithFrames'", nullptr);
@@ -900,10 +900,10 @@ int lua_ax_3d_Animate3D_create(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animate3D:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animate3D:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Animate3D:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Animate3D:create");
             if (!ok) { break; }
             ax::Animate3D* ret = ax::Animate3D::create(arg0, arg1, arg2);
             object_to_luaval<ax::Animate3D>(tolua_S, "ax.Animate3D",(ax::Animate3D*)ret);
@@ -953,8 +953,8 @@ int lua_ax_3d_Animate3D_createWithFrames(lua_State* tolua_S)
         int arg1;
         int arg2;
         ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:createWithFrames");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Animate3D:createWithFrames");
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Animate3D:createWithFrames");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Animate3D:createWithFrames");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Animate3D:createWithFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_createWithFrames'", nullptr);
@@ -971,9 +971,9 @@ int lua_ax_3d_Animate3D_createWithFrames(lua_State* tolua_S)
         int arg2;
         double arg3;
         ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:createWithFrames");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Animate3D:createWithFrames");
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Animate3D:createWithFrames");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Animate3D:createWithFrames");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Animate3D:createWithFrames");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Animate3D:createWithFrames");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Animate3D:createWithFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_createWithFrames'", nullptr);
@@ -1043,7 +1043,7 @@ int lua_ax_3d_Animate3D_setTransitionTime(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Animate3D:setTransitionTime");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Animate3D:setTransitionTime");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Animate3D_setTransitionTime'", nullptr);
@@ -1557,7 +1557,7 @@ int lua_ax_3d_BillBoard_setMode(lua_State* tolua_S)
     {
         ax::BillBoard::Mode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.BillBoard:setMode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.BillBoard:setMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_BillBoard_setMode'", nullptr);
@@ -1659,7 +1659,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.BillBoard:create");
             if (!ok) { break; }
             ax::BillBoard::Mode arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.BillBoard:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.BillBoard:create");
             if (!ok) { break; }
             ax::BillBoard* ret = ax::BillBoard::create(arg0, arg1);
             object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
@@ -1682,7 +1682,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         if (argc == 1)
         {
             ax::BillBoard::Mode arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.BillBoard:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.BillBoard:create");
             if (!ok) { break; }
             ax::BillBoard* ret = ax::BillBoard::create(arg0);
             object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
@@ -1717,7 +1717,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.BillBoard:create");
             if (!ok) { break; }
             ax::BillBoard::Mode arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.BillBoard:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.BillBoard:create");
             if (!ok) { break; }
             ax::BillBoard* ret = ax::BillBoard::create(arg0, arg1, arg2);
             object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
@@ -1766,7 +1766,7 @@ int lua_ax_3d_BillBoard_createWithTexture(lua_State* tolua_S)
         ax::Texture2D* arg0;
         ax::BillBoard::Mode arg1;
         ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.BillBoard:createWithTexture");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.BillBoard:createWithTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.BillBoard:createWithTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_BillBoard_createWithTexture'", nullptr);
@@ -1922,7 +1922,7 @@ int lua_ax_3d_Mesh_getMeshVertexAttribute(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Mesh:getMeshVertexAttribute");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Mesh:getMeshVertexAttribute");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_getMeshVertexAttribute'", nullptr);
@@ -2019,7 +2019,7 @@ int lua_ax_3d_Mesh_setVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Mesh:setVisible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Mesh:setVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setVisible'", nullptr);
@@ -2307,7 +2307,7 @@ int lua_ax_3d_Mesh_setIndexFormat(lua_State* tolua_S)
     {
         ax::rhi::IndexFormat arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Mesh:setIndexFormat");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Mesh:setIndexFormat");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setIndexFormat'", nullptr);
@@ -2513,19 +2513,19 @@ int lua_ax_3d_Mesh_draw(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Mesh:draw");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Mesh:draw");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Mesh:draw");
 
         ok &= luaval_to_mat4(tolua_S, 4, &arg2, "ax.Mesh:draw");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.Mesh:draw");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Mesh:draw");
 
-        ok &= luaval_to_uint32(tolua_S, 6,&arg4, "ax.Mesh:draw");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Mesh:draw");
 
         ok &= luaval_to_vec4(tolua_S, 7, &arg5, "ax.Mesh:draw");
 
-        ok &= luaval_to_boolean(tolua_S, 8,&arg6, "ax.Mesh:draw");
+        ok &= luaval_to_boolean(tolua_S, 8, &arg6, "ax.Mesh:draw");
 
-        ok &= luaval_to_boolean(tolua_S, 9,&arg7, "ax.Mesh:draw");
+        ok &= luaval_to_boolean(tolua_S, 9, &arg7, "ax.Mesh:draw");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_draw'", nullptr);
@@ -2783,7 +2783,7 @@ int lua_ax_3d_Mesh_setInstanceCount(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Mesh:setInstanceCount");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Mesh:setInstanceCount");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setInstanceCount'", nullptr);
@@ -2833,7 +2833,7 @@ int lua_ax_3d_Mesh_enableInstancing(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Mesh:enableInstancing");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Mesh:enableInstancing");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_enableInstancing'", nullptr);
@@ -2848,9 +2848,9 @@ int lua_ax_3d_Mesh_enableInstancing(lua_State* tolua_S)
         bool arg0;
         int arg1;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Mesh:enableInstancing");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Mesh:enableInstancing");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Mesh:enableInstancing");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Mesh:enableInstancing");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_enableInstancing'", nullptr);
@@ -2900,7 +2900,7 @@ int lua_ax_3d_Mesh_setDynamicInstancing(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Mesh:setDynamicInstancing");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Mesh:setDynamicInstancing");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setDynamicInstancing'", nullptr);
@@ -3222,7 +3222,7 @@ int lua_ax_3d_Skeleton3D_getBoneByIndex(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Skeleton3D:getBoneByIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Skeleton3D:getBoneByIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Skeleton3D_getBoneByIndex'", nullptr);
@@ -3369,7 +3369,7 @@ int lua_ax_3d_Skeleton3D_getRootBone(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Skeleton3D:getRootBone");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Skeleton3D:getRootBone");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Skeleton3D_getRootBone'", nullptr);
@@ -4008,10 +4008,10 @@ int lua_ax_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
         if (argc == 2)
         {
             ax::MeshMaterial::MaterialType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshMaterial:createBuiltInMaterial");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshMaterial:createBuiltInMaterial");
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.MeshMaterial:createBuiltInMaterial");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.MeshMaterial:createBuiltInMaterial");
             if (!ok) { break; }
             ax::MeshMaterial* ret = ax::MeshMaterial::createBuiltInMaterial(arg0, arg1);
             object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
@@ -4277,7 +4277,7 @@ int lua_ax_3d_MeshRenderer_getMeshByIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:getMeshByIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshRenderer:getMeshByIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_getMeshByIndex'", nullptr);
@@ -4762,7 +4762,7 @@ int lua_ax_3d_MeshRenderer_setForceDepthWrite(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MeshRenderer:setForceDepthWrite");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MeshRenderer:setForceDepthWrite");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_setForceDepthWrite'", nullptr);
@@ -4859,7 +4859,7 @@ int lua_ax_3d_MeshRenderer_setCullFace(lua_State* tolua_S)
     {
         ax::rhi::CullMode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:setCullFace");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshRenderer:setCullFace");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_setCullFace'", nullptr);
@@ -4909,7 +4909,7 @@ int lua_ax_3d_MeshRenderer_setCullFaceEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MeshRenderer:setCullFaceEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MeshRenderer:setCullFaceEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_setCullFaceEnabled'", nullptr);
@@ -4959,7 +4959,7 @@ int lua_ax_3d_MeshRenderer_setLightMask(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.MeshRenderer:setLightMask");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshRenderer:setLightMask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_setLightMask'", nullptr);
@@ -5056,7 +5056,7 @@ int lua_ax_3d_MeshRenderer_setWireframe(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MeshRenderer:setWireframe");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MeshRenderer:setWireframe");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_setWireframe'", nullptr);
@@ -5151,7 +5151,7 @@ int lua_ax_3d_MeshRenderer_setMaterial(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.MeshRenderer:setMaterial");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.MeshRenderer:setMaterial");
 
             if (!ok) { break; }
             cobj->setMaterial(arg0, arg1);
@@ -5223,7 +5223,7 @@ int lua_ax_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:getMaterial");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshRenderer:getMaterial");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_getMaterial'", nullptr);
@@ -5331,7 +5331,7 @@ int lua_ax_3d_MeshRenderer_genMaterial(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MeshRenderer:genMaterial");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MeshRenderer:genMaterial");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_genMaterial'", nullptr);
@@ -5391,7 +5391,7 @@ int lua_ax_3d_MeshRenderer_enableInstancing(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.MeshRenderer:enableInstancing");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.MeshRenderer:enableInstancing");
 
             if (!ok) { break; }
             cobj->enableInstancing(arg0, arg1);
@@ -5403,7 +5403,7 @@ int lua_ax_3d_MeshRenderer_enableInstancing(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::MeshMaterial::InstanceMaterialType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:enableInstancing");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshRenderer:enableInstancing");
 
             if (!ok) { break; }
             cobj->enableInstancing(arg0);
@@ -5415,11 +5415,11 @@ int lua_ax_3d_MeshRenderer_enableInstancing(lua_State* tolua_S)
     do{
         if (argc == 2) {
             ax::MeshMaterial::InstanceMaterialType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:enableInstancing");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshRenderer:enableInstancing");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.MeshRenderer:enableInstancing");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.MeshRenderer:enableInstancing");
 
             if (!ok) { break; }
             cobj->enableInstancing(arg0, arg1);
@@ -5515,7 +5515,7 @@ int lua_ax_3d_MeshRenderer_setDynamicInstancing(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MeshRenderer:setDynamicInstancing");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MeshRenderer:setDynamicInstancing");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_setDynamicInstancing'", nullptr);
@@ -5582,7 +5582,7 @@ int lua_ax_3d_MeshRenderer_addInstanceChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.MeshRenderer:addInstanceChild");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.MeshRenderer:addInstanceChild");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.MeshRenderer:addInstanceChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_addInstanceChild'", nullptr);
@@ -6305,9 +6305,9 @@ int lua_ax_3d_Terrain_getNormal(lua_State* tolua_S)
         int arg0;
         int arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Terrain:getNormal");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Terrain:getNormal");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Terrain:getNormal");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Terrain:getNormal");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Terrain_getNormal'", nullptr);
@@ -6358,9 +6358,9 @@ int lua_ax_3d_Terrain_getImageHeight(lua_State* tolua_S)
         int arg0;
         int arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Terrain:getImageHeight");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Terrain:getImageHeight");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Terrain:getImageHeight");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Terrain:getImageHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Terrain_getImageHeight'", nullptr);
@@ -6410,7 +6410,7 @@ int lua_ax_3d_Terrain_setDrawWire(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Terrain:setDrawWire");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Terrain:setDrawWire");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Terrain_setDrawWire'", nullptr);
@@ -6462,11 +6462,11 @@ int lua_ax_3d_Terrain_setLODDistance(lua_State* tolua_S)
         double arg1;
         double arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Terrain:setLODDistance");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Terrain:setLODDistance");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Terrain:setLODDistance");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Terrain:setLODDistance");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Terrain:setLODDistance");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Terrain:setLODDistance");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Terrain_setLODDistance'", nullptr);
@@ -6516,7 +6516,7 @@ int lua_ax_3d_Terrain_setIsEnableFrustumCull(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Terrain:setIsEnableFrustumCull");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Terrain:setIsEnableFrustumCull");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Terrain_setIsEnableFrustumCull'", nullptr);
@@ -6617,7 +6617,7 @@ int lua_ax_3d_Terrain_setDetailMap(lua_State* tolua_S)
         unsigned int arg0;
         ax::Terrain::DetailMap arg1;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Terrain:setDetailMap");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Terrain:setDetailMap");
 
         #pragma warning NO CONVERSION TO NATIVE FOR DetailMap
         ok = false;
@@ -6670,7 +6670,7 @@ int lua_ax_3d_Terrain_setMaxDetailMapAmount(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Terrain:setMaxDetailMapAmount");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Terrain:setMaxDetailMapAmount");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Terrain_setMaxDetailMapAmount'", nullptr);
@@ -6914,7 +6914,7 @@ int lua_ax_3d_Terrain_setSkirtHeightRatio(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Terrain:setSkirtHeightRatio");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Terrain:setSkirtHeightRatio");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Terrain_setSkirtHeightRatio'", nullptr);
@@ -7109,7 +7109,7 @@ int lua_ax_3d_Terrain_initWithTerrainData(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR TerrainData
         ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Terrain:initWithTerrainData");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Terrain:initWithTerrainData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Terrain_initWithTerrainData'", nullptr);
@@ -7605,7 +7605,7 @@ int lua_ax_3d_Bundle3D_parseGLDataType(lua_State* tolua_S)
         std::string_view arg0;
         int arg1;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Bundle3D:parseGLDataType");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Bundle3D:parseGLDataType");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Bundle3D:parseGLDataType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Bundle3D_parseGLDataType'", nullptr);

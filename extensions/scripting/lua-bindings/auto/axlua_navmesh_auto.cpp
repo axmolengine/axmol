@@ -35,7 +35,7 @@ int lua_ax_navmesh_NavMeshAgent_setRadius(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.NavMeshAgent:setRadius");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.NavMeshAgent:setRadius");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setRadius'", nullptr);
@@ -132,7 +132,7 @@ int lua_ax_navmesh_NavMeshAgent_setHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.NavMeshAgent:setHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.NavMeshAgent:setHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setHeight'", nullptr);
@@ -229,7 +229,7 @@ int lua_ax_navmesh_NavMeshAgent_setMaxAcceleration(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.NavMeshAgent:setMaxAcceleration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.NavMeshAgent:setMaxAcceleration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setMaxAcceleration'", nullptr);
@@ -326,7 +326,7 @@ int lua_ax_navmesh_NavMeshAgent_setMaxSpeed(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.NavMeshAgent:setMaxSpeed");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.NavMeshAgent:setMaxSpeed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setMaxSpeed'", nullptr);
@@ -423,7 +423,7 @@ int lua_ax_navmesh_NavMeshAgent_setSeparationWeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.NavMeshAgent:setSeparationWeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.NavMeshAgent:setSeparationWeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setSeparationWeight'", nullptr);
@@ -520,7 +520,7 @@ int lua_ax_navmesh_NavMeshAgent_setObstacleAvoidanceType(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ax.NavMeshAgent:setObstacleAvoidanceType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.NavMeshAgent:setObstacleAvoidanceType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setObstacleAvoidanceType'", nullptr);
@@ -855,7 +855,7 @@ int lua_ax_navmesh_NavMeshAgent_setAutoOrientation(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.NavMeshAgent:setAutoOrientation");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.NavMeshAgent:setAutoOrientation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setAutoOrientation'", nullptr);
@@ -905,7 +905,7 @@ int lua_ax_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.NavMeshAgent:setAutoTraverseOffMeshLink");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.NavMeshAgent:setAutoTraverseOffMeshLink");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink'", nullptr);
@@ -1194,7 +1194,7 @@ int lua_ax_navmesh_NavMeshAgent_setSyncFlag(lua_State* tolua_S)
     {
         ax::NavMeshAgent::NavMeshAgentSyncFlag arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.NavMeshAgent:setSyncFlag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.NavMeshAgent:setSyncFlag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_setSyncFlag'", nullptr);
@@ -1684,7 +1684,7 @@ int lua_ax_navmesh_NavMeshObstacle_setSyncFlag(lua_State* tolua_S)
     {
         ax::NavMeshObstacle::NavMeshObstacleSyncFlag arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.NavMeshObstacle:setSyncFlag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.NavMeshObstacle:setSyncFlag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshObstacle_setSyncFlag'", nullptr);
@@ -1876,9 +1876,9 @@ int lua_ax_navmesh_NavMeshObstacle_initWith(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.NavMeshObstacle:initWith");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.NavMeshObstacle:initWith");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.NavMeshObstacle:initWith");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.NavMeshObstacle:initWith");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshObstacle_initWith'", nullptr);
@@ -1917,8 +1917,8 @@ int lua_ax_navmesh_NavMeshObstacle_create(lua_State* tolua_S)
     {
         double arg0;
         double arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.NavMeshObstacle:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.NavMeshObstacle:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.NavMeshObstacle:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.NavMeshObstacle:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshObstacle_create'", nullptr);
@@ -2066,7 +2066,7 @@ int lua_ax_navmesh_NavMesh_update(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.NavMesh:update");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.NavMesh:update");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMesh_update'", nullptr);
@@ -2166,7 +2166,7 @@ int lua_ax_navmesh_NavMesh_setDebugDrawEnable(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.NavMesh:setDebugDrawEnable");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.NavMesh:setDebugDrawEnable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMesh_setDebugDrawEnable'", nullptr);

@@ -190,8 +190,7 @@ void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event
         for (int i = 0; i < d; ++i)
         {
             Sprite* sprite = Sprite::create("Images/fire.png");
-            sprite->setColor(Color32::RED);
-            sprite->setOpacity(20);
+            sprite->setColor(Color32(255, 0, 0, 20));
             _brushs.pushBack(sprite);
         }
         for (int i = 0; i < d; i++)
@@ -199,15 +198,16 @@ void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event
             float difx  = end.x - start.x;
             float dify  = end.y - start.y;
             float delta = (float)i / distance;
-            _brushs.at(i)->setPosition(Vec2(start.x + (difx * delta), start.y + (dify * delta)));
-            _brushs.at(i)->setRotation(rand() % 360);
+            auto brush  = _brushs.at(i);
+            brush->setPosition(Vec2(start.x + (difx * delta), start.y + (dify * delta)));
+            brush->setRotation(rand() % 360);
             float r = (float)(rand() % 50 / 50.f) + 0.25f;
-            _brushs.at(i)->setScale(r);
+            brush->setScale(r);
             /*_brush->setColor(Color32(AXRANDOM_0_1() * 127 + 128, 255, 255));*/
             // Use AXRANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
-            _brushs.at(i)->setColor(Color32(rand() % 127 + 128, 255, 255));
+            brush->setColor(Color32(rand() % 127 + 128, 255, 255, brush->getOpacity()));
             // Call visit to draw the brush, don't call draw..
-            _brushs.at(i)->visit();
+            brush->visit();
         }
     }
 

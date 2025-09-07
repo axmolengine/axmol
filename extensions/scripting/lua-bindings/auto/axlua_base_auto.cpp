@@ -525,23 +525,23 @@ int lua_ax_base_Touch_setTouchInfo(lua_State* tolua_S)
     do{
         if (argc == 5) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Touch:setTouchInfo");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Touch:setTouchInfo");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Touch:setTouchInfo");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Touch:setTouchInfo");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Touch:setTouchInfo");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Touch:setTouchInfo");
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Touch:setTouchInfo");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Touch:setTouchInfo");
 
             if (!ok) { break; }
             double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.Touch:setTouchInfo");
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.Touch:setTouchInfo");
 
             if (!ok) { break; }
             cobj->setTouchInfo(arg0, arg1, arg2, arg3, arg4);
@@ -553,15 +553,15 @@ int lua_ax_base_Touch_setTouchInfo(lua_State* tolua_S)
     do{
         if (argc == 3) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Touch:setTouchInfo");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Touch:setTouchInfo");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Touch:setTouchInfo");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Touch:setTouchInfo");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Touch:setTouchInfo");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Touch:setTouchInfo");
 
             if (!ok) { break; }
             cobj->setTouchInfo(arg0, arg1, arg2);
@@ -994,7 +994,7 @@ int lua_ax_base_Event_constructor(lua_State* tolua_S)
     {
         ax::Event::Type arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Event:Event");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Event:Event");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Event_constructor'", nullptr);
@@ -1118,7 +1118,7 @@ int lua_ax_base_EventTouch_setEventCode(lua_State* tolua_S)
     {
         ax::EventTouch::EventCode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventTouch:setEventCode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventTouch:setEventCode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventTouch_setEventCode'", nullptr);
@@ -1215,9 +1215,9 @@ int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
         ax::EventKeyboard::KeyCode arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventKeyboard:EventKeyboard");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventKeyboard:EventKeyboard");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventKeyboard:EventKeyboard");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.EventKeyboard:EventKeyboard");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventKeyboard_constructor'", nullptr);
@@ -1528,7 +1528,7 @@ int lua_ax_base_Action_step(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Action:step");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Action:step");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Action_step'", nullptr);
@@ -1578,7 +1578,7 @@ int lua_ax_base_Action_update(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Action:update");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Action:update");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Action_update'", nullptr);
@@ -1869,7 +1869,7 @@ int lua_ax_base_Action_setTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Action:setTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Action:setTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Action_setTag'", nullptr);
@@ -1966,7 +1966,7 @@ int lua_ax_base_Action_setFlags(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Action:setFlags");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Action:setFlags");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Action_setFlags'", nullptr);
@@ -2097,7 +2097,7 @@ int lua_ax_base_FiniteTimeAction_setDuration(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FiniteTimeAction:setDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FiniteTimeAction:setDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FiniteTimeAction_setDuration'", nullptr);
@@ -2215,7 +2215,7 @@ int lua_ax_base_Speed_setSpeed(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Speed:setSpeed");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Speed:setSpeed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Speed_setSpeed'", nullptr);
@@ -2365,7 +2365,7 @@ int lua_ax_base_Speed_initWithAction(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.Speed:initWithAction");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Speed:initWithAction");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Speed:initWithAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Speed_initWithAction'", nullptr);
@@ -2405,7 +2405,7 @@ int lua_ax_base_Speed_create(lua_State* tolua_S)
         ax::ActionInterval* arg0;
         double arg1;
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.Speed:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Speed:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Speed:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Speed_create'", nullptr);
@@ -2563,7 +2563,7 @@ int lua_ax_base_Follow_setBoundarySet(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Follow:setBoundarySet");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Follow:setBoundarySet");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Follow_setBoundarySet'", nullptr);
@@ -2684,9 +2684,9 @@ int lua_ax_base_Follow_initWithTargetAndOffset(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Follow:initWithTargetAndOffset");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Follow:initWithTargetAndOffset");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Follow:initWithTargetAndOffset");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Follow:initWithTargetAndOffset");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Follow:initWithTargetAndOffset");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Follow_initWithTargetAndOffset'", nullptr);
@@ -2705,9 +2705,9 @@ int lua_ax_base_Follow_initWithTargetAndOffset(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Follow:initWithTargetAndOffset");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Follow:initWithTargetAndOffset");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Follow:initWithTargetAndOffset");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Follow:initWithTargetAndOffset");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Follow:initWithTargetAndOffset");
 
         ok &= luaval_to_rect(tolua_S, 5, &arg3, "ax.Follow:initWithTargetAndOffset");
         if(!ok)
@@ -2801,8 +2801,8 @@ int lua_ax_base_Follow_createWithOffset(lua_State* tolua_S)
         double arg1;
         double arg2;
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Follow:createWithOffset");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Follow:createWithOffset");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Follow:createWithOffset");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Follow:createWithOffset");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Follow:createWithOffset");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Follow_createWithOffset'", nullptr);
@@ -2819,8 +2819,8 @@ int lua_ax_base_Follow_createWithOffset(lua_State* tolua_S)
         double arg2;
         ax::Rect arg3;
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Follow:createWithOffset");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Follow:createWithOffset");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Follow:createWithOffset");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Follow:createWithOffset");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Follow:createWithOffset");
         ok &= luaval_to_rect(tolua_S, 5, &arg3, "ax.Follow:createWithOffset");
         if(!ok)
         {
@@ -3026,7 +3026,7 @@ int lua_ax_base_EventListener_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.EventListener:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventListener:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListener_setEnabled'", nullptr);
@@ -3507,7 +3507,7 @@ int lua_ax_base_Texture2D_initWithImage(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.Texture2D:initWithImage");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:initWithImage");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Texture2D:initWithImage");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_initWithImage'", nullptr);
@@ -3525,9 +3525,9 @@ int lua_ax_base_Texture2D_initWithImage(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.Texture2D:initWithImage");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:initWithImage");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Texture2D:initWithImage");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Texture2D:initWithImage");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Texture2D:initWithImage");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_initWithImage'", nullptr);
@@ -3595,7 +3595,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Texture2D:initWithString");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             bool ret = cobj->initWithString(arg0, arg1, arg2);
@@ -3615,7 +3615,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Texture2D:initWithString");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -3639,7 +3639,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Texture2D:initWithString");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -3647,7 +3647,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TextHAlignment arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:initWithString");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             bool ret = cobj->initWithString(arg0, arg1, arg2, arg3, arg4);
@@ -3667,7 +3667,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Texture2D:initWithString");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -3675,11 +3675,11 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TextHAlignment arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:initWithString");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::TextVAlignment arg5;
-            ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:initWithString");
+            ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             bool ret = cobj->initWithString(arg0, arg1, arg2, arg3, arg4, arg5);
@@ -3699,7 +3699,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Texture2D:initWithString");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -3707,15 +3707,15 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TextHAlignment arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:initWithString");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::TextVAlignment arg5;
-            ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:initWithString");
+            ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             bool arg6;
-            ok &= luaval_to_boolean(tolua_S, 8,&arg6, "ax.Texture2D:initWithString");
+            ok &= luaval_to_boolean(tolua_S, 8, &arg6, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             bool ret = cobj->initWithString(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
@@ -3735,7 +3735,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Texture2D:initWithString");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -3743,19 +3743,19 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TextHAlignment arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:initWithString");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::TextVAlignment arg5;
-            ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:initWithString");
+            ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             bool arg6;
-            ok &= luaval_to_boolean(tolua_S, 8,&arg6, "ax.Texture2D:initWithString");
+            ok &= luaval_to_boolean(tolua_S, 8, &arg6, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             int arg7;
-            ok &= luaval_to_int32(tolua_S, 9,(int *)&arg7, "ax.Texture2D:initWithString");
+            ok &= luaval_to_int(tolua_S, 9, &arg7, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             bool ret = cobj->initWithString(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
@@ -3811,13 +3811,13 @@ int lua_ax_base_Texture2D_updateSubData(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Texture2D:updateSubData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateSubData'", nullptr);
@@ -3839,15 +3839,15 @@ int lua_ax_base_Texture2D_updateSubData(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Texture2D:updateSubData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateSubData'", nullptr);
@@ -3870,17 +3870,17 @@ int lua_ax_base_Texture2D_updateSubData(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Texture2D:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 8,(int *)&arg6, "ax.Texture2D:updateSubData");
+        ok &= luaval_to_int(tolua_S, 8, &arg6, "ax.Texture2D:updateSubData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_updateSubData'", nullptr);
@@ -3980,7 +3980,7 @@ int lua_ax_base_Texture2D_drawAtPoint(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Texture2D:drawAtPoint");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Texture2D:drawAtPoint");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Texture2D:drawAtPoint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_drawAtPoint'", nullptr);
@@ -4033,7 +4033,7 @@ int lua_ax_base_Texture2D_drawInRect(lua_State* tolua_S)
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "ax.Texture2D:drawInRect");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Texture2D:drawInRect");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Texture2D:drawInRect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_drawInRect'", nullptr);
@@ -4265,7 +4265,7 @@ int lua_ax_base_Texture2D_getBitsPerPixelForFormat(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::rhi::PixelFormat arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Texture2D:getBitsPerPixelForFormat");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Texture2D:getBitsPerPixelForFormat");
 
             if (!ok) { break; }
             unsigned int ret = cobj->getBitsPerPixelForFormat(arg0);
@@ -4416,7 +4416,7 @@ int lua_ax_base_Texture2D_setPremultipliedAlpha(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Texture2D:setPremultipliedAlpha");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Texture2D:setPremultipliedAlpha");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_setPremultipliedAlpha'", nullptr);
@@ -4795,7 +4795,7 @@ int lua_ax_base_Texture2D_setMaxS(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Texture2D:setMaxS");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Texture2D:setMaxS");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_setMaxS'", nullptr);
@@ -4892,7 +4892,7 @@ int lua_ax_base_Texture2D_setMaxT(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Texture2D:setMaxT");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Texture2D:setMaxT");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Texture2D_setMaxT'", nullptr);
@@ -5213,7 +5213,7 @@ int lua_ax_base_Component_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Component:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Component:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Component_setEnabled'", nullptr);
@@ -5457,7 +5457,7 @@ int lua_ax_base_Component_update(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Component:update");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Component:update");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Component_update'", nullptr);
@@ -5712,7 +5712,7 @@ int lua_ax_base_Node_setLocalZOrder(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:setLocalZOrder");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:setLocalZOrder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setLocalZOrder'", nullptr);
@@ -5856,7 +5856,7 @@ int lua_ax_base_Node_setGlobalZOrder(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setGlobalZOrder");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setGlobalZOrder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setGlobalZOrder'", nullptr);
@@ -5953,7 +5953,7 @@ int lua_ax_base_Node_setScaleX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setScaleX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setScaleX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setScaleX'", nullptr);
@@ -6050,7 +6050,7 @@ int lua_ax_base_Node_setScaleY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setScaleY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setScaleY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setScaleY'", nullptr);
@@ -6147,7 +6147,7 @@ int lua_ax_base_Node_setScaleZ(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setScaleZ");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setScaleZ");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setScaleZ'", nullptr);
@@ -6238,11 +6238,11 @@ int lua_ax_base_Node_setScale(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setScale");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setScale");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Node:setScale");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Node:setScale");
 
             if (!ok) { break; }
             cobj->setScale(arg0, arg1);
@@ -6254,7 +6254,7 @@ int lua_ax_base_Node_setScale(lua_State* tolua_S)
     do{
         if (argc == 1) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setScale");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setScale");
 
             if (!ok) { break; }
             cobj->setScale(arg0);
@@ -6344,11 +6344,11 @@ int lua_ax_base_Node_setPosition(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setPosition");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setPosition");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Node:setPosition");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Node:setPosition");
 
             if (!ok) { break; }
             cobj->setPosition(arg0, arg1);
@@ -6603,7 +6603,7 @@ int lua_ax_base_Node_setPositionX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setPositionX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setPositionX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setPositionX'", nullptr);
@@ -6700,7 +6700,7 @@ int lua_ax_base_Node_setPositionY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setPositionY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setPositionY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setPositionY'", nullptr);
@@ -6894,7 +6894,7 @@ int lua_ax_base_Node_setPositionZ(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setPositionZ");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setPositionZ");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setPositionZ'", nullptr);
@@ -6991,7 +6991,7 @@ int lua_ax_base_Node_setSkewX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setSkewX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setSkewX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setSkewX'", nullptr);
@@ -7088,7 +7088,7 @@ int lua_ax_base_Node_setSkewY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setSkewY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setSkewY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setSkewY'", nullptr);
@@ -7376,7 +7376,7 @@ int lua_ax_base_Node_setVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:setVisible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:setVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setVisible'", nullptr);
@@ -7473,7 +7473,7 @@ int lua_ax_base_Node_setRotation(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setRotation");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setRotation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setRotation'", nullptr);
@@ -7667,7 +7667,7 @@ int lua_ax_base_Node_setRotationSkewX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setRotationSkewX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setRotationSkewX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setRotationSkewX'", nullptr);
@@ -7764,7 +7764,7 @@ int lua_ax_base_Node_setRotationSkewY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:setRotationSkewY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setRotationSkewY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setRotationSkewY'", nullptr);
@@ -7861,7 +7861,7 @@ int lua_ax_base_Node_setIgnoreAnchorPointForPosition(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:setIgnoreAnchorPointForPosition");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:setIgnoreAnchorPointForPosition");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setIgnoreAnchorPointForPosition'", nullptr);
@@ -7956,7 +7956,7 @@ int lua_ax_base_Node_addChild(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Node:addChild");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Node:addChild");
 
             if (!ok) { break; }
             cobj->addChild(arg0, arg1);
@@ -7984,11 +7984,11 @@ int lua_ax_base_Node_addChild(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Node:addChild");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Node:addChild");
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Node:addChild");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Node:addChild");
 
             if (!ok) { break; }
             cobj->addChild(arg0, arg1, arg2);
@@ -8004,7 +8004,7 @@ int lua_ax_base_Node_addChild(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Node:addChild");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Node:addChild");
 
             if (!ok) { break; }
             std::string_view arg2;
@@ -8057,7 +8057,7 @@ int lua_ax_base_Node_getChildByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:getChildByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:getChildByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_getChildByTag'", nullptr);
@@ -8342,7 +8342,7 @@ int lua_ax_base_Node_removeFromParentAndCleanup(lua_State* tolua_S)
     do{
         if (argc == 1) {
             bool arg0;
-            ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:removeFromParentAndCleanup");
+            ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:removeFromParentAndCleanup");
 
             if (!ok) { break; }
             cobj->removeFromParentAndCleanup(arg0);
@@ -8416,7 +8416,7 @@ int lua_ax_base_Node_removeChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:removeChild");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Node:removeChild");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Node:removeChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_removeChild'", nullptr);
@@ -8466,7 +8466,7 @@ int lua_ax_base_Node_removeChildByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:removeChildByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:removeChildByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_removeChildByTag'", nullptr);
@@ -8481,9 +8481,9 @@ int lua_ax_base_Node_removeChildByTag(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:removeChildByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:removeChildByTag");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Node:removeChildByTag");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Node:removeChildByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_removeChildByTag'", nullptr);
@@ -8550,7 +8550,7 @@ int lua_ax_base_Node_removeChildByName(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Node:removeChildByName");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Node:removeChildByName");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Node:removeChildByName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_removeChildByName'", nullptr);
@@ -8594,7 +8594,7 @@ int lua_ax_base_Node_removeAllChildrenWithCleanup(lua_State* tolua_S)
     do{
         if (argc == 1) {
             bool arg0;
-            ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:removeAllChildrenWithCleanup");
+            ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:removeAllChildrenWithCleanup");
 
             if (!ok) { break; }
             cobj->removeAllChildrenWithCleanup(arg0);
@@ -8654,7 +8654,7 @@ int lua_ax_base_Node_reorderChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:reorderChild");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Node:reorderChild");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Node:reorderChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_reorderChild'", nullptr);
@@ -8798,7 +8798,7 @@ int lua_ax_base_Node_setTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:setTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:setTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setTag'", nullptr);
@@ -9099,7 +9099,7 @@ int lua_ax_base_Node_draw(lua_State* tolua_S)
 
             if (!ok) { break; }
             unsigned int arg2;
-            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Node:draw");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Node:draw");
 
             if (!ok) { break; }
             cobj->draw(arg0, arg1, arg2);
@@ -9158,7 +9158,7 @@ int lua_ax_base_Node_visit(lua_State* tolua_S)
 
             if (!ok) { break; }
             unsigned int arg2;
-            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Node:visit");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Node:visit");
 
             if (!ok) { break; }
             cobj->visit(arg0, arg1, arg2);
@@ -9642,7 +9642,7 @@ int lua_ax_base_Node_stopActionByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:stopActionByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:stopActionByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_stopActionByTag'", nullptr);
@@ -9692,7 +9692,7 @@ int lua_ax_base_Node_stopAllActionsByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:stopAllActionsByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:stopAllActionsByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_stopAllActionsByTag'", nullptr);
@@ -9742,7 +9742,7 @@ int lua_ax_base_Node_stopActionsByFlags(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Node:stopActionsByFlags");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:stopActionsByFlags");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_stopActionsByFlags'", nullptr);
@@ -9792,7 +9792,7 @@ int lua_ax_base_Node_getActionByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:getActionByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:getActionByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_getActionByTag'", nullptr);
@@ -9889,7 +9889,7 @@ int lua_ax_base_Node_getNumberOfRunningActionsByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Node:getNumberOfRunningActionsByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:getNumberOfRunningActionsByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_getNumberOfRunningActionsByTag'", nullptr);
@@ -10180,7 +10180,7 @@ int lua_ax_base_Node_update(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Node:update");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:update");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_update'", nullptr);
@@ -11404,7 +11404,7 @@ int lua_ax_base_Node_setOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ax.Node:setOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:setOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setOpacity'", nullptr);
@@ -11454,7 +11454,7 @@ int lua_ax_base_Node_updateDisplayedOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ax.Node:updateDisplayedOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:updateDisplayedOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_updateDisplayedOpacity'", nullptr);
@@ -11551,7 +11551,7 @@ int lua_ax_base_Node_setCascadeOpacityEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:setCascadeOpacityEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:setCascadeOpacityEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setCascadeOpacityEnabled'", nullptr);
@@ -11842,7 +11842,7 @@ int lua_ax_base_Node_setCascadeColorEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:setCascadeColorEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:setCascadeColorEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setCascadeColorEnabled'", nullptr);
@@ -11892,7 +11892,7 @@ int lua_ax_base_Node_setOpacityModifyRGB(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:setOpacityModifyRGB");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:setOpacityModifyRGB");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setOpacityModifyRGB'", nullptr);
@@ -12346,7 +12346,7 @@ int lua_ax_base_Node_setCameraMask(lua_State* tolua_S)
     {
         unsigned short arg0;
 
-        ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.Node:setCameraMask");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:setCameraMask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setCameraMask'", nullptr);
@@ -12361,9 +12361,9 @@ int lua_ax_base_Node_setCameraMask(lua_State* tolua_S)
         unsigned short arg0;
         bool arg1;
 
-        ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.Node:setCameraMask");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:setCameraMask");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Node:setCameraMask");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Node:setCameraMask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setCameraMask'", nullptr);
@@ -12413,7 +12413,7 @@ int lua_ax_base_Node_applyMaskOnEnter(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Node:applyMaskOnEnter");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:applyMaskOnEnter");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_applyMaskOnEnter'", nullptr);
@@ -12473,7 +12473,7 @@ int lua_ax_base_Node_setProgramState(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Node:setProgramState");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Node:setProgramState");
 
             if (!ok) { break; }
             bool ret = cobj->setProgramState(arg0, arg1);
@@ -12485,7 +12485,7 @@ int lua_ax_base_Node_setProgramState(lua_State* tolua_S)
     do{
         if (argc == 1) {
             unsigned int arg0;
-            ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Node:setProgramState");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:setProgramState");
 
             if (!ok) { break; }
             cobj->setProgramState(arg0);
@@ -12535,7 +12535,7 @@ int lua_ax_base_Node_setProgramStateWithRegistry(lua_State* tolua_S)
         unsigned int arg0;
         ax::Texture2D* arg1;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Node:setProgramStateWithRegistry");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:setProgramStateWithRegistry");
 
         ok &= luaval_to_object<ax::Texture2D>(tolua_S, 3, "ax.Texture2D",&arg1, "ax.Node:setProgramStateWithRegistry");
         if(!ok)
@@ -12587,7 +12587,7 @@ int lua_ax_base_Node_setProgramStateByProgramId(lua_State* tolua_S)
     {
         unsigned long long arg0;
 
-        ok &= luaval_to_long_long(tolua_S, 2,(long long*)&arg0, "ax.Node:setProgramStateByProgramId");
+        ok &= luaval_to_long_long(tolua_S, 2, (long long*)&arg0, "ax.Node:setProgramStateByProgramId");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_setProgramStateByProgramId'", nullptr);
@@ -12737,7 +12737,7 @@ int lua_ax_base_Node_resetChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:resetChild");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Node:resetChild");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Node:resetChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_resetChild'", nullptr);
@@ -13835,7 +13835,7 @@ int lua_ax_base_Image_saveToFile(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Image:saveToFile");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Image:saveToFile");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Image:saveToFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Image_saveToFile'", nullptr);
@@ -13967,7 +13967,7 @@ int lua_ax_base_Image_setPNGPremultipliedAlphaEnabled(lua_State* tolua_S)
     if (argc == 1)
     {
         bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Image:setPNGPremultipliedAlphaEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Image:setPNGPremultipliedAlphaEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Image_setPNGPremultipliedAlphaEnabled'", nullptr);
@@ -14004,8 +14004,8 @@ int lua_ax_base_Image_setCompressedImagesHavePMA(lua_State* tolua_S)
     {
         unsigned int arg0;
         bool arg1;
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Image:setCompressedImagesHavePMA");
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Image:setCompressedImagesHavePMA");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Image:setCompressedImagesHavePMA");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Image:setCompressedImagesHavePMA");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Image_setCompressedImagesHavePMA'", nullptr);
@@ -14041,7 +14041,7 @@ int lua_ax_base_Image_isCompressedImageHavePMA(lua_State* tolua_S)
     if (argc == 1)
     {
         unsigned int arg0;
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Image:isCompressedImageHavePMA");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Image:isCompressedImageHavePMA");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Image_isCompressedImageHavePMA'", nullptr);
@@ -14219,7 +14219,7 @@ int lua_ax_base_PolygonInfo_setQuads(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR V3F_T2F_C4B_Quad*
         ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.PolygonInfo:setQuads");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.PolygonInfo:setQuads");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PolygonInfo_setQuads'", nullptr);
@@ -14922,7 +14922,7 @@ int lua_ax_base_SpriteFrame_setRotated(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.SpriteFrame:setRotated");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.SpriteFrame:setRotated");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteFrame_setRotated'", nullptr);
@@ -15891,7 +15891,7 @@ int lua_ax_base_SpriteFrame_initWithTexture(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.SpriteFrame:initWithTexture");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.SpriteFrame:initWithTexture");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -15966,7 +15966,7 @@ int lua_ax_base_SpriteFrame_initWithTextureFilename(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.SpriteFrame:initWithTextureFilename");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.SpriteFrame:initWithTextureFilename");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -16081,7 +16081,7 @@ int lua_ax_base_SpriteFrame_create(lua_State* tolua_S)
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.SpriteFrame:create");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.SpriteFrame:create");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.SpriteFrame:create");
             if (!ok) { break; }
             ax::Vec2 arg3;
             ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.SpriteFrame:create");
@@ -16144,7 +16144,7 @@ int lua_ax_base_SpriteFrame_createWithTexture(lua_State* tolua_S)
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.SpriteFrame:createWithTexture");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.SpriteFrame:createWithTexture");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.SpriteFrame:createWithTexture");
             if (!ok) { break; }
             ax::Vec2 arg3;
             ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.SpriteFrame:createWithTexture");
@@ -16441,7 +16441,7 @@ int lua_ax_base_AnimationFrame_setDelayUnits(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.AnimationFrame:setDelayUnits");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.AnimationFrame:setDelayUnits");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AnimationFrame_setDelayUnits'", nullptr);
@@ -16639,7 +16639,7 @@ int lua_ax_base_AnimationFrame_initWithSpriteFrame(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "ax.AnimationFrame:initWithSpriteFrame");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.AnimationFrame:initWithSpriteFrame");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.AnimationFrame:initWithSpriteFrame");
 
         ok &= luaval_to_ccvaluemap(tolua_S, 4, &arg2, "ax.AnimationFrame:initWithSpriteFrame");
         if(!ok)
@@ -16682,7 +16682,7 @@ int lua_ax_base_AnimationFrame_create(lua_State* tolua_S)
         double arg1;
         ax::ValueMap arg2;
         ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "ax.AnimationFrame:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.AnimationFrame:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.AnimationFrame:create");
         ok &= luaval_to_ccvaluemap(tolua_S, 4, &arg2, "ax.AnimationFrame:create");
         if(!ok)
         {
@@ -16997,7 +16997,7 @@ int lua_ax_base_Animation_setDelayPerUnit(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Animation:setDelayPerUnit");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Animation:setDelayPerUnit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_setDelayPerUnit'", nullptr);
@@ -17285,7 +17285,7 @@ int lua_ax_base_Animation_setRestoreOriginalFrame(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Animation:setRestoreOriginalFrame");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Animation:setRestoreOriginalFrame");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_setRestoreOriginalFrame'", nullptr);
@@ -17382,7 +17382,7 @@ int lua_ax_base_Animation_setLoops(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Animation:setLoops");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Animation:setLoops");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_setLoops'", nullptr);
@@ -17543,7 +17543,7 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
 
         ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:initWithSpriteFrames");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animation:initWithSpriteFrames");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:initWithSpriteFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_initWithSpriteFrames'", nullptr);
@@ -17561,9 +17561,9 @@ int lua_ax_base_Animation_initWithSpriteFrames(lua_State* tolua_S)
 
         ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:initWithSpriteFrames");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animation:initWithSpriteFrames");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:initWithSpriteFrames");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Animation:initWithSpriteFrames");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Animation:initWithSpriteFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_initWithSpriteFrames'", nullptr);
@@ -17617,9 +17617,9 @@ int lua_ax_base_Animation_initWithAnimationFrames(lua_State* tolua_S)
 
         ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:initWithAnimationFrames");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animation:initWithAnimationFrames");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:initWithAnimationFrames");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Animation:initWithAnimationFrames");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Animation:initWithAnimationFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_initWithAnimationFrames'", nullptr);
@@ -17661,7 +17661,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
             ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animation:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:create");
             if (!ok) { break; }
             ax::Animation* ret = ax::Animation::create(arg0, arg1);
             object_to_luaval<ax::Animation>(tolua_S, "ax.Animation",(ax::Animation*)ret);
@@ -17677,10 +17677,10 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
             ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animation:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:create");
             if (!ok) { break; }
             unsigned int arg2;
-            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Animation:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Animation:create");
             if (!ok) { break; }
             ax::Animation* ret = ax::Animation::create(arg0, arg1, arg2);
             object_to_luaval<ax::Animation>(tolua_S, "ax.Animation",(ax::Animation*)ret);
@@ -17739,7 +17739,7 @@ int lua_ax_base_Animation_createWithSpriteFrames(lua_State* tolua_S)
         ax::Vector<ax::SpriteFrame *> arg0;
         double arg1;
         ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:createWithSpriteFrames");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animation:createWithSpriteFrames");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:createWithSpriteFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_createWithSpriteFrames'", nullptr);
@@ -17755,8 +17755,8 @@ int lua_ax_base_Animation_createWithSpriteFrames(lua_State* tolua_S)
         double arg1;
         unsigned int arg2;
         ok &= luaval_to_ccvector(tolua_S, 2, &arg0, "ax.Animation:createWithSpriteFrames");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animation:createWithSpriteFrames");
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Animation:createWithSpriteFrames");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Animation:createWithSpriteFrames");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Animation:createWithSpriteFrames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Animation_createWithSpriteFrames'", nullptr);
@@ -17927,7 +17927,7 @@ int lua_ax_base_ActionInterval_setAmplitudeRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ActionInterval:setAmplitudeRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionInterval:setAmplitudeRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionInterval_setAmplitudeRate'", nullptr);
@@ -18024,7 +18024,7 @@ int lua_ax_base_ActionInterval_initWithDuration(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ActionInterval:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionInterval:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionInterval_initWithDuration'", nullptr);
@@ -18359,7 +18359,7 @@ int lua_ax_base_Repeat_initWithAction(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::FiniteTimeAction>(tolua_S, 2, "ax.FiniteTimeAction",&arg0, "ax.Repeat:initWithAction");
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Repeat:initWithAction");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Repeat:initWithAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Repeat_initWithAction'", nullptr);
@@ -18399,7 +18399,7 @@ int lua_ax_base_Repeat_create(lua_State* tolua_S)
         ax::FiniteTimeAction* arg0;
         unsigned int arg1;
         ok &= luaval_to_object<ax::FiniteTimeAction>(tolua_S, 2, "ax.FiniteTimeAction",&arg0, "ax.Repeat:create");
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Repeat:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Repeat:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Repeat_create'", nullptr);
@@ -18908,7 +18908,7 @@ int lua_ax_base_RotateTo_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateTo:initWithDuration");
 
             if (!ok) { break; }
             ax::Vec3 arg1;
@@ -18924,15 +18924,15 @@ int lua_ax_base_RotateTo_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 3) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateTo:initWithDuration");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RotateTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RotateTo:initWithDuration");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RotateTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RotateTo:initWithDuration");
 
             if (!ok) { break; }
             bool ret = cobj->initWithDuration(arg0, arg1, arg2);
@@ -18970,10 +18970,10 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateTo:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RotateTo:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RotateTo:create");
             if (!ok) { break; }
             ax::RotateTo* ret = ax::RotateTo::create(arg0, arg1);
             object_to_luaval<ax::RotateTo>(tolua_S, "ax.RotateTo",(ax::RotateTo*)ret);
@@ -18986,13 +18986,13 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateTo:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RotateTo:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RotateTo:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RotateTo:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RotateTo:create");
             if (!ok) { break; }
             ax::RotateTo* ret = ax::RotateTo::create(arg0, arg1, arg2);
             object_to_luaval<ax::RotateTo>(tolua_S, "ax.RotateTo",(ax::RotateTo*)ret);
@@ -19005,7 +19005,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateTo:create");
             if (!ok) { break; }
             ax::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.RotateTo:create");
@@ -19107,15 +19107,15 @@ int lua_ax_base_RotateBy_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 3) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateBy:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:initWithDuration");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RotateBy:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RotateBy:initWithDuration");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RotateBy:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RotateBy:initWithDuration");
 
             if (!ok) { break; }
             bool ret = cobj->initWithDuration(arg0, arg1, arg2);
@@ -19127,11 +19127,11 @@ int lua_ax_base_RotateBy_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateBy:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:initWithDuration");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RotateBy:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RotateBy:initWithDuration");
 
             if (!ok) { break; }
             bool ret = cobj->initWithDuration(arg0, arg1);
@@ -19143,7 +19143,7 @@ int lua_ax_base_RotateBy_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateBy:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:initWithDuration");
 
             if (!ok) { break; }
             ax::Vec3 arg1;
@@ -19185,13 +19185,13 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateBy:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RotateBy:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RotateBy:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RotateBy:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RotateBy:create");
             if (!ok) { break; }
             ax::RotateBy* ret = ax::RotateBy::create(arg0, arg1, arg2);
             object_to_luaval<ax::RotateBy>(tolua_S, "ax.RotateBy",(ax::RotateBy*)ret);
@@ -19204,10 +19204,10 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateBy:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RotateBy:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RotateBy:create");
             if (!ok) { break; }
             ax::RotateBy* ret = ax::RotateBy::create(arg0, arg1);
             object_to_luaval<ax::RotateBy>(tolua_S, "ax.RotateBy",(ax::RotateBy*)ret);
@@ -19220,7 +19220,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RotateBy:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:create");
             if (!ok) { break; }
             ax::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.RotateBy:create");
@@ -19322,7 +19322,7 @@ int lua_ax_base_MoveBy_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MoveBy:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveBy:initWithDuration");
 
             if (!ok) { break; }
             ax::Vec3 arg1;
@@ -19338,7 +19338,7 @@ int lua_ax_base_MoveBy_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MoveBy:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveBy:initWithDuration");
 
             if (!ok) { break; }
             ax::Vec2 arg1;
@@ -19380,7 +19380,7 @@ int lua_ax_base_MoveBy_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MoveBy:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveBy:create");
             if (!ok) { break; }
             ax::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.MoveBy:create");
@@ -19396,7 +19396,7 @@ int lua_ax_base_MoveBy_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MoveBy:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveBy:create");
             if (!ok) { break; }
             ax::Vec2 arg1;
             ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.MoveBy:create");
@@ -19498,7 +19498,7 @@ int lua_ax_base_MoveTo_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MoveTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveTo:initWithDuration");
 
             if (!ok) { break; }
             ax::Vec3 arg1;
@@ -19514,7 +19514,7 @@ int lua_ax_base_MoveTo_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MoveTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveTo:initWithDuration");
 
             if (!ok) { break; }
             ax::Vec2 arg1;
@@ -19556,7 +19556,7 @@ int lua_ax_base_MoveTo_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MoveTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveTo:create");
             if (!ok) { break; }
             ax::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.MoveTo:create");
@@ -19572,7 +19572,7 @@ int lua_ax_base_MoveTo_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MoveTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveTo:create");
             if (!ok) { break; }
             ax::Vec2 arg1;
             ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.MoveTo:create");
@@ -19682,11 +19682,11 @@ int lua_ax_base_SkewTo_initWithDuration(lua_State* tolua_S)
         double arg1;
         double arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SkewTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SkewTo:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.SkewTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.SkewTo:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.SkewTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.SkewTo:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SkewTo_initWithDuration'", nullptr);
@@ -19726,9 +19726,9 @@ int lua_ax_base_SkewTo_create(lua_State* tolua_S)
         double arg0;
         double arg1;
         double arg2;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SkewTo:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.SkewTo:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.SkewTo:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SkewTo:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.SkewTo:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.SkewTo:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SkewTo_create'", nullptr);
@@ -19837,11 +19837,11 @@ int lua_ax_base_SkewBy_initWithDuration(lua_State* tolua_S)
         double arg1;
         double arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SkewBy:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SkewBy:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.SkewBy:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.SkewBy:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.SkewBy:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.SkewBy:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SkewBy_initWithDuration'", nullptr);
@@ -19881,9 +19881,9 @@ int lua_ax_base_SkewBy_create(lua_State* tolua_S)
         double arg0;
         double arg1;
         double arg2;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SkewBy:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.SkewBy:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.SkewBy:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SkewBy:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.SkewBy:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.SkewBy:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SkewBy_create'", nullptr);
@@ -19993,13 +19993,13 @@ int lua_ax_base_JumpBy_initWithDuration(lua_State* tolua_S)
         double arg2;
         int arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.JumpBy:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.JumpBy:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.JumpBy:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.JumpBy:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.JumpBy:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.JumpBy:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.JumpBy:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_JumpBy_initWithDuration'", nullptr);
@@ -20040,10 +20040,10 @@ int lua_ax_base_JumpBy_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         double arg2;
         int arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.JumpBy:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.JumpBy:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.JumpBy:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.JumpBy:create");
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.JumpBy:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.JumpBy:create");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.JumpBy:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_JumpBy_create'", nullptr);
@@ -20153,13 +20153,13 @@ int lua_ax_base_JumpTo_initWithDuration(lua_State* tolua_S)
         double arg2;
         int arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.JumpTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.JumpTo:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.JumpTo:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.JumpTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.JumpTo:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.JumpTo:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.JumpTo:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_JumpTo_initWithDuration'", nullptr);
@@ -20200,10 +20200,10 @@ int lua_ax_base_JumpTo_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         double arg2;
         int arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.JumpTo:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.JumpTo:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.JumpTo:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.JumpTo:create");
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.JumpTo:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.JumpTo:create");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.JumpTo:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_JumpTo_create'", nullptr);
@@ -20311,7 +20311,7 @@ int lua_ax_base_BezierBy_initWithDuration(lua_State* tolua_S)
         double arg0;
         ax::BezierConfig arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.BezierBy:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.BezierBy:initWithDuration");
 
         #pragma warning NO CONVERSION TO NATIVE FOR BezierConfig
         ok = false;
@@ -20423,7 +20423,7 @@ int lua_ax_base_BezierTo_initWithDuration(lua_State* tolua_S)
         double arg0;
         ax::BezierConfig arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.BezierTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.BezierTo:initWithDuration");
 
         #pragma warning NO CONVERSION TO NATIVE FOR BezierConfig
         ok = false;
@@ -20528,15 +20528,15 @@ int lua_ax_base_ScaleTo_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 3) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             bool ret = cobj->initWithDuration(arg0, arg1, arg2);
@@ -20548,11 +20548,11 @@ int lua_ax_base_ScaleTo_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             bool ret = cobj->initWithDuration(arg0, arg1);
@@ -20564,19 +20564,19 @@ int lua_ax_base_ScaleTo_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 4) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ScaleTo:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ScaleTo:initWithDuration");
 
             if (!ok) { break; }
             bool ret = cobj->initWithDuration(arg0, arg1, arg2, arg3);
@@ -20614,13 +20614,13 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleTo:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ScaleTo:create");
             if (!ok) { break; }
             ax::ScaleTo* ret = ax::ScaleTo::create(arg0, arg1, arg2);
             object_to_luaval<ax::ScaleTo>(tolua_S, "ax.ScaleTo",(ax::ScaleTo*)ret);
@@ -20633,10 +20633,10 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleTo:create");
             if (!ok) { break; }
             ax::ScaleTo* ret = ax::ScaleTo::create(arg0, arg1);
             object_to_luaval<ax::ScaleTo>(tolua_S, "ax.ScaleTo",(ax::ScaleTo*)ret);
@@ -20649,16 +20649,16 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         if (argc == 4)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleTo:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ScaleTo:create");
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ScaleTo:create");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ScaleTo:create");
             if (!ok) { break; }
             ax::ScaleTo* ret = ax::ScaleTo::create(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::ScaleTo>(tolua_S, "ax.ScaleTo",(ax::ScaleTo*)ret);
@@ -20752,13 +20752,13 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleBy:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleBy:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ScaleBy:create");
             if (!ok) { break; }
             ax::ScaleBy* ret = ax::ScaleBy::create(arg0, arg1, arg2);
             object_to_luaval<ax::ScaleBy>(tolua_S, "ax.ScaleBy",(ax::ScaleBy*)ret);
@@ -20771,10 +20771,10 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleBy:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleBy:create");
             if (!ok) { break; }
             ax::ScaleBy* ret = ax::ScaleBy::create(arg0, arg1);
             object_to_luaval<ax::ScaleBy>(tolua_S, "ax.ScaleBy",(ax::ScaleBy*)ret);
@@ -20787,16 +20787,16 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         if (argc == 4)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleBy:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ScaleBy:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ScaleBy:create");
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ScaleBy:create");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ScaleBy:create");
             if (!ok) { break; }
             ax::ScaleBy* ret = ax::ScaleBy::create(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::ScaleBy>(tolua_S, "ax.ScaleBy",(ax::ScaleBy*)ret);
@@ -20901,9 +20901,9 @@ int lua_ax_base_Blink_initWithDuration(lua_State* tolua_S)
         double arg0;
         int arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Blink:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Blink:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Blink:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Blink:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Blink_initWithDuration'", nullptr);
@@ -20942,8 +20942,8 @@ int lua_ax_base_Blink_create(lua_State* tolua_S)
     {
         double arg0;
         int arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Blink:create");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Blink:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Blink:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Blink:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Blink_create'", nullptr);
@@ -21051,9 +21051,9 @@ int lua_ax_base_FadeTo_initWithDuration(lua_State* tolua_S)
         double arg0;
         uint16_t arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FadeTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FadeTo:initWithDuration");
 
-        ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ax.FadeTo:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.FadeTo:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FadeTo_initWithDuration'", nullptr);
@@ -21092,8 +21092,8 @@ int lua_ax_base_FadeTo_create(lua_State* tolua_S)
     {
         double arg0;
         uint16_t arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FadeTo:create");
-        ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ax.FadeTo:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FadeTo:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.FadeTo:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FadeTo_create'", nullptr);
@@ -21238,7 +21238,7 @@ int lua_ax_base_FadeIn_create(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FadeIn:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FadeIn:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FadeIn_create'", nullptr);
@@ -21383,7 +21383,7 @@ int lua_ax_base_FadeOut_create(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FadeOut:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FadeOut:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FadeOut_create'", nullptr);
@@ -21491,7 +21491,7 @@ int lua_ax_base_TintTo_initWithDuration(lua_State* tolua_S)
         double arg0;
         ax::Color32 arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TintTo:initWithDuration");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.TintTo:initWithDuration");
         if(!ok)
@@ -21532,7 +21532,7 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TintTo:create");
             if (!ok) { break; }
             ax::Color32 arg1;
             ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.TintTo:create");
@@ -21548,16 +21548,16 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
         if (argc == 4)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintTo:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TintTo:create");
             if (!ok) { break; }
             uint16_t arg1;
-            ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ax.TintTo:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.TintTo:create");
             if (!ok) { break; }
             uint16_t arg2;
-            ok &= luaval_to_uint16(tolua_S, 4,&arg2, "ax.TintTo:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TintTo:create");
             if (!ok) { break; }
             uint16_t arg3;
-            ok &= luaval_to_uint16(tolua_S, 5,&arg3, "ax.TintTo:create");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.TintTo:create");
             if (!ok) { break; }
             ax::TintTo* ret = ax::TintTo::create(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::TintTo>(tolua_S, "ax.TintTo",(ax::TintTo*)ret);
@@ -21665,13 +21665,13 @@ int lua_ax_base_TintBy_initWithDuration(lua_State* tolua_S)
         int32_t arg2;
         int32_t arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintBy:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TintBy:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 3,&arg1, "ax.TintBy:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.TintBy:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 4,&arg2, "ax.TintBy:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TintBy:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 5,&arg3, "ax.TintBy:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.TintBy:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TintBy_initWithDuration'", nullptr);
@@ -21712,10 +21712,10 @@ int lua_ax_base_TintBy_create(lua_State* tolua_S)
         int32_t arg1;
         int32_t arg2;
         int32_t arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TintBy:create");
-        ok &= luaval_to_int32(tolua_S, 3,&arg1, "ax.TintBy:create");
-        ok &= luaval_to_int32(tolua_S, 4,&arg2, "ax.TintBy:create");
-        ok &= luaval_to_int32(tolua_S, 5,&arg3, "ax.TintBy:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TintBy:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.TintBy:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TintBy:create");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.TintBy:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TintBy_create'", nullptr);
@@ -21810,7 +21810,7 @@ int lua_ax_base_DelayTime_create(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.DelayTime:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.DelayTime:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DelayTime_create'", nullptr);
@@ -22460,11 +22460,11 @@ int lua_ax_base_ActionFloat_initWithDuration(lua_State* tolua_S)
         double arg2;
         std::function<void (float)> arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ActionFloat:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionFloat:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ActionFloat:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ActionFloat:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ActionFloat:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ActionFloat:initWithDuration");
 
         do {
         	// Lambda binding for lua is not supported.
@@ -22511,9 +22511,9 @@ int lua_ax_base_ActionFloat_create(lua_State* tolua_S)
         double arg1;
         double arg2;
         std::function<void (float)> arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ActionFloat:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ActionFloat:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ActionFloat:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionFloat:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ActionFloat:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ActionFloat:create");
         do {
         	// Lambda binding for lua is not supported.
             assert(false);
@@ -23033,7 +23033,7 @@ int lua_ax_base_Scene_fixedUpdate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Scene:fixedUpdate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Scene:fixedUpdate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_fixedUpdate'", nullptr);
@@ -23083,7 +23083,7 @@ int lua_ax_base_Scene_stepPhysicsAndNavigation(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Scene:stepPhysicsAndNavigation");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Scene:stepPhysicsAndNavigation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scene_stepPhysicsAndNavigation'", nullptr);
@@ -23448,7 +23448,7 @@ int lua_ax_base_RenderView_setIMEKeyboardState(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RenderView:setIMEKeyboardState");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderView:setIMEKeyboardState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setIMEKeyboardState'", nullptr);
@@ -23640,9 +23640,9 @@ int lua_ax_base_RenderView_setFrameSize(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setFrameSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setFrameSize");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderView:setFrameSize");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setFrameSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setFrameSize'", nullptr);
@@ -23692,7 +23692,7 @@ int lua_ax_base_RenderView_setFrameZoomFactor(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setFrameZoomFactor");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setFrameZoomFactor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setFrameZoomFactor'", nullptr);
@@ -23789,7 +23789,7 @@ int lua_ax_base_RenderView_setCursorVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RenderView:setCursorVisible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderView:setCursorVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setCursorVisible'", nullptr);
@@ -23886,7 +23886,7 @@ int lua_ax_base_RenderView_setContentScaleFactor(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setContentScaleFactor");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setContentScaleFactor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setContentScaleFactor'", nullptr);
@@ -24220,11 +24220,11 @@ int lua_ax_base_RenderView_setDesignResolutionSize(lua_State* tolua_S)
         double arg1;
         ResolutionPolicy arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setDesignResolutionSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setDesignResolutionSize");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderView:setDesignResolutionSize");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setDesignResolutionSize");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderView:setDesignResolutionSize");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderView:setDesignResolutionSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setDesignResolutionSize'", nullptr);
@@ -24324,13 +24324,13 @@ int lua_ax_base_RenderView_setViewPortInPoints(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setViewPortInPoints");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setViewPortInPoints");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderView:setViewPortInPoints");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.RenderView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderView:setViewPortInPoints");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setViewPortInPoints'", nullptr);
@@ -24383,13 +24383,13 @@ int lua_ax_base_RenderView_setScissorInPoints(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderView:setScissorInPoints");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.RenderView:setScissorInPoints");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderView:setScissorInPoints");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setScissorInPoints'", nullptr);
@@ -24973,7 +24973,7 @@ int lua_ax_base_RenderView_setInteractive(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RenderView:setInteractive");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderView:setInteractive");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setInteractive'", nullptr);
@@ -25338,7 +25338,7 @@ int lua_ax_base_Director_setAnimationInterval(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Director:setAnimationInterval");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Director:setAnimationInterval");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setAnimationInterval'", nullptr);
@@ -25435,7 +25435,7 @@ int lua_ax_base_Director_setStatsDisplay(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Director:setStatsDisplay");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Director:setStatsDisplay");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setStatsDisplay'", nullptr);
@@ -25543,7 +25543,7 @@ int lua_ax_base_Director_setStatsAnchor(lua_State* tolua_S)
     {
         ax::AnchorPreset arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:setStatsAnchor");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:setStatsAnchor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setStatsAnchor'", nullptr);
@@ -25690,7 +25690,7 @@ int lua_ax_base_Director_setPowerPreference(lua_State* tolua_S)
     {
         ax::rhi::PowerPreference arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:setPowerPreference");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:setPowerPreference");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setPowerPreference'", nullptr);
@@ -25787,7 +25787,7 @@ int lua_ax_base_Director_setDebugLayerEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Director:setDebugLayerEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Director:setDebugLayerEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setDebugLayerEnabled'", nullptr);
@@ -25978,7 +25978,7 @@ int lua_ax_base_Director_setNextDeltaTimeZero(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Director:setNextDeltaTimeZero");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Director:setNextDeltaTimeZero");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setNextDeltaTimeZero'", nullptr);
@@ -26122,7 +26122,7 @@ int lua_ax_base_Director_setProjection(lua_State* tolua_S)
     {
         ax::Director::Projection arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:setProjection");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:setProjection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setProjection'", nullptr);
@@ -26939,7 +26939,7 @@ int lua_ax_base_Director_popToSceneStackLevel(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:popToSceneStackLevel");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:popToSceneStackLevel");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_popToSceneStackLevel'", nullptr);
@@ -27553,7 +27553,7 @@ int lua_ax_base_Director_mainLoop(lua_State* tolua_S)
     do{
         if (argc == 1) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Director:mainLoop");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Director:mainLoop");
 
             if (!ok) { break; }
             cobj->mainLoop(arg0);
@@ -27610,7 +27610,7 @@ int lua_ax_base_Director_setContentScaleFactor(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Director:setContentScaleFactor");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Director:setContentScaleFactor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setContentScaleFactor'", nullptr);
@@ -28139,7 +28139,7 @@ int lua_ax_base_Director_pushMatrix(lua_State* tolua_S)
     {
         ax::MATRIX_STACK_TYPE arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:pushMatrix");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:pushMatrix");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_pushMatrix'", nullptr);
@@ -28189,7 +28189,7 @@ int lua_ax_base_Director_popMatrix(lua_State* tolua_S)
     {
         ax::MATRIX_STACK_TYPE arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:popMatrix");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:popMatrix");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_popMatrix'", nullptr);
@@ -28239,7 +28239,7 @@ int lua_ax_base_Director_loadIdentityMatrix(lua_State* tolua_S)
     {
         ax::MATRIX_STACK_TYPE arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:loadIdentityMatrix");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:loadIdentityMatrix");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_loadIdentityMatrix'", nullptr);
@@ -28290,7 +28290,7 @@ int lua_ax_base_Director_loadMatrix(lua_State* tolua_S)
         ax::MATRIX_STACK_TYPE arg0;
         ax::Mat4 arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:loadMatrix");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:loadMatrix");
 
         ok &= luaval_to_mat4(tolua_S, 3, &arg1, "ax.Director:loadMatrix");
         if(!ok)
@@ -28343,7 +28343,7 @@ int lua_ax_base_Director_multiplyMatrix(lua_State* tolua_S)
         ax::MATRIX_STACK_TYPE arg0;
         ax::Mat4 arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:multiplyMatrix");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:multiplyMatrix");
 
         ok &= luaval_to_mat4(tolua_S, 3, &arg1, "ax.Director:multiplyMatrix");
         if(!ok)
@@ -28395,7 +28395,7 @@ int lua_ax_base_Director_getMatrix(lua_State* tolua_S)
     {
         ax::MATRIX_STACK_TYPE arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Director:getMatrix");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:getMatrix");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getMatrix'", nullptr);
@@ -28539,7 +28539,7 @@ int lua_ax_base_Director_setChildrenIndexerEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Director:setChildrenIndexerEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Director:setChildrenIndexerEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setChildrenIndexerEnabled'", nullptr);
@@ -29004,7 +29004,7 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Properties:getNamespace");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Properties:getNamespace");
 
             if (!ok) { break; }
             ax::Properties* ret = cobj->getNamespace(arg0, arg1);
@@ -29020,11 +29020,11 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Properties:getNamespace");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Properties:getNamespace");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Properties:getNamespace");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Properties:getNamespace");
 
             if (!ok) { break; }
             ax::Properties* ret = cobj->getNamespace(arg0, arg1, arg2);
@@ -29390,7 +29390,7 @@ int lua_ax_base_Properties_getBool(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getBool"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Properties:getBool");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Properties:getBool");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Properties_getBool'", nullptr);
@@ -30293,11 +30293,11 @@ int lua_ax_base_Timer_setupTimerWithInterval(lua_State* tolua_S)
         unsigned int arg1;
         double arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Timer:setupTimerWithInterval");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Timer:setupTimerWithInterval");
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Timer:setupTimerWithInterval");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Timer:setupTimerWithInterval");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Timer:setupTimerWithInterval");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Timer:setupTimerWithInterval");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Timer_setupTimerWithInterval'", nullptr);
@@ -30488,7 +30488,7 @@ int lua_ax_base_Timer_trigger(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Timer:trigger");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Timer:trigger");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Timer_trigger'", nullptr);
@@ -30585,7 +30585,7 @@ int lua_ax_base_Timer_update(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Timer:update");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Timer:update");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Timer_update'", nullptr);
@@ -30708,7 +30708,7 @@ int lua_ax_base_Scheduler_setTimeScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Scheduler:setTimeScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Scheduler:setTimeScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_setTimeScale'", nullptr);
@@ -30918,7 +30918,7 @@ int lua_ax_base_UserDefault_getBoolForKey(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.UserDefault:getBoolForKey");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.UserDefault:getBoolForKey");
 
             if (!ok) { break; }
             bool ret = cobj->getBoolForKey(arg0, arg1);
@@ -30977,7 +30977,7 @@ int lua_ax_base_UserDefault_getIntegerForKey(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.UserDefault:getIntegerForKey");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.UserDefault:getIntegerForKey");
 
             if (!ok) { break; }
             int ret = cobj->getIntegerForKey(arg0, arg1);
@@ -31036,7 +31036,7 @@ int lua_ax_base_UserDefault_getLargeIntForKey(lua_State* tolua_S)
 
             if (!ok) { break; }
             long long arg1;
-            ok &= luaval_to_long_long(tolua_S, 3,&arg1, "ax.UserDefault:getLargeIntForKey");
+            ok &= luaval_to_long_long(tolua_S, 3, &arg1, "ax.UserDefault:getLargeIntForKey");
 
             if (!ok) { break; }
             long long ret = cobj->getLargeIntForKey(arg0, arg1);
@@ -31095,7 +31095,7 @@ int lua_ax_base_UserDefault_getFloatForKey(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.UserDefault:getFloatForKey");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.UserDefault:getFloatForKey");
 
             if (!ok) { break; }
             double ret = cobj->getFloatForKey(arg0, arg1);
@@ -31154,7 +31154,7 @@ int lua_ax_base_UserDefault_getDoubleForKey(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.UserDefault:getDoubleForKey");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.UserDefault:getDoubleForKey");
 
             if (!ok) { break; }
             double ret = cobj->getDoubleForKey(arg0, arg1);
@@ -31277,7 +31277,7 @@ int lua_ax_base_UserDefault_setBoolForKey(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:setBoolForKey"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.UserDefault:setBoolForKey");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.UserDefault:setBoolForKey");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setBoolForKey'", nullptr);
@@ -31330,7 +31330,7 @@ int lua_ax_base_UserDefault_setIntegerForKey(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:setIntegerForKey"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.UserDefault:setIntegerForKey");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.UserDefault:setIntegerForKey");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setIntegerForKey'", nullptr);
@@ -31383,7 +31383,7 @@ int lua_ax_base_UserDefault_setLargeIntForKey(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:setLargeIntForKey"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_long_long(tolua_S, 3,&arg1, "ax.UserDefault:setLargeIntForKey");
+        ok &= luaval_to_long_long(tolua_S, 3, &arg1, "ax.UserDefault:setLargeIntForKey");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setLargeIntForKey'", nullptr);
@@ -31436,7 +31436,7 @@ int lua_ax_base_UserDefault_setFloatForKey(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:setFloatForKey"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.UserDefault:setFloatForKey");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.UserDefault:setFloatForKey");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setFloatForKey'", nullptr);
@@ -31489,7 +31489,7 @@ int lua_ax_base_UserDefault_setDoubleForKey(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:setDoubleForKey"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.UserDefault:setDoubleForKey");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.UserDefault:setDoubleForKey");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_UserDefault_setDoubleForKey'", nullptr);
@@ -31691,7 +31691,7 @@ int lua_ax_base_UserDefault_setEncryptEnabled(lua_State* tolua_S)
         std::string_view arg1;
         std::string_view arg2;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.UserDefault:setEncryptEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.UserDefault:setEncryptEnabled");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.UserDefault:setEncryptEnabled");
 
@@ -32276,7 +32276,7 @@ int lua_ax_base_FileUtils_addSearchPath(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:addSearchPath");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.FileUtils:addSearchPath");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.FileUtils:addSearchPath");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_addSearchPath'", nullptr);
@@ -32564,7 +32564,7 @@ int lua_ax_base_FileUtils_setPopupNotify(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.FileUtils:setPopupNotify");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.FileUtils:setPopupNotify");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_setPopupNotify'", nullptr);
@@ -32714,7 +32714,7 @@ int lua_ax_base_FileUtils_getValueMapFromData(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.FileUtils:getValueMapFromData"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.FileUtils:getValueMapFromData");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.FileUtils:getValueMapFromData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_getValueMapFromData'", nullptr);
@@ -33706,7 +33706,7 @@ int lua_ax_base_FileUtils_writeBinaryToFile(lua_State* tolua_S)
         std::string_view arg2;
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.FileUtils:writeBinaryToFile");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.FileUtils:writeBinaryToFile");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ax.FileUtils:writeBinaryToFile");
         if(!ok)
         {
@@ -34180,7 +34180,7 @@ int lua_ax_base_EventDispatcher_addEventListenerWithFixedPriority(lua_State* tol
 
         ok &= luaval_to_object<ax::EventListener>(tolua_S, 2, "ax.EventListener",&arg0, "ax.EventDispatcher:addEventListenerWithFixedPriority");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.EventDispatcher:addEventListenerWithFixedPriority");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.EventDispatcher:addEventListenerWithFixedPriority");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_addEventListenerWithFixedPriority'", nullptr);
@@ -34337,7 +34337,7 @@ int lua_ax_base_EventDispatcher_removeEventListenersForType(lua_State* tolua_S)
     {
         ax::EventListener::Type arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventDispatcher:removeEventListenersForType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventDispatcher:removeEventListenersForType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_removeEventListenersForType'", nullptr);
@@ -34404,7 +34404,7 @@ int lua_ax_base_EventDispatcher_removeEventListenersForTarget(lua_State* tolua_S
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.EventDispatcher:removeEventListenersForTarget");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventDispatcher:removeEventListenersForTarget");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.EventDispatcher:removeEventListenersForTarget");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_removeEventListenersForTarget'", nullptr);
@@ -34568,7 +34568,7 @@ int lua_ax_base_EventDispatcher_pauseEventListenersForTarget(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.EventDispatcher:pauseEventListenersForTarget");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventDispatcher:pauseEventListenersForTarget");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.EventDispatcher:pauseEventListenersForTarget");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_pauseEventListenersForTarget'", nullptr);
@@ -34635,7 +34635,7 @@ int lua_ax_base_EventDispatcher_resumeEventListenersForTarget(lua_State* tolua_S
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.EventDispatcher:resumeEventListenersForTarget");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventDispatcher:resumeEventListenersForTarget");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.EventDispatcher:resumeEventListenersForTarget");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_resumeEventListenersForTarget'", nullptr);
@@ -34688,7 +34688,7 @@ int lua_ax_base_EventDispatcher_setPriority(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::EventListener>(tolua_S, 2, "ax.EventListener",&arg0, "ax.EventDispatcher:setPriority");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.EventDispatcher:setPriority");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.EventDispatcher:setPriority");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_setPriority'", nullptr);
@@ -34738,7 +34738,7 @@ int lua_ax_base_EventDispatcher_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.EventDispatcher:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventDispatcher:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_setEnabled'", nullptr);
@@ -34852,7 +34852,7 @@ int lua_ax_base_EventDispatcher_dispatchEvent(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Event>(tolua_S, 2, "ax.Event",&arg0, "ax.EventDispatcher:dispatchEvent");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventDispatcher:dispatchEvent");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.EventDispatcher:dispatchEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_dispatchEvent'", nullptr);
@@ -34941,7 +34941,7 @@ int lua_ax_base_EventDispatcher_dispatchCustomEvent(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.EventDispatcher:dispatchCustomEvent");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.EventDispatcher:dispatchCustomEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventDispatcher_dispatchCustomEvent'", nullptr);
@@ -35547,9 +35547,9 @@ int lua_ax_base_EventMouse_setScrollData(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.EventMouse:setScrollData");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.EventMouse:setScrollData");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EventMouse:setScrollData");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EventMouse:setScrollData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_setScrollData'", nullptr);
@@ -35695,11 +35695,11 @@ int lua_ax_base_EventMouse_setMouseInfo(lua_State* tolua_S)
         double arg1;
         ax::EventMouse::MouseButton arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.EventMouse:setMouseInfo");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.EventMouse:setMouseInfo");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EventMouse:setMouseInfo");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EventMouse:setMouseInfo");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventMouse:setMouseInfo");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventMouse:setMouseInfo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_setMouseInfo'", nullptr);
@@ -35749,7 +35749,7 @@ int lua_ax_base_EventMouse_setMouseButton(lua_State* tolua_S)
     {
         ax::EventMouse::MouseButton arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventMouse:setMouseButton");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventMouse:setMouseButton");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_setMouseButton'", nullptr);
@@ -36162,7 +36162,7 @@ int lua_ax_base_EventMouse_constructor(lua_State* tolua_S)
     {
         ax::EventMouse::MouseEventType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventMouse:EventMouse");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventMouse:EventMouse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_constructor'", nullptr);
@@ -36249,7 +36249,7 @@ int lua_ax_base_EventListenerMouse_setSwallowMouse(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.EventListenerMouse:setSwallowMouse");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventListenerMouse:setSwallowMouse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerMouse_setSwallowMouse'", nullptr);
@@ -36472,7 +36472,7 @@ int lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.EventListenerTouchOneByOne:setSwallowTouches");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventListenerTouchOneByOne:setSwallowTouches");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventListenerTouchOneByOne_setSwallowTouches'", nullptr);
@@ -36922,7 +36922,7 @@ int lua_ax_base_EventController_setKeyCode(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventController:setKeyCode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:setKeyCode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventController_setKeyCode'", nullptr);
@@ -36972,7 +36972,7 @@ int lua_ax_base_EventController_setConnectStatus(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.EventController:setConnectStatus");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventController:setConnectStatus");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventController_setConnectStatus'", nullptr);
@@ -37052,7 +37052,7 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
     do{
         if (argc == 3) {
             ax::EventController::ControllerEventType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventController:EventController");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
 
             if (!ok) { break; }
             ax::Controller* arg1;
@@ -37060,7 +37060,7 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.EventController:EventController");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.EventController:EventController");
 
             if (!ok) { break; }
             cobj = new ax::EventController(arg0, arg1, arg2);
@@ -37075,7 +37075,7 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
     do{
         if (argc == 3) {
             ax::EventController::ControllerEventType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventController:EventController");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
 
             if (!ok) { break; }
             ax::Controller* arg1;
@@ -37083,7 +37083,7 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventController:EventController");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventController:EventController");
 
             if (!ok) { break; }
             cobj = new ax::EventController(arg0, arg1, arg2);
@@ -37155,15 +37155,15 @@ int lua_ax_base_ActionCamera_setEye(lua_State* tolua_S)
     do{
         if (argc == 3) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ActionCamera:setEye");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionCamera:setEye");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ActionCamera:setEye");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ActionCamera:setEye");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ActionCamera:setEye");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ActionCamera:setEye");
 
             if (!ok) { break; }
             cobj->setEye(arg0, arg1, arg2);
@@ -37534,19 +37534,19 @@ int lua_ax_base_OrbitCamera_initWithDuration(lua_State* tolua_S)
         double arg5;
         double arg6;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.OrbitCamera:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.OrbitCamera:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.OrbitCamera:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.OrbitCamera:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.OrbitCamera:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.OrbitCamera:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.OrbitCamera:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.OrbitCamera:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.OrbitCamera:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.OrbitCamera:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.OrbitCamera:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.OrbitCamera:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.OrbitCamera:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.OrbitCamera:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_OrbitCamera_initWithDuration'", nullptr);
@@ -37590,13 +37590,13 @@ int lua_ax_base_OrbitCamera_create(lua_State* tolua_S)
         double arg4;
         double arg5;
         double arg6;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.OrbitCamera:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.OrbitCamera:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.OrbitCamera:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.OrbitCamera:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.OrbitCamera:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.OrbitCamera:create");
-        ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.OrbitCamera:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.OrbitCamera:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.OrbitCamera:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.OrbitCamera:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.OrbitCamera:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.OrbitCamera:create");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.OrbitCamera:create");
+        ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.OrbitCamera:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_OrbitCamera_create'", nullptr);
@@ -37705,11 +37705,11 @@ int lua_ax_base_CardinalSplineTo_initWithDuration(lua_State* tolua_S)
         ax::PointArray* arg1;
         double arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.CardinalSplineTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CardinalSplineTo:initWithDuration");
 
         ok &= luaval_to_object<ax::PointArray>(tolua_S, 3, "ax.PointArray",&arg1, "ax.CardinalSplineTo:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.CardinalSplineTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.CardinalSplineTo:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CardinalSplineTo_initWithDuration'", nullptr);
@@ -37974,7 +37974,7 @@ int lua_ax_base_CatmullRomTo_initWithDuration(lua_State* tolua_S)
         double arg0;
         ax::PointArray* arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.CatmullRomTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CatmullRomTo:initWithDuration");
 
         ok &= luaval_to_object<ax::PointArray>(tolua_S, 3, "ax.PointArray",&arg1, "ax.CatmullRomTo:initWithDuration");
         if(!ok)
@@ -38047,7 +38047,7 @@ int lua_ax_base_CatmullRomBy_initWithDuration(lua_State* tolua_S)
         double arg0;
         ax::PointArray* arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.CatmullRomBy:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CatmullRomBy:initWithDuration");
 
         ok &= luaval_to_object<ax::PointArray>(tolua_S, 3, "ax.PointArray",&arg1, "ax.CatmullRomBy:initWithDuration");
         if(!ok)
@@ -38237,7 +38237,7 @@ int lua_ax_base_EaseRateAction_setRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.EaseRateAction:setRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.EaseRateAction:setRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseRateAction_setRate'", nullptr);
@@ -38337,7 +38337,7 @@ int lua_ax_base_EaseRateAction_initWithAction(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseRateAction:initWithAction");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseRateAction:initWithAction");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseRateAction:initWithAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseRateAction_initWithAction'", nullptr);
@@ -38377,7 +38377,7 @@ int lua_ax_base_EaseRateAction_create(lua_State* tolua_S)
         ax::ActionInterval* arg0;
         double arg1;
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseRateAction:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseRateAction:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseRateAction:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseRateAction_create'", nullptr);
@@ -40995,7 +40995,7 @@ int lua_ax_base_EaseIn_create(lua_State* tolua_S)
         ax::ActionInterval* arg0;
         double arg1;
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseIn:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseIn:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseIn:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseIn_create'", nullptr);
@@ -41091,7 +41091,7 @@ int lua_ax_base_EaseOut_create(lua_State* tolua_S)
         ax::ActionInterval* arg0;
         double arg1;
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseOut:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseOut:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseOut:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseOut_create'", nullptr);
@@ -41187,7 +41187,7 @@ int lua_ax_base_EaseInOut_create(lua_State* tolua_S)
         ax::ActionInterval* arg0;
         double arg1;
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseInOut:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseInOut:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseInOut:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseInOut_create'", nullptr);
@@ -41340,7 +41340,7 @@ int lua_ax_base_EaseElastic_setPeriod(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.EaseElastic:setPeriod");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.EaseElastic:setPeriod");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseElastic_setPeriod'", nullptr);
@@ -41407,7 +41407,7 @@ int lua_ax_base_EaseElastic_initWithAction(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseElastic:initWithAction");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseElastic:initWithAction");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseElastic:initWithAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseElastic_initWithAction'", nullptr);
@@ -41482,7 +41482,7 @@ int lua_ax_base_EaseElasticIn_create(lua_State* tolua_S)
         ax::ActionInterval* arg0;
         double arg1;
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseElasticIn:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseElasticIn:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseElasticIn:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseElasticIn_create'", nullptr);
@@ -41591,7 +41591,7 @@ int lua_ax_base_EaseElasticOut_create(lua_State* tolua_S)
         ax::ActionInterval* arg0;
         double arg1;
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseElasticOut:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseElasticOut:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseElasticOut:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseElasticOut_create'", nullptr);
@@ -41700,7 +41700,7 @@ int lua_ax_base_EaseElasticInOut_create(lua_State* tolua_S)
         ax::ActionInterval* arg0;
         double arg1;
         ok &= luaval_to_object<ax::ActionInterval>(tolua_S, 2, "ax.ActionInterval",&arg0, "ax.EaseElasticInOut:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseElasticInOut:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseElasticInOut:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseElasticInOut_create'", nullptr);
@@ -41809,13 +41809,13 @@ int lua_ax_base_EaseBezierAction_setBezierParamer(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.EaseBezierAction:setBezierParamer");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.EaseBezierAction:setBezierParamer");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.EaseBezierAction:setBezierParamer");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EaseBezierAction:setBezierParamer");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.EaseBezierAction:setBezierParamer");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.EaseBezierAction:setBezierParamer");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.EaseBezierAction:setBezierParamer");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.EaseBezierAction:setBezierParamer");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EaseBezierAction_setBezierParamer'", nullptr);
@@ -42255,7 +42255,7 @@ int lua_ax_base_RemoveSelf_init(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RemoveSelf:init");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RemoveSelf:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RemoveSelf_init'", nullptr);
@@ -42304,7 +42304,7 @@ int lua_ax_base_RemoveSelf_create(lua_State* tolua_S)
     if (argc == 1)
     {
         bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RemoveSelf:create");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RemoveSelf:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RemoveSelf_create'", nullptr);
@@ -42411,7 +42411,7 @@ int lua_ax_base_FlipX_initWithFlipX(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.FlipX:initWithFlipX");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.FlipX:initWithFlipX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FlipX_initWithFlipX'", nullptr);
@@ -42449,7 +42449,7 @@ int lua_ax_base_FlipX_create(lua_State* tolua_S)
     if (argc == 1)
     {
         bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.FlipX:create");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.FlipX:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FlipX_create'", nullptr);
@@ -42556,7 +42556,7 @@ int lua_ax_base_FlipY_initWithFlipY(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.FlipY:initWithFlipY");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.FlipY:initWithFlipY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FlipY_initWithFlipY'", nullptr);
@@ -42594,7 +42594,7 @@ int lua_ax_base_FlipY_create(lua_State* tolua_S)
     if (argc == 1)
     {
         bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.FlipY:create");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.FlipY:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FlipY_create'", nullptr);
@@ -42999,7 +42999,7 @@ int lua_ax_base_GridAction_initWithDuration(lua_State* tolua_S)
         double arg0;
         ax::Vec2 arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.GridAction:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.GridAction:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.GridAction:initWithDuration");
         if(!ok)
@@ -43250,7 +43250,7 @@ int lua_ax_base_ReuseGrid_initWithTimes(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ReuseGrid:initWithTimes");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ReuseGrid:initWithTimes");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ReuseGrid_initWithTimes'", nullptr);
@@ -43288,7 +43288,7 @@ int lua_ax_base_ReuseGrid_create(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ReuseGrid:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ReuseGrid:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ReuseGrid_create'", nullptr);
@@ -43442,7 +43442,7 @@ int lua_ax_base_Waves3D_setAmplitude(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Waves3D:setAmplitude");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Waves3D:setAmplitude");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Waves3D_setAmplitude'", nullptr);
@@ -43539,7 +43539,7 @@ int lua_ax_base_Waves3D_setAmplitudeRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Waves3D:setAmplitudeRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Waves3D:setAmplitudeRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Waves3D_setAmplitudeRate'", nullptr);
@@ -43592,13 +43592,13 @@ int lua_ax_base_Waves3D_initWithDuration(lua_State* tolua_S)
         unsigned int arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Waves3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Waves3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Waves3D:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Waves3D:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Waves3D:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Waves3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Waves3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Waves3D_initWithDuration'", nullptr);
@@ -43639,10 +43639,10 @@ int lua_ax_base_Waves3D_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         unsigned int arg2;
         double arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Waves3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Waves3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Waves3D:create");
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Waves3D:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Waves3D:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Waves3D:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Waves3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Waves3D_create'", nullptr);
@@ -43753,7 +43753,7 @@ int lua_ax_base_FlipX3D_initWithDuration(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FlipX3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FlipX3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FlipX3D_initWithDuration'", nullptr);
@@ -43806,7 +43806,7 @@ int lua_ax_base_FlipX3D_initWithSize(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.FlipX3D:initWithSize");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.FlipX3D:initWithSize");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.FlipX3D:initWithSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FlipX3D_initWithSize'", nullptr);
@@ -43844,7 +43844,7 @@ int lua_ax_base_FlipX3D_create(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FlipX3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FlipX3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FlipX3D_create'", nullptr);
@@ -43940,7 +43940,7 @@ int lua_ax_base_FlipY3D_create(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FlipY3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FlipY3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FlipY3D_create'", nullptr);
@@ -44093,7 +44093,7 @@ int lua_ax_base_Lens3D_setLensEffect(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Lens3D:setLensEffect");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Lens3D:setLensEffect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Lens3D_setLensEffect'", nullptr);
@@ -44143,7 +44143,7 @@ int lua_ax_base_Lens3D_setConcave(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Lens3D:setConcave");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Lens3D:setConcave");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Lens3D_setConcave'", nullptr);
@@ -44293,13 +44293,13 @@ int lua_ax_base_Lens3D_initWithDuration(lua_State* tolua_S)
         ax::Vec2 arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Lens3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Lens3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Lens3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.Lens3D:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Lens3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Lens3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Lens3D_initWithDuration'", nullptr);
@@ -44340,10 +44340,10 @@ int lua_ax_base_Lens3D_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         ax::Vec2 arg2;
         double arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Lens3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Lens3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Lens3D:create");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.Lens3D:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Lens3D:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Lens3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Lens3D_create'", nullptr);
@@ -44599,7 +44599,7 @@ int lua_ax_base_Ripple3D_setAmplitude(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Ripple3D:setAmplitude");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Ripple3D:setAmplitude");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ripple3D_setAmplitude'", nullptr);
@@ -44696,7 +44696,7 @@ int lua_ax_base_Ripple3D_setAmplitudeRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Ripple3D:setAmplitudeRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Ripple3D:setAmplitudeRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ripple3D_setAmplitudeRate'", nullptr);
@@ -44751,17 +44751,17 @@ int lua_ax_base_Ripple3D_initWithDuration(lua_State* tolua_S)
         unsigned int arg4;
         double arg5;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Ripple3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Ripple3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Ripple3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.Ripple3D:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Ripple3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Ripple3D:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 6,&arg4, "ax.Ripple3D:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Ripple3D:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.Ripple3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.Ripple3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ripple3D_initWithDuration'", nullptr);
@@ -44804,12 +44804,12 @@ int lua_ax_base_Ripple3D_create(lua_State* tolua_S)
         double arg3;
         unsigned int arg4;
         double arg5;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Ripple3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Ripple3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Ripple3D:create");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.Ripple3D:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Ripple3D:create");
-        ok &= luaval_to_uint32(tolua_S, 6,&arg4, "ax.Ripple3D:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.Ripple3D:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Ripple3D:create");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Ripple3D:create");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.Ripple3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Ripple3D_create'", nullptr);
@@ -44925,13 +44925,13 @@ int lua_ax_base_Shaky3D_initWithDuration(lua_State* tolua_S)
         int arg2;
         bool arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Shaky3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Shaky3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Shaky3D:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Shaky3D:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Shaky3D:initWithDuration");
 
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.Shaky3D:initWithDuration");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.Shaky3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Shaky3D_initWithDuration'", nullptr);
@@ -44972,10 +44972,10 @@ int lua_ax_base_Shaky3D_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         int arg2;
         bool arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Shaky3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Shaky3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Shaky3D:create");
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Shaky3D:create");
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.Shaky3D:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Shaky3D:create");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.Shaky3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Shaky3D_create'", nullptr);
@@ -45129,7 +45129,7 @@ int lua_ax_base_Liquid_setAmplitude(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Liquid:setAmplitude");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Liquid:setAmplitude");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Liquid_setAmplitude'", nullptr);
@@ -45226,7 +45226,7 @@ int lua_ax_base_Liquid_setAmplitudeRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Liquid:setAmplitudeRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Liquid:setAmplitudeRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Liquid_setAmplitudeRate'", nullptr);
@@ -45279,13 +45279,13 @@ int lua_ax_base_Liquid_initWithDuration(lua_State* tolua_S)
         unsigned int arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Liquid:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Liquid:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Liquid:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Liquid:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Liquid:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Liquid:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Liquid:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Liquid_initWithDuration'", nullptr);
@@ -45326,10 +45326,10 @@ int lua_ax_base_Liquid_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         unsigned int arg2;
         double arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Liquid:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Liquid:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Liquid:create");
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Liquid:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Liquid:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Liquid:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Liquid:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Liquid_create'", nullptr);
@@ -45487,7 +45487,7 @@ int lua_ax_base_Waves_setAmplitude(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Waves:setAmplitude");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Waves:setAmplitude");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Waves_setAmplitude'", nullptr);
@@ -45584,7 +45584,7 @@ int lua_ax_base_Waves_setAmplitudeRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Waves:setAmplitudeRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Waves:setAmplitudeRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Waves_setAmplitudeRate'", nullptr);
@@ -45639,17 +45639,17 @@ int lua_ax_base_Waves_initWithDuration(lua_State* tolua_S)
         bool arg4;
         bool arg5;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Waves:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Waves:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Waves:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Waves:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Waves:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Waves:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Waves:initWithDuration");
 
-        ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.Waves:initWithDuration");
+        ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.Waves:initWithDuration");
 
-        ok &= luaval_to_boolean(tolua_S, 7,&arg5, "ax.Waves:initWithDuration");
+        ok &= luaval_to_boolean(tolua_S, 7, &arg5, "ax.Waves:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Waves_initWithDuration'", nullptr);
@@ -45692,12 +45692,12 @@ int lua_ax_base_Waves_create(lua_State* tolua_S)
         double arg3;
         bool arg4;
         bool arg5;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Waves:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Waves:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Waves:create");
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Waves:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Waves:create");
-        ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.Waves:create");
-        ok &= luaval_to_boolean(tolua_S, 7,&arg5, "ax.Waves:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Waves:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Waves:create");
+        ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.Waves:create");
+        ok &= luaval_to_boolean(tolua_S, 7, &arg5, "ax.Waves:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Waves_create'", nullptr);
@@ -45952,7 +45952,7 @@ int lua_ax_base_Twirl_setAmplitude(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Twirl:setAmplitude");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Twirl:setAmplitude");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Twirl_setAmplitude'", nullptr);
@@ -46049,7 +46049,7 @@ int lua_ax_base_Twirl_setAmplitudeRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Twirl:setAmplitudeRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Twirl:setAmplitudeRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Twirl_setAmplitudeRate'", nullptr);
@@ -46103,15 +46103,15 @@ int lua_ax_base_Twirl_initWithDuration(lua_State* tolua_S)
         unsigned int arg3;
         double arg4;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Twirl:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Twirl:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Twirl:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.Twirl:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.Twirl:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Twirl:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.Twirl:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.Twirl:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Twirl_initWithDuration'", nullptr);
@@ -46153,11 +46153,11 @@ int lua_ax_base_Twirl_create(lua_State* tolua_S)
         ax::Vec2 arg2;
         unsigned int arg3;
         double arg4;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Twirl:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Twirl:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Twirl:create");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.Twirl:create");
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.Twirl:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.Twirl:create");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Twirl:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.Twirl:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Twirl_create'", nullptr);
@@ -46276,7 +46276,7 @@ int lua_ax_base_ActionManager_addAction(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ActionManager:addAction");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.ActionManager:addAction");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.ActionManager:addAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionManager_addAction'", nullptr);
@@ -46474,7 +46474,7 @@ int lua_ax_base_ActionManager_removeActionByTag(lua_State* tolua_S)
         int arg0;
         ax::Node* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ActionManager:removeActionByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ActionManager:removeActionByTag");
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ActionManager:removeActionByTag");
         if(!ok)
@@ -46527,7 +46527,7 @@ int lua_ax_base_ActionManager_removeAllActionsByTag(lua_State* tolua_S)
         int arg0;
         ax::Node* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ActionManager:removeAllActionsByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ActionManager:removeAllActionsByTag");
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ActionManager:removeAllActionsByTag");
         if(!ok)
@@ -46580,7 +46580,7 @@ int lua_ax_base_ActionManager_removeActionsByFlags(lua_State* tolua_S)
         unsigned int arg0;
         ax::Node* arg1;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.ActionManager:removeActionsByFlags");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ActionManager:removeActionsByFlags");
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ActionManager:removeActionsByFlags");
         if(!ok)
@@ -46633,7 +46633,7 @@ int lua_ax_base_ActionManager_getActionByTag(lua_State* tolua_S)
         int arg0;
         const ax::Node* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ActionManager:getActionByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ActionManager:getActionByTag");
 
         ok &= luaval_to_object<const ax::Node>(tolua_S, 3, "ax.Node",&arg1, "ax.ActionManager:getActionByTag");
         if(!ok)
@@ -46785,7 +46785,7 @@ int lua_ax_base_ActionManager_getNumberOfRunningActionsInTargetByTag(lua_State* 
 
         ok &= luaval_to_object<const ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ActionManager:getNumberOfRunningActionsInTargetByTag");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ActionManager:getNumberOfRunningActionsInTargetByTag");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ActionManager:getNumberOfRunningActionsInTargetByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionManager_getNumberOfRunningActionsInTargetByTag'", nullptr);
@@ -47032,7 +47032,7 @@ int lua_ax_base_ActionManager_update(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ActionManager:update");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionManager:update");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionManager_update'", nullptr);
@@ -47144,7 +47144,7 @@ int lua_ax_base_PageTurn3D_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Vec2 arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PageTurn3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PageTurn3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PageTurn3D:create");
         if(!ok)
         {
@@ -47214,9 +47214,9 @@ int lua_ax_base_ProgressTo_initWithDuration(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ProgressTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ProgressTo:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ProgressTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ProgressTo:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgressTo_initWithDuration'", nullptr);
@@ -47255,8 +47255,8 @@ int lua_ax_base_ProgressTo_create(lua_State* tolua_S)
     {
         double arg0;
         double arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ProgressTo:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ProgressTo:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ProgressTo:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ProgressTo:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgressTo_create'", nullptr);
@@ -47365,11 +47365,11 @@ int lua_ax_base_ProgressFromTo_initWithDuration(lua_State* tolua_S)
         double arg1;
         double arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ProgressFromTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ProgressFromTo:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ProgressFromTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ProgressFromTo:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ProgressFromTo:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ProgressFromTo:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgressFromTo_initWithDuration'", nullptr);
@@ -47409,9 +47409,9 @@ int lua_ax_base_ProgressFromTo_create(lua_State* tolua_S)
         double arg0;
         double arg1;
         double arg2;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ProgressFromTo:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ProgressFromTo:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ProgressFromTo:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ProgressFromTo:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ProgressFromTo:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ProgressFromTo:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgressFromTo_create'", nullptr);
@@ -47521,13 +47521,13 @@ int lua_ax_base_ShakyTiles3D_initWithDuration(lua_State* tolua_S)
         int arg2;
         bool arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ShakyTiles3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ShakyTiles3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.ShakyTiles3D:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ShakyTiles3D:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ShakyTiles3D:initWithDuration");
 
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ShakyTiles3D:initWithDuration");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ShakyTiles3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShakyTiles3D_initWithDuration'", nullptr);
@@ -47568,10 +47568,10 @@ int lua_ax_base_ShakyTiles3D_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         int arg2;
         bool arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ShakyTiles3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ShakyTiles3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.ShakyTiles3D:create");
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ShakyTiles3D:create");
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ShakyTiles3D:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ShakyTiles3D:create");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ShakyTiles3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShakyTiles3D_create'", nullptr);
@@ -47681,13 +47681,13 @@ int lua_ax_base_ShatteredTiles3D_initWithDuration(lua_State* tolua_S)
         int arg2;
         bool arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ShatteredTiles3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ShatteredTiles3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.ShatteredTiles3D:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ShatteredTiles3D:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ShatteredTiles3D:initWithDuration");
 
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ShatteredTiles3D:initWithDuration");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ShatteredTiles3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShatteredTiles3D_initWithDuration'", nullptr);
@@ -47728,10 +47728,10 @@ int lua_ax_base_ShatteredTiles3D_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         int arg2;
         bool arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ShatteredTiles3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ShatteredTiles3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.ShatteredTiles3D:create");
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ShatteredTiles3D:create");
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ShatteredTiles3D:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ShatteredTiles3D:create");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ShatteredTiles3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShatteredTiles3D_create'", nullptr);
@@ -47890,11 +47890,11 @@ int lua_ax_base_ShuffleTiles_initWithDuration(lua_State* tolua_S)
         ax::Vec2 arg1;
         unsigned int arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ShuffleTiles:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ShuffleTiles:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.ShuffleTiles:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.ShuffleTiles:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ShuffleTiles:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShuffleTiles_initWithDuration'", nullptr);
@@ -47934,9 +47934,9 @@ int lua_ax_base_ShuffleTiles_create(lua_State* tolua_S)
         double arg0;
         ax::Vec2 arg1;
         unsigned int arg2;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ShuffleTiles:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ShuffleTiles:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.ShuffleTiles:create");
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.ShuffleTiles:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ShuffleTiles:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ShuffleTiles_create'", nullptr);
@@ -48047,7 +48047,7 @@ int lua_ax_base_FadeOutTRTiles_testFunc(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.FadeOutTRTiles:testFunc");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.FadeOutTRTiles:testFunc");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.FadeOutTRTiles:testFunc");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FadeOutTRTiles_testFunc'", nullptr);
@@ -48200,7 +48200,7 @@ int lua_ax_base_FadeOutTRTiles_transformTile(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.FadeOutTRTiles:transformTile");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.FadeOutTRTiles:transformTile");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.FadeOutTRTiles:transformTile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FadeOutTRTiles_transformTile'", nullptr);
@@ -48239,7 +48239,7 @@ int lua_ax_base_FadeOutTRTiles_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Vec2 arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FadeOutTRTiles:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FadeOutTRTiles:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.FadeOutTRTiles:create");
         if(!ok)
         {
@@ -48339,7 +48339,7 @@ int lua_ax_base_FadeOutBLTiles_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Vec2 arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FadeOutBLTiles:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FadeOutBLTiles:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.FadeOutBLTiles:create");
         if(!ok)
         {
@@ -48435,7 +48435,7 @@ int lua_ax_base_FadeOutUpTiles_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Vec2 arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FadeOutUpTiles:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FadeOutUpTiles:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.FadeOutUpTiles:create");
         if(!ok)
         {
@@ -48531,7 +48531,7 @@ int lua_ax_base_FadeOutDownTiles_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Vec2 arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.FadeOutDownTiles:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.FadeOutDownTiles:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.FadeOutDownTiles:create");
         if(!ok)
         {
@@ -48740,11 +48740,11 @@ int lua_ax_base_TurnOffTiles_initWithDuration(lua_State* tolua_S)
         ax::Vec2 arg1;
         unsigned int arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TurnOffTiles:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TurnOffTiles:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.TurnOffTiles:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.TurnOffTiles:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TurnOffTiles:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TurnOffTiles_initWithDuration'", nullptr);
@@ -48783,13 +48783,13 @@ int lua_ax_base_TurnOffTiles_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TurnOffTiles:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TurnOffTiles:create");
             if (!ok) { break; }
             ax::Vec2 arg1;
             ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.TurnOffTiles:create");
             if (!ok) { break; }
             unsigned int arg2;
-            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.TurnOffTiles:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TurnOffTiles:create");
             if (!ok) { break; }
             ax::TurnOffTiles* ret = ax::TurnOffTiles::create(arg0, arg1, arg2);
             object_to_luaval<ax::TurnOffTiles>(tolua_S, "ax.TurnOffTiles",(ax::TurnOffTiles*)ret);
@@ -48802,7 +48802,7 @@ int lua_ax_base_TurnOffTiles_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TurnOffTiles:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TurnOffTiles:create");
             if (!ok) { break; }
             ax::Vec2 arg1;
             ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.TurnOffTiles:create");
@@ -48959,7 +48959,7 @@ int lua_ax_base_WavesTiles3D_setAmplitude(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.WavesTiles3D:setAmplitude");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.WavesTiles3D:setAmplitude");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_WavesTiles3D_setAmplitude'", nullptr);
@@ -49056,7 +49056,7 @@ int lua_ax_base_WavesTiles3D_setAmplitudeRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.WavesTiles3D:setAmplitudeRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.WavesTiles3D:setAmplitudeRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_WavesTiles3D_setAmplitudeRate'", nullptr);
@@ -49109,13 +49109,13 @@ int lua_ax_base_WavesTiles3D_initWithDuration(lua_State* tolua_S)
         unsigned int arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.WavesTiles3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.WavesTiles3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.WavesTiles3D:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.WavesTiles3D:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.WavesTiles3D:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.WavesTiles3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.WavesTiles3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_WavesTiles3D_initWithDuration'", nullptr);
@@ -49156,10 +49156,10 @@ int lua_ax_base_WavesTiles3D_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         unsigned int arg2;
         double arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.WavesTiles3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.WavesTiles3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.WavesTiles3D:create");
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.WavesTiles3D:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.WavesTiles3D:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.WavesTiles3D:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.WavesTiles3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_WavesTiles3D_create'", nullptr);
@@ -49317,7 +49317,7 @@ int lua_ax_base_JumpTiles3D_setAmplitude(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.JumpTiles3D:setAmplitude");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.JumpTiles3D:setAmplitude");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_JumpTiles3D_setAmplitude'", nullptr);
@@ -49414,7 +49414,7 @@ int lua_ax_base_JumpTiles3D_setAmplitudeRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.JumpTiles3D:setAmplitudeRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.JumpTiles3D:setAmplitudeRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_JumpTiles3D_setAmplitudeRate'", nullptr);
@@ -49467,13 +49467,13 @@ int lua_ax_base_JumpTiles3D_initWithDuration(lua_State* tolua_S)
         unsigned int arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.JumpTiles3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.JumpTiles3D:initWithDuration");
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.JumpTiles3D:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.JumpTiles3D:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.JumpTiles3D:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.JumpTiles3D:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.JumpTiles3D:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_JumpTiles3D_initWithDuration'", nullptr);
@@ -49514,10 +49514,10 @@ int lua_ax_base_JumpTiles3D_create(lua_State* tolua_S)
         ax::Vec2 arg1;
         unsigned int arg2;
         double arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.JumpTiles3D:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.JumpTiles3D:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.JumpTiles3D:create");
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.JumpTiles3D:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.JumpTiles3D:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.JumpTiles3D:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.JumpTiles3D:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_JumpTiles3D_create'", nullptr);
@@ -49629,9 +49629,9 @@ int lua_ax_base_SplitRows_initWithDuration(lua_State* tolua_S)
         double arg0;
         unsigned int arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SplitRows:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SplitRows:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.SplitRows:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.SplitRows:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SplitRows_initWithDuration'", nullptr);
@@ -49670,8 +49670,8 @@ int lua_ax_base_SplitRows_create(lua_State* tolua_S)
     {
         double arg0;
         unsigned int arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SplitRows:create");
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.SplitRows:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SplitRows:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.SplitRows:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SplitRows_create'", nullptr);
@@ -49779,9 +49779,9 @@ int lua_ax_base_SplitCols_initWithDuration(lua_State* tolua_S)
         double arg0;
         unsigned int arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SplitCols:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SplitCols:initWithDuration");
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.SplitCols:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.SplitCols:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SplitCols_initWithDuration'", nullptr);
@@ -49820,8 +49820,8 @@ int lua_ax_base_SplitCols_create(lua_State* tolua_S)
     {
         double arg0;
         unsigned int arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SplitCols:create");
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.SplitCols:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SplitCols:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.SplitCols:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SplitCols_create'", nullptr);
@@ -49931,13 +49931,13 @@ int lua_ax_base_ActionTween_initWithDuration(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ActionTween:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionTween:initWithDuration");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.ActionTween:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ActionTween:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ActionTween:initWithDuration");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ActionTween:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ActionTween:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionTween_initWithDuration'", nullptr);
@@ -49978,10 +49978,10 @@ int lua_ax_base_ActionTween_create(lua_State* tolua_S)
         std::string_view arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ActionTween:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionTween:create");
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.ActionTween:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ActionTween:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ActionTween:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ActionTween:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ActionTween:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionTween_create'", nullptr);
@@ -50643,11 +50643,11 @@ int lua_ax_base_AtlasNode_initWithTileFile(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AtlasNode:initWithTileFile");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.AtlasNode:initWithTileFile");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.AtlasNode:initWithTileFile");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.AtlasNode:initWithTileFile");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.AtlasNode:initWithTileFile");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.AtlasNode:initWithTileFile");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.AtlasNode:initWithTileFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AtlasNode_initWithTileFile'", nullptr);
@@ -50702,11 +50702,11 @@ int lua_ax_base_AtlasNode_initWithTexture(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.AtlasNode:initWithTexture");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.AtlasNode:initWithTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.AtlasNode:initWithTexture");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.AtlasNode:initWithTexture");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.AtlasNode:initWithTexture");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.AtlasNode:initWithTexture");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.AtlasNode:initWithTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AtlasNode_initWithTexture'", nullptr);
@@ -50748,9 +50748,9 @@ int lua_ax_base_AtlasNode_create(lua_State* tolua_S)
         int arg2;
         int arg3;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AtlasNode:create");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.AtlasNode:create");
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.AtlasNode:create");
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.AtlasNode:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.AtlasNode:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.AtlasNode:create");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.AtlasNode:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_AtlasNode_create'", nullptr);
@@ -50931,7 +50931,7 @@ int lua_ax_base_ClippingNode_setStencil(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ClippingNode:setStencil");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ClippingNode:setStencil");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ClippingNode:setStencil");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ClippingNode_setStencil'", nullptr);
@@ -51075,7 +51075,7 @@ int lua_ax_base_ClippingNode_setAlphaThreshold(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ClippingNode:setAlphaThreshold");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ClippingNode:setAlphaThreshold");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ClippingNode_setAlphaThreshold'", nullptr);
@@ -51172,7 +51172,7 @@ int lua_ax_base_ClippingNode_setInverted(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ClippingNode:setInverted");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ClippingNode:setInverted");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ClippingNode_setInverted'", nullptr);
@@ -51489,7 +51489,7 @@ int lua_ax_base_ClippingRectangleNode_setClippingEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ClippingRectangleNode:setClippingEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ClippingRectangleNode:setClippingEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ClippingRectangleNode_setClippingEnabled'", nullptr);
@@ -51612,7 +51612,7 @@ int lua_ax_base_DrawNode_drawPoint(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPoint");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPoint");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawPoint");
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawPoint");
         if(!ok)
@@ -51633,11 +51633,11 @@ int lua_ax_base_DrawNode_drawPoint(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPoint");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPoint");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawPoint");
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawPoint");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPoint");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawPoint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawPoint'", nullptr);
@@ -51716,7 +51716,7 @@ int lua_ax_base_DrawNode_drawLine(lua_State* tolua_S)
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawLine");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.DrawNode:drawLine");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawLine");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawLine'", nullptr);
@@ -51740,9 +51740,9 @@ int lua_ax_base_DrawNode_drawLine(lua_State* tolua_S)
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawLine");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.DrawNode:drawLine");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawLine");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawLine");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawLine");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawLine'", nullptr);
@@ -51767,11 +51767,11 @@ int lua_ax_base_DrawNode_drawLine(lua_State* tolua_S)
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawLine");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.DrawNode:drawLine");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawLine");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawLine");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawLine");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.DrawNode:drawLine");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.DrawNode:drawLine");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawLine'", nullptr);
@@ -51863,7 +51863,7 @@ int lua_ax_base_DrawNode_drawRect(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawRect");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawRect");
 
             if (!ok) { break; }
             cobj->drawRect(arg0, arg1, arg2, arg3, arg4, arg5);
@@ -51907,7 +51907,7 @@ int lua_ax_base_DrawNode_drawRect(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.DrawNode:drawRect");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawRect");
 
             if (!ok) { break; }
             cobj->drawRect(arg0, arg1, arg2, arg3);
@@ -51954,19 +51954,19 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             unsigned int arg3;
-            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             ax::Color arg5;
@@ -51986,19 +51986,19 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             unsigned int arg3;
-            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             ax::Color arg5;
@@ -52006,7 +52006,7 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg6;
-            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             cobj->drawCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
@@ -52022,27 +52022,27 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             unsigned int arg3;
-            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             double arg6;
-            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             ax::Color arg7;
@@ -52062,27 +52062,27 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             unsigned int arg3;
-            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             double arg6;
-            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             ax::Color arg7;
@@ -52090,7 +52090,7 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg8;
-            ok &= luaval_to_number(tolua_S, 10,&arg8, "ax.DrawNode:drawCircle");
+            ok &= luaval_to_number(tolua_S, 10, &arg8, "ax.DrawNode:drawCircle");
 
             if (!ok) { break; }
             cobj->drawCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
@@ -52145,11 +52145,11 @@ int lua_ax_base_DrawNode_drawStar(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawStar");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawStar");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawStar");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawStar");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawStar");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawStar");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawStar");
 
         ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.DrawNode:drawStar");
         if(!ok)
@@ -52172,15 +52172,15 @@ int lua_ax_base_DrawNode_drawStar(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawStar");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawStar");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawStar");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawStar");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawStar");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawStar");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawStar");
 
         ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.DrawNode:drawStar");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawStar");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawStar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawStar'", nullptr);
@@ -52237,11 +52237,11 @@ int lua_ax_base_DrawNode_drawSolidStar(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidStar");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawSolidStar");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidStar");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSolidStar");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidStar");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidStar");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidStar");
 
         ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidStar");
 
@@ -52267,17 +52267,17 @@ int lua_ax_base_DrawNode_drawSolidStar(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidStar");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawSolidStar");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidStar");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSolidStar");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidStar");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidStar");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidStar");
 
         ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidStar");
 
         ok &=luaval_to_color(tolua_S, 7, &arg5, "ax.DrawNode:drawSolidStar");
 
-        ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawSolidStar");
+        ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawSolidStar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawSolidStar'", nullptr);
@@ -52337,7 +52337,7 @@ int lua_ax_base_DrawNode_drawQuadBezier(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.DrawNode:drawQuadBezier");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawQuadBezier");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawQuadBezier");
 
         ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.DrawNode:drawQuadBezier");
         if(!ok)
@@ -52364,11 +52364,11 @@ int lua_ax_base_DrawNode_drawQuadBezier(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.DrawNode:drawQuadBezier");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawQuadBezier");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawQuadBezier");
 
         ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.DrawNode:drawQuadBezier");
 
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawQuadBezier");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawQuadBezier");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawQuadBezier'", nullptr);
@@ -52431,7 +52431,7 @@ int lua_ax_base_DrawNode_drawCubicBezier(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.DrawNode:drawCubicBezier");
 
-        ok &= luaval_to_uint32(tolua_S, 6,&arg4, "ax.DrawNode:drawCubicBezier");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawCubicBezier");
 
         ok &=luaval_to_color(tolua_S, 7, &arg5, "ax.DrawNode:drawCubicBezier");
         if(!ok)
@@ -52461,11 +52461,11 @@ int lua_ax_base_DrawNode_drawCubicBezier(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.DrawNode:drawCubicBezier");
 
-        ok &= luaval_to_uint32(tolua_S, 6,&arg4, "ax.DrawNode:drawCubicBezier");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawCubicBezier");
 
         ok &=luaval_to_color(tolua_S, 7, &arg5, "ax.DrawNode:drawCubicBezier");
 
-        ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawCubicBezier");
+        ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawCubicBezier");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawCubicBezier'", nullptr);
@@ -52519,7 +52519,7 @@ int lua_ax_base_DrawNode_drawDot(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawDot");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawDot");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawDot");
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawDot");
         if(!ok)
@@ -52600,7 +52600,7 @@ int lua_ax_base_DrawNode_drawSolidRect(lua_State* tolua_S)
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidRect");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidRect");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidRect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawSolidRect'", nullptr);
@@ -52624,7 +52624,7 @@ int lua_ax_base_DrawNode_drawSolidRect(lua_State* tolua_S)
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidRect");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidRect");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidRect");
 
         ok &=luaval_to_color(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidRect");
         if(!ok)
@@ -52674,23 +52674,23 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             unsigned int arg3;
-            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             ax::Color arg6;
@@ -52710,23 +52710,23 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             unsigned int arg3;
-            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             ax::Color arg6;
@@ -52734,7 +52734,7 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg7;
-            ok &= luaval_to_number(tolua_S, 9,&arg7, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 9, &arg7, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             ax::Color arg8;
@@ -52754,23 +52754,23 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             unsigned int arg3;
-            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             ax::Color arg6;
@@ -52778,7 +52778,7 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg7;
-            ok &= luaval_to_number(tolua_S, 9,&arg7, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 9, &arg7, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             ax::Color arg8;
@@ -52786,7 +52786,7 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg9;
-            ok &= luaval_to_boolean(tolua_S, 11,&arg9, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_boolean(tolua_S, 11, &arg9, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             cobj->drawSolidCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
@@ -52802,15 +52802,15 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             unsigned int arg3;
-            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidCircle");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidCircle");
 
             if (!ok) { break; }
             ax::Color arg4;
@@ -52861,27 +52861,27 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg6;
-            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             ax::Color arg7;
@@ -52901,27 +52901,27 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg6;
-            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             ax::Color arg7;
@@ -52929,7 +52929,7 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::DrawNode::DrawMode arg8;
-            ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 10, &arg8, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
@@ -52945,27 +52945,27 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg6;
-            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             ax::Color arg7;
@@ -52989,27 +52989,27 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg6;
-            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             ax::Color arg7;
@@ -53021,7 +53021,7 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::DrawNode::DrawMode arg9;
-            ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 11, &arg9, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
@@ -53037,27 +53037,27 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg6;
-            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 8, &arg6, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             ax::Color arg7;
@@ -53069,11 +53069,11 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::DrawNode::DrawMode arg9;
-            ok &= luaval_to_int32(tolua_S, 11,(int *)&arg9, "ax.DrawNode:drawPie");
+            ok &= luaval_to_int(tolua_S, 11, &arg9, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             double arg10;
-            ok &= luaval_to_number(tolua_S, 12,&arg10, "ax.DrawNode:drawPie");
+            ok &= luaval_to_number(tolua_S, 12, &arg10, "ax.DrawNode:drawPie");
 
             if (!ok) { break; }
             cobj->drawPie(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
@@ -53129,7 +53129,7 @@ int lua_ax_base_DrawNode_drawSegment(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.DrawNode:drawSegment");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSegment");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSegment");
 
         ok &=luaval_to_color(tolua_S, 5, &arg3, "ax.DrawNode:drawSegment");
         if(!ok)
@@ -53153,11 +53153,11 @@ int lua_ax_base_DrawNode_drawSegment(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.DrawNode:drawSegment");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSegment");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSegment");
 
         ok &=luaval_to_color(tolua_S, 5, &arg3, "ax.DrawNode:drawSegment");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawSegment");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawSegment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawSegment'", nullptr);
@@ -53180,13 +53180,13 @@ int lua_ax_base_DrawNode_drawSegment(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.DrawNode:drawSegment");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawSegment");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.DrawNode:drawSegment");
 
         ok &=luaval_to_color(tolua_S, 5, &arg3, "ax.DrawNode:drawSegment");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.DrawNode:drawSegment");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.DrawNode:drawSegment");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.DrawNode:drawSegment");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.DrawNode:drawSegment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_drawSegment'", nullptr);
@@ -53403,7 +53403,7 @@ int lua_ax_base_DrawNode_drawSolidTriangle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg5;
-            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawSolidTriangle");
+            ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.DrawNode:drawSolidTriangle");
 
             if (!ok) { break; }
             cobj->drawSolidTriangle(arg0, arg1, arg2, arg3, arg4, arg5);
@@ -53447,7 +53447,7 @@ int lua_ax_base_DrawNode_drawSolidTriangle(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.DrawNode:drawSolidTriangle");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.DrawNode:drawSolidTriangle");
 
             if (!ok) { break; }
             cobj->drawSolidTriangle(arg0, arg1, arg2, arg3);
@@ -53640,7 +53640,7 @@ int lua_ax_base_DrawNode_setIsolated(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.DrawNode:setIsolated");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.DrawNode:setIsolated");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_DrawNode_setIsolated'", nullptr);
@@ -53949,7 +53949,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Label:setBMFontFilePath");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Label:setBMFontFilePath");
 
             if (!ok) { break; }
             bool ret = cobj->setBMFontFilePath(arg0, arg1, arg2);
@@ -53969,11 +53969,11 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Label:setBMFontFilePath");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Label:setBMFontFilePath");
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Label:setBMFontFilePath");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Label:setBMFontFilePath");
 
             if (!ok) { break; }
             bool ret = cobj->setBMFontFilePath(arg0, arg1, arg2, arg3);
@@ -54001,7 +54001,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Label:setBMFontFilePath");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Label:setBMFontFilePath");
 
             if (!ok) { break; }
             bool ret = cobj->setBMFontFilePath(arg0, arg1);
@@ -54037,7 +54037,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:setBMFontFilePath");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:setBMFontFilePath");
 
             if (!ok) { break; }
             bool ret = cobj->setBMFontFilePath(arg0, arg1, arg2);
@@ -54131,15 +54131,15 @@ int lua_ax_base_Label_setCharMap(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Label:setCharMap");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Label:setCharMap");
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:setCharMap");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:setCharMap");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Label:setCharMap");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Label:setCharMap");
 
             if (!ok) { break; }
             bool ret = cobj->setCharMap(arg0, arg1, arg2, arg3);
@@ -54155,15 +54155,15 @@ int lua_ax_base_Label_setCharMap(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Label:setCharMap");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Label:setCharMap");
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:setCharMap");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:setCharMap");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Label:setCharMap");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Label:setCharMap");
 
             if (!ok) { break; }
             bool ret = cobj->setCharMap(arg0, arg1, arg2, arg3);
@@ -54321,7 +54321,7 @@ int lua_ax_base_Label_setSystemFontSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setSystemFontSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setSystemFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setSystemFontSize'", nullptr);
@@ -54801,7 +54801,7 @@ int lua_ax_base_Label_enableShadow(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.Label:enableShadow");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:enableShadow");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:enableShadow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_enableShadow'", nullptr);
@@ -54868,7 +54868,7 @@ int lua_ax_base_Label_enableOutline(lua_State* tolua_S)
 
         ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.Label:enableOutline");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Label:enableOutline");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Label:enableOutline");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_enableOutline'", nullptr);
@@ -55150,7 +55150,7 @@ int lua_ax_base_Label_disableEffect(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::LabelEffect arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Label:disableEffect");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:disableEffect");
 
             if (!ok) { break; }
             cobj->disableEffect(arg0);
@@ -55530,11 +55530,11 @@ int lua_ax_base_Label_setAlignment(lua_State* tolua_S)
     do{
         if (argc == 2) {
             ax::TextHAlignment arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Label:setAlignment");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:setAlignment");
 
             if (!ok) { break; }
             ax::TextVAlignment arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Label:setAlignment");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Label:setAlignment");
 
             if (!ok) { break; }
             cobj->setAlignment(arg0, arg1);
@@ -55546,7 +55546,7 @@ int lua_ax_base_Label_setAlignment(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::TextHAlignment arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Label:setAlignment");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:setAlignment");
 
             if (!ok) { break; }
             cobj->setAlignment(arg0);
@@ -55642,7 +55642,7 @@ int lua_ax_base_Label_setHorizontalAlignment(lua_State* tolua_S)
     {
         ax::TextHAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Label:setHorizontalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:setHorizontalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setHorizontalAlignment'", nullptr);
@@ -55739,7 +55739,7 @@ int lua_ax_base_Label_setVerticalAlignment(lua_State* tolua_S)
     {
         ax::TextVAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Label:setVerticalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:setVerticalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setVerticalAlignment'", nullptr);
@@ -55836,7 +55836,7 @@ int lua_ax_base_Label_setLineBreakWithoutSpace(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Label:setLineBreakWithoutSpace");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Label:setLineBreakWithoutSpace");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setLineBreakWithoutSpace'", nullptr);
@@ -55886,7 +55886,7 @@ int lua_ax_base_Label_setMaxLineWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setMaxLineWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setMaxLineWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setMaxLineWidth'", nullptr);
@@ -55983,7 +55983,7 @@ int lua_ax_base_Label_setTTFFaceSize(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Label:setTTFFaceSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:setTTFFaceSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setTTFFaceSize'", nullptr);
@@ -56080,7 +56080,7 @@ int lua_ax_base_Label_setBMFontSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setBMFontSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setBMFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setBMFontSize'", nullptr);
@@ -56177,7 +56177,7 @@ int lua_ax_base_Label_enableWrap(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Label:enableWrap");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Label:enableWrap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_enableWrap'", nullptr);
@@ -56274,7 +56274,7 @@ int lua_ax_base_Label_setOverflow(lua_State* tolua_S)
     {
         ax::Label::Overflow arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Label:setOverflow");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:setOverflow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setOverflow'", nullptr);
@@ -56371,7 +56371,7 @@ int lua_ax_base_Label_setWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setWidth'", nullptr);
@@ -56468,7 +56468,7 @@ int lua_ax_base_Label_setHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setHeight'", nullptr);
@@ -56566,9 +56566,9 @@ int lua_ax_base_Label_setDimensions(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setDimensions");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setDimensions");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Label:setDimensions");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Label:setDimensions");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setDimensions'", nullptr);
@@ -56712,7 +56712,7 @@ int lua_ax_base_Label_getLetter(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Label:getLetter");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:getLetter");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_getLetter'", nullptr);
@@ -56762,7 +56762,7 @@ int lua_ax_base_Label_setClipMarginEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Label:setClipMarginEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Label:setClipMarginEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setClipMarginEnabled'", nullptr);
@@ -56859,7 +56859,7 @@ int lua_ax_base_Label_setLineHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setLineHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setLineHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setLineHeight'", nullptr);
@@ -56956,7 +56956,7 @@ int lua_ax_base_Label_setLineSpacing(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setLineSpacing");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setLineSpacing");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setLineSpacing'", nullptr);
@@ -57147,7 +57147,7 @@ int lua_ax_base_Label_setAdditionalKerning(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Label:setAdditionalKerning");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Label:setAdditionalKerning");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_setAdditionalKerning'", nullptr);
@@ -57388,7 +57388,7 @@ int lua_ax_base_Label_removeAllChildrenWithCleanup(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Label:removeAllChildrenWithCleanup");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Label:removeAllChildrenWithCleanup");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_removeAllChildrenWithCleanup'", nullptr);
@@ -57456,7 +57456,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TextHAlignment arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:initWithTTF");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             bool ret = cobj->initWithTTF(arg0, arg1, arg2);
@@ -57476,11 +57476,11 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TextHAlignment arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:initWithTTF");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Label:initWithTTF");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             bool ret = cobj->initWithTTF(arg0, arg1, arg2, arg3);
@@ -57500,7 +57500,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:initWithTTF");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             bool ret = cobj->initWithTTF(arg0, arg1, arg2);
@@ -57520,7 +57520,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:initWithTTF");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -57544,7 +57544,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:initWithTTF");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -57552,7 +57552,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TextHAlignment arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Label:initWithTTF");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             bool ret = cobj->initWithTTF(arg0, arg1, arg2, arg3, arg4);
@@ -57572,7 +57572,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:initWithTTF");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -57580,11 +57580,11 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TextHAlignment arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Label:initWithTTF");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             ax::TextVAlignment arg5;
-            ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Label:initWithTTF");
+            ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Label:initWithTTF");
 
             if (!ok) { break; }
             bool ret = cobj->initWithTTF(arg0, arg1, arg2, arg3, arg4, arg5);
@@ -57659,7 +57659,7 @@ int lua_ax_base_Label_createWithSystemFont(lua_State* tolua_S)
         double arg2;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:createWithSystemFont");
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:createWithSystemFont");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:createWithSystemFont");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:createWithSystemFont");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_createWithSystemFont'", nullptr);
@@ -57677,7 +57677,7 @@ int lua_ax_base_Label_createWithSystemFont(lua_State* tolua_S)
         ax::Vec2 arg3;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:createWithSystemFont");
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:createWithSystemFont");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:createWithSystemFont");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:createWithSystemFont");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.Label:createWithSystemFont");
         if(!ok)
         {
@@ -57697,9 +57697,9 @@ int lua_ax_base_Label_createWithSystemFont(lua_State* tolua_S)
         ax::TextHAlignment arg4;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:createWithSystemFont");
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:createWithSystemFont");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:createWithSystemFont");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:createWithSystemFont");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.Label:createWithSystemFont");
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Label:createWithSystemFont");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Label:createWithSystemFont");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_createWithSystemFont'", nullptr);
@@ -57719,10 +57719,10 @@ int lua_ax_base_Label_createWithSystemFont(lua_State* tolua_S)
         ax::TextVAlignment arg5;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:createWithSystemFont");
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:createWithSystemFont");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Label:createWithSystemFont");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Label:createWithSystemFont");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.Label:createWithSystemFont");
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Label:createWithSystemFont");
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Label:createWithSystemFont");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Label:createWithSystemFont");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Label:createWithSystemFont");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_createWithSystemFont'", nullptr);
@@ -57765,16 +57765,16 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             ax::TextHAlignment arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:createWithBMFont");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Label:createWithBMFont");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             ax::Rect arg4;
             ok &= luaval_to_rect(tolua_S, 6, &arg4, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             bool arg5;
-            ok &= luaval_to_boolean(tolua_S, 7,&arg5, "ax.Label:createWithBMFont");
+            ok &= luaval_to_boolean(tolua_S, 7, &arg5, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             ax::Label* ret = ax::Label::createWithBMFont(arg0, arg1, arg2, arg3, arg4, arg5);
             object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
@@ -57809,7 +57809,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             ax::TextHAlignment arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:createWithBMFont");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             ax::Label* ret = ax::Label::createWithBMFont(arg0, arg1, arg2);
             object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
@@ -57828,10 +57828,10 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             ax::TextHAlignment arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:createWithBMFont");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Label:createWithBMFont");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             ax::Label* ret = ax::Label::createWithBMFont(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
@@ -57850,10 +57850,10 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             ax::TextHAlignment arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:createWithBMFont");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Label:createWithBMFont");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Label:createWithBMFont");
             if (!ok) { break; }
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "ax.Label:createWithBMFont");
@@ -57894,13 +57894,13 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.Label:createWithCharMap");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Label:createWithCharMap");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Label:createWithCharMap");
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:createWithCharMap");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:createWithCharMap");
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Label:createWithCharMap");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Label:createWithCharMap");
             if (!ok) { break; }
             ax::Label* ret = ax::Label::createWithCharMap(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
@@ -57916,13 +57916,13 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:createWithCharMap");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Label:createWithCharMap");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Label:createWithCharMap");
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Label:createWithCharMap");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Label:createWithCharMap");
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.Label:createWithCharMap");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Label:createWithCharMap");
             if (!ok) { break; }
             ax::Label* ret = ax::Label::createWithCharMap(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
@@ -58093,15 +58093,15 @@ int lua_ax_base_LabelAtlas_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.LabelAtlas:initWithString");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.LabelAtlas:initWithString");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.LabelAtlas:initWithString");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.LabelAtlas:initWithString");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.LabelAtlas:initWithString");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.LabelAtlas:initWithString");
 
             if (!ok) { break; }
             bool ret = cobj->initWithString(arg0, arg1, arg2, arg3, arg4);
@@ -58121,15 +58121,15 @@ int lua_ax_base_LabelAtlas_initWithString(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.LabelAtlas:initWithString");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.LabelAtlas:initWithString");
 
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.LabelAtlas:initWithString");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.LabelAtlas:initWithString");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.LabelAtlas:initWithString");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.LabelAtlas:initWithString");
 
             if (!ok) { break; }
             bool ret = cobj->initWithString(arg0, arg1, arg2, arg3, arg4);
@@ -58286,13 +58286,13 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.LabelAtlas:create");
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.LabelAtlas:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.LabelAtlas:create");
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.LabelAtlas:create");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.LabelAtlas:create");
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.LabelAtlas:create");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.LabelAtlas:create");
             if (!ok) { break; }
             ax::LabelAtlas* ret = ax::LabelAtlas::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<ax::LabelAtlas>(tolua_S, "ax.LabelAtlas",(ax::LabelAtlas*)ret);
@@ -58311,13 +58311,13 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 3, "ax.Texture2D",&arg1, "ax.LabelAtlas:create");
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.LabelAtlas:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.LabelAtlas:create");
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.LabelAtlas:create");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.LabelAtlas:create");
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.LabelAtlas:create");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.LabelAtlas:create");
             if (!ok) { break; }
             ax::LabelAtlas* ret = ax::LabelAtlas::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<ax::LabelAtlas>(tolua_S, "ax.LabelAtlas",(ax::LabelAtlas*)ret);
@@ -58621,7 +58621,7 @@ int lua_ax_base_Sprite_setTextureRect(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Sprite:setTextureRect");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Sprite:setTextureRect");
 
             if (!ok) { break; }
             ax::Vec2 arg2;
@@ -59085,7 +59085,7 @@ int lua_ax_base_Sprite_setDisplayFrameWithAnimationName(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Sprite:setDisplayFrameWithAnimationName");
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Sprite:setDisplayFrameWithAnimationName");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Sprite:setDisplayFrameWithAnimationName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setDisplayFrameWithAnimationName'", nullptr);
@@ -59182,7 +59182,7 @@ int lua_ax_base_Sprite_setDirty(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:setDirty");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Sprite:setDirty");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setDirty'", nullptr);
@@ -59232,7 +59232,7 @@ int lua_ax_base_Sprite_removeAllChildrenWithCleanup(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:removeAllChildrenWithCleanup");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Sprite:removeAllChildrenWithCleanup");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_removeAllChildrenWithCleanup'", nullptr);
@@ -59376,7 +59376,7 @@ int lua_ax_base_Sprite_setAtlasIndex(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Sprite:setAtlasIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Sprite:setAtlasIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setAtlasIndex'", nullptr);
@@ -59664,7 +59664,7 @@ int lua_ax_base_Sprite_setFlippedX(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:setFlippedX");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Sprite:setFlippedX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setFlippedX'", nullptr);
@@ -59761,7 +59761,7 @@ int lua_ax_base_Sprite_setFlippedY(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:setFlippedY");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Sprite:setFlippedY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setFlippedY'", nullptr);
@@ -59811,7 +59811,7 @@ int lua_ax_base_Sprite_setStretchEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:setStretchEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Sprite:setStretchEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setStretchEnabled'", nullptr);
@@ -60129,7 +60129,7 @@ int lua_ax_base_Sprite_initWithTexture(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Sprite:initWithTexture");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Sprite:initWithTexture");
 
             if (!ok) { break; }
             bool ret = cobj->initWithTexture(arg0, arg1, arg2);
@@ -60276,7 +60276,7 @@ int lua_ax_base_Sprite_initWithFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Sprite:initWithFile");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Sprite:initWithFile");
 
             if (!ok) { break; }
             bool ret = cobj->initWithFile(arg0, arg1);
@@ -60453,7 +60453,7 @@ int lua_ax_base_Sprite_setAutoUpdatePS(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:setAutoUpdatePS");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Sprite:setAutoUpdatePS");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setAutoUpdatePS'", nullptr);
@@ -60503,7 +60503,7 @@ int lua_ax_base_Sprite_setAutoSize(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:setAutoSize");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Sprite:setAutoSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setAutoSize'", nullptr);
@@ -60564,7 +60564,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.Sprite:createWithTexture");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Sprite:createWithTexture");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Sprite:createWithTexture");
             if (!ok) { break; }
             ax::Sprite* ret = ax::Sprite::createWithTexture(arg0, arg1, arg2);
             object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
@@ -60851,7 +60851,7 @@ int lua_ax_base_LayerColor_changeWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.LayerColor:changeWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.LayerColor:changeWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerColor_changeWidth'", nullptr);
@@ -60901,7 +60901,7 @@ int lua_ax_base_LayerColor_changeHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.LayerColor:changeHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.LayerColor:changeHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerColor_changeHeight'", nullptr);
@@ -60952,9 +60952,9 @@ int lua_ax_base_LayerColor_changeWidthAndHeight(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.LayerColor:changeWidthAndHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.LayerColor:changeWidthAndHeight");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.LayerColor:changeWidthAndHeight");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.LayerColor:changeWidthAndHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerColor_changeWidthAndHeight'", nullptr);
@@ -61014,11 +61014,11 @@ int lua_ax_base_LayerColor_initWithColor(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.LayerColor:initWithColor");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.LayerColor:initWithColor");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.LayerColor:initWithColor");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.LayerColor:initWithColor");
 
             if (!ok) { break; }
             bool ret = cobj->initWithColor(arg0, arg1, arg2);
@@ -61059,10 +61059,10 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
             ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerColor:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.LayerColor:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.LayerColor:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.LayerColor:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.LayerColor:create");
             if (!ok) { break; }
             ax::LayerColor* ret = ax::LayerColor::create(arg0, arg1, arg2);
             object_to_luaval<ax::LayerColor>(tolua_S, "ax.LayerColor",(ax::LayerColor*)ret);
@@ -61193,7 +61193,7 @@ int lua_ax_base_LayerGradient_setCompressedInterpolation(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.LayerGradient:setCompressedInterpolation");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.LayerGradient:setCompressedInterpolation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerGradient_setCompressedInterpolation'", nullptr);
@@ -61484,7 +61484,7 @@ int lua_ax_base_LayerGradient_setStartOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ax.LayerGradient:setStartOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerGradient:setStartOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerGradient_setStartOpacity'", nullptr);
@@ -61581,7 +61581,7 @@ int lua_ax_base_LayerGradient_setEndOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ax.LayerGradient:setEndOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerGradient:setEndOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerGradient_setEndOpacity'", nullptr);
@@ -61980,7 +61980,7 @@ int lua_ax_base_LayerRadialGradient_setStartOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ax.LayerRadialGradient:setStartOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setStartOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_setStartOpacity'", nullptr);
@@ -62077,7 +62077,7 @@ int lua_ax_base_LayerRadialGradient_setEndOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ax.LayerRadialGradient:setEndOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setEndOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_setEndOpacity'", nullptr);
@@ -62174,7 +62174,7 @@ int lua_ax_base_LayerRadialGradient_setRadius(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.LayerRadialGradient:setRadius");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setRadius");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_setRadius'", nullptr);
@@ -62368,7 +62368,7 @@ int lua_ax_base_LayerRadialGradient_setExpand(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.LayerRadialGradient:setExpand");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.LayerRadialGradient:setExpand");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_setExpand'", nullptr);
@@ -62764,11 +62764,11 @@ int lua_ax_base_LayerRadialGradient_initWithColor(lua_State* tolua_S)
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.LayerRadialGradient:initWithColor");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.LayerRadialGradient:initWithColor");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.LayerRadialGradient:initWithColor");
 
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.LayerRadialGradient:initWithColor");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.LayerRadialGradient:initWithColor");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.LayerRadialGradient:initWithColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerRadialGradient_initWithColor'", nullptr);
@@ -62823,13 +62823,13 @@ int lua_ax_base_LayerRadialGradient_create(lua_State* tolua_S)
             ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.LayerRadialGradient:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.LayerRadialGradient:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.LayerRadialGradient:create");
             if (!ok) { break; }
             ax::Vec2 arg3;
             ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.LayerRadialGradient:create");
             if (!ok) { break; }
             double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.LayerRadialGradient:create");
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.LayerRadialGradient:create");
             if (!ok) { break; }
             ax::LayerRadialGradient* ret = ax::LayerRadialGradient::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<ax::LayerRadialGradient>(tolua_S, "ax.LayerRadialGradient",(ax::LayerRadialGradient*)ret);
@@ -62994,11 +62994,11 @@ int lua_ax_base_LayerMultiplex_switchTo(lua_State* tolua_S)
     do{
         if (argc == 2) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.LayerMultiplex:switchTo");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerMultiplex:switchTo");
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.LayerMultiplex:switchTo");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.LayerMultiplex:switchTo");
 
             if (!ok) { break; }
             cobj->switchTo(arg0, arg1);
@@ -63010,7 +63010,7 @@ int lua_ax_base_LayerMultiplex_switchTo(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.LayerMultiplex:switchTo");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerMultiplex:switchTo");
 
             if (!ok) { break; }
             cobj->switchTo(arg0);
@@ -63059,7 +63059,7 @@ int lua_ax_base_LayerMultiplex_switchToAndReleaseMe(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.LayerMultiplex:switchToAndReleaseMe");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerMultiplex:switchToAndReleaseMe");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_LayerMultiplex_switchToAndReleaseMe'", nullptr);
@@ -63455,7 +63455,7 @@ int lua_ax_base_MenuItem_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MenuItem:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MenuItem:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MenuItem_setEnabled'", nullptr);
@@ -64037,11 +64037,11 @@ int lua_ax_base_MenuItemAtlasFont_initWithString(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.MenuItemAtlasFont:initWithString");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.MenuItemAtlasFont:initWithString");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.MenuItemAtlasFont:initWithString");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.MenuItemAtlasFont:initWithString");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.MenuItemAtlasFont:initWithString");
 
-        ok &= luaval_to_int32(tolua_S, 6,&arg4, "ax.MenuItemAtlasFont:initWithString");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.MenuItemAtlasFont:initWithString");
 
         do {
         	// Lambda binding for lua is not supported.
@@ -64155,7 +64155,7 @@ int lua_ax_base_MenuItemFont_setFontSizeObj(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MenuItemFont:setFontSizeObj");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MenuItemFont:setFontSizeObj");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MenuItemFont_setFontSizeObj'", nullptr);
@@ -64394,7 +64394,7 @@ int lua_ax_base_MenuItemFont_setFontSize(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MenuItemFont:setFontSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MenuItemFont:setFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MenuItemFont_setFontSize'", nullptr);
@@ -64997,7 +64997,7 @@ int lua_ax_base_MenuItemSprite_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MenuItemSprite:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MenuItemSprite:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MenuItemSprite_setEnabled'", nullptr);
@@ -65643,7 +65643,7 @@ int lua_ax_base_MenuItemToggle_setSelectedIndex(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.MenuItemToggle:setSelectedIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MenuItemToggle:setSelectedIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MenuItemToggle_setSelectedIndex'", nullptr);
@@ -65903,7 +65903,7 @@ int lua_ax_base_Menu_alignItemsVerticallyWithPadding(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Menu:alignItemsVerticallyWithPadding");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Menu:alignItemsVerticallyWithPadding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_alignItemsVerticallyWithPadding'", nullptr);
@@ -66000,7 +66000,7 @@ int lua_ax_base_Menu_alignItemsHorizontallyWithPadding(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Menu:alignItemsHorizontallyWithPadding");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Menu:alignItemsHorizontallyWithPadding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_alignItemsHorizontallyWithPadding'", nullptr);
@@ -66097,7 +66097,7 @@ int lua_ax_base_Menu_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Menu:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Menu:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Menu_setEnabled'", nullptr);
@@ -66599,7 +66599,7 @@ int lua_ax_base_MotionStreak_setFastMode(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MotionStreak:setFastMode");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MotionStreak:setFastMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MotionStreak_setFastMode'", nullptr);
@@ -66696,7 +66696,7 @@ int lua_ax_base_MotionStreak_setStroke(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak:setStroke");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak:setStroke");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MotionStreak_setStroke'", nullptr);
@@ -66793,7 +66793,7 @@ int lua_ax_base_MotionStreak_setStartingPositionInitialized(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MotionStreak:setStartingPositionInitialized");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MotionStreak:setStartingPositionInitialized");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MotionStreak_setStartingPositionInitialized'", nullptr);
@@ -66837,15 +66837,15 @@ int lua_ax_base_MotionStreak_initWithFade(lua_State* tolua_S)
     do{
         if (argc == 5) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak:initWithFade");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.MotionStreak:initWithFade");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak:initWithFade");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
             ax::Color32 arg3;
@@ -66865,15 +66865,15 @@ int lua_ax_base_MotionStreak_initWithFade(lua_State* tolua_S)
     do{
         if (argc == 5) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak:initWithFade");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.MotionStreak:initWithFade");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak:initWithFade");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.MotionStreak:initWithFade");
 
             if (!ok) { break; }
             ax::Color32 arg3;
@@ -66919,13 +66919,13 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
         if (argc == 5)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.MotionStreak:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.MotionStreak:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.MotionStreak:create");
             if (!ok) { break; }
             ax::Color32 arg3;
             ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak:create");
@@ -66944,13 +66944,13 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
         if (argc == 5)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.MotionStreak:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.MotionStreak:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.MotionStreak:create");
             if (!ok) { break; }
             ax::Color32 arg3;
             ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak:create");
@@ -67428,7 +67428,7 @@ int lua_ax_base_ParticleBatchNode_insertChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::ParticleSystem>(tolua_S, 2, "ax.ParticleSystem",&arg0, "ax.ParticleBatchNode:insertChild");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleBatchNode:insertChild");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleBatchNode:insertChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleBatchNode_insertChild'", nullptr);
@@ -67479,9 +67479,9 @@ int lua_ax_base_ParticleBatchNode_removeChildAtIndex(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleBatchNode:removeChildAtIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleBatchNode:removeChildAtIndex");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ParticleBatchNode:removeChildAtIndex");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ParticleBatchNode:removeChildAtIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleBatchNode_removeChildAtIndex'", nullptr);
@@ -67531,7 +67531,7 @@ int lua_ax_base_ParticleBatchNode_removeAllChildrenWithCleanup(lua_State* tolua_
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleBatchNode:removeAllChildrenWithCleanup");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleBatchNode:removeAllChildrenWithCleanup");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleBatchNode_removeAllChildrenWithCleanup'", nullptr);
@@ -67581,7 +67581,7 @@ int lua_ax_base_ParticleBatchNode_disableParticle(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleBatchNode:disableParticle");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleBatchNode:disableParticle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleBatchNode_disableParticle'", nullptr);
@@ -67925,7 +67925,7 @@ int lua_ax_base_ParticleBatchNode_initWithTexture(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.ParticleBatchNode:initWithTexture");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleBatchNode:initWithTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleBatchNode:initWithTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleBatchNode_initWithTexture'", nullptr);
@@ -67978,7 +67978,7 @@ int lua_ax_base_ParticleBatchNode_initWithFile(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleBatchNode:initWithFile");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleBatchNode:initWithFile");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleBatchNode:initWithFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleBatchNode_initWithFile'", nullptr);
@@ -68031,7 +68031,7 @@ int lua_ax_base_ParticleBatchNode_createWithTexture(lua_State* tolua_S)
         ax::Texture2D* arg0;
         int arg1;
         ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.ParticleBatchNode:createWithTexture");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleBatchNode:createWithTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleBatchNode:createWithTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleBatchNode_createWithTexture'", nullptr);
@@ -68082,7 +68082,7 @@ int lua_ax_base_ParticleBatchNode_create(lua_State* tolua_S)
         std::string_view arg0;
         int arg1;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleBatchNode:create");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleBatchNode:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleBatchNode:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleBatchNode_create'", nullptr);
@@ -68285,7 +68285,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             unsigned int arg2;
-            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.SpriteFrameCache:addSpriteFramesWithFile");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.SpriteFrameCache:addSpriteFramesWithFile");
 
             if (!ok) { break; }
             cobj->addSpriteFramesWithFile(arg0, arg1, arg2);
@@ -68313,7 +68313,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             unsigned int arg1;
-            ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.SpriteFrameCache:addSpriteFramesWithFile");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.SpriteFrameCache:addSpriteFramesWithFile");
 
             if (!ok) { break; }
             cobj->addSpriteFramesWithFile(arg0, arg1);
@@ -68349,7 +68349,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             unsigned int arg2;
-            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.SpriteFrameCache:addSpriteFramesWithFile");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.SpriteFrameCache:addSpriteFramesWithFile");
 
             if (!ok) { break; }
             cobj->addSpriteFramesWithFile(arg0, arg1, arg2);
@@ -69148,7 +69148,7 @@ int lua_ax_base_SpriteFrameCache_deregisterSpriteSheetLoader(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.SpriteFrameCache:deregisterSpriteSheetLoader");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.SpriteFrameCache:deregisterSpriteSheetLoader");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteFrameCache_deregisterSpriteSheetLoader'", nullptr);
@@ -69198,7 +69198,7 @@ int lua_ax_base_SpriteFrameCache_getSpriteSheetLoader(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.SpriteFrameCache:getSpriteSheetLoader");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.SpriteFrameCache:getSpriteSheetLoader");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteFrameCache_getSpriteSheetLoader'", nullptr);
@@ -69356,7 +69356,7 @@ int lua_ax_base_ParticleData_init(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleData:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleData:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleData_init'", nullptr);
@@ -69501,9 +69501,9 @@ int lua_ax_base_ParticleData_copyParticle(lua_State* tolua_S)
         int arg0;
         int arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleData:copyParticle");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleData:copyParticle");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleData:copyParticle");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleData:copyParticle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleData_copyParticle'", nullptr);
@@ -69630,7 +69630,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             cobj->bakeEmissionMask(arg0, arg1, arg2);
@@ -69650,11 +69650,11 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             cobj->bakeEmissionMask(arg0, arg1, arg2, arg3);
@@ -69674,15 +69674,15 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             cobj->bakeEmissionMask(arg0, arg1, arg2, arg3, arg4);
@@ -69718,7 +69718,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             cobj->bakeEmissionMask(arg0, arg1, arg2);
@@ -69738,11 +69738,11 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             cobj->bakeEmissionMask(arg0, arg1, arg2, arg3);
@@ -69762,15 +69762,15 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             int arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
 
             if (!ok) { break; }
             cobj->bakeEmissionMask(arg0, arg1, arg2, arg3, arg4);
@@ -69825,7 +69825,7 @@ int lua_ax_base_ParticleEmissionMaskCache_getEmissionMask(lua_State* tolua_S)
     do{
         if (argc == 1) {
             unsigned int arg0;
-            ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:getEmissionMask");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleEmissionMaskCache:getEmissionMask");
 
             if (!ok) { break; }
             const ax::ParticleEmissionMaskDesc& ret = cobj->getEmissionMask(arg0);
@@ -70029,7 +70029,7 @@ int lua_ax_base_ParticleSystem_addParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:addParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_addParticles'", nullptr);
@@ -70044,9 +70044,9 @@ int lua_ax_base_ParticleSystem_addParticles(lua_State* tolua_S)
         int arg0;
         int arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:addParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addParticles");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleSystem:addParticles");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleSystem:addParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_addParticles'", nullptr);
@@ -70062,11 +70062,11 @@ int lua_ax_base_ParticleSystem_addParticles(lua_State* tolua_S)
         int arg1;
         int arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:addParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addParticles");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleSystem:addParticles");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleSystem:addParticles");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ParticleSystem:addParticles");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ParticleSystem:addParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_addParticles'", nullptr);
@@ -70445,7 +70445,7 @@ int lua_ax_base_ParticleSystem_setAutoRemoveOnFinish(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setAutoRemoveOnFinish");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setAutoRemoveOnFinish");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setAutoRemoveOnFinish'", nullptr);
@@ -70639,7 +70639,7 @@ int lua_ax_base_ParticleSystem_setSpeed(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setSpeed");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setSpeed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSpeed'", nullptr);
@@ -70736,7 +70736,7 @@ int lua_ax_base_ParticleSystem_setSpeedVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setSpeedVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setSpeedVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSpeedVar'", nullptr);
@@ -70833,7 +70833,7 @@ int lua_ax_base_ParticleSystem_setTangentialAccel(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setTangentialAccel");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setTangentialAccel");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setTangentialAccel'", nullptr);
@@ -70930,7 +70930,7 @@ int lua_ax_base_ParticleSystem_setTangentialAccelVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setTangentialAccelVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setTangentialAccelVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setTangentialAccelVar'", nullptr);
@@ -71027,7 +71027,7 @@ int lua_ax_base_ParticleSystem_setRadialAccel(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setRadialAccel");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setRadialAccel");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setRadialAccel'", nullptr);
@@ -71124,7 +71124,7 @@ int lua_ax_base_ParticleSystem_setRadialAccelVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setRadialAccelVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setRadialAccelVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setRadialAccelVar'", nullptr);
@@ -71221,7 +71221,7 @@ int lua_ax_base_ParticleSystem_setRotationIsDir(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setRotationIsDir");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setRotationIsDir");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setRotationIsDir'", nullptr);
@@ -71318,7 +71318,7 @@ int lua_ax_base_ParticleSystem_setStartRadius(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setStartRadius");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setStartRadius");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setStartRadius'", nullptr);
@@ -71415,7 +71415,7 @@ int lua_ax_base_ParticleSystem_setStartRadiusVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setStartRadiusVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setStartRadiusVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setStartRadiusVar'", nullptr);
@@ -71512,7 +71512,7 @@ int lua_ax_base_ParticleSystem_setEndRadius(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setEndRadius");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setEndRadius");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEndRadius'", nullptr);
@@ -71609,7 +71609,7 @@ int lua_ax_base_ParticleSystem_setEndRadiusVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setEndRadiusVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setEndRadiusVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEndRadiusVar'", nullptr);
@@ -71706,7 +71706,7 @@ int lua_ax_base_ParticleSystem_setRotatePerSecond(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setRotatePerSecond");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setRotatePerSecond");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setRotatePerSecond'", nullptr);
@@ -71803,7 +71803,7 @@ int lua_ax_base_ParticleSystem_setRotatePerSecondVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setRotatePerSecondVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setRotatePerSecondVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setRotatePerSecondVar'", nullptr);
@@ -71947,7 +71947,7 @@ int lua_ax_base_ParticleSystem_setBlendAdditive(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setBlendAdditive");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setBlendAdditive");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setBlendAdditive'", nullptr);
@@ -72141,7 +72141,7 @@ int lua_ax_base_ParticleSystem_setAtlasIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:setAtlasIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAtlasIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setAtlasIndex'", nullptr);
@@ -72285,7 +72285,7 @@ int lua_ax_base_ParticleSystem_setDuration(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setDuration'", nullptr);
@@ -72576,7 +72576,7 @@ int lua_ax_base_ParticleSystem_setLife(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setLife");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setLife");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setLife'", nullptr);
@@ -72673,7 +72673,7 @@ int lua_ax_base_ParticleSystem_setLifeVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setLifeVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setLifeVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setLifeVar'", nullptr);
@@ -72770,7 +72770,7 @@ int lua_ax_base_ParticleSystem_setAngle(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setAngle");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setAngle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setAngle'", nullptr);
@@ -72867,7 +72867,7 @@ int lua_ax_base_ParticleSystem_setAngleVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setAngleVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setAngleVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setAngleVar'", nullptr);
@@ -72964,7 +72964,7 @@ int lua_ax_base_ParticleSystem_setEmitterMode(lua_State* tolua_S)
     {
         ax::ParticleSystem::Mode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:setEmitterMode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setEmitterMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEmitterMode'", nullptr);
@@ -73061,7 +73061,7 @@ int lua_ax_base_ParticleSystem_setStartSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setStartSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setStartSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setStartSize'", nullptr);
@@ -73158,7 +73158,7 @@ int lua_ax_base_ParticleSystem_setStartSizeVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setStartSizeVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setStartSizeVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setStartSizeVar'", nullptr);
@@ -73255,7 +73255,7 @@ int lua_ax_base_ParticleSystem_setEndSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setEndSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setEndSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEndSize'", nullptr);
@@ -73352,7 +73352,7 @@ int lua_ax_base_ParticleSystem_setEndSizeVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setEndSizeVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setEndSizeVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEndSizeVar'", nullptr);
@@ -73790,7 +73790,7 @@ int lua_ax_base_ParticleSystem_useHSV(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:useHSV");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:useHSV");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_useHSV'", nullptr);
@@ -73934,7 +73934,7 @@ int lua_ax_base_ParticleSystem_setHue(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setHue");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setHue");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setHue'", nullptr);
@@ -74031,7 +74031,7 @@ int lua_ax_base_ParticleSystem_setHueVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setHueVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setHueVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setHueVar'", nullptr);
@@ -74324,7 +74324,7 @@ int lua_ax_base_ParticleSystem_setStartSpin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setStartSpin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setStartSpin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setStartSpin'", nullptr);
@@ -74421,7 +74421,7 @@ int lua_ax_base_ParticleSystem_setStartSpinVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setStartSpinVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setStartSpinVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setStartSpinVar'", nullptr);
@@ -74518,7 +74518,7 @@ int lua_ax_base_ParticleSystem_setEndSpin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setEndSpin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setEndSpin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEndSpin'", nullptr);
@@ -74615,7 +74615,7 @@ int lua_ax_base_ParticleSystem_setEndSpinVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setEndSpinVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setEndSpinVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEndSpinVar'", nullptr);
@@ -74712,7 +74712,7 @@ int lua_ax_base_ParticleSystem_setSpawnAngle(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setSpawnAngle");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setSpawnAngle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSpawnAngle'", nullptr);
@@ -74809,7 +74809,7 @@ int lua_ax_base_ParticleSystem_setSpawnAngleVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setSpawnAngleVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setSpawnAngleVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSpawnAngleVar'", nullptr);
@@ -74906,7 +74906,7 @@ int lua_ax_base_ParticleSystem_setSpawnFadeIn(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setSpawnFadeIn");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setSpawnFadeIn");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSpawnFadeIn'", nullptr);
@@ -75003,7 +75003,7 @@ int lua_ax_base_ParticleSystem_setSpawnFadeInVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setSpawnFadeInVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setSpawnFadeInVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSpawnFadeInVar'", nullptr);
@@ -75100,7 +75100,7 @@ int lua_ax_base_ParticleSystem_setSpawnScaleIn(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setSpawnScaleIn");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setSpawnScaleIn");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSpawnScaleIn'", nullptr);
@@ -75197,7 +75197,7 @@ int lua_ax_base_ParticleSystem_setSpawnScaleInVar(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setSpawnScaleInVar");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setSpawnScaleInVar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSpawnScaleInVar'", nullptr);
@@ -75294,7 +75294,7 @@ int lua_ax_base_ParticleSystem_setEmissionRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setEmissionRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setEmissionRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEmissionRate'", nullptr);
@@ -75391,7 +75391,7 @@ int lua_ax_base_ParticleSystem_setTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:setTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setTotalParticles'", nullptr);
@@ -75441,7 +75441,7 @@ int lua_ax_base_ParticleSystem_setLifeAnimation(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setLifeAnimation");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setLifeAnimation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setLifeAnimation'", nullptr);
@@ -75491,7 +75491,7 @@ int lua_ax_base_ParticleSystem_setEmitterAnimation(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setEmitterAnimation");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setEmitterAnimation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEmitterAnimation'", nullptr);
@@ -75541,7 +75541,7 @@ int lua_ax_base_ParticleSystem_setLoopAnimation(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setLoopAnimation");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setLoopAnimation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setLoopAnimation'", nullptr);
@@ -75779,7 +75779,7 @@ int lua_ax_base_ParticleSystem_setAnimationReverse(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setAnimationReverse");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationReverse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setAnimationReverse'", nullptr);
@@ -76061,7 +76061,7 @@ int lua_ax_base_ParticleSystem_setAnimationIndicesAtlas(lua_State* tolua_S)
     do{
         if (argc == 1) {
             unsigned int arg0;
-            ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.ParticleSystem:setAnimationIndicesAtlas");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationIndicesAtlas");
 
             if (!ok) { break; }
             cobj->setAnimationIndicesAtlas(arg0);
@@ -76073,11 +76073,11 @@ int lua_ax_base_ParticleSystem_setAnimationIndicesAtlas(lua_State* tolua_S)
     do{
         if (argc == 2) {
             unsigned int arg0;
-            ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.ParticleSystem:setAnimationIndicesAtlas");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationIndicesAtlas");
 
             if (!ok) { break; }
             ax::ParticleSystem::TexAnimDir arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParticleSystem:setAnimationIndicesAtlas");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParticleSystem:setAnimationIndicesAtlas");
 
             if (!ok) { break; }
             cobj->setAnimationIndicesAtlas(arg0, arg1);
@@ -76128,7 +76128,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
     do{
         if (argc == 2) {
             unsigned short arg0;
-            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -76168,7 +76168,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
     do{
         if (argc == 2) {
             unsigned short arg0;
-            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
 
             if (!ok) { break; }
             ax::SpriteFrame* arg1;
@@ -76184,7 +76184,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
     do{
         if (argc == 2) {
             unsigned short arg0;
-            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
 
             if (!ok) { break; }
             ax::Rect arg1;
@@ -76200,7 +76200,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
     do{
         if (argc == 3) {
             unsigned short arg0;
-            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
 
             if (!ok) { break; }
             ax::Rect arg1;
@@ -76208,7 +76208,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.ParticleSystem:addAnimationIndex");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.ParticleSystem:addAnimationIndex");
 
             if (!ok) { break; }
             bool ret = cobj->addAnimationIndex(arg0, arg1, arg2);
@@ -76317,7 +76317,7 @@ int lua_ax_base_ParticleSystem_setAnimationDesc(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ParticleSystem:setAnimationDesc");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ParticleSystem:setAnimationDesc");
 
             if (!ok) { break; }
             cobj->setAnimationDesc(arg0, arg1);
@@ -76329,15 +76329,15 @@ int lua_ax_base_ParticleSystem_setAnimationDesc(lua_State* tolua_S)
     do{
         if (argc == 4) {
             unsigned short arg0;
-            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationDesc");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationDesc");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:setAnimationDesc");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:setAnimationDesc");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:setAnimationDesc");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:setAnimationDesc");
 
             if (!ok) { break; }
             std::vector<unsigned short> arg3;
@@ -76353,15 +76353,15 @@ int lua_ax_base_ParticleSystem_setAnimationDesc(lua_State* tolua_S)
     do{
         if (argc == 5) {
             unsigned short arg0;
-            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationDesc");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationDesc");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:setAnimationDesc");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:setAnimationDesc");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:setAnimationDesc");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:setAnimationDesc");
 
             if (!ok) { break; }
             std::vector<unsigned short> arg3;
@@ -76369,7 +76369,7 @@ int lua_ax_base_ParticleSystem_setAnimationDesc(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.ParticleSystem:setAnimationDesc");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.ParticleSystem:setAnimationDesc");
 
             if (!ok) { break; }
             cobj->setAnimationDesc(arg0, arg1, arg2, arg3, arg4);
@@ -76418,7 +76418,7 @@ int lua_ax_base_ParticleSystem_setAnimationSpeedTimescaleIndependent(lua_State* 
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setAnimationSpeedTimescaleIndependent");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationSpeedTimescaleIndependent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setAnimationSpeedTimescaleIndependent'", nullptr);
@@ -76515,7 +76515,7 @@ int lua_ax_base_ParticleSystem_setEmissionShapes(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setEmissionShapes");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setEmissionShapes");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setEmissionShapes'", nullptr);
@@ -76711,7 +76711,7 @@ int lua_ax_base_ParticleSystem_setEmissionShape(lua_State* tolua_S)
         unsigned short arg0;
         ax::EmissionShape arg1;
 
-        ok &= luaval_to_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:setEmissionShape");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setEmissionShape");
 
         #pragma warning NO CONVERSION TO NATIVE FOR EmissionShape
         ok = false;
@@ -76811,7 +76811,7 @@ int lua_ax_base_ParticleSystem_setPositionType(lua_State* tolua_S)
     {
         ax::ParticleSystem::PositionType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:setPositionType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setPositionType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setPositionType'", nullptr);
@@ -76872,7 +76872,7 @@ int lua_ax_base_ParticleSystem_simulate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:simulate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:simulate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_simulate'", nullptr);
@@ -76887,9 +76887,9 @@ int lua_ax_base_ParticleSystem_simulate(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:simulate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:simulate");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:simulate");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:simulate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_simulate'", nullptr);
@@ -76950,7 +76950,7 @@ int lua_ax_base_ParticleSystem_resimulate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:resimulate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:resimulate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_resimulate'", nullptr);
@@ -76965,9 +76965,9 @@ int lua_ax_base_ParticleSystem_resimulate(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:resimulate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:resimulate");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:resimulate");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:resimulate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_resimulate'", nullptr);
@@ -77352,7 +77352,7 @@ int lua_ax_base_ParticleSystem_setSourcePositionCompatible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParticleSystem:setSourcePositionCompatible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParticleSystem:setSourcePositionCompatible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setSourcePositionCompatible'", nullptr);
@@ -77558,7 +77558,7 @@ int lua_ax_base_ParticleSystem_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_initWithTotalParticles'", nullptr);
@@ -77807,7 +77807,7 @@ int lua_ax_base_ParticleSystem_setFixedFPS(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setFixedFPS");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setFixedFPS");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setFixedFPS'", nullptr);
@@ -77915,7 +77915,7 @@ int lua_ax_base_ParticleSystem_setTimeScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ParticleSystem:setTimeScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ParticleSystem:setTimeScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_setTimeScale'", nullptr);
@@ -77989,7 +77989,7 @@ int lua_ax_base_ParticleSystem_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystem:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createWithTotalParticles'", nullptr);
@@ -78131,7 +78131,7 @@ int lua_ax_base_ParticleSystem_createMaskShape(lua_State* tolua_S)
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.ParticleSystem:createMaskShape");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.ParticleSystem:createMaskShape");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.ParticleSystem:createMaskShape");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.ParticleSystem:createMaskShape");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.ParticleSystem:createMaskShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createMaskShape'", nullptr);
@@ -78283,7 +78283,7 @@ int lua_ax_base_ParticleSystem_createCircleShape(lua_State* tolua_S)
         ax::Vec2 arg0;
         double arg1;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ParticleSystem:createCircleShape");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:createCircleShape");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:createCircleShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createCircleShape'", nullptr);
@@ -78299,8 +78299,8 @@ int lua_ax_base_ParticleSystem_createCircleShape(lua_State* tolua_S)
         double arg1;
         double arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ParticleSystem:createCircleShape");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:createCircleShape");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:createCircleShape");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:createCircleShape");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:createCircleShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createCircleShape'", nullptr);
@@ -78340,9 +78340,9 @@ int lua_ax_base_ParticleSystem_createConeShape(lua_State* tolua_S)
         double arg2;
         double arg3;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ParticleSystem:createConeShape");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:createConeShape");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:createConeShape");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ParticleSystem:createConeShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createConeShape'", nullptr);
@@ -78360,10 +78360,10 @@ int lua_ax_base_ParticleSystem_createConeShape(lua_State* tolua_S)
         double arg3;
         double arg4;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ParticleSystem:createConeShape");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:createConeShape");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:createConeShape");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ParticleSystem:createConeShape");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.ParticleSystem:createConeShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createConeShape'", nullptr);
@@ -78402,8 +78402,8 @@ int lua_ax_base_ParticleSystem_createTorusShape(lua_State* tolua_S)
         double arg1;
         double arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ParticleSystem:createTorusShape");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:createTorusShape");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:createTorusShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createTorusShape'", nullptr);
@@ -78420,9 +78420,9 @@ int lua_ax_base_ParticleSystem_createTorusShape(lua_State* tolua_S)
         double arg2;
         double arg3;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ParticleSystem:createTorusShape");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:createTorusShape");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:createTorusShape");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ParticleSystem:createTorusShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createTorusShape'", nullptr);
@@ -78463,10 +78463,10 @@ int lua_ax_base_ParticleSystem_createConeTorusShape(lua_State* tolua_S)
         double arg3;
         double arg4;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.ParticleSystem:createConeTorusShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createConeTorusShape'", nullptr);
@@ -78485,11 +78485,11 @@ int lua_ax_base_ParticleSystem_createConeTorusShape(lua_State* tolua_S)
         double arg4;
         double arg5;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.ParticleSystem:createConeTorusShape");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.ParticleSystem:createConeTorusShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystem_createConeTorusShape'", nullptr);
@@ -78962,7 +78962,7 @@ int lua_ax_base_ParticleSystemQuad_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSystemQuad:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystemQuad:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSystemQuad_createWithTotalParticles'", nullptr);
@@ -79094,7 +79094,7 @@ int lua_ax_base_ParticleFire_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleFire:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleFire:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleFire_createWithTotalParticles'", nullptr);
@@ -79248,7 +79248,7 @@ int lua_ax_base_ParticleFireworks_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleFireworks:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleFireworks:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleFireworks_initWithTotalParticles'", nullptr);
@@ -79320,7 +79320,7 @@ int lua_ax_base_ParticleFireworks_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleFireworks:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleFireworks:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleFireworks_createWithTotalParticles'", nullptr);
@@ -79476,7 +79476,7 @@ int lua_ax_base_ParticleSun_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSun:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSun:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSun_initWithTotalParticles'", nullptr);
@@ -79548,7 +79548,7 @@ int lua_ax_base_ParticleSun_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSun:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSun:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSun_createWithTotalParticles'", nullptr);
@@ -79704,7 +79704,7 @@ int lua_ax_base_ParticleGalaxy_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleGalaxy:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleGalaxy:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleGalaxy_initWithTotalParticles'", nullptr);
@@ -79776,7 +79776,7 @@ int lua_ax_base_ParticleGalaxy_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleGalaxy:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleGalaxy:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleGalaxy_createWithTotalParticles'", nullptr);
@@ -79932,7 +79932,7 @@ int lua_ax_base_ParticleFlower_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleFlower:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleFlower:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleFlower_initWithTotalParticles'", nullptr);
@@ -80004,7 +80004,7 @@ int lua_ax_base_ParticleFlower_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleFlower:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleFlower:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleFlower_createWithTotalParticles'", nullptr);
@@ -80160,7 +80160,7 @@ int lua_ax_base_ParticleMeteor_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleMeteor:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleMeteor:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleMeteor_initWithTotalParticles'", nullptr);
@@ -80232,7 +80232,7 @@ int lua_ax_base_ParticleMeteor_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleMeteor:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleMeteor:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleMeteor_createWithTotalParticles'", nullptr);
@@ -80388,7 +80388,7 @@ int lua_ax_base_ParticleSpiral_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSpiral:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSpiral:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSpiral_initWithTotalParticles'", nullptr);
@@ -80460,7 +80460,7 @@ int lua_ax_base_ParticleSpiral_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSpiral:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSpiral:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSpiral_createWithTotalParticles'", nullptr);
@@ -80616,7 +80616,7 @@ int lua_ax_base_ParticleExplosion_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleExplosion:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleExplosion:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleExplosion_initWithTotalParticles'", nullptr);
@@ -80688,7 +80688,7 @@ int lua_ax_base_ParticleExplosion_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleExplosion:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleExplosion:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleExplosion_createWithTotalParticles'", nullptr);
@@ -80844,7 +80844,7 @@ int lua_ax_base_ParticleSmoke_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSmoke:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSmoke:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSmoke_initWithTotalParticles'", nullptr);
@@ -80916,7 +80916,7 @@ int lua_ax_base_ParticleSmoke_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSmoke:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSmoke:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSmoke_createWithTotalParticles'", nullptr);
@@ -81072,7 +81072,7 @@ int lua_ax_base_ParticleSnow_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSnow:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSnow:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSnow_initWithTotalParticles'", nullptr);
@@ -81144,7 +81144,7 @@ int lua_ax_base_ParticleSnow_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleSnow:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSnow:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleSnow_createWithTotalParticles'", nullptr);
@@ -81300,7 +81300,7 @@ int lua_ax_base_ParticleRain_initWithTotalParticles(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleRain:initWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleRain:initWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleRain_initWithTotalParticles'", nullptr);
@@ -81372,7 +81372,7 @@ int lua_ax_base_ParticleRain_createWithTotalParticles(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ParticleRain:createWithTotalParticles");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleRain:createWithTotalParticles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParticleRain_createWithTotalParticles'", nullptr);
@@ -81622,7 +81622,7 @@ int lua_ax_base_ProgressTimer_setPercentage(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ProgressTimer:setPercentage");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ProgressTimer:setPercentage");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgressTimer_setPercentage'", nullptr);
@@ -81722,7 +81722,7 @@ int lua_ax_base_ProgressTimer_setType(lua_State* tolua_S)
     {
         ax::ProgressTimer::Type arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ProgressTimer:setType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ProgressTimer:setType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgressTimer_setType'", nullptr);
@@ -81819,7 +81819,7 @@ int lua_ax_base_ProgressTimer_setReverseDirection(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ProgressTimer:setReverseDirection");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ProgressTimer:setReverseDirection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgressTimer_setReverseDirection'", nullptr);
@@ -82218,7 +82218,7 @@ int lua_ax_base_ProtectedNode_addProtectedChild(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ProtectedNode:addProtectedChild");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ProtectedNode:addProtectedChild");
 
             if (!ok) { break; }
             cobj->addProtectedChild(arg0, arg1);
@@ -82246,11 +82246,11 @@ int lua_ax_base_ProtectedNode_addProtectedChild(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ProtectedNode:addProtectedChild");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ProtectedNode:addProtectedChild");
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ProtectedNode:addProtectedChild");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ProtectedNode:addProtectedChild");
 
             if (!ok) { break; }
             cobj->addProtectedChild(arg0, arg1, arg2);
@@ -82299,7 +82299,7 @@ int lua_ax_base_ProtectedNode_getProtectedChildByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ProtectedNode:getProtectedChildByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ProtectedNode:getProtectedChildByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_getProtectedChildByTag'", nullptr);
@@ -82416,7 +82416,7 @@ int lua_ax_base_ProtectedNode_removeProtectedChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ProtectedNode:removeProtectedChild");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ProtectedNode:removeProtectedChild");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ProtectedNode:removeProtectedChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_removeProtectedChild'", nullptr);
@@ -82466,7 +82466,7 @@ int lua_ax_base_ProtectedNode_removeProtectedChildByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ProtectedNode:removeProtectedChildByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ProtectedNode:removeProtectedChildByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_removeProtectedChildByTag'", nullptr);
@@ -82481,9 +82481,9 @@ int lua_ax_base_ProtectedNode_removeProtectedChildByTag(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ProtectedNode:removeProtectedChildByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ProtectedNode:removeProtectedChildByTag");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.ProtectedNode:removeProtectedChildByTag");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.ProtectedNode:removeProtectedChildByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_removeProtectedChildByTag'", nullptr);
@@ -82580,7 +82580,7 @@ int lua_ax_base_ProtectedNode_removeAllProtectedChildrenWithCleanup(lua_State* t
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ProtectedNode:removeAllProtectedChildrenWithCleanup");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ProtectedNode:removeAllProtectedChildrenWithCleanup");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_removeAllProtectedChildrenWithCleanup'", nullptr);
@@ -82633,7 +82633,7 @@ int lua_ax_base_ProtectedNode_reorderProtectedChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ProtectedNode:reorderProtectedChild");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ProtectedNode:reorderProtectedChild");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ProtectedNode:reorderProtectedChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_reorderProtectedChild'", nullptr);
@@ -83016,23 +83016,23 @@ int lua_ax_base_RenderTexture_beginWithClear(lua_State* tolua_S)
     do{
         if (argc == 5) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             cobj->beginWithClear(arg0, arg1, arg2, arg3, arg4);
@@ -83044,19 +83044,19 @@ int lua_ax_base_RenderTexture_beginWithClear(lua_State* tolua_S)
     do{
         if (argc == 4) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             cobj->beginWithClear(arg0, arg1, arg2, arg3);
@@ -83068,27 +83068,27 @@ int lua_ax_base_RenderTexture_beginWithClear(lua_State* tolua_S)
     do{
         if (argc == 6) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             double arg4;
-            ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             int arg5;
-            ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.RenderTexture:beginWithClear");
+            ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.RenderTexture:beginWithClear");
 
             if (!ok) { break; }
             cobj->beginWithClear(arg0, arg1, arg2, arg3, arg4, arg5);
@@ -83187,13 +83187,13 @@ int lua_ax_base_RenderTexture_clear(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderTexture:clear");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:clear");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.RenderTexture:clear");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderTexture:clear");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderTexture:clear");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderTexture:clear");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.RenderTexture:clear");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderTexture:clear");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_clear'", nullptr);
@@ -83243,7 +83243,7 @@ int lua_ax_base_RenderTexture_clearDepth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderTexture:clearDepth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:clearDepth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_clearDepth'", nullptr);
@@ -83293,7 +83293,7 @@ int lua_ax_base_RenderTexture_clearStencil(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:clearStencil");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:clearStencil");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_clearStencil'", nullptr);
@@ -83341,11 +83341,11 @@ int lua_ax_base_RenderTexture_saveToFileAsNonPMA(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::Image::Format arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:saveToFileAsNonPMA");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:saveToFileAsNonPMA");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.RenderTexture:saveToFileAsNonPMA");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.RenderTexture:saveToFileAsNonPMA");
 
             if (!ok) { break; }
             std::function<void (ax::RenderTexture *, std::string_view)> arg3;
@@ -83381,7 +83381,7 @@ int lua_ax_base_RenderTexture_saveToFileAsNonPMA(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.RenderTexture:saveToFileAsNonPMA");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.RenderTexture:saveToFileAsNonPMA");
 
             if (!ok) { break; }
             bool ret = cobj->saveToFileAsNonPMA(arg0, arg1);
@@ -83397,7 +83397,7 @@ int lua_ax_base_RenderTexture_saveToFileAsNonPMA(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.RenderTexture:saveToFileAsNonPMA");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.RenderTexture:saveToFileAsNonPMA");
 
             if (!ok) { break; }
             std::function<void (ax::RenderTexture *, std::string_view)> arg2;
@@ -83452,7 +83452,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::Image::Format arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:saveToFile");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:saveToFile");
 
             if (!ok) { break; }
             bool ret = cobj->saveToFile(arg0, arg1);
@@ -83468,11 +83468,11 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::Image::Format arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:saveToFile");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:saveToFile");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.RenderTexture:saveToFile");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.RenderTexture:saveToFile");
 
             if (!ok) { break; }
             bool ret = cobj->saveToFile(arg0, arg1, arg2);
@@ -83488,11 +83488,11 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::Image::Format arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:saveToFile");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:saveToFile");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.RenderTexture:saveToFile");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.RenderTexture:saveToFile");
 
             if (!ok) { break; }
             std::function<void (ax::RenderTexture *, std::string_view)> arg3;
@@ -83528,7 +83528,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.RenderTexture:saveToFile");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.RenderTexture:saveToFile");
 
             if (!ok) { break; }
             bool ret = cobj->saveToFile(arg0, arg1);
@@ -83544,7 +83544,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.RenderTexture:saveToFile");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.RenderTexture:saveToFile");
 
             if (!ok) { break; }
             std::function<void (ax::RenderTexture *, std::string_view)> arg2;
@@ -83648,7 +83648,7 @@ int lua_ax_base_RenderTexture_setClearFlags(lua_State* tolua_S)
     {
         ax::rhi::TargetBufferFlags arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:setClearFlags");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:setClearFlags");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_setClearFlags'", nullptr);
@@ -83842,7 +83842,7 @@ int lua_ax_base_RenderTexture_setClearDepth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.RenderTexture:setClearDepth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:setClearDepth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_setClearDepth'", nullptr);
@@ -83939,7 +83939,7 @@ int lua_ax_base_RenderTexture_setClearStencil(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:setClearStencil");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:setClearStencil");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_setClearStencil'", nullptr);
@@ -84036,7 +84036,7 @@ int lua_ax_base_RenderTexture_setAutoDraw(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RenderTexture:setAutoDraw");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderTexture:setAutoDraw");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_setAutoDraw'", nullptr);
@@ -84180,7 +84180,7 @@ int lua_ax_base_RenderTexture_setKeepMatrix(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.RenderTexture:setKeepMatrix");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.RenderTexture:setKeepMatrix");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderTexture_setKeepMatrix'", nullptr);
@@ -84327,19 +84327,19 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
     do{
         if (argc == 4) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             bool ret = cobj->initWithWidthAndHeight(arg0, arg1, arg2, arg3);
@@ -84351,23 +84351,23 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
     do{
         if (argc == 5) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             bool ret = cobj->initWithWidthAndHeight(arg0, arg1, arg2, arg3, arg4);
@@ -84379,15 +84379,15 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
     do{
         if (argc == 3) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             bool ret = cobj->initWithWidthAndHeight(arg0, arg1, arg2);
@@ -84399,19 +84399,19 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
     do{
         if (argc == 4) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.RenderTexture:initWithWidthAndHeight");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.RenderTexture:initWithWidthAndHeight");
 
             if (!ok) { break; }
             bool ret = cobj->initWithWidthAndHeight(arg0, arg1, arg2, arg3);
@@ -84485,13 +84485,13 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         if (argc == 3)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2);
             object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
@@ -84504,16 +84504,16 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         if (argc == 4)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.RenderTexture:create");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
@@ -84526,16 +84526,16 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         if (argc == 4)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::rhi::PixelFormat arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
@@ -84548,19 +84548,19 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         if (argc == 5)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::rhi::PixelFormat arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.RenderTexture:create");
             if (!ok) { break; }
             bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.RenderTexture:create");
+            ok &= luaval_to_boolean(tolua_S, 6, &arg4, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
@@ -84573,10 +84573,10 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         if (argc == 2)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1);
             object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
@@ -84589,13 +84589,13 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         if (argc == 3)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:create");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.RenderTexture:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.RenderTexture:create");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.RenderTexture:create");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.RenderTexture:create");
             if (!ok) { break; }
             ax::RenderTexture* ret = ax::RenderTexture::create(arg0, arg1, arg2);
             object_to_luaval<ax::RenderTexture>(tolua_S, "ax.RenderTexture",(ax::RenderTexture*)ret);
@@ -84983,7 +84983,7 @@ int lua_ax_base_TransitionScene_initWithDuration(lua_State* tolua_S)
         double arg0;
         ax::Scene* arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionScene:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionScene:initWithDuration");
 
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionScene:initWithDuration");
         if(!ok)
@@ -85024,7 +85024,7 @@ int lua_ax_base_TransitionScene_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionScene:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionScene:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionScene:create");
         if(!ok)
         {
@@ -85138,11 +85138,11 @@ int lua_ax_base_TransitionSceneOriented_initWithDuration(lua_State* tolua_S)
         ax::Scene* arg1;
         ax::TransitionScene::Orientation arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionSceneOriented:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionSceneOriented:initWithDuration");
 
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionSceneOriented:initWithDuration");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TransitionSceneOriented:initWithDuration");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TransitionSceneOriented:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TransitionSceneOriented_initWithDuration'", nullptr);
@@ -85182,9 +85182,9 @@ int lua_ax_base_TransitionSceneOriented_create(lua_State* tolua_S)
         double arg0;
         ax::Scene* arg1;
         ax::TransitionScene::Orientation arg2;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionSceneOriented:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionSceneOriented:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionSceneOriented:create");
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TransitionSceneOriented:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TransitionSceneOriented:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TransitionSceneOriented_create'", nullptr);
@@ -85280,7 +85280,7 @@ int lua_ax_base_TransitionRotoZoom_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionRotoZoom:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionRotoZoom:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionRotoZoom:create");
         if(!ok)
         {
@@ -85376,7 +85376,7 @@ int lua_ax_base_TransitionJumpZoom_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionJumpZoom:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionJumpZoom:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionJumpZoom:create");
         if(!ok)
         {
@@ -85569,7 +85569,7 @@ int lua_ax_base_TransitionMoveInL_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionMoveInL:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionMoveInL:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionMoveInL:create");
         if(!ok)
         {
@@ -85667,7 +85667,7 @@ int lua_ax_base_TransitionMoveInR_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionMoveInR:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionMoveInR:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionMoveInR:create");
         if(!ok)
         {
@@ -85763,7 +85763,7 @@ int lua_ax_base_TransitionMoveInT_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionMoveInT:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionMoveInT:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionMoveInT:create");
         if(!ok)
         {
@@ -85859,7 +85859,7 @@ int lua_ax_base_TransitionMoveInB_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionMoveInB:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionMoveInB:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionMoveInB:create");
         if(!ok)
         {
@@ -86052,7 +86052,7 @@ int lua_ax_base_TransitionSlideInL_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionSlideInL:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionSlideInL:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionSlideInL:create");
         if(!ok)
         {
@@ -86150,7 +86150,7 @@ int lua_ax_base_TransitionSlideInR_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionSlideInR:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionSlideInR:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionSlideInR:create");
         if(!ok)
         {
@@ -86246,7 +86246,7 @@ int lua_ax_base_TransitionSlideInB_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionSlideInB:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionSlideInB:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionSlideInB:create");
         if(!ok)
         {
@@ -86342,7 +86342,7 @@ int lua_ax_base_TransitionSlideInT_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionSlideInT:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionSlideInT:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionSlideInT:create");
         if(!ok)
         {
@@ -86488,7 +86488,7 @@ int lua_ax_base_TransitionShrinkGrow_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionShrinkGrow:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionShrinkGrow:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionShrinkGrow:create");
         if(!ok)
         {
@@ -86585,7 +86585,7 @@ int lua_ax_base_TransitionFlipX_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFlipX:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFlipX:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFlipX:create");
@@ -86601,13 +86601,13 @@ int lua_ax_base_TransitionFlipX_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFlipX:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFlipX:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFlipX:create");
             if (!ok) { break; }
             ax::TransitionScene::Orientation arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TransitionFlipX:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TransitionFlipX:create");
             if (!ok) { break; }
             ax::TransitionFlipX* ret = ax::TransitionFlipX::create(arg0, arg1, arg2);
             object_to_luaval<ax::TransitionFlipX>(tolua_S, "ax.TransitionFlipX",(ax::TransitionFlipX*)ret);
@@ -86700,7 +86700,7 @@ int lua_ax_base_TransitionFlipY_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFlipY:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFlipY:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFlipY:create");
@@ -86716,13 +86716,13 @@ int lua_ax_base_TransitionFlipY_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFlipY:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFlipY:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFlipY:create");
             if (!ok) { break; }
             ax::TransitionScene::Orientation arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TransitionFlipY:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TransitionFlipY:create");
             if (!ok) { break; }
             ax::TransitionFlipY* ret = ax::TransitionFlipY::create(arg0, arg1, arg2);
             object_to_luaval<ax::TransitionFlipY>(tolua_S, "ax.TransitionFlipY",(ax::TransitionFlipY*)ret);
@@ -86815,7 +86815,7 @@ int lua_ax_base_TransitionFlipAngular_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFlipAngular:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFlipAngular:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFlipAngular:create");
@@ -86831,13 +86831,13 @@ int lua_ax_base_TransitionFlipAngular_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFlipAngular:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFlipAngular:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFlipAngular:create");
             if (!ok) { break; }
             ax::TransitionScene::Orientation arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TransitionFlipAngular:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TransitionFlipAngular:create");
             if (!ok) { break; }
             ax::TransitionFlipAngular* ret = ax::TransitionFlipAngular::create(arg0, arg1, arg2);
             object_to_luaval<ax::TransitionFlipAngular>(tolua_S, "ax.TransitionFlipAngular",(ax::TransitionFlipAngular*)ret);
@@ -86930,7 +86930,7 @@ int lua_ax_base_TransitionZoomFlipX_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionZoomFlipX:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionZoomFlipX:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionZoomFlipX:create");
@@ -86946,13 +86946,13 @@ int lua_ax_base_TransitionZoomFlipX_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionZoomFlipX:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionZoomFlipX:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionZoomFlipX:create");
             if (!ok) { break; }
             ax::TransitionScene::Orientation arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TransitionZoomFlipX:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TransitionZoomFlipX:create");
             if (!ok) { break; }
             ax::TransitionZoomFlipX* ret = ax::TransitionZoomFlipX::create(arg0, arg1, arg2);
             object_to_luaval<ax::TransitionZoomFlipX>(tolua_S, "ax.TransitionZoomFlipX",(ax::TransitionZoomFlipX*)ret);
@@ -87045,7 +87045,7 @@ int lua_ax_base_TransitionZoomFlipY_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionZoomFlipY:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionZoomFlipY:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionZoomFlipY:create");
@@ -87061,13 +87061,13 @@ int lua_ax_base_TransitionZoomFlipY_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionZoomFlipY:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionZoomFlipY:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionZoomFlipY:create");
             if (!ok) { break; }
             ax::TransitionScene::Orientation arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TransitionZoomFlipY:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TransitionZoomFlipY:create");
             if (!ok) { break; }
             ax::TransitionZoomFlipY* ret = ax::TransitionZoomFlipY::create(arg0, arg1, arg2);
             object_to_luaval<ax::TransitionZoomFlipY>(tolua_S, "ax.TransitionZoomFlipY",(ax::TransitionZoomFlipY*)ret);
@@ -87160,7 +87160,7 @@ int lua_ax_base_TransitionZoomFlipAngular_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionZoomFlipAngular:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionZoomFlipAngular:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionZoomFlipAngular:create");
@@ -87176,13 +87176,13 @@ int lua_ax_base_TransitionZoomFlipAngular_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionZoomFlipAngular:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionZoomFlipAngular:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionZoomFlipAngular:create");
             if (!ok) { break; }
             ax::TransitionScene::Orientation arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TransitionZoomFlipAngular:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TransitionZoomFlipAngular:create");
             if (!ok) { break; }
             ax::TransitionZoomFlipAngular* ret = ax::TransitionZoomFlipAngular::create(arg0, arg1, arg2);
             object_to_luaval<ax::TransitionZoomFlipAngular>(tolua_S, "ax.TransitionZoomFlipAngular",(ax::TransitionZoomFlipAngular*)ret);
@@ -87280,7 +87280,7 @@ int lua_ax_base_TransitionFade_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFade:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFade:initWithDuration");
 
             if (!ok) { break; }
             ax::Scene* arg1;
@@ -87296,7 +87296,7 @@ int lua_ax_base_TransitionFade_initWithDuration(lua_State* tolua_S)
     do{
         if (argc == 3) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFade:initWithDuration");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFade:initWithDuration");
 
             if (!ok) { break; }
             ax::Scene* arg1;
@@ -87342,7 +87342,7 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
         if (argc == 2)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFade:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFade:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFade:create");
@@ -87358,7 +87358,7 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
         if (argc == 3)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFade:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFade:create");
             if (!ok) { break; }
             ax::Scene* arg1;
             ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFade:create");
@@ -87458,7 +87458,7 @@ int lua_ax_base_TransitionCrossFade_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionCrossFade:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionCrossFade:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionCrossFade:create");
         if(!ok)
         {
@@ -87604,7 +87604,7 @@ int lua_ax_base_TransitionTurnOffTiles_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionTurnOffTiles:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionTurnOffTiles:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionTurnOffTiles:create");
         if(!ok)
         {
@@ -87798,7 +87798,7 @@ int lua_ax_base_TransitionSplitCols_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionSplitCols:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionSplitCols:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionSplitCols:create");
         if(!ok)
         {
@@ -87896,7 +87896,7 @@ int lua_ax_base_TransitionSplitRows_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionSplitRows:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionSplitRows:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionSplitRows:create");
         if(!ok)
         {
@@ -88092,7 +88092,7 @@ int lua_ax_base_TransitionFadeTR_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFadeTR:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFadeTR:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFadeTR:create");
         if(!ok)
         {
@@ -88190,7 +88190,7 @@ int lua_ax_base_TransitionFadeBL_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFadeBL:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFadeBL:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFadeBL:create");
         if(!ok)
         {
@@ -88286,7 +88286,7 @@ int lua_ax_base_TransitionFadeUp_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFadeUp:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFadeUp:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFadeUp:create");
         if(!ok)
         {
@@ -88382,7 +88382,7 @@ int lua_ax_base_TransitionFadeDown_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionFadeDown:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFadeDown:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionFadeDown:create");
         if(!ok)
         {
@@ -88491,11 +88491,11 @@ int lua_ax_base_TransitionPageTurn_initWithDuration(lua_State* tolua_S)
         ax::Scene* arg1;
         bool arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionPageTurn:initWithDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionPageTurn:initWithDuration");
 
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionPageTurn:initWithDuration");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.TransitionPageTurn:initWithDuration");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.TransitionPageTurn:initWithDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TransitionPageTurn_initWithDuration'", nullptr);
@@ -88585,9 +88585,9 @@ int lua_ax_base_TransitionPageTurn_create(lua_State* tolua_S)
         double arg0;
         ax::Scene* arg1;
         bool arg2;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionPageTurn:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionPageTurn:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionPageTurn:create");
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.TransitionPageTurn:create");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.TransitionPageTurn:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TransitionPageTurn_create'", nullptr);
@@ -88684,7 +88684,7 @@ int lua_ax_base_TransitionProgress_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionProgress:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionProgress:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionProgress:create");
         if(!ok)
         {
@@ -88780,7 +88780,7 @@ int lua_ax_base_TransitionProgressRadialCCW_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionProgressRadialCCW:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionProgressRadialCCW:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionProgressRadialCCW:create");
         if(!ok)
         {
@@ -88876,7 +88876,7 @@ int lua_ax_base_TransitionProgressRadialCW_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionProgressRadialCW:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionProgressRadialCW:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionProgressRadialCW:create");
         if(!ok)
         {
@@ -88972,7 +88972,7 @@ int lua_ax_base_TransitionProgressHorizontal_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionProgressHorizontal:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionProgressHorizontal:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionProgressHorizontal:create");
         if(!ok)
         {
@@ -89068,7 +89068,7 @@ int lua_ax_base_TransitionProgressVertical_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionProgressVertical:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionProgressVertical:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionProgressVertical:create");
         if(!ok)
         {
@@ -89164,7 +89164,7 @@ int lua_ax_base_TransitionProgressInOut_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionProgressInOut:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionProgressInOut:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionProgressInOut:create");
         if(!ok)
         {
@@ -89260,7 +89260,7 @@ int lua_ax_base_TransitionProgressOutIn_create(lua_State* tolua_S)
     {
         double arg0;
         ax::Scene* arg1;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.TransitionProgressOutIn:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionProgressOutIn:create");
         ok &= luaval_to_object<ax::Scene>(tolua_S, 3, "ax.Scene",&arg1, "ax.TransitionProgressOutIn:create");
         if(!ok)
         {
@@ -89414,7 +89414,7 @@ int lua_ax_base_Camera_setCameraFlag(lua_State* tolua_S)
     {
         ax::CameraFlag arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Camera:setCameraFlag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Camera:setCameraFlag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_setCameraFlag'", nullptr);
@@ -89872,7 +89872,7 @@ int lua_ax_base_Camera_setDepth(lua_State* tolua_S)
     {
         int32_t arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,&arg0, "ax.Camera:setDepth");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Camera:setDepth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_setDepth'", nullptr);
@@ -90063,7 +90063,7 @@ int lua_ax_base_Camera_setFOV(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:setFOV");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Camera:setFOV");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_setFOV'", nullptr);
@@ -90160,7 +90160,7 @@ int lua_ax_base_Camera_setFarPlane(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:setFarPlane");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Camera:setFarPlane");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_setFarPlane'", nullptr);
@@ -90257,7 +90257,7 @@ int lua_ax_base_Camera_setNearPlane(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:setNearPlane");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Camera:setNearPlane");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_setNearPlane'", nullptr);
@@ -90354,7 +90354,7 @@ int lua_ax_base_Camera_setZoom(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:setZoom");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Camera:setZoom");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_setZoom'", nullptr);
@@ -90886,13 +90886,13 @@ int lua_ax_base_Camera_initPerspective(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:initPerspective");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Camera:initPerspective");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Camera:initPerspective");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Camera:initPerspective");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Camera:initPerspective");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Camera:initPerspective");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Camera:initPerspective");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Camera:initPerspective");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_initPerspective'", nullptr);
@@ -90945,13 +90945,13 @@ int lua_ax_base_Camera_initOrthographic(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:initOrthographic");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Camera:initOrthographic");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Camera:initOrthographic");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Camera:initOrthographic");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Camera:initOrthographic");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Camera:initOrthographic");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Camera:initOrthographic");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Camera:initOrthographic");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_initOrthographic'", nullptr);
@@ -91039,10 +91039,10 @@ int lua_ax_base_Camera_createPerspective(lua_State* tolua_S)
         double arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:createPerspective");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Camera:createPerspective");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Camera:createPerspective");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Camera:createPerspective");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Camera:createPerspective");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Camera:createPerspective");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Camera:createPerspective");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Camera:createPerspective");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_createPerspective'", nullptr);
@@ -91081,10 +91081,10 @@ int lua_ax_base_Camera_createOrthographic(lua_State* tolua_S)
         double arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:createOrthographic");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Camera:createOrthographic");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Camera:createOrthographic");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Camera:createOrthographic");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Camera:createOrthographic");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Camera:createOrthographic");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Camera:createOrthographic");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Camera:createOrthographic");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_createOrthographic'", nullptr);
@@ -91627,7 +91627,7 @@ int lua_ax_base_CameraBackgroundBrush_createDepthBrush(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.CameraBackgroundBrush:createDepthBrush");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CameraBackgroundBrush:createDepthBrush");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CameraBackgroundBrush_createDepthBrush'", nullptr);
@@ -91665,7 +91665,7 @@ int lua_ax_base_CameraBackgroundBrush_createColorBrush(lua_State* tolua_S)
         ax::Color arg0;
         double arg1;
         ok &=luaval_to_color(tolua_S, 2, &arg0, "ax.CameraBackgroundBrush:createColorBrush");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.CameraBackgroundBrush:createColorBrush");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.CameraBackgroundBrush:createColorBrush");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CameraBackgroundBrush_createColorBrush'", nullptr);
@@ -91824,7 +91824,7 @@ int lua_ax_base_CameraBackgroundDepthBrush_setDepth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.CameraBackgroundDepthBrush:setDepth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CameraBackgroundDepthBrush:setDepth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CameraBackgroundDepthBrush_setDepth'", nullptr);
@@ -91862,7 +91862,7 @@ int lua_ax_base_CameraBackgroundDepthBrush_create(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.CameraBackgroundDepthBrush:create");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.CameraBackgroundDepthBrush:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CameraBackgroundDepthBrush_create'", nullptr);
@@ -92009,7 +92009,7 @@ int lua_ax_base_CameraBackgroundColorBrush_create(lua_State* tolua_S)
         ax::Color arg0;
         double arg1;
         ok &=luaval_to_color(tolua_S, 2, &arg0, "ax.CameraBackgroundColorBrush:create");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.CameraBackgroundColorBrush:create");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.CameraBackgroundColorBrush:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CameraBackgroundColorBrush_create'", nullptr);
@@ -92260,7 +92260,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_setActived(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.CameraBackgroundSkyBoxBrush:setActived");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.CameraBackgroundSkyBoxBrush:setActived");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CameraBackgroundSkyBoxBrush_setActived'", nullptr);
@@ -92310,7 +92310,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_setTextureValid(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.CameraBackgroundSkyBoxBrush:setTextureValid");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.CameraBackgroundSkyBoxBrush:setTextureValid");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CameraBackgroundSkyBoxBrush_setTextureValid'", nullptr);
@@ -92748,7 +92748,7 @@ int lua_ax_base_GridBase_initWithSize(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.GridBase:initWithSize");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.GridBase:initWithSize");
 
             if (!ok) { break; }
             bool ret = cobj->initWithSize(arg0, arg1, arg2);
@@ -92768,7 +92768,7 @@ int lua_ax_base_GridBase_initWithSize(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.GridBase:initWithSize");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.GridBase:initWithSize");
 
             if (!ok) { break; }
             ax::Rect arg3;
@@ -92868,7 +92868,7 @@ int lua_ax_base_GridBase_setActive(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.GridBase:setActive");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.GridBase:setActive");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GridBase_setActive'", nullptr);
@@ -92965,7 +92965,7 @@ int lua_ax_base_GridBase_setReuseGrid(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.GridBase:setReuseGrid");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.GridBase:setReuseGrid");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GridBase_setReuseGrid'", nullptr);
@@ -93256,7 +93256,7 @@ int lua_ax_base_GridBase_setTextureFlipped(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.GridBase:setTextureFlipped");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.GridBase:setTextureFlipped");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GridBase_setTextureFlipped'", nullptr);
@@ -93587,7 +93587,7 @@ int lua_ax_base_Grid3D_setNeedDepthTestForBlit(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Grid3D:setNeedDepthTestForBlit");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Grid3D:setNeedDepthTestForBlit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Grid3D_setNeedDepthTestForBlit'", nullptr);
@@ -93708,7 +93708,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 3, "ax.Texture2D",&arg1, "ax.Grid3D:create");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Grid3D:create");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Grid3D:create");
             if (!ok) { break; }
             ax::Grid3D* ret = ax::Grid3D::create(arg0, arg1, arg2);
             object_to_luaval<ax::Grid3D>(tolua_S, "ax.Grid3D",(ax::Grid3D*)ret);
@@ -93727,7 +93727,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 3, "ax.Texture2D",&arg1, "ax.Grid3D:create");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.Grid3D:create");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.Grid3D:create");
             if (!ok) { break; }
             ax::Rect arg3;
             ok &= luaval_to_rect(tolua_S, 5, &arg3, "ax.Grid3D:create");
@@ -93860,7 +93860,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 3, "ax.Texture2D",&arg1, "ax.TiledGrid3D:create");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.TiledGrid3D:create");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.TiledGrid3D:create");
             if (!ok) { break; }
             ax::TiledGrid3D* ret = ax::TiledGrid3D::create(arg0, arg1, arg2);
             object_to_luaval<ax::TiledGrid3D>(tolua_S, "ax.TiledGrid3D",(ax::TiledGrid3D*)ret);
@@ -93879,7 +93879,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 3, "ax.Texture2D",&arg1, "ax.TiledGrid3D:create");
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.TiledGrid3D:create");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.TiledGrid3D:create");
             if (!ok) { break; }
             ax::Rect arg3;
             ok &= luaval_to_rect(tolua_S, 5, &arg3, "ax.TiledGrid3D:create");
@@ -94042,7 +94042,7 @@ int lua_ax_base_BaseLight_setIntensity(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.BaseLight:setIntensity");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.BaseLight:setIntensity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_BaseLight_setIntensity'", nullptr);
@@ -94139,7 +94139,7 @@ int lua_ax_base_BaseLight_setLightFlag(lua_State* tolua_S)
     {
         ax::LightFlag arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.BaseLight:setLightFlag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.BaseLight:setLightFlag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_BaseLight_setLightFlag'", nullptr);
@@ -94189,7 +94189,7 @@ int lua_ax_base_BaseLight_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.BaseLight:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.BaseLight:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_BaseLight_setEnabled'", nullptr);
@@ -94602,7 +94602,7 @@ int lua_ax_base_PointLight_setRange(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PointLight:setRange");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PointLight:setRange");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointLight_setRange'", nullptr);
@@ -94644,7 +94644,7 @@ int lua_ax_base_PointLight_create(lua_State* tolua_S)
         double arg2;
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.PointLight:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "ax.PointLight:create");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PointLight:create");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.PointLight:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_PointLight_create'", nullptr);
@@ -94896,7 +94896,7 @@ int lua_ax_base_SpotLight_setRange(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SpotLight:setRange");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SpotLight:setRange");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpotLight_setRange'", nullptr);
@@ -94993,7 +94993,7 @@ int lua_ax_base_SpotLight_setInnerAngle(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SpotLight:setInnerAngle");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SpotLight:setInnerAngle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpotLight_setInnerAngle'", nullptr);
@@ -95137,7 +95137,7 @@ int lua_ax_base_SpotLight_setOuterAngle(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.SpotLight:setOuterAngle");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.SpotLight:setOuterAngle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpotLight_setOuterAngle'", nullptr);
@@ -95277,9 +95277,9 @@ int lua_ax_base_SpotLight_create(lua_State* tolua_S)
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.SpotLight:create");
         ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.SpotLight:create");
         ok &=luaval_to_color32(tolua_S, 4, &arg2, "ax.SpotLight:create");
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.SpotLight:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.SpotLight:create");
-        ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.SpotLight:create");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.SpotLight:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.SpotLight:create");
+        ok &= luaval_to_number(tolua_S, 7, &arg5, "ax.SpotLight:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpotLight_create'", nullptr);
@@ -96060,17 +96060,17 @@ int lua_ax_base_Material_draw(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::MeshCommand>(tolua_S, 2, "ax.MeshCommand",&arg0, "ax.Material:draw");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Material:draw");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Material:draw");
 
         ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 4, "axrhi.Buffer",&arg2, "ax.Material:draw");
 
         ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 5, "axrhi.Buffer",&arg3, "ax.Material:draw");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Material:draw");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Material:draw");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Material:draw");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Material:draw");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "ax.Material:draw");
+        ok &= luaval_to_int(tolua_S, 8, &arg6, "ax.Material:draw");
 
         ok &= luaval_to_mat4(tolua_S, 9, &arg7, "ax.Material:draw");
         if(!ok)
@@ -96654,7 +96654,7 @@ int lua_ax_base_Material_setPrimitiveType(lua_State* tolua_S)
     {
         ax::rhi::PrimitiveType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Material:setPrimitiveType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Material:setPrimitiveType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Material_setPrimitiveType'", nullptr);
@@ -96751,7 +96751,7 @@ int lua_ax_base_Material_setTransparent(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Material:setTransparent");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Material:setTransparent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Material_setTransparent'", nullptr);
@@ -96848,7 +96848,7 @@ int lua_ax_base_Material_setForce2DQueue(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Material:setForce2DQueue");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Material:setForce2DQueue");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Material_setForce2DQueue'", nullptr);
@@ -97149,17 +97149,17 @@ int lua_ax_base_Pass_draw(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::MeshCommand>(tolua_S, 2, "ax.MeshCommand",&arg0, "ax.Pass:draw");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Pass:draw");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Pass:draw");
 
         ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 4, "axrhi.Buffer",&arg2, "ax.Pass:draw");
 
         ok &= luaval_to_object<ax::rhi::Buffer>(tolua_S, 5, "axrhi.Buffer",&arg3, "ax.Pass:draw");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ax.Pass:draw");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ax.Pass:draw");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "ax.Pass:draw");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "ax.Pass:draw");
 
-        ok &= luaval_to_uint32(tolua_S, 8,&arg6, "ax.Pass:draw");
+        ok &= luaval_to_int(tolua_S, 8, &arg6, "ax.Pass:draw");
 
         ok &= luaval_to_mat4(tolua_S, 9, &arg7, "ax.Pass:draw");
         if(!ok)
@@ -97553,7 +97553,7 @@ int lua_ax_base_Pass_setUniformTexture(lua_State* tolua_S)
         unsigned int arg0;
         ax::rhi::Texture* arg1;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Pass:setUniformTexture");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Pass:setUniformTexture");
 
         ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 3, "axrhi.Texture",&arg1, "ax.Pass:setUniformTexture");
         if(!ok)
@@ -97606,7 +97606,7 @@ int lua_ax_base_Pass_setUniformNormTexture(lua_State* tolua_S)
         unsigned int arg0;
         ax::rhi::Texture* arg1;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Pass:setUniformNormTexture");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Pass:setUniformNormTexture");
 
         ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 3, "axrhi.Texture",&arg1, "ax.Pass:setUniformNormTexture");
         if(!ok)
@@ -97662,7 +97662,7 @@ int lua_ax_base_Pass_setUniformColor(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformColor");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformColor'", nullptr);
@@ -97716,7 +97716,7 @@ int lua_ax_base_Pass_setUniformMatrixPalette(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformMatrixPalette");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformMatrixPalette");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformMatrixPalette'", nullptr);
@@ -97770,7 +97770,7 @@ int lua_ax_base_Pass_setUniformDirLightColor(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformDirLightColor");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformDirLightColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformDirLightColor'", nullptr);
@@ -97824,7 +97824,7 @@ int lua_ax_base_Pass_setUniformDirLightDir(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformDirLightDir");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformDirLightDir");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformDirLightDir'", nullptr);
@@ -97878,7 +97878,7 @@ int lua_ax_base_Pass_setUniformPointLightColor(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformPointLightColor");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformPointLightColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformPointLightColor'", nullptr);
@@ -97932,7 +97932,7 @@ int lua_ax_base_Pass_setUniformPointLightPosition(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformPointLightPosition");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformPointLightPosition");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformPointLightPosition'", nullptr);
@@ -97986,7 +97986,7 @@ int lua_ax_base_Pass_setUniformPointLightRangeInverse(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformPointLightRangeInverse");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformPointLightRangeInverse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformPointLightRangeInverse'", nullptr);
@@ -98040,7 +98040,7 @@ int lua_ax_base_Pass_setUniformSpotLightColor(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformSpotLightColor");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformSpotLightColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformSpotLightColor'", nullptr);
@@ -98094,7 +98094,7 @@ int lua_ax_base_Pass_setUniformSpotLightPosition(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformSpotLightPosition");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformSpotLightPosition");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformSpotLightPosition'", nullptr);
@@ -98148,7 +98148,7 @@ int lua_ax_base_Pass_setUniformSpotLightDir(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformSpotLightDir");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformSpotLightDir");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformSpotLightDir'", nullptr);
@@ -98202,7 +98202,7 @@ int lua_ax_base_Pass_setUniformSpotLightInnerAngleCos(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformSpotLightInnerAngleCos");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformSpotLightInnerAngleCos");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformSpotLightInnerAngleCos'", nullptr);
@@ -98256,7 +98256,7 @@ int lua_ax_base_Pass_setUniformSpotLightOuterAngleCos(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformSpotLightOuterAngleCos");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformSpotLightOuterAngleCos");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformSpotLightOuterAngleCos'", nullptr);
@@ -98310,7 +98310,7 @@ int lua_ax_base_Pass_setUniformSpotLightRangeInverse(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformSpotLightRangeInverse");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformSpotLightRangeInverse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformSpotLightRangeInverse'", nullptr);
@@ -98364,7 +98364,7 @@ int lua_ax_base_Pass_setUniformAmbientLigthColor(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Pass:setUniformAmbientLigthColor");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Pass:setUniformAmbientLigthColor");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_setUniformAmbientLigthColor'", nullptr);
@@ -98534,7 +98534,7 @@ int lua_ax_base_ProgramManager_getBuiltinProgram(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.ProgramManager:getBuiltinProgram");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ProgramManager:getBuiltinProgram");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgramManager_getBuiltinProgram'", nullptr);
@@ -98607,7 +98607,7 @@ int lua_ax_base_ProgramManager_registerCustomProgram(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.ProgramManager:registerCustomProgram");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ProgramManager:registerCustomProgram");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ProgramManager:registerCustomProgram");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgramManager_registerCustomProgram'", nullptr);
@@ -98628,9 +98628,9 @@ int lua_ax_base_ProgramManager_registerCustomProgram(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.ProgramManager:registerCustomProgram");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ProgramManager:registerCustomProgram");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ProgramManager:registerCustomProgram");
 
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.ProgramManager:registerCustomProgram");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.ProgramManager:registerCustomProgram");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgramManager_registerCustomProgram'", nullptr);
@@ -98698,7 +98698,7 @@ int lua_ax_base_ProgramManager_loadProgram(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::rhi::VertexLayoutKind arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.ProgramManager:loadProgram");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.ProgramManager:loadProgram");
 
             if (!ok) { break; }
             ax::rhi::Program* ret = cobj->loadProgram(arg0, arg1, arg2);
@@ -98710,7 +98710,7 @@ int lua_ax_base_ProgramManager_loadProgram(lua_State* tolua_S)
     do{
         if (argc == 1) {
             unsigned long long arg0;
-            ok &= luaval_to_long_long(tolua_S, 2,(long long*)&arg0, "ax.ProgramManager:loadProgram");
+            ok &= luaval_to_long_long(tolua_S, 2, (long long*)&arg0, "ax.ProgramManager:loadProgram");
 
             if (!ok) { break; }
             ax::rhi::Program* ret = cobj->loadProgram(arg0);
@@ -98959,7 +98959,7 @@ int lua_ax_base_ProgramManager_chooseSpriteProgramType(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::rhi::PixelFormat arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.ProgramManager:chooseSpriteProgramType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ProgramManager:chooseSpriteProgramType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProgramManager_chooseSpriteProgramType'", nullptr);
@@ -99107,7 +99107,7 @@ int lua_ax_base_Renderer_addCallbackCommand(lua_State* tolua_S)
         } while(0)
         ;
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Renderer:addCallbackCommand");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Renderer:addCallbackCommand");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_addCallbackCommand'", nullptr);
@@ -99155,7 +99155,7 @@ int lua_ax_base_Renderer_addCommand(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Renderer:addCommand");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Renderer:addCommand");
 
             if (!ok) { break; }
             cobj->addCommand(arg0, arg1);
@@ -99263,7 +99263,7 @@ int lua_ax_base_Renderer_pushGroup(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:pushGroup");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:pushGroup");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_pushGroup'", nullptr);
@@ -99937,15 +99937,15 @@ int lua_ax_base_Renderer_clear(lua_State* tolua_S)
         unsigned int arg3;
         double arg4;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:clear");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:clear");
 
         ok &=luaval_to_color(tolua_S, 3, &arg1, "ax.Renderer:clear");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Renderer:clear");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Renderer:clear");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.Renderer:clear");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Renderer:clear");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.Renderer:clear");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "ax.Renderer:clear");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_clear'", nullptr);
@@ -100183,7 +100183,7 @@ int lua_ax_base_Renderer_setDepthTest(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Renderer:setDepthTest");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Renderer:setDepthTest");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setDepthTest'", nullptr);
@@ -100233,7 +100233,7 @@ int lua_ax_base_Renderer_setDepthWrite(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Renderer:setDepthWrite");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Renderer:setDepthWrite");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setDepthWrite'", nullptr);
@@ -100283,7 +100283,7 @@ int lua_ax_base_Renderer_setDepthCompareFunc(lua_State* tolua_S)
     {
         ax::rhi::CompareFunc arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:setDepthCompareFunc");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setDepthCompareFunc");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setDepthCompareFunc'", nullptr);
@@ -100474,7 +100474,7 @@ int lua_ax_base_Renderer_setStencilTest(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Renderer:setStencilTest");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Renderer:setStencilTest");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setStencilTest'", nullptr);
@@ -100526,11 +100526,11 @@ int lua_ax_base_Renderer_setStencilCompareFunc(lua_State* tolua_S)
         unsigned int arg1;
         unsigned int arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:setStencilCompareFunc");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setStencilCompareFunc");
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Renderer:setStencilCompareFunc");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Renderer:setStencilCompareFunc");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Renderer:setStencilCompareFunc");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Renderer:setStencilCompareFunc");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setStencilCompareFunc'", nullptr);
@@ -100582,11 +100582,11 @@ int lua_ax_base_Renderer_setStencilOp(lua_State* tolua_S)
         ax::rhi::StencilOp arg1;
         ax::rhi::StencilOp arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:setStencilOp");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setStencilOp");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Renderer:setStencilOp");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Renderer:setStencilOp");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Renderer:setStencilOp");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Renderer:setStencilOp");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setStencilOp'", nullptr);
@@ -100636,7 +100636,7 @@ int lua_ax_base_Renderer_setStencilWriteMask(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Renderer:setStencilWriteMask");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setStencilWriteMask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setStencilWriteMask'", nullptr);
@@ -101160,7 +101160,7 @@ int lua_ax_base_Renderer_setCullMode(lua_State* tolua_S)
     {
         ax::rhi::CullMode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:setCullMode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setCullMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setCullMode'", nullptr);
@@ -101257,7 +101257,7 @@ int lua_ax_base_Renderer_setWinding(lua_State* tolua_S)
     {
         ax::rhi::Winding arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:setWinding");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setWinding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setWinding'", nullptr);
@@ -101357,13 +101357,13 @@ int lua_ax_base_Renderer_setViewPort(lua_State* tolua_S)
         unsigned int arg2;
         unsigned int arg3;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:setViewPort");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setViewPort");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Renderer:setViewPort");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Renderer:setViewPort");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.Renderer:setViewPort");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Renderer:setViewPort");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.Renderer:setViewPort");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Renderer:setViewPort");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setViewPort'", nullptr);
@@ -101460,7 +101460,7 @@ int lua_ax_base_Renderer_setScissorTest(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Renderer:setScissorTest");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Renderer:setScissorTest");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setScissorTest'", nullptr);
@@ -101513,13 +101513,13 @@ int lua_ax_base_Renderer_setScissorRect(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Renderer:setScissorRect");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Renderer:setScissorRect");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Renderer:setScissorRect");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Renderer:setScissorRect");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Renderer:setScissorRect");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.Renderer:setScissorRect");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Renderer:setScissorRect");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.Renderer:setScissorRect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setScissorRect'", nullptr);
@@ -101915,9 +101915,9 @@ int lua_ax_base_Renderer_resizeSwapChain(lua_State* tolua_S)
         unsigned int arg0;
         unsigned int arg1;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Renderer:resizeSwapChain");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:resizeSwapChain");
 
-        ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.Renderer:resizeSwapChain");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Renderer:resizeSwapChain");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_resizeSwapChain'", nullptr);
@@ -102126,7 +102126,7 @@ int lua_ax_base_TextureCache_getWhiteTexture(lua_State* tolua_S)
 
             if (!ok) { break; }
             uint16_t arg1;
-            ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ax.TextureCache:getWhiteTexture");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.TextureCache:getWhiteTexture");
 
             if (!ok) { break; }
             ax::Texture2D* ret = cobj->getWhiteTexture(arg0, arg1);
@@ -102228,7 +102228,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.TextureCache:addImage");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.TextureCache:addImage");
 
             if (!ok) { break; }
             ax::Texture2D* ret = cobj->addImage(arg0, arg1);
@@ -102244,11 +102244,11 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.TextureCache:addImage");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.TextureCache:addImage");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.TextureCache:addImage");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.TextureCache:addImage");
 
             if (!ok) { break; }
             ax::Texture2D* ret = cobj->addImage(arg0, arg1, arg2);
@@ -102276,7 +102276,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.TextureCache:addImage");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.TextureCache:addImage");
 
             if (!ok) { break; }
             ax::Texture2D* ret = cobj->addImage(arg0, arg1);
@@ -102312,7 +102312,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::rhi::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TextureCache:addImage");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TextureCache:addImage");
 
             if (!ok) { break; }
             ax::Texture2D* ret = cobj->addImage(arg0, arg1, arg2);
@@ -103203,7 +103203,7 @@ int lua_ax_base_Device_setAccelerometerEnabled(lua_State* tolua_S)
     if (argc == 1)
     {
         bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Device:setAccelerometerEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Device:setAccelerometerEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_setAccelerometerEnabled'", nullptr);
@@ -103239,7 +103239,7 @@ int lua_ax_base_Device_setAccelerometerInterval(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Device:setAccelerometerInterval");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Device:setAccelerometerInterval");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_setAccelerometerInterval'", nullptr);
@@ -103275,7 +103275,7 @@ int lua_ax_base_Device_setKeepScreenOn(lua_State* tolua_S)
     if (argc == 1)
     {
         bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Device:setKeepScreenOn");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Device:setKeepScreenOn");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_setKeepScreenOn'", nullptr);
@@ -103311,7 +103311,7 @@ int lua_ax_base_Device_vibrate(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Device:vibrate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Device:vibrate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_vibrate'", nullptr);
@@ -103347,7 +103347,7 @@ int lua_ax_base_Device_prepareImpactFeedbackGenerator(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::Device::ImpactFeedbackStyle arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Device:prepareImpactFeedbackGenerator");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Device:prepareImpactFeedbackGenerator");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_prepareImpactFeedbackGenerator'", nullptr);
@@ -103383,7 +103383,7 @@ int lua_ax_base_Device_impactOccurred(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::Device::ImpactFeedbackStyle arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Device:impactOccurred");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Device:impactOccurred");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_impactOccurred'", nullptr);
@@ -103453,7 +103453,7 @@ int lua_ax_base_Device_notificationOccurred(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::Device::NotificationFeedbackType arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Device:notificationOccurred");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Device:notificationOccurred");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_notificationOccurred'", nullptr);
@@ -103600,7 +103600,7 @@ int lua_ax_base_Application_setAnimationInterval(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Application:setAnimationInterval");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Application:setAnimationInterval");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Application_setAnimationInterval'", nullptr);
@@ -103991,7 +103991,7 @@ int lua_ax_base_RenderViewImpl_createWithRect(lua_State* tolua_S)
         double arg2;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithRect");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderViewImpl:createWithRect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithRect'", nullptr);
@@ -104009,8 +104009,8 @@ int lua_ax_base_RenderViewImpl_createWithRect(lua_State* tolua_S)
         bool arg3;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderViewImpl:createWithRect");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.RenderViewImpl:createWithRect");
-        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderViewImpl:createWithRect");
+        ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ax.RenderViewImpl:createWithRect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderViewImpl_createWithRect'", nullptr);
@@ -104697,7 +104697,7 @@ int lua_ax_base_SpriteBatchNode_removeChildAtIndex(lua_State* tolua_S)
 
         ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "ax.SpriteBatchNode:removeChildAtIndex");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.SpriteBatchNode:removeChildAtIndex");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.SpriteBatchNode:removeChildAtIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteBatchNode_removeChildAtIndex'", nullptr);
@@ -105003,7 +105003,7 @@ int lua_ax_base_SpriteBatchNode_atlasIndexForChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "ax.SpriteBatchNode:atlasIndexForChild");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.SpriteBatchNode:atlasIndexForChild");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.SpriteBatchNode:atlasIndexForChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteBatchNode_atlasIndexForChild'", nullptr);
@@ -105053,7 +105053,7 @@ int lua_ax_base_SpriteBatchNode_reorderBatch(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.SpriteBatchNode:reorderBatch");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.SpriteBatchNode:reorderBatch");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteBatchNode_reorderBatch'", nullptr);
@@ -105297,7 +105297,7 @@ int lua_ax_base_SpriteBatchNode_removeAllChildrenWithCleanup(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.SpriteBatchNode:removeAllChildrenWithCleanup");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.SpriteBatchNode:removeAllChildrenWithCleanup");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteBatchNode_removeAllChildrenWithCleanup'", nullptr);
@@ -105404,9 +105404,9 @@ int lua_ax_base_SpriteBatchNode_addSpriteWithoutQuad(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "ax.SpriteBatchNode:addSpriteWithoutQuad");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.SpriteBatchNode:addSpriteWithoutQuad");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.SpriteBatchNode:addSpriteWithoutQuad");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.SpriteBatchNode:addSpriteWithoutQuad");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.SpriteBatchNode:addSpriteWithoutQuad");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_SpriteBatchNode_addSpriteWithoutQuad'", nullptr);
@@ -105827,7 +105827,7 @@ int lua_ax_base_ParallaxNode_addChild(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ParallaxNode:addChild");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.ParallaxNode:addChild");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.ParallaxNode:addChild");
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.ParallaxNode:addChild");
 
@@ -105881,7 +105881,7 @@ int lua_ax_base_ParallaxNode_removeAllChildrenWithCleanup(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.ParallaxNode:removeAllChildrenWithCleanup");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.ParallaxNode:removeAllChildrenWithCleanup");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ParallaxNode_removeAllChildrenWithCleanup'", nullptr);
@@ -106736,7 +106736,7 @@ int lua_ax_base_TMXTilesetInfo_getRectForGID(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.TMXTilesetInfo:getRectForGID");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TMXTilesetInfo:getRectForGID");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXTilesetInfo_getRectForGID'", nullptr);
@@ -107191,7 +107191,7 @@ int lua_ax_base_TMXMapInfo_setOrientation(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TMXMapInfo:setOrientation");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TMXMapInfo:setOrientation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setOrientation'", nullptr);
@@ -107288,7 +107288,7 @@ int lua_ax_base_TMXMapInfo_setStaggerAxis(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TMXMapInfo:setStaggerAxis");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TMXMapInfo:setStaggerAxis");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setStaggerAxis'", nullptr);
@@ -107385,7 +107385,7 @@ int lua_ax_base_TMXMapInfo_setStaggerIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TMXMapInfo:setStaggerIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TMXMapInfo:setStaggerIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setStaggerIndex'", nullptr);
@@ -107482,7 +107482,7 @@ int lua_ax_base_TMXMapInfo_setHexSideLength(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TMXMapInfo:setHexSideLength");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TMXMapInfo:setHexSideLength");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setHexSideLength'", nullptr);
@@ -108064,7 +108064,7 @@ int lua_ax_base_TMXMapInfo_setParentElement(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TMXMapInfo:setParentElement");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TMXMapInfo:setParentElement");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setParentElement'", nullptr);
@@ -108161,7 +108161,7 @@ int lua_ax_base_TMXMapInfo_setParentGID(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TMXMapInfo:setParentGID");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TMXMapInfo:setParentGID");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setParentGID'", nullptr);
@@ -108258,7 +108258,7 @@ int lua_ax_base_TMXMapInfo_setLayerAttribs(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.TMXMapInfo:setLayerAttribs");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.TMXMapInfo:setLayerAttribs");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setLayerAttribs'", nullptr);
@@ -108355,7 +108355,7 @@ int lua_ax_base_TMXMapInfo_setStoringCharacters(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.TMXMapInfo:setStoringCharacters");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.TMXMapInfo:setStoringCharacters");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXMapInfo_setStoringCharacters'", nullptr);
@@ -108922,9 +108922,9 @@ int lua_ax_base_TileMapAtlas_initWithTileFile(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.TileMapAtlas:initWithTileFile");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TileMapAtlas:initWithTileFile");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TileMapAtlas:initWithTileFile");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.TileMapAtlas:initWithTileFile");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.TileMapAtlas:initWithTileFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TileMapAtlas_initWithTileFile'", nullptr);
@@ -109117,8 +109117,8 @@ int lua_ax_base_TileMapAtlas_create(lua_State* tolua_S)
         int arg3;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.TileMapAtlas:create");
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.TileMapAtlas:create");
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.TileMapAtlas:create");
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ax.TileMapAtlas:create");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.TileMapAtlas:create");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.TileMapAtlas:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TileMapAtlas_create'", nullptr);
@@ -109222,7 +109222,7 @@ int lua_ax_base_FastTMXLayer_setTileGID(lua_State* tolua_S)
     do{
         if (argc == 3) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.FastTMXLayer:setTileGID");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.FastTMXLayer:setTileGID");
 
             if (!ok) { break; }
             ax::Vec2 arg1;
@@ -109230,7 +109230,7 @@ int lua_ax_base_FastTMXLayer_setTileGID(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::TMXTileFlags_ arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.FastTMXLayer:setTileGID");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.FastTMXLayer:setTileGID");
 
             if (!ok) { break; }
             cobj->setTileGID(arg0, arg1, arg2);
@@ -109242,7 +109242,7 @@ int lua_ax_base_FastTMXLayer_setTileGID(lua_State* tolua_S)
     do{
         if (argc == 2) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.FastTMXLayer:setTileGID");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.FastTMXLayer:setTileGID");
 
             if (!ok) { break; }
             ax::Vec2 arg1;
@@ -109927,7 +109927,7 @@ int lua_ax_base_FastTMXLayer_setLayerOrientation(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.FastTMXLayer:setLayerOrientation");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.FastTMXLayer:setLayerOrientation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXLayer_setLayerOrientation'", nullptr);
@@ -110130,7 +110130,7 @@ int lua_ax_base_FastTMXLayer_setupTileSprite(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.FastTMXLayer:setupTileSprite");
 
-        ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.FastTMXLayer:setupTileSprite");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.FastTMXLayer:setupTileSprite");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXLayer_setupTileSprite'", nullptr);
@@ -110652,7 +110652,7 @@ int lua_ax_base_TMXTileAnimTask_create(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR TMXTileAnimInfo*
         ok = false;
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.TMXTileAnimTask:create");
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.TMXTileAnimTask:create");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.TMXTileAnimTask:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXTileAnimTask_create'", nullptr);
@@ -110721,7 +110721,7 @@ int lua_ax_base_TMXTileAnimTask_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.TMXTileAnimTask:TMXTileAnimTask");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.TMXTileAnimTask:TMXTileAnimTask");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.TMXTileAnimTask:TMXTileAnimTask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXTileAnimTask_constructor'", nullptr);
@@ -111189,7 +111189,7 @@ int lua_ax_base_FastTMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.FastTMXTiledMap:getPropertiesForGID");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.FastTMXTiledMap:getPropertiesForGID");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_getPropertiesForGID'", nullptr);
@@ -111480,7 +111480,7 @@ int lua_ax_base_FastTMXTiledMap_setMapOrientation(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.FastTMXTiledMap:setMapOrientation");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.FastTMXTiledMap:setMapOrientation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_setMapOrientation'", nullptr);
@@ -111724,7 +111724,7 @@ int lua_ax_base_FastTMXTiledMap_setTileAnimEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.FastTMXTiledMap:setTileAnimEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.FastTMXTiledMap:setTileAnimEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_setTileAnimEnabled'", nullptr);
@@ -112029,7 +112029,7 @@ int lua_ax_base_FastTMXTiledMap_initWithTMXFile(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FastTMXTiledMap:initWithTMXFile");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.FastTMXTiledMap:initWithTMXFile");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.FastTMXTiledMap:initWithTMXFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_initWithTMXFile'", nullptr);
@@ -112102,7 +112102,7 @@ int lua_ax_base_FastTMXTiledMap_initWithXML(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FastTMXTiledMap:initWithXML");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.FastTMXTiledMap:initWithXML");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.FastTMXTiledMap:initWithXML");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_initWithXML'", nullptr);
@@ -112155,7 +112155,7 @@ int lua_ax_base_FastTMXTiledMap_create(lua_State* tolua_S)
         std::string_view arg0;
         bool arg1;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FastTMXTiledMap:create");
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.FastTMXTiledMap:create");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.FastTMXTiledMap:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_create'", nullptr);
@@ -112210,7 +112210,7 @@ int lua_ax_base_FastTMXTiledMap_createWithXML(lua_State* tolua_S)
         bool arg2;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FastTMXTiledMap:createWithXML");
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.FastTMXTiledMap:createWithXML");
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.FastTMXTiledMap:createWithXML");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.FastTMXTiledMap:createWithXML");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FastTMXTiledMap_createWithXML'", nullptr);
@@ -112483,7 +112483,7 @@ int lua_ax_base_MotionStreak3D_setStroke(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak3D:setStroke");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak3D:setStroke");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MotionStreak3D_setStroke'", nullptr);
@@ -112580,7 +112580,7 @@ int lua_ax_base_MotionStreak3D_setStartingPositionInitialized(lua_State* tolua_S
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MotionStreak3D:setStartingPositionInitialized");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.MotionStreak3D:setStartingPositionInitialized");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_MotionStreak3D_setStartingPositionInitialized'", nullptr);
@@ -112915,15 +112915,15 @@ int lua_ax_base_MotionStreak3D_initWithFade(lua_State* tolua_S)
     do{
         if (argc == 5) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak3D:initWithFade");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.MotionStreak3D:initWithFade");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak3D:initWithFade");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
             ax::Color32 arg3;
@@ -112943,15 +112943,15 @@ int lua_ax_base_MotionStreak3D_initWithFade(lua_State* tolua_S)
     do{
         if (argc == 5) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak3D:initWithFade");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.MotionStreak3D:initWithFade");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak3D:initWithFade");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.MotionStreak3D:initWithFade");
 
             if (!ok) { break; }
             ax::Color32 arg3;
@@ -112997,13 +112997,13 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
         if (argc == 5)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak3D:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak3D:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.MotionStreak3D:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.MotionStreak3D:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak3D:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.MotionStreak3D:create");
             if (!ok) { break; }
             ax::Color32 arg3;
             ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak3D:create");
@@ -113022,13 +113022,13 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
         if (argc == 5)
         {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.MotionStreak3D:create");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak3D:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.MotionStreak3D:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.MotionStreak3D:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.MotionStreak3D:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.MotionStreak3D:create");
             if (!ok) { break; }
             ax::Color32 arg3;
             ok &=luaval_to_color32(tolua_S, 5, &arg3, "ax.MotionStreak3D:create");
@@ -113198,7 +113198,7 @@ int lua_ax_base_ComponentLua_update(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.ComponentLua:update");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ComponentLua:update");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ComponentLua_update'", nullptr);

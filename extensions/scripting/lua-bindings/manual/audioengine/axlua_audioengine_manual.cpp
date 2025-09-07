@@ -258,7 +258,7 @@ int axlua_audioengine_AudioEngine_setFinishCallback(lua_State* tolua_S)
     if (argc == 2)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "ax.AudioEngine:setFinishCallback");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "ax.AudioEngine:setFinishCallback");
 
 #if _AX_DEBUG >= 1
         if (!toluafix_isfunction(tolua_S, 3, "LUA_FUNCTION", 0, &tolua_err))

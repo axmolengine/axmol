@@ -356,7 +356,7 @@ int axlua_3d_Terrain_create(lua_State* L)
         ax::Terrain::CrackFixedType arg1;
 
         ok &= luaval_to_terraindata(L, 2, &arg0);
-        ok &= luaval_to_int32(L, 3, (int*)&arg1, "ax.Terrain:create");
+        ok &= luaval_to_int(L, 3, (int*)&arg1, "ax.Terrain:create");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'axlua_3d_Terrain_create'", nullptr);
@@ -1498,7 +1498,7 @@ int axlua_3d_OBB_constructor(lua_State* L)
                 break;
             }
             int arg1;
-            ok &= luaval_to_int32(L, 3, (int*)&arg1, "ax.OBB:OBB");
+            ok &= luaval_to_int(L, 3, (int*)&arg1, "ax.OBB:OBB");
 
             if (!ok)
             {

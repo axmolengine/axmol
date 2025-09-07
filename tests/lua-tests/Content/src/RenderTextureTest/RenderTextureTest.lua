@@ -71,8 +71,7 @@ local function RenderTextureSave()
             for i = 0,d -1 do
                 -- create a brush image to draw into the texture with
                 local sprite = ax.Sprite:create("Images/fire.png")
-                sprite:setColor(ax.color32(255, 0, 0))
-                sprite:setOpacity(20)
+                sprite:setColor(ax.color32(255, 0, 0, 20))
                 brushes[i + 1] = sprite
             end
 
@@ -80,15 +79,16 @@ local function RenderTextureSave()
                 local difx = ended.x - start.x
                 local dify = ended.y - start.y
                 local delta = i / distance
-                brushes[i + 1]:setPosition(ax.p(start.x + (difx * delta), start.y + (dify * delta)))
-                brushes[i + 1]:setRotation(math.random(0, 359))
+                local brush = brushes[i + 1]
+                brush:setPosition(ax.p(start.x + (difx * delta), start.y + (dify * delta)))
+                brush:setRotation(math.random(0, 359))
                 local r = math.random(0, 49) / 50.0 + 0.25
-                brushes[i + 1]:setScale(r)
+                brush:setScale(r)
 
                 -- Use ax.RANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
-                brushes[i + 1]:setColor(ax.color32(math.random(0, 126) + 128, 255, 255))
+                brush:setColor(ax.color32(math.random(0, 126) + 128, 255, 255, brush:getOpacity()))
                 -- Call visit to draw the brush, don't call draw..
-                brushes[i + 1]:visit()
+                brush:visit()
             end
         end
 

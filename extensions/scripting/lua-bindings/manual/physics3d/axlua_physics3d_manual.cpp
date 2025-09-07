@@ -523,7 +523,7 @@ int axlua_physics3d_Physics3DShape_createMesh(lua_State* L)
         std::vector<Vec3> arg0;
         int arg1;
         ok &= luaval_to_std_vector_vec3(L, 2, &arg0, "ax.Physics3DShape:createMesh");
-        ok &= luaval_to_int32(L, 3, (int*)&arg1, "ax.Physics3DShape:createMesh");
+        ok &= luaval_to_int(L, 3, (int*)&arg1, "ax.Physics3DShape:createMesh");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'axlua_physics3d_Physics3DShape_createMesh'", nullptr);
@@ -568,8 +568,8 @@ int axlua_physics3d_Physics3DShape_createHeightfield(lua_State* L)
         double arg5;
         bool arg6;
         bool arg7;
-        ok &= luaval_to_int32(L, 2, (int*)&arg0, "ax.Physics3DShape:createHeightfield");
-        ok &= luaval_to_int32(L, 3, (int*)&arg1, "ax.Physics3DShape:createHeightfield");
+        ok &= luaval_to_int(L, 2, (int*)&arg0, "ax.Physics3DShape:createHeightfield");
+        ok &= luaval_to_int(L, 3, (int*)&arg1, "ax.Physics3DShape:createHeightfield");
         ok &= luaval_to_std_vector_float(L, 4, &arg2, "ax.Physics3DShape:createHeightfield");
         ok &= luaval_to_number(L, 5, &arg3, "ax.Physics3DShape:createHeightfield");
         ok &= luaval_to_number(L, 6, &arg4, "ax.Physics3DShape:createHeightfield");
@@ -597,8 +597,8 @@ int axlua_physics3d_Physics3DShape_createHeightfield(lua_State* L)
         bool arg6;
         bool arg7;
         bool arg8;
-        ok &= luaval_to_int32(L, 2, (int*)&arg0, "ax.Physics3DShape:createHeightfield");
-        ok &= luaval_to_int32(L, 3, (int*)&arg1, "ax.Physics3DShape:createHeightfield");
+        ok &= luaval_to_int(L, 2, (int*)&arg0, "ax.Physics3DShape:createHeightfield");
+        ok &= luaval_to_int(L, 3, (int*)&arg1, "ax.Physics3DShape:createHeightfield");
         ok &= luaval_to_std_vector_float(L, 4, &arg2, "ax.Physics3DShape:createHeightfield");
         ok &= luaval_to_number(L, 5, &arg3, "ax.Physics3DShape:createHeightfield");
         ok &= luaval_to_number(L, 6, &arg4, "ax.Physics3DShape:createHeightfield");

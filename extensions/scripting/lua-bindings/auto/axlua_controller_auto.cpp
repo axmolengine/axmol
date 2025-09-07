@@ -176,9 +176,9 @@ int lua_ax_controller_Controller_receiveExternalKeyEvent(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Controller:receiveExternalKeyEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Controller:receiveExternalKeyEvent");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.Controller:receiveExternalKeyEvent");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.Controller:receiveExternalKeyEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_receiveExternalKeyEvent'", nullptr);
@@ -228,7 +228,7 @@ int lua_ax_controller_Controller_setTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Controller:setTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Controller:setTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_setTag'", nullptr);
@@ -313,7 +313,7 @@ int lua_ax_controller_Controller_getControllerByTag(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Controller:getControllerByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Controller:getControllerByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_getControllerByTag'", nullptr);
@@ -349,7 +349,7 @@ int lua_ax_controller_Controller_getControllerByDeviceId(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Controller:getControllerByDeviceId");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Controller:getControllerByDeviceId");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_getControllerByDeviceId'", nullptr);
@@ -635,7 +635,7 @@ int lua_ax_controller_EventController_setKeyCode(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventController:setKeyCode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:setKeyCode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_setKeyCode'", nullptr);
@@ -685,7 +685,7 @@ int lua_ax_controller_EventController_setConnectStatus(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.EventController:setConnectStatus");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.EventController:setConnectStatus");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_setConnectStatus'", nullptr);
@@ -765,7 +765,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
     do{
         if (argc == 3) {
             ax::EventController::ControllerEventType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventController:EventController");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
 
             if (!ok) { break; }
             ax::Controller* arg1;
@@ -773,7 +773,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.EventController:EventController");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.EventController:EventController");
 
             if (!ok) { break; }
             cobj = new ax::EventController(arg0, arg1, arg2);
@@ -788,7 +788,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
     do{
         if (argc == 3) {
             ax::EventController::ControllerEventType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventController:EventController");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
 
             if (!ok) { break; }
             ax::Controller* arg1;
@@ -796,7 +796,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventController:EventController");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventController:EventController");
 
             if (!ok) { break; }
             cobj = new ax::EventController(arg0, arg1, arg2);

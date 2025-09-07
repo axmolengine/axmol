@@ -35,7 +35,7 @@ int lua_ax_studio_ActionFrame_setFrameIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionFrame:setFrameIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionFrame:setFrameIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFrame_setFrameIndex'", nullptr);
@@ -132,7 +132,7 @@ int lua_ax_studio_ActionFrame_setFrameTime(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionFrame:setFrameTime");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionFrame:setFrameTime");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFrame_setFrameTime'", nullptr);
@@ -229,7 +229,7 @@ int lua_ax_studio_ActionFrame_setFrameType(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionFrame:setFrameType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionFrame:setFrameType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFrame_setFrameType'", nullptr);
@@ -326,7 +326,7 @@ int lua_ax_studio_ActionFrame_setEasingType(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionFrame:setEasingType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionFrame:setEasingType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFrame_setEasingType'", nullptr);
@@ -417,7 +417,7 @@ int lua_ax_studio_ActionFrame_getAction(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionFrame:getAction");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionFrame:getAction");
 
             if (!ok) { break; }
             cocostudio::ActionFrame* arg1;
@@ -433,7 +433,7 @@ int lua_ax_studio_ActionFrame_getAction(lua_State* tolua_S)
     do{
         if (argc == 1) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionFrame:getAction");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionFrame:getAction");
 
             if (!ok) { break; }
             ax::ActionInterval* ret = cobj->getAction(arg0);
@@ -696,7 +696,7 @@ int lua_ax_studio_ActionMoveFrame_getAction(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionMoveFrame:getAction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionMoveFrame:getAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionMoveFrame_getAction'", nullptr);
@@ -806,7 +806,7 @@ int lua_ax_studio_ActionScaleFrame_setScaleX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionScaleFrame:setScaleX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionScaleFrame:setScaleX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionScaleFrame_setScaleX'", nullptr);
@@ -903,7 +903,7 @@ int lua_ax_studio_ActionScaleFrame_setScaleY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionScaleFrame:setScaleY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionScaleFrame:setScaleY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionScaleFrame_setScaleY'", nullptr);
@@ -1000,7 +1000,7 @@ int lua_ax_studio_ActionScaleFrame_getAction(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionScaleFrame:getAction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionScaleFrame:getAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionScaleFrame_getAction'", nullptr);
@@ -1112,7 +1112,7 @@ int lua_ax_studio_ActionRotationFrame_setRotation(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionRotationFrame:setRotation");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionRotationFrame:setRotation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionRotationFrame_setRotation'", nullptr);
@@ -1203,7 +1203,7 @@ int lua_ax_studio_ActionRotationFrame_getAction(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionRotationFrame:getAction");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionRotationFrame:getAction");
 
             if (!ok) { break; }
             cocostudio::ActionFrame* arg1;
@@ -1219,7 +1219,7 @@ int lua_ax_studio_ActionRotationFrame_getAction(lua_State* tolua_S)
     do{
         if (argc == 1) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionRotationFrame:getAction");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionRotationFrame:getAction");
 
             if (!ok) { break; }
             ax::ActionInterval* ret = cobj->getAction(arg0);
@@ -1328,7 +1328,7 @@ int lua_ax_studio_ActionFadeFrame_setOpacity(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionFadeFrame:setOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionFadeFrame:setOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFadeFrame_setOpacity'", nullptr);
@@ -1425,7 +1425,7 @@ int lua_ax_studio_ActionFadeFrame_getAction(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionFadeFrame:getAction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionFadeFrame:getAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFadeFrame_getAction'", nullptr);
@@ -1632,7 +1632,7 @@ int lua_ax_studio_ActionTintFrame_getAction(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionTintFrame:getAction");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionTintFrame:getAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTintFrame_getAction'", nullptr);
@@ -1839,7 +1839,7 @@ int lua_ax_studio_ActionObject_setLoop(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.ActionObject:setLoop");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.ActionObject:setLoop");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_setLoop'", nullptr);
@@ -1936,7 +1936,7 @@ int lua_ax_studio_ActionObject_setUnitTime(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionObject:setUnitTime");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionObject:setUnitTime");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_setUnitTime'", nullptr);
@@ -2033,7 +2033,7 @@ int lua_ax_studio_ActionObject_setCurrentTime(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionObject:setCurrentTime");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionObject:setCurrentTime");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_setCurrentTime'", nullptr);
@@ -2469,7 +2469,7 @@ int lua_ax_studio_ActionObject_updateToFrameByTime(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionObject:updateToFrameByTime");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionObject:updateToFrameByTime");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_updateToFrameByTime'", nullptr);
@@ -2519,7 +2519,7 @@ int lua_ax_studio_ActionObject_simulationActionUpdate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionObject:simulationActionUpdate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionObject:simulationActionUpdate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_simulationActionUpdate'", nullptr);
@@ -3799,7 +3799,7 @@ int lua_ax_studio_BoneData_getDisplayData(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.BoneData:getDisplayData");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.BoneData:getDisplayData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneData_getDisplayData'", nullptr);
@@ -4426,7 +4426,7 @@ int lua_ax_studio_MovementBoneData_getFrameData(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.MovementBoneData:getFrameData");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.MovementBoneData:getFrameData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_MovementBoneData_getFrameData'", nullptr);
@@ -5295,7 +5295,7 @@ int lua_ax_studio_TextureData_getContourData(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.TextureData:getContourData");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.TextureData:getContourData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_TextureData_getContourData'", nullptr);
@@ -5496,13 +5496,13 @@ int lua_ax_studio_Tween_play(lua_State* tolua_S)
 
         ok &= luaval_to_object<cocostudio::MovementBoneData>(tolua_S, 2, "ccs.MovementBoneData",&arg0, "ccs.Tween:play");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.Tween:play");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.Tween:play");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ccs.Tween:play");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ccs.Tween:play");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "ccs.Tween:play");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ccs.Tween:play");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "ccs.Tween:play");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "ccs.Tween:play");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Tween_play'", nullptr);
@@ -5649,7 +5649,7 @@ int lua_ax_studio_Tween_gotoAndPlay(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Tween:gotoAndPlay");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Tween:gotoAndPlay");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Tween_gotoAndPlay'", nullptr);
@@ -5699,7 +5699,7 @@ int lua_ax_studio_Tween_gotoAndPause(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Tween:gotoAndPause");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Tween:gotoAndPause");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Tween_gotoAndPause'", nullptr);
@@ -5897,7 +5897,7 @@ int lua_ax_studio_DisplayManager_addDisplay(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.DisplayManager:addDisplay");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.DisplayManager:addDisplay");
 
             if (!ok) { break; }
             cobj->addDisplay(arg0, arg1);
@@ -5913,7 +5913,7 @@ int lua_ax_studio_DisplayManager_addDisplay(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.DisplayManager:addDisplay");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.DisplayManager:addDisplay");
 
             if (!ok) { break; }
             cobj->addDisplay(arg0, arg1);
@@ -5962,7 +5962,7 @@ int lua_ax_studio_DisplayManager_removeDisplay(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.DisplayManager:removeDisplay");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.DisplayManager:removeDisplay");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_removeDisplay'", nullptr);
@@ -6060,9 +6060,9 @@ int lua_ax_studio_DisplayManager_changeDisplayWithIndex(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.DisplayManager:changeDisplayWithIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.DisplayManager:changeDisplayWithIndex");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.DisplayManager:changeDisplayWithIndex");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.DisplayManager:changeDisplayWithIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_changeDisplayWithIndex'", nullptr);
@@ -6115,7 +6115,7 @@ int lua_ax_studio_DisplayManager_changeDisplayWithName(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.DisplayManager:changeDisplayWithName");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.DisplayManager:changeDisplayWithName");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.DisplayManager:changeDisplayWithName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_changeDisplayWithName'", nullptr);
@@ -6306,7 +6306,7 @@ int lua_ax_studio_DisplayManager_setVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.DisplayManager:setVisible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.DisplayManager:setVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_setVisible'", nullptr);
@@ -6585,11 +6585,11 @@ int lua_ax_studio_DisplayManager_containPoint(lua_State* tolua_S)
     do{
         if (argc == 2) {
             double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.DisplayManager:containPoint");
+            ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.DisplayManager:containPoint");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "ccs.DisplayManager:containPoint");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "ccs.DisplayManager:containPoint");
 
             if (!ok) { break; }
             bool ret = cobj->containPoint(arg0, arg1);
@@ -6650,7 +6650,7 @@ int lua_ax_studio_DisplayManager_setForceChangeDisplay(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.DisplayManager:setForceChangeDisplay");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.DisplayManager:setForceChangeDisplay");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_setForceChangeDisplay'", nullptr);
@@ -6907,7 +6907,7 @@ int lua_ax_studio_Bone_addDisplay(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.Bone:addDisplay");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.Bone:addDisplay");
 
             if (!ok) { break; }
             cobj->addDisplay(arg0, arg1);
@@ -6923,7 +6923,7 @@ int lua_ax_studio_Bone_addDisplay(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.Bone:addDisplay");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.Bone:addDisplay");
 
             if (!ok) { break; }
             cobj->addDisplay(arg0, arg1);
@@ -6972,7 +6972,7 @@ int lua_ax_studio_Bone_removeDisplay(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Bone:removeDisplay");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Bone:removeDisplay");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_removeDisplay'", nullptr);
@@ -7023,9 +7023,9 @@ int lua_ax_studio_Bone_changeDisplayWithIndex(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Bone:changeDisplayWithIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Bone:changeDisplayWithIndex");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.Bone:changeDisplayWithIndex");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.Bone:changeDisplayWithIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_changeDisplayWithIndex'", nullptr);
@@ -7078,7 +7078,7 @@ int lua_ax_studio_Bone_changeDisplayWithName(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Bone:changeDisplayWithName");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.Bone:changeDisplayWithName");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.Bone:changeDisplayWithName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_changeDisplayWithName'", nullptr);
@@ -7275,7 +7275,7 @@ int lua_ax_studio_Bone_removeFromParent(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.Bone:removeFromParent");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.Bone:removeFromParent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_removeFromParent'", nullptr);
@@ -7328,7 +7328,7 @@ int lua_ax_studio_Bone_removeChildBone(lua_State* tolua_S)
 
         ok &= luaval_to_object<cocostudio::Bone>(tolua_S, 2, "ccs.Bone",&arg0, "ccs.Bone:removeChildBone");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.Bone:removeChildBone");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.Bone:removeChildBone");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_removeChildBone'", nullptr);
@@ -7519,7 +7519,7 @@ int lua_ax_studio_Bone_setTransformDirty(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.Bone:setTransformDirty");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.Bone:setTransformDirty");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_setTransformDirty'", nullptr);
@@ -8142,7 +8142,7 @@ int lua_ax_studio_Bone_setIgnoreMovementBoneData(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.Bone:setIgnoreMovementBoneData");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.Bone:setIgnoreMovementBoneData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_setIgnoreMovementBoneData'", nullptr);
@@ -8336,7 +8336,7 @@ int lua_ax_studio_Bone_setBlendDirty(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.Bone:setBlendDirty");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.Bone:setBlendDirty");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_setBlendDirty'", nullptr);
@@ -8768,7 +8768,7 @@ int lua_ax_studio_ArmatureAnimation_setSpeedScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:setSpeedScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:setSpeedScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_setSpeedScale'", nullptr);
@@ -8882,7 +8882,7 @@ int lua_ax_studio_ArmatureAnimation_play(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:play");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:play");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ArmatureAnimation:play");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_play'", nullptr);
@@ -8900,9 +8900,9 @@ int lua_ax_studio_ArmatureAnimation_play(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:play");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:play");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ArmatureAnimation:play");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ccs.ArmatureAnimation:play");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ccs.ArmatureAnimation:play");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_play'", nullptr);
@@ -8952,7 +8952,7 @@ int lua_ax_studio_ArmatureAnimation_playWithIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ArmatureAnimation:playWithIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:playWithIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_playWithIndex'", nullptr);
@@ -8967,9 +8967,9 @@ int lua_ax_studio_ArmatureAnimation_playWithIndex(lua_State* tolua_S)
         int arg0;
         int arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ArmatureAnimation:playWithIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:playWithIndex");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:playWithIndex");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ArmatureAnimation:playWithIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_playWithIndex'", nullptr);
@@ -8985,11 +8985,11 @@ int lua_ax_studio_ArmatureAnimation_playWithIndex(lua_State* tolua_S)
         int arg1;
         int arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ArmatureAnimation:playWithIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:playWithIndex");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:playWithIndex");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ArmatureAnimation:playWithIndex");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ccs.ArmatureAnimation:playWithIndex");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ccs.ArmatureAnimation:playWithIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_playWithIndex'", nullptr);
@@ -9056,7 +9056,7 @@ int lua_ax_studio_ArmatureAnimation_playWithNames(lua_State* tolua_S)
 
         ok &= luaval_to_std_vector_string(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:playWithNames");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:playWithNames");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ArmatureAnimation:playWithNames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_playWithNames'", nullptr);
@@ -9074,9 +9074,9 @@ int lua_ax_studio_ArmatureAnimation_playWithNames(lua_State* tolua_S)
 
         ok &= luaval_to_std_vector_string(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:playWithNames");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:playWithNames");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ArmatureAnimation:playWithNames");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ccs.ArmatureAnimation:playWithNames");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ccs.ArmatureAnimation:playWithNames");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_playWithNames'", nullptr);
@@ -9143,7 +9143,7 @@ int lua_ax_studio_ArmatureAnimation_playWithIndexes(lua_State* tolua_S)
 
         ok &= luaval_to_std_vector_int(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:playWithIndexes");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:playWithIndexes");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ArmatureAnimation:playWithIndexes");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_playWithIndexes'", nullptr);
@@ -9161,9 +9161,9 @@ int lua_ax_studio_ArmatureAnimation_playWithIndexes(lua_State* tolua_S)
 
         ok &= luaval_to_std_vector_int(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:playWithIndexes");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:playWithIndexes");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ArmatureAnimation:playWithIndexes");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ccs.ArmatureAnimation:playWithIndexes");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ccs.ArmatureAnimation:playWithIndexes");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_playWithIndexes'", nullptr);
@@ -9213,7 +9213,7 @@ int lua_ax_studio_ArmatureAnimation_gotoAndPlay(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ArmatureAnimation:gotoAndPlay");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:gotoAndPlay");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_gotoAndPlay'", nullptr);
@@ -9263,7 +9263,7 @@ int lua_ax_studio_ArmatureAnimation_gotoAndPause(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ArmatureAnimation:gotoAndPause");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ArmatureAnimation:gotoAndPause");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_gotoAndPause'", nullptr);
@@ -10977,7 +10977,7 @@ int lua_ax_studio_Armature_removeBone(lua_State* tolua_S)
 
         ok &= luaval_to_object<cocostudio::Bone>(tolua_S, 2, "ccs.Bone",&arg0, "ccs.Armature:removeBone");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.Armature:removeBone");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.Armature:removeBone");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_removeBone'", nullptr);
@@ -11075,9 +11075,9 @@ int lua_ax_studio_Armature_getBoneAtPoint(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.Armature:getBoneAtPoint");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.Armature:getBoneAtPoint");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ccs.Armature:getBoneAtPoint");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ccs.Armature:getBoneAtPoint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getBoneAtPoint'", nullptr);
@@ -11656,7 +11656,7 @@ int lua_ax_studio_Armature_setVersion(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.Armature:setVersion");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.Armature:setVersion");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_setVersion'", nullptr);
@@ -12377,7 +12377,7 @@ int lua_ax_studio_ComAttribute_setInt(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:setInt");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ComAttribute:setInt");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ComAttribute:setInt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_setInt'", nullptr);
@@ -12430,7 +12430,7 @@ int lua_ax_studio_ComAttribute_setFloat(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:setFloat");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ccs.ComAttribute:setFloat");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ccs.ComAttribute:setFloat");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_setFloat'", nullptr);
@@ -12483,7 +12483,7 @@ int lua_ax_studio_ComAttribute_setBool(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:setBool");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.ComAttribute:setBool");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.ComAttribute:setBool");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_setBool'", nullptr);
@@ -12603,7 +12603,7 @@ int lua_ax_studio_ComAttribute_getInt(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getInt");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ComAttribute:getInt");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ComAttribute:getInt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getInt'", nullptr);
@@ -12670,7 +12670,7 @@ int lua_ax_studio_ComAttribute_getFloat(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getFloat");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ccs.ComAttribute:getFloat");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ccs.ComAttribute:getFloat");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getFloat'", nullptr);
@@ -12737,7 +12737,7 @@ int lua_ax_studio_ComAttribute_getBool(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getBool");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.ComAttribute:getBool");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.ComAttribute:getBool");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getBool'", nullptr);
@@ -13109,7 +13109,7 @@ int lua_ax_studio_ComAudio_playBackgroundMusic(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.ComAudio:playBackgroundMusic");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.ComAudio:playBackgroundMusic");
 
             if (!ok) { break; }
             cobj->playBackgroundMusic(arg0, arg1);
@@ -13168,7 +13168,7 @@ int lua_ax_studio_ComAudio_stopBackgroundMusic(lua_State* tolua_S)
     do{
         if (argc == 1) {
             bool arg0;
-            ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.ComAudio:stopBackgroundMusic");
+            ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.ComAudio:stopBackgroundMusic");
 
             if (!ok) { break; }
             cobj->stopBackgroundMusic(arg0);
@@ -13499,7 +13499,7 @@ int lua_ax_studio_ComAudio_setBackgroundMusicVolume(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ComAudio:setBackgroundMusicVolume");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ComAudio:setBackgroundMusicVolume");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_setBackgroundMusicVolume'", nullptr);
@@ -13596,7 +13596,7 @@ int lua_ax_studio_ComAudio_setEffectsVolume(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ComAudio:setEffectsVolume");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ComAudio:setEffectsVolume");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_setEffectsVolume'", nullptr);
@@ -13656,7 +13656,7 @@ int lua_ax_studio_ComAudio_playEffect(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.ComAudio:playEffect");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.ComAudio:playEffect");
 
             if (!ok) { break; }
             unsigned int ret = cobj->playEffect(arg0, arg1);
@@ -13713,7 +13713,7 @@ int lua_ax_studio_ComAudio_pauseEffect(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ccs.ComAudio:pauseEffect");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ComAudio:pauseEffect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_pauseEffect'", nullptr);
@@ -13810,7 +13810,7 @@ int lua_ax_studio_ComAudio_resumeEffect(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ccs.ComAudio:resumeEffect");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ComAudio:resumeEffect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_resumeEffect'", nullptr);
@@ -13907,7 +13907,7 @@ int lua_ax_studio_ComAudio_stopEffect(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ccs.ComAudio:stopEffect");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ComAudio:stopEffect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_stopEffect'", nullptr);
@@ -14201,7 +14201,7 @@ int lua_ax_studio_ComAudio_setLoop(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.ComAudio:setLoop");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.ComAudio:setLoop");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_setLoop'", nullptr);
@@ -15196,7 +15196,7 @@ int lua_ax_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.SceneReader:createNodeWithSceneFile");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.SceneReader:createNodeWithSceneFile");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.SceneReader:createNodeWithSceneFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SceneReader_createNodeWithSceneFile'", nullptr);
@@ -15300,7 +15300,7 @@ int lua_ax_studio_SceneReader_getNodeByTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.SceneReader:getNodeByTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.SceneReader:getNodeByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SceneReader_getNodeByTag'", nullptr);
@@ -16078,7 +16078,7 @@ int lua_ax_studio_Frame_setFrameIndex(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ccs.Frame:setFrameIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Frame:setFrameIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_setFrameIndex'", nullptr);
@@ -16369,7 +16369,7 @@ int lua_ax_studio_Frame_setTween(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.Frame:setTween");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.Frame:setTween");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_setTween'", nullptr);
@@ -16466,7 +16466,7 @@ int lua_ax_studio_Frame_setTweenType(lua_State* tolua_S)
     {
         ax::tweenfunc::TweenType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Frame:setTweenType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Frame:setTweenType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_setTweenType'", nullptr);
@@ -16707,7 +16707,7 @@ int lua_ax_studio_Frame_apply(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.Frame:apply");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.Frame:apply");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_apply'", nullptr);
@@ -16838,7 +16838,7 @@ int lua_ax_studio_VisibleFrame_setVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.VisibleFrame:setVisible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.VisibleFrame:setVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_VisibleFrame_setVisible'", nullptr);
@@ -17220,7 +17220,7 @@ int lua_ax_studio_RotationFrame_setRotation(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.RotationFrame:setRotation");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.RotationFrame:setRotation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_RotationFrame_setRotation'", nullptr);
@@ -17411,7 +17411,7 @@ int lua_ax_studio_SkewFrame_setSkewX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.SkewFrame:setSkewX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.SkewFrame:setSkewX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SkewFrame_setSkewX'", nullptr);
@@ -17508,7 +17508,7 @@ int lua_ax_studio_SkewFrame_setSkewY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.SkewFrame:setSkewY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.SkewFrame:setSkewY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SkewFrame_setSkewY'", nullptr);
@@ -17890,7 +17890,7 @@ int lua_ax_studio_PositionFrame_setX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.PositionFrame:setX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.PositionFrame:setX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_PositionFrame_setX'", nullptr);
@@ -17940,7 +17940,7 @@ int lua_ax_studio_PositionFrame_setY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.PositionFrame:setY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.PositionFrame:setY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_PositionFrame_setY'", nullptr);
@@ -18182,7 +18182,7 @@ int lua_ax_studio_ScaleFrame_setScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ScaleFrame:setScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ScaleFrame:setScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ScaleFrame_setScale'", nullptr);
@@ -18232,7 +18232,7 @@ int lua_ax_studio_ScaleFrame_setScaleX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ScaleFrame:setScaleX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ScaleFrame:setScaleX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ScaleFrame_setScaleX'", nullptr);
@@ -18329,7 +18329,7 @@ int lua_ax_studio_ScaleFrame_setScaleY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ScaleFrame:setScaleY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ScaleFrame:setScaleY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ScaleFrame_setScaleY'", nullptr);
@@ -18714,7 +18714,7 @@ int lua_ax_studio_InnerActionFrame_setInnerActionType(lua_State* tolua_S)
     {
         cocostudio::timeline::InnerActionType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.InnerActionFrame:setInnerActionType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.InnerActionFrame:setInnerActionType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_setInnerActionType'", nullptr);
@@ -18811,7 +18811,7 @@ int lua_ax_studio_InnerActionFrame_setEnterWithName(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.InnerActionFrame:setEnterWithName");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.InnerActionFrame:setEnterWithName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_setEnterWithName'", nullptr);
@@ -18861,7 +18861,7 @@ int lua_ax_studio_InnerActionFrame_setStartFrameIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.InnerActionFrame:setStartFrameIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.InnerActionFrame:setStartFrameIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_setStartFrameIndex'", nullptr);
@@ -18958,7 +18958,7 @@ int lua_ax_studio_InnerActionFrame_setEndFrameIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.InnerActionFrame:setEndFrameIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.InnerActionFrame:setEndFrameIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_setEndFrameIndex'", nullptr);
@@ -19105,7 +19105,7 @@ int lua_ax_studio_InnerActionFrame_setSingleFrameIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.InnerActionFrame:setSingleFrameIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.InnerActionFrame:setSingleFrameIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_setSingleFrameIndex'", nullptr);
@@ -19495,7 +19495,7 @@ int lua_ax_studio_AlphaFrame_setAlpha(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "ccs.AlphaFrame:setAlpha");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.AlphaFrame:setAlpha");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_AlphaFrame_setAlpha'", nullptr);
@@ -19925,7 +19925,7 @@ int lua_ax_studio_ZOrderFrame_setZOrder(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ZOrderFrame:setZOrder");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ZOrderFrame:setZOrder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ZOrderFrame_setZOrder'", nullptr);
@@ -20498,7 +20498,7 @@ int lua_ax_studio_Timeline_gotoFrame(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Timeline:gotoFrame");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Timeline:gotoFrame");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_gotoFrame'", nullptr);
@@ -20548,7 +20548,7 @@ int lua_ax_studio_Timeline_stepToFrame(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Timeline:stepToFrame");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Timeline:stepToFrame");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_stepToFrame'", nullptr);
@@ -20698,7 +20698,7 @@ int lua_ax_studio_Timeline_insertFrame(lua_State* tolua_S)
 
         ok &= luaval_to_object<cocostudio::timeline::Frame>(tolua_S, 2, "ccs.Frame",&arg0, "ccs.Timeline:insertFrame");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.Timeline:insertFrame");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.Timeline:insertFrame");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_insertFrame'", nullptr);
@@ -20798,7 +20798,7 @@ int lua_ax_studio_Timeline_setActionTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Timeline:setActionTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.Timeline:setActionTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_setActionTag'", nullptr);
@@ -21241,7 +21241,7 @@ int lua_ax_studio_ActionTimelineData_setActionTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimelineData:setActionTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimelineData:setActionTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineData_setActionTag'", nullptr);
@@ -21338,7 +21338,7 @@ int lua_ax_studio_ActionTimelineData_init(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimelineData:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimelineData:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineData_init'", nullptr);
@@ -21376,7 +21376,7 @@ int lua_ax_studio_ActionTimelineData_create(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimelineData:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimelineData:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineData_create'", nullptr);
@@ -21488,7 +21488,7 @@ int lua_ax_studio_ActionTimeline_play(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimeline:play");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.ActionTimeline:play");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.ActionTimeline:play");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_play'", nullptr);
@@ -21579,11 +21579,11 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
     do{
         if (argc == 2) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             cobj->gotoFrameAndPlay(arg0, arg1);
@@ -21595,7 +21595,7 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             cobj->gotoFrameAndPlay(arg0);
@@ -21607,15 +21607,15 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
     do{
         if (argc == 3) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             cobj->gotoFrameAndPlay(arg0, arg1, arg2);
@@ -21627,19 +21627,19 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
     do{
         if (argc == 4) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ccs.ActionTimeline:gotoFrameAndPlay");
+            ok &= luaval_to_boolean(tolua_S, 5, &arg3, "ccs.ActionTimeline:gotoFrameAndPlay");
 
             if (!ok) { break; }
             cobj->gotoFrameAndPlay(arg0, arg1, arg2, arg3);
@@ -21688,7 +21688,7 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPause(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:gotoFrameAndPause");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPause");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_gotoFrameAndPause'", nullptr);
@@ -21879,7 +21879,7 @@ int lua_ax_studio_ActionTimeline_setTimeSpeed(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionTimeline:setTimeSpeed");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionTimeline:setTimeSpeed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_setTimeSpeed'", nullptr);
@@ -21976,7 +21976,7 @@ int lua_ax_studio_ActionTimeline_setDuration(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:setDuration");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:setDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_setDuration'", nullptr);
@@ -22167,7 +22167,7 @@ int lua_ax_studio_ActionTimeline_setCurrentFrame(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:setCurrentFrame");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:setCurrentFrame");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_setCurrentFrame'", nullptr);
@@ -22818,7 +22818,7 @@ int lua_ax_studio_ActionTimeline_addFrameEndCallFunc(lua_State* tolua_S)
         std::string_view arg1;
         std::function<void ()> arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:addFrameEndCallFunc");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:addFrameEndCallFunc");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ActionTimeline:addFrameEndCallFunc");
 
@@ -22877,7 +22877,7 @@ int lua_ax_studio_ActionTimeline_removeFrameEndCallFunc(lua_State* tolua_S)
         int arg0;
         std::string_view arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:removeFrameEndCallFunc");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:removeFrameEndCallFunc");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ActionTimeline:removeFrameEndCallFunc");
         if(!ok)
@@ -22929,7 +22929,7 @@ int lua_ax_studio_ActionTimeline_removeFrameEndCallFuncs(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:removeFrameEndCallFuncs");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:removeFrameEndCallFuncs");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_removeFrameEndCallFuncs'", nullptr);
@@ -23683,11 +23683,11 @@ int lua_ax_studio_BoneNode_addSkin(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.BoneNode:addSkin");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.BoneNode:addSkin");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ccs.BoneNode:addSkin");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ccs.BoneNode:addSkin");
 
             if (!ok) { break; }
             cobj->addSkin(arg0, arg1, arg2);
@@ -23703,7 +23703,7 @@ int lua_ax_studio_BoneNode_addSkin(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.BoneNode:addSkin");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.BoneNode:addSkin");
 
             if (!ok) { break; }
             cobj->addSkin(arg0, arg1);
@@ -23750,7 +23750,7 @@ int lua_ax_studio_BoneNode_displaySkin(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.BoneNode:displaySkin");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.BoneNode:displaySkin");
 
             if (!ok) { break; }
             cobj->displaySkin(arg0, arg1);
@@ -23766,7 +23766,7 @@ int lua_ax_studio_BoneNode_displaySkin(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.BoneNode:displaySkin");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ccs.BoneNode:displaySkin");
 
             if (!ok) { break; }
             cobj->displaySkin(arg0, arg1);
@@ -24053,7 +24053,7 @@ int lua_ax_studio_BoneNode_setDebugDrawEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.BoneNode:setDebugDrawEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.BoneNode:setDebugDrawEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_setDebugDrawEnabled'", nullptr);
@@ -24150,7 +24150,7 @@ int lua_ax_studio_BoneNode_setDebugDrawLength(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.BoneNode:setDebugDrawLength");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.BoneNode:setDebugDrawLength");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_setDebugDrawLength'", nullptr);
@@ -24247,7 +24247,7 @@ int lua_ax_studio_BoneNode_setDebugDrawWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.BoneNode:setDebugDrawWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.BoneNode:setDebugDrawWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_setDebugDrawWidth'", nullptr);
@@ -24477,7 +24477,7 @@ int lua_ax_studio_BoneNode_create(lua_State* tolua_S)
         if (argc == 1)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.BoneNode:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.BoneNode:create");
             if (!ok) { break; }
             cocostudio::timeline::BoneNode* ret = cocostudio::timeline::BoneNode::create(arg0);
             object_to_luaval<cocostudio::timeline::BoneNode>(tolua_S, "ccs.BoneNode",(cocostudio::timeline::BoneNode*)ret);
@@ -25008,7 +25008,7 @@ int lua_ax_studio_ComExtensionData_setActionTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ComExtensionData:setActionTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ComExtensionData:setActionTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComExtensionData_setActionTag'", nullptr);

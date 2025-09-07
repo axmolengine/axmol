@@ -1249,7 +1249,7 @@ int lua_ax_fairygui_UIEventDispatcher_dispatchEvent(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.UIEventDispatcher:dispatchEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.UIEventDispatcher:dispatchEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_UIEventDispatcher_dispatchEvent'", nullptr);
@@ -1264,7 +1264,7 @@ int lua_ax_fairygui_UIEventDispatcher_dispatchEvent(lua_State* tolua_S)
         int arg0;
         void* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.UIEventDispatcher:dispatchEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.UIEventDispatcher:dispatchEvent");
 
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
@@ -1283,7 +1283,7 @@ int lua_ax_fairygui_UIEventDispatcher_dispatchEvent(lua_State* tolua_S)
         void* arg1;
         ax::Value arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.UIEventDispatcher:dispatchEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.UIEventDispatcher:dispatchEvent");
 
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
@@ -1338,7 +1338,7 @@ int lua_ax_fairygui_UIEventDispatcher_bubbleEvent(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.UIEventDispatcher:bubbleEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.UIEventDispatcher:bubbleEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_UIEventDispatcher_bubbleEvent'", nullptr);
@@ -1353,7 +1353,7 @@ int lua_ax_fairygui_UIEventDispatcher_bubbleEvent(lua_State* tolua_S)
         int arg0;
         void* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.UIEventDispatcher:bubbleEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.UIEventDispatcher:bubbleEvent");
 
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
@@ -1372,7 +1372,7 @@ int lua_ax_fairygui_UIEventDispatcher_bubbleEvent(lua_State* tolua_S)
         void* arg1;
         ax::Value arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.UIEventDispatcher:bubbleEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.UIEventDispatcher:bubbleEvent");
 
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
@@ -1427,7 +1427,7 @@ int lua_ax_fairygui_UIEventDispatcher_isDispatchingEvent(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.UIEventDispatcher:isDispatchingEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.UIEventDispatcher:isDispatchingEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_UIEventDispatcher_isDispatchingEvent'", nullptr);
@@ -1682,7 +1682,7 @@ int lua_ax_fairygui_GController_setSelectedIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GController:setSelectedIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GController:setSelectedIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GController_setSelectedIndex'", nullptr);
@@ -1697,9 +1697,9 @@ int lua_ax_fairygui_GController_setSelectedIndex(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GController:setSelectedIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GController:setSelectedIndex");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GController:setSelectedIndex");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GController:setSelectedIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GController_setSelectedIndex'", nullptr);
@@ -1813,7 +1813,7 @@ int lua_ax_fairygui_GController_setSelectedPage(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.GController:setSelectedPage");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GController:setSelectedPage");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GController:setSelectedPage");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GController_setSelectedPage'", nullptr);
@@ -1927,7 +1927,7 @@ int lua_ax_fairygui_GController_setSelectedPageId(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.GController:setSelectedPageId");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GController:setSelectedPageId");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GController:setSelectedPageId");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GController_setSelectedPageId'", nullptr);
@@ -2315,7 +2315,7 @@ int lua_ax_fairygui_GController_getPageId(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GController:getPageId");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GController:getPageId");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GController_getPageId'", nullptr);
@@ -2584,7 +2584,7 @@ int lua_ax_fairygui_GObject_setX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setX'", nullptr);
@@ -2681,7 +2681,7 @@ int lua_ax_fairygui_GObject_setY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setY'", nullptr);
@@ -2779,9 +2779,9 @@ int lua_ax_fairygui_GObject_setPosition(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setPosition");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setPosition");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GObject:setPosition");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GObject:setPosition");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setPosition'", nullptr);
@@ -2878,7 +2878,7 @@ int lua_ax_fairygui_GObject_setXMin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setXMin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setXMin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setXMin'", nullptr);
@@ -2975,7 +2975,7 @@ int lua_ax_fairygui_GObject_setYMin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setYMin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setYMin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setYMin'", nullptr);
@@ -3072,7 +3072,7 @@ int lua_ax_fairygui_GObject_setPixelSnapping(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GObject:setPixelSnapping");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GObject:setPixelSnapping");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setPixelSnapping'", nullptr);
@@ -3169,7 +3169,7 @@ int lua_ax_fairygui_GObject_setWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setWidth'", nullptr);
@@ -3266,7 +3266,7 @@ int lua_ax_fairygui_GObject_setHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setHeight'", nullptr);
@@ -3364,9 +3364,9 @@ int lua_ax_fairygui_GObject_setSize(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setSize");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GObject:setSize");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GObject:setSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setSize'", nullptr);
@@ -3382,11 +3382,11 @@ int lua_ax_fairygui_GObject_setSize(lua_State* tolua_S)
         double arg1;
         bool arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setSize");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GObject:setSize");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GObject:setSize");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "fgui.GObject:setSize");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "fgui.GObject:setSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setSize'", nullptr);
@@ -3447,7 +3447,7 @@ int lua_ax_fairygui_GObject_center(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GObject:center");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GObject:center");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_center'", nullptr);
@@ -3592,9 +3592,9 @@ int lua_ax_fairygui_GObject_setPivot(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setPivot");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setPivot");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GObject:setPivot");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GObject:setPivot");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setPivot'", nullptr);
@@ -3610,11 +3610,11 @@ int lua_ax_fairygui_GObject_setPivot(lua_State* tolua_S)
         double arg1;
         bool arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setPivot");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setPivot");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GObject:setPivot");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GObject:setPivot");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "fgui.GObject:setPivot");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "fgui.GObject:setPivot");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setPivot'", nullptr);
@@ -3758,7 +3758,7 @@ int lua_ax_fairygui_GObject_setScaleX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setScaleX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setScaleX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setScaleX'", nullptr);
@@ -3855,7 +3855,7 @@ int lua_ax_fairygui_GObject_setScaleY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setScaleY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setScaleY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setScaleY'", nullptr);
@@ -3953,9 +3953,9 @@ int lua_ax_fairygui_GObject_setScale(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setScale");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GObject:setScale");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GObject:setScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setScale'", nullptr);
@@ -4052,7 +4052,7 @@ int lua_ax_fairygui_GObject_setSkewX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setSkewX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setSkewX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setSkewX'", nullptr);
@@ -4149,7 +4149,7 @@ int lua_ax_fairygui_GObject_setSkewY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setSkewY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setSkewY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setSkewY'", nullptr);
@@ -4246,7 +4246,7 @@ int lua_ax_fairygui_GObject_setRotation(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setRotation");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setRotation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setRotation'", nullptr);
@@ -4343,7 +4343,7 @@ int lua_ax_fairygui_GObject_setAlpha(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GObject:setAlpha");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GObject:setAlpha");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setAlpha'", nullptr);
@@ -4440,7 +4440,7 @@ int lua_ax_fairygui_GObject_setGrayed(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GObject:setGrayed");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GObject:setGrayed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setGrayed'", nullptr);
@@ -4537,7 +4537,7 @@ int lua_ax_fairygui_GObject_setVisible(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GObject:setVisible");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GObject:setVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setVisible'", nullptr);
@@ -4634,7 +4634,7 @@ int lua_ax_fairygui_GObject_setTouchable(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GObject:setTouchable");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GObject:setTouchable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setTouchable'", nullptr);
@@ -4731,7 +4731,7 @@ int lua_ax_fairygui_GObject_setSortingOrder(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GObject:setSortingOrder");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:setSortingOrder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setSortingOrder'", nullptr);
@@ -5216,7 +5216,7 @@ int lua_ax_fairygui_GObject_setBlendMode(lua_State* tolua_S)
     {
         fairygui::BlendMode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GObject:setBlendMode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:setBlendMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setBlendMode'", nullptr);
@@ -5461,7 +5461,7 @@ int lua_ax_fairygui_GObject_setDraggable(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GObject:setDraggable");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GObject:setDraggable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_setDraggable'", nullptr);
@@ -5619,7 +5619,7 @@ int lua_ax_fairygui_GObject_startDrag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GObject:startDrag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:startDrag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_startDrag'", nullptr);
@@ -6023,7 +6023,7 @@ int lua_ax_fairygui_GObject_addRelation(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GObject:addRelation");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GObject:addRelation");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GObject:addRelation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_addRelation'", nullptr);
@@ -6041,9 +6041,9 @@ int lua_ax_fairygui_GObject_addRelation(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GObject:addRelation");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GObject:addRelation");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GObject:addRelation");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "fgui.GObject:addRelation");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "fgui.GObject:addRelation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_addRelation'", nullptr);
@@ -6096,7 +6096,7 @@ int lua_ax_fairygui_GObject_removeRelation(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GObject:removeRelation");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GObject:removeRelation");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GObject:removeRelation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_removeRelation'", nullptr);
@@ -6146,7 +6146,7 @@ int lua_ax_fairygui_GObject_getGear(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GObject:getGear");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:getGear");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_getGear'", nullptr);
@@ -6197,7 +6197,7 @@ int lua_ax_fairygui_GObject_checkGearController(lua_State* tolua_S)
         int arg0;
         fairygui::GController* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GObject:checkGearController");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:checkGearController");
 
         ok &= luaval_to_object<fairygui::GController>(tolua_S, 3, "fgui.GController",&arg1, "fgui.GObject:checkGearController");
         if(!ok)
@@ -6296,7 +6296,7 @@ int lua_ax_fairygui_GObject_releaseDisplayLock(lua_State* tolua_S)
     {
         unsigned int arg0;
 
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "fgui.GObject:releaseDisplayLock");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:releaseDisplayLock");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_releaseDisplayLock'", nullptr);
@@ -6628,7 +6628,7 @@ int lua_ax_fairygui_GObject_getProp(lua_State* tolua_S)
     {
         fairygui::ObjectPropID arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GObject:getProp");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:getProp");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GObject_getProp'", nullptr);
@@ -6679,7 +6679,7 @@ int lua_ax_fairygui_GObject_setProp(lua_State* tolua_S)
         fairygui::ObjectPropID arg0;
         ax::Value arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GObject:setProp");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GObject:setProp");
 
         ok &= luaval_to_ccvalue(tolua_S, 3, &arg1, "fgui.GObject:setProp");
         if(!ok)
@@ -7949,7 +7949,7 @@ int lua_ax_fairygui_GImage_setFlip(lua_State* tolua_S)
     {
         fairygui::FlipType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GImage:setFlip");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GImage:setFlip");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GImage_setFlip'", nullptr);
@@ -8143,7 +8143,7 @@ int lua_ax_fairygui_GImage_setFillMethod(lua_State* tolua_S)
     {
         fairygui::FillMethod arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GImage:setFillMethod");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GImage:setFillMethod");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GImage_setFillMethod'", nullptr);
@@ -8240,7 +8240,7 @@ int lua_ax_fairygui_GImage_setFillOrigin(lua_State* tolua_S)
     {
         fairygui::FillOrigin arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GImage:setFillOrigin");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GImage:setFillOrigin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GImage_setFillOrigin'", nullptr);
@@ -8337,7 +8337,7 @@ int lua_ax_fairygui_GImage_setFillClockwise(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GImage:setFillClockwise");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GImage:setFillClockwise");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GImage_setFillClockwise'", nullptr);
@@ -8434,7 +8434,7 @@ int lua_ax_fairygui_GImage_setFillAmount(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GImage:setFillAmount");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GImage:setFillAmount");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GImage_setFillAmount'", nullptr);
@@ -8635,7 +8635,7 @@ int lua_ax_fairygui_GMovieClip_setPlaying(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GMovieClip:setPlaying");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GMovieClip:setPlaying");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaying'", nullptr);
@@ -8732,7 +8732,7 @@ int lua_ax_fairygui_GMovieClip_setFrame(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GMovieClip:setFrame");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GMovieClip:setFrame");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GMovieClip_setFrame'", nullptr);
@@ -8829,7 +8829,7 @@ int lua_ax_fairygui_GMovieClip_setTimeScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GMovieClip:setTimeScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GMovieClip:setTimeScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GMovieClip_setTimeScale'", nullptr);
@@ -8879,7 +8879,7 @@ int lua_ax_fairygui_GMovieClip_advance(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GMovieClip:advance");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GMovieClip:advance");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GMovieClip_advance'", nullptr);
@@ -8976,7 +8976,7 @@ int lua_ax_fairygui_GMovieClip_setFlip(lua_State* tolua_S)
     {
         fairygui::FlipType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GMovieClip:setFlip");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GMovieClip:setFlip");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GMovieClip_setFlip'", nullptr);
@@ -9273,7 +9273,7 @@ int lua_ax_fairygui_GTextField_setUBBEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GTextField:setUBBEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GTextField:setUBBEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextField_setUBBEnabled'", nullptr);
@@ -9370,7 +9370,7 @@ int lua_ax_fairygui_GTextField_setAutoSize(lua_State* tolua_S)
     {
         fairygui::AutoSizeType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GTextField:setAutoSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GTextField:setAutoSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextField_setAutoSize'", nullptr);
@@ -9467,7 +9467,7 @@ int lua_ax_fairygui_GTextField_setSingleLine(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GTextField:setSingleLine");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GTextField:setSingleLine");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextField_setSingleLine'", nullptr);
@@ -9802,7 +9802,7 @@ int lua_ax_fairygui_GTextField_setFontSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTextField:setFontSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTextField:setFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextField_setFontSize'", nullptr);
@@ -10469,7 +10469,7 @@ int lua_ax_fairygui_GTextInput_setPassword(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GTextInput:setPassword");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GTextInput:setPassword");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextInput_setPassword'", nullptr);
@@ -10519,7 +10519,7 @@ int lua_ax_fairygui_GTextInput_setKeyboardType(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GTextInput:setKeyboardType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GTextInput:setKeyboardType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextInput_setKeyboardType'", nullptr);
@@ -10569,7 +10569,7 @@ int lua_ax_fairygui_GTextInput_setMaxLength(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GTextInput:setMaxLength");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GTextInput:setMaxLength");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTextInput_setMaxLength'", nullptr);
@@ -10770,11 +10770,11 @@ int lua_ax_fairygui_GGraph_drawRect(lua_State* tolua_S)
         ax::Color arg3;
         ax::Color arg4;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GGraph:drawRect");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GGraph:drawRect");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GGraph:drawRect");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GGraph:drawRect");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "fgui.GGraph:drawRect");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "fgui.GGraph:drawRect");
 
         ok &=luaval_to_color(tolua_S, 5, &arg3, "fgui.GGraph:drawRect");
 
@@ -10832,11 +10832,11 @@ int lua_ax_fairygui_GGraph_drawEllipse(lua_State* tolua_S)
         ax::Color arg3;
         ax::Color arg4;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GGraph:drawEllipse");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GGraph:drawEllipse");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GGraph:drawEllipse");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GGraph:drawEllipse");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "fgui.GGraph:drawEllipse");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "fgui.GGraph:drawEllipse");
 
         ok &=luaval_to_color(tolua_S, 5, &arg3, "fgui.GGraph:drawEllipse");
 
@@ -10894,7 +10894,7 @@ int lua_ax_fairygui_GGraph_drawPolygon(lua_State* tolua_S)
         const ax::Vec2* arg3;
         int arg4;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGraph:drawPolygon");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGraph:drawPolygon");
 
         ok &=luaval_to_color(tolua_S, 3, &arg1, "fgui.GGraph:drawPolygon");
 
@@ -10902,7 +10902,7 @@ int lua_ax_fairygui_GGraph_drawPolygon(lua_State* tolua_S)
 
         ok &= luaval_to_object<const ax::Vec2>(tolua_S, 5, "ax.Vec2",&arg3, "fgui.GGraph:drawPolygon");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "fgui.GGraph:drawPolygon");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "fgui.GGraph:drawPolygon");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGraph_drawPolygon'", nullptr);
@@ -10955,13 +10955,13 @@ int lua_ax_fairygui_GGraph_drawRegularPolygon(lua_State* tolua_S)
         ax::Color arg2;
         int arg3;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGraph:drawRegularPolygon");
 
         ok &=luaval_to_color(tolua_S, 3, &arg1, "fgui.GGraph:drawRegularPolygon");
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "fgui.GGraph:drawRegularPolygon");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "fgui.GGraph:drawRegularPolygon");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGraph_drawRegularPolygon'", nullptr);
@@ -10979,15 +10979,15 @@ int lua_ax_fairygui_GGraph_drawRegularPolygon(lua_State* tolua_S)
         int arg3;
         double arg4;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGraph:drawRegularPolygon");
 
         ok &=luaval_to_color(tolua_S, 3, &arg1, "fgui.GGraph:drawRegularPolygon");
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "fgui.GGraph:drawRegularPolygon");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "fgui.GGraph:drawRegularPolygon");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "fgui.GGraph:drawRegularPolygon");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGraph_drawRegularPolygon'", nullptr);
@@ -11006,15 +11006,15 @@ int lua_ax_fairygui_GGraph_drawRegularPolygon(lua_State* tolua_S)
         double arg4;
         const float* arg5;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGraph:drawRegularPolygon");
 
         ok &=luaval_to_color(tolua_S, 3, &arg1, "fgui.GGraph:drawRegularPolygon");
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "fgui.GGraph:drawRegularPolygon");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "fgui.GGraph:drawRegularPolygon");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "fgui.GGraph:drawRegularPolygon");
 
         #pragma warning NO CONVERSION TO NATIVE FOR float*
         ok = false;
@@ -11037,20 +11037,20 @@ int lua_ax_fairygui_GGraph_drawRegularPolygon(lua_State* tolua_S)
         const float* arg5;
         int arg6;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGraph:drawRegularPolygon");
 
         ok &=luaval_to_color(tolua_S, 3, &arg1, "fgui.GGraph:drawRegularPolygon");
 
         ok &=luaval_to_color(tolua_S, 4, &arg2, "fgui.GGraph:drawRegularPolygon");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "fgui.GGraph:drawRegularPolygon");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "fgui.GGraph:drawRegularPolygon");
 
         #pragma warning NO CONVERSION TO NATIVE FOR float*
         ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 8,(int *)&arg6, "fgui.GGraph:drawRegularPolygon");
+        ok &= luaval_to_int(tolua_S, 8, &arg6, "fgui.GGraph:drawRegularPolygon");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGraph_drawRegularPolygon'", nullptr);
@@ -11487,7 +11487,7 @@ int lua_ax_fairygui_GLoader_setAlign(lua_State* tolua_S)
     {
         ax::TextHAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GLoader:setAlign");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GLoader:setAlign");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setAlign'", nullptr);
@@ -11584,7 +11584,7 @@ int lua_ax_fairygui_GLoader_setVerticalAlign(lua_State* tolua_S)
     {
         ax::TextVAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GLoader:setVerticalAlign");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GLoader:setVerticalAlign");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setVerticalAlign'", nullptr);
@@ -11681,7 +11681,7 @@ int lua_ax_fairygui_GLoader_setAutoSize(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GLoader:setAutoSize");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GLoader:setAutoSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setAutoSize'", nullptr);
@@ -11778,7 +11778,7 @@ int lua_ax_fairygui_GLoader_setFill(lua_State* tolua_S)
     {
         fairygui::LoaderFillType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GLoader:setFill");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GLoader:setFill");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setFill'", nullptr);
@@ -11875,7 +11875,7 @@ int lua_ax_fairygui_GLoader_setShrinkOnly(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GLoader:setShrinkOnly");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GLoader:setShrinkOnly");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setShrinkOnly'", nullptr);
@@ -12116,7 +12116,7 @@ int lua_ax_fairygui_GLoader_setPlaying(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GLoader:setPlaying");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GLoader:setPlaying");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setPlaying'", nullptr);
@@ -12213,7 +12213,7 @@ int lua_ax_fairygui_GLoader_setFrame(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GLoader:setFrame");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GLoader:setFrame");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setFrame'", nullptr);
@@ -12310,7 +12310,7 @@ int lua_ax_fairygui_GLoader_setFillMethod(lua_State* tolua_S)
     {
         fairygui::FillMethod arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GLoader:setFillMethod");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GLoader:setFillMethod");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setFillMethod'", nullptr);
@@ -12407,7 +12407,7 @@ int lua_ax_fairygui_GLoader_setFillOrigin(lua_State* tolua_S)
     {
         fairygui::FillOrigin arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GLoader:setFillOrigin");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GLoader:setFillOrigin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setFillOrigin'", nullptr);
@@ -12504,7 +12504,7 @@ int lua_ax_fairygui_GLoader_setFillClockwise(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GLoader:setFillClockwise");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GLoader:setFillClockwise");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setFillClockwise'", nullptr);
@@ -12601,7 +12601,7 @@ int lua_ax_fairygui_GLoader_setFillAmount(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GLoader:setFillAmount");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GLoader:setFillAmount");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GLoader_setFillAmount'", nullptr);
@@ -12865,7 +12865,7 @@ int lua_ax_fairygui_GGroup_setLayout(lua_State* tolua_S)
     {
         fairygui::GroupLayoutType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGroup:setLayout");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGroup:setLayout");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_setLayout'", nullptr);
@@ -12962,7 +12962,7 @@ int lua_ax_fairygui_GGroup_setColumnGap(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGroup:setColumnGap");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGroup:setColumnGap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_setColumnGap'", nullptr);
@@ -13059,7 +13059,7 @@ int lua_ax_fairygui_GGroup_setLineGap(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGroup:setLineGap");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGroup:setLineGap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_setLineGap'", nullptr);
@@ -13156,7 +13156,7 @@ int lua_ax_fairygui_GGroup_setExcludeInvisibles(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GGroup:setExcludeInvisibles");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GGroup:setExcludeInvisibles");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_setExcludeInvisibles'", nullptr);
@@ -13253,7 +13253,7 @@ int lua_ax_fairygui_GGroup_setAutoSizeDisabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GGroup:setAutoSizeDisabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GGroup:setAutoSizeDisabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_setAutoSizeDisabled'", nullptr);
@@ -13350,7 +13350,7 @@ int lua_ax_fairygui_GGroup_setMainGridIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGroup:setMainGridIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGroup:setMainGridIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_setMainGridIndex'", nullptr);
@@ -13447,7 +13447,7 @@ int lua_ax_fairygui_GGroup_setMainGridMinSize(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GGroup:setMainGridMinSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GGroup:setMainGridMinSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_setMainGridMinSize'", nullptr);
@@ -13508,7 +13508,7 @@ int lua_ax_fairygui_GGroup_setBoundsChangedFlag(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GGroup:setBoundsChangedFlag");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GGroup:setBoundsChangedFlag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_setBoundsChangedFlag'", nullptr);
@@ -13559,9 +13559,9 @@ int lua_ax_fairygui_GGroup_moveChildren(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GGroup:moveChildren");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GGroup:moveChildren");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GGroup:moveChildren");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GGroup:moveChildren");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_moveChildren'", nullptr);
@@ -13612,9 +13612,9 @@ int lua_ax_fairygui_GGroup_resizeChildren(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GGroup:resizeChildren");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GGroup:resizeChildren");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GGroup:resizeChildren");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GGroup:resizeChildren");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GGroup_resizeChildren'", nullptr);
@@ -14105,7 +14105,7 @@ int lua_ax_fairygui_ScrollPane_setBouncebackEffect(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.ScrollPane:setBouncebackEffect");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.ScrollPane:setBouncebackEffect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setBouncebackEffect'", nullptr);
@@ -14202,7 +14202,7 @@ int lua_ax_fairygui_ScrollPane_setTouchEffect(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.ScrollPane:setTouchEffect");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.ScrollPane:setTouchEffect");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setTouchEffect'", nullptr);
@@ -14299,7 +14299,7 @@ int lua_ax_fairygui_ScrollPane_setInertiaDisabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.ScrollPane:setInertiaDisabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.ScrollPane:setInertiaDisabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setInertiaDisabled'", nullptr);
@@ -14396,7 +14396,7 @@ int lua_ax_fairygui_ScrollPane_setScrollStep(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setScrollStep");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setScrollStep");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setScrollStep'", nullptr);
@@ -14493,7 +14493,7 @@ int lua_ax_fairygui_ScrollPane_setSnapToItem(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.ScrollPane:setSnapToItem");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.ScrollPane:setSnapToItem");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setSnapToItem'", nullptr);
@@ -14590,7 +14590,7 @@ int lua_ax_fairygui_ScrollPane_setPageMode(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.ScrollPane:setPageMode");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.ScrollPane:setPageMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPageMode'", nullptr);
@@ -14784,7 +14784,7 @@ int lua_ax_fairygui_ScrollPane_setMouseWheelEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.ScrollPane:setMouseWheelEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.ScrollPane:setMouseWheelEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setMouseWheelEnabled'", nullptr);
@@ -14881,7 +14881,7 @@ int lua_ax_fairygui_ScrollPane_setDecelerationRate(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setDecelerationRate");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setDecelerationRate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setDecelerationRate'", nullptr);
@@ -14978,7 +14978,7 @@ int lua_ax_fairygui_ScrollPane_setPosX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setPosX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setPosX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPosX'", nullptr);
@@ -14993,9 +14993,9 @@ int lua_ax_fairygui_ScrollPane_setPosX(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setPosX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setPosX");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:setPosX");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:setPosX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPosX'", nullptr);
@@ -15092,7 +15092,7 @@ int lua_ax_fairygui_ScrollPane_setPosY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setPosY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setPosY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPosY'", nullptr);
@@ -15107,9 +15107,9 @@ int lua_ax_fairygui_ScrollPane_setPosY(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setPosY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setPosY");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:setPosY");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:setPosY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPosY'", nullptr);
@@ -15206,7 +15206,7 @@ int lua_ax_fairygui_ScrollPane_setPercX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setPercX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setPercX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPercX'", nullptr);
@@ -15221,9 +15221,9 @@ int lua_ax_fairygui_ScrollPane_setPercX(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setPercX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setPercX");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:setPercX");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:setPercX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPercX'", nullptr);
@@ -15320,7 +15320,7 @@ int lua_ax_fairygui_ScrollPane_setPercY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setPercY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setPercY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPercY'", nullptr);
@@ -15335,9 +15335,9 @@ int lua_ax_fairygui_ScrollPane_setPercY(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:setPercY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:setPercY");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:setPercY");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:setPercY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPercY'", nullptr);
@@ -15492,7 +15492,7 @@ int lua_ax_fairygui_ScrollPane_scrollLeft(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollLeft");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollLeft");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollLeft'", nullptr);
@@ -15507,9 +15507,9 @@ int lua_ax_fairygui_ScrollPane_scrollLeft(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollLeft");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollLeft");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:scrollLeft");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:scrollLeft");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollLeft'", nullptr);
@@ -15570,7 +15570,7 @@ int lua_ax_fairygui_ScrollPane_scrollRight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollRight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollRight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollRight'", nullptr);
@@ -15585,9 +15585,9 @@ int lua_ax_fairygui_ScrollPane_scrollRight(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollRight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollRight");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:scrollRight");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:scrollRight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollRight'", nullptr);
@@ -15648,7 +15648,7 @@ int lua_ax_fairygui_ScrollPane_scrollUp(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollUp");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollUp");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollUp'", nullptr);
@@ -15663,9 +15663,9 @@ int lua_ax_fairygui_ScrollPane_scrollUp(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollUp");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollUp");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:scrollUp");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:scrollUp");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollUp'", nullptr);
@@ -15726,7 +15726,7 @@ int lua_ax_fairygui_ScrollPane_scrollDown(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollDown");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollDown");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollDown'", nullptr);
@@ -15741,9 +15741,9 @@ int lua_ax_fairygui_ScrollPane_scrollDown(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollDown");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollDown");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:scrollDown");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:scrollDown");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollDown'", nullptr);
@@ -15804,7 +15804,7 @@ int lua_ax_fairygui_ScrollPane_scrollTop(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollTop");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollTop");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollTop'", nullptr);
@@ -15865,7 +15865,7 @@ int lua_ax_fairygui_ScrollPane_scrollBottom(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.ScrollPane:scrollBottom");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollBottom");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_scrollBottom'", nullptr);
@@ -15925,7 +15925,7 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:scrollToView");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:scrollToView");
 
             if (!ok) { break; }
             cobj->scrollToView(arg0, arg1);
@@ -15941,11 +15941,11 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:scrollToView");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:scrollToView");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "fgui.ScrollPane:scrollToView");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "fgui.ScrollPane:scrollToView");
 
             if (!ok) { break; }
             cobj->scrollToView(arg0, arg1, arg2);
@@ -15973,7 +15973,7 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:scrollToView");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:scrollToView");
 
             if (!ok) { break; }
             cobj->scrollToView(arg0, arg1);
@@ -15989,11 +15989,11 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:scrollToView");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:scrollToView");
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "fgui.ScrollPane:scrollToView");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "fgui.ScrollPane:scrollToView");
 
             if (!ok) { break; }
             cobj->scrollToView(arg0, arg1, arg2);
@@ -16139,7 +16139,7 @@ int lua_ax_fairygui_ScrollPane_setPageX(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.ScrollPane:setPageX");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.ScrollPane:setPageX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPageX'", nullptr);
@@ -16154,9 +16154,9 @@ int lua_ax_fairygui_ScrollPane_setPageX(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.ScrollPane:setPageX");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.ScrollPane:setPageX");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:setPageX");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:setPageX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPageX'", nullptr);
@@ -16253,7 +16253,7 @@ int lua_ax_fairygui_ScrollPane_setPageY(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.ScrollPane:setPageY");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.ScrollPane:setPageY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPageY'", nullptr);
@@ -16268,9 +16268,9 @@ int lua_ax_fairygui_ScrollPane_setPageY(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.ScrollPane:setPageY");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.ScrollPane:setPageY");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.ScrollPane:setPageY");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.ScrollPane:setPageY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_setPageY'", nullptr);
@@ -16508,7 +16508,7 @@ int lua_ax_fairygui_ScrollPane_lockHeader(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.ScrollPane:lockHeader");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.ScrollPane:lockHeader");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_lockHeader'", nullptr);
@@ -16558,7 +16558,7 @@ int lua_ax_fairygui_ScrollPane_lockFooter(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.ScrollPane:lockFooter");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.ScrollPane:lockFooter");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_ScrollPane_lockFooter'", nullptr);
@@ -16891,11 +16891,11 @@ int lua_ax_fairygui_Transition_playReverse(lua_State* tolua_S)
     do{
         if (argc == 2) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.Transition:playReverse");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Transition:playReverse");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.Transition:playReverse");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.Transition:playReverse");
 
             if (!ok) { break; }
             cobj->playReverse(arg0, arg1);
@@ -16907,11 +16907,11 @@ int lua_ax_fairygui_Transition_playReverse(lua_State* tolua_S)
     do{
         if (argc == 3) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.Transition:playReverse");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Transition:playReverse");
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.Transition:playReverse");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.Transition:playReverse");
 
             if (!ok) { break; }
             std::function<void ()> arg2;
@@ -16992,7 +16992,7 @@ int lua_ax_fairygui_Transition_changePlayTimes(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.Transition:changePlayTimes");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Transition:changePlayTimes");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Transition_changePlayTimes'", nullptr);
@@ -17036,11 +17036,11 @@ int lua_ax_fairygui_Transition_stop(lua_State* tolua_S)
     do{
         if (argc == 2) {
             bool arg0;
-            ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.Transition:stop");
+            ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.Transition:stop");
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.Transition:stop");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.Transition:stop");
 
             if (!ok) { break; }
             cobj->stop(arg0, arg1);
@@ -17099,11 +17099,11 @@ int lua_ax_fairygui_Transition_setAutoPlay(lua_State* tolua_S)
         int arg1;
         double arg2;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.Transition:setAutoPlay");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.Transition:setAutoPlay");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.Transition:setAutoPlay");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.Transition:setAutoPlay");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.Transition:setAutoPlay");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.Transition:setAutoPlay");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Transition_setAutoPlay'", nullptr);
@@ -17153,7 +17153,7 @@ int lua_ax_fairygui_Transition_setPaused(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.Transition:setPaused");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.Transition:setPaused");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Transition_setPaused'", nullptr);
@@ -17416,7 +17416,7 @@ int lua_ax_fairygui_Transition_setDuration(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.Transition:setDuration");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.Transition:setDuration");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.Transition:setDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Transition_setDuration'", nullptr);
@@ -17563,7 +17563,7 @@ int lua_ax_fairygui_Transition_setTimeScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.Transition:setTimeScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.Transition:setTimeScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Transition_setTimeScale'", nullptr);
@@ -17617,9 +17617,9 @@ int lua_ax_fairygui_Transition_updateFromRelations(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.Transition:updateFromRelations");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.Transition:updateFromRelations");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.Transition:updateFromRelations");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.Transition:updateFromRelations");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.Transition:updateFromRelations");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Transition_updateFromRelations'", nullptr);
@@ -17894,7 +17894,7 @@ int lua_ax_fairygui_GComponent_addChildAt(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GComponent:addChildAt");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GComponent:addChildAt");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GComponent:addChildAt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_addChildAt'", nullptr);
@@ -17994,7 +17994,7 @@ int lua_ax_fairygui_GComponent_removeChildAt(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComponent:removeChildAt");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:removeChildAt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_removeChildAt'", nullptr);
@@ -18038,11 +18038,11 @@ int lua_ax_fairygui_GComponent_removeChildren(lua_State* tolua_S)
     do{
         if (argc == 2) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComponent:removeChildren");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:removeChildren");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GComponent:removeChildren");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GComponent:removeChildren");
 
             if (!ok) { break; }
             cobj->removeChildren(arg0, arg1);
@@ -18099,7 +18099,7 @@ int lua_ax_fairygui_GComponent_getChildAt(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComponent:getChildAt");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:getChildAt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_getChildAt'", nullptr);
@@ -18452,7 +18452,7 @@ int lua_ax_fairygui_GComponent_setChildIndex(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GComponent:setChildIndex");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GComponent:setChildIndex");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GComponent:setChildIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_setChildIndex'", nullptr);
@@ -18505,7 +18505,7 @@ int lua_ax_fairygui_GComponent_setChildIndexBefore(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GComponent:setChildIndexBefore");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GComponent:setChildIndexBefore");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GComponent:setChildIndexBefore");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_setChildIndexBefore'", nullptr);
@@ -18609,9 +18609,9 @@ int lua_ax_fairygui_GComponent_swapChildrenAt(lua_State* tolua_S)
         int arg0;
         int arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComponent:swapChildrenAt");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:swapChildrenAt");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GComponent:swapChildrenAt");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GComponent:swapChildrenAt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_swapChildrenAt'", nullptr);
@@ -18905,7 +18905,7 @@ int lua_ax_fairygui_GComponent_getControllerAt(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComponent:getControllerAt");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:getControllerAt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_getControllerAt'", nullptr);
@@ -19249,7 +19249,7 @@ int lua_ax_fairygui_GComponent_getTransitionAt(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComponent:getTransitionAt");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:getTransitionAt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_getTransitionAt'", nullptr);
@@ -19393,7 +19393,7 @@ int lua_ax_fairygui_GComponent_setOpaque(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GComponent:setOpaque");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GComponent:setOpaque");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_setOpaque'", nullptr);
@@ -19587,7 +19587,7 @@ int lua_ax_fairygui_GComponent_setChildrenRenderOrder(lua_State* tolua_S)
     {
         fairygui::ChildrenRenderOrder arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComponent:setChildrenRenderOrder");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:setChildrenRenderOrder");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_setChildrenRenderOrder'", nullptr);
@@ -19684,7 +19684,7 @@ int lua_ax_fairygui_GComponent_setApexIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComponent:setApexIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:setApexIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_setApexIndex'", nullptr);
@@ -19798,7 +19798,7 @@ int lua_ax_fairygui_GComponent_setMask(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "fgui.GComponent:setMask");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GComponent:setMask");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GComponent:setMask");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_setMask'", nullptr);
@@ -20039,7 +20039,7 @@ int lua_ax_fairygui_GComponent_setViewWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GComponent:setViewWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GComponent:setViewWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_setViewWidth'", nullptr);
@@ -20136,7 +20136,7 @@ int lua_ax_fairygui_GComponent_setViewHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GComponent:setViewHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GComponent:setViewHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_setViewHeight'", nullptr);
@@ -20334,9 +20334,9 @@ int lua_ax_fairygui_GComponent_childSortingOrderChanged(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GComponent:childSortingOrderChanged");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GComponent:childSortingOrderChanged");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GComponent:childSortingOrderChanged");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "fgui.GComponent:childSortingOrderChanged");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "fgui.GComponent:childSortingOrderChanged");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComponent_childSortingOrderChanged'", nullptr);
@@ -21069,7 +21069,7 @@ int lua_ax_fairygui_GButton_setTitleFontSize(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GButton:setTitleFontSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GButton:setTitleFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GButton_setTitleFontSize'", nullptr);
@@ -21166,7 +21166,7 @@ int lua_ax_fairygui_GButton_setSelected(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GButton:setSelected");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GButton:setSelected");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GButton_setSelected'", nullptr);
@@ -21360,7 +21360,7 @@ int lua_ax_fairygui_GButton_setChangeStateOnClick(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GButton:setChangeStateOnClick");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GButton:setChangeStateOnClick");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GButton_setChangeStateOnClick'", nullptr);
@@ -21867,7 +21867,7 @@ int lua_ax_fairygui_GList_setLayout(lua_State* tolua_S)
     {
         fairygui::ListLayoutType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setLayout");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setLayout");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setLayout'", nullptr);
@@ -21964,7 +21964,7 @@ int lua_ax_fairygui_GList_setLineCount(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setLineCount");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setLineCount");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setLineCount'", nullptr);
@@ -22061,7 +22061,7 @@ int lua_ax_fairygui_GList_setColumnCount(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setColumnCount");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setColumnCount");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setColumnCount'", nullptr);
@@ -22158,7 +22158,7 @@ int lua_ax_fairygui_GList_setColumnGap(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setColumnGap");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setColumnGap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setColumnGap'", nullptr);
@@ -22255,7 +22255,7 @@ int lua_ax_fairygui_GList_setLineGap(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setLineGap");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setLineGap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setLineGap'", nullptr);
@@ -22352,7 +22352,7 @@ int lua_ax_fairygui_GList_setAlign(lua_State* tolua_S)
     {
         ax::TextHAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setAlign");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setAlign");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setAlign'", nullptr);
@@ -22449,7 +22449,7 @@ int lua_ax_fairygui_GList_setVerticalAlign(lua_State* tolua_S)
     {
         ax::TextVAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setVerticalAlign");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setVerticalAlign");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setVerticalAlign'", nullptr);
@@ -22546,7 +22546,7 @@ int lua_ax_fairygui_GList_setAutoResizeItem(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GList:setAutoResizeItem");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GList:setAutoResizeItem");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setAutoResizeItem'", nullptr);
@@ -22643,7 +22643,7 @@ int lua_ax_fairygui_GList_setSelectionMode(lua_State* tolua_S)
     {
         fairygui::ListSelectionMode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setSelectionMode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setSelectionMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setSelectionMode'", nullptr);
@@ -22892,7 +22892,7 @@ int lua_ax_fairygui_GList_removeChildToPoolAt(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:removeChildToPoolAt");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:removeChildToPoolAt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_removeChildToPoolAt'", nullptr);
@@ -22986,11 +22986,11 @@ int lua_ax_fairygui_GList_removeChildrenToPool(lua_State* tolua_S)
     do{
         if (argc == 2) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:removeChildrenToPool");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:removeChildrenToPool");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GList:removeChildrenToPool");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GList:removeChildrenToPool");
 
             if (!ok) { break; }
             cobj->removeChildrenToPool(arg0, arg1);
@@ -23094,7 +23094,7 @@ int lua_ax_fairygui_GList_setSelectedIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setSelectedIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setSelectedIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setSelectedIndex'", nullptr);
@@ -23195,9 +23195,9 @@ int lua_ax_fairygui_GList_addSelection(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:addSelection");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:addSelection");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GList:addSelection");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GList:addSelection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_addSelection'", nullptr);
@@ -23247,7 +23247,7 @@ int lua_ax_fairygui_GList_removeSelection(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:removeSelection");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:removeSelection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_removeSelection'", nullptr);
@@ -23438,7 +23438,7 @@ int lua_ax_fairygui_GList_handleArrowKey(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:handleArrowKey");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:handleArrowKey");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_handleArrowKey'", nullptr);
@@ -23482,11 +23482,11 @@ int lua_ax_fairygui_GList_resizeToFit(lua_State* tolua_S)
     do{
         if (argc == 2) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:resizeToFit");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:resizeToFit");
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GList:resizeToFit");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GList:resizeToFit");
 
             if (!ok) { break; }
             cobj->resizeToFit(arg0, arg1);
@@ -23498,7 +23498,7 @@ int lua_ax_fairygui_GList_resizeToFit(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:resizeToFit");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:resizeToFit");
 
             if (!ok) { break; }
             cobj->resizeToFit(arg0);
@@ -23547,7 +23547,7 @@ int lua_ax_fairygui_GList_scrollToView(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:scrollToView");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:scrollToView");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_scrollToView'", nullptr);
@@ -23562,9 +23562,9 @@ int lua_ax_fairygui_GList_scrollToView(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:scrollToView");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:scrollToView");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GList:scrollToView");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GList:scrollToView");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_scrollToView'", nullptr);
@@ -23580,11 +23580,11 @@ int lua_ax_fairygui_GList_scrollToView(lua_State* tolua_S)
         bool arg1;
         bool arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:scrollToView");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:scrollToView");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GList:scrollToView");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GList:scrollToView");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "fgui.GList:scrollToView");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "fgui.GList:scrollToView");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_scrollToView'", nullptr);
@@ -23966,7 +23966,7 @@ int lua_ax_fairygui_GList_setNumItems(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:setNumItems");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:setNumItems");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_setNumItems'", nullptr);
@@ -24016,7 +24016,7 @@ int lua_ax_fairygui_GList_childIndexToItemIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:childIndexToItemIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:childIndexToItemIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_childIndexToItemIndex'", nullptr);
@@ -24066,7 +24066,7 @@ int lua_ax_fairygui_GList_itemIndexToChildIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GList:itemIndexToChildIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:itemIndexToChildIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GList_itemIndexToChildIndex'", nullptr);
@@ -24497,7 +24497,7 @@ int lua_ax_fairygui_GComboBox_setTitleFontSize(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComboBox:setTitleFontSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComboBox:setTitleFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComboBox_setTitleFontSize'", nullptr);
@@ -24691,7 +24691,7 @@ int lua_ax_fairygui_GComboBox_setSelectedIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GComboBox:setSelectedIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComboBox:setSelectedIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GComboBox_setSelectedIndex'", nullptr);
@@ -25277,7 +25277,7 @@ int lua_ax_fairygui_GProgressBar_setTitleType(lua_State* tolua_S)
     {
         fairygui::ProgressTitleType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GProgressBar:setTitleType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GProgressBar:setTitleType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GProgressBar_setTitleType'", nullptr);
@@ -25374,7 +25374,7 @@ int lua_ax_fairygui_GProgressBar_setMin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GProgressBar:setMin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GProgressBar:setMin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GProgressBar_setMin'", nullptr);
@@ -25471,7 +25471,7 @@ int lua_ax_fairygui_GProgressBar_setMax(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GProgressBar:setMax");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GProgressBar:setMax");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GProgressBar_setMax'", nullptr);
@@ -25568,7 +25568,7 @@ int lua_ax_fairygui_GProgressBar_setValue(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GProgressBar:setValue");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GProgressBar:setValue");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GProgressBar_setValue'", nullptr);
@@ -25619,9 +25619,9 @@ int lua_ax_fairygui_GProgressBar_tweenValue(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GProgressBar:tweenValue");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GProgressBar:tweenValue");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GProgressBar:tweenValue");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GProgressBar:tweenValue");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GProgressBar_tweenValue'", nullptr);
@@ -25671,7 +25671,7 @@ int lua_ax_fairygui_GProgressBar_update(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GProgressBar:update");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GProgressBar:update");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GProgressBar_update'", nullptr);
@@ -25870,7 +25870,7 @@ int lua_ax_fairygui_GSlider_setTitleType(lua_State* tolua_S)
     {
         fairygui::ProgressTitleType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GSlider:setTitleType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GSlider:setTitleType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GSlider_setTitleType'", nullptr);
@@ -25967,7 +25967,7 @@ int lua_ax_fairygui_GSlider_setMin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GSlider:setMin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GSlider:setMin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GSlider_setMin'", nullptr);
@@ -26064,7 +26064,7 @@ int lua_ax_fairygui_GSlider_setMax(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GSlider:setMax");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GSlider:setMax");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GSlider_setMax'", nullptr);
@@ -26161,7 +26161,7 @@ int lua_ax_fairygui_GSlider_setValue(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GSlider:setValue");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GSlider:setValue");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GSlider_setValue'", nullptr);
@@ -26258,7 +26258,7 @@ int lua_ax_fairygui_GSlider_setWholeNumbers(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GSlider:setWholeNumbers");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GSlider:setWholeNumbers");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GSlider_setWholeNumbers'", nullptr);
@@ -26413,7 +26413,7 @@ int lua_ax_fairygui_GScrollBar_setScrollPane(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::ScrollPane>(tolua_S, 2, "fgui.ScrollPane",&arg0, "fgui.GScrollBar:setScrollPane");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GScrollBar:setScrollPane");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GScrollBar:setScrollPane");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GScrollBar_setScrollPane'", nullptr);
@@ -26463,7 +26463,7 @@ int lua_ax_fairygui_GScrollBar_setDisplayPerc(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GScrollBar:setDisplayPerc");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GScrollBar:setDisplayPerc");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GScrollBar_setDisplayPerc'", nullptr);
@@ -26513,7 +26513,7 @@ int lua_ax_fairygui_GScrollBar_setScrollPerc(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GScrollBar:setScrollPerc");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GScrollBar:setScrollPerc");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GScrollBar_setScrollPerc'", nullptr);
@@ -27082,7 +27082,7 @@ int lua_ax_fairygui_Window_setModal(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.Window:setModal");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.Window:setModal");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Window_setModal'", nullptr);
@@ -27126,7 +27126,7 @@ int lua_ax_fairygui_Window_showModalWait(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.Window:showModalWait");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Window:showModalWait");
 
             if (!ok) { break; }
             cobj->showModalWait(arg0);
@@ -27177,7 +27177,7 @@ int lua_ax_fairygui_Window_closeModalWait(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.Window:closeModalWait");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Window:closeModalWait");
 
             if (!ok) { break; }
             bool ret = cobj->closeModalWait(arg0);
@@ -27378,7 +27378,7 @@ int lua_ax_fairygui_Window_setBringToFrontOnClick(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.Window:setBringToFrontOnClick");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.Window:setBringToFrontOnClick");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_Window_setBringToFrontOnClick'", nullptr);
@@ -28697,7 +28697,7 @@ int lua_ax_fairygui_GRoot_getTouchPosition(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GRoot:getTouchPosition");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GRoot:getTouchPosition");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GRoot_getTouchPosition'", nullptr);
@@ -28896,7 +28896,7 @@ int lua_ax_fairygui_GRoot_showPopup(lua_State* tolua_S)
 
             if (!ok) { break; }
             fairygui::PopupDirection arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "fgui.GRoot:showPopup");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "fgui.GRoot:showPopup");
 
             if (!ok) { break; }
             cobj->showPopup(arg0, arg1, arg2);
@@ -28959,7 +28959,7 @@ int lua_ax_fairygui_GRoot_togglePopup(lua_State* tolua_S)
 
             if (!ok) { break; }
             fairygui::PopupDirection arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "fgui.GRoot:togglePopup");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "fgui.GRoot:togglePopup");
 
             if (!ok) { break; }
             cobj->togglePopup(arg0, arg1, arg2);
@@ -29124,7 +29124,7 @@ int lua_ax_fairygui_GRoot_getPoupPosition(lua_State* tolua_S)
 
         ok &= luaval_to_object<fairygui::GObject>(tolua_S, 3, "fgui.GObject",&arg1, "fgui.GRoot:getPoupPosition");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "fgui.GRoot:getPoupPosition");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "fgui.GRoot:getPoupPosition");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GRoot_getPoupPosition'", nullptr);
@@ -29338,7 +29338,7 @@ int lua_ax_fairygui_GRoot_playSound(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.GRoot:playSound");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GRoot:playSound");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GRoot:playSound");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GRoot_playSound'", nullptr);
@@ -29435,7 +29435,7 @@ int lua_ax_fairygui_GRoot_setSoundEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GRoot:setSoundEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GRoot:setSoundEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GRoot_setSoundEnabled'", nullptr);
@@ -29532,7 +29532,7 @@ int lua_ax_fairygui_GRoot_setSoundVolumeScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GRoot:setSoundVolumeScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GRoot:setSoundVolumeScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GRoot_setSoundVolumeScale'", nullptr);
@@ -29585,7 +29585,7 @@ int lua_ax_fairygui_GRoot_create(lua_State* tolua_S)
         ax::Scene* arg0;
         int arg1;
         ok &= luaval_to_object<ax::Scene>(tolua_S, 2, "ax.Scene",&arg0, "fgui.GRoot:create");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GRoot:create");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GRoot:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GRoot_create'", nullptr);
@@ -29818,7 +29818,7 @@ int lua_ax_fairygui_PopupMenu_addItemAt(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.PopupMenu:addItemAt");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.PopupMenu:addItemAt");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.PopupMenu:addItemAt");
 
         do {
         	// Lambda binding for lua is not supported.
@@ -29921,7 +29921,7 @@ int lua_ax_fairygui_PopupMenu_getItemName(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.PopupMenu:getItemName");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.PopupMenu:getItemName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_PopupMenu_getItemName'", nullptr);
@@ -30027,7 +30027,7 @@ int lua_ax_fairygui_PopupMenu_setItemVisible(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.PopupMenu:setItemVisible");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.PopupMenu:setItemVisible");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.PopupMenu:setItemVisible");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_PopupMenu_setItemVisible'", nullptr);
@@ -30080,7 +30080,7 @@ int lua_ax_fairygui_PopupMenu_setItemGrayed(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.PopupMenu:setItemGrayed");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.PopupMenu:setItemGrayed");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.PopupMenu:setItemGrayed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_PopupMenu_setItemGrayed'", nullptr);
@@ -30133,7 +30133,7 @@ int lua_ax_fairygui_PopupMenu_setItemCheckable(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.PopupMenu:setItemCheckable");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.PopupMenu:setItemCheckable");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.PopupMenu:setItemCheckable");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_PopupMenu_setItemCheckable'", nullptr);
@@ -30186,7 +30186,7 @@ int lua_ax_fairygui_PopupMenu_setItemChecked(lua_State* tolua_S)
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.PopupMenu:setItemChecked");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.PopupMenu:setItemChecked");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.PopupMenu:setItemChecked");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_PopupMenu_setItemChecked'", nullptr);
@@ -30522,7 +30522,7 @@ int lua_ax_fairygui_PopupMenu_show(lua_State* tolua_S)
 
             if (!ok) { break; }
             fairygui::PopupDirection arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.PopupMenu:show");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.PopupMenu:show");
 
             if (!ok) { break; }
             cobj->show(arg0, arg1);
@@ -30687,7 +30687,7 @@ int lua_ax_fairygui_UIObjectFactory_newObject(lua_State* tolua_S)
         if (argc == 1)
         {
             fairygui::ObjectType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.UIObjectFactory:newObject");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.UIObjectFactory:newObject");
             if (!ok) { break; }
             fairygui::GObject* ret = fairygui::UIObjectFactory::newObject(arg0);
             object_to_luaval<fairygui::GObject>(tolua_S, "fgui.GObject",(fairygui::GObject*)ret);
@@ -30938,7 +30938,7 @@ int lua_ax_fairygui_DragDropManager_startDrag(lua_State* tolua_S)
 
         ok &= luaval_to_ccvalue(tolua_S, 3, &arg1, "fgui.DragDropManager:startDrag");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "fgui.DragDropManager:startDrag");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "fgui.DragDropManager:startDrag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_DragDropManager_startDrag'", nullptr);
@@ -31129,7 +31129,7 @@ int lua_ax_fairygui_GTweener_setDelay(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTweener:setDelay");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTweener:setDelay");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setDelay'", nullptr);
@@ -31226,7 +31226,7 @@ int lua_ax_fairygui_GTweener_setDuration(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTweener:setDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTweener:setDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setDuration'", nullptr);
@@ -31323,7 +31323,7 @@ int lua_ax_fairygui_GTweener_setBreakpoint(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTweener:setBreakpoint");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTweener:setBreakpoint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setBreakpoint'", nullptr);
@@ -31373,7 +31373,7 @@ int lua_ax_fairygui_GTweener_setEase(lua_State* tolua_S)
     {
         fairygui::EaseType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GTweener:setEase");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GTweener:setEase");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setEase'", nullptr);
@@ -31423,7 +31423,7 @@ int lua_ax_fairygui_GTweener_setEasePeriod(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTweener:setEasePeriod");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTweener:setEasePeriod");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setEasePeriod'", nullptr);
@@ -31473,7 +31473,7 @@ int lua_ax_fairygui_GTweener_setEaseOvershootOrAmplitude(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTweener:setEaseOvershootOrAmplitude");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTweener:setEaseOvershootOrAmplitude");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setEaseOvershootOrAmplitude'", nullptr);
@@ -31523,7 +31523,7 @@ int lua_ax_fairygui_GTweener_setRepeat(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GTweener:setRepeat");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GTweener:setRepeat");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setRepeat'", nullptr);
@@ -31538,9 +31538,9 @@ int lua_ax_fairygui_GTweener_setRepeat(lua_State* tolua_S)
         int arg0;
         bool arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "fgui.GTweener:setRepeat");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GTweener:setRepeat");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "fgui.GTweener:setRepeat");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "fgui.GTweener:setRepeat");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setRepeat'", nullptr);
@@ -31637,7 +31637,7 @@ int lua_ax_fairygui_GTweener_setTimeScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTweener:setTimeScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTweener:setTimeScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setTimeScale'", nullptr);
@@ -31687,7 +31687,7 @@ int lua_ax_fairygui_GTweener_setSnapping(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GTweener:setSnapping");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GTweener:setSnapping");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setSnapping'", nullptr);
@@ -31805,7 +31805,7 @@ int lua_ax_fairygui_GTweener_setTarget(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "fgui.GTweener:setTarget");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GTweener:setTarget");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GTweener:setTarget");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setTarget'", nullptr);
@@ -32190,7 +32190,7 @@ int lua_ax_fairygui_GTweener_setPaused(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GTweener:setPaused");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GTweener:setPaused");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_setPaused'", nullptr);
@@ -32240,7 +32240,7 @@ int lua_ax_fairygui_GTweener_seek(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTweener:seek");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTweener:seek");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_seek'", nullptr);
@@ -32301,7 +32301,7 @@ int lua_ax_fairygui_GTweener_kill(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "fgui.GTweener:kill");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.GTweener:kill");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTweener_kill'", nullptr);
@@ -32422,9 +32422,9 @@ int lua_ax_fairygui_GTween_toFloat(lua_State* tolua_S)
         double arg0;
         double arg1;
         double arg2;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTween:toFloat");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GTween:toFloat");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toFloat");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTween:toFloat");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GTween:toFloat");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.GTween:toFloat");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_toFloat'", nullptr);
@@ -32464,7 +32464,7 @@ int lua_ax_fairygui_GTween_toVec2(lua_State* tolua_S)
         double arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "fgui.GTween:toVec2");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "fgui.GTween:toVec2");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toVec2");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.GTween:toVec2");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_toVec2'", nullptr);
@@ -32504,7 +32504,7 @@ int lua_ax_fairygui_GTween_toVec3(lua_State* tolua_S)
         double arg2;
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "fgui.GTween:toVec3");
         ok &= luaval_to_vec3(tolua_S, 3, &arg1, "fgui.GTween:toVec3");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toVec3");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.GTween:toVec3");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_toVec3'", nullptr);
@@ -32544,7 +32544,7 @@ int lua_ax_fairygui_GTween_toVec4(lua_State* tolua_S)
         double arg2;
         ok &= luaval_to_vec4(tolua_S, 2, &arg0, "fgui.GTween:toVec4");
         ok &= luaval_to_vec4(tolua_S, 3, &arg1, "fgui.GTween:toVec4");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toVec4");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.GTween:toVec4");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_toVec4'", nullptr);
@@ -32584,7 +32584,7 @@ int lua_ax_fairygui_GTween_toColor32(lua_State* tolua_S)
         double arg2;
         ok &=luaval_to_color32(tolua_S, 2, &arg0, "fgui.GTween:toColor32");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "fgui.GTween:toColor32");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toColor32");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.GTween:toColor32");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_toColor32'", nullptr);
@@ -32622,9 +32622,9 @@ int lua_ax_fairygui_GTween_toDouble(lua_State* tolua_S)
         double arg0;
         double arg1;
         double arg2;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTween:toDouble");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GTween:toDouble");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:toDouble");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTween:toDouble");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GTween:toDouble");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.GTween:toDouble");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_toDouble'", nullptr);
@@ -32660,7 +32660,7 @@ int lua_ax_fairygui_GTween_delayedCall(lua_State* tolua_S)
     if (argc == 1)
     {
         double arg0;
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "fgui.GTween:delayedCall");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "fgui.GTween:delayedCall");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_delayedCall'", nullptr);
@@ -32699,8 +32699,8 @@ int lua_ax_fairygui_GTween_shake(lua_State* tolua_S)
         double arg1;
         double arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "fgui.GTween:shake");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "fgui.GTween:shake");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "fgui.GTween:shake");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "fgui.GTween:shake");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "fgui.GTween:shake");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_shake'", nullptr);
@@ -32751,7 +32751,7 @@ int lua_ax_fairygui_GTween_isTweening(lua_State* tolua_S)
         ax::Object* arg0;
         fairygui::TweenPropType arg1;
         ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "fgui.GTween:isTweening");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GTween:isTweening");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GTween:isTweening");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_isTweening'", nullptr);
@@ -32802,7 +32802,7 @@ int lua_ax_fairygui_GTween_kill(lua_State* tolua_S)
         ax::Object* arg0;
         fairygui::TweenPropType arg1;
         ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "fgui.GTween:kill");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GTween:kill");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GTween:kill");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_kill'", nullptr);
@@ -32818,8 +32818,8 @@ int lua_ax_fairygui_GTween_kill(lua_State* tolua_S)
         fairygui::TweenPropType arg1;
         bool arg2;
         ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "fgui.GTween:kill");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GTween:kill");
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "fgui.GTween:kill");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GTween:kill");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "fgui.GTween:kill");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_kill'", nullptr);
@@ -32870,7 +32870,7 @@ int lua_ax_fairygui_GTween_getTween(lua_State* tolua_S)
         ax::Object* arg0;
         fairygui::TweenPropType arg1;
         ok &= luaval_to_object<ax::Object>(tolua_S, 2, "ax.Object",&arg0, "fgui.GTween:getTween");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "fgui.GTween:getTween");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "fgui.GTween:getTween");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_fairygui_GTween_getTween'", nullptr);

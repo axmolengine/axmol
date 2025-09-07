@@ -71,7 +71,7 @@ static int lua_ax_fairygui_addClickListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
         bool ok              = true;
         int tag;
-        ok &= luaval_to_int32(L, 3, (int*)&tag, "lua_ax_fairygui_addClickListener");
+        ok &= luaval_to_int(L, 3, (int*)&tag, "lua_ax_fairygui_addClickListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_addClickListener'", nullptr);
@@ -122,7 +122,7 @@ static int lua_ax_fairygui_removeClickListener(lua_State* L)
     {
         bool ok = true;
         int tag;
-        ok &= luaval_to_int32(L, 2, (int*)&tag, "lua_ax_fairygui_removeClickListener");
+        ok &= luaval_to_int(L, 2, (int*)&tag, "lua_ax_fairygui_removeClickListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_removeClickListener'", nullptr);
@@ -213,7 +213,7 @@ static int lua_ax_fairygui_addEventListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 3, 0));
         bool ok              = true;
         int eventType;
-        ok &= luaval_to_int32(L, 2, (int*)&eventType, "lua_ax_fairygui_addEventListener");
+        ok &= luaval_to_int(L, 2, (int*)&eventType, "lua_ax_fairygui_addEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_addEventListener'", nullptr);
@@ -235,14 +235,14 @@ static int lua_ax_fairygui_addEventListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 3, 0));
         bool ok              = true;
         int eventType;
-        ok &= luaval_to_int32(L, 2, (int*)&eventType, "lua_ax_fairygui_addEventListener");
+        ok &= luaval_to_int(L, 2, (int*)&eventType, "lua_ax_fairygui_addEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_addEventListener'", nullptr);
             return 0;
         }
         int tag;
-        ok &= luaval_to_int32(L, 4, (int*)&tag, "lua_ax_fairygui_addEventListener");
+        ok &= luaval_to_int(L, 4, (int*)&tag, "lua_ax_fairygui_addEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_addEventListener'", nullptr);
@@ -288,7 +288,7 @@ static int lua_ax_fairygui_removeEventListener(lua_State* L)
     {
         bool ok = true;
         int eventType;
-        ok &= luaval_to_int32(L, 2, (int*)&eventType, "lua_ax_fairygui_removeEventListener");
+        ok &= luaval_to_int(L, 2, (int*)&eventType, "lua_ax_fairygui_removeEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'", nullptr);
@@ -301,14 +301,14 @@ static int lua_ax_fairygui_removeEventListener(lua_State* L)
     {
         bool ok = true;
         int eventType;
-        ok &= luaval_to_int32(L, 2, (int*)&eventType, "lua_ax_fairygui_removeEventListener");
+        ok &= luaval_to_int(L, 2, (int*)&eventType, "lua_ax_fairygui_removeEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'", nullptr);
             return 0;
         }
         int tag;
-        ok &= luaval_to_int32(L, 3, (int*)&tag, "lua_ax_fairygui_removeEventListener");
+        ok &= luaval_to_int(L, 3, (int*)&tag, "lua_ax_fairygui_removeEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'", nullptr);
@@ -352,7 +352,7 @@ static int lua_ax_fairygui_hasEventListener(lua_State* L)
     {
         bool ok = true;
         int eventType;
-        ok &= luaval_to_int32(L, 2, (int*)&eventType, "lua_ax_fairygui_hasEventListener");
+        ok &= luaval_to_int(L, 2, (int*)&eventType, "lua_ax_fairygui_hasEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_hasEventListener'", nullptr);
@@ -365,14 +365,14 @@ static int lua_ax_fairygui_hasEventListener(lua_State* L)
     {
         bool ok = true;
         int eventType;
-        ok &= luaval_to_int32(L, 2, (int*)&eventType, "lua_ax_fairygui_hasEventListener");
+        ok &= luaval_to_int(L, 2, (int*)&eventType, "lua_ax_fairygui_hasEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_hasEventListener'", nullptr);
             return 0;
         }
         int tag;
-        ok &= luaval_to_int32(L, 3, (int*)&tag, "lua_ax_fairygui_hasEventListener");
+        ok &= luaval_to_int(L, 3, (int*)&tag, "lua_ax_fairygui_hasEventListener");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_hasEventListener'", nullptr);
@@ -436,7 +436,7 @@ static int lua_ax_fairygui_play(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 4, 0));
         bool ok              = true;
         int times;
-        ok &= luaval_to_int32(L, 2, (int*)&times, "lua_ax_fairygui_play");
+        ok &= luaval_to_int(L, 2, (int*)&times, "lua_ax_fairygui_play");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_ax_fairygui_play'", nullptr);
@@ -788,7 +788,7 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
@@ -802,8 +802,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
     {
         int arg0;
         int arg1;
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
@@ -818,9 +818,9 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
         int arg0;
         int arg1;
         int arg2;
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 4, (int*)&arg2, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 4, (int*)&arg2, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
@@ -836,10 +836,10 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
         int arg1;
         int arg2;
         int arg3;
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 4, (int*)&arg2, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 5, (int*)&arg3, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 4, (int*)&arg2, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 5, (int*)&arg3, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
@@ -861,10 +861,10 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
         int arg1;
         int arg2;
         int arg3;
-        ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 4, (int*)&arg2, "fgui.GMovieClip:setPlaySettings");
-        ok &= luaval_to_int32(tolua_S, 5, (int*)&arg3, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 4, (int*)&arg2, "fgui.GMovieClip:setPlaySettings");
+        ok &= luaval_to_int(tolua_S, 5, (int*)&arg3, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);

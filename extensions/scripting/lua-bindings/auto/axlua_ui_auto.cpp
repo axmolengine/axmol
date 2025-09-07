@@ -320,7 +320,7 @@ int lua_ax_ui_LinearLayoutParameter_setGravity(lua_State* tolua_S)
     {
         ax::ui::LinearLayoutParameter::LinearGravity arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.LinearLayoutParameter:setGravity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.LinearLayoutParameter:setGravity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LinearLayoutParameter_setGravity'", nullptr);
@@ -511,7 +511,7 @@ int lua_ax_ui_RelativeLayoutParameter_setAlign(lua_State* tolua_S)
     {
         ax::ui::RelativeLayoutParameter::RelativeAlign arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RelativeLayoutParameter:setAlign");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RelativeLayoutParameter:setAlign");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RelativeLayoutParameter_setAlign'", nullptr);
@@ -900,7 +900,7 @@ int lua_ax_ui_Widget_setEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setEnabled'", nullptr);
@@ -997,7 +997,7 @@ int lua_ax_ui_Widget_setBright(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setBright");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setBright");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setBright'", nullptr);
@@ -1094,7 +1094,7 @@ int lua_ax_ui_Widget_setTouchEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setTouchEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setTouchEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setTouchEnabled'", nullptr);
@@ -1144,7 +1144,7 @@ int lua_ax_ui_Widget_setBrightStyle(lua_State* tolua_S)
     {
         ax::ui::Widget::BrightStyle arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:setBrightStyle");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Widget:setBrightStyle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setBrightStyle'", nullptr);
@@ -1194,7 +1194,7 @@ int lua_ax_ui_Widget_setMouseEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setMouseEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setMouseEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setMouseEnabled'", nullptr);
@@ -1385,7 +1385,7 @@ int lua_ax_ui_Widget_setHighlighted(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setHighlighted");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setHighlighted");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setHighlighted'", nullptr);
@@ -1720,7 +1720,7 @@ int lua_ax_ui_Widget_setPositionType(lua_State* tolua_S)
     {
         ax::ui::Widget::PositionType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:setPositionType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Widget:setPositionType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setPositionType'", nullptr);
@@ -1817,7 +1817,7 @@ int lua_ax_ui_Widget_setFlippedX(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setFlippedX");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setFlippedX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setFlippedX'", nullptr);
@@ -1914,7 +1914,7 @@ int lua_ax_ui_Widget_setFlippedY(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setFlippedY");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setFlippedY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setFlippedY'", nullptr);
@@ -2252,7 +2252,7 @@ int lua_ax_ui_Widget_setSizeType(lua_State* tolua_S)
     {
         ax::ui::Widget::SizeType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:setSizeType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Widget:setSizeType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setSizeType'", nullptr);
@@ -2843,7 +2843,7 @@ int lua_ax_ui_Widget_ignoreContentAdaptWithSize(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:ignoreContentAdaptWithSize");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:ignoreContentAdaptWithSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_ignoreContentAdaptWithSize'", nullptr);
@@ -3132,7 +3132,7 @@ int lua_ax_ui_Widget_setActionTag(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:setActionTag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Widget:setActionTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setActionTag'", nullptr);
@@ -3229,7 +3229,7 @@ int lua_ax_ui_Widget_setPropagateTouchEvents(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setPropagateTouchEvents");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setPropagateTouchEvents");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setPropagateTouchEvents'", nullptr);
@@ -3326,7 +3326,7 @@ int lua_ax_ui_Widget_setSwallowTouches(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setSwallowTouches");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setSwallowTouches");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setSwallowTouches'", nullptr);
@@ -3423,7 +3423,7 @@ int lua_ax_ui_Widget_setSwallowMouse(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setSwallowMouse");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setSwallowMouse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setSwallowMouse'", nullptr);
@@ -3567,7 +3567,7 @@ int lua_ax_ui_Widget_setFocused(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setFocused");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setFocused");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setFocused'", nullptr);
@@ -3664,7 +3664,7 @@ int lua_ax_ui_Widget_setFocusEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setFocusEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setFocusEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setFocusEnabled'", nullptr);
@@ -3715,7 +3715,7 @@ int lua_ax_ui_Widget_findNextFocusedWidget(lua_State* tolua_S)
         ax::ui::Widget::FocusDirection arg0;
         ax::ui::Widget* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:findNextFocusedWidget");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Widget:findNextFocusedWidget");
 
         ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:findNextFocusedWidget");
         if(!ok)
@@ -3814,7 +3814,7 @@ int lua_ax_ui_Widget_setUnifySizeEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setUnifySizeEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setUnifySizeEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setUnifySizeEnabled'", nullptr);
@@ -4105,7 +4105,7 @@ int lua_ax_ui_Widget_setLayoutComponentEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:setLayoutComponentEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:setLayoutComponentEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_setLayoutComponentEnabled'", nullptr);
@@ -4204,7 +4204,7 @@ int lua_ax_ui_Widget_interceptTouchEvent(lua_State* tolua_S)
         ax::ui::Widget* arg1;
         ax::Touch* arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:interceptTouchEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Widget:interceptTouchEvent");
 
         ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:interceptTouchEvent");
 
@@ -4260,7 +4260,7 @@ int lua_ax_ui_Widget_propagateTouchEvent(lua_State* tolua_S)
         ax::ui::Widget* arg1;
         ax::Touch* arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:propagateTouchEvent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Widget:propagateTouchEvent");
 
         ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:propagateTouchEvent");
 
@@ -4476,7 +4476,7 @@ int lua_ax_ui_Widget_enableDpadNavigation(lua_State* tolua_S)
     if (argc == 1)
     {
         bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Widget:enableDpadNavigation");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Widget:enableDpadNavigation");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_enableDpadNavigation'", nullptr);
@@ -4673,7 +4673,7 @@ int lua_ax_ui_Layout_setBackGroundImage(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Layout:setBackGroundImage");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Layout:setBackGroundImage");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Layout:setBackGroundImage");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setBackGroundImage'", nullptr);
@@ -4820,7 +4820,7 @@ int lua_ax_ui_Layout_setBackGroundColorType(lua_State* tolua_S)
     {
         ax::ui::Layout::BackGroundColorType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Layout:setBackGroundColorType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColorType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setBackGroundColorType'", nullptr);
@@ -4917,7 +4917,7 @@ int lua_ax_ui_Layout_setBackGroundImageScale9Enabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Layout:setBackGroundImageScale9Enabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Layout:setBackGroundImageScale9Enabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setBackGroundImageScale9Enabled'", nullptr);
@@ -5214,7 +5214,7 @@ int lua_ax_ui_Layout_setBackGroundColorOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "axui.Layout:setBackGroundColorOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColorOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setBackGroundColorOpacity'", nullptr);
@@ -5458,7 +5458,7 @@ int lua_ax_ui_Layout_setBackGroundImageOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "axui.Layout:setBackGroundImageOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Layout:setBackGroundImageOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setBackGroundImageOpacity'", nullptr);
@@ -5696,7 +5696,7 @@ int lua_ax_ui_Layout_setClippingEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Layout:setClippingEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Layout:setClippingEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setClippingEnabled'", nullptr);
@@ -5746,7 +5746,7 @@ int lua_ax_ui_Layout_setClippingType(lua_State* tolua_S)
     {
         ax::ui::Layout::ClippingType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Layout:setClippingType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Layout:setClippingType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setClippingType'", nullptr);
@@ -5890,7 +5890,7 @@ int lua_ax_ui_Layout_setLayoutType(lua_State* tolua_S)
     {
         ax::ui::Layout::Type arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Layout:setLayoutType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Layout:setLayoutType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setLayoutType'", nullptr);
@@ -6081,7 +6081,7 @@ int lua_ax_ui_Layout_setLoopFocus(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Layout:setLoopFocus");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Layout:setLoopFocus");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setLoopFocus'", nullptr);
@@ -6178,7 +6178,7 @@ int lua_ax_ui_Layout_setPassFocusToChild(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Layout:setPassFocusToChild");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Layout:setPassFocusToChild");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_setPassFocusToChild'", nullptr);
@@ -6529,7 +6529,7 @@ int lua_ax_ui_Button_loadTextures(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.Button:loadTextures");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.Button:loadTextures");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.Button:loadTextures");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_loadTextures'", nullptr);
@@ -6596,7 +6596,7 @@ int lua_ax_ui_Button_loadTextureNormal(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:loadTextureNormal");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Button:loadTextureNormal");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Button:loadTextureNormal");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_loadTextureNormal'", nullptr);
@@ -6663,7 +6663,7 @@ int lua_ax_ui_Button_loadTexturePressed(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:loadTexturePressed");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Button:loadTexturePressed");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Button:loadTexturePressed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_loadTexturePressed'", nullptr);
@@ -6730,7 +6730,7 @@ int lua_ax_ui_Button_loadTextureDisabled(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:loadTextureDisabled");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Button:loadTextureDisabled");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Button:loadTextureDisabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_loadTextureDisabled'", nullptr);
@@ -7121,7 +7121,7 @@ int lua_ax_ui_Button_setScale9Enabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Button:setScale9Enabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Button:setScale9Enabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_setScale9Enabled'", nullptr);
@@ -7218,7 +7218,7 @@ int lua_ax_ui_Button_setPressedActionEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Button:setPressedActionEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Button:setPressedActionEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_setPressedActionEnabled'", nullptr);
@@ -7509,7 +7509,7 @@ int lua_ax_ui_Button_setTitleFontSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.Button:setTitleFontSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.Button:setTitleFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_setTitleFontSize'", nullptr);
@@ -7697,11 +7697,11 @@ int lua_ax_ui_Button_setTitleAlignment(lua_State* tolua_S)
     do{
         if (argc == 2) {
             ax::TextHAlignment arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Button:setTitleAlignment");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Button:setTitleAlignment");
 
             if (!ok) { break; }
             ax::TextVAlignment arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Button:setTitleAlignment");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Button:setTitleAlignment");
 
             if (!ok) { break; }
             cobj->setTitleAlignment(arg0, arg1);
@@ -7713,7 +7713,7 @@ int lua_ax_ui_Button_setTitleAlignment(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::TextHAlignment arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Button:setTitleAlignment");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Button:setTitleAlignment");
 
             if (!ok) { break; }
             cobj->setTitleAlignment(arg0);
@@ -7859,7 +7859,7 @@ int lua_ax_ui_Button_setZoomScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.Button:setZoomScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.Button:setZoomScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_setZoomScale'", nullptr);
@@ -8439,7 +8439,7 @@ int lua_ax_ui_Button_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.Button:init");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.Button:init");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.Button:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_init'", nullptr);
@@ -8616,7 +8616,7 @@ int lua_ax_ui_Button_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.Button:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.Button:create");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.Button:create");
             if (!ok) { break; }
             ax::ui::Button* ret = ax::ui::Button::create(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::ui::Button>(tolua_S, "axui.Button",(ax::ui::Button*)ret);
@@ -8811,7 +8811,7 @@ int lua_ax_ui_AbstractCheckButton_loadTextures(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.AbstractCheckButton:loadTextures");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.AbstractCheckButton:loadTextures");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.AbstractCheckButton:loadTextures");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_loadTextures'", nullptr);
@@ -8878,7 +8878,7 @@ int lua_ax_ui_AbstractCheckButton_loadTextureBackGround(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureBackGround");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.AbstractCheckButton:loadTextureBackGround");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.AbstractCheckButton:loadTextureBackGround");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_loadTextureBackGround'", nullptr);
@@ -8945,7 +8945,7 @@ int lua_ax_ui_AbstractCheckButton_loadTextureBackGroundSelected(lua_State* tolua
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureBackGroundSelected");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.AbstractCheckButton:loadTextureBackGroundSelected");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.AbstractCheckButton:loadTextureBackGroundSelected");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_loadTextureBackGroundSelected'", nullptr);
@@ -9012,7 +9012,7 @@ int lua_ax_ui_AbstractCheckButton_loadTextureFrontCross(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureFrontCross");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.AbstractCheckButton:loadTextureFrontCross");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.AbstractCheckButton:loadTextureFrontCross");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_loadTextureFrontCross'", nullptr);
@@ -9079,7 +9079,7 @@ int lua_ax_ui_AbstractCheckButton_loadTextureBackGroundDisabled(lua_State* tolua
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureBackGroundDisabled");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.AbstractCheckButton:loadTextureBackGroundDisabled");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.AbstractCheckButton:loadTextureBackGroundDisabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_loadTextureBackGroundDisabled'", nullptr);
@@ -9146,7 +9146,7 @@ int lua_ax_ui_AbstractCheckButton_loadTextureFrontCrossDisabled(lua_State* tolua
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureFrontCrossDisabled");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.AbstractCheckButton:loadTextureFrontCrossDisabled");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.AbstractCheckButton:loadTextureFrontCrossDisabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_loadTextureFrontCrossDisabled'", nullptr);
@@ -9243,7 +9243,7 @@ int lua_ax_ui_AbstractCheckButton_setSelected(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.AbstractCheckButton:setSelected");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.AbstractCheckButton:setSelected");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_setSelected'", nullptr);
@@ -9293,7 +9293,7 @@ int lua_ax_ui_AbstractCheckButton_setZoomScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.AbstractCheckButton:setZoomScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.AbstractCheckButton:setZoomScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_setZoomScale'", nullptr);
@@ -9901,7 +9901,7 @@ int lua_ax_ui_AbstractCheckButton_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.AbstractCheckButton:init");
 
-        ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.AbstractCheckButton:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.AbstractCheckButton:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_init'", nullptr);
@@ -10108,7 +10108,7 @@ int lua_ax_ui_CheckBox_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.CheckBox:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg5;
-            ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.CheckBox:create");
+            ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.CheckBox:create");
             if (!ok) { break; }
             ax::ui::CheckBox* ret = ax::ui::CheckBox::create(arg0, arg1, arg2, arg3, arg4, arg5);
             object_to_luaval<ax::ui::CheckBox>(tolua_S, "axui.CheckBox",(ax::ui::CheckBox*)ret);
@@ -10153,7 +10153,7 @@ int lua_ax_ui_CheckBox_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.CheckBox:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.CheckBox:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.CheckBox:create");
             if (!ok) { break; }
             ax::ui::CheckBox* ret = ax::ui::CheckBox::create(arg0, arg1, arg2);
             object_to_luaval<ax::ui::CheckBox>(tolua_S, "axui.CheckBox",(ax::ui::CheckBox*)ret);
@@ -10376,7 +10376,7 @@ int lua_ax_ui_RadioButton_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RadioButton:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg5;
-            ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.RadioButton:create");
+            ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RadioButton:create");
             if (!ok) { break; }
             ax::ui::RadioButton* ret = ax::ui::RadioButton::create(arg0, arg1, arg2, arg3, arg4, arg5);
             object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
@@ -10421,7 +10421,7 @@ int lua_ax_ui_RadioButton_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.RadioButton:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.RadioButton:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.RadioButton:create");
             if (!ok) { break; }
             ax::ui::RadioButton* ret = ax::ui::RadioButton::create(arg0, arg1, arg2);
             object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
@@ -10634,7 +10634,7 @@ int lua_ax_ui_RadioButtonGroup_setSelectedButton(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RadioButtonGroup:setSelectedButton");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RadioButtonGroup:setSelectedButton");
 
             if (!ok) { break; }
             cobj->setSelectedButton(arg0);
@@ -10689,7 +10689,7 @@ int lua_ax_ui_RadioButtonGroup_setSelectedButtonWithoutEvent(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RadioButtonGroup:setSelectedButtonWithoutEvent");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RadioButtonGroup:setSelectedButtonWithoutEvent");
 
             if (!ok) { break; }
             cobj->setSelectedButtonWithoutEvent(arg0);
@@ -10932,7 +10932,7 @@ int lua_ax_ui_RadioButtonGroup_getRadioButtonByIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RadioButtonGroup:getRadioButtonByIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RadioButtonGroup:getRadioButtonByIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RadioButtonGroup_getRadioButtonByIndex'", nullptr);
@@ -10982,7 +10982,7 @@ int lua_ax_ui_RadioButtonGroup_setAllowedNoSelection(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RadioButtonGroup:setAllowedNoSelection");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RadioButtonGroup:setAllowedNoSelection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RadioButtonGroup_setAllowedNoSelection'", nullptr);
@@ -11199,7 +11199,7 @@ int lua_ax_ui_ImageView_loadTexture(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.ImageView:loadTexture");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.ImageView:loadTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.ImageView:loadTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_loadTexture'", nullptr);
@@ -11299,7 +11299,7 @@ int lua_ax_ui_ImageView_setScale9Enabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.ImageView:setScale9Enabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.ImageView:setScale9Enabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_setScale9Enabled'", nullptr);
@@ -11654,7 +11654,7 @@ int lua_ax_ui_ImageView_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.ImageView:init");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.ImageView:init");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.ImageView:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_init'", nullptr);
@@ -11743,7 +11743,7 @@ int lua_ax_ui_ImageView_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.ImageView:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.ImageView:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.ImageView:create");
             if (!ok) { break; }
             ax::ui::ImageView* ret = ax::ui::ImageView::create(arg0, arg1);
             object_to_luaval<ax::ui::ImageView>(tolua_S, "axui.ImageView",(ax::ui::ImageView*)ret);
@@ -12012,7 +12012,7 @@ int lua_ax_ui_Text_setFontSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.Text:setFontSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.Text:setFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_setFontSize'", nullptr);
@@ -12253,7 +12253,7 @@ int lua_ax_ui_Text_setTouchScaleChangeEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Text:setTouchScaleChangeEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Text:setTouchScaleChangeEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_setTouchScaleChangeEnabled'", nullptr);
@@ -12494,7 +12494,7 @@ int lua_ax_ui_Text_setTextHorizontalAlignment(lua_State* tolua_S)
     {
         ax::TextHAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Text:setTextHorizontalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Text:setTextHorizontalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_setTextHorizontalAlignment'", nullptr);
@@ -12591,7 +12591,7 @@ int lua_ax_ui_Text_setTextVerticalAlignment(lua_State* tolua_S)
     {
         ax::TextVAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Text:setTextVerticalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Text:setTextVerticalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_setTextVerticalAlignment'", nullptr);
@@ -12833,7 +12833,7 @@ int lua_ax_ui_Text_enableShadow(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "axui.Text:enableShadow");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.Text:enableShadow");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.Text:enableShadow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_enableShadow'", nullptr);
@@ -12900,7 +12900,7 @@ int lua_ax_ui_Text_enableOutline(lua_State* tolua_S)
 
         ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Text:enableOutline");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Text:enableOutline");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Text:enableOutline");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_enableOutline'", nullptr);
@@ -12994,7 +12994,7 @@ int lua_ax_ui_Text_disableEffect(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::LabelEffect arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Text:disableEffect");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Text:disableEffect");
 
             if (!ok) { break; }
             cobj->disableEffect(arg0);
@@ -13380,7 +13380,7 @@ int lua_ax_ui_Text_getLetter(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Text:getLetter");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Text:getLetter");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getLetter'", nullptr);
@@ -13533,7 +13533,7 @@ int lua_ax_ui_Text_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.Text:init");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "axui.Text:init");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.Text:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_init'", nullptr);
@@ -13612,7 +13612,7 @@ int lua_ax_ui_Text_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.Text:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "axui.Text:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.Text:create");
             if (!ok) { break; }
             ax::ui::Text* ret = ax::ui::Text::create(arg0, arg1, arg2);
             object_to_luaval<ax::ui::Text>(tolua_S, "axui.Text",(ax::ui::Text*)ret);
@@ -13769,9 +13769,9 @@ int lua_ax_ui_TextAtlas_setProperty(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.TextAtlas:setProperty");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.TextAtlas:setProperty");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.TextAtlas:setProperty");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.TextAtlas:setProperty");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.TextAtlas:setProperty");
 
         ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.TextAtlas:setProperty");
         if(!ok)
@@ -14090,10 +14090,10 @@ int lua_ax_ui_TextAtlas_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.TextAtlas:create");
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.TextAtlas:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.TextAtlas:create");
             if (!ok) { break; }
             int arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.TextAtlas:create");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.TextAtlas:create");
             if (!ok) { break; }
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.TextAtlas:create");
@@ -14217,7 +14217,7 @@ int lua_ax_ui_LoadingBar_setDirection(lua_State* tolua_S)
     {
         ax::ui::LoadingBar::Direction arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.LoadingBar:setDirection");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.LoadingBar:setDirection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_setDirection'", nullptr);
@@ -14331,7 +14331,7 @@ int lua_ax_ui_LoadingBar_loadTexture(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.LoadingBar:loadTexture");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.LoadingBar:loadTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.LoadingBar:loadTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_loadTexture'", nullptr);
@@ -14381,7 +14381,7 @@ int lua_ax_ui_LoadingBar_setPercent(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LoadingBar:setPercent");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LoadingBar:setPercent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_setPercent'", nullptr);
@@ -14478,7 +14478,7 @@ int lua_ax_ui_LoadingBar_setScale9Enabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LoadingBar:setScale9Enabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LoadingBar:setScale9Enabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_setScale9Enabled'", nullptr);
@@ -14758,7 +14758,7 @@ int lua_ax_ui_LoadingBar_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.LoadingBar:create");
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "axui.LoadingBar:create");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "axui.LoadingBar:create");
             if (!ok) { break; }
             ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create(arg0, arg1);
             object_to_luaval<ax::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(ax::ui::LoadingBar*)ret);
@@ -14784,7 +14784,7 @@ int lua_ax_ui_LoadingBar_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.LoadingBar:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.LoadingBar:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.LoadingBar:create");
             if (!ok) { break; }
             ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create(arg0, arg1);
             object_to_luaval<ax::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(ax::ui::LoadingBar*)ret);
@@ -14800,10 +14800,10 @@ int lua_ax_ui_LoadingBar_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.LoadingBar:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.LoadingBar:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.LoadingBar:create");
             if (!ok) { break; }
             double arg2;
-            ok &= luaval_to_number(tolua_S, 4,&arg2, "axui.LoadingBar:create");
+            ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.LoadingBar:create");
             if (!ok) { break; }
             ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create(arg0, arg1, arg2);
             object_to_luaval<ax::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(ax::ui::LoadingBar*)ret);
@@ -14918,7 +14918,7 @@ int lua_ax_ui_ScrollView_setDirection(lua_State* tolua_S)
     {
         ax::ui::ScrollView::Direction arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.ScrollView:setDirection");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.ScrollView:setDirection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setDirection'", nullptr);
@@ -15204,9 +15204,9 @@ int lua_ax_ui_ScrollView_scrollToBottom(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToBottom");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToBottom");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.ScrollView:scrollToBottom");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.ScrollView:scrollToBottom");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToBottom'", nullptr);
@@ -15257,9 +15257,9 @@ int lua_ax_ui_ScrollView_scrollToTop(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToTop");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToTop");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.ScrollView:scrollToTop");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.ScrollView:scrollToTop");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToTop'", nullptr);
@@ -15310,9 +15310,9 @@ int lua_ax_ui_ScrollView_scrollToLeft(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToLeft");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToLeft");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.ScrollView:scrollToLeft");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.ScrollView:scrollToLeft");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToLeft'", nullptr);
@@ -15363,9 +15363,9 @@ int lua_ax_ui_ScrollView_scrollToRight(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToRight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToRight");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.ScrollView:scrollToRight");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.ScrollView:scrollToRight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToRight'", nullptr);
@@ -15416,9 +15416,9 @@ int lua_ax_ui_ScrollView_scrollToTopLeft(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToTopLeft");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToTopLeft");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.ScrollView:scrollToTopLeft");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.ScrollView:scrollToTopLeft");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToTopLeft'", nullptr);
@@ -15469,9 +15469,9 @@ int lua_ax_ui_ScrollView_scrollToTopRight(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToTopRight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToTopRight");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.ScrollView:scrollToTopRight");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.ScrollView:scrollToTopRight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToTopRight'", nullptr);
@@ -15522,9 +15522,9 @@ int lua_ax_ui_ScrollView_scrollToBottomLeft(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToBottomLeft");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToBottomLeft");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.ScrollView:scrollToBottomLeft");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.ScrollView:scrollToBottomLeft");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToBottomLeft'", nullptr);
@@ -15575,9 +15575,9 @@ int lua_ax_ui_ScrollView_scrollToBottomRight(lua_State* tolua_S)
         double arg0;
         bool arg1;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToBottomRight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToBottomRight");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.ScrollView:scrollToBottomRight");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.ScrollView:scrollToBottomRight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToBottomRight'", nullptr);
@@ -15629,11 +15629,11 @@ int lua_ax_ui_ScrollView_scrollToPercentVertical(lua_State* tolua_S)
         double arg1;
         bool arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToPercentVertical");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToPercentVertical");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "axui.ScrollView:scrollToPercentVertical");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "axui.ScrollView:scrollToPercentVertical");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.ScrollView:scrollToPercentVertical");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "axui.ScrollView:scrollToPercentVertical");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToPercentVertical'", nullptr);
@@ -15685,11 +15685,11 @@ int lua_ax_ui_ScrollView_scrollToPercentHorizontal(lua_State* tolua_S)
         double arg1;
         bool arg2;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:scrollToPercentHorizontal");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:scrollToPercentHorizontal");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "axui.ScrollView:scrollToPercentHorizontal");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "axui.ScrollView:scrollToPercentHorizontal");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.ScrollView:scrollToPercentHorizontal");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "axui.ScrollView:scrollToPercentHorizontal");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToPercentHorizontal'", nullptr);
@@ -15743,9 +15743,9 @@ int lua_ax_ui_ScrollView_scrollToPercentBothDirection(lua_State* tolua_S)
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ScrollView:scrollToPercentBothDirection");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "axui.ScrollView:scrollToPercentBothDirection");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "axui.ScrollView:scrollToPercentBothDirection");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.ScrollView:scrollToPercentBothDirection");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "axui.ScrollView:scrollToPercentBothDirection");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_scrollToPercentBothDirection'", nullptr);
@@ -16312,7 +16312,7 @@ int lua_ax_ui_ScrollView_jumpToPercentVertical(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:jumpToPercentVertical");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:jumpToPercentVertical");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_jumpToPercentVertical'", nullptr);
@@ -16362,7 +16362,7 @@ int lua_ax_ui_ScrollView_jumpToPercentHorizontal(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:jumpToPercentHorizontal");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:jumpToPercentHorizontal");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_jumpToPercentHorizontal'", nullptr);
@@ -16710,7 +16710,7 @@ int lua_ax_ui_ScrollView_setBounceEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.ScrollView:setBounceEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.ScrollView:setBounceEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setBounceEnabled'", nullptr);
@@ -16807,7 +16807,7 @@ int lua_ax_ui_ScrollView_setInertiaScrollEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.ScrollView:setInertiaScrollEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.ScrollView:setInertiaScrollEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setInertiaScrollEnabled'", nullptr);
@@ -16904,7 +16904,7 @@ int lua_ax_ui_ScrollView_setScrollBarEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.ScrollView:setScrollBarEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setScrollBarEnabled'", nullptr);
@@ -17245,7 +17245,7 @@ int lua_ax_ui_ScrollView_setScrollBarWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:setScrollBarWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setScrollBarWidth'", nullptr);
@@ -17439,7 +17439,7 @@ int lua_ax_ui_ScrollView_setScrollBarOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "axui.ScrollView:setScrollBarOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setScrollBarOpacity'", nullptr);
@@ -17536,7 +17536,7 @@ int lua_ax_ui_ScrollView_setScrollBarAutoHideEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.ScrollView:setScrollBarAutoHideEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarAutoHideEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setScrollBarAutoHideEnabled'", nullptr);
@@ -17633,7 +17633,7 @@ int lua_ax_ui_ScrollView_setScrollBarAutoHideTime(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:setScrollBarAutoHideTime");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarAutoHideTime");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setScrollBarAutoHideTime'", nullptr);
@@ -17730,7 +17730,7 @@ int lua_ax_ui_ScrollView_setTouchTotalTimeThreshold(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:setTouchTotalTimeThreshold");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:setTouchTotalTimeThreshold");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setTouchTotalTimeThreshold'", nullptr);
@@ -17827,7 +17827,7 @@ int lua_ax_ui_ScrollView_setScrollDuration(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ScrollView:setScrollDuration");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ScrollView:setScrollDuration");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_setScrollDuration'", nullptr);
@@ -18024,7 +18024,7 @@ int lua_ax_ui_ScrollView_scrollToItem(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "axui.ScrollView:scrollToItem");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "axui.ScrollView:scrollToItem");
 
             if (!ok) { break; }
             cobj->scrollToItem(arg0, arg1, arg2, arg3);
@@ -18864,7 +18864,7 @@ int lua_ax_ui_ListView_setGravity(lua_State* tolua_S)
     {
         ax::ui::ListView::Gravity arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.ListView:setGravity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.ListView:setGravity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setGravity'", nullptr);
@@ -18914,7 +18914,7 @@ int lua_ax_ui_ListView_setMagneticType(lua_State* tolua_S)
     {
         ax::ui::ListView::MagneticType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.ListView:setMagneticType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.ListView:setMagneticType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setMagneticType'", nullptr);
@@ -19011,7 +19011,7 @@ int lua_ax_ui_ListView_setMagneticAllowedOutOfBoundary(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.ListView:setMagneticAllowedOutOfBoundary");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.ListView:setMagneticAllowedOutOfBoundary");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setMagneticAllowedOutOfBoundary'", nullptr);
@@ -19108,7 +19108,7 @@ int lua_ax_ui_ListView_setItemsMargin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ListView:setItemsMargin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ListView:setItemsMargin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setItemsMargin'", nullptr);
@@ -19208,13 +19208,13 @@ int lua_ax_ui_ListView_setPadding(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ListView:setPadding");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ListView:setPadding");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "axui.ListView:setPadding");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "axui.ListView:setPadding");
 
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "axui.ListView:setPadding");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "axui.ListView:setPadding");
 
-        ok &= luaval_to_number(tolua_S, 5,&arg3, "axui.ListView:setPadding");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "axui.ListView:setPadding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setPadding'", nullptr);
@@ -19264,7 +19264,7 @@ int lua_ax_ui_ListView_setLeftPadding(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ListView:setLeftPadding");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ListView:setLeftPadding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setLeftPadding'", nullptr);
@@ -19314,7 +19314,7 @@ int lua_ax_ui_ListView_setTopPadding(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ListView:setTopPadding");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ListView:setTopPadding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setTopPadding'", nullptr);
@@ -19364,7 +19364,7 @@ int lua_ax_ui_ListView_setRightPadding(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ListView:setRightPadding");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ListView:setRightPadding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setRightPadding'", nullptr);
@@ -19414,7 +19414,7 @@ int lua_ax_ui_ListView_setBottomPadding(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.ListView:setBottomPadding");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.ListView:setBottomPadding");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setBottomPadding'", nullptr);
@@ -20102,7 +20102,7 @@ int lua_ax_ui_ListView_scrollToItem(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg3;
-            ok &= luaval_to_number(tolua_S, 5,&arg3, "axui.ListView:scrollToItem");
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "axui.ListView:scrollToItem");
 
             if (!ok) { break; }
             cobj->scrollToItem(arg0, arg1, arg2, arg3);
@@ -20218,7 +20218,7 @@ int lua_ax_ui_ListView_setCurSelectedIndex(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.ListView:setCurSelectedIndex");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.ListView:setCurSelectedIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_setCurSelectedIndex'", nullptr);
@@ -20506,7 +20506,7 @@ int lua_ax_ui_Slider_loadBarTexture(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadBarTexture");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Slider:loadBarTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Slider:loadBarTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_loadBarTexture'", nullptr);
@@ -20556,7 +20556,7 @@ int lua_ax_ui_Slider_setScale9Enabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Slider:setScale9Enabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Slider:setScale9Enabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_setScale9Enabled'", nullptr);
@@ -20957,7 +20957,7 @@ int lua_ax_ui_Slider_loadSlidBallTextures(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.Slider:loadSlidBallTextures");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.Slider:loadSlidBallTextures");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.Slider:loadSlidBallTextures");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_loadSlidBallTextures'", nullptr);
@@ -21024,7 +21024,7 @@ int lua_ax_ui_Slider_loadSlidBallTextureNormal(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadSlidBallTextureNormal");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Slider:loadSlidBallTextureNormal");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Slider:loadSlidBallTextureNormal");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_loadSlidBallTextureNormal'", nullptr);
@@ -21091,7 +21091,7 @@ int lua_ax_ui_Slider_loadSlidBallTexturePressed(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadSlidBallTexturePressed");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Slider:loadSlidBallTexturePressed");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Slider:loadSlidBallTexturePressed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_loadSlidBallTexturePressed'", nullptr);
@@ -21158,7 +21158,7 @@ int lua_ax_ui_Slider_loadSlidBallTextureDisabled(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadSlidBallTextureDisabled");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Slider:loadSlidBallTextureDisabled");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Slider:loadSlidBallTextureDisabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_loadSlidBallTextureDisabled'", nullptr);
@@ -21225,7 +21225,7 @@ int lua_ax_ui_Slider_loadProgressBarTexture(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadProgressBarTexture");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Slider:loadProgressBarTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Slider:loadProgressBarTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_loadProgressBarTexture'", nullptr);
@@ -21275,7 +21275,7 @@ int lua_ax_ui_Slider_setPercent(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Slider:setPercent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Slider:setPercent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_setPercent'", nullptr);
@@ -21419,7 +21419,7 @@ int lua_ax_ui_Slider_setMaxPercent(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Slider:setMaxPercent");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Slider:setMaxPercent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_setMaxPercent'", nullptr);
@@ -21570,7 +21570,7 @@ int lua_ax_ui_Slider_setZoomScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.Slider:setZoomScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.Slider:setZoomScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_setZoomScale'", nullptr);
@@ -22135,7 +22135,7 @@ int lua_ax_ui_Slider_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.Slider:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.Slider:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.Slider:create");
             if (!ok) { break; }
             ax::ui::Slider* ret = ax::ui::Slider::create(arg0, arg1, arg2);
             object_to_luaval<ax::ui::Slider>(tolua_S, "axui.Slider",(ax::ui::Slider*)ret);
@@ -22377,7 +22377,7 @@ int lua_ax_ui_TextField_setTouchAreaEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TextField:setTouchAreaEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TextField:setTouchAreaEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setTouchAreaEnabled'", nullptr);
@@ -22718,7 +22718,7 @@ int lua_ax_ui_TextField_setFontSize(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TextField:setFontSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TextField:setFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setFontSize'", nullptr);
@@ -23056,7 +23056,7 @@ int lua_ax_ui_TextField_setMaxLengthEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TextField:setMaxLengthEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TextField:setMaxLengthEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setMaxLengthEnabled'", nullptr);
@@ -23153,7 +23153,7 @@ int lua_ax_ui_TextField_setMaxLength(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TextField:setMaxLength");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TextField:setMaxLength");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setMaxLength'", nullptr);
@@ -23297,7 +23297,7 @@ int lua_ax_ui_TextField_setPasswordEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TextField:setPasswordEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TextField:setPasswordEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setPasswordEnabled'", nullptr);
@@ -23538,7 +23538,7 @@ int lua_ax_ui_TextField_setAttachWithIME(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TextField:setAttachWithIME");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TextField:setAttachWithIME");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setAttachWithIME'", nullptr);
@@ -23635,7 +23635,7 @@ int lua_ax_ui_TextField_setDetachWithIME(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TextField:setDetachWithIME");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TextField:setDetachWithIME");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setDetachWithIME'", nullptr);
@@ -23732,7 +23732,7 @@ int lua_ax_ui_TextField_setInsertText(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TextField:setInsertText");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TextField:setInsertText");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setInsertText'", nullptr);
@@ -23829,7 +23829,7 @@ int lua_ax_ui_TextField_setDeleteBackward(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TextField:setDeleteBackward");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TextField:setDeleteBackward");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setDeleteBackward'", nullptr);
@@ -24124,7 +24124,7 @@ int lua_ax_ui_TextField_setTextHorizontalAlignment(lua_State* tolua_S)
     {
         ax::TextHAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TextField:setTextHorizontalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TextField:setTextHorizontalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setTextHorizontalAlignment'", nullptr);
@@ -24221,7 +24221,7 @@ int lua_ax_ui_TextField_setTextVerticalAlignment(lua_State* tolua_S)
     {
         ax::TextVAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TextField:setTextVerticalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TextField:setTextVerticalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setTextVerticalAlignment'", nullptr);
@@ -24318,7 +24318,7 @@ int lua_ax_ui_TextField_setCursorEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TextField:setCursorEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TextField:setCursorEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setCursorEnabled'", nullptr);
@@ -24368,7 +24368,7 @@ int lua_ax_ui_TextField_setCursorChar(lua_State* tolua_S)
     {
         int32_t arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,&arg0, "axui.TextField:setCursorChar");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TextField:setCursorChar");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_setCursorChar'", nullptr);
@@ -24500,7 +24500,7 @@ int lua_ax_ui_TextField_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.TextField:create");
             if (!ok) { break; }
             int arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.TextField:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.TextField:create");
             if (!ok) { break; }
             ax::ui::TextField* ret = ax::ui::TextField::create(arg0, arg1, arg2);
             object_to_luaval<ax::ui::TextField>(tolua_S, "axui.TextField",(ax::ui::TextField*)ret);
@@ -25148,7 +25148,7 @@ int lua_ax_ui_PageView_insertPage(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.PageView:insertPage");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.PageView:insertPage");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.PageView:insertPage");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_insertPage'", nullptr);
@@ -25343,7 +25343,7 @@ int lua_ax_ui_PageView_scrollToPage(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "axui.PageView:scrollToPage");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "axui.PageView:scrollToPage");
 
             if (!ok) { break; }
             cobj->scrollToPage(arg0, arg1);
@@ -25402,7 +25402,7 @@ int lua_ax_ui_PageView_scrollToItem(lua_State* tolua_S)
 
             if (!ok) { break; }
             double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, "axui.PageView:scrollToItem");
+            ok &= luaval_to_number(tolua_S, 3, &arg1, "axui.PageView:scrollToItem");
 
             if (!ok) { break; }
             cobj->scrollToItem(arg0, arg1);
@@ -25614,7 +25614,7 @@ int lua_ax_ui_PageView_setIndicatorEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.PageView:setIndicatorEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.PageView:setIndicatorEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setIndicatorEnabled'", nullptr);
@@ -25905,7 +25905,7 @@ int lua_ax_ui_PageView_setIndicatorSpaceBetweenIndexNodes(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.PageView:setIndicatorSpaceBetweenIndexNodes");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.PageView:setIndicatorSpaceBetweenIndexNodes");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setIndicatorSpaceBetweenIndexNodes'", nullptr);
@@ -26196,7 +26196,7 @@ int lua_ax_ui_PageView_setIndicatorSelectedIndexOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "axui.PageView:setIndicatorSelectedIndexOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.PageView:setIndicatorSelectedIndexOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setIndicatorSelectedIndexOpacity'", nullptr);
@@ -26293,7 +26293,7 @@ int lua_ax_ui_PageView_setIndicatorIndexNodesOpacity(lua_State* tolua_S)
     {
         uint16_t arg0;
 
-        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "axui.PageView:setIndicatorIndexNodesOpacity");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.PageView:setIndicatorIndexNodesOpacity");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setIndicatorIndexNodesOpacity'", nullptr);
@@ -26390,7 +26390,7 @@ int lua_ax_ui_PageView_setIndicatorIndexNodesScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.PageView:setIndicatorIndexNodesScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.PageView:setIndicatorIndexNodesScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setIndicatorIndexNodesScale'", nullptr);
@@ -26457,7 +26457,7 @@ int lua_ax_ui_PageView_setIndicatorIndexNodesTexture(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.PageView:setIndicatorIndexNodesTexture");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.PageView:setIndicatorIndexNodesTexture");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.PageView:setIndicatorIndexNodesTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setIndicatorIndexNodesTexture'", nullptr);
@@ -26554,7 +26554,7 @@ int lua_ax_ui_PageView_setAutoScrollStopEpsilon(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.PageView:setAutoScrollStopEpsilon");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.PageView:setAutoScrollStopEpsilon");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_setAutoScrollStopEpsilon'", nullptr);
@@ -26751,7 +26751,7 @@ int lua_ax_ui_Helper_seekWidgetByTag(lua_State* tolua_S)
         ax::ui::Widget* arg0;
         int arg1;
         ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Helper:seekWidgetByTag");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Helper:seekWidgetByTag");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Helper:seekWidgetByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_seekWidgetByTag'", nullptr);
@@ -26827,7 +26827,7 @@ int lua_ax_ui_Helper_seekActionWidgetByActionTag(lua_State* tolua_S)
         ax::ui::Widget* arg0;
         int arg1;
         ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Helper:seekActionWidgetByActionTag");
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Helper:seekActionWidgetByActionTag");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.Helper:seekActionWidgetByActionTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_seekActionWidgetByActionTag'", nullptr);
@@ -26899,7 +26899,7 @@ int lua_ax_ui_Helper_changeLayoutSystemActiveState(lua_State* tolua_S)
     if (argc == 1)
     {
         bool arg0;
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Helper:changeLayoutSystemActiveState");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Helper:changeLayoutSystemActiveState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_changeLayoutSystemActiveState'", nullptr);
@@ -27048,7 +27048,7 @@ int lua_ax_ui_RichElement_init(lua_State* tolua_S)
         int arg0;
         ax::Color32 arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElement:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElement:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElement:init");
         if(!ok)
@@ -27100,7 +27100,7 @@ int lua_ax_ui_RichElement_equalType(lua_State* tolua_S)
     {
         ax::ui::RichElement::Type arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElement:equalType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElement:equalType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElement_equalType'", nullptr);
@@ -27228,7 +27228,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         unsigned int arg5;
         std::string_view arg6;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
@@ -27236,9 +27236,9 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
         if(!ok)
@@ -27261,7 +27261,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         std::string_view arg6;
         ax::Color32 arg7;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
@@ -27269,9 +27269,9 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
@@ -27297,7 +27297,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         ax::Color32 arg7;
         int arg8;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
@@ -27305,15 +27305,15 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27336,7 +27336,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         int arg8;
         ax::Color32 arg9;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
@@ -27344,15 +27344,15 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
         if(!ok)
@@ -27378,7 +27378,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         ax::Color32 arg9;
         ax::Vec2 arg10;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
@@ -27386,15 +27386,15 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
 
@@ -27423,7 +27423,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         ax::Vec2 arg10;
         int arg11;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
@@ -27431,21 +27431,21 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
 
         ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 13, &arg11, "axui.RichElementText:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
@@ -27471,7 +27471,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         int arg11;
         ax::Color32 arg12;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
@@ -27479,21 +27479,21 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
 
         ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 13, &arg11, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 14, &arg12, "axui.RichElementText:init");
         if(!ok)
@@ -27522,7 +27522,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
         ax::Color32 arg12;
         std::string_view arg13;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:init");
 
@@ -27530,21 +27530,21 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:init");
 
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:init");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:init");
 
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:init");
 
         ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:init");
 
-        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:init");
+        ok &= luaval_to_int(tolua_S, 13, &arg11, "axui.RichElementText:init");
 
         ok &=luaval_to_color32(tolua_S, 14, &arg12, "axui.RichElementText:init");
 
@@ -27590,11 +27590,11 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         std::string_view arg2;
         std::string_view arg3;
         double arg4;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27612,12 +27612,12 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         std::string_view arg3;
         double arg4;
         unsigned int arg5;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27636,12 +27636,12 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         double arg4;
         unsigned int arg5;
         std::string_view arg6;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         if(!ok)
         {
@@ -27662,12 +27662,12 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         unsigned int arg5;
         std::string_view arg6;
         ax::Color32 arg7;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
         if(!ok)
@@ -27690,15 +27690,15 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         std::string_view arg6;
         ax::Color32 arg7;
         int arg8;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27720,15 +27720,15 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         ax::Color32 arg7;
         int arg8;
         ax::Color32 arg9;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
         if(!ok)
         {
@@ -27752,15 +27752,15 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         int arg8;
         ax::Color32 arg9;
         ax::Vec2 arg10;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
         ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:create");
         if(!ok)
@@ -27786,18 +27786,18 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         ax::Color32 arg9;
         ax::Vec2 arg10;
         int arg11;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
         ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 13, &arg11, "axui.RichElementText:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
@@ -27822,18 +27822,18 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         ax::Vec2 arg10;
         int arg11;
         ax::Color32 arg12;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
         ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 13, &arg11, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 14, &arg12, "axui.RichElementText:create");
         if(!ok)
         {
@@ -27860,18 +27860,18 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
         int arg11;
         ax::Color32 arg12;
         std::string_view arg13;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementText:create");
-        ok &= luaval_to_number(tolua_S, 6,&arg4, "axui.RichElementText:create");
-        ok &= luaval_to_uint32(tolua_S, 7,&arg5, "axui.RichElementText:create");
+        ok &= luaval_to_number(tolua_S, 6, &arg4, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 8,&arg6, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 9, &arg7, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 10,(int *)&arg8, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 10, &arg8, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 11, &arg9, "axui.RichElementText:create");
         ok &= luaval_to_vec2(tolua_S, 12, &arg10, "axui.RichElementText:create");
-        ok &= luaval_to_int32(tolua_S, 13,(int *)&arg11, "axui.RichElementText:create");
+        ok &= luaval_to_int(tolua_S, 13, &arg11, "axui.RichElementText:create");
         ok &=luaval_to_color32(tolua_S, 14, &arg12, "axui.RichElementText:create");
         ok &= luaval_to_std_string_view(tolua_S, 15,&arg13, "axui.RichElementText:create");
         if(!ok)
@@ -27982,7 +27982,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
         ax::Color32 arg1;
         std::string_view arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:init");
 
@@ -28003,7 +28003,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
         std::string_view arg2;
         std::string_view arg3;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:init");
 
@@ -28027,7 +28027,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
         std::string_view arg3;
         ax::ui::Widget::TextureResType arg4;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:init");
 
@@ -28035,7 +28035,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:init");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.RichElementImage:init");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axui.RichElementImage:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_init'", nullptr);
@@ -28054,7 +28054,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
         ax::ui::Widget::TextureResType arg4;
         std::string_view arg5;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:init");
 
@@ -28062,7 +28062,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:init");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.RichElementImage:init");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axui.RichElementImage:init");
 
         ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axui.RichElementImage:init");
         if(!ok)
@@ -28114,7 +28114,7 @@ int lua_ax_ui_RichElementImage_setWidth(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:setWidth");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:setWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setWidth'", nullptr);
@@ -28164,7 +28164,7 @@ int lua_ax_ui_RichElementImage_setHeight(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:setHeight");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:setHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setHeight'", nullptr);
@@ -28214,7 +28214,7 @@ int lua_ax_ui_RichElementImage_setScale(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScale");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.RichElementImage:setScale");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScale'", nullptr);
@@ -28264,7 +28264,7 @@ int lua_ax_ui_RichElementImage_setScaleX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScaleX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.RichElementImage:setScaleX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScaleX'", nullptr);
@@ -28314,7 +28314,7 @@ int lua_ax_ui_RichElementImage_setScaleY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScaleY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.RichElementImage:setScaleY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScaleY'", nullptr);
@@ -28454,7 +28454,7 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
         int arg0;
         ax::Color32 arg1;
         std::string_view arg2;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:create");
         if(!ok)
@@ -28472,7 +28472,7 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
         ax::Color32 arg1;
         std::string_view arg2;
         std::string_view arg3;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:create");
@@ -28492,11 +28492,11 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
         std::string_view arg2;
         std::string_view arg3;
         ax::ui::Widget::TextureResType arg4;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:create");
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.RichElementImage:create");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axui.RichElementImage:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_create'", nullptr);
@@ -28514,11 +28514,11 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
         std::string_view arg3;
         ax::ui::Widget::TextureResType arg4;
         std::string_view arg5;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementImage:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementImage:create");
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.RichElementImage:create");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axui.RichElementImage:create");
         ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axui.RichElementImage:create");
         if(!ok)
         {
@@ -28635,7 +28635,7 @@ int lua_ax_ui_RichElementCustomNode_init(lua_State* tolua_S)
         ax::Color32 arg1;
         ax::Node* arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementCustomNode:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementCustomNode:init");
 
@@ -28656,7 +28656,7 @@ int lua_ax_ui_RichElementCustomNode_init(lua_State* tolua_S)
         ax::Node* arg2;
         std::string_view arg3;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:init");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementCustomNode:init");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementCustomNode:init");
 
@@ -28702,7 +28702,7 @@ int lua_ax_ui_RichElementCustomNode_create(lua_State* tolua_S)
         int arg0;
         ax::Color32 arg1;
         ax::Node* arg2;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementCustomNode:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementCustomNode:create");
         ok &= luaval_to_object<ax::Node>(tolua_S, 4, "ax.Node",&arg2, "axui.RichElementCustomNode:create");
         if(!ok)
@@ -28720,7 +28720,7 @@ int lua_ax_ui_RichElementCustomNode_create(lua_State* tolua_S)
         ax::Color32 arg1;
         ax::Node* arg2;
         std::string_view arg3;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:create");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementCustomNode:create");
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementCustomNode:create");
         ok &= luaval_to_object<ax::Node>(tolua_S, 4, "ax.Node",&arg2, "axui.RichElementCustomNode:create");
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.RichElementCustomNode:create");
@@ -28819,10 +28819,10 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
         if (argc == 3)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementNewLine:create");
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.RichElementNewLine:create");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.RichElementNewLine:create");
             if (!ok) { break; }
             ax::Color32 arg2;
             ok &=luaval_to_color32(tolua_S, 4, &arg2, "axui.RichElementNewLine:create");
@@ -28838,7 +28838,7 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
         if (argc == 2)
         {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementNewLine:create");
             if (!ok) { break; }
             ax::Color32 arg1;
             ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichElementNewLine:create");
@@ -28888,7 +28888,7 @@ int lua_ax_ui_RichElementNewLine_constructor(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:RichElementNewLine");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichElementNewLine:RichElementNewLine");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementNewLine_constructor'", nullptr);
@@ -28965,7 +28965,7 @@ int lua_ax_ui_RichText_insertElement(lua_State* tolua_S)
 
         ok &= luaval_to_object<ax::ui::RichElement>(tolua_S, 2, "axui.RichElement",&arg0, "axui.RichText:insertElement");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.RichText:insertElement");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.RichText:insertElement");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_insertElement'", nullptr);
@@ -29071,7 +29071,7 @@ int lua_ax_ui_RichText_removeElement(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichText:removeElement");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichText:removeElement");
 
             if (!ok) { break; }
             cobj->removeElement(arg0);
@@ -29120,7 +29120,7 @@ int lua_ax_ui_RichText_setVerticalSpace(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichText:setVerticalSpace");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.RichText:setVerticalSpace");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setVerticalSpace'", nullptr);
@@ -29181,7 +29181,7 @@ int lua_ax_ui_RichText_formatText(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:formatText");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:formatText");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_formatText'", nullptr);
@@ -29231,7 +29231,7 @@ int lua_ax_ui_RichText_setWrapMode(lua_State* tolua_S)
     {
         ax::ui::RichText::WrapMode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichText:setWrapMode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichText:setWrapMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setWrapMode'", nullptr);
@@ -29328,7 +29328,7 @@ int lua_ax_ui_RichText_setHorizontalAlignment(lua_State* tolua_S)
     {
         ax::ui::RichText::HorizontalAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichText:setHorizontalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichText:setHorizontalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setHorizontalAlignment'", nullptr);
@@ -29425,7 +29425,7 @@ int lua_ax_ui_RichText_setVerticalAlignment(lua_State* tolua_S)
     {
         ax::ui::RichText::VerticalAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichText:setVerticalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichText:setVerticalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setVerticalAlignment'", nullptr);
@@ -29666,7 +29666,7 @@ int lua_ax_ui_RichText_setFontSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichText:setFontSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.RichText:setFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setFontSize'", nullptr);
@@ -30004,7 +30004,7 @@ int lua_ax_ui_RichText_setAnchorTextBold(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextBold");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextBold");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextBold'", nullptr);
@@ -30101,7 +30101,7 @@ int lua_ax_ui_RichText_setAnchorTextItalic(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextItalic");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextItalic");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextItalic'", nullptr);
@@ -30198,7 +30198,7 @@ int lua_ax_ui_RichText_setAnchorTextDel(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextDel");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextDel");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextDel'", nullptr);
@@ -30295,7 +30295,7 @@ int lua_ax_ui_RichText_setAnchorTextUnderline(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextUnderline");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextUnderline");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextUnderline'", nullptr);
@@ -30392,7 +30392,7 @@ int lua_ax_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextOutline");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextOutline");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextOutline'", nullptr);
@@ -30407,7 +30407,7 @@ int lua_ax_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
         bool arg0;
         ax::Color32 arg1;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextOutline");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextOutline");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextOutline");
         if(!ok)
@@ -30425,11 +30425,11 @@ int lua_ax_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
         ax::Color32 arg1;
         int arg2;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextOutline");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextOutline");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextOutline");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.RichText:setAnchorTextOutline");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.RichText:setAnchorTextOutline");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextOutline'", nullptr);
@@ -30620,7 +30620,7 @@ int lua_ax_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextShadow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextShadow'", nullptr);
@@ -30635,7 +30635,7 @@ int lua_ax_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
         bool arg0;
         ax::Color32 arg1;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextShadow");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
         if(!ok)
@@ -30653,7 +30653,7 @@ int lua_ax_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
         ax::Color32 arg1;
         ax::Vec2 arg2;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextShadow");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
 
@@ -30674,13 +30674,13 @@ int lua_ax_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
         ax::Vec2 arg2;
         int arg3;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextShadow");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextShadow");
 
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "axui.RichText:setAnchorTextShadow");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.RichText:setAnchorTextShadow");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.RichText:setAnchorTextShadow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextShadow'", nullptr);
@@ -30918,7 +30918,7 @@ int lua_ax_ui_RichText_setAnchorTextGlow(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextGlow");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextGlow");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setAnchorTextGlow'", nullptr);
@@ -30933,7 +30933,7 @@ int lua_ax_ui_RichText_setAnchorTextGlow(lua_State* tolua_S)
         bool arg0;
         ax::Color32 arg1;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextGlow");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.RichText:setAnchorTextGlow");
 
         ok &=luaval_to_color32(tolua_S, 3, &arg1, "axui.RichText:setAnchorTextGlow");
         if(!ok)
@@ -32282,7 +32282,7 @@ int lua_ax_ui_Scale9Sprite_init(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.Scale9Sprite:init");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
             ax::Rect arg3;
@@ -32306,7 +32306,7 @@ int lua_ax_ui_Scale9Sprite_init(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.Scale9Sprite:init");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -32419,7 +32419,7 @@ int lua_ax_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.Scale9Sprite:updateWithSprite");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
             ax::Vec2 arg3;
@@ -32451,7 +32451,7 @@ int lua_ax_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.Scale9Sprite:updateWithSprite");
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
             ax::Rect arg3;
@@ -32557,7 +32557,7 @@ int lua_ax_ui_Scale9Sprite_setState(lua_State* tolua_S)
     {
         ax::ui::Scale9Sprite::State arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Scale9Sprite:setState");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Scale9Sprite:setState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_setState'", nullptr);
@@ -32798,7 +32798,7 @@ int lua_ax_ui_Scale9Sprite_setInsetLeft(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.Scale9Sprite:setInsetLeft");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.Scale9Sprite:setInsetLeft");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_setInsetLeft'", nullptr);
@@ -32895,7 +32895,7 @@ int lua_ax_ui_Scale9Sprite_setInsetTop(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.Scale9Sprite:setInsetTop");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.Scale9Sprite:setInsetTop");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_setInsetTop'", nullptr);
@@ -32992,7 +32992,7 @@ int lua_ax_ui_Scale9Sprite_setInsetRight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.Scale9Sprite:setInsetRight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.Scale9Sprite:setInsetRight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_setInsetRight'", nullptr);
@@ -33089,7 +33089,7 @@ int lua_ax_ui_Scale9Sprite_setInsetBottom(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.Scale9Sprite:setInsetBottom");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.Scale9Sprite:setInsetBottom");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_setInsetBottom'", nullptr);
@@ -33186,7 +33186,7 @@ int lua_ax_ui_Scale9Sprite_setScale9Enabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.Scale9Sprite:setScale9Enabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.Scale9Sprite:setScale9Enabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_setScale9Enabled'", nullptr);
@@ -33380,7 +33380,7 @@ int lua_ax_ui_Scale9Sprite_setRenderingType(lua_State* tolua_S)
     {
         ax::ui::Scale9Sprite::RenderingType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Scale9Sprite:setRenderingType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Scale9Sprite:setRenderingType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_setRenderingType'", nullptr);
@@ -33942,7 +33942,7 @@ int lua_ax_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
 
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.EditBox:initWithSizeAndBackgroundSprite");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
             bool ret = cobj->initWithSizeAndBackgroundSprite(arg0, arg1, arg2);
@@ -34087,7 +34087,7 @@ int lua_ax_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.EditBox:initWithSizeAndTexture");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.EditBox:initWithSizeAndTexture");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axui.EditBox:initWithSizeAndTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_initWithSizeAndTexture'", nullptr);
@@ -34183,7 +34183,7 @@ int lua_ax_ui_EditBox_loadTextures(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.EditBox:loadTextures");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.EditBox:loadTextures");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.EditBox:loadTextures");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_loadTextures'", nullptr);
@@ -34250,7 +34250,7 @@ int lua_ax_ui_EditBox_loadTextureNormal(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:loadTextureNormal");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.EditBox:loadTextureNormal");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.EditBox:loadTextureNormal");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_loadTextureNormal'", nullptr);
@@ -34317,7 +34317,7 @@ int lua_ax_ui_EditBox_loadTexturePressed(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:loadTexturePressed");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.EditBox:loadTexturePressed");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.EditBox:loadTexturePressed");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_loadTexturePressed'", nullptr);
@@ -34384,7 +34384,7 @@ int lua_ax_ui_EditBox_loadTextureDisabled(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:loadTextureDisabled");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.EditBox:loadTextureDisabled");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.EditBox:loadTextureDisabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_loadTextureDisabled'", nullptr);
@@ -34775,7 +34775,7 @@ int lua_ax_ui_EditBox_registerScriptEditBoxHandler(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:registerScriptEditBoxHandler");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.EditBox:registerScriptEditBoxHandler");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_registerScriptEditBoxHandler'", nullptr);
@@ -35019,7 +35019,7 @@ int lua_ax_ui_EditBox_setFont(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axui.EditBox:setFont"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.EditBox:setFont");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.EditBox:setFont");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setFont'", nullptr);
@@ -35166,7 +35166,7 @@ int lua_ax_ui_EditBox_setFontSize(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setFontSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.EditBox:setFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setFontSize'", nullptr);
@@ -35363,7 +35363,7 @@ int lua_ax_ui_EditBox_setPlaceholderFont(lua_State* tolua_S)
 
         std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "axui.EditBox:setPlaceholderFont"); arg0 = arg0_tmp.c_str();
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.EditBox:setPlaceholderFont");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axui.EditBox:setPlaceholderFont");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setPlaceholderFont'", nullptr);
@@ -35510,7 +35510,7 @@ int lua_ax_ui_EditBox_setPlaceholderFontSize(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setPlaceholderFontSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.EditBox:setPlaceholderFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setPlaceholderFontSize'", nullptr);
@@ -35801,7 +35801,7 @@ int lua_ax_ui_EditBox_setInputMode(lua_State* tolua_S)
     {
         ax::ui::EditBox::InputMode arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setInputMode");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.EditBox:setInputMode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setInputMode'", nullptr);
@@ -35898,7 +35898,7 @@ int lua_ax_ui_EditBox_setMaxLength(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setMaxLength");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.EditBox:setMaxLength");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setMaxLength'", nullptr);
@@ -35995,7 +35995,7 @@ int lua_ax_ui_EditBox_setInputFlag(lua_State* tolua_S)
     {
         ax::ui::EditBox::InputFlag arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setInputFlag");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.EditBox:setInputFlag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setInputFlag'", nullptr);
@@ -36092,7 +36092,7 @@ int lua_ax_ui_EditBox_setReturnType(lua_State* tolua_S)
     {
         ax::ui::EditBox::KeyboardReturnType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setReturnType");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.EditBox:setReturnType");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setReturnType'", nullptr);
@@ -36189,7 +36189,7 @@ int lua_ax_ui_EditBox_setTextHorizontalAlignment(lua_State* tolua_S)
     {
         ax::TextHAlignment arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setTextHorizontalAlignment");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.EditBox:setTextHorizontalAlignment");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_setTextHorizontalAlignment'", nullptr);
@@ -36579,7 +36579,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.EditBox:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.EditBox:create");
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "axui.EditBox:create");
             if (!ok) { break; }
             ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1, arg2);
             object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
@@ -36718,7 +36718,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.EditBox:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg4;
-            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.EditBox:create");
+            ok &= luaval_to_int(tolua_S, 6, &arg4, "axui.EditBox:create");
             if (!ok) { break; }
             ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
@@ -36872,7 +36872,7 @@ int lua_ax_ui_LayoutComponent_setUsingPercentContentSize(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setUsingPercentContentSize");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setUsingPercentContentSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setUsingPercentContentSize'", nullptr);
@@ -37307,7 +37307,7 @@ int lua_ax_ui_LayoutComponent_setPositionPercentXEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setPositionPercentXEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setPositionPercentXEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPositionPercentXEnabled'", nullptr);
@@ -37404,7 +37404,7 @@ int lua_ax_ui_LayoutComponent_setPositionPercentX(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setPositionPercentX");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setPositionPercentX");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPositionPercentX'", nullptr);
@@ -37501,7 +37501,7 @@ int lua_ax_ui_LayoutComponent_setPositionPercentYEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setPositionPercentYEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setPositionPercentYEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPositionPercentYEnabled'", nullptr);
@@ -37598,7 +37598,7 @@ int lua_ax_ui_LayoutComponent_setPositionPercentY(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setPositionPercentY");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setPositionPercentY");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPositionPercentY'", nullptr);
@@ -37695,7 +37695,7 @@ int lua_ax_ui_LayoutComponent_setHorizontalEdge(lua_State* tolua_S)
     {
         ax::ui::LayoutComponent::HorizontalEdge arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.LayoutComponent:setHorizontalEdge");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.LayoutComponent:setHorizontalEdge");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setHorizontalEdge'", nullptr);
@@ -37792,7 +37792,7 @@ int lua_ax_ui_LayoutComponent_setVerticalEdge(lua_State* tolua_S)
     {
         ax::ui::LayoutComponent::VerticalEdge arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.LayoutComponent:setVerticalEdge");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.LayoutComponent:setVerticalEdge");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setVerticalEdge'", nullptr);
@@ -37889,7 +37889,7 @@ int lua_ax_ui_LayoutComponent_setLeftMargin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setLeftMargin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setLeftMargin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setLeftMargin'", nullptr);
@@ -37986,7 +37986,7 @@ int lua_ax_ui_LayoutComponent_setRightMargin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setRightMargin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setRightMargin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setRightMargin'", nullptr);
@@ -38083,7 +38083,7 @@ int lua_ax_ui_LayoutComponent_setTopMargin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setTopMargin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setTopMargin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setTopMargin'", nullptr);
@@ -38180,7 +38180,7 @@ int lua_ax_ui_LayoutComponent_setBottomMargin(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setBottomMargin");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setBottomMargin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setBottomMargin'", nullptr);
@@ -38374,7 +38374,7 @@ int lua_ax_ui_LayoutComponent_setPercentWidthEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setPercentWidthEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setPercentWidthEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPercentWidthEnabled'", nullptr);
@@ -38471,7 +38471,7 @@ int lua_ax_ui_LayoutComponent_setSizeWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setSizeWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setSizeWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setSizeWidth'", nullptr);
@@ -38568,7 +38568,7 @@ int lua_ax_ui_LayoutComponent_setPercentWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setPercentWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setPercentWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPercentWidth'", nullptr);
@@ -38665,7 +38665,7 @@ int lua_ax_ui_LayoutComponent_setPercentHeightEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setPercentHeightEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setPercentHeightEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPercentHeightEnabled'", nullptr);
@@ -38762,7 +38762,7 @@ int lua_ax_ui_LayoutComponent_setSizeHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setSizeHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setSizeHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setSizeHeight'", nullptr);
@@ -38859,7 +38859,7 @@ int lua_ax_ui_LayoutComponent_setPercentHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.LayoutComponent:setPercentHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.LayoutComponent:setPercentHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPercentHeight'", nullptr);
@@ -38956,7 +38956,7 @@ int lua_ax_ui_LayoutComponent_setStretchWidthEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setStretchWidthEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setStretchWidthEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setStretchWidthEnabled'", nullptr);
@@ -39053,7 +39053,7 @@ int lua_ax_ui_LayoutComponent_setStretchHeightEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setStretchHeightEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setStretchHeightEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setStretchHeightEnabled'", nullptr);
@@ -39103,7 +39103,7 @@ int lua_ax_ui_LayoutComponent_setPercentOnlyEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setPercentOnlyEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setPercentOnlyEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setPercentOnlyEnabled'", nullptr);
@@ -39153,7 +39153,7 @@ int lua_ax_ui_LayoutComponent_setActiveEnabled(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.LayoutComponent:setActiveEnabled");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.LayoutComponent:setActiveEnabled");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_setActiveEnabled'", nullptr);
@@ -39669,7 +39669,7 @@ int lua_ax_ui_TabHeader_setTitleFontSize(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.TabHeader:setTitleFontSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.TabHeader:setTitleFontSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabHeader_setTitleFontSize'", nullptr);
@@ -39927,7 +39927,7 @@ int lua_ax_ui_TabHeader_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.TabHeader:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.TabHeader:create");
+            ok &= luaval_to_int(tolua_S, 5, &arg3, "axui.TabHeader:create");
             if (!ok) { break; }
             ax::ui::TabHeader* ret = ax::ui::TabHeader::create(arg0, arg1, arg2, arg3);
             object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
@@ -39996,7 +39996,7 @@ int lua_ax_ui_TabHeader_create(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axui.TabHeader:create");
             if (!ok) { break; }
             ax::ui::Widget::TextureResType arg6;
-            ok &= luaval_to_int32(tolua_S, 8,(int *)&arg6, "axui.TabHeader:create");
+            ok &= luaval_to_int(tolua_S, 8, &arg6, "axui.TabHeader:create");
             if (!ok) { break; }
             ax::ui::TabHeader* ret = ax::ui::TabHeader::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
             object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
@@ -40072,7 +40072,7 @@ int lua_ax_ui_TabControl_removeTab(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TabControl:removeTab");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabControl:removeTab");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_removeTab'", nullptr);
@@ -40128,7 +40128,7 @@ int lua_ax_ui_TabControl_setSelectTab(lua_State* tolua_S)
     do{
         if (argc == 1) {
             int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TabControl:setSelectTab");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabControl:setSelectTab");
 
             if (!ok) { break; }
             cobj->setSelectTab(arg0);
@@ -40177,7 +40177,7 @@ int lua_ax_ui_TabControl_getTabHeader(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TabControl:getTabHeader");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabControl:getTabHeader");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getTabHeader'", nullptr);
@@ -40227,7 +40227,7 @@ int lua_ax_ui_TabControl_getTabContainer(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TabControl:getTabContainer");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabControl:getTabContainer");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getTabContainer'", nullptr);
@@ -40279,7 +40279,7 @@ int lua_ax_ui_TabControl_insertTab(lua_State* tolua_S)
         ax::ui::TabHeader* arg1;
         ax::ui::Layout* arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TabControl:insertTab");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabControl:insertTab");
 
         ok &= luaval_to_object<ax::ui::TabHeader>(tolua_S, 3, "axui.TabHeader",&arg1, "axui.TabControl:insertTab");
 
@@ -40531,7 +40531,7 @@ int lua_ax_ui_TabControl_setHeaderWidth(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.TabControl:setHeaderWidth");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.TabControl:setHeaderWidth");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_setHeaderWidth'", nullptr);
@@ -40628,7 +40628,7 @@ int lua_ax_ui_TabControl_setHeaderHeight(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.TabControl:setHeaderHeight");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.TabControl:setHeaderHeight");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_setHeaderHeight'", nullptr);
@@ -40725,7 +40725,7 @@ int lua_ax_ui_TabControl_ignoreHeadersTextureSize(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.TabControl:ignoreHeadersTextureSize");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.TabControl:ignoreHeadersTextureSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_ignoreHeadersTextureSize'", nullptr);
@@ -40822,7 +40822,7 @@ int lua_ax_ui_TabControl_setHeaderSelectedZoom(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.TabControl:setHeaderSelectedZoom");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.TabControl:setHeaderSelectedZoom");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_setHeaderSelectedZoom'", nullptr);
@@ -40919,7 +40919,7 @@ int lua_ax_ui_TabControl_setHeaderDockPlace(lua_State* tolua_S)
     {
         ax::ui::TabControl::Dock arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TabControl:setHeaderDockPlace");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabControl:setHeaderDockPlace");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_setHeaderDockPlace'", nullptr);

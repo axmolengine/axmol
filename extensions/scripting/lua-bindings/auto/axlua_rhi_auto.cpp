@@ -363,7 +363,7 @@ int lua_ax_rhi_Program_getUniformLocation(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::rhi::Uniform arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.Program:getUniformLocation");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Program:getUniformLocation");
 
             if (!ok) { break; }
             ax::rhi::UniformLocation ret = cobj->getUniformLocation(arg0);
@@ -418,7 +418,7 @@ int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::rhi::VertexInputKind arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.Program:getVertexInputDesc");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Program:getVertexInputDesc");
 
             if (!ok) { break; }
             const ax::rhi::VertexInputDesc* ret = cobj->getVertexInputDesc(arg0);
@@ -761,7 +761,7 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
     {
         ax::rhi::ShaderStage arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.Program:getUniformBufferSize");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Program:getUniformBufferSize");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getUniformBufferSize'", nullptr);
@@ -1234,7 +1234,7 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
     do{
         if (argc == 1) {
             ax::rhi::VertexInputKind arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.ProgramState:getVertexInputDesc");
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.ProgramState:getVertexInputDesc");
 
             if (!ok) { break; }
             const ax::rhi::VertexInputDesc* ret = cobj->getVertexInputDesc(arg0);
@@ -1293,7 +1293,7 @@ int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
 
             if (!ok) { break; }
             int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axrhi.ProgramState:setTexture");
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "axrhi.ProgramState:setTexture");
 
             if (!ok) { break; }
             ax::rhi::Texture* arg2;
@@ -2058,13 +2058,13 @@ int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axrhi.Texture:updateData");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axrhi.Texture:updateData");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axrhi.Texture:updateData");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axrhi.Texture:updateData");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axrhi.Texture:updateData");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axrhi.Texture:updateData");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axrhi.Texture:updateData");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axrhi.Texture:updateData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateData'", nullptr);
@@ -2120,20 +2120,20 @@ int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
         const void* arg5;
         int arg6;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.Texture:updateSubData");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Texture:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axrhi.Texture:updateSubData");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axrhi.Texture:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axrhi.Texture:updateSubData");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axrhi.Texture:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axrhi.Texture:updateSubData");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axrhi.Texture:updateSubData");
 
-        ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axrhi.Texture:updateSubData");
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axrhi.Texture:updateSubData");
 
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
 
-        ok &= luaval_to_int32(tolua_S, 8,(int *)&arg6, "axrhi.Texture:updateSubData");
+        ok &= luaval_to_int(tolua_S, 8, &arg6, "axrhi.Texture:updateSubData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateSubData'", nullptr);
@@ -2184,7 +2184,7 @@ int lua_ax_rhi_Texture_updateFaceData(lua_State* tolua_S)
         ax::rhi::TextureCubeFace arg0;
         const void* arg1;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.Texture:updateFaceData");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Texture:updateFaceData");
 
         #pragma warning NO CONVERSION TO NATIVE FOR void*
         ok = false;
@@ -2295,7 +2295,7 @@ int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
     {
         int arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.Texture:shouldGenMipmaps");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Texture:shouldGenMipmaps");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_shouldGenMipmaps'", nullptr);
@@ -2935,7 +2935,7 @@ int lua_ax_rhi_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
     {
         ax::rhi::FeatureType arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axrhi.DriverBase:checkForFeatureSupported");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.DriverBase:checkForFeatureSupported");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_checkForFeatureSupported'", nullptr);

@@ -95,20 +95,6 @@ extern bool luaval_is_usertype(lua_State* L, int lo, const char* type, int def);
  **/
 
 /**
- * Get a unsigned short value from the given acceptable index of stack.
- * If the value at the given acceptable index of stack is a number or a string convertible to a number it returns true,
- * otherwise returns false.
- *
- * @param L the current lua_State.
- * @param lo the given acceptable index of stack.
- * @param outValue the pointer to store the unsigned short value converted from the Lua value.
- * @param funcName the name of calling function, it is used for error output in the debug model.
- * @return Return true if the value at the given acceptable index of stack is a number or a string convertible to a
- * number, otherwise return false.
- */
-extern bool luaval_to_ushort(lua_State* L, int lo, unsigned short* outValue, const char* funcName = "");
-
-/**
  * Get a float value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a number or a string convertible to a number it returns true,
  * otherwise returns false.
@@ -134,35 +120,16 @@ extern bool luaval_to_float(lua_State* L, int lo, float* outValue, const char* f
  * @return Return true if the value at the given acceptable index of stack is a number or a string convertible to a
  * number, otherwise return false.
  */
-extern bool luaval_to_int32(lua_State* L, int lo, int* outValue, const char* funcName = "");
+extern bool luaval_to_integer(lua_State* L, int lo, lua_Integer* outVal, const char* funcName = "");
 
-/**
- * Get a unsigned int value from the given acceptable index of stack.
- * If the value at the given acceptable index of stack is a number or a string convertible to a number it returns true,
- * otherwise returns false.
- *
- * @param L the current lua_State.
- * @param lo the given acceptable index of stack.
- * @param outValue the pointer to store the unsigned int value converted from the Lua value.
- * @param funcName the name of calling function, it is used for error output in the debug model.
- * @return Return true if the value at the given acceptable index of stack is a number or a string convertible to a
- * number, otherwise return false.
- */
-extern bool luaval_to_uint32(lua_State* L, int lo, unsigned int* outValue, const char* funcName = "");
-
-/**
- * Get a uint16_t value from the given acceptable index of stack.
- * If the value at the given acceptable index of stack is a number or a string convertible to a number it returns true,
- * otherwise returns false.
- *
- * @param L the current lua_State.
- * @param lo the given acceptable index of stack.
- * @param outValue the pointer to store the uint16_t value converted from the Lua value.
- * @param funcName the name of calling function, it is used for error output in the debug model.
- * @return Return true if the value at the given acceptable index of stack is a number or a string convertible to a
- * number, otherwise return false.
- */
-extern bool luaval_to_uint16(lua_State* L, int lo, uint16_t* outValue, const char* funcName = "");
+template<typename _Ty>
+inline bool luaval_to_int(lua_State* L, int lo, _Ty* outVal, const char* funcName = "")
+{
+    lua_Integer tmp{0};
+    bool ret = luaval_to_integer(L, lo, &tmp, funcName);
+    *outVal  = static_cast<_Ty>(tmp);
+    return ret;
+}
 
 /**
  * Get a boolean value from the given acceptable index of stack.
@@ -219,8 +186,8 @@ extern bool luaval_to_long_long(lua_State* L, int lo, long long* outValue, const
  * @return Return true if the value at the given acceptable index of stack is a string or a number convertible to a
  * string, otherwise return false.
  */
-extern AX_LUA_DLL bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const char* funcName = "");
-extern AX_LUA_DLL bool luaval_to_std_string_view(lua_State* L,
+extern bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const char* funcName = "");
+extern bool luaval_to_std_string_view(lua_State* L,
                                                  int lo,
                                                  cxx17::string_view* outValue,
                                                  const char* funcName = "");

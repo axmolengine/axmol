@@ -148,7 +148,7 @@ int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "axui.WebView:loadURL");
+            ok &= luaval_to_boolean(tolua_S, 3, &arg1, "axui.WebView:loadURL");
 
             if (!ok) { break; }
             cobj->loadURL(arg0, arg1);
@@ -591,7 +591,7 @@ int lua_ax_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.WebView:setScalesPageToFit");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.WebView:setScalesPageToFit");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_setScalesPageToFit'", nullptr);
@@ -688,7 +688,7 @@ int lua_ax_webview_WebView_setBounces(lua_State* tolua_S)
     {
         bool arg0;
 
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.WebView:setBounces");
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axui.WebView:setBounces");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_setBounces'", nullptr);
@@ -738,7 +738,7 @@ int lua_ax_webview_WebView_setOpacityWebView(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.WebView:setOpacityWebView");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "axui.WebView:setOpacityWebView");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_setOpacityWebView'", nullptr);
