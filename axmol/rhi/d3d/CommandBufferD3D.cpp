@@ -767,6 +767,8 @@ void CommandBufferImpl::prepareDrawing()
 
 void CommandBufferImpl::endFrame()
 {
+    if (_screenRT != _currentRT)
+        return;
     HRESULT hr = _swapChain->Present(1, 0 /*DXGI_PRESENT_DO_NOT_WAIT*/);
 
     if (FAILED(hr))

@@ -135,7 +135,7 @@ static void ImGui_ImplAxmol_SetupRenderState(ax::Renderer* renderer, ImDrawData*
         renderer->setCullMode(rhi::CullMode::NONE);
         renderer->setDepthTest(false);
         renderer->setScissorTest(true);
-        renderer->setViewPort(0, 0, fb_width, fb_height);
+        renderer->setViewport(0, 0, fb_width, fb_height);
     });
 
     // Catch up with texture updates. Most of the times, the list will have 1 element with an OK status, aka nothing to
@@ -161,7 +161,7 @@ static void ImGui_ImplAxmol_RestoreRenderState(ax::Renderer* renderer)
         auto bd = ImGui_ImplAxmol_GetBackendData();
         renderer->setCullMode(bd->SavedRenderState.cull);
         auto& vp = bd->SavedRenderState.vp;
-        renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
+        renderer->setViewport(vp.x, vp.y, vp.w, vp.h);
         renderer->setScissorTest(bd->SavedRenderState.scissorTest);
         auto& sc = bd->SavedRenderState.scissorRect;
         renderer->setScissorRect(sc.x, sc.y, sc.width, sc.height);
@@ -325,7 +325,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         auto cmd = std::make_shared<CustomCommand>();
                         bd->CustomCommands.push_back(cmd);
                         cmd->init(0.f, BlendFunc::ALPHA_NON_PREMULTIPLIED);
-                        const auto pinfo = &bd->ProgramInfo; 
+                        const auto pinfo = &bd->ProgramInfo;
                         // create new ProgramState
                         auto state = new ProgramState(pinfo->program);
                         state->autorelease();

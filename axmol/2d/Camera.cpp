@@ -508,7 +508,7 @@ void Camera::apply()
 
 void Camera::applyViewport()
 {
-    _director->getRenderer()->setViewPort(_defaultViewport.x, _defaultViewport.y, _defaultViewport.width,
+    _director->getRenderer()->setViewport(_defaultViewport.x, _defaultViewport.y, _defaultViewport.width,
                                           _defaultViewport.height);
 }
 

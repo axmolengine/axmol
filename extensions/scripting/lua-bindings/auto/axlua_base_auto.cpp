@@ -16070,7 +16070,7 @@ int lua_ax_base_SpriteFrame_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -16095,7 +16095,7 @@ int lua_ax_base_SpriteFrame_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -16133,7 +16133,7 @@ int lua_ax_base_SpriteFrame_createWithTexture(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -16158,7 +16158,7 @@ int lua_ax_base_SpriteFrame_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -17653,7 +17653,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -17669,7 +17669,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -17688,7 +17688,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -18965,7 +18965,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -18981,7 +18981,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -19000,7 +19000,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -19180,7 +19180,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -19199,7 +19199,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -19215,7 +19215,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -19375,7 +19375,7 @@ int lua_ax_base_MoveBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -19391,7 +19391,7 @@ int lua_ax_base_MoveBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -19551,7 +19551,7 @@ int lua_ax_base_MoveTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -19567,7 +19567,7 @@ int lua_ax_base_MoveTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -20609,7 +20609,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -20628,7 +20628,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -20644,7 +20644,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -20747,7 +20747,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -20766,7 +20766,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -20782,7 +20782,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -21527,7 +21527,7 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -21543,7 +21543,7 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -24291,7 +24291,7 @@ int lua_ax_base_RenderView_getDesignResolutionSize(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_RenderView_setViewPortInPoints(lua_State* tolua_S)
+int lua_ax_base_RenderView_setViewportInPoints(lua_State* tolua_S)
 {
     int argc = 0;
     ax::RenderView* cobj = nullptr;
@@ -24311,7 +24311,7 @@ int lua_ax_base_RenderView_setViewPortInPoints(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setViewPortInPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setViewportInPoints'", nullptr);
         return 0;
     }
 #endif
@@ -24324,28 +24324,28 @@ int lua_ax_base_RenderView_setViewPortInPoints(lua_State* tolua_S)
         double arg2;
         double arg3;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setViewportInPoints");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setViewportInPoints");
 
-        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.RenderView:setViewportInPoints");
 
-        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderView:setViewPortInPoints");
+        ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.RenderView:setViewportInPoints");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setViewPortInPoints'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setViewportInPoints'", nullptr);
             return 0;
         }
-        cobj->setViewPortInPoints(arg0, arg1, arg2, arg3);
+        cobj->setViewportInPoints(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setViewPortInPoints",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setViewportInPoints",argc, 4);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setViewPortInPoints'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setViewportInPoints'.",&tolua_err);
 #endif
 
     return 0;
@@ -25097,7 +25097,7 @@ int lua_register_ax_base_RenderView(lua_State* tolua_S)
         tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_RenderView_getSafeAreaRect);
         tolua_function(tolua_S,"setDesignResolutionSize",lua_ax_base_RenderView_setDesignResolutionSize);
         tolua_function(tolua_S,"getDesignResolutionSize",lua_ax_base_RenderView_getDesignResolutionSize);
-        tolua_function(tolua_S,"setViewPortInPoints",lua_ax_base_RenderView_setViewPortInPoints);
+        tolua_function(tolua_S,"setViewportInPoints",lua_ax_base_RenderView_setViewportInPoints);
         tolua_function(tolua_S,"setScissorInPoints",lua_ax_base_RenderView_setScissorInPoints);
         tolua_function(tolua_S,"isScissorEnabled",lua_ax_base_RenderView_isScissorEnabled);
         tolua_function(tolua_S,"getScissorRect",lua_ax_base_RenderView_getScissorRect);
@@ -48778,7 +48778,7 @@ int lua_ax_base_TurnOffTiles_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -48797,7 +48797,7 @@ int lua_ax_base_TurnOffTiles_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -51256,7 +51256,7 @@ int lua_ax_base_ClippingNode_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -51269,7 +51269,7 @@ int lua_ax_base_ClippingNode_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -51523,7 +51523,7 @@ int lua_ax_base_ClippingRectangleNode_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -51533,7 +51533,7 @@ int lua_ax_base_ClippingRectangleNode_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -57754,7 +57754,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 6)
         {
@@ -57782,7 +57782,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -57798,7 +57798,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -57817,7 +57817,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -57839,7 +57839,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -57886,7 +57886,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -57908,7 +57908,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -57930,7 +57930,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -58259,7 +58259,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -58275,7 +58275,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -58300,7 +58300,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -60537,7 +60537,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -60553,7 +60553,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -60572,7 +60572,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -61051,7 +61051,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -61070,7 +61070,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -61080,7 +61080,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -61826,7 +61826,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -61842,7 +61842,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -61852,7 +61852,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -62802,7 +62802,7 @@ int lua_ax_base_LayerRadialGradient_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -62812,7 +62812,7 @@ int lua_ax_base_LayerRadialGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -66914,7 +66914,7 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -66939,7 +66939,7 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -67301,7 +67301,7 @@ int lua_ax_base_NodeGrid_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -67314,7 +67314,7 @@ int lua_ax_base_NodeGrid_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -78900,7 +78900,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -78913,7 +78913,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -78923,7 +78923,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -84480,7 +84480,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -84499,7 +84499,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -84521,7 +84521,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -84543,7 +84543,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -84568,7 +84568,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -84584,7 +84584,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -86580,7 +86580,7 @@ int lua_ax_base_TransitionFlipX_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -86596,7 +86596,7 @@ int lua_ax_base_TransitionFlipX_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -86695,7 +86695,7 @@ int lua_ax_base_TransitionFlipY_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -86711,7 +86711,7 @@ int lua_ax_base_TransitionFlipY_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -86810,7 +86810,7 @@ int lua_ax_base_TransitionFlipAngular_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -86826,7 +86826,7 @@ int lua_ax_base_TransitionFlipAngular_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -86925,7 +86925,7 @@ int lua_ax_base_TransitionZoomFlipX_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -86941,7 +86941,7 @@ int lua_ax_base_TransitionZoomFlipX_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -87040,7 +87040,7 @@ int lua_ax_base_TransitionZoomFlipY_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -87056,7 +87056,7 @@ int lua_ax_base_TransitionZoomFlipY_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -87155,7 +87155,7 @@ int lua_ax_base_TransitionZoomFlipAngular_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -87171,7 +87171,7 @@ int lua_ax_base_TransitionZoomFlipAngular_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -87337,7 +87337,7 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -87353,7 +87353,7 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -92344,7 +92344,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 0)
         {
@@ -92354,7 +92354,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 6)
         {
@@ -93668,7 +93668,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -93684,7 +93684,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -93697,7 +93697,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -93716,7 +93716,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -93820,7 +93820,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 2)
         {
@@ -93836,7 +93836,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 1)
         {
@@ -93849,7 +93849,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 3)
         {
@@ -93868,7 +93868,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 4)
         {
@@ -101324,7 +101324,7 @@ int lua_ax_base_Renderer_getWinding(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Renderer_setViewPort(lua_State* tolua_S)
+int lua_ax_base_Renderer_setViewport(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Renderer* cobj = nullptr;
@@ -101344,7 +101344,7 @@ int lua_ax_base_Renderer_setViewPort(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setViewPort'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setViewport'", nullptr);
         return 0;
     }
 #endif
@@ -101357,28 +101357,28 @@ int lua_ax_base_Renderer_setViewPort(lua_State* tolua_S)
         unsigned int arg2;
         unsigned int arg3;
 
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setViewPort");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Renderer:setViewport");
 
-        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Renderer:setViewPort");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Renderer:setViewport");
 
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Renderer:setViewPort");
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.Renderer:setViewport");
 
-        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Renderer:setViewPort");
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "ax.Renderer:setViewport");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setViewPort'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setViewport'", nullptr);
             return 0;
         }
-        cobj->setViewPort(arg0, arg1, arg2, arg3);
+        cobj->setViewport(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:setViewPort",argc, 4);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:setViewport",argc, 4);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Renderer_setViewPort'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Renderer_setViewport'.",&tolua_err);
 #endif
 
     return 0;
@@ -102032,7 +102032,7 @@ int lua_register_ax_base_Renderer(lua_State* tolua_S)
         tolua_function(tolua_S,"getCullMode",lua_ax_base_Renderer_getCullMode);
         tolua_function(tolua_S,"setWinding",lua_ax_base_Renderer_setWinding);
         tolua_function(tolua_S,"getWinding",lua_ax_base_Renderer_getWinding);
-        tolua_function(tolua_S,"setViewPort",lua_ax_base_Renderer_setViewPort);
+        tolua_function(tolua_S,"setViewport",lua_ax_base_Renderer_setViewport);
         tolua_function(tolua_S,"getViewport",lua_ax_base_Renderer_getViewport);
         tolua_function(tolua_S,"setScissorTest",lua_ax_base_Renderer_setScissorTest);
         tolua_function(tolua_S,"setScissorRect",lua_ax_base_Renderer_setScissorRect);
@@ -112992,7 +112992,7 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
+    do
     {
         if (argc == 5)
         {
@@ -113017,7 +113017,7 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
+    do
     {
         if (argc == 5)
         {

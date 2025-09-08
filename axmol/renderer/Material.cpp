@@ -384,7 +384,7 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
         auto programState = new rhi::ProgramState(program);
         pass->setProgramState(programState);
 
-        // Parse uniforms only if the GLProgramState was created
+        // Parse uniforms only if the ProgramState was created
         auto property = shaderProperties->getNextProperty();
         while (property)
         {
@@ -483,7 +483,7 @@ bool Material::parseRenderState(RenderState::StateBlock* state, Properties* prop
     auto property = properties->getNextProperty();
     while (property)
     {
-        // Parse uniforms only if the GLProgramState was created
+        // Parse uniforms only if the ProgramState was created
         // Render state only can have "strings" or numbers as values. No new namespaces
         state->setState(property, properties->getString(property));
 

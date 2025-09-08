@@ -49,7 +49,6 @@ namespace ax
 
 class Technique;
 class Pass;
-class GLProgramState;
 class Node;
 class Properties;
 class RenderState;
@@ -82,7 +81,7 @@ public:
      */
     static Material* createWithFilename(std::string_view path);
 
-    /** Creates a Material with a GLProgramState.
+    /** Creates a Material with a ProgramState.
      It will only contain one Technique and one Pass.
      Added in order to support legacy code.
      */

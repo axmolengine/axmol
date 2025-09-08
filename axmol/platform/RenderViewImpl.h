@@ -66,7 +66,7 @@ public:
     float getFrameZoomFactor() const override;
     // void centerWindow();
 
-    void setViewPortInPoints(float x, float y, float w, float h) override;
+    void setViewportInPoints(float x, float y, float w, float h) override;
     void setScissorInPoints(float x, float y, float w, float h) override;
     Rect getScissorRect() const override;
 

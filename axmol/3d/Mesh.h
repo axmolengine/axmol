@@ -60,7 +60,7 @@ class Buffer;
 }
 
 /**
- * @brief Mesh: contains ref to index buffer, GLProgramState, texture, skin, blend function, aabb and so on
+ * @brief Mesh: contains ref to index buffer, ProgramState, texture, skin, blend function, aabb and so on
  */
 class AX_DLL Mesh : public Object
 {
@@ -298,7 +298,6 @@ protected:
 
     std::string _name;
     MeshIndexData* _meshIndexData;
-    // GLProgramState*     _glProgramState;
     BlendFunc _blend;
     bool _blendDirty;
     Material* _material;

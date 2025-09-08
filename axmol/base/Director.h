@@ -409,6 +409,7 @@ public:
      * value range of each element is [0.0, 1.0].
      */
     void setClearColor(const Color& clearColor);
+    const Color& getClearColor() const { return _clearColor; }
 
     void mainLoop();
     /** Invoke main loop with delta time. Then `calculateDeltaTime` can just use the delta time directly.

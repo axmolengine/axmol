@@ -280,10 +280,10 @@ Rect RenderViewImpl::getSafeAreaRect() const
         Vec2 rightTop   = Vec2(_screenSize.width - safeAreaInsets.right, safeAreaInsets.top);
 
         // Convert a point from UI coordinates to which in design resolution coordinate.
-        leftBottom.x = (leftBottom.x - _viewPortRect.origin.x) / _scaleX,
-        leftBottom.y = (leftBottom.y - _viewPortRect.origin.y) / _scaleY;
-        rightTop.x   = (rightTop.x - _viewPortRect.origin.x) / _scaleX,
-        rightTop.y   = (rightTop.y - _viewPortRect.origin.y) / _scaleY;
+        leftBottom.x = (leftBottom.x - _viewportRect.origin.x) / _scaleX,
+        leftBottom.y = (leftBottom.y - _viewportRect.origin.y) / _scaleY;
+        rightTop.x   = (rightTop.x - _viewportRect.origin.x) / _scaleX,
+        rightTop.y   = (rightTop.y - _viewportRect.origin.y) / _scaleY;
 
         // Adjust points to make them inside design resolution
         leftBottom.x = MAX(leftBottom.x, 0);

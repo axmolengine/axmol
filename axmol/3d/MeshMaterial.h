@@ -107,7 +107,7 @@ public:
 
     /**
      * Create material with a ProgramState
-     * @param programState GLProgramState instance
+     * @param programState ProgramState instance
      * @return An autorelease material object
      */
     static MeshMaterial* createWithProgramState(rhi::ProgramState* programState);

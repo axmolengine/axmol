@@ -196,7 +196,7 @@ void GridBase::beforeDraw()
         _directorProjection = director->getProjection();
         set2DProjection();
         Vec2 size = director->getWinSizeInPixels();
-        renderer->setViewPort(0, 0, (unsigned int)size.width, (unsigned int)size.height);
+        renderer->setViewport(0, 0, (unsigned int)size.width, (unsigned int)size.height);
 
         _oldRenderTarget = renderer->getRenderTarget();
         AX_SAFE_RELEASE(_renderTarget);
@@ -218,13 +218,13 @@ void GridBase::afterDraw(ax::Node* /*target*/)
     //_afterDrawCommand.func = [=]() -> void {
     //    director->setProjection(_directorProjection);
     //    const auto& vp = Camera::getDefaultViewport();
-    //    renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
+    //    renderer->setViewport(vp.x, vp.y, vp.w, vp.h);
     //    renderer->setRenderTarget(_oldRenderTarget);
     //};
     renderer->addCallbackCommand([director, renderer, this]() -> void {
         director->setProjection(_directorProjection);
         const auto& vp = Camera::getDefaultViewport();
-        renderer->setViewPort(vp.x, vp.y, vp.width, vp.height);
+        renderer->setViewport(vp.x, vp.y, vp.width, vp.height);
         renderer->setRenderTarget(_oldRenderTarget);
     });
 

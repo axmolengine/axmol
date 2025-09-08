@@ -412,7 +412,7 @@ void Mesh::setMaterial(Material* material)
 
         _meshIndexData->setPrimitiveType(material->getPrimitiveType());
     }
-    // Was the texture set before the GLProgramState ? Set it
+    // Was the texture set before the ProgramState ? Set it
     for (auto&& tex : _textures)
         setTexture(tex.second, tex.first);
 

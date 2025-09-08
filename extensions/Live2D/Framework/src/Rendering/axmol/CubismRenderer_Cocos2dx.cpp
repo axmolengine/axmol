@@ -689,7 +689,7 @@ void CubismRendererProfile_Cocos2dx::Restore()
         };
         // AddCommand([=]() -> void { GetCocos2dRenderer()->setRenderTarget(_lastRenderTarget); });
     }
-    GetCocos2dRenderer()->setViewPort(_lastViewport.X, _lastViewport.Y, _lastViewport.Width, _lastViewport.Height);
+    GetCocos2dRenderer()->setViewport(_lastViewport.X, _lastViewport.Y, _lastViewport.Width, _lastViewport.Height);
 }
 
 

@@ -154,11 +154,11 @@ void RenderView::updateDesignResolutionSize()
         }
 
         // calculate the rect of viewport
-        float viewPortW = _designResolutionSize.width * _scaleX;
-        float viewPortH = _designResolutionSize.height * _scaleY;
+        float viewportW = _designResolutionSize.width * _scaleX;
+        float viewportH = _designResolutionSize.height * _scaleY;
 
-        _viewPortRect.setRect((_screenSize.width - viewPortW) / 2, (_screenSize.height - viewPortH) / 2, viewPortW,
-                              viewPortH);
+        _viewportRect.setRect((_screenSize.width - viewportW) / 2, (_screenSize.height - viewportH) / 2, viewportW,
+                              viewportH);
 
         // reset director's member variables to fit visible rect
         auto director                   = Director::getInstance();
@@ -241,11 +241,11 @@ Vec2 RenderView::getVisibleOrigin() const
     }
 }
 
-void RenderView::setViewPortInPoints(float x, float y, float w, float h)
+void RenderView::setViewportInPoints(float x, float y, float w, float h)
 {
     Viewport vp;
-    vp.x      = (int)(x * _scaleX + _viewPortRect.origin.x);
-    vp.y      = (int)(y * _scaleY + _viewPortRect.origin.y);
+    vp.x      = (int)(x * _scaleX + _viewportRect.origin.x);
+    vp.y      = (int)(y * _scaleY + _viewportRect.origin.y);
     vp.width  = (unsigned int)(w * _scaleX);
     vp.height = (unsigned int)(h * _scaleY);
     Camera::setDefaultViewport(vp);
@@ -254,7 +254,7 @@ void RenderView::setViewPortInPoints(float x, float y, float w, float h)
 void RenderView::setScissorInPoints(float x, float y, float w, float h)
 {
     auto renderer = Director::getInstance()->getRenderer();
-    renderer->setScissorRect((int)(x * _scaleX + _viewPortRect.origin.x), (int)(y * _scaleY + _viewPortRect.origin.y),
+    renderer->setScissorRect((int)(x * _scaleX + _viewportRect.origin.x), (int)(y * _scaleY + _viewportRect.origin.y),
                              (unsigned int)(w * _scaleX), (unsigned int)(h * _scaleY));
 }
 
@@ -269,8 +269,8 @@ Rect RenderView::getScissorRect() const
     auto renderer = Director::getInstance()->getRenderer();
     auto& rect    = renderer->getScissorRect();
 
-    float x = (rect.x - _viewPortRect.origin.x) / _scaleX;
-    float y = (rect.y - _viewPortRect.origin.y) / _scaleY;
+    float x = (rect.x - _viewportRect.origin.x) / _scaleX;
+    float y = (rect.y - _viewportRect.origin.y) / _scaleY;
     float w = rect.width / _scaleX;
     float h = rect.height / _scaleY;
     return Rect(x, y, w, h);
@@ -471,7 +471,7 @@ void RenderView::handleTouchesCancel(int num, intptr_t ids[], float xs[], float 
 
 const Rect& RenderView::getViewPortRect() const
 {
-    return _viewPortRect;
+    return _viewportRect;
 }
 
 std::vector<Touch*> RenderView::getAllTouches() const
@@ -489,10 +489,37 @@ float RenderView::getScaleY() const
     return _scaleY;
 }
 
+#ifdef AX_ENABLE_VR
+void RenderView::setVR(experimental::IVRRenderer* impl)
+{
+    if (_vrImpl != impl)
+    {
+        if (_vrImpl)
+        {
+            _vrImpl->cleanup();
+            delete _vrImpl;
+        }
+
+        if (impl)
+            impl->setup(this);
+
+        _vrImpl = impl;
+    }
+}
+#endif
+
 void RenderView::renderScene(Scene* scene, Renderer* renderer)
 {
     AXASSERT(scene, "Invalid Scene");
     AXASSERT(renderer, "Invalid Renderer");
+
+#ifdef AX_ENABLE_VR
+    if (_vrImpl) [[unlikely]]
+    {
+        _vrImpl->render(scene, renderer);
+        return;
+    }
+#endif
 
     scene->render(renderer, Mat4::IDENTITY, nullptr);
 }

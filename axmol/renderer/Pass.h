@@ -60,7 +60,7 @@ class AX_DLL Pass : public Object
     friend class VertexInputBinding;
 
 public:
-    /** Creates a Pass with a GLProgramState.
+    /** Creates a Pass with a ProgramState.
      */
     static Pass* createWithProgramState(Technique* parent, rhi::ProgramState* programState);
 
@@ -134,7 +134,7 @@ protected:
     Pass();
     ~Pass();
     bool init(Technique* parent);
-    bool initWithProgramState(Technique* parent, rhi::ProgramState* glProgramState);
+    bool initWithProgramState(Technique* parent, rhi::ProgramState* programState);
 
     void setProgramState(rhi::ProgramState* programState);
     void setVertexLayout(rhi::VertexLayout* vertexLayout);

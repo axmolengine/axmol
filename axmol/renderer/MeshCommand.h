@@ -36,7 +36,6 @@
 namespace ax
 {
 
-class GLProgramState;
 class EventListenerCustom;
 class EventCustom;
 class Material;

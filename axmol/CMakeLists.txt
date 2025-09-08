@@ -140,6 +140,8 @@ option(AX_ENABLE_3D "Build 3D support" ON)
 cmake_dependent_option(AX_ENABLE_3D_PHYSICS "Build 3D Physics support" ON "AX_ENABLE_3D" OFF)
 cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3D" OFF)
 
+option(AX_ENABLE_VR "Build VR support" OFF)
+
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 option(AX_CORE_PROFILE "Whether strip deprecated features" OFF)
@@ -258,6 +260,10 @@ if(AX_ENABLE_MEDIA)
   endif()
 endif()
 
+if(AX_ENABLE_VR)
+    include(vr/CMakeLists.txt)
+endif()
+
 set(_AX_HEADER axmol.h
   ${_AX_2D_HEADER}
   ${_AX_PLATFORM_HEADER}
@@ -309,6 +315,11 @@ endif()
 if(AX_ENABLE_AUDIO)
   list(APPEND _AX_HEADER ${_AX_AUDIO_HEADER})
   list(APPEND _AX_SRC ${_AX_AUDIO_SRC})
+endif()
+
+if(AX_ENABLE_VR)
+  list(APPEND _AX_HEADER ${_AX_VR_HEADER})
+  list(APPEND _AX_SRC ${_AX_VR_SRC})
 endif()
 
 list(APPEND _AX_SRC ${_AX_HEADER})
@@ -385,6 +396,7 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_NAVMESH)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_VR)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 
 # add base macro define and compile options

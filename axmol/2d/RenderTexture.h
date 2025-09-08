@@ -411,7 +411,7 @@ protected:
     bool _keepMatrix = false;
     Rect _rtTextureRect;
     Rect _fullRect;
-    Rect _fullviewPort;
+    Rect _fullViewport;
 
     Viewport _oldViewport;
 

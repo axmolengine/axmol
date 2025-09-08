@@ -1,0 +1,15 @@
+if(NOT IOS AND AX_ENABLE_VR)
+  set(_AX_VR_HEADER
+    vr/VRBase.h
+    vr/VRGenericHeadTracker.h
+    vr/VRDistortion.h
+    vr/VRGenericRenderer.h
+    vr/VRDistortionMesh.h
+  )
+  set(_AX_VR_SRC
+    vr/VRDistortion.cpp
+    vr/VRDistortionMesh.cpp
+    vr/VRGenericRenderer.cpp
+    vr/VRGenericHeadTracker.cpp
+  )
+endif()

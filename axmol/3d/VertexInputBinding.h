@@ -61,7 +61,7 @@ public:
     /**
      * Spawn a VertexInputBinding with cache, autorelease
      *
-     * If a VertexInputBinding matching the specified MeshVertexData and GLProgramState already
+     * If a VertexInputBinding matching the specified MeshVertexData and ProgramState already
      * exists, it will be returned. Otherwise, a new VertexInputBinding will
      * be returned. If OpenGL VAOs are enabled, the a new VAO will be created and
      * stored in the returned VertexInputBinding, otherwise a client-side

@@ -255,13 +255,13 @@ public:
      * ensure that you ONLY return true if you explicitly handle a custom auto binding; return
      * false otherwise.
      *
-     * Note that the custom resolver is called only once for a GLProgramState object when its
+     * Note that the custom resolver is called only once for a ProgramState object when its
      * node binding is initially set. This occurs when a material is initially bound to a
-     * Node. The resolver is NOT called each frame or each time the GLProgramState is bound.
+     * Node. The resolver is NOT called each frame or each time the ProgramState is bound.
      *
      * If no registered resolvers explicitly handle an auto binding, the binding will attempt
      * to be resolved using the internal/built-in resolver, which is able to handle any
-     * auto bindings found in the GLProgramState::AutoBinding enumeration.
+     * auto bindings found in the ProgramState::AutoBinding enumeration.
      *
      * When an instance of a class that extends AutoBindingResolver is created, it is automatically
      * registered as a custom auto binding handler. Likewise, it is automatically unregistered

@@ -229,7 +229,7 @@ protected:
     RenderPipelineImpl* _renderPipeline           = nullptr;
     CullMode _cullMode                            = CullMode::NONE;
     DepthStencilStateImpl* _depthStencilStateImpl = nullptr;
-    Viewport _viewPort;
+    Viewport _viewport;
     GLboolean _alphaTestEnabled = false;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY

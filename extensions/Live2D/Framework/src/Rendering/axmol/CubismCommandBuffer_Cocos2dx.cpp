@@ -214,7 +214,7 @@ void CubismCommandBuffer_Cocos2dx::Viewport(csmFloat32 x, csmFloat32 y, csmFloat
     (
         [=] () -> void
         {
-            GetCocos2dRenderer()->setViewPort(x, y, w, h);
+            GetCocos2dRenderer()->setViewport(x, y, w, h);
         }
     );
 }

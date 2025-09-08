@@ -444,7 +444,7 @@ void Director::setViewport()
 {
     if (_renderView)
     {
-        _renderView->setViewPortInPoints(0, 0, _winSizeInPoints.width, _winSizeInPoints.height);
+        _renderView->setViewportInPoints(0, 0, _winSizeInPoints.width, _winSizeInPoints.height);
     }
 }
 

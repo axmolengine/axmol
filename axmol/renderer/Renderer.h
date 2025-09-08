@@ -65,6 +65,14 @@ class CallbackCommand;
 struct PipelineDesc;
 class Texture2D;
 
+#ifdef AX_ENABLE_VR
+struct RasterTransform
+{
+    float sx{1}, sy{1};
+    float ox{0}, oy{0};
+};
+#endif
+
 /** Class that knows how to sort `RenderCommand` objects.
  Since the commands that have `z == 0` are "pushed back" in
  the correct order, the only `RenderCommand` objects that need to be sorted,
@@ -167,6 +175,11 @@ public:
 
     /** Creates a render queue and returns its Id */
     int createRenderQueue();
+
+#ifdef AX_ENABLE_VR
+    void pushRasterTransform(const RasterTransform& xf) { _xfStack.push(xf); }
+    void popRasterTransform() { _xfStack.pop(); }
+#endif
 
     /** Renders into the RenderView all the queued `RenderCommand` objects */
     void render();
@@ -385,7 +398,7 @@ public:
      * @param w The width of the viewport, in pixels.
      * @param h The height of the viewport, in pixels.
      */
-    void setViewPort(int x, int y, unsigned int w, unsigned int h);
+    void setViewport(int x, int y, unsigned int w, unsigned int h);
 
     /// Get viewport.
     const Viewport& getViewport() const { return _viewport; }
@@ -575,6 +588,10 @@ protected:
     };
 
     std::deque<StateBlock> _stateBlockStack;
+
+#ifdef AX_ENABLE_VR
+    std::stack<RasterTransform, std::vector<RasterTransform>> _xfStack;
+#endif
 };
 
 }  // namespace ax

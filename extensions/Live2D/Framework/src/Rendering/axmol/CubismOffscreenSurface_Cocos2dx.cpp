@@ -112,12 +112,12 @@ csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBuf
 
         if (_colorBuffer)
         {
-            _viewPortSize = csmRectF(0.0f, 0.0f, texture2d->getContentSizeInPixels().width,
+            _viewportSize = csmRectF(0.0f, 0.0f, texture2d->getContentSizeInPixels().width,
                                      texture2d->getContentSizeInPixels().height);
         }
         else
         {
-            _viewPortSize = csmRectF(0.0f, 0.0f, _bufferWidth, _bufferHeight);
+            _viewportSize = csmRectF(0.0f, 0.0f, _bufferWidth, _bufferHeight);
         }
 
         _bufferWidth = displayBufferWidth;
@@ -161,7 +161,7 @@ csmUint32 CubismOffscreenFrame_Cocos2dx::GetBufferHeight() const
 
 csmRectF CubismOffscreenFrame_Cocos2dx::GetViewPortSize() const
 {
-    return _viewPortSize;
+    return _viewportSize;
 }
 
 csmBool CubismOffscreenFrame_Cocos2dx::IsValid() const

@@ -190,7 +190,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         _fullRect = _rtTextureRect = Rect(0, 0, w, h);
         w                          = (int)(w * AX_CONTENT_SCALE_FACTOR());
         h                          = (int)(h * AX_CONTENT_SCALE_FACTOR());
-        _fullviewPort              = Rect(0, 0, w, h);
+        _fullViewport              = Rect(0, 0, w, h);
 
         setContentSize(Vec2(static_cast<float>(w), static_cast<float>(h)));
 
@@ -326,7 +326,7 @@ void RenderTexture::setVirtualViewport(const Vec2& rtBegin, const Rect& fullRect
 
     _fullRect = fullRect;
 
-    _fullviewPort = fullViewport;
+    _fullViewport = fullViewport;
 }
 
 bool RenderTexture::isSharedRenderTarget() const
@@ -639,17 +639,17 @@ void RenderTexture::onBegin()
     }
 
     Rect viewport;
-    viewport.size.width           = _fullviewPort.size.width;
-    viewport.size.height          = _fullviewPort.size.height;
-    float viewPortRectWidthRatio  = float(viewport.size.width) / _fullRect.size.width;
-    float viewPortRectHeightRatio = float(viewport.size.height) / _fullRect.size.height;
-    viewport.origin.x             = (_fullRect.origin.x - _rtTextureRect.origin.x) * viewPortRectWidthRatio;
-    viewport.origin.y             = (_fullRect.origin.y - _rtTextureRect.origin.y) * viewPortRectHeightRatio;
+    viewport.size.width           = _fullViewport.size.width;
+    viewport.size.height          = _fullViewport.size.height;
+    float viewportRectWidthRatio  = float(viewport.size.width) / _fullRect.size.width;
+    float viewportRectHeightRatio = float(viewport.size.height) / _fullRect.size.height;
+    viewport.origin.x             = (_fullRect.origin.x - _rtTextureRect.origin.x) * viewportRectWidthRatio;
+    viewport.origin.y             = (_fullRect.origin.y - _rtTextureRect.origin.y) * viewportRectHeightRatio;
 
     Renderer* renderer = _director->getRenderer();
 
     _oldViewport = renderer->getViewport();
-    renderer->setViewPort(viewport.origin.x, viewport.origin.y, viewport.size.width, viewport.size.height);
+    renderer->setViewport(viewport.origin.x, viewport.origin.y, viewport.size.width, viewport.size.height);
 
     _oldRenderTarget = renderer->getRenderTarget();
     renderer->setRenderTarget(_renderTarget);
@@ -661,7 +661,7 @@ void RenderTexture::onEnd()
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _oldTransMatrix);
 
     Renderer* renderer = _director->getRenderer();
-    renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.width, _oldViewport.height);
+    renderer->setViewport(_oldViewport.x, _oldViewport.y, _oldViewport.width, _oldViewport.height);
 
     renderer->setRenderTarget(_oldRenderTarget);
 }

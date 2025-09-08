@@ -594,14 +594,6 @@ const rhi::DepthStencilDesc& Renderer::getDepthStencilDesc() const
     return _dsDesc;
 }
 
-void Renderer::setViewPort(int x, int y, unsigned int w, unsigned int h)
-{
-    _viewport.x      = x;
-    _viewport.y      = y;
-    _viewport.width  = w;
-    _viewport.height = h;
-}
-
 void Renderer::fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset)
 {
     auto destVertices = &_verts[_filledVertex];
@@ -961,12 +953,41 @@ const ScissorRect& Renderer::getScissorRect() const
     return _scissorState.rect;
 }
 
-void Renderer::setScissorRect(float x, float y, float width, float height)
+void Renderer::setScissorRect(float x, float y, float w, float h)
 {
+#ifdef AX_ENABLE_VR
+    if (!_xfStack.empty())
+    {
+        const auto& xf = _xfStack.top();
+        x              = x * xf.sx + xf.ox;
+        y              = y * xf.sy + xf.oy;
+        w              = w * xf.sx;
+        h              = h * xf.sy;
+    }
+#endif
+
     _scissorState.rect.x      = x;
     _scissorState.rect.y      = y;
-    _scissorState.rect.width  = width;
-    _scissorState.rect.height = height;
+    _scissorState.rect.width  = w;
+    _scissorState.rect.height = h;
+}
+
+void Renderer::setViewport(int x, int y, unsigned int w, unsigned int h)
+{
+#if AX_ENABLE_VR
+    if (!_xfStack.empty())
+    {
+        const auto& xf = _xfStack.top();
+        x              = int(x * xf.sx + xf.ox);
+        y              = int(y * xf.sy + xf.oy);
+        w              = int(w * xf.sx);
+        h              = int(h * xf.sy);
+    }
+#endif
+    _viewport.x      = x;
+    _viewport.y      = y;
+    _viewport.width  = w;
+    _viewport.height = h;
 }
 
 // TriangleCommandBufferManager

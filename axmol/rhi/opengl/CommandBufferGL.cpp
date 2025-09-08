@@ -159,7 +159,7 @@ void CommandBufferImpl::updatePipelineState(const RenderTarget* rt, const Pipeli
 
 void CommandBufferImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
-    __state->viewport(_viewPort.set(x, y, w, h));
+    __state->viewport(_viewport.set(x, y, w, h));
 }
 
 void CommandBufferImpl::setCullMode(CullMode mode)
@@ -398,7 +398,7 @@ void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const Pi
     PixelBufferDesc pbd;
     if (rt->isDefaultRenderTarget())
     {  // read pixels from screen
-        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.width, _viewPort.height, _viewPort.width * 4, false, pbd);
+        readPixels(rt, _viewport.x, _viewport.y, _viewport.width, _viewport.height, _viewport.width * 4, false, pbd);
     }
     else
     {

@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include "axmol/base/Types.h"
 #include "axmol/base/EventTouch.h"
+#include "axmol/vr/VRBase.h"
 
 #include <functional>
 #include <vector>
@@ -278,7 +279,7 @@ public:
      * @param w Set the width of  the view port
      * @param h Set the Height of the view port.
      */
-    virtual void setViewPortInPoints(float x, float y, float w, float h);
+    virtual void setViewportInPoints(float x, float y, float w, float h);
 
     /**
      * Set Scissor rectangle with points.
@@ -446,10 +447,13 @@ public:
      * When disabled, it prevents touches to be dispatched and will cancel current touches
      */
     void setInteractive(bool interactive);
+#ifdef AX_ENABLE_VR
+    void setVR(experimental::IVRRenderer* impl);
+#endif
 
 protected:
-    float transformInputX(float x) { return (x - _viewPortRect.origin.x) / _scaleX; }
-    float transformInputY(float y) { return (y - _viewPortRect.origin.y) / _scaleY; }
+    float transformInputX(float x) { return (x - _viewportRect.origin.x) / _scaleX; }
+    float transformInputY(float y) { return (y - _viewportRect.origin.y) / _scaleY; }
 
     /**
      * queue a priority operation in render thread for non-PC platforms, even through app in background
@@ -469,13 +473,17 @@ protected:
     // resolution size, it is the size appropriate for the app resources.
     Vec2 _designResolutionSize;
     // the view port size
-    Rect _viewPortRect;
+    Rect _viewportRect;
     // the view name
     std::string _viewName;
 
     float _scaleX;
     float _scaleY;
     ResolutionPolicy _resolutionPolicy;
+
+#ifdef AX_ENABLE_VR
+    experimental::IVRRenderer* _vrImpl{nullptr};
+#endif
 
 private:
     void cancelAllTouches();

@@ -37,7 +37,7 @@ namespace ax
 {
 /**
  Command used to render one or more Triangles, which is similar to QuadCommand.
- Every TrianglesCommand will have generate material ID by give textureID, glProgramState, Blend function
+ Every TrianglesCommand will have generate material ID by give textureID, ProgramState, Blend function
  if the material id is the same, these TrianglesCommands could be batched to save draw call.
 */
 namespace rhi
@@ -108,7 +108,7 @@ public:
     void updateMaterialID();
 
 protected:
-    /**Generate the material ID by textureID, glProgramState, and blend function.*/
+    /**Generate the material ID by textureID, programState, and blend function.*/
     void generateMaterialID();
 
     /**Generated material id.*/

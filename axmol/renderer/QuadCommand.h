@@ -40,7 +40,7 @@ namespace ax
 
 /**
  Command used to render one or more Quads, similar to TrianglesCommand.
- Every QuadCommand will have generate material ID by give textureID, glProgramState, Blend function
+ Every QuadCommand will have generate material ID by give textureID, programState, Blend function
  if the material id is the same, these QuadCommands could be batched to save draw call.
  */
 class AX_DLL QuadCommand : public TrianglesCommand

@@ -674,7 +674,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     CHECK_GL_ERROR_DEBUG();
 #endif
     //    // GLFW v3.2 no longer emits "onGLFWWindowSizeFunCallback" at creation time. Force default viewport:
-    //    setViewPortInPoints(0, 0, neededWidth, neededHeight);
+    //    setViewportInPoints(0, 0, neededWidth, neededHeight);
     //
     return true;
 }
@@ -1046,13 +1046,13 @@ void RenderViewImpl::setFrameSize(float width, float height)
     updateFrameSize();
 }
 
-void RenderViewImpl::setViewPortInPoints(float x, float y, float w, float h)
+void RenderViewImpl::setViewportInPoints(float x, float y, float w, float h)
 {
     Viewport vp;
     vp.x = (int)(x * _scaleX * _retinaFactor * _frameZoomFactor +
-                 _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor);
+                 _viewportRect.origin.x * _retinaFactor * _frameZoomFactor);
     vp.y = (int)(y * _scaleY * _retinaFactor * _frameZoomFactor +
-                 _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor);
+                 _viewportRect.origin.y * _retinaFactor * _frameZoomFactor);
     vp.w = (unsigned int)(w * _scaleX * _retinaFactor * _frameZoomFactor);
     vp.h = (unsigned int)(h * _scaleY * _retinaFactor * _frameZoomFactor);
     Camera::setDefaultViewport(vp);
@@ -1061,9 +1061,9 @@ void RenderViewImpl::setViewPortInPoints(float x, float y, float w, float h)
 void RenderViewImpl::setScissorInPoints(float x, float y, float w, float h)
 {
     auto x1       = (int)(x * _scaleX * _retinaFactor * _frameZoomFactor +
-                    _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor);
+                    _viewportRect.origin.x * _retinaFactor * _frameZoomFactor);
     auto y1       = (int)(y * _scaleY * _retinaFactor * _frameZoomFactor +
-                    _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor);
+                    _viewportRect.origin.y * _retinaFactor * _frameZoomFactor);
     auto width1   = (unsigned int)(w * _scaleX * _retinaFactor * _frameZoomFactor);
     auto height1  = (unsigned int)(h * _scaleY * _retinaFactor * _frameZoomFactor);
     auto renderer = Director::getInstance()->getRenderer();
@@ -1075,9 +1075,9 @@ ax::Rect RenderViewImpl::getScissorRect() const
     auto renderer = Director::getInstance()->getRenderer();
     auto& rect    = renderer->getScissorRect();
 
-    float x = (rect.x - _viewPortRect.origin.x * _retinaFactor * _frameZoomFactor) /
+    float x = (rect.x - _viewportRect.origin.x * _retinaFactor * _frameZoomFactor) /
               (_scaleX * _retinaFactor * _frameZoomFactor);
-    float y = (rect.y - _viewPortRect.origin.y * _retinaFactor * _frameZoomFactor) /
+    float y = (rect.y - _viewportRect.origin.y * _retinaFactor * _frameZoomFactor) /
               (_scaleY * _retinaFactor * _frameZoomFactor);
     float w = rect.width / (_scaleX * _retinaFactor * _frameZoomFactor);
     float h = rect.height / (_scaleY * _retinaFactor * _frameZoomFactor);

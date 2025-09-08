@@ -57,7 +57,7 @@ class AX_DLL Technique : public Object
     friend class RenderState;
 
 public:
-    /** Creates a new Technique with a GLProgramState.
+    /** Creates a new Technique with a ProgramState.
      Method added to support legacy code
      */
     static Technique* createWithProgramState(Material* parent, rhi::ProgramState* state);

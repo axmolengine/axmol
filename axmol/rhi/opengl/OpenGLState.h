@@ -198,7 +198,7 @@ struct AX_DLL OpenGLState
 
     OpenGLState();
 
-    void viewport(const Viewport& v) { try_callf(glViewport, _viewPort, v, v.x, v.y, v.width, v.height); }
+    void viewport(const Viewport& v) { try_callf(glViewport, _viewport, v, v.x, v.y, v.width, v.height); }
     void winding(Winding v) { try_callf(glFrontFace, _winding, v, UtilsGL::toGLFrontFace(v)); }
     void enableDepthTest() { try_enable(GL_DEPTH_TEST, _depthTest); }
     void disableDepthTest() { try_disable(GL_DEPTH_TEST, _depthTest); }
@@ -409,7 +409,7 @@ private:
     std::optional<TextureBindState> _textureBindings[MAX_TEXTURE_UNITS];
     std::optional<SamplerBindState> _samplerBindings[MAX_TEXTURE_UNITS];
 
-    std::optional<Viewport> _viewPort;
+    std::optional<Viewport> _viewport;
     std::optional<Winding> _winding;
     std::optional<bool> _depthTest;
     std::optional<bool> _blend;

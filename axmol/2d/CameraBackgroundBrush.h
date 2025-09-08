@@ -231,7 +231,6 @@ protected:
 };
 
 class TextureCube;
-class GLProgramState;
 class EventListenerCustom;
 
 /**
