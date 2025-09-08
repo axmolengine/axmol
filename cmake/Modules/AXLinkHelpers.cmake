@@ -54,9 +54,11 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     PRIVATE P2T_STATIC_EXPORTS=1
     PRIVATE BT_USE_SSE_IN_API=1
   )
-  
+
   if(AX_GLES_PROFILE)
     target_compile_definitions(${APP_NAME} PRIVATE AX_GLES_PROFILE=${AX_GLES_PROFILE})
+  else()
+    target_compile_definitions(${APP_NAME} PRIVATE AX_GLES_PROFILE=0)
   endif()
 
   ax_config_pred(${APP_NAME} AX_USE_ALSOFT)
