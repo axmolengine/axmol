@@ -39,7 +39,7 @@
 #    import <CoreMotion/CoreMotion.h>
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <jni.h>
-#    include "platform/android/jni/JniHelper.h"
+#    include "axmol/platform/android/jni/JniHelper.h"
 #endif
 
 namespace ax::experimental

@@ -449,6 +449,7 @@ public:
     void setInteractive(bool interactive);
 #ifdef AX_ENABLE_VR
     void setVR(experimental::IVRRenderer* impl);
+    experimental::IVRRenderer* getVR() const { return _vrImpl; }
 #endif
 
 protected:

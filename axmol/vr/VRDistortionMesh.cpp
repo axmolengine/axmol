@@ -23,6 +23,9 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
+
+ refer: https://github.com/googlevr/cardboard/blob/master/sdk/distortion_mesh.cc
+
  ****************************************************************************/
 
 #include "axmol/vr/VRDistortionMesh.h"

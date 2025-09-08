@@ -25,6 +25,7 @@
  ****************************************************************************/
 
 #include "VRTest.h"
+#include "axmol/vr/VRGenericRenderer.h"
 
 using namespace ax;
 
@@ -56,8 +57,7 @@ VRTest1::VRTest1()
         }
         else
         {
-            auto genericvr = new VRGenericRenderer;
-            renderView->setVR(genericvr);
+            renderView->setVR(new experimental::VRGenericRenderer());
         }
     });
     button->setFontSizeObj(16);

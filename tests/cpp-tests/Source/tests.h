@@ -123,4 +123,7 @@
 #if AX_ENABLE_EXT_IMGUI
 #    include "ImGuiTest/ImGuiTest.h"
 #endif
+#ifdef AX_ENABLE_VR
+#    include "VRTest/VRTest.h"
+#endif
 #endif

@@ -133,6 +133,9 @@ public:
      AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
         addTest("Window Test", []() { return new WindowTests(); });  // TODO wrong effect
 #endif
+#ifdef AX_ENABLE_VR
+        addTest("VR Test", []() { return new VRTests(); });
+#endif
     }
 };
 
