@@ -49,4 +49,4 @@ private:
     float _coefficients[s_numberOfCoefficients];
 };
 
-}  // namespace ax
+}  // namespace ax::experimental

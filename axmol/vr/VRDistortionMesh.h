@@ -59,4 +59,4 @@ public:
     rhi::Buffer* _ebo{nullptr};
 };
 
-}  // namespace ax
+}  // namespace ax::experimental
