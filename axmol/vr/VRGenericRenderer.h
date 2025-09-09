@@ -78,7 +78,7 @@ protected:
     rhi::ProgramState* _programState{nullptr};
     rhi::VertexLayout* _vertexLayout{nullptr};
     Size _screenSize;  // The screen size
-    Size _rtSize;   // The render texture (render target) size
+    Size _rtSize;      // The render texture (render target) size
     VREye _leftEye;
     VREye _rightEye;
     DistortionMesh* _leftDistortionMesh{nullptr};

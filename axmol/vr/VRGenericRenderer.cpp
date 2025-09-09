@@ -44,7 +44,7 @@ VRGenericRenderer::VRGenericRenderer()
     : _leftDistortionMesh(nullptr), _rightDistortionMesh(nullptr), _distortion(nullptr), _vignetteEnabled(true)
 {
     _headTracker = new VRGenericHeadTracker;
-    _director = Director::getInstance();
+    _director    = Director::getInstance();
 }
 
 VRGenericRenderer::~VRGenericRenderer()
@@ -180,9 +180,10 @@ DistortionMesh* VRGenericRenderer::createDistortionMesh(VREye::EyeType eyeType)
         (eyeType == VREye::EyeType::LEFT) ? screenWidth / 4 + vp.x : screenWidth * 3 / 4 + vp.x;
     const float yEyeOffsetScreen = screenHeight / 2 + vp.y;
 
-    const float textureWidth      = _screenSize.width;
-    const float textureHeight     = _screenSize.height;
-    const float xEyeOffsetTexture = (eyeType == VREye::EyeType::LEFT) ? _screenSize.width / 4 : _screenSize.width * 3 / 4;
+    const float textureWidth  = _screenSize.width;
+    const float textureHeight = _screenSize.height;
+    const float xEyeOffsetTexture =
+        (eyeType == VREye::EyeType::LEFT) ? _screenSize.width / 4 : _screenSize.width * 3 / 4;
     const float yEyeOffsetTexture = _screenSize.height / 2;
 
     const float viewportX = (eyeType == VREye::EyeType::LEFT) ? 0 : textureWidth / 2;
