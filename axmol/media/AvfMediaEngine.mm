@@ -481,7 +481,7 @@ bool AvfMediaEngine::close()
         _sessionHandler = nil;
     }
 
-    _state = MEMediaState::Closed;
+    _state         = MEMediaState::Closed;
     _playbackEnded = false;
     return true;
 }
