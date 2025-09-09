@@ -73,7 +73,7 @@ IVRHeadTracker* VRGenericRenderer::getHeadTracker()
 
 void VRGenericRenderer::cleanup()
 {
-    AX_SAFE_RELEASE(_renderTexture);
+    AX_SAFE_RELEASE_NULL(_renderTexture);
     AX_SAFE_DELETE(_distortion);
     AX_SAFE_DELETE(_leftDistortionMesh);
     AX_SAFE_DELETE(_rightDistortionMesh);
