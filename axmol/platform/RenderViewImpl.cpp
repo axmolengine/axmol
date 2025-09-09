@@ -1353,7 +1353,6 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
         Size size(w, h);
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
 
-        
 #ifdef AX_ENABLE_VR
         if (_vrImpl)
             _vrImpl->onRenderViewResized(this);
