@@ -83,6 +83,9 @@ public:
 
 protected:
     void setupProgram();
+
+    void fillEyeViewports(RenderView* rv, const Vec2& screenSize);
+
     DistortionMesh* createDistortionMesh(VREye::EyeType eyeType, const Size& screenSize);
 
     void pushLeftRasterTransform(Renderer* renderer);

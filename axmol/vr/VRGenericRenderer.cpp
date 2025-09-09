@@ -91,21 +91,13 @@ void VRGenericRenderer::init(RenderView* rv)
     _renderTexture        = RenderTexture::create(screenSize.width, screenSize.height);
     _renderTexture->retain();
 
-    const Size rtSize = _renderTexture->getContentSize();
-    const float sx    = rtSize.width / screenSize.width;
-    const float sy    = rtSize.height / screenSize.height;
+    const Size& rtSize = _renderTexture->getContentSize();
+    const float sx     = rtSize.width / screenSize.width;
+    const float sy     = rtSize.height / screenSize.height;
 
     // DO NOT offset eye viewports by default viewport.
     // Eye viewports in RT must be exact halves to match distortion mesh sampling.
-    _leftEye.viewport.x      = 0.0f;
-    _leftEye.viewport.y      = 0.0f;
-    _leftEye.viewport.width  = rtSize.width * 0.5f;
-    _leftEye.viewport.height = rtSize.height;
-
-    _rightEye.viewport.x      = rtSize.width * 0.5f;
-    _rightEye.viewport.y      = 0.0f;
-    _rightEye.viewport.width  = rtSize.width * 0.5f;
-    _rightEye.viewport.height = rtSize.height;
+    fillEyeViewports(rv, screenSize);
 
     // Scissor transform: scale only, no translation in VR path.
     _scissorTransform = makeVRGlobalScissorTransform(sx, sy);
@@ -125,6 +117,50 @@ void VRGenericRenderer::init(RenderView* rv)
     _rightEyeCmd.setDrawType(CustomCommand::DrawType::ELEMENT);
     _rightEyeCmd.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
     _rightEyeCmd.setIndexDrawInfo(0, _rightDistortionMesh->_indices);
+}
+
+void VRGenericRenderer::fillEyeViewports(RenderView* rv, const Vec2& screenSize)
+{
+    const auto& rtSize = _renderTexture->getContentSize();
+    if (screenSize.x <= 0 || screenSize.y <= 0 || rtSize.width <= 0 || rtSize.height <= 0)
+        return;
+
+    // Per-eye half frame
+    const float subW = rtSize.width / 2;
+    const float subH = rtSize.height;
+
+    // SHOW_ALL: decide by aspect
+    float viewportW, viewportH;
+    if (subW * screenSize.y > subH * screenSize.x)
+    {
+        // Half frame is wider: fit height
+        viewportH = subH;
+        viewportW = subH * (screenSize.x / screenSize.y);
+    }
+    else
+    {
+        // Half frame is narrower: fit width
+        viewportW = subW;
+        viewportH = subW / (screenSize.x / screenSize.y);
+    }
+
+    // Center inside half frame
+    const float offsetX = (subW - viewportW) / 2;
+    const float offsetY = (subH - viewportH) / 2;
+
+    // Left eye
+    _leftEye.type            = VREye::EyeType::LEFT;
+    _leftEye.viewport.x      = offsetX;
+    _leftEye.viewport.y      = offsetY;
+    _leftEye.viewport.width  = viewportW;
+    _leftEye.viewport.height = viewportH;
+
+    // Right eye
+    _rightEye.type            = VREye::EyeType::RIGHT;
+    _rightEye.viewport.x      = subW + offsetX;
+    _rightEye.viewport.y      = offsetY;
+    _rightEye.viewport.width  = viewportW;
+    _rightEye.viewport.height = viewportH;
 }
 
 void VRGenericRenderer::render(Scene* scene, Renderer* renderer)
