@@ -262,6 +262,9 @@ endif()
 
 if(AX_ENABLE_VR)
     include(vr/CMakeLists.txt)
+    if (APPLE)
+        set_source_files_properties(vr/VRGenericHeadTracker.cpp PROPERTIES LANGUAGE OBJCXX)
+    endif()
 endif()
 
 set(_AX_HEADER axmol.h
