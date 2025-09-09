@@ -92,6 +92,10 @@ THE SOFTWARE.
 #    include <emscripten/html5.h>
 #endif
 
+#ifndef NDEBUG
+#    include "axmol/base/Scheduler.h"
+#endif
+
 namespace ax
 {
 
