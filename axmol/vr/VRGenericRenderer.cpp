@@ -44,6 +44,7 @@ VRGenericRenderer::VRGenericRenderer()
     : _leftDistortionMesh(nullptr), _rightDistortionMesh(nullptr), _distortion(nullptr), _vignetteEnabled(true)
 {
     _headTracker = new VRGenericHeadTracker;
+    _director = Director::getInstance();
 }
 
 VRGenericRenderer::~VRGenericRenderer()
@@ -72,9 +73,9 @@ void VRGenericRenderer::setup(RenderView* /*renderView*/)
     _rightEye.viewport.width  = vp.width / 2;
     _rightEye.viewport.height = vp.height / 2;
 
-    _winSize = Director::getInstance()->getWinSizeInPixels();
+    _screenSize = _director->getRenderView()->getFrameSize();
 
-    _renderTexture = RenderTexture::create(_winSize.width, _winSize.height);
+    _renderTexture = RenderTexture::create(_screenSize.width, _screenSize.height);
     _renderTexture->retain();
     _rtSize = _renderTexture->getContentSize();
 
@@ -109,10 +110,7 @@ void VRGenericRenderer::render(Scene* scene, Renderer* renderer)
 
     auto texture = _renderTexture->getSprite()->getTexture();
 
-    const Color clearColor = Director::getInstance()->getClearColor();
-
-    auto director = Director::getInstance();
-    Size winSize  = director->getWinSizeInPixels();  // Logical size
+    const Color clearColor = _director->getClearColor();
 
     // Push raster transform to scale scissor/viewport into RT space
     renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::pushRasterTransform, this, renderer));
@@ -161,8 +159,8 @@ void VRGenericRenderer::render(Scene* scene, Renderer* renderer)
 void VRGenericRenderer::pushRasterTransform(Renderer* renderer)
 {
     RasterTransform xf;
-    xf.sx = _rtSize.width / _winSize.width;
-    xf.sy = _rtSize.height / _winSize.height;
+    xf.sx = _rtSize.width / _screenSize.width;
+    xf.sy = _rtSize.height / _screenSize.height;
 
     renderer->pushRasterTransform(xf);
 }
@@ -176,18 +174,16 @@ DistortionMesh* VRGenericRenderer::createDistortionMesh(VREye::EyeType eyeType)
 {
     auto vp = Camera::getDefaultViewport();
 
-    Size screenSize = Director::getInstance()->getWinSizeInPixels();
-
-    const float screenWidth  = screenSize.width;
-    const float screenHeight = screenSize.height;
+    const float screenWidth  = _screenSize.width;
+    const float screenHeight = _screenSize.height;
     const float xEyeOffsetScreen =
         (eyeType == VREye::EyeType::LEFT) ? screenWidth / 4 + vp.x : screenWidth * 3 / 4 + vp.x;
     const float yEyeOffsetScreen = screenHeight / 2 + vp.y;
 
-    const float textureWidth      = _winSize.width;
-    const float textureHeight     = _winSize.height;
-    const float xEyeOffsetTexture = (eyeType == VREye::EyeType::LEFT) ? _winSize.width / 4 : _winSize.width * 3 / 4;
-    const float yEyeOffsetTexture = _winSize.height / 2;
+    const float textureWidth      = _screenSize.width;
+    const float textureHeight     = _screenSize.height;
+    const float xEyeOffsetTexture = (eyeType == VREye::EyeType::LEFT) ? _screenSize.width / 4 : _screenSize.width * 3 / 4;
+    const float yEyeOffsetTexture = _screenSize.height / 2;
 
     const float viewportX = (eyeType == VREye::EyeType::LEFT) ? 0 : textureWidth / 2;
     const float viewportY = 0;

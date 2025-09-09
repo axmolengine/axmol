@@ -73,10 +73,11 @@ protected:
     void pushRasterTransform(Renderer* renderer);
     void popRasterTransform(Renderer* renderer);
 
+    Director* _director{nullptr};
     RenderTexture* _renderTexture{nullptr};
     rhi::ProgramState* _programState{nullptr};
     rhi::VertexLayout* _vertexLayout{nullptr};
-    Size _winSize;  // The window logic size
+    Size _screenSize;  // The screen size
     Size _rtSize;   // The render texture (render target) size
     VREye _leftEye;
     VREye _rightEye;
