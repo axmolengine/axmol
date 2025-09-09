@@ -252,7 +252,7 @@ void Renderer::addCommand(RenderCommand* command, int renderQueueID)
     AXASSERT(renderQueueID >= 0, "Invalid render queue");
     AXASSERT(command->getType() != RenderCommand::Type::UNKNOWN_COMMAND, "Invalid Command Type");
 
-#ifdef _DEBUG
+#ifndef NDEBUG
     AXASSERT(command->checkPSVL(), "Command pipelineDesc incomplete");
 #endif
 
@@ -940,6 +940,13 @@ ClearFlag Renderer::getClearFlag() const
 
 void Renderer::setScissorTest(bool enabled)
 {
+#ifdef AX_ENABLE_VR
+    if (!_stStack.empty())
+    {
+        const auto& xf = _stStack.top();
+        enabled        = xf.enabled;
+    }
+#endif
     _scissorState.isEnabled = enabled;
 }
 
@@ -955,10 +962,10 @@ const ScissorRect& Renderer::getScissorRect() const
 
 void Renderer::setScissorRect(float x, float y, float w, float h)
 {
-#ifdef AX_ENABLE_VR
-    if (!_xfStack.empty())
+#if defined(AX_ENABLE_VR) && !defined(NDEBUG)
+    if (!_stStack.empty())
     {
-        const auto& xf = _xfStack.top();
+        const auto& xf = _stStack.top();
         x              = x * xf.sx + xf.ox;
         y              = y * xf.sy + xf.oy;
         w              = w * xf.sx;
@@ -974,16 +981,6 @@ void Renderer::setScissorRect(float x, float y, float w, float h)
 
 void Renderer::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
-#if AX_ENABLE_VR
-    if (!_xfStack.empty())
-    {
-        const auto& xf = _xfStack.top();
-        x              = int(x * xf.sx + xf.ox);
-        y              = int(y * xf.sy + xf.oy);
-        w              = int(w * xf.sx);
-        h              = int(h * xf.sy);
-    }
-#endif
     _viewport.x      = x;
     _viewport.y      = y;
     _viewport.width  = w;

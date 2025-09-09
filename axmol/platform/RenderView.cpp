@@ -490,20 +490,20 @@ float RenderView::getScaleY() const
 }
 
 #ifdef AX_ENABLE_VR
-void RenderView::setVR(experimental::IVRRenderer* impl)
+void RenderView::setVR(std::unique_ptr<experimental::IVRRenderer>&& impl)
 {
     if (_vrImpl != impl)
     {
         if (_vrImpl)
         {
             _vrImpl->cleanup();
-            delete _vrImpl;
+            _vrImpl.reset();
         }
 
         if (impl)
-            impl->setup(this);
+            impl->init(this);
 
-        _vrImpl = impl;
+        _vrImpl = std::move(impl);
     }
 }
 #endif

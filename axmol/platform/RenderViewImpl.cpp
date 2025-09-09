@@ -1276,7 +1276,7 @@ void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*sc
             break;
         }
     }
-#if defined(AX_PLATFORM_PC) && defined(_DEBUG)
+#if defined(AX_PLATFORM_PC) && !defined(NDEBUG)
     else
     {
         auto director = Director::getInstance();
@@ -1348,6 +1348,12 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
 
         Size size(w, h);
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
+
+        
+#ifdef AX_ENABLE_VR
+        if (_vrImpl)
+            _vrImpl->onRenderViewResized(this);
+#endif
     }
 }
 

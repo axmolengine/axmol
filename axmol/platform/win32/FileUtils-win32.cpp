@@ -179,7 +179,6 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
     ::GetModuleFileNameW(nullptr, full_path, AX_MAX_PATH + 1);
 
     // Debug app uses executable directory; Non-debug app uses local app data directory
-    // #ifndef _DEBUG
     // Get filename of executable only, e.g. MyGame.exe
     WCHAR* base_name = wcsrchr(full_path, '\\');
     std::wstring retPath;
@@ -209,7 +208,6 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
         }
     }
     if (retPath.empty())
-    // #endif // not defined _DEBUG
     {
         // If fetching of local app data directory fails, use the executable one
         retPath = full_path;

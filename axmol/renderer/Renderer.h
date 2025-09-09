@@ -70,6 +70,9 @@ struct RasterTransform
 {
     float sx{1}, sy{1};
     float ox{0}, oy{0};
+#    ifndef NDEBUG
+    bool enabled{false};
+#    endif
 };
 #endif
 
@@ -177,8 +180,8 @@ public:
     int createRenderQueue();
 
 #ifdef AX_ENABLE_VR
-    void pushRasterTransform(const RasterTransform& xf) { _xfStack.push(xf); }
-    void popRasterTransform() { _xfStack.pop(); }
+    void pushScissorTransform(const RasterTransform& xf) { _stStack.push(xf); }
+    void popScissorTransform() { _stStack.pop(); }
 #endif
 
     /** Renders into the RenderView all the queued `RenderCommand` objects */
@@ -590,7 +593,7 @@ protected:
     std::deque<StateBlock> _stateBlockStack;
 
 #ifdef AX_ENABLE_VR
-    std::stack<RasterTransform, std::vector<RasterTransform>> _xfStack;
+    std::stack<RasterTransform, std::vector<RasterTransform>> _stStack;
 #endif
 };
 

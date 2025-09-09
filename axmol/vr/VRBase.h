@@ -56,8 +56,9 @@ class AX_DLL IVRRenderer
 public:
     virtual ~IVRRenderer() {}
 
-    virtual void setup(RenderView* renderView)            = 0;
+    virtual void init(RenderView* rv)                     = 0;
     virtual void cleanup()                                = 0;
+    virtual void onRenderViewResized(RenderView* rv)      = 0;
     virtual void render(Scene* scene, Renderer* renderer) = 0;
     virtual IVRHeadTracker* getHeadTracker()              = 0;
 };

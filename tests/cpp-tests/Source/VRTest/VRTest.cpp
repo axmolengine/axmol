@@ -50,14 +50,17 @@ VRTest1::VRTest1()
 
     auto button = MenuItemFont::create("Enable / Disable VR", [](Object* ref) {
         auto renderView = Director::getInstance()->getRenderView();
-        auto vrimpl     = renderView->getVR();
+        auto& vrimpl     = renderView->getVR();
         if (vrimpl)
         {
             renderView->setVR(nullptr);
         }
         else
         {
-            renderView->setVR(new experimental::VRGenericRenderer());
+            auto vrRenderer = std::make_unique<experimental::VRGenericRenderer>();
+            // on android/ios device, if no VR head tracker device, uncomment to see left/right render result
+            // vrRenderer->setDebugIgnoreHeadTracker(true);
+            renderView->setVR(std::move(vrRenderer));
         }
     });
     button->setFontSizeObj(16);

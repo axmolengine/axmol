@@ -334,7 +334,7 @@ void MfMediaEngine::OnMediaEngineEvent(uint32_t meEvent)
     case MF_MEDIA_ENGINE_EVENT_ERROR:
         m_state = MEMediaState::Error;
         fireMediaEvent(MEMediaEventType::Error);
-#    ifdef _DEBUG
+#    ifndef NDEBUG
         if (m_mediaEngine)
         {
             ComPtr<IMFMediaError> error;

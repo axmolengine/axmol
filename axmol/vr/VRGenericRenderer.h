@@ -35,6 +35,8 @@ namespace ax
 class Camera;
 class Sprite;
 class RenderTexture;
+class Director;
+class RenderView;
 
 namespace experimental
 {
@@ -59,36 +61,57 @@ class AX_DLL VRGenericRenderer : public IVRRenderer
 {
 public:
     VRGenericRenderer();
-    virtual ~VRGenericRenderer();
+    ~VRGenericRenderer() override;
 
-    virtual void setup(RenderView* renderView) override;
-    virtual void cleanup() override;
-    virtual void render(Scene* scene, Renderer* renderer) override;
-    virtual IVRHeadTracker* getHeadTracker() override;
+    /**
+     * Enables or disables ignoring the head tracker rotation during VR rendering.
+     * Useful for debugging on devices without a connected headset.
+     *
+     * @param debug true to ignore head tracker rotation and use identity transform;
+     *              false to use the actual head tracker rotation.
+     */
+    void setDebugIgnoreHeadTracker(bool debug) { _debugIgnoreHeadTracker = debug; }
+
+    IVRHeadTracker* getHeadTracker() override;
+
+    void onRenderViewResized(RenderView* rv) override;
+
+    void init(RenderView* rv) override;
+    void cleanup() override;
+
+    void render(Scene* scene, Renderer* renderer) override;
 
 protected:
     void setupProgram();
-    DistortionMesh* createDistortionMesh(VREye::EyeType eyeType);
+    DistortionMesh* createDistortionMesh(VREye::EyeType eyeType, const Size& screenSize);
 
-    void pushRasterTransform(Renderer* renderer);
+    void pushLeftRasterTransform(Renderer* renderer);
+    void pushRightRasterTransform(Renderer* renderer);
     void popRasterTransform(Renderer* renderer);
 
     Director* _director{nullptr};
-    RenderTexture* _renderTexture{nullptr};
+
+    // static resources
+    VRGenericHeadTracker* _headTracker{nullptr};
     rhi::ProgramState* _programState{nullptr};
     rhi::VertexLayout* _vertexLayout{nullptr};
-    Size _screenSize;  // The screen size
-    Size _rtSize;      // The render texture (render target) size
-    VREye _leftEye;
-    VREye _rightEye;
+
+    // runtime resources, rebuild when screen size changed
+    RenderTexture* _renderTexture{nullptr};
     DistortionMesh* _leftDistortionMesh{nullptr};
     DistortionMesh* _rightDistortionMesh{nullptr};
     Distortion* _distortion{nullptr};
-    bool _vignetteEnabled{false};
+
+    VREye _leftEye;
+    VREye _rightEye;
+    RasterTransform _scissorTransform;
+
+    bool _vignetteEnabled{true};
+
+    bool _debugIgnoreHeadTracker{false};
 
     CustomCommand _leftEyeCmd;
     CustomCommand _rightEyeCmd;
-    VRGenericHeadTracker* _headTracker{nullptr};
 };
 }  // namespace experimental
 }  // namespace ax

@@ -530,7 +530,7 @@ bool WmfMediaEngine::transferVideoFrame()
         MEVideoFrame frame{buffer.data(), cbcrData, buffer.size(),
                            MEVideoPixelDesc{m_videoPF, MEIntPoint{m_frameExtent.x, m_frameExtent.y}}, m_videoExtent};
         frame._vpd._rotation = static_cast<int>(m_VideoRotation);
-#    if defined(_DEBUG)
+#    if !defined(NDEBUG)
         switch (m_videoPF)
         {
         case MEVideoPixelFormat::YUY2:

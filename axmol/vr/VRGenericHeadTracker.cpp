@@ -245,17 +245,16 @@ Mat4 VRGenericHeadTracker::getLocalRotation()
     Vec3 accel   = JniHelper::callStaticVec3Method("dev.axmol.lib.AxmolEngine", "getAccelValue");
     Vec3 compass = JniHelper::callStaticVec3Method("dev.axmol.lib.AxmolEngine", "getCompassValue");
 
-    //    CCLOG("accel: %f, %f, %f.... compass: %f, %f, %f", accel.x, accel.y, accel.z, compass.x, compass.y,
+    //    AXLOGD("accel: {}, {}, {}.... compass: {}, {}, {}", accel.x, accel.y, accel.z, compass.x, compass.y,
     //    compass.z);
     prevAccel   = lowPass(accel, prevAccel);
     prevCompass = lowPass(compass, prevCompass);
-    //    CCLOG("low pass accel: %f, %f, %f.... compass: %f, %f, %f", prevAccel.x, prevAccel.y, prevAccel.z,
+    //    AXLOGD("low pass accel: {}, {}, {}.... compass: {}, {}, {}", prevAccel.x, prevAccel.y, prevAccel.z,
     //    prevCompass.x, prevCompass.y, prevCompass.z);
 
     Mat4 rotMatrix = getRotationMatrix(prevAccel, prevCompass);
 
-    Mat4 inertialReferenceFrameToDevice(rotMatrix);
-    Mat4 worldToDevice = inertialReferenceFrameToDevice * _worldToInertialReferenceFrame;
+    Mat4 worldToDevice = rotMatrix * _worldToInertialReferenceFrame;
     return _deviceToDisplay * worldToDevice;
 #else
     return Mat4::IDENTITY;

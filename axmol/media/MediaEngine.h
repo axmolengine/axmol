@@ -117,7 +117,7 @@ struct MEIntPoint
     int y;
 };
 
-#if defined(_DEBUG) || !defined(_NDEBUG)
+#if !defined(_NDEBUG)
 struct YCbCrBiPlanarPixelInfo
 {
     unsigned int YPitch = 0;
@@ -172,7 +172,7 @@ struct MEVideoFrame
     const uint8_t* _cbcrDataPointer;
     MEVideoPixelDesc _vpd;  // the video pixel desc
     MEIntPoint _videoDim;   // the video size
-#if defined(_DEBUG) || !defined(_NDEBUG)
+#if !defined(_NDEBUG)
     YCbCrBiPlanarPixelInfo _ycbcrDesc{};
 #endif
 };

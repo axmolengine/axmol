@@ -201,7 +201,7 @@ void ShaderModuleImpl::compileShader(ID3D11Device* device, ShaderStage stage, st
 
     ComPtr<ID3DBlob> errorBlob;
     UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2 | D3DCOMPILE_ENABLE_STRICTNESS;
-#if defined(_DEBUG)
+#if !defined(NDEBUG)
     flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
     HRESULT hr = D3DCompile(shaderSource.data(), shaderSource.size(), nullptr, nullptr, nullptr, "main",

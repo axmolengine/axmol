@@ -33,6 +33,7 @@ THE SOFTWARE.
 
 #include <functional>
 #include <vector>
+#include <memory>
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <windows.h>
@@ -448,8 +449,8 @@ public:
      */
     void setInteractive(bool interactive);
 #ifdef AX_ENABLE_VR
-    void setVR(experimental::IVRRenderer* impl);
-    experimental::IVRRenderer* getVR() const { return _vrImpl; }
+    void setVR(std::unique_ptr<experimental::IVRRenderer>&& impl);
+    const std::unique_ptr<experimental::IVRRenderer>& getVR() const { return _vrImpl; }
 #endif
 
 protected:
@@ -483,7 +484,7 @@ protected:
     ResolutionPolicy _resolutionPolicy;
 
 #ifdef AX_ENABLE_VR
-    experimental::IVRRenderer* _vrImpl{nullptr};
+    std::unique_ptr<experimental::IVRRenderer> _vrImpl{nullptr};
 #endif
 
 private:
