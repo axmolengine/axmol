@@ -253,9 +253,8 @@ void RenderView::setViewportInPoints(float x, float y, float w, float h)
 
 void RenderView::setScissorInPoints(float x, float y, float w, float h)
 {
-    auto renderer = Director::getInstance()->getRenderer();
-    renderer->setScissorRect((int)(x * _scaleX + _viewportRect.origin.x), (int)(y * _scaleY + _viewportRect.origin.y),
-                             (unsigned int)(w * _scaleX), (unsigned int)(h * _scaleY));
+    setScissorRect((int)(x * _scaleX + _viewportRect.origin.x), (int)(y * _scaleY + _viewportRect.origin.y),
+                   (unsigned int)(w * _scaleX), (unsigned int)(h * _scaleY));
 }
 
 bool RenderView::isScissorEnabled()
@@ -264,10 +263,9 @@ bool RenderView::isScissorEnabled()
     return renderer->getScissorTest();
 }
 
-Rect RenderView::getScissorRect() const
+Rect RenderView::getScissorInPoints() const
 {
-    auto renderer = Director::getInstance()->getRenderer();
-    auto& rect    = renderer->getScissorRect();
+    auto& rect = getScissorRect();
 
     float x = (rect.x - _viewportRect.origin.x) / _scaleX;
     float y = (rect.y - _viewportRect.origin.y) / _scaleY;
@@ -489,24 +487,15 @@ float RenderView::getScaleY() const
     return _scaleY;
 }
 
-#ifdef AX_ENABLE_VR
-void RenderView::setVR(std::unique_ptr<experimental::IVRRenderer>&& impl)
+void RenderView::onFrameBufferResized(uint32_t fbWidth, uint32_t fbHeight)
 {
-    if (_vrImpl != impl)
-    {
-        if (_vrImpl)
-        {
-            _vrImpl->cleanup();
-            _vrImpl.reset();
-        }
+    Director::getInstance()->resizeSwapchain(fbWidth, fbHeight);
 
-        if (impl)
-            impl->init(this);
-
-        _vrImpl = std::move(impl);
-    }
-}
+#ifdef AX_ENABLE_VR
+    if (_vrRenderer) [[unlikely]]
+        _vrRenderer->onRenderViewResized(this);
 #endif
+}
 
 void RenderView::renderScene(Scene* scene, Renderer* renderer)
 {
@@ -514,15 +503,57 @@ void RenderView::renderScene(Scene* scene, Renderer* renderer)
     AXASSERT(renderer, "Invalid Renderer");
 
 #ifdef AX_ENABLE_VR
-    if (_vrImpl) [[unlikely]]
+    if (_vrRenderer) [[unlikely]]
     {
-        _vrImpl->render(scene, renderer);
+        _vrRenderer->render(scene, renderer);
         return;
     }
 #endif
 
     scene->render(renderer, Mat4::IDENTITY, nullptr);
 }
+
+void RenderView::setScissorRect(float x, float y, float w, float h)
+{
+#ifdef AX_ENABLE_VR
+    if (_vrRenderer) [[unlikely]]
+    {
+        _vrRenderer->setScissorRect(x, y, w, h);
+        return;
+    }
+#endif
+
+    Director::getInstance()->getRenderer()->setScissorRect(x, y, w, h);
+}
+
+const ScissorRect& RenderView::getScissorRect() const
+{
+#ifdef AX_ENABLE_VR
+    if (_vrRenderer) [[unlikely]]
+        return _vrRenderer->getScissorRect();
+#endif
+
+    return Director::getInstance()->getRenderer()->getScissorRect();
+}
+
+#ifdef AX_ENABLE_VR
+void RenderView::setVR(std::unique_ptr<experimental::IVRRenderer>&& impl)
+{
+    if (_vrRenderer != impl)
+    {
+        if (_vrRenderer)
+        {
+            _vrRenderer->cleanup();
+            _vrRenderer.reset();
+        }
+
+        if (impl)
+            impl->init(this);
+
+        _vrRenderer = std::move(impl);
+    }
+}
+#endif
 
 void RenderView::queueOperation(AsyncOperation /*op*/, void* /*param*/) {}
 

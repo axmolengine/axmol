@@ -95,6 +95,26 @@ void VRGenericRenderer::onRenderViewResized(RenderView* rv)
     init(rv);
 }
 
+void VRGenericRenderer::setScissorRect(float x, float y, float w, float h)
+{
+    _sourceScissorRect.set(x, y, w, h);
+
+    if (!_stStack.empty())
+    {
+        const auto& xf = _stStack.top();
+        x              = x * xf.sx + xf.ox;
+        y              = y * xf.sy + xf.oy;
+        w              = w * xf.sx;
+        h              = h * xf.sy;
+    }
+
+    Director::getInstance()->getRenderer()->setScissorRect(x, y, w, h);
+}
+const ScissorRect& VRGenericRenderer::getScissorRect() const
+{
+    return _sourceScissorRect;
+}
+
 void VRGenericRenderer::init(RenderView* rv)
 {
     const auto screenSize = rv->getFrameSize();
@@ -217,7 +237,6 @@ void VRGenericRenderer::render(Scene* scene, Renderer* renderer)
     _renderTexture->end();
 
 #pragma region Submit distortion draw commands to screen
-
     // Hacker: due to GroupCommand, scene->render internally calls renderer->render()
     // to finish drawing into offscreen RT. We need an empty begin/end to restore the default screen RT.
     _renderTexture->begin();
@@ -239,17 +258,17 @@ void VRGenericRenderer::render(Scene* scene, Renderer* renderer)
 
 void VRGenericRenderer::pushLeftRasterTransform(Renderer* renderer)
 {
-    renderer->pushScissorTransform(_xfLeft);
+    pushScissorTransform(_xfLeft);
 }
 
 void VRGenericRenderer::pushRightRasterTransform(Renderer* renderer)
 {
-    renderer->pushScissorTransform(_xfRight);
+    pushScissorTransform(_xfRight);
 }
 
 void VRGenericRenderer::popRasterTransform(Renderer* renderer)
 {
-    renderer->popScissorTransform();
+    popScissorTransform();
 }
 
 DistortionMesh* VRGenericRenderer::createDistortionMesh(VREye::EyeType eyeType, const Size& screenSize)

@@ -586,7 +586,7 @@ void ScrollView::onBeforeDraw()
         if (renderView->isScissorEnabled())
         {
             _scissorRestored   = true;
-            _parentScissorRect = renderView->getScissorRect();
+            _parentScissorRect = renderView->getScissorInPoints();
             // set the intersection of _parentScissorRect and frame as the new scissor rect
             if (frame.intersectsRect(_parentScissorRect))
             {

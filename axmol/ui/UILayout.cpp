@@ -330,7 +330,7 @@ void Layout::onBeforeVisitScissor()
 
     // apply scissor box
     Rect clippingRect = getClippingRect();
-    _clippingOldRect  = renderView->getScissorRect();
+    _clippingOldRect  = renderView->getScissorInPoints();
     if (false == _clippingOldRect.equals(clippingRect))
     {
         renderView->setScissorInPoints(clippingRect.origin.x, clippingRect.origin.y, clippingRect.size.width,

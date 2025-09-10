@@ -865,8 +865,8 @@ void Renderer::beginRenderPass()
     _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.width, _viewport.height);
     _commandBuffer->setCullMode(_cullMode);
     _commandBuffer->setWinding(_winding);
-
-    commitScissorState();
+    _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
+                                   _scissorState.rect.width, _scissorState.rect.height);
 }
 
 void Renderer::endRenderPass()
@@ -896,33 +896,12 @@ void Renderer::clear(ClearFlag flags, const Color& color, float depth, unsigned 
         if (bitmask::any(flags, ClearFlag::STENCIL))
             descriptor.clearStencilValue = stencil;
 
-        commitScissorState();
+        _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
+                                       _scissorState.rect.width, _scissorState.rect.height);
         _commandBuffer->beginRenderPass(_currentRT, descriptor);
         _commandBuffer->endRenderPass();
     };
     addCommand(command);
-}
-
-void Renderer::commitScissorState()
-{
-#if defined(AX_ENABLE_VR)
-    float x = _scissorState.rect.x;
-    float y = _scissorState.rect.y;
-    float w = _scissorState.rect.width;
-    float h = _scissorState.rect.height;
-    if (!_stStack.empty() && _scissorState.isEnabled)
-    {
-        const auto& xf = _stStack.top();
-        x              = x * xf.sx + xf.ox;
-        y              = y * xf.sy + xf.oy;
-        w              = w * xf.sx;
-        h              = h * xf.sy;
-    }
-    _commandBuffer->setScissorRect(_scissorState.isEnabled, x, y, w, h);
-#else
-    _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
-                                   _scissorState.rect.width, _scissorState.rect.height);
-#endif
 }
 
 CallbackCommand* Renderer::nextCallbackCommand()

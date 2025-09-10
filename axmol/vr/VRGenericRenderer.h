@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include <stack>
+
 #include "axmol/vr/VRBase.h"
 #include "axmol/renderer/CustomCommand.h"
 
@@ -44,7 +46,7 @@ class DistortionMesh;
 class Distortion;
 class VRGenericHeadTracker;
 
-struct AX_DLL VREye
+struct VREye
 {
     enum class EyeType
     {
@@ -55,6 +57,12 @@ struct AX_DLL VREye
 
     EyeType type;
     Viewport viewport;
+};
+
+struct RasterTransform
+{
+    float sx{1}, sy{1};
+    float ox{0}, oy{0};
 };
 
 class AX_DLL VRGenericRenderer : public IVRRenderer
@@ -73,6 +81,9 @@ public:
     void setDebugIgnoreHeadTracker(bool debug) { _debugIgnoreHeadTracker = debug; }
 
     IVRHeadTracker* getHeadTracker() override;
+
+    void setScissorRect(float x, float y, float w, float h) override;
+    const ScissorRect& getScissorRect() const override;
 
     void onRenderViewResized(RenderView* rv) override;
 
@@ -93,7 +104,12 @@ protected:
 
     void popRasterTransform(Renderer* renderer);
 
+    void pushScissorTransform(const RasterTransform& xf) { _stStack.push(xf); }
+    void popScissorTransform() { _stStack.pop(); }
+
     Director* _director{nullptr};
+
+    ScissorRect _sourceScissorRect;
 
     // static resources
     VRGenericHeadTracker* _headTracker{nullptr};
@@ -117,6 +133,8 @@ protected:
 
     CustomCommand _leftEyeCmd;
     CustomCommand _rightEyeCmd;
+
+    std::stack<RasterTransform, std::vector<RasterTransform>> _stStack;
 };
 }  // namespace experimental
 }  // namespace ax

@@ -323,7 +323,7 @@ void FUIContainer::onBeforeVisitScissor()
     }
     else
     {
-        _rectClippingSupport->_clippingOldRect = renderView->getScissorRect();
+        _rectClippingSupport->_clippingOldRect = renderView->getScissorInPoints();
         clippingRect = ToolSet::intersection(clippingRect, _rectClippingSupport->_clippingOldRect);
     }
 

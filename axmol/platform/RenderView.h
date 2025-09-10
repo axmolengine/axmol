@@ -304,7 +304,7 @@ public:
      *
      * @return The current scissor rectangle.
      */
-    virtual Rect getScissorRect() const;
+    virtual Rect getScissorInPoints() const;
 
     /** Set the view name.
      *
@@ -450,12 +450,17 @@ public:
     void setInteractive(bool interactive);
 #ifdef AX_ENABLE_VR
     void setVR(std::unique_ptr<experimental::IVRRenderer>&& impl);
-    const std::unique_ptr<experimental::IVRRenderer>& getVR() const { return _vrImpl; }
+    const std::unique_ptr<experimental::IVRRenderer>& getVR() const { return _vrRenderer; }
 #endif
 
 protected:
     float transformInputX(float x) { return (x - _viewportRect.origin.x) / _scaleX; }
     float transformInputY(float y) { return (y - _viewportRect.origin.y) / _scaleY; }
+
+    void onFrameBufferResized(uint32_t fbWidth, uint32_t fbHeight);
+
+    void setScissorRect(float x, float y, float w, float h);
+    const ScissorRect& getScissorRect() const;
 
     /**
      * queue a priority operation in render thread for non-PC platforms, even through app in background
@@ -484,7 +489,7 @@ protected:
     ResolutionPolicy _resolutionPolicy;
 
 #ifdef AX_ENABLE_VR
-    std::unique_ptr<experimental::IVRRenderer> _vrImpl{nullptr};
+    std::unique_ptr<experimental::IVRRenderer> _vrRenderer{nullptr};
 #endif
 
 private:

@@ -1064,20 +1064,19 @@ void RenderViewImpl::setViewportInPoints(float x, float y, float w, float h)
 
 void RenderViewImpl::setScissorInPoints(float x, float y, float w, float h)
 {
-    auto x1       = (int)(x * _scaleX * _retinaFactor * _frameZoomFactor +
+    auto x1      = (int)(x * _scaleX * _retinaFactor * _frameZoomFactor +
                     _viewportRect.origin.x * _retinaFactor * _frameZoomFactor);
-    auto y1       = (int)(y * _scaleY * _retinaFactor * _frameZoomFactor +
+    auto y1      = (int)(y * _scaleY * _retinaFactor * _frameZoomFactor +
                     _viewportRect.origin.y * _retinaFactor * _frameZoomFactor);
-    auto width1   = (unsigned int)(w * _scaleX * _retinaFactor * _frameZoomFactor);
-    auto height1  = (unsigned int)(h * _scaleY * _retinaFactor * _frameZoomFactor);
-    auto renderer = Director::getInstance()->getRenderer();
-    renderer->setScissorRect(x1, y1, width1, height1);
+    auto width1  = (unsigned int)(w * _scaleX * _retinaFactor * _frameZoomFactor);
+    auto height1 = (unsigned int)(h * _scaleY * _retinaFactor * _frameZoomFactor);
+
+    setScissorRect(x1, y1, width1, height1);
 }
 
-ax::Rect RenderViewImpl::getScissorRect() const
+ax::Rect RenderViewImpl::getScissorInPoints() const
 {
-    auto renderer = Director::getInstance()->getRenderer();
-    auto& rect    = renderer->getScissorRect();
+    auto& rect = getScissorRect();
 
     float x = (rect.x - _viewportRect.origin.x * _retinaFactor * _frameZoomFactor) /
               (_scaleX * _retinaFactor * _frameZoomFactor);
@@ -1344,15 +1343,10 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
 
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
-        director->resizeSwapchain(fbWidth, fbHeight);
+        onFrameBufferResized(fbWidth, fbHeight);
 
         Size size(w, h);
         director->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
-
-#ifdef AX_ENABLE_VR
-        if (_vrImpl)
-            _vrImpl->onRenderViewResized(this);
-#endif
     }
 }
 

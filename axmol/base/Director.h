@@ -551,16 +551,17 @@ public:
      */
     bool isValid() const { return !_invalid; }
 
+protected:
+    void reset();
+
     /**
-     * @brief Resize swapchain, internal use
+     * @brief Internal-only: Resizes the swapchain to accommodate surface changes.
+     * Not intended for external module access.
      *
      * @param w
      * @param h
      */
     void resizeSwapchain(uint32_t w, uint32_t h);
-
-protected:
-    void reset();
 
 #if defined(AX_PLATFORM_PC)
     void processOperations();

@@ -65,14 +65,6 @@ class CallbackCommand;
 struct PipelineDesc;
 class Texture2D;
 
-#ifdef AX_ENABLE_VR
-struct RasterTransform
-{
-    float sx{1}, sy{1};
-    float ox{0}, oy{0};
-};
-#endif
-
 /** Class that knows how to sort `RenderCommand` objects.
  Since the commands that have `z == 0` are "pushed back" in
  the correct order, the only `RenderCommand` objects that need to be sorted,
@@ -175,11 +167,6 @@ public:
 
     /** Creates a render queue and returns its Id */
     int createRenderQueue();
-
-#ifdef AX_ENABLE_VR
-    void pushScissorTransform(const RasterTransform& xf) { _stStack.push(xf); }
-    void popScissorTransform() { _stStack.pop(); }
-#endif
 
     /** Renders into the RenderView all the queued `RenderCommand` objects */
     void render();
@@ -503,8 +490,6 @@ protected:
 
     void popStateBlock();
 
-    void commitScissorState();
-
     void resizeSwapchain(uint32_t width, uint32_t height);
 
     rhi::RenderPipeline* _renderPipeline = nullptr;
@@ -590,10 +575,6 @@ protected:
     };
 
     std::deque<StateBlock> _stateBlockStack;
-
-#ifdef AX_ENABLE_VR
-    std::stack<RasterTransform, std::vector<RasterTransform>> _stStack;
-#endif
 };
 
 }  // namespace ax

@@ -68,7 +68,7 @@ public:
 
     void setViewportInPoints(float x, float y, float w, float h) override;
     void setScissorInPoints(float x, float y, float w, float h) override;
-    Rect getScissorRect() const override;
+    Rect getScissorInPoints() const override;
 
     bool windowShouldClose() override;
     void pollEvents() override;
