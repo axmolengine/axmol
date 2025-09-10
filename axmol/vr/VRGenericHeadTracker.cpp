@@ -41,7 +41,7 @@
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <jni.h>
 #    include "axmol/platform/android/jni/JniHelper.h"
-#    define  AXMOLENGINE_JAVA_CLASS_NAME "dev.axmol.lib.AxmolEngine"
+#    define AXMOLENGINE_JAVA_CLASS_NAME "dev.axmol.lib.AxmolEngine"
 #endif
 
 namespace ax::experimental

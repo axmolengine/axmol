@@ -58,7 +58,8 @@ VRTest1::VRTest1()
         else
         {
             auto vrRenderer = std::make_unique<experimental::VRGenericRenderer>();
-            // on android/ios emulator devices, if no VR head tracker device, uncomment to see left/right render result
+            // On Android/iOS emulator devices, uncomment to visualize the left/right eye VR rendering output.
+            // Useful for debugging stereo rendering without a physical headset.
             // vrRenderer->setDebugIgnoreHeadTracker(true);
             renderView->setVR(std::move(vrRenderer));
         }
