@@ -37,6 +37,7 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
 #    import <CoreMotion/CoreMotion.h>
+#    import <UIKit/UIKit.h>
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <jni.h>
 #    include "axmol/platform/android/jni/JniHelper.h"
