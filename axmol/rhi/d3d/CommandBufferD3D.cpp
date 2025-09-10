@@ -767,19 +767,20 @@ void CommandBufferImpl::prepareDrawing()
 
 void CommandBufferImpl::endFrame()
 {
-    if (_screenRT != _currentRT)
-        return;
     HRESULT hr = _swapChain->Present(1, 0 /*DXGI_PRESENT_DO_NOT_WAIT*/);
-
+#ifdef NDEBUG
+    (void)hr;
+#else
     if (FAILED(hr))
     {
         if (hr == DXGI_ERROR_DEVICE_REMOVED)
         {
             auto device    = static_cast<DriverImpl*>(DriverBase::getInstance())->getDevice();
             HRESULT reason = device->GetDeviceRemovedReason();
-            // AXLOGD("D3D11 Device remove reason: {}", reason);
+            AXLOGD("D3D11 Device remove reason: {}", reason);
         }
     }
+#endif
 }
 
 void CommandBufferImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)

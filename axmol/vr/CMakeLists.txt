@@ -1,4 +1,4 @@
-if(NOT IOS AND AX_ENABLE_VR)
+if(AX_ENABLE_VR)
   set(_AX_VR_HEADER
     vr/VRBase.h
     vr/VRGenericHeadTracker.h
