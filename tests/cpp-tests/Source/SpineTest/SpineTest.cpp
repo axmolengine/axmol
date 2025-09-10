@@ -289,7 +289,7 @@ bool IKExample::init()
         // convert the mosue location to the skeleton's coordinate space
         // and store it.
         EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
-        position               = skeletonNode->convertToNodeSpace(mouseEvent->getLocationInView());
+        position               = skeletonNode->convertToNodeSpace(mouseEvent->getLocation());
 
         return true;
     };

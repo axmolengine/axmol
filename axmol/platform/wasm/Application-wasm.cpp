@@ -65,7 +65,7 @@ void axmol_webglcontextrestored()
     director->resetMatrixStack();
     ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
     director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
-    director->setGLDefaultValues();
+    director->setRenderDefaults();
 #    if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     ax::VolatileTextureMgr::reloadAllTextures();
 #    endif

@@ -246,7 +246,7 @@ ax.Handler.CALLFUNC        = 2
 ax.Handler.SCHEDULE        = 3
 ax.Handler.TOUCHES         = 4
 ax.Handler.KEYPAD          = 5
-ax.Handler.AaxELEROMETER   = 6
+ax.Handler.ACCELEROMETER   = 6
 ax.Handler.CONTROL_TOUCH_DOWN = 7
 ax.Handler.CONTROL_TOUCH_DRAG_INSIDE = 8
 ax.Handler.CONTROL_TOUCH_DRAG_OUTSIDE = 9
@@ -276,7 +276,7 @@ ax.Handler.ASSETSMANAGER_SUaxESS  = 32
 ax.Handler.ASSETSMANAGER_ERROR    = 33
 ax.Handler.STUDIO_EVENT_LISTENER  = 34
 ax.Handler.ARMATURE_EVENT         = 35
-ax.Handler.EVENT_Aax              = 36
+ax.Handler.EVENT_ACC              = 36
 ax.Handler.EVENT_CUSTIOM          = 37
 ax.Handler.EVENT_KEYBOARD_PRESSED = 38
 ax.Handler.EVENT_KEYBOARD_RELEASED = 39
@@ -315,7 +315,7 @@ ax.EVENT_TOUCH_ONE_BY_ONE      = 1
 ax.EVENT_TOUCH_ALL_AT_ONCE     = 2
 ax.EVENT_KEYBOARD              = 3
 ax.EVENT_MOUSE                 = 4
-ax.EVENT_AaxELERATION          = 5
+ax.EVENT_ACCELERATION          = 5
 ax.EVENT_CUSTOM                = 6
 
 ax.PHYSICSSHAPE_MATERIAL_DEFAULT = {density = 0.0, restitution = 0.5, friction = 0.5}

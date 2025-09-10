@@ -99,7 +99,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
         director->resetMatrixStack();
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent, true);
-        director->setGLDefaultValues();
+        director->setRenderDefaults();
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         ax::VolatileTextureMgr::reloadAllTextures();
 #endif

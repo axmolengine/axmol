@@ -31,6 +31,16 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 
 ***
 
+## 📢 Branches
+
+> **Important Notice**  
+> - **`dev` branch**: Serves as the **v3** development branch. It is under active development and may contain unstable or experimental features.  
+> - **`release/2.x` branch**: Serves as the **stable production branch**. It is recommended for production use to ensure stability and compatibility.  
+>
+> Use the `dev` branch if you want to contribute to v3 development or test new features. For production deployment, please use the `release/2.x` branch.
+
+***
+
 ## ⚡️Building
 
 * Download it: [Latest Release](https://github.com/axmolengine/axmol/releases) / [SourceForge Mirror](https://sourceforge.net/projects/axmol-engine.mirror) / [Gitee Mirror](https://gitee.com/simdsoft/axmol) 

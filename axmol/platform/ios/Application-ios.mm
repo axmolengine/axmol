@@ -126,14 +126,7 @@ bool Application::openURL(std::string_view url)
     NSURL* nsUrl  = [NSURL URLWithString:msg];
 
     id application = [UIApplication sharedApplication];
-    if ([application respondsToSelector:@selector(openURL:options:completionHandler:)])
-    {
-        [application openURL:nsUrl options:@{} completionHandler:nil];
-    }
-    else
-    {
-        return [application openURL:nsUrl];
-    }
+    [application openURL:nsUrl options:@{} completionHandler:nil];
 }
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
