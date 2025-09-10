@@ -451,7 +451,7 @@ void Director::setViewport()
 {
     if (_renderView)
     {
-        _renderView->setViewportInPoints(0, 0, _winSizeInPoints.width, _winSizeInPoints.height);
+        _renderView->setViewportInPoints(0, 0, _viewSizeInPoints.width, _viewSizeInPoints.height);
     }
 }
 
@@ -614,7 +614,7 @@ const Mat4& Director::getMatrix(MATRIX_STACK_TYPE type) const
 
 void Director::setProjection(Projection projection)
 {
-    Vec2 size = _winSizeInPoints;
+    Vec2 size = _viewSizeInPoints;
 
     if (size.width == 0 || size.height == 0)
     {
@@ -688,7 +688,7 @@ void Director::purgeCachedData()
 
 float Director::getZEye() const
 {
-    return (_winSizeInPoints.height / 1.154700538379252f);  //(2 * tanf(M_PI/6))
+    return (_viewSizeInPoints.height / 1.154700538379252f);  //(2 * tanf(M_PI/6))
 }
 
 void Director::setClearColor(const Color& clearColor)
