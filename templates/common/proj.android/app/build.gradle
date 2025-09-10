@@ -121,12 +121,10 @@ dependencies {
 project.afterEvaluate {
     android.applicationVariants.configureEach { variant ->
         def variantName = variant.name.capitalize()
-        def externalNativeBuild = tasks.named("externalNativeBuild${variantName}")
-        if (externalNativeBuild) {
-            def copyContentToAssets = tasks.named("copy${variantName}ContentToAssets")
-            copyContentToAssets
-            copyContentToAssets.get().dependsOn externalNativeBuild
-            tasks.named("compile${variantName}JavaWithJavac").get().dependsOn copyContentToAssets
+        def copyTask = tasks.named("copy${variantName}ContentToAssets")
+
+        tasks.named("merge${variantName}Assets").configure {
+            dependsOn(copyTask)
         }
     }
 }
