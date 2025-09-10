@@ -68,7 +68,22 @@ struct DepthStencilDesc;
 class CommandBuffer : public ax::Object
 {
 public:
+    /**
+     * @brief Set the Screen Render Target object
+     *
+     * @param rt
+     */
     void setScreenRenderTarget(RenderTarget* rt) { _screenRT = rt; }
+
+    /**
+     * @brief Resize swapchain when window size changed
+     *
+     * @param width
+     * @param height
+     * @return true
+     * @return false
+     */
+    virtual bool resizeSwapchain(uint32_t width, uint32_t height);
 
     /**
      * Set depthStencil status once
@@ -229,8 +244,6 @@ public:
      * @param value Specifies stencil reference value.
      */
     void setStencilReferenceValue(unsigned int value);
-
-    virtual bool resizeSwapChain(uint32_t width, uint32_t height);
 
 protected:
     virtual ~CommandBuffer() = default;

@@ -55,6 +55,16 @@ public:
     ~CommandBufferImpl();
 
     /**
+     * @brief Resize metal swapchain when window size changed
+     *
+     * @param width
+     * @param height
+     * @return true
+     * @return false
+     */
+    bool resizeSwapchain(uint32_t width, uint32_t height) override;
+
+    /**
      * Set depthStencil status
      * @param depthStencilState Specifies the depth and stencil status
      */

@@ -69,7 +69,7 @@ public:
     CommandBufferImpl(DriverImpl* driver, void* presentTarget);
     ~CommandBufferImpl() override;
 
-    bool resizeSwapChain(uint32_t width, uint32_t height) override;
+    bool resizeSwapchain(uint32_t width, uint32_t height) override;
 
     /**
      * Set depthStencil status

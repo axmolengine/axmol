@@ -40,14 +40,24 @@
 namespace ax::experimental
 {
 
-static RasterTransform makeVRGlobalScissorTransform(float sx, float sy)
+static RasterTransform makeEyeScissorTransform(const Viewport& eyeViewport,
+                                               const Viewport& screenViewport,
+                                               const Size& rtSize)
 {
-    RasterTransform st;
-    st.sx = sx;    // scaleX from RT content size / frame size
-    st.sy = sy;    // scaleY from RT content size / frame size
-    st.ox = 0.0f;  // no translation for global coords
-    st.oy = 0.0f;
-    return st;
+    const float subW = rtSize.width * 0.5f;
+    const float subH = rtSize.height;
+
+    const float sx = (subW) / screenViewport.width;
+    const float sy = (subH) / screenViewport.height;
+
+    RasterTransform xf;
+    xf.sx = sx;
+    xf.sy = sy;
+
+    xf.ox = eyeViewport.x - (screenViewport.x) * sx;
+    xf.oy = eyeViewport.y - (screenViewport.y) * sy;
+
+    return xf;
 }
 
 VRGenericRenderer::VRGenericRenderer()
@@ -91,27 +101,28 @@ void VRGenericRenderer::init(RenderView* rv)
     _renderTexture        = RenderTexture::create(screenSize.width, screenSize.height);
     _renderTexture->retain();
 
-    const Size& rtSize = _renderTexture->getContentSize();
-    const float sx     = rtSize.width / screenSize.width;
-    const float sy     = rtSize.height / screenSize.height;
-
     // DO NOT offset eye viewports by default viewport.
     // Eye viewports in RT must be exact halves to match distortion mesh sampling.
     fillEyeViewports(rv, screenSize);
 
     // Scissor transform: scale only, no translation in VR path.
-    _scissorTransform = makeVRGlobalScissorTransform(sx, sy);
+    auto& screenVP = Camera::getDefaultViewport();
+    auto& rtSize = _renderTexture->getContentSize();
+    _xfLeft = makeEyeScissorTransform(_leftEye.viewport, screenVP, rtSize);
+    _xfRight = makeEyeScissorTransform(_rightEye.viewport, screenVP, rtSize);
 
     _distortion          = new Distortion();
     _leftDistortionMesh  = createDistortionMesh(VREye::EyeType::LEFT, screenSize);
     _rightDistortionMesh = createDistortionMesh(VREye::EyeType::RIGHT, screenSize);
 
+    _leftEyeCmd.init(0);
     _leftEyeCmd.setVertexBuffer(_leftDistortionMesh->_vbo);
     _leftEyeCmd.setIndexBuffer(_leftDistortionMesh->_ebo, CustomCommand::IndexFormat::U_SHORT);
     _leftEyeCmd.setDrawType(CustomCommand::DrawType::ELEMENT);
     _leftEyeCmd.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
     _leftEyeCmd.setIndexDrawInfo(0, _leftDistortionMesh->_indices);
 
+    _rightEyeCmd.init(0);
     _rightEyeCmd.setVertexBuffer(_rightDistortionMesh->_vbo);
     _rightEyeCmd.setIndexBuffer(_rightDistortionMesh->_ebo, CustomCommand::IndexFormat::U_SHORT);
     _rightEyeCmd.setDrawType(CustomCommand::DrawType::ELEMENT);
@@ -180,38 +191,32 @@ void VRGenericRenderer::render(Scene* scene, Renderer* renderer)
 
     auto texture = _renderTexture->getSprite()->getTexture();
 
-    const Color clearColor = _director->getClearColor();
+    auto& clearColor = _director->getClearColor();
 
     // --- Render left eye
-
-    // Push raster transform to scale scissor/viewport into RT space
-    renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::pushLeftRasterTransform, this, renderer));
-
     _renderTexture->beginWithClear(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::pushLeftRasterTransform, this, renderer));
     _renderTexture->setVirtualViewport(
         Vec2(0, 0),  // Start position on target texture
         Rect(_leftEye.viewport.x, _leftEye.viewport.y, _leftEye.viewport.w, _leftEye.viewport.h),
         Rect(_leftEye.viewport.x, _leftEye.viewport.y, _leftEye.viewport.w, _leftEye.viewport.h));
 
     scene->render(renderer, leftTransform);
+    renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::popRasterTransform, this, renderer));
     _renderTexture->end();
 
-    // Pop raster transform to restore renderer state
-    renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::popRasterTransform, this, renderer));
-
     // --- Render right eye
-    // Push raster transform to scale scissor/viewport into RT space
-    renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::pushRightRasterTransform, this, renderer));
     _renderTexture->begin();
+    renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::pushRightRasterTransform, this, renderer));
     _renderTexture->setVirtualViewport(
         Vec2(0, 0),  // Start position on target texture
         Rect(_rightEye.viewport.x, _rightEye.viewport.y, _rightEye.viewport.w, _rightEye.viewport.h),
         Rect(_rightEye.viewport.x, _rightEye.viewport.y, _rightEye.viewport.w, _rightEye.viewport.h));
     scene->render(renderer, rightTransform);
+    renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::popRasterTransform, this, renderer));
     _renderTexture->end();
 
-    // Pop raster transform to restore renderer state
-    renderer->addCallbackCommand(AX_CALLBACK_0(VRGenericRenderer::popRasterTransform, this, renderer));
+#pragma region Submit distortion draw commands to screen
 
     // Hacker: due to GroupCommand, scene->render internally calls renderer->render()
     // to finish drawing into offscreen RT. We need an empty begin/end to restore the default screen RT.
@@ -222,24 +227,24 @@ void VRGenericRenderer::render(Scene* scene, Renderer* renderer)
     _programState->setTexture(texture->getRHITexture());
 
     // Restore viewport for distortion rendering
-    auto vpCmd     = renderer->nextCallbackCommand();
     auto defaultVP = Camera::getDefaultViewport();
-    vpCmd->func    = [=]() { renderer->setViewport(defaultVP.x, defaultVP.y, defaultVP.width, defaultVP.height); };
-    renderer->addCommand(vpCmd);
+    renderer->addCallbackCommand(
+        [=]() { renderer->setViewport(defaultVP.x, defaultVP.y, defaultVP.width, defaultVP.height); });
 
     // Submit distortion draw commands for both eyes
     renderer->addCommand(&_leftEyeCmd);
     renderer->addCommand(&_rightEyeCmd);
+#pragma endregion
 }
 
 void VRGenericRenderer::pushLeftRasterTransform(Renderer* renderer)
 {
-    renderer->pushScissorTransform(_scissorTransform);
+    renderer->pushScissorTransform(_xfLeft);
 }
 
 void VRGenericRenderer::pushRightRasterTransform(Renderer* renderer)
 {
-    renderer->pushScissorTransform(_scissorTransform);
+    renderer->pushScissorTransform(_xfRight);
 }
 
 void VRGenericRenderer::popRasterTransform(Renderer* renderer)

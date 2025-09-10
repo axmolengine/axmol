@@ -42,7 +42,7 @@ void CommandBuffer::setStencilReferenceValue(uint32_t value)
     _stencilReferenceValue = value;
 }
 
-bool CommandBuffer::resizeSwapChain(uint32_t /*width*/, uint32_t /*height*/)
+bool CommandBuffer::resizeSwapchain(uint32_t /*width*/, uint32_t /*height*/)
 {
     return true;
 }

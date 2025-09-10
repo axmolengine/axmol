@@ -153,6 +153,12 @@ CommandBufferImpl::~CommandBufferImpl()
     dispatch_semaphore_signal(_frameBoundarySemaphore);
 }
 
+bool CommandBufferImpl::resizeSwapchain(uint32_t width, uint32_t height)
+{
+    rhi::mtl::UtilsMTL::resizeDefaultAttachmentTexture(width, height);
+    return true;
+}
+
 void CommandBufferImpl::setDepthStencilState(DepthStencilState* depthStencilState)
 {
     _depthStencilStateImpl = static_cast<DepthStencilStateImpl*>(depthStencilState);

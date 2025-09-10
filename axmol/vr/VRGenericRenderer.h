@@ -90,6 +90,7 @@ protected:
 
     void pushLeftRasterTransform(Renderer* renderer);
     void pushRightRasterTransform(Renderer* renderer);
+
     void popRasterTransform(Renderer* renderer);
 
     Director* _director{nullptr};
@@ -107,7 +108,8 @@ protected:
 
     VREye _leftEye;
     VREye _rightEye;
-    RasterTransform _scissorTransform;
+    RasterTransform _xfLeft;
+    RasterTransform _xfRight;
 
     bool _vignetteEnabled{true};
 

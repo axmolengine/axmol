@@ -364,7 +364,7 @@ CommandBufferImpl::~CommandBufferImpl()
         _rasterState.Reset();
 }
 
-bool CommandBufferImpl::resizeSwapChain(uint32_t width, uint32_t height)
+bool CommandBufferImpl::resizeSwapchain(uint32_t width, uint32_t height)
 {
     if (!_swapChain || !_driverImpl || !_screenRT)
         return false;

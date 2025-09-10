@@ -1327,31 +1327,27 @@ void RenderViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int cha
 
 void RenderViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int x, int y)
 {
-    Director::getInstance()->setViewport();
+    auto director = Director::getInstance();
+    director->setViewport();
 
     Vec2 pos(x, y);
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_POSITIONED, &pos);
+    director->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_POSITIONED, &pos);
 }
 
 void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
+        auto director = Director::getInstance();
+
         handleWindowSize(w, h);
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
-        // update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
-        rhi::mtl::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
-#elif AX_RENDER_API == AX_RENDER_API_D3D
-        int fbWidth, fbHeight;
-        glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
-        Director::getInstance()->getRenderer()->resizeSwapChain(fbWidth, fbHeight);
-#endif
+        director->resizeSwapchain(fbWidth, fbHeight);
 
         Size size(w, h);
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
+        director->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
 
 #ifdef AX_ENABLE_VR
         if (_vrImpl)

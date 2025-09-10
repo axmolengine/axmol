@@ -70,9 +70,6 @@ struct RasterTransform
 {
     float sx{1}, sy{1};
     float ox{0}, oy{0};
-#    ifndef NDEBUG
-    bool enabled{false};
-#    endif
 };
 #endif
 
@@ -435,8 +432,6 @@ public:
 
     CallbackCommand* nextCallbackCommand();
 
-    void resizeSwapChain(uint32_t width, uint32_t height);
-
 protected:
     friend class Director;
     friend class GroupCommand;
@@ -507,6 +502,10 @@ protected:
     void pushStateBlock();
 
     void popStateBlock();
+
+    void commitScissorState();
+
+    void resizeSwapchain(uint32_t width, uint32_t height);
 
     rhi::RenderPipeline* _renderPipeline = nullptr;
 

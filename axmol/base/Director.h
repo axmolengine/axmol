@@ -551,6 +551,14 @@ public:
      */
     bool isValid() const { return !_invalid; }
 
+    /**
+     * @brief Resize swapchain, internal use
+     *
+     * @param w
+     * @param h
+     */
+    void resizeSwapchain(uint32_t w, uint32_t h);
+
 protected:
     void reset();
 
