@@ -305,7 +305,7 @@ void FastTMXLayer::setupTiles()
     // Parse axmol properties
     this->parseInternalProperties();
 
-    auto& screenSize = _director->getWinSize();
+    auto& screenSize = _director->getViewSize();
 
     switch (_layerOrientation)
     {

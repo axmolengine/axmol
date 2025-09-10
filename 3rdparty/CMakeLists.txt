@@ -298,22 +298,16 @@ if(WINDOWS OR LINUX OR ANDROID OR WASM)
 endif()
 
 if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
-  if(NOT LINUX)
-    ax_add_3rd(glfw OPTIONS
-      "GLFW_BUILD_DOCS OFF"
-      "GLFW_INSTALL OFF"
-    )
-  else()
-    ax_add_3rd(glfw OPTIONS
-      "GLFW_BUILD_X11 ON"
-      "GLFW_BUILD_WAYLAND OFF"
-      "GLFW_BUILD_DOCS OFF"
-      "GLFW_INSTALL OFF"
-    )
+  set(_glfw_options "GLFW_BUILD_DOCS OFF" "GLFW_INSTALL OFF")
+  if(LINUX)
+    list(APPEND _glfw_options "GLFW_BUILD_X11 ON")
+    if(AX_ENABLE_WAYLAND)
+      list(APPEND _glfw_options "GLFW_BUILD_WAYLAND ON")
+    endif()
   endif()
-
+  ax_add_3rd(glfw OPTIONS ${_glfw_options})
   set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
-
+ 
   if(NOT WINDOWS)
     target_link_libraries(3rdparty INTERFACE pthread)
   endif()

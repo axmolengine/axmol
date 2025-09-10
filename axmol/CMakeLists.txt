@@ -124,6 +124,8 @@ cmake_dependent_option(AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" O
 cmake_dependent_option(AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON "WIN32" OFF)
 cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" OFF "(WIN32 AND NOT WINRT) OR LINUX" OFF)
 
+cmake_dependent_option(AX_ENABLE_WAYLAND "Enabling linux wayland" OFF "LINUX" OFF)
+
 if(NOT APPLE AND(NOT EMSCRIPTEN))
   set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
 else()
@@ -401,6 +403,7 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_CONSOLE)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_VR)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_WAYLAND)
 
 # add base macro define and compile options
 use_ax_compile_define(${_AX_CORE_LIB})

@@ -111,7 +111,7 @@ GfxContextAttrs& RenderView::getGfxContextAttrs()
 }
 
 RenderView::RenderView()
-    : _screenSize(0, 0)
+    : _windowSize(0, 0)
     , _designResolutionSize(0, 0)
     , _scaleX(1.0f)
     , _scaleY(1.0f)
@@ -125,11 +125,11 @@ void RenderView::pollEvents() {}
 
 void RenderView::updateDesignResolutionSize()
 {
-    if (_screenSize.width > 0 && _screenSize.height > 0 && _designResolutionSize.width > 0 &&
+    if (_windowSize.width > 0 && _windowSize.height > 0 && _designResolutionSize.width > 0 &&
         _designResolutionSize.height > 0)
     {
-        _scaleX = (float)_screenSize.width / _designResolutionSize.width;
-        _scaleY = (float)_screenSize.height / _designResolutionSize.height;
+        _scaleX = (float)_windowSize.width / _designResolutionSize.width;
+        _scaleY = (float)_windowSize.height / _designResolutionSize.height;
 
         if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
         {
@@ -144,26 +144,25 @@ void RenderView::updateDesignResolutionSize()
         else if (_resolutionPolicy == ResolutionPolicy::FIXED_HEIGHT)
         {
             _scaleX                     = _scaleY;
-            _designResolutionSize.width = ceilf(_screenSize.width / _scaleX);
+            _designResolutionSize.width = ceilf(_windowSize.width / _scaleX);
         }
 
         else if (_resolutionPolicy == ResolutionPolicy::FIXED_WIDTH)
         {
             _scaleY                      = _scaleX;
-            _designResolutionSize.height = ceilf(_screenSize.height / _scaleY);
+            _designResolutionSize.height = ceilf(_windowSize.height / _scaleY);
         }
 
         // calculate the rect of viewport
         float viewportW = _designResolutionSize.width * _scaleX;
         float viewportH = _designResolutionSize.height * _scaleY;
 
-        _viewportRect.setRect((_screenSize.width - viewportW) / 2, (_screenSize.height - viewportH) / 2, viewportW,
+        _viewportRect.setRect((_windowSize.width - viewportW) / 2, (_windowSize.height - viewportH) / 2, viewportW,
                               viewportH);
 
         // reset director's member variables to fit visible rect
         auto director                   = Director::getInstance();
-        director->_winSizeInPoints      = getDesignResolutionSize();
-        director->_isStatusLabelUpdated = true;
+        director->setViewSize(getDesignResolutionSize());
         director->setProjection(director->getProjection());
     }
 }
@@ -188,19 +187,19 @@ const Vec2& RenderView::getDesignResolutionSize() const
     return _designResolutionSize;
 }
 
-Vec2 RenderView::getFrameSize() const
+const Vec2& RenderView::getWindowSize() const
 {
-    return _screenSize;
+    return _windowSize;
 }
 
-void RenderView::setFrameSize(float width, float height)
+void RenderView::setWindowSize(float width, float height)
 {
-    _screenSize = Vec2(width, height);
+    _windowSize = Vec2(width, height);
 
     // Github issue #16003 and #16485
     // only update the designResolution if it wasn't previously set
     if (_designResolutionSize.equals(Vec2::ZERO))
-        _designResolutionSize = _screenSize;
+        _designResolutionSize = _windowSize;
 }
 
 Rect RenderView::getVisibleRect() const
@@ -220,7 +219,7 @@ Vec2 RenderView::getVisibleSize() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
-        return Vec2(_screenSize.width / _scaleX, _screenSize.height / _scaleY);
+        return Vec2(_windowSize.width / _scaleX, _windowSize.height / _scaleY);
     }
     else
     {
@@ -232,8 +231,8 @@ Vec2 RenderView::getVisibleOrigin() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
-        return Vec2((_designResolutionSize.width - _screenSize.width / _scaleX) / 2,
-                    (_designResolutionSize.height - _screenSize.height / _scaleY) / 2);
+        return Vec2((_designResolutionSize.width - _windowSize.width / _scaleX) / 2,
+                    (_designResolutionSize.height - _windowSize.height / _scaleY) / 2);
     }
     else
     {

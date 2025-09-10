@@ -103,7 +103,7 @@ void Scene::setNavMesh(NavMesh* navMesh)
 
 bool Scene::init()
 {
-    auto size = _director->getWinSize();
+    auto size = _director->getViewSize();
     return initWithSize(size);
 }
 
@@ -358,7 +358,7 @@ bool Scene::initPhysicsWorld()
     bool ret = false;
     do
     {
-        this->setContentSize(_director->getWinSize());
+        this->setContentSize(_director->getViewSize());
 
 #    if defined(AX_ENABLE_3D_PHYSICS)
         Physics3DWorldDes info;

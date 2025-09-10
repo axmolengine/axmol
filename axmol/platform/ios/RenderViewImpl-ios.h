@@ -65,8 +65,8 @@ public:
     /** returns the content scale factor */
     float getContentScaleFactor() const override;
 
-    /** returns whether or not the view is in Retina Display mode */
-    bool isRetinaDisplay() const override { return getContentScaleFactor() == 2.0; }
+    /** returns whether or not the view is in high DPI mode */
+    bool isHighDPI() const override { return getContentScaleFactor() == 2.0; }
 
     /** @since axmol-2.8.0, returns the objective-c UIWindow instance */
     void* getEAWindow() const override { return _eaWindowHandle; }

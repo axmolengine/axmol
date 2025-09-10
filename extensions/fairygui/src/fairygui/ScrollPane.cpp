@@ -1225,8 +1225,8 @@ float ScrollPane::updateTargetAndDuration(float pos, int axis)
         if (v2 > 500)
             ratio = pow((v2 - 500) / 500, 2);
 #else
-        const ax::Size& winSize = Director::getInstance()->getWinSizeInPixels();
-        v2 *= 1136.0f / MAX(winSize.width, winSize.height);
+        const ax::Size& viewSize = Director::getInstance()->getViewSizeInPixels();
+        v2 *= 1136.0f / MAX(viewSize.width, viewSize.height);
 
         if (_pageMode)
         {

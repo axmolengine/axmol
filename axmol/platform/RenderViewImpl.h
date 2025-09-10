@@ -63,7 +63,7 @@ public:
 
     // void resize(int width, int height);
 
-    float getFrameZoomFactor() const override;
+    float getWindowZoomFactor() const override;
     // void centerWindow();
 
     void setViewportInPoints(float x, float y, float w, float h) override;
@@ -96,8 +96,9 @@ public:
     void setFullscreen(GLFWmonitor* monitor, int w, int h, int refreshRate);
     void setWindowed(int width, int height, bool borderless = false);
 
+    Vec2 getNativeWindowSize() const override;
+
     void getWindowPosition(int* xpos, int* ypos);
-    void getWindowSize(int* width, int* height);
 
     void setWindowSizeLimits(int minwidth,
                              int minheight,
@@ -111,7 +112,7 @@ public:
     bool isGfxContextReady() override;
     void end() override;
     void swapBuffers() override;
-    void setFrameSize(float width, float height) override;
+    void setWindowSize(float width, float height) override;
     void setIMEKeyboardState(bool bOpen) override;
 
 #if AX_ICON_SET_SUPPORT
@@ -123,20 +124,16 @@ public:
     /*
      * Set zoom factor for frame. This method is for debugging big resolution (e.g.new ipad) app on desktop.
      */
-    void setFrameZoomFactor(float zoomFactor) override;
+    void setWindowZoomFactor(float zoomFactor) override;
     /**
      * Hide or Show the mouse cursor if there is one.
      */
     void setCursorVisible(bool isVisible) override;
-    /** Retina support is disabled by default
-     *  @note This method is only available on Mac.
-     */
-    void enableRetina(bool enabled);
-    /** Check whether retina display is enabled. */
-    bool isRetinaEnabled() const { return _isRetinaEnabled; };
 
-    /** Get retina factor */
-    int getRetinaFactor() const override { return _retinaFactor; }
+    /** Get device pixel ratio */
+    int getDevicePixelRatio() const override { return _devicePixelRatio; }
+
+    bool isHighDPI() const override { return _isHightDPI; }
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     HWND getWin32Window() override;
@@ -150,10 +147,10 @@ public:
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
     void* getX11Window() override;
     void* getX11Display() override;
-    /* TODO: Implement AX_PLATFORM_LINUX_WAYLAND
+#ifdef AX_ENABLE_WAYLAND
     void* getWaylandWindow() override;
     void* getWaylandDisplay() override;
-    */
+#endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 protected:
@@ -167,12 +164,6 @@ protected:
     bool loadGL();
 #endif
 
-    /* invoke when window size changed */
-    void handleWindowSize(int w, int h);
-
-    /* update frame size when user set zoomFactor, retina, frameSize */
-    void updateFrameSize();
-
     // GLFW callbacks
     void onGLFWError(int errorID, const char* errorDesc);
     void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify);
@@ -185,18 +176,27 @@ protected:
     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void onGLFWCharCallback(GLFWwindow* window, unsigned int character);
     void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y);
-    void onGLFWWindowSizeCallback(GLFWwindow* window, int width, int height);
+    void onGLFWFramebufferSizeCallback(GLFWwindow* window, int w, int h);
+    void onGLFWWindowSizeCallback(GLFWwindow* window, int w, int h);
     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
     void onGLFWWindowCloseCallback(GLFWwindow* window);
 
+protected:
+    /* invoke when framebuffer size changed */
+    void handleFramebufferSize(int fbWidth, int fbHeight);
+
+    /* update window size when user set zoomFactor, retina, frameSize */
+    void updateWindowSize();
+
     bool _isTouchDevice = false;
     bool _captured;
-    bool _isInRetinaMonitor;
-    bool _isRetinaEnabled;
-    int _retinaFactor;  // Should be 1 or 2
 
-    float _frameZoomFactor;
+    bool _isHightDPI{false};
+
+    float _devicePixelRatio;  // >=1
+
+    float _windowZoomFactor;
 
     GLFWwindow* _mainWindow;
     GLFWmonitor* _monitor;

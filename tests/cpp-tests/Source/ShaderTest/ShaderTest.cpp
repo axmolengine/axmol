@@ -146,9 +146,9 @@ void ShaderNode::setPosition(const Vec2& newPosition)
     auto position     = getPosition();
     auto frameSize    = Director::getInstance()->getRenderView()->getFrameSize();
     auto visibleSize  = Director::getInstance()->getVisibleSize();
-    auto retinaFactor = Director::getInstance()->getRenderView()->getRetinaFactor();
-    _center           = Vec2(position.x * frameSize.width / visibleSize.width * retinaFactor,
-                             position.y * frameSize.height / visibleSize.height * retinaFactor);
+    auto pixelRatio = Director::getInstance()->getRenderView()->getDevicePixelRatio();
+    _center           = Vec2(position.x * frameSize.width / visibleSize.width * pixelRatio,
+                             position.y * frameSize.height / visibleSize.height * pixelRatio);
 }
 
 void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
@@ -190,8 +190,8 @@ void ShaderNode::updateUniforms()
     _locScreenSize = _programState->getUniformLocation("u_screenSize");
 
     const Vec2& frameSize   = Director::getInstance()->getRenderView()->getFrameSize();
-    float retinaFactor      = Director::getInstance()->getRenderView()->getRetinaFactor();
-    auto screenSizeInPixels = frameSize * retinaFactor;
+    float pixelRatio      = Director::getInstance()->getRenderView()->getDevicePixelRatio();
+    auto screenSizeInPixels = frameSize * pixelRatio;
     _programState->setUniform(_locScreenSize, &screenSizeInPixels, sizeof(screenSizeInPixels));
 }
 
@@ -573,8 +573,8 @@ bool ShaderRetroEffect::init()
         auto director                  = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
         const auto& frameSize          = director->getRenderView()->getFrameSize();
-        float retinaFactor             = director->getRenderView()->getRetinaFactor();
-        auto screenSizeInPixels        = frameSize * retinaFactor;
+        float pixelRatio             = director->getRenderView()->getDevicePixelRatio();
+        auto screenSizeInPixels        = frameSize * pixelRatio;
         p->setUniform(screenSizeLocation, &screenSizeInPixels, sizeof(screenSizeInPixels));
 
         auto s = director->getWinSize();

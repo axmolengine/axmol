@@ -16,6 +16,7 @@
   - AX_ENABLE_CONSOLE: whether to enable debug tool console support, default: `TRUE`
   - AX_ENABLE_OPUS: whether to enable audio engine play .opus files support, default: `TRUE`
   - AX_ENABLE_VR: whether to enable generic VR renderer support, status: `experimental`, default: `FALSE`
+  - AX_ENABLE_WAYLAND: whether to enable linux wayland, default: `FALSE`
 - AX_USE_XXX:
   - AX_USE_ALSOFT: whether use openal-soft for all platforms
     - Apple platform: Use openal-soft instead system deprecated: `OpenAL.framework`

@@ -26366,11 +26366,11 @@ int lua_ax_base_Director_getWinSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getWinSize'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWinSize();
+        auto&& ret = cobj->getViewSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getWinSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getViewSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -26380,7 +26380,7 @@ int lua_ax_base_Director_getWinSize(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Director_getWinSizeInPixels(lua_State* tolua_S)
+int lua_ax_base_Director_getViewSizeInPixels(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* cobj = nullptr;
@@ -26400,7 +26400,7 @@ int lua_ax_base_Director_getWinSizeInPixels(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getWinSizeInPixels'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getViewSizeInPixels'", nullptr);
         return 0;
     }
 #endif
@@ -26410,19 +26410,19 @@ int lua_ax_base_Director_getWinSizeInPixels(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getWinSizeInPixels'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getViewSizeInPixels'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWinSizeInPixels();
+        auto&& ret = cobj->getViewSizeInPixels();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getWinSizeInPixels",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getViewSizeInPixels",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getWinSizeInPixels'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getViewSizeInPixels'.",&tolua_err);
 #endif
 
     return 0;
@@ -28805,8 +28805,8 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"isSendCleanupToScene",lua_ax_base_Director_isSendCleanupToScene);
         tolua_function(tolua_S,"getNotificationNode",lua_ax_base_Director_getNotificationNode);
         tolua_function(tolua_S,"setNotificationNode",lua_ax_base_Director_setNotificationNode);
-        tolua_function(tolua_S,"getWinSize",lua_ax_base_Director_getWinSize);
-        tolua_function(tolua_S,"getWinSizeInPixels",lua_ax_base_Director_getWinSizeInPixels);
+        tolua_function(tolua_S,"getViewSize",lua_ax_base_Director_getWinSize);
+        tolua_function(tolua_S,"getViewSizeInPixels",lua_ax_base_Director_getViewSizeInPixels);
         tolua_function(tolua_S,"getVisibleSize",lua_ax_base_Director_getVisibleSize);
         tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_Director_getVisibleOrigin);
         tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_Director_getSafeAreaRect);

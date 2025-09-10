@@ -260,25 +260,31 @@ public:
      */
     void setNotificationNode(Node* node);
 
-    // window size
+    // view size
 
-    /** Returns the size of the OpenGL view in points. */
-    const Vec2& getWinSize() const;
+    /** Returns the size of the render view in points. 
+     * FIXME: do we need update view size when design resolution size changed
+    */
+    const Vec2& getViewSize() const;
 
-    /** Returns the size of the OpenGL view in pixels. */
-    Vec2 getWinSizeInPixels() const;
+    /** Returns the size of the render view in pixels. */
+    Vec2 getViewSizeInPixels() const;
+
+    // implicit deprecated APIs
+    const Vec2& getWinSize() const { return getViewSize(); }
+    Vec2 getWinSizeInPixels() const { return getViewSizeInPixels(); }
 
     /**
-     * Returns visible size of the OpenGL view in points.
-     * The value is equal to `Director::getWinSize()` if don't invoke `RenderView::setDesignResolutionSize()`.
+     * Returns visible size of the render view in points.
+     * The value is equal to `Director::getViewSize()` if don't invoke `RenderView::setDesignResolutionSize()`.
      */
     Vec2 getVisibleSize() const;
 
-    /** Returns visible origin coordinate of the OpenGL view in points. */
+    /** Returns visible origin coordinate of the render view in points. */
     Vec2 getVisibleOrigin() const;
 
     /**
-     * Returns safe area rectangle of the OpenGL view in points.
+     * Returns safe area rectangle of the render view in points.
      */
     Rect getSafeAreaRect() const;
 
@@ -563,6 +569,11 @@ protected:
      */
     void resizeSwapchain(uint32_t w, uint32_t h);
 
+    /**
+     * @brief Internal-only: sync view size aka design size, invoked by RenderView
+     */
+    void setViewSize(const Vec2& viewSize);
+
 #if defined(AX_PLATFORM_PC)
     void processOperations();
 #endif
@@ -677,8 +688,8 @@ protected:
     /* projection used */
     Projection _projection = Projection::DEFAULT;
 
-    /* window size in points */
-    Vec2 _winSizeInPoints = Vec2::ZERO;
+    /* view size in points */
+    Vec2 _viewSizeInPoints = Vec2::ZERO;
 
     /* content scale factor */
     float _contentScaleFactor = 1.0f;

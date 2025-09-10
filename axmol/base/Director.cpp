@@ -405,10 +405,8 @@ void Director::setRenderView(RenderView* renderView)
         _renderView = renderView;
         _renderView->retain();
 
-        // set size
-        _winSizeInPoints = _renderView->getDesignResolutionSize();
-
-        _isStatusLabelUpdated = true;
+        // set view size equals to designResolutionSize
+        setViewSize(_renderView->getDesignResolutionSize());
 
         _renderer->init();
 
@@ -422,6 +420,12 @@ void Director::setRenderView(RenderView* renderView)
             _eventDispatcher->setEnabled(true);
         }
     }
+}
+
+void Director::setViewSize(const Vec2& viewSize)
+{
+    _viewSizeInPoints = viewSize;
+    _isStatusLabelUpdated = true;
 }
 
 TextureCache* Director::getTextureCache() const
@@ -715,8 +719,8 @@ Vec2 Director::convertToGL(const Vec2& uiPoint)
     // Calculate z=0 using -> transform*[0, 0, 0, 1]/w
     float zClip = transform.m[14] / transform.m[15];
 
-    Vec2 glSize = _renderView->getDesignResolutionSize();
-    Vec4 clipCoord(2.0f * uiPoint.x / glSize.width - 1.0f, 1.0f - 2.0f * uiPoint.y / glSize.height, zClip, 1);
+    Vec2 designSize = _renderView->getDesignResolutionSize();
+    Vec4 clipCoord(2.0f * uiPoint.x / designSize.width - 1.0f, 1.0f - 2.0f * uiPoint.y / designSize.height, zClip, 1);
 
     Vec4 glCoord;
     // transformInv.transformPoint(clipCoord, &glCoord);
@@ -747,20 +751,20 @@ Vec2 Director::convertToUI(const Vec2& glPoint)
     clipCoord.y = clipCoord.y / clipCoord.w;
     clipCoord.z = clipCoord.z / clipCoord.w;
 
-    Vec2 glSize  = _renderView->getDesignResolutionSize();
+    Vec2 designSize  = _renderView->getDesignResolutionSize();
     float factor = 1.0f / glCoord.w;
-    return Vec2(glSize.width * (clipCoord.x * 0.5f + 0.5f) * factor,
-                glSize.height * (-clipCoord.y * 0.5f + 0.5f) * factor);
+    return Vec2(designSize.width * (clipCoord.x * 0.5f + 0.5f) * factor,
+                designSize.height * (-clipCoord.y * 0.5f + 0.5f) * factor);
 }
 
-const Vec2& Director::getWinSize() const
+const Vec2& Director::getViewSize() const
 {
-    return _winSizeInPoints;
+    return _viewSizeInPoints;
 }
 
-Vec2 Director::getWinSizeInPixels() const
+Vec2 Director::getViewSizeInPixels() const
 {
-    return Vec2(_winSizeInPoints.width * _contentScaleFactor, _winSizeInPoints.height * _contentScaleFactor);
+    return Vec2(_viewSizeInPoints.width * _contentScaleFactor, _viewSizeInPoints.height * _contentScaleFactor);
 }
 
 Vec2 Director::getVisibleSize() const

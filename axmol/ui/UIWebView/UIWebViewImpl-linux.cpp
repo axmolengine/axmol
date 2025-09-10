@@ -22,6 +22,8 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
+
+ Note: only support x11, wayland not implement yet
  ****************************************************************************/
 
 #include "axmol/ui/UIWebView/UIWebViewImpl-linux.h"
@@ -41,11 +43,9 @@
 #    include "axmol/ui/UIHelper.h"
 #    include "axmol/ui/UIWebView/UIWebViewCommon.h"
 
-#    if !defined(AX_PLATFORM_LINUX_WAYLAND)
-#        include <X11/Xlib.h>
-#        include <X11/Xatom.h>
-#        include <gdk/gdkx.h>
-#    endif
+#    include <X11/Xlib.h>
+#    include <X11/Xatom.h>
+#    include <gdk/gdkx.h>
 
 using namespace webview_common;
 
@@ -103,13 +103,9 @@ static inline bool is_wayland_display()
 // See: https://docs.gdkWindow.org/gdk3/class.DisplayManager.html
 static inline bool is_gdk_x11_backend()
 {
-#    if !defined(AX_PLATFORM_LINUX_WAYLAND)
     auto* manager = gdk_display_manager_get();
     auto* display = gdk_display_manager_get_default_display(manager);
     return GDK_IS_X11_DISPLAY(display);
-#    else
-    return false;
-#    endif
 }
 
 // Checks whether WebKit is affected by bug when using DMA-BUF renderer.
@@ -256,13 +252,12 @@ static void init_gtk_platform_with_display(Display* x11Display)
     }
     webkit_dmabuf::apply_webkit_dmabuf_workaround();
 
-#    if !defined(AX_PLATFORM_LINUX_WAYLAND)
     // this will instruct gdk to use XWayland layer on Wayland platforms
     if (webkit_dmabuf::is_wayland_display())
     {
         gdk_set_allowed_backends("x11");
     }
-#    endif
+
     gtk_init(nullptr, nullptr);
 
     // instructing gdk display manager to use specified x11 display as default
@@ -298,7 +293,7 @@ public:
         }),
                          this);
 
-#    if defined(AX_PLATFORM_LINUX_WAYLAND)
+#    if 0
         AX_ASSERT(0 && "TODO: Implement for wayland..");
 /*
  * Notes:

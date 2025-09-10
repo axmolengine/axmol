@@ -120,7 +120,7 @@ bool Menu::initWithArray(const Vector<MenuItem*>& arrayOfItems)
     {
         _enabled = true;
         // menu in the center of the screen
-        Vec2 s = _director->getWinSize();
+        Vec2 s = _director->getViewSize();
 
         this->setIgnoreAnchorPointForPosition(true);
         setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -388,7 +388,7 @@ void Menu::alignItemsInColumnsWithArray(const ValueVector& rows)
     // check if too many rows/columns for available menu items
     AXASSERT(!columnsOccupied, "columnsOccupied should be 0.");
 
-    Vec2 winSize = getContentSize();
+    Vec2 viewSize = getContentSize();
 
     row        = 0;
     rowHeight  = 0;
@@ -402,14 +402,14 @@ void Menu::alignItemsInColumnsWithArray(const ValueVector& rows)
         if (rowColumns == 0)
         {
             rowColumns = rows[row].asInt();
-            w          = winSize.width / (1 + rowColumns);
+            w          = viewSize.width / (1 + rowColumns);
             x          = w;
         }
 
         float tmp = child->getContentSize().height;
         rowHeight = (unsigned int)((rowHeight >= tmp || isnan(tmp)) ? rowHeight : tmp);
 
-        child->setPosition(x - winSize.width / 2, y - child->getContentSize().height / 2);
+        child->setPosition(x - viewSize.width / 2, y - child->getContentSize().height / 2);
 
         x += w;
         ++columnsOccupied;
@@ -491,7 +491,7 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
     // check if too many rows/columns for available menu items.
     AXASSERT(!rowsOccupied, "rowsOccupied should be 0.");
 
-    Vec2 winSize = getContentSize();
+    Vec2 viewSize = getContentSize();
 
     column      = 0;
     columnWidth = 0;
@@ -511,7 +511,7 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
         float tmp   = child->getContentSize().width;
         columnWidth = (unsigned int)((columnWidth >= tmp || isnan(tmp)) ? columnWidth : tmp);
 
-        child->setPosition(x + columnWidths[column] / 2, y - winSize.height / 2);
+        child->setPosition(x + columnWidths[column] / 2, y - viewSize.height / 2);
 
         y -= child->getContentSize().height + 10;
         ++rowsOccupied;

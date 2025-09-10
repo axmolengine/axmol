@@ -102,7 +102,7 @@ void TransitionPageTurn::onEnter()
     _inSceneProxy->onEnter();
     _outSceneProxy->onEnter();
 
-    Vec2 s = _director->getWinSize();
+    Vec2 s = _director->getViewSize();
     int x, y;
     if (s.width > s.height)
     {

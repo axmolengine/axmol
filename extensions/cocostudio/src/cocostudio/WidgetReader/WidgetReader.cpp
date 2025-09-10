@@ -155,7 +155,7 @@ void WidgetReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
         bool adaptScrenn = DICTOOL->getBooleanValue_json(options, P_AdaptScreen);
         if (adaptScrenn)
         {
-            Size screenSize = Director::getInstance()->getWinSize();
+            Size screenSize = Director::getInstance()->getViewSize();
             w               = screenSize.width;
             h               = screenSize.height;
         }
@@ -273,7 +273,7 @@ void WidgetReader::beginSetBasicProperties(ax::ui::Widget* widget)
 
 void WidgetReader::endSetBasicProperties(Widget* widget)
 {
-    Size screenSize = Director::getInstance()->getWinSize();
+    Size screenSize = Director::getInstance()->getViewSize();
 
     widget->setPositionPercent(Vec2(_positionPercentX, _positionPercentY));
     widget->setSizePercent(Vec2(_sizePercentX, _sizePercentY));
