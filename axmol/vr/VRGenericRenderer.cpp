@@ -107,9 +107,9 @@ void VRGenericRenderer::init(RenderView* rv)
 
     // Scissor transform: scale only, no translation in VR path.
     auto& screenVP = Camera::getDefaultViewport();
-    auto& rtSize = _renderTexture->getContentSize();
-    _xfLeft = makeEyeScissorTransform(_leftEye.viewport, screenVP, rtSize);
-    _xfRight = makeEyeScissorTransform(_rightEye.viewport, screenVP, rtSize);
+    auto& rtSize   = _renderTexture->getContentSize();
+    _xfLeft        = makeEyeScissorTransform(_leftEye.viewport, screenVP, rtSize);
+    _xfRight       = makeEyeScissorTransform(_rightEye.viewport, screenVP, rtSize);
 
     _distortion          = new Distortion();
     _leftDistortionMesh  = createDistortionMesh(VREye::EyeType::LEFT, screenSize);

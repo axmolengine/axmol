@@ -1584,7 +1584,8 @@ void Director::setAnimationInterval(float interval, SetIntervalReason reason)
 
 void Director::resizeSwapchain(uint32_t w, uint32_t h)
 {
-    if (_renderer) _renderer->resizeSwapchain(w, h);
+    if (_renderer)
+        _renderer->resizeSwapchain(w, h);
 }
 
 }  // namespace ax
