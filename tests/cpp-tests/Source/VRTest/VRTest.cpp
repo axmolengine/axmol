@@ -58,7 +58,7 @@ VRTest1::VRTest1()
         else
         {
             auto vrRenderer = std::make_unique<experimental::VRGenericRenderer>();
-            // on android/ios device, if no VR head tracker device, uncomment to see left/right render result
+            // on android/ios emulator devices, if no VR head tracker device, uncomment to see left/right render result
             // vrRenderer->setDebugIgnoreHeadTracker(true);
             renderView->setVR(std::move(vrRenderer));
         }

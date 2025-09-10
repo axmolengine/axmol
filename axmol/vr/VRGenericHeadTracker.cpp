@@ -41,6 +41,7 @@
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <jni.h>
 #    include "axmol/platform/android/jni/JniHelper.h"
+#    define  AXMOLENGINE_JAVA_CLASS_NAME "dev.axmol.lib.AxmolEngine"
 #endif
 
 namespace ax::experimental
@@ -203,8 +204,8 @@ void VRGenericHeadTracker::startTracking()
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     _deviceToDisplay               = getRotateEulerMatrix(0.f, 0.f, -90.f);
     _worldToInertialReferenceFrame = getRotateEulerMatrix(-90.f, 0.f, 90.f);
-    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.Cocos2dxHelper", "enableAccelerometer");
-    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.Cocos2dxHelper", "enableCompass");
+    JniHelper::callStaticVoidMethod(AXMOLENGINE_JAVA_CLASS_NAME, "enableAccelerometer");
+    JniHelper::callStaticVoidMethod(AXMOLENGINE_JAVA_CLASS_NAME, "enableCompass");
 #endif
 }
 
@@ -243,8 +244,8 @@ Mat4 VRGenericHeadTracker::getLocalRotation()
     static Vec3 prevAccel   = Vec3(0, 0, 0);
     static Vec3 prevCompass = Vec3(0, 0, 0);
 
-    Vec3 accel   = JniHelper::callStaticVec3Method("dev.axmol.lib.AxmolEngine", "getAccelValue");
-    Vec3 compass = JniHelper::callStaticVec3Method("dev.axmol.lib.AxmolEngine", "getCompassValue");
+    Vec3 accel   = JniHelper::callStaticVec3Method(AXMOLENGINE_JAVA_CLASS_NAME, "getAccelValue");
+    Vec3 compass = JniHelper::callStaticVec3Method(AXMOLENGINE_JAVA_CLASS_NAME, "getCompassValue");
 
     //    AXLOGD("accel: {}, {}, {}.... compass: {}, {}, {}", accel.x, accel.y, accel.z, compass.x, compass.y,
     //    compass.z);

@@ -72,11 +72,12 @@ public:
     ~VRGenericRenderer() override;
 
     /**
-     * Enables or disables ignoring the head tracker rotation during VR rendering.
-     * Useful for debugging on devices without a connected headset.
+     * Toggles whether to ignore head tracker rotation during VR rendering.
+     * This is primarily intended for debugging on devices without a connected headset,
+     * such as Android or iOS emulators.
      *
-     * @param debug true to ignore head tracker rotation and use identity transform;
-     *              false to use the actual head tracker rotation.
+     * @param debug If true, the head tracker rotation is ignored and an identity transform is used.
+     *              If false, the actual head tracker rotation is applied.
      */
     void setDebugIgnoreHeadTracker(bool debug) { _debugIgnoreHeadTracker = debug; }
 
