@@ -51,7 +51,7 @@ public:
     static RenderViewImpl* createWithRect(std::string_view viewName,
                                           const Rect& rect,
                                           float zoomFactor = 1.0f,
-                                          bool resizable        = false);
+                                          bool resizable   = false);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName,
                                                 const GLFWvidmode& videoMode,
@@ -183,10 +183,10 @@ protected:
 
 protected:
     /* invoke when window size changed
-    * glfw fire event order
-    *   -> framebufferSize
-    *   -> windowSize
-    */
+     * glfw fire event order
+     *   -> framebufferSize
+     *   -> windowSize
+     */
     void handleWindowSize(int w, int h, int fbWidth, int fbHeigh);
 
     /* update window size when user set zoomFactor, retina, frameSize */

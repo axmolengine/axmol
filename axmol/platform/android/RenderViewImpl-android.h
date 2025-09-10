@@ -42,7 +42,7 @@ public:
     static RenderViewImpl* createWithRect(std::string_view viewName,
                                           const Rect& rect,
                                           float zoomFactor = 1.0f,
-                                          bool resizable        = false);
+                                          bool resizable   = false);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
 
     bool isGfxContextReady() override;

@@ -501,7 +501,7 @@ void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32
 
         auto director   = ax::Director::getInstance();
         auto renderView = director->getRenderView();
-        auto windowSize  = renderView->getWindowSize();
+        auto windowSize = renderView->getWindowSize();
 
         auto scaleFactor = [static_cast<EARenderView*>(renderView->getEARenderView()) contentScaleFactor];
 
@@ -511,8 +511,10 @@ void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32
         auto rightTop   = this->_webView->convertToWorldSpace(
             ax::Vec2(this->_webView->getContentSize().width, this->_webView->getContentSize().height));
 
-        auto x = (windowSize.width / 2 + (leftBottom.x - logicalSize.width / 2) * renderView->getScaleX()) / scaleFactor;
-        auto y = (windowSize.height / 2 - (rightTop.y - logicalSize.height / 2) * renderView->getScaleY()) / scaleFactor;
+        auto x =
+            (windowSize.width / 2 + (leftBottom.x - logicalSize.width / 2) * renderView->getScaleX()) / scaleFactor;
+        auto y =
+            (windowSize.height / 2 - (rightTop.y - logicalSize.height / 2) * renderView->getScaleY()) / scaleFactor;
         auto width  = (rightTop.x - leftBottom.x) * renderView->getScaleX() / scaleFactor;
         auto height = (rightTop.y - leftBottom.y) * renderView->getScaleY() / scaleFactor;
 

@@ -424,7 +424,7 @@ void Director::setRenderView(RenderView* renderView)
 
 void Director::setLogicalSize(const Vec2& viewSize)
 {
-    _logicalSizeInPoints     = viewSize;
+    _logicalSizeInPoints  = viewSize;
     _isStatusLabelUpdated = true;
 }
 

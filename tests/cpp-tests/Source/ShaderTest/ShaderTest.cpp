@@ -189,8 +189,8 @@ void ShaderNode::updateUniforms()
     _locCosTime    = _programState->getUniformLocation("u_CosTime");
     _locScreenSize = _programState->getUniformLocation("u_screenSize");
 
-    const Vec2& winSize   = Director::getInstance()->getRenderView()->getWindowSize();
-    float renderScale        = Director::getInstance()->getRenderView()->getRenderScale();
+    const Vec2& winSize     = Director::getInstance()->getRenderView()->getWindowSize();
+    float renderScale       = Director::getInstance()->getRenderView()->getRenderScale();
     auto screenSizeInPixels = winSize * renderScale;
     _programState->setUniform(_locScreenSize, &screenSizeInPixels, sizeof(screenSizeInPixels));
 }
@@ -572,9 +572,9 @@ bool ShaderRetroEffect::init()
         auto p                         = new rhi::ProgramState(program);
         auto director                  = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
-        const auto& windowSize          = director->getRenderView()->getWindowSize();
-        float renderScale               = director->getRenderView()->getRenderScale();
-        auto screenSizeInPixels         = windowSize * renderScale;
+        const auto& windowSize         = director->getRenderView()->getWindowSize();
+        float renderScale              = director->getRenderView()->getRenderScale();
+        auto screenSizeInPixels        = windowSize * renderScale;
         p->setUniform(screenSizeLocation, &screenSizeInPixels, sizeof(screenSizeInPixels));
 
         auto s = director->getLogicalSize();

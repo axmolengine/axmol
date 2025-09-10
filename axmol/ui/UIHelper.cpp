@@ -191,10 +191,10 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
 {
     auto director   = Director::getInstance();
     auto renderView = director->getRenderView();
-    auto winSize  = renderView->getWindowSize();
+    auto winSize    = renderView->getWindowSize();
 
-    auto logicalSize   = director->getLogicalSize();
-    auto leftBottom = node->convertToWorldSpace(Point::ZERO);
+    auto logicalSize = director->getLogicalSize();
+    auto leftBottom  = node->convertToWorldSpace(Point::ZERO);
 
     auto contentSize = node->getContentSize();
     auto rightTop    = node->convertToWorldSpace(Point(contentSize.width, contentSize.height));
@@ -217,7 +217,7 @@ void Helper::setDesignSizeFixedEdge(const Vec2& designSize)
 
     // Set the design resolution
     RenderView* pERenderView = Director::getInstance()->getRenderView();
-    const Vec2& windowSize    = pERenderView->getWindowSize();
+    const Vec2& windowSize   = pERenderView->getWindowSize();
 
     // Vec2 lsSize = lsaSize;
 
@@ -242,7 +242,7 @@ void Helper::setDesignSizeNoBorder(const Vec2& designSize)
 
     // Set the design resolution
     RenderView* pERenderView = Director::getInstance()->getRenderView();
-    const Vec2& windowSize    = pERenderView->getWindowSize();
+    const Vec2& windowSize   = pERenderView->getWindowSize();
 
     // Vec2 lsSize = lsaSize;
 

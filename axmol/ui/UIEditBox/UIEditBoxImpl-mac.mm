@@ -196,7 +196,7 @@ void EditBoxImplMac::setNativeVisible(bool visible)
 void EditBoxImplMac::updateNativeFrame(const ax::Rect& rect)
 {
     RenderView* renderView = Director::getInstance()->getRenderView();
-    auto windowSize         = renderView->getWindowSize();
+    auto windowSize        = renderView->getWindowSize();
     // Coordinate System on OSX has its origin at the lower left corner.
     //    https://developer.apple.com/library/ios/documentation/General/Conceptual/Devpedia-CocoaApp/CoordinateSystem.html
     auto screenPosY = windowSize.height - rect.origin.y - rect.size.height;
