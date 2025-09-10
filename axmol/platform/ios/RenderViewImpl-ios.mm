@@ -144,8 +144,8 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
     [eaView setMultipleTouchEnabled:YES];
 #endif
 
-    _screenSize.width = _designResolutionSize.width = [eaView getWidth];
-    _screenSize.height = _designResolutionSize.height = [eaView getHeight];
+    _windowSize.width = _designResolutionSize.width = [eaView getWidth];
+    _windowSize.height = _designResolutionSize.height = [eaView getHeight];
     //    _scaleX = _scaleY = [eaView contentScaleFactor];
 
     _eaViewHandle = eaView;
@@ -276,8 +276,8 @@ Rect RenderViewImpl::getSafeAreaRect() const
         safeAreaInsets.bottom *= eaView.contentScaleFactor;
 
         // Get leftBottom and rightTop point in UI coordinates
-        Vec2 leftBottom = Vec2(safeAreaInsets.left, _screenSize.height - safeAreaInsets.bottom);
-        Vec2 rightTop   = Vec2(_screenSize.width - safeAreaInsets.right, safeAreaInsets.top);
+        Vec2 leftBottom = Vec2(safeAreaInsets.left, _windowSize.height - safeAreaInsets.bottom);
+        Vec2 rightTop   = Vec2(_windowSize.width - safeAreaInsets.right, safeAreaInsets.top);
 
         // Convert a point from UI coordinates to which in design resolution coordinate.
         leftBottom.x = (leftBottom.x - _viewportRect.origin.x) / _scaleX,

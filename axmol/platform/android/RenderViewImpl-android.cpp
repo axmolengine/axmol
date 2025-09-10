@@ -105,7 +105,7 @@ bool RenderViewImpl::initWithFullScreen(std::string_view viewName)
 
 bool RenderViewImpl::isGfxContextReady()
 {
-    return (_screenSize.width != 0 && _screenSize.height != 0);
+    return (_windowSize.width != 0 && _windowSize.height != 0);
 }
 
 void RenderViewImpl::end()
