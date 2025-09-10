@@ -423,7 +423,7 @@ void* RenderViewImpl::getX11Display()
 {
     return (void*)glfwGetX11Display();
 }
-#ifdef AX_ENABLE_WAYLAND
+#    ifdef AX_ENABLE_WAYLAND
 void* RenderViewImpl::getWaylandWindow()
 {
     return (void*)glfwGetWaylandWindow(_mainWindow);
@@ -432,7 +432,7 @@ void* RenderViewImpl::getWaylandDisplay()
 {
     return (void*)glfwGetWaylandDisplay();
 }
-#endif
+#    endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
@@ -608,7 +608,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     int actualWidth, actualHeight;
     glfwGetWindowSize(_mainWindow, &actualWidth, &actualHeight);
     // sense retina
-    setWindowSize(actualWidth / windowZoomFactor, actualHeight/ windowZoomFactor);
+    setWindowSize(actualWidth / windowZoomFactor, actualHeight / windowZoomFactor);
 #endif
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
@@ -994,7 +994,7 @@ void RenderViewImpl::handleFramebufferSize(int fbWidth, int fbHeight)
     */
     int w = 0, h = 0;
     glfwGetWindowSize(_mainWindow, &w, &h);
-    _isHightDPI = fbWidth > w;
+    _isHightDPI       = fbWidth > w;
     _devicePixelRatio = static_cast<float>(fbWidth) / w;
 
     RenderView::setFrameSize(w / _windowZoomFactor, h / _windowZoomFactor);
@@ -1020,11 +1020,11 @@ void RenderViewImpl::updateWindowSize()
         int fbWidth = 0, fbHeight = 0;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
-        _isHightDPI = fbWidth > w;
+        _isHightDPI       = fbWidth > w;
         _devicePixelRatio = static_cast<float>(fbWidth) / w;
 
         glfwSetWindowSize(_mainWindow, (int)(_windowSize.width * _windowZoomFactor),
-                              (int)(_windowSize.height * _windowZoomFactor));
+                          (int)(_windowSize.height * _windowZoomFactor));
     }
 }
 

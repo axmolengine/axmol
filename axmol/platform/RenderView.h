@@ -442,10 +442,10 @@ public:
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
     virtual void* getX11Window()  = 0;
     virtual void* getX11Display() = 0;
-#ifdef AX_ENABLE_WAYLAND
-    virtual void* getWaylandWindow() = 0;
+#    ifdef AX_ENABLE_WAYLAND
+    virtual void* getWaylandWindow()  = 0;
     virtual void* getWaylandDisplay() = 0;
-#endif
+#    endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
     /**

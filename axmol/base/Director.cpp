@@ -424,7 +424,7 @@ void Director::setRenderView(RenderView* renderView)
 
 void Director::setViewSize(const Vec2& viewSize)
 {
-    _viewSizeInPoints = viewSize;
+    _viewSizeInPoints     = viewSize;
     _isStatusLabelUpdated = true;
 }
 
@@ -751,8 +751,8 @@ Vec2 Director::convertToUI(const Vec2& glPoint)
     clipCoord.y = clipCoord.y / clipCoord.w;
     clipCoord.z = clipCoord.z / clipCoord.w;
 
-    Vec2 designSize  = _renderView->getDesignResolutionSize();
-    float factor = 1.0f / glCoord.w;
+    Vec2 designSize = _renderView->getDesignResolutionSize();
+    float factor    = 1.0f / glCoord.w;
     return Vec2(designSize.width * (clipCoord.x * 0.5f + 0.5f) * factor,
                 designSize.height * (-clipCoord.y * 0.5f + 0.5f) * factor);
 }

@@ -147,10 +147,10 @@ public:
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
     void* getX11Window() override;
     void* getX11Display() override;
-#ifdef AX_ENABLE_WAYLAND
+#    ifdef AX_ENABLE_WAYLAND
     void* getWaylandWindow() override;
     void* getWaylandDisplay() override;
-#endif
+#    endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 protected:

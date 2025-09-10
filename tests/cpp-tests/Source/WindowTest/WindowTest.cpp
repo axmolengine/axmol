@@ -110,11 +110,11 @@ void WindowTestResizedAndPositioned::onEnter()
 {
     WindowTest::onEnter();
 
-    auto s     = _director->getViewSize();
+    auto s          = _director->getViewSize();
     auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
 
-    int x      = 0;
-    int y      = 0;
+    int x = 0;
+    int y = 0;
     renderView->getWindowPosition(&x, &y);
     auto winSize = renderView->getNativeWindowSize();
 
@@ -122,7 +122,8 @@ void WindowTestResizedAndPositioned::onEnter()
     label1->setPosition(s.width / 3 * 1, s.height / 2);
     addChild(label1);
 
-    label2 = Label::createWithTTF(fmt::format("size : {}, {}", winSize.width, winSize.height), "fonts/Marker Felt.ttf", 16.0f);
+    label2 = Label::createWithTTF(fmt::format("size : {}, {}", winSize.width, winSize.height), "fonts/Marker Felt.ttf",
+                                  16.0f);
     label2->setPosition(s.width / 3 * 2, s.height / 2);
     addChild(label2);
 

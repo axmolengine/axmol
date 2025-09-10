@@ -519,7 +519,7 @@ void UIEditBoxImplWinrt::nativeOpenKeyboard()
     // Position
     auto directorInstance = ax::Director::getInstance();
     auto frameSize        = renderView->getFrameSize();
-    auto viewSize          = directorInstance->getViewSize();
+    auto viewSize         = directorInstance->getViewSize();
     auto leftBottom       = _editBox->convertToWorldSpace(ax::Point::ZERO);
     auto rightTop =
         _editBox->convertToWorldSpace(ax::Point(_editBox->getContentSize().width, _editBox->getContentSize().height));

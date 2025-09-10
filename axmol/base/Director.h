@@ -262,9 +262,9 @@ public:
 
     // view size
 
-    /** Returns the size of the render view in points. 
+    /** Returns the size of the render view in points.
      * FIXME: do we need update view size when design resolution size changed
-    */
+     */
     const Vec2& getViewSize() const;
 
     /** Returns the size of the render view in pixels. */

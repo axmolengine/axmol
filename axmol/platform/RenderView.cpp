@@ -161,7 +161,7 @@ void RenderView::updateDesignResolutionSize()
                               viewportH);
 
         // reset director's member variables to fit visible rect
-        auto director                   = Director::getInstance();
+        auto director = Director::getInstance();
         director->setViewSize(getDesignResolutionSize());
         director->setProjection(director->getProjection());
     }
