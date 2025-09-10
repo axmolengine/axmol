@@ -269,7 +269,7 @@ TestLayer1::TestLayer1(std::string_view transitionName)
 {
     float x, y;
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     x         = size.width;
     y         = size.height;
 
@@ -339,7 +339,7 @@ TestLayer2::TestLayer2(std::string_view transitionName)
 {
     float x, y;
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     x         = size.width;
     y         = size.height;
 

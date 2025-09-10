@@ -2137,7 +2137,7 @@ void DrawNodeThicknessTest::update(float dt)
     array2->addControlPoint(Vec2(size.width / 2, 30.0f));
     drawNode->drawCatmullRom(array2, 50, Color::ORANGE, sliderValue[sliderType::Thickness]);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     drawNode->drawPoint(Vec2(s.width / 2 - 120, s.height / 2 - 120), 10,
                         Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
@@ -2392,7 +2392,7 @@ void DrawNodeThicknessStressTest::update(float dt)
     array2->addControlPoint(Vec2(size.width / 2, 30.0f));
     drawNode->drawCatmullRom(array2, 50, Color::ORANGE, negativThickness);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     drawNode->drawPoint(Vec2(s.width / 2 - 120, s.height / 2 - 120), negativThickness,
                         Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));

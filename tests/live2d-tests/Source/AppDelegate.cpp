@@ -87,7 +87,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // Set the design resolution
     renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::SHOW_ALL);
-//    auto frameSize = renderView->getFrameSize();
+//    auto frameSize = renderView->getWindowSize();
 //    // if the frame's height is larger than the height of medium size.
 //    if (frameSize.height > mediumResolutionSize.height)
 //    {

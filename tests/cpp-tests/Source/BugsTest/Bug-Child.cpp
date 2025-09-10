@@ -38,7 +38,7 @@ bool BugChild::init()
 {
     if (BugsTestBase::init())
     {
-        auto size = Director::getInstance()->getWinSize();
+        auto size = Director::getInstance()->getLogicalSize();
 
         // create and initialize a Label
         auto item1 = MenuItemFont::create("Switch Child", AX_CALLBACK_1(BugChild::switchChild, this));
@@ -88,7 +88,7 @@ bool BugCameraMask::init()
     if (!BugsTestBase::init())
         return false;
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto node = Node::create();
     node->setPosition(size.width / 4, size.height / 3);

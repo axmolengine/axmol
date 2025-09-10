@@ -1,5 +1,5 @@
 
-local s = ax.Director:getInstance():getWinSize()
+local s = ax.Director:getInstance():getLogicalSize()
 
 ------------------------------------
 --  SpriteProgressToRadial

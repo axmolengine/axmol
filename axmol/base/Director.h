@@ -263,20 +263,21 @@ public:
     // view size
 
     /** Returns the size of the render view in points.
-     * FIXME: do we need update view size when design resolution size changed
      */
-    const Vec2& getViewSize() const;
+    const Vec2& getLogicalSize() const;
 
     /** Returns the size of the render view in pixels. */
-    Vec2 getViewSizeInPixels() const;
+    Vec2 getLogicalSizeInPixels() const;
 
     // implicit deprecated APIs
-    const Vec2& getWinSize() const { return getViewSize(); }
-    Vec2 getWinSizeInPixels() const { return getViewSizeInPixels(); }
+#ifndef _AX_GEN_SCRIPT_BINDINGS
+    const Vec2& getWinSize() const { return getLogicalSize(); }
+    Vec2 getWinSizeInPixels() const { return getLogicalSizeInPixels(); }
+#endif
 
     /**
      * Returns visible size of the render view in points.
-     * The value is equal to `Director::getViewSize()` if don't invoke `RenderView::setDesignResolutionSize()`.
+     * The value is equal to `Director::getLogicalSize()` if don't invoke `RenderView::setDesignResolutionSize()`.
      */
     Vec2 getVisibleSize() const;
 
@@ -570,9 +571,9 @@ protected:
     void resizeSwapchain(uint32_t w, uint32_t h);
 
     /**
-     * @brief Internal-only: sync view size aka design size, invoked by RenderView
+     * @brief Internal-only: Sets logical size aka design size, invoked by RenderView
      */
-    void setViewSize(const Vec2& viewSize);
+    void setLogicalSize(const Vec2& logicalSize);
 
 #if defined(AX_PLATFORM_PC)
     void processOperations();
@@ -688,8 +689,8 @@ protected:
     /* projection used */
     Projection _projection = Projection::DEFAULT;
 
-    /* view size in points */
-    Vec2 _viewSizeInPoints = Vec2::ZERO;
+    /* logical size in points */
+    Vec2 _logicalSizeInPoints = Vec2::ZERO;
 
     /* content scale factor */
     float _contentScaleFactor = 1.0f;

@@ -36,7 +36,7 @@ end
 
 function SpritePolygonTest1:ctor()
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local offset = ax.p(0.15 * s.width, 0)
     local filename = s_pPathGrossini
     local info =  ax.AutoPolygon:generatePolygon(filename)
@@ -86,7 +86,7 @@ end
 local SpritePolygonTest2 = class("SpritePolygonTest2", SpritePolygonTestDemo)
 
 function SpritePolygonTest2:make2Sprites()
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local offset = ax.p(0.15 * s.width, 0)
     local filename = s_pPathGrossini
     local head = ax.rect(30, 25, 25, 25)

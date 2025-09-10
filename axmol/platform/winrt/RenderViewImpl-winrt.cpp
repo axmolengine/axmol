@@ -106,9 +106,7 @@ RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
 }
 
 RenderViewImpl::RenderViewImpl()
-    : _frameZoomFactor(1.0f)
-    , _supportTouch(true)
-    , _isRetina(false)
+    : _supportTouch(true)
     , _isCursorVisible(true)
     , m_lastPointValid(false)
     , m_running(false)
@@ -495,16 +493,6 @@ void ax::RenderViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void RenderViewImpl::setFrameZoomFactor(float /*fZoomFactor*/)
-{
-    AXLOGD("Windows UWP not support setFrameZoomFactor other than 1.0f");
-}
-
-float RenderViewImpl::getFrameZoomFactor()
-{
-    return _frameZoomFactor;
-}
-
 void RenderViewImpl::centerWindow()
 {
     // not implemented in WinRT. Window is always full screen
@@ -566,7 +554,7 @@ void RenderViewImpl::UpdateWindowSize()
     m_presentTarget.width  = m_width;
     m_presentTarget.height = m_height;
 
-    RenderView::setFrameSize(m_width / _frameZoomFactor, m_height / _frameZoomFactor);
+    RenderView::setWindowSize(m_width, m_height);
 
     updateDesignResolutionSize();
 }

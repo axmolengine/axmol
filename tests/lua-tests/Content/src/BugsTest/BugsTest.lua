@@ -2,7 +2,7 @@ local    MAX_COUNT = 9
 local    LINE_SPACE = 40
 local    kItemTagBasic = 5432
 
-local Winsize = ax.Director:getInstance():getWinSize()
+local Winsize = ax.Director:getInstance():getLogicalSize()
 
 local testNames = {
     "Bug-350",
@@ -394,7 +394,7 @@ end
 local function BugTest1174()
     local layer = ax.Layer:create()
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
 
 
     local subtitleLabel = ax.Label:createWithTTF("The results output on the console", s_thonburiPath, 24)

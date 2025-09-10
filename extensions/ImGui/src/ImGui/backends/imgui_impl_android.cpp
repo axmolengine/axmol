@@ -247,8 +247,8 @@ void ImGui_ImplAndroid_NewFrame()
     // Setup display size (every frame to accommodate for window resizing)
     int32_t window_width  = bd->ViewResolution.width;
     int32_t window_height = bd->ViewResolution.height;
-    int display_width     = bd->Window->getFrameSize().width;
-    int display_height    = bd->Window->getFrameSize().height;
+    int display_width     = bd->Window->getWindowSize().width;
+    int display_height    = bd->Window->getWindowSize().height;
 
     io.DisplaySize = ImVec2((float)window_width, (float)window_height);
     if (window_width > 0 && window_height > 0)

@@ -43,7 +43,7 @@ SpriteFrameCacheTests::SpriteFrameCacheTests()
 
 SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
 {
-    const Size screenSize = Director::getInstance()->getWinSize();
+    const Size screenSize = Director::getInstance()->getLogicalSize();
 
     infoLabel = Label::create();
     infoLabel->setAnchorPoint(Point(0.5f, 1.0f));
@@ -90,7 +90,7 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file, ax
 
 SpriteFrameCacheLoadMultipleTimes::SpriteFrameCacheLoadMultipleTimes()
 {
-    const Size screenSize = Director::getInstance()->getWinSize();
+    const Size screenSize = Director::getInstance()->getLogicalSize();
 
     // load atlas definition with specified PixelFormat and check that it matches to expected format
     loadSpriteFrames("Images/sprite_frames_test/test_RGBA8888.plist", rhi::PixelFormat::RGBA8);
@@ -111,7 +111,7 @@ void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file, 
 
 SpriteFrameCacheFullCheck::SpriteFrameCacheFullCheck()
 {
-    const Size screenSize = Director::getInstance()->getWinSize();
+    const Size screenSize = Director::getInstance()->getLogicalSize();
     // load atlas definition with specified PixelFormat and check that it matches to expected format
     loadSpriteFrames("Images/test_polygon.plist", rhi::PixelFormat::RGBA8);
 }
@@ -428,7 +428,7 @@ SpriteFrameCacheJsonAtlasTest::SpriteFrameCacheJsonAtlasTest()
     auto* cache = SpriteFrameCache::getInstance();
     cache->registerSpriteSheetLoader(std::make_unique<GenericJsonArraySpriteSheetLoader>());
 
-    const Size screenSize = Director::getInstance()->getWinSize();
+    const Size screenSize = Director::getInstance()->getLogicalSize();
 
     infoLabel = Label::create();
     infoLabel->setAnchorPoint(Point(0.5f, 1.0f));

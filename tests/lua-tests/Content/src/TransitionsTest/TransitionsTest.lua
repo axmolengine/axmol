@@ -4,7 +4,7 @@ require "TransitionsTest/TransitionsName"
 local SceneIdx = -1
 local CurSceneNo = 2
 local TRANSITION_DURATION = 1.2
-local s = ax.Director:getInstance():getWinSize()
+local s = ax.Director:getInstance():getLogicalSize()
 
 local function switchSceneTypeNo()
     if CurSceneNo == 1 then

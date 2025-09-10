@@ -50,7 +50,7 @@ public:
     static RenderViewImpl* create(std::string_view viewName, bool resizable);
     static RenderViewImpl* createWithRect(std::string_view viewName,
                                           const Rect& rect,
-                                          float frameZoomFactor = 1.0f,
+                                          float zoomFactor = 1.0f,
                                           bool resizable        = false);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName,
@@ -130,8 +130,8 @@ public:
      */
     void setCursorVisible(bool isVisible) override;
 
-    /** Get device pixel ratio */
-    int getDevicePixelRatio() const override { return _devicePixelRatio; }
+    /** Get render scale */
+    int getRenderScale() const override { return _renderScale; }
 
     bool isHighDPI() const override { return _isHightDPI; }
 
@@ -176,15 +176,18 @@ protected:
     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void onGLFWCharCallback(GLFWwindow* window, unsigned int character);
     void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y);
-    void onGLFWFramebufferSizeCallback(GLFWwindow* window, int w, int h);
     void onGLFWWindowSizeCallback(GLFWwindow* window, int w, int h);
     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
     void onGLFWWindowCloseCallback(GLFWwindow* window);
 
 protected:
-    /* invoke when framebuffer size changed */
-    void handleFramebufferSize(int fbWidth, int fbHeight);
+    /* invoke when window size changed
+    * glfw fire event order
+    *   -> framebufferSize
+    *   -> windowSize
+    */
+    void handleWindowSize(int w, int h, int fbWidth, int fbHeigh);
 
     /* update window size when user set zoomFactor, retina, frameSize */
     void updateWindowSize();
@@ -194,7 +197,7 @@ protected:
 
     bool _isHightDPI{false};
 
-    float _devicePixelRatio;  // >=1
+    float _renderScale;  // >=1
 
     float _windowZoomFactor;
 

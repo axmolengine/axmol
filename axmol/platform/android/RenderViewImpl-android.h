@@ -41,7 +41,7 @@ public:
     static RenderViewImpl* create(std::string_view viewname);
     static RenderViewImpl* createWithRect(std::string_view viewName,
                                           const Rect& rect,
-                                          float frameZoomFactor = 1.0f,
+                                          float zoomFactor = 1.0f,
                                           bool resizable        = false);
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);
 
@@ -57,7 +57,7 @@ protected:
     RenderViewImpl();
     virtual ~RenderViewImpl();
 
-    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable = false);
+    bool initWithRect(std::string_view viewName, const Rect& rect, float zoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
 };
 

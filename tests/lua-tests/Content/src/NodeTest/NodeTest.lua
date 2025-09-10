@@ -3,7 +3,7 @@ local kTagSprite2 = 2
 local kTagSprite3 = 3
 local kTagSlider  = 4
 
-local s = ax.Director:getInstance():getWinSize()
+local s = ax.Director:getInstance():getLogicalSize()
 local scheduler = ax.Director:getInstance():getScheduler()
 
 local function getBaseLayer()
@@ -642,7 +642,7 @@ local function NodeGlobalZValueTest()
     Helper.subtitleLabel:setString("Center Sprite should change go from foreground to background")
 
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local zOrderSprite = nil
     for i = 1,9 do
         local parent = ax.Node:create()

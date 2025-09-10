@@ -63,7 +63,7 @@ void Effect1::onEnter()
     //     Lens3D is Grid3D and it's size is (15,10)
     //     Waves3D is Grid3D and it's size is (15,10)
 
-    auto size  = Director::getInstance()->getWinSize();
+    auto size  = Director::getInstance()->getLogicalSize();
     auto lens  = Lens3D::create(0.0f, Size(15, 10), Vec2(size.width / 2, size.height / 2), 240);
     auto waves = Waves3D::create(10, Size(15, 10), 18, 15);
 

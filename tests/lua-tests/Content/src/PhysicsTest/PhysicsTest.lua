@@ -1,4 +1,4 @@
-local size = ax.Director:getInstance():getWinSize()
+local size = ax.Director:getInstance():getLogicalSize()
 local MATERIAL_DEFAULT = ax.PhysicsMaterial(0.1, 0.5, 0.5)
 local curLayer = nil
 local STATIC_COLOR = ax.color(1.0, 0.0, 0.0, 1.0)

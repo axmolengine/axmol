@@ -2,7 +2,7 @@ local AssetManagerModule = {}
 
 function AssetManagerModule.newScene(backfunc)
 
-    local winSize = ax.Director:getInstance():getWinSize()
+    local winSize = ax.Director:getInstance():getLogicalSize()
 
     local newScene = ax.Scene:create()
     local layer    = ax.Layer:create()

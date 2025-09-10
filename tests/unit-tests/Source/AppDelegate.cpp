@@ -71,7 +71,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 #endif
 
-    auto screenSize = renderView->getFrameSize();
+    auto screenSize = renderView->getWindowSize();
 
     renderView->setDesignResolutionSize(gWindowSize.x, gWindowSize.y, ResolutionPolicy::SHOW_ALL);
 

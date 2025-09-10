@@ -54,7 +54,7 @@ local function Effect1()
     --     Lens3D is Grid3D and it's size is (15,10)
     --     Waves3D is Grid3D and it's size is (15,10)
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
     local  lens = ax.Lens3D:create(0.0, ax.size(15,10), ax.p(size.width/2,size.height/2), 240)
     local  waves = ax.Waves3D:create(10, ax.size(15,10), 18, 15)
 

@@ -34,7 +34,7 @@ void LAppView::onEnter()
     // 画面の表示の拡大縮小や移動の変換を行う行列
     viewMatrix = new CubismViewMatrix();
 
-    Size size = Director::getInstance()->getWinSize();
+    Size size = Director::getInstance()->getLogicalSize();
 
     float width = size.width;
     float height = size.height;
@@ -222,7 +222,7 @@ void LAppView::drawDebugRects(LAppLive2DManager* manager) const
     const Color userDataAreaColor = Color(0, 0, 1.0f, 0.2f);
 
     CubismMatrix44 projection;
-    const Size window = Director::getInstance()->getWinSize();
+    const Size window = Director::getInstance()->getLogicalSize();
     const CubismVector2 windowSize = CubismVector2(window.width, window.height);
     projection.Scale(1, window.width / window.height);
 

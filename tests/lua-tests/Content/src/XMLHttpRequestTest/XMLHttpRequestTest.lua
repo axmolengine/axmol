@@ -2,7 +2,7 @@ local json = require 'cjson'
 
 local function XMLHttpRequestLayer()
     local layer = ax.Layer:create()
-    local winSize = ax.Director:getInstance():getWinSize()
+    local winSize = ax.Director:getInstance():getLogicalSize()
     local margin = 40
     local space  = 35
 

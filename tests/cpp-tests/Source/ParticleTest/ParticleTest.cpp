@@ -538,7 +538,7 @@ void DemoModernArt::onEnter()
     _background->addChild(_emitter, 10);
     ////_emitter->release();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // duration
     _emitter->setDuration(-1);
@@ -1840,7 +1840,7 @@ void RadiusMode1::onEnter()
     _emitter->setAngleVar(0);
 
     // emitter position
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
     _emitter->setPosVar(Vec2::ZERO);
 
@@ -1923,7 +1923,7 @@ void RadiusMode2::onEnter()
     _emitter->setAngleVar(0);
 
     // emitter position
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
     _emitter->setPosVar(Vec2::ZERO);
 
@@ -2006,7 +2006,7 @@ void Issue704::onEnter()
     _emitter->setAngleVar(0);
 
     // emitter position
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     _emitter->setPosition(Vec2(size.width / 2, size.height / 2));
     _emitter->setPosVar(Vec2::ZERO);
 
@@ -2246,7 +2246,7 @@ void ParticleDemo::onEnter()
     listener->onTouchesEnded = AX_CALLBACK_2(ParticleDemo::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto item4 = MenuItemToggle::createWithCallback(
         AX_CALLBACK_1(ParticleDemo::toggleCallback, this), MenuItemFont::create("Free Movement"),
@@ -2341,7 +2341,7 @@ void ParticleDemo::toggleCallback(Object* sender)
 
 void ParticleDemo::setEmitterPosition()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     if (_emitter != nullptr)
     {
         _emitter->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -2413,7 +2413,7 @@ void ParticleBatchMultipleEmitters::onEnter()
     auto emitter3 = ParticleSystemQuad::create("Particles/LavaFlow.plist");
     emitter3->setStartColor(Color(0, 0, 1, 1));
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     emitter1->setPosition(Vec2(s.width / 1.25f, s.height / 1.25f));
     emitter2->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -2468,7 +2468,7 @@ void ParticleReorder::onEnter()
         emitter3->setStartColor(Color(0, 0, 1, 1));
         emitter3->setBlendAdditive(false);
 
-        auto s = Director::getInstance()->getWinSize();
+        auto s = Director::getInstance()->getLogicalSize();
 
         int neg = (i == 0 ? 1 : -1);
 
@@ -2571,7 +2571,7 @@ bool RainbowEffect::initWithTotalParticles(int numberOfParticles)
         setAngleVar(0);
 
         // emitter position
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         setPosition(Vec2(winSize.width / 2, winSize.height / 2));
         setPosVar(Vec2::ZERO);
 
@@ -2626,7 +2626,7 @@ void Issue1201::onEnter()
 
     addChild(particle);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     particle->setPosition(Vec2(s.width / 2, s.height / 2));
 
@@ -3130,7 +3130,7 @@ void ParticleAutoBatching::onEnter()
     this->removeChild(_background, true);
     _background = nullptr;
 
-    Size s = Director::getInstance()->getWinSize();
+    Size s = Director::getInstance()->getLogicalSize();
 
     for (int i = 0; i < 10; i++)
     {
@@ -3204,7 +3204,7 @@ void ParticleIssue12310::onEnter()
     removeChild(_background, true);
     _background = nullptr;
 
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     auto particle = ParticleSystemQuad::create("Particles/BoilingFoam.plist");
     particle->setPosition(Vec2(winSize.width * 0.35f, winSize.height * 0.5f));

@@ -43,7 +43,7 @@ UserDefaultTests::UserDefaultTests()
 
 UserDefaultTest::UserDefaultTest()
 {
-    auto s     = Director::getInstance()->getWinSize();
+    auto s     = Director::getInstance()->getLogicalSize();
     auto label = Label::createWithTTF("UserDefault test Log data see console", "fonts/arial.ttf", 22);
     addChild(label, 0);
     label->setPosition(Vec2(s.width / 2, s.height - 50));

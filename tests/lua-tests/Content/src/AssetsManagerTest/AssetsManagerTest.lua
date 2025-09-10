@@ -9,7 +9,7 @@ local menuItemNames =
     "update",
 }
 
-local winSize = ax.Director:getInstance():getWinSize()
+local winSize = ax.Director:getInstance():getLogicalSize()
 
 local function updateLayer()
     local layer = ax.Layer:create()

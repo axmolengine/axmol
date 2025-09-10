@@ -9,7 +9,7 @@ local function ZwoptexGenericTest()
                                 "Coordinate Formats, Rotation, Trimming, flipX/Y")
     local spriteFrameIndex = 0
     local counter = 0
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local schedulerEntry = nil
     local schedulerFlipSpriteEntry = nil
     local sprite1 = nil

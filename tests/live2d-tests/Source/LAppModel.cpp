@@ -753,7 +753,7 @@ void LAppModel::MakeRenderingTarget()
     if (!_renderSprite && !_renderBuffer->IsValid())
     {
         float aspectFactor = 1.0f;
-        int frameW = Director::getInstance()->getRenderView()->getFrameSize().width, frameH = Director::getInstance()->getRenderView()->getFrameSize().height;
+        int frameW = Director::getInstance()->getRenderView()->getWindowSize().width, frameH = Director::getInstance()->getRenderView()->getWindowSize().height;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // Retina対策でこっちからとる

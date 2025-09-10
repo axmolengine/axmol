@@ -512,7 +512,7 @@ Widget* WidgetPropertiesReader0250::createWidget(const rapidjson::Value& data,
     if (fileDesignWidth <= 0 || fileDesignHeight <= 0)
     {
         AXLOGE("Read design size error!\n");
-        Size size = Director::getInstance()->getViewSize();
+        Size size = Director::getInstance()->getLogicalSize();
         GUIReader::getInstance()->storeFileDesignSize(fileName, size);
     }
     else
@@ -1285,7 +1285,7 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data,
     if (fileDesignWidth <= 0 || fileDesignHeight <= 0)
     {
         AXLOGE("Read design size error!\n");
-        Size viewSize = Director::getInstance()->getViewSize();
+        Size viewSize = Director::getInstance()->getLogicalSize();
         GUIReader::getInstance()->storeFileDesignSize(fileName, viewSize);
     }
     else
@@ -1354,7 +1354,7 @@ ax::ui::Widget* WidgetPropertiesReader0300::createWidgetFromBinary(CocoLoader* c
             if (fileDesignWidth <= 0 || fileDesignHeight <= 0)
             {
                 AXLOGE("Read design size error!\n");
-                Size viewSize = Director::getInstance()->getViewSize();
+                Size viewSize = Director::getInstance()->getLogicalSize();
                 GUIReader::getInstance()->storeFileDesignSize(fileName, viewSize);
             }
             else

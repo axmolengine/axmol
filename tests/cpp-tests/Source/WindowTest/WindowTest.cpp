@@ -110,7 +110,7 @@ void WindowTestResizedAndPositioned::onEnter()
 {
     WindowTest::onEnter();
 
-    auto s          = _director->getViewSize();
+    auto s          = _director->getLogicalSize();
     auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
 
     int x = 0;
@@ -201,7 +201,7 @@ void WindowTestClose::onWindowClose(EventCustom* e)
         label = nullptr;
     }
 
-    auto s = _director->getViewSize();
+    auto s = _director->getLogicalSize();
     label  = Label::createWithTTF("Window close button callback!", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 2, s.height / 2);
     addChild(label);

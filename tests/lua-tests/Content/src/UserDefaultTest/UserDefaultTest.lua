@@ -71,7 +71,7 @@ end
 
 function UserDefaultTestMain()
     local ret = ax.Scene:create()
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local  label = ax.Label:createWithTTF("UserDefault test see log", s_arialPath, 28)
     ret:addChild(label, 0)
     label:setAnchorPoint(ax.p(0.5, 0.5))

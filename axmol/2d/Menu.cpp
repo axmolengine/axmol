@@ -120,7 +120,7 @@ bool Menu::initWithArray(const Vector<MenuItem*>& arrayOfItems)
     {
         _enabled = true;
         // menu in the center of the screen
-        Vec2 s = _director->getViewSize();
+        Vec2 s = _director->getLogicalSize();
 
         this->setIgnoreAnchorPointForPosition(true);
         setAnchorPoint(Vec2(0.5f, 0.5f));

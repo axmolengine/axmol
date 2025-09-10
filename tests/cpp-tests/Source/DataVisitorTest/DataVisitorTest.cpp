@@ -67,7 +67,7 @@ void PrettyPrinterDemo::addSprite()
 void PrettyPrinterDemo::onEnter()
 {
     TestCase::onEnter();
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto label = Label::createWithTTF(title().c_str(), "fonts/arial.ttf", 28);
     label->setPosition(s.width / 2, s.height * 4 / 5);

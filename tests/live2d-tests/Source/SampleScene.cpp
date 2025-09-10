@@ -55,7 +55,7 @@ bool SampleScene::init()
     // Live2DManager実体化の前に必要となる
     instance = this;
 
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -154,7 +154,7 @@ void SampleScene::update(float delta)
     Node::update(delta);
 
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         // 端に隙間なく位置すると端末によっては描画されないことがあるのでマージンを設ける

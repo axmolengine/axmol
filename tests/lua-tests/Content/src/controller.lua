@@ -25,7 +25,7 @@ director:setDisplayStats(true)
 --set FPS. the default value is 1.0/60 if you don't call this
 director:setAnimationInterval(1.0 / 60)
 
-local screenSize = renderView:getFrameSize()
+local screenSize = renderView:getWindowSize()
 
 local designSize = {width = 480, height = 320}
 

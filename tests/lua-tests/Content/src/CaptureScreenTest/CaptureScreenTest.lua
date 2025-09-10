@@ -1,4 +1,4 @@
-local winSize = ax.Director:getInstance():getWinSize()
+local winSize = ax.Director:getInstance():getLogicalSize()
 local kTagSprite = 1
 local childTag   = 119
 

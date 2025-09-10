@@ -191,16 +191,16 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
 {
     auto director   = Director::getInstance();
     auto renderView = director->getRenderView();
-    auto frameSize  = renderView->getFrameSize();
+    auto winSize  = renderView->getWindowSize();
 
-    auto viewSize   = director->getViewSize();
+    auto logicalSize   = director->getLogicalSize();
     auto leftBottom = node->convertToWorldSpace(Point::ZERO);
 
     auto contentSize = node->getContentSize();
     auto rightTop    = node->convertToWorldSpace(Point(contentSize.width, contentSize.height));
 
-    auto uiLeft   = frameSize.width / 2 + (leftBottom.x - viewSize.width / 2) * renderView->getScaleX();
-    auto uiTop    = frameSize.height / 2 - (rightTop.y - viewSize.height / 2) * renderView->getScaleY();
+    auto uiLeft   = winSize.width / 2 + (leftBottom.x - logicalSize.width / 2) * renderView->getScaleX();
+    auto uiTop    = winSize.height / 2 - (rightTop.y - logicalSize.height / 2) * renderView->getScaleY();
     auto uiWidth  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
     auto uiHeight = (rightTop.y - leftBottom.y) * renderView->getScaleY();
 
@@ -217,12 +217,12 @@ void Helper::setDesignSizeFixedEdge(const Vec2& designSize)
 
     // Set the design resolution
     RenderView* pERenderView = Director::getInstance()->getRenderView();
-    const Vec2& frameSize    = pERenderView->getFrameSize();
+    const Vec2& windowSize    = pERenderView->getWindowSize();
 
     // Vec2 lsSize = lsaSize;
 
-    float scaleX = (float)frameSize.width / designSize.width;
-    float scaleY = (float)frameSize.height / designSize.height;
+    float scaleX = (float)windowSize.width / designSize.width;
+    float scaleY = (float)windowSize.height / designSize.height;
 
     // adjustedScale = 0.0f; // MAX(scaleX, scaleY);
     if (scaleX < scaleY)
@@ -242,21 +242,21 @@ void Helper::setDesignSizeNoBorder(const Vec2& designSize)
 
     // Set the design resolution
     RenderView* pERenderView = Director::getInstance()->getRenderView();
-    const Vec2& frameSize    = pERenderView->getFrameSize();
+    const Vec2& windowSize    = pERenderView->getWindowSize();
 
     // Vec2 lsSize = lsaSize;
 
-    float scaleX = (float)frameSize.width / Helper::s_designSize.width;
-    float scaleY = (float)frameSize.height / Helper::s_designSize.height;
+    float scaleX = (float)windowSize.width / Helper::s_designSize.width;
+    float scaleY = (float)windowSize.height / Helper::s_designSize.height;
 
     Helper::s_adjustedScale = 0.0f;  // MAX(scaleX, scaleY);
     if (scaleX > scaleY)
     {
-        Helper::s_adjustedScale = scaleX / (frameSize.height / Helper::s_designSize.height);
+        Helper::s_adjustedScale = scaleX / (windowSize.height / Helper::s_designSize.height);
     }
     else
     {
-        Helper::s_adjustedScale = scaleY / (frameSize.width / Helper::s_designSize.width);
+        Helper::s_adjustedScale = scaleY / (windowSize.width / Helper::s_designSize.width);
     }
 
     AXLOGD("x: {}; y: {}; scale: {}", scaleX, scaleY, s_adjustedScale);

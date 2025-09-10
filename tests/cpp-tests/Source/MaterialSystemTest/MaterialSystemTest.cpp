@@ -85,7 +85,7 @@ void Material_MultipleMeshRenderer::onEnter()
 
     const int totalNames = sizeof(names) / sizeof(names[0]);
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     for (int i = 0; i < totalNames; i++)
     {
@@ -402,7 +402,7 @@ void Material_parsePerformance::onEnter()
 
     _maxParsingCoumt = 5e3;
 
-    auto screenSize = Director::getInstance()->getWinSize();
+    auto screenSize = Director::getInstance()->getLogicalSize();
 
     ui::Slider* slider = ui::Slider::create();
     slider->loadBarTexture("cocosui/sliderTrack.png");

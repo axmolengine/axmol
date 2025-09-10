@@ -166,7 +166,7 @@ MeshRendererBasicTest::MeshRendererBasicTest()
     listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererBasicTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 
@@ -243,7 +243,7 @@ MeshRendererStaticInstancingBasicTest::MeshRendererStaticInstancingBasicTest()
     mesh->setScale(3.f);
     mesh->setTexture("MeshRendererTest/boss.png");
 
-    auto& s = Director::getInstance()->getWinSize();
+    auto& s = Director::getInstance()->getLogicalSize();
     mesh->setPosition(s.width / 2, s.height / 2);
 
     mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE);
@@ -286,7 +286,7 @@ MeshRendererDynamicInstancingBasicTest::MeshRendererDynamicInstancingBasicTest()
     mesh->setScale(3.f);
     mesh->setTexture("MeshRendererTest/boss.png");
 
-    auto& s = Director::getInstance()->getWinSize();
+    auto& s = Director::getInstance()->getLogicalSize();
     mesh->setPosition(s.width / 2, s.height / 2);
 
     mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE);
@@ -330,7 +330,7 @@ MeshRendererPreallocatedInstancingBufferTest::MeshRendererPreallocatedInstancing
     mesh->setScale(3.f);
     mesh->setTexture("MeshRendererTest/boss.png");
 
-    auto& s = Director::getInstance()->getWinSize();
+    auto& s = Director::getInstance()->getLogicalSize();
     mesh->setPosition(s.width / 2, s.height / 2);
 
     mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE, 1000);
@@ -372,7 +372,7 @@ MeshRendererInstancingStressTest::MeshRendererInstancingStressTest()
     mesh->setScale(3.f);
     mesh->setTexture("MeshRendererTest/boss.png");
 
-    auto& s = Director::getInstance()->getWinSize();
+    auto& s = Director::getInstance()->getLogicalSize();
     mesh->setPosition(s.width / 2, s.height / 2);
 
     mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE, 10000);
@@ -689,7 +689,7 @@ void MeshRendererFakeShadowTest::onTouchesEnded(const std::vector<Touch*>& touch
             {
                 Vec3 nearP(location.x, location.y, -1.0f), farP(location.x, location.y, 1.0f);
 
-                auto size = Director::getInstance()->getWinSize();
+                auto size = Director::getInstance()->getLogicalSize();
                 nearP     = _camera->unproject(nearP);
                 farP      = _camera->unproject(farP);
                 Vec3 dir(farP - nearP);
@@ -841,7 +841,7 @@ void MeshRendererLightMapTest::onTouchesMoved(const std::vector<ax::Touch*>& tou
 //------------------------------------------------------------------
 MeshRendererHitTest::MeshRendererHitTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto mesh1 = MeshRenderer::create("MeshRendererTest/boss1.obj");
 
@@ -908,7 +908,7 @@ std::string MeshRendererHitTest::subtitle() const
 
 MeshRendererEffectTest::MeshRendererEffectTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
@@ -1000,7 +1000,7 @@ AsyncLoadMeshRendererTest::AsyncLoadMeshRendererTest()
     auto item1 =
         MenuItemLabel::create(label1, AX_CALLBACK_1(AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh, this));
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     item1->setPosition(s.width * .5f, s.height * .8f);
 
     auto pMenu1 = Menu::create(item1, nullptr);
@@ -1044,7 +1044,7 @@ void AsyncLoadMeshRendererTest::asyncLoad_Callback(MeshRenderer* mesh, void* par
 {
     auto index  = static_cast<int>((uintptr_t)param);
     auto node   = getChildByTag(101);
-    auto s      = Director::getInstance()->getWinSize();
+    auto s      = Director::getInstance()->getLogicalSize();
     float width = s.width / _paths.size();
     Vec2 point(width * (0.5f + index), s.height / 2.f);
     mesh->setPosition(point);
@@ -1072,7 +1072,7 @@ MeshRendererWithSkinTest::MeshRendererWithSkinTest()
 
     _meshes.clear();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 std::string MeshRendererWithSkinTest::title() const
@@ -1163,7 +1163,7 @@ MeshRendererWithSkinOutlineTest::MeshRendererWithSkinOutlineTest()
     listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererWithSkinOutlineTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
@@ -1297,7 +1297,7 @@ void Animate3DTest::addMeshRenderer()
     std::string fileName = "MeshRendererTest/tortoise.c3b";
     auto mesh            = MeshRenderer::create(fileName);
     mesh->setScale(0.1f);
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     mesh->setPosition(Vec2(s.width * 4.f / 5.f, s.height / 2.f));
     addChild(mesh);
     _mesh          = mesh;
@@ -1324,7 +1324,7 @@ void Animate3DTest::addMeshRenderer()
 
 void Animate3DTest::reachEndCallBack()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     _mesh->stopActionByTag(100);
     auto inverse = MoveTo::create(4.f, Vec2(s.width - _mesh->getPositionX(), s.height / 2.f));
     inverse->retain();
@@ -1377,7 +1377,7 @@ void Animate3DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
 
 AttachmentTest::AttachmentTest() : _hasWeapon(false), _mesh(nullptr)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
@@ -1433,7 +1433,7 @@ void AttachmentTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* e
 
 MeshRendererReskinTest::MeshRendererReskinTest() : _mesh(nullptr)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
@@ -1560,7 +1560,7 @@ MeshRendererWithOBBPerformanceTest::MeshRendererWithOBBPerformanceTest()
     listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesEnded, this);
     listener->onTouchesMoved = AX_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     initDrawBox();
 
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
@@ -1691,7 +1691,7 @@ void MeshRendererWithOBBPerformanceTest::addNewMeshWithCoords(Vec2 p)
     _obbtOri             = _obbt;
 
     mesh->setScale(0.1f);
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     mesh->setPosition(Vec2(s.width * 4.f / 5.f, s.height / 2.f));
     addChild(mesh);
     _mesh          = mesh;
@@ -1716,7 +1716,7 @@ void MeshRendererWithOBBPerformanceTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererWithOBBPerformanceTest::reachEndCallBack()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     _mesh->stopActionByTag(100);
     auto inverse = MoveTo::create(4.f, Vec2(s.width - _mesh->getPositionX(), s.height / 2.f));
     inverse->retain();
@@ -1739,8 +1739,8 @@ void MeshRendererWithOBBPerformanceTest::addOBBWithCount(float value)
 {
     for (int i = 0; i < value; i++)
     {
-        Vec2 randompos = Vec2(AXRANDOM_0_1() * Director::getInstance()->getWinSize().width,
-                              AXRANDOM_0_1() * Director::getInstance()->getWinSize().height);
+        Vec2 randompos = Vec2(AXRANDOM_0_1() * Director::getInstance()->getLogicalSize().width,
+                              AXRANDOM_0_1() * Director::getInstance()->getLogicalSize().height);
         Vec3 extents   = Vec3(10, 10, 10);
         AABB aabb(-extents, extents);
         auto obb    = OBB(aabb);
@@ -1793,7 +1793,7 @@ void MeshRendererWithOBBPerformanceTest::unproject(const Mat4& viewProjection,
 void MeshRendererWithOBBPerformanceTest::calculateRayByLocationInView(Ray* ray, const Vec2& location)
 {
     auto dir  = Director::getInstance();
-    auto view = dir->getWinSize();
+    auto view = dir->getLogicalSize();
     auto mat  = dir->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 
     Vec3 src = Vec3(location.x, location.y, -1);
@@ -1814,7 +1814,7 @@ void MeshRendererWithOBBPerformanceTest::calculateRayByLocationInView(Ray* ray, 
 
 MeshRendererMirrorTest::MeshRendererMirrorTest() : _mesh(nullptr), _mirrorMesh(nullptr)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 std::string MeshRendererMirrorTest::title() const
@@ -1874,7 +1874,7 @@ void MeshRendererMirrorTest::addNewMeshWithCoords(Vec2 p)
 
 QuaternionTest::QuaternionTest() : _arcSpeed(AX_DEGREES_TO_RADIANS(90)), _radius(100.f), _accAngle(0.f)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2.f, s.height / 2.f));
     scheduleUpdate();
 }
@@ -1892,7 +1892,7 @@ void QuaternionTest::addNewMeshWithCoords(Vec2 p)
     std::string fileName = "MeshRendererTest/tortoise.c3b";
     auto mesh            = MeshRenderer::create(fileName);
     mesh->setScale(0.1f);
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     mesh->setPosition(Vec2(s.width / 2.f + _radius * cosf(_accAngle), s.height / 2.f + _radius * sinf(_accAngle)));
     addChild(mesh);
     _mesh          = mesh;
@@ -1911,7 +1911,7 @@ void QuaternionTest::update(float delta)
     if (_accAngle >= 2 * pi)
         _accAngle -= 2 * pi;
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     _mesh->setPosition(Vec2(s.width / 2.f + _radius * cosf(_accAngle), s.height / 2.f + _radius * sinf(_accAngle)));
 
     Quaternion quat;
@@ -1921,7 +1921,7 @@ void QuaternionTest::update(float delta)
 
 UseCaseMeshRenderer::UseCaseMeshRenderer() : _caseIdx(0)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     _useCaseTitles[0] = "transparent 3d mesh and 2d mesh";
     _useCaseTitles[1] = "ui - 3d - ui";
@@ -1976,7 +1976,7 @@ void UseCaseMeshRenderer::switchCase()
 {
     removeChildByTag(101);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     _label->setString(_useCaseTitles[_caseIdx]);
     if (_caseIdx == 0)  // use case 1, 3d transparent mesh + 2d mesh
     {
@@ -2101,7 +2101,7 @@ void UseCaseMeshRenderer::update(float delta)
 // Node Frame Animation
 NodeAnimationTest::NodeAnimationTest() : _vectorIndex(0)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Object* sender) {
         _meshes[_vectorIndex]->setVisible(false);
@@ -2147,7 +2147,7 @@ std::string NodeAnimationTest::subtitle() const
 
 void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // add jumping ball
     std::string fileName = "MeshRendererTest/ball.c3b";
@@ -2194,7 +2194,7 @@ void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
 
 MeshRendererCubeMapTest::MeshRendererCubeMapTest() : _textureCube(nullptr), _skyBox(nullptr), _teapot(nullptr)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 
@@ -2314,7 +2314,7 @@ Issue9767::Issue9767()
 {
     _shaderType = Issue9767::ShaderType::SHADER_TEX;
 
-    auto s    = Director::getInstance()->getWinSize();
+    auto s    = Director::getInstance()->getLogicalSize();
     auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
     mesh->setScale(3.f);
     mesh->setTexture("MeshRendererTest/boss.png");
@@ -2366,7 +2366,7 @@ std::string Issue9767::subtitle() const
 
 MeshRendererClippingTest::MeshRendererClippingTest()
 {
-    auto size             = Director::getInstance()->getWinSize();
+    auto size             = Director::getInstance()->getLogicalSize();
     auto stencil          = Sprite::create("Images/close.png");
     auto clipMeshRenderer = ClippingNode::create();
     clipMeshRenderer->setStencil(stencil);
@@ -2405,7 +2405,7 @@ Animate3DCallbackTest::Animate3DCallbackTest()
     FileUtils::getInstance()->addSearchPath("Particle3D/materials");
     FileUtils::getInstance()->addSearchPath("Particle3D/scripts");
 
-    auto s        = Director::getInstance()->getWinSize();
+    auto s        = Director::getInstance()->getLogicalSize();
     _meshRenderer = MeshRenderer::create("MeshRendererTest/ReskinGirl.c3b");
     _meshRenderer->setPosition(Vec2(s.width / 2.0f, s.height / 3.0f));
     _meshRenderer->setScale(3.0f);
@@ -2462,7 +2462,7 @@ std::string Animate3DCallbackTest::subtitle() const
 
 MeshRendererVertexColorTest::MeshRendererVertexColorTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto mesh = MeshRenderer::create("MeshRendererTest/box_VertexCol.c3t");
     mesh->setPosition(Vec2(0.0f, 0.0f));
@@ -2520,7 +2520,7 @@ CameraBackgroundClearTest::CameraBackgroundClearTest()
     this->addChild(pMenu1, 10);
 
     // setup camera
-    auto s  = Director::getInstance()->getWinSize();
+    auto s  = Director::getInstance()->getLogicalSize();
     _camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
     _camera->setCameraFlag(CameraFlag::USER1);
     _camera->setPosition3D(Vec3(0.f, 30.f, 100.f));
@@ -2588,7 +2588,7 @@ std::string CameraBackgroundClearTest::subtitle() const
 
 MotionStreak3DTest::MotionStreak3DTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
     camera->setCameraFlag(CameraFlag::USER1);
@@ -2632,7 +2632,7 @@ void MotionStreak3DTest::update(float delta)
 
 MeshRendererNormalMappingTest::MeshRendererNormalMappingTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     {
         auto mesh = MeshRenderer::create("MeshRendererTest/sphere.c3b");
@@ -2707,7 +2707,7 @@ std::string MeshRendererNormalMappingTest::subtitle() const
 
 MeshRendererPropertyTest::MeshRendererPropertyTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
     camera->setCameraFlag(CameraFlag::USER1);
@@ -2809,7 +2809,7 @@ void MeshRendererPropertyTest::refreshMeshRender()
 //
 Issue16155Test::Issue16155Test()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3b");
 

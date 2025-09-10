@@ -116,7 +116,7 @@ NewSpriteTest::~NewSpriteTest() {}
 
 void NewSpriteTest::createSpriteTest()
 {
-    Size winSize = Director::getInstance()->getWinSize();
+    Size winSize = Director::getInstance()->getLogicalSize();
 
     Sprite* parent = Sprite::create("Images/grossini.png");
     parent->setPosition(winSize.width / 4, winSize.height / 2);
@@ -147,7 +147,7 @@ void NewSpriteTest::createSpriteTest()
 
 void NewSpriteTest::createNewSpriteTest()
 {
-    Size winSize = Director::getInstance()->getWinSize();
+    Size winSize = Director::getInstance()->getLogicalSize();
 
     Sprite* parent = Sprite::create("Images/grossini.png");
     parent->setPosition(winSize.width * 2 / 3, winSize.height / 2);
@@ -218,7 +218,7 @@ void SpriteInGroupCommand::draw(Renderer* renderer, const Mat4& transform, uint3
 GroupCommandTest::GroupCommandTest()
 {
     auto sprite  = SpriteInGroupCommand::create("Images/grossini.png");
-    Size winSize = Director::getInstance()->getWinSize();
+    Size winSize = Director::getInstance()->getLogicalSize();
     sprite->setPosition(winSize.width / 2, winSize.height / 2);
     addChild(sprite);
 }
@@ -237,7 +237,7 @@ std::string GroupCommandTest::subtitle() const
 
 NewClippingNodeTest::NewClippingNodeTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto clipper = ClippingNode::create();
     clipper->setTag(kTagClipperNode);
@@ -328,7 +328,7 @@ void NewClippingNodeTest::onTouchesEnded(const std::vector<Touch*>& touches, Eve
  */
 NewDrawNodeTest::NewDrawNodeTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto parent = Node::create();
     parent->setPosition(s.width / 2, s.height / 2);
@@ -360,7 +360,7 @@ std::string NewDrawNodeTest::subtitle() const
 
 NewCullingTest::NewCullingTest()
 {
-    Size size   = Director::getInstance()->getWinSize();
+    Size size   = Director::getInstance()->getLogicalSize();
     auto sprite = Sprite::create("Images/btn-about-normal-vertical.png");
     sprite->setRotation(5);
     sprite->setPosition(Vec2(size.width / 2, size.height / 3));
@@ -417,7 +417,7 @@ std::string NewCullingTest::subtitle() const
 SpriteCreation::SpriteCreation()
 {
 
-    Size s       = Director::getInstance()->getWinSize();
+    Size s       = Director::getInstance()->getLogicalSize();
     Node* parent = Node::create();
     parent->setPosition(s.width / 2, s.height / 2);
     addChild(parent);
@@ -576,7 +576,7 @@ std::string SpriteCreation::subtitle() const
 
 VBOFullTest::VBOFullTest()
 {
-    Size s       = Director::getInstance()->getWinSize();
+    Size s       = Director::getInstance()->getLogicalSize();
     Node* parent = Node::create();
     parent->setPosition(0, 0);
     addChild(parent);
@@ -606,7 +606,7 @@ std::string VBOFullTest::subtitle() const
 
 CaptureScreenTest::CaptureScreenTest()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = Director::getInstance()->getLogicalSize();
     Vec2 left(s.width / 4, s.height / 2);
     Vec2 right(s.width / 4 * 3, s.height / 2);
 
@@ -663,7 +663,7 @@ void CaptureScreenTest::afterCaptured(bool succeed, std::string_view outputFile)
     {
         auto sp = Sprite::create(outputFile);
         addChild(sp, 0, childTag);
-        Size s = Director::getInstance()->getWinSize();
+        Size s = Director::getInstance()->getLogicalSize();
         sp->setPosition(s.width / 2, s.height / 2);
         sp->setScale(0.25);
         _filename = outputFile;
@@ -679,7 +679,7 @@ void CaptureScreenTest::afterCaptured(bool succeed, std::string_view outputFile)
 
 CaptureNodeTest::CaptureNodeTest()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = Director::getInstance()->getLogicalSize();
     Vec2 left(s.width / 4, s.height / 2);
     Vec2 right(s.width / 4 * 3, s.height / 2);
 
@@ -732,7 +732,7 @@ void CaptureNodeTest::onCaptured(Object*)
         // create a sprite with the captured image directly
         auto sp = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage(image, _filename));
         addChild(sp, 0, childTag);
-        Size s = Director::getInstance()->getWinSize();
+        Size s = Director::getInstance()->getLogicalSize();
         sp->setPosition(s.width / 2, s.height / 2);
 
         // store to disk
@@ -745,7 +745,7 @@ void CaptureNodeTest::onCaptured(Object*)
 
 BugAutoCulling::BugAutoCulling()
 {
-    Size s       = Director::getInstance()->getWinSize();
+    Size s       = Director::getInstance()->getLogicalSize();
     auto fastmap = ax::FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
     this->addChild(fastmap);
     for (int i = 0; i < 30; i++)
@@ -780,7 +780,7 @@ std::string BugAutoCulling::subtitle() const
 
 RendererBatchQuadTri::RendererBatchQuadTri()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = Director::getInstance()->getLogicalSize();
 
     for (int i = 0; i < 250; i++)
     {
@@ -817,7 +817,7 @@ std::string RendererBatchQuadTri::subtitle() const
 
 RendererUniformBatch::RendererUniformBatch()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = Director::getInstance()->getLogicalSize();
 
     auto blurState = createBlurProgramState();
     blurState->updateBatchId();
@@ -891,7 +891,7 @@ std::string RendererUniformBatch::subtitle() const
 
 RendererUniformBatch2::RendererUniformBatch2()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = Director::getInstance()->getLogicalSize();
 
     auto blurState = createBlurProgramState();
     blurState->updateBatchId();
@@ -957,7 +957,7 @@ std::string RendererUniformBatch2::subtitle() const
 
 NonBatchSprites::NonBatchSprites()
 {
-    Size s         = Director::getInstance()->getWinSize();
+    Size s         = Director::getInstance()->getLogicalSize();
     _spritesAnchor = Node::create();
     _spritesAnchor->setPosition(0, 0);
     addChild(_spritesAnchor);
@@ -975,7 +975,7 @@ NonBatchSprites::NonBatchSprites()
 void NonBatchSprites::createSprite()
 {
 
-    Size s         = Director::getInstance()->getWinSize();
+    Size s         = Director::getInstance()->getLogicalSize();
     Sprite* sprite = nullptr;
     if (_spriteIndex % 2 == 0)
     {

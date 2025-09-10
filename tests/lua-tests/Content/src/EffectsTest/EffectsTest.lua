@@ -2,7 +2,7 @@ require "EffectsTest/EffectsName"
 
 
 local ActionIdx = -1
-local size = ax.Director:getInstance():getWinSize()
+local size = ax.Director:getInstance():getLogicalSize()
 local kTagTextLayer  = 1
 local kTagBackground = 1
 local kTagLabel      = 2

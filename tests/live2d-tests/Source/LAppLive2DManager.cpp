@@ -74,8 +74,8 @@ LAppLive2DManager::LAppLive2DManager()
 
     CreateShader();
 
-    int width = static_cast<int>(ax::Director::getInstance()->getRenderView()->getFrameSize().width);
-    int height = static_cast<int>(ax::Director::getInstance()->getRenderView()->getFrameSize().height);
+    int width = static_cast<int>(ax::Director::getInstance()->getRenderView()->getWindowSize().width);
+    int height = static_cast<int>(ax::Director::getInstance()->getRenderView()->getWindowSize().height);
 
     // 画面全体を覆うサイズ
     _sprite = new LAppSprite(_program);
@@ -196,7 +196,7 @@ void LAppLive2DManager::OnTap(csmFloat32 x, csmFloat32 y)
 void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer) const
 {
     Director* director = Director::getInstance();
-    Size window = director->getWinSize();
+    Size window = director->getLogicalSize();
 
     Csm::Rendering::CubismRenderer_Cocos2dx::StartFrame(commandBuffer);
 

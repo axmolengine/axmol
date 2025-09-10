@@ -95,16 +95,16 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 {
     auto director   = ax::Director::getInstance();
     auto renderView = director->getRenderView();
-    auto frameSize  = renderView->getFrameSize();
+    auto windowSize  = renderView->getWindowSize();
 
-    auto viewSize   = director->getViewSize();
+    auto logicalSize   = director->getLogicalSize();
     auto leftBottom = _editBox->convertToWorldSpace(Point::ZERO);
 
     auto contentSize = frame.size;
     auto rightTop    = _editBox->convertToWorldSpace(Point(contentSize.width, contentSize.height));
 
-    auto uiLeft   = frameSize.width / 2 + (leftBottom.x - viewSize.width / 2) * renderView->getScaleX();
-    auto uiTop    = frameSize.height / 2 - (rightTop.y - viewSize.height / 2) * renderView->getScaleY();
+    auto uiLeft   = windowSize.width / 2 + (leftBottom.x - logicalSize.width / 2) * renderView->getScaleX();
+    auto uiTop    = windowSize.height / 2 - (rightTop.y - logicalSize.height / 2) * renderView->getScaleY();
     auto uiWidth  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
     auto uiHeight = (rightTop.y - leftBottom.y) * renderView->getScaleY();
     LOGD("scaleX = %f", renderView->getScaleX());

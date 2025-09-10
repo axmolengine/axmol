@@ -162,7 +162,7 @@ void RenderView::updateDesignResolutionSize()
 
         // reset director's member variables to fit visible rect
         auto director = Director::getInstance();
-        director->setViewSize(getDesignResolutionSize());
+        director->setLogicalSize(getDesignResolutionSize());
         director->setProjection(director->getProjection());
     }
 }
@@ -486,7 +486,7 @@ float RenderView::getScaleY() const
     return _scaleY;
 }
 
-void RenderView::onFrameBufferResized(uint32_t fbWidth, uint32_t fbHeight)
+void RenderView::onFramebufferResized(uint32_t fbWidth, uint32_t fbHeight)
 {
     Director::getInstance()->resizeSwapchain(fbWidth, fbHeight);
 

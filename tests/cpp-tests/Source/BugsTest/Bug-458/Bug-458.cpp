@@ -37,7 +37,7 @@ bool Bug458Layer::init()
     if (BugsTestBase::init())
     {
         // ask director the the window size
-        auto size = Director::getInstance()->getWinSize();
+        auto size = Director::getInstance()->getLogicalSize();
 
         auto question  = new QuestionContainerSprite();
         auto question2 = new QuestionContainerSprite();

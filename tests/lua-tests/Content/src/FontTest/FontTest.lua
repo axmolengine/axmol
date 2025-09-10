@@ -27,7 +27,7 @@ local vAlignCount = #(verticalAlignment)
 local function showFont(ret, pFont)
 
     cclog("vAlignIdx="..vAlignIdx)
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local blockSize = ax.size(s.width/3, 200)
     local fontSize = 26

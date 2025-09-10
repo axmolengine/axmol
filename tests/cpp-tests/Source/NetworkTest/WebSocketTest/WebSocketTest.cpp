@@ -64,7 +64,7 @@ WebSocketTest::WebSocketTest()
     , _sendTextTimes(0)
     , _sendBinaryTimes(0)
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     const int MARGIN = 40;
     const int SPACE  = 35;
@@ -354,7 +354,7 @@ void WebSocketTest::onMenuSendBinaryClicked(ax::Object* sender)
 
 WebSocketCloseTest::WebSocketCloseTest() : _wsiTest(nullptr)
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     _wsiTest = new network::WebSocket();
 
@@ -421,7 +421,7 @@ void WebSocketCloseTest::onError(network::WebSocket* ws, const network::WebSocke
 WebSocketDelayTest::WebSocketDelayTest()
     : _wsiSendText(nullptr), _sendTextStatus(nullptr), _progressStatus(nullptr), _sendTextTimes(0)
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     const int MARGIN = 40;
     const int SPACE  = 35;

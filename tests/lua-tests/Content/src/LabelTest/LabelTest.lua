@@ -1,4 +1,4 @@
-local size = ax.Director:getInstance():getWinSize()
+local size = ax.Director:getInstance():getLogicalSize()
 local scheduler = ax.Director:getInstance():getScheduler()
 
 local kTagTileMap = 1
@@ -123,7 +123,7 @@ function LabelFNTSpriteActions.create()
     Helper.initWithLayer(layer)
     LabelFNTSpriteActions.layer = layer
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local drawNode = ax.DrawNode:create()
     drawNode:drawLine( ax.p(0, s.height/2), ax.p(s.width, s.height/2), ax.color(1,1,1,1))
@@ -209,7 +209,7 @@ function LabelFNTPadding:create()
     local label = ax.Label:createWithBMFont("fonts/bitmapFontTest4.fnt", "abcdefg")
     layer:addChild(label)
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     label:setPosition( ax.p(s.width/2, s.height/2) )
     label:setAnchorPoint( ax.p(0.5, 0.5) )
@@ -233,7 +233,7 @@ function LabelFNTOffset:create()
     Helper.initWithLayer(layer)
     LabelFNTOffset.layer = layer
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local label = ax.Label:createWithBMFont("fonts/bitmapFontTest5.fnt", "FaFeFiFoFu")
     layer:addChild(label)
     label:setPosition( ax.p(s.width/2, s.height/2+50) )
@@ -265,7 +265,7 @@ function LabelFNTColor:create()
     LabelFNTColor.layer = layer
     Helper.initWithLayer(layer)
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local label = ax.Label:createWithBMFont("fonts/bitmapFontTest5.fnt", "Blue")
     label:setColor( ax.color32(0, 0, 255 ))
@@ -303,7 +303,7 @@ function LabelTTFColor:create()
     LabelTTFColor.layer = layer
     Helper.initWithLayer(layer)
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local ttfConfig = {}
     ttfConfig.fontFilePath="fonts/arial.ttf"
     ttfConfig.fontSize=18
@@ -351,7 +351,7 @@ function LabelFNTHundredLabels:create()
         local label = ax.Label:createWithBMFont("fonts/bitmapFontTest.fnt", str)
         layer:addChild(label)
 
-        local s = ax.Director:getInstance():getWinSize()
+        local s = ax.Director:getInstance():getLogicalSize()
 
         local p = ax.p( math.random() * s.width, math.random() * s.height)
         label:setPosition( p )
@@ -436,7 +436,7 @@ function LabelFNTandTTFEmpty.create()
     LabelFNTandTTFEmpty.layer = layer
     Helper.initWithLayer(layer)
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     -- ax.LabelBMFont
     local label1 = ax.Label:createWithBMFont("fonts/bitmapFontTest3.fnt", "", ax.TEXT_ALIGNMENT_CENTER,s.width)
@@ -488,7 +488,7 @@ function LabelFNTRetina.create()
     local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     -- ax.LabelBMFont
     local label1 = ax.Label:createWithBMFont("fonts/konqa32.fnt", "TESTING RETINA DISPLAY")
@@ -511,7 +511,7 @@ function LabelFNTGlyphDesigner.create()
     local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local label1 = ax.Label:createWithBMFont("fonts/futura-48.fnt", "TESTING RETINA DISPLAY")
     label1:setAnchorPoint(ax.p(0.5, 0.5))
@@ -532,7 +532,7 @@ function LabelTTFUnicodeChinese.create()
     Helper.titleLabel:setString("New Label + .TTF file Chinese")
     Helper.subtitleLabel:setString("Testing new Label + TTF with Chinese character")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local ttfConfig = {}
     ttfConfig.fontFilePath="fonts/HKYuanMini.ttf"
     ttfConfig.fontSize=28
@@ -556,7 +556,7 @@ function LabelFNTUnicodeChinese.create()
     local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
     local lable = ax.Label:createWithBMFont("fonts/bitmapFontChinese.fnt", "中国")
     lable:setAnchorPoint(ax.p(0.5,0.5))
     lable:setPosition(ax.p(size.width / 2, size.height /2))
@@ -600,7 +600,7 @@ function LabelFNTMultiLineAlignment.create()
     local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     -- ask director the the window size
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
 
     -- create and initialize a Label
     LabelFNTMultiLineAlignment._pLabelShouldRetain = ax.Label:createWithBMFont("fonts/markerFelt.fnt", LongSentencesExample, ax.TEXT_ALIGNMENT_CENTER, size.width/1.5)
@@ -688,7 +688,7 @@ function LabelFNTMultiLineAlignment.create()
             return
         end
 
-        local winSize = ax.Director:getInstance():getWinSize()
+        local winSize = ax.Director:getInstance():getLogicalSize()
         local location = touches[1]:getLocationInView()
 
         LabelFNTMultiLineAlignment._pArrowsShouldRetain:setPosition(
@@ -779,7 +779,7 @@ function LabelFNTUNICODELanguages.create()
     Helper.titleLabel:setString("New Label + .FNT + UNICODE")
     Helper.subtitleLabel:setString("You should see 3 different labels:\nIn Spanish, Chinese, and Japanese")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local label1 = ax.Label:createWithBMFont("fonts/arial-unicode-26.fnt", "Buen día", ax.TEXT_ALIGNMENT_CENTER, 200)
     label1:setAnchorPoint(ax.p(0.5,0.5))
@@ -809,7 +809,7 @@ function LabelTTFAlignmentNew.create()
     Helper.titleLabel:setString("New Label + TTF")
     Helper.subtitleLabel:setString("Tests alignment values")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local ttfConfig = {}
     ttfConfig.fontFilePath="fonts/tahoma.ttf"
     ttfConfig.fontSize=16
@@ -842,7 +842,7 @@ function LabelTTFUnicodeNew.create()
     Helper.titleLabel:setString("New Label + TTF unicode")
     Helper.subtitleLabel:setString("Uses the new Label with TTF. Testing unicode")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local vStep = s.height/9
     local vSize = s.height
 
@@ -885,7 +885,7 @@ function LabelFNTBounds.create()
     Helper.titleLabel:setString("New Label + .FNT + Bounds")
     Helper.subtitleLabel:setString("You should see string enclosed by a box")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local colorlayer = ax.LayerColor:create(ax.color32(128,128,128,255))
     layer:addChild(colorlayer, -10)
@@ -901,7 +901,7 @@ end
 
 function LabelFNTBounds.draw()
     -- ax.size labelSize = label1:getContentSize()
-    -- ax.size origin = ax.Director:getInstance():getWinSize()
+    -- ax.size origin = ax.Director:getInstance():getLogicalSize()
 
     -- origin.width = origin.width / 2 - (labelSize.width / 2)
     -- origin.height = origin.height / 2 - (labelSize.height / 2)
@@ -927,7 +927,7 @@ function LabelTTFLongLineWrapping.create()
     Helper.titleLabel:setString("New Label + .TTF")
     Helper.subtitleLabel:setString("Uses the new Label with TTF. Testing auto-wrapping")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize = 14
@@ -957,7 +957,7 @@ function LabelTTFDynamicAlignment.create()
     LabelTTFDynamicAlignment._label       = nil
     LabelTTFDynamicAlignment._eHorizAlign = ax.TEXT_ALIGNMENT_LEFT
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize = 23
@@ -991,7 +991,7 @@ function LabelTTFDynamicAlignment.create()
 end
 
 function LabelTTFDynamicAlignment.updateAlignment()
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     LabelTTFDynamicAlignment._label:setAlignment(LabelTTFDynamicAlignment._eHorizAlign)
 end
 
@@ -1079,7 +1079,7 @@ function LabelTTFFontsTestNew.create()
     Helper.titleLabel:setString("New Label + TTF")
     Helper.subtitleLabel:setString("")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local ttfPaths =
     {
@@ -1121,7 +1121,7 @@ function LabelBMFontTestNew.create()
     Helper.titleLabel:setString("New Label + FNT")
     Helper.subtitleLabel:setString("Uses the new Label with .FNT file")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local label1 = ax.Label:createWithBMFont("fonts/bitmapFontTest2.fnt", "Hello World, this is testing the new Label using fnt file", ax.TEXT_ALIGNMENT_CENTER, s.width)
     label1:setAnchorPoint(ax.p(0.5,0.5))
@@ -1141,7 +1141,7 @@ function LabelTTFDistanceField.create()
     Helper.titleLabel:setString("New Label + .TTF")
     Helper.subtitleLabel:setString("Testing rendering base on DistanceField")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize = 40
@@ -1178,7 +1178,7 @@ function LabelOutlineAndGlowTest.create()
     Helper.titleLabel:setString("New Label + .TTF")
     Helper.subtitleLabel:setString("Testing outline and glow of label")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local col = ax.LayerColor:create( ax.color32(200, 191, 231, 255))
     layer:addChild(col)
@@ -1287,7 +1287,7 @@ function LabelCrashTest.create()
     ttfConfig.glyphs       = ax.GLYPHCOLLECTION_DYNAMIC
     ttfConfig.customGlyphs = nil
     ttfConfig.distanceFieldEnabled = true
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local label1 = ax.Label:createWithTTF(ttfConfig,"Test崩溃123", ax.TEXT_ALIGNMENT_CENTER, s.width)
     label1:setPosition( ax.p(s.width/2, s.height/2) )
     label1:setAnchorPoint(ax.p(0.5, 0.5))
@@ -1306,7 +1306,7 @@ function LabelShadowTest.create()
     Helper.titleLabel:setString("New Label + .TTF")
     Helper.subtitleLabel:setString("Testing shadow of label")
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
 
     local bg = ax.LayerColor:create(ax.color32(200,191,231,255))
     layer:addChild(bg)
@@ -1445,7 +1445,7 @@ function LabelFontNameTest.create()
     Helper.titleLabel:setString("New Label Test")
     Helper.subtitleLabel:setString("create label by font name,compatible with old labelTTF")
 
-    local  size = ax.Director:getInstance():getWinSize()
+    local  size = ax.Director:getInstance():getLogicalSize()
 
     local label1 = ax.Label:create()
     label1:setString("Default Font")
@@ -1478,7 +1478,7 @@ function LabelAlignmentTest.create()
     Helper.subtitleLabel:setString("Select the buttons on the sides to change alignment")
 
     local blockSize = ax.size(200, 160)
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local pos = ax.p((s.width - blockSize.width) / 2, (s.height - blockSize.height) / 2)
     local colorLayer = ax.LayerColor:create(ax.color32(100, 100, 100, 255), blockSize.width, blockSize.height)
@@ -1615,7 +1615,7 @@ function LabelIssue4428Test.create()
     Helper.subtitleLabel:setString("Reorder issue #4428.The label should be flipped vertically.")
 
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
 
     local label = ax.Label:createWithBMFont( "fonts/bitmapFontTest3.fnt", "123\n456")
     label:setPosition(ax.p(size.width /2.0, size.height / 2.0))
@@ -1644,7 +1644,7 @@ function LabelTTFOldNew.create()
     Helper.titleLabel:setString("New / Old TTF")
     Helper.subtitleLabel:setString("Comparison between old(red) and new(white) TTF label")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local delta = s.height/4
 
     local label1 = ax.Label:createWithSystemFont("Axmol Label Test", "arial", 24)
@@ -1653,7 +1653,7 @@ function LabelTTFOldNew.create()
     label1:setColor(ax.color32(255, 0, 0))
 
     local labelSize = label1:getContentSize()
-    local origin    = ax.Director:getInstance():getWinSize()
+    local origin    = ax.Director:getInstance():getLogicalSize()
     origin.width = origin.width   / 2 - (labelSize.width / 2)
     origin.height = origin.height / 2 - (labelSize.height / 2)
     local vertices =
@@ -1675,7 +1675,7 @@ function LabelTTFOldNew.create()
     label2:setPosition(ax.p(s.width/2, delta * 2))
 
     labelSize = label2:getContentSize()
-    origin    = ax.Director:getInstance():getWinSize()
+    origin    = ax.Director:getInstance():getLogicalSize()
     origin.width = origin.width   / 2 - (labelSize.width / 2)
     origin.height = origin.height / 2 - (labelSize.height / 2)
     local vertices2 =

@@ -518,14 +518,14 @@ void UIEditBoxImplWinrt::nativeOpenKeyboard()
     _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getRenderView()->getScaleY() /** scale.y*/);
     // Position
     auto directorInstance = ax::Director::getInstance();
-    auto frameSize        = renderView->getFrameSize();
-    auto viewSize         = directorInstance->getViewSize();
+    auto winSize        = renderView->getWindowSize();
+    auto logicalSize         = directorInstance->getLogicalSize();
     auto leftBottom       = _editBox->convertToWorldSpace(ax::Point::ZERO);
     auto rightTop =
         _editBox->convertToWorldSpace(ax::Point(_editBox->getContentSize().width, _editBox->getContentSize().height));
     Windows::Foundation::Rect rect;
-    rect.X      = frameSize.width / 2 + (leftBottom.x - viewSize.width / 2) * renderView->getScaleX();
-    rect.Y      = frameSize.height / 2 - (rightTop.y - viewSize.height / 2) * renderView->getScaleY();
+    rect.X      = winSize.width / 2 + (leftBottom.x - logicalSize.width / 2) * renderView->getScaleX();
+    rect.Y      = winSize.height / 2 - (rightTop.y - logicalSize.height / 2) * renderView->getScaleY();
     rect.Width  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
     rect.Height = (rightTop.y - leftBottom.y) * renderView->getScaleY();
     _system_control->setPosition(rect);
@@ -546,7 +546,7 @@ void UIEditBoxImplWinrt::setNativeMaxLength(int maxLength)
 ax::Vec2 UIEditBoxImplWinrt::convertDesignCoordToXamlCoord(const ax::Vec2& designCoord)
 {
     auto renderView  = ax::Director::getInstance()->getRenderView();
-    float viewH      = renderView->getFrameSize().height;
+    float viewH      = renderView->getWindowSize().height;
     Vec2 visiblePos  = Vec2(designCoord.x * renderView->getScaleX(), designCoord.y * renderView->getScaleY());
     Vec2 screenGLPos = visiblePos + renderView->getViewPortRect().origin;
     Vec2 xamlPos(screenGLPos.x, viewH - screenGLPos.y);

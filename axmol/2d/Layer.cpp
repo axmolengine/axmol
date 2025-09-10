@@ -100,7 +100,7 @@ LayerColor* LayerColor::create(const Color32& color)
 
 bool LayerColor::init()
 {
-    Size s = _director->getViewSize();
+    Size s = _director->getLogicalSize();
     return initWithColor(Color32(0, 0, 0, 0), s.width, s.height);
 }
 
@@ -124,7 +124,7 @@ bool LayerColor::initWithColor(const Color32& color, float w, float h)
 
 bool LayerColor::initWithColor(const Color32& color)
 {
-    Size s = _director->getViewSize();
+    Size s = _director->getLogicalSize();
     return initWithColor(color, s.width, s.height);
 }
 

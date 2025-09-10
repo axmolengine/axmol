@@ -4,7 +4,7 @@ local function DrawNodeMainLayer()
     local testCount = 1
     local maxCases = testCount
     local curCase  = 0
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
     local curLayer = nil
 
     local  function orderCallbackMenu()
@@ -27,7 +27,7 @@ local function DrawNodeMainLayer()
         end
 
         local ordercallbackmenu = ax.Menu:create()
-        local size = ax.Director:getInstance():getWinSize()
+        local size = ax.Director:getInstance():getLogicalSize()
         local item1 = ax.MenuItemImage:create(s_pPathB1, s_pPathB2)
         item1:registerScriptTapHandler(backCallback)
         ordercallbackmenu:addChild(item1,kItemTagBasic)

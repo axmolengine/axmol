@@ -154,7 +154,7 @@ void UnZipNormalFile::onEnter()
 {
     TestCase::onEnter();
 
-    const auto winSize = Director::getInstance()->getWinSize();
+    const auto winSize = Director::getInstance()->getLogicalSize();
 
     Label* label = Label::createWithTTF("unziping file", "fonts/Marker Felt.ttf", 23);
     label->setPosition(winSize.width / 2, winSize.height / 2);
@@ -172,7 +172,7 @@ void UnZipWithPassword::onEnter()
 {
     TestCase::onEnter();
 
-    const auto winSize = Director::getInstance()->getWinSize();
+    const auto winSize = Director::getInstance()->getLogicalSize();
 
     Label* label = Label::createWithTTF("unziping file", "fonts/Marker Felt.ttf", 23);
     label->setPosition(winSize.width / 2, winSize.height / 2);

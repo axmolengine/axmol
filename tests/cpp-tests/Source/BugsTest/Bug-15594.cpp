@@ -42,7 +42,7 @@ bool Bug15594Layer::init()
     {
         auto mesh = MeshRenderer::create("Images/bugs/bug15594.c3t", "Images/bugs/bug15594.jpg");
         addChild(mesh);
-        auto size = Director::getInstance()->getWinSize();
+        auto size = Director::getInstance()->getLogicalSize();
         mesh->setPosition(size / 2);
 
         auto animation = Animation3D::create("Images/bugs/bug15594.c3t");

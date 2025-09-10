@@ -19,7 +19,7 @@ end
 
 local function WebSocketTestLayer()
     local layer   = ax.Layer:create()
-    local winSize = ax.Director:getInstance():getWinSize()
+    local winSize = ax.Director:getInstance():getLogicalSize()
 
     local MARGIN = 40
     local SPACE  = 35

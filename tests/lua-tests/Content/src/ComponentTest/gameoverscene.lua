@@ -2,7 +2,7 @@ local GameOverLayer = {
 
     create = function(self, content)
         local label = ax.Label:createWithTTF(content, "fonts/Marker Felt.ttf", 32)
-        local winSize = ax.Director:getInstance():getWinSize()
+        local winSize = ax.Director:getInstance():getLogicalSize()
         label:setColor(ax.color32(0, 0, 0))
         label:setPosition(winSize.width/2, winSize.height/2)
 

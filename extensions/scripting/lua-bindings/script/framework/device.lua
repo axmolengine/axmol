@@ -41,7 +41,7 @@ elseif target == ax.PLATFORM_IOS then
     device.platform = "ios"
     local director = ax.Director:getInstance()
     local view = director:getRenderView()
-    local framesize = view:getFrameSize()
+    local framesize = view:getWindowSize()
     local w, h = framesize.width, framesize.height
     if w == 640 and h == 960 then
         device.model = "iphone 4"

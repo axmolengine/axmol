@@ -141,7 +141,7 @@ local function MenuLayerMainMenu()
     menu:alignItemsVertically()
 
     -- elastic effect
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local i        = 0
     local child    = nil
@@ -281,7 +281,7 @@ local function MenuLayer2()
         menu:addChild(item2)
         menu:addChild(item3)
 
-        local s = ax.Director:getInstance():getWinSize()
+        local s = ax.Director:getInstance():getLogicalSize()
         menu:setPosition(ax.p(s.width/2, s.height/2))
 
         menu:setTag( kTagMenu )
@@ -349,7 +349,7 @@ local function MenuLayer3()
 
     menu:setPosition( ax.p(0,0) )
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     item1:setPosition( ax.p(s.width/2 - 150, s.height/2) )
     item2:setPosition( ax.p(s.width/2 - 200, s.height/2) )
@@ -469,7 +469,7 @@ local function MenuLayer4()
 
     ret:addChild(menu)
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     menu:setPosition(ax.p(s.width/2, s.height/2))
     return ret
 end
@@ -510,7 +510,7 @@ local function BugsTest()
     ret:addChild(menu)
     menu:alignItemsVertically()
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     menu:setPosition(ax.p(s.width/2, s.height/2))
     return ret
 end
@@ -518,7 +518,7 @@ end
 
 local function RemoveMenuItemWhenMove()
     local ret = ax.Layer:create()
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local  label = ax.Label:createWithTTF("click item and move, should not crash", s_arialPath, 20)
     label:setAnchorPoint(ax.p(0.5, 0.5))

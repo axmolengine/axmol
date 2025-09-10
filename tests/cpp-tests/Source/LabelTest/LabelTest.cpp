@@ -61,7 +61,7 @@ public:
 
     LabelIssue1336()
     {
-        auto size = Director::getInstance()->getWinSize();
+        auto size = Director::getInstance()->getLogicalSize();
         TTFConfig config("fonts/arial.ttf");
         config.distanceFieldEnabled = true;
         config.faceSize             = 72;
@@ -240,7 +240,7 @@ LabelFNTSpriteActions::LabelFNTSpriteActions()
 {
     _time = 0;
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto drawNode = DrawNode::create();
     drawNode->drawLine(Vec2(0.0f, s.height / 2), Vec2(s.width, s.height / 2), Color(1.0f, 1.0f, 1.0f, 1.0f));
@@ -313,7 +313,7 @@ LabelFNTPadding::LabelFNTPadding()
     auto label = Label::createWithBMFont("fonts/bitmapFontTest4.fnt", "abcdefg");
     addChild(label);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     label->setPosition(Vec2(s.width / 2, s.height / 2));
 }
@@ -330,7 +330,7 @@ std::string LabelFNTPadding::subtitle() const
 
 LabelFNTOffset::LabelFNTOffset()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     Label* label = nullptr;
     label        = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "FaFeFiFoFu");
@@ -358,7 +358,7 @@ std::string LabelFNTOffset::subtitle() const
 
 LabelFNTColor::LabelFNTColor()
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "Blue");
     label->setColor(Color32::BLUE);
@@ -389,7 +389,7 @@ std::string LabelFNTColor::subtitle() const
 
 LabelFNTOpacity::LabelFNTOpacity()
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "Opacity 100");
     label->setOpacity(100);
@@ -422,7 +422,7 @@ LabelFNTHundredLabels::LabelFNTHundredLabels()
         auto label = Label::createWithBMFont("fonts/bitmapFontTest.fnt", str);
         addChild(label);
 
-        auto s = Director::getInstance()->getWinSize();
+        auto s = Director::getInstance()->getLogicalSize();
 
         auto p = Vec2(AXRANDOM_0_1() * s.width, AXRANDOM_0_1() * s.height);
         label->setPosition(p);
@@ -483,7 +483,7 @@ std::string LabelFNTMultiLine::subtitle() const
 
 LabelFNTandTTFEmpty::LabelFNTandTTFEmpty()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // LabelBMFont
     auto label1 = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "", TextHAlignment::CENTER, s.width);
@@ -541,7 +541,7 @@ std::string LabelFNTandTTFEmpty::subtitle() const
 
 LabelFNTRetina::LabelFNTRetina()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // LabelBMFont
     auto label1 = Label::createWithBMFont("fonts/konqa32.fnt", "TESTING RETINA DISPLAY");
@@ -561,7 +561,7 @@ std::string LabelFNTRetina::subtitle() const
 
 LabelFNTGlyphDesigner::LabelFNTGlyphDesigner()
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     auto layer = LayerColor::create(Color32(128, 128, 128, 255));
     addChild(layer, -10);
@@ -626,7 +626,7 @@ bool LabelFNTMultiLineAlignment::init()
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     // ask director the the window size
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     // create and initialize a Label
     this->_label = Label::createWithBMFont("fonts/markerFelt.fnt", "", TextHAlignment::CENTER, size.width / 1.5);
@@ -812,7 +812,7 @@ void LabelFNTMultiLineAlignment::onTouchesMoved(const std::vector<Touch*>& touch
     auto touch    = touches[0];
     auto location = touch->getLocationInView();
 
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     this->_arrows->setPosition(Vec2(MAX(MIN(location.x, ArrowsMax * winSize.width), ArrowsMin * winSize.width),
                                     this->_arrows->getPosition().y));
@@ -896,7 +896,7 @@ LabelFNTUNICODELanguages::LabelFNTUNICODELanguages()
     std::string spanish  = strings["spanish"].asString();
     std::string japanese = strings["japanese"].asString();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto label1 = Label::createWithBMFont("fonts/arial-unicode-26.fnt", spanish, TextHAlignment::CENTER, 200);
     addChild(label1);
@@ -927,7 +927,7 @@ std::string LabelFNTUNICODELanguages::subtitle() const
 
 LabelFNTBounds::LabelFNTBounds()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto layer = LayerColor::create(Color32(128, 128, 128, 255));
     addChild(layer, -10);
@@ -940,7 +940,7 @@ LabelFNTBounds::LabelFNTBounds()
 
     auto drawNode  = DrawNode::create();
     auto labelSize = label1->getContentSize();
-    auto origin    = Director::getInstance()->getWinSize();
+    auto origin    = Director::getInstance()->getLogicalSize();
 
     origin.width  = origin.width / 2 - (labelSize.width / 2);
     origin.height = origin.height / 2 - (labelSize.height / 2);
@@ -964,7 +964,7 @@ std::string LabelFNTBounds::subtitle() const
 
 LabelFNTMultiFontAtlasNoRotation::LabelFNTMultiFontAtlasNoRotation()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto label1 = Label::createWithBMFont("fonts/helvetica-32.fnt", "This is Helvetica");
     addChild(label1);
@@ -988,7 +988,7 @@ std::string LabelFNTMultiFontAtlasNoRotation::subtitle() const
 
 LabelFNTMultiFontAtlasWithRotation::LabelFNTMultiFontAtlasWithRotation()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto spriteCache = SpriteFrameCache::getInstance();
     spriteCache->addSpriteFramesWithFile("fonts/bmfont-rotated-test.plist");
@@ -1018,7 +1018,7 @@ std::string LabelFNTMultiFontAtlasWithRotation::subtitle() const
 
 LabelTTFLongLineWrapping::LabelTTFLongLineWrapping()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     // Long sentence
     TTFConfig ttfConfig("fonts/arial.ttf", 14);
@@ -1040,7 +1040,7 @@ std::string LabelTTFLongLineWrapping::subtitle() const
 
 LabelTTFColor::LabelTTFColor()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     TTFConfig ttfConfig("fonts/arial.ttf", 18);
     // Green
@@ -1074,7 +1074,7 @@ std::string LabelTTFColor::subtitle() const
 
 LabelTTFDynamicAlignment::LabelTTFDynamicAlignment()
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     TTFConfig ttfConfig("fonts/arial.ttf", 23);
     _label = Label::createWithTTF(ttfConfig, LongSentencesExample, TextHAlignment::CENTER, winSize.width);
@@ -1132,7 +1132,7 @@ std::string LabelTTFDynamicAlignment::subtitle() const
 //
 LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto drawNode = DrawNode::create();
     drawNode->setAnchorPoint(Vec2(0, 0));
@@ -1194,7 +1194,7 @@ LabelTTFUnicodeNew::LabelTTFUnicodeNew()
 {
     auto strings        = FileUtils::getInstance()->getValueMapFromFile("strings/LabelFNTUNICODELanguages.xml");
     std::string chinese = strings["chinese1"].asString();
-    auto winSize        = Director::getInstance()->getWinSize();
+    auto winSize        = Director::getInstance()->getLogicalSize();
 
     // Spanish
     auto label1 = Label::createWithTTF("Buen día, ¿cómo te llamas?", "fonts/arial.ttf", 23);
@@ -1228,7 +1228,7 @@ std::string LabelTTFUnicodeNew::subtitle() const
 LabelTTFEmoji::LabelTTFEmoji()
 {
     std::string emojiString = FileUtils::getInstance()->getStringFromFile("fonts/emoji.txt");
-    auto winSize            = Director::getInstance()->getWinSize();
+    auto winSize            = Director::getInstance()->getLogicalSize();
 
     auto label = Label::createWithTTF(emojiString, "fonts/NotoEmoji-Regular.ttf", 23);
     label->setPosition(winSize.width / 2, winSize.height / 2);
@@ -1256,7 +1256,7 @@ LabelTTFFontsTestNew::LabelTTFFontsTestNew()
     };
 
     int fontCount = sizeof(ttfpaths) / sizeof(ttfpaths[0]);
-    auto size     = Director::getInstance()->getWinSize();
+    auto size     = Director::getInstance()->getLogicalSize();
     TTFConfig ttfConfig(ttfpaths[0], 20, GlyphCollection::NEHE);
 
     for (int i = 0; i < fontCount; ++i)
@@ -1287,7 +1287,7 @@ std::string LabelTTFFontsTestNew::subtitle() const
 
 LabelTTFDistanceField::LabelTTFDistanceField()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     TTFConfig ttfConfig("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
 
     auto label1 = Label::createWithTTF(ttfConfig, "Distance Field", TextHAlignment::CENTER, size.width);
@@ -1334,7 +1334,7 @@ std::string LabelTTFDistanceField::subtitle() const
 }
 LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     FontFreeType::setShareDistanceFieldEnabled(false);
     auto button = ax::ui::Button::create();
@@ -1382,7 +1382,7 @@ std::string LabelTitleButtonTTFDistanceField::subtitle() const
 }
 LabelTTFSDF::LabelTTFSDF()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     FontFreeType::setShareDistanceFieldEnabled(false);
     Label* title = Label::createWithTTF("Normal", "fonts/Marker Felt.ttf", 20);
@@ -1598,7 +1598,7 @@ std::string LabelTTFSDF::subtitle() const
 
 LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
@@ -1655,7 +1655,7 @@ void LabelShadowTest::onEnter()
 {
     AtlasDemoNew::onEnter();
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
@@ -1845,7 +1845,7 @@ std::string LabelCharMapColorTest::subtitle() const
 
 LabelCrashTest::LabelCrashTest()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     TTFConfig ttfConfig("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
 
@@ -1866,7 +1866,7 @@ std::string LabelCrashTest::subtitle() const
 
 LabelTTFOldNew::LabelTTFOldNew()
 {
-    auto s      = Director::getInstance()->getWinSize();
+    auto s      = Director::getInstance()->getLogicalSize();
     float delta = s.height / 4;
 
     auto label1 = Label::createWithSystemFont("Axmol Label Test", "arial", 24);
@@ -1881,7 +1881,7 @@ LabelTTFOldNew::LabelTTFOldNew()
 
     auto drawNode  = DrawNode::create();
     auto labelSize = label1->getContentSize();
-    auto origin    = Director::getInstance()->getWinSize();
+    auto origin    = Director::getInstance()->getLogicalSize();
 
     origin.width  = origin.width / 2 - (labelSize.width / 2);
     origin.height = origin.height / 2 - (labelSize.height / 2);
@@ -1892,7 +1892,7 @@ LabelTTFOldNew::LabelTTFOldNew()
     drawNode->drawPoly(vertices, 4, true, Color(1.0f, 0.0f, 0.0f, 1.0f));
 
     labelSize = label2->getContentSize();
-    origin    = Director::getInstance()->getWinSize();
+    origin    = Director::getInstance()->getLogicalSize();
 
     origin.width  = origin.width / 2 - (labelSize.width / 2);
     origin.height = origin.height / 2 - (labelSize.height / 2);
@@ -1917,7 +1917,7 @@ std::string LabelTTFOldNew::subtitle() const
 
 LabelFontNameTest::LabelFontNameTest()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto label1 = Label::create();
     label1->setString("Default Font");
@@ -1942,7 +1942,7 @@ std::string LabelFontNameTest::subtitle() const
 LabelAlignmentTest::LabelAlignmentTest()
 {
     auto blockSize = Size(200, 160);
-    auto s         = Director::getInstance()->getWinSize();
+    auto s         = Director::getInstance()->getLogicalSize();
 
     auto pos        = Vec2((s.width - blockSize.width) / 2, (s.height - blockSize.height) / 2);
     auto colorLayer = LayerColor::create(Color32(100, 100, 100, 255), blockSize.width, blockSize.height);
@@ -2018,7 +2018,7 @@ std::string LabelAlignmentTest::subtitle() const
 
 LabelIssue4428Test::LabelIssue4428Test()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "123\n456");
     label->setPosition(Vec2(size.width / 2.0f, size.height / 2.0f));
@@ -2066,7 +2066,7 @@ std::string LabelIssue4999Test::subtitle() const
 
 LabelLineHeightTest::LabelLineHeightTest()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
@@ -2110,7 +2110,7 @@ std::string LabelLineHeightTest::subtitle() const
 
 LabelAdditionalKerningTest::LabelAdditionalKerningTest()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
@@ -2190,7 +2190,7 @@ std::string LabelMultilineWithOutline::subtitle() const
 
 LabelIssue9255Test::LabelIssue9255Test()
 {
-    Size s      = Director::getInstance()->getWinSize();
+    Size s      = Director::getInstance()->getLogicalSize();
     auto parent = Node::create();
     parent->setPosition(s.width / 2, s.height / 2);
     parent->setVisible(false);
@@ -2257,7 +2257,7 @@ std::string LabelIssue10089Test::subtitle() const
 
 LabelSystemFontColor::LabelSystemFontColor()
 {
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto label1 = Label::createWithSystemFont("Color32::Red", "fonts/arial.ttf", 20);
     label1->setPosition(Vec2(size.width / 2, size.height * 0.3f));
@@ -2369,7 +2369,7 @@ LabelIssue12409Test::LabelIssue12409Test()
     addChild(label);
 
     auto labelSize = label->getContentSize();
-    auto winSize   = Director::getInstance()->getWinSize();
+    auto winSize   = Director::getInstance()->getLogicalSize();
     Vec2 labelOrigin;
     labelOrigin.x    = winSize.width / 2 - (labelSize.width / 2);
     labelOrigin.y    = winSize.height / 2 - (labelSize.height / 2);
@@ -2870,7 +2870,7 @@ void LabelLayoutBaseTest::onExit()
 
 void LabelLayoutBaseTest::updateDrawNodeSize(const ax::Size& drawNodeSize)
 {
-    auto origin    = Director::getInstance()->getWinSize();
+    auto origin    = Director::getInstance()->getLogicalSize();
     auto labelSize = _label->getContentSize();
 
     origin.width  = origin.width / 2 - (labelSize.width / 2);
@@ -3423,7 +3423,7 @@ std::string LabelRichText::subtitle() const
 
 LabelItalics::LabelItalics()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // LabelBMFont
     auto label1 =
@@ -3457,7 +3457,7 @@ LabelItalics::LabelItalics()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
     menu->setPosition(winSize.width * 0.9, winSize.height * 0.25f);
 }
 
@@ -3475,7 +3475,7 @@ std::string LabelItalics::subtitle() const
 
 LabelBold::LabelBold()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // LabelBMFont
     auto label1 =
@@ -3509,7 +3509,7 @@ LabelBold::LabelBold()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
     menu->setPosition(winSize.width * 0.9, winSize.height * 0.25f);
 }
 
@@ -3527,7 +3527,7 @@ std::string LabelBold::subtitle() const
 
 LabelUnderline::LabelUnderline()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // LabelBMFont
     auto label1 =
@@ -3561,7 +3561,7 @@ LabelUnderline::LabelUnderline()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
     menu->setPosition(winSize.width * 0.9, winSize.height * 0.25f);
 }
 
@@ -3579,7 +3579,7 @@ std::string LabelUnderline::subtitle() const
 
 LabelUnderlineMultiline::LabelUnderlineMultiline()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // bmfont
     _label1a = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "hello underline\nand multiline",
@@ -3603,7 +3603,7 @@ LabelUnderlineMultiline::LabelUnderlineMultiline()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
     menu->setPosition(winSize.width * 0.9, winSize.height * 0.25f);
 }
 
@@ -3619,7 +3619,7 @@ std::string LabelUnderlineMultiline::subtitle() const
 
 LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     TTFConfig ttfConf("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
 
@@ -3777,7 +3777,7 @@ std::string LabelUnderlineStrikethroughMultiline::subtitle() const
 
 LabelStrikethrough::LabelStrikethrough()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // bmfont
     _label1a = Label::createWithBMFont("fonts/bitmapFontTest4.fnt", "hello strikethrough\nand multiline",
@@ -3801,7 +3801,7 @@ LabelStrikethrough::LabelStrikethrough()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
     menu->setPosition(winSize.width * 0.86, winSize.height * 0.25f);
 }
 
@@ -4067,7 +4067,7 @@ std::string LabelIssue16717::subtitle() const
 LabelIssueLineGap::LabelIssueLineGap()
 {
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
 
     auto label1 = Label::createWithTTF("test \ntest", "fonts/FingerpopGap.ttf", 30);
     label1->setPosition(Vec2(size.width / 3, size.height / 2));
@@ -4123,7 +4123,7 @@ std::string LabelIssue17902::subtitle() const
 //
 LabelIssue20523::LabelIssue20523()
 {
-    auto size           = Director::getInstance()->getWinSize();
+    auto size           = Director::getInstance()->getLogicalSize();
     auto _crashingLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 120);
     _crashingLabel->setPosition(Vec2(size.width / 2, size.height / 2));
     _crashingLabel->setColor(ax::Color32(200, 200, 200));

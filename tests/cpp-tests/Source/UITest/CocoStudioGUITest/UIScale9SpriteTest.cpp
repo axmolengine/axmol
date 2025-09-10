@@ -253,7 +253,7 @@ bool UIS9BatchNodeBasic::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -277,7 +277,7 @@ bool UIS9FrameNameSpriteSheet::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -303,7 +303,7 @@ bool UIS9FrameNameSpriteSheetRotated::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -327,7 +327,7 @@ bool UIS9FrameNameSpriteSheetCropped::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -353,7 +353,7 @@ bool UIS9FrameNameSpriteSheetCroppedRotated::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -379,7 +379,7 @@ bool UIS9FrameNameSpriteSheetCroppedSimple::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -406,7 +406,7 @@ bool UIS9FrameNameSpriteSheetCroppedRotatedSimple::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -433,7 +433,7 @@ bool UIS9BatchNodeScaledNoInsets::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -457,7 +457,7 @@ bool UIS9FrameNameSpriteSheetScaledNoInsets::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
@@ -480,7 +480,7 @@ bool UIS9FrameNameSpriteSheetRotatedScaledNoInsets::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -501,7 +501,7 @@ bool UIS9BatchNodeScaleWithCapInsets::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -528,7 +528,7 @@ bool UIS9FrameNameSpriteSheetInsets::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -549,7 +549,7 @@ bool UIS9FrameNameSpriteSheetInsetsScaled::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -571,7 +571,7 @@ bool UIS9FrameNameSpriteSheetRotatedInsets::init()
     if (UIScene::init())
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -592,7 +592,7 @@ bool UIS9_TexturePacker::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_ui_plist);
 
         float x = winSize.width / 4;
@@ -626,7 +626,7 @@ bool UIS9FrameNameSpriteSheetRotatedInsetsScaled::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -649,7 +649,7 @@ bool UIS9FrameNameSpriteSheetRotatedSetCapInsetLater::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -673,7 +673,7 @@ bool UIS9CascadeOpacityAndColor::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
         auto rgba    = Layer::create();
@@ -705,7 +705,7 @@ bool UIS9ZOrder::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -738,7 +738,7 @@ bool UIS9Flip::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2);
 
@@ -871,7 +871,7 @@ bool UIS9ChangeAnchorPoint::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2 + 50);
 
@@ -929,7 +929,7 @@ bool UIS9NinePatchTest::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile("cocosui/android9patch.plist");
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2 + 50);
 
@@ -1031,7 +1031,7 @@ bool UIS9ToggleRenderingTypeTest::init()
     if (UIScene::init())
     {
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2 - 20);
 
@@ -1074,7 +1074,7 @@ bool UIS9GlobalZOrderTest::init()
     if (UIScene::init())
     {
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2 - 20);
 
@@ -1107,7 +1107,7 @@ bool UIS9EnableScale9FalseTest::init()
     if (UIScene::init())
     {
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2 + 50;
         float y      = 0 + (winSize.height / 2 + 10);
 
@@ -1149,7 +1149,7 @@ bool UIS9GrayStateOpacityTest::init()
     if (UIScene::init())
     {
 
-        auto winSize = Director::getInstance()->getWinSize();
+        auto winSize = Director::getInstance()->getLogicalSize();
         float x      = winSize.width / 2;
         float y      = 0 + (winSize.height / 2 + 10);
 

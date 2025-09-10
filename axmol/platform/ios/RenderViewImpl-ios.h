@@ -43,8 +43,8 @@ public:
     /** creates a RenderViewImpl with a title name, a rect and the zoom factor */
     static RenderViewImpl* createWithRect(std::string_view viewName,
                                           const Rect& rect,
-                                          float frameZoomFactor = 1.0f,
-                                          bool resizable        = false);
+                                          float zoomFactor = 1.0f,
+                                          bool resizable   = false);
 
     /** creates a RenderViewImpl with a name in fullscreen mode */
     static RenderViewImpl* createWithFullScreen(std::string_view viewName);

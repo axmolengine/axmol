@@ -56,7 +56,7 @@ void NavMeshDisabled::onEnter()
     auto label =
         Label::createWithTTF(ttfConfig, "Should enable AX_ENABLE_NAVMESH & AX_ENABLE_PHYSICS\n to run this test case");
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     label->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(label);
@@ -86,7 +86,7 @@ bool NavMeshBaseTestDemo::init()
 
         _angle = 0.0f;
 
-        Size size = Director::getInstance()->getWinSize();
+        Size size = Director::getInstance()->getLogicalSize();
         _camera   = Camera::createPerspective(30.0f, size.width / size.height, 1.0f, 1000.0f);
         _camera->setPosition3D(Vec3(0.0f, 50.0f, 100.0f));
         _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
@@ -290,7 +290,7 @@ void NavMeshBasicTestDemo::touchesEnded(const std::vector<ax::Touch*>& touches, 
         auto location = touch->getLocationInView();
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
-        auto size = Director::getInstance()->getWinSize();
+        auto size = Director::getInstance()->getLogicalSize();
         _camera->unproject(size, &nearP, &nearP);
         _camera->unproject(size, &farP, &farP);
 
@@ -426,7 +426,7 @@ void NavMeshAdvanceTestDemo::touchesEnded(const std::vector<ax::Touch*>& touches
         auto location = touch->getLocationInView();
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
-        auto size = Director::getInstance()->getWinSize();
+        auto size = Director::getInstance()->getLogicalSize();
         _camera->unproject(size, &nearP, &nearP);
         _camera->unproject(size, &farP, &farP);
 

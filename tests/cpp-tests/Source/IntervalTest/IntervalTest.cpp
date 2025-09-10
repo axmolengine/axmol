@@ -42,7 +42,7 @@ IntervalTest::IntervalTest()
 {
     _time0 = _time1 = _time2 = _time3 = _time4 = 0.0f;
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     // sun
     auto sun = ParticleSun::create();
     sun->setTexture(Director::getInstance()->getTextureCache()->addImage("Images/fire.png"));

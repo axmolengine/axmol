@@ -7,7 +7,7 @@ local notExistURI = "https://www.cocos2d-x.org/attachments/1503/no_exist.txt"
 local writablePath = ax.FileUtils:getInstance():getWritablePath()
 local function DownloaderLayer()
     local layer = ax.Layer:create()
-    local winSize = ax.Director:getInstance():getWinSize()
+    local winSize = ax.Director:getInstance():getLogicalSize()
     local margin = 40
     local space  = 35
 

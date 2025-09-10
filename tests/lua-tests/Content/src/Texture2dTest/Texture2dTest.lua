@@ -22,7 +22,7 @@ end
 local function TexturePNG()
     local ret = createTestLayer("PNG Test")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image.png")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -38,7 +38,7 @@ end
 --------------------------------------------------------------------
 local function TextureJPEG()
     local ret = createTestLayer("JPEG Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image.jpeg")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -54,7 +54,7 @@ end
 --------------------------------------------------------------------
 local function TextureWEBP()
     local ret = createTestLayer("WEBP Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image.webp")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -71,7 +71,7 @@ end
 local function TextureMipMap()
     local ret = createTestLayer("Texture Mipmap",
                                 "Left image uses mipmap. Right image doesn't")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local texture0 = ax.Director:getInstance():getTextureCache():addImage(
         "Images/grossini_dance_atlas.png", true)
@@ -111,7 +111,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVRMipMap()
     local ret = createTestLayer("PVRTC MipMap Test", "Left image uses mipmap. Right image doesn't")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local imgMipMap = ax.Sprite:create("Images/logo-mipmap.pvr")
     if imgMipMap ~= nil and imgMipMap:getTexture() ~= nil then
@@ -149,7 +149,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVRMipMap2()
     local ret = createTestLayer("PVR MipMap Test #2", "Left image uses mipmap. Right image doesn't")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local imgMipMap = ax.Sprite:create("Images/test_image_rgba4444_mipmap.pvr")
     imgMipMap:setPosition(ax.p( s.width/2.0-100, s.height/2.0))
@@ -185,7 +185,7 @@ end
 local function TexturePVR2BPP()
     local ret = createTestLayer("PVR TC 2bpp Test")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_pvrtc2bpp.pvr")
 
@@ -207,7 +207,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVR()
     local ret = createTestLayer("PVR TC 4bpp Test #2")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image.pvr")
 
@@ -231,7 +231,7 @@ end
 local function TexturePVR4BPP()
     local ret = createTestLayer("PVR TC 4bpp Test #3")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_pvrtc4bpp.pvr")
 
@@ -255,7 +255,7 @@ end
 local function TexturePVRRGBA8888()
     local ret = createTestLayer("PVR + RGBA  8888 Test")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgba8888.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -274,7 +274,7 @@ end
 local function TexturePVRBGRA8888()
     local ret = createTestLayer("PVR + BGRA 8888 Test")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_bgra8888.pvr")
     if img ~= nil then
@@ -296,7 +296,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVRRGBA5551()
     local ret = createTestLayer("PVR + RGBA 5551 Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgba5551.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -314,7 +314,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVRRGBA4444()
     local ret = createTestLayer("PVR + RGBA 4444 Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgba4444.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -333,7 +333,7 @@ end
 local function TexturePVRRGBA4444GZ()
     local ret = createTestLayer("PVR + RGBA 4444 + GZ Test",
                                 "This is a gzip PVR image")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgba4444.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -352,7 +352,7 @@ end
 local function TexturePVRRGBA4444CCZ()
     local ret = createTestLayer("PVR + RGBA 4444 + ax.Z Test",
                                 "This is a ccz PVR image")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgba4444.pvr.ccz")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -370,7 +370,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVRRGB565()
     local ret = createTestLayer("PVR + RGB 565 Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgb565.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -384,7 +384,7 @@ end
 -- http:--www.imgtec.com/powervr/insider/powervr-pvrtextool.asp
 local function TexturePVRRGB888()
     local ret = createTestLayer("PVR + RGB 888 Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgb888.pvr")
     if img ~= nil then
@@ -404,7 +404,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVRA8()
     local ret = createTestLayer("PVR + A8 Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_a8.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -422,7 +422,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVRI8()
     local ret = createTestLayer("PVR + I8 Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_i8.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -441,7 +441,7 @@ end
 --------------------------------------------------------------------
 local function TexturePVRAI88()
     local ret = createTestLayer("PVR + AI88 Test")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_ai88.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -453,7 +453,7 @@ end
 -- TexturePVR2BPPv3
 local function TexturePVR2BPPv3()
     local ret = createTestLayer("PVR TC 2bpp Test", "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_pvrtc2bpp_v3.pvr")
 
@@ -468,7 +468,7 @@ end
 -- TexturePVRII2BPPv3
 local function TexturePVRII2BPPv3()
     local ret = createTestLayer("PVR TC II 2bpp Test", "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_pvrtcii2bpp_v3.pvr")
 
@@ -484,7 +484,7 @@ end
 -- TexturePVR4BPPv3
 local function TexturePVR4BPPv3()
     local ret = createTestLayer("PVR TC 4bpp Test", "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_pvrtc4bpp_v3.pvr")
 
@@ -507,7 +507,7 @@ end
 local function TexturePVRII4BPPv3()
     local ret = createTestLayer("PVR TC II 4bpp Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_pvrtcii4bpp_v3.pvr")
 
@@ -525,7 +525,7 @@ end
 local function TexturePVRRGBA8888v3()
     local ret = createTestLayer("PVR + RGBA  8888 Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgba8888_v3.pvr")
 
@@ -543,7 +543,7 @@ local function TexturePVRBGRA8888v3()
     local ret = createTestLayer("PVR + BGRA 8888 Test",
                                 "Testing PVR File Format v3")
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_bgra8888_v3.pvr")
 
@@ -562,7 +562,7 @@ end
 local function TexturePVRRGBA5551v3()
     local ret = createTestLayer("PVR + RGBA 5551 Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local img = ax.Sprite:create("Images/test_image_rgba5551_v3.pvr")
 
     if img ~= nil then
@@ -578,7 +578,7 @@ end
 local function TexturePVRRGBA4444v3()
     local ret = createTestLayer("PVR + RGBA 4444 Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgba4444_v3.pvr")
 
@@ -595,7 +595,7 @@ end
 local function TexturePVRRGB565v3()
     local ret = createTestLayer("PVR + RGB 565 Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgb565_v3.pvr")
 
@@ -612,7 +612,7 @@ end
 local function TexturePVRRGB888v3()
     local ret = createTestLayer("PVR + RGB 888 Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_rgb888_v3.pvr")
 
@@ -629,7 +629,7 @@ end
 local function TexturePVRA8v3()
     local ret = createTestLayer("PVR + A8 Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_a8_v3.pvr")
 
@@ -646,7 +646,7 @@ end
 local function TexturePVRI8v3()
     local ret = createTestLayer("PVR + I8 Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_i8_v3.pvr")
 
@@ -663,7 +663,7 @@ end
 local function TexturePVRAI88v3()
     local ret = createTestLayer("PVR + AI88 Test",
                                 "Testing PVR File Format v3")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image_ai88_v3.pvr")
 
@@ -686,7 +686,7 @@ end
 local function TexturePVRBadEncoding()
     local ret = createTestLayer("PVR Unsupported encoding",
                                 "You should not see any image")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/test_image-bad_encoding.pvr")
     if img  ~= nil then
@@ -704,7 +704,7 @@ end
 local function TexturePVRNonSquare()
     local ret = createTestLayer("PVR + Non square texture",
                                 "Loading a 128x256 texture")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/grossini_128x256_mipmap.pvr")
     img:setPosition(ax.p( s.width/2.0, s.height/2.0))
@@ -721,7 +721,7 @@ end
 local function TexturePVRNPOT4444()
     local ret = createTestLayer("PVR RGBA4 + NPOT texture",
                                 "Loading a 81x121 RGBA4444 texture.")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/grossini_pvr_rgba4444.pvr")
     if img ~= nil then
@@ -740,7 +740,7 @@ end
 local function TexturePVRNPOT8888()
     local ret = createTestLayer("PVR RGBA8 + NPOT texture",
                                 "Loading a 81x121 RGBA8888 texture.")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local img = ax.Sprite:create("Images/grossini_pvr_rgba8888.pvr")
     if img ~= nil then
@@ -759,7 +759,7 @@ end
 local function TextureAlias()
     local ret = createTestLayer("AntiAlias / Alias textures",
                                 "Left image is antialiased. Right image is aliases")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     --
     -- Sprite 1: ccb.SamplerFilter.LINEAR
@@ -815,7 +815,7 @@ local function TexturePixelFormat()
     local label = ret:getChildByTag(kTagLabel)
     label:setColor(ax.color32(16,16,255))
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local background = ax.LayerColor:create(ax.color32(128,128,128,255), s.width, s.height)
     ret:addChild(background, -1)
@@ -933,7 +933,7 @@ local function TextureAsync()
                                 "Textures should load while an animation is being run")
     local m_nImageOffset = 0
 
-    local size =ax.Director:getInstance():getWinSize()
+    local size =ax.Director:getInstance():getLogicalSize()
 
     local label = ax.Label:createWithTTF("Loading...", s_markerFeltFontPath, 32)
     label:setAnchorPoint(ax.p(0.5, 0.5))
@@ -952,7 +952,7 @@ local function TextureAsync()
         sprite:setAnchorPoint(ax.p(0,0))
         ret:addChild(sprite, -1)
 
-        local size = director:getWinSize()
+        local size = director:getLogicalSize()
         local i = m_nImageOffset * 32
         sprite:setPosition(ax.p( i % size.width, math.floor((i / size.width)) * 32 ))
 
@@ -1002,7 +1002,7 @@ end
 local function TextureGlClamp()
     local ret = createTestLayer("Texture GL_CLAMP")
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
 
     -- The .png image MUST be power of 2 in order to create a continue effect.
     -- eg: 32x64, 512x128, 256x1024, 64x64, etc..
@@ -1036,7 +1036,7 @@ end
 local function TextureGlRepeat()
     local ret = createTestLayer("Texture ccb.SamplerFilter.REPEAT")
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
 
     -- The .png image MUST be power of 2 in order to create a continue effect.
     -- eg: 32x64, 512x128, 256x1024, 64x64, etc..
@@ -1111,7 +1111,7 @@ end
 local function TextureCache1()
     local ret = createTestLayer("TextureCache: remove",
                     "4 images should appear: alias, antialias, alias, antialias")
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local sprite = nil
 
@@ -1160,7 +1160,7 @@ local function TextureDrawAtPoint()
         director:pushMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW)
         director:loadMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW, transform)
 
-        local s = ax.Director:getInstance():getWinSize()
+        local s = ax.Director:getInstance():getLogicalSize()
 
         m_pTex1:drawAtPoint(ax.p(s.width/2-50, s.height/2 - 50), globalZOrder)
         m_pTex2F:drawAtPoint(ax.p(s.width/2+50, s.height/2 - 50), globalZOrder)
@@ -1205,7 +1205,7 @@ local function TextureDrawInRect()
         director:pushMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW)
         director:loadMatrix(ax.MATRIX_STACK_TYPE.MODELVIEW, transform)
 
-        local s = ax.Director:getInstance():getWinSize()
+        local s = ax.Director:getInstance():getLogicalSize()
 
         local rect1 = ax.rect( s.width/2 - 80, 20, m_pTex1:getContentSize().width * 0.5, m_pTex1:getContentSize().height *2 )
         local rect2 = ax.rect( s.width/2 + 80, s.height/2, m_pTex1:getContentSize().width * 2, m_pTex1:getContentSize().height * 0.5 )
@@ -1277,7 +1277,7 @@ local function TextureMemoryAlloc()
 
         m_pBackground:setVisible(false)
 
-        local s = ax.Director:getInstance():getWinSize()
+        local s = ax.Director:getInstance():getLogicalSize()
         m_pBackground:setPosition(ax.p(s.width/2, s.height/2))
     end
 
@@ -1321,7 +1321,7 @@ local function TextureMemoryAlloc()
     menu2:alignItemsHorizontally()
 
     ret:addChild(menu2)
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     menu2:setPosition(ax.p(s.width/2, s.height/4))
     return ret
@@ -1341,7 +1341,7 @@ local function TexturePVRv3Premult()
         sprite:runAction(repeatAction)
     end
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
 
     local background = ax.LayerColor:create(ax.color32(128,128,128,255), size.width, size.height)
     ret:addChild(background, -1)

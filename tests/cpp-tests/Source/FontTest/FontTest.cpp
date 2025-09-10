@@ -84,7 +84,7 @@ FontTests::FontTests()
 
 void FontTest::showFont(std::string_view fontFile)
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto blockSize = Size(s.width / 3, 200);
     float fontSize = 26;
@@ -179,7 +179,7 @@ void FontNoReplacementTest::onEnter()
     TestCase::onEnter();
 
     std::string suffix;
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto blockSize = Size(s.width / 3, 200);
     float fontSize = 26;

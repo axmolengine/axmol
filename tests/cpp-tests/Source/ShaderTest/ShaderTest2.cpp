@@ -394,7 +394,7 @@ protected:
     {
         auto s = sprite->getTexture()->getContentSizeInPixels();
         SET_UNIFORM(_programState, "textureResolution", Vec2(s.width, s.height));
-        s = Director::getInstance()->getWinSize();
+        s = Director::getInstance()->getLogicalSize();
         SET_UNIFORM(_programState, "resolution", Vec2(s.width, s.height));
     }
 };
@@ -477,7 +477,7 @@ bool EffectSpriteTest::init()
         auto layer = LayerColor::create(Color32::BLUE);
         this->addChild(layer);
 
-        auto s = Director::getInstance()->getWinSize();
+        auto s = Director::getInstance()->getLogicalSize();
 
         auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Object* sender) {
             _vectorIndex--;
@@ -541,7 +541,7 @@ bool EffectSpriteLamp::init()
     if (ShaderTestDemo2::init())
     {
 
-        auto s  = Director::getInstance()->getWinSize();
+        auto s  = Director::getInstance()->getLogicalSize();
         _sprite = EffectSprite::create("Images/elephant1_Diffuse.png");
         // auto contentSize = _sprite->getContentSize();
         _sprite->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -576,7 +576,7 @@ void EffectSpriteLamp::onTouchesBegan(const std::vector<Touch*>& touches, Event*
     for (auto&& item : touches)
     {
         auto touch         = item;
-        auto s             = Director::getInstance()->getWinSize();
+        auto s             = Director::getInstance()->getLogicalSize();
         Point loc_winSpace = touch->getLocationInView();
         _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
         Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
@@ -592,7 +592,7 @@ void EffectSpriteLamp::onTouchesMoved(const std::vector<Touch*>& touches, Event*
     for (auto&& item : touches)
     {
         auto touch         = item;
-        auto s             = Director::getInstance()->getWinSize();
+        auto s             = Director::getInstance()->getLogicalSize();
         Point loc_winSpace = touch->getLocationInView();
         _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
         Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);
@@ -608,7 +608,7 @@ void EffectSpriteLamp::onTouchesEnded(const std::vector<Touch*>& touches, Event*
     for (auto&& item : touches)
     {
         auto touch         = item;
-        auto s             = Director::getInstance()->getWinSize();
+        auto s             = Director::getInstance()->getLogicalSize();
         Point loc_winSpace = touch->getLocationInView();
         _lightSprite->setPosition(Vec2(loc_winSpace.x, s.height - loc_winSpace.y));
         Vec3 pos(loc_winSpace.x, loc_winSpace.y, 50);

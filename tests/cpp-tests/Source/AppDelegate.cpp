@@ -99,7 +99,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 #endif
 
-    auto screenSize = renderView->getFrameSize();
+    auto screenSize = renderView->getWindowSize();
 
     auto fileUtils = FileUtils::getInstance();
     std::vector<std::string> searchPaths;

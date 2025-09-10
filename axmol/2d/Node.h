@@ -328,7 +328,7 @@ public:
      * Usually we use `Vec2(x,y)` to compose Vec2 object.
      * This code snippet sets the node in the center of screen.
      @code
-     Vec2 size = Director::getInstance()->getViewSize();
+     Vec2 size = Director::getInstance()->getLogicalSize();
      node->setPosition(size.width/2, size.height/2);
      @endcode
      *

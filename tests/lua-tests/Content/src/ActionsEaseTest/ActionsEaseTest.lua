@@ -2,7 +2,7 @@ local kTagAction1 = 1
 local kTagAction2 = 2
 local kTagSlider = 1
 
-local s = ax.Director:getInstance():getWinSize()
+local s = ax.Director:getInstance():getLogicalSize()
 local scheduler = ax.Director:getInstance():getScheduler()
 
 local function createSimpleMoveBy()

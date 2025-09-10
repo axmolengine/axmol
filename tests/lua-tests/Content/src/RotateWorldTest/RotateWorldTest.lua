@@ -1,5 +1,5 @@
 
-local size = ax.Director:getInstance():getWinSize()
+local size = ax.Director:getInstance():getLogicalSize()
 
 local function CreateSpriteLayer()
 	local layer = ax.Layer:create()

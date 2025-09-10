@@ -23562,7 +23562,7 @@ int lua_ax_base_RenderView_pollEvents(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_RenderView_getFrameSize(lua_State* tolua_S)
+int lua_ax_base_RenderView_getNativeWindowSize(lua_State* tolua_S)
 {
     int argc = 0;
     ax::RenderView* cobj = nullptr;
@@ -23582,7 +23582,7 @@ int lua_ax_base_RenderView_getFrameSize(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getFrameSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getNativeWindowSize'", nullptr);
         return 0;
     }
 #endif
@@ -23592,24 +23592,24 @@ int lua_ax_base_RenderView_getFrameSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getFrameSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getNativeWindowSize'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFrameSize();
+        auto&& ret = cobj->getNativeWindowSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getFrameSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getNativeWindowSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getFrameSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getNativeWindowSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setFrameSize(lua_State* tolua_S)
+int lua_ax_base_RenderView_getWindowSize(lua_State* tolua_S)
 {
     int argc = 0;
     ax::RenderView* cobj = nullptr;
@@ -23629,7 +23629,54 @@ int lua_ax_base_RenderView_setFrameSize(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setFrameSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getWindowSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getWindowSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getWindowSize();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getWindowSize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getWindowSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderView_setWindowSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setWindowSize'", nullptr);
         return 0;
     }
 #endif
@@ -23640,29 +23687,29 @@ int lua_ax_base_RenderView_setFrameSize(lua_State* tolua_S)
         double arg0;
         double arg1;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setFrameSize");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setWindowSize");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setFrameSize");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:setWindowSize");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setFrameSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setWindowSize'", nullptr);
             return 0;
         }
-        cobj->setFrameSize(arg0, arg1);
+        cobj->setWindowSize(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setFrameSize",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setWindowSize",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setFrameSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setWindowSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_setFrameZoomFactor(lua_State* tolua_S)
+int lua_ax_base_RenderView_setWindowZoomFactor(lua_State* tolua_S)
 {
     int argc = 0;
     ax::RenderView* cobj = nullptr;
@@ -23682,7 +23729,7 @@ int lua_ax_base_RenderView_setFrameZoomFactor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setFrameZoomFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setWindowZoomFactor'", nullptr);
         return 0;
     }
 #endif
@@ -23692,27 +23739,27 @@ int lua_ax_base_RenderView_setFrameZoomFactor(lua_State* tolua_S)
     {
         double arg0;
 
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setFrameZoomFactor");
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setWindowZoomFactor");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setFrameZoomFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setWindowZoomFactor'", nullptr);
             return 0;
         }
-        cobj->setFrameZoomFactor(arg0);
+        cobj->setWindowZoomFactor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setFrameZoomFactor",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setWindowZoomFactor",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setFrameZoomFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setWindowZoomFactor'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_RenderView_getFrameZoomFactor(lua_State* tolua_S)
+int lua_ax_base_RenderView_getWindowZoomFactor(lua_State* tolua_S)
 {
     int argc = 0;
     ax::RenderView* cobj = nullptr;
@@ -23732,7 +23779,7 @@ int lua_ax_base_RenderView_getFrameZoomFactor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getFrameZoomFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getWindowZoomFactor'", nullptr);
         return 0;
     }
 #endif
@@ -23742,19 +23789,19 @@ int lua_ax_base_RenderView_getFrameZoomFactor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getFrameZoomFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getWindowZoomFactor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFrameZoomFactor();
+        auto&& ret = cobj->getWindowZoomFactor();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getFrameZoomFactor",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getWindowZoomFactor",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getFrameZoomFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getWindowZoomFactor'.",&tolua_err);
 #endif
 
     return 0;
@@ -23809,7 +23856,7 @@ int lua_ax_base_RenderView_setCursorVisible(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_RenderView_getRetinaFactor(lua_State* tolua_S)
+int lua_ax_base_RenderView_getRenderScale(lua_State* tolua_S)
 {
     int argc = 0;
     ax::RenderView* cobj = nullptr;
@@ -23829,7 +23876,7 @@ int lua_ax_base_RenderView_getRetinaFactor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getRetinaFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getRenderScale'", nullptr);
         return 0;
     }
 #endif
@@ -23839,19 +23886,19 @@ int lua_ax_base_RenderView_getRetinaFactor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getRetinaFactor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getRenderScale'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRetinaFactor();
+        auto&& ret = cobj->getRenderScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getRetinaFactor",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getRenderScale",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getRetinaFactor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getRenderScale'.",&tolua_err);
 #endif
 
     return 0;
@@ -23953,7 +24000,7 @@ int lua_ax_base_RenderView_getContentScaleFactor(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_RenderView_isRetinaDisplay(lua_State* tolua_S)
+int lua_ax_base_RenderView_isHighDPI(lua_State* tolua_S)
 {
     int argc = 0;
     ax::RenderView* cobj = nullptr;
@@ -23973,7 +24020,7 @@ int lua_ax_base_RenderView_isRetinaDisplay(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_isRetinaDisplay'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_isHighDPI'", nullptr);
         return 0;
     }
 #endif
@@ -23983,19 +24030,19 @@ int lua_ax_base_RenderView_isRetinaDisplay(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_isRetinaDisplay'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_isHighDPI'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isRetinaDisplay();
+        auto&& ret = cobj->isHighDPI();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:isRetinaDisplay",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:isHighDPI",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_isRetinaDisplay'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_isHighDPI'.",&tolua_err);
 #endif
 
     return 0;
@@ -25082,15 +25129,16 @@ int lua_register_ax_base_RenderView(lua_State* tolua_S)
         tolua_function(tolua_S,"setIMEKeyboardState",lua_ax_base_RenderView_setIMEKeyboardState);
         tolua_function(tolua_S,"windowShouldClose",lua_ax_base_RenderView_windowShouldClose);
         tolua_function(tolua_S,"pollEvents",lua_ax_base_RenderView_pollEvents);
-        tolua_function(tolua_S,"getFrameSize",lua_ax_base_RenderView_getFrameSize);
-        tolua_function(tolua_S,"setFrameSize",lua_ax_base_RenderView_setFrameSize);
-        tolua_function(tolua_S,"setFrameZoomFactor",lua_ax_base_RenderView_setFrameZoomFactor);
-        tolua_function(tolua_S,"getFrameZoomFactor",lua_ax_base_RenderView_getFrameZoomFactor);
+        tolua_function(tolua_S,"getNativeWindowSize",lua_ax_base_RenderView_getNativeWindowSize);
+        tolua_function(tolua_S,"getWindowSize",lua_ax_base_RenderView_getWindowSize);
+        tolua_function(tolua_S,"setWindowSize",lua_ax_base_RenderView_setWindowSize);
+        tolua_function(tolua_S,"setWindowZoomFactor",lua_ax_base_RenderView_setWindowZoomFactor);
+        tolua_function(tolua_S,"getWindowZoomFactor",lua_ax_base_RenderView_getWindowZoomFactor);
         tolua_function(tolua_S,"setCursorVisible",lua_ax_base_RenderView_setCursorVisible);
-        tolua_function(tolua_S,"getRetinaFactor",lua_ax_base_RenderView_getRetinaFactor);
+        tolua_function(tolua_S,"getRenderScale",lua_ax_base_RenderView_getRenderScale);
         tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_RenderView_setContentScaleFactor);
         tolua_function(tolua_S,"getContentScaleFactor",lua_ax_base_RenderView_getContentScaleFactor);
-        tolua_function(tolua_S,"isRetinaDisplay",lua_ax_base_RenderView_isRetinaDisplay);
+        tolua_function(tolua_S,"isHighDPI",lua_ax_base_RenderView_isHighDPI);
         tolua_function(tolua_S,"getVisibleSize",lua_ax_base_RenderView_getVisibleSize);
         tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_RenderView_getVisibleOrigin);
         tolua_function(tolua_S,"getVisibleRect",lua_ax_base_RenderView_getVisibleRect);
@@ -26333,7 +26381,7 @@ int lua_ax_base_Director_setNotificationNode(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Director_getWinSize(lua_State* tolua_S)
+int lua_ax_base_Director_getLogicalSize(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* cobj = nullptr;
@@ -26353,7 +26401,7 @@ int lua_ax_base_Director_getWinSize(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getWinSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getLogicalSize'", nullptr);
         return 0;
     }
 #endif
@@ -26363,24 +26411,24 @@ int lua_ax_base_Director_getWinSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getWinSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getLogicalSize'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getViewSize();
+        auto&& ret = cobj->getLogicalSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getViewSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getLogicalSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getWinSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getLogicalSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Director_getViewSizeInPixels(lua_State* tolua_S)
+int lua_ax_base_Director_getLogicalSizeInPixels(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* cobj = nullptr;
@@ -26400,7 +26448,7 @@ int lua_ax_base_Director_getViewSizeInPixels(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getViewSizeInPixels'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getLogicalSizeInPixels'", nullptr);
         return 0;
     }
 #endif
@@ -26410,19 +26458,19 @@ int lua_ax_base_Director_getViewSizeInPixels(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getViewSizeInPixels'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getLogicalSizeInPixels'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getViewSizeInPixels();
+        auto&& ret = cobj->getLogicalSizeInPixels();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getViewSizeInPixels",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getLogicalSizeInPixels",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getViewSizeInPixels'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getLogicalSizeInPixels'.",&tolua_err);
 #endif
 
     return 0;
@@ -28805,8 +28853,8 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"isSendCleanupToScene",lua_ax_base_Director_isSendCleanupToScene);
         tolua_function(tolua_S,"getNotificationNode",lua_ax_base_Director_getNotificationNode);
         tolua_function(tolua_S,"setNotificationNode",lua_ax_base_Director_setNotificationNode);
-        tolua_function(tolua_S,"getViewSize",lua_ax_base_Director_getWinSize);
-        tolua_function(tolua_S,"getViewSizeInPixels",lua_ax_base_Director_getViewSizeInPixels);
+        tolua_function(tolua_S,"getLogicalSize",lua_ax_base_Director_getLogicalSize);
+        tolua_function(tolua_S,"getLogicalSizeInPixels",lua_ax_base_Director_getLogicalSizeInPixels);
         tolua_function(tolua_S,"getVisibleSize",lua_ax_base_Director_getVisibleSize);
         tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_Director_getVisibleOrigin);
         tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_Director_getSafeAreaRect);

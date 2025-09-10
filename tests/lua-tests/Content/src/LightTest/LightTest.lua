@@ -20,7 +20,7 @@ function LightTest:init()
     self:addSprite()
     self:addLights()
 
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     local camera = ax.Camera:createPerspective(60, s.width/s.height, 1.0, 1000.0)
     camera:setCameraFlag(ax.CameraFlag.USER1)
     camera:setPosition3D(ax.vec3(0.0, 100, 100))
@@ -128,7 +128,7 @@ function LightTest:init()
 end
 
 function LightTest:addSprite()
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
 
     local fileName = "MeshRendererTest/orc.c3b"
     local sprite1 = ax.Sprite3D:create(fileName)
@@ -168,7 +168,7 @@ function LightTest:addSprite()
 end
 
 function LightTest:addLights()
-    local s = ax.Director:getInstance():getWinSize()
+    local s = ax.Director:getInstance():getLogicalSize()
     self._ambientLight = ax.AmbientLight:create(ax.color32(200, 200, 200))
     self._ambientLight:setEnabled(true)
     self:addChild(self._ambientLight)

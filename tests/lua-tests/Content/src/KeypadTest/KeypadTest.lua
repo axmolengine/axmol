@@ -3,7 +3,7 @@ local function KeypadMainLayer()
 
     local function onEnter()
         print("come in")
-        local  s = ax.Director:getInstance():getWinSize()
+        local  s = ax.Director:getInstance():getLogicalSize()
         local  label = ax.Label:createWithTTF("Keypad Test", s_thonburiPath, 28)
         layer:addChild(label, 0)
         label:setAnchorPoint(ax.p(0.5, 0.5))

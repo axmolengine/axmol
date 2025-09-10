@@ -148,7 +148,7 @@ local CreateExtensionsTestTable =
 
 local function ExtensionsMainLayer()
 
-	local s = ax.Director:getInstance():getWinSize()
+	local s = ax.Director:getInstance():getLogicalSize()
 
 	local function CreateExtensionsTestScene(nPerformanceNo)
 	  	local pNewscene = CreateExtensionsTestTable[nPerformanceNo]()

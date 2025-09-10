@@ -41,7 +41,7 @@ HttpClientTests::HttpClientTests()
 
 HttpClientTest::HttpClientTest() : _labelStatusCode(nullptr)
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     auto httpClient = HttpClient::getInstance();
 
@@ -367,7 +367,7 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient* sender, HttpResponse* re
 
 HttpClientClearRequestsTest::HttpClientClearRequestsTest() : _labelStatusCode(nullptr)
 {
-    auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getLogicalSize();
 
     const int MARGIN = 40;
     const int SPACE  = 35;

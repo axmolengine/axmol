@@ -42,7 +42,7 @@ bool TableViewTest::init()
         return false;
     }
 
-    Size winSize = Director::getInstance()->getWinSize();
+    Size winSize = Director::getInstance()->getLogicalSize();
 
     TableView* tableView = TableView::create(this, Size(250.0f, 60.0f));
     tableView->setDirection(ScrollView::Direction::HORIZONTAL);

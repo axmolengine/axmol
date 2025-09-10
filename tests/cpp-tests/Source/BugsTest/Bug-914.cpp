@@ -40,7 +40,7 @@ bool Bug914Layer::init()
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         // ask director the the window size
-        auto size = Director::getInstance()->getWinSize();
+        auto size = Director::getInstance()->getLogicalSize();
         LayerColor* layer;
         for (int i = 0; i < 5; i++)
         {

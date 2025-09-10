@@ -36,7 +36,7 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     // 画面サイズを取得する
     ax::Size visibleSize = ax::Director::getInstance()->getVisibleSize();
-    ax::Size winSize = ax::Director::getInstance()->getWinSize();
+    ax::Size winSize = ax::Director::getInstance()->getLogicalSize();
 
     // 頂点データ
     float positionVertex[] =

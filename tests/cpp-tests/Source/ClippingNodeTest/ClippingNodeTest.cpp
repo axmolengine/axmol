@@ -115,7 +115,7 @@ std::string BasicTest::subtitle() const
 
 void BasicTest::setup()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto stencil = this->stencil();
     stencil->setTag(kTagStencilNode);
@@ -575,7 +575,7 @@ void RawStencilBufferTest::initCommands()
 
     size_t neededCmdSize = _planeCount * 2;
     _renderCmds.resize(neededCmdSize);
-    auto winPoint  = Vec2(Director::getInstance()->getWinSize());
+    auto winPoint  = Vec2(Director::getInstance()->getLogicalSize());
     auto planeSize = winPoint * (1.0 / _planeCount);
     BlendFunc blend;
     blend.src = rhi::BlendFactor::ONE;
@@ -612,7 +612,7 @@ void RawStencilBufferTest::initCommands()
 
 void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    auto winPoint  = Vec2(Director::getInstance()->getWinSize());
+    auto winPoint  = Vec2(Director::getInstance()->getLogicalSize());
     auto planeSize = winPoint * (1.0 / _planeCount);
 
     renderer->addCallbackCommand([=]() { renderer->setStencilTest(true); }, _globalZOrder);
@@ -834,7 +834,7 @@ void ClippingToRenderTextureTest::setup()
         this->reproduceBug();
     });
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
     // create menu, it's an autorelease object
     auto menu = Menu::create(button, nullptr);
     menu->setPosition(Point(s.width / 2, s.height / 2));
@@ -983,7 +983,7 @@ std::string ClippingNodePerformanceTest::subtitle() const
 
 void ClippingNodePerformanceTest::setup()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto countLabel = Label::createWithTTF("0", "fonts/arial.ttf", 30);
     countLabel->enableOutline(Color32(0, 0, 0, 255), 2);

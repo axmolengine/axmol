@@ -202,6 +202,7 @@ public:
      */
     virtual float getWindowZoomFactor() const { return 1.0; }
 
+#ifndef _AX_GEN_SCRIPT_BINDINGS
     /**
      * implicit deprecated APIs, use getWindowSize instead
      */
@@ -209,6 +210,7 @@ public:
     void setFrameSize(float width, float height) { setWindowSize(width, height); }
     float getFrameZoomFactor() const { return getWindowZoomFactor(); }
     void setFrameZoomFactor(float zoomFactor) { setWindowZoomFactor(zoomFactor); }
+#endif
 
     /**
      * Hide or Show the mouse cursor if there is one.
@@ -219,9 +221,9 @@ public:
 
     /** Get device pixel ratio.
      *
-     * @return The device pixel ratio.
+     * @return The render scale fbSize/windowSize
      */
-    virtual int getDevicePixelRatio() const { return 1; }
+    virtual int getRenderScale() const { return 1; }
 
     /** Only works on ios platform. Set Content Scale of the Factor. */
     virtual bool setContentScaleFactor(float /*scaleFactor*/) { return false; }
@@ -277,7 +279,7 @@ public:
     virtual void setDesignResolutionSize(float width, float height, ResolutionPolicy resolutionPolicy);
 
     /** Get design resolution size.
-     *  Default resolution size is the same as 'getFrameSize'.
+     *  Default resolution size is the same as 'getWindowSize'.
      *
      * @return The design resolution size.
      */
@@ -468,7 +470,7 @@ protected:
     float transformInputX(float x) { return (x - _viewportRect.origin.x) / _scaleX; }
     float transformInputY(float y) { return (y - _viewportRect.origin.y) / _scaleY; }
 
-    void onFrameBufferResized(uint32_t fbWidth, uint32_t fbHeight);
+    void onFramebufferResized(uint32_t fbWidth, uint32_t fbHeight);
 
     void setScissorRect(float x, float y, float w, float h);
     const ScissorRect& getScissorRect() const;

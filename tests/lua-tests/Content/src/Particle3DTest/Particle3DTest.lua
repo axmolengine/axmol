@@ -12,7 +12,7 @@ local function baseInit(self)
     ax.FileUtils:getInstance():addSearchPath("res/Particle3D/materials")
     ax.FileUtils:getInstance():addSearchPath("res/Particle3D/scripts")
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
     self._camera = ax.Camera:createPerspective(30.0, size.width / size.height, 1.0, 1000.0)
     self._camera:setPosition3D(ax.vec3(0.0, 0.0, 100.0))
     self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))

@@ -154,7 +154,7 @@ function EventDispatcherTestDemo:createMenu()
     menu:addChild(self._nextItem,itemTagBasic)
     self._nextItem:registerScriptTapHandler(self.nextCallback)
 
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
     self._backItem:setPosition(ax.p(size.width / 2 - self._restarItem:getContentSize().width * 2, self._restarItem:getContentSize().height / 2))
     self._restarItem:setPosition(ax.p(size.width / 2, self._restarItem:getContentSize().height / 2))
     self._nextItem:setPosition(ax.p(size.width / 2 + self._restarItem:getContentSize().width * 2, self._restarItem:getContentSize().height / 2))
@@ -1245,7 +1245,7 @@ function StopPropagationTest:isPointInNode(pt, node)
 end
 
 function StopPropagationTest:isPointInTopHalfAreaOfScreen(pt)
-    local winSize = ax.Director:getInstance():getWinSize()
+    local winSize = ax.Director:getInstance():getLogicalSize()
     if pt.y >= winSize.height / 2 then
         return true
     end

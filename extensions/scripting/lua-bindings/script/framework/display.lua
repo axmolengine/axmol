@@ -42,7 +42,7 @@ if not view then
     director:setRenderView(view)
 end
 
-local framesize = view:getFrameSize()
+local framesize = view:getWindowSize()
 local textureCache = director:getTextureCache()
 local spriteFrameCache = ax.SpriteFrameCache:getInstance()
 local animationCache = ax.AnimationCache:getInstance()
@@ -83,7 +83,7 @@ local function setDesignResolution(r, framesize)
 end
 
 local function setConstants()
-    local sizeInPixels = view:getFrameSize()
+    local sizeInPixels = view:getWindowSize()
     display.sizeInPixels = {width = sizeInPixels.width, height = sizeInPixels.height}
 
     local viewsize = director:getViewSize()

@@ -238,7 +238,7 @@ void SchedulerPauseResumeAllUser::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto sprite = Sprite::create("Images/grossinis_sister1.png");
     sprite->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -356,7 +356,7 @@ void SchedulerUnscheduleAllHard::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto sprite = Sprite::create("Images/grossinis_sister1.png");
     sprite->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -429,7 +429,7 @@ void SchedulerUnscheduleAllUserLevel::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto sprite = Sprite::create("Images/grossinis_sister1.png");
     sprite->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -790,7 +790,7 @@ void SchedulerTimeScale::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // rotate and jump
     auto jump1 = JumpBy::create(4, Vec2(-s.width + 80, 0.0f), 100, 4);
@@ -888,7 +888,7 @@ void TwoSchedulers::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // rotate and jump
     auto jump1 = JumpBy::create(4, Vec2(0, 0), 100, 4);

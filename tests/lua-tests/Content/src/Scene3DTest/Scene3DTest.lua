@@ -175,7 +175,7 @@ function TerrainWalkThru:init()
                 local nearP = ax.vec3(location.x, location.y, 0.0)
                 local farP  = ax.vec3(location.x, location.y, 1.0)
 
-                local size = ax.Director:getInstance():getWinSize()
+                local size = ax.Director:getInstance():getLogicalSize()
                 nearP = self._camera:unproject(size, nearP, nearP)
                 farP  = self._camera:unproject(size, farP, farP)
                 local dir = ax.vec3sub(farP, nearP)
@@ -469,7 +469,7 @@ function Scene3DTest:createDetailDlg()
 --    skeletonNode:setSkin("goblin")
 --
 --    skeletonNode:setScale(0.25)
---    local windowSize = ax.Director:getInstance():getWinSize()
+--    local windowSize = ax.Director:getInstance():getLogicalSize()
 --    skeletonNode:setPosition(ax.p(dlgSize.width / 2, 20))
 --    self._detailDlg:addChild(skeletonNode)
 

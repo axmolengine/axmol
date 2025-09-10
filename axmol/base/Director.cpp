@@ -405,8 +405,8 @@ void Director::setRenderView(RenderView* renderView)
         _renderView = renderView;
         _renderView->retain();
 
-        // set view size equals to designResolutionSize
-        setViewSize(_renderView->getDesignResolutionSize());
+        // set logical size equals to designResolutionSize
+        setLogicalSize(_renderView->getDesignResolutionSize());
 
         _renderer->init();
 
@@ -422,9 +422,9 @@ void Director::setRenderView(RenderView* renderView)
     }
 }
 
-void Director::setViewSize(const Vec2& viewSize)
+void Director::setLogicalSize(const Vec2& viewSize)
 {
-    _viewSizeInPoints     = viewSize;
+    _logicalSizeInPoints     = viewSize;
     _isStatusLabelUpdated = true;
 }
 
@@ -451,7 +451,7 @@ void Director::setViewport()
 {
     if (_renderView)
     {
-        _renderView->setViewportInPoints(0, 0, _viewSizeInPoints.width, _viewSizeInPoints.height);
+        _renderView->setViewportInPoints(0, 0, _logicalSizeInPoints.width, _logicalSizeInPoints.height);
     }
 }
 
@@ -614,7 +614,7 @@ const Mat4& Director::getMatrix(MATRIX_STACK_TYPE type) const
 
 void Director::setProjection(Projection projection)
 {
-    Vec2 size = _viewSizeInPoints;
+    Vec2 size = _logicalSizeInPoints;
 
     if (size.width == 0 || size.height == 0)
     {
@@ -688,7 +688,7 @@ void Director::purgeCachedData()
 
 float Director::getZEye() const
 {
-    return (_viewSizeInPoints.height / 1.154700538379252f);  //(2 * tanf(M_PI/6))
+    return (_logicalSizeInPoints.height / 1.154700538379252f);  //(2 * tanf(M_PI/6))
 }
 
 void Director::setClearColor(const Color& clearColor)
@@ -757,14 +757,14 @@ Vec2 Director::convertToUI(const Vec2& glPoint)
                 designSize.height * (-clipCoord.y * 0.5f + 0.5f) * factor);
 }
 
-const Vec2& Director::getViewSize() const
+const Vec2& Director::getLogicalSize() const
 {
-    return _viewSizeInPoints;
+    return _logicalSizeInPoints;
 }
 
-Vec2 Director::getViewSizeInPixels() const
+Vec2 Director::getLogicalSizeInPixels() const
 {
-    return Vec2(_viewSizeInPoints.width * _contentScaleFactor, _viewSizeInPoints.height * _contentScaleFactor);
+    return Vec2(_logicalSizeInPoints.width * _contentScaleFactor, _logicalSizeInPoints.height * _contentScaleFactor);
 }
 
 Vec2 Director::getVisibleSize() const

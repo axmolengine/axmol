@@ -94,7 +94,7 @@ void NodeTest2::onEnter()
 {
     TestCocosNodeDemo::onEnter();
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto sp1 = Sprite::create(s_pathSister1);
     auto sp2 = Sprite::create(s_pathSister2);
@@ -289,7 +289,7 @@ std::string NodeTest6::subtitle() const
 //------------------------------------------------------------------
 StressTest1::StressTest1()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto sp1 = Sprite::create(s_pathSister1);
     addChild(sp1, 0, kTagSprite1);
@@ -303,7 +303,7 @@ void StressTest1::shouldNotCrash(float dt)
 {
     unschedule("should_not_crash_key");
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     // if the node has timers, it crashes
     auto explosion = ParticleSun::create();
@@ -338,7 +338,7 @@ std::string StressTest1::subtitle() const
 //------------------------------------------------------------------
 StressTest2::StressTest2()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto sublayer = Layer::create();
 
@@ -492,7 +492,7 @@ NodeToWorld3D::NodeToWorld3D()
     //  - It tests different anchor Points
     //  - It tests different children anchor points
 
-    Size s      = Director::getInstance()->getWinSize();
+    Size s      = Director::getInstance()->getLogicalSize();
     auto parent = Node::create();
     parent->setContentSize(s);
     parent->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -553,7 +553,7 @@ void CameraOrbitTest::onExit()
 
 CameraOrbitTest::CameraOrbitTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto p = Sprite::create(s_back3);
     addChild(p, 0);
@@ -622,7 +622,7 @@ void CameraZoomTest::onExit()
 
 CameraZoomTest::CameraZoomTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     Sprite* sprite;
     //    Camera *cam;
@@ -690,7 +690,7 @@ void CameraCenterTest::onExit()
 
 CameraCenterTest::CameraCenterTest()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     Sprite* sprite;
     OrbitCamera* orbit;
@@ -763,7 +763,7 @@ ConvertToNode::ConvertToNode()
     listener->onTouchesEnded = AX_CALLBACK_2(ConvertToNode::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto rotate = RotateBy::create(10, 360);
     auto action = RepeatForever::create(rotate);
@@ -880,7 +880,7 @@ std::string NodeNonOpaqueTest::subtitle() const
 
 NodeGlobalZValueTest::NodeGlobalZValueTest()
 {
-    Size s = Director::getInstance()->getWinSize();
+    Size s = Director::getInstance()->getLogicalSize();
     for (int i = 0; i < 9; i++)
     {
         Sprite* sprite;
@@ -999,7 +999,7 @@ void CameraTest1::onExit()
 
 CameraTest1::CameraTest1()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     _sprite1 = MySprite::create(s_back3);
     addChild(_sprite1);
@@ -1050,7 +1050,7 @@ void CameraTest2::onExit()
 
 CameraTest2::CameraTest2()
 {
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     _sprite1 = MySprite::create(s_back3);
     addChild(_sprite1);
@@ -1139,7 +1139,7 @@ NodeNormalizedPositionTest2::NodeNormalizedPositionTest2() : _accum(0)
     }
     scheduleUpdate();
 
-    setContentSize(Director::getInstance()->getWinSize());
+    setContentSize(Director::getInstance()->getLogicalSize());
     _copyContentSize = getContentSize();
 
     //    setAnchorPoint(Vec2(0.5,0.5));
@@ -1416,7 +1416,7 @@ void Issue16100Test::onEnter()
     TestCocosNodeDemo::onEnter();
 
     // create user camera
-    auto s = Director::getInstance()->getWinSize();
+    auto s = Director::getInstance()->getLogicalSize();
 
     auto delay = DelayTime::create(0.1f);
     auto f     = CallFunc::create([this, s]() {

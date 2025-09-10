@@ -25,7 +25,7 @@ local function OpenGLTestMainLayer()
     local curCase  = 0
     local accum    = 0
     local labelBMFont = nil
-    local size = ax.Director:getInstance():getWinSize()
+    local size = ax.Director:getInstance():getLogicalSize()
     local curLayer = nil
     local schedulEntry = nil
     local  function OrderCallbackMenu()
@@ -48,7 +48,7 @@ local function OpenGLTestMainLayer()
         end
 
         local ordercallbackmenu = ax.Menu:create()
-        local size = ax.Director:getInstance():getWinSize()
+        local size = ax.Director:getInstance():getLogicalSize()
         local item1 = ax.MenuItemImage:create(s_pPathB1, s_pPathB2)
         item1:registerScriptTapHandler(backCallback)
         ordercallbackmenu:addChild(item1,kItemTagBasic)
@@ -204,10 +204,10 @@ local function OpenGLTestMainLayer()
 
         local resolution = ax.p(256, 256)
         local director = ax.Director:getInstance()
-        local frameSize = director:getRenderView():getFrameSize()
+        local winSize = director:getRenderView():getWindowSize()
         local visibleSize = director:getVisibleSize()
-        local retinaFactor = director:getRenderView():getRetinaFactor()
-        local center = ax.p( size.width / 2 * frameSize.width / visibleSize.width * retinaFactor, size.height / 2 * frameSize.height / visibleSize.height * retinaFactor)
+        local retinaFactor = director:getRenderView():getRenderScale()
+        local center = ax.p( size.width / 2 * winSize.width / visibleSize.width * retinaFactor, size.height / 2 * winSize.height / visibleSize.height * retinaFactor)
 
         local function initBuffers()
             local w = 256

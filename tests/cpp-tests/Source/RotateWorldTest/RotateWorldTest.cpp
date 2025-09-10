@@ -43,7 +43,7 @@ void TestLayer::onEnter()
 
     float x, y;
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     x         = size.width;
     y         = size.height;
 
@@ -71,7 +71,7 @@ void SpriteLayer::onEnter()
 
     float x, y;
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     x         = size.width;
     y         = size.height;
 
@@ -120,7 +120,7 @@ void RotateWorldMainLayer::onEnter()
 
     float x, y;
 
-    auto size = Director::getInstance()->getWinSize();
+    auto size = Director::getInstance()->getLogicalSize();
     x         = size.width;
     y         = size.height;
 
