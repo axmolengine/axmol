@@ -986,7 +986,7 @@ void RenderViewImpl::handleWindowSize(int w, int h, int fbWidth, int fbHeigh)
        then glfw will update vidoeMode to a windowed size instead desired full screen size before invoke windows
        API: ChangeDisplaySettingsExW
     */
-    _isHighDPI  = fbWidth > w;
+    _isHighDPI   = fbWidth > w;
     _renderScale = static_cast<float>(fbWidth) / w;
 
     RenderView::setWindowSize(w / _windowZoomFactor, h / _windowZoomFactor);
@@ -1010,7 +1010,7 @@ void RenderViewImpl::updateWindowSize()
         int fbWidth = 0, fbHeight = 0;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
-        _isHighDPI  = fbWidth > w;
+        _isHighDPI   = fbWidth > w;
         _renderScale = static_cast<float>(fbWidth) / w;
 
         glfwSetWindowSize(_mainWindow, (int)(_windowSize.width * _windowZoomFactor),
