@@ -364,7 +364,7 @@ static EventMouse::MouseButton checkMouseButton(GLFWwindow* window)
 
 RenderViewImpl::RenderViewImpl(bool initglfw)
     : _captured(false)
-    , _isHightDPI(false)
+    , _isHighDPI(false)
     , _renderScale(1.0f)
     , _windowZoomFactor(1.0f)
     , _mainWindow(nullptr)
@@ -986,7 +986,7 @@ void RenderViewImpl::handleWindowSize(int w, int h, int fbWidth, int fbHeigh)
        then glfw will update vidoeMode to a windowed size instead desired full screen size before invoke windows
        API: ChangeDisplaySettingsExW
     */
-    _isHightDPI  = fbWidth > w;
+    _isHighDPI  = fbWidth > w;
     _renderScale = static_cast<float>(fbWidth) / w;
 
     RenderView::setWindowSize(w / _windowZoomFactor, h / _windowZoomFactor);
@@ -1010,7 +1010,7 @@ void RenderViewImpl::updateWindowSize()
         int fbWidth = 0, fbHeight = 0;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
-        _isHightDPI  = fbWidth > w;
+        _isHighDPI  = fbWidth > w;
         _renderScale = static_cast<float>(fbWidth) / w;
 
         glfwSetWindowSize(_mainWindow, (int)(_windowSize.width * _windowZoomFactor),
@@ -1121,15 +1121,6 @@ void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, doubl
     _mouseX /= _windowZoomFactor;
     _mouseY /= _windowZoomFactor;
 
-    if (_isHightDPI)
-    {
-        // TODO:
-        // if (_retinaFactor == 1)
-        // {
-        //     _mouseX *= 2;
-        //     _mouseY *= 2;
-        // }
-    }
     if (!_isTouchDevice)
     {
         if (_captured)

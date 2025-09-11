@@ -133,7 +133,7 @@ public:
     /** Get render scale */
     int getRenderScale() const override { return _renderScale; }
 
-    bool isHighDPI() const override { return _isHightDPI; }
+    bool isHighDPI() const override { return _isHighDPI; }
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     HWND getWin32Window() override;
@@ -195,7 +195,7 @@ protected:
     bool _isTouchDevice = false;
     bool _captured;
 
-    bool _isHightDPI{false};
+    bool _isHighDPI{false};
 
     float _renderScale;  // >=1
 
