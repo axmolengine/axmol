@@ -1416,7 +1416,7 @@ void FogTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* 
 //
 // void CameraFrameBufferTest::onEnter()
 //{
-//     auto sizeInpixels = Director::getInstance()->getWinSizeInPixels();
+//     auto sizeInpixels = Director::getInstance()->getLogicalSizeInPixels();
 //     auto size = Director::getInstance()->getLogicalSize();
 //     auto fboSize = Size(sizeInpixels.width * 1, sizeInpixels.height * 1.5);
 //     auto fbo = experimental::FrameBuffer::create(1, fboSize.width, fboSize.height);

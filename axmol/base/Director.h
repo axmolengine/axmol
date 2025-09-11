@@ -271,8 +271,8 @@ public:
 
     // implicit deprecated APIs
 #ifndef _AX_GEN_SCRIPT_BINDINGS
-    const Vec2& getWinSize() const { return getLogicalSize(); }
-    Vec2 getWinSizeInPixels() const { return getLogicalSizeInPixels(); }
+    AX_DEPRECATED(3.0) const Vec2& getWinSize() const { return getLogicalSize(); }
+    AX_DEPRECATED(3.0) Vec2 getWinSizeInPixels() const { return getLogicalSizeInPixels(); }
 #endif
 
     /**

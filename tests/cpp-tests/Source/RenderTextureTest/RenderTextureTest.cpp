@@ -253,7 +253,7 @@ RenderTextureIssue937::RenderTextureIssue937()
 
     auto spr_size = spr_premulti->getContentSize();
     rend->setKeepMatrix(true);
-    Size pixelSize = Director::getInstance()->getWinSizeInPixels();
+    Size pixelSize = Director::getInstance()->getLogicalSizeInPixels();
     rend->setVirtualViewport(Vec2(s.width / 2 - 32, s.height / 2 - 32), Rect(0, 0, s.width, s.height),
                              Rect(0, 0, pixelSize.width, pixelSize.height));
 
@@ -449,7 +449,7 @@ RenderTexturePartTest::RenderTexturePartTest()
     _rend = RenderTexture::create(200, 200, rhi::PixelFormat::RGBA8);
     _rend->retain();
     _rend->setKeepMatrix(true);
-    Size pixelSize = Director::getInstance()->getWinSizeInPixels();
+    Size pixelSize = Director::getInstance()->getLogicalSizeInPixels();
     _rend->setVirtualViewport(Vec2(size.width / 2 - 150, size.height / 2 - 150), Rect(0, 0, size.width, size.height),
                               Rect(0, 0, pixelSize.width, pixelSize.height));
 

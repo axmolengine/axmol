@@ -49,7 +49,7 @@ bool UITextAtlasTest::init()
 
         // Create the text atlas
         TextAtlas* textAtlas = nullptr;
-        if (Director::getInstance()->getWinSizeInPixels().height > 320.f)
+        if (Director::getInstance()->getLogicalSizeInPixels().height > 320.f)
         {
             textAtlas = TextAtlas::create("1234567890", "cocosui/labelatlas.png", 34, 44, "0");
         }
@@ -96,7 +96,7 @@ bool UITextAtlasETC1ShadowTest::init()
 
         // Create the text atlas
         TextAtlas* textAtlas = nullptr;
-        if (Director::getInstance()->getWinSizeInPixels().height > 320.f)
+        if (Director::getInstance()->getLogicalSizeInPixels().height > 320.f)
         {
             textAtlas = TextAtlas::create("1234567890", "cocosui/labelatlas.pkm", 34, 44, "0");
         }

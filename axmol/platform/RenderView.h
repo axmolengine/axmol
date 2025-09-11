@@ -206,10 +206,10 @@ public:
     /**
      * implicit deprecated APIs, use getWindowSize instead
      */
-    const Vec2& getFrameSize() const { return getWindowSize(); }
-    void setFrameSize(float width, float height) { setWindowSize(width, height); }
-    float getFrameZoomFactor() const { return getWindowZoomFactor(); }
-    void setFrameZoomFactor(float zoomFactor) { setWindowZoomFactor(zoomFactor); }
+    AX_DEPRECATED(3.0) const Vec2& getFrameSize() const { return getWindowSize(); }
+    AX_DEPRECATED(3.0) void setFrameSize(float width, float height) { setWindowSize(width, height); }
+    AX_DEPRECATED(3.0) float getFrameZoomFactor() const { return getWindowZoomFactor(); }
+    AX_DEPRECATED(3.0) void setFrameZoomFactor(float zoomFactor) { setWindowZoomFactor(zoomFactor); }
 #endif
 
     /**
