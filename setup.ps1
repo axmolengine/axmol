@@ -361,7 +361,10 @@ else {
                     'fontconfig',
                     'gtk3',
                     'webkit2gtk',
-                    'vlc'
+                    'vlc',
+                    'wayland',
+                    'wayland-protocols',
+                    'libglvnd'
                 )
                 sudo pacman -S --needed --noconfirm @DEPENDS
             }

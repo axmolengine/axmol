@@ -77,7 +77,7 @@ static ax::Vec2 convertToUICoordinates(const Vec2& pos)
 {
     auto* bd    = ImGui_ImplAndroid_GetBackendData();
     ImGuiIO& io = ImGui::GetIO();
-    auto origin = bd->Window->getViewPortRect().origin;
+    auto origin = bd->Window->getViewportRect().origin;
     auto uiX    = (pos.x * bd->Window->getScaleX() + origin.x) / io.DisplayFramebufferScale.x;
     auto uiY    = (pos.y * bd->Window->getScaleY() + origin.y) / io.DisplayFramebufferScale.y;
 

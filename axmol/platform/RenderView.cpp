@@ -466,7 +466,7 @@ void RenderView::handleTouchesCancel(int num, intptr_t ids[], float xs[], float 
     handleTouchesOfEndOrCancel(EventTouch::EventCode::CANCELLED, num, ids, xs, ys);
 }
 
-const Rect& RenderView::getViewPortRect() const
+const Rect& RenderView::getViewportRect() const
 {
     return _viewportRect;
 }

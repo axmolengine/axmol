@@ -1077,8 +1077,8 @@ void RenderViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int
             if (GLFW_PRESS == action)
             {
                 _captured = true;
-                if (this->getViewPortRect().equals(ax::Rect::ZERO) ||
-                    this->getViewPortRect().containsPoint(Vec2(_mouseX, _mouseY)))
+                if (this->getViewportRect().equals(ax::Rect::ZERO) ||
+                    this->getViewportRect().containsPoint(Vec2(_mouseX, _mouseY)))
                 {
                     intptr_t id = 0;
                     this->handleTouchesBegin(1, &id, &_mouseX, &_mouseY);

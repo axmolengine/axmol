@@ -24749,7 +24749,7 @@ int lua_ax_base_RenderView_setDefaultIcon(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_RenderView_getViewPortRect(lua_State* tolua_S)
+int lua_ax_base_RenderView_getViewportRect(lua_State* tolua_S)
 {
     int argc = 0;
     ax::RenderView* cobj = nullptr;
@@ -24769,7 +24769,7 @@ int lua_ax_base_RenderView_getViewPortRect(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getViewPortRect'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getViewportRect'", nullptr);
         return 0;
     }
 #endif
@@ -24779,19 +24779,19 @@ int lua_ax_base_RenderView_getViewPortRect(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getViewPortRect'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getViewportRect'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getViewPortRect();
+        auto&& ret = cobj->getViewportRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getViewPortRect",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getViewportRect",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getViewPortRect'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getViewportRect'.",&tolua_err);
 #endif
 
     return 0;
@@ -25153,7 +25153,7 @@ int lua_register_ax_base_RenderView(lua_State* tolua_S)
         tolua_function(tolua_S,"getViewName",lua_ax_base_RenderView_getViewName);
         tolua_function(tolua_S,"setIcon",lua_ax_base_RenderView_setIcon);
         tolua_function(tolua_S,"setDefaultIcon",lua_ax_base_RenderView_setDefaultIcon);
-        tolua_function(tolua_S,"getViewPortRect",lua_ax_base_RenderView_getViewPortRect);
+        tolua_function(tolua_S,"getViewportRect",lua_ax_base_RenderView_getViewportRect);
         tolua_function(tolua_S,"getScaleX",lua_ax_base_RenderView_getScaleX);
         tolua_function(tolua_S,"getScaleY",lua_ax_base_RenderView_getScaleY);
         tolua_function(tolua_S,"getResolutionPolicy",lua_ax_base_RenderView_getResolutionPolicy);

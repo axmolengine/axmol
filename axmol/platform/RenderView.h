@@ -402,7 +402,7 @@ public:
      *
      * @return Return the opengl view port rectangle.
      */
-    const Rect& getViewPortRect() const;
+    const Rect& getViewportRect() const;
 
     /**
      * Get list of all active touches.

@@ -548,7 +548,7 @@ ax::Vec2 UIEditBoxImplWinrt::convertDesignCoordToXamlCoord(const ax::Vec2& desig
     auto renderView  = ax::Director::getInstance()->getRenderView();
     float viewH      = renderView->getWindowSize().height;
     Vec2 visiblePos  = Vec2(designCoord.x * renderView->getScaleX(), designCoord.y * renderView->getScaleY());
-    Vec2 screenGLPos = visiblePos + renderView->getViewPortRect().origin;
+    Vec2 screenGLPos = visiblePos + renderView->getViewportRect().origin;
     Vec2 xamlPos(screenGLPos.x, viewH - screenGLPos.y);
     return xamlPos;
 }

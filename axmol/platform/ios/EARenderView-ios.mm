@@ -722,7 +722,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     end = CGRectApplyAffineTransform(
         end, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
 
-    float offestY = renderView->getViewPortRect().origin.y;
+    float offestY = renderView->getViewportRect().origin.y;
     if (offestY < 0.0f)
     {
         begin.origin.y += offestY;
