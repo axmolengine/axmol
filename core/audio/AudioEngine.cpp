@@ -551,4 +551,14 @@ bool AudioEngine::isEnabled()
 {
     return _isEnabled;
 }
+
+void AudioEngine::setPan(int audioId, float value)
+{
+    if (!_audioEngineImpl)
+    {
+        return;
+    }
+
+    _audioEngineImpl->setPan(audioId, value);
+}
 }

@@ -490,6 +490,8 @@ bool AudioEngineImpl::init()
             alDisable(AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
 #endif
 
+            checkExtensions();
+
             AXLOGI("OpenAL was initialized successfully, vender:{}, version:{}", vender, version);
         }
     } while (false);
@@ -905,6 +907,48 @@ void AudioEngineImpl::update(float /*dt*/)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     _updatePlayers(false);
+}
+
+void AudioEngineImpl::setPan(AUDIO_ID audioId, float value)
+{
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto iter = _audioPlayers.find(audioId);
+    if (iter == _audioPlayers.end())
+        return;
+
+    auto player = iter->second;
+    lck.unlock();
+
+    player->_pan = value;
+
+    alSource3f(player->_alSource, AL_POSITION, player->_pan, 0.0f, -1.f);
+    if (_stereoExtension)
+    {
+        // pan between -60 degrees when fully left (-1) and 60 degrees when fully right (1)
+        auto angle = static_cast<float>(M_PI) / 6.f;
+
+        float panAngles[2];
+        panAngles[0] = (1.0f - player->_pan) * angle;
+        panAngles[1] = (1.0f + player->_pan) * -angle;
+
+        alSourcei(player->_alSource, AL_SOURCE_RELATIVE, TRUE); // relative to listener
+        alSourcefv(player->_alSource, AL_STEREO_ANGLES, panAngles);
+    }
+}
+
+bool AudioEngineImpl::isExtensionPresent(const char* extensionId)
+{
+    if (alIsExtensionPresent(extensionId))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void AudioEngineImpl::checkExtensions()
+{
+    _stereoExtension = isExtensionPresent("AL_EXT_STEREO_ANGLES");
 }
 
 void AudioEngineImpl::_updatePlayers(bool forStop)

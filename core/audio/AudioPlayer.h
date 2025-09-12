@@ -74,6 +74,8 @@ protected:
     float _volume;
     float _pitch;
     bool _loop;
+    float _pan{};
+
     std::function<void(AUDIO_ID, std::string_view)> _finishCallbak;
 
     bool _isDestroyed;
