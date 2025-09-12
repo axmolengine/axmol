@@ -762,7 +762,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::EventController::ControllerEventType arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
@@ -785,7 +785,7 @@ int lua_ax_controller_EventController_constructor(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::EventController::ControllerEventType arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");

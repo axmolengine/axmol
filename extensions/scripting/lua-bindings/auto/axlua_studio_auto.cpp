@@ -414,7 +414,7 @@ int lua_ax_studio_ActionFrame_getAction(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionFrame:getAction");
@@ -430,7 +430,7 @@ int lua_ax_studio_ActionFrame_getAction(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionFrame:getAction");
@@ -1200,7 +1200,7 @@ int lua_ax_studio_ActionRotationFrame_getAction(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionRotationFrame:getAction");
@@ -1216,7 +1216,7 @@ int lua_ax_studio_ActionRotationFrame_getAction(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.ActionRotationFrame:getAction");
@@ -2215,7 +2215,7 @@ int lua_ax_studio_ActionObject_play(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::CallFunc* arg0;
             ok &= luaval_to_object<ax::CallFunc>(tolua_S, 2, "ax.CallFunc",&arg0, "ccs.ActionObject:play");
@@ -2227,7 +2227,7 @@ int lua_ax_studio_ActionObject_play(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->play();
             lua_settop(tolua_S, 1);
@@ -2687,7 +2687,7 @@ int lua_ax_studio_ActionManagerEx_playActionByName(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ccs.ActionManagerEx:playActionByName"); arg0 = arg0_tmp.c_str();
@@ -2707,7 +2707,7 @@ int lua_ax_studio_ActionManagerEx_playActionByName(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ccs.ActionManagerEx:playActionByName"); arg0 = arg0_tmp.c_str();
@@ -5890,7 +5890,7 @@ int lua_ax_studio_DisplayManager_addDisplay(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ccs.DisplayManager:addDisplay");
@@ -5906,7 +5906,7 @@ int lua_ax_studio_DisplayManager_addDisplay(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             cocostudio::DisplayData* arg0;
             ok &= luaval_to_object<cocostudio::DisplayData>(tolua_S, 2, "ccs.DisplayData",&arg0, "ccs.DisplayManager:addDisplay");
@@ -6582,7 +6582,7 @@ int lua_ax_studio_DisplayManager_containPoint(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ccs.DisplayManager:containPoint");
@@ -6598,7 +6598,7 @@ int lua_ax_studio_DisplayManager_containPoint(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ccs.DisplayManager:containPoint");
@@ -6900,7 +6900,7 @@ int lua_ax_studio_Bone_addDisplay(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ccs.Bone:addDisplay");
@@ -6916,7 +6916,7 @@ int lua_ax_studio_Bone_addDisplay(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             cocostudio::DisplayData* arg0;
             ok &= luaval_to_object<cocostudio::DisplayData>(tolua_S, 2, "ccs.DisplayData",&arg0, "ccs.Bone:addDisplay");
@@ -8511,8 +8511,7 @@ int lua_ax_studio_Bone_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -8524,8 +8523,7 @@ int lua_ax_studio_Bone_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             cocostudio::Bone* ret = cocostudio::Bone::create();
@@ -10168,7 +10166,7 @@ int lua_ax_studio_ArmatureDataManager_addArmatureFileInfo(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureFileInfo");
@@ -10188,7 +10186,7 @@ int lua_ax_studio_ArmatureDataManager_addArmatureFileInfo(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureFileInfo");
@@ -10750,7 +10748,7 @@ int lua_ax_studio_Armature_init(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Armature:init");
@@ -10766,7 +10764,7 @@ int lua_ax_studio_Armature_init(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Armature:init");
@@ -11834,8 +11832,7 @@ int lua_ax_studio_Armature_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -11847,8 +11844,7 @@ int lua_ax_studio_Armature_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             cocostudio::Armature* ret = cocostudio::Armature::create();
@@ -11857,8 +11853,7 @@ int lua_ax_studio_Armature_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -12213,8 +12208,7 @@ int lua_ax_studio_Skin_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -12226,8 +12220,7 @@ int lua_ax_studio_Skin_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             cocostudio::Skin* ret = cocostudio::Skin::create();
@@ -13090,7 +13083,7 @@ int lua_ax_studio_ComAudio_playBackgroundMusic(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ccs.ComAudio:playBackgroundMusic"); arg0 = arg0_tmp.c_str();
@@ -13102,7 +13095,7 @@ int lua_ax_studio_ComAudio_playBackgroundMusic(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ccs.ComAudio:playBackgroundMusic"); arg0 = arg0_tmp.c_str();
@@ -13118,7 +13111,7 @@ int lua_ax_studio_ComAudio_playBackgroundMusic(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->playBackgroundMusic();
             lua_settop(tolua_S, 1);
@@ -13157,7 +13150,7 @@ int lua_ax_studio_ComAudio_stopBackgroundMusic(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             cobj->stopBackgroundMusic();
             lua_settop(tolua_S, 1);
@@ -13165,7 +13158,7 @@ int lua_ax_studio_ComAudio_stopBackgroundMusic(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             bool arg0;
             ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ccs.ComAudio:stopBackgroundMusic");
@@ -13637,7 +13630,7 @@ int lua_ax_studio_ComAudio_playEffect(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ccs.ComAudio:playEffect"); arg0 = arg0_tmp.c_str();
@@ -13649,7 +13642,7 @@ int lua_ax_studio_ComAudio_playEffect(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ccs.ComAudio:playEffect"); arg0 = arg0_tmp.c_str();
@@ -13665,7 +13658,7 @@ int lua_ax_studio_ComAudio_playEffect(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             unsigned int ret = cobj->playEffect();
             tolua_pushnumber(tolua_S,(lua_Number)ret);
@@ -14751,8 +14744,7 @@ int lua_ax_studio_ComRender_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::Node* arg0;
@@ -14767,8 +14759,7 @@ int lua_ax_studio_ComRender_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             cocostudio::ComRender* ret = cocostudio::ComRender::create();
@@ -21576,7 +21567,7 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
@@ -21592,7 +21583,7 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
@@ -21604,7 +21595,7 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
@@ -21624,7 +21615,7 @@ int lua_ax_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ccs.ActionTimeline:gotoFrameAndPlay");
@@ -23535,7 +23526,7 @@ int lua_ax_studio_BoneNode_getChildBones(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::Vector<cocostudio::timeline::BoneNode *>& ret = cobj->getChildBones();
             ccvector_to_luaval(tolua_S, ret);
@@ -23543,7 +23534,7 @@ int lua_ax_studio_BoneNode_getChildBones(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::Vector<cocostudio::timeline::BoneNode *>& ret = cobj->getChildBones();
             ccvector_to_luaval(tolua_S, ret);
@@ -23676,7 +23667,7 @@ int lua_ax_studio_BoneNode_addSkin(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ccs.BoneNode:addSkin");
@@ -23696,7 +23687,7 @@ int lua_ax_studio_BoneNode_addSkin(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ccs.BoneNode:addSkin");
@@ -23743,7 +23734,7 @@ int lua_ax_studio_BoneNode_displaySkin(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.BoneNode:displaySkin");
@@ -23759,7 +23750,7 @@ int lua_ax_studio_BoneNode_displaySkin(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ccs.BoneNode:displaySkin");
@@ -23853,7 +23844,7 @@ int lua_ax_studio_BoneNode_getSkins(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::Vector<ax::Node *>& ret = cobj->getSkins();
             ccvector_to_luaval(tolua_S, ret);
@@ -23861,7 +23852,7 @@ int lua_ax_studio_BoneNode_getSkins(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::Vector<ax::Node *>& ret = cobj->getSkins();
             ccvector_to_luaval(tolua_S, ret);
@@ -24472,8 +24463,7 @@ int lua_ax_studio_BoneNode_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             int arg0;
@@ -24485,8 +24475,7 @@ int lua_ax_studio_BoneNode_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             cocostudio::timeline::BoneNode* ret = cocostudio::timeline::BoneNode::create();
@@ -24698,7 +24687,7 @@ int lua_ax_studio_SkeletonNode_changeSkins(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.SkeletonNode:changeSkins");
@@ -24710,7 +24699,7 @@ int lua_ax_studio_SkeletonNode_changeSkins(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             tsl::robin_map<std::string, std::string, axstd::string_hash, axstd::equal_to> arg0;
             ok &= luaval_to_std_map_string_string(tolua_S, 2, &arg0, "ccs.SkeletonNode:changeSkins");

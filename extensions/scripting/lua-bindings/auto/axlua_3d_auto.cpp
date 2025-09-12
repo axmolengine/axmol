@@ -777,7 +777,7 @@ int lua_ax_3d_Animate3D_init(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::Animation3D* arg0;
             ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:init");
@@ -797,7 +797,7 @@ int lua_ax_3d_Animate3D_init(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Animation3D* arg0;
             ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:init");
@@ -892,8 +892,7 @@ int lua_ax_3d_Animate3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             ax::Animation3D* arg0;
@@ -911,8 +910,7 @@ int lua_ax_3d_Animate3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             ax::Animation3D* arg0;
@@ -1638,8 +1636,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -1651,8 +1648,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -1667,8 +1663,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::BillBoard* ret = ax::BillBoard::create();
@@ -1677,8 +1672,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             ax::BillBoard::Mode arg0;
@@ -1690,8 +1684,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -1706,8 +1699,7 @@ int lua_ax_3d_BillBoard_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -3825,8 +3817,7 @@ int lua_ax_3d_Skybox_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 6)
         {
             std::string_view arg0;
@@ -3853,8 +3844,7 @@ int lua_ax_3d_Skybox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::Skybox* ret = ax::Skybox::create();
@@ -3993,8 +3983,7 @@ int lua_ax_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::MeshMaterial::createBuiltInMaterial();
@@ -4003,8 +3992,7 @@ int lua_ax_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::MeshMaterial::MaterialType arg0;
@@ -4213,7 +4201,7 @@ int lua_ax_3d_MeshRenderer_setTexture(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Texture2D* arg0;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.MeshRenderer:setTexture");
@@ -4225,7 +4213,7 @@ int lua_ax_3d_MeshRenderer_setTexture(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.MeshRenderer:setTexture");
@@ -5144,7 +5132,7 @@ int lua_ax_3d_MeshRenderer_setMaterial(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Material* arg0;
             ok &= luaval_to_object<ax::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.MeshRenderer:setMaterial");
@@ -5160,7 +5148,7 @@ int lua_ax_3d_MeshRenderer_setMaterial(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Material* arg0;
             ok &= luaval_to_object<ax::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.MeshRenderer:setMaterial");
@@ -5372,7 +5360,7 @@ int lua_ax_3d_MeshRenderer_enableInstancing(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::MeshMaterial* arg0;
             ok &= luaval_to_object<ax::MeshMaterial>(tolua_S, 2, "ax.MeshMaterial",&arg0, "ax.MeshRenderer:enableInstancing");
@@ -5384,7 +5372,7 @@ int lua_ax_3d_MeshRenderer_enableInstancing(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::MeshMaterial* arg0;
             ok &= luaval_to_object<ax::MeshMaterial>(tolua_S, 2, "ax.MeshMaterial",&arg0, "ax.MeshRenderer:enableInstancing");
@@ -5400,7 +5388,7 @@ int lua_ax_3d_MeshRenderer_enableInstancing(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::MeshMaterial::InstanceMaterialType arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshRenderer:enableInstancing");
@@ -5412,7 +5400,7 @@ int lua_ax_3d_MeshRenderer_enableInstancing(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::MeshMaterial::InstanceMaterialType arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.MeshRenderer:enableInstancing");
@@ -5710,8 +5698,7 @@ int lua_ax_3d_MeshRenderer_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -5723,8 +5710,7 @@ int lua_ax_3d_MeshRenderer_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::MeshRenderer* ret = ax::MeshRenderer::create();
@@ -5733,8 +5719,7 @@ int lua_ax_3d_MeshRenderer_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;

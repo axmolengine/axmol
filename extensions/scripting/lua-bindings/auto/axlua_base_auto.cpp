@@ -522,7 +522,7 @@ int lua_ax_base_Touch_setTouchInfo(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 5) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Touch:setTouchInfo");
@@ -550,7 +550,7 @@ int lua_ax_base_Touch_setTouchInfo(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Touch:setTouchInfo");
@@ -3568,7 +3568,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
@@ -3584,7 +3584,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
@@ -3604,7 +3604,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
@@ -3628,7 +3628,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
@@ -3656,7 +3656,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 6) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
@@ -3688,7 +3688,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 7) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
@@ -3724,7 +3724,7 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 8) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
@@ -4262,7 +4262,7 @@ int lua_ax_base_Texture2D_getBitsPerPixelForFormat(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::rhi::PixelFormat arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Texture2D:getBitsPerPixelForFormat");
@@ -4274,7 +4274,7 @@ int lua_ax_base_Texture2D_getBitsPerPixelForFormat(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             unsigned int ret = cobj->getBitsPerPixelForFormat();
             tolua_pushnumber(tolua_S,(lua_Number)ret);
@@ -6235,7 +6235,7 @@ int lua_ax_base_Node_setScale(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setScale");
@@ -6251,7 +6251,7 @@ int lua_ax_base_Node_setScale(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setScale");
@@ -6341,7 +6341,7 @@ int lua_ax_base_Node_setPosition(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Node:setPosition");
@@ -6357,7 +6357,7 @@ int lua_ax_base_Node_setPosition(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Node:setPosition");
@@ -7949,7 +7949,7 @@ int lua_ax_base_Node_addChild(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:addChild");
@@ -7965,7 +7965,7 @@ int lua_ax_base_Node_addChild(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:addChild");
@@ -7977,7 +7977,7 @@ int lua_ax_base_Node_addChild(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:addChild");
@@ -7997,7 +7997,7 @@ int lua_ax_base_Node_addChild(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:addChild");
@@ -8148,7 +8148,7 @@ int lua_ax_base_Node_getChildren(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             const ax::Vector<ax::Node *>& ret = cobj->getChildren();
             ccvector_to_luaval(tolua_S, ret);
@@ -8156,7 +8156,7 @@ int lua_ax_base_Node_getChildren(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::Vector<ax::Node *>& ret = cobj->getChildren();
             ccvector_to_luaval(tolua_S, ret);
@@ -8292,7 +8292,7 @@ int lua_ax_base_Node_getParent(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             const ax::Node* ret = cobj->getParent();
             object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
@@ -8300,7 +8300,7 @@ int lua_ax_base_Node_getParent(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::Node* ret = cobj->getParent();
             object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
@@ -8339,7 +8339,7 @@ int lua_ax_base_Node_removeFromParentAndCleanup(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             bool arg0;
             ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:removeFromParentAndCleanup");
@@ -8351,7 +8351,7 @@ int lua_ax_base_Node_removeFromParentAndCleanup(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->removeFromParent();
             lua_settop(tolua_S, 1);
@@ -8591,7 +8591,7 @@ int lua_ax_base_Node_removeAllChildrenWithCleanup(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             bool arg0;
             ok &= luaval_to_boolean(tolua_S, 2, &arg0, "ax.Node:removeAllChildrenWithCleanup");
@@ -8603,7 +8603,7 @@ int lua_ax_base_Node_removeAllChildrenWithCleanup(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->removeAllChildren();
             lua_settop(tolua_S, 1);
@@ -9080,7 +9080,7 @@ int lua_ax_base_Node_draw(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             cobj->draw();
             lua_settop(tolua_S, 1);
@@ -9088,7 +9088,7 @@ int lua_ax_base_Node_draw(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Renderer* arg0;
             ok &= luaval_to_object<ax::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Node:draw");
@@ -9139,7 +9139,7 @@ int lua_ax_base_Node_visit(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             cobj->visit();
             lua_settop(tolua_S, 1);
@@ -9147,7 +9147,7 @@ int lua_ax_base_Node_visit(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Renderer* arg0;
             ok &= luaval_to_object<ax::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Node:visit");
@@ -9439,7 +9439,7 @@ int lua_ax_base_Node_getActionManager(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             const ax::ActionManager* ret = cobj->getActionManager();
             object_to_luaval<ax::ActionManager>(tolua_S, "ax.ActionManager",(ax::ActionManager*)ret);
@@ -9447,7 +9447,7 @@ int lua_ax_base_Node_getActionManager(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::ActionManager* ret = cobj->getActionManager();
             object_to_luaval<ax::ActionManager>(tolua_S, "ax.ActionManager",(ax::ActionManager*)ret);
@@ -9980,7 +9980,7 @@ int lua_ax_base_Node_getScheduler(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             const ax::Scheduler* ret = cobj->getScheduler();
             object_to_luaval<ax::Scheduler>(tolua_S, "ax.Scheduler",(ax::Scheduler*)ret);
@@ -9988,7 +9988,7 @@ int lua_ax_base_Node_getScheduler(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::Scheduler* ret = cobj->getScheduler();
             object_to_luaval<ax::Scheduler>(tolua_S, "ax.Scheduler",(ax::Scheduler*)ret);
@@ -10268,7 +10268,7 @@ int lua_ax_base_Node_getNodeToParentTransform(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:getNodeToParentTransform");
@@ -10280,7 +10280,7 @@ int lua_ax_base_Node_getNodeToParentTransform(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::Mat4& ret = cobj->getNodeToParentTransform();
             mat4_to_luaval(tolua_S, ret);
@@ -10319,7 +10319,7 @@ int lua_ax_base_Node_getNodeToParentAffineTransform(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Node:getNodeToParentAffineTransform");
@@ -10331,7 +10331,7 @@ int lua_ax_base_Node_getNodeToParentAffineTransform(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::AffineTransform ret = cobj->getNodeToParentAffineTransform();
             affinetransform_to_luaval(tolua_S, ret);
@@ -11199,7 +11199,7 @@ int lua_ax_base_Node_removeComponent(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Component* arg0;
             ok &= luaval_to_object<ax::Component>(tolua_S, 2, "ax.Component",&arg0, "ax.Node:removeComponent");
@@ -11211,7 +11211,7 @@ int lua_ax_base_Node_removeComponent(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Node:removeComponent");
@@ -12454,7 +12454,7 @@ int lua_ax_base_Node_setProgramState(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::rhi::ProgramState* arg0;
             ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.Node:setProgramState");
@@ -12466,7 +12466,7 @@ int lua_ax_base_Node_setProgramState(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::rhi::ProgramState* arg0;
             ok &= luaval_to_object<ax::rhi::ProgramState>(tolua_S, 2, "axrhi.ProgramState",&arg0, "ax.Node:setProgramState");
@@ -12482,7 +12482,7 @@ int lua_ax_base_Node_setProgramState(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             unsigned int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:setProgramState");
@@ -15880,7 +15880,7 @@ int lua_ax_base_SpriteFrame_initWithTexture(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 5) {
             ax::Texture2D* arg0;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.SpriteFrame:initWithTexture");
@@ -15908,7 +15908,7 @@ int lua_ax_base_SpriteFrame_initWithTexture(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Texture2D* arg0;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.SpriteFrame:initWithTexture");
@@ -15955,7 +15955,7 @@ int lua_ax_base_SpriteFrame_initWithTextureFilename(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 5) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.SpriteFrame:initWithTextureFilename");
@@ -15983,7 +15983,7 @@ int lua_ax_base_SpriteFrame_initWithTextureFilename(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.SpriteFrame:initWithTextureFilename");
@@ -16070,8 +16070,7 @@ int lua_ax_base_SpriteFrame_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 5)
         {
             std::string_view arg0;
@@ -16095,8 +16094,7 @@ int lua_ax_base_SpriteFrame_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -16133,8 +16131,7 @@ int lua_ax_base_SpriteFrame_createWithTexture(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 5)
         {
             ax::Texture2D* arg0;
@@ -16158,8 +16155,7 @@ int lua_ax_base_SpriteFrame_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             ax::Texture2D* arg0;
@@ -16482,7 +16478,7 @@ int lua_ax_base_AnimationFrame_getUserInfo(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::ValueMap& ret = cobj->getUserInfo();
             ccvaluemap_to_luaval(tolua_S, ret);
@@ -16490,7 +16486,7 @@ int lua_ax_base_AnimationFrame_getUserInfo(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::ValueMap& ret = cobj->getUserInfo();
             ccvaluemap_to_luaval(tolua_S, ret);
@@ -17653,8 +17649,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             ax::Vector<ax::AnimationFrame *> arg0;
@@ -17669,8 +17664,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             ax::Vector<ax::AnimationFrame *> arg0;
@@ -17688,8 +17682,7 @@ int lua_ax_base_Animation_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::Animation* ret = ax::Animation::create();
@@ -18905,7 +18898,7 @@ int lua_ax_base_RotateTo_initWithDuration(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateTo:initWithDuration");
@@ -18921,7 +18914,7 @@ int lua_ax_base_RotateTo_initWithDuration(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateTo:initWithDuration");
@@ -18965,8 +18958,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -18981,8 +18973,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -19000,8 +18991,7 @@ int lua_ax_base_RotateTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -19104,7 +19094,7 @@ int lua_ax_base_RotateBy_initWithDuration(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:initWithDuration");
@@ -19124,7 +19114,7 @@ int lua_ax_base_RotateBy_initWithDuration(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:initWithDuration");
@@ -19140,7 +19130,7 @@ int lua_ax_base_RotateBy_initWithDuration(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RotateBy:initWithDuration");
@@ -19180,8 +19170,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -19199,8 +19188,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -19215,8 +19203,7 @@ int lua_ax_base_RotateBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -19319,7 +19306,7 @@ int lua_ax_base_MoveBy_initWithDuration(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveBy:initWithDuration");
@@ -19335,7 +19322,7 @@ int lua_ax_base_MoveBy_initWithDuration(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveBy:initWithDuration");
@@ -19375,8 +19362,7 @@ int lua_ax_base_MoveBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -19391,8 +19377,7 @@ int lua_ax_base_MoveBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -19495,7 +19480,7 @@ int lua_ax_base_MoveTo_initWithDuration(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveTo:initWithDuration");
@@ -19511,7 +19496,7 @@ int lua_ax_base_MoveTo_initWithDuration(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MoveTo:initWithDuration");
@@ -19551,8 +19536,7 @@ int lua_ax_base_MoveTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -19567,8 +19551,7 @@ int lua_ax_base_MoveTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -20525,7 +20508,7 @@ int lua_ax_base_ScaleTo_initWithDuration(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:initWithDuration");
@@ -20545,7 +20528,7 @@ int lua_ax_base_ScaleTo_initWithDuration(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:initWithDuration");
@@ -20561,7 +20544,7 @@ int lua_ax_base_ScaleTo_initWithDuration(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScaleTo:initWithDuration");
@@ -20609,8 +20592,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -20628,8 +20610,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -20644,8 +20625,7 @@ int lua_ax_base_ScaleTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             double arg0;
@@ -20747,8 +20727,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -20766,8 +20745,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -20782,8 +20760,7 @@ int lua_ax_base_ScaleBy_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             double arg0;
@@ -21527,8 +21504,7 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -21543,8 +21519,7 @@ int lua_ax_base_TintTo_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             double arg0;
@@ -21957,7 +21932,7 @@ int lua_ax_base_Animate_getAnimation(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             const ax::Animation* ret = cobj->getAnimation();
             object_to_luaval<ax::Animation>(tolua_S, "ax.Animation",(ax::Animation*)ret);
@@ -21965,7 +21940,7 @@ int lua_ax_base_Animate_getAnimation(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::Animation* ret = cobj->getAnimation();
             object_to_luaval<ax::Animation>(tolua_S, "ax.Animation",(ax::Animation*)ret);
@@ -22249,7 +22224,7 @@ int lua_ax_base_TargetedAction_getForcedTarget(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             const ax::Node* ret = cobj->getForcedTarget();
             object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
@@ -22257,7 +22232,7 @@ int lua_ax_base_TargetedAction_getForcedTarget(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::Node* ret = cobj->getForcedTarget();
             object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
@@ -24668,7 +24643,7 @@ int lua_ax_base_RenderView_setIcon(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             std::vector<std::string_view> arg0;
             ok &= luaval_to_std_vector_string_view(tolua_S, 2, &arg0, "ax.RenderView:setIcon");
@@ -24680,7 +24655,7 @@ int lua_ax_base_RenderView_setIcon(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderView:setIcon");
@@ -27645,7 +27620,7 @@ int lua_ax_base_Director_mainLoop(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Director:mainLoop");
@@ -27657,7 +27632,7 @@ int lua_ax_base_Director_mainLoop(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->mainLoop();
             lua_settop(tolua_S, 1);
@@ -29073,7 +29048,7 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             const char* ret = cobj->getNamespace();
             tolua_pushstring(tolua_S,(const char*)ret);
@@ -29081,7 +29056,7 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getNamespace");
@@ -29093,7 +29068,7 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getNamespace");
@@ -29109,7 +29084,7 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getNamespace");
@@ -31007,7 +30982,7 @@ int lua_ax_base_UserDefault_getBoolForKey(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getBoolForKey"); arg0 = arg0_tmp.c_str();
@@ -31023,7 +30998,7 @@ int lua_ax_base_UserDefault_getBoolForKey(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getBoolForKey"); arg0 = arg0_tmp.c_str();
@@ -31066,7 +31041,7 @@ int lua_ax_base_UserDefault_getIntegerForKey(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getIntegerForKey"); arg0 = arg0_tmp.c_str();
@@ -31082,7 +31057,7 @@ int lua_ax_base_UserDefault_getIntegerForKey(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getIntegerForKey"); arg0 = arg0_tmp.c_str();
@@ -31125,7 +31100,7 @@ int lua_ax_base_UserDefault_getLargeIntForKey(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getLargeIntForKey"); arg0 = arg0_tmp.c_str();
@@ -31141,7 +31116,7 @@ int lua_ax_base_UserDefault_getLargeIntForKey(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getLargeIntForKey"); arg0 = arg0_tmp.c_str();
@@ -31184,7 +31159,7 @@ int lua_ax_base_UserDefault_getFloatForKey(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getFloatForKey"); arg0 = arg0_tmp.c_str();
@@ -31200,7 +31175,7 @@ int lua_ax_base_UserDefault_getFloatForKey(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getFloatForKey"); arg0 = arg0_tmp.c_str();
@@ -31243,7 +31218,7 @@ int lua_ax_base_UserDefault_getDoubleForKey(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getDoubleForKey"); arg0 = arg0_tmp.c_str();
@@ -31259,7 +31234,7 @@ int lua_ax_base_UserDefault_getDoubleForKey(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getDoubleForKey"); arg0 = arg0_tmp.c_str();
@@ -31302,7 +31277,7 @@ int lua_ax_base_UserDefault_getStringForKey(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getStringForKey"); arg0 = arg0_tmp.c_str();
@@ -31318,7 +31293,7 @@ int lua_ax_base_UserDefault_getStringForKey(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             const char* arg0;
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.UserDefault:getStringForKey"); arg0 = arg0_tmp.c_str();
@@ -33413,7 +33388,7 @@ int lua_ax_base_FileUtils_renameFile(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:renameFile");
@@ -33429,7 +33404,7 @@ int lua_ax_base_FileUtils_renameFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:renameFile");
@@ -37145,7 +37120,7 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::EventController::ControllerEventType arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
@@ -37168,7 +37143,7 @@ int lua_ax_base_EventController_constructor(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::EventController::ControllerEventType arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventController:EventController");
@@ -37248,7 +37223,7 @@ int lua_ax_base_ActionCamera_setEye(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ActionCamera:setEye");
@@ -37268,7 +37243,7 @@ int lua_ax_base_ActionCamera_setEye(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Vec3 arg0;
             ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.ActionCamera:setEye");
@@ -48874,8 +48849,7 @@ int lua_ax_base_TurnOffTiles_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -48893,8 +48867,7 @@ int lua_ax_base_TurnOffTiles_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -51352,8 +51325,7 @@ int lua_ax_base_ClippingNode_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 1)
         {
             ax::Node* arg0;
@@ -51365,8 +51337,7 @@ int lua_ax_base_ClippingNode_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::ClippingNode* ret = ax::ClippingNode::create();
@@ -51619,8 +51590,7 @@ int lua_ax_base_ClippingRectangleNode_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::ClippingRectangleNode* ret = ax::ClippingRectangleNode::create();
@@ -51629,8 +51599,7 @@ int lua_ax_base_ClippingRectangleNode_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 1)
         {
             ax::Rect arg0;
@@ -51908,7 +51877,7 @@ int lua_ax_base_DrawNode_drawRect(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 5) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawRect");
@@ -51936,7 +51905,7 @@ int lua_ax_base_DrawNode_drawRect(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 6) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawRect");
@@ -51968,7 +51937,7 @@ int lua_ax_base_DrawNode_drawRect(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawRect");
@@ -51988,7 +51957,7 @@ int lua_ax_base_DrawNode_drawRect(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawRect");
@@ -52043,7 +52012,7 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 6) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
@@ -52075,7 +52044,7 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 7) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
@@ -52111,7 +52080,7 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 8) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
@@ -52151,7 +52120,7 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 9) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
@@ -52763,7 +52732,7 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 7) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
@@ -52799,7 +52768,7 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 9) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
@@ -52843,7 +52812,7 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 10) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
@@ -52891,7 +52860,7 @@ int lua_ax_base_DrawNode_drawSolidCircle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidCircle");
@@ -52950,7 +52919,7 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 8) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
@@ -52990,7 +52959,7 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 9) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
@@ -53034,7 +53003,7 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 9) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
@@ -53078,7 +53047,7 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 10) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
@@ -53126,7 +53095,7 @@ int lua_ax_base_DrawNode_drawPie(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 11) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawPie");
@@ -53377,7 +53346,7 @@ int lua_ax_base_DrawNode_drawTriangle(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 4) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawTriangle");
@@ -53401,7 +53370,7 @@ int lua_ax_base_DrawNode_drawTriangle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             const ax::Vec2* arg0;
             ok &= luaval_to_object<const ax::Vec2>(tolua_S, 2, "ax.Vec2",&arg0, "ax.DrawNode:drawTriangle");
@@ -53448,7 +53417,7 @@ int lua_ax_base_DrawNode_drawSolidTriangle(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 5) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidTriangle");
@@ -53476,7 +53445,7 @@ int lua_ax_base_DrawNode_drawSolidTriangle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 6) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawSolidTriangle");
@@ -53508,7 +53477,7 @@ int lua_ax_base_DrawNode_drawSolidTriangle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             const ax::Vec2* arg0;
             ok &= luaval_to_object<const ax::Vec2>(tolua_S, 2, "ax.Vec2",&arg0, "ax.DrawNode:drawSolidTriangle");
@@ -53528,7 +53497,7 @@ int lua_ax_base_DrawNode_drawSolidTriangle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             const ax::Vec2* arg0;
             ok &= luaval_to_object<const ax::Vec2>(tolua_S, 2, "ax.Vec2",&arg0, "ax.DrawNode:drawSolidTriangle");
@@ -54034,7 +54003,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setBMFontFilePath");
@@ -54054,7 +54023,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setBMFontFilePath");
@@ -54078,7 +54047,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setBMFontFilePath");
@@ -54090,7 +54059,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setBMFontFilePath");
@@ -54106,7 +54075,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setBMFontFilePath");
@@ -54122,7 +54091,7 @@ int lua_ax_base_Label_setBMFontFilePath(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setBMFontFilePath");
@@ -54220,7 +54189,7 @@ int lua_ax_base_Label_setCharMap(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 4) {
             ax::Texture2D* arg0;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.Label:setCharMap");
@@ -54244,7 +54213,7 @@ int lua_ax_base_Label_setCharMap(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setCharMap");
@@ -54268,7 +54237,7 @@ int lua_ax_base_Label_setCharMap(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:setCharMap");
@@ -55243,7 +55212,7 @@ int lua_ax_base_Label_disableEffect(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::LabelEffect arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:disableEffect");
@@ -55255,7 +55224,7 @@ int lua_ax_base_Label_disableEffect(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->disableEffect();
             lua_settop(tolua_S, 1);
@@ -55623,7 +55592,7 @@ int lua_ax_base_Label_setAlignment(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::TextHAlignment arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:setAlignment");
@@ -55639,7 +55608,7 @@ int lua_ax_base_Label_setAlignment(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::TextHAlignment arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Label:setAlignment");
@@ -57525,7 +57494,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::_ttfConfig arg0;
             ok &= luaval_to_ttfconfig(tolua_S, 2, &arg0, "ax.Label:initWithTTF");
@@ -57541,7 +57510,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::_ttfConfig arg0;
             ok &= luaval_to_ttfconfig(tolua_S, 2, &arg0, "ax.Label:initWithTTF");
@@ -57561,7 +57530,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             ax::_ttfConfig arg0;
             ok &= luaval_to_ttfconfig(tolua_S, 2, &arg0, "ax.Label:initWithTTF");
@@ -57585,7 +57554,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:initWithTTF");
@@ -57605,7 +57574,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:initWithTTF");
@@ -57629,7 +57598,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:initWithTTF");
@@ -57657,7 +57626,7 @@ int lua_ax_base_Label_initWithTTF(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 6) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Label:initWithTTF");
@@ -57850,8 +57819,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 6)
         {
             std::string_view arg0;
@@ -57878,8 +57846,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -57894,8 +57861,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -57913,8 +57879,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             std::string_view arg0;
@@ -57935,8 +57900,7 @@ int lua_ax_base_Label_createWithBMFont(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 5)
         {
             std::string_view arg0;
@@ -57982,8 +57946,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 4)
         {
             ax::Texture2D* arg0;
@@ -58004,8 +57967,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             std::string_view arg0;
@@ -58026,8 +57988,7 @@ int lua_ax_base_Label_createWithCharMap(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -58162,7 +58123,7 @@ int lua_ax_base_LabelAtlas_initWithString(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.LabelAtlas:initWithString");
@@ -58178,7 +58139,7 @@ int lua_ax_base_LabelAtlas_initWithString(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.LabelAtlas:initWithString");
@@ -58206,7 +58167,7 @@ int lua_ax_base_LabelAtlas_initWithString(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.LabelAtlas:initWithString");
@@ -58355,8 +58316,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -58371,8 +58331,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 5)
         {
             std::string_view arg0;
@@ -58396,8 +58355,7 @@ int lua_ax_base_LabelAtlas_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 5)
         {
             std::string_view arg0;
@@ -58608,7 +58566,7 @@ int lua_ax_base_Sprite_setTexture(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Texture2D* arg0;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.Sprite:setTexture");
@@ -58620,7 +58578,7 @@ int lua_ax_base_Sprite_setTexture(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Sprite:setTexture");
@@ -58710,7 +58668,7 @@ int lua_ax_base_Sprite_setTextureRect(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "ax.Sprite:setTextureRect");
@@ -58730,7 +58688,7 @@ int lua_ax_base_Sprite_setTextureRect(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "ax.Sprite:setTextureRect");
@@ -59017,7 +58975,7 @@ int lua_ax_base_Sprite_setSpriteFrame(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::SpriteFrame* arg0;
             ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "ax.Sprite:setSpriteFrame");
@@ -59029,7 +58987,7 @@ int lua_ax_base_Sprite_setSpriteFrame(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Sprite:setSpriteFrame");
@@ -60186,7 +60144,7 @@ int lua_ax_base_Sprite_initWithTexture(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Texture2D* arg0;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.Sprite:initWithTexture");
@@ -60202,7 +60160,7 @@ int lua_ax_base_Sprite_initWithTexture(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Texture2D* arg0;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.Sprite:initWithTexture");
@@ -60214,7 +60172,7 @@ int lua_ax_base_Sprite_initWithTexture(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Texture2D* arg0;
             ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.Sprite:initWithTexture");
@@ -60365,7 +60323,7 @@ int lua_ax_base_Sprite_initWithFile(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Sprite:initWithFile");
@@ -60381,7 +60339,7 @@ int lua_ax_base_Sprite_initWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Sprite:initWithFile");
@@ -60393,7 +60351,7 @@ int lua_ax_base_Sprite_initWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Sprite:initWithFile");
@@ -60633,8 +60591,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             ax::Texture2D* arg0;
@@ -60649,8 +60606,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             ax::Texture2D* arg0;
@@ -60668,8 +60624,7 @@ int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 1)
         {
             ax::Texture2D* arg0;
@@ -61091,7 +61046,7 @@ int lua_ax_base_LayerColor_initWithColor(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Color32 arg0;
             ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerColor:initWithColor");
@@ -61103,7 +61058,7 @@ int lua_ax_base_LayerColor_initWithColor(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Color32 arg0;
             ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerColor:initWithColor");
@@ -61147,8 +61102,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 3)
         {
             ax::Color32 arg0;
@@ -61166,8 +61120,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::LayerColor* ret = ax::LayerColor::create();
@@ -61176,8 +61129,7 @@ int lua_ax_base_LayerColor_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 1)
         {
             ax::Color32 arg0;
@@ -61862,7 +61814,7 @@ int lua_ax_base_LayerGradient_initWithColor(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::Color32 arg0;
             ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerGradient:initWithColor");
@@ -61882,7 +61834,7 @@ int lua_ax_base_LayerGradient_initWithColor(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Color32 arg0;
             ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.LayerGradient:initWithColor");
@@ -61922,8 +61874,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             ax::Color32 arg0;
@@ -61938,8 +61889,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::LayerGradient* ret = ax::LayerGradient::create();
@@ -61948,8 +61898,7 @@ int lua_ax_base_LayerGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             ax::Color32 arg0;
@@ -62898,8 +62847,7 @@ int lua_ax_base_LayerRadialGradient_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::LayerRadialGradient* ret = ax::LayerRadialGradient::create();
@@ -62908,8 +62856,7 @@ int lua_ax_base_LayerRadialGradient_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 5)
         {
             ax::Color32 arg0;
@@ -63087,7 +63034,7 @@ int lua_ax_base_LayerMultiplex_switchTo(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerMultiplex:switchTo");
@@ -63103,7 +63050,7 @@ int lua_ax_base_LayerMultiplex_switchTo(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.LayerMultiplex:switchTo");
@@ -66930,7 +66877,7 @@ int lua_ax_base_MotionStreak_initWithFade(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 5) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak:initWithFade");
@@ -66958,7 +66905,7 @@ int lua_ax_base_MotionStreak_initWithFade(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak:initWithFade");
@@ -67010,8 +66957,7 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 5)
         {
             double arg0;
@@ -67035,8 +66981,7 @@ int lua_ax_base_MotionStreak_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 5)
         {
             double arg0;
@@ -67160,7 +67105,7 @@ int lua_ax_base_NodeGrid_getGrid(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             const ax::GridBase* ret = cobj->getGrid();
             object_to_luaval<ax::GridBase>(tolua_S, "ax.GridBase",(ax::GridBase*)ret);
@@ -67168,7 +67113,7 @@ int lua_ax_base_NodeGrid_getGrid(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::GridBase* ret = cobj->getGrid();
             object_to_luaval<ax::GridBase>(tolua_S, "ax.GridBase",(ax::GridBase*)ret);
@@ -67397,8 +67342,7 @@ int lua_ax_base_NodeGrid_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 1)
         {
             ax::Rect arg0;
@@ -67410,8 +67354,7 @@ int lua_ax_base_NodeGrid_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::NodeGrid* ret = ax::NodeGrid::create();
@@ -68354,7 +68297,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.SpriteFrameCache:addSpriteFramesWithFile");
@@ -68370,7 +68313,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.SpriteFrameCache:addSpriteFramesWithFile");
@@ -68390,7 +68333,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.SpriteFrameCache:addSpriteFramesWithFile");
@@ -68402,7 +68345,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.SpriteFrameCache:addSpriteFramesWithFile");
@@ -68418,7 +68361,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.SpriteFrameCache:addSpriteFramesWithFile");
@@ -68434,7 +68377,7 @@ int lua_ax_base_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.SpriteFrameCache:addSpriteFramesWithFile");
@@ -69699,7 +69642,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
@@ -69715,7 +69658,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
@@ -69735,7 +69678,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
@@ -69759,7 +69702,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
@@ -69787,7 +69730,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
@@ -69803,7 +69746,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
@@ -69823,7 +69766,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
@@ -69847,7 +69790,7 @@ int lua_ax_base_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:bakeEmissionMask");
@@ -69906,7 +69849,7 @@ int lua_ax_base_ParticleEmissionMaskCache_getEmissionMask(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleEmissionMaskCache:getEmissionMask");
@@ -69918,7 +69861,7 @@ int lua_ax_base_ParticleEmissionMaskCache_getEmissionMask(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             unsigned int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleEmissionMaskCache:getEmissionMask");
@@ -76154,7 +76097,7 @@ int lua_ax_base_ParticleSystem_setAnimationIndicesAtlas(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             unsigned int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationIndicesAtlas");
@@ -76166,7 +76109,7 @@ int lua_ax_base_ParticleSystem_setAnimationIndicesAtlas(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             unsigned int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationIndicesAtlas");
@@ -76182,7 +76125,7 @@ int lua_ax_base_ParticleSystem_setAnimationIndicesAtlas(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->setAnimationIndicesAtlas();
             lua_settop(tolua_S, 1);
@@ -76221,7 +76164,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             unsigned short arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
@@ -76237,7 +76180,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ParticleSystem:addAnimationIndex");
@@ -76249,7 +76192,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::SpriteFrame* arg0;
             ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "ax.ParticleSystem:addAnimationIndex");
@@ -76261,7 +76204,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             unsigned short arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
@@ -76277,7 +76220,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             unsigned short arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
@@ -76293,7 +76236,7 @@ int lua_ax_base_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             unsigned short arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:addAnimationIndex");
@@ -76394,7 +76337,7 @@ int lua_ax_base_ParticleSystem_setAnimationDesc(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             std::vector<unsigned short> arg0;
             ok &= luaval_to_std_vector_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationDesc");
@@ -76406,7 +76349,7 @@ int lua_ax_base_ParticleSystem_setAnimationDesc(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::vector<unsigned short> arg0;
             ok &= luaval_to_std_vector_ushort(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationDesc");
@@ -76422,7 +76365,7 @@ int lua_ax_base_ParticleSystem_setAnimationDesc(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             unsigned short arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationDesc");
@@ -76446,7 +76389,7 @@ int lua_ax_base_ParticleSystem_setAnimationDesc(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             unsigned short arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.ParticleSystem:setAnimationDesc");
@@ -77586,7 +77529,7 @@ int lua_ax_base_ParticleSystem_initWithDictionary(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::ValueMap arg0;
             ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.ParticleSystem:initWithDictionary");
@@ -77602,7 +77545,7 @@ int lua_ax_base_ParticleSystem_initWithDictionary(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::ValueMap arg0;
             ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "ax.ParticleSystem:initWithDictionary");
@@ -78996,8 +78939,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -79009,8 +78951,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::ParticleSystemQuad* ret = ax::ParticleSystemQuad::create();
@@ -79019,8 +78960,7 @@ int lua_ax_base_ParticleSystemQuad_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 1)
         {
             ax::ValueMap arg0;
@@ -82307,7 +82247,7 @@ int lua_ax_base_ProtectedNode_addProtectedChild(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ProtectedNode:addProtectedChild");
@@ -82323,7 +82263,7 @@ int lua_ax_base_ProtectedNode_addProtectedChild(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ProtectedNode:addProtectedChild");
@@ -82335,7 +82275,7 @@ int lua_ax_base_ProtectedNode_addProtectedChild(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.ProtectedNode:addProtectedChild");
@@ -83109,7 +83049,7 @@ int lua_ax_base_RenderTexture_beginWithClear(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 5) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:beginWithClear");
@@ -83137,7 +83077,7 @@ int lua_ax_base_RenderTexture_beginWithClear(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:beginWithClear");
@@ -83161,7 +83101,7 @@ int lua_ax_base_RenderTexture_beginWithClear(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 6) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderTexture:beginWithClear");
@@ -83430,7 +83370,7 @@ int lua_ax_base_RenderTexture_saveToFileAsNonPMA(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 4) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFileAsNonPMA");
@@ -83458,7 +83398,7 @@ int lua_ax_base_RenderTexture_saveToFileAsNonPMA(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFileAsNonPMA");
@@ -83470,7 +83410,7 @@ int lua_ax_base_RenderTexture_saveToFileAsNonPMA(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFileAsNonPMA");
@@ -83486,7 +83426,7 @@ int lua_ax_base_RenderTexture_saveToFileAsNonPMA(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFileAsNonPMA");
@@ -83541,7 +83481,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFile");
@@ -83557,7 +83497,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFile");
@@ -83577,7 +83517,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFile");
@@ -83605,7 +83545,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFile");
@@ -83617,7 +83557,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFile");
@@ -83633,7 +83573,7 @@ int lua_ax_base_RenderTexture_saveToFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.RenderTexture:saveToFile");
@@ -84420,7 +84360,7 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 4) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
@@ -84444,7 +84384,7 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
@@ -84472,7 +84412,7 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
@@ -84492,7 +84432,7 @@ int lua_ax_base_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.RenderTexture:initWithWidthAndHeight");
@@ -84576,8 +84516,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 3)
         {
             int arg0;
@@ -84595,8 +84534,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             int arg0;
@@ -84617,8 +84555,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             int arg0;
@@ -84639,8 +84576,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 5)
         {
             int arg0;
@@ -84664,8 +84600,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 2)
         {
             int arg0;
@@ -84680,8 +84615,7 @@ int lua_ax_base_RenderTexture_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             int arg0;
@@ -86676,8 +86610,7 @@ int lua_ax_base_TransitionFlipX_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -86692,8 +86625,7 @@ int lua_ax_base_TransitionFlipX_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -86791,8 +86723,7 @@ int lua_ax_base_TransitionFlipY_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -86807,8 +86738,7 @@ int lua_ax_base_TransitionFlipY_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -86906,8 +86836,7 @@ int lua_ax_base_TransitionFlipAngular_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -86922,8 +86851,7 @@ int lua_ax_base_TransitionFlipAngular_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -87021,8 +86949,7 @@ int lua_ax_base_TransitionZoomFlipX_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -87037,8 +86964,7 @@ int lua_ax_base_TransitionZoomFlipX_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -87136,8 +87062,7 @@ int lua_ax_base_TransitionZoomFlipY_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -87152,8 +87077,7 @@ int lua_ax_base_TransitionZoomFlipY_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -87251,8 +87175,7 @@ int lua_ax_base_TransitionZoomFlipAngular_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -87267,8 +87190,7 @@ int lua_ax_base_TransitionZoomFlipAngular_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -87373,7 +87295,7 @@ int lua_ax_base_TransitionFade_initWithDuration(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFade:initWithDuration");
@@ -87389,7 +87311,7 @@ int lua_ax_base_TransitionFade_initWithDuration(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.TransitionFade:initWithDuration");
@@ -87433,8 +87355,7 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             double arg0;
@@ -87449,8 +87370,7 @@ int lua_ax_base_TransitionFade_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             double arg0;
@@ -92440,8 +92360,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 0)
         {
             ax::CameraBackgroundSkyBoxBrush* ret = ax::CameraBackgroundSkyBoxBrush::create();
@@ -92450,8 +92369,7 @@ int lua_ax_base_CameraBackgroundSkyBoxBrush_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 6)
         {
             std::string_view arg0;
@@ -92805,7 +92723,7 @@ int lua_ax_base_GridBase_initWithSize(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.GridBase:initWithSize");
@@ -92821,7 +92739,7 @@ int lua_ax_base_GridBase_initWithSize(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.GridBase:initWithSize");
@@ -92833,7 +92751,7 @@ int lua_ax_base_GridBase_initWithSize(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.GridBase:initWithSize");
@@ -92853,7 +92771,7 @@ int lua_ax_base_GridBase_initWithSize(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.GridBase:initWithSize");
@@ -93764,8 +93682,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             ax::Vec2 arg0;
@@ -93780,8 +93697,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 1)
         {
             ax::Vec2 arg0;
@@ -93793,8 +93709,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             ax::Vec2 arg0;
@@ -93812,8 +93727,7 @@ int lua_ax_base_Grid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             ax::Vec2 arg0;
@@ -93916,8 +93830,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 2)
         {
             ax::Vec2 arg0;
@@ -93932,8 +93845,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 1)
         {
             ax::Vec2 arg0;
@@ -93945,8 +93857,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 3)
         {
             ax::Vec2 arg0;
@@ -93964,8 +93875,7 @@ int lua_ax_base_TiledGrid3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 4)
         {
             ax::Vec2 arg0;
@@ -98767,7 +98677,7 @@ int lua_ax_base_ProgramManager_loadProgram(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ProgramManager:loadProgram");
@@ -98783,7 +98693,7 @@ int lua_ax_base_ProgramManager_loadProgram(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.ProgramManager:loadProgram");
@@ -98803,7 +98713,7 @@ int lua_ax_base_ProgramManager_loadProgram(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             unsigned long long arg0;
             ok &= luaval_to_long_long(tolua_S, 2, (long long*)&arg0, "ax.ProgramManager:loadProgram");
@@ -99244,7 +99154,7 @@ int lua_ax_base_Renderer_addCommand(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::RenderCommand* arg0;
             ok &= luaval_to_object<ax::RenderCommand>(tolua_S, 2, "ax.RenderCommand",&arg0, "ax.Renderer:addCommand");
@@ -99260,7 +99170,7 @@ int lua_ax_base_Renderer_addCommand(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::RenderCommand* arg0;
             ok &= luaval_to_object<ax::RenderCommand>(tolua_S, 2, "ax.RenderCommand",&arg0, "ax.Renderer:addCommand");
@@ -102161,7 +102071,7 @@ int lua_ax_base_TextureCache_getWhiteTexture(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.TextureCache:getWhiteTexture");
@@ -102177,7 +102087,7 @@ int lua_ax_base_TextureCache_getWhiteTexture(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             ax::Texture2D* ret = cobj->getWhiteTexture();
             object_to_luaval<ax::Texture2D>(tolua_S, "ax.Texture2D",(ax::Texture2D*)ret);
@@ -102263,7 +102173,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.TextureCache:addImage");
@@ -102279,7 +102189,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.TextureCache:addImage");
@@ -102299,7 +102209,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.TextureCache:addImage");
@@ -102311,7 +102221,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.TextureCache:addImage");
@@ -102327,7 +102237,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Image* arg0;
             ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.TextureCache:addImage");
@@ -102343,7 +102253,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Image* arg0;
             ok &= luaval_to_object<ax::Image>(tolua_S, 2, "ax.Image",&arg0, "ax.TextureCache:addImage");
@@ -102363,7 +102273,7 @@ int lua_ax_base_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Data arg0;
             luaL_error(tolua_S, "ax::Data unsupported");;
@@ -106352,7 +106262,7 @@ int lua_ax_base_TMXObjectGroup_getProperties(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::ValueMap& ret = cobj->getProperties();
             ccvaluemap_to_luaval(tolua_S, ret);
@@ -106360,7 +106270,7 @@ int lua_ax_base_TMXObjectGroup_getProperties(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::ValueMap& ret = cobj->getProperties();
             ccvaluemap_to_luaval(tolua_S, ret);
@@ -106449,7 +106359,7 @@ int lua_ax_base_TMXObjectGroup_getObjects(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::ValueVector& ret = cobj->getObjects();
             ccvaluevector_to_luaval(tolua_S, ret);
@@ -106457,7 +106367,7 @@ int lua_ax_base_TMXObjectGroup_getObjects(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::ValueVector& ret = cobj->getObjects();
             ccvaluevector_to_luaval(tolua_S, ret);
@@ -107759,7 +107669,7 @@ int lua_ax_base_TMXMapInfo_getLayers(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::Vector<ax::TMXLayerInfo *>& ret = cobj->getLayers();
             ccvector_to_luaval(tolua_S, ret);
@@ -107767,7 +107677,7 @@ int lua_ax_base_TMXMapInfo_getLayers(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::Vector<ax::TMXLayerInfo *>& ret = cobj->getLayers();
             ccvector_to_luaval(tolua_S, ret);
@@ -107856,7 +107766,7 @@ int lua_ax_base_TMXMapInfo_getTilesets(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::Vector<ax::TMXTilesetInfo *>& ret = cobj->getTilesets();
             ccvector_to_luaval(tolua_S, ret);
@@ -107864,7 +107774,7 @@ int lua_ax_base_TMXMapInfo_getTilesets(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::Vector<ax::TMXTilesetInfo *>& ret = cobj->getTilesets();
             ccvector_to_luaval(tolua_S, ret);
@@ -107953,7 +107863,7 @@ int lua_ax_base_TMXMapInfo_getObjectGroups(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::Vector<ax::TMXObjectGroup *>& ret = cobj->getObjectGroups();
             ccvector_to_luaval(tolua_S, ret);
@@ -107961,7 +107871,7 @@ int lua_ax_base_TMXMapInfo_getObjectGroups(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::Vector<ax::TMXObjectGroup *>& ret = cobj->getObjectGroups();
             ccvector_to_luaval(tolua_S, ret);
@@ -108438,7 +108348,7 @@ int lua_ax_base_TMXMapInfo_getProperties(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::ValueMap& ret = cobj->getProperties();
             ccvaluemap_to_luaval(tolua_S, ret);
@@ -108446,7 +108356,7 @@ int lua_ax_base_TMXMapInfo_getProperties(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::ValueMap& ret = cobj->getProperties();
             ccvaluemap_to_luaval(tolua_S, ret);
@@ -109261,7 +109171,7 @@ int lua_ax_base_FastTMXLayer_setTileGID(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.FastTMXLayer:setTileGID");
@@ -109281,7 +109191,7 @@ int lua_ax_base_FastTMXLayer_setTileGID(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.FastTMXLayer:setTileGID");
@@ -110010,7 +109920,7 @@ int lua_ax_base_FastTMXLayer_getProperties(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::ValueMap& ret = cobj->getProperties();
             ccvaluemap_to_luaval(tolua_S, ret);
@@ -110018,7 +109928,7 @@ int lua_ax_base_FastTMXLayer_getProperties(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::ValueMap& ret = cobj->getProperties();
             ccvaluemap_to_luaval(tolua_S, ret);
@@ -111563,7 +111473,7 @@ int lua_ax_base_FastTMXTiledMap_getObjectGroups(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 0) {
             ax::Vector<ax::TMXObjectGroup *>& ret = cobj->getObjectGroups();
             ccvector_to_luaval(tolua_S, ret);
@@ -111571,7 +111481,7 @@ int lua_ax_base_FastTMXTiledMap_getObjectGroups(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             const ax::Vector<ax::TMXObjectGroup *>& ret = cobj->getObjectGroups();
             ccvector_to_luaval(tolua_S, ret);
@@ -112954,7 +112864,7 @@ int lua_ax_base_MotionStreak3D_initWithFade(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 5) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak3D:initWithFade");
@@ -112982,7 +112892,7 @@ int lua_ax_base_MotionStreak3D_initWithFade(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 5) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.MotionStreak3D:initWithFade");
@@ -113034,8 +112944,7 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do
-    {
+    do {
         if (argc == 5)
         {
             double arg0;
@@ -113059,8 +112968,7 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do
-    {
+    do {
         if (argc == 5)
         {
             double arg0;

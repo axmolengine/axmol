@@ -360,7 +360,7 @@ int lua_ax_rhi_Program_getUniformLocation(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::rhi::Uniform arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Program:getUniformLocation");
@@ -372,7 +372,7 @@ int lua_ax_rhi_Program_getUniformLocation(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.Program:getUniformLocation");
@@ -415,7 +415,7 @@ int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::rhi::VertexInputKind arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Program:getVertexInputDesc");
@@ -427,7 +427,7 @@ int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.Program:getVertexInputDesc");
@@ -1231,7 +1231,7 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::rhi::VertexInputKind arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.ProgramState:getVertexInputDesc");
@@ -1243,7 +1243,7 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.ProgramState:getVertexInputDesc");
@@ -1286,7 +1286,7 @@ int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::rhi::UniformLocation arg0;
             ok &= luaval_to_uniformLocation(tolua_S, 2, arg0, "axrhi.ProgramState:setTexture");
@@ -1306,7 +1306,7 @@ int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::rhi::Texture* arg0;
             ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 2, "axrhi.Texture",&arg0, "axrhi.ProgramState:setTexture");

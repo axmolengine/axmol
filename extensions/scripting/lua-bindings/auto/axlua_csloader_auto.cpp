@@ -635,8 +635,7 @@ int lua_ax_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -655,8 +654,7 @@ int lua_ax_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;

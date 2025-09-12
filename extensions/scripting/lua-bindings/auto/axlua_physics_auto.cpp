@@ -2997,7 +2997,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PhysicsBody:removeCollider");
@@ -3009,7 +3009,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PhysicsBody:removeCollider");
@@ -3025,7 +3025,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::PhysicsCollider* arg0;
             ok &= luaval_to_object<ax::PhysicsCollider>(tolua_S, 2, "ax.PhysicsCollider",&arg0, "ax.PhysicsBody:removeCollider");
@@ -3037,7 +3037,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::PhysicsCollider* arg0;
             ok &= luaval_to_object<ax::PhysicsCollider>(tolua_S, 2, "ax.PhysicsCollider",&arg0, "ax.PhysicsBody:removeCollider");
@@ -8429,8 +8429,7 @@ int lua_ax_physics_PhysicsJointLimit_instantiate(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 6)
         {
             ax::PhysicsBody* arg0;
@@ -8457,8 +8456,7 @@ int lua_ax_physics_PhysicsJointLimit_instantiate(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::PhysicsBody* arg0;
@@ -8529,8 +8527,7 @@ int lua_ax_physics_PhysicsJointPin_instantiate(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::PhysicsBody* arg0;
@@ -8551,8 +8548,7 @@ int lua_ax_physics_PhysicsJointPin_instantiate(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             ax::PhysicsBody* arg0;
@@ -10248,8 +10244,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_instantiate(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::PhysicsBody* arg0;
@@ -10264,8 +10259,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_instantiate(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::PhysicsBody* arg0;
@@ -11342,7 +11336,7 @@ int lua_ax_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PhysicsWorld:removeBody");
@@ -11354,7 +11348,7 @@ int lua_ax_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::PhysicsBody* arg0;
             ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsWorld:removeBody");

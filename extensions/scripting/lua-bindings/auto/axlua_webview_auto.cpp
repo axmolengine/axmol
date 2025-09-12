@@ -141,7 +141,7 @@ int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.WebView:loadURL");
@@ -157,7 +157,7 @@ int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.WebView:loadURL");

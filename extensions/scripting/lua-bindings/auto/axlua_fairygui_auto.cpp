@@ -5801,7 +5801,7 @@ int lua_ax_fairygui_GObject_globalToLocal(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "fgui.GObject:globalToLocal");
@@ -5813,7 +5813,7 @@ int lua_ax_fairygui_GObject_globalToLocal(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "fgui.GObject:globalToLocal");
@@ -5856,7 +5856,7 @@ int lua_ax_fairygui_GObject_localToGlobal(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "fgui.GObject:localToGlobal");
@@ -5868,7 +5868,7 @@ int lua_ax_fairygui_GObject_localToGlobal(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "fgui.GObject:localToGlobal");
@@ -15906,7 +15906,7 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollToView");
@@ -15918,7 +15918,7 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollToView");
@@ -15934,7 +15934,7 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "fgui.ScrollPane:scrollToView");
@@ -15954,7 +15954,7 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.ScrollPane:scrollToView");
@@ -15966,7 +15966,7 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.ScrollPane:scrollToView");
@@ -15982,7 +15982,7 @@ int lua_ax_fairygui_ScrollPane_scrollToView(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.ScrollPane:scrollToView");
@@ -16888,7 +16888,7 @@ int lua_ax_fairygui_Transition_playReverse(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Transition:playReverse");
@@ -16904,7 +16904,7 @@ int lua_ax_fairygui_Transition_playReverse(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Transition:playReverse");
@@ -16928,7 +16928,7 @@ int lua_ax_fairygui_Transition_playReverse(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->playReverse();
             lua_settop(tolua_S, 1);
@@ -16936,7 +16936,7 @@ int lua_ax_fairygui_Transition_playReverse(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             std::function<void ()> arg0;
             do {
@@ -17033,7 +17033,7 @@ int lua_ax_fairygui_Transition_stop(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             bool arg0;
             ok &= luaval_to_boolean(tolua_S, 2, &arg0, "fgui.Transition:stop");
@@ -17049,7 +17049,7 @@ int lua_ax_fairygui_Transition_stop(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->stop();
             lua_settop(tolua_S, 1);
@@ -18035,7 +18035,7 @@ int lua_ax_fairygui_GComponent_removeChildren(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GComponent:removeChildren");
@@ -18051,7 +18051,7 @@ int lua_ax_fairygui_GComponent_removeChildren(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->removeChildren();
             lua_settop(tolua_S, 1);
@@ -22731,7 +22731,7 @@ int lua_ax_fairygui_GList_getFromPool(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             std::string arg0;
             ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.GList:getFromPool");
@@ -22743,7 +22743,7 @@ int lua_ax_fairygui_GList_getFromPool(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             fairygui::GObject* ret = cobj->getFromPool();
             object_to_luaval<fairygui::GObject>(tolua_S, "fgui.GObject",(fairygui::GObject*)ret);
@@ -22832,7 +22832,7 @@ int lua_ax_fairygui_GList_addItemFromPool(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             std::string arg0;
             ok &= luaval_to_std_string(tolua_S, 2,&arg0, "fgui.GList:addItemFromPool");
@@ -22844,7 +22844,7 @@ int lua_ax_fairygui_GList_addItemFromPool(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             fairygui::GObject* ret = cobj->addItemFromPool();
             object_to_luaval<fairygui::GObject>(tolua_S, "fgui.GObject",(fairygui::GObject*)ret);
@@ -22983,7 +22983,7 @@ int lua_ax_fairygui_GList_removeChildrenToPool(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:removeChildrenToPool");
@@ -22999,7 +22999,7 @@ int lua_ax_fairygui_GList_removeChildrenToPool(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->removeChildrenToPool();
             lua_settop(tolua_S, 1);
@@ -23479,7 +23479,7 @@ int lua_ax_fairygui_GList_resizeToFit(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:resizeToFit");
@@ -23495,7 +23495,7 @@ int lua_ax_fairygui_GList_resizeToFit(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.GList:resizeToFit");
@@ -27123,7 +27123,7 @@ int lua_ax_fairygui_Window_showModalWait(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Window:showModalWait");
@@ -27135,7 +27135,7 @@ int lua_ax_fairygui_Window_showModalWait(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->showModalWait();
             lua_settop(tolua_S, 1);
@@ -27174,7 +27174,7 @@ int lua_ax_fairygui_Window_closeModalWait(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "fgui.Window:closeModalWait");
@@ -27186,7 +27186,7 @@ int lua_ax_fairygui_Window_closeModalWait(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             bool ret = cobj->closeModalWait();
             tolua_pushboolean(tolua_S,(bool)ret);
@@ -28885,7 +28885,7 @@ int lua_ax_fairygui_GRoot_showPopup(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GRoot:showPopup");
@@ -28905,7 +28905,7 @@ int lua_ax_fairygui_GRoot_showPopup(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GRoot:showPopup");
@@ -28948,7 +28948,7 @@ int lua_ax_fairygui_GRoot_togglePopup(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GRoot:togglePopup");
@@ -28968,7 +28968,7 @@ int lua_ax_fairygui_GRoot_togglePopup(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GRoot:togglePopup");
@@ -29011,7 +29011,7 @@ int lua_ax_fairygui_GRoot_hidePopup(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.GRoot:hidePopup");
@@ -29023,7 +29023,7 @@ int lua_ax_fairygui_GRoot_hidePopup(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->hidePopup();
             lua_settop(tolua_S, 1);
@@ -30515,7 +30515,7 @@ int lua_ax_fairygui_PopupMenu_show(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             fairygui::GObject* arg0;
             ok &= luaval_to_object<fairygui::GObject>(tolua_S, 2, "fgui.GObject",&arg0, "fgui.PopupMenu:show");
@@ -30531,7 +30531,7 @@ int lua_ax_fairygui_PopupMenu_show(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->show();
             lua_settop(tolua_S, 1);
@@ -30563,8 +30563,7 @@ int lua_ax_fairygui_PopupMenu_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 0)
         {
             fairygui::PopupMenu* ret = fairygui::PopupMenu::create();
@@ -30573,8 +30572,7 @@ int lua_ax_fairygui_PopupMenu_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string arg0;
@@ -30682,8 +30680,7 @@ int lua_ax_fairygui_UIObjectFactory_newObject(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             fairygui::ObjectType arg0;
@@ -30695,8 +30692,7 @@ int lua_ax_fairygui_UIObjectFactory_newObject(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             fairygui::PackageItem* arg0;

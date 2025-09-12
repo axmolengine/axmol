@@ -305,7 +305,7 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setZoomScale");
@@ -321,7 +321,7 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.ScrollView:setZoomScale");
@@ -1886,8 +1886,7 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::extension::ScrollView* ret = ax::extension::ScrollView::create();
@@ -1896,8 +1895,7 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             ax::Size arg0;
@@ -1909,8 +1907,7 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::Size arg0;
@@ -8575,8 +8572,7 @@ int lua_ax_extension_PUParticleSystem3D_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -8588,8 +8584,7 @@ int lua_ax_extension_PUParticleSystem3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::PUParticleSystem3D* ret = ax::PUParticleSystem3D::create();
@@ -8598,8 +8593,7 @@ int lua_ax_extension_PUParticleSystem3D_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;

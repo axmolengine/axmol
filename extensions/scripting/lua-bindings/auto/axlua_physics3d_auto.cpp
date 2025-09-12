@@ -1685,7 +1685,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             double arg0;
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setAngularFactor");
@@ -1697,7 +1697,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Vec3 arg0;
             ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setAngularFactor");
@@ -3443,7 +3443,7 @@ int lua_ax_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             unsigned int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:removeConstraint");
@@ -3455,7 +3455,7 @@ int lua_ax_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Physics3DConstraint* arg0;
             ok &= luaval_to_object<ax::Physics3DConstraint>(tolua_S, 2, "ax.Physics3DConstraint",&arg0, "ax.Physics3DRigidBody:removeConstraint");
@@ -5865,7 +5865,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 4) {
             ax::Physics3DRigidBody* arg0;
             ok &= luaval_to_object<ax::Physics3DRigidBody>(tolua_S, 2, "ax.Physics3DRigidBody",&arg0, "ax.Physics3DPointToPointConstraint:init");
@@ -5889,7 +5889,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Physics3DRigidBody* arg0;
             ok &= luaval_to_object<ax::Physics3DRigidBody>(tolua_S, 2, "ax.Physics3DRigidBody",&arg0, "ax.Physics3DPointToPointConstraint:init");
@@ -5929,8 +5929,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::Physics3DRigidBody* arg0;
@@ -5951,8 +5950,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::Physics3DRigidBody* arg0;
@@ -6678,7 +6676,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Mat4 arg0;
             ok &= luaval_to_mat4(tolua_S, 2, &arg0, "ax.Physics3DHingeConstraint:getHingeAngle");
@@ -6694,7 +6692,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             double ret = cobj->getHingeAngle();
             tolua_pushnumber(tolua_S,(lua_Number)ret);
@@ -7105,8 +7103,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             ax::Physics3DRigidBody* arg0;
@@ -7124,8 +7121,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::Physics3DRigidBody* arg0;
@@ -7146,8 +7142,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::Physics3DRigidBody* arg0;
@@ -7162,8 +7157,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             ax::Physics3DRigidBody* arg0;
@@ -7181,8 +7175,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 6)
         {
             ax::Physics3DRigidBody* arg0;
@@ -7209,8 +7202,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 7)
         {
             ax::Physics3DRigidBody* arg0;
@@ -7240,8 +7232,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::Physics3DRigidBody* arg0;
@@ -7262,8 +7253,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 5)
         {
             ax::Physics3DRigidBody* arg0;
@@ -11567,8 +11557,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::Physics3DRigidBody* arg0;
@@ -11589,8 +11578,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::Physics3DRigidBody* arg0;
@@ -12237,8 +12225,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             ax::Physics3DRigidBody* arg0;
@@ -12256,8 +12243,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 5)
         {
             ax::Physics3DRigidBody* arg0;

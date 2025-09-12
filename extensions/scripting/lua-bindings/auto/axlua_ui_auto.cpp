@@ -3072,7 +3072,7 @@ int lua_ax_ui_Widget_updateSizeAndPosition(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Widget:updateSizeAndPosition");
@@ -3084,7 +3084,7 @@ int lua_ax_ui_Widget_updateSizeAndPosition(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->updateSizeAndPosition();
             lua_settop(tolua_S, 1);
@@ -5005,7 +5005,7 @@ int lua_ax_ui_Layout_setBackGroundColor(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Color32 arg0;
             ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColor");
@@ -5021,7 +5021,7 @@ int lua_ax_ui_Layout_setBackGroundColor(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::Color32 arg0;
             ok &=luaval_to_color32(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColor");
@@ -7694,7 +7694,7 @@ int lua_ax_ui_Button_setTitleAlignment(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::TextHAlignment arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Button:setTitleAlignment");
@@ -7710,7 +7710,7 @@ int lua_ax_ui_Button_setTitleAlignment(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ax::TextHAlignment arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Button:setTitleAlignment");
@@ -8554,8 +8554,7 @@ int lua_ax_ui_Button_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -8567,8 +8566,7 @@ int lua_ax_ui_Button_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -8583,8 +8581,7 @@ int lua_ax_ui_Button_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -8602,8 +8599,7 @@ int lua_ax_ui_Button_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             std::string_view arg0;
@@ -8624,8 +8620,7 @@ int lua_ax_ui_Button_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::Button* ret = ax::ui::Button::create();
@@ -10063,8 +10058,7 @@ int lua_ax_ui_CheckBox_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 5)
         {
             std::string_view arg0;
@@ -10088,8 +10082,7 @@ int lua_ax_ui_CheckBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 6)
         {
             std::string_view arg0;
@@ -10116,8 +10109,7 @@ int lua_ax_ui_CheckBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::CheckBox* ret = ax::ui::CheckBox::create();
@@ -10126,8 +10118,7 @@ int lua_ax_ui_CheckBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -10142,8 +10133,7 @@ int lua_ax_ui_CheckBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -10331,8 +10321,7 @@ int lua_ax_ui_RadioButton_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 5)
         {
             std::string_view arg0;
@@ -10356,8 +10345,7 @@ int lua_ax_ui_RadioButton_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 6)
         {
             std::string_view arg0;
@@ -10384,8 +10372,7 @@ int lua_ax_ui_RadioButton_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::RadioButton* ret = ax::ui::RadioButton::create();
@@ -10394,8 +10381,7 @@ int lua_ax_ui_RadioButton_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -10410,8 +10396,7 @@ int lua_ax_ui_RadioButton_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -10619,7 +10604,7 @@ int lua_ax_ui_RadioButtonGroup_setSelectedButton(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::ui::RadioButton* arg0;
             ok &= luaval_to_object<ax::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:setSelectedButton");
@@ -10631,7 +10616,7 @@ int lua_ax_ui_RadioButtonGroup_setSelectedButton(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RadioButtonGroup:setSelectedButton");
@@ -10674,7 +10659,7 @@ int lua_ax_ui_RadioButtonGroup_setSelectedButtonWithoutEvent(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::ui::RadioButton* arg0;
             ok &= luaval_to_object<ax::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:setSelectedButtonWithoutEvent");
@@ -10686,7 +10671,7 @@ int lua_ax_ui_RadioButtonGroup_setSelectedButtonWithoutEvent(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RadioButtonGroup:setSelectedButtonWithoutEvent");
@@ -11722,8 +11707,7 @@ int lua_ax_ui_ImageView_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -11735,8 +11719,7 @@ int lua_ax_ui_ImageView_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -11751,8 +11734,7 @@ int lua_ax_ui_ImageView_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::ImageView* ret = ax::ui::ImageView::create();
@@ -12991,7 +12973,7 @@ int lua_ax_ui_Text_disableEffect(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::LabelEffect arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.Text:disableEffect");
@@ -13003,7 +12985,7 @@ int lua_ax_ui_Text_disableEffect(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 0) {
             cobj->disableEffect();
             lua_settop(tolua_S, 1);
@@ -13601,8 +13583,7 @@ int lua_ax_ui_Text_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -13620,8 +13601,7 @@ int lua_ax_ui_Text_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::Text* ret = ax::ui::Text::create();
@@ -14079,8 +14059,7 @@ int lua_ax_ui_TextAtlas_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 5)
         {
             std::string_view arg0;
@@ -14104,8 +14083,7 @@ int lua_ax_ui_TextAtlas_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::TextAtlas* ret = ax::ui::TextAtlas::create();
@@ -14737,8 +14715,7 @@ int lua_ax_ui_LoadingBar_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -14750,8 +14727,7 @@ int lua_ax_ui_LoadingBar_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -14766,8 +14742,7 @@ int lua_ax_ui_LoadingBar_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create();
@@ -14776,8 +14751,7 @@ int lua_ax_ui_LoadingBar_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -14792,8 +14766,7 @@ int lua_ax_ui_LoadingBar_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -18009,7 +17982,7 @@ int lua_ax_ui_ScrollView_scrollToItem(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 4) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "axui.ScrollView:scrollToItem");
@@ -18033,7 +18006,7 @@ int lua_ax_ui_ScrollView_scrollToItem(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Node* arg0;
             ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "axui.ScrollView:scrollToItem");
@@ -20087,7 +20060,7 @@ int lua_ax_ui_ListView_scrollToItem(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 4) {
             ssize_t arg0;
             ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.ListView:scrollToItem");
@@ -20111,7 +20084,7 @@ int lua_ax_ui_ListView_scrollToItem(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ssize_t arg0;
             ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.ListView:scrollToItem");
@@ -22108,8 +22081,7 @@ int lua_ax_ui_Slider_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -22124,8 +22096,7 @@ int lua_ax_ui_Slider_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -22143,8 +22114,7 @@ int lua_ax_ui_Slider_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::Slider* ret = ax::ui::Slider::create();
@@ -24489,8 +24459,7 @@ int lua_ax_ui_TextField_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -24508,8 +24477,7 @@ int lua_ax_ui_TextField_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::TextField* ret = ax::ui::TextField::create();
@@ -24966,8 +24934,7 @@ int lua_ax_ui_TextBMFont_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -24982,8 +24949,7 @@ int lua_ax_ui_TextBMFont_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::TextBMFont* ret = ax::ui::TextBMFont::create();
@@ -25336,7 +25302,7 @@ int lua_ax_ui_PageView_scrollToPage(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ssize_t arg0;
             ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.PageView:scrollToPage");
@@ -25352,7 +25318,7 @@ int lua_ax_ui_PageView_scrollToPage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ssize_t arg0;
             ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.PageView:scrollToPage");
@@ -25395,7 +25361,7 @@ int lua_ax_ui_PageView_scrollToItem(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ssize_t arg0;
             ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.PageView:scrollToItem");
@@ -25411,7 +25377,7 @@ int lua_ax_ui_PageView_scrollToItem(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             ssize_t arg0;
             ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.PageView:scrollToItem");
@@ -28814,8 +28780,7 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             int arg0;
@@ -28833,8 +28798,7 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             int arg0;
@@ -29056,7 +29020,7 @@ int lua_ax_ui_RichText_removeElement(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::ui::RichElement* arg0;
             ok &= luaval_to_object<ax::ui::RichElement>(tolua_S, 2, "axui.RichElement",&arg0, "axui.RichText:removeElement");
@@ -29068,7 +29032,7 @@ int lua_ax_ui_RichText_removeElement(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.RichText:removeElement");
@@ -31659,8 +31623,7 @@ int lua_ax_ui_HBox_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             ax::Vec2 arg0;
@@ -31672,8 +31635,7 @@ int lua_ax_ui_HBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::HBox* ret = ax::ui::HBox::create();
@@ -31813,8 +31775,7 @@ int lua_ax_ui_VBox_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             ax::Vec2 arg0;
@@ -31826,8 +31787,7 @@ int lua_ax_ui_VBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::VBox* ret = ax::ui::VBox::create();
@@ -31967,8 +31927,7 @@ int lua_ax_ui_RelativeBox_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             ax::Vec2 arg0;
@@ -31980,8 +31939,7 @@ int lua_ax_ui_RelativeBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::RelativeBox* ret = ax::ui::RelativeBox::create();
@@ -32078,7 +32036,7 @@ int lua_ax_ui_Scale9Sprite_initWithFile(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Scale9Sprite:initWithFile");
@@ -32094,7 +32052,7 @@ int lua_ax_ui_Scale9Sprite_initWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Scale9Sprite:initWithFile");
@@ -32251,7 +32209,7 @@ int lua_ax_ui_Scale9Sprite_init(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 3) {
             ax::Sprite* arg0;
             ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
@@ -32271,7 +32229,7 @@ int lua_ax_ui_Scale9Sprite_init(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             ax::Sprite* arg0;
             ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
@@ -32295,7 +32253,7 @@ int lua_ax_ui_Scale9Sprite_init(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 6) {
             ax::Sprite* arg0;
             ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
@@ -32408,7 +32366,7 @@ int lua_ax_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 6) {
             ax::Sprite* arg0;
             ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:updateWithSprite");
@@ -32440,7 +32398,7 @@ int lua_ax_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             ax::Sprite* arg0;
             ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:updateWithSprite");
@@ -33605,8 +33563,7 @@ int lua_ax_ui_Scale9Sprite_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -33624,8 +33581,7 @@ int lua_ax_ui_Scale9Sprite_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::create();
@@ -33634,8 +33590,7 @@ int lua_ax_ui_Scale9Sprite_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::Rect arg0;
@@ -33650,8 +33605,7 @@ int lua_ax_ui_Scale9Sprite_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -33666,8 +33620,7 @@ int lua_ax_ui_Scale9Sprite_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -33701,8 +33654,7 @@ int lua_ax_ui_Scale9Sprite_createWithSpriteFrame(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::SpriteFrame* arg0;
@@ -33717,8 +33669,7 @@ int lua_ax_ui_Scale9Sprite_createWithSpriteFrame(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             ax::SpriteFrame* arg0;
@@ -33752,8 +33703,7 @@ int lua_ax_ui_Scale9Sprite_createWithSpriteFrameName(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -33768,8 +33718,7 @@ int lua_ax_ui_Scale9Sprite_createWithSpriteFrameName(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -33899,7 +33848,7 @@ int lua_ax_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 2) {
             ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndBackgroundSprite");
@@ -33915,7 +33864,7 @@ int lua_ax_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 2) {
             ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndBackgroundSprite");
@@ -33931,7 +33880,7 @@ int lua_ax_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 3) {
             ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndBackgroundSprite");
@@ -33951,7 +33900,7 @@ int lua_ax_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 4) {
             ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndBackgroundSprite");
@@ -36568,8 +36517,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             ax::Size arg0;
@@ -36587,8 +36535,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::Size arg0;
@@ -36603,8 +36550,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             ax::Size arg0;
@@ -36622,8 +36568,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::Size arg0;
@@ -36644,8 +36589,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             ax::Size arg0;
@@ -36660,8 +36604,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             ax::Size arg0;
@@ -36679,8 +36622,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             ax::Size arg0;
@@ -36701,8 +36643,7 @@ int lua_ax_ui_EditBox_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 5)
         {
             ax::Size arg0;
@@ -39894,8 +39835,7 @@ int lua_ax_ui_TabHeader_create(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -39913,8 +39853,7 @@ int lua_ax_ui_TabHeader_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             std::string_view arg0;
@@ -39935,8 +39874,7 @@ int lua_ax_ui_TabHeader_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 0)
         {
             ax::ui::TabHeader* ret = ax::ui::TabHeader::create();
@@ -39945,8 +39883,7 @@ int lua_ax_ui_TabHeader_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 6)
         {
             std::string_view arg0;
@@ -39973,8 +39910,7 @@ int lua_ax_ui_TabHeader_create(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 7)
         {
             std::string_view arg0;
@@ -40113,7 +40049,7 @@ int lua_ax_ui_TabControl_setSelectTab(lua_State* tolua_S)
     }
 #endif
     argc = lua_gettop(tolua_S)-1;
-    do{
+    do {
         if (argc == 1) {
             ax::ui::TabHeader* arg0;
             ok &= luaval_to_object<ax::ui::TabHeader>(tolua_S, 2, "axui.TabHeader",&arg0, "axui.TabControl:setSelectTab");
@@ -40125,7 +40061,7 @@ int lua_ax_ui_TabControl_setSelectTab(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    do{
+    do {
         if (argc == 1) {
             int arg0;
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axui.TabControl:setSelectTab");

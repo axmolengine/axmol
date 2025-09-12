@@ -175,8 +175,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -192,8 +191,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -212,8 +210,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -225,8 +222,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -241,8 +237,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 3)
         {
             std::string_view arg0;
@@ -260,8 +255,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 4)
         {
             std::string_view arg0;
@@ -1022,8 +1016,7 @@ int lua_ax_audioengine_AudioEngine_getProfile(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
@@ -1035,8 +1028,7 @@ int lua_ax_audioengine_AudioEngine_getProfile(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             int arg0;
@@ -1070,8 +1062,7 @@ int lua_ax_audioengine_AudioEngine_preload(lua_State* tolua_S)
 
     argc = lua_gettop(tolua_S)-1;
 
-    do 
-    {
+    do {
         if (argc == 2)
         {
             std::string_view arg0;
@@ -1090,8 +1081,7 @@ int lua_ax_audioengine_AudioEngine_preload(lua_State* tolua_S)
         }
     } while (0);
     ok  = true;
-    do 
-    {
+    do {
         if (argc == 1)
         {
             std::string_view arg0;
