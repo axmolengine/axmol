@@ -372,7 +372,7 @@ RenderViewImpl::RenderViewImpl(bool initglfw)
     , _mouseX(0.0f)
     , _mouseY(0.0f)
 {
-    _viewName = "axmol2";
+    _viewName = "axmol3";
     g_keyCodeMap.clear();
     for (auto&& item : g_keyCodeStructArray)
     {
@@ -1013,23 +1013,23 @@ void RenderViewImpl::applyWindowSize()
 void RenderViewImpl::setViewportInPoints(float x, float y, float w, float h)
 {
     Viewport vp;
-    vp.x = (int)(x * _scaleX * _renderScale * _windowZoomFactor +
+    vp.x = (int)(x * _viewScale.x * _renderScale * _windowZoomFactor +
                  _viewportRect.origin.x * _renderScale * _windowZoomFactor);
-    vp.y = (int)(y * _scaleY * _renderScale * _windowZoomFactor +
+    vp.y = (int)(y * _viewScale.y * _renderScale * _windowZoomFactor +
                  _viewportRect.origin.y * _renderScale * _windowZoomFactor);
-    vp.w = (unsigned int)(w * _scaleX * _renderScale * _windowZoomFactor);
-    vp.h = (unsigned int)(h * _scaleY * _renderScale * _windowZoomFactor);
+    vp.w = (unsigned int)(w * _viewScale.x * _renderScale * _windowZoomFactor);
+    vp.h = (unsigned int)(h * _viewScale.y * _renderScale * _windowZoomFactor);
     Camera::setDefaultViewport(vp);
 }
 
 void RenderViewImpl::setScissorInPoints(float x, float y, float w, float h)
 {
-    auto x1      = (int)(x * _scaleX * _renderScale * _windowZoomFactor +
+    auto x1      = (int)(x * _viewScale.x * _renderScale * _windowZoomFactor +
                     _viewportRect.origin.x * _renderScale * _windowZoomFactor);
-    auto y1      = (int)(y * _scaleY * _renderScale * _windowZoomFactor +
+    auto y1      = (int)(y * _viewScale.y * _renderScale * _windowZoomFactor +
                     _viewportRect.origin.y * _renderScale * _windowZoomFactor);
-    auto width1  = (unsigned int)(w * _scaleX * _renderScale * _windowZoomFactor);
-    auto height1 = (unsigned int)(h * _scaleY * _renderScale * _windowZoomFactor);
+    auto width1  = (unsigned int)(w * _viewScale.x * _renderScale * _windowZoomFactor);
+    auto height1 = (unsigned int)(h * _viewScale.y * _renderScale * _windowZoomFactor);
 
     setScissorRect(x1, y1, width1, height1);
 }
@@ -1039,11 +1039,11 @@ ax::Rect RenderViewImpl::getScissorInPoints() const
     auto& rect = getScissorRect();
 
     float x = (rect.x - _viewportRect.origin.x * _renderScale * _windowZoomFactor) /
-              (_scaleX * _renderScale * _windowZoomFactor);
+              (_viewScale.x * _renderScale * _windowZoomFactor);
     float y = (rect.y - _viewportRect.origin.y * _renderScale * _windowZoomFactor) /
-              (_scaleY * _renderScale * _windowZoomFactor);
-    float w = rect.width / (_scaleX * _renderScale * _windowZoomFactor);
-    float h = rect.height / (_scaleY * _renderScale * _windowZoomFactor);
+              (_viewScale.y * _renderScale * _windowZoomFactor);
+    float w = rect.width / (_viewScale.x * _renderScale * _windowZoomFactor);
+    float h = rect.height / (_viewScale.y * _renderScale * _windowZoomFactor);
     return ax::Rect(x, y, w, h);
 }
 

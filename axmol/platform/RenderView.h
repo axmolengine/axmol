@@ -467,8 +467,8 @@ public:
 #endif
 
 protected:
-    float transformInputX(float x) { return (x - _viewportRect.origin.x) / _scaleX; }
-    float transformInputY(float y) { return (y - _viewportRect.origin.y) / _scaleY; }
+    float transformInputX(float x) { return (x - _viewportRect.origin.x) / _viewScale.x; }
+    float transformInputY(float y) { return (y - _viewportRect.origin.y) / _viewScale.y; }
 
     void onFramebufferResized(uint32_t fbWidth, uint32_t fbHeight);
 
@@ -497,8 +497,7 @@ protected:
     // the view name
     std::string _viewName;
 
-    float _scaleX;
-    float _scaleY;
+    Vec2 _viewScale;
     ResolutionPolicy _resolutionPolicy;
 
 #ifdef AX_ENABLE_VR

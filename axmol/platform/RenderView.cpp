@@ -113,8 +113,7 @@ GfxContextAttrs& RenderView::getGfxContextAttrs()
 RenderView::RenderView()
     : _windowSize(0, 0)
     , _designResolutionSize(0, 0)
-    , _scaleX(1.0f)
-    , _scaleY(1.0f)
+    , _viewScale(Vec2::ONE)
     , _resolutionPolicy(ResolutionPolicy::UNKNOWN)
     , _interactive(true)
 {}
@@ -128,34 +127,33 @@ void RenderView::updateDesignResolutionSize()
     if (_windowSize.width > 0 && _windowSize.height > 0 && _designResolutionSize.width > 0 &&
         _designResolutionSize.height > 0)
     {
-        _scaleX = (float)_windowSize.width / _designResolutionSize.width;
-        _scaleY = (float)_windowSize.height / _designResolutionSize.height;
+        _viewScale = _windowSize / _designResolutionSize;
 
         if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
         {
-            _scaleX = _scaleY = MAX(_scaleX, _scaleY);
+            _viewScale.x = _viewScale.y = (std::max)(_viewScale.x, _viewScale.y);
         }
 
         else if (_resolutionPolicy == ResolutionPolicy::SHOW_ALL)
         {
-            _scaleX = _scaleY = MIN(_scaleX, _scaleY);
+            _viewScale.x = _viewScale.y = (std::min)(_viewScale.x, _viewScale.y);
         }
 
         else if (_resolutionPolicy == ResolutionPolicy::FIXED_HEIGHT)
         {
-            _scaleX                     = _scaleY;
-            _designResolutionSize.width = ceilf(_windowSize.width / _scaleX);
+            _viewScale.x                = _viewScale.y;
+            _designResolutionSize.width = ceilf(_windowSize.width / _viewScale.x);
         }
 
         else if (_resolutionPolicy == ResolutionPolicy::FIXED_WIDTH)
         {
-            _scaleY                      = _scaleX;
-            _designResolutionSize.height = ceilf(_windowSize.height / _scaleY);
+            _viewScale.y                 = _viewScale.x;
+            _designResolutionSize.height = ceilf(_windowSize.height / _viewScale.y);
         }
 
         // calculate the rect of viewport
-        float viewportW = _designResolutionSize.width * _scaleX;
-        float viewportH = _designResolutionSize.height * _scaleY;
+        float viewportW = _designResolutionSize.width * _viewScale.x;
+        float viewportH = _designResolutionSize.height * _viewScale.y;
 
         _viewportRect.setRect((_windowSize.width - viewportW) / 2, (_windowSize.height - viewportH) / 2, viewportW,
                               viewportH);
@@ -219,7 +217,7 @@ Vec2 RenderView::getVisibleSize() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
-        return Vec2(_windowSize.width / _scaleX, _windowSize.height / _scaleY);
+        return Vec2(_windowSize.width / _viewScale.x, _windowSize.height / _viewScale.y);
     }
     else
     {
@@ -231,8 +229,8 @@ Vec2 RenderView::getVisibleOrigin() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
-        return Vec2((_designResolutionSize.width - _windowSize.width / _scaleX) / 2,
-                    (_designResolutionSize.height - _windowSize.height / _scaleY) / 2);
+        return Vec2((_designResolutionSize.width - _windowSize.width / _viewScale.x) / 2,
+                    (_designResolutionSize.height - _windowSize.height / _viewScale.y) / 2);
     }
     else
     {
@@ -243,17 +241,17 @@ Vec2 RenderView::getVisibleOrigin() const
 void RenderView::setViewportInPoints(float x, float y, float w, float h)
 {
     Viewport vp;
-    vp.x      = (int)(x * _scaleX + _viewportRect.origin.x);
-    vp.y      = (int)(y * _scaleY + _viewportRect.origin.y);
-    vp.width  = (unsigned int)(w * _scaleX);
-    vp.height = (unsigned int)(h * _scaleY);
+    vp.x      = (int)(x * _viewScale.x + _viewportRect.origin.x);
+    vp.y      = (int)(y * _viewScale.y + _viewportRect.origin.y);
+    vp.width  = (unsigned int)(w * _viewScale.x);
+    vp.height = (unsigned int)(h * _viewScale.y);
     Camera::setDefaultViewport(vp);
 }
 
 void RenderView::setScissorInPoints(float x, float y, float w, float h)
 {
-    setScissorRect((int)(x * _scaleX + _viewportRect.origin.x), (int)(y * _scaleY + _viewportRect.origin.y),
-                   (unsigned int)(w * _scaleX), (unsigned int)(h * _scaleY));
+    setScissorRect((int)(x * _viewScale.x + _viewportRect.origin.x), (int)(y * _viewScale.y + _viewportRect.origin.y),
+                   (unsigned int)(w * _viewScale.y), (unsigned int)(h * _viewScale.y));
 }
 
 bool RenderView::isScissorEnabled()
@@ -266,10 +264,10 @@ Rect RenderView::getScissorInPoints() const
 {
     auto& rect = getScissorRect();
 
-    float x = (rect.x - _viewportRect.origin.x) / _scaleX;
-    float y = (rect.y - _viewportRect.origin.y) / _scaleY;
-    float w = rect.width / _scaleX;
-    float h = rect.height / _scaleY;
+    float x = (rect.x - _viewportRect.origin.x) / _viewScale.x;
+    float y = (rect.y - _viewportRect.origin.y) / _viewScale.y;
+    float w = rect.width / _viewScale.x;
+    float h = rect.height / _viewScale.y;
     return Rect(x, y, w, h);
 }
 
@@ -478,12 +476,12 @@ std::vector<Touch*> RenderView::getAllTouches() const
 
 float RenderView::getScaleX() const
 {
-    return _scaleX;
+    return _viewScale.x;
 }
 
 float RenderView::getScaleY() const
 {
-    return _scaleY;
+    return _viewScale.y;
 }
 
 void RenderView::onFramebufferResized(uint32_t fbWidth, uint32_t fbHeight)
