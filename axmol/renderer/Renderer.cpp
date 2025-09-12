@@ -206,7 +206,7 @@ void Renderer::init()
     auto driver = axdrv;
 #if AX_RENDER_API == AX_RENDER_API_D3D
     auto nativeWindow = Director::getInstance()->getRenderView()->getNativeWindow();
-    _commandBuffer = driver->createCommandBuffer(nativeWindow);
+    _commandBuffer    = driver->createCommandBuffer(nativeWindow);
 #else
     _commandBuffer = driver->createCommandBuffer(nullptr);
 #endif
