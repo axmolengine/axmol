@@ -146,7 +146,7 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
 
     _windowSize.width = _designResolutionSize.width = [eaView getWidth];
     _windowSize.height = _designResolutionSize.height = [eaView getHeight];
-    //    _scaleX = _scaleY = [eaView contentScaleFactor];
+    //    _viewScale.x = _viewScale.y = [eaView contentScaleFactor];
 
     _eaViewHandle = eaView;
 
@@ -218,7 +218,7 @@ bool RenderViewImpl::isGfxContextReady()
 bool RenderViewImpl::setContentScaleFactor(float contentScaleFactor)
 {
     AX_ASSERT(_resolutionPolicy == ResolutionPolicy::UNKNOWN);  // cannot enable retina mode
-    _scaleX = _scaleY = contentScaleFactor;
+    _viewScale.x = _viewScale.y = contentScaleFactor;
 
     [(__bridge EARenderView*)_eaViewHandle setNeedsLayout];
 
@@ -280,10 +280,10 @@ Rect RenderViewImpl::getSafeAreaRect() const
         Vec2 rightTop   = Vec2(_windowSize.width - safeAreaInsets.right, safeAreaInsets.top);
 
         // Convert a point from UI coordinates to which in design resolution coordinate.
-        leftBottom.x = (leftBottom.x - _viewportRect.origin.x) / _scaleX,
-        leftBottom.y = (leftBottom.y - _viewportRect.origin.y) / _scaleY;
-        rightTop.x   = (rightTop.x - _viewportRect.origin.x) / _scaleX,
-        rightTop.y   = (rightTop.y - _viewportRect.origin.y) / _scaleY;
+        leftBottom.x = (leftBottom.x - _viewportRect.origin.x) / _viewScale.x,
+        leftBottom.y = (leftBottom.y - _viewportRect.origin.y) / _viewScale.y;
+        rightTop.x   = (rightTop.x - _viewportRect.origin.x) / _viewScale.x,
+        rightTop.y   = (rightTop.y - _viewportRect.origin.y) / _viewScale.y;
 
         // Adjust points to make them inside design resolution
         leftBottom.x = MAX(leftBottom.x, 0);

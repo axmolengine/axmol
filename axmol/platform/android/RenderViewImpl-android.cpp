@@ -141,8 +141,8 @@ Rect RenderViewImpl::getSafeAreaRect() const
         deviceAspectRatio = safeAreaRect.size.width / safeAreaRect.size.height;
     }
 
-    float marginX = DEFAULT_MARGIN_ANDROID / _scaleX;
-    float marginY = DEFAULT_MARGIN_ANDROID / _scaleY;
+    float marginX = DEFAULT_MARGIN_ANDROID / _viewScale.x;
+    float marginY = DEFAULT_MARGIN_ANDROID / _viewScale.y;
 
     bool isScreenRound   = JniHelper::callStaticBooleanMethod("dev/axmol/lib/AxmolEngine", "isScreenRound");
     bool hasSoftKeys     = JniHelper::callStaticBooleanMethod("dev/axmol/lib/AxmolEngine", "hasSoftKeys");
@@ -183,10 +183,10 @@ Rect RenderViewImpl::getSafeAreaRect() const
         // cornerRadii is only available in API31+ (Android 12+)
         if (cornerRadii.size() >= 4)
         {
-            float radiiBottom = cornerRadii[0] / _scaleY;
-            float radiiLeft   = cornerRadii[1] / _scaleX;
-            float radiiRight  = cornerRadii[2] / _scaleX;
-            float radiiTop    = cornerRadii[3] / _scaleY;
+            float radiiBottom = cornerRadii[0] / _viewScale.y;
+            float radiiLeft   = cornerRadii[1] / _viewScale.x;
+            float radiiRight  = cornerRadii[2] / _viewScale.x;
+            float radiiTop    = cornerRadii[3] / _viewScale.y;
 
             if (safeAreaRect.size.width < safeAreaRect.size.height)
             {
@@ -248,10 +248,10 @@ Rect RenderViewImpl::getSafeAreaRect() const
 
         if (safeInsets.size() >= 4)
         {
-            float safeInsetBottom = safeInsets[0] / _scaleY;
-            float safeInsetLeft   = safeInsets[1] / _scaleX;
-            float safeInsetRight  = safeInsets[2] / _scaleX;
-            float safeInsetTop    = safeInsets[3] / _scaleY;
+            float safeInsetBottom = safeInsets[0] / _viewScale.y;
+            float safeInsetLeft   = safeInsets[1] / _viewScale.x;
+            float safeInsetRight  = safeInsets[2] / _viewScale.x;
+            float safeInsetTop    = safeInsets[3] / _viewScale.y;
 
             // fit safe area rect with safe insets
             auto maxInsetBottom = std::max(safeInsetBottom, insetBottom);
