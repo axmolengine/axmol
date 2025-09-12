@@ -561,4 +561,14 @@ void AudioEngine::setPan(int audioId, float value)
 
     _audioEngineImpl->setPan(audioId, value);
 }
+
+float AudioEngine::getPan(int audioId)
+{
+    if (!_audioEngineImpl)
+    {
+        return 0.f;
+    }
+
+    return _audioEngineImpl->getPan(audioId);
+}
 }

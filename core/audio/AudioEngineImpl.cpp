@@ -936,14 +936,22 @@ void AudioEngineImpl::setPan(AUDIO_ID audioId, float value)
     }
 }
 
+float AudioEngineImpl::getPan(int audioId)
+{
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto iter = _audioPlayers.find(audioId);
+    if (iter == _audioPlayers.end())
+        return 0.f;
+
+    auto player = iter->second;
+    lck.unlock();
+
+    return player->_pan;
+}
+
 bool AudioEngineImpl::isExtensionPresent(const char* extensionId)
 {
-    if (alIsExtensionPresent(extensionId))
-    {
-        return true;
-    }
-
-    return false;
+    return alIsExtensionPresent(extensionId);
 }
 
 void AudioEngineImpl::checkExtensions()

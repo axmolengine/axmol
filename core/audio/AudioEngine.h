@@ -347,13 +347,21 @@ public:
     static bool isEnabled();
 
     /**
-     * Sets the current playback position of an audio instance.
+     * Sets the pan of an audio instance.
      *
      * @param audioId   An audioID returned by the play2d function.
      * @param value     Panning value, from -1.f to +1.f, representing -60 degrees to +60 degrees
      * @return
      */
     static void setPan(AUDIO_ID audioId, float value);
+
+    /**
+     * Gets the pan of an audio instance.
+     *
+     * @param audioId   An audioID returned by the play2d function.
+     * @return pan value as a float between -1.0f to +1.0f
+     */
+    static float getPan(AUDIO_ID audioId);
 
 protected:
     static void addTask(const std::function<void()>& task);

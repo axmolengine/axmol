@@ -62,6 +62,7 @@ public:
     bool setCurrentTime(AUDIO_ID audioID, float time);
     void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, std::string_view)>& callback);
     void setPan(AUDIO_ID audioId, float value);
+    float getPan(AUDIO_ID audioId);
 
     void uncache(std::string_view filePath);
     void uncacheAll();
