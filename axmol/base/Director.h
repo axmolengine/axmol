@@ -294,15 +294,15 @@ public:
      * Useful for mapping (multi)touch input to the current scene layout,
      * taking into account orientation (portrait or landscape) and viewport settings.
      */
-    AX_DEPRECATED(3.0) Vec2 convertToGL(const Vec2& point) { return screenToWorld(point); }
     Vec2 screenToWorld(const Vec2& point);
+    AX_DEPRECATED(3.0) Vec2 convertToGL(const Vec2& point) { return screenToWorld(point); }
 
     /**
      * Converts an rendering coordinate to a screen coordinate.
      * Useful to convert node points to window points for calls such as glScissor.
      */
-    AX_DEPRECATED(3.0) Vec2 convertToUI(const Vec2& point) { return worldToScreen(point); }
     Vec2 worldToScreen(const Vec2& point);
+    AX_DEPRECATED(3.0) Vec2 convertToUI(const Vec2& point) { return worldToScreen(point); }
 
     /**
      * Gets the distance between camera and near clipping frame.

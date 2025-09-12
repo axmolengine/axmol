@@ -1914,7 +1914,7 @@ Vec2 Node::convertToWorldSpaceAR(const Vec2& nodePoint) const
     return convertToWorldSpace(nodePoint + _anchorPointInPoints);
 }
 
-Vec2 Node::convertToWindowSpace(const Vec2& nodePoint) const
+Vec2 Node::convertToScreenSpace(const Vec2& nodePoint) const
 {
     Vec2 worldPoint(this->convertToWorldSpace(nodePoint));
     return _director->worldToScreen(worldPoint);
