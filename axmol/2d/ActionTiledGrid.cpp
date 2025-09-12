@@ -796,7 +796,7 @@ SplitRows* SplitRows::clone() const
 void SplitRows::startWithTarget(Node* target)
 {
     TiledGrid3DAction::startWithTarget(target);
-    _winSize = Director::getInstance()->getLogicalSizeInPixels();
+    _worldSize = Director::getInstance()->getLogicalSizeInPixels();
 }
 
 void SplitRows::update(float time)
@@ -812,10 +812,10 @@ void SplitRows::update(float time)
             direction = -1;
         }
 
-        coords.bl.x += direction * _winSize.width * time;
-        coords.br.x += direction * _winSize.width * time;
-        coords.tl.x += direction * _winSize.width * time;
-        coords.tr.x += direction * _winSize.width * time;
+        coords.bl.x += direction * _worldSize.width * time;
+        coords.br.x += direction * _worldSize.width * time;
+        coords.tl.x += direction * _worldSize.width * time;
+        coords.tr.x += direction * _worldSize.width * time;
 
         setTile(pos, coords);
     }
@@ -852,7 +852,7 @@ SplitCols* SplitCols::clone() const
 void SplitCols::startWithTarget(Node* target)
 {
     TiledGrid3DAction::startWithTarget(target);
-    _winSize = Director::getInstance()->getLogicalSizeInPixels();
+    _worldSize = Director::getInstance()->getLogicalSizeInPixels();
 }
 
 void SplitCols::update(float time)
@@ -868,10 +868,10 @@ void SplitCols::update(float time)
             direction = -1;
         }
 
-        coords.bl.y += direction * _winSize.height * time;
-        coords.br.y += direction * _winSize.height * time;
-        coords.tl.y += direction * _winSize.height * time;
-        coords.tr.y += direction * _winSize.height * time;
+        coords.bl.y += direction * _worldSize.height * time;
+        coords.br.y += direction * _worldSize.height * time;
+        coords.tl.y += direction * _worldSize.height * time;
+        coords.tr.y += direction * _worldSize.height * time;
 
         setTile(pos, coords);
     }

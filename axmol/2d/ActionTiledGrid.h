@@ -540,7 +540,7 @@ public:
 
 protected:
     unsigned int _rows;
-    Vec2 _winSize;
+    Vec2 _worldSize;  // 2D world size in logical units (design resolution)
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(SplitRows);
@@ -583,7 +583,7 @@ public:
 
 protected:
     unsigned int _cols;
-    Vec2 _winSize;
+    Vec2 _worldSize;  // 2D world size in logical units (design resolution)
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(SplitCols);

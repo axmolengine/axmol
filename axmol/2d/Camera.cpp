@@ -286,7 +286,7 @@ Vec2 Camera::project(const Vec3& src) const
 {
     Vec2 screenPos;
 
-    auto viewport = _director->getLogicalSize();
+    auto worldSize = _director->getLogicalSize();
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
@@ -294,8 +294,8 @@ Vec2 Camera::project(const Vec3& src) const
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
-    screenPos.x = (ndcX + 1.0f) * 0.5f * viewport.width;
-    screenPos.y = (1.0f - (ndcY + 1.0f) * 0.5f) * viewport.height;
+    screenPos.x = (ndcX + 1.0f) * 0.5f * worldSize.width;
+    screenPos.y = (1.0f - (ndcY + 1.0f) * 0.5f) * worldSize.height;
     return screenPos;
 }
 
@@ -303,7 +303,7 @@ Vec2 Camera::projectGL(const Vec3& src) const
 {
     Vec2 screenPos;
 
-    auto viewport = _director->getLogicalSize();
+    auto worldSize = _director->getLogicalSize();
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
@@ -313,8 +313,8 @@ Vec2 Camera::projectGL(const Vec3& src) const
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
-    screenPos.x = (ndcX + 1.0f) * 0.5f * viewport.width;
-    screenPos.y = (ndcY + 1.0f) * 0.5f * viewport.height;
+    screenPos.x = (ndcX + 1.0f) * 0.5f * worldSize.width;
+    screenPos.y = (ndcY + 1.0f) * 0.5f * worldSize.height;
     return screenPos;
 }
 
