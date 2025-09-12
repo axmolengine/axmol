@@ -133,7 +133,7 @@
     if (!self.wkWebView.superview)
     {
         auto view   = ax::Director::getInstance()->getRenderView();
-        auto eaView = (__bridge EARenderView*)view->getEARenderView();
+        auto eaView = (__bridge EARenderView*)view->getNativeDisplay();
         [eaView addSubview:self.wkWebView];
     }
 }
@@ -503,7 +503,7 @@ void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32
         auto renderView = director->getRenderView();
         auto windowSize = renderView->getWindowSize();
 
-        auto scaleFactor = [static_cast<EARenderView*>(renderView->getEARenderView()) contentScaleFactor];
+        auto scaleFactor = [static_cast<EARenderView*>(renderView->getNativeDisplay()) contentScaleFactor];
 
         auto logicalSize = director->getLogicalSize();
 

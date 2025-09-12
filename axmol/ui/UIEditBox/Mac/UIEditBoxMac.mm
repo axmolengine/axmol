@@ -132,7 +132,7 @@
 - (NSWindow*)window
 {
     auto renderView = ax::Director::getInstance()->getRenderView();
-    return (NSWindow*)renderView->getCocoaWindow();
+    return (NSWindow*)renderView->getNativeWindow();
 }
 
 - (void)openKeyboard

@@ -431,24 +431,27 @@ public:
      */
     ResolutionPolicy getResolutionPolicy() const { return _resolutionPolicy; }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-    virtual HWND getWin32Window() = 0;
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
-    virtual PresentTarget* getPresentTarget() const = 0;
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-    virtual void* getCocoaWindow() = 0;
-    virtual void* getNSGLContext() = 0;  // stevetranby: added
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-    virtual void* getEAWindow() const     = 0;  // @since axmol-2.8.0
-    virtual void* getEARenderView() const = 0;  // @since axmol-2.8.0
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-    virtual void* getX11Window()  = 0;
-    virtual void* getX11Display() = 0;
-#    ifdef AX_ENABLE_WAYLAND
-    virtual void* getWaylandWindow()  = 0;
-    virtual void* getWaylandDisplay() = 0;
-#    endif
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+    /**
+     * @brief Get the Native Window object
+     *
+     * @return void*
+     *    win32: HWND
+     *    winrt: PresentTarget*
+     *    linux: x11 or wayland window
+     *    macOS: NSWindow*
+     *    iOS: UIWindow*
+     */
+    virtual void* getNativeWindow() const { return nullptr; }
+
+    /**
+     * @brief Get the Native Display object
+     *
+     * @return void*
+     *   linux: x11 or wayland display
+     *   macOS: NSGLContext*
+     *   iOS/tvOS: EARenderView*
+     */
+    virtual void* getNativeDisplay() const { return nullptr; }
 
     /**
      * Renders a Scene with a Renderer

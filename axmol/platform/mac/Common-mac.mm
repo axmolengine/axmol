@@ -49,7 +49,7 @@ AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
     [alert setAlertStyle:NSAlertStyleWarning];
 
     auto renderView = Director::getInstance()->getRenderView();
-    id window       = (id)renderView->getCocoaWindow();
+    id window       = (id)renderView->getNativeWindow();
     [alert beginSheetModalForWindow:window completionHandler:nil];
 
     return AlertResult::None;

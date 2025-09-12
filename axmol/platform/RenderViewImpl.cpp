@@ -394,40 +394,33 @@ RenderViewImpl::~RenderViewImpl()
     glfwTerminate();
 }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-HWND RenderViewImpl::getWin32Window()
+void* RenderViewImpl::getNativeWindow() const
 {
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
-}
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-void* RenderViewImpl::getCocoaWindow()
-{
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     return (void*)glfwGetCocoaWindow(_mainWindow);
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    int platform = glfwGetPlatform();
+    return platform == GLFW_PLATFORM_WAYLAND ? (void*)glfwGetWaylandWindow(_mainWindow)
+                                             : (void*)glfwGetX11Window(_mainWindow);
+#else
+    return nullptr;
+#endif
 }
-void* RenderViewImpl::getNSGLContext()
+
+void* RenderViewImpl::getNativeDisplay() const
 {
+#if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     return (void*)glfwGetNSGLContext(_mainWindow);
-}  // stevetranby: added
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-void* RenderViewImpl::getX11Window()
-{
-    return (void*)glfwGetX11Window(_mainWindow);
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    int platform = glfwGetPlatform();
+    return platform == GLFW_PLATFORM_WAYLAND ? (void*)glfwGetWaylandDisplay(_mainWindow)
+                                             : (void*)glfwGetX11Display(_mainWindow);
+#else
+    return nullptr;
+#endif
 }
-void* RenderViewImpl::getX11Display()
-{
-    return (void*)glfwGetX11Display();
-}
-#    ifdef AX_ENABLE_WAYLAND
-void* RenderViewImpl::getWaylandWindow()
-{
-    return (void*)glfwGetWaylandWindow(_mainWindow);
-}
-void* RenderViewImpl::getWaylandDisplay()
-{
-    return (void*)glfwGetWaylandDisplay();
-}
-#    endif
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 RenderViewImpl* RenderViewImpl::create(std::string_view viewName)
 {
@@ -583,7 +576,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
         return false;
     }
 
-    NSView* contentView = [(id)getCocoaWindow() contentView];
+    NSView* contentView = [(id)getNativeWindow() contentView];
     [contentView setWantsLayer:YES];
     CAMetalLayer* layer = [CAMetalLayer layer];
     [layer setDevice:device];

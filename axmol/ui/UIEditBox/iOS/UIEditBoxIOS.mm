@@ -320,7 +320,7 @@
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)distance
 {
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getNativeDisplay();
 
     [eaView doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
 }
@@ -337,7 +337,7 @@
 - (void)openKeyboard
 {
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getNativeDisplay();
 
     [eaView addSubview:self.textInput];
     [self.textInput becomeFirstResponder];
@@ -362,7 +362,7 @@
 - (void)animationSelector
 {
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getNativeDisplay();
 
     [eaView doAnimationWhenAnotherEditBeClicked];
 }
@@ -376,7 +376,7 @@
     _returnPressed = NO;
 
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getNativeDisplay();
 
     if ([eaView isKeyboardShown])
     {
@@ -469,7 +469,7 @@
     _returnPressed = NO;
 
     auto view            = ax::Director::getInstance()->getRenderView();
-    EARenderView* eaView = (__bridge EARenderView*)view->getEARenderView();
+    EARenderView* eaView = (__bridge EARenderView*)view->getNativeDisplay();
 
     if ([eaView isKeyboardShown])
     {

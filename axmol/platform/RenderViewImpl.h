@@ -129,23 +129,8 @@ public:
 
     bool isHighDPI() const override { return _isHighDPI; }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-    HWND getWin32Window() override;
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-    void* getCocoaWindow() override;
-    void* getNSGLContext() override;  // stevetranby: added
-#endif                                // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-    void* getX11Window() override;
-    void* getX11Display() override;
-#    ifdef AX_ENABLE_WAYLAND
-    void* getWaylandWindow() override;
-    void* getWaylandDisplay() override;
-#    endif
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+    void* getNativeWindow() const override;
+    void* getNativeDisplay() const override;
 
 protected:
     RenderViewImpl(bool initglfw = true);

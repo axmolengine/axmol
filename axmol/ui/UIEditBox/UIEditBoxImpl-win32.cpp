@@ -55,7 +55,7 @@ HWND EditBoxImplWin::s_hwndCocos           = 0;
 
 void EditBoxImplWin::lazyInit()
 {
-    s_hwndCocos = ax::Director::getInstance()->getRenderView()->getWin32Window();
+    s_hwndCocos = (HWND)ax::Director::getInstance()->getRenderView()->getNativeWindow();
     LONG style  = ::GetWindowLongW(s_hwndCocos, GWL_STYLE);
     ::SetWindowLongW(s_hwndCocos, GWL_STYLE, style | WS_CLIPCHILDREN);
     s_isInitialized    = true;

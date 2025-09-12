@@ -278,8 +278,8 @@ class GTKWebKit
 public:
     GTKWebKit() : isXwayland(webkit_dmabuf::is_wayland_display())
     {
-        m_X11Display      = static_cast<Display*>(ax::Director::getInstance()->getRenderView()->getX11Display());
-        m_ParentX11Window = reinterpret_cast<Window>(ax::Director::getInstance()->getRenderView()->getX11Window());
+        m_X11Display      = static_cast<Display*>(ax::Director::getInstance()->getRenderView()->getNativeDisplay());
+        m_ParentX11Window = reinterpret_cast<Window>(ax::Director::getInstance()->getRenderView()->getNativeWindow());
 
         init_gtk_platform_with_display(m_X11Display);
 

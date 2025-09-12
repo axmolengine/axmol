@@ -144,7 +144,7 @@ public:
 
     void SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb);
 
-    PresentTarget* getPresentTarget() const override { return &m_presentTarget; }
+    void* getNativeWindow() const override { return &m_presentTarget; }
 
 protected:
     RenderViewImpl();

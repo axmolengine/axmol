@@ -84,7 +84,7 @@ customization that is not appropriate for viewDidLoad.
 
     if (renderView)
     {
-        EARenderView* eaView = (__bridge EARenderView*)renderView->getEARenderView();
+        EARenderView* eaView = (__bridge EARenderView*)renderView->getNativeDisplay();
 
         if (eaView)
         {
