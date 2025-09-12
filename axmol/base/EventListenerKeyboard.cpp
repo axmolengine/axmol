@@ -34,7 +34,7 @@ const std::string EventListenerKeyboard::LISTENER_ID = "__ax_keyboard";
 
 bool EventListenerKeyboard::checkAvailable()
 {
-    if (onKeyPressed == nullptr && onKeyReleased == nullptr)
+    if (onKeyPressed == nullptr && onKeyReleased == nullptr && onKeyJustPressed == nullptr)
     {
         AXASSERT(false, "Invalid EventListenerKeyboard!");
         return false;
@@ -63,8 +63,9 @@ EventListenerKeyboard* EventListenerKeyboard::clone()
     if (ret->init())
     {
         ret->autorelease();
-        ret->onKeyPressed  = onKeyPressed;
-        ret->onKeyReleased = onKeyReleased;
+        ret->onKeyPressed       = onKeyPressed;
+        ret->onKeyReleased      = onKeyReleased;
+        ret->onKeyJustPressed   = onKeyJustPressed;
     }
     else
     {
@@ -73,30 +74,42 @@ EventListenerKeyboard* EventListenerKeyboard::clone()
     return ret;
 }
 
-EventListenerKeyboard::EventListenerKeyboard() : onKeyPressed(nullptr), onKeyReleased(nullptr) {}
+EventListenerKeyboard::EventListenerKeyboard() : onKeyPressed(nullptr), onKeyReleased(nullptr),  onKeyJustPressed(nullptr) {}
+
 
 bool EventListenerKeyboard::init()
 {
     auto listener = [this](Event* event) {
-        auto keyboardEvent = static_cast<EventKeyboard*>(event);
+        auto keyboardEvent             = static_cast<EventKeyboard*>(event);
+        EventKeyboard::KeyCode keyCode = keyboardEvent->_keyCode;
         if (keyboardEvent->_isPressed)
         {
+            if (!keyStates[keyCode])
+            {                                     // Key was not pressed before
+                justPressedKeys[keyCode] = true;  // Mark as just pressed
+                if (onKeyJustPressed != nullptr)
+                {
+                    onKeyJustPressed(keyCode, event);
+                }
+            }
+            keyStates[keyCode] = true;  // Mark key as pressed
             if (onKeyPressed != nullptr)
-                onKeyPressed(keyboardEvent->_keyCode, event);
+            {
+                onKeyPressed(keyCode, event);
+            }
         }
         else
-        {
+        {  // Key released
+            keyStates[keyCode]       = false;
+            justPressedKeys[keyCode] = false;  // Reset just pressed on release
             if (onKeyReleased != nullptr)
-                onKeyReleased(keyboardEvent->_keyCode, event);
+            {
+                onKeyReleased(keyCode, event);
+            }
         }
     };
 
-    if (EventListener::init(Type::KEYBOARD, LISTENER_ID, listener))
-    {
-        return true;
-    }
-
-    return false;
+    return EventListener::init(Type::KEYBOARD, LISTENER_ID, listener);
 }
 
 }  // namespace ax

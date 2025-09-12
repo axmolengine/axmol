@@ -59,8 +59,14 @@ public:
 
     std::function<void(EventKeyboard::KeyCode, Event*)> onKeyPressed;
     std::function<void(EventKeyboard::KeyCode, Event*)> onKeyReleased;
+    std::function<void(EventKeyboard::KeyCode, Event*)> onKeyJustPressed;
     EventListenerKeyboard();
     bool init();
+
+private:
+    std::unordered_map<EventKeyboard::KeyCode, bool> keyStates;
+    std::unordered_map<EventKeyboard::KeyCode, bool> justPressedKeys;
+
 };
 
 }  // namespace ax
