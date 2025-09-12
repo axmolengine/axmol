@@ -24912,6 +24912,147 @@ int lua_ax_base_RenderView_getResolutionPolicy(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_RenderView_getNativeWindow(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getNativeWindow'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getNativeWindow'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getNativeWindow();
+        #pragma warning NO CONVERSION FROM NATIVE FOR void*;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getNativeWindow",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getNativeWindow'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderView_getNativeDisplay(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getNativeDisplay'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getNativeDisplay'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getNativeDisplay();
+        #pragma warning NO CONVERSION FROM NATIVE FOR void*;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getNativeDisplay",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getNativeDisplay'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_RenderView_getWindowPlatform(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getWindowPlatform'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getWindowPlatform'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getWindowPlatform();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getWindowPlatform",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getWindowPlatform'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_RenderView_renderScene(lua_State* tolua_S)
 {
     int argc = 0;
@@ -25132,6 +25273,9 @@ int lua_register_ax_base_RenderView(lua_State* tolua_S)
         tolua_function(tolua_S,"getScaleX",lua_ax_base_RenderView_getScaleX);
         tolua_function(tolua_S,"getScaleY",lua_ax_base_RenderView_getScaleY);
         tolua_function(tolua_S,"getResolutionPolicy",lua_ax_base_RenderView_getResolutionPolicy);
+        tolua_function(tolua_S,"getNativeWindow",lua_ax_base_RenderView_getNativeWindow);
+        tolua_function(tolua_S,"getNativeDisplay",lua_ax_base_RenderView_getNativeDisplay);
+        tolua_function(tolua_S,"getWindowPlatform",lua_ax_base_RenderView_getWindowPlatform);
         tolua_function(tolua_S,"renderScene",lua_ax_base_RenderView_renderScene);
         tolua_function(tolua_S,"setInteractive",lua_ax_base_RenderView_setInteractive);
         tolua_function(tolua_S,"setGfxContextAttrs", lua_ax_base_RenderView_setGfxContextAttrs);
