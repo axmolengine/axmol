@@ -73,7 +73,7 @@ static ImGui_ImplAndroid_Data* ImGui_ImplAndroid_GetBackendData()
     return ImGui::GetCurrentContext() ? (ImGui_ImplAndroid_Data*)ImGui::GetIO().BackendPlatformUserData : nullptr;
 }
 
-static ax::Vec2 convertToUICoordinates(const Vec2& pos)
+static ax::Vec2 convertToScreen(const Vec2& pos)
 {
     auto* bd    = ImGui_ImplAndroid_GetBackendData();
     ImGuiIO& io = ImGui::GetIO();
@@ -144,7 +144,7 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
     touchListener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location              = convertToUICoordinates(touch->getLocationInView());
+        auto location              = convertToScreen(touch->getLocationInView());
         auto touchPos              = ImVec2(location.x, location.y);
 
         // We perform our own hit test here because on Android there is no real mouse hover event.
@@ -170,7 +170,7 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
             return;
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location              = convertToUICoordinates(touch->getLocationInView());
+        auto location              = convertToScreen(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
     };
@@ -180,7 +180,7 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
             return;
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location              = convertToUICoordinates(touch->getLocationInView());
+        auto location              = convertToScreen(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);
@@ -205,7 +205,7 @@ bool ImGui_ImplAndroid_InitForAxmol(RenderView* window, bool install_callbacks)
 
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location              = convertToUICoordinates(touch->getLocationInView());
+        auto location              = convertToScreen(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);

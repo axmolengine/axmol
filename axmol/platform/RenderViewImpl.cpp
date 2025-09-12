@@ -461,7 +461,7 @@ RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
     return nullptr;
 }
 
-RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::createWithFullscreen(std::string_view viewName)
 {
     auto ret = new RenderViewImpl();
     if (ret->initWithFullScreen(viewName))
@@ -473,7 +473,7 @@ RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
     return nullptr;
 }
 
-RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName,
+RenderViewImpl* RenderViewImpl::createWithFullscreen(std::string_view viewName,
                                                      const GLFWvidmode& videoMode,
                                                      GLFWmonitor* monitor)
 {
@@ -569,6 +569,8 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     int w, h;
     glfwGetWindowSize(_mainWindow, &w, &h);
 
+    handleWindowResized(w, h, fbWidth, fbHeight);
+
 #if AX_RENDER_API == AX_RENDER_API_MTL
     CGSize size;
     size.width  = static_cast<CGFloat>(fbWidth);
@@ -594,13 +596,6 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #elif AX_RENDER_API == AX_RENDER_API_GL
     glfwMakeContextCurrent(_mainWindow);
     glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
-#endif
-
-#if defined(__APPLE__)
-    // sense retina
-    setWindowSize(w / windowZoomFactor, h / windowZoomFactor);
-#else
-    handleWindowSize(w, h, fbWidth, fbHeight);
 #endif
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
@@ -663,9 +658,6 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #    endif
     CHECK_GL_ERROR_DEBUG();
 #endif
-    //    // GLFW v3.2 no longer emits "onGLFWWindowSizeFunCallback" at creation time. Force default viewport:
-    //    setViewportInPoints(0, 0, neededWidth, neededHeight);
-    //
     return true;
 }
 
@@ -816,12 +808,10 @@ void RenderViewImpl::setWindowZoomFactor(float zoomFactor)
     AXASSERT(zoomFactor > 0.0f, "zoomFactor must be larger than 0");
 
     if (std::abs(_windowZoomFactor - zoomFactor) < FLT_EPSILON)
-    {
         return;
-    }
 
     _windowZoomFactor = zoomFactor;
-    updateWindowSize();
+    applyWindowSize();
 }
 
 float RenderViewImpl::getWindowZoomFactor() const
@@ -967,52 +957,54 @@ void RenderViewImpl::setWindowSizeLimits(int minwidth, int minheight, int maxwid
     glfwSetWindowSizeLimits(_mainWindow, minwidth, minheight, maxwidth, maxheight);
 }
 
-void RenderViewImpl::handleWindowSize(int w, int h, int fbWidth, int fbHeigh)
+void RenderViewImpl::updateRenderScale(int windowWidth, int framebufferWidth)
 {
-    /*
-    * x-studio spec, fix view size incorrect when window size changed
-    * diff with cocos2d-x, axmol don't call this->setWindowSize when window size changed,
-    * instead, invoke this function to apply screenSize, update design size(update viewport)
+    _isHighDPI   = framebufferWidth > windowWidth;
+    _renderScale = static_cast<float>(framebufferWidth) / windowWidth;
+}
 
-      The cocos2d-x original behavior(incorrect):
-      1. first time enter full screen: w,h=1920,1080
-      2. second or later enter full screen: will trigger 2 times WindowSizeCallback
-        1). w,h=976,679
-        2). w,h=1024,768
-
-      @remark:
-      1. glfwSetWindowMonitor will fire window size change event in full screen mode, reason is
-       fired by glfw remove window style WS_OVERLAPPEDWINDOW and invoke SetWindowLong in glfwSetWindowMonitor,
-       then glfw will update vidoeMode to a windowed size instead desired full screen size before invoke windows
-       API: ChangeDisplaySettingsExW
-    */
-    _isHighDPI   = fbWidth > w;
-    _renderScale = static_cast<float>(fbWidth) / w;
+/*
+ * Handle window resize events (including fullscreen toggle, manual resize, HiDPI scaling).
+ * Updates HiDPI flag, render scale, logical window size, and design resolution (viewport)
+ * based on logical window size (w,h) and framebuffer size (fbWidth, fbHeight).
+ *
+ * Difference from cocos2d-x:
+ * - cocos2d-x calls setWindowSize() directly on window size change.
+ * - axmol uses this method instead to apply screen size and update viewport.
+ *
+ * The cocos2d-x original behavior (incorrect):
+ *   1. First time entering fullscreen: w,h = 1920,1080
+ *   2. Second or later entering fullscreen: triggers WindowSizeCallback twice:
+ *        1) w,h = 976,679
+ *        2) w,h = 1024,768
+ *
+ * Platform note (Windows + GLFW):
+ * - glfwSetWindowMonitor may trigger intermediate window size events when toggling fullscreen.
+ * - This happens because GLFW temporarily removes WS_OVERLAPPEDWINDOW style and calls SetWindowLong,
+ *   causing a windowed-size update before ChangeDisplaySettingsExW applies the final fullscreen resolution.
+ *
+ * Current GLFW fire event order:
+ *  -> framebufferSize
+ *  -> windowSize
+ */
+void RenderViewImpl::handleWindowResized(int w, int h, int fbWidth, int fbHeight)
+{
+    updateRenderScale(w, fbWidth);
 
     RenderView::setWindowSize(w / _windowZoomFactor, h / _windowZoomFactor);
-
     updateDesignResolutionSize();
 }
 
 void RenderViewImpl::setWindowSize(float width, float height)
 {
     RenderView::setWindowSize(width, height);
-    updateWindowSize();
+    applyWindowSize();
 }
 
-void RenderViewImpl::updateWindowSize()
+void RenderViewImpl::applyWindowSize()
 {
     if (_windowSize.width > 0 && _windowSize.height > 0)
     {
-        int w = 0, h = 0;
-        glfwGetWindowSize(_mainWindow, &w, &h);
-
-        int fbWidth = 0, fbHeight = 0;
-        glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
-
-        _isHighDPI   = fbWidth > w;
-        _renderScale = static_cast<float>(fbWidth) / w;
-
         glfwSetWindowSize(_mainWindow, (int)(_windowSize.width * _windowZoomFactor),
                           (int)(_windowSize.height * _windowZoomFactor));
     }
@@ -1297,11 +1289,12 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-        // record frameBufferSize in onGLFWFrameBufferSizeCallback?
+        // Query the actual framebuffer size here to handle HiDPI displays.
+        // On macOS/Windows/Linux with Retina/HiDPI, framebuffer size may differ from window size.
         int fbWidth = 0, fbHeight = 0;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
-        handleWindowSize(w, h, fbWidth, fbHeight);
+        handleWindowResized(w, h, fbWidth, fbHeight);
         onFramebufferResized(fbWidth, fbHeight);
         Size size(w, h);
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);

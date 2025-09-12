@@ -93,7 +93,7 @@ RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
     return nullptr;
 }
 
-RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::createWithFullscreen(std::string_view viewName)
 {
     auto ret = new RenderViewImpl();
     if (ret->initWithFullScreen(viewName))

@@ -51,19 +51,19 @@ Vec2 Touch::getStartLocationInView() const
 // returns the current touch location in OpenGL coordinates
 Vec2 Touch::getLocation() const
 {
-    return Director::getInstance()->convertToGL(_point);
+    return Director::getInstance()->screenToWorld(_point);
 }
 
 // returns the previous touch location in OpenGL coordinates
 Vec2 Touch::getPreviousLocation() const
 {
-    return Director::getInstance()->convertToGL(_prevPoint);
+    return Director::getInstance()->screenToWorld(_prevPoint);
 }
 
 // returns the start touch location in OpenGL coordinates
 Vec2 Touch::getStartLocation() const
 {
-    return Director::getInstance()->convertToGL(_startPoint);
+    return Director::getInstance()->screenToWorld(_startPoint);
 }
 
 // returns the delta position between the current location and the previous location in OpenGL coordinates

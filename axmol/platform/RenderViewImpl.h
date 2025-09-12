@@ -52,16 +52,10 @@ public:
                                           const Rect& rect,
                                           float zoomFactor = 1.0f,
                                           bool resizable   = false);
-    static RenderViewImpl* createWithFullScreen(std::string_view viewName);
-    static RenderViewImpl* createWithFullScreen(std::string_view viewName,
+    static RenderViewImpl* createWithFullscreen(std::string_view viewName);
+    static RenderViewImpl* createWithFullscreen(std::string_view viewName,
                                                 const GLFWvidmode& videoMode,
                                                 GLFWmonitor* monitor);
-
-    /*
-     *frameZoomFactor for frame. This method is for debugging big resolution (e.g.new ipad) app on desktop.
-     */
-
-    // void resize(int width, int height);
 
     float getWindowZoomFactor() const override;
     // void centerWindow();
@@ -122,7 +116,7 @@ public:
 #endif /* AX_ICON_SET_SUPPORT */
 
     /*
-     * Set zoom factor for frame. This method is for debugging big resolution (e.g.new ipad) app on desktop.
+     * Set zoom factor for window. This method is for debugging big resolution (e.g.new ipad) app on desktop.
      */
     void setWindowZoomFactor(float zoomFactor) override;
     /**
@@ -157,7 +151,7 @@ protected:
     RenderViewImpl(bool initglfw = true);
     ~RenderViewImpl() override;
 
-    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable);
+    bool initWithRect(std::string_view viewName, const Rect& rect, float zoomFactor, bool resizable);
     bool initWithFullScreen(std::string_view viewName);
     bool initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor);
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)  // Windows, Linux: use glad to loadGL
@@ -182,15 +176,10 @@ protected:
     void onGLFWWindowCloseCallback(GLFWwindow* window);
 
 protected:
-    /* invoke when window size changed
-     * glfw fire event order
-     *   -> framebufferSize
-     *   -> windowSize
-     */
-    void handleWindowSize(int w, int h, int fbWidth, int fbHeigh);
+    void handleWindowResized(int w, int h, int fbWidth, int fbHeigh);
 
     /* update window size when user set zoomFactor, retina, frameSize */
-    void updateWindowSize();
+    void applyWindowSize();
 
     bool _isTouchDevice = false;
     bool _captured;
@@ -224,6 +213,7 @@ public:
     static const std::string EVENT_WINDOW_CLOSE;
 
 private:
+    void updateRenderScale(int windowWidth, int framebufferWidth);
     AX_DISALLOW_COPY_AND_ASSIGN(RenderViewImpl);
 };
 

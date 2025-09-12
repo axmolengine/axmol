@@ -1917,7 +1917,7 @@ Vec2 Node::convertToWorldSpaceAR(const Vec2& nodePoint) const
 Vec2 Node::convertToWindowSpace(const Vec2& nodePoint) const
 {
     Vec2 worldPoint(this->convertToWorldSpace(nodePoint));
-    return _director->convertToUI(worldPoint);
+    return _director->worldToScreen(worldPoint);
 }
 
 // convenience methods which take a Touch instead of Vec2

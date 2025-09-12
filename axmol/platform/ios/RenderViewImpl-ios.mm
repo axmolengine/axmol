@@ -66,7 +66,7 @@ RenderViewImpl* RenderViewImpl::createWithRect(std::string_view viewName,
     return nullptr;
 }
 
-RenderViewImpl* RenderViewImpl::createWithFullScreen(std::string_view viewName)
+RenderViewImpl* RenderViewImpl::createWithFullscreen(std::string_view viewName)
 {
     auto ret = new RenderViewImpl();
     if (ret->initWithFullScreen(viewName))
@@ -292,8 +292,8 @@ Rect RenderViewImpl::getSafeAreaRect() const
         rightTop.y   = MAX(rightTop.y, 0);
 
         // Convert to GL coordinates
-        leftBottom = Director::getInstance()->convertToGL(leftBottom);
-        rightTop   = Director::getInstance()->convertToGL(rightTop);
+        leftBottom = Director::getInstance()->screenToWorld(leftBottom);
+        rightTop   = Director::getInstance()->screenToWorld(rightTop);
 
         return Rect(leftBottom.x, leftBottom.y, rightTop.x - leftBottom.x, rightTop.y - leftBottom.y);
     }

@@ -696,7 +696,7 @@ void Director::setClearColor(const Color& clearColor)
     _clearColor = clearColor;
 }
 
-static void GLToClipTransform(Mat4* transformOut)
+static void getViewProjMatrix(Mat4* transformOut)
 {
     if (nullptr == transformOut)
         return;
@@ -709,10 +709,10 @@ static void GLToClipTransform(Mat4* transformOut)
     *transformOut    = projection * modelview;
 }
 
-Vec2 Director::convertToGL(const Vec2& uiPoint)
+Vec2 Director::screenToWorld(const Vec2& uiPoint)
 {
     Mat4 transform;
-    GLToClipTransform(&transform);
+    getViewProjMatrix(&transform);
 
     Mat4 transformInv = transform.getInversed();
 
@@ -729,10 +729,10 @@ Vec2 Director::convertToGL(const Vec2& uiPoint)
     return Vec2(glCoord.x * factor, glCoord.y * factor);
 }
 
-Vec2 Director::convertToUI(const Vec2& glPoint)
+Vec2 Director::worldToScreen(const Vec2& glPoint)
 {
     Mat4 transform;
-    GLToClipTransform(&transform);
+    getViewProjMatrix(&transform);
 
     Vec4 clipCoord;
     // Need to calculate the zero depth from the transform.

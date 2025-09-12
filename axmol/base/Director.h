@@ -76,8 +76,8 @@ using PowerPreference = rhi::PowerPreference;
  and when to execute the Scenes.
 
  The Director is also responsible for:
- - initializing the OpenGL context
- - setting the OpenGL buffer depth (default one is 0-bit)
+ - initializing the graphics context
+ - setting the buffer depth (default one is 0-bit)
  - setting the projection (default one is 3D)
 
  Since the Director is a singleton, the standard way to use it is by calling:
@@ -107,7 +107,7 @@ public:
     static const char* EVENT_BEFORE_DRAW;
 
     /**
-     * @brief Possible OpenGL projections used by director
+     * @brief Possible projection types used by the director.
      */
     enum class Projection
     {
@@ -230,15 +230,15 @@ public:
     /** How many frames were called since the director started */
     unsigned int getTotalFrames() { return _totalFrames; }
 
-    /** Gets an OpenGL projection.
+    /** Gets an projection.
      * @since v0.8.2
      * @lua NA
      */
     Projection getProjection() { return _projection; }
-    /** Sets OpenGL projection. */
+    /** Sets projection. */
     void setProjection(Projection projection);
 
-    /** Sets the glViewport.*/
+    /** Sets the viewport.*/
     void setViewport();
 
     /** Whether or not the replaced scene will receive the cleanup message.
@@ -290,16 +290,19 @@ public:
     Rect getSafeAreaRect() const;
 
     /**
-     * Converts a screen coordinate to an OpenGL coordinate.
-     * Useful to convert (multi) touch coordinates to the current layout (portrait or landscape).
+     * Converts a point from screen coordinates to the rendering coordinate system.
+     * Useful for mapping (multi)touch input to the current scene layout,
+     * taking into account orientation (portrait or landscape) and viewport settings.
      */
-    Vec2 convertToGL(const Vec2& point);
+    AX_DEPRECATED(3.0) Vec2 convertToGL(const Vec2& point) { screenToWorld(point); }
+    Vec2 screenToWorld(const Vec2& point);
 
     /**
-     * Converts an OpenGL coordinate to a screen coordinate.
+     * Converts an rendering coordinate to a screen coordinate.
      * Useful to convert node points to window points for calls such as glScissor.
      */
-    Vec2 convertToUI(const Vec2& point);
+    AX_DEPRECATED(3.0) Vec2 convertToUI(const Vec2& point) { return worldToScreen(point); }
+    Vec2 worldToScreen(const Vec2& point);
 
     /**
      * Gets the distance between camera and near clipping frame.

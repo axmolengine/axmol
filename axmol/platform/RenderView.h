@@ -155,15 +155,15 @@ public:
      */
     virtual bool windowShouldClose() { return false; };
 
-    /** Static method and member so that we can modify it on all platforms before create OpenGL context.
+    /** Static method and member so that we can modify it on all platforms before create graphics context.
      *
-     * @param gfxContextAttrs The OpenGL context attrs.
+     * @param gfxContextAttrs The graphics context attrs.
      */
     static void setGfxContextAttrs(GfxContextAttrs& gfxContextAttrs);
 
-    /** Return the OpenGL context attrs.
+    /** Return the graphics context attrs.
      *
-     * @return Return the OpenGL context attrs.
+     * @return Return the graphics context attrs.
      */
     static GfxContextAttrs& getGfxContextAttrs();
 
@@ -173,7 +173,7 @@ public:
     virtual Vec2 getNativeWindowSize() const { return getWindowSize(); }
 
     /**
-     * Get the frame size aka zoomed window size
+     * Get the zoomed window size
      * In general, it returns the screen size since the EGL view is a fullscreen view.
      *
      * @return The window size (aka logic size)
@@ -181,7 +181,7 @@ public:
     virtual const Vec2& getWindowSize() const;
 
     /**
-     * Set the frame size aka zoomed window size
+     * Set the zoomed window size
      *
      * @param width The width of the fram size.
      * @param height The height of the fram size.
@@ -238,23 +238,23 @@ public:
     virtual bool isHighDPI() const { return false; }
 
     /**
-     * Get the visible area size of opengl viewport.
+     * Get the visible area size of render viewport.
      *
-     * @return The visible area size of opengl viewport.
+     * @return The visible area size of render viewport.
      */
     virtual Vec2 getVisibleSize() const;
 
     /**
-     * Get the visible origin point of opengl viewport.
+     * Get the visible origin point of render viewport.
      *
-     * @return The visible origin point of opengl viewport.
+     * @return The visible origin point of render viewport.
      */
     virtual Vec2 getVisibleOrigin() const;
 
     /**
-     * Get the visible rectangle of opengl viewport.
+     * Get the visible rectangle of render viewport.
      *
-     * @return The visible rectangle of opengl viewport.
+     * @return The visible rectangle of render viewport.
      */
     virtual Rect getVisibleRect() const;
 
@@ -286,7 +286,7 @@ public:
     virtual const Vec2& getDesignResolutionSize() const;
 
     /**
-     * Set opengl view port rectangle with points.
+     * Set render view port rectangle with points.
      *
      * @param x Set the points of x.
      * @param y Set the points of y.
@@ -398,9 +398,9 @@ public:
     virtual void setDefaultIcon() const {};
 
     /**
-     * Get the opengl view port rectangle.
+     * Get the render view port rectangle.
      *
-     * @return Return the opengl view port rectangle.
+     * @return Return the render view port rectangle.
      */
     const Rect& getViewportRect() const;
 

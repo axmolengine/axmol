@@ -47,7 +47,7 @@ public:
                                           bool resizable   = false);
 
     /** creates a RenderViewImpl with a name in fullscreen mode */
-    static RenderViewImpl* createWithFullScreen(std::string_view viewName);
+    static RenderViewImpl* createWithFullscreen(std::string_view viewName);
 
     static void choosePixelFormats();
     static PixelFormat _pixelFormat;
