@@ -931,7 +931,7 @@ void AudioEngineImpl::setPan(AUDIO_ID audioId, float value)
         panAngles[0] = (1.0f - player->_pan) * angle;
         panAngles[1] = (1.0f + player->_pan) * -angle;
 
-        alSourcei(player->_alSource, AL_SOURCE_RELATIVE, TRUE); // relative to listener
+        alSourcei(player->_alSource, AL_SOURCE_RELATIVE, AL_TRUE); // relative to listener
         alSourcefv(player->_alSource, AL_STEREO_ANGLES, panAngles);
     }
 }
