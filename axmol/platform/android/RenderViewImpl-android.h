@@ -53,6 +53,8 @@ public:
 
     void queueOperation(void (*op)(void*), void* param) override;
 
+    WindowPlatform getWindowPlatform() const override { return WindowPlatform::Android; }
+
 protected:
     RenderViewImpl();
     virtual ~RenderViewImpl();

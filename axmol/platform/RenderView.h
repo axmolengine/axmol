@@ -114,6 +114,20 @@ class Director;
  * @addtogroup platform
  * @{
  */
+
+enum class WindowPlatform
+{
+    Unknown,     // Unknown or unsupported platform
+    Win32,       // Windows desktop applications using HWND
+    CoreWindow,  // UWP or Xbox applications using CoreWindow/AppWindow
+    Cocoa,       // macOS applications using NSWindow
+    X11,         // Linux applications using the X11 window system
+    Wayland,     // Linux applications using the Wayland protocol
+    UIKit,       // iOS/tvOS applications using UIView/UIWindow
+    Android,     // Android applications using SurfaceView or native window
+    Web          // WebAssembly applications using HTML canvas or DOM
+};
+
 /**
  * @brief By RenderView you can operate the frame information of EGL view through some function.
  */
@@ -452,6 +466,13 @@ public:
      *   iOS/tvOS: EARenderView*
      */
     virtual void* getNativeDisplay() const { return nullptr; }
+
+    /**
+     * @brief Get the Window Platform object
+     *
+     * @return WindowPlatform
+     */
+    virtual WindowPlatform getWindowPlatform() const { return WindowPlatform::Unknown; };
 
     /**
      * Renders a Scene with a Renderer

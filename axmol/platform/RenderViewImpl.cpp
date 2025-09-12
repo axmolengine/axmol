@@ -415,10 +415,25 @@ void* RenderViewImpl::getNativeDisplay() const
     return (void*)glfwGetNSGLContext(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
     int platform = glfwGetPlatform();
-    return platform == GLFW_PLATFORM_WAYLAND ? (void*)glfwGetWaylandDisplay(_mainWindow)
-                                             : (void*)glfwGetX11Display(_mainWindow);
+    return platform == GLFW_PLATFORM_WAYLAND ? (void*)glfwGetWaylandDisplay() : (void*)glfwGetX11Display();
 #else
     return nullptr;
+#endif
+}
+
+WindowPlatform RenderViewImpl::getWindowPlatform() const
+{
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    return WindowPlatform::Win32;
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+    return WindowPlatform::Cocoa;
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    int platform = glfwGetPlatform();
+    return platform == GLFW_PLATFORM_WAYLAND ? WindowPlatform::Wayland : WindowPlatform::X11;
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+    return WindowPlatform::Web;
+#else
+    return WindowPlatform::Unknown;
 #endif
 }
 

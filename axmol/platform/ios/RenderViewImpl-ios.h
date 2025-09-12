@@ -74,6 +74,8 @@ public:
     /** @since axmol-3.0, returns the objective-c EARenderView instance */
     void* getNativeDisplay() const override { return _eaViewHandle; }
 
+    WindowPlatform getWindowPlatform() const override { return WindowPlatform::UIKit; }
+
     // overrides
     bool isGfxContextReady() override;
     void end() override;

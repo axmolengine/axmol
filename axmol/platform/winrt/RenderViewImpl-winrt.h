@@ -145,6 +145,7 @@ public:
     void SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb);
 
     void* getNativeWindow() const override { return &m_presentTarget; }
+    WindowPlatform getWindowPlatform() const override { return WindowPlatform::CoreWindow; }
 
 protected:
     RenderViewImpl();

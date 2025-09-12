@@ -131,6 +131,7 @@ public:
 
     void* getNativeWindow() const override;
     void* getNativeDisplay() const override;
+    WindowPlatform getWindowPlatform() const override;
 
 protected:
     RenderViewImpl(bool initglfw = true);
