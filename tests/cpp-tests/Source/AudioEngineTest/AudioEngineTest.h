@@ -358,4 +358,30 @@ public:
 private:
 };
 
+class AudioPanningTest : public AudioEngineTestDemo
+{
+public:
+    CREATE_FUNC(AudioPanningTest);
+
+    ~AudioPanningTest() override;
+
+    bool init() override;
+    void update(float dt) override;
+    std::string title() const override;
+
+private:
+    int _audioID;
+    bool _loopEnabled;
+    float _volume;
+    float _pan;
+    float _duration;
+    float _timeRatio;
+
+    void* _playItem;
+    void* _timeSlider;
+    bool _updateTimeSlider;
+    bool _isStopped;
+    ax::Label* _playOverLabel;
+};
+
 #endif /* defined(__NEWAUDIOENGINE_TEST_H_) */
