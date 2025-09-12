@@ -294,7 +294,7 @@ public:
      * Useful for mapping (multi)touch input to the current scene layout,
      * taking into account orientation (portrait or landscape) and viewport settings.
      */
-    AX_DEPRECATED(3.0) Vec2 convertToGL(const Vec2& point) { screenToWorld(point); }
+    AX_DEPRECATED(3.0) Vec2 convertToGL(const Vec2& point) { return screenToWorld(point); }
     Vec2 screenToWorld(const Vec2& point);
 
     /**
