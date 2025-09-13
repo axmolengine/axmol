@@ -69,9 +69,6 @@ class TextureCache;
 class Renderer;
 class Camera;
 
-using PowerPreference = rhi::PowerPreference;
-using RenderScaleMode = rhi::RenderScaleMode;
-
 /**
  @brief Class that creates and handles the main Window and manages how
  and when to execute the Scenes.
@@ -177,23 +174,6 @@ public:
      * @lua NA
      */
     void setRenderView(RenderView* renderView);
-
-    /**
-     * Sets GPU Power Preference, only affects d3d render API currently.
-     */
-    void setPowerPreference(PowerPreference value) { _powerPreference = value; }
-
-    /**
-     * Gets GPU Power Preference
-     */
-    PowerPreference getPowerPreference() const { return _powerPreference; }
-
-    /**
-    * Sets render scale mode
-    */
-    void setRenderScaleMode(RenderScaleMode mode) { _renderScaleMode = mode; }
-
-    RenderScaleMode getRenderScaleMode() const { return _renderScaleMode; }
 
     /**
      * @brief Enable or disable the graphics API debug layer.
@@ -725,8 +705,6 @@ protected:
     bool _childrenIndexerEnabled = false;
 
     bool _debugLayerEnabled          = false;
-    PowerPreference _powerPreference = PowerPreference::Auto;
-    RenderScaleMode _renderScaleMode = RenderScaleMode::Default;
 
     /* axmol thread id */
     std::thread::id _axmol_thread_id;

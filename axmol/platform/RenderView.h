@@ -43,6 +43,16 @@ THE SOFTWARE.
 #    define AX_ICON_SET_SUPPORT true
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) */
 
+namespace ax
+{
+
+using PowerPreference = rhi::PowerPreference;
+using RenderScaleMode = rhi::RenderScaleMode;
+
+class Scene;
+class Renderer;
+class Director;
+
 /** There are some Resolution Policy for Adapt to the screen. */
 enum class ResolutionPolicy
 {
@@ -74,41 +84,7 @@ enum class ResolutionPolicy
     UNKNOWN,
 };
 
-/** @struct GfxContextAttrs
- *
- * The graphics context attributes.
- */
-struct GfxContextAttrs
-{
-    int redBits;
-    int greenBits;
-    int blueBits;
-    int alphaBits;
-    int depthBits;
-    int stencilBits;
-    int multisamplingCount;
-    bool visible   = true;
-    bool decorated = true;
-    bool vsync     = true;
-#if defined(_WIN32)
-    void* viewParent = nullptr;
-#endif
-};
-
-namespace ax
-{
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-struct PresentTarget
-{
-    void* surface{nullptr};
-    float width{1};
-    float height{1};
-};
-#endif
-
-class Scene;
-class Renderer;
-class Director;
+using GfxContextAttrs = rhi::ContextAttrs;
 
 /**
  * @addtogroup platform
@@ -503,9 +479,6 @@ protected:
 
     void handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num, intptr_t ids[], float xs[], float ys[]);
 
-    /** The graphics context attrs. */
-    static GfxContextAttrs _gfxContextAttrs;
-
     // The window size aka logic size, may scaled by windowZoomFactor in high DPI display
     Vec2 _windowSize;
     // resolution size, it is the size appropriate for the app resources.
@@ -527,6 +500,9 @@ private:
 
     bool _interactive;
 };
+
+using ResolutionPolicy = ax::ResolutionPolicy;
+using GfxContextAttrs  = ax::GfxContextAttrs;
 
 // end of platform group
 /// @}

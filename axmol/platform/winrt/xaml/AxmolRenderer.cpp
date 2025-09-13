@@ -55,10 +55,13 @@ AxmolRenderer::~AxmolRenderer() {}
 void AxmolRenderer::Resume()
 {
     auto director = ax::Director::getInstance();
+    auto appInstance = Application::getInstance();
 
     auto renderView = static_cast<RenderViewImpl*>(director->getRenderView());
     if (!renderView)
     {
+        appInstance->initGfxContextAttrs();
+
         renderView = RenderViewImpl::createWithRect(
             "axmol3", ax::Rect{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)});
         renderView->setPanel(m_panel);
@@ -66,10 +69,10 @@ void AxmolRenderer::Resume()
         renderView->SetDPI(m_dpi);
         renderView->setDispatcher(m_dispatcher);
         director->setRenderView(renderView);
-        Application::getInstance()->run();
+        appInstance->run();
     }
 
-    Application::getInstance()->applicationWillEnterForeground();
+    appInstance->applicationWillEnterForeground();
     ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent, true);
 }

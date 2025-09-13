@@ -240,6 +240,8 @@ protected:
 
     axstd::pod_vector<ID3D11ShaderResourceView*> _nullSRVs;
     UINT _textureBounds{0};
+
+    RenderScaleMode _renderScaleMode{};
 };
 
 /** @} */

@@ -196,6 +196,8 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
 {
     _driverImpl = driver;
 
+    _renderScaleMode = driver->getContextAttrs().renderScaleMode;
+
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
 
@@ -311,12 +313,10 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
             });
             AX_BREAK_IF(FAILED(hr));
 
-            auto scaleMode = Director::getInstance()->getSurfaceScaleMode();
-
             // create swapchain
             // The swapchain size can't be zero for WinRT, maybe SwapChainPanel::ActualWidth/Height * DPI
             DXGI_SWAP_CHAIN_DESC1 desc1 = {};
-            if (scaleMode == SurfaceScaleMode::Physical)
+            if (_renderScaleMode == RenderScaleMode::Physical)
             {
                 desc1.Width  = static_cast<UINT>(panelSize.Width * renderScale.x);
                 desc1.Height = static_cast<UINT>(panelSize.Height * renderScale.y);
@@ -348,7 +348,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
             DXGI_SWAP_CHAIN_DESC1 actualDesc = {};
             swapChain1->GetDesc1(&actualDesc);
 
-            if (scaleMode == SurfaceScaleMode::Physical)
+            if (_renderScaleMode == RenderScaleMode::Physical)
             {
                 // Setup a scale matrix for the swap chain
                 DXGI_MATRIX_3X2_F scaleMatrix = {};

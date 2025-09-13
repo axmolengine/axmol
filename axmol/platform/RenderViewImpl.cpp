@@ -520,21 +520,23 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
 
+    auto& contextAttrs = getGfxContextAttrs();
+
     glfwWindowHint(GLFW_RESIZABLE, resizable ? GL_TRUE : GL_FALSE);
-    glfwWindowHint(GLFW_RED_BITS, _gfxContextAttrs.redBits);
-    glfwWindowHint(GLFW_GREEN_BITS, _gfxContextAttrs.greenBits);
-    glfwWindowHint(GLFW_BLUE_BITS, _gfxContextAttrs.blueBits);
-    glfwWindowHint(GLFW_ALPHA_BITS, _gfxContextAttrs.alphaBits);
-    glfwWindowHint(GLFW_DEPTH_BITS, _gfxContextAttrs.depthBits);
-    glfwWindowHint(GLFW_STENCIL_BITS, _gfxContextAttrs.stencilBits);
+    glfwWindowHint(GLFW_RED_BITS, contextAttrs.redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, contextAttrs.greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, contextAttrs.blueBits);
+    glfwWindowHint(GLFW_ALPHA_BITS, contextAttrs.alphaBits);
+    glfwWindowHint(GLFW_DEPTH_BITS, contextAttrs.depthBits);
+    glfwWindowHint(GLFW_STENCIL_BITS, contextAttrs.stencilBits);
 
-    glfwWindowHint(GLFW_SAMPLES, _gfxContextAttrs.multisamplingCount);
+    glfwWindowHint(GLFW_SAMPLES, contextAttrs.multisamplingCount);
 
-    glfwWindowHint(GLFW_VISIBLE, _gfxContextAttrs.visible);
-    glfwWindowHint(GLFW_DECORATED, _gfxContextAttrs.decorated);
+    glfwWindowHint(GLFW_VISIBLE, contextAttrs.visible);
+    glfwWindowHint(GLFW_DECORATED, contextAttrs.decorated);
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-    glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, _gfxContextAttrs.viewParent);
+    glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, contextAttrs.windowParent);
 #endif
 
 #if AX_RENDER_API == AX_RENDER_API_D3D
@@ -544,7 +546,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #endif
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-    _renderScaleMode = Director::getInstance()->getRenderScaleMode();
+    _renderScaleMode = contextAttrs.renderScaleMode;
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, _renderScaleMode == RenderScaleMode::Physical ? GLFW_TRUE : GLFW_FALSE);
 #endif
 

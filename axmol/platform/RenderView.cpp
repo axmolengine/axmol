@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "axmol/2d/Camera.h"
 #include "axmol/2d/Scene.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/rhi/DriverBase.h"
 
 namespace ax
 {
@@ -97,17 +98,14 @@ static void removeUsedIndexBit(int index)
 
 }  // namespace
 
-// default context attributions are set as follows
-GfxContextAttrs RenderView::_gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
-
 void RenderView::setGfxContextAttrs(GfxContextAttrs& gfxContextAttrs)
 {
-    _gfxContextAttrs = gfxContextAttrs;
+    rhi::DriverBase::setContextAttrs(gfxContextAttrs);
 }
 
 GfxContextAttrs& RenderView::getGfxContextAttrs()
 {
-    return _gfxContextAttrs;
+    return rhi::DriverBase::getContextAttrs();
 }
 
 RenderView::RenderView()
