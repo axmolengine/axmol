@@ -60,6 +60,20 @@ set(GAME_INC_DIRS
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
 set(engine_script_folder "${_AX_ROOT}/extensions/scripting/lua-bindings/script")
 
+# Find all .h and .hpp files recursively
+file(GLOB_RECURSE HEADER_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.hpp"
+)
+
+# Extract unique directories from those headers
+set(GAME_INC_DIRS "")
+foreach(header ${HEADER_FILES})
+  get_filename_component(dir "${header}" DIRECTORY)
+  list(APPEND GAME_INC_DIRS "${dir}")
+endforeach()
+list(REMOVE_DUPLICATES GAME_INC_DIRS)
+
 if(APPLE)
   ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
   set(common_content_files ${content_files})
