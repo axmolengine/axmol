@@ -147,7 +147,7 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
     [eaView setMultipleTouchEnabled:YES];
 #endif
 
-    RenderView::setWindowSize([eaView getWidth], [eaView getHeight])
+    RenderView::setWindowSize([eaView getWidth], [eaView getHeight]);
     //    _viewScale.x = _viewScale.y = [eaView contentScaleFactor];
 
     _eaViewHandle = eaView;
