@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "core/math/Vec3.h"
 #include "platform/PlatformConfig.h"
 #include "platform/PlatformMacros.h"
 #include "audio/AudioMacros.h"
@@ -351,9 +352,10 @@ public:
      *
      * @param audioId   An audioID returned by the play2d function.
      * @param value     Panning value, from -1.f to +1.f, representing -60 degrees to +60 degrees
+     * @param distance  Distance from source, with -0.5f being the default
      * @return
      */
-    static void setPan(AUDIO_ID audioId, float value);
+    static void setPan(AUDIO_ID audioId, float value, float distance = -0.5f);
 
     /**
      * Gets the pan of an audio instance.
@@ -362,6 +364,22 @@ public:
      * @return pan value as a float between -1.0f to +1.0f
      */
     static float getPan(AUDIO_ID audioId);
+
+    /**
+     * Gets the position of the audio source.
+     *
+     * @param audioId   An audioID returned by the play2d function.
+     * @return Vec3 position of source
+     */
+    static ax::Vec3 getSourcePosition(AUDIO_ID audioId);
+
+    /**
+     * Sets the position of the audio source.
+     *
+     * @param audioId   An audioID returned by the play2d function.
+     * @param position position of source
+     */
+    static void setSourcePosition(AUDIO_ID audioId, const ax::Vec3& position);
 
 protected:
     static void addTask(const std::function<void()>& task);

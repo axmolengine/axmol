@@ -909,7 +909,7 @@ void AudioEngineImpl::update(float /*dt*/)
     _updatePlayers(false);
 }
 
-void AudioEngineImpl::setPan(AUDIO_ID audioId, float value)
+void AudioEngineImpl::setPan(AUDIO_ID audioId, float value, float distance)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioId);
@@ -919,19 +919,20 @@ void AudioEngineImpl::setPan(AUDIO_ID audioId, float value)
     auto player = iter->second;
     lck.unlock();
 
+    player->_sourcePosition.set(value, 0.0f, distance);
     player->_pan = value;
 
-    alSource3f(player->_alSource, AL_POSITION, player->_pan, 0.0f, -1.f);
+    alSourcei(player->_alSource, AL_SOURCE_RELATIVE, AL_TRUE);  // relative to listener
+    alSource3f(player->_alSource, AL_POSITION, value, 0.0f, distance);
     if (_stereoExtension)
     {
         // pan between -60 degrees when fully left (-1) and 60 degrees when fully right (1)
         auto angle = static_cast<float>(M_PI) / 6.f;
 
         float panAngles[2];
-        panAngles[0] = (1.0f - player->_pan) * angle;
-        panAngles[1] = (1.0f + player->_pan) * -angle;
+        panAngles[0] = (1.0f - value) * angle;
+        panAngles[1] = (1.0f + value) * -angle;
 
-        alSourcei(player->_alSource, AL_SOURCE_RELATIVE, AL_TRUE); // relative to listener
         alSourcefv(player->_alSource, 0x1030, panAngles); // AL_STEREO_ANGLES = 0x1030
     }
 }
@@ -947,6 +948,34 @@ float AudioEngineImpl::getPan(int audioId)
     lck.unlock();
 
     return player->_pan;
+}
+
+ax::Vec3 AudioEngineImpl::getSourcePosition(int audioId)
+{
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto iter = _audioPlayers.find(audioId);
+    if (iter == _audioPlayers.end())
+        return {};
+
+    auto player = iter->second;
+    lck.unlock();
+
+    return player->_sourcePosition;
+}
+
+void AudioEngineImpl::setSourcePosition(int audioId, const ax::Vec3& position)
+{
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto iter = _audioPlayers.find(audioId);
+    if (iter == _audioPlayers.end())
+        return;
+
+    auto player = iter->second;
+    lck.unlock();
+
+    player->_sourcePosition.set(position);
+
+    alSource3f(player->_alSource, AL_POSITION, position.x, position.y, position.z);
 }
 
 bool AudioEngineImpl::isExtensionPresent(const char* extensionId)

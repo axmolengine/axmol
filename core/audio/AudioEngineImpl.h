@@ -61,8 +61,10 @@ public:
     float getCurrentTime(AUDIO_ID audioID);
     bool setCurrentTime(AUDIO_ID audioID, float time);
     void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, std::string_view)>& callback);
-    void setPan(AUDIO_ID audioId, float value);
+    void setPan(AUDIO_ID audioId, float value, float distance);
     float getPan(AUDIO_ID audioId);
+    ax::Vec3 getSourcePosition(AUDIO_ID audioId);
+    void setSourcePosition(AUDIO_ID audioId, const ax::Vec3& position);
 
     void uncache(std::string_view filePath);
     void uncacheAll();

@@ -552,14 +552,14 @@ bool AudioEngine::isEnabled()
     return _isEnabled;
 }
 
-void AudioEngine::setPan(int audioId, float value)
+void AudioEngine::setPan(int audioId, float value, float distance)
 {
     if (!_audioEngineImpl)
     {
         return;
     }
 
-    _audioEngineImpl->setPan(audioId, value);
+    _audioEngineImpl->setPan(audioId, value, distance);
 }
 
 float AudioEngine::getPan(int audioId)
@@ -570,5 +570,25 @@ float AudioEngine::getPan(int audioId)
     }
 
     return _audioEngineImpl->getPan(audioId);
+}
+
+ax::Vec3 AudioEngine::getSourcePosition(int audioId)
+{
+    if (!_audioEngineImpl)
+    {
+        return {};
+    }
+
+    return _audioEngineImpl->getSourcePosition(audioId);
+}
+
+void AudioEngine::setSourcePosition(int audioId, const ax::Vec3& position)
+{
+    if (!_audioEngineImpl)
+    {
+        return;
+    }
+
+    _audioEngineImpl->setSourcePosition(audioId, position);
 }
 }

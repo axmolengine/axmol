@@ -75,6 +75,7 @@ protected:
     float _pitch;
     bool _loop;
     float _pan{};
+    Vec3 _sourcePosition;
 
     std::function<void(AUDIO_ID, std::string_view)> _finishCallbak;
 
