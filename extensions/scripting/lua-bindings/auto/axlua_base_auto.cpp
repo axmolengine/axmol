@@ -23975,53 +23975,6 @@ int lua_ax_base_RenderView_getContentScaleFactor(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_RenderView_isHighDPI(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::RenderView* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_isHighDPI'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_isHighDPI'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->isHighDPI();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:isHighDPI",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_isHighDPI'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_RenderView_getVisibleSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -24240,7 +24193,7 @@ int lua_ax_base_RenderView_setDesignResolutionSize(lua_State* tolua_S)
     {
         double arg0;
         double arg1;
-        ResolutionPolicy arg2;
+        ax::ResolutionPolicy arg2;
 
         ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setDesignResolutionSize");
 
@@ -25173,8 +25126,8 @@ int lua_ax_base_RenderView_setGfxContextAttrs(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        GfxContextAttrs arg0;
-        #pragma warning NO CONVERSION TO NATIVE FOR GfxContextAttrs
+        ax::rhi::ContextAttrs arg0;
+        #pragma warning NO CONVERSION TO NATIVE FOR ContextAttrs
         ok = false;
         if(!ok)
         {
@@ -25216,7 +25169,7 @@ int lua_ax_base_RenderView_getGfxContextAttrs(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::RenderView::getGfxContextAttrs();
-        #pragma warning NO CONVERSION FROM NATIVE FOR GfxContextAttrs;
+        #pragma warning NO CONVERSION FROM NATIVE FOR ContextAttrs;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.RenderView:getGfxContextAttrs",argc, 0);
@@ -25254,7 +25207,6 @@ int lua_register_ax_base_RenderView(lua_State* tolua_S)
         tolua_function(tolua_S,"getRenderScale",lua_ax_base_RenderView_getRenderScale);
         tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_RenderView_setContentScaleFactor);
         tolua_function(tolua_S,"getContentScaleFactor",lua_ax_base_RenderView_getContentScaleFactor);
-        tolua_function(tolua_S,"isHighDPI",lua_ax_base_RenderView_isHighDPI);
         tolua_function(tolua_S,"getVisibleSize",lua_ax_base_RenderView_getVisibleSize);
         tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_RenderView_getVisibleOrigin);
         tolua_function(tolua_S,"getVisibleRect",lua_ax_base_RenderView_getVisibleRect);
@@ -25823,103 +25775,6 @@ int lua_ax_base_Director_setRenderView(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_setRenderView'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Director_setPowerPreference(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Director* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_setPowerPreference'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        ax::rhi::PowerPreference arg0;
-
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Director:setPowerPreference");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_setPowerPreference'", nullptr);
-            return 0;
-        }
-        cobj->setPowerPreference(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:setPowerPreference",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_setPowerPreference'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_Director_getPowerPreference(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Director* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getPowerPreference'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getPowerPreference'", nullptr);
-            return 0;
-        }
-        int ret = (int)cobj->getPowerPreference();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getPowerPreference",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getPowerPreference'.",&tolua_err);
 #endif
 
     return 0;
@@ -28958,8 +28813,6 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"setStatsAnchor",lua_ax_base_Director_setStatsAnchor);
         tolua_function(tolua_S,"getRenderView",lua_ax_base_Director_getRenderView);
         tolua_function(tolua_S,"setRenderView",lua_ax_base_Director_setRenderView);
-        tolua_function(tolua_S,"setPowerPreference",lua_ax_base_Director_setPowerPreference);
-        tolua_function(tolua_S,"getPowerPreference",lua_ax_base_Director_getPowerPreference);
         tolua_function(tolua_S,"setDebugLayerEnabled",lua_ax_base_Director_setDebugLayerEnabled);
         tolua_function(tolua_S,"isDebugLayerEnabled",lua_ax_base_Director_isDebugLayerEnabled);
         tolua_function(tolua_S,"getTextureCache",lua_ax_base_Director_getTextureCache);
