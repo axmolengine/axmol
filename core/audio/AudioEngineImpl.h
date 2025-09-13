@@ -36,6 +36,7 @@
 #    include "audio/AudioMacros.h"
 #    include "audio/AudioCache.h"
 #    include "audio/AudioPlayer.h"
+#    include "core/math/Vec3.h"
 
 namespace ax
 {
