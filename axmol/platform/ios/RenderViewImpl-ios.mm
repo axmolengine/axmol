@@ -29,6 +29,7 @@
 #include "axmol/platform/ios/EARenderView-ios.h"
 #include "axmol/platform/ios/DirectorCaller-ios.h"
 #include "axmol/platform/ios/RenderViewImpl-ios.h"
+#include "axmol/rhi/DriverBase.h"
 #include "axmol/base/Touch.h"
 #include "axmol/base/Director.h"
 
