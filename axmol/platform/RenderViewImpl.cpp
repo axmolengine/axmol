@@ -656,7 +656,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
 #if AX_RENDER_API == AX_RENDER_API_GL
 #    if !defined(__EMSCRIPTEN__)
-    glfwSwapInterval(_gfxContextAttrs.vsync ? 1 : 0);
+    glfwSwapInterval(contextAttrs.vsync ? 1 : 0);
 #    endif
     // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !AX_GLES_PROFILE
@@ -666,7 +666,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #        else
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
 #        endif
-    if (_gfxContextAttrs.multisamplingCount > 0)
+    if (contextAttrs.multisamplingCount > 0)
         glEnable(GL_MULTISAMPLE);
 #    endif
     CHECK_GL_ERROR_DEBUG();

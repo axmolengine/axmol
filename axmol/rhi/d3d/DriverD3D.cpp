@@ -106,16 +106,6 @@ std::string_view GetVendorString(uint32_t vendorId)
     }
 }
 
-void DriverBase::setContextAttrs(const ContextAttrs& attrs)
-{
-    _contextAttrs = attrs;
-}
-
-ContextAttrs& DriverBase::getContextAttrs()
-{
-    return _contextAttrs;
-}
-
 DriverBase* DriverBase::getInstance()
 {
     if (!_instance)
