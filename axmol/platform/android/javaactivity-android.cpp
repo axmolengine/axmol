@@ -88,7 +88,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
     if (!renderView)
     {
         renderView = ax::RenderViewImpl::create("axmol3");
-        renderView->setFrameSize(w, h);
+        renderView->setWindowSize(w, h);
         director->setRenderView(renderView);
 
         ax::Application::getInstance()->run();

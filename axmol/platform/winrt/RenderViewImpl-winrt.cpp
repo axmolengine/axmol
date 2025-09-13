@@ -137,6 +137,8 @@ RenderViewImpl::~RenderViewImpl()
 
 bool RenderViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float /*frameZoomFactor*/)
 {
+    _renderScaleMode = getGfxContextAttrs().renderScaleMode;
+
     setViewName(viewName);
 
     m_width  = rect.size.width;
@@ -546,7 +548,8 @@ void RenderViewImpl::UpdateForWindowSizeChange(float width, float height)
         m_height = height;
         handleWindowResized();
 
-        onFramebufferResized(m_width * _renderScale, m_height * _renderScale);
+        _renderSize.set(m_width * _renderScale, m_height * _renderScale);
+        onRenderResized();
     }
 }
 
@@ -564,13 +567,13 @@ void RenderViewImpl::handleWindowResized()
 {
     RenderView::setWindowSize(m_width, m_height);
 
-    updateDesignResolutionSize();
+    updateDesignResolution();
 }
 
 void RenderViewImpl::updateRenderScale()
 {
 #if AX_RENDER_API == AX_RENDER_API_D3D
-    if (Director::getInstance()->getSurfaceScaleMode() == SurfaceScaleMode::Physical)
+    if (_renderScaleMode == RenderScaleMode::Physical)
     {
         _renderScale = m_dpi / 96.0f;
         return;

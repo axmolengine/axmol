@@ -120,7 +120,7 @@ RenderView::~RenderView() {}
 
 void RenderView::pollEvents() {}
 
-void RenderView::updateDesignResolutionSize()
+void RenderView::updateDesignResolution()
 {
     if (_windowSize.width > 0 && _windowSize.height > 0 && _designResolutionSize.width > 0 &&
         _designResolutionSize.height > 0)
@@ -175,7 +175,7 @@ void RenderView::setDesignResolutionSize(float width, float height, ResolutionPo
     _designResolutionSize.set(width, height);
     _resolutionPolicy = resolutionPolicy;
 
-    updateDesignResolutionSize();
+    updateDesignResolution();
 }
 
 const Vec2& RenderView::getDesignResolutionSize() const
@@ -196,6 +196,9 @@ void RenderView::setWindowSize(float width, float height)
     // only update the designResolution if it wasn't previously set
     if (_designResolutionSize.equals(Vec2::ZERO))
         _designResolutionSize = _windowSize;
+
+    if (_renderSize.equals(Vec2::ZERO))
+        _renderSize = _windowSize;
 }
 
 Rect RenderView::getVisibleRect() const
@@ -482,9 +485,10 @@ float RenderView::getScaleY() const
     return _viewScale.y;
 }
 
-void RenderView::onFramebufferResized(uint32_t fbWidth, uint32_t fbHeight)
+void RenderView::onRenderResized()
 {
-    Director::getInstance()->resizeSwapchain(fbWidth, fbHeight);
+    Director::getInstance()->resizeSwapchain(static_cast<uint32_t>(_renderSize.width),
+                                             static_cast<uint32_t>(_renderSize.height));
 
 #ifdef AX_ENABLE_VR
     if (_vrRenderer) [[unlikely]]

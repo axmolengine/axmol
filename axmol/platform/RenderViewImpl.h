@@ -161,16 +161,21 @@ protected:
     void onGLFWWindowCloseCallback(GLFWwindow* window);
 
 protected:
-    void handleFramebufferResized(int fbWidth, int fbHeigh);
+    void handleWindowResized(int w, int h);
 
-    /* update window size when user set zoomFactor, retina, frameSize */
-    void applyWindowSize();
+    // update window size, render scale, resolution(view layout)
+    void updateWindowAndResolution(float width, float height);
+
+    /* resize platform window when user set zoomFactor, windowSize */
+    void resizePlatformWindow(float w, float h);
 
     bool _isTouchDevice = false;
     bool _captured;
+    bool _renderSizeChanged{false};
 
     RenderScaleMode _renderScaleMode{};
 
+    // The render scale aka backingScaleFactor
     float _renderScale{1.0f};  // >=1
     float _inputScale{1.0f};
 

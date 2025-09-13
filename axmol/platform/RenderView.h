@@ -192,6 +192,8 @@ public:
      */
     virtual float getWindowZoomFactor() const { return 1.0; }
 
+    const Vec2& getRenderSize() const { return _renderSize; }
+
 #ifndef _AX_GEN_SCRIPT_BINDINGS
     /**
      * implicit deprecated APIs, use getWindowSize instead
@@ -464,7 +466,7 @@ protected:
     float transformInputX(float x) { return (x - _viewportRect.origin.x) / _viewScale.x; }
     float transformInputY(float y) { return (y - _viewportRect.origin.y) / _viewScale.y; }
 
-    void onFramebufferResized(uint32_t fbWidth, uint32_t fbHeight);
+    void onRenderResized();
 
     void setScissorRect(float x, float y, float w, float h);
     const ScissorRect& getScissorRect() const;
@@ -475,10 +477,11 @@ protected:
      */
     virtual void queueOperation(AsyncOperation op, void* param = nullptr);
 
-    void updateDesignResolutionSize();
+    void updateDesignResolution();
 
     void handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num, intptr_t ids[], float xs[], float ys[]);
 
+    Vec2 _renderSize;
     // The window size aka logic size, may scaled by windowZoomFactor in high DPI display
     Vec2 _windowSize;
     // resolution size, it is the size appropriate for the app resources.

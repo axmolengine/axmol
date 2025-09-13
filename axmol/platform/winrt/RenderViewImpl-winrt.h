@@ -179,6 +179,7 @@ private:
     Windows::Foundation::Point m_lastPoint{};
 
     float _renderScale{1.0f};
+    RenderScaleMode _renderScaleMode{};
 
     float m_width;
     float m_height;
