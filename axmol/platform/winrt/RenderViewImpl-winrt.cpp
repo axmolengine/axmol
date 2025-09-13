@@ -577,7 +577,6 @@ void RenderViewImpl::updateRenderScale()
     }
 #endif
     _renderScale = 1.0f;
-    _isHighDPI   = false;
 }
 
 void RenderViewImpl::setViewportInPoints(float x, float y, float w, float h)

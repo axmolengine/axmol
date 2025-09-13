@@ -65,9 +65,6 @@ public:
     /** returns the content scale factor */
     float getContentScaleFactor() const override;
 
-    /** returns whether or not the view is in high DPI mode */
-    bool isHighDPI() const override { return getContentScaleFactor() == 2.0; }
-
     /** @since axmol-3.0, returns the objective-c UIWindow instance */
     void* getNativeWindow() const override { return _eaWindowHandle; }
 
