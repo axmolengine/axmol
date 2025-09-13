@@ -61,8 +61,11 @@ set(content_folder
   "${CMAKE_CURRENT_SOURCE_DIR}/Content"
 )
 
-# Find all header files recursively
-file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h")
+# Find all .h and .hpp files recursively
+file(GLOB_RECURSE HEADER_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.hpp"
+)
 
 # Extract unique directories from those headers
 set(GAME_INC_DIRS "")
