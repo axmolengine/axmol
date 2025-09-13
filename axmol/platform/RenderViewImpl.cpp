@@ -603,7 +603,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     [layer setPixelFormat:MTLPixelFormatBGRA8Unorm];
     [layer setFramebufferOnly:YES];
     [layer setDrawableSize:size];
-    layer.displaySyncEnabled = _gfxContextAttrs.vsync;
+    layer.displaySyncEnabled = contextAttrs.vsync;
     [contentView setLayer:layer];
     rhi::mtl::DriverImpl::setCAMetalLayer(layer);
 #elif AX_RENDER_API == AX_RENDER_API_GL

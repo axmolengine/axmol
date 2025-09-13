@@ -133,11 +133,11 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnContextLost(JNIE
 JNIEXPORT jintArray JNICALL Java_dev_axmol_lib_AxmolActivity_getGLContextAttrs(JNIEnv* env, jclass)
 {
     ax::Application::getInstance()->initGfxContextAttrs();
-    auto& _gfxContextAttrs = RenderView::getGfxContextAttrs();
+    const auto& contextAttrs = rhi::DriverBase::getContextAttrs();
 
-    int tmp[7] = {_gfxContextAttrs.redBits,           _gfxContextAttrs.greenBits, _gfxContextAttrs.blueBits,
-                  _gfxContextAttrs.alphaBits,         _gfxContextAttrs.depthBits, _gfxContextAttrs.stencilBits,
-                  _gfxContextAttrs.multisamplingCount};
+    int tmp[7] = {contextAttrs.redBits,           contextAttrs.greenBits, contextAttrs.blueBits,
+                  contextAttrs.alphaBits,         contextAttrs.depthBits, contextAttrs.stencilBits,
+                  contextAttrs.multisamplingCount};
 
     jintArray glContextAttrsJava = env->NewIntArray(7);
     env->SetIntArrayRegion(glContextAttrsJava, 0, 7, tmp);
