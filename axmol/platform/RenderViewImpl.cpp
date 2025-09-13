@@ -364,7 +364,6 @@ static EventMouse::MouseButton checkMouseButton(GLFWwindow* window)
 
 RenderViewImpl::RenderViewImpl(bool initglfw)
     : _captured(false)
-    , _isHighDPI(false)
     , _renderScale(1.0f)
     , _windowZoomFactor(1.0f)
     , _mainWindow(nullptr)
@@ -544,8 +543,18 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     axdrv;
 #endif
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    _renderScaleMode = Director::getInstance()->getRenderScaleMode();
+    glfwWindowHint(GLFW_SCALE_TO_MONITOR, _renderScaleMode == RenderScaleMode::Physical ? GLFW_TRUE : GLFW_FALSE);
+#endif
+
     _mainWindow = glfwCreateWindow(static_cast<int>(requestWinSize.width), static_cast<int>(requestWinSize.height),
                                    _viewName.c_str(), _monitor, nullptr);
+
+    // BOOL yesok = IsProcessDPIAware();
+    // float xscale, yscale;
+    // glfwGetWindowContentScale(_mainWindow, &xscale, &yscale);
+    // bool dpiAwareness = xscale > 1.0f || yscale > 1.0f;
 
     if (_mainWindow == nullptr)
     {
@@ -965,12 +974,6 @@ void RenderViewImpl::setWindowSizeLimits(int minwidth, int minheight, int maxwid
     glfwSetWindowSizeLimits(_mainWindow, minwidth, minheight, maxwidth, maxheight);
 }
 
-void RenderViewImpl::updateRenderScale(int windowWidth, int framebufferWidth)
-{
-    _isHighDPI   = framebufferWidth > windowWidth;
-    _renderScale = static_cast<float>(framebufferWidth) / windowWidth;
-}
-
 /*
  * Handle window resize events (including fullscreen toggle, manual resize, HiDPI scaling).
  * Updates HiDPI flag, render scale, logical window size, and design resolution (viewport)
@@ -999,7 +1002,24 @@ void RenderViewImpl::handleWindowResized(int w, int h, int fbWidth, int fbHeight
 {
     updateRenderScale(w, fbWidth);
 
-    RenderView::setWindowSize(w / _windowZoomFactor, h / _windowZoomFactor);
+    float width = w / _windowZoomFactor;
+    float height = h / _windowZoomFactor;
+
+    // Translate to logical size on platforms where pixels and screen coordinates always map 1:1
+    if (_renderScaleMode == RenderScaleMode::Physical)
+    {
+        auto windowPlatform = getWindowPlatform();
+        switch (windowPlatform)
+        {
+        case WindowPlatform::Win32:
+        case WindowPlatform::X11:
+            width /= _renderScale;
+            height /= _renderScale;
+            break;
+        }
+    }
+
+    RenderView::setWindowSize(width, height);
     updateDesignResolutionSize();
 }
 
@@ -1013,9 +1033,44 @@ void RenderViewImpl::applyWindowSize()
 {
     if (_windowSize.width > 0 && _windowSize.height > 0)
     {
-        glfwSetWindowSize(_mainWindow, (int)(_windowSize.width * _windowZoomFactor),
-                          (int)(_windowSize.height * _windowZoomFactor));
+        float width = (_windowSize.width * _windowZoomFactor);
+        float height = (_windowSize.height * _windowZoomFactor);
+
+        // Translate to physical size on platforms where pixels and screen coordinates always map 1:1
+        if (_renderScaleMode == RenderScaleMode::Physical)
+        {
+            auto windowPlatform = getWindowPlatform();
+            switch (windowPlatform)
+            {
+            case WindowPlatform::Win32:
+            case WindowPlatform::X11:
+                width *= _renderScale;
+                height *= _renderScale;
+                break;
+            }
+        }
+        glfwSetWindowSize(_mainWindow, static_cast<int>(width),
+                          static_cast<int>(height));
     }
+}
+
+void RenderViewImpl::updateRenderScale(int windowWidth, int framebufferWidth)
+{
+    if (_renderScaleMode == RenderScaleMode::Physical)
+    {
+        auto windowPlatform = getWindowPlatform();
+        switch (windowPlatform)
+        {
+        case WindowPlatform::Win32:
+        case WindowPlatform::X11:
+            glfwGetWindowContentScale(_mainWindow, &_renderScale, nullptr);
+            _inputScale = 1.0f / _renderScale;
+            return;
+        }
+    }
+
+    _inputScale = 1.0f;
+    _renderScale = framebufferWidth / static_cast<float>(windowWidth);
 }
 
 void RenderViewImpl::setViewportInPoints(float x, float y, float w, float h)
@@ -1120,6 +1175,8 @@ void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, doubl
 
     _mouseX /= _windowZoomFactor;
     _mouseY /= _windowZoomFactor;
+    _mouseX *= _inputScale;
+    _mouseY *= _inputScale;
 
     if (!_isTouchDevice)
     {

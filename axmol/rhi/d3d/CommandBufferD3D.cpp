@@ -30,6 +30,7 @@
 #include "axmol/rhi/d3d/ProgramD3D.h"
 #include "axmol/rhi/d3d/VertexLayoutD3D.h"
 #include <dxgi1_2.h>
+#include <dxgi1_3.h>
 #include <VersionHelpers.h>
 #include "axmol/base/Logging.h"
 
@@ -310,18 +311,28 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
             });
             AX_BREAK_IF(FAILED(hr));
 
+            auto scaleMode = Director::getInstance()->getSurfaceScaleMode();
+
             // create swapchain
             // The swapchain size can't be zero for WinRT, maybe SwapChainPanel::ActualWidth/Height * DPI
             DXGI_SWAP_CHAIN_DESC1 desc1 = {};
-            desc1.Width                 = static_cast<UINT>(panelSize.Width);
-            desc1.Height                = static_cast<UINT>(panelSize.Height);
-            desc1.Format                = _AX_SWAPCHAIN_FORMAT;
-            desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
-            desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-            desc1.BufferCount           = 2;
-            desc1.SwapEffect            = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;  // UWP recommanded
-            desc1.Scaling               = DXGI_SCALING_STRETCH;
-            desc1.AlphaMode             = DXGI_ALPHA_MODE_IGNORE;
+            if (scaleMode == SurfaceScaleMode::Physical)
+            {
+                desc1.Width  = static_cast<UINT>(panelSize.Width * renderScale.x);
+                desc1.Height = static_cast<UINT>(panelSize.Height * renderScale.y);
+            }
+            else
+            {
+                desc1.Width  = static_cast<UINT>(panelSize.Width);
+                desc1.Height = static_cast<UINT>(panelSize.Height);
+            }
+            desc1.Format           = _AX_SWAPCHAIN_FORMAT;
+            desc1.SampleDesc.Count = 1;  // Flip not support MSAA
+            desc1.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            desc1.BufferCount      = 2;
+            desc1.SwapEffect       = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;  // UWP recommanded
+            desc1.Scaling          = DXGI_SCALING_STRETCH;
+            desc1.AlphaMode        = DXGI_ALPHA_MODE_IGNORE;
 
             ComPtr<IDXGISwapChain1> swapChain1;
             hr = factory2->CreateSwapChainForComposition(device, &desc1, nullptr, &swapChain1);
@@ -336,6 +347,21 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
 
             DXGI_SWAP_CHAIN_DESC1 actualDesc = {};
             swapChain1->GetDesc1(&actualDesc);
+
+            if (scaleMode == SurfaceScaleMode::Physical)
+            {
+                // Setup a scale matrix for the swap chain
+                DXGI_MATRIX_3X2_F scaleMatrix = {};
+                scaleMatrix._11               = 1 / renderScale.x;
+                scaleMatrix._22               = 1 / renderScale.y;
+
+                ComPtr<IDXGISwapChain2> swapChain2;
+                hr = swapChain1.As(&swapChain2);
+                AX_BREAK_IF(FAILED(hr));
+
+                hr = swapChain2->SetMatrixTransform(&scaleMatrix);
+                AX_BREAK_IF(FAILED(hr));
+            }
 
             _screenWidth  = actualDesc.Width;
             _screenHeight = actualDesc.Height;

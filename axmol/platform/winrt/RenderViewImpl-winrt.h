@@ -130,7 +130,7 @@ public:
     void UpdateOrientation(Windows::Graphics::Display::DisplayOrientations orientation);
     void UpdateForWindowSizeChange(float width, float height);
 
-    void SetDPI(float dpi) { m_dpi = dpi; }
+    void SetDPI(float dpi);
     float GetDPI() { return m_dpi; }
     // static function
     /**
@@ -147,6 +147,12 @@ public:
     void* getNativeWindow() const override;
     WindowPlatform getWindowPlatform() const override { return WindowPlatform::CoreWindow; }
 
+    void setViewportInPoints(float x, float y, float w, float h) override;
+    void setScissorInPoints(float x, float y, float w, float h) override;
+    Rect getScissorInPoints() const override;
+
+    float getRenderScale() const override { return _renderScale; }
+
 protected:
     RenderViewImpl();
     ~RenderViewImpl() override;
@@ -161,20 +167,24 @@ private:
     AX_DISALLOW_COPY_AND_ASSIGN(RenderViewImpl);
 
     void OnRendering();
-    void UpdateWindowSize();
+
+    void handleWindowResized();
+    void updateRenderScale();
 
     ax::Vec2 TransformToOrientation(Windows::Foundation::Point const& point);
     ax::Vec2 GetPoint(Windows::UI::Core::PointerEventArgs const& args);
 
-    Windows::Foundation::Rect m_windowBounds;
+    Windows::Foundation::Rect m_windowBounds{};
     winrt::event_token m_eventToken;
-    Windows::Foundation::Point m_lastPoint;
+    Windows::Foundation::Point m_lastPoint{};
+
+    float _renderScale{1.0f};
 
     float m_width;
     float m_height;
     float m_dpi;
     Windows::Graphics::Display::DisplayOrientations m_orientation;
-    Windows::Foundation::Rect m_keyboardRect;
+    Windows::Foundation::Rect m_keyboardRect{};
 
     bool m_lastPointValid;
     bool m_windowClosed;

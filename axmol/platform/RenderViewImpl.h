@@ -125,9 +125,7 @@ public:
     void setCursorVisible(bool isVisible) override;
 
     /** Get render scale */
-    int getRenderScale() const override { return _renderScale; }
-
-    bool isHighDPI() const override { return _isHighDPI; }
+    float getRenderScale() const override { return _renderScale; }
 
     void* getNativeWindow() const override;
     void* getNativeDisplay() const override;
@@ -170,9 +168,10 @@ protected:
     bool _isTouchDevice = false;
     bool _captured;
 
-    bool _isHighDPI{false};
+    RenderScaleMode _renderScaleMode{};
 
-    float _renderScale;  // >=1
+    float _renderScale{1.0f};  // >=1
+    float _inputScale{1.0f};
 
     float _windowZoomFactor;
 

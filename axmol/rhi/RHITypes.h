@@ -562,6 +562,13 @@ enum class PowerPreference
     HighPerformance  // Prefer discrete GPU
 };
 
+enum class RenderScaleMode
+{
+    Default,  // Use the system's default scaling behavior
+    Logical,  // Use logical pixels (do not apply DPI scaling)
+    Physical  // Use logical pixels multiplied by the DPI scale factor
+};
+
 template <typename T, unsigned int N>
 inline void SafeRelease(T (&resourceBlock)[N])
 {

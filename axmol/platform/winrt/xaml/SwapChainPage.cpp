@@ -146,12 +146,19 @@ void SwapChainPage::OnPageLoaded(Windows::Foundation::IInspectable const& /*send
 void SwapChainPage::OnPanelSizeChanged(Windows::Foundation::IInspectable const& /*sender*/,
                                        Windows::UI::Xaml::RoutedEventArgs const& /*e*/)
 {
-    UpdateCanvasSize();
+    if (!m_updateScheduled)
+    {
+        m_updateScheduled = true;
+        swapChainPanel().Dispatcher().RunAsync(CoreDispatcherPriority::Low, [this]() {
+            m_updateScheduled = false;
+            UpdatePanelSize();
+        });
+    }
 }
 
 void SwapChainPage::CreateRenderSurface()
 {
-    UpdateCanvasSize();
+    UpdatePanelSize();
 #if AX_RENDER_API == AX_RENDER_API_GL
     if (m_eglSurfaceProvider && m_eglSurface == EGL_NO_SURFACE)
     {
@@ -175,11 +182,11 @@ void SwapChainPage::CreateRenderSurface()
 #endif
 }
 
-void SwapChainPage::UpdateCanvasSize()
+void SwapChainPage::UpdatePanelSize()
 {
     auto panel     = swapChainPanel();
-    m_canvasWidth  = panel.ActualWidth();
-    m_canvasHeight = panel.ActualHeight();
+    m_panelWidth  = panel.ActualWidth();
+    m_panelHeight = panel.ActualHeight();
 }
 
 void SwapChainPage::DestroyRenderSurface()
@@ -248,20 +255,10 @@ void SwapChainPage::StartRenderLoop()
 
     // Create a task for rendering that will be run on a background thread.
     auto renderMainLoop = ([this, dispatcher](Windows::Foundation::IAsyncAction const& action) {
-#if AX_RENDER_API == AX_RENDER_API_GL
-        m_eglSurfaceProvider->MakeCurrent(m_eglSurface);
-
-        GLsizei panelWidth  = 0;
-        GLsizei panelHeight = 0;
-        m_eglSurfaceProvider->GetSurfaceDimensions(m_eglSurface, &panelWidth, &panelHeight);
-#else
-        size_t panelWidth  = static_cast<size_t>(m_canvasWidth);
-        size_t panelHeight = static_cast<size_t>(m_canvasHeight);
-#endif
 
         if (!m_renderer)
         {
-            m_renderer = std::make_shared<AxmolRenderer>(m_canvasWidth, m_canvasHeight, m_dpi, m_orientation,
+            m_renderer = std::make_shared<AxmolRenderer>(m_panelWidth, m_panelHeight, m_dpi, m_orientation,
                                                          dispatcher, swapChainPanel());
         }
 
@@ -307,13 +304,8 @@ void SwapChainPage::StartRenderLoop()
 
             ProcessOperations();
 
-#if AX_RENDER_API == AX_RENDER_API_GL
-            m_eglSurfaceProvider->GetSurfaceDimensions(m_eglSurface, &panelWidth, &panelHeight);
-#else
-            panelWidth  = static_cast<size_t>(m_canvasWidth);
-            panelHeight = static_cast<size_t>(m_canvasHeight);
-#endif
-            m_renderer->Draw(panelWidth, panelHeight, m_dpi, m_orientation);
+            m_renderer->Draw(static_cast<size_t>(m_panelWidth), static_cast<size_t>(m_panelHeight), m_dpi,
+                             m_orientation);
 
             // Recreate input dispatch
             if (RenderViewImpl::sharedRenderView() &&

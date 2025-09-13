@@ -237,19 +237,13 @@ public:
      *
      * @return The render scale fbSize/windowSize
      */
-    virtual int getRenderScale() const { return 1; }
+    virtual float getRenderScale() const { return 1.0f; }
 
     /** Only works on ios platform. Set Content Scale of the Factor. */
     virtual bool setContentScaleFactor(float /*scaleFactor*/) { return false; }
 
     /** Only works on ios platform. Get Content Scale of the Factor. */
     virtual float getContentScaleFactor() const { return 1.0; }
-
-    /** Returns whether or not the view is in high DPI mode.
-     *
-     * @return Returns whether or not the view is in high DPI mode.
-     */
-    virtual bool isHighDPI() const { return false; }
 
     /**
      * Get the visible area size of render viewport.

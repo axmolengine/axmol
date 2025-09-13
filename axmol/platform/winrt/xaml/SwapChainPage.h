@@ -114,14 +114,15 @@ public:
 
 private:
     // must call at UI thread
-    void UpdateCanvasSize();
+    void UpdatePanelSize();
 
     std::condition_variable m_sleepCondition;
 
     Concurrency::concurrent_queue<std::function<void()>> m_operations;
 
-    double m_canvasWidth{0};
-    double m_canvasHeight{0};
+    double m_panelWidth{0};
+    double m_panelHeight{0};
+    bool m_updateScheduled{false};
 };
 }  // namespace winrt::AxmolAppWinRT::implementation
 
