@@ -184,7 +184,7 @@ void SwapChainPage::CreateRenderSurface()
 
 void SwapChainPage::UpdatePanelSize()
 {
-    auto panel     = swapChainPanel();
+    auto panel    = swapChainPanel();
     m_panelWidth  = panel.ActualWidth();
     m_panelHeight = panel.ActualHeight();
 }
@@ -255,11 +255,10 @@ void SwapChainPage::StartRenderLoop()
 
     // Create a task for rendering that will be run on a background thread.
     auto renderMainLoop = ([this, dispatcher](Windows::Foundation::IAsyncAction const& action) {
-
         if (!m_renderer)
         {
-            m_renderer = std::make_shared<AxmolRenderer>(m_panelWidth, m_panelHeight, m_dpi, m_orientation,
-                                                         dispatcher, swapChainPanel());
+            m_renderer = std::make_shared<AxmolRenderer>(m_panelWidth, m_panelHeight, m_dpi, m_orientation, dispatcher,
+                                                         swapChainPanel());
         }
 
         // !!!Start the engine renderer on the render thread so that WICImageDecoder

@@ -54,7 +54,7 @@ AxmolRenderer::~AxmolRenderer() {}
 
 void AxmolRenderer::Resume()
 {
-    auto director = ax::Director::getInstance();
+    auto director    = ax::Director::getInstance();
     auto appInstance = Application::getInstance();
 
     auto renderView = static_cast<RenderViewImpl*>(director->getRenderView());

@@ -704,7 +704,7 @@ protected:
 
     bool _childrenIndexerEnabled = false;
 
-    bool _debugLayerEnabled          = false;
+    bool _debugLayerEnabled = false;
 
     /* axmol thread id */
     std::thread::id _axmol_thread_id;

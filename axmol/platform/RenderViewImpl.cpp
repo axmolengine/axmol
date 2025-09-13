@@ -1004,7 +1004,7 @@ void RenderViewImpl::handleWindowResized(int w, int h, int fbWidth, int fbHeight
 {
     updateRenderScale(w, fbWidth);
 
-    float width = w / _windowZoomFactor;
+    float width  = w / _windowZoomFactor;
     float height = h / _windowZoomFactor;
 
     // Translate to logical size on platforms where pixels and screen coordinates always map 1:1
@@ -1035,7 +1035,7 @@ void RenderViewImpl::applyWindowSize()
 {
     if (_windowSize.width > 0 && _windowSize.height > 0)
     {
-        float width = (_windowSize.width * _windowZoomFactor);
+        float width  = (_windowSize.width * _windowZoomFactor);
         float height = (_windowSize.height * _windowZoomFactor);
 
         // Translate to physical size on platforms where pixels and screen coordinates always map 1:1
@@ -1051,8 +1051,7 @@ void RenderViewImpl::applyWindowSize()
                 break;
             }
         }
-        glfwSetWindowSize(_mainWindow, static_cast<int>(width),
-                          static_cast<int>(height));
+        glfwSetWindowSize(_mainWindow, static_cast<int>(width), static_cast<int>(height));
     }
 }
 
@@ -1071,7 +1070,7 @@ void RenderViewImpl::updateRenderScale(int windowWidth, int framebufferWidth)
         }
     }
 
-    _inputScale = 1.0f;
+    _inputScale  = 1.0f;
     _renderScale = framebufferWidth / static_cast<float>(windowWidth);
 }
 

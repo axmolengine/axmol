@@ -235,7 +235,6 @@ protected:
     int _maxTextureUnits   = 0;  ///< Maximum texture unit.
     int _maxSamplesAllowed = 0;  ///< Maximum sampler count.
 
-    
     /** The grapihcs(GPU adapter, window, render) context attrs. */
     static ContextAttrs _contextAttrs;
 
