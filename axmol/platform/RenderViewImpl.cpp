@@ -997,7 +997,7 @@ void RenderViewImpl::setWindowSizeLimits(int minwidth, int minheight, int maxwid
  * Current GLFW fire event order:
  *  -> framebufferSize
  *  -> windowSize
- * 
+ *
  * Reason for handling render view design & window size here:
  *  On Wayland, calling glfwSetWindowSize will not invoke windowSizeCallback,
  *  so we must update them explicitly at this point.
