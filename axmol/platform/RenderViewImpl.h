@@ -154,13 +154,14 @@ protected:
     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void onGLFWCharCallback(GLFWwindow* window, unsigned int character);
     void onGLFWWindowPosCallback(GLFWwindow* windows, int x, int y);
+    void onGLFWFramebufferSizeCallback(GLFWwindow* window, int fbWidth, int fbHeight);
     void onGLFWWindowSizeCallback(GLFWwindow* window, int w, int h);
     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
     void onGLFWWindowCloseCallback(GLFWwindow* window);
 
 protected:
-    void handleWindowResized(int w, int h, int fbWidth, int fbHeigh);
+    void handleFramebufferResized(int fbWidth, int fbHeigh);
 
     /* update window size when user set zoomFactor, retina, frameSize */
     void applyWindowSize();
@@ -198,7 +199,7 @@ public:
     static const std::string EVENT_WINDOW_CLOSE;
 
 private:
-    void updateRenderScale(int windowWidth, int framebufferWidth);
+    void updateRenderScale();
     AX_DISALLOW_COPY_AND_ASSIGN(RenderViewImpl);
 };
 

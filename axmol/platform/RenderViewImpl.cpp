@@ -158,6 +158,12 @@ public:
             _view->onGLFWWindowPosCallback(windows, x, y);
     }
 
+    static void onGLFWFramebufferSizeCallback(GLFWwindow* window, int width, int height)
+    {
+        if (_view)
+            _view->onGLFWFramebufferSizeCallback(window, width, height);
+    }
+
     static void onGLFWWindowSizeCallback(GLFWwindow* window, int width, int height)
     {
         if (_view)
@@ -579,10 +585,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
 
-    int w, h;
-    glfwGetWindowSize(_mainWindow, &w, &h);
-
-    handleWindowResized(w, h, fbWidth, fbHeight);
+    handleFramebufferResized(fbWidth, fbHeight);
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
     CGSize size;
@@ -641,6 +644,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetCharCallback(_mainWindow, GLFWEventHandler::onGLFWCharCallback);
     glfwSetKeyCallback(_mainWindow, GLFWEventHandler::onGLFWKeyCallback);
     glfwSetWindowPosCallback(_mainWindow, GLFWEventHandler::onGLFWWindowPosCallback);
+    glfwSetFramebufferSizeCallback(_mainWindow, GLFWEventHandler::onGLFWFramebufferSizeCallback);
     glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeCallback);
     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
@@ -971,7 +975,7 @@ void RenderViewImpl::setWindowSizeLimits(int minwidth, int minheight, int maxwid
 }
 
 /*
- * Handle window resize events (including fullscreen toggle, manual resize, HiDPI scaling).
+ * Handle framebuffer resize events (including fullscreen toggle, manual resize, HiDPI scaling).
  * Updates HiDPI flag, render scale, logical window size, and design resolution (viewport)
  * based on logical window size (w,h) and framebuffer size (fbWidth, fbHeight).
  *
@@ -993,10 +997,19 @@ void RenderViewImpl::setWindowSizeLimits(int minwidth, int minheight, int maxwid
  * Current GLFW fire event order:
  *  -> framebufferSize
  *  -> windowSize
+ * 
+ * Reason for handling render view design & window size here:
+ *  On Wayland, calling glfwSetWindowSize will not invoke windowSizeCallback,
+ *  so we must update them explicitly at this point.
  */
-void RenderViewImpl::handleWindowResized(int w, int h, int fbWidth, int fbHeight)
+void RenderViewImpl::handleFramebufferResized(int fbWidth, int fbHeight)
 {
-    updateRenderScale(w, fbWidth);
+    int w, h;
+    glfwGetWindowSize(_mainWindow, &w, &h);
+    if (w == 0 || h == 0 || fbWidth == 0 || fbHeight == 0)
+        return;
+
+    updateRenderScale();
 
     float width  = w / _windowZoomFactor;
     float height = h / _windowZoomFactor;
@@ -1049,23 +1062,44 @@ void RenderViewImpl::applyWindowSize()
     }
 }
 
-void RenderViewImpl::updateRenderScale(int windowWidth, int framebufferWidth)
+/**
+ * Updates the render scale and input scale factors based on the current platform
+ * and render scale mode.
+ *
+ * - On platforms where screen coordinates map 1:1 to physical pixels (Win32, X11),
+ *   high-DPI scaling is only applied when in Physical mode. In this case, _inputScale
+ *   converts from screen coordinates to the render view's logical coordinate space.
+ *
+ * - On other platforms (e.g., macOS, Wayland), input coordinates are already in logical
+ *   units, so _inputScale remains 1.0. However, _renderScale is still queried to adjust
+ *   rendering for high-DPI displays (e.g., viewport size).
+ *
+ * This function uses glfwGetWindowContentScale() to retrieve the current content scale
+ * factor, which may change when moving the window between monitors with different DPI
+ * settings.
+ */
+void RenderViewImpl::updateRenderScale()
 {
-    if (_renderScaleMode == RenderScaleMode::Physical)
+    auto windowPlatform = getWindowPlatform();
+    switch (windowPlatform)
     {
-        auto windowPlatform = getWindowPlatform();
-        switch (windowPlatform)
+    case WindowPlatform::Win32:
+    case WindowPlatform::X11:
+        if (_renderScaleMode == RenderScaleMode::Physical)
         {
-        case WindowPlatform::Win32:
-        case WindowPlatform::X11:
             glfwGetWindowContentScale(_mainWindow, &_renderScale, nullptr);
             _inputScale = 1.0f / _renderScale;
-            return;
         }
+        else
+        {
+            _inputScale = _renderScale = 1.0f;
+        }
+        break;
+    default:
+        glfwGetWindowContentScale(_mainWindow, &_renderScale, nullptr);
+        _inputScale = 1.0f;
+        break;
     }
-
-    _inputScale  = 1.0f;
-    _renderScale = framebufferWidth / static_cast<float>(windowWidth);
 }
 
 void RenderViewImpl::setViewportInPoints(float x, float y, float w, float h)
@@ -1345,17 +1379,19 @@ void RenderViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int x, int 
     director->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_POSITIONED, &pos);
 }
 
+void RenderViewImpl::onGLFWFramebufferSizeCallback(GLFWwindow* window, int fbWidth, int fbHeight)
+{
+    AXLOGI("RenderViewImpl::onGLFWFramebufferSizeCallback: ({}, {})", fbWidth, fbHeight);
+
+    handleFramebufferResized(fbWidth, fbHeight);
+    onFramebufferResized(fbWidth, fbHeight);
+}
+
 void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
+    AXLOGI("RenderViewImpl::onGLFWWindowSizeCallback: ({}, {})", w, h);
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-        // Query the actual framebuffer size here to handle HiDPI displays.
-        // On macOS/Windows/Linux with Retina/HiDPI, framebuffer size may differ from window size.
-        int fbWidth = 0, fbHeight = 0;
-        glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
-
-        handleWindowResized(w, h, fbWidth, fbHeight);
-        onFramebufferResized(fbWidth, fbHeight);
         Size size(w, h);
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
     }
