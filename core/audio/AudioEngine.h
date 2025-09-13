@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "core/math/Vec3.h"
+#include "math/Vec3.h"
 #include "platform/PlatformConfig.h"
 #include "platform/PlatformMacros.h"
 #include "audio/AudioMacros.h"

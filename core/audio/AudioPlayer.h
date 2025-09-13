@@ -37,6 +37,7 @@
 #include "audio/AudioMacros.h"
 #include "platform/PlatformMacros.h"
 #include "audio/alconfig.h"
+#include "math/Vec3.h"
 
 namespace ax
 {
