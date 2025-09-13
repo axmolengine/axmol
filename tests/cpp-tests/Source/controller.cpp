@@ -55,7 +55,7 @@ public:
         addTest("Actions - Basic", []() { return new ActionsTests(); });
         addTest("Actions - Ease", []() { return new ActionsEaseTests(); });
         addTest("Actions - Progress", []() { return new ActionsProgressTests(); });
-        addTest("Audio - NewAudioEngine", []() { return new AudioEngineTests(); });
+        addTest("AudioEngine", []() { return new AudioEngineTests(); });
 
         addTest("Box2D - Basic", []() { return new Box2DTests(); });
 #if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
