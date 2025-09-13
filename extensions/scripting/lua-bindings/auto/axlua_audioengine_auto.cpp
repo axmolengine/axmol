@@ -1215,6 +1215,171 @@ int lua_ax_audioengine_AudioEngine_isEnabled(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_audioengine_AudioEngine_setPan(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        int arg0;
+        double arg1;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:setPan");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.AudioEngine:setPan");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setPan'", nullptr);
+            return 0;
+        }
+        ax::AudioEngine::setPan(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 3)
+    {
+        int arg0;
+        double arg1;
+        double arg2;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:setPan");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.AudioEngine:setPan");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.AudioEngine:setPan");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setPan'", nullptr);
+            return 0;
+        }
+        ax::AudioEngine::setPan(arg0, arg1, arg2);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:setPan",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_setPan'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_audioengine_AudioEngine_getPan(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        int arg0;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:getPan");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getPan'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::AudioEngine::getPan(arg0);
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:getPan",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_getPan'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_audioengine_AudioEngine_getSourcePosition(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        int arg0;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:getSourcePosition");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getSourcePosition'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::AudioEngine::getSourcePosition(arg0);
+        vec3_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:getSourcePosition",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_getSourcePosition'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_audioengine_AudioEngine_setSourcePosition(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        int arg0;
+        ax::Vec3 arg1;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:setSourcePosition");
+        ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.AudioEngine:setSourcePosition");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setSourcePosition'", nullptr);
+            return 0;
+        }
+        ax::AudioEngine::setSourcePosition(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:setSourcePosition",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_setSourcePosition'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_audioengine_AudioEngine_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (AudioEngine)");
@@ -1256,6 +1421,10 @@ int lua_register_ax_audioengine_AudioEngine(lua_State* tolua_S)
         tolua_function(tolua_S,"getPlayingAudioCount", lua_ax_audioengine_AudioEngine_getPlayingAudioCount);
         tolua_function(tolua_S,"setEnabled", lua_ax_audioengine_AudioEngine_setEnabled);
         tolua_function(tolua_S,"isEnabled", lua_ax_audioengine_AudioEngine_isEnabled);
+        tolua_function(tolua_S,"setPan", lua_ax_audioengine_AudioEngine_setPan);
+        tolua_function(tolua_S,"getPan", lua_ax_audioengine_AudioEngine_getPan);
+        tolua_function(tolua_S,"getSourcePosition", lua_ax_audioengine_AudioEngine_getSourcePosition);
+        tolua_function(tolua_S,"setSourcePosition", lua_ax_audioengine_AudioEngine_setSourcePosition);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::AudioEngine).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AudioEngine";
