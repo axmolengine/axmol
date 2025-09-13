@@ -552,12 +552,6 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     _mainWindow = glfwCreateWindow(static_cast<int>(requestWinSize.width), static_cast<int>(requestWinSize.height),
                                    _viewName.c_str(), _monitor, nullptr);
-
-    // BOOL yesok = IsProcessDPIAware();
-    // float xscale, yscale;
-    // glfwGetWindowContentScale(_mainWindow, &xscale, &yscale);
-    // bool dpiAwareness = xscale > 1.0f || yscale > 1.0f;
-
     if (_mainWindow == nullptr)
     {
         std::string message = "Can't create window";

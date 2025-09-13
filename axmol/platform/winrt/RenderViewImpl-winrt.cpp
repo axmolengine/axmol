@@ -552,7 +552,7 @@ void RenderViewImpl::UpdateForWindowSizeChange(float width, float height)
 
 void RenderViewImpl::SetDPI(float dpi)
 {
-    bool inital = m_dpi == 0;
+    // bool inital = m_dpi == 0;
     if (m_dpi != dpi)
     {
         m_dpi = dpi;

@@ -53,8 +53,10 @@ AppDelegate::~AppDelegate()
 void AppDelegate::initGfxContextAttrs()
 {
     // set graphics context attributes: red,green,blue,alpha,depth,stencil
-    GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
+    GfxContextAttrs gfxContextAttrs = {.powerPreference = PowerPreference::HighPerformance};
 
+    // uncomment if your app need adapt high DPI scale monitors
+    // gfxContextAttrs.renderScaleMode = RenderScaleMode::Physical;
     RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
 
@@ -73,7 +75,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    director->setPowerPreference(PowerPreference::HighPerformance);
     auto renderView = director->getRenderView();
     if (!renderView)
     {
