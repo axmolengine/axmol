@@ -79,7 +79,7 @@ bool EventListenerKeyboard::init()
 {
     auto listener = [this](Event* event) {
         auto keyboardEvent = static_cast<EventKeyboard*>(event);
-        if (keyboardEvent->_isPressed)
+        if (keyboardEvent->_isKeyDown)
         {
             if (onKeyPressed != nullptr)
                 onKeyPressed(keyboardEvent->_keyCode, event);
