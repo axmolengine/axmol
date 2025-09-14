@@ -983,6 +983,8 @@ void RenderViewImpl::setWindowSizeLimits(int minwidth, int minheight, int maxwid
 void RenderViewImpl::onGLFWFramebufferSizeCallback(GLFWwindow* window, int fbWidth, int fbHeight)
 {
     AXLOGD("RenderViewImpl::onGLFWFramebufferSizeCallback: ({}, {})", fbWidth, fbHeight);
+    if (fbWidth == 0 || fbHeight == 0)
+        return;
 
     _renderSize.set(fbWidth, fbHeight);
     _renderSizeChanged = true;
@@ -991,14 +993,14 @@ void RenderViewImpl::onGLFWFramebufferSizeCallback(GLFWwindow* window, int fbWid
 void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     AXLOGD("RenderViewImpl::onGLFWWindowSizeCallback: ({}, {})", w, h);
-    if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
-    {
-        updateScaledWindowSize(w, h);
+    if (w == 0 || h == 0)
+        return;
 
-        Size size(w, h);
+    updateScaledWindowSize(w, h);
 
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
-    }
+    Size size(w, h);
+
+    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
 }
 
 /*
