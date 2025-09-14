@@ -23781,6 +23781,53 @@ int lua_ax_base_RenderView_getWindowZoomFactor(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_RenderView_getRenderSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderView* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getRenderSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getRenderSize'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getRenderSize();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getRenderSize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getRenderSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_RenderView_setCursorVisible(lua_State* tolua_S)
 {
     int argc = 0;
@@ -25203,6 +25250,7 @@ int lua_register_ax_base_RenderView(lua_State* tolua_S)
         tolua_function(tolua_S,"setWindowSize",lua_ax_base_RenderView_setWindowSize);
         tolua_function(tolua_S,"setWindowZoomFactor",lua_ax_base_RenderView_setWindowZoomFactor);
         tolua_function(tolua_S,"getWindowZoomFactor",lua_ax_base_RenderView_getWindowZoomFactor);
+        tolua_function(tolua_S,"getRenderSize",lua_ax_base_RenderView_getRenderSize);
         tolua_function(tolua_S,"setCursorVisible",lua_ax_base_RenderView_setCursorVisible);
         tolua_function(tolua_S,"getRenderScale",lua_ax_base_RenderView_getRenderScale);
         tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_RenderView_setContentScaleFactor);
