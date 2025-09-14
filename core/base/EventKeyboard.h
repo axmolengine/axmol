@@ -219,7 +219,7 @@ public:
         KEY_PLAY
     };
 
-    enum KeyAction
+    enum class KeyAction
     {
         RELEASE = 0,
         PRESS   = 1,
@@ -231,14 +231,14 @@ public:
      * @param keyCode A given keycode.
      * @param action see enum KeyAction
      */
-    EventKeyboard(KeyCode keyCode, int action);
+    EventKeyboard(KeyCode keyCode, KeyAction action);
 
     bool isPress() const { return _action == KeyAction::PRESS; }
     bool isRepeat() const { return _action == KeyAction::REPEAT; }
 
 private:
     KeyCode _keyCode;
-    int _action;
+    KeyAction _action;
 
     friend class EventListenerKeyboard;
 };

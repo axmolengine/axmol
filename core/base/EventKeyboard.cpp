@@ -29,7 +29,7 @@
 namespace ax
 {
 
-EventKeyboard::EventKeyboard(KeyCode keyCode, int action)
+EventKeyboard::EventKeyboard(KeyCode keyCode, KeyAction action)
     : Event(Type::KEYBOARD), _keyCode(keyCode), _action(action)
 {}
 

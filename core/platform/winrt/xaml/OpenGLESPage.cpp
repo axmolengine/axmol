@@ -411,7 +411,7 @@ void OpenGLESPage::OnKeyPressed(CoreWindow const& sender, KeyEventArgs const& ar
 {
     if (mRenderer)
     {
-        mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::KeyPressed, args);
+        mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::PRESS, args);
     }
 }
 
@@ -423,7 +423,7 @@ void OpenGLESPage::OnKeyReleased(CoreWindow const& /*sender*/, KeyEventArgs cons
 {
     if (mRenderer)
     {
-        mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::KeyReleased, args);
+        mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::RELEASE, args);
     }
 }
 
