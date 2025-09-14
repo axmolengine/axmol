@@ -593,4 +593,4 @@ void AudioEngine::setSourcePosition(int audioId, const ax::Vec3& position)
 
     _audioEngineImpl->setSourcePosition(audioId, position);
 }
-} // namespace ax
+}  // namespace ax
