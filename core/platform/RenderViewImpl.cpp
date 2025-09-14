@@ -1242,7 +1242,7 @@ void RenderViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, dou
 
 void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
 {
-    // x-studio spec, for repeat press key support.
+    // The enum EventKeyBoard::KeyAction value is same with GLFW action
     EventKeyboard event(g_keyCodeMap[key], action);
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->dispatchEvent(&event);

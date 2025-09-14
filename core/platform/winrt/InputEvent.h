@@ -101,8 +101,9 @@ private:
 
 enum WinRTKeyboardEventType
 {
+    KeyReleased,
 	KeyPressed,
-	KeyReleased,
+    KeyRepeat
 };
 
 class AX_DLL WinRTKeyboardEvent : public InputEvent

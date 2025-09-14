@@ -219,21 +219,31 @@ public:
         KEY_PLAY
     };
 
+    enum KeyAction
+    {
+        RELEASE = 0,
+        PRESS   = 1,
+        REPEAT  = 2
+    };
+
     /** Constructor.
      *
      * @param keyCode A given keycode.
-     * @param isPressed True if the key is pressed.
+     * @param action see enum KeyAction
      */
-    EventKeyboard(KeyCode keyCode, bool isPressed);
+    EventKeyboard(KeyCode keyCode, int action);
+
+    bool isPress() const { return _action == KeyAction::PRESS; }
+    bool isRepeat() const { return _action == KeyAction::REPEAT; }
 
 private:
     KeyCode _keyCode;
-    bool _isPressed;
+    int _action;
 
     friend class EventListenerKeyboard;
 };
 
-}
+}  // namespace ax
 
 // end of base group
 /// @}
