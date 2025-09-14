@@ -184,6 +184,100 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSetting
     return ret;
 }
 
+int AudioEngine::play3d(std::string_view filePath, const Vec3& position, bool loop, float volume, const AudioProfile* profile)
+{
+    return play3d(filePath, ax::AudioPlayerSettings{loop, volume, 0.0f, position});
+}
+
+AUDIO_ID AudioEngine::play3d(std::string_view filePath,
+                             const AudioPlayerSettings& settings,
+                             const AudioProfile* profile)
+{
+    AUDIO_ID ret = AudioEngine::INVALID_AUDIO_ID;
+
+    do
+    {
+        if (!isEnabled())
+        {
+            break;
+        }
+
+        if (!lazyInit())
+        {
+            break;
+        }
+
+        if (!FileUtils::getInstance()->isFileExist(filePath))
+        {
+            break;
+        }
+
+        auto profileHelper = _defaultProfileHelper;
+        if (profile && profile != &profileHelper->profile)
+        {
+            AX_ASSERT(!profile->name.empty());
+            profileHelper          = &_audioPathProfileHelperMap[profile->name];
+            profileHelper->profile = *profile;
+        }
+
+        if (_audioIDInfoMap.size() >= _maxInstances)
+        {
+            AXLOGE("Fail to play {} cause by limited max instance of AudioEngine", filePath);
+            break;
+        }
+        if (profileHelper)
+        {
+            if (profileHelper->profile.maxInstances != 0 &&
+                profileHelper->audioIDs.size() >= profileHelper->profile.maxInstances)
+            {
+                AXLOGE("Fail to play {} cause by limited max instance of AudioProfile", filePath);
+                break;
+            }
+            if (profileHelper->profile.minDelay > TIME_DELAY_PRECISION)
+            {
+                auto currTime = utils::gettime();
+                if (profileHelper->lastPlayTime > TIME_DELAY_PRECISION &&
+                    currTime - profileHelper->lastPlayTime <= profileHelper->profile.minDelay)
+                {
+                    AXLOGE("Fail to play {} cause by limited minimum delay", filePath);
+                    break;
+                }
+            }
+        }
+
+        float volume = settings.volume;
+        if (volume < 0.0f)
+        {
+            volume = 0.0f;
+        }
+        else if (volume > 1.0f)
+        {
+            volume = 1.0f;
+        }
+
+        ret = _audioEngineImpl->play3d(filePath, settings.position, settings.loop, volume, settings.time);
+        if (ret != INVALID_AUDIO_ID)
+        {
+            _audioPathIDMap[filePath.data()].emplace_back(ret);
+            auto it = _audioPathIDMap.find(filePath);
+
+            auto& audioRef    = _audioIDInfoMap[ret];
+            audioRef.volume   = volume;
+            audioRef.loop     = settings.loop;
+            audioRef.filePath = it->first;
+
+            if (profileHelper)
+            {
+                profileHelper->lastPlayTime = utils::gettime();
+                profileHelper->audioIDs.emplace_back(ret);
+            }
+            audioRef.profileHelper = profileHelper;
+        }
+    } while (0);
+
+    return ret;
+}
+
 void AudioEngine::setLoop(AUDIO_ID audioID, bool loop)
 {
     auto it = _audioIDInfoMap.find(audioID);
@@ -590,5 +684,25 @@ void AudioEngine::setSourcePosition(int audioId, const ax::Vec3& position)
     }
 
     _audioEngineImpl->setSourcePosition(audioId, position);
+}
+
+void AudioEngine::setListenerPosition(const ax::Vec3& position)
+{
+    if (!_audioEngineImpl)
+    {
+        return;
+    }
+
+    _audioEngineImpl->setListenerPosition(position);
+}
+
+ax::Vec3 AudioEngine::getListenerPosition()
+{
+    if (!_audioEngineImpl)
+    {
+        return {};
+    }
+
+    return _audioEngineImpl->getListenerPosition();
 }
 }

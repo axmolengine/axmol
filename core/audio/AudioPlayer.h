@@ -66,6 +66,7 @@ protected:
     void setCache(AudioCache* cache);
     void rotateBufferThread(int offsetFrame);
     bool play2d();
+    bool play3d();
 #if defined(__APPLE__)
     void wakeupRotateThread();
 #endif
