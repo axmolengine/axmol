@@ -33,6 +33,12 @@
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+#import <AppKit/AppKit.h>
+#else
+#import <UIKit/UIKit.h>
+#endif
+
 namespace ax::rhi::mtl
 {
 
@@ -137,25 +143,66 @@ static MTLRenderPassDescriptor* toMTLRenderPassDesc(const RenderTarget* rt, cons
 
 }  // namespace
 
-CommandBufferImpl::CommandBufferImpl(DriverImpl* driver)
-    : _mtlCommandQueue(driver->getMTLCommandQueue())
-    , _frameBoundarySemaphore(dispatch_semaphore_create(MAX_INFLIGHT_BUFFER))
-{}
+CAMetalLayer*    CommandBufferImpl::_mtlLayer = nil;
+id<CAMetalDrawable> CommandBufferImpl::_currentDrawable = nil;
+
+CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
+{
+    _frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_BUFFER);
+    auto mtlDevice = driver->getMTLDevice();
+    _mtlCmdQueue = driver->getMTLCmdQueue();
+    auto& contextAttrs = driver->getContextAttrs();
+#if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+    CGSize fbSize;
+    NSView* contentView = (id)surfaceContext;
+    @autoreleasepool {
+        const NSRect contentRect = [contentView frame];
+        const NSRect fbRect = [contentView convertRectToBacking:contentRect];
+
+        fbSize.width =  (int) fbRect.size.width;
+        fbSize.height = (int) fbRect.size.height;
+    } // autoreleasepool
+    [contentView setWantsLayer:YES];
+    _mtlLayer = [CAMetalLayer layer];
+    [_mtlLayer setDevice:mtlDevice];
+    [_mtlLayer setPixelFormat:MTLPixelFormatBGRA8Unorm];
+    [_mtlLayer setFramebufferOnly:YES];
+    [_mtlLayer setDrawableSize:fbSize];
+    _mtlLayer.displaySyncEnabled = contextAttrs.vsync;
+    [contentView setLayer:_mtlLayer];
+#else
+    UIView* view = (id)surfaceContext;
+    _mtlLayer   = (CAMetalLayer*)[view layer];
+    _mtlLayer.device          = mtlDevice;
+    _mtlLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
+    _mtlLayer.framebufferOnly = YES;
+    
+    const auto backingScaleFactor = [view contentScaleFactor];
+    auto bounds = [view bounds];
+    CGSize fbSize = CGSizeMake(bounds.size.width * backingScaleFactor,
+                              bounds.size.height * backingScaleFactor);
+    _mtlLayer.drawableSize = fbSize;
+#endif
+    
+    UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
+}
 
 CommandBufferImpl::~CommandBufferImpl()
 {
     // Wait for all frames to finish by submitting and waiting on a dummy command buffer.
     flush();
-    id<MTLCommandBuffer> oneOffBuffer = [_mtlCommandQueue commandBuffer];
+    id<MTLCommandBuffer> oneOffBuffer = [_mtlCmdQueue commandBuffer];
     [oneOffBuffer commit];
     [oneOffBuffer waitUntilCompleted];
+    [oneOffBuffer release];
 
     dispatch_semaphore_signal(_frameBoundarySemaphore);
 }
 
 bool CommandBufferImpl::resizeSwapchain(uint32_t width, uint32_t height)
 {
-    rhi::mtl::UtilsMTL::resizeDefaultAttachmentTexture(width, height);
+    [_mtlLayer setDrawableSize:CGSizeMake(width, height)];
+    UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
     return true;
 }
 
@@ -174,10 +221,10 @@ bool CommandBufferImpl::beginFrame()
     _autoReleasePool = [[NSAutoreleasePool alloc] init];
     dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
 
-    _mtlCommandBuffer = [_mtlCommandQueue commandBuffer];
-    // [_mtlCommandBuffer enqueue];
+    _currentCmdBuffer = [_mtlCmdQueue commandBuffer];
+    // [_currentCmdBuffer enqueue];
     // commit will enqueue automatically
-    [_mtlCommandBuffer retain];
+    [_currentCmdBuffer retain];
 
     BufferManager::beginFrame();
     return true;
@@ -205,7 +252,7 @@ void CommandBufferImpl::updateRenderCommandEncoder(const RenderTarget* renderTar
     auto mtlDesc        = toMTLRenderPassDesc(renderTarget, renderPassDesc);
     _renderTargetWidth  = (unsigned int)mtlDesc.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDesc.colorAttachments[0].texture.height;
-    _mtlRenderEncoder   = [_mtlCommandBuffer renderCommandEncoderWithDescriptor:mtlDesc];
+    _mtlRenderEncoder   = [_currentCmdBuffer renderCommandEncoderWithDescriptor:mtlDesc];
     [_mtlRenderEncoder retain];
 }
 
@@ -350,10 +397,10 @@ void CommandBufferImpl::endFrame()
     [_mtlRenderEncoder release];
     _mtlRenderEncoder = nil;
 
-    auto currentDrawable = DriverImpl::getCurrentDrawable();
-    [_mtlCommandBuffer presentDrawable:currentDrawable];
+    auto currentDrawable = getCurrentDrawable();
+    [_currentCmdBuffer presentDrawable:currentDrawable];
     _drawableTexture = currentDrawable.texture;
-    [_mtlCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
+    [_currentCmdBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
       // GPU work is complete
       // Signal the semaphore to start the CPU work
       dispatch_semaphore_signal(_frameBoundarySemaphore);
@@ -361,7 +408,7 @@ void CommandBufferImpl::endFrame()
 
     flush();
 
-    DriverImpl::resetCurrentDrawable();
+    resetCurrentDrawable();
     [_autoReleasePool drain];
 }
 
@@ -377,15 +424,15 @@ void CommandBufferImpl::endEncoding()
 
 void CommandBufferImpl::flush()
 {
-    if (_mtlCommandBuffer)
+    if (_currentCmdBuffer)
     {
-        assert(_mtlCommandBuffer.status != MTLCommandBufferStatusCommitted);
-        [_mtlCommandBuffer commit];
+        assert(_currentCmdBuffer.status != MTLCommandBufferStatusCommitted);
+        [_currentCmdBuffer commit];
 
         flushCaptureCommands();
 
-        [_mtlCommandBuffer release];
-        _mtlCommandBuffer = nil;
+        [_currentCmdBuffer release];
+        _currentCmdBuffer = nil;
     }
 }
 
@@ -397,7 +444,7 @@ void CommandBufferImpl::flushCaptureCommands()
         // because readPixels require sync operation to get screen pixels properly without data race issue,
         // otherwise, will lead dead-lock
         // !!!Notes, MTL is mutli-threading, all GPU handler is dispatch at GPU threads
-        [_mtlCommandBuffer waitUntilCompleted];
+        [_currentCmdBuffer waitUntilCompleted];
 
         PixelBufferDesc screenPixelData;
         for (auto& cb : _captureCallbacks)
@@ -406,10 +453,10 @@ void CommandBufferImpl::flushCaptureCommands()
             {  // screen capture
                 if (!screenPixelData)
                 {
-                    CommandBufferImpl::readPixels(_drawableTexture, 0, 0, [_drawableTexture width],
+                    readPixels(_drawableTexture, 0, 0, [_drawableTexture width],
                                                   [_drawableTexture height], screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
-                    axdrv->setFrameBufferOnly(true);
+                    setFrameBufferOnly(true);
                 }
                 cb.second(screenPixelData);
             }
@@ -418,7 +465,7 @@ void CommandBufferImpl::flushCaptureCommands()
                 PixelBufferDesc pixelData;
                 auto texture = cb.first;
                 assert(texture != nullptr);
-                CommandBufferImpl::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
+                readPixels(static_cast<TextureImpl*>(texture)->internalHandle(), 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
                 AX_SAFE_RELEASE(texture);
                 cb.second(pixelData);
             }
@@ -524,17 +571,6 @@ void CommandBufferImpl::setScissorRect(bool isEnabled, float x, float y, float w
     [_mtlRenderEncoder setScissorRect:scissorRect];
 }
 
-void CommandBufferImpl::readPixels(Texture* texture,
-                                   std::size_t origX,
-                                   std::size_t origY,
-                                   std::size_t rectWidth,
-                                   std::size_t rectHeight,
-                                   PixelBufferDesc& pbd)
-{
-    CommandBufferImpl::readPixels(static_cast<TextureImpl*>(texture)->internalHandle(), origX, origY, rectWidth,
-                                  rectHeight, pbd);
-}
-
 void CommandBufferImpl::readPixels(id<MTLTexture> texture,
                                    std::size_t origX,
                                    std::size_t origY,
@@ -554,11 +590,10 @@ void CommandBufferImpl::readPixels(id<MTLTexture> texture,
     id<MTLDevice> device              = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
     id<MTLTexture> readPixelsTexture  = [device newTextureWithDescriptor:textureDesc];
 
-    id<MTLCommandQueue> commandQueue = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCommandQueue();
-    auto commandBuffer               = [commandQueue commandBuffer];
-    // [commandBuffer enqueue];
+    auto oneOffBuffer               = [_mtlCmdQueue commandBuffer];
+    // [oneOffBuffer enqueue];
 
-    id<MTLBlitCommandEncoder> blitCommandEncoder = [commandBuffer blitCommandEncoder];
+    id<MTLBlitCommandEncoder> blitCommandEncoder = [oneOffBuffer blitCommandEncoder];
     [blitCommandEncoder copyFromTexture:texture
                             sourceSlice:0
                             sourceLevel:0
@@ -574,7 +609,7 @@ void CommandBufferImpl::readPixels(id<MTLTexture> texture,
 #endif
     [blitCommandEncoder endEncoding];
 
-    [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
+    [oneOffBuffer addCompletedHandler:^(id<MTLCommandBuffer> commandBufferMTL) {
       auto bytePerRow = rectWidth * getBitsPerElementMTL(texture.pixelFormat) / 8;
       auto texelData  = pbd._data.resize(bytePerRow * rectHeight);
       if (texelData != nullptr)
@@ -586,8 +621,27 @@ void CommandBufferImpl::readPixels(id<MTLTexture> texture,
       }
       [readPixelsTexture release];
     }];
-    [commandBuffer commit];
-    [commandBuffer waitUntilCompleted];
+    [oneOffBuffer commit];
+    [oneOffBuffer waitUntilCompleted];
+    [oneOffBuffer release];
+}
+
+void CommandBufferImpl::setFrameBufferOnly(bool frameBufferOnly)
+{
+    [_mtlLayer setFramebufferOnly:frameBufferOnly];
+}
+
+id<CAMetalDrawable> CommandBufferImpl::getCurrentDrawable()
+{
+    if (!_currentDrawable)
+        _currentDrawable = [_mtlLayer nextDrawable];
+
+    return _currentDrawable;
+}
+
+void CommandBufferImpl::resetCurrentDrawable()
+{
+    _currentDrawable = nil;
 }
 
 }  // namespace ax::rhi::mtl

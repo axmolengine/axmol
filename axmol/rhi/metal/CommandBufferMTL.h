@@ -51,7 +51,7 @@ public:
     /**
      * @param driver The device for which MTLCommandQueue object was created.
      */
-    CommandBufferImpl(DriverImpl* driver);
+    CommandBufferImpl(DriverImpl* driver, void* surfaceContext);
     ~CommandBufferImpl();
 
     /**
@@ -212,7 +212,8 @@ public:
 
     id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
 
-    id<MTLCommandBuffer> getMTLCommandBuffer() const { return _mtlCommandBuffer; }
+    static id<CAMetalDrawable> getCurrentDrawable();
+    static void resetCurrentDrawable();
 
 protected:
     /**
@@ -225,18 +226,24 @@ protected:
      * @param pbd, the output buffer for fill texels data
      * @remark: !!!this function only can call after endFrame, then it's could be works well.
      */
-    static void readPixels(Texture* texture,
+    void readPixels(id<MTLTexture> texture,
                            std::size_t origX,
                            std::size_t origY,
                            std::size_t rectWidth,
                            std::size_t rectHeight,
                            PixelBufferDesc& pbd);
-    static void readPixels(id<MTLTexture> texture,
-                           std::size_t origX,
-                           std::size_t origY,
-                           std::size_t rectWidth,
-                           std::size_t rectHeight,
-                           PixelBufferDesc& pbd);
+
+    /**
+     * This property controls whether or not the drawables'
+     * metal textures may only be used for framebuffer attachments (YES) or
+     * whether they may also be used for texture sampling and pixel
+     * read/write operations (NO).
+     * @param frameBufferOnly A value of YES allows CAMetalLayer to allocate the MTLTexture objects in ways that are
+     * optimized for display purposes that makes them unsuitable for sampling. The recommended value for most
+     * applications is YES.
+     * @note This interface is specificaly designed for metal.
+     */
+    void setFrameBufferOnly(bool frameBufferOnly) override;
 
 private:
     void prepareDrawing() const;
@@ -247,8 +254,12 @@ private:
     void flushCaptureCommands();
     void updateRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDesc& renderPassParams);
 
-    id<MTLCommandBuffer> _mtlCommandBuffer        = nil;
-    id<MTLCommandQueue> _mtlCommandQueue          = nil;
+    static CAMetalLayer*    _mtlLayer;
+    static id<CAMetalDrawable> _currentDrawable;
+
+    // weak ref, like context, managed by DriverImpl
+    id<MTLCommandQueue> _mtlCmdQueue               = nil; 
+    id<MTLCommandBuffer> _currentCmdBuffer        = nil;
     id<MTLRenderCommandEncoder> _mtlRenderEncoder = nil;
     id<MTLBuffer> _mtlIndexBuffer                 = nil;
     id<MTLTexture> _drawableTexture               = nil;

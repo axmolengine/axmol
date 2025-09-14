@@ -195,17 +195,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         AX_UNUSED_PARAM(format);
         AX_UNUSED_PARAM(depth);
         AX_UNUSED_PARAM(sharegroup);
-        id<MTLDevice> device = MTLCreateSystemDefaultDevice();
-        if (!device)
-        {
-            AXLOGE("Doesn't support metal.");
-            return nil;
-        }
-        CAMetalLayer* metalLayer   = (CAMetalLayer*)[self layer];
-        metalLayer.device          = device;
-        metalLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
-        metalLayer.framebufferOnly = YES;
-        ax::rhi::mtl::DriverImpl::setCAMetalLayer(metalLayer);
 #else
         pixelformat_        = format;
         depthFormat_        = depth;
@@ -248,18 +237,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     }
 
     return self;
-}
-
-- (int)getWidth
-{
-    CGSize bound = [self bounds].size;
-    return (int)bound.width * self.contentScaleFactor;
-}
-
-- (int)getHeight
-{
-    CGSize bound = [self bounds].size;
-    return (int)bound.height * self.contentScaleFactor;
 }
 
 #if AX_RENDER_API == AX_RENDER_API_GL
@@ -321,19 +298,15 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     size_ = [self bounds].size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
-    ax::rhi::mtl::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
 #else
     [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     size_ = [renderer_ backingSize];
-
-    // Issue #914 #924
-    //     Director *director = [Director sharedDirector];
-    //     [director reshapeProjection:size_];
     ax::Size size;
     size.width  = size_.width;
     size.height = size_.height;
-    // ax::Director::getInstance()->reshapeProjection(size);
 #endif
+    
+    // TODO: resizeSwapchain?
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])

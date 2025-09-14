@@ -78,7 +78,7 @@
 {
     auto renderView = ax::Director::getInstance()->getRenderView();
 
-    float padding = AX_EDIT_BOX_PADDING * renderView->getScaleX() / renderView->getContentScaleFactor();
+    float padding = AX_EDIT_BOX_PADDING * renderView->getScaleX() / renderView->getRenderScale();
     return CGRectInset(bounds, padding, padding);
 }
 

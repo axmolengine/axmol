@@ -415,8 +415,14 @@ void* RenderViewImpl::getNativeWindow() const
 
 void* RenderViewImpl::getNativeDisplay() const
 {
-#if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    return glfwGetWin32Window(_mainWindow);
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+#if AX_RENDER_API == AX_RENDER_API_MTL
+    return (void*)glfwGetCocoaView(_mainWindow);
+#else
     return (void*)glfwGetNSGLContext(_mainWindow);
+#endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
     int platform = glfwGetPlatform();
     return platform == GLFW_PLATFORM_WAYLAND ? (void*)glfwGetWaylandDisplay() : (void*)glfwGetX11Display();
@@ -544,7 +550,8 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, contextAttrs.windowParent);
 #endif
 
-#if AX_RENDER_API == AX_RENDER_API_D3D
+#if AX_RENDER_API != AX_RENDER_API_GL
+    // Init GPU device by driver for non-opengl RHI
     // Initialize the D3D driver before creating the window to avoid a brief white flash
     // caused by driver initialization stutter (hundreds of milliseconds) after the window appears.
     axdrv;
@@ -593,29 +600,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwGetWindowSize(_mainWindow, &w, &h);
     updateScaledWindowSize(w, h);
 
-#if AX_RENDER_API == AX_RENDER_API_MTL
-    CGSize size;
-    size.width  = static_cast<CGFloat>(fbWidth);
-    size.height = static_cast<CGFloat>(fbHeight);
-    // Initialize device.
-    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
-    if (!device)
-    {
-        AXLOGD("Doesn't support metal.");
-        return false;
-    }
-
-    NSView* contentView = [(id)getNativeWindow() contentView];
-    [contentView setWantsLayer:YES];
-    CAMetalLayer* layer = [CAMetalLayer layer];
-    [layer setDevice:device];
-    [layer setPixelFormat:MTLPixelFormatBGRA8Unorm];
-    [layer setFramebufferOnly:YES];
-    [layer setDrawableSize:size];
-    layer.displaySyncEnabled = contextAttrs.vsync;
-    [contentView setLayer:layer];
-    rhi::mtl::DriverImpl::setCAMetalLayer(layer);
-#elif AX_RENDER_API == AX_RENDER_API_GL
+#if AX_RENDER_API == AX_RENDER_API_GL
     glfwMakeContextCurrent(_mainWindow);
     glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
 #endif

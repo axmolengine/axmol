@@ -92,34 +92,6 @@ public:
     /* The default attribs binding index */
     static constexpr uint32_t DEFAULT_ATTRIBS_BINDING_INDEX = VBO_BINDING_INDEX_START + MAX_VERTEX_ATTRIBS;
 
-    /**
-     * Set CAMetalLayer.
-     * @param metalLayer A CAMetalLayer object.
-     */
-    static void setCAMetalLayer(CAMetalLayer* metalLayer);
-
-    /**
-     * Invoke by engine internally at the beginning of rendering a new frame.
-     */
-    static void updateDrawable();
-
-    /**
-     * Get a CAMetalLayer.
-     * @return A CAMetalLayer object.
-     */
-    static CAMetalLayer* getCAMetalLayer() { return DriverImpl::_metalLayer; }
-
-    /**
-     * Get available Drawable.
-     * @return an available drawable.
-     */
-    static id<CAMetalDrawable> getCurrentDrawable();
-
-    /**
-     * Reset current drawable to nil.
-     */
-    static void resetCurrentDrawable();
-
     /// @name Constructor, Destructor and Initializers
     DriverImpl();
     ~DriverImpl();
@@ -165,17 +137,6 @@ public:
     RenderPipeline* createRenderPipeline() override;
 
     /**
-     * This property controls whether or not the drawables'
-     * MTLTextures may only be used for framebuffer attachments (YES) or
-     * whether they may also be used for texture sampling and pixel
-     * read/write operations (NO).
-     * @param frameBufferOnly A value of YES allows CAMetalLayer to allocate the MTLTexture objects in ways that are
-     * optimized for display purposes that makes them unsuitable for sampling. The recommended value for most
-     * applications is YES.
-     */
-    void setFrameBufferOnly(bool frameBufferOnly) override;
-
-    /**
      * New a Program, not auto release.
      * @param vertexShader Specifes this is a vertex shader source.
      * @param fragmentShader Specifes this is a fragment shader source.
@@ -188,12 +149,8 @@ public:
      * @return A MTLDevice object.
      */
     inline id<MTLDevice> getMTLDevice() const { return _mtlDevice; }
-
-    /**
-     * Get a MTLCommandQueue object.
-     * @return A MTLCommandQueue object.
-     */
-    inline id<MTLCommandQueue> getMTLCommandQueue() const { return _mtlCommandQueue; }
+    
+    inline id<MTLCommandQueue> getMTLCmdQueue() const { return _mtlCmdQueue; }
 
     /// below is driver info
 
@@ -238,11 +195,8 @@ protected:
     void destroySampler(SamplerHandle& sampler) override;
 
 private:
-    static CAMetalLayer* _metalLayer;
-    static id<CAMetalDrawable> _currentDrawable;
-
     id<MTLDevice> _mtlDevice             = nil;
-    id<MTLCommandQueue> _mtlCommandQueue = nil;
+    id<MTLCommandQueue> _mtlCmdQueue      = nil;
 
     std::string _deviceName;
     FeatureSet _featureSet = FeatureSet::Unknown;

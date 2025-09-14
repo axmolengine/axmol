@@ -59,11 +59,8 @@ public:
 
     void showWindow(void* viewController);
 
-    /** sets the content scale factor */
-    bool setContentScaleFactor(float contentScaleFactor) override;
-
-    /** returns the content scale factor */
-    float getContentScaleFactor() const override;
+    /** returns the render scale aka backing scale factor */
+    float getRenderScale() const override;
 
     /** @since axmol-3.0, returns the objective-c UIWindow instance */
     void* getNativeWindow() const override { return _eaWindowHandle; }

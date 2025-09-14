@@ -146,9 +146,11 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
 #if !defined(AX_TARGET_OS_TVOS)
     [eaView setMultipleTouchEnabled:YES];
 #endif
+    auto size = [eaView bounds].size;
+    const auto backingScaleFactor = [eaView contentScaleFactor];
 
-    RenderView::setWindowSize([eaView getWidth], [eaView getHeight]);
-    //    _viewScale.x = _viewScale.y = [eaView contentScaleFactor];
+    // simply set windowSize, renderSize to framebufferSize with renderScale=1.0
+    RenderView::setWindowSize(size.width * backingScaleFactor, size.height * backingScaleFactor);
 
     _eaViewHandle = eaView;
 
@@ -217,17 +219,7 @@ bool RenderViewImpl::isGfxContextReady()
     return _eaViewHandle != nullptr;
 }
 
-bool RenderViewImpl::setContentScaleFactor(float contentScaleFactor)
-{
-    AX_ASSERT(_resolutionPolicy == ResolutionPolicy::UNKNOWN);  // cannot enable retina mode
-    _viewScale.x = _viewScale.y = contentScaleFactor;
-
-    [(__bridge EARenderView*)_eaViewHandle setNeedsLayout];
-
-    return true;
-}
-
-float RenderViewImpl::getContentScaleFactor() const
+float RenderViewImpl::getRenderScale() const
 {
     return [(__bridge EARenderView*)_eaViewHandle contentScaleFactor];
 }

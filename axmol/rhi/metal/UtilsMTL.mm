@@ -32,7 +32,6 @@
 namespace ax::rhi::mtl
 {
 
-id<MTLTexture> UtilsMTL::_defaultColorAttachmentTexture        = nil;
 id<MTLTexture> UtilsMTL::_defaultDepthStencilAttachmentTexture = nil;
 
 namespace
@@ -120,6 +119,27 @@ void UtilsMTL::initGPUTextureFormats()
     info.fmt   = getSupportedDepthStencilFormat();
 }
 
+id<MTLTexture> UtilsMTL::getDefaultDepthStencilTexture()
+{
+    return _defaultDepthStencilAttachmentTexture;
+}
+
+void UtilsMTL::updateDefaultDepthStencilAttachment(CAMetalLayer* layer)
+{
+    if (_defaultDepthStencilAttachmentTexture != nil) {
+        [_defaultDepthStencilAttachmentTexture release];
+    }
+  
+    MTLTextureDescriptor* textureDesc = [[MTLTextureDescriptor alloc] init];
+    textureDesc.width                 = layer.drawableSize.width;
+    textureDesc.height                = layer.drawableSize.height;
+    textureDesc.pixelFormat           = s_textureFormats[(int)PixelFormat::D24S8].fmt;
+    textureDesc.resourceOptions       = MTLResourceStorageModePrivate;
+    textureDesc.usage                 = MTLTextureUsageRenderTarget;
+    _defaultDepthStencilAttachmentTexture  = [layer.device newTextureWithDescriptor:textureDesc];
+    [textureDesc release];
+}
+
 MTLPixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()
 {
     return MTLPixelFormatBGRA8Unorm;
@@ -128,19 +148,6 @@ MTLPixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()
 MTLPixelFormat UtilsMTL::getDefaultDepthStencilAttachmentPixelFormat()
 {
     return getSupportedDepthStencilFormat();
-}
-
-id<MTLTexture> UtilsMTL::getDefaultDepthStencilTexture()
-{
-    if (!_defaultDepthStencilAttachmentTexture)
-        _defaultDepthStencilAttachmentTexture = UtilsMTL::createDepthStencilAttachmentTexture();
-
-    return _defaultDepthStencilAttachmentTexture;
-}
-
-void UtilsMTL::updateDefaultColorAttachmentTexture(id<MTLTexture> texture)
-{
-    UtilsMTL::_defaultColorAttachmentTexture = texture;
 }
 
 MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
@@ -152,36 +159,16 @@ MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
     return MTLPixelFormatInvalid;
 }
 
-void UtilsMTL::resizeDefaultAttachmentTexture(std::size_t width, std::size_t height)
-{
-    [DriverImpl::getCAMetalLayer() setDrawableSize:CGSizeMake(width, height)];
-    [_defaultDepthStencilAttachmentTexture release];
-    _defaultDepthStencilAttachmentTexture = UtilsMTL::createDepthStencilAttachmentTexture();
-}
-
-id<MTLTexture> UtilsMTL::createDepthStencilAttachmentTexture()
-{
-    auto CAMetalLayer                 = DriverImpl::getCAMetalLayer();
-    MTLTextureDescriptor* textureDesc = [[MTLTextureDescriptor alloc] init];
-    textureDesc.width                 = CAMetalLayer.drawableSize.width;
-    textureDesc.height                = CAMetalLayer.drawableSize.height;
-    textureDesc.pixelFormat           = s_textureFormats[(int)PixelFormat::D24S8].fmt;
-    textureDesc.resourceOptions       = MTLResourceStorageModePrivate;
-    textureDesc.usage                 = MTLTextureUsageRenderTarget;
-    auto ret                          = [CAMetalLayer.device newTextureWithDescriptor:textureDesc];
-    [textureDesc release];
-
-    return ret;
-}
-
 void UtilsMTL::generateMipmaps(id<MTLTexture> texture)
 {
-    auto commandQueue  = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCommandQueue();
-    auto commandBuffer = [commandQueue commandBuffer];
-    id<MTLBlitCommandEncoder> commandEncoder = [commandBuffer blitCommandEncoder];
-    [commandEncoder generateMipmapsForTexture:texture];
-    [commandEncoder endEncoding];
-    [commandBuffer commit];
+    auto cmdQueue  = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCmdQueue();
+    @autoreleasepool {
+        auto oneOffBuffer = [cmdQueue commandBuffer];
+        id<MTLBlitCommandEncoder> commandEncoder = [oneOffBuffer blitCommandEncoder];
+        [commandEncoder generateMipmapsForTexture:texture];
+        [commandEncoder endEncoding];
+        [oneOffBuffer commit];
+    }
 }
 
 void UtilsMTL::swizzleImage(unsigned char* image, std::size_t width, std::size_t height, MTLPixelFormat format)

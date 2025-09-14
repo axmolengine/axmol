@@ -204,12 +204,8 @@ void Renderer::init()
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
 
     auto driver = axdrv;
-#if AX_RENDER_API == AX_RENDER_API_D3D
-    auto nativeWindow = Director::getInstance()->getRenderView()->getNativeWindow();
-    _commandBuffer    = driver->createCommandBuffer(nativeWindow);
-#else
-    _commandBuffer = driver->createCommandBuffer(nullptr);
-#endif
+    auto nativeDisplay = Director::getInstance()->getRenderView()->getNativeDisplay();
+    _commandBuffer    = driver->createCommandBuffer(nativeDisplay);
     _dsDesc.flags = DepthStencilFlags::ALL;
     _currentRT = _defaultRT = driver->createDefaultRenderTarget();
     _commandBuffer->setScreenRenderTarget(_defaultRT);
@@ -829,9 +825,9 @@ bool Renderer::checkVisibility(const Mat4& transform, const Vec2& size)
 void Renderer::readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback)
 {
     assert(!!rt);
-    if (rt ==
-        _defaultRT)  // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
-        axdrv->setFrameBufferOnly(false);
+    // read pixels from screen, metal renderer backend: screen texture must not be a framebufferOnly
+    if (rt == _defaultRT)
+        _commandBuffer->setFrameBufferOnly(false);
 
     _commandBuffer->readPixels(rt, std::move(callback));
 }

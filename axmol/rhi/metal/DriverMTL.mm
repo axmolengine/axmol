@@ -402,31 +402,10 @@ bool supportS3TC(FeatureSet featureSet)
 
 bool DriverImpl::_isDepth24Stencil8PixelFormatSupported = false;
 
-CAMetalLayer* DriverImpl::_metalLayer            = nil;
-id<CAMetalDrawable> DriverImpl::_currentDrawable = nil;
-
-void DriverImpl::setCAMetalLayer(CAMetalLayer* metalLayer)
-{
-    DriverImpl::_metalLayer = metalLayer;
-}
-
-id<CAMetalDrawable> DriverImpl::getCurrentDrawable()
-{
-    if (!DriverImpl::_currentDrawable)
-        DriverImpl::_currentDrawable = [DriverImpl::_metalLayer nextDrawable];
-
-    return DriverImpl::_currentDrawable;
-}
-
-void DriverImpl::resetCurrentDrawable()
-{
-    DriverImpl::_currentDrawable = nil;
-}
-
 DriverImpl::DriverImpl()
 {
-    _mtlDevice       = DriverImpl::_metalLayer.device;
-    _mtlCommandQueue = [_mtlDevice newCommandQueue];
+    _mtlDevice       = MTLCreateSystemDefaultDevice();
+    _mtlCmdQueue      = [_mtlDevice newCommandQueue];
 
     _deviceName = [_mtlDevice.name UTF8String];
 
@@ -458,9 +437,9 @@ DriverImpl::DriverImpl()
 
 DriverImpl::~DriverImpl() {}
 
-CommandBuffer* DriverImpl::createCommandBuffer(void*)
+CommandBuffer* DriverImpl::createCommandBuffer(void* surfaceContext)
 {
-    return new CommandBufferImpl(this);
+    return new CommandBufferImpl(this, surfaceContext);
 }
 
 Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage)
@@ -610,11 +589,6 @@ void DriverImpl::destroySampler(SamplerHandle& sampler)
         [reinterpret_cast<id<MTLSamplerState>>(sampler) release];
         sampler = nullptr;
     }
-}
-
-void DriverImpl::setFrameBufferOnly(bool frameBufferOnly)
-{
-    [DriverImpl::_metalLayer setFramebufferOnly:frameBufferOnly];
 }
 
 std::string DriverImpl::getVendor() const

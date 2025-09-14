@@ -1,6 +1,7 @@
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/rhi/metal/TextureMTL.h"
+#include "axmol/rhi/metal/CommandBufferMTL.h"
 
 namespace ax::rhi::mtl
 {
@@ -90,7 +91,7 @@ void RenderTargetImpl::applyRenderPassAttachments(const RenderPassDesc& params, 
 RenderTargetImpl::Attachment RenderTargetImpl::getColorAttachment(int index) const
 {
     if (isDefaultRenderTarget() && index == 0)
-        return {DriverImpl::getCurrentDrawable().texture, 0};
+        return {CommandBufferImpl::getCurrentDrawable().texture, 0};
     auto& rb = this->_color[index];
     return RenderTargetImpl::Attachment{
         static_cast<bool>(rb) ? static_cast<TextureImpl*>(rb.texture)->internalHandle() : nil, rb.level};

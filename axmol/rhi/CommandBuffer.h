@@ -240,6 +240,18 @@ public:
     virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) = 0;
 
     /**
+     * This property controls whether or not the drawables'
+     * metal textures may only be used for framebuffer attachments (YES) or
+     * whether they may also be used for texture sampling and pixel
+     * read/write operations (NO).
+     * @param frameBufferOnly A value of YES allows CAMetalLayer to allocate the MTLTexture objects in ways that are
+     * optimized for display purposes that makes them unsuitable for sampling. The recommended value for most
+     * applications is YES.
+     * @note This interface is specificaly designed for metal.
+     */
+    virtual void setFrameBufferOnly(bool frameBufferOnly);
+
+    /**
      * Update both front and back stencil reference value.
      * @param value Specifies stencil reference value.
      */

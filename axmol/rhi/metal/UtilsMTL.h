@@ -28,6 +28,7 @@
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/rhi/PixelBufferDesc.h"
 #import <Metal/Metal.h>
+#import <QuartzCore/CAMetalLayer.h>
 #include <functional>
 
 namespace ax::rhi
@@ -55,21 +56,16 @@ struct UtilsMTL
     static void initGPUTextureFormats();
 
     /**
-     * Update default color attachment texture.
+     * Update default render target attachments: color, depth-stecil
      * @param texture Specifies the texture to be setted to the color attachemnt.
      */
-    static void updateDefaultColorAttachmentTexture(id<MTLTexture> texture);
-    static void resizeDefaultAttachmentTexture(std::size_t width, std::size_t height);
+    static void updateDefaultDepthStencilAttachment(CAMetalLayer* layer);
+    
+    static id<MTLTexture> getDefaultDepthStencilTexture();
 
     static MTLPixelFormat getDefaultColorAttachmentPixelFormat();
 
     static MTLPixelFormat getDefaultDepthStencilAttachmentPixelFormat();
-
-    /**
-     * Get the default combined depth and stencil texture.
-     * @return The default combined depth and stencil texture.
-     */
-    static id<MTLTexture> getDefaultDepthStencilTexture();
 
     /**
      * Convert rhi::PixelFormat to MTLPixelFormat.
@@ -94,9 +90,6 @@ struct UtilsMTL
     static void swizzleImage(unsigned char* image, std::size_t width, std::size_t height, MTLPixelFormat format);
 
 private:
-    static id<MTLTexture> createDepthStencilAttachmentTexture();
-
-    static id<MTLTexture> _defaultColorAttachmentTexture;
     static id<MTLTexture> _defaultDepthStencilAttachmentTexture;
 };
 

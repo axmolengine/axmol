@@ -175,6 +175,11 @@ void* RenderViewImpl::getNativeWindow() const
     return winrt::get_unknown(m_panel.get());
 }
 
+void* RenderViewImpl::getNativeDisplay() const
+{
+    return winrt::get_unknown(m_panel.get());
+}
+
 void RenderViewImpl::setIMEKeyboardState(bool bOpen)
 {
     setIMEKeyboardState(bOpen, "");

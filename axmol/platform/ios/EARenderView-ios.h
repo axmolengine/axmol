@@ -146,9 +146,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (CGRect)convertRectFromViewToSurface:(CGRect)rect;
 - (CGPoint)convertPointFromViewToSurface:(CGPoint)point;
 
-- (int)getWidth;
-- (int)getHeight;
-
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)dis;
 - (void)doAnimationWhenAnotherEditBeClicked;
 

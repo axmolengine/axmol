@@ -211,17 +211,11 @@ public:
      */
     virtual void setCursorVisible(bool /*isVisible*/) {}
 
-    /** Get device pixel ratio.
+    /** Get render scale.
      *
-     * @return The render scale fbSize/windowSize
+     * @return The render scale fbSize/windowSize aka backing scale factor
      */
     virtual float getRenderScale() const { return 1.0f; }
-
-    /** Only works on ios platform. Set Content Scale of the Factor. */
-    virtual bool setContentScaleFactor(float /*scaleFactor*/) { return false; }
-
-    /** Only works on ios platform. Get Content Scale of the Factor. */
-    virtual float getContentScaleFactor() const { return 1.0; }
 
     /**
      * Get the visible area size of render viewport.
