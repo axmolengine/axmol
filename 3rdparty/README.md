@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.15.0
+- Version: 8.16.0
 - License: Curl (MIT/X)
 
 ## doctest
@@ -98,7 +98,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 3.1.1
+- Version: 3.1.2
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -124,7 +124,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-f9140a6
+  - Version: 2.1-871db2c
   - License: MIT
 
 - tolua
