@@ -1035,7 +1035,6 @@ void RenderViewImpl::setWindowSize(float width, float height)
     }
 }
 
-
 /*
  * Update scaled window (including fullscreen toggle, manual resize, HiDPI scaling).
  * Updates HiDPI flag, render scale, logical window size, and design resolution (viewport)
