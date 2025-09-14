@@ -98,7 +98,6 @@ THE SOFTWARE.
 
 namespace ax
 {
-
 class GLFWEventHandler
 {
 public:
@@ -559,8 +558,9 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, _renderScaleMode == RenderScaleMode::Physical ? GLFW_TRUE : GLFW_FALSE);
 #endif
 
-    _mainWindow = glfwCreateWindow(static_cast<int>(requestWinSize.width), static_cast<int>(requestWinSize.height),
-                                   _viewName.c_str(), _monitor, nullptr);
+    _mainWindow =
+        glfwCreateWindow(static_cast<int>(std::lround(requestWinSize.width)),
+                         static_cast<int>(std::lround(requestWinSize.height)), _viewName.c_str(), _monitor, nullptr);
     if (_mainWindow == nullptr)
     {
         std::string message = "Can't create window";
@@ -826,17 +826,6 @@ void RenderViewImpl::setCursorVisible(bool isVisible)
         glfwSetInputMode(_mainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
-void RenderViewImpl::setWindowZoomFactor(float zoomFactor)
-{
-    AXASSERT(zoomFactor > 0.0f, "zoomFactor must be larger than 0");
-
-    if (std::abs(_windowZoomFactor - zoomFactor) < FLT_EPSILON)
-        return;
-
-    _windowZoomFactor = zoomFactor;
-    resizePlatformWindow(_windowSize.width, _windowSize.height);
-}
-
 float RenderViewImpl::getWindowZoomFactor() const
 {
     return _windowZoomFactor;
@@ -1003,6 +992,50 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
     Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RenderViewImpl::EVENT_WINDOW_RESIZED, &size);
 }
 
+void RenderViewImpl::setWindowZoomFactor(float zoomFactor)
+{
+    AXASSERT(zoomFactor > 0.0f, "zoomFactor must be larger than 0");
+
+    if (std::abs(_windowZoomFactor - zoomFactor) < FLT_EPSILON)
+        return;
+
+    _windowZoomFactor  = zoomFactor;
+    _zoomFactorChanged = true;
+    resizePlatformWindow(_windowSize.width, _windowSize.height);
+
+    // process platform that window size callback not trigger(wayland)
+    if (_renderSizeChanged)
+    {
+        _renderSizeChanged = false;
+        onRenderResized();
+    }
+}
+
+void RenderViewImpl::setWindowSize(float width, float height)
+{
+    if (width == 0 || height == 0)
+        return;
+    Vec2 requestSize{width, height};
+    if (requestSize.equals(_windowSize))
+        return;
+
+    resizePlatformWindow(width, height);
+
+    // If platform (Wayland) not trigger windowSizeCallback, we update window
+    // and resolution at here
+    // Other platform may trigger framebuffer and window size callback delayed(x11)
+    if (!requestSize.equals(_windowSize))
+        updateWindowAndResolution(width, height);
+
+    // process platform that window size callback not trigger(wayland)
+    if (_renderSizeChanged)
+    {
+        _renderSizeChanged = false;
+        onRenderResized();
+    }
+}
+
+
 /*
  * Update scaled window (including fullscreen toggle, manual resize, HiDPI scaling).
  * Updates HiDPI flag, render scale, logical window size, and design resolution (viewport)
@@ -1038,18 +1071,29 @@ void RenderViewImpl::updateScaledWindowSize(int w, int h)
 
     updateRenderScale();
 
-    Vec2 scaledSize{w / _windowZoomFactor, h / _windowZoomFactor};
+    double scaledWidth  = w / (double)_windowZoomFactor;
+    double scaledHeight = h / (double)_windowZoomFactor;
 
     // Translate to logical size on platforms where pixels and screen coordinates always map 1:1
     if (_renderScaleMode == RenderScaleMode::Physical)
     {
         auto windowPlatform = getWindowPlatform();
         if (windowPlatform == WindowPlatform::Win32 || windowPlatform == WindowPlatform::X11)
-            scaledSize *= (1 / _renderScale);
+        {
+            const auto factor = (1 / (double)_renderScale);
+            scaledWidth *= factor;
+            scaledHeight *= factor;
+        }
     }
 
-    if (!scaledSize.equals(_windowSize))
+    Vec2 scaledSize{static_cast<float>(std::round(scaledWidth)), static_cast<float>(std::round(scaledHeight))};
+    if (!scaledSize.equals(_windowSize) || _zoomFactorChanged)
+    {
+        // updateWindowAndResolution additional operation update Camera viewport depends on _windowZoomFactor
+        // @see setViewportInPoints
+        _zoomFactorChanged = false;
         updateWindowAndResolution(scaledSize.width, scaledSize.height);
+    }
 
     // fire render resized event on platform that framebuffer & window size callback trigger delayed (x11)
     if (_renderSizeChanged)
@@ -1059,41 +1103,21 @@ void RenderViewImpl::updateScaledWindowSize(int w, int h)
     }
 }
 
-void RenderViewImpl::setWindowSize(float width, float height)
-{
-    if (width == 0 || height == 0)
-        return;
-    Vec2 requestSize{width, height};
-    if (requestSize.equals(_windowSize))
-        return;
-
-    resizePlatformWindow(width, height);
-
-    // If platform (Wayland) not trigger windowSizeCallback, we update window
-    // and resolution at here
-    // Other platform may trigger framebuffer and window size callback delayed(x11)
-    if (!requestSize.equals(_windowSize))
-        updateWindowAndResolution(width, height);
-
-    // process platform that window size callback not trigger(wayland)
-    if (_renderSizeChanged)
-    {
-        _renderSizeChanged = false;
-        onRenderResized();
-    }
-}
-
 void RenderViewImpl::resizePlatformWindow(float w, float h)
 {
-    Vec2 unscaledSize{w * _windowZoomFactor, h * _windowZoomFactor};
+    double unscaledWidth = w * _windowZoomFactor, unscaledHeight = h * _windowZoomFactor;
     // Translate to physical size on platforms where pixels and screen coordinates always map 1:1
     if (_renderScaleMode == RenderScaleMode::Physical)
     {
         auto windowPlatform = getWindowPlatform();
         if (windowPlatform == WindowPlatform::Win32 || windowPlatform == WindowPlatform::X11)
-            unscaledSize *= _renderScale;
+        {
+            unscaledWidth *= _renderScale;
+            unscaledHeight *= _renderScale;
+        }
     }
-    glfwSetWindowSize(_mainWindow, static_cast<int>(unscaledSize.width), static_cast<int>(unscaledSize.height));
+    glfwSetWindowSize(_mainWindow, static_cast<int>(std::lround(unscaledWidth)),
+                      static_cast<int>(std::lround(unscaledHeight)));
 }
 
 void RenderViewImpl::updateWindowAndResolution(float width, float height)
@@ -1140,24 +1164,22 @@ void RenderViewImpl::updateRenderScale()
 
 void RenderViewImpl::setViewportInPoints(float x, float y, float w, float h)
 {
+    const auto pixelScale = _renderScale * _windowZoomFactor;
     Viewport vp;
-    vp.x = (int)(x * _viewScale.x * _renderScale * _windowZoomFactor +
-                 _viewportRect.origin.x * _renderScale * _windowZoomFactor);
-    vp.y = (int)(y * _viewScale.y * _renderScale * _windowZoomFactor +
-                 _viewportRect.origin.y * _renderScale * _windowZoomFactor);
-    vp.w = (unsigned int)(w * _viewScale.x * _renderScale * _windowZoomFactor);
-    vp.h = (unsigned int)(h * _viewScale.y * _renderScale * _windowZoomFactor);
+    vp.x = (int)(x * _viewScale.x * pixelScale + _viewportRect.origin.x * pixelScale);
+    vp.y = (int)(y * _viewScale.y * pixelScale + _viewportRect.origin.y * pixelScale);
+    vp.w = (unsigned int)(w * _viewScale.x * pixelScale);
+    vp.h = (unsigned int)(h * _viewScale.y * pixelScale);
     Camera::setDefaultViewport(vp);
 }
 
 void RenderViewImpl::setScissorInPoints(float x, float y, float w, float h)
 {
-    auto x1      = (int)(x * _viewScale.x * _renderScale * _windowZoomFactor +
-                    _viewportRect.origin.x * _renderScale * _windowZoomFactor);
-    auto y1      = (int)(y * _viewScale.y * _renderScale * _windowZoomFactor +
-                    _viewportRect.origin.y * _renderScale * _windowZoomFactor);
-    auto width1  = (unsigned int)(w * _viewScale.x * _renderScale * _windowZoomFactor);
-    auto height1 = (unsigned int)(h * _viewScale.y * _renderScale * _windowZoomFactor);
+    const auto pixelScale = _renderScale * _windowZoomFactor;
+    auto x1               = (int)(x * _viewScale.x * pixelScale + _viewportRect.origin.x * pixelScale);
+    auto y1               = (int)(y * _viewScale.y * pixelScale + _viewportRect.origin.y * pixelScale);
+    auto width1           = (unsigned int)(w * _viewScale.x * pixelScale);
+    auto height1          = (unsigned int)(h * _viewScale.y * pixelScale);
 
     setScissorRect(x1, y1, width1, height1);
 }
@@ -1166,12 +1188,12 @@ ax::Rect RenderViewImpl::getScissorInPoints() const
 {
     auto& rect = getScissorRect();
 
-    float x = (rect.x - _viewportRect.origin.x * _renderScale * _windowZoomFactor) /
-              (_viewScale.x * _renderScale * _windowZoomFactor);
-    float y = (rect.y - _viewportRect.origin.y * _renderScale * _windowZoomFactor) /
-              (_viewScale.y * _renderScale * _windowZoomFactor);
-    float w = rect.width / (_viewScale.x * _renderScale * _windowZoomFactor);
-    float h = rect.height / (_viewScale.y * _renderScale * _windowZoomFactor);
+    const auto pixelScale = _renderScale * _windowZoomFactor;
+
+    float x = (rect.x - _viewportRect.origin.x * pixelScale) / (_viewScale.x * pixelScale);
+    float y = (rect.y - _viewportRect.origin.y * pixelScale) / (_viewScale.y * pixelScale);
+    float w = rect.width / (_viewScale.x * pixelScale);
+    float h = rect.height / (_viewScale.y * pixelScale);
     return ax::Rect(x, y, w, h);
 }
 
@@ -1235,13 +1257,9 @@ void RenderViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int
 
 void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
 {
-    _mouseX = (float)x;
-    _mouseY = (float)y;
-
-    _mouseX /= _windowZoomFactor;
-    _mouseY /= _windowZoomFactor;
-    _mouseX *= _inputScale;
-    _mouseY *= _inputScale;
+    const auto inputScale = _inputScale / _windowZoomFactor;
+    _mouseX               = static_cast<float>(x * inputScale);
+    _mouseY               = static_cast<float>(y * inputScale);
 
     if (!_isTouchDevice)
     {
@@ -1325,6 +1343,10 @@ void RenderViewImpl::onWebClickCallback()
 
 void RenderViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
 {
+    const auto inputScale = _inputScale / _windowZoomFactor;
+    x *= inputScale;
+    y *= inputScale;
+
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
     float cursorX = transformInputX(_mouseX);
     float cursorY = transformInputY(_mouseY);

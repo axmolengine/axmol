@@ -172,6 +172,7 @@ protected:
     bool _isTouchDevice = false;
     bool _captured;
     bool _renderSizeChanged{false};
+    bool _zoomFactorChanged{false};
 
     RenderScaleMode _renderScaleMode{};
 
