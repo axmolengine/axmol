@@ -1789,9 +1789,9 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(simdjson::simdjson_result<simdjson
                     Mat4 invbindpos;
                     auto&& jinvbindpos = bone[TRANSFORM];
                     int k              = 0;
-                    for (auto&& val : jinvbindpos)
+                    for (auto&& val : jinvbindpos.get_array())
                     {
-                        invbindpos.m[k] = static_cast<float>(val);
+                        invbindpos.m[k++] = static_cast<float>(val);
                     }
 
                     // invbindpos.inverse();
