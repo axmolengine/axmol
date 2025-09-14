@@ -4,7 +4,7 @@
  *
  *   Windows-specific FreeType low-level system interface (body).
  *
- * Copyright (C) 2021-2024 by
+ * Copyright (C) 2021-2025 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -296,7 +296,7 @@
 
   /* support for really old Windows */
 #if defined( _WIN32_WCE ) || defined ( _WIN32_WINDOWS ) || \
-    !defined( _WIN32_WINNT ) || _WIN32_WINNT <= 0x0400
+    ( defined( _WIN32_WINNT ) && _WIN32_WINNT <= 0x0400 )
 
   FT_LOCAL_DEF( BOOL )
   GetFileSizeEx( HANDLE          hFile,

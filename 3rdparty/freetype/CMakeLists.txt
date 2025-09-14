@@ -1,6 +1,6 @@
 # CMakeLists.txt
 #
-# Copyright (C) 2013-2024 by
+# Copyright (C) 2013-2025 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # Written originally by John Cary <cary@txcorp.com>
@@ -87,6 +87,11 @@
 #                    -D FT_REQUIRE_HARFBUZZ=TRUE \
 #                    -D FT_REQUIRE_BROTLI=TRUE [...]
 #
+# - Set the `FT_DYNAMIC_HARFBUZZ' CMake variable to `ON' or `TRUE' to load
+#   the HarfBuzz library dynamically at runtime, if possible.  Example:
+#
+#     cmake -B build -D FT_DYNAMIC_HARFBUZZ=TRUE [...]
+#
 # - Set `FT_DISABLE_XXX=TRUE' to disable a dependency completely (where
 #   `XXX' is a CMake package name like `BZip2').  Example for disabling all
 #   dependencies:
@@ -109,16 +114,7 @@
 #   support).
 
 # CMake 3.12 provides for IMPORTED targets for common libraries like zlib, libpng and bzip2
-cmake_minimum_required(VERSION 3.12)
-
-if (NOT CMAKE_VERSION VERSION_LESS 3.3)
-  # Allow symbol visibility settings also on static libraries. CMake < 3.3
-  # only sets the property on a shared library build.
-  cmake_policy(SET CMP0063 NEW)
-
-  # Support new IN_LIST if() operator.
-  cmake_policy(SET CMP0057 NEW)
-endif ()
+cmake_minimum_required(VERSION 3.12...3.31.0)
 
 include(CheckIncludeFile)
 include(CMakeDependentOption)
@@ -162,8 +158,8 @@ endif ()
 project(freetype C)
 
 set(VERSION_MAJOR "2")
-set(VERSION_MINOR "13")
-set(VERSION_PATCH "3")
+set(VERSION_MINOR "14")
+set(VERSION_PATCH "1")
 
 # Generate LIBRARY_VERSION and LIBRARY_SOVERSION.
 set(LIBTOOL_REGEX "version_info='([0-9]+):([0-9]+):([0-9]+)'")
@@ -206,6 +202,9 @@ cmake_dependent_option(FT_REQUIRE_PNG
 
 option(FT_DISABLE_HARFBUZZ
   "Disable HarfBuzz (used for improving auto-hinting of OpenType fonts)." OFF)
+cmake_dependent_option(FT_DYNAMIC_HARFBUZZ
+  "Load HarfBuzz library dynamically at runtime, if possible." ON
+  "NOT FT_DISABLE_HARFBUZZ" OFF)
 cmake_dependent_option(FT_REQUIRE_HARFBUZZ
   "Require HarfBuzz for improving auto-hinting of OpenType fonts." OFF
   "NOT FT_DISABLE_HARFBUZZ" OFF)
@@ -248,10 +247,36 @@ endif ()
 
 # Find dependencies
 include(FindPkgConfig)
+include(CMakePushCheckState)
+include(CheckSymbolExists)
 
 if (NOT FT_DISABLE_HARFBUZZ)
   set(HARFBUZZ_MIN_VERSION "2.0.0")
-  if (FT_REQUIRE_HARFBUZZ)
+
+  if (FT_DYNAMIC_HARFBUZZ)
+    if (WIN32)  # Windows uses its own LoadLibrary()
+      set(FT_DYNAMIC_HARFBUZZ_ENABLED TRUE)
+    else()
+      cmake_push_check_state(RESET)
+      check_symbol_exists(dlopen "dlfcn.h" HAVE_DLOPEN_IN_LIBC)
+      if (NOT HAVE_DLOPEN_IN_LIBC)
+        set(CMAKE_REQUIRED_LIBRARIES dl)
+        check_symbol_exists(dlopen "dlfcn.h" HAVE_DLOPEN_IN_LIBDL)
+      endif()
+      cmake_pop_check_state()
+
+      if (HAVE_DLOPEN_IN_LIBC OR HAVE_DLOPEN_IN_LIBDL)
+        set(FT_DYNAMIC_HARFBUZZ_ENABLED TRUE)
+        if (HAVE_DLOPEN_IN_LIBDL)
+          set(FT_NEED_LIBDL TRUE)
+        endif()
+      endif()
+    endif()
+  endif()
+
+  if (FT_DYNAMIC_HARFBUZZ_ENABLED)
+    message(STATUS "Enabled dynamic loading of HarfBuzz library at runtime.")
+  elseif (FT_REQUIRE_HARFBUZZ)
     find_package(HarfBuzz ${HARFBUZZ_MIN_VERSION} REQUIRED)
   else ()
     find_package(HarfBuzz ${HARFBUZZ_MIN_VERSION})
@@ -348,10 +373,15 @@ if (PNG_FOUND)
     "/\\* +(#define +FT_CONFIG_OPTION_USE_PNG) +\\*/" "\\1"
     FTOPTION_H "${FTOPTION_H}")
 endif ()
-if (HARFBUZZ_FOUND)
+if (HARFBUZZ_FOUND OR FT_DYNAMIC_HARFBUZZ_ENABLED)
   string(REGEX REPLACE
     "/\\* +(#define +FT_CONFIG_OPTION_USE_HARFBUZZ) +\\*/" "\\1"
     FTOPTION_H "${FTOPTION_H}")
+  if (FT_DYNAMIC_HARFBUZZ_ENABLED)
+    string(REGEX REPLACE
+      "/\\* +(#define +FT_CONFIG_OPTION_USE_HARFBUZZ_DYNAMIC) +\\*/" "\\1"
+      FTOPTION_H "${FTOPTION_H}")
+  endif ()
 endif ()
 if (BROTLIDEC_FOUND)
   string(REGEX REPLACE
@@ -459,10 +489,6 @@ add_library(freetype
   ${BASE_SRCS}
 )
 
-set_target_properties(
-  freetype PROPERTIES
-    C_VISIBILITY_PRESET hidden)
-
 target_compile_definitions(
   freetype PRIVATE FT2_BUILD_LIBRARY)
 
@@ -473,6 +499,10 @@ if (WIN32)
     target_compile_definitions(
       freetype PRIVATE DLL_EXPORT)
   endif ()
+else ()
+  # Windows handles exports with DLL_EXPORT defined above.
+  set_target_properties(freetype PROPERTIES
+    C_VISIBILITY_PRESET hidden)
 endif ()
 
 if (BUILD_SHARED_LIBS)
@@ -523,13 +553,11 @@ set(PKGCONFIG_LIBS "-L\${libdir} -lfreetype")
 set(PKGCONFIG_LIBS_PRIVATE "")
 
 if (ZLIB_FOUND)
-  target_link_libraries(freetype PRIVATE ${ZLIB_LIBRARIES})
-  target_include_directories(freetype PRIVATE ${ZLIB_INCLUDE_DIRS})
+  target_link_libraries(freetype PRIVATE ZLIB::ZLIB)
   list(APPEND PKGCONFIG_REQUIRES_PRIVATE "zlib")
 endif ()
 if (BZIP2_FOUND)
-  target_link_libraries(freetype PRIVATE ${BZIP2_LIBRARIES})
-  target_include_directories(freetype PRIVATE ${BZIP2_INCLUDE_DIR}) # not BZIP2_INCLUDE_DIRS
+  target_link_libraries(freetype PRIVATE BZip2::BZip2)
   if (PC_BZIP2_FOUND)
     list(APPEND PKGCONFIG_REQUIRES_PRIVATE "bzip2")
   else ()
@@ -537,14 +565,15 @@ if (BZIP2_FOUND)
   endif ()
 endif ()
 if (PNG_FOUND)
-  target_link_libraries(freetype PRIVATE ${PNG_LIBRARIES})
-  target_compile_definitions(freetype PRIVATE ${PNG_DEFINITIONS})
-  target_include_directories(freetype PRIVATE ${PNG_INCLUDE_DIRS})
+  target_link_libraries(freetype PRIVATE PNG::PNG)
   list(APPEND PKGCONFIG_REQUIRES_PRIVATE "libpng")
 endif ()
-if (HarfBuzz_FOUND)
-  target_link_libraries(freetype PRIVATE ${HarfBuzz_LIBRARY})
-  target_include_directories(freetype PRIVATE ${HarfBuzz_INCLUDE_DIRS})
+if (FT_DYNAMIC_HARFBUZZ_ENABLED AND FT_NEED_LIBDL)
+  target_link_libraries(freetype PRIVATE dl)
+  list(APPEND PKGCONFIG_LIBS_PRIVATE " -ldl")
+endif ()
+if (HarfBuzz_FOUND AND (NOT FT_DYNAMIC_HARFBUZZ_ENABLED))
+  target_link_libraries(freetype PRIVATE HarfBuzz::HarfBuzz)
   list(APPEND PKGCONFIG_REQUIRES_PRIVATE "harfbuzz >= ${HARFBUZZ_MIN_VERSION}")
 endif ()
 if (BROTLIDEC_FOUND)

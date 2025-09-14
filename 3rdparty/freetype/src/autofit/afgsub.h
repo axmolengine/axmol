@@ -1,10 +1,10 @@
 /****************************************************************************
  *
- * dlgwrap.c
+ * afgsub.h
  *
- *   Wrapper file for the 'dlg' library (body only)
+ *   Auto-fitter routines to parse the GSUB table (header).
  *
- * Copyright (C) 2020-2024 by
+ * Copyright (C) 2025 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -15,18 +15,24 @@
  *
  */
 
+#ifndef AFGSUB_H_
+#define AFGSUB_H_
 
-#include <ft2build.h>
-#include FT_CONFIG_OPTIONS_H
+#include "afglobal.h"
 
 
-#ifdef FT_DEBUG_LOGGING
-#define DLG_STATIC
-#include "dlg.c"
-#else
-  /* ANSI C doesn't like empty source files */
-  typedef int  dlg_dummy_;
-#endif
+FT_BEGIN_HEADER
 
+  FT_LOCAL( void )
+  af_parse_gsub( AF_FaceGlobals  globals );
+
+  FT_LOCAL( FT_Error )
+  af_map_lookup( AF_FaceGlobals  globals,
+                 FT_Hash         map,
+                 FT_UInt32       lookup_offset );
+
+FT_END_HEADER
+
+#endif /* AFGSUB_H_ */
 
 /* END */
