@@ -125,7 +125,7 @@ JNIEXPORT jboolean JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeKeyEvent(JNIEn
         return JNI_FALSE;
     }
 
-    ax::EventKeyboard event(iterKeyCode->second, isPressed ? ax::EventKeyboard::KeyAction::PRESS : ax::EventKeyboard::KeyAction::RELEASE);
+    ax::EventKeyboard event(iterKeyCode->second, isPressed ? ax::EventKeyboard::KeyAction::Down : ax::EventKeyboard::KeyAction::Up);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     return JNI_TRUE;
 }

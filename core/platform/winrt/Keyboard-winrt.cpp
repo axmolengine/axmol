@@ -279,8 +279,8 @@ void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventAr
     auto action = type;
 
     // Is key repeats
-    if (action == WinRTKeyboardEventType::PRESS && args.KeyStatus().WasKeyDown)
-        action = WinRTKeyboardEventType::REPEAT;
+    if (action == WinRTKeyboardEventType::Down && args.KeyStatus().WasKeyDown)
+        action = WinRTKeyboardEventType::Repeat;
 
     int key = static_cast<int>(args.VirtualKey());
     auto it = g_keyCodeMap.find(key);
@@ -296,7 +296,7 @@ void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventAr
             IMEDispatcher::sharedDispatcher()->dispatchInsertText("\n", 1);
         }
 
-        if (action != WinRTKeyboardEventType::RELEASE && !event.isStopped())
+        if (action != WinRTKeyboardEventType::Up && !event.isStopped())
         {
             switch (keyCode)
             {

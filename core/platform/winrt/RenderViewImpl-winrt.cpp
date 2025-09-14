@@ -273,7 +273,7 @@ void RenderViewImpl::OnResuming(Windows::Foundation::IInspectable const& sender)
 // user pressed the Back Key on the phone
 void RenderViewImpl::OnBackKeyPress()
 {
-    ax::EventKeyboard event(EventKeyboard::KeyCode::KEY_ESCAPE, EventKeyboard::KeyAction::PRESS);
+    ax::EventKeyboard event(EventKeyboard::KeyCode::KEY_ESCAPE, EventKeyboard::KeyAction::Down);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 

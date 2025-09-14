@@ -221,9 +221,9 @@ public:
 
     enum class KeyAction
     {
-        RELEASE = 0,
-        PRESS   = 1,
-        REPEAT  = 2
+        Up      = 0,
+        Down    = 1,
+        Repeat  = 2
     };
 
     /** Constructor.
@@ -233,8 +233,14 @@ public:
      */
     EventKeyboard(KeyCode keyCode, KeyAction action);
 
-    bool isPress() const { return _action == KeyAction::PRESS; }
-    bool isRepeat() const { return _action == KeyAction::REPEAT; }
+    /**
+     * @brief Get the Action
+     *
+     * @return KeyAction KeyUp, Down, Repeat
+     */
+    KeyAction getAction() const { return _action; }
+
+    bool isKeyUp() const { return _action == KeyAction::Up; }
 
 private:
     KeyCode _keyCode;

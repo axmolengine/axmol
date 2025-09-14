@@ -1247,7 +1247,7 @@ void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*sc
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->dispatchEvent(&event);
 
-    if (GLFW_RELEASE != action)
+    if (action != GLFW_RELEASE && !event.isStopped())
     {
         switch (g_keyCodeMap[key])
         {
