@@ -1223,7 +1223,7 @@ int lua_ax_base_EventKeyboard_isRepeat(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 0)
     {
         if(!ok)
         {
@@ -1277,17 +1277,17 @@ int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
         toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.EventKeyboard");
         return 1;
     }
-    if (argc == 3) 
+    if (argc == 3)
     {
         ax::EventKeyboard::KeyCode arg0;
         bool arg1;
         bool arg2;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventKeyboard:EventKeyboard");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventKeyboard:EventKeyboard");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventKeyboard:EventKeyboard");
+        ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.EventKeyboard:EventKeyboard");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.EventKeyboard:EventKeyboard");
+        ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.EventKeyboard:EventKeyboard");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventKeyboard_constructor'", nullptr);

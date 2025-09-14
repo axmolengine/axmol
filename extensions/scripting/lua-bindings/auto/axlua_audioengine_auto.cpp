@@ -1224,8 +1224,8 @@ int lua_ax_audioengine_AudioEngine_setPan(lua_State* tolua_S)
     {
         int arg0;
         double arg1;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:setPan");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.AudioEngine:setPan");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AudioEngine:setPan");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.AudioEngine:setPan");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setPan'", nullptr);
@@ -1240,9 +1240,9 @@ int lua_ax_audioengine_AudioEngine_setPan(lua_State* tolua_S)
         int arg0;
         double arg1;
         double arg2;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:setPan");
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.AudioEngine:setPan");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.AudioEngine:setPan");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AudioEngine:setPan");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.AudioEngine:setPan");
+        ok &= luaval_to_number(tolua_S, 4, &arg2, "ax.AudioEngine:setPan");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setPan'", nullptr);
@@ -1278,7 +1278,7 @@ int lua_ax_audioengine_AudioEngine_getPan(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:getPan");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AudioEngine:getPan");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getPan'", nullptr);
@@ -1314,7 +1314,7 @@ int lua_ax_audioengine_AudioEngine_getSourcePosition(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:getSourcePosition");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AudioEngine:getSourcePosition");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getSourcePosition'", nullptr);
@@ -1351,7 +1351,7 @@ int lua_ax_audioengine_AudioEngine_setSourcePosition(lua_State* tolua_S)
     {
         int arg0;
         ax::Vec3 arg1;
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:setSourcePosition");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.AudioEngine:setSourcePosition");
         ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.AudioEngine:setSourcePosition");
         if(!ok)
         {
