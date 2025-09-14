@@ -585,7 +585,12 @@ AUDIO_ID AudioEngineImpl::play2d(std::string_view filePath, bool loop, float vol
     return _currentAudioID;
 }
 
-int AudioEngineImpl::play3d(std::string_view filePath, const Vec3& position, bool loop, float volume, float time)
+int AudioEngineImpl::play3d(std::string_view filePath,
+                            const Vec3& position,
+                            float distanceScale,
+                            bool loop,
+                            float volume,
+                            float time)
 {
     if (s_ALDevice == nullptr)
     {
@@ -609,6 +614,7 @@ int AudioEngineImpl::play3d(std::string_view filePath, const Vec3& position, boo
     player->_volume         = volume;
     player->_pitch          = 1.0f;
     player->_sourcePosition.set(position);
+    player->_distanceScale = distanceScale;
     if (time > 0.0f)
     {
         player->_currTime  = time;

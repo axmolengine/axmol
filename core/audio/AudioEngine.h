@@ -58,6 +58,7 @@ struct AX_DLL AudioPlayerSettings
     float volume = 1.0f; // Volume value (range from 0.0 to 1.0).
     float time = 0.0f; // The initial time offset when play audio
     Vec3 position{}; // position of audio in 3d space relative to listener
+    static float distanceScale; // scale used for distance calculations. Must be greater than 0, and defaults to 1.0f.
 };
 
 /**
@@ -428,6 +429,20 @@ public:
      * @return Vec3 position of listener
      */
     static ax::Vec3 getListenerPosition();
+
+    /**
+     * Sets the distance scale
+     *
+     * @param scale used for 3D audio source to listener calculations. Default is 1.0f, and must be greater than 0.f.
+     */
+    static void setDistanceScale(float scale);
+
+    /**
+     * Gets the distance scale
+     *
+     * @return float distance used for 3D audio source to listener calculations
+     */
+    static float getDistanceScale();
 
 protected:
     static void addTask(const std::function<void()>& task);

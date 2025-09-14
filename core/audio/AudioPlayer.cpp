@@ -305,6 +305,8 @@ bool AudioPlayer::play3d()
         CHECK_AL_ERROR_DEBUG();
         alSource3f(_alSource, AL_VELOCITY, 0, 0, 0);
         CHECK_AL_ERROR_DEBUG();
+        alSourcef(_alSource, AL_REFERENCE_DISTANCE, _distanceScale);
+        CHECK_AL_ERROR_DEBUG();
 
         if (_audioCache->_queBufferFrames == 0)
         {

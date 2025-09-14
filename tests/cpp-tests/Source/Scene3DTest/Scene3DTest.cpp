@@ -244,6 +244,7 @@ Scene3DTestScene::~Scene3DTestScene()
 {
     AudioEngine::stopAll();
     AudioEngine::setListenerPosition(Vec3()); // reset listener position
+    AudioEngine::setDistanceScale(1.f);
 }
 
 bool Scene3DTestScene::init()
@@ -457,6 +458,7 @@ void Scene3DTestScene::createWorld3D()
     monster->setPosition3D(_player->getPosition3D() + Vec3(-50, -5, 0));
     _monsters[1] = monster;
 
+    AudioEngine::setDistanceScale(5);
     _audioId = AudioEngine::play3d("background.mp3", monster->getPosition3D(), true);
 }
 

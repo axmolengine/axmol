@@ -43,6 +43,8 @@
 namespace ax
 {
 
+float AudioPlayerSettings::distanceScale = 1.f;
+
 const int AudioEngine::INVALID_AUDIO_ID = -1;
 const float AudioEngine::TIME_UNKNOWN   = -1.0f;
 
@@ -255,7 +257,8 @@ AUDIO_ID AudioEngine::play3d(std::string_view filePath,
             volume = 1.0f;
         }
 
-        ret = _audioEngineImpl->play3d(filePath, settings.position, settings.loop, volume, settings.time);
+        ret = _audioEngineImpl->play3d(filePath, settings.position, settings.distanceScale, settings.loop, volume,
+                                       settings.time);
         if (ret != INVALID_AUDIO_ID)
         {
             _audioPathIDMap[filePath.data()].emplace_back(ret);
@@ -704,5 +707,18 @@ ax::Vec3 AudioEngine::getListenerPosition()
     }
 
     return _audioEngineImpl->getListenerPosition();
+}
+
+void AudioEngine::setDistanceScale(float scale)
+{
+    if (scale <= 0.f)
+        return;
+
+    AudioPlayerSettings::distanceScale = scale;
+}
+
+float AudioEngine::getDistanceScale()
+{
+    return AudioPlayerSettings::distanceScale;
 }
 }
