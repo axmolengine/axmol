@@ -552,6 +552,9 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #endif
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    // On Linux X11 platforms, GLFW does not support fractional DPI scaling (e.g., 1.5x).
+    // To ensure consistent rendering across high-DPI displays, we disable GLFW_SCALE_TO_MONITOR
+    // and apply custom scaling logic based on platform-specific DPI detection.
     _renderScaleMode = contextAttrs.renderScaleMode;
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, _renderScaleMode == RenderScaleMode::Physical ? GLFW_TRUE : GLFW_FALSE);
 #endif
@@ -585,6 +588,11 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
     _renderSize.set(fbWidth, fbHeight);
+
+    int w, h;
+    glfwGetWindowSize(_mainWindow, &w, &h);
+    updateScaledWindowSize(w, h);
+
 #if AX_RENDER_API == AX_RENDER_API_MTL
     CGSize size;
     size.width  = static_cast<CGFloat>(fbWidth);
@@ -647,10 +655,6 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
     glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
-
-    int w, h;
-    glfwGetWindowSize(_mainWindow, &w, &h);
-    handleWindowResized(w, h);
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 #    if AX_RENDER_API == AX_RENDER_API_GL
@@ -936,7 +940,7 @@ Vec2 RenderViewImpl::getNativeWindowSize() const
 
 void RenderViewImpl::getWindowPosition(int* xpos, int* ypos)
 {
-    if (_mainWindow != nullptr)
+    if (_mainWindow != nullptr && getWindowPlatform() != WindowPlatform::Wayland)
         glfwGetWindowPos(_mainWindow, xpos, ypos);
 }
 
@@ -989,7 +993,7 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
     AXLOGD("RenderViewImpl::onGLFWWindowSizeCallback: ({}, {})", w, h);
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-        handleWindowResized(w, h);
+        updateScaledWindowSize(w, h);
 
         Size size(w, h);
 
@@ -998,7 +1002,7 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
 }
 
 /*
- * Handle framebuffer resize events (including fullscreen toggle, manual resize, HiDPI scaling).
+ * Update scaled window (including fullscreen toggle, manual resize, HiDPI scaling).
  * Updates HiDPI flag, render scale, logical window size, and design resolution (viewport)
  * based on logical window size (w,h) and framebuffer size (fbWidth, fbHeight).
  *
@@ -1025,10 +1029,12 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
  *  On Wayland, calling glfwSetWindowSize will not invoke windowSizeCallback,
  *  so we must update them explicitly at this point.
  */
-void RenderViewImpl::handleWindowResized(int w, int h)
+void RenderViewImpl::updateScaledWindowSize(int w, int h)
 {
     if (w == 0 || h == 0)
         return;
+
+    updateRenderScale();
 
     Vec2 scaledSize{w / _windowZoomFactor, h / _windowZoomFactor};
 
@@ -1042,6 +1048,13 @@ void RenderViewImpl::handleWindowResized(int w, int h)
 
     if (!scaledSize.equals(_windowSize))
         updateWindowAndResolution(scaledSize.width, scaledSize.height);
+
+    // fire render resized event on platform that framebuffer & window size callback trigger delayed (x11)
+    if (_renderSizeChanged)
+    {
+        _renderSizeChanged = false;
+        onRenderResized();
+    }
 }
 
 void RenderViewImpl::setWindowSize(float width, float height)
@@ -1054,10 +1067,18 @@ void RenderViewImpl::setWindowSize(float width, float height)
 
     resizePlatformWindow(width, height);
 
-    // If platform not trigger windowResized, we update window
+    // If platform (Wayland) not trigger windowSizeCallback, we update window
     // and resolution at here
+    // Other platform may trigger framebuffer and window size callback delayed(x11)
     if (!requestSize.equals(_windowSize))
         updateWindowAndResolution(width, height);
+
+    // process platform that window size callback not trigger(wayland)
+    if (_renderSizeChanged)
+    {
+        _renderSizeChanged = false;
+        onRenderResized();
+    }
 }
 
 void RenderViewImpl::resizePlatformWindow(float w, float h)
@@ -1076,14 +1097,7 @@ void RenderViewImpl::resizePlatformWindow(float w, float h)
 void RenderViewImpl::updateWindowAndResolution(float width, float height)
 {
     RenderView::setWindowSize(width, height);
-    updateRenderScale();
     updateDesignResolution();
-
-    if (_renderSizeChanged)
-    {
-        _renderSizeChanged = false;
-        onRenderResized();
-    }
 }
 
 /**

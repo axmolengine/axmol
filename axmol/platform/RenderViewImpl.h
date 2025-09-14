@@ -161,7 +161,7 @@ protected:
     void onGLFWWindowCloseCallback(GLFWwindow* window);
 
 protected:
-    void handleWindowResized(int w, int h);
+    void updateScaledWindowSize(int w, int h);
 
     // update window size, render scale, resolution(view layout)
     void updateWindowAndResolution(float width, float height);

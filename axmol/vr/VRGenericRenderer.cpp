@@ -117,13 +117,14 @@ const ScissorRect& VRGenericRenderer::getScissorRect() const
 
 void VRGenericRenderer::init(RenderView* rv)
 {
-    const auto windowSize = rv->getWindowSize();
-    _renderTexture        = RenderTexture::create(windowSize.width, windowSize.height);
+    // Use scaled window size as screenSize, maybe use rv->getRenderSize() for HiDPI rendering
+    const auto screenSize = rv->getWindowSize();
+    _renderTexture        = RenderTexture::create(screenSize.width, screenSize.height);
     _renderTexture->retain();
 
     // DO NOT offset eye viewports by default viewport.
     // Eye viewports in RT must be exact halves to match distortion mesh sampling.
-    fillEyeViewports(rv, windowSize);
+    fillEyeViewports(rv, screenSize);
 
     // Scissor transform: scale only, no translation in VR path.
     auto& screenVP = Camera::getDefaultViewport();
@@ -132,8 +133,8 @@ void VRGenericRenderer::init(RenderView* rv)
     _xfRight       = makeEyeScissorTransform(_rightEye.viewport, screenVP, rtSize);
 
     _distortion          = new Distortion();
-    _leftDistortionMesh  = createDistortionMesh(VREye::EyeType::LEFT, windowSize);
-    _rightDistortionMesh = createDistortionMesh(VREye::EyeType::RIGHT, windowSize);
+    _leftDistortionMesh  = createDistortionMesh(VREye::EyeType::LEFT, screenSize);
+    _rightDistortionMesh = createDistortionMesh(VREye::EyeType::RIGHT, screenSize);
 
     _leftEyeCmd.init(0);
     _leftEyeCmd.setVertexBuffer(_leftDistortionMesh->_vbo);
