@@ -276,11 +276,8 @@ void KeyBoardWinRT::HideKeyboard(winrt::hstring const& text)
 
 void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventArgs const& args)
 {
-    auto action = type;
-
-    // Is key repeats
-    if (action == WinRTKeyboardEventType::Down && args.KeyStatus().WasKeyDown)
-        action = WinRTKeyboardEventType::Repeat;
+    const auto isKeyDown = type == WinRTKeyboardEventType::Down;
+    const auto isRepeat = (isKeyDown && args.KeyStatus().WasKeyDown);
 
     int key = static_cast<int>(args.VirtualKey());
     auto it = g_keyCodeMap.find(key);
@@ -288,7 +285,7 @@ void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventAr
     {
         EventKeyboard::KeyCode keyCode = it->second;
 
-        EventKeyboard event(keyCode, action);
+        EventKeyboard event(keyCode, isKeyDown, isRepeat);
         auto dispatcher = Director::getInstance()->getEventDispatcher();
         dispatcher->dispatchEvent(&event);
         if (keyCode == EventKeyboard::KeyCode::KEY_ENTER)
@@ -296,7 +293,7 @@ void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventAr
             IMEDispatcher::sharedDispatcher()->dispatchInsertText("\n", 1);
         }
 
-        if (action != WinRTKeyboardEventType::Up && !event.isStopped())
+        if (isKeyDown && !event.isStopped())
         {
             switch (keyCode)
             {

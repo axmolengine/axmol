@@ -29,8 +29,8 @@
 namespace ax
 {
 
-EventKeyboard::EventKeyboard(KeyCode keyCode, KeyAction action)
-    : Event(Type::KEYBOARD), _keyCode(keyCode), _action(action)
+EventKeyboard::EventKeyboard(KeyCode keyCode, bool pressed, bool repeated)
+    : Event(Type::KEYBOARD), _keyCode(keyCode), _isPressed(repeated), _isRepeat(repeated)
 {}
 
 }

@@ -45,7 +45,7 @@ public:
     /**
      * KeyCode The key (code).
      */
-    enum class KeyCode
+    enum class KeyCode : uint16_t
     {
         KEY_NONE,
         KEY_PAUSE,
@@ -219,32 +219,20 @@ public:
         KEY_PLAY
     };
 
-    enum class KeyAction
-    {
-        Up      = 0,
-        Down    = 1,
-        Repeat  = 2
-    };
-
     /** Constructor.
      *
      * @param keyCode A given keycode.
-     * @param action see enum KeyAction
+     * @param isKeyDown whether is key down event
+     * @param isRepeat whether key down repeat
      */
-    EventKeyboard(KeyCode keyCode, KeyAction action);
+    EventKeyboard(KeyCode keyCode, bool isKeyDown, bool isRepeat = false);
 
-    /**
-     * @brief Get the Action
-     *
-     * @return KeyAction KeyUp, Down, Repeat
-     */
-    KeyAction getAction() const { return _action; }
-
-    bool isKeyUp() const { return _action == KeyAction::Up; }
+    bool isRepeat() const { return _isRepeat; }
 
 private:
     KeyCode _keyCode;
-    KeyAction _action;
+    bool _isKeyDown;
+    bool _isRepeat;
 
     friend class EventListenerKeyboard;
 };

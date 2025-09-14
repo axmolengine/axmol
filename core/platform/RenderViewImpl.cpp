@@ -1242,12 +1242,12 @@ void RenderViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, dou
 
 void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
 {
-    // The enum EventKeyBoard::KeyAction value is same with GLFW action
-    EventKeyboard event(g_keyCodeMap[key], (EventKeyboard::KeyAction)action);
+    const auto isKeyDown = action != GLFW_RELEASE;
+    EventKeyboard event(g_keyCodeMap[key], isKeyDown, action == GLFW_REPEAT);
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->dispatchEvent(&event);
 
-    if (action != GLFW_RELEASE && !event.isStopped())
+    if (isKeyDown && !event.isStopped())
     {
         switch (g_keyCodeMap[key])
         {

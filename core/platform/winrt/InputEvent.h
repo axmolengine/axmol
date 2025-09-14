@@ -100,7 +100,11 @@ private:
     winrt::hstring m_text;
 };
 
-using WinRTKeyboardEventType = ax::EventKeyboard::KeyAction;
+enum class WinRTKeyboardEventType
+{
+    Up,
+    Down
+};
 
 class AX_DLL WinRTKeyboardEvent : public InputEvent
 {

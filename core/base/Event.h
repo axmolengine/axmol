@@ -45,7 +45,7 @@ class AX_DLL Event : public Object
 {
 public:
     /** Type Event type.*/
-    enum class Type
+    enum class Type : uint8_t
     {
         TOUCH,
         KEYBOARD,
