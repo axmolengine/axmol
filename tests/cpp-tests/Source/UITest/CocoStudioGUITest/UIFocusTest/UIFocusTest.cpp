@@ -123,29 +123,29 @@ void UIFocusTestBase::onImageViewClicked(ax::Object* ref, Widget::TouchEventType
 
 void UIFocusTestBase::onLeftKeyPressed()
 {
-    ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_LEFT;
-    ax::EventKeyboard event(cocos2dKey, false);
+    ax::EventKeyboard::KeyCode keyCode = EventKeyboard::KeyCode::KEY_DPAD_LEFT;
+    ax::EventKeyboard event(keyCode, false);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onRightKeyPressed()
 {
-    ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_RIGHT;
-    ax::EventKeyboard event(cocos2dKey, false);
+    ax::EventKeyboard::KeyCode keyCode = EventKeyboard::KeyCode::KEY_DPAD_RIGHT;
+    ax::EventKeyboard event(keyCode, false);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onUpKeyPressed()
 {
-    ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_UP;
-    ax::EventKeyboard event(cocos2dKey, false);
+    ax::EventKeyboard::KeyCode keyCode = EventKeyboard::KeyCode::KEY_DPAD_UP;
+    ax::EventKeyboard event(keyCode, false);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onDownKeyPressed()
 {
-    ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_DOWN;
-    ax::EventKeyboard event(cocos2dKey, false);
+    ax::EventKeyboard::KeyCode keyCode = EventKeyboard::KeyCode::KEY_DPAD_DOWN;
+    ax::EventKeyboard event(keyCode, false);
     ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
