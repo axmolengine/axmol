@@ -3,7 +3,7 @@
 #include "axmol/base/Director.h"
 #include "axmol/base/Data.h"
 #if !defined(__ANDROID__)
-#    include "axmol/platform/desktop/RenderViewImpl.h"
+#    include "axmol/platform/RenderViewImpl.h"
 #endif
 #include "axmol/rhi/Program.h"
 #include "axmol/rhi/ProgramState.h"

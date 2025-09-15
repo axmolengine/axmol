@@ -181,45 +181,28 @@ THE SOFTWARE.
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    include "axmol/platform/ios/Application-ios.h"
-#    include "axmol/platform/ios/RenderViewImpl-ios.h"
 #    include "axmol/platform/ios/StdC-ios.h"
-#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_IOS
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include "axmol/platform/android/Application-android.h"
-#    include "axmol/platform/android/RenderViewImpl-android.h"
 #    include "axmol/platform/android/StdC-android.h"
-#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include "axmol/platform/win32/Application-win32.h"
-#    include "axmol/platform/desktop/RenderViewImpl.h"
 #    include "axmol/platform/win32/StdC-win32.h"
-#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 #    include "axmol/platform/winrt/Application-winrt.h"
-#    include "axmol/platform/winrt/RenderViewImpl-winrt.h"
 #    include "axmol/platform/winrt/StdC-winrt.h"
-#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    include "axmol/platform/desktop/RenderViewImpl.h"
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 #    include "axmol/platform/mac/Application-mac.h"
 #    include "axmol/platform/mac/StdC-mac.h"
-#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    include "axmol/platform/linux/Application-linux.h"
-#    include "axmol/platform/desktop/RenderViewImpl.h"
 #    include "axmol/platform/linux/StdC-linux.h"
-#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 #    include "axmol/platform/wasm/Application-wasm.h"
-#    include "axmol/platform/desktop/RenderViewImpl.h"
 #    include "axmol/platform/wasm/StdC-wasm.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+
+#include "axmol/platform/RenderViewImpl.h"
 
 #if AX_RENDER_API == AX_RENDER_API_GL
 #    include "axmol/platform/GL.h"

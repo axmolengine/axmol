@@ -1,6 +1,6 @@
 #pragma once
 
-#include "axmol/platform/desktop/RenderViewImpl.h"
+#include "axmol/platform/RenderViewImpl.h"
 #include "physics-nodes/PhysicsDebugNode.h"
 
 using namespace ax;
