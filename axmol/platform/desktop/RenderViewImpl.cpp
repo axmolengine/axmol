@@ -988,7 +988,7 @@ void RenderViewImpl::setWindowZoomFactor(float zoomFactor)
     if (std::abs(_windowZoomFactor - zoomFactor) < FLT_EPSILON)
         return;
 
-    _windowZoomFactor  = zoomFactor;
+    _windowZoomFactor = zoomFactor;
     applyWindowSize();
 }
 
@@ -1039,7 +1039,8 @@ void RenderViewImpl::updateScaledWindowSize(int w, int h)
 
 void RenderViewImpl::applyWindowSize()
 {
-    double unscaledWidth = _windowSize.width * _windowZoomFactor, unscaledHeight = _windowSize.height * _windowZoomFactor;
+    double unscaledWidth  = _windowSize.width * _windowZoomFactor,
+           unscaledHeight = _windowSize.height * _windowZoomFactor;
     // Translate to physical size on platforms where pixels and screen coordinates always map 1:1
     if (_renderScaleMode == RenderScaleMode::Physical)
     {
@@ -1091,7 +1092,8 @@ void RenderViewImpl::updateRenderScale()
         {
             glfwGetWindowContentScale(_mainWindow, &_renderScale, nullptr);
         }
-        else {
+        else
+        {
             _renderScale = 1.0f;
         }
         _inputScale = 1.0f;
@@ -1163,9 +1165,9 @@ void RenderViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int
 
 void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
 {
-    _mouseX               = static_cast<float>(x);
-    _mouseY               = static_cast<float>(y);
-    
+    _mouseX = static_cast<float>(x);
+    _mouseY = static_cast<float>(y);
+
     _mouseX *= _inputScale;
     _mouseY *= _inputScale;
 
@@ -1253,7 +1255,7 @@ void RenderViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, dou
 {
     x *= _inputScale;
     y *= _inputScale;
-    
+
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
     float cursorX = transformInputX(_mouseX);
     float cursorY = transformInputY(_mouseY);

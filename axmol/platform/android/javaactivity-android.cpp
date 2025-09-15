@@ -87,7 +87,8 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
     auto renderView = director->getRenderView();
     if (!renderView)
     {
-        renderView = ax::RenderViewImpl::createWithRect("axmol3", Rect{ax::Rect{0, 0, static_cast<float>(w), static_cast<float>(h)}});
+        renderView = ax::RenderViewImpl::createWithRect(
+            "axmol3", Rect{ax::Rect{0, 0, static_cast<float>(w), static_cast<float>(h)}});
         director->setRenderView(renderView);
 
         ax::Application::getInstance()->run();
