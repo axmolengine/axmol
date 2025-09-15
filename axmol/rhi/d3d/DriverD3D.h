@@ -112,17 +112,6 @@ public:
     RenderPipeline* createRenderPipeline() override;
 
     /**
-     * This property controls whether or not the drawables'
-     * MTLTextures may only be used for framebuffer attachments (YES) or
-     * whether they may also be used for texture sampling and pixel
-     * read/write operations (NO).
-     * @param frameBufferOnly A value of YES allows CAMetalLayer to allocate the MTLTexture objects in ways that are
-     * optimized for display purposes that makes them unsuitable for sampling. The recommended value for most
-     * applications is YES.
-     */
-    void setFrameBufferOnly(bool frameBufferOnly) override;
-
-    /**
      * Create a Program, not auto release.
      * @param vertexShader Specifes this is a vertex shader source.
      * @param fragmentShader Specifes this is a fragment shader source.

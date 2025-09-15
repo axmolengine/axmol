@@ -98,11 +98,6 @@ public:
     RenderPipeline* createRenderPipeline() override;
 
     /**
-     * Design for metal.
-     */
-    void setFrameBufferOnly(bool frameBufferOnly) override {}
-
-    /**
      * New a Program, not auto released.
      * @param vertexShader Specifes this is a vertex shader source.
      * @param fragmentShader Specifes this is a fragment shader source.
