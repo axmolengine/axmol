@@ -72,7 +72,7 @@ elseif(APPLE)
       platform/mac/Common-mac.mm
       platform/mac/Device-mac.mm
     )
-    set_source_files_properties(platform/RenderViewImpl.cpp PROPERTIES LANGUAGE OBJCXX)
+    set_source_files_properties(platform/desktop/RenderViewImpl.cpp PROPERTIES LANGUAGE OBJCXX)
   elseif(IOS)
     set(_AX_PLATFORM_SPECIFIC_HEADER
       ${_AX_PLATFORM_SPECIFIC_HEADER}
