@@ -1090,7 +1090,8 @@ void RenderViewImpl::updateRenderScale()
     {
         if (_renderScaleMode == RenderScaleMode::Physical)
         {
-            glfwGetWindowContentScale(_mainWindow, &_renderScale, nullptr);
+            float ignoreVal;
+            glfwGetWindowContentScale(_mainWindow, &_renderScale, &ignoreVal);
         }
         else
         {
@@ -1100,7 +1101,8 @@ void RenderViewImpl::updateRenderScale()
     }
     else
     {
-        glfwGetWindowContentScale(_mainWindow, &_renderScale, nullptr);
+        float ignoreVal;
+        glfwGetWindowContentScale(_mainWindow, &_renderScale, &ignoreVal);
         _inputScale = _renderScale;
     }
 }
