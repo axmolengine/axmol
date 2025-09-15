@@ -29,7 +29,7 @@
 #include "axmol/renderer/RenderState.h"
 #include <spine/spine-axmol.h>
 
-#include "AudioEngine.h"
+#include "axmol/audio/AudioEngine.h"
 #include "../testResource.h"
 #include "../TerrainTest/TerrainTest.h"
 
