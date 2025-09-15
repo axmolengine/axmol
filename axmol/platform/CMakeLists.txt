@@ -37,7 +37,6 @@ elseif(WINDOWS)
       platform/win32/GL-win32.h
       platform/win32/FileUtils-win32.h
       platform/win32/StdC-win32.h
-      platform/RenderViewImpl.h
     )
     set(_AX_PLATFORM_SPECIFIC_SRC
       platform/win32/StdC-win32.cpp
@@ -45,7 +44,6 @@ elseif(WINDOWS)
       platform/win32/Common-win32.cpp
       platform/win32/Application-win32.cpp
       platform/win32/Device-win32.cpp
-      platform/RenderViewImpl.cpp
     )
   else()
     file(GLOB _AX_PLATFORM_SPECIFIC_HEADER platform/winrt/*.h)
@@ -67,14 +65,12 @@ elseif(APPLE)
       ${_AX_PLATFORM_SPECIFIC_HEADER}
       platform/mac/StdC-mac.h
       platform/mac/Application-mac.h
-      platform/RenderViewImpl.h
     )
     set(_AX_PLATFORM_SPECIFIC_SRC
       ${_AX_PLATFORM_SPECIFIC_SRC}
       platform/mac/Application-mac.mm
       platform/mac/Common-mac.mm
       platform/mac/Device-mac.mm
-      platform/RenderViewImpl.cpp
     )
     set_source_files_properties(platform/RenderViewImpl.cpp PROPERTIES LANGUAGE OBJCXX)
   elseif(IOS)
@@ -128,14 +124,12 @@ elseif(LINUX)
     platform/linux/GL-linux.h
     platform/linux/StdC-linux.h
     platform/linux/FileUtils-linux.h
-    platform/RenderViewImpl.h
   )
   set(_AX_PLATFORM_SPECIFIC_SRC
     platform/linux/FileUtils-linux.cpp
     platform/linux/Common-linux.cpp
     platform/linux/Application-linux.cpp
     platform/linux/Device-linux.cpp
-    platform/RenderViewImpl.cpp
   )
 elseif(EMSCRIPTEN)
   include_directories(
@@ -147,19 +141,22 @@ elseif(EMSCRIPTEN)
     platform/wasm/GL-wasm.h
     platform/wasm/StdC-wasm.h
     platform/wasm/FileUtils-wasm.h
-    platform/RenderViewImpl.h # wasm can share GLviewImpl-desktop based on GLFW
   )
   set(_AX_PLATFORM_SPECIFIC_SRC
     platform/wasm/FileUtils-wasm.cpp
     platform/wasm/Common-wasm.cpp
     platform/wasm/Application-wasm.cpp
     platform/wasm/Device-wasm.cpp
-    platform/RenderViewImpl.cpp
   )
 
   if(AX_WASM_ENABLE_DEVTOOLS)
     list(APPEND _AX_PLATFORM_SPECIFIC_SRC platform/wasm/devtools-wasm.cpp)
   endif()
+endif()
+
+if((WIN32 AND NOT WINRT) OR LINUX OR MACOSX OR WASM)
+  list(APPEND _AX_PLATFORM_SPECIFIC_HEADER "platform/desktop/RenderViewImpl.h")
+  list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/desktop/RenderViewImpl.cpp")
 endif()
 
 set(_AX_PLATFORM_HEADER

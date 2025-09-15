@@ -649,7 +649,7 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
         featureSupported = hasExtension("GL_OES_packed_depth_stencil"sv);
         break;
     case FeatureType::VAO:
-#ifdef AX_PLATFORM_PC
+#if !AX_GLES_PROFILE
         featureSupported = hasExtension("vertex_array_object"sv);
 #else
         featureSupported = hasExtension("GL_OES_vertex_array_object"sv);

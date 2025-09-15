@@ -23,9 +23,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+The RenderViewImpl for win32,linux,macos,wasm
+
 ****************************************************************************/
 
-#include "axmol/platform/RenderViewImpl.h"
+#include "axmol/platform/desktop/RenderViewImpl.h"
 
 #include <cmath>
 #include <unordered_map>

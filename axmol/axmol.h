@@ -193,7 +193,7 @@ THE SOFTWARE.
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include "axmol/platform/win32/Application-win32.h"
-#    include "axmol/platform/RenderViewImpl.h"
+#    include "axmol/platform/desktop/RenderViewImpl.h"
 #    include "axmol/platform/win32/StdC-win32.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
@@ -204,20 +204,20 @@ THE SOFTWARE.
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    include "axmol/platform/RenderViewImpl.h"
+#    include "axmol/platform/desktop/RenderViewImpl.h"
 #    include "axmol/platform/mac/Application-mac.h"
 #    include "axmol/platform/mac/StdC-mac.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    include "axmol/platform/linux/Application-linux.h"
-#    include "axmol/platform/RenderViewImpl.h"
+#    include "axmol/platform/desktop/RenderViewImpl.h"
 #    include "axmol/platform/linux/StdC-linux.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 #    include "axmol/platform/wasm/Application-wasm.h"
-#    include "axmol/platform/RenderViewImpl.h"
+#    include "axmol/platform/desktop/RenderViewImpl.h"
 #    include "axmol/platform/wasm/StdC-wasm.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
