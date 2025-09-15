@@ -159,8 +159,10 @@ protected:
 protected:
     void updateScaledWindowSize(int w, int h);
 
+    void handleRenderResized();
+
     /* resize platform window when user set zoomFactor, windowSize */
-    void resizePlatformWindow(float w, float h);
+    void applyWindowSize();
 
     bool _isTouchDevice = false;
     bool _captured;
@@ -170,9 +172,18 @@ protected:
 
     RenderScaleMode _renderScaleMode{};
 
-    // The render scale aka backingScaleFactor
-    float _renderScale{1.0f};  // >=1
+    // Render scale factor:
+    // - Used to convert physical window size to logical size.
+    // - Also applied as the input scaling factor on platforms where
+    //   screen coordinates do not map 1:1 to physical pixels.
+    float _renderScale{1.0f};
+
+    // Input scale factor:
+    // - Always 1.0 on platforms with a 1:1 mapping between screen coordinates
+    //   and physical pixels.
+    // - On other platforms, matches _renderScale to account for DPI scaling.
     float _inputScale{1.0f};
+
     float _windowZoomFactor;
 
     GLFWwindow* _mainWindow;

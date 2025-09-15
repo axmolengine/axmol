@@ -986,7 +986,7 @@ void RenderViewImpl::setWindowZoomFactor(float zoomFactor)
         return;
 
     _windowZoomFactor  = zoomFactor;
-    resizePlatformWindow(_windowSize.width, _windowSize.height);
+    applyWindowSize();
 }
 
 void RenderViewImpl::setWindowSize(float width, float height)
@@ -997,35 +997,10 @@ void RenderViewImpl::setWindowSize(float width, float height)
     if (requestSize.equals(_windowSize))
         return;
 
-    resizePlatformWindow(width, height);
+    _windowSize.set(width, height);
+    applyWindowSize();
 }
 
-/*
- * Re-compute window logic size when size callback, not affect viewport
- *
- * Difference from cocos2d-x:
- * - cocos2d-x calls setWindowSize() directly on window size change.
- * - axmol uses this method instead to apply screen size and update viewport.
- *
- * The cocos2d-x original behavior (incorrect):
- *   1. First time entering fullscreen: w,h = 1920,1080
- *   2. Second or later entering fullscreen: triggers WindowSizeCallback twice:
- *        1) w,h = 976,679
- *        2) w,h = 1024,768
- *
- * Platform note (Windows + GLFW):
- * - glfwSetWindowMonitor may trigger intermediate window size events when toggling fullscreen.
- * - This happens because GLFW temporarily removes WS_OVERLAPPEDWINDOW style and calls SetWindowLong,
- *   causing a windowed-size update before ChangeDisplaySettingsExW applies the final fullscreen resolution.
- *
- * Current GLFW fire event order:
- *  -> framebufferSize
- *  -> windowSize
- *
- * Reason for handling render view design & window size here:
- *  On Wayland, calling glfwSetWindowSize will not invoke windowSizeCallback,
- *  so we must update them explicitly at this point.
- */
 void RenderViewImpl::updateScaledWindowSize(int w, int h)
 {
     if (w == 0 || h == 0)
@@ -1056,16 +1031,12 @@ void RenderViewImpl::updateScaledWindowSize(int w, int h)
 
     // fire render resized event on platform that framebuffer & window size callback trigger delayed (x11)
     // if zoom factor changed, the renderSize also should changed
-    if (_renderSizeUpdated)
-    {
-        _renderSizeUpdated = false;
-        onRenderResized();
-    }
+    handleRenderResized();
 }
 
-void RenderViewImpl::resizePlatformWindow(float w, float h)
+void RenderViewImpl::applyWindowSize()
 {
-    double unscaledWidth = w * _windowZoomFactor, unscaledHeight = h * _windowZoomFactor;
+    double unscaledWidth = _windowSize.width * _windowZoomFactor, unscaledHeight = _windowSize.height * _windowZoomFactor;
     // Translate to physical size on platforms where pixels and screen coordinates always map 1:1
     if (_renderScaleMode == RenderScaleMode::Physical)
     {
@@ -1078,6 +1049,18 @@ void RenderViewImpl::resizePlatformWindow(float w, float h)
     }
     glfwSetWindowSize(_mainWindow, static_cast<int>(std::lround(unscaledWidth)),
                       static_cast<int>(std::lround(unscaledHeight)));
+
+    // process platform that window size callback not trigger(wayland)
+    handleRenderResized();
+}
+
+void RenderViewImpl::handleRenderResized()
+{
+    if (_renderSizeUpdated)
+    {
+        _renderSizeUpdated = false;
+        onRenderResized();
+    }
 }
 
 /**
