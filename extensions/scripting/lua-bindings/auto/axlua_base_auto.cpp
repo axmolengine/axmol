@@ -23996,103 +23996,6 @@ int lua_ax_base_RenderView_getRenderScale(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_RenderView_setContentScaleFactor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::RenderView* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_setContentScaleFactor'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        double arg0;
-
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:setContentScaleFactor");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_setContentScaleFactor'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->setContentScaleFactor(arg0);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:setContentScaleFactor",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_setContentScaleFactor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_base_RenderView_getContentScaleFactor(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::RenderView* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_RenderView_getContentScaleFactor'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_getContentScaleFactor'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->getContentScaleFactor();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:getContentScaleFactor",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_getContentScaleFactor'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_RenderView_getVisibleSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -25324,8 +25227,6 @@ int lua_register_ax_base_RenderView(lua_State* tolua_S)
         tolua_function(tolua_S,"getRenderSize",lua_ax_base_RenderView_getRenderSize);
         tolua_function(tolua_S,"setCursorVisible",lua_ax_base_RenderView_setCursorVisible);
         tolua_function(tolua_S,"getRenderScale",lua_ax_base_RenderView_getRenderScale);
-        tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_RenderView_setContentScaleFactor);
-        tolua_function(tolua_S,"getContentScaleFactor",lua_ax_base_RenderView_getContentScaleFactor);
         tolua_function(tolua_S,"getVisibleSize",lua_ax_base_RenderView_getVisibleSize);
         tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_RenderView_getVisibleOrigin);
         tolua_function(tolua_S,"getVisibleRect",lua_ax_base_RenderView_getVisibleRect);
