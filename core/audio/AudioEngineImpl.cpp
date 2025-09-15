@@ -695,7 +695,7 @@ void AudioEngineImpl::_play3d(AudioCache* cache, int audioID)
     }
     else
     {
-        AXLOGD("AudioEngineImpl::_play2d, cache was destroyed or not ready!");
+        AXLOGD("AudioEngineImpl::_play3d, cache was destroyed or not ready!");
         player->_removeByAudioEngine = true;
     }
 }
