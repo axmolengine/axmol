@@ -60,7 +60,7 @@ struct UtilsMTL
      * @param texture Specifies the texture to be setted to the color attachemnt.
      */
     static void updateDefaultDepthStencilAttachment(CAMetalLayer* layer);
-    
+
     static id<MTLTexture> getDefaultDepthStencilTexture();
 
     static MTLPixelFormat getDefaultColorAttachmentPixelFormat();

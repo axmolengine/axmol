@@ -146,7 +146,7 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
 #if !defined(AX_TARGET_OS_TVOS)
     [eaView setMultipleTouchEnabled:YES];
 #endif
-    auto size = [eaView bounds].size;
+    auto size                     = [eaView bounds].size;
     const auto backingScaleFactor = [eaView contentScaleFactor];
 
     // simply set windowSize, renderSize to framebufferSize with renderScale=1.0

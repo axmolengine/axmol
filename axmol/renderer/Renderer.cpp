@@ -203,10 +203,10 @@ void Renderer::init()
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
 
-    auto driver = axdrv;
+    auto driver        = axdrv;
     auto nativeDisplay = Director::getInstance()->getRenderView()->getNativeDisplay();
-    _commandBuffer    = driver->createCommandBuffer(nativeDisplay);
-    _dsDesc.flags = DepthStencilFlags::ALL;
+    _commandBuffer     = driver->createCommandBuffer(nativeDisplay);
+    _dsDesc.flags      = DepthStencilFlags::ALL;
     _currentRT = _defaultRT = driver->createDefaultRenderTarget();
     _commandBuffer->setScreenRenderTarget(_defaultRT);
 

@@ -47,9 +47,6 @@ bool CommandBuffer::resizeSwapchain(uint32_t /*width*/, uint32_t /*height*/)
     return true;
 }
 
-void CommandBuffer::setFrameBufferOnly(bool /*frameBufferOnly*/)
-{
-
-}
+void CommandBuffer::setFrameBufferOnly(bool /*frameBufferOnly*/) {}
 
 }  // namespace ax::rhi

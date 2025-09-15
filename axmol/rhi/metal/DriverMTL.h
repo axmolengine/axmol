@@ -149,7 +149,7 @@ public:
      * @return A MTLDevice object.
      */
     inline id<MTLDevice> getMTLDevice() const { return _mtlDevice; }
-    
+
     inline id<MTLCommandQueue> getMTLCmdQueue() const { return _mtlCmdQueue; }
 
     /// below is driver info
@@ -195,8 +195,8 @@ protected:
     void destroySampler(SamplerHandle& sampler) override;
 
 private:
-    id<MTLDevice> _mtlDevice             = nil;
-    id<MTLCommandQueue> _mtlCmdQueue      = nil;
+    id<MTLDevice> _mtlDevice         = nil;
+    id<MTLCommandQueue> _mtlCmdQueue = nil;
 
     std::string _deviceName;
     FeatureSet _featureSet = FeatureSet::Unknown;

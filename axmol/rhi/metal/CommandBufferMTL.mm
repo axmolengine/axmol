@@ -34,9 +34,9 @@
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#import <AppKit/AppKit.h>
+#    import <AppKit/AppKit.h>
 #else
-#import <UIKit/UIKit.h>
+#    import <UIKit/UIKit.h>
 #endif
 
 namespace ax::rhi::mtl
@@ -143,25 +143,26 @@ static MTLRenderPassDescriptor* toMTLRenderPassDesc(const RenderTarget* rt, cons
 
 }  // namespace
 
-CAMetalLayer*    CommandBufferImpl::_mtlLayer = nil;
+CAMetalLayer* CommandBufferImpl::_mtlLayer              = nil;
 id<CAMetalDrawable> CommandBufferImpl::_currentDrawable = nil;
 
 CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
 {
     _frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_BUFFER);
-    auto mtlDevice = driver->getMTLDevice();
-    _mtlCmdQueue = driver->getMTLCmdQueue();
-    auto& contextAttrs = driver->getContextAttrs();
+    auto mtlDevice          = driver->getMTLDevice();
+    _mtlCmdQueue            = driver->getMTLCmdQueue();
+    auto& contextAttrs      = driver->getContextAttrs();
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     CGSize fbSize;
     NSView* contentView = (id)surfaceContext;
-    @autoreleasepool {
+    @autoreleasepool
+    {
         const NSRect contentRect = [contentView frame];
-        const NSRect fbRect = [contentView convertRectToBacking:contentRect];
+        const NSRect fbRect      = [contentView convertRectToBacking:contentRect];
 
-        fbSize.width =  (int) fbRect.size.width;
-        fbSize.height = (int) fbRect.size.height;
-    } // autoreleasepool
+        fbSize.width  = (int)fbRect.size.width;
+        fbSize.height = (int)fbRect.size.height;
+    }  // autoreleasepool
     [contentView setWantsLayer:YES];
     _mtlLayer = [CAMetalLayer layer];
     [_mtlLayer setDevice:mtlDevice];
@@ -171,19 +172,18 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
     _mtlLayer.displaySyncEnabled = contextAttrs.vsync;
     [contentView setLayer:_mtlLayer];
 #else
-    UIView* view = (id)surfaceContext;
-    _mtlLayer   = (CAMetalLayer*)[view layer];
+    UIView* view              = (id)surfaceContext;
+    _mtlLayer                 = (CAMetalLayer*)[view layer];
     _mtlLayer.device          = mtlDevice;
     _mtlLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
     _mtlLayer.framebufferOnly = YES;
-    
+
     const auto backingScaleFactor = [view contentScaleFactor];
-    auto bounds = [view bounds];
-    CGSize fbSize = CGSizeMake(bounds.size.width * backingScaleFactor,
-                              bounds.size.height * backingScaleFactor);
+    auto bounds                   = [view bounds];
+    CGSize fbSize = CGSizeMake(bounds.size.width * backingScaleFactor, bounds.size.height * backingScaleFactor);
     _mtlLayer.drawableSize = fbSize;
 #endif
-    
+
     UtilsMTL::updateDefaultDepthStencilAttachment(_mtlLayer);
 }
 
@@ -453,8 +453,8 @@ void CommandBufferImpl::flushCaptureCommands()
             {  // screen capture
                 if (!screenPixelData)
                 {
-                    readPixels(_drawableTexture, 0, 0, [_drawableTexture width],
-                                                  [_drawableTexture height], screenPixelData);
+                    readPixels(_drawableTexture, 0, 0, [_drawableTexture width], [_drawableTexture height],
+                               screenPixelData);
                     // screen framebuffer copied, restore screen framebuffer only to true
                     setFrameBufferOnly(true);
                 }
@@ -465,7 +465,8 @@ void CommandBufferImpl::flushCaptureCommands()
                 PixelBufferDesc pixelData;
                 auto texture = cb.first;
                 assert(texture != nullptr);
-                readPixels(static_cast<TextureImpl*>(texture)->internalHandle(), 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
+                readPixels(static_cast<TextureImpl*>(texture)->internalHandle(), 0, 0, texture->getWidth(),
+                           texture->getHeight(), pixelData);
                 AX_SAFE_RELEASE(texture);
                 cb.second(pixelData);
             }
@@ -590,7 +591,7 @@ void CommandBufferImpl::readPixels(id<MTLTexture> texture,
     id<MTLDevice> device              = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLDevice();
     id<MTLTexture> readPixelsTexture  = [device newTextureWithDescriptor:textureDesc];
 
-    auto oneOffBuffer               = [_mtlCmdQueue commandBuffer];
+    auto oneOffBuffer = [_mtlCmdQueue commandBuffer];
     // [oneOffBuffer enqueue];
 
     id<MTLBlitCommandEncoder> blitCommandEncoder = [oneOffBuffer blitCommandEncoder];

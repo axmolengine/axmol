@@ -126,17 +126,18 @@ id<MTLTexture> UtilsMTL::getDefaultDepthStencilTexture()
 
 void UtilsMTL::updateDefaultDepthStencilAttachment(CAMetalLayer* layer)
 {
-    if (_defaultDepthStencilAttachmentTexture != nil) {
+    if (_defaultDepthStencilAttachmentTexture != nil)
+    {
         [_defaultDepthStencilAttachmentTexture release];
     }
-  
-    MTLTextureDescriptor* textureDesc = [[MTLTextureDescriptor alloc] init];
-    textureDesc.width                 = layer.drawableSize.width;
-    textureDesc.height                = layer.drawableSize.height;
-    textureDesc.pixelFormat           = s_textureFormats[(int)PixelFormat::D24S8].fmt;
-    textureDesc.resourceOptions       = MTLResourceStorageModePrivate;
-    textureDesc.usage                 = MTLTextureUsageRenderTarget;
-    _defaultDepthStencilAttachmentTexture  = [layer.device newTextureWithDescriptor:textureDesc];
+
+    MTLTextureDescriptor* textureDesc     = [[MTLTextureDescriptor alloc] init];
+    textureDesc.width                     = layer.drawableSize.width;
+    textureDesc.height                    = layer.drawableSize.height;
+    textureDesc.pixelFormat               = s_textureFormats[(int)PixelFormat::D24S8].fmt;
+    textureDesc.resourceOptions           = MTLResourceStorageModePrivate;
+    textureDesc.usage                     = MTLTextureUsageRenderTarget;
+    _defaultDepthStencilAttachmentTexture = [layer.device newTextureWithDescriptor:textureDesc];
     [textureDesc release];
 }
 
@@ -161,9 +162,10 @@ MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
 
 void UtilsMTL::generateMipmaps(id<MTLTexture> texture)
 {
-    auto cmdQueue  = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCmdQueue();
-    @autoreleasepool {
-        auto oneOffBuffer = [cmdQueue commandBuffer];
+    auto cmdQueue = static_cast<DriverImpl*>(DriverBase::getInstance())->getMTLCmdQueue();
+    @autoreleasepool
+    {
+        auto oneOffBuffer                        = [cmdQueue commandBuffer];
         id<MTLBlitCommandEncoder> commandEncoder = [oneOffBuffer blitCommandEncoder];
         [commandEncoder generateMipmapsForTexture:texture];
         [commandEncoder endEncoding];

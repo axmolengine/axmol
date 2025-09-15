@@ -227,11 +227,11 @@ protected:
      * @remark: !!!this function only can call after endFrame, then it's could be works well.
      */
     void readPixels(id<MTLTexture> texture,
-                           std::size_t origX,
-                           std::size_t origY,
-                           std::size_t rectWidth,
-                           std::size_t rectHeight,
-                           PixelBufferDesc& pbd);
+                    std::size_t origX,
+                    std::size_t origY,
+                    std::size_t rectWidth,
+                    std::size_t rectHeight,
+                    PixelBufferDesc& pbd);
 
     /**
      * This property controls whether or not the drawables'
@@ -254,11 +254,11 @@ private:
     void flushCaptureCommands();
     void updateRenderCommandEncoder(const RenderTarget* renderTarget, const RenderPassDesc& renderPassParams);
 
-    static CAMetalLayer*    _mtlLayer;
+    static CAMetalLayer* _mtlLayer;
     static id<CAMetalDrawable> _currentDrawable;
 
     // weak ref, like context, managed by DriverImpl
-    id<MTLCommandQueue> _mtlCmdQueue               = nil; 
+    id<MTLCommandQueue> _mtlCmdQueue              = nil;
     id<MTLCommandBuffer> _currentCmdBuffer        = nil;
     id<MTLRenderCommandEncoder> _mtlRenderEncoder = nil;
     id<MTLBuffer> _mtlIndexBuffer                 = nil;

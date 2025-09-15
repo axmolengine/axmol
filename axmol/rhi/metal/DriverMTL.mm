@@ -404,8 +404,8 @@ bool DriverImpl::_isDepth24Stencil8PixelFormatSupported = false;
 
 DriverImpl::DriverImpl()
 {
-    _mtlDevice       = MTLCreateSystemDefaultDevice();
-    _mtlCmdQueue      = [_mtlDevice newCommandQueue];
+    _mtlDevice   = MTLCreateSystemDefaultDevice();
+    _mtlCmdQueue = [_mtlDevice newCommandQueue];
 
     _deviceName = [_mtlDevice.name UTF8String];
 

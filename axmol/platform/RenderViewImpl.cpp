@@ -418,11 +418,11 @@ void* RenderViewImpl::getNativeDisplay() const
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#if AX_RENDER_API == AX_RENDER_API_MTL
+#    if AX_RENDER_API == AX_RENDER_API_MTL
     return (void*)glfwGetCocoaView(_mainWindow);
-#else
+#    else
     return (void*)glfwGetNSGLContext(_mainWindow);
-#endif
+#    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
     int platform = glfwGetPlatform();
     return platform == GLFW_PLATFORM_WAYLAND ? (void*)glfwGetWaylandDisplay() : (void*)glfwGetX11Display();

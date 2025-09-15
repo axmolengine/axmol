@@ -305,7 +305,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     size.width  = size_.width;
     size.height = size_.height;
 #endif
-    
+
     // TODO: resizeSwapchain?
 
     // Avoid flicker. Issue #350
