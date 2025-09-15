@@ -60,10 +60,6 @@ public:
     float getWindowZoomFactor() const override;
     // void centerWindow();
 
-    void setViewportInPoints(float x, float y, float w, float h) override;
-    void setScissorInPoints(float x, float y, float w, float h) override;
-    Rect getScissorInPoints() const override;
-
     bool windowShouldClose() override;
     void pollEvents() override;
     GLFWwindow* getWindow() const { return _mainWindow; }
@@ -163,23 +159,20 @@ protected:
 protected:
     void updateScaledWindowSize(int w, int h);
 
-    // update window size, render scale, resolution(view layout)
-    void updateWindowAndResolution(float width, float height);
-
     /* resize platform window when user set zoomFactor, windowSize */
     void resizePlatformWindow(float w, float h);
 
     bool _isTouchDevice = false;
     bool _captured;
-    bool _renderSizeChanged{false};
-    bool _zoomFactorChanged{false};
+
+    /* whether render size updated by GLFW framebuffer size callback */
+    bool _renderSizeUpdated{false};
 
     RenderScaleMode _renderScaleMode{};
 
     // The render scale aka backingScaleFactor
     float _renderScale{1.0f};  // >=1
     float _inputScale{1.0f};
-
     float _windowZoomFactor;
 
     GLFWwindow* _mainWindow;

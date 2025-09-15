@@ -125,8 +125,6 @@ public:
     int Run();
     void Render();
 
-    void centerWindow();
-
     void UpdateOrientation(Windows::Graphics::Display::DisplayOrientations orientation);
     void UpdateForWindowSizeChange(float width, float height);
 
@@ -147,10 +145,6 @@ public:
     void* getNativeWindow() const override;
     void* getNativeDisplay() const override;
     WindowPlatform getWindowPlatform() const override { return WindowPlatform::CoreWindow; }
-
-    void setViewportInPoints(float x, float y, float w, float h) override;
-    void setScissorInPoints(float x, float y, float w, float h) override;
-    Rect getScissorInPoints() const override;
 
     float getRenderScale() const override { return _renderScale; }
 
@@ -180,7 +174,6 @@ private:
     Windows::Foundation::Point m_lastPoint{};
 
     float _renderScale{1.0f};
-    RenderScaleMode _renderScaleMode{};
 
     float m_width;
     float m_height;

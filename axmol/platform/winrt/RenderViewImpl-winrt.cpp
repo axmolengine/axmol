@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "axmol/base/EventListenerKeyboard.h"
 #include "axmol/platform/winrt/Application-winrt.h"
 #include "axmol/platform/winrt/WinRTUtils.h"
+#include "axmol/platform/Device.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventMouse.h"
 #include <future>
@@ -137,13 +138,10 @@ RenderViewImpl::~RenderViewImpl()
 
 bool RenderViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float /*frameZoomFactor*/)
 {
-    _renderScaleMode = getGfxContextAttrs().renderScaleMode;
-
     setViewName(viewName);
 
     m_width  = rect.size.width;
     m_height = rect.size.height;
-    handleWindowResized();
 
     m_initialized = true;
 
@@ -503,11 +501,6 @@ void ax::RenderViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void RenderViewImpl::centerWindow()
-{
-    // not implemented in WinRT. Window is always full screen
-}
-
 RenderViewImpl* RenderViewImpl::sharedRenderView()
 {
     return s_renderView;
@@ -552,74 +545,46 @@ void RenderViewImpl::UpdateForWindowSizeChange(float width, float height)
         m_height = height;
         handleWindowResized();
 
-        _renderSize.set(m_width * _renderScale, m_height * _renderScale);
+        setRenderSize(m_width * _renderScale, m_height * _renderScale);
         onRenderResized();
     }
 }
 
 void RenderViewImpl::SetDPI(float dpi)
 {
-    // bool inital = m_dpi == 0;
+    bool inital = m_dpi == 0;
     if (m_dpi != dpi)
     {
         m_dpi = dpi;
         updateRenderScale();
+        if (!inital)
+        {
+            setRenderSize(m_width * _renderScale, m_height * _renderScale);
+        }
     }
 }
 
 void RenderViewImpl::handleWindowResized()
 {
-    RenderView::setWindowSize(m_width, m_height);
+    _windowSize.set(m_width, m_height);
 
-    updateDesignResolution();
+    setRenderSize(m_width * _renderScale, m_height * _renderScale);
 }
 
 void RenderViewImpl::updateRenderScale()
 {
 #if AX_RENDER_API == AX_RENDER_API_D3D
-    if (_renderScaleMode == RenderScaleMode::Physical)
-    {
-        _renderScale = m_dpi / 96.0f;
-        return;
-    }
-#endif
+    _renderScale = m_dpi / 96.0f;
+#else
     _renderScale = 1.0f;
+#endif
 }
 
-void RenderViewImpl::setViewportInPoints(float x, float y, float w, float h)
-{
-    Viewport vp;
-    vp.x = (int)(x * _viewScale.x * _renderScale + _viewportRect.origin.x * _renderScale);
-    vp.y = (int)(y * _viewScale.y * _renderScale + _viewportRect.origin.y * _renderScale);
-    vp.w = (unsigned int)(w * _viewScale.x * _renderScale);
-    vp.h = (unsigned int)(h * _viewScale.y * _renderScale);
-    Camera::setDefaultViewport(vp);
-}
-
-void RenderViewImpl::setScissorInPoints(float x, float y, float w, float h)
-{
-    auto x1      = (int)(x * _viewScale.x * _renderScale + _viewportRect.origin.x * _renderScale);
-    auto y1      = (int)(y * _viewScale.y * _renderScale + _viewportRect.origin.y * _renderScale);
-    auto width1  = (unsigned int)(w * _viewScale.x * _renderScale);
-    auto height1 = (unsigned int)(h * _viewScale.y * _renderScale);
-
-    setScissorRect(x1, y1, width1, height1);
-}
-
-ax::Rect RenderViewImpl::getScissorInPoints() const
-{
-    auto& rect = getScissorRect();
-
-    float x = (rect.x - _viewportRect.origin.x * _renderScale) / (_viewScale.x * _renderScale);
-    float y = (rect.y - _viewportRect.origin.y * _renderScale) / (_viewScale.y * _renderScale);
-    float w = rect.width / (_viewScale.x * _renderScale);
-    float h = rect.height / (_viewScale.y * _renderScale);
-    return ax::Rect(x, y, w, h);
-}
-
+// CoreWindow manage logic window size = physics size / dpiScale,
+// _renderScale is input scale
 ax::Vec2 RenderViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)
 {
-    return Vec2{p.X, p.Y};
+    return Vec2{p.X * _renderScale, p.Y * _renderScale};
 }
 
 Vec2 RenderViewImpl::GetPoint(Windows::UI::Core::PointerEventArgs const& args)

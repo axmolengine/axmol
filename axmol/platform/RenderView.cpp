@@ -122,10 +122,10 @@ void RenderView::pollEvents() {}
 
 void RenderView::updateDesignResolution()
 {
-    if (_windowSize.width > 0 && _windowSize.height > 0 && _designResolutionSize.width > 0 &&
+    if (_renderSize.width > 0 && _renderSize.height > 0 && _designResolutionSize.width > 0 &&
         _designResolutionSize.height > 0)
     {
-        _viewScale = _windowSize / _designResolutionSize;
+        _viewScale = _renderSize / _designResolutionSize;
 
         if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
         {
@@ -140,20 +140,20 @@ void RenderView::updateDesignResolution()
         else if (_resolutionPolicy == ResolutionPolicy::FIXED_HEIGHT)
         {
             _viewScale.x                = _viewScale.y;
-            _designResolutionSize.width = ceilf(_windowSize.width / _viewScale.x);
+            _designResolutionSize.width = ceilf(_renderSize.width / _viewScale.x);
         }
 
         else if (_resolutionPolicy == ResolutionPolicy::FIXED_WIDTH)
         {
             _viewScale.y                 = _viewScale.x;
-            _designResolutionSize.height = ceilf(_windowSize.height / _viewScale.y);
+            _designResolutionSize.height = ceilf(_renderSize.height / _viewScale.y);
         }
 
         // calculate the rect of viewport
         float viewportW = _designResolutionSize.width * _viewScale.x;
         float viewportH = _designResolutionSize.height * _viewScale.y;
 
-        _viewportRect.setRect((_windowSize.width - viewportW) / 2, (_windowSize.height - viewportH) / 2, viewportW,
+        _viewportRect.setRect((_renderSize.width - viewportW) / 2, (_renderSize.height - viewportH) / 2, viewportW,
                               viewportH);
 
         // reset director's member variables to fit visible rect
@@ -183,22 +183,20 @@ const Vec2& RenderView::getDesignResolutionSize() const
     return _designResolutionSize;
 }
 
-const Vec2& RenderView::getWindowSize() const
+void RenderView::setRenderSize(float width, float height)
 {
-    return _windowSize;
-}
+    _renderSize.set(width, height);
 
-void RenderView::setWindowSize(float width, float height)
-{
-    _windowSize = Vec2(width, height);
+    if (_windowSize.equals(Vec2::ZERO))
+        _windowSize = _renderSize;
 
     // Github issue #16003 and #16485
     // only update the designResolution if it wasn't previously set
     if (_designResolutionSize.equals(Vec2::ZERO))
-        _designResolutionSize = _windowSize;
+        _designResolutionSize = _renderSize;
 
-    if (_renderSize.equals(Vec2::ZERO))
-        _renderSize = _windowSize;
+    if (!_renderSize.equals(Vec2::ZERO))
+        updateDesignResolution();
 }
 
 Rect RenderView::getVisibleRect() const
@@ -218,7 +216,7 @@ Vec2 RenderView::getVisibleSize() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
-        return Vec2(_windowSize.width / _viewScale.x, _windowSize.height / _viewScale.y);
+        return Vec2(_renderSize.width / _viewScale.x, _renderSize.height / _viewScale.y);
     }
     else
     {
@@ -230,8 +228,8 @@ Vec2 RenderView::getVisibleOrigin() const
 {
     if (_resolutionPolicy == ResolutionPolicy::NO_BORDER)
     {
-        return Vec2((_designResolutionSize.width - _windowSize.width / _viewScale.x) / 2,
-                    (_designResolutionSize.height - _windowSize.height / _viewScale.y) / 2);
+        return Vec2((_designResolutionSize.width - _renderSize.width / _viewScale.x) / 2,
+                    (_designResolutionSize.height - _renderSize.height / _viewScale.y) / 2);
     }
     else
     {
@@ -255,12 +253,6 @@ void RenderView::setScissorInPoints(float x, float y, float w, float h)
                    (unsigned int)(w * _viewScale.y), (unsigned int)(h * _viewScale.y));
 }
 
-bool RenderView::isScissorEnabled()
-{
-    auto renderer = Director::getInstance()->getRenderer();
-    return renderer->getScissorTest();
-}
-
 Rect RenderView::getScissorInPoints() const
 {
     auto& rect = getScissorRect();
@@ -270,6 +262,12 @@ Rect RenderView::getScissorInPoints() const
     float w = rect.width / _viewScale.x;
     float h = rect.height / _viewScale.y;
     return Rect(x, y, w, h);
+}
+
+bool RenderView::isScissorEnabled()
+{
+    auto renderer = Director::getInstance()->getRenderer();
+    return renderer->getScissorTest();
 }
 
 void RenderView::setViewName(std::string_view viewname)

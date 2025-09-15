@@ -118,7 +118,7 @@ const ScissorRect& VRGenericRenderer::getScissorRect() const
 void VRGenericRenderer::init(RenderView* rv)
 {
     // Use scaled window size as screenSize, maybe use rv->getRenderSize() for HiDPI rendering
-    const auto screenSize = rv->getWindowSize();
+    const auto screenSize = rv->getRenderSize();
     _renderTexture        = RenderTexture::create(screenSize.width, screenSize.height);
     _renderTexture->retain();
 

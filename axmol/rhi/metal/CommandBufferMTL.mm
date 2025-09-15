@@ -624,7 +624,6 @@ void CommandBufferImpl::readPixels(id<MTLTexture> texture,
     }];
     [oneOffBuffer commit];
     [oneOffBuffer waitUntilCompleted];
-    [oneOffBuffer release];
 }
 
 void CommandBufferImpl::setFrameBufferOnly(bool frameBufferOnly)

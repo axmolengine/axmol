@@ -91,10 +91,11 @@ RenderViewImpl::RenderViewImpl() {}
 RenderViewImpl::~RenderViewImpl() {}
 
 bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
-                                  const Rect& /*rect*/,
+                                  const Rect& rect,
                                   float /*frameZoomFactor*/,
                                   bool /*resizable*/)
 {
+    setRenderSize(rect.size.width, rect.size.height);
     return true;
 }
 

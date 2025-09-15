@@ -168,7 +168,7 @@ public:
      *
      * @return The window size (aka logic size)
      */
-    virtual const Vec2& getWindowSize() const;
+    const Vec2& getWindowSize() const { return _windowSize; }
 
     /**
      * Set the zoomed window size
@@ -176,7 +176,7 @@ public:
      * @param width The width of the fram size.
      * @param height The height of the fram size.
      */
-    virtual void setWindowSize(float width, float height);
+    virtual void setWindowSize(float, float) {}
 
     /** Set zoom factor for frame. This methods are for
      * debugging big resolution (e.g.new ipad) app on desktop.
@@ -460,6 +460,7 @@ protected:
     float transformInputX(float x) { return (x - _viewportRect.origin.x) / _viewScale.x; }
     float transformInputY(float y) { return (y - _viewportRect.origin.y) / _viewScale.y; }
 
+    void setRenderSize(float fbWidth, float fbHeight);
     void onRenderResized();
 
     void setScissorRect(float x, float y, float w, float h);

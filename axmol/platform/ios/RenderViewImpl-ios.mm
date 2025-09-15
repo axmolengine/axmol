@@ -149,8 +149,8 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
     auto size                     = [eaView bounds].size;
     const auto backingScaleFactor = [eaView contentScaleFactor];
 
-    // simply set windowSize, renderSize to framebufferSize with renderScale=1.0
-    RenderView::setWindowSize(size.width * backingScaleFactor, size.height * backingScaleFactor);
+    // simply set renderSize, renderSize to framebufferSize with renderScale=1.0
+    setRenderSize(size.width * backingScaleFactor, size.height * backingScaleFactor);
 
     _eaViewHandle = eaView;
 

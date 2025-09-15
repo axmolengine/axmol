@@ -62,11 +62,11 @@ void AxmolRenderer::Resume()
     {
         appInstance->initGfxContextAttrs();
 
-        renderView = RenderViewImpl::createWithRect(
-            "axmol3", ax::Rect{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)});
+        renderView = RenderViewImpl::create("axmol3");
         renderView->setPanel(m_panel);
-        renderView->UpdateOrientation(m_orientation);
         renderView->SetDPI(m_dpi);
+        renderView->UpdateOrientation(m_orientation);
+        renderView->UpdateForWindowSizeChange(m_width, m_height);
         renderView->setDispatcher(m_dispatcher);
         director->setRenderView(renderView);
         appInstance->run();
