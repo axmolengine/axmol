@@ -460,7 +460,34 @@ protected:
     float transformInputX(float x) { return (x - _viewportRect.origin.x) / _viewScale.x; }
     float transformInputY(float y) { return (y - _viewportRect.origin.y) / _viewScale.y; }
 
-    void setRenderSize(float fbWidth, float fbHeight);
+    /**
+     * @brief Sets the render size (framebuffer/render target size) and updates the viewport and scaling.
+     *
+     * This method will:
+     * - Overwrite `_renderSize` with the given dimensions;
+     * - If `_windowSize` has not been initialized (equals `Vec2::ZERO`), initialize it to `_renderSize`;
+     * - If `_designResolutionSize` has not been initialized (equals `Vec2::ZERO`), initialize it to `_renderSize`;
+     * - Call `updateDesignResolution()` to compute `_viewScale` and `_viewportRect` based on the current
+     *   `ResolutionPolicy`, and synchronize the Director's logical size and projection.
+     *
+     * @param width  The width of the render size.
+     * @param height The height of the render size.
+     *
+     * @warning This method has side effects: on the first call, it may initialize `_windowSize`
+     *          and `_designResolutionSize`.
+     * @note If the given size is (0,0), no update will be performed.
+     * @see updateDesignResolution(), setDesignResolutionSize()
+     */
+    void setRenderSize(float width, float height);
+
+    /**
+     * @brief Callback invoked after the RenderView size has changed and all related updates are complete.
+     *
+     * This method is called once the RenderView's dimensions have been updated and
+     * all dependent states (such as viewport, scaling, and layout) are ready.
+     * It serves as a notification hook for any components that need to respond
+     * to the final, settled render size.
+     */
     void onRenderResized();
 
     void setScissorRect(float x, float y, float w, float h);
