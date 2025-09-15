@@ -180,7 +180,7 @@ bool LuaEngine::parseConfig(ConfigType type, std::string_view str)
     lua_getglobal(_stack->getLuaState(), "__onParseConfig");
     if (!lua_isfunction(_stack->getLuaState(), -1))
     {
-        AXLOGD("[LUA ERROR] name '{}' does not represent a Lua function", "__onParseConfig");
+        AXLOGW("[LUA WARN] name '{}' does not represent a Lua function", "__onParseConfig");
         lua_pop(_stack->getLuaState(), 1);
         return false;
     }

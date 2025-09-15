@@ -586,6 +586,65 @@ AUDIO_ID AudioEngineImpl::play2d(std::string_view filePath, bool loop, float vol
     return _currentAudioID;
 }
 
+int AudioEngineImpl::play3d(std::string_view filePath,
+                            const Vec3& position,
+                            float distanceScale,
+                            bool loop,
+                            float volume,
+                            float time)
+{
+    if (s_ALDevice == nullptr)
+    {
+        return AudioEngine::INVALID_AUDIO_ID;
+    }
+
+    ALuint alSource = findValidSource();
+    if (alSource == AL_INVALID)
+    {
+        return AudioEngine::INVALID_AUDIO_ID;
+    }
+
+    auto player = new AudioPlayer;
+    if (player == nullptr)
+    {
+        return AudioEngine::INVALID_AUDIO_ID;
+    }
+
+    player->_alSource       = alSource;
+    player->_loop           = loop;
+    player->_volume         = volume;
+    player->_pitch          = 1.0f;
+    player->_sourcePosition.set(position);
+    player->_distanceScale = distanceScale;
+    if (time > 0.0f)
+    {
+        player->_currTime  = time;
+        player->_timeDirty = true;
+    }
+
+    auto audioCache = preload(filePath, nullptr);
+    if (audioCache == nullptr)
+    {
+        delete player;
+        return AudioEngine::INVALID_AUDIO_ID;
+    }
+
+    player->setCache(audioCache);
+    _threadMutex.lock();
+    _audioPlayers.emplace(++_currentAudioID, player);
+    _threadMutex.unlock();
+
+    audioCache->addPlayCallback(std::bind(&AudioEngineImpl::_play3d, this, audioCache, _currentAudioID));
+
+    if (!_scheduled)
+    {
+        _scheduled = true;
+        _scheduler->schedule(AX_SCHEDULE_SELECTOR(AudioEngineImpl::update), this, 0.05f, false);
+    }
+
+    return _currentAudioID;
+}
+
 void AudioEngineImpl::_play2d(AudioCache* cache, AUDIO_ID audioID)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
@@ -610,6 +669,34 @@ void AudioEngineImpl::_play2d(AudioCache* cache, AUDIO_ID audioID)
     else
     {
         AXLOGD("AudioEngineImpl::_play2d, cache was destroyed or not ready!");
+        player->_removeByAudioEngine = true;
+    }
+}
+
+void AudioEngineImpl::_play3d(AudioCache* cache, int audioID)
+{
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto iter = _audioPlayers.find(audioID);
+    if (iter == _audioPlayers.end())
+        return;
+    auto player = iter->second;
+
+    // Note: It maybe in sub thread or main thread :(
+    if (!*cache->_isDestroyed && cache->_state == AudioCache::State::READY)
+    {
+        if (player->play3d())
+        {
+            _scheduler->runOnAxmolThread([audioID]() {
+                if (AudioEngine::_audioIDInfoMap.find(audioID) != AudioEngine::_audioIDInfoMap.end())
+                {
+                    AudioEngine::_audioIDInfoMap[audioID].state = AudioEngine::AudioState::PLAYING;
+                }
+            });
+        }
+    }
+    else
+    {
+        AXLOGD("AudioEngineImpl::_play3d, cache was destroyed or not ready!");
         player->_removeByAudioEngine = true;
     }
 }
@@ -977,6 +1064,20 @@ void AudioEngineImpl::setSourcePosition(int audioId, const ax::Vec3& position)
     player->_sourcePosition.set(position);
 
     alSource3f(player->_alSource, AL_POSITION, position.x, position.y, position.z);
+}
+
+void AudioEngineImpl::setListenerPosition(const ax::Vec3& position)
+{
+    alListener3f(AL_POSITION, position.x, position.y, position.z);
+}
+
+ax::Vec3 AudioEngineImpl::getListenerPosition()
+{
+    Vec3 pos;
+    
+    alGetListener3f(AL_POSITION, &pos.x, &pos.y, &pos.z);
+
+    return pos;
 }
 
 bool AudioEngineImpl::isExtensionPresent(const char* extensionId)

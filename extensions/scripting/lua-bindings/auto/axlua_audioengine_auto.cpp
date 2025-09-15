@@ -284,6 +284,141 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_audioengine_AudioEngine_play3d(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+
+    do {
+        if (argc == 2)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            ax::AudioPlayerSettings arg1;
+            #pragma warning NO CONVERSION TO NATIVE FOR AudioPlayerSettings
+        ok = false;
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play3d(arg0, arg1);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 3)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            ax::AudioPlayerSettings arg1;
+            #pragma warning NO CONVERSION TO NATIVE FOR AudioPlayerSettings
+        ok = false;
+            if (!ok) { break; }
+            const ax::AudioProfile* arg2;
+            ok &= luaval_to_object<const ax::AudioProfile>(tolua_S, 4, "ax.AudioProfile",&arg2, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play3d(arg0, arg1, arg2);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 2)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            ax::Vec3 arg1;
+            ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play3d(arg0, arg1);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 3)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            ax::Vec3 arg1;
+            ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            bool arg2;
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play3d(arg0, arg1, arg2);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 4)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            ax::Vec3 arg1;
+            ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            bool arg2;
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            double arg3;
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play3d(arg0, arg1, arg2, arg3);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do {
+        if (argc == 5)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            ax::Vec3 arg1;
+            ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            bool arg2;
+            ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            double arg3;
+            ok &= luaval_to_number(tolua_S, 5, &arg3, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            const ax::AudioProfile* arg4;
+            ok &= luaval_to_object<const ax::AudioProfile>(tolua_S, 6, "ax.AudioProfile",&arg4, "ax.AudioEngine:play3d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play3d(arg0, arg1, arg2, arg3, arg4);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.AudioEngine:play3d",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_play3d'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_audioengine_AudioEngine_setLoop(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1370,6 +1505,146 @@ int lua_ax_audioengine_AudioEngine_setSourcePosition(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_audioengine_AudioEngine_setListenerPosition(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::Vec3 arg0;
+        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.AudioEngine:setListenerPosition");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setListenerPosition'", nullptr);
+            return 0;
+        }
+        ax::AudioEngine::setListenerPosition(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:setListenerPosition",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_setListenerPosition'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_audioengine_AudioEngine_getListenerPosition(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getListenerPosition'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::AudioEngine::getListenerPosition();
+        vec3_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:getListenerPosition",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_getListenerPosition'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_audioengine_AudioEngine_setDistanceScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        double arg0;
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.AudioEngine:setDistanceScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setDistanceScale'", nullptr);
+            return 0;
+        }
+        ax::AudioEngine::setDistanceScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:setDistanceScale",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_setDistanceScale'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_audioengine_AudioEngine_getDistanceScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getDistanceScale'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::AudioEngine::getDistanceScale();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:getDistanceScale",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_getDistanceScale'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_audioengine_AudioEngine_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (AudioEngine)");
@@ -1386,6 +1661,7 @@ int lua_register_ax_audioengine_AudioEngine(lua_State* tolua_S)
         tolua_function(tolua_S,"endToLua", lua_ax_audioengine_AudioEngine_end);
         tolua_function(tolua_S,"getDefaultProfile", lua_ax_audioengine_AudioEngine_getDefaultProfile);
         tolua_function(tolua_S,"play2d", lua_ax_audioengine_AudioEngine_play2d);
+        tolua_function(tolua_S,"play3d", lua_ax_audioengine_AudioEngine_play3d);
         tolua_function(tolua_S,"setLoop", lua_ax_audioengine_AudioEngine_setLoop);
         tolua_function(tolua_S,"isLoop", lua_ax_audioengine_AudioEngine_isLoop);
         tolua_function(tolua_S,"setVolume", lua_ax_audioengine_AudioEngine_setVolume);
@@ -1415,6 +1691,10 @@ int lua_register_ax_audioengine_AudioEngine(lua_State* tolua_S)
         tolua_function(tolua_S,"getPan", lua_ax_audioengine_AudioEngine_getPan);
         tolua_function(tolua_S,"getSourcePosition", lua_ax_audioengine_AudioEngine_getSourcePosition);
         tolua_function(tolua_S,"setSourcePosition", lua_ax_audioengine_AudioEngine_setSourcePosition);
+        tolua_function(tolua_S,"setListenerPosition", lua_ax_audioengine_AudioEngine_setListenerPosition);
+        tolua_function(tolua_S,"getListenerPosition", lua_ax_audioengine_AudioEngine_getListenerPosition);
+        tolua_function(tolua_S,"setDistanceScale", lua_ax_audioengine_AudioEngine_setDistanceScale);
+        tolua_function(tolua_S,"getDistanceScale", lua_ax_audioengine_AudioEngine_getDistanceScale);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::AudioEngine).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AudioEngine";

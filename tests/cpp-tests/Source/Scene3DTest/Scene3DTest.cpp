@@ -29,6 +29,7 @@
 #include "axmol/renderer/RenderState.h"
 #include <spine/spine-axmol.h>
 
+#include "AudioEngine.h"
 #include "../testResource.h"
 #include "../TerrainTest/TerrainTest.h"
 
@@ -87,6 +88,7 @@ private:
     Scene3DTestScene();
     ~Scene3DTestScene() override;
     bool init() override;
+    void update(float) override;
 
     void createWorld3D();
     void createUI();
@@ -106,6 +108,7 @@ private:
     ax::Terrain* _terrain;
     Player* _player;
     Node* _monsters[2];
+    int _audioId = -1;
 
     // init in createUI()
     Node* _playerItem;
@@ -119,6 +122,7 @@ private:
     Node* _detailDlg;
     // init in createDescDlg()
     Node* _descDlg;
+
     enum SkinType
     {
         HAIR = 0,
@@ -236,7 +240,12 @@ Scene3DTestScene::Scene3DTestScene()
     _monsters[0] = _monsters[1] = nullptr;
 }
 
-Scene3DTestScene::~Scene3DTestScene() {}
+Scene3DTestScene::~Scene3DTestScene()
+{
+    AudioEngine::stopAll();
+    AudioEngine::setListenerPosition(Vec3()); // reset listener position
+    AudioEngine::setDistanceScale(1.f);
+}
 
 bool Scene3DTestScene::init()
 {
@@ -357,10 +366,22 @@ bool Scene3DTestScene::init()
         listener->onTouchEnded = AX_CALLBACK_2(Scene3DTestScene::onTouchEnd, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+        scheduleUpdate();
+
         ret = true;
     } while (0);
 
     return ret;
+}
+
+void Scene3DTestScene::update(float x)
+{
+    TestCase::update(x);
+
+    if (_player)
+    {
+        AudioEngine::setListenerPosition(_player->getPosition3D());
+    }
 }
 
 void Scene3DTestScene::createWorld3D()
@@ -434,6 +455,9 @@ void Scene3DTestScene::createWorld3D()
     monster->setRotation3D(Vec3(0, 180, 0));
     monster->setPosition3D(_player->getPosition3D() + Vec3(-50, -5, 0));
     _monsters[1] = monster;
+
+    AudioEngine::setDistanceScale(5);
+    _audioId = AudioEngine::play3d("background.mp3", monster->getPosition3D(), true);
 }
 
 void Scene3DTestScene::createUI()
@@ -470,6 +494,32 @@ void Scene3DTestScene::createUI()
     auto menu = Menu::create(showPlayerDlgItem, descItem, nullptr);
     menu->setPosition(Vec2::ZERO);
     _ui->addChild(menu);
+
+    auto audioCheckbox = ui::CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+                           "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+                           "cocosui/check_box_active_disable.png");
+    audioCheckbox->setSelected(true);
+    audioCheckbox->setName("Audio");
+    audioCheckbox->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
+    audioCheckbox->setScale(0.8f);
+    audioCheckbox->addEventListener(
+        [this](ax::Object* sender, ax::ui::CheckBox::EventType eventType) {
+            if (eventType == ui::CheckBox::EventType::UNSELECTED)
+            {
+                AudioEngine::pause(_audioId);
+            }
+            else
+            {
+                AudioEngine::resume(_audioId);
+            }
+        });
+    auto label = ui::Text::create();
+    label->setString("Positional Audio");
+    label->setAnchorPoint(Vec2(0, 0));
+    label->setPositionX(audioCheckbox->getContentSize().width);
+    audioCheckbox->addChild(label);
+    audioCheckbox->setPosition(VisibleRect::right() - Vec2(audioCheckbox->getContentSize().width + label->getContentSize().width, 0));
+    _ui->addChild(audioCheckbox);
 
     // second, add cameras control button to ui
     auto createCameraButton = [this](int tag, const char* text) -> Node* {

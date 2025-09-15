@@ -47,6 +47,7 @@ public:
 
     bool init();
     AUDIO_ID play2d(std::string_view fileFullPath, bool loop, float volume, float time);
+    AUDIO_ID play3d(std::string_view fileFullPath, const Vec3& position, float distanceScale, bool loop, float volume, float time);
     void setVolume(AUDIO_ID audioID, float volume);
     void setPitch(AUDIO_ID audioID, float pitch);
     void setLoop(AUDIO_ID audioID, bool loop);
@@ -62,6 +63,8 @@ public:
     float getPan(AUDIO_ID audioId);
     ax::Vec3 getSourcePosition(AUDIO_ID audioId);
     void setSourcePosition(AUDIO_ID audioId, const ax::Vec3& position);
+    void setListenerPosition(const ax::Vec3& position);
+    ax::Vec3 getListenerPosition();
 
     void uncache(std::string_view filePath);
     void uncacheAll();
@@ -75,6 +78,7 @@ private:
     // query players state per frame and dispatch finish callback if possible
     void _updatePlayers(bool forStop);
     void _play2d(AudioCache* cache, AUDIO_ID audioID);
+    void _play3d(AudioCache* cache, AUDIO_ID audioID);
     void _unscheduleUpdate();
     ALuint findValidSource();
 #if defined(__APPLE__) && !AX_USE_ALSOFT

@@ -331,7 +331,7 @@ int LuaStack::executeGlobalFunction(const char* functionName)
     lua_getglobal(_state, functionName); /* query function by name, stack: function */
     if (!lua_isfunction(_state, -1))
     {
-        AXLOGD("[LUA ERROR] name '{}' does not represent a Lua function", functionName);
+        AXLOGW("[LUA WARN] name '{}' does not represent a Lua function", functionName);
         lua_pop(_state, 1);
         return 0;
     }
@@ -444,7 +444,7 @@ bool LuaStack::pushFunctionByHandler(int nHandler)
     toluafix_get_function_by_refid(_state, nHandler); /* L: ... func */
     if (!lua_isfunction(_state, -1))
     {
-        AXLOGD("[LUA ERROR] function refid '{}' does not reference a Lua function", nHandler);
+        AXLOGE("[LUA ERROR] function refid '{}' does not reference a Lua function", nHandler);
         lua_pop(_state, 1);
         return false;
     }
@@ -456,7 +456,7 @@ int LuaStack::executeFunction(int numArgs)
     int functionIndex = -(numArgs + 1);
     if (!lua_isfunction(_state, functionIndex))
     {
-        AXLOGD("value at stack [{}] is not function", functionIndex);
+        AXLOGE("value at stack [{}] is not function", functionIndex);
         lua_pop(_state, numArgs + 1);  // remove function and arguments
         return 0;
     }
@@ -481,7 +481,7 @@ int LuaStack::executeFunction(int numArgs)
     {
         if (traceback == 0)
         {
-            AXLOGD("[LUA ERROR] {}", lua_tostring(_state, -1)); /* L: ... error */
+            AXLOGE("[LUA ERROR] {}", lua_tostring(_state, -1)); /* L: ... error */
             lua_pop(_state, 1);                                 // remove error message from stack
         }
         else /* L: ... G error */
@@ -598,7 +598,7 @@ int LuaStack::executeFunction(int handler,
         {
             if (traceCallback == 0)
             {
-                AXLOGD("[LUA ERROR] {}", lua_tostring(_state, -1)); /* L: ... error */
+                AXLOGE("[LUA ERROR] {}", lua_tostring(_state, -1)); /* L: ... error */
                 lua_pop(_state, 1);                                 // remove error message from stack
             }
             else /* L: ... G error */
@@ -772,19 +772,19 @@ int LuaStack::luaLoadBuffer(lua_State* L, const char* chunk, int chunkSize, cons
         switch (r)
         {
         case LUA_ERRSYNTAX:
-            AXLOGD("[LUA ERROR] load \"{}\", error: syntax error during pre-compilation.", chunkName);
+            AXLOGE("[LUA ERROR] load \"{}\", error: syntax error during pre-compilation.", chunkName);
             break;
 
         case LUA_ERRMEM:
-            AXLOGD("[LUA ERROR] load \"{}\", error: memory allocation error.", chunkName);
+            AXLOGE("[LUA ERROR] load \"{}\", error: memory allocation error.", chunkName);
             break;
 
         case LUA_ERRFILE:
-            AXLOGD("[LUA ERROR] load \"{}\", error: cannot open/read file.", chunkName);
+            AXLOGE("[LUA ERROR] load \"{}\", error: cannot open/read file.", chunkName);
             break;
 
         default:
-            AXLOGD("[LUA ERROR] load \"{}\", error: unknown.", chunkName);
+            AXLOGE("[LUA ERROR] load \"{}\", error: unknown.", chunkName);
         }
     }
 #endif

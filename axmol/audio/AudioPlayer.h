@@ -64,6 +64,7 @@ protected:
     void setCache(AudioCache* cache);
     void rotateBufferThread(int offsetFrame);
     bool play2d();
+    bool play3d();
 #if defined(__APPLE__)
     void wakeupRotateThread();
 #endif
@@ -87,6 +88,7 @@ protected:
     unsigned int _id;
 
     float _pan{};
+    float _distanceScale;
     Vec3 _sourcePosition;
 
     bool _streamingSource{false};

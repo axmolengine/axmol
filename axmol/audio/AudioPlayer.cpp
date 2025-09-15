@@ -261,6 +261,128 @@ bool AudioPlayer::play2d()
     return ret;
 }
 
+bool AudioPlayer::play3d()
+{
+    std::unique_lock<std::mutex> lck(_play2dMutex);
+    AXLOGV("AudioPlayer::play2d, _alSource: {}, player id={}", _alSource, _id);
+
+    if (_isDestroyed)
+        return false;
+
+    /*********************************************************************/
+    /*       Note that it may be in sub thread or in main thread.       **/
+    /*********************************************************************/
+    bool ret = false;
+    do
+    {
+        if (_audioCache->_state != AudioCache::State::READY)
+        {
+            AXLOGE("{}", "alBuffer isn't ready for play!");
+            break;
+        }
+
+        alSourcei(_alSource, AL_BUFFER, 0);
+        CHECK_AL_ERROR_DEBUG();
+        alSourcef(_alSource, AL_PITCH, 1.0f);
+        CHECK_AL_ERROR_DEBUG();
+        alSourcef(_alSource, AL_GAIN, _volume);
+        CHECK_AL_ERROR_DEBUG();
+        alSourcei(_alSource, AL_LOOPING, AL_FALSE);
+        CHECK_AL_ERROR_DEBUG();
+        alSource3f(_alSource, AL_POSITION, _sourcePosition.x, _sourcePosition.y, _sourcePosition.z);
+        CHECK_AL_ERROR_DEBUG();
+        alSource3f(_alSource, AL_VELOCITY, 0, 0, 0);
+        CHECK_AL_ERROR_DEBUG();
+        alSourcef(_alSource, AL_REFERENCE_DISTANCE, _distanceScale);
+        CHECK_AL_ERROR_DEBUG();
+
+        if (_audioCache->_queBufferFrames == 0)
+        {
+            if (_loop)
+            {
+                alSourcei(_alSource, AL_LOOPING, AL_TRUE);
+                CHECK_AL_ERROR_DEBUG();
+            }
+        }
+        else
+        {
+            alGenBuffers(QUEUEBUFFER_NUM, _bufferIds);
+
+            auto alError = alGetError();
+            if (alError == AL_NO_ERROR)
+            {
+                for (int index = 0; index < QUEUEBUFFER_NUM; ++index)
+                {
+                    alBufferData(_bufferIds[index], _audioCache->_format, _audioCache->_queBuffers[index],
+                                 _audioCache->_queBufferSize[index], _audioCache->_sampleRate);
+                }
+                CHECK_AL_ERROR_DEBUG();
+            }
+            else
+            {
+                AXLOGE("{}:alGenBuffers error code: {:#x}", __FUNCTION__, alError);
+                break;
+            }
+            _streamingSource = true;
+        }
+
+        {
+            std::unique_lock<std::mutex> lk(_sleepMutex);
+            if (_isDestroyed)
+                break;
+
+            if (_streamingSource)
+            {
+                // To continuously stream audio from a source without interruption, buffer queuing is required.
+                alSourceQueueBuffers(_alSource, QUEUEBUFFER_NUM, _bufferIds);
+                CHECK_AL_ERROR_DEBUG();
+                _rotateBufferThread = new std::thread(&AudioPlayer::rotateBufferThread, this,
+                                                      _audioCache->_queBufferFrames * QUEUEBUFFER_NUM + 1);
+            }
+            else
+            {
+                alSourcei(_alSource, AL_BUFFER, _audioCache->_alBufferId);
+                CHECK_AL_ERROR_DEBUG();
+            }
+
+            alSourcePlay(_alSource);
+        }
+
+        auto alError = alGetError();
+        if (alError != AL_NO_ERROR)
+        {
+            AXLOGE("{}:alSourcePlay error code:{:#x}", __FUNCTION__, (int)alError);
+            break;
+        }
+
+        ALint state;
+        alGetSourcei(_alSource, AL_SOURCE_STATE, &state);
+        if (state != AL_PLAYING)
+            AXLOGE("state isn't playing, {}, {}, cache id={}, player id={}", state, _audioCache->_fileFullPath,
+                   _audioCache->_id, _id);
+
+        // OpenAL framework: sometime when switch audio too fast, the result state will error, but there is no any
+        // alError, so just skip for workaround.
+        assert(state == AL_PLAYING);
+
+        if (!_streamingSource && _currTime >= 0.0f)
+        {
+            alSourcef(_alSource, AL_SEC_OFFSET, _currTime);
+            CHECK_AL_ERROR_DEBUG();
+        }
+
+        _ready = true;
+        ret    = true;
+    } while (false);
+
+    if (!ret)
+    {
+        _removeByAudioEngine = true;
+    }
+
+    return ret;
+}
+
 // rotateBufferThread is used to rotate alBufferData for _alSource when playing big audio file
 void AudioPlayer::rotateBufferThread(int offsetFrame)
 {

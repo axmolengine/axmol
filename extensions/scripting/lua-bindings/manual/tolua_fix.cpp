@@ -104,7 +104,6 @@ TOLUA_API int toluafix_remove_ccobject_by_refid(lua_State* L, int refid)
     {
         lua_pop(L, 1);
         // Lua stack has closed, C++ object not in Lua.
-        // printf("[LUA ERROR] remove CCObject with NULL ptr, refid: %d\n", refid);
         return -2;
     }
 
@@ -122,7 +121,7 @@ TOLUA_API int toluafix_remove_ccobject_by_refid(lua_State* L, int refid)
     if (lua_isnil(L, -1))
     {
         lua_pop(L, 2);
-        AXLOGD("[LUA ERROR] remove CCObject with NULL type, refid: {}, ptr: {}\n", refid, fmt::ptr(ptr));
+        AXLOGW("[LUA WARN] remove CCObject with NULL type, refid: {}, ptr: {}\n", refid, fmt::ptr(ptr));
         return -1;
     }
 
@@ -155,7 +154,6 @@ TOLUA_API int toluafix_remove_ccobject_by_refid(lua_State* L, int refid)
     if (lua_isnil(L, -1))
     {
         // Lua object has released (GC), C++ object not in ubox.
-        // printf("[LUA ERROR] remove CCObject with NULL ubox, refid: %d, ptr: %x, type: %s\n", refid, (int)ptr, type);
         lua_pop(L, 3);
         return -3;
     }
@@ -168,7 +166,7 @@ TOLUA_API int toluafix_remove_ccobject_by_refid(lua_State* L, int refid)
     lua_pop(L, 1); /* stack: mt ubox */
     if (ud == NULL)
     {
-        AXLOGD("[LUA ERROR] remove CCObject with NULL userdata, refid: {}, ptr: {}, type: {}n", refid, fmt::ptr(ptr),
+        AXLOGW("[LUA WARN] remove CCObject with NULL userdata, refid: {}, ptr: {}, type: {}n", refid, fmt::ptr(ptr),
                type);
         lua_pop(L, 2);
         return -1;
