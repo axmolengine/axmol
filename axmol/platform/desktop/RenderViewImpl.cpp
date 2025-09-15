@@ -561,7 +561,8 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #endif
 
     _renderScaleMode = contextAttrs.renderScaleMode;
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || \
+    AX_TARGET_PLATFORM == AX_PLATFORM_WASM
     // On Linux X11 platforms, GLFW does not support fractional DPI scaling (e.g., 1.5x).
     // To ensure consistent rendering across high-DPI displays, we disable GLFW_SCALE_TO_MONITOR
     // and apply custom scaling logic based on platform-specific DPI detection.
@@ -1015,7 +1016,8 @@ void RenderViewImpl::updateScaledWindowSize(int w, int h)
     double scaledWidth  = w / (double)_windowZoomFactor;
     double scaledHeight = h / (double)_windowZoomFactor;
 
-    // Translate to logical size on platforms where pixels and screen coordinates always map 1:1
+    // Translate to logical size on platforms where pixels and screen coordinates always map 1:1 (Win32, X11)
+    // Note: wasm coordinates not map 1:1 when _renderScaleMode is RenderScaleMode::Physical
     if (_renderScaleMode == RenderScaleMode::Physical)
     {
         auto windowPlatform = getWindowPlatform();
@@ -1083,22 +1085,26 @@ void RenderViewImpl::handleRenderResized()
  * This function uses glfwGetWindowContentScale() to retrieve the current content scale
  * factor, which may change when moving the window between monitors with different DPI
  * settings.
+ *
+ * renderScale: for computing logical window size
+ * inputScale: for transform input axis
  */
 void RenderViewImpl::updateRenderScale()
 {
     auto windowPlatform = getWindowPlatform();
-    if (windowPlatform == WindowPlatform::Win32 || windowPlatform == WindowPlatform::X11)
+    if (windowPlatform == WindowPlatform::Win32 || windowPlatform == WindowPlatform::X11 ||
+        windowPlatform == WindowPlatform::Web)
     {
         if (_renderScaleMode == RenderScaleMode::Physical)
         {
             float ignoreVal;
             glfwGetWindowContentScale(_mainWindow, &_renderScale, &ignoreVal);
+            _inputScale = windowPlatform != WindowPlatform::Web ? 1.0f : _renderScale;
         }
         else
         {
-            _renderScale = 1.0f;
+            _inputScale = _renderScale = 1.0f;
         }
-        _inputScale = 1.0f;
     }
     else
     {
