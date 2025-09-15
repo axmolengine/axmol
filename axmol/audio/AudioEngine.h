@@ -54,11 +54,11 @@ namespace ax
  */
 struct AX_DLL AudioPlayerSettings
 {
-    bool loop = false; // Whether audio instance loop or not.
-    float volume = 1.0f; // Volume value (range from 0.0 to 1.0).
-    float time = 0.0f; // The initial time offset when play audio
-    Vec3 position{}; // position of audio in 3d space relative to listener
-    static float distanceScale; // scale used for distance calculations. Must be greater than 0, and defaults to 1.0f.
+    bool loop    = false;        // Whether audio instance loop or not.
+    float volume = 1.0f;         // Volume value (range from 0.0 to 1.0).
+    float time   = 0.0f;         // The initial time offset when play audio
+    Vec3 position{};             // position of audio in 3d space relative to listener
+    static float distanceScale;  // scale used for distance calculations. Must be greater than 0, and defaults to 1.0f.
 };
 
 /**

@@ -243,7 +243,7 @@ Scene3DTestScene::Scene3DTestScene()
 Scene3DTestScene::~Scene3DTestScene()
 {
     AudioEngine::stopAll();
-    AudioEngine::setListenerPosition(Vec3()); // reset listener position
+    AudioEngine::setListenerPosition(Vec3());  // reset listener position
     AudioEngine::setDistanceScale(1.f);
 }
 
@@ -496,29 +496,29 @@ void Scene3DTestScene::createUI()
     _ui->addChild(menu);
 
     auto audioCheckbox = ui::CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
-                           "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
-                           "cocosui/check_box_active_disable.png");
+                                              "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+                                              "cocosui/check_box_active_disable.png");
     audioCheckbox->setSelected(true);
     audioCheckbox->setName("Audio");
     audioCheckbox->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
     audioCheckbox->setScale(0.8f);
-    audioCheckbox->addEventListener(
-        [this](ax::Object* sender, ax::ui::CheckBox::EventType eventType) {
-            if (eventType == ui::CheckBox::EventType::UNSELECTED)
-            {
-                AudioEngine::pause(_audioId);
-            }
-            else
-            {
-                AudioEngine::resume(_audioId);
-            }
-        });
+    audioCheckbox->addEventListener([this](ax::Object* sender, ax::ui::CheckBox::EventType eventType) {
+        if (eventType == ui::CheckBox::EventType::UNSELECTED)
+        {
+            AudioEngine::pause(_audioId);
+        }
+        else
+        {
+            AudioEngine::resume(_audioId);
+        }
+    });
     auto label = ui::Text::create();
     label->setString("Positional Audio");
     label->setAnchorPoint(Vec2(0, 0));
     label->setPositionX(audioCheckbox->getContentSize().width);
     audioCheckbox->addChild(label);
-    audioCheckbox->setPosition(VisibleRect::right() - Vec2(audioCheckbox->getContentSize().width + label->getContentSize().width, 0));
+    audioCheckbox->setPosition(VisibleRect::right() -
+                               Vec2(audioCheckbox->getContentSize().width + label->getContentSize().width, 0));
     _ui->addChild(audioCheckbox);
 
     // second, add cameras control button to ui

@@ -188,7 +188,11 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath,
     return ret;
 }
 
-int AudioEngine::play3d(std::string_view filePath, const Vec3& position, bool loop, float volume, const AudioProfile* profile)
+int AudioEngine::play3d(std::string_view filePath,
+                        const Vec3& position,
+                        bool loop,
+                        float volume,
+                        const AudioProfile* profile)
 {
     return play3d(filePath, ax::AudioPlayerSettings{loop, volume, 0.0f, position});
 }

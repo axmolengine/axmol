@@ -610,10 +610,10 @@ int AudioEngineImpl::play3d(std::string_view filePath,
         return AudioEngine::INVALID_AUDIO_ID;
     }
 
-    player->_alSource       = alSource;
-    player->_loop           = loop;
-    player->_volume         = volume;
-    player->_pitch          = 1.0f;
+    player->_alSource = alSource;
+    player->_loop     = loop;
+    player->_volume   = volume;
+    player->_pitch    = 1.0f;
     player->_sourcePosition.set(position);
     player->_distanceScale = distanceScale;
     if (time > 0.0f)
@@ -1074,7 +1074,7 @@ void AudioEngineImpl::setListenerPosition(const ax::Vec3& position)
 ax::Vec3 AudioEngineImpl::getListenerPosition()
 {
     Vec3 pos;
-    
+
     alGetListener3f(AL_POSITION, &pos.x, &pos.y, &pos.z);
 
     return pos;
