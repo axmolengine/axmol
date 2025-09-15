@@ -560,11 +560,12 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     axdrv;
 #endif
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    _renderScaleMode = contextAttrs.renderScaleMode;
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WASM
     // On Linux X11 platforms, GLFW does not support fractional DPI scaling (e.g., 1.5x).
     // To ensure consistent rendering across high-DPI displays, we disable GLFW_SCALE_TO_MONITOR
     // and apply custom scaling logic based on platform-specific DPI detection.
-    _renderScaleMode = contextAttrs.renderScaleMode;
+    // GLFW_SCALE_TO_MONITOR support Win32, X11, Wasm
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, _renderScaleMode == RenderScaleMode::Physical ? GLFW_TRUE : GLFW_FALSE);
 #endif
 
@@ -596,13 +597,13 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
      *  see declaration glfwCreateWindow
      */
 
-    int w, h;
-    glfwGetWindowSize(_mainWindow, &w, &h);
-    updateScaledWindowSize(w, h);
-
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
     setRenderSize(fbWidth, fbHeight);
+
+    int w, h;
+    glfwGetWindowSize(_mainWindow, &w, &h);
+    updateScaledWindowSize(w, h);
 
 #if AX_RENDER_API == AX_RENDER_API_GL
     glfwMakeContextCurrent(_mainWindow);
