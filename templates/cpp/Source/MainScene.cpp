@@ -169,14 +169,14 @@ void MainScene::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event
 bool MainScene::onMouseDown(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
-    // AXLOGD("onMouseDown detected, Key: %d", static_cast<int>(e->getMouseButton()));
+    // AXLOGD("onMouseDown detected, button: {}", static_cast<int>(e->getMouseButton()));
     return true;
 }
 
 bool MainScene::onMouseUp(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
-    AXLOGD("onMouseUp detected, Key: %d", static_cast<int>(e->getMouseButton()));
+    AXLOGD("onMouseUp detected, button: {}", static_cast<int>(e->getMouseButton()));
     return true;
 }
 
@@ -201,7 +201,7 @@ void MainScene::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
 
 void MainScene::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 {
-    AXLOGD("onKeyReleased, keycode: %d", static_cast<int>(code));
+    AXLOGD("onKeyReleased, keycode: {}", static_cast<int>(code));
 }
 
 void MainScene::update(float delta)
