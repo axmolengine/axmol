@@ -101,6 +101,29 @@ The RenderViewImpl for win32,linux,macos,wasm
 
 namespace ax
 {
+#if defined(__EMSCRIPTEN__)
+struct IVec2
+{
+    int x{0};
+    int y{0};
+};
+struct WebFullscreenState
+{
+    WebFullscreenState()
+    {
+        EmscriptenFullscreenChangeEvent fs;
+        if (emscripten_get_fullscreen_status(&fs) == EMSCRIPTEN_RESULT_SUCCESS)
+        {
+            isFullscreen = fs.isFullscreen;
+        }
+    }
+
+    IVec2 windowedSize;
+    bool isFullscreen{false};
+};
+static std::unique_ptr<WebFullscreenState> s_fullscreenState;
+#endif
+
 class GLFWEventHandler
 {
 public:
@@ -122,10 +145,17 @@ public:
             _view->onGLFWMouseMoveCallBack(window, x, y);
     }
 #if defined(__EMSCRIPTEN__)
-    static EM_BOOL onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent, void* /*userData*/)
+    static EM_BOOL onWebFullscreenCallback(int eventType, const EmscriptenFullscreenChangeEvent* e, void* /*userData*/)
     {
         if (_view)
-            _view->onWebTouchCallback(eventType, touchEvent);
+            _view->onWebFullscreenCallback(eventType, e);
+        return EM_TRUE;
+    }
+
+    static EM_BOOL onWebTouchCallback(int eventType, const EmscriptenTouchEvent* e, void* /*userData*/)
+    {
+        if (_view)
+            _view->onWebTouchCallback(eventType, e);
         return EM_FALSE;
     }
 
@@ -614,17 +644,20 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
 #if defined(__EMSCRIPTEN__)
+    s_fullscreenState = std::make_unique<WebFullscreenState>();
     // clang-format off
+    emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, this, EM_TRUE, GLFWEventHandler::onWebFullscreenCallback);
+
     _isTouchDevice = !!EM_ASM_INT(return (('ontouchstart' in window) ||
         (navigator.maxTouchPoints > 0) ||
         (navigator.msMaxTouchPoints > 0)) ? 1 : 0;
     );
     if (_isTouchDevice)
     {
-        emscripten_set_touchstart_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchend_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchmove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
-        emscripten_set_touchcancel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchstart_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchend_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchmove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchcancel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, EM_TRUE, GLFWEventHandler::onWebTouchCallback);
     }
     else
     {
@@ -967,7 +1000,8 @@ void RenderViewImpl::onGLFWFramebufferSizeCallback(GLFWwindow* window, int fbWid
         return;
 
     setRenderSize(fbWidth, fbHeight);
-    _renderSizeUpdated = true;
+
+    maybeDispatchResizeEvent(WindowUpdateFlag::FramebufferSizeChanged);
 }
 
 void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
@@ -1037,7 +1071,7 @@ void RenderViewImpl::updateScaledWindowSize(int w, int h)
 
     // fire render resized event on platform that framebuffer & window size callback trigger delayed (x11)
     // if zoom factor changed, the renderSize also should changed
-    handleRenderResized();
+    maybeDispatchResizeEvent(WindowUpdateFlag::WindowSizeChanged);
 }
 
 void RenderViewImpl::applyWindowSize()
@@ -1058,14 +1092,21 @@ void RenderViewImpl::applyWindowSize()
                       static_cast<int>(std::lround(unscaledHeight)));
 
     // process platform that window size callback not trigger(wayland)
-    handleRenderResized();
+    maybeDispatchResizeEvent(WindowUpdateFlag::WindowSizeChanged);
 }
 
-void RenderViewImpl::handleRenderResized()
+void RenderViewImpl::maybeDispatchResizeEvent(uint8_t updateFlag)
 {
-    if (_renderSizeUpdated)
+    auto flags = _windowUpdateFlags;
+    flags |= updateFlag;
+
+    if (flags != WindowUpdateFlag::AllUpdates)
     {
-        _renderSizeUpdated = false;
+        _windowUpdateFlags = flags;
+    }
+    else
+    {
+        _windowUpdateFlags = 0;
         onRenderResized();
     }
 }
@@ -1200,6 +1241,29 @@ void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, doubl
 }
 
 #if defined(__EMSCRIPTEN__)
+void RenderViewImpl::onWebFullscreenCallback(int eventType, const EmscriptenFullscreenChangeEvent* e)
+{
+    if (e->isFullscreen == s_fullscreenState->isFullscreen)
+        return;
+
+    auto& windowedSize              = s_fullscreenState->windowedSize;
+    s_fullscreenState->isFullscreen = e->isFullscreen;
+    if (e->isFullscreen)
+    {
+        glfwGetWindowSize(_mainWindow, &windowedSize.x, &windowedSize.y);
+
+        AXLOGD("onWebFullscreenCallback: enter full screen: ({},{}) => ({},{})", windowedSize.x, windowedSize.y,
+               e->screenWidth, e->screenHeight);
+        glfwSetWindowSize(_mainWindow, e->screenWidth, e->screenHeight);
+    }
+    else
+    {
+        AXLOGD("onWebFullscreenCallback: exit full screen => ({},{}) => ({},{})", e->screenWidth, e->screenHeight,
+               windowedSize.x, windowedSize.y);
+        glfwSetWindowSize(_mainWindow, windowedSize.x, windowedSize.y);
+    }
+}
+
 void RenderViewImpl::onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent)
 {
     float boundingX = EM_ASM_INT(return canvas.getBoundingClientRect().left);

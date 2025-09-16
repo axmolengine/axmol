@@ -447,8 +447,8 @@ void CommandBufferImpl::readPixels(RenderTarget* rt,
         if (!eglCacheHint)
         {
             // we need to flip the buffer vertically to match our API
-            uint8_t* wptr = nullptr;
-            if (wptr = pbd._data.resize(bufferSize))
+            uint8_t* wptr = pbd._data.resize(bufferSize);
+            if (wptr)
             {
                 auto rptr = buffer_ptr + (height - 1) * bytesPerRow;
                 for (int row = 0; row < height; ++row)

@@ -56,8 +56,11 @@ void AppDelegate::initGfxContextAttrs()
     // since axmol-2.2 vsync was enabled in engine by default
     // gfxContextAttrs.vsync = false;
 
-    // uncomment if your app need adapt high DPI scale monitors
-    // gfxContextAttrs.renderScaleMode = RenderScaleMode::Physical;
+    // Enable high-DPI scaling support (non-Windows platforms only)
+    // Note: cpp-tests keep the default render mode to ensure consistent performance benchmarks
+#if AX_TARGET_PLATFORM != AX_PLATFORM_WIN32
+    gfxContextAttrs.renderScaleMode = RenderScaleMode::Physical;
+#endif
     RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
 

@@ -35,6 +35,7 @@ THE SOFTWARE.
 #    include "axmol/tlx/pod_vector.hpp"
 struct EmscriptenMouseEvent;
 struct EmscriptenTouchEvent;
+struct EmscriptenFullscreenChangeEvent;
 #endif
 
 namespace ax
@@ -143,6 +144,7 @@ protected:
     void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify);
     void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y);
 #if defined(__EMSCRIPTEN__)
+    void onWebFullscreenCallback(int eventType, const EmscriptenFullscreenChangeEvent* e);
     void onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent);
     void onWebClickCallback();
 #endif
@@ -159,16 +161,25 @@ protected:
 protected:
     void updateScaledWindowSize(int w, int h);
 
-    void handleRenderResized();
-
     /* resize platform window when user set zoomFactor, windowSize */
     void applyWindowSize();
+
+    void maybeDispatchResizeEvent(uint8_t updateFlag);
 
     bool _isTouchDevice = false;
     bool _captured;
 
-    /* whether render size updated by GLFW framebuffer size callback */
-    bool _renderSizeUpdated{false};
+    enum WindowUpdateFlag : uint8_t
+    {
+        WindowSizeChanged      = 1 << 0,
+        FramebufferSizeChanged = 1 << 1,
+        AllUpdates             = WindowSizeChanged | FramebufferSizeChanged
+    };
+
+    // Flags indicating whether the window or framebuffer size was updated.
+    // On desktop platforms, callback order is: framebufferSize => windowSize.
+    // On WebAssembly, the order is reversed: windowSize => framebufferSize.
+    uint8_t _windowUpdateFlags{0};
 
     RenderScaleMode _renderScaleMode{};
 

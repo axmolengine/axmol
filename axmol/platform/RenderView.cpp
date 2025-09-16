@@ -485,6 +485,8 @@ float RenderView::getScaleY() const
 
 void RenderView::onRenderResized()
 {
+    AXLOGD("RenderView::onRenderResized");
+
     Director::getInstance()->resizeSwapchain(static_cast<uint32_t>(_renderSize.width),
                                              static_cast<uint32_t>(_renderSize.height));
 
