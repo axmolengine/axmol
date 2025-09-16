@@ -165,6 +165,16 @@ public:
                                       int& height,
                                       bool& hasPremultipliedAlpha);
 
+    /**
+     * @brief Returns the current display refresh rate in Hertz.
+     *
+     * This value reflects the screen's vertical refresh frequency,
+     * typically 60Hz, 90Hz, or 120Hz depending on the device.
+     * @return Refresh rate in Hz.
+     * @note UWP will always return 60Hz
+     */
+    static int getDisplayRefreshRate();
+
 private:
     AX_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);
 };

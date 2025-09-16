@@ -771,4 +771,11 @@ void Device::selectionChanged()
 #endif
 }
 
+int Device::getDisplayRefreshRate()
+{
+    UIScreen* mainScreen = [UIScreen mainScreen];
+    int hz               = static_cast<int>(mainScreen.maximumFramesPerSecond);
+    return hz;
+}
+
 }  // namespace ax

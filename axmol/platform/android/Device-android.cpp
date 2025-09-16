@@ -211,6 +211,12 @@ void Device::selectionChanged()
     JniHelper::callStaticVoidMethod(deviceHelperClassName, "selectionChanged");
 }
 
+int Device::getDisplayRefreshRate()
+{
+    int hz = static_cast<int>(JniHelper::callStaticFloatMethod(deviceHelperClassName, "getDisplayRefreshRate"));
+    return hz;
+}
+
 }  // namespace ax
 
 // this method is called by BitmapHelper

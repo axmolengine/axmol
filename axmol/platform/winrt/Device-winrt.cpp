@@ -574,6 +574,11 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
+int Device::getDisplayRefreshRate()
+{
+    return 60;
+}
+
 }  // namespace ax
 
 #endif  // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)

@@ -737,6 +737,23 @@ public class AxmolEngine {
         return Build.VERSION.SDK_INT;
     }
 
+    @SuppressWarnings("unused")
+    public static float getDisplayRefreshRate() {
+        try {
+            WindowManager wm = (WindowManager) sActivity.getApplication().getSystemService(Context.WINDOW_SERVICE);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                Display display = wm.getDefaultDisplay();
+                Display.Mode mode = display.getMode();
+                return mode.getRefreshRate();
+            } else {
+                Display display = wm.getDefaultDisplay();
+                return display.getRefreshRate();
+            }
+        } catch (Exception e) {
+            return 60.0f;
+        }
+    }
+
     public static void restartProcess() {
         ProcessPhoenix.triggerRebirth(sActivity);
     }

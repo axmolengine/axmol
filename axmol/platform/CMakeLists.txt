@@ -154,9 +154,11 @@ elseif(EMSCRIPTEN)
   endif()
 endif()
 
+# Add desktop-specific sources for platforms where GLFW is available
 if((WIN32 AND NOT WINRT) OR LINUX OR MACOSX OR WASM)
   list(APPEND _AX_PLATFORM_SPECIFIC_HEADER "platform/desktop/RenderViewImpl.h")
   list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/desktop/RenderViewImpl.cpp")
+  list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/desktop/Device-desktop.cpp")
 endif()
 
 set(_AX_PLATFORM_HEADER
