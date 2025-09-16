@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "axmol/base/EventListenerKeyboard.h"
 #include "axmol/platform/winrt/Application-winrt.h"
 #include "axmol/platform/winrt/WinRTUtils.h"
-#include "axmol/platform/Device.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventMouse.h"
 #include <future>
