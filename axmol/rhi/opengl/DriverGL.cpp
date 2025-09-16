@@ -118,7 +118,8 @@ DriverImpl::DriverImpl()
     {
 #if AX_GLES_PROFILE == 0
         auto msg = fmt::format(
-            "OpeGL 3.3+ is required. Current version:{} incompatible (update driver or make current context).", _version);
+            "OpeGL 3.3+ is required. Current version:{} incompatible (update driver or make current context).",
+            _version);
 #else
         auto msg = fmt::format(
             "OpeGL ES {}.{}+ is required. Current version:{} incompatible (update driver or make current context).",
