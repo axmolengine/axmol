@@ -229,7 +229,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 3.13.0
+- Version: 4.0.2
 - License: Apache-2.0
 
 ## stb (stb_image)
