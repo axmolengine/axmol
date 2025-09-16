@@ -241,6 +241,11 @@ protected:
     axstd::pod_vector<ID3D11ShaderResourceView*> _nullSRVs;
     UINT _textureBounds{0};
 
+    UINT _swapChainFlags{0};
+    UINT _syncInterval{1};
+    UINT _presentFlags{0};
+    BOOL _allowTearing{FALSE};
+
     RenderScaleMode _renderScaleMode{};
 };
 

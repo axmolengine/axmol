@@ -31,6 +31,7 @@
 #include "axmol/rhi/d3d/VertexLayoutD3D.h"
 #include <dxgi1_2.h>
 #include <dxgi1_3.h>
+#include <dxgi1_5.h>
 #include <VersionHelpers.h>
 #include "axmol/base/Logging.h"
 
@@ -196,7 +197,8 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
 {
     _driverImpl = driver;
 
-    _renderScaleMode = driver->getContextAttrs().renderScaleMode;
+    auto& contextAttrs = driver->getContextAttrs();
+    _renderScaleMode   = contextAttrs.renderScaleMode;
 
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
@@ -204,15 +206,31 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
     auto& factory = driver->getDXGIFactory();
     auto& adapter = driver->getDXGIAdapter();
 
-    // create swapchain
+    // Check allow tearing feature support and set swapchain flags
+    ComPtr<IDXGIFactory5> factory5;
+    if (SUCCEEDED(factory.As(&factory5)))
+        factory5->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &_allowTearing, sizeof(_allowTearing));
+    _swapChainFlags = _allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
+
+    // control vsync
+    if (contextAttrs.vsync)
+    {
+        _syncInterval = 1;
+        _presentFlags = 0;
+    }
+    else
+    {
+        _syncInterval = 0;
+        _presentFlags = DXGI_PRESENT_DO_NOT_WAIT;
+        if (_allowTearing)
+            _presentFlags |= DXGI_PRESENT_ALLOW_TEARING;
+    }
+
+    // Try create swapchain, we prefer DXGI 1.2 but support fallback to DXGI 1.1
     ComPtr<IDXGISwapChain> swapChain;
     ComPtr<IDXGIFactory2> factory2;
-
     HRESULT hr = factory->QueryInterface(IID_PPV_ARGS(&factory2));
-
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-    DXGI_SWAP_EFFECT swapEffect = DXGI_SWAP_EFFECT_DISCARD;  // Default is blt mode
-
     RECT clientRect;
     auto hwnd = (HWND)surfaceContext;
     GetClientRect(hwnd, &clientRect);
@@ -229,6 +247,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
         desc1.SampleDesc.Count      = 1;  // Flip not support MSAA
         desc1.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc1.BufferCount           = 2;
+        desc1.Flags                 = _swapChainFlags;
 
         // choolse swapchain by OS version
         if (_axmolIsWindows10BuildOrGreaterWin32(0))
@@ -268,6 +287,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
         scDesc.SampleDesc.Quality                 = 0;
         scDesc.Windowed                           = TRUE;
         scDesc.SwapEffect                         = DXGI_SWAP_EFFECT_DISCARD;
+        scDesc.Flags                              = _swapChainFlags;
 
         hr = factory->CreateSwapChain(device, &scDesc, &swapChain);
     }
@@ -330,9 +350,11 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
             desc1.SampleDesc.Count = 1;  // Flip not support MSAA
             desc1.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
             desc1.BufferCount      = 2;
-            desc1.SwapEffect       = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;  // UWP recommanded
-            desc1.Scaling          = DXGI_SCALING_STRETCH;
-            desc1.AlphaMode        = DXGI_ALPHA_MODE_IGNORE;
+
+            desc1.Scaling    = DXGI_SCALING_STRETCH;
+            desc1.AlphaMode  = DXGI_ALPHA_MODE_IGNORE;
+            desc1.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+            desc1.Flags      = _swapChainFlags;
 
             ComPtr<IDXGISwapChain1> swapChain1;
             hr = factory2->CreateSwapChainForComposition(device, &desc1, nullptr, &swapChain1);
@@ -405,15 +427,11 @@ bool CommandBufferImpl::resizeSwapchain(uint32_t width, uint32_t height)
     if (width == _screenWidth && height == _screenHeight)
         return true;
 
-    // 2) Resize swapchain buffers
-    UINT flags = 0;
-    // if (_allowTearing)
-    //     flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
-
+    // Resize swapchain buffers
     auto impl = static_cast<RenderTargetImpl*>(const_cast<RenderTarget*>(_screenRT));
     impl->invalidate();
 
-    HRESULT hr = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, flags);
+    HRESULT hr = _swapChain->ResizeBuffers(0, width, height, _AX_SWAPCHAIN_FORMAT, _swapChainFlags);
 
     UtilsD3D::updateDefaultRenderTargetAttachments(_driverImpl, _swapChain);
 
@@ -794,7 +812,7 @@ void CommandBufferImpl::prepareDrawing()
 
 void CommandBufferImpl::endFrame()
 {
-    HRESULT hr = _swapChain->Present(1, 0 /*DXGI_PRESENT_DO_NOT_WAIT*/);
+    HRESULT hr = _swapChain->Present(_syncInterval, _presentFlags);
 #ifdef NDEBUG
     (void)hr;
 #else
@@ -806,6 +824,9 @@ void CommandBufferImpl::endFrame()
             HRESULT reason = device->GetDeviceRemovedReason();
             AXLOGD("D3D11 Device remove reason: {}", reason);
         }
+        // else if (hr == DXGI_ERROR_WAS_STILL_DRAWING)
+        //{
+        // }
     }
 #endif
 }
