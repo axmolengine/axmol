@@ -183,7 +183,7 @@ bool MainScene::onMouseUp(Event* event)
 bool MainScene::onMouseMove(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
-    // AXLOGD("onMouseMove detected, X:{}  Y:{}", e->getCursorX(), e->getCursorY());
+    // AXLOGD("onMouseMove detected, X:{}  Y:{}", e->getLocation().x, e->getLocation().y);
     return true;
 }
 
