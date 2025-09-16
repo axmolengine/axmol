@@ -33,11 +33,10 @@ env:
 run-name: 'build@c++${{ inputs.cxxstd || 23 }}'
 
 jobs:
-  win32:
+  win32-ogl:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v5
-
     - name: Build
       shell: pwsh
       run: |
@@ -51,19 +50,29 @@ jobs:
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build'
     - uses: actions/upload-artifact@v4
       with:
-        name: windows_x64
+        name: windows_ogl_x64
         path: |
           build/bin/cpp-tests/**/*
-  win32-dll:
-        runs-on: windows-latest
-        steps:
-        - uses: actions/checkout@v5
-
-        - name: Build
-          shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a x64 -dll
-  winuwp:
-        # build uwp debug avoid github CI fail with memory issue
+  win32-d3d11:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v5
+    - name: Build
+      shell: pwsh
+      run: |
+        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d'
+    - name: Check prebuilt workflow
+      shell: pwsh
+      run: |
+        ./setup.ps1
+        axmol new HelloCpp
+        axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: windows_d3d11_x64
+        path: |
+          build/bin/cpp-tests/**/*
+  winuwp-ogl:
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v5
@@ -71,6 +80,14 @@ jobs:
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p winuwp -a x64 -O3
+  winuwp-d3d11:
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v5
+
+        - name: Build
+          shell: pwsh
+          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d'
   win32-clang:
         runs-on: windows-latest
         env:
@@ -82,6 +99,13 @@ jobs:
         - name: Build
           shell: pwsh
           run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -sdk $env:WINSDK_VER -O3
+  win32-dll:
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v5
+        - name: Build
+          shell: pwsh
+          run: .\tools\cmdline\axmol -p win32 -a x64 -dll
   linux:
     runs-on: ubuntu-latest
     steps:
