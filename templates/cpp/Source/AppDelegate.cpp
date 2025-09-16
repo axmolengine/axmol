@@ -53,7 +53,8 @@ void AppDelegate::initGfxContextAttrs()
     // powerPreference only affect when RHI backend is D3D
     GfxContextAttrs gfxContextAttrs = {.powerPreference = PowerPreference::HighPerformance};
 
-    // since axmol-2.2 vsync was enabled in engine by default
+    // V-Sync is enabled by default since axmol 2.2.
+    // Uncomment to disable V-Sync and unlock FPS.
     // gfxContextAttrs.vsync = false;
 
     // Enable high-DPI scaling support (non-Windows platforms only)

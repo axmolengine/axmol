@@ -56,6 +56,10 @@ void AppDelegate::initGfxContextAttrs()
     // powerPreference only affect when RHI backend is D3D
     GfxContextAttrs gfxContextAttrs = {.powerPreference = PowerPreference::HighPerformance};
 
+    // V-Sync is enabled by default since axmol 2.2.
+    // Uncomment to disable V-Sync and unlock FPS.
+    // gfxContextAttrs.vsync = false;
+
     // Enable high-DPI scaling support (non-win32 platforms only)
     // Note: on win32, cpp-tests keep the default render mode to ensure consistent performance benchmarks
 #if AX_TARGET_PLATFORM != AX_PLATFORM_WIN32
@@ -98,11 +102,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     const char* const autotest_capture = std::getenv("AXMOL_AUTOTEST_CAPTURE_DIR");
     director->setStatsDisplay(!autotest_capture || !autotest_capture[0]);
 
-#ifdef AX_PLATFORM_PC
-    director->setAnimationInterval(1.0f / glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate);
-#else
-    director->setAnimationInterval(1.0f / 60);
-#endif
+    director->setAnimationInterval(1.0f / Device::getDisplayRefreshRate());
 
     auto screenSize = renderView->getWindowSize();
 
