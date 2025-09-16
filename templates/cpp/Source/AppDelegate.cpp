@@ -26,7 +26,7 @@
 #include "AppDelegate.h"
 #include "MainScene.h"
 
-#define USE_VR_RENDERER 0
+#define USE_VR_RENDERER  0
 #define USE_AUDIO_ENGINE 1
 
 #if USE_AUDIO_ENGINE
