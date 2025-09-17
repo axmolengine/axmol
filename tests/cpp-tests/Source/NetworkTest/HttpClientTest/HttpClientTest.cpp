@@ -175,7 +175,7 @@ void HttpClientTest::onMenuPatchTestClicked(Object* sender)
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the body data
-        const char* bodyData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+        const char* bodyData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
         request->setRequestData(bodyData, strlen(bodyData));
         request->setTag("PATCH Binary test1");
         HttpClient::getInstance()->send(request);
@@ -193,7 +193,7 @@ void HttpClientTest::onMenuPatchTestClicked(Object* sender)
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
-        const char* bodyData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+        const char* bodyData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
         request->setRequestData(bodyData, strlen(bodyData));
         request->setTag("PATCH Binary test2");
         HttpClient::getInstance()->send(request);
@@ -215,7 +215,7 @@ void HttpClientTest::onMenuPostTestClicked(ax::Object* sender)
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
-        const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+        const char* postData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
         request->setRequestData(postData, strlen(postData));
         request->setTag("POST test1");
         HttpClient::getInstance()->send(request);
@@ -231,7 +231,7 @@ void HttpClientTest::onMenuPostTestClicked(ax::Object* sender)
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
-        const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+        const char* postData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
         request->setRequestData(postData, strlen(postData));
         request->setTag("POST test2");
         HttpClient::getInstance()->send(request);
@@ -270,7 +270,7 @@ void HttpClientTest::onMenuPutTestClicked(Object* sender)
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
-        const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+        const char* postData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
         request->setRequestData(postData, strlen(postData));
         request->setTag("PUT Binary test1");
         HttpClient::getInstance()->send(request);
@@ -288,7 +288,7 @@ void HttpClientTest::onMenuPutTestClicked(Object* sender)
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
-        const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+        const char* postData = "visitor=axmol&TestSuite=Extensions Test/NetworkTest";
         request->setRequestData(postData, strlen(postData));
         request->setTag("PUT Binary test2");
         HttpClient::getInstance()->send(request);
@@ -417,7 +417,7 @@ void HttpClientClearRequestsTest::onMenuCancelAllClicked(ax::Object* sender)
     {
         HttpRequest* request = new HttpRequest();
         std::stringstream url;
-        url << "https://cocos2d-x.org/images/logo.png?id=" << std::to_string(i);
+        url << "https://axmol.dev/assets/img/logo.png?id=" << std::to_string(i);
         request->setUrl(url.str());
         request->setRequestType(HttpRequest::Type::GET);
         request->setResponseCallback(AX_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
@@ -446,7 +446,7 @@ void HttpClientClearRequestsTest::onMenuCancelSomeClicked(ax::Object* sender)
     {
         HttpRequest* request = new HttpRequest();
         std::stringstream url;
-        url << "https://cocos2d-x.org/images/logo.png?id=" << std::to_string(i);
+        url << "https://axmol.dev/assets/img/logo.png?id=" << std::to_string(i);
         request->setUrl(url.str());
         request->setRequestType(HttpRequest::Type::GET);
         request->setResponseCallback(AX_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
