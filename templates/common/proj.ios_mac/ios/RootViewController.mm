@@ -79,19 +79,6 @@ customization that is not appropriate for viewDidLoad.
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-
-    auto renderView = ax::Director::getInstance()->getRenderView();
-
-    if (renderView)
-    {
-        EARenderView* eaView = (__bridge EARenderView*)renderView->getNativeDisplay();
-
-        if (eaView)
-        {
-            CGSize s = CGSizeMake([eaView getWidth], [eaView getHeight]);
-            ax::Application::getInstance()->applicationScreenSizeChanged((int)s.width, (int)s.height);
-        }
-    }
 }
 
 // fix not hide status on ios7
