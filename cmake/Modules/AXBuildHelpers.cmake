@@ -1,5 +1,4 @@
 include(CMakeParseArguments)
-
 find_program(PWSH_PROG NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
 if(NOT PWSH_PROG)
@@ -191,7 +190,7 @@ function(get_target_depends_ext_dlls ax_target all_depend_dlls_out)
   set(${all_depend_dlls_out} ${all_depend_ext_dlls} PARENT_SCOPE)
 endfunction()
 
-# sync the `ax_target` depended(prebuilt) dlls into TARGET_FILE_DIR
+# sync windows the `ax_target` depended(prebuilt) dlls into TARGET_FILE_DIR
 function(ax_sync_target_dlls ax_target)
   set(options LUA)
   cmake_parse_arguments(opt "${options}" "" "" ${ARGN})
@@ -208,52 +207,24 @@ function(ax_sync_target_dlls ax_target)
     list(REMOVE_DUPLICATES all_depend_dlls)
   endif()
 
-  foreach(cc_dll_file ${all_depend_dlls})
-    get_filename_component(cc_dll_name ${cc_dll_file} NAME)
-    add_custom_command(TARGET ${ax_target} POST_BUILD
-
-      # COMMAND ${CMAKE_COMMAND} -E echo "copy dll into target file dir: ${cc_dll_name} ..."
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${cc_dll_file} "$<TARGET_FILE_DIR:${ax_target}>/${cc_dll_name}"
-    )
-  endforeach()
-
-  # copy 3rdparty dlls to target bin dir
-  if(NOT CMAKE_GENERATOR MATCHES "Ninja")
-    set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
-  endif()
-
-  add_custom_command(TARGET ${ax_target} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:${ax_target}> $<TARGET_FILE_DIR:${ax_target}>
-    COMMAND_EXPAND_LISTS
-  )
-
-  # Copy windows angle binaries
-  if(WIN32 AND AX_GLES_PROFILE)
-    add_custom_command(TARGET ${ax_target} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+  # windows angle binaries
+  if(AX_GLES_PROFILE)
+    list(APPEND all_depend_dlls
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-      ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
-      $<TARGET_FILE_DIR:${ax_target}>
     )
+  endif()
+
+  if(AX_GLES_PROFILE OR AX_RENDER_API STREQUAL "d3d")
+    find_windows_sdk_bin(_winsdk_bin_dir ${ARCH_ALIAS})
+    list(APPEND all_depend_dlls "${_winsdk_bin_dir}/d3dcompiler_47.dll")
   endif()
 
   # Copy webview2 for ninja
   if(AX_ENABLE_MSEDGE_WEBVIEW2)
     if(CMAKE_GENERATOR MATCHES "Ninja")
-      add_custom_command(TARGET ${ax_target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
-        $<TARGET_FILE_DIR:${ax_target}>)
+      list(APPEND all_depend_dlls "${_NUGET_PACKAGE_DIR}/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll")
     endif()
-  endif()
-
-  # copy libvlc plugins dir for windows
-  if(AX_ENABLE_VLC_MEDIA)
-    add_custom_command(TARGET ${ax_target} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory ${_AX_ROOT}/cache/vlc/lib/vlc/plugins
-      $<TARGET_FILE_DIR:${ax_target}>/plugins
-    )
   endif()
 
   # if lua
@@ -263,11 +234,27 @@ function(ax_sync_target_dlls ax_target)
     endif()
 
     if(MSVC)
-      add_custom_command(TARGET ${ax_target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
-        $<TARGET_FILE_DIR:${ax_target}>)
+      list(APPEND all_depend_dlls "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll")
     endif()
+  endif()
+
+  if(all_depend_dlls)
+    add_custom_command(TARGET ${ax_target} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${all_depend_dlls} $<TARGET_FILE_DIR:${ax_target}>)
+  endif()
+
+  # copy target runtime dlls if exist
+  add_custom_command(TARGET ${ax_target} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:${ax_target}> $<TARGET_FILE_DIR:${ax_target}>
+    COMMAND_EXPAND_LISTS
+  )
+
+  # copy libvlc plugins dir for windows
+  if(AX_ENABLE_VLC_MEDIA)
+    add_custom_command(TARGET ${ax_target} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${_AX_ROOT}/cache/vlc/lib/vlc/plugins
+      $<TARGET_FILE_DIR:${ax_target}>/plugins
+    )
   endif()
 endfunction()
 
@@ -421,13 +408,16 @@ function(get_target_compiled_shaders output_list target)
   function(_collect_shaders_recursive tgt)
     get_property(_visited GLOBAL PROPERTY _visited_targets)
     list(FIND _visited "${tgt}" _found)
+
     if(NOT _found EQUAL -1)
       return()
     endif()
+
     list(APPEND _visited "${tgt}")
     set_property(GLOBAL PROPERTY _visited_targets "${_visited}")
 
     get_target_property(_shaders "${tgt}" AX_COMPILED_SHADERS)
+
     if(_shaders)
       get_property(_all GLOBAL PROPERTY _all_shaders)
       list(APPEND _all ${_shaders})
@@ -435,8 +425,10 @@ function(get_target_compiled_shaders output_list target)
     endif()
 
     get_property(_depends TARGET "${tgt}" PROPERTY SHADER_DEPENDS)
+
     foreach(dep IN LISTS _depends)
       get_target_property(_dep_shaders "${dep}" AX_COMPILED_SHADERS)
+
       if(_dep_shaders)
         get_property(_all GLOBAL PROPERTY _all_shaders)
         list(APPEND _all ${_dep_shaders})
@@ -445,6 +437,7 @@ function(get_target_compiled_shaders output_list target)
     endforeach()
 
     get_target_property(_linked_libs "${tgt}" LINK_LIBRARIES)
+
     if(_linked_libs)
       foreach(lib IN LISTS _linked_libs)
         if(TARGET "${lib}")
@@ -568,6 +561,7 @@ function(ax_setup_app_config app_name)
   set(app_shaders_dir "${_APP_SOURCE_DIR}/Source/shaders")
 
   ax_find_shaders(${app_shaders_dir} app_shaders RECURSE)
+
   if(app_shaders)
     list(LENGTH app_shaders app_shaders_count)
     message(STATUS "${app_shaders_count} shader sources found in ${app_shaders_dir}")
@@ -687,6 +681,7 @@ macro(ax_setup_winrt_sources)
       set(ssl_dll_suffix "-${ARCH_ALIAS}")
     endif()
 
+    find_windows_sdk_bin(_winsdk_bin_dir ${ARCH_ALIAS})
     set(prebuilt_dlls
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll
@@ -694,7 +689,8 @@ macro(ax_setup_winrt_sources)
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
-      ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll)
+      "${_winsdk_bin_dir}/d3dcompiler_47.dll"
+    )
   endif()
 
   ax_mark_multi_resources(prebuilt_dlls RES_TO "." FILES ${prebuilt_dlls})

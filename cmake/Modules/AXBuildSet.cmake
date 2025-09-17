@@ -44,6 +44,8 @@ endif()
 
 include(AXSLCC)
 
+include(FindWindowsSDK)
+
 # include helper functions
 include(AXBuildHelpers)
 
