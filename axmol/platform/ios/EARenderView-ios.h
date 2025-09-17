@@ -1,19 +1,8 @@
 /*
 
-===== IMPORTANT =====
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
-This is sample code demonstrating API, technology or techniques in development.
-Although this sample code has been reviewed for technical accuracy, it is not
-final. Apple is supplying this information to help you plan for the adoption of
-the technologies and programming interfaces described herein. This information
-is subject to change, and software implemented based on this sample code should
-be tested with final operating system software and final documentation. Newer
-versions of this sample code may be provided with future seeds of the API or
-technology. For information about updates to this and other developer
-documentation, view the New & Updated sidebars in subsequent documentation
-seeds.
-
-=====================
+ https://axmol.dev/
 
 File: EARenderView.h
 Abstract: Convenience class that wraps the CAEAGLLayer from CoreAnimation into a
