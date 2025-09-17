@@ -6,7 +6,7 @@ on:
     inputs:
       pr_id:
         # actions run ID
-        description: 'Please input release version, example: 2426'
+        description: 'Please input PR number, example: 2426'
         # Default value if no value is explicitly provided
         default: ''
         # Input has to be provided for the workflow to run

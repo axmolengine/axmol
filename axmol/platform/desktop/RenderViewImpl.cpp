@@ -145,6 +145,15 @@ public:
             _view->onGLFWMouseMoveCallBack(window, x, y);
     }
 #if defined(__EMSCRIPTEN__)
+    static EM_BOOL onWebOrientationChangeCallback(int eventType,
+                                                  const EmscriptenOrientationChangeEvent* e,
+                                                  void* /*userData*/)
+    {
+        if (_view)
+            _view->onWebOrientationChangeCallback(eventType, e);
+        return EM_TRUE;
+    }
+
     static EM_BOOL onWebFullscreenCallback(int eventType, const EmscriptenFullscreenChangeEvent* e, void* /*userData*/)
     {
         if (_view)
@@ -646,6 +655,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #if defined(__EMSCRIPTEN__)
     s_fullscreenState = std::make_unique<WebFullscreenState>();
     // clang-format off
+    emscripten_set_orientationchange_callback(this, EM_TRUE, GLFWEventHandler::onWebOrientationChangeCallback);
     emscripten_set_fullscreenchange_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, this, EM_TRUE, GLFWEventHandler::onWebFullscreenCallback);
 
     _isTouchDevice = !!EM_ASM_INT(return (('ontouchstart' in window) ||
@@ -1241,7 +1251,22 @@ void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, doubl
 }
 
 #if defined(__EMSCRIPTEN__)
-void RenderViewImpl::onWebFullscreenCallback(int eventType, const EmscriptenFullscreenChangeEvent* e)
+void RenderViewImpl::onWebOrientationChangeCallback(int /*eventType*/, const EmscriptenOrientationChangeEvent* e)
+{
+    AXLOGD("onWebOrientationChangeCallback: orientationIndex:{}, orientationAngle:{}", e->orientationIndex,
+           e->orientationAngle);
+
+    if (s_fullscreenState->isFullscreen)
+    {
+        int screenWidth = 0, screenHeight = 0;
+        emscripten_get_screen_size(&screenWidth, &screenHeight);
+        AXLOGD("Screen size after orientation change: ({}, {})", screenWidth, screenHeight);
+        glfwSetWindowSize(_mainWindow, screenWidth, screenHeight);
+    }
+    // else: browser handling canvas size
+}
+
+void RenderViewImpl::onWebFullscreenCallback(int /*eventType*/, const EmscriptenFullscreenChangeEvent* e)
 {
     if (e->isFullscreen == s_fullscreenState->isFullscreen)
         return;
@@ -1381,6 +1406,8 @@ void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*sc
             director->resume();
             director->getScheduler()->schedule([director](float) { director->pause(); }, director, 0, 0, 0, false,
                                                "step");
+            break;
+        default:
             break;
         }
     }

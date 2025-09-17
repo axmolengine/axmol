@@ -36,6 +36,7 @@ THE SOFTWARE.
 struct EmscriptenMouseEvent;
 struct EmscriptenTouchEvent;
 struct EmscriptenFullscreenChangeEvent;
+struct EmscriptenOrientationChangeEvent;
 #endif
 
 namespace ax
@@ -144,6 +145,7 @@ protected:
     void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify);
     void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y);
 #if defined(__EMSCRIPTEN__)
+    void onWebOrientationChangeCallback(int eventType, const EmscriptenOrientationChangeEvent* e);
     void onWebFullscreenCallback(int eventType, const EmscriptenFullscreenChangeEvent* e);
     void onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent);
     void onWebClickCallback();
