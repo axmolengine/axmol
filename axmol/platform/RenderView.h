@@ -264,7 +264,8 @@ public:
      * ratio, two areas of your game view will be cut. [3] SHOW_ALL  Full screen with black border: if the design
      * resolution ratio of width to height is different from the screen resolution ratio, two black borders will be
      * shown.
-     * @remark You shoud only set once
+     * @remark For applications with a static design resolution, this method should typically be called only once during
+     * initialization.
      */
     virtual void setDesignResolutionSize(float width, float height, ResolutionPolicy resolutionPolicy);
 
@@ -540,6 +541,8 @@ protected:
     // On desktop platforms, callback order is: framebufferSize => windowSize.
     // On WebAssembly, the order is reversed: windowSize => framebufferSize.
     uint8_t _surfaceUpdateFlags{0};
+
+    bool _isResolutionUpdateLocked{false};
 
 #ifdef AX_ENABLE_VR
     std::unique_ptr<IVRRenderer> _vrRenderer{nullptr};

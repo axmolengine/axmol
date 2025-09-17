@@ -175,7 +175,8 @@ void RenderView::setDesignResolutionSize(float width, float height, ResolutionPo
     _designResolutionSize.set(width, height);
     _resolutionPolicy = resolutionPolicy;
 
-    updateDesignResolution();
+    if (!_isResolutionUpdateLocked)
+        updateDesignResolution();
 }
 
 const Vec2& RenderView::getDesignResolutionSize() const
@@ -188,18 +189,29 @@ void RenderView::updateRenderSurface(float width, float height, uint8_t updateFl
     if (width == 0 || height == 0)
         return;
 
+    Vec2 value{width, height};
+
     if (updateFlag & SurfaceUpdateFlag::WindowSizeChanged)
-        _windowSize.set(width, height);
+        _windowSize = value;
 
     if (updateFlag & SurfaceUpdateFlag::RenderSizeChanged)
     {
-        _renderSize.set(width, height);
+        _isResolutionUpdateLocked = true;
+
+        _renderSize = value;
 
         // If designResolutionSize hasn't been set, default to renderSize
         if (_designResolutionSize.equals(Vec2::ZERO))
-            _designResolutionSize.set(width, height);
+            _designResolutionSize = value;
 
+        // Notify the application that the screen size has changed.
+        // This gives the user a chance to re-layout scene content or reset designResolutionSize if needed.
+        ax::Application::getInstance()->applicationScreenSizeChanged(width, height);
+
+        // then we update resolution and viewport
         updateDesignResolution();
+
+        _isResolutionUpdateLocked = false;
     }
 
     // check does all updateed
@@ -520,7 +532,6 @@ void RenderView::onSurfaceResized()
     if (_vrRenderer) [[unlikely]]
         _vrRenderer->onRenderViewResized(this);
 #endif
-    ax::Application::getInstance()->applicationScreenSizeChanged(screenWidth, screenHeight);
 }
 
 void RenderView::renderScene(Scene* scene, Renderer* renderer)
