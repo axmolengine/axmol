@@ -1074,7 +1074,6 @@ void RenderViewImpl::updateScaledWindowSize(int w, int h, uint8_t updateFlag)
     Vec2 scaledSize{static_cast<float>(std::round(scaledWidth)), static_cast<float>(std::round(scaledHeight))};
     if (!scaledSize.equals(_windowSize))
         updateRenderSurface(scaledSize.width, scaledSize.height, updateFlag);
-    
 }
 
 void RenderViewImpl::applyWindowSize()
