@@ -1253,8 +1253,8 @@ void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, doubl
 #if defined(__EMSCRIPTEN__)
 void RenderViewImpl::onWebOrientationChangeCallback(int /*eventType*/, const EmscriptenOrientationChangeEvent* e)
 {
-    AXLOGID("onWebOrientationChangeCallback: orientationIndex:{}, orientationAngle:{}", e->orientationIndex,
-            e->orientationAngle);
+    AXLOGD("onWebOrientationChangeCallback: orientationIndex:{}, orientationAngle:{}", e->orientationIndex,
+           e->orientationAngle);
 
     if (s_fullscreenState->isFullscreen)
     {
