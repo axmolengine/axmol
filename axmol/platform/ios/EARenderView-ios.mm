@@ -291,7 +291,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 - (void)layoutSubviews
 {
-    if (!ax::Director::getInstance()->isValid())
+    auto director = ax::Director::getInstance();
+    if (!director->isValid())
         return;
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
@@ -301,18 +302,15 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #else
     [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     size_ = [renderer_ backingSize];
-    ax::Size size;
-    size.width  = size_.width;
-    size.height = size_.height;
 #endif
 
-    // TODO: resizeSwapchain?
+    auto renderView = director->getRenderView();
+    if (renderView)
+        renderView->updateRenderSurface(size_.width, size_.height, ax::RenderView::AllUpdates);
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
-    {
-        ax::Director::getInstance()->drawScene();
-    }
+        director->drawScene();
 }
 
 - (void)swapBuffers
