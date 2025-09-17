@@ -183,20 +183,45 @@ const Vec2& RenderView::getDesignResolutionSize() const
     return _designResolutionSize;
 }
 
-void RenderView::setRenderSize(float width, float height)
+void RenderView::updateRenderSurface(float width, float height, uint8_t updateFlag)
 {
-    _renderSize.set(width, height);
+    if (width == 0 || height == 0)
+        return;
 
-    if (_windowSize.equals(Vec2::ZERO))
-        _windowSize = _renderSize;
+    if (updateFlag & SurfaceUpdateFlag::WindowSizeChanged)
+        _windowSize.set(width, height);
 
-    // Github issue #16003 and #16485
-    // only update the designResolution if it wasn't previously set
-    if (_designResolutionSize.equals(Vec2::ZERO))
-        _designResolutionSize = _renderSize;
+    if (updateFlag & SurfaceUpdateFlag::RenderSizeChanged)
+    {
+        _renderSize.set(width, height);
 
-    if (!_renderSize.equals(Vec2::ZERO))
+        // If designResolutionSize hasn't been set, default to renderSize
+        if (_designResolutionSize.equals(Vec2::ZERO))
+            _designResolutionSize.set(width, height);
+
         updateDesignResolution();
+    }
+
+    // check does all updateed
+    maybeDispatchResizeEvent(updateFlag);
+}
+
+void RenderView::maybeDispatchResizeEvent(uint8_t updateFlag)
+{
+    const bool silentUpdate = (updateFlag & SurfaceUpdateFlag::SilentUpdate) != 0;
+    updateFlag &= ~SurfaceUpdateFlag::SilentUpdate;  // Remove temporary flag
+
+    _surfaceUpdateFlags |= updateFlag;
+
+    constexpr uint8_t requiredFlags = SurfaceUpdateFlag::WindowSizeChanged | SurfaceUpdateFlag::RenderSizeChanged;
+
+    const bool readyToDispatch = (_surfaceUpdateFlags == requiredFlags);
+
+    if (readyToDispatch && !silentUpdate)
+    {
+        _surfaceUpdateFlags = 0;
+        onSurfaceResized();
+    }
 }
 
 Rect RenderView::getVisibleRect() const
@@ -483,17 +508,19 @@ float RenderView::getScaleY() const
     return _viewScale.y;
 }
 
-void RenderView::onRenderResized()
+void RenderView::onSurfaceResized()
 {
-    AXLOGD("RenderView::onRenderResized");
+    AXLOGD("RenderView::onSurfaceResized");
 
-    Director::getInstance()->resizeSwapchain(static_cast<uint32_t>(_renderSize.width),
-                                             static_cast<uint32_t>(_renderSize.height));
+    int screenWidth  = static_cast<uint32_t>(_renderSize.width);
+    int screenHeight = static_cast<uint32_t>(_renderSize.height);
+    Director::getInstance()->resizeSwapchain(screenWidth, screenHeight);
 
 #ifdef AX_ENABLE_VR
     if (_vrRenderer) [[unlikely]]
         _vrRenderer->onRenderViewResized(this);
 #endif
+    ax::Application::getInstance()->applicationScreenSizeChanged(screenWidth, screenHeight);
 }
 
 void RenderView::renderScene(Scene* scene, Renderer* renderer)

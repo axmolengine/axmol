@@ -147,7 +147,9 @@ JNIEXPORT jintArray JNICALL Java_dev_axmol_lib_AxmolActivity_getGLContextAttrs(J
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
 {
-    ax::Application::getInstance()->applicationScreenSizeChanged(w, h);
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    if (renderView)
+        renderView->updateRenderSurface(w, h, ax::RenderView::AllUpdates);
 }
 }
 #undef LOGD

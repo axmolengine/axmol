@@ -89,13 +89,6 @@ public:
      */
     bool openURL(std::string_view url) override;
 
-    /**
-    @brief  This function will be called when the application screen size is changed.
-    @param new width
-    @param new height
-    */
-    virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
-
 protected:
     static Application* sm_pSharedApplication;
 };

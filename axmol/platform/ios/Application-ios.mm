@@ -129,6 +129,4 @@ bool Application::openURL(std::string_view url)
     [application openURL:nsUrl options:@{} completionHandler:nil];
 }
 
-void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
-
 }  // namespace ax

@@ -138,6 +138,8 @@ public:
      * @lua NA
      */
     virtual bool openURL(std::string_view url) = 0;
+
+    virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
 };
 
 using ApplicationProtocol = ApplicationBase;

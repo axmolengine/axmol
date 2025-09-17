@@ -110,8 +110,6 @@ bool Application::openURL(std::string_view url)
     return JniHelper::callStaticBooleanMethod(applicationHelperClassName, "openURL", url);
 }
 
-void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
-
 }  // namespace ax
 
 #undef LOGD
