@@ -90,7 +90,7 @@ public:
         addTest("Light", []() { return new LightTests(); });
         addTest("Menu", []() { return new MenuTests(); });
         addTest("MotionStreak", []() { return new MotionStreakTests(); });
-        addTest("Node", []() { return new CocosNodeTests(); });
+        addTest("Node", []() { return new NodeTests(); });
         addTest("Parallax", []() { return new ParallaxTests(); });
         addTest("Particles", []() { return new ParticleTests(); });
         addTest("Particle3D (PU)", []() { return new Particle3DTests(); });

@@ -348,7 +348,7 @@ void ActionRotationalSkewVSStandardSkew::onEnter()
     box->setPosition(s.width / 2, s.height - 100 - box->getContentSize().height / 2);
     this->addChild(box);
 
-    auto label = Label::createWithTTF("Standard cocos2d Skew", "fonts/Marker Felt.ttf", 16.0f);
+    auto label = Label::createWithTTF("Standard axmol Skew", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 2, s.height - 100 + label->getContentSize().height);
     this->addChild(label);
 

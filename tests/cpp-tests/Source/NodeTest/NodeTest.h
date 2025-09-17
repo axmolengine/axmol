@@ -30,21 +30,21 @@
 ////----#include "axmol.h"
 #include "../BaseTest.h"
 
-DEFINE_TEST_SUITE(CocosNodeTests);
+DEFINE_TEST_SUITE(NodeTests);
 
-class TestCocosNodeDemo : public TestCase
+class TestNodeDemo : public TestCase
 {
 public:
     virtual std::string title() const override;
 
 protected:
-    TestCocosNodeDemo();
-    virtual ~TestCocosNodeDemo();
+    TestNodeDemo();
+    virtual ~TestNodeDemo();
 
     ax::Director::Projection _preProjection;
 };
 
-class NodeTest2 : public TestCocosNodeDemo
+class NodeTest2 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeTest2);
@@ -53,7 +53,7 @@ public:
     virtual std::string subtitle() const override;
 };
 
-class NodeTest4 : public TestCocosNodeDemo
+class NodeTest4 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeTest4);
@@ -66,7 +66,7 @@ protected:
     NodeTest4();
 };
 
-class NodeTest5 : public TestCocosNodeDemo
+class NodeTest5 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeTest5);
@@ -78,7 +78,7 @@ protected:
     NodeTest5();
 };
 
-class NodeTest6 : public TestCocosNodeDemo
+class NodeTest6 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeTest6);
@@ -89,7 +89,7 @@ protected:
     NodeTest6();
 };
 
-class StressTest1 : public TestCocosNodeDemo
+class StressTest1 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(StressTest1);
@@ -101,7 +101,7 @@ protected:
     StressTest1();
 };
 
-class StressTest2 : public TestCocosNodeDemo
+class StressTest2 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(StressTest2);
@@ -112,7 +112,7 @@ protected:
     StressTest2();
 };
 
-class SchedulerTest1 : public TestCocosNodeDemo
+class SchedulerTest1 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(SchedulerTest1);
@@ -123,7 +123,7 @@ protected:
     SchedulerTest1();
 };
 
-class SchedulerCallbackTest : public TestCocosNodeDemo
+class SchedulerCallbackTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(SchedulerCallbackTest);
@@ -135,7 +135,7 @@ protected:
     SchedulerCallbackTest();
 };
 
-class NodeToWorld : public TestCocosNodeDemo
+class NodeToWorld : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeToWorld);
@@ -145,7 +145,7 @@ protected:
     NodeToWorld();
 };
 
-class NodeToWorld3D : public TestCocosNodeDemo
+class NodeToWorld3D : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeToWorld3D);
@@ -155,7 +155,7 @@ protected:
     NodeToWorld3D();
 };
 
-class CameraOrbitTest : public TestCocosNodeDemo
+class CameraOrbitTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(CameraOrbitTest);
@@ -167,7 +167,7 @@ protected:
     CameraOrbitTest();
 };
 
-class CameraZoomTest : public TestCocosNodeDemo
+class CameraZoomTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(CameraZoomTest);
@@ -182,7 +182,7 @@ protected:
     float _z;
 };
 
-class CameraCenterTest : public TestCocosNodeDemo
+class CameraCenterTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(CameraCenterTest);
@@ -196,7 +196,7 @@ protected:
     CameraCenterTest();
 };
 
-class CameraTest1 : public TestCocosNodeDemo
+class CameraTest1 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(CameraTest1);
@@ -212,7 +212,7 @@ protected:
     ax::Sprite* _sprite2;
 };
 
-class CameraTest2 : public TestCocosNodeDemo
+class CameraTest2 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(CameraTest2);
@@ -228,7 +228,7 @@ protected:
     ax::Sprite* _sprite2;
 };
 
-class ConvertToNode : public TestCocosNodeDemo
+class ConvertToNode : public TestNodeDemo
 {
 public:
     CREATE_FUNC(ConvertToNode);
@@ -240,7 +240,7 @@ protected:
     ConvertToNode();
 };
 
-class NodeOpaqueTest : public TestCocosNodeDemo
+class NodeOpaqueTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeOpaqueTest);
@@ -251,7 +251,7 @@ protected:
     NodeOpaqueTest();
 };
 
-class NodeNonOpaqueTest : public TestCocosNodeDemo
+class NodeNonOpaqueTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeNonOpaqueTest);
@@ -262,7 +262,7 @@ protected:
     NodeNonOpaqueTest();
 };
 
-class NodeGlobalZValueTest : public TestCocosNodeDemo
+class NodeGlobalZValueTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeGlobalZValueTest);
@@ -276,7 +276,7 @@ protected:
     ax::Sprite* _sprite;
 };
 
-class NodeNormalizedPositionTest1 : public TestCocosNodeDemo
+class NodeNormalizedPositionTest1 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeNormalizedPositionTest1);
@@ -287,7 +287,7 @@ protected:
     NodeNormalizedPositionTest1();
 };
 
-class NodeNormalizedPositionTest2 : public TestCocosNodeDemo
+class NodeNormalizedPositionTest2 : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeNormalizedPositionTest2);
@@ -302,7 +302,7 @@ protected:
     float _accum;
 };
 
-class NodeNormalizedPositionBugTest : public TestCocosNodeDemo
+class NodeNormalizedPositionBugTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeNormalizedPositionBugTest);
@@ -317,7 +317,7 @@ protected:
     ax::Sprite* sprite;
 };
 
-class NodeNameTest : public TestCocosNodeDemo
+class NodeNameTest : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeNameTest);
@@ -330,7 +330,7 @@ public:
     void test(float dt);
 };
 
-class Issue16100Test : public TestCocosNodeDemo
+class Issue16100Test : public TestNodeDemo
 {
 public:
     CREATE_FUNC(Issue16100Test);
@@ -341,7 +341,7 @@ public:
     virtual void onExit() override;
 };
 
-class Issue16735Test : public TestCocosNodeDemo
+class Issue16735Test : public TestNodeDemo
 {
 public:
     CREATE_FUNC(Issue16735Test);
@@ -352,7 +352,7 @@ public:
     virtual void onExit() override;
 };
 
-class NodeWorldSpace : public TestCocosNodeDemo
+class NodeWorldSpace : public TestNodeDemo
 {
 public:
     CREATE_FUNC(NodeWorldSpace);

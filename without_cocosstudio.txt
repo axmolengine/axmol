@@ -1,0 +1,243 @@
+	axmol\audio\AudioCache.cpp:402:            AXLOGV("invokingLoadCallbacks perform in cocos thread, AudioCache ({}) was destroyed!", fmt::ptr(this));
+extensions\assets-manager\src\assets-manager\AssetsManager.cpp:52:#define TEMP_PACKAGE_FILE_NAME    "cocos2dx-update-temp-package.zip"
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:180:    tolua_function(tolua_S, "create", tolua_Cocos2d_LuaNode_create00);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:286:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_MenuItemImage_create'.\n", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:327:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_MenuItemImage_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:368:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_MenuItemImage_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:425:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_MenuItemImage_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:483:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Menu_create'.\n", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:630:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_MenuItemToggle_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:651:        tolua_error(tolua_S, "invalid 'cobj' in function 'tolua_cocos2d_MenuItem_registerScriptTapHandler'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:676:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_MenuItem_registerScriptTapHandler'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:700:        tolua_error(tolua_S, "invalid 'cobj' in function 'tolua_cocos2d_MenuItem_unregisterScriptTapHandler'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:719:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_MenuItem_unregisterScriptTapHandler'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:743:        tolua_error(tolua_S, "invalid 'self' in function 'tolua_cocos2d_Scheduler_scheduleScriptFunc'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:772:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Scheduler_scheduleScriptFunc'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:796:        tolua_error(tolua_S, "invalid 'self' in function 'tolua_cocos2d_Scheduler_unscheduleScriptEntry'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:822:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Scheduler_unscheduleScriptEntry'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:847:        tolua_error(tolua_S, "invalid 'cobj' in function 'tolua_cocos2d_RenderTexture_newImage'", nullptr);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:859:            tolua_error(tolua_S, "invalid arguments in function 'tolua_cocos2d_RenderTexture_newImage'", nullptr);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:889:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_RenderTexture_newImage'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:950:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Sequence_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1044:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_CallFunc_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1067:        tolua_error(tolua_S, "invalid 'self' in function 'tolua_cocos2d_Node_registerScriptHandler'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1093:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Node_registerScriptHandler'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1116:        tolua_error(tolua_S, "invalid 'self' in function 'tolua_cocos2d_Node_unregisterScriptHandler'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1135:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Node_unregisterScriptHandler'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1158:        tolua_error(tolua_S, "invalid 'self' in function 'tolua_Cocos2d_Node_scheduleUpdateWithPriorityLua'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1187:    tolua_error(tolua_S, "#ferror in function 'tolua_Cocos2d_Node_scheduleUpdateWithPriorityLua'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1210:        tolua_error(tolua_S, "invalid 'self' in function 'tolua_cocos2d_Node_unscheduleUpdate'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1229:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Node_unscheduleUpdate'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1374:        tolua_error(tolua_S, "invalid 'self' in function 'tolua_cocos2d_Node_getPosition'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1404:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Node_getPosition'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1797:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Spawn_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1872:    tolua_error(tolua_S, "#ferror in function 'lua_cocos2d_CardinalSplineBy_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:1938:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_CatmullRomBy_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:2004:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_CatmullRomTo_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:2065:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_BezierBy_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:2126:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_BezierTo_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:2149:        tolua_error(tolua_S, "invalid 'self' in function 'tolua_cocos2d_DrawNode_drawPolygon'\n", NULL);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:2217:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_DrawNode_drawPolygon'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:3815:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_LuaEventListenerCustom_create'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:3826:        tolua_function(tolua_S, "create", tolua_cocos2d_LuaEventListenerCustom_create);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6451:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_captureScreen'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6481:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_captureScreen'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6517:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_findChildren'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6541:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_findChild'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6561:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_gettime'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6581:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getTimeInMilliseconds'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6605:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getFileMD5Hash'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6628:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getStringMD5Hash'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6655:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_base64Encode'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6681:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_base64Decode'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6702:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_getCascadeBoundingBox'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6717:    tolua_function(tolua_S, "captureNode", tolua_cocos2d_utils_captureNode);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6718:    tolua_function(tolua_S, "captureScreen", tolua_cocos2d_utils_captureScreen);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6719:    tolua_function(tolua_S, "findChildren", tolua_cocos2d_utils_findChildren);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6720:    tolua_function(tolua_S, "findChild", tolua_cocos2d_utils_findChild);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6721:    tolua_function(tolua_S, "gettime", tolua_cocos2d_utils_gettime);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6722:    tolua_function(tolua_S, "getTimeInMilliseconds", tolua_cocos2d_utils_getTimeInMilliseconds);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6723:    tolua_function(tolua_S, "getStringMD5Hash", tolua_cocos2d_utils_getStringMD5Hash);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6724:    tolua_function(tolua_S, "getFileMD5Hash", tolua_cocos2d_utils_getFileMD5Hash);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6725:    tolua_function(tolua_S, "base64Encode", tolua_cocos2d_utils_base64Encode);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6726:    tolua_function(tolua_S, "base64Decode", tolua_cocos2d_utils_base64Decode);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:6727:    tolua_function(tolua_S, "getCascadeBoundingBox", tolua_cocos2d_utils_getCascadeBoundingBox);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7199:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Mat4_translate'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7236:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Mat4_createRotationZ'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7271:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Mat4_setIdentity'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7328:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Mat4_createTranslation'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7389:    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_Mat4_createRotation'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7418:    tolua_function(tolua_S, "mat4_getInversed", tolua_cocos2d_Mat4_getInversed);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7419:    tolua_function(tolua_S, "mat4_transformVector", tolua_cocos2d_Mat4_transformVector);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7420:    tolua_function(tolua_S, "mat4_decompose", tolua_cocos2d_Mat4_decompose);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7421:    tolua_function(tolua_S, "mat4_multiply", tolua_cocos2d_Mat4_multiply);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7422:    tolua_function(tolua_S, "mat4_translate", tolua_cocos2d_Mat4_translate);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7423:    tolua_function(tolua_S, "mat4_createRotationZ", tolua_cocos2d_Mat4_createRotationZ);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7424:    tolua_function(tolua_S, "mat4_setIdentity", tolua_cocos2d_Mat4_setIdentity);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7425:    tolua_function(tolua_S, "mat4_createTranslation", tolua_cocos2d_Mat4_createTranslation);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7426:    tolua_function(tolua_S, "mat4_createRotation", tolua_cocos2d_Mat4_createRotation);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7427:    tolua_function(tolua_S, "vec3_cross", tolua_cocos2d_Vec3_cross);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7428:    tolua_function(tolua_S, "vec2_new", tolua_cocos2d_Vec2_new);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7429:    tolua_function(tolua_S, "vec3_new", tolua_cocos2d_Vec3_new);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7430:    tolua_function(tolua_S, "vec4_new", tolua_cocos2d_Vec4_new);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7511:            ok &= luaval_to_vec2(L, 1, &arg, "tolua_cocos2d_bytearray_template");
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7529:    tolua_error(L, "#ferror in function 'tolua_cocos2d_bytearray_template'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7552:            ok &= luaval_to_vec3(L, 1, &arg, "tolua_cocos2d_bytearray_template");
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7570:    tolua_error(L, "#ferror in function 'tolua_cocos2d_bytearray_template'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7593:            ok &= luaval_to_vec4(L, 1, &arg, "tolua_cocos2d_bytearray_template");
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7611:    tolua_error(L, "#ferror in function 'tolua_cocos2d_bytearray_template'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7634:            ok &= luaval_to_mat4(L, 1, &arg, "tolua_cocos2d_bytearray_template");
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7652:    tolua_error(L, "#ferror in function 'tolua_cocos2d_bytearray_template'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7675:            ok &= luaval_to_int(L, 1, &arg, "tolua_cocos2d_bytearray_template");
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7693:    tolua_error(L, "#ferror in function 'tolua_cocos2d_bytearray_template'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7716:            ok &= luaval_to_float(L, 1, &arg, "tolua_cocos2d_bytearray_template");
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7734:    tolua_error(L, "#ferror in function 'tolua_cocos2d_bytearray_template'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7764:                luaval_to_int(L, -1, &e, "tolua_cocos2d_bytearray_elev");
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7781:    tolua_error(L, "#ferror in function 'tolua_cocos2d_bytearray_elev'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7811:                luaval_to_float(L, -1, &e, "tolua_cocos2d_bytearray_elev");
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7828:    tolua_error(L, "#ferror in function 'tolua_cocos2d_bytearray_elev'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7842:    tolua_function(tolua_S, "from_vec2", tolua_cocos2d_bytearray_vec2);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7843:    tolua_function(tolua_S, "from_vec3", tolua_cocos2d_bytearray_vec3);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7844:    tolua_function(tolua_S, "from_vec4", tolua_cocos2d_bytearray_vec4);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7845:    tolua_function(tolua_S, "from_mat4", tolua_cocos2d_bytearray_mat4);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7846:    tolua_function(tolua_S, "from_int", tolua_cocos2d_bytearray_int);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7847:    tolua_function(tolua_S, "from_float", tolua_cocos2d_bytearray_float);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7848:    tolua_function(tolua_S, "from_intv", tolua_cocos2d_bytearray_intv);
+extensions\scripting\lua-bindings\manual\base\axlua_base_manual.cpp:7849:    tolua_function(tolua_S, "from_floatv", tolua_cocos2d_bytearray_floatv);
+extensions\scripting\lua-bindings\manual\base\LuaScriptHandlerMgr.cpp:280:                "invalid 'scriptHanlderMgr' in function 'tolua_Cocos2d_ScriptHandlerMgr_registerScriptHandler00'\n",
+extensions\scripting\lua-bindings\manual\base\LuaScriptHandlerMgr.cpp:315:                "invalid 'scriptHanlderMgr' in function 'tolua_Cocos2d_ScriptHandlerMgr_unregisterScriptHandler00'\n",
+extensions\scripting\lua-bindings\manual\base\LuaScriptHandlerMgr.cpp:348:                "invalid 'scriptHanlderMgr' in function 'tolua_Cocos2d_ScriptHandlerMgr_removeObjectAllHandlers00'\n",
+extensions\scripting\lua-bindings\manual\base\LuaScriptHandlerMgr.cpp:371:    tolua_function(tolua_S, "getInstance", tolua_Cocos2d_ScriptHandlerMgr_getInstance00);
+extensions\scripting\lua-bindings\manual\base\LuaScriptHandlerMgr.cpp:372:    tolua_function(tolua_S, "registerScriptHandler", tolua_Cocos2d_ScriptHandlerMgr_registerScriptHandler00);
+extensions\scripting\lua-bindings\manual\base\LuaScriptHandlerMgr.cpp:373:    tolua_function(tolua_S, "unregisterScriptHandler", tolua_Cocos2d_ScriptHandlerMgr_unregisterScriptHandler00);
+extensions\scripting\lua-bindings\manual\base\LuaScriptHandlerMgr.cpp:374:    tolua_function(tolua_S, "removeObjectAllHandlers", tolua_Cocos2d_ScriptHandlerMgr_removeObjectAllHandlers00);
+extensions\scripting\lua-bindings\manual\fairygui\axlua_fairygui_manual.cpp:173:        object_to_luaval<cocos2d::Object>(tolua_S, /*"cc."*/ "ax.Object", (cocos2d::Object*)ret);
+extensions\scripting\lua-bindings\manual\fairygui\axlua_fairygui_manual.cpp:672:        object_to_luaval<cocos2d::Object>(tolua_S, /*"cc."*/ "ax.Object", (cocos2d::Object*)ret);
+extensions\scripting\lua-bindings\manual\spine\axlua_spine_manual.cpp:579:        tolua_function(L, "registerSpineEventHandler", tolua_Cocos2d_CCSkeletonAnimation_registerSpineEventHandler00);
+extensions\scripting\lua-bindings\manual\ui\axlua_ui_manual.cpp:947:        tolua_error(L, "invalid 'self' in function 'tolua_cocos2d_EditBox_registerScriptEditBoxHandler'\n", NULL);
+extensions\scripting\lua-bindings\manual\ui\axlua_ui_manual.cpp:973:    tolua_error(L, "#ferror in function 'tolua_cocos2d_EditBox_registerScriptEditBoxHandler'.", &tolua_err);
+extensions\scripting\lua-bindings\manual\ui\axlua_ui_manual.cpp:998:        tolua_error(L, "invalid 'self' in function 'tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler'\n", NULL);
+extensions\scripting\lua-bindings\manual\ui\axlua_ui_manual.cpp:1017:    tolua_error(L, "#ferror in function 'tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler'.", &tolua_err);
+tests\cpp-tests\Source\ActionsTest\ActionsTest.cpp:351:    auto label = Label::createWithTTF("Standard cocos2d Skew", "fonts/Marker Felt.ttf", 16.0f);
+tests\cpp-tests\Source\ActionsTest\ActionsTest.cpp:2134:    ImageView* imageViewResize = ImageView::create("cocosui/buttonHighlighted.png");
+tests\cpp-tests\Source\ActionsTest\ActionsTest.cpp:2149:    ImageView* imageViewScale = ImageView::create("cocosui/buttonHighlighted.png");
+tests\cpp-tests\Source\AudioEngineTest\AudioEngineTest.cpp:174:            ret->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\AudioEngineTest\AudioEngineTest.cpp:175:            ret->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\AudioEngineTest\AudioEngineTest.cpp:176:            ret->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\Camera3DTest\Camera3DTest.cpp:1525:        slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\Camera3DTest\Camera3DTest.cpp:1526:        slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\Camera3DTest\Camera3DTest.cpp:1527:        slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\controller.cpp:93:        addTest("Node", []() { return new CocosNodeTests(); });
+tests\cpp-tests\Source\DrawNodeTest\DrawNodeTest.cpp:1554:        slider[i]->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\DrawNodeTest\DrawNodeTest.cpp:1555:        slider[i]->loadSlidBallTextures("ccs-res/cocosui/sliderballnormal.png", "ccs-res/cocosui/sliderballpressed.png",
+tests\cpp-tests\Source\DrawNodeTest\DrawNodeTest.cpp:1557:        slider[i]->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\DrawNodeTest\DrawNodeTest.cpp:3223:            ui::RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1485:    slider2->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1486:    slider2->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1487:    slider2->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1519:        RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1577:    CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1578:                                          "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1579:                                          "cocosui/check_box_active_disable.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1666:    slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1667:    slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1668:    slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1677:    slider2->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1678:    slider2->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:1679:    slider2->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2083:    slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2084:    slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2085:    slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2127:    slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2128:    slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2129:    slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2590:    CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2591:                                          "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2592:                                          "cocosui/check_box_active_disable.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2619:    CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2620:                                          "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2621:                                          "cocosui/check_box_active_disable.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2709:    slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2710:    slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2711:    slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2725:    slider2->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2726:    slider2->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:2727:    slider2->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3025:    CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3026:                                          "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3027:                                          "cocosui/check_box_active_disable.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3091:    CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3092:                                          "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3093:                                          "cocosui/check_box_active_disable.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3133:        RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3240:    CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3241:                                          "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3242:                                          "cocosui/check_box_active_disable.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3285:        RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:3841:        RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
+tests\cpp-tests\Source\LabelTest\LabelTest.cpp:4033:    auto bg = Sprite::create("cocosui/Hello.png");
+tests\cpp-tests\Source\LayerTest\LayerTest.cpp:868:    slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\LayerTest\LayerTest.cpp:869:    slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\LayerTest\LayerTest.cpp:870:    slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\MaterialSystemTest\MaterialSystemTest.cpp:408:    slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\MaterialSystemTest\MaterialSystemTest.cpp:409:    slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\MaterialSystemTest\MaterialSystemTest.cpp:410:    slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\NetworkTest\DownloaderTest\DownloaderTest.cpp:92:        auto btn = ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+tests\cpp-tests\Source\NetworkTest\DownloaderTest\DownloaderTest.cpp:101:        auto bar = ui::LoadingBar::create("ccs-res/cocosui/sliderProgress.png");
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:178:        const char* bodyData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:196:        const char* bodyData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:218:        const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:234:        const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:253:    char postData[22] = "binary=hello\0\0cocos2d";  // including \0, the strings after \0 should not be cut in response
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:273:        const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:291:        const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:420:        url << "https://cocos2d-x.org/images/logo.png?id=" << std::to_string(i);
+tests\cpp-tests\Source\NetworkTest\HttpClientTest\HttpClientTest.cpp:449:        url << "https://cocos2d-x.org/images/logo.png?id=" << std::to_string(i);
+tests\cpp-tests\Source\NodeTest\NodeTest.cpp:406:    return "cocosnode scheduler test #1";
+tests\cpp-tests\Source\RendererTest\RendererTest.cpp:482:                                                  "Images/cocos-html5.png",
+tests\cpp-tests\Source\RendererTest\RendererTest.cpp:489:                                                  "Images/cocos2dbanner.png"};
+tests\cpp-tests\Source\RotateWorldTest\RotateWorldTest.cpp:53:    auto label = Label::createWithSystemFont("a Cocos2D-4.0 fork", "Tahoma", 52);
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:498:    auto audioCheckbox = ui::CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:499:                                              "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:500:                                              "cocosui/check_box_active_disable.png");
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:526:        auto cb = ui::CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:527:                                       "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:528:                                       "cocosui/check_box_active_disable.png");
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:632:    ui::Button* zoomIn = ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:642:    ui::Button* zoomOut = ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:653:    ui::Slider* slider = ui::Slider::create("cocosui/slidbar.png", "cocosui/sliderballnormal.png");
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:689:    ui::Button* capture = ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:715:    ui::Button* remove = ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+tests\cpp-tests\Source\Scene3DTest\Scene3DTest.cpp:858:        auto btn = ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+tests\cpp-tests\Source\ShaderTest\ShaderTest.cpp:709:    slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\ShaderTest\ShaderTest.cpp:710:    slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\ShaderTest\ShaderTest.cpp:711:    slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\SpritePolygonTest\SpritePolygonTest.cpp:305:    slider->loadBarTexture("cocosui/sliderTrack.png");
+tests\cpp-tests\Source\SpritePolygonTest\SpritePolygonTest.cpp:306:    slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\SpritePolygonTest\SpritePolygonTest.cpp:307:    slider->loadProgressBarTexture("cocosui/sliderProgress.png");
+tests\cpp-tests\Source\SpriteTest\SpriteTest.cpp:5409:        auto s1 = Sprite::create("ccs-res/cocosui/button.png");
+tests\cpp-tests\Source\SpriteTest\SpriteTest.cpp:5418:        auto s2 = Sprite::create("ccs-res/cocosui/button.png");
+tests\cpp-tests\Source\SpriteTest\SpriteTest.cpp:5427:        auto s3 = Sprite::create("ccs-res/cocosui/button.png");
+tests\cpp-tests\Source\Texture2dTest\Texture2dTest.cpp:1771:    // AXASSERT( [NSThread currentThread] == [director runningThread], @"FAIL. Callback should be on cocos2d thread");
+tests\cpp-tests\Source\VibrateTest\VibrateTest.cpp:156:            ret->loadBarTexture("ccs-res/cocosui/sliderTrack.png");
+tests\cpp-tests\Source\VibrateTest\VibrateTest.cpp:157:            ret->loadSlidBallTextures("ccs-res/cocosui/sliderThumb.png", "ccs-res/cocosui/sliderThumb.png", "");
+tests\cpp-tests\Source\VibrateTest\VibrateTest.cpp:158:            ret->loadProgressBarTexture("ccs-res/cocosui/sliderProgress.png");
+tests\lua-tests\Source\lua_test_bindings.cpp:357:        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_getBlendFunc'", nullptr);
+tests\lua-tests\Source\lua_test_bindings.cpp:376:    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_getBlendFunc'.", &tolua_err);
+tests\lua-tests\Source\lua_test_bindings.cpp:402:        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'", nullptr);
+tests\lua-tests\Source\lua_test_bindings.cpp:415:            tolua_error(L, "invalid arguments in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'", nullptr);
+tests\lua-tests\Source\lua_test_bindings.cpp:427:    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'.", &tolua_err);
+tests\lua-tests\Source\lua_test_bindings.cpp:453:        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_drawLine'", nullptr);
+tests\lua-tests\Source\lua_test_bindings.cpp:480:    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_drawLine'.", &tolua_err);
+tests\lua-tests\Source\lua_test_bindings.cpp:506:        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_clear'", nullptr);
+tests\lua-tests\Source\lua_test_bindings.cpp:524:    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_clear'.", &tolua_err);
+tests\lua-tests\Source\lua_test_bindings.cpp:550:        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_drawCube'", nullptr);
+tests\lua-tests\Source\lua_test_bindings.cpp:602:    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_drawCube'.", &tolua_err);
+tests\lua-tests\Source\lua_test_bindings.cpp:636:    tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_create'.", &tolua_err);
+tests\lua-tests\Source\lua_test_bindings.cpp:647:    tolua_function(L, "getBlendFunc", lua_cocos2dx_DrawNode3D_getBlendFunc);
+tests\lua-tests\Source\lua_test_bindings.cpp:648:    tolua_function(L, "drawLine", lua_cocos2dx_DrawNode3D_drawLine);
+tests\lua-tests\Source\lua_test_bindings.cpp:649:    tolua_function(L, "clear", lua_cocos2dx_DrawNode3D_clear);
+tests\lua-tests\Source\lua_test_bindings.cpp:650:    tolua_function(L, "drawCube", lua_cocos2dx_DrawNode3D_drawCube);
+tests\lua-tests\Source\lua_test_bindings.cpp:651:    tolua_function(L, "create", lua_cocos2dx_DrawNode3D_create);
+tests\lua-tests\Source\lua_test_bindings.cpp:689:    tolua_error(L, "#ferror in function 'lua_cocos2dx_ValueTypeJudgeInTable_create'.", &tolua_err);
+tests\lua-tests\Source\lua_test_bindings.cpp:700:    tolua_function(L, "create", lua_cocos2dx_ValueTypeJudgeInTable_create);

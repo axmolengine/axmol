@@ -399,7 +399,7 @@ void AudioCache::invokingLoadCallbacks()
     scheduler->runOnAxmolThread([&, isDestroyed]() {
         if (*isDestroyed)
         {
-            AXLOGV("invokingLoadCallbacks perform in cocos thread, AudioCache ({}) was destroyed!", fmt::ptr(this));
+            AXLOGV("invokingLoadCallbacks perform in axmol thread, AudioCache ({}) was destroyed!", fmt::ptr(this));
             return;
         }
 

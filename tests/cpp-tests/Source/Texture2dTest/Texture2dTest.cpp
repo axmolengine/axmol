@@ -1768,7 +1768,7 @@ void TextureAsync::imageLoaded(Texture2D* texture)
 {
     auto director = Director::getInstance();
 
-    // AXASSERT( [NSThread currentThread] == [director runningThread], @"FAIL. Callback should be on cocos2d thread");
+    // AXASSERT( [NSThread currentThread] == [director runningThread], @"FAIL. Callback should be on axmol thread");
 
     // IMPORTANT: The order on the callback is not guaranteed. Don't depend on the callback
 
