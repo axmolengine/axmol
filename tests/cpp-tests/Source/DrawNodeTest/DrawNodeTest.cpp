@@ -1836,8 +1836,6 @@ string DrawNodeMorphTest_Polygon::subtitle() const
 
 DrawNodePictureTest::DrawNodePictureTest()
 {
-    drawNode->runAction(RepeatForever::create(Sequence::create(FadeIn::create(1.2f), FadeOut::create(1.2f), nullptr)));
-
     scheduleUpdate();
 }
 
@@ -1877,7 +1875,8 @@ void DrawNodePictureTest::update(float dt)
     int sph_la    = 0;
     do
     {
-        Color color    = Color(sph_xx[sph_la + 1], sph_yy[sph_la + 1], sph_xx[sph_la + 2], sph_yy[sph_la + 2] * 255);
+        Color color =
+            Color(sph_xx[sph_la + 1] / 256, sph_yy[sph_la + 1] / 256, sph_xx[sph_la + 2] / 256, sph_yy[sph_la + 2]);
         Vec2* vertices = new Vec2[(int)(sph_cmb - 3)];
         for (int n = 3; n < sph_cmb; n++)
         {
@@ -1889,8 +1888,7 @@ void DrawNodePictureTest::update(float dt)
         drawNode->setRotation(180);
         drawNode->properties.setCenter(vertices[0]);
         drawNode->properties.setRotation(rot);
-        drawNode->drawPolygon(vertices, sph_cmb - 3, color, /*rot*/ 0.f,
-                              Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1), true);
+        drawNode->drawPolygon(vertices, sph_cmb - 3, color, 0.f, Color(), true);
 
         sph_la += sph_cmb;
         sph_cmb = sph_yy[sph_la];
@@ -1904,7 +1902,7 @@ string DrawNodePictureTest::title() const
 
 string DrawNodePictureTest::subtitle() const
 {
-    return "Actions Test";
+    return "Properties (Rotation) Test";
 }
 
 // orginal source from here: https://forum.lazarus.freepascal.org/index.php/topic,71851.0.html
@@ -3591,7 +3589,7 @@ void DrawNodeSpLinesTest::update(float dt)
     for (int i = 0; i < 10; i++)
     {
         array->addControlPoint(Vec2((i % 2) ? 20 : screen.width - 20, 50 + i * 20));
-        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color::BLUE);
+        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color::BLUE, DrawNode::PointType::Circle);
     }
     drawNode->drawCardinalSpline(array, 0.1, 20, Color::ORANGE);
 
@@ -3640,6 +3638,22 @@ DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
         pts2->insertControlPoint(Vec2(0, 0), i);
     }
 
+    auto closeLabel = Label::createWithTTF("Closed Spline GREEN", "fonts/Marker Felt.ttf", 14);
+    closeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    closeLabel->setPosition(Vec2(10, 200));
+    closeLabel->setTextColor(Color32::GREEN);
+    this->addChild(closeLabel, 1);
+    auto openLabel = Label::createWithTTF("Open Spline RED", "fonts/Marker Felt.ttf", 14);
+    openLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    openLabel->setPosition(Vec2(10, 220));
+    openLabel->setTextColor(Color32::RED);
+    this->addChild(openLabel, 1);
+    auto cpLabel = Label::createWithTTF("Control Point YELLOW", "fonts/Marker Felt.ttf", 14);
+    cpLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    cpLabel->setPosition(Vec2(10, 240));
+    cpLabel->setTextColor(Color32::YELLOW);
+    this->addChild(cpLabel, 1);
+
     DrawNodeBaseTest::generateDataPoints();
     scheduleUpdate();
 }
@@ -3683,13 +3697,12 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
     int boxSize = 3;
     for (auto&& p : points)
     {
-
-        drawNodeCP->drawRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color::BLUE);
+        drawNodeCP->drawSolidRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color::YELLOW);
         array->addControlPoint(Vec2(p.x, p.y));
     }
 
-    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::GREEN, 1.0f, true);
-    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::RED, 1.0f, false);
+    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::GREEN, 4.0f, true);
+    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color::RED, 4.0f, false);
 }
 
 #if defined(AX_PLATFORM_PC)
