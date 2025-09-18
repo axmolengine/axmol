@@ -25,8 +25,8 @@
 #include "AudioEffectsExtensionOpenAL.h"
 
 #include "AudioMacros.h"
-#include "alconfig.h"
 
+#if ALC_EXT_EFX == 1
 namespace ax
 {
 EffectsExtensionOpenAL* EffectsExtensionOpenAL::getInstance()
@@ -128,3 +128,4 @@ void EffectsExtensionOpenAL::deleteFilter(uint32_t filterId)
     alDeleteFilters(1, &filterId);
 }
 }
+#endif

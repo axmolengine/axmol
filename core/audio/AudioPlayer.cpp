@@ -144,6 +144,7 @@ void AudioPlayer::destroy()
         }
     } while (false);
 
+#if ALC_EXT_EFX == 1
     if (_reverbEffect != 0)
     {
         auto&& efx = EffectsExtensionOpenAL::getInstance();
@@ -158,6 +159,7 @@ void AudioPlayer::destroy()
         _reverbSlot = 0;
         _reverbEffect = 0;
     }
+#endif
 
     AXLOGV("{}", "Before alSourceStop");
     alSourceStop(_alSource);
@@ -578,6 +580,7 @@ bool AudioPlayer::isFinished() const
 
 void AudioPlayer::setReverbSettings(const EaxReverbSettings* reverbSettings)
 {
+#if ALC_EXT_EFX == 1
     auto&& efx = EffectsExtensionOpenAL::getInstance();
 
     if (!efx->isAvailable())
@@ -660,6 +663,7 @@ void AudioPlayer::setReverbSettings(const EaxReverbSettings* reverbSettings)
         _reverbEnabled = false;
         efx->bindSourceToAuxiliarySlot(_alSource, 0, 0, 0);
     }
+#endif
 }
 
 bool AudioPlayer::setLoop(bool loop)

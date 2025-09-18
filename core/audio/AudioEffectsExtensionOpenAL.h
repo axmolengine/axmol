@@ -22,9 +22,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include <cstdint>
 
-#include "alconstants.h"
+#include "alconfig.h"
+
+#if ALC_EXT_EFX == 1
+
+#   include <cstdint>
+#   include "alconstants.h"
 
 namespace ax
 {
@@ -59,3 +63,4 @@ private:
 };
 
 }
+#endif
