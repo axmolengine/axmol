@@ -144,22 +144,7 @@ void AudioPlayer::destroy()
         }
     } while (false);
 
-#if ALC_EXT_EFX == 1
-    if (_reverbEffect != 0)
-    {
-        auto&& efx = EffectsExtensionOpenAL::getInstance();
-
-        efx->bindSourceToAuxiliarySlot(_alSource, 0, 0, 0); // unset effect
-        CHECK_AL_ERROR_DEBUG();
-        alSourcei(_alSource, (int)Sourcei::EfxDirectFilter, 0); // unset filter
-        CHECK_AL_ERROR_DEBUG();
-
-        efx->deleteAuxiliaryEffectSlot(_reverbSlot);
-        efx->deleteEffect(_reverbEffect);
-        _reverbSlot = 0;
-        _reverbEffect = 0;
-    }
-#endif
+    clearEffects();
 
     AXLOGV("{}", "Before alSourceStop");
     alSourceStop(_alSource);
@@ -417,6 +402,29 @@ bool AudioPlayer::play3d()
     return ret;
 }
 
+void AudioPlayer::clearEffects()
+{
+#if ALC_EXT_EFX == 1
+    if (_reverbEffect == 0)
+        return;
+
+    auto&& efx = EffectsExtensionOpenAL::getInstance();
+
+    if (!efx->isAvailable())
+        return;
+
+    efx->bindSourceToAuxiliarySlot(_alSource, 0, 0, 0);
+    alSourcei(_alSource, (int)Sourcei::EfxDirectFilter, 0);  // unset filter
+    CHECK_AL_ERROR_DEBUG();
+
+    efx->deleteAuxiliaryEffectSlot(_reverbSlot);
+    _reverbSlot = 0;
+
+    efx->deleteEffect(_reverbEffect);
+    _reverbEffect = 0;
+#endif
+}
+
 // rotateBufferThread is used to rotate alBufferData for _alSource when playing big audio file
 void AudioPlayer::rotateBufferThread(int offsetFrame)
 {
@@ -593,8 +601,15 @@ void AudioPlayer::setReverbSettings(const EaxReverbSettings* reverbSettings)
         /* Clear error state. */
         alGetError();
 
-        efx->genAuxiliaryEffectSlots(1, _reverbSlot);
-        efx->genEffect(_reverbEffect);
+        if (_reverbSlot == 0)
+        {
+            efx->genAuxiliaryEffectSlots(1, _reverbSlot);
+        }
+
+        if (_reverbEffect == 0)
+        {
+            efx->genEffect(_reverbEffect);
+        }
 
         efx->setEffectParamInt(_reverbEffect, (int)Effecti::EffectType, (int)EffectType::EaxReverb);
         auto err = alGetError();
@@ -660,8 +675,7 @@ void AudioPlayer::setReverbSettings(const EaxReverbSettings* reverbSettings)
     else
     {
         _reverbSettings = {};
-        _reverbEnabled = false;
-        efx->bindSourceToAuxiliarySlot(_alSource, 0, 0, 0);
+        clearEffects();
     }
 #endif
 }

@@ -72,6 +72,7 @@ protected:
 #if defined(__APPLE__)
     void wakeupRotateThread();
 #endif
+    void clearEffects();
 
     AudioCache* _audioCache;
 
@@ -89,7 +90,6 @@ protected:
     bool _ready;
     ALuint _alSource;
 
-    bool _reverbEnabled{};
     EaxReverbSettings _reverbSettings;
 
     // play by circular buffer
