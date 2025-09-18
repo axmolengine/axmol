@@ -25130,6 +25130,62 @@ int lua_ax_base_RenderView_setInteractive(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_RenderView_updateRenderSurface(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::RenderView* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.RenderView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::RenderView*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_RenderView_updateRenderSurface'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3)
+    {
+        double arg0;
+        double arg1;
+        uint16_t arg2;
+
+        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.RenderView:updateRenderSurface");
+
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.RenderView:updateRenderSurface");
+
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.RenderView:updateRenderSurface");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_RenderView_updateRenderSurface'", nullptr);
+            return 0;
+        }
+        obj->updateRenderSurface(arg0, arg1, arg2);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderView:updateRenderSurface",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_RenderView_updateRenderSurface'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_RenderView_setGfxContextAttrs(lua_State* tolua_S)
 {
     int argc = 0;
@@ -25250,6 +25306,7 @@ int lua_register_ax_base_RenderView(lua_State* tolua_S)
         tolua_function(tolua_S,"getWindowPlatform",lua_ax_base_RenderView_getWindowPlatform);
         tolua_function(tolua_S,"renderScene",lua_ax_base_RenderView_renderScene);
         tolua_function(tolua_S,"setInteractive",lua_ax_base_RenderView_setInteractive);
+        tolua_function(tolua_S,"updateRenderSurface",lua_ax_base_RenderView_updateRenderSurface);
         tolua_function(tolua_S,"setGfxContextAttrs", lua_ax_base_RenderView_setGfxContextAttrs);
         tolua_function(tolua_S,"getGfxContextAttrs", lua_ax_base_RenderView_getGfxContextAttrs);
     tolua_endmodule(tolua_S);
