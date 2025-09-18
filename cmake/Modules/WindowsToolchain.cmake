@@ -1,9 +1,11 @@
 # WindowsToolchain.cmake not a general toolchain file, just include as early as possible
-cmake_minimum_required(VERSION 3.27...4.1)
+include_guard(GLOBAL)
 
 if(NOT WIN32)
   return()
 endif()
+
+cmake_minimum_required(VERSION 3.27...4.1)
 
 # Determine Compiler
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
