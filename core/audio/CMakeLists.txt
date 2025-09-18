@@ -1,6 +1,7 @@
 # common headers and sources
 set(_AX_AUDIO_HEADER
   audio/alconfig.h
+  audio/alconstants.h
   audio/AudioEngine.h
   audio/AudioMacros.h
   audio/AudioDecoderManager.h
@@ -10,6 +11,8 @@ set(_AX_AUDIO_HEADER
   audio/AudioPlayer.h
   audio/AudioCache.h
   audio/AudioEngineImpl.h
+  audio/AudioEffects.h
+  audio/AudioEffectsExtensionOpenAL.h
 )
 
 set(_AX_AUDIO_SRC
@@ -21,6 +24,7 @@ set(_AX_AUDIO_SRC
   audio/AudioPlayer.cpp
   audio/AudioCache.cpp
   audio/AudioEngineImpl.cpp
+  audio/AudioEffectsExtensionOpenAL.cpp
 )
 
 if(APPLE)

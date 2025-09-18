@@ -32,6 +32,7 @@
 #    include <unordered_map>
 #    include <queue>
 
+#    include "audio/AudioEffects.h"
 #    include "base/Object.h"
 #    include "audio/AudioMacros.h"
 #    include "audio/AudioCache.h"
@@ -69,6 +70,7 @@ public:
     void setSourcePosition(AUDIO_ID audioId, const ax::Vec3& position);
     void setListenerPosition(const ax::Vec3& position);
     ax::Vec3 getListenerPosition();
+    void setReverbSettings(AUDIO_ID audioId, const EaxReverbSettings* reverbSettings);
 
     void uncache(std::string_view filePath);
     void uncacheAll();

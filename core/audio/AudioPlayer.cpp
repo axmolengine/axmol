@@ -26,6 +26,8 @@
 
 #include "platform/PlatformConfig.h"
 #include "audio/AudioPlayer.h"
+
+#include "AudioEffectsExtensionOpenAL.h"
 #include "audio/AudioCache.h"
 #include "platform/FileUtils.h"
 #include "audio/AudioDecoder.h"
@@ -35,6 +37,9 @@
 
 namespace ax
 {
+
+using namespace al;
+using namespace al::efx;
 
 namespace
 {
@@ -138,6 +143,21 @@ void AudioPlayer::destroy()
             }
         }
     } while (false);
+
+    if (_reverbEffect != 0)
+    {
+        auto&& efx = EffectsExtensionOpenAL::getInstance();
+
+        efx->bindSourceToAuxiliarySlot(_alSource, 0, 0, 0); // unset effect
+        CHECK_AL_ERROR_DEBUG();
+        alSourcei(_alSource, (int)Sourcei::EfxDirectFilter, 0); // unset filter
+        CHECK_AL_ERROR_DEBUG();
+
+        efx->deleteAuxiliaryEffectSlot(_reverbSlot);
+        efx->deleteEffect(_reverbEffect);
+        _reverbSlot = 0;
+        _reverbEffect = 0;
+    }
 
     AXLOGV("{}", "Before alSourceStop");
     alSourceStop(_alSource);
@@ -553,6 +573,92 @@ bool AudioPlayer::isFinished() const
         ALint sourceState;
         alGetSourcei(_alSource, AL_SOURCE_STATE, &sourceState);
         return sourceState == AL_STOPPED;
+    }
+}
+
+void AudioPlayer::setReverbSettings(const EaxReverbSettings* reverbSettings)
+{
+    auto&& efx = EffectsExtensionOpenAL::getInstance();
+
+    if (!efx->isAvailable())
+        return;
+
+    if (reverbSettings)
+    {
+        _reverbSettings = *reverbSettings;
+
+        /* Clear error state. */
+        alGetError();
+
+        efx->genAuxiliaryEffectSlots(1, _reverbSlot);
+        efx->genEffect(_reverbEffect);
+
+        efx->setEffectParamInt(_reverbEffect, (int)Effecti::EffectType, (int)EffectType::EaxReverb);
+        auto err = alGetError();
+        if (AL_NO_ERROR == err)
+        {
+            // EAX Reverb
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::Density, _reverbSettings.Density);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::Diffusion, _reverbSettings.Diffusion);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::Gain, _reverbSettings.Gain);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::GainHF, _reverbSettings.GainHF);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::GainLF, _reverbSettings.GainLF);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::DecayTime, _reverbSettings.DecayTime);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::DecayHFRatio, _reverbSettings.DecayHFRatio);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::DecayLFRatio, _reverbSettings.DecayLFRatio);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::ReflectionsGain, _reverbSettings.ReflectionsGain);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::ReflectionsDelay,
+                               _reverbSettings.ReflectionsDelay);
+            efx->setEffectParamFloatArray(_reverbEffect, (int)EaxReverbParamIds::ReflectionsPan,
+                                    _reverbSettings.ReflectionsPan);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::LateReverbGain, _reverbSettings.LateReverbGain);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::LateReverbDelay, _reverbSettings.LateReverbDelay);
+            efx->setEffectParamFloatArray(_reverbEffect, (int)EaxReverbParamIds::LateReverbPan,
+                                    _reverbSettings.LateReverbPan);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::EchoTime, _reverbSettings.EchoTime);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::EchoDepth, _reverbSettings.EchoDepth);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::ModulationTime, _reverbSettings.ModulationTime);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::ModulationDepth, _reverbSettings.ModulationDepth);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::AirAbsorptionGainHF,
+                               _reverbSettings.AirAbsorptionGainHF);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::LFReference, _reverbSettings.LFReference);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::HFReference, _reverbSettings.HFReference);
+            efx->setEffectParamFloat(_reverbEffect, (int)EaxReverbParamIds::RoomRolloffFactor,
+                               _reverbSettings.RoomRolloffFactor);
+            efx->setEffectParamInt(_reverbEffect, (int)EaxReverbParamIds::DecayHFLimit, _reverbSettings.DecayHFLimit);
+        }
+        else
+        {
+            // Standad Reverb
+            efx->setEffectParamInt(_reverbEffect, (int)Effecti::EffectType, (int)EffectType::Reverb);
+
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::Density, _reverbSettings.Density);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::Diffusion, _reverbSettings.Diffusion);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::Gain, _reverbSettings.Gain);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::GainHF, _reverbSettings.GainHF);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::DecayTime, _reverbSettings.DecayTime);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::DecayHFRatio, _reverbSettings.DecayHFRatio);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::ReflectionsGain, _reverbSettings.ReflectionsGain);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::ReflectionsDelay,
+                               _reverbSettings.ReflectionsDelay);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::LateReverbGain, _reverbSettings.LateReverbGain);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::LateReverbDelay, _reverbSettings.LateReverbDelay);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::AirAbsorptionGainHF,
+                               _reverbSettings.AirAbsorptionGainHF);
+            efx->setEffectParamFloat(_reverbEffect, (int)ReverbParamIds::RoomRolloffFactor,
+                               _reverbSettings.RoomRolloffFactor);
+            efx->setEffectParamInt(_reverbEffect, (int)ReverbParamIds::DecayHFLimit, _reverbSettings.DecayHFLimit);
+        }
+        efx->auxiliaryEffectSlot(_reverbSlot, EffectSlotf::EffectSlotGain,/* _reverbSettings.EffectSlotGain*/ 1.0f);
+
+        efx->bindEffectToAuxiliarySlot(_reverbSlot, _reverbEffect);
+        efx->bindSourceToAuxiliarySlot(_alSource, _reverbSlot, 0, 0);
+    }
+    else
+    {
+        _reverbSettings = {};
+        _reverbEnabled = false;
+        efx->bindSourceToAuxiliarySlot(_alSource, 0, 0, 0);
     }
 }
 

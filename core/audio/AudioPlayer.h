@@ -34,6 +34,7 @@
 #include <thread>
 #include <atomic>
 
+#include "AudioEffects.h"
 #include "audio/AudioMacros.h"
 #include "platform/PlatformMacros.h"
 #include "audio/alconfig.h"
@@ -41,7 +42,6 @@
 
 namespace ax
 {
-
 class AudioCache;
 class AudioEngineImpl;
 
@@ -57,10 +57,12 @@ public:
 
     // queue buffer related stuff
     bool setTime(float time);
-    float getTime() { return _currTime; }
+    float getTime() const { return _currTime; }
     bool setLoop(bool loop);
 
     bool isFinished() const;
+
+    void setReverbSettings(const EaxReverbSettings* reverbSettings);
 
 protected:
     void setCache(AudioCache* cache);
@@ -87,6 +89,9 @@ protected:
     bool _ready;
     ALuint _alSource;
 
+    bool _reverbEnabled{};
+    EaxReverbSettings _reverbSettings;
+
     // play by circular buffer
     float _currTime;
     bool _streamingSource;
@@ -103,6 +108,9 @@ protected:
     std::mutex _play2dMutex;
 
     unsigned int _id;
+    uint32_t _reverbSlot{};
+    uint32_t _reverbEffect{};
+
     friend class AudioEngineImpl;
 };
 
