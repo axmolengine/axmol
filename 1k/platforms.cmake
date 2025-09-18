@@ -36,6 +36,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   else()
     # https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ARCHITECTURE_ID.html
     string(TOLOWER "${CMAKE_C_COMPILER_ARCHITECTURE_ID}" ARCH_ALIAS)
+    if(ARCH_ALIAS MATCHES "64")
+      set(WIN64 TRUE)
+    endif()
   endif()
 
   set(PLATFORM_NAME win32)
