@@ -5,15 +5,13 @@ param(
     $min_ver = '2.4' # The minimum version to build docs
 )
 
-$myRoot = $PSScriptRoot
-
 $ErrorActionPreference = 'Stop'
 
 $isWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
-$AX_ROOT = (Resolve-Path $myRoot/../..)
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../..)
 
 $git_prog = (Get-Command 'git' -ErrorAction SilentlyContinue).Source
 if (!$git_prog) {
@@ -121,7 +119,7 @@ function parse_current_rev() {
     return $axver
 }
 
-$site_src = (Resolve-Path "$myRoot/../../docs").Path
+$site_src = (Resolve-Path "$PSScriptRoot/../../docs").Path
 if (!$site_dist) {
     $site_dist = Join-Path $site_src 'dist'
 }

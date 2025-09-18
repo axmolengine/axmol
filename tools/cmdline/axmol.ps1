@@ -11,13 +11,11 @@ $Global:LASTEXITCODE = 0
 # pwsh function alias
 function println($message) { Write-Host "axmol: $message" }
 
-$myRoot = $PSScriptRoot
-
 # 0: windows, 1: linux, 2: macos
 # $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 # parse engine version
-$AX_ROOT = (Resolve-Path $myRoot/../..).Path
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
 $axver_file = (Resolve-Path $AX_ROOT/axmol/axmolver.h.in).Path
 $content = $(Get-Content -Path $axver_file)
 
@@ -244,7 +242,7 @@ function axmol_run() {
 
 $builtinPlugins = @{
     new    = @{
-        proc  = (Join-Path $myRoot 'axmol_new.ps1');
+        proc  = (Join-Path $PSScriptRoot 'axmol_new.ps1');
         usage = @"
 usage: axmol new -p dev.axmol.hellocpp -d path/to/project -l cpp --portrait <ProjectName>
 Creates a new project.
