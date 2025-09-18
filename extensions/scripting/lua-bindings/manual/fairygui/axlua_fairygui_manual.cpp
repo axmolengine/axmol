@@ -143,9 +143,9 @@ tolua_lerror:
 
 int lua_ax_fairygui_GObject_getData(lua_State* tolua_S)
 {
-    int argc                = 0;
+    int argc               = 0;
     fairygui::GObject* obj = nullptr;
-    bool ok                 = true;
+    bool ok                = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
@@ -600,9 +600,9 @@ tolua_lerror:
 
 int lua_ax_fairygui_EventContext_getDataValue(lua_State* tolua_S)
 {
-    int argc                     = 0;
+    int argc                    = 0;
     fairygui::EventContext* obj = nullptr;
-    bool ok                      = true;
+    bool ok                     = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
@@ -642,9 +642,9 @@ tolua_lerror:
 
 int lua_ax_fairygui_EventContext_getData(lua_State* tolua_S)
 {
-    int argc                     = 0;
+    int argc                    = 0;
     fairygui::EventContext* obj = nullptr;
-    bool ok                      = true;
+    bool ok                     = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
@@ -755,9 +755,9 @@ static void extendEventContext(lua_State* L)
 
 int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc                  = 0;
     fairygui::GMovieClip* obj = nullptr;
-    bool ok                    = true;
+    bool ok                   = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
@@ -897,9 +897,9 @@ static void extendGMovieClip(lua_State* L)
 
 int lua_ax_fairygui_GTweener_onUpdate(lua_State* tolua_S)
 {
-    int argc                 = 0;
+    int argc                = 0;
     fairygui::GTweener* obj = nullptr;
-    bool ok                  = true;
+    bool ok                 = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
@@ -946,9 +946,9 @@ tolua_lerror:
 
 int lua_ax_fairygui_GTweener_onStart(lua_State* tolua_S)
 {
-    int argc                 = 0;
+    int argc                = 0;
     fairygui::GTweener* obj = nullptr;
-    bool ok                  = true;
+    bool ok                 = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
@@ -995,9 +995,9 @@ tolua_lerror:
 
 int lua_ax_fairygui_GTweener_onComplete(lua_State* tolua_S)
 {
-    int argc                 = 0;
+    int argc                = 0;
     fairygui::GTweener* obj = nullptr;
-    bool ok                  = true;
+    bool ok                 = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
@@ -1040,9 +1040,9 @@ tolua_lerror:
 
 int lua_ax_fairygui_GTweener_onComplete1(lua_State* tolua_S)
 {
-    int argc                 = 0;
+    int argc                = 0;
     fairygui::GTweener* obj = nullptr;
-    bool ok                  = true;
+    bool ok                 = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif

@@ -46,9 +46,9 @@
 
 int axlua_physics_PhysicsBody_getJoints(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc             = 0;
     ax::PhysicsBody* obj = nullptr;
-    bool ok               = true;
+    bool ok              = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -112,7 +112,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsWorld_getScene(lua_State* tolua_S)
 {
-    int argc               = 0;
+    int argc              = 0;
     ax::PhysicsWorld* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -162,9 +162,9 @@ tolua_lerror:
 
 int axlua_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
 {
-    int argc               = 0;
+    int argc              = 0;
     ax::PhysicsWorld* obj = nullptr;
-    bool ok                = true;
+    bool ok               = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -227,9 +227,9 @@ tolua_lerror:
 }
 int axlua_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
 {
-    int argc               = 0;
+    int argc              = 0;
     ax::PhysicsWorld* obj = nullptr;
-    bool ok                = true;
+    bool ok               = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -291,9 +291,9 @@ tolua_lerror:
 
 int axlua_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
 {
-    int argc               = 0;
+    int argc              = 0;
     ax::PhysicsWorld* obj = nullptr;
-    bool ok                = true;
+    bool ok               = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -874,7 +874,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderBox_getPoints(lua_State* tolua_S)
 {
-    int argc                     = 0;
+    int argc                    = 0;
     ax::PhysicsColliderBox* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -917,7 +917,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
 {
-    int argc                         = 0;
+    int argc                        = 0;
     ax::PhysicsColliderPolygon* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -1118,7 +1118,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderEdgeBox_getPoints(lua_State* tolua_S)
 {
-    int argc                         = 0;
+    int argc                        = 0;
     ax::PhysicsColliderEdgeBox* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -1163,7 +1163,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
 {
-    int argc                             = 0;
+    int argc                            = 0;
     ax::PhysicsColliderEdgePolygon* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -1208,7 +1208,7 @@ tolua_lerror:
 
 int axlua_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
 {
-    int argc                           = 0;
+    int argc                          = 0;
     ax::PhysicsColliderEdgeChain* obj = nullptr;
 
 #    if _AX_DEBUG >= 1

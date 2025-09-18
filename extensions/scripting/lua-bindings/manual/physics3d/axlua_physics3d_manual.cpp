@@ -434,9 +434,9 @@ void extendPhysics3DComponent(lua_State* L)
 
 int axlua_physics3d_Physics3DWorld_rayCast(lua_State* L)
 {
-    int argc                 = 0;
+    int argc                = 0;
     ax::Physics3DWorld* obj = nullptr;
-    bool ok                  = true;
+    bool ok                 = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -731,7 +731,7 @@ void CollisionPoint_to_luaval(lua_State* L, const ax::Physics3DCollisionInfo::Co
 
 int axlua_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
 {
-    int argc                  = 0;
+    int argc                 = 0;
     ax::Physics3DObject* obj = nullptr;
 
 #    if _AX_DEBUG >= 1

@@ -32,7 +32,7 @@
 
 int axlua_3d_MeshRenderer_getAABB(lua_State* L)
 {
-    int argc               = 0;
+    int argc              = 0;
     ax::MeshRenderer* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -377,9 +377,9 @@ tolua_lerror:
 
 int axlua_3d_Terrain_getHeight(lua_State* L)
 {
-    int argc          = 0;
+    int argc         = 0;
     ax::Terrain* obj = nullptr;
-    bool ok           = true;
+    bool ok          = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -508,9 +508,9 @@ tolua_lerror:
 
 int axlua_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
 {
-    int argc          = 0;
+    int argc         = 0;
     ax::Terrain* obj = nullptr;
-    bool ok           = true;
+    bool ok          = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -658,9 +658,9 @@ static int register_all_ax_3d_manual(lua_State* L)
 
 int axlua_3d_AABB_reset(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -702,9 +702,9 @@ tolua_lerror:
 }
 int axlua_3d_AABB_set(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -751,9 +751,9 @@ tolua_lerror:
 }
 int axlua_3d_AABB_transform(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -797,9 +797,9 @@ tolua_lerror:
 }
 int axlua_3d_AABB_getCenter(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -841,9 +841,9 @@ tolua_lerror:
 }
 int axlua_3d_AABB_isEmpty(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -885,9 +885,9 @@ tolua_lerror:
 }
 int axlua_3d_AABB_getCorners(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -931,9 +931,9 @@ tolua_lerror:
 }
 int axlua_3d_AABB_updateMinMax(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -980,9 +980,9 @@ tolua_lerror:
 }
 int axlua_3d_AABB_containPoint(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1027,9 +1027,9 @@ tolua_lerror:
 }
 int axlua_3d_AABB_constructor(lua_State* L)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::AABB* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -1252,9 +1252,9 @@ int lua_register_axis_3d_AABB(lua_State* L)
 
 int axlua_3d_OBB_reset(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::OBB* obj = nullptr;
-    bool ok       = true;
+    bool ok      = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1296,9 +1296,9 @@ tolua_lerror:
 }
 int axlua_3d_OBB_set(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::OBB* obj = nullptr;
-    bool ok       = true;
+    bool ok      = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1354,9 +1354,9 @@ tolua_lerror:
 }
 int axlua_3d_OBB_transform(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::OBB* obj = nullptr;
-    bool ok       = true;
+    bool ok      = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1401,9 +1401,9 @@ tolua_lerror:
 
 int axlua_3d_OBB_containPoint(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::OBB* obj = nullptr;
-    bool ok       = true;
+    bool ok      = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1449,9 +1449,9 @@ tolua_lerror:
 
 int axlua_3d_OBB_constructor(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::OBB* obj = nullptr;
-    bool ok       = true;
+    bool ok      = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -1909,7 +1909,7 @@ tolua_lerror:
 
 int axlua_3d_OBB_getCorners(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::OBB* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -2022,9 +2022,9 @@ int lua_register_axis_3d_OBB(lua_State* L)
 
 int axlua_3d_Ray_set(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::Ray* obj = nullptr;
-    bool ok       = true;
+    bool ok      = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2071,9 +2071,9 @@ tolua_lerror:
 }
 int axlua_3d_Ray_transform(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::Ray* obj = nullptr;
-    bool ok       = true;
+    bool ok      = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2161,9 +2161,9 @@ tolua_lerror:
 
 int axlua_3d_Ray_constructor(lua_State* L)
 {
-    int argc      = 0;
+    int argc     = 0;
     ax::Ray* obj = nullptr;
-    bool ok       = true;
+    bool ok      = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif

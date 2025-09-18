@@ -637,7 +637,7 @@ static int axlua_MenuItem_registerScriptTapHandler(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
-    int argc       = 0;
+    int argc      = 0;
     MenuItem* obj = nullptr;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -683,7 +683,7 @@ static int axlua_MenuItem_unregisterScriptTapHandler(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
-    int argc       = 0;
+    int argc      = 0;
     MenuItem* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -826,9 +826,9 @@ tolua_lerror:
 
 static int axlua_RenderTexture_newImage(lua_State* tolua_S)
 {
-    int argc                = 0;
+    int argc               = 0;
     ax::RenderTexture* obj = nullptr;
-    bool ok                 = true;
+    bool ok                = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1233,9 +1233,9 @@ tolua_lerror:
 
 int axlua_Node_setContentSize(lua_State* tolua_S)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::Node* obj = NULL;
-    bool ok        = true;
+    bool ok       = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -1294,9 +1294,9 @@ tolua_lerror:
 
 int axlua_Node_setAnchorPoint(lua_State* tolua_S)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::Node* obj = NULL;
-    bool ok        = true;
+    bool ok       = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -1408,7 +1408,7 @@ tolua_lerror:
 
 static int axlua_Node_enumerateChildren(lua_State* tolua_S)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::Node* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -1469,9 +1469,9 @@ tolua_lerror:
 
 int axlua_Node_setAdditionalTransform(lua_State* tolua_S)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::Node* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -1537,9 +1537,9 @@ tolua_lerror:
 
 int axlua_Node_setRotationQuat(lua_State* tolua_S)
 {
-    int argc       = 0;
+    int argc      = 0;
     ax::Node* obj = nullptr;
-    bool ok        = true;
+    bool ok       = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -1590,9 +1590,9 @@ tolua_lerror:
 #    include "axmol/navmesh/NavMesh.h"
 int axlua_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
-    int argc        = 0;
+    int argc       = 0;
     ax::Scene* obj = nullptr;
-    bool ok         = true;
+    bool ok        = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1641,9 +1641,9 @@ tolua_lerror:
 }
 int axlua_Scene_setNavMesh(lua_State* tolua_S)
 {
-    int argc        = 0;
+    int argc       = 0;
     ax::Scene* obj = nullptr;
-    bool ok         = true;
+    bool ok        = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1692,9 +1692,9 @@ tolua_lerror:
 
 int axlua_Scene_getNavMesh(lua_State* tolua_S)
 {
-    int argc        = 0;
+    int argc       = 0;
     ax::Scene* obj = nullptr;
-    bool ok         = true;
+    bool ok        = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2872,9 +2872,9 @@ static int toaxlua_SpriteBatchNode_getDescendants(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
-    int argc                  = 0;
+    int argc                 = 0;
     ax::SpriteBatchNode* obj = nullptr;
-    bool ok                   = true;
+    bool ok                  = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2936,9 +2936,9 @@ tolua_lerror:
 #if defined(AX_ENABLE_PHYSICS)
 int axlua_Scene_getPhysicsWorld(lua_State* tolua_S)
 {
-    int argc        = 0;
+    int argc       = 0;
     ax::Scene* obj = nullptr;
-    bool ok         = true;
+    bool ok        = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2988,9 +2988,9 @@ tolua_lerror:
 #    include "axmol/physics3d/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
-    int argc        = 0;
+    int argc       = 0;
     ax::Scene* obj = nullptr;
-    bool ok         = true;
+    bool ok        = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3037,9 +3037,9 @@ tolua_lerror:
 
 int axlua_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
 {
-    int argc        = 0;
+    int argc       = 0;
     ax::Scene* obj = nullptr;
-    bool ok         = true;
+    bool ok        = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3431,9 +3431,9 @@ static void extendDrawNode(lua_State* tolua_S)
 
 int axlua_Sprite_initWithPolygon(lua_State* tolua_S)
 {
-    int argc         = 0;
+    int argc        = 0;
     ax::Sprite* obj = nullptr;
-    bool ok          = true;
+    bool ok         = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3482,9 +3482,9 @@ tolua_lerror:
 
 int axlua_Sprite_setPolygonInfo(lua_State* tolua_S)
 {
-    int argc         = 0;
+    int argc        = 0;
     ax::Sprite* obj = nullptr;
-    bool ok          = true;
+    bool ok         = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -4861,7 +4861,7 @@ static int toaxlua_ActionCamera_reverse(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
-    int argc               = 0;
+    int argc              = 0;
     ax::ActionCamera* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -4916,7 +4916,7 @@ static int toaxlua_GridAction_reverse(lua_State* tolua_S)
     if (NULL == tolua_S)
         return 0;
 
-    int argc             = 0;
+    int argc            = 0;
     ax::GridAction* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -5080,9 +5080,9 @@ static void extendLabel(lua_State* tolua_S)
 
 static int axlua_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc             = 0;
     ax::TMXTiledMap* obj = NULL;
-    bool ok               = true;
+    bool ok              = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -5207,9 +5207,9 @@ static void extendOrbitCamera(lua_State* tolua_S)
 
 int axlua_TMXLayer_getTileGIDAt(lua_State* tolua_S)
 {
-    int argc           = 0;
+    int argc          = 0;
     ax::TMXLayer* obj = nullptr;
-    bool ok            = true;
+    bool ok           = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5273,7 +5273,7 @@ tolua_lerror:
 
 int axlua_TMXLayer_setTiles(lua_State* tolua_S)
 {
-    int argc           = 0;
+    int argc          = 0;
     ax::TMXLayer* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -5347,9 +5347,9 @@ static void extendTMXLayer(lua_State* tolua_S)
 
 static int axlua_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
 {
-    int argc               = 0;
+    int argc              = 0;
     ax::FastTMXLayer* obj = nullptr;
-    bool ok                = true;
+    bool ok               = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5424,7 +5424,7 @@ static void extendFastTMXLayer(lua_State* tolua_S)
 
 int axlua_Application_isIOS64bit(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc             = 0;
     ax::Application* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -5475,7 +5475,7 @@ tolua_lerror:
 
 int axlua_Application_is64BitMobileDevice(lua_State* tolua_S)
 {
-    int argc              = 0;
+    int argc             = 0;
     ax::Application* obj = nullptr;
 
 #if _AX_DEBUG >= 1
@@ -5608,9 +5608,9 @@ static void extendTextureCache(lua_State* tolua_S)
 
 int axlua_RenderView_getAllTouches(lua_State* tolua_S)
 {
-    int argc             = 0;
+    int argc            = 0;
     ax::RenderView* obj = nullptr;
-    bool ok              = true;
+    bool ok             = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5683,9 +5683,9 @@ static void extendRenderView(lua_State* tolua_S)
 
 int axlua_Camera_unproject(lua_State* tolua_S)
 {
-    int argc         = 0;
+    int argc        = 0;
     ax::Camera* obj = nullptr;
-    bool ok          = true;
+    bool ok         = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6072,9 +6072,9 @@ static void extendPipelineDescriptor(lua_State* tolua_S)
 
 static int axlua_rhi_ProgramState_getUniformLocation(lua_State* tolua_S)
 {
-    int argc                    = 0;
+    int argc                   = 0;
     ax::rhi::ProgramState* obj = nullptr;
-    bool ok                     = true;
+    bool ok                    = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif

@@ -275,10 +275,9 @@ static int axlua_ScriptHandlerMgr_registerScriptHandler00(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
-            tolua_error(
-                tolua_S,
-                "invalid 'scriptHanlderMgr' in function 'axlua_ScriptHandlerMgr_registerScriptHandler00'\n",
-                NULL);
+            tolua_error(tolua_S,
+                        "invalid 'scriptHanlderMgr' in function 'axlua_ScriptHandlerMgr_registerScriptHandler00'\n",
+                        NULL);
             return 0;
         }
 #endif
@@ -310,10 +309,9 @@ static int axlua_ScriptHandlerMgr_unregisterScriptHandler00(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
-            tolua_error(
-                tolua_S,
-                "invalid 'scriptHanlderMgr' in function 'axlua_ScriptHandlerMgr_unregisterScriptHandler00'\n",
-                NULL);
+            tolua_error(tolua_S,
+                        "invalid 'scriptHanlderMgr' in function 'axlua_ScriptHandlerMgr_unregisterScriptHandler00'\n",
+                        NULL);
             return 0;
         }
 #endif
@@ -343,10 +341,9 @@ static int axlua_ScriptHandlerMgr_removeObjectAllHandlers00(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
-            tolua_error(
-                tolua_S,
-                "invalid 'scriptHanlderMgr' in function 'axlua_ScriptHandlerMgr_removeObjectAllHandlers00'\n",
-                NULL);
+            tolua_error(tolua_S,
+                        "invalid 'scriptHanlderMgr' in function 'axlua_ScriptHandlerMgr_removeObjectAllHandlers00'\n",
+                        NULL);
             return 0;
         }
 #endif

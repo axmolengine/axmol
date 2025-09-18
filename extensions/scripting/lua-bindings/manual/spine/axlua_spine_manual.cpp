@@ -327,9 +327,9 @@ tolua_lerror:
 
 static int axlua_spine_SkeletonAnimation_addAnimation(lua_State* tolua_S)
 {
-    int argc                       = 0;
+    int argc                      = 0;
     spine::SkeletonAnimation* obj = nullptr;
-    bool ok                        = true;
+    bool ok                       = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -408,9 +408,9 @@ tolua_lerror:
 
 static int axlua_spine_SkeletonAnimation_setAnimation(lua_State* tolua_S)
 {
-    int argc                       = 0;
+    int argc                      = 0;
     spine::SkeletonAnimation* obj = nullptr;
-    bool ok                        = true;
+    bool ok                       = true;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -495,7 +495,7 @@ static int axlua_spine_SkeletonAnimation_getBoundingBox(lua_State* tolua_S)
 
 static int axlua_spine_SkeletonAnimation_findBone(lua_State* tolua_S)
 {
-    int argc                       = 0;
+    int argc                      = 0;
     spine::SkeletonAnimation* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
@@ -577,8 +577,7 @@ static void extendSkeletonAnimation(lua_State* L)
     {
         tolua_function(L, "create", axlua_SkeletonAnimation_createWithFile);
         tolua_function(L, "registerSpineEventHandler", axlua_SkeletonAnimation_registerSpineEventHandler00);
-        tolua_function(L, "unregisterSpineEventHandler",
-                       axlua_SkeletonAnimation_unregisterSpineEventHandler00);
+        tolua_function(L, "unregisterSpineEventHandler", axlua_SkeletonAnimation_unregisterSpineEventHandler00);
         tolua_function(L, "addAnimation", axlua_spine_SkeletonAnimation_addAnimation);
         tolua_function(L, "setAnimation", axlua_spine_SkeletonAnimation_setAnimation);
         tolua_function(L, "findBone", axlua_spine_SkeletonAnimation_findBone);

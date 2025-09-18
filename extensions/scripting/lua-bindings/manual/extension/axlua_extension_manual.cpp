@@ -259,9 +259,9 @@ static void extendEventListenerAssetsManagerEx(lua_State* L)
 
 int axlua_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
 {
-    int argc                   = 0;
+    int argc                  = 0;
     ax::ParticleSystem3D* obj = nullptr;
-    bool ok                    = true;
+    bool ok                   = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -320,9 +320,9 @@ static void extendParticleSystem3D(lua_State* tolua_S)
 
 int axlua_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
 {
-    int argc               = 0;
+    int argc              = 0;
     ax::ParticlePool* obj = nullptr;
-    bool ok                = true;
+    bool ok               = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
