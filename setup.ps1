@@ -22,8 +22,7 @@ echo > /dev/null <<"out-null"
 #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 # Powershell Start ----------------------------------------------------#>
 
-$myRoot = $PSScriptRoot
-$AX_ROOT = $myRoot
+$AX_ROOT = $PSScriptRoot
 
 $Global:is_axmol_engine = Test-Path $(Join-Path $AX_ROOT 'axmol/axmol.cpp')
 
@@ -375,8 +374,8 @@ else {
     }
 }
 
-$1k_script = Join-Path $myRoot '1k/1kiss.ps1'
-$prefix = Join-Path $myRoot 'tools/external'
+$1k_script = Join-Path $PSScriptRoot '1k/1kiss.ps1'
+$prefix = Join-Path $PSScriptRoot 'tools/external'
 if (!(Test-Path $prefix -PathType Container)) {
     mkdirs $prefix
 }
