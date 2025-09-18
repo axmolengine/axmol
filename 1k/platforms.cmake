@@ -14,6 +14,8 @@
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   set(WINDOWS TRUE)
 
+  include(${CMAKE_CURRENT_LIST_DIR}/windows.cmake)
+
   if(CMAKE_GENERATOR_PLATFORM)
     string(TOLOWER "${CMAKE_GENERATOR_PLATFORM}" _gp_lcase)
   elseif(CLANG_TARGET_TRIPLE)

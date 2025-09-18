@@ -1,35 +1,31 @@
-# WindowsToolchain.cmake not a general toolchain file, just include as early as possible
+# 1k/windows.cmake not a general toolchain file, just include as early as possible
+cmake_minimum_required(VERSION 3.27...4.1)
+
 include_guard(GLOBAL)
 
 if(NOT WIN32)
   return()
 endif()
 
-cmake_minimum_required(VERSION 3.27...4.1)
-
 # Determine Compiler
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  message(STATUS "Using Windows clang generate axmol project, CLANG_VERSION: ${CLANG_VERSION_STRING}")
   set(FUZZ_CLANG TRUE) # clang-cl or clang++
 
   if(NOT MSVC)
+    message(STATUS "🔧 Using Windows clang, version: ${CMAKE_C_COMPILER_VERSION}")
     set(FULL_CLANG TRUE) # clang++
   else()
+    message(STATUS "🔧 Using Windows clang-cl, version: ${CMAKE_C_COMPILER_VERSION}")
     set(FUZZ_MSVC TRUE) # clang-cl
   endif()
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
   # Visual Studio 2017, MSVC_VERSION 1910-1919 (v141 toolset)
+  message(STATUS "🔧 Using Windows MSVC, version: ${CMAKE_C_COMPILER_VERSION}, MSVC_VERSION: ${MSVC_VERSION}")
   set(FUZZ_MSVC TRUE)
   set(FULL_MSVC TRUE)
-
-  if(${MSVC_VERSION} EQUAL 1900 OR ${MSVC_VERSION} GREATER 1900)
-    message(STATUS "Using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION}")
-  else()
-    message(FATAL_ERROR "Using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
-  endif()
 else()
-  message(FATAL_ERROR "Please using Windows MSVC/LLVM-Clang compile axmol project")
+  message(FATAL_ERROR "Windows toolchain file only MSVC or LLVM-Clang")
 endif()
 
 # Determine Windows SDK version

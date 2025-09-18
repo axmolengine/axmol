@@ -44,8 +44,6 @@ endif()
 
 include(AXSLCC)
 
-include(WindowsToolchain)
-
 # set common compiler options
 # add target compile define function
 # add target compile options function

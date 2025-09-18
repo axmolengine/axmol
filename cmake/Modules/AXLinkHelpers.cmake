@@ -1,5 +1,4 @@
 include(${_AX_ROOT}/1k/platforms.cmake)
-include(${_AX_ROOT}/cmake/Modules/FindWindowsSDK.cmake)
 _1k_deprecated_32bit(axmol 3.0.0)
 
 if(NOT CMAKE_GENERATOR MATCHES "Ninja")

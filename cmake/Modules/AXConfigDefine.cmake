@@ -15,6 +15,10 @@ if(WINDOWS)
   set(_NUGET_PACKAGE_DIR "${_AX_ROOT}/cache/packages" CACHE INTERNAL "" FORCE)
   file(TO_NATIVE_PATH ${_NUGET_PACKAGE_DIR} _NUGET_PACKAGE_DIR_N)
   set(_NUGET_PACKAGE_DIR_N "${_NUGET_PACKAGE_DIR_N}" CACHE INTERNAL "" FORCE)
+
+  if(${MSVC_VERSION} LESS 1900)
+    message(FATAL_ERROR "MSVC_VER=1900 required, your version is:${MSVC_VERSION}")
+  endif()
 endif()
 
 # UWP min deploy target support, VS property: targetPlatformMinVersion
