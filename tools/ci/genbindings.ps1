@@ -1,9 +1,8 @@
 param(
     $stage = 3
 )
-$myRoot = $PSScriptRoot
 
-$AX_ROOT = (Resolve-Path $myRoot/../..).Path
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
 
 $succeed = $true
 if (($stage -band 1)) {
@@ -11,7 +10,7 @@ if (($stage -band 1)) {
     Push-Location $AX_ROOT
     ## setup ndk
     . ./setup.ps1 -p android
-    axmol -c
+    # axmol -c
     Pop-Location
 
     $pip_cmd = @('pip3', 'pip')[$IsWin]
@@ -23,13 +22,29 @@ if (($stage -band 1)) {
 
     echo "$ndk_root=$ndk_root"
 
-    ## download win64 libclang.dll
+    ## setup llvm libclang.dll
+    $llvm_ver_pred = $manifest['llvm'].Split('~')
+    $llvm_ver = [Version]$llvm_ver_pred[$llvm_ver_pred.Count -gt 1].TrimLast('+')
     $lib_name = @('libclang.dll', 'libclang.so', 'libclang.dylib')[$HOST_OS_INT]
     $lib_path = Join-Path $AX_ROOT "tools/bindings-generator/clang/prebuilt/$lib_name"
+    if ((Test-Path $lib_path -PathType Leaf)) {
+        $__clang_ver_script = Join-Path $PSScriptRoot 'clang-ver.ps1'
+        echo "Detecting version of $lib_path ..."
+        $lib_clang_ver_raw = & pwsh -NoProfile -File $__clang_ver_script -DllPath $lib_path
+        $_match_ret = [Regex]::Match($lib_clang_ver_raw, '(\d+\.)+(-)?(\*|\d+)')
+        if (!$_match_ret -or !$_match_ret.Success) { throw "unexpected libclang ver: $lib_clang_ver_raw" }
+        $_cur_ver = [Version]$_match_ret.Value
+        if ($_cur_ver.Major -eq $llvm_ver.Major) {
+            echo "Using libclang: $lib_path, version: $_cur_ver"
+        }
+        else {
+            echo "The libclang version mismatch: $_cur_ver,  requires: $llvm_ver, re-installing ..."
+            Remove-Item $lib_path
+        }
+    }
+
     if (!(Test-Path $lib_path -PathType Leaf)) {
         setup_7z
-        $llvm_ver_pred = $manifest['llvm'].Split('~')
-        $llvm_ver = $llvm_ver_pred[$llvm_ver_pred.Count -gt 1].TrimLast('+')
         $llvm_pkg = "llvm-$llvm_ver.7z"
 
         $prefix = Join-Path $AX_ROOT "cache/devtools"
@@ -68,7 +83,7 @@ if ($stage -band 2) {
     $eol = $UTF8Encoding.GetBytes("`n")
     $autogen_dir = Join-Path $AX_ROOT 'extensions/scripting/lua-bindings/auto/*.hpp'
     $header_files = Get-ChildItem $autogen_dir
-    
+
     foreach ($file in $header_files) {
         $file_path = "$file"
         $code_lines = Get-Content $file_path
@@ -89,7 +104,7 @@ if ($stage -band 2) {
 
         # $fs.Write($eol, 0, $eol.Length)
         $fs.Dispose()
-        
+
         echo "Removed $empty_lines empty lines for file $file_path, valid lines: $write_lines"
     }
 }

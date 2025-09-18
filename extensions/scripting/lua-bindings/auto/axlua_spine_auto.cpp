@@ -6,7 +6,7 @@
 int lua_ax_spine_SkeletonRenderer_getSkeleton(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18,12 +18,12 @@ int lua_ax_spine_SkeletonRenderer_getSkeleton(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_getSkeleton'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_getSkeleton'", nullptr);
         return 0;
     }
 #endif
@@ -36,7 +36,7 @@ int lua_ax_spine_SkeletonRenderer_getSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getSkeleton'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSkeleton();
+        auto&& ret = obj->getSkeleton();
         object_to_luaval<spine::Skeleton>(tolua_S, "sp.Skeleton",(spine::Skeleton*)ret);
         return 1;
     }
@@ -53,7 +53,7 @@ int lua_ax_spine_SkeletonRenderer_getSkeleton(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setTimeScale(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -65,12 +65,12 @@ int lua_ax_spine_SkeletonRenderer_setTimeScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setTimeScale'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setTimeScale'", nullptr);
         return 0;
     }
 #endif
@@ -86,7 +86,7 @@ int lua_ax_spine_SkeletonRenderer_setTimeScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setTimeScale'", nullptr);
             return 0;
         }
-        cobj->setTimeScale(arg0);
+        obj->setTimeScale(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -103,7 +103,7 @@ int lua_ax_spine_SkeletonRenderer_setTimeScale(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_getTimeScale(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -115,12 +115,12 @@ int lua_ax_spine_SkeletonRenderer_getTimeScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_getTimeScale'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_getTimeScale'", nullptr);
         return 0;
     }
 #endif
@@ -133,7 +133,7 @@ int lua_ax_spine_SkeletonRenderer_getTimeScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getTimeScale'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTimeScale();
+        auto&& ret = obj->getTimeScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -150,7 +150,7 @@ int lua_ax_spine_SkeletonRenderer_getTimeScale(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -162,12 +162,12 @@ int lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -183,7 +183,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled'", nullptr);
             return 0;
         }
-        cobj->setDebugSlotsEnabled(arg0);
+        obj->setDebugSlotsEnabled(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -200,7 +200,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugSlotsEnabled(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -212,12 +212,12 @@ int lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -230,7 +230,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDebugSlotsEnabled();
+        auto&& ret = obj->getDebugSlotsEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -247,7 +247,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -259,12 +259,12 @@ int lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -280,7 +280,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled'", nullptr);
             return 0;
         }
-        cobj->setDebugBonesEnabled(arg0);
+        obj->setDebugBonesEnabled(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -297,7 +297,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugBonesEnabled(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -309,12 +309,12 @@ int lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -327,7 +327,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDebugBonesEnabled();
+        auto&& ret = obj->getDebugBonesEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -344,7 +344,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -356,12 +356,12 @@ int lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -377,7 +377,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled'", nullptr);
             return 0;
         }
-        cobj->setDebugMeshesEnabled(arg0);
+        obj->setDebugMeshesEnabled(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -394,7 +394,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugMeshesEnabled(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -406,12 +406,12 @@ int lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -424,7 +424,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDebugMeshesEnabled();
+        auto&& ret = obj->getDebugMeshesEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -441,7 +441,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -453,12 +453,12 @@ int lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -474,7 +474,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled'", nullptr);
             return 0;
         }
-        cobj->setDebugBoundingRectEnabled(arg0);
+        obj->setDebugBoundingRectEnabled(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -491,7 +491,7 @@ int lua_ax_spine_SkeletonRenderer_setDebugBoundingRectEnabled(lua_State* tolua_S
 int lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -503,12 +503,12 @@ int lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -521,7 +521,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDebugBoundingRectEnabled();
+        auto&& ret = obj->getDebugBoundingRectEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -538,7 +538,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled(lua_State* tolua_S
 int lua_ax_spine_SkeletonRenderer_setToSetupPose(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -550,12 +550,12 @@ int lua_ax_spine_SkeletonRenderer_setToSetupPose(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setToSetupPose'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setToSetupPose'", nullptr);
         return 0;
     }
 #endif
@@ -568,7 +568,7 @@ int lua_ax_spine_SkeletonRenderer_setToSetupPose(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setToSetupPose'", nullptr);
             return 0;
         }
-        cobj->setToSetupPose();
+        obj->setToSetupPose();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -585,7 +585,7 @@ int lua_ax_spine_SkeletonRenderer_setToSetupPose(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setBonesToSetupPose(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -597,12 +597,12 @@ int lua_ax_spine_SkeletonRenderer_setBonesToSetupPose(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setBonesToSetupPose'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setBonesToSetupPose'", nullptr);
         return 0;
     }
 #endif
@@ -615,7 +615,7 @@ int lua_ax_spine_SkeletonRenderer_setBonesToSetupPose(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setBonesToSetupPose'", nullptr);
             return 0;
         }
-        cobj->setBonesToSetupPose();
+        obj->setBonesToSetupPose();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -632,7 +632,7 @@ int lua_ax_spine_SkeletonRenderer_setBonesToSetupPose(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setSlotsToSetupPose(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -644,12 +644,12 @@ int lua_ax_spine_SkeletonRenderer_setSlotsToSetupPose(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setSlotsToSetupPose'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setSlotsToSetupPose'", nullptr);
         return 0;
     }
 #endif
@@ -662,7 +662,7 @@ int lua_ax_spine_SkeletonRenderer_setSlotsToSetupPose(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setSlotsToSetupPose'", nullptr);
             return 0;
         }
-        cobj->setSlotsToSetupPose();
+        obj->setSlotsToSetupPose();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -679,7 +679,7 @@ int lua_ax_spine_SkeletonRenderer_setSlotsToSetupPose(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setSkin(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -688,11 +688,11 @@ int lua_ax_spine_SkeletonRenderer_setSkin(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setSkin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setSkin'", nullptr);
         return 0;
     }
 #endif
@@ -703,7 +703,7 @@ int lua_ax_spine_SkeletonRenderer_setSkin(lua_State* tolua_S)
             std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "sp.SkeletonRenderer:setSkin"); arg0 = arg0_tmp.c_str();
 
             if (!ok) { break; }
-            cobj->setSkin(arg0);
+            obj->setSkin(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -715,7 +715,7 @@ int lua_ax_spine_SkeletonRenderer_setSkin(lua_State* tolua_S)
             ok &= luaval_to_std_string(tolua_S, 2,&arg0, "sp.SkeletonRenderer:setSkin");
 
             if (!ok) { break; }
-            cobj->setSkin(arg0);
+            obj->setSkin(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -734,7 +734,7 @@ int lua_ax_spine_SkeletonRenderer_setSkin(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setAttachment(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -743,11 +743,11 @@ int lua_ax_spine_SkeletonRenderer_setAttachment(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setAttachment'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setAttachment'", nullptr);
         return 0;
     }
 #endif
@@ -762,7 +762,7 @@ int lua_ax_spine_SkeletonRenderer_setAttachment(lua_State* tolua_S)
             std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "sp.SkeletonRenderer:setAttachment"); arg1 = arg1_tmp.c_str();
 
             if (!ok) { break; }
-            bool ret = cobj->setAttachment(arg0, arg1);
+            bool ret = obj->setAttachment(arg0, arg1);
             tolua_pushboolean(tolua_S,(bool)ret);
             return 1;
         }
@@ -778,7 +778,7 @@ int lua_ax_spine_SkeletonRenderer_setAttachment(lua_State* tolua_S)
             ok &= luaval_to_std_string(tolua_S, 3,&arg1, "sp.SkeletonRenderer:setAttachment");
 
             if (!ok) { break; }
-            bool ret = cobj->setAttachment(arg0, arg1);
+            bool ret = obj->setAttachment(arg0, arg1);
             tolua_pushboolean(tolua_S,(bool)ret);
             return 1;
         }
@@ -797,7 +797,7 @@ int lua_ax_spine_SkeletonRenderer_setAttachment(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setTwoColorTint(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -809,12 +809,12 @@ int lua_ax_spine_SkeletonRenderer_setTwoColorTint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setTwoColorTint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setTwoColorTint'", nullptr);
         return 0;
     }
 #endif
@@ -830,7 +830,7 @@ int lua_ax_spine_SkeletonRenderer_setTwoColorTint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setTwoColorTint'", nullptr);
             return 0;
         }
-        cobj->setTwoColorTint(arg0);
+        obj->setTwoColorTint(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -847,7 +847,7 @@ int lua_ax_spine_SkeletonRenderer_setTwoColorTint(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_isTwoColorTint(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -859,12 +859,12 @@ int lua_ax_spine_SkeletonRenderer_isTwoColorTint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_isTwoColorTint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_isTwoColorTint'", nullptr);
         return 0;
     }
 #endif
@@ -877,7 +877,7 @@ int lua_ax_spine_SkeletonRenderer_isTwoColorTint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_isTwoColorTint'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isTwoColorTint();
+        auto&& ret = obj->isTwoColorTint();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -894,7 +894,7 @@ int lua_ax_spine_SkeletonRenderer_isTwoColorTint(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setSlotsRange(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -906,12 +906,12 @@ int lua_ax_spine_SkeletonRenderer_setSlotsRange(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setSlotsRange'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setSlotsRange'", nullptr);
         return 0;
     }
 #endif
@@ -930,7 +930,7 @@ int lua_ax_spine_SkeletonRenderer_setSlotsRange(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setSlotsRange'", nullptr);
             return 0;
         }
-        cobj->setSlotsRange(arg0, arg1);
+        obj->setSlotsRange(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -947,7 +947,7 @@ int lua_ax_spine_SkeletonRenderer_setSlotsRange(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -959,12 +959,12 @@ int lua_ax_spine_SkeletonRenderer_setBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setBlendFunc'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_setBlendFunc'", nullptr);
         return 0;
     }
 #endif
@@ -980,7 +980,7 @@ int lua_ax_spine_SkeletonRenderer_setBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setBlendFunc'", nullptr);
             return 0;
         }
-        cobj->setBlendFunc(arg0);
+        obj->setBlendFunc(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -997,7 +997,7 @@ int lua_ax_spine_SkeletonRenderer_setBlendFunc(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_getBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1009,12 +1009,12 @@ int lua_ax_spine_SkeletonRenderer_getBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_getBlendFunc'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_getBlendFunc'", nullptr);
         return 0;
     }
 #endif
@@ -1027,7 +1027,7 @@ int lua_ax_spine_SkeletonRenderer_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getBlendFunc'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBlendFunc();
+        auto&& ret = obj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1044,7 +1044,7 @@ int lua_ax_spine_SkeletonRenderer_getBlendFunc(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1056,12 +1056,12 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
         return 0;
     }
 #endif
@@ -1077,7 +1077,7 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
             return 0;
         }
-        cobj->initWithSkeleton(arg0);
+        obj->initWithSkeleton(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1094,7 +1094,7 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
             return 0;
         }
-        cobj->initWithSkeleton(arg0, arg1);
+        obj->initWithSkeleton(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1114,7 +1114,7 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
             return 0;
         }
-        cobj->initWithSkeleton(arg0, arg1, arg2);
+        obj->initWithSkeleton(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1137,7 +1137,7 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithSkeleton'", nullptr);
             return 0;
         }
-        cobj->initWithSkeleton(arg0, arg1, arg2, arg3);
+        obj->initWithSkeleton(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1154,7 +1154,7 @@ int lua_ax_spine_SkeletonRenderer_initWithSkeleton(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_initWithData(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1166,12 +1166,12 @@ int lua_ax_spine_SkeletonRenderer_initWithData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_initWithData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_initWithData'", nullptr);
         return 0;
     }
 #endif
@@ -1187,7 +1187,7 @@ int lua_ax_spine_SkeletonRenderer_initWithData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithData'", nullptr);
             return 0;
         }
-        cobj->initWithData(arg0);
+        obj->initWithData(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1204,7 +1204,7 @@ int lua_ax_spine_SkeletonRenderer_initWithData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initWithData'", nullptr);
             return 0;
         }
-        cobj->initWithData(arg0, arg1);
+        obj->initWithData(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1221,7 +1221,7 @@ int lua_ax_spine_SkeletonRenderer_initWithData(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1230,11 +1230,11 @@ int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_initWithJsonFile'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_initWithJsonFile'", nullptr);
         return 0;
     }
 #endif
@@ -1249,7 +1249,7 @@ int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
             ok &= luaval_to_std_string(tolua_S, 3,&arg1, "sp.SkeletonRenderer:initWithJsonFile");
 
             if (!ok) { break; }
-            cobj->initWithJsonFile(arg0, arg1);
+            obj->initWithJsonFile(arg0, arg1);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1269,7 +1269,7 @@ int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithJsonFile");
 
             if (!ok) { break; }
-            cobj->initWithJsonFile(arg0, arg1, arg2);
+            obj->initWithJsonFile(arg0, arg1, arg2);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1285,7 +1285,7 @@ int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
             ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonRenderer:initWithJsonFile");
 
             if (!ok) { break; }
-            cobj->initWithJsonFile(arg0, arg1);
+            obj->initWithJsonFile(arg0, arg1);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1305,7 +1305,7 @@ int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithJsonFile");
 
             if (!ok) { break; }
-            cobj->initWithJsonFile(arg0, arg1, arg2);
+            obj->initWithJsonFile(arg0, arg1, arg2);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1324,7 +1324,7 @@ int lua_ax_spine_SkeletonRenderer_initWithJsonFile(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1333,11 +1333,11 @@ int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_initWithBinaryFile'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_initWithBinaryFile'", nullptr);
         return 0;
     }
 #endif
@@ -1352,7 +1352,7 @@ int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
             ok &= luaval_to_std_string(tolua_S, 3,&arg1, "sp.SkeletonRenderer:initWithBinaryFile");
 
             if (!ok) { break; }
-            cobj->initWithBinaryFile(arg0, arg1);
+            obj->initWithBinaryFile(arg0, arg1);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1372,7 +1372,7 @@ int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithBinaryFile");
 
             if (!ok) { break; }
-            cobj->initWithBinaryFile(arg0, arg1, arg2);
+            obj->initWithBinaryFile(arg0, arg1, arg2);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1388,7 +1388,7 @@ int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
             ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonRenderer:initWithBinaryFile");
 
             if (!ok) { break; }
-            cobj->initWithBinaryFile(arg0, arg1);
+            obj->initWithBinaryFile(arg0, arg1);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1408,7 +1408,7 @@ int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:initWithBinaryFile");
 
             if (!ok) { break; }
-            cobj->initWithBinaryFile(arg0, arg1, arg2);
+            obj->initWithBinaryFile(arg0, arg1, arg2);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1427,7 +1427,7 @@ int lua_ax_spine_SkeletonRenderer_initWithBinaryFile(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_initialize(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1439,12 +1439,12 @@ int lua_ax_spine_SkeletonRenderer_initialize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_initialize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonRenderer_initialize'", nullptr);
         return 0;
     }
 #endif
@@ -1457,7 +1457,7 @@ int lua_ax_spine_SkeletonRenderer_initialize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_initialize'", nullptr);
             return 0;
         }
-        cobj->initialize();
+        obj->initialize();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1664,7 +1664,7 @@ int lua_ax_spine_SkeletonRenderer_createWithFile(lua_State* tolua_S)
 int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
+    spine::SkeletonRenderer* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1677,11 +1677,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_object<spine::Skeleton>(tolua_S, 2, "sp.Skeleton",&arg0, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1696,11 +1696,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0, arg1);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0, arg1);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1719,11 +1719,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 4, &arg2, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0, arg1, arg2);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0, arg1, arg2);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1746,22 +1746,22 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 5, &arg3, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0, arg1, arg2, arg3);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0, arg1, arg2, arg3);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
     ok  = true;
     do {
         if (argc == 0) {
-            cobj = new spine::SkeletonRenderer();
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer();
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1772,11 +1772,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_object<spine::SkeletonData>(tolua_S, 2, "sp.SkeletonData",&arg0, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1791,11 +1791,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 3, &arg1, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0, arg1);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0, arg1);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1810,11 +1810,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_object<spine::Atlas>(tolua_S, 3, "sp.Atlas",&arg1, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0, arg1);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0, arg1);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1833,11 +1833,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0, arg1, arg2);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0, arg1, arg2);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1852,11 +1852,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_std_string(tolua_S, 3,&arg1, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0, arg1);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0, arg1);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1875,11 +1875,11 @@ int lua_ax_spine_SkeletonRenderer_constructor(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 4, &arg2, "sp.SkeletonRenderer:SkeletonRenderer");
 
             if (!ok) { break; }
-            cobj = new spine::SkeletonRenderer(arg0, arg1, arg2);
-            cobj->autorelease();
-            int ID =  (int)cobj->_ID ;
-            int* luaID =  &cobj->_luaID ;
-            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"sp.SkeletonRenderer");
+            obj = new spine::SkeletonRenderer(arg0, arg1, arg2);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"sp.SkeletonRenderer");
             return 1;
         }
     }while(0);
@@ -1946,7 +1946,7 @@ int lua_register_ax_spine_SkeletonRenderer(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setMix(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1958,12 +1958,12 @@ int lua_ax_spine_SkeletonAnimation_setMix(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setMix'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setMix'", nullptr);
         return 0;
     }
 #endif
@@ -1985,7 +1985,7 @@ int lua_ax_spine_SkeletonAnimation_setMix(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setMix'", nullptr);
             return 0;
         }
-        cobj->setMix(arg0, arg1, arg2);
+        obj->setMix(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2002,7 +2002,7 @@ int lua_ax_spine_SkeletonAnimation_setMix(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setEmptyAnimation(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2014,12 +2014,12 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimation'", nullptr);
         return 0;
     }
 #endif
@@ -2038,7 +2038,7 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->setEmptyAnimation(arg0, arg1);
+        auto&& ret = obj->setEmptyAnimation(arg0, arg1);
         object_to_luaval<spine::TrackEntry>(tolua_S, "sp.TrackEntry",(spine::TrackEntry*)ret);
         return 1;
     }
@@ -2055,7 +2055,7 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimation(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setEmptyAnimations(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2067,12 +2067,12 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimations(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimations'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimations'", nullptr);
         return 0;
     }
 #endif
@@ -2088,7 +2088,7 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimations(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimations'", nullptr);
             return 0;
         }
-        cobj->setEmptyAnimations(arg0);
+        obj->setEmptyAnimations(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2105,7 +2105,7 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimations(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2117,12 +2117,12 @@ int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_addEmptyAnimation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_addEmptyAnimation'", nullptr);
         return 0;
     }
 #endif
@@ -2141,7 +2141,7 @@ int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_addEmptyAnimation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->addEmptyAnimation(arg0, arg1);
+        auto&& ret = obj->addEmptyAnimation(arg0, arg1);
         object_to_luaval<spine::TrackEntry>(tolua_S, "sp.TrackEntry",(spine::TrackEntry*)ret);
         return 1;
     }
@@ -2161,7 +2161,7 @@ int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_addEmptyAnimation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->addEmptyAnimation(arg0, arg1, arg2);
+        auto&& ret = obj->addEmptyAnimation(arg0, arg1, arg2);
         object_to_luaval<spine::TrackEntry>(tolua_S, "sp.TrackEntry",(spine::TrackEntry*)ret);
         return 1;
     }
@@ -2178,7 +2178,7 @@ int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_findAnimation(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2190,12 +2190,12 @@ int lua_ax_spine_SkeletonAnimation_findAnimation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_findAnimation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_findAnimation'", nullptr);
         return 0;
     }
 #endif
@@ -2211,7 +2211,7 @@ int lua_ax_spine_SkeletonAnimation_findAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_findAnimation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->findAnimation(arg0);
+        auto&& ret = obj->findAnimation(arg0);
         object_to_luaval<spine::Animation>(tolua_S, "sp.Animation",(spine::Animation*)ret);
         return 1;
     }
@@ -2228,7 +2228,7 @@ int lua_ax_spine_SkeletonAnimation_findAnimation(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_clearTracks(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2240,12 +2240,12 @@ int lua_ax_spine_SkeletonAnimation_clearTracks(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_clearTracks'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_clearTracks'", nullptr);
         return 0;
     }
 #endif
@@ -2258,7 +2258,7 @@ int lua_ax_spine_SkeletonAnimation_clearTracks(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_clearTracks'", nullptr);
             return 0;
         }
-        cobj->clearTracks();
+        obj->clearTracks();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2275,7 +2275,7 @@ int lua_ax_spine_SkeletonAnimation_clearTracks(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_clearTrack(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2287,12 +2287,12 @@ int lua_ax_spine_SkeletonAnimation_clearTrack(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_clearTrack'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_clearTrack'", nullptr);
         return 0;
     }
 #endif
@@ -2305,7 +2305,7 @@ int lua_ax_spine_SkeletonAnimation_clearTrack(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_clearTrack'", nullptr);
             return 0;
         }
-        cobj->clearTrack();
+        obj->clearTrack();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2319,7 +2319,7 @@ int lua_ax_spine_SkeletonAnimation_clearTrack(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_clearTrack'", nullptr);
             return 0;
         }
-        cobj->clearTrack(arg0);
+        obj->clearTrack(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2336,7 +2336,7 @@ int lua_ax_spine_SkeletonAnimation_clearTrack(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setStartListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2348,12 +2348,12 @@ int lua_ax_spine_SkeletonAnimation_setStartListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setStartListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setStartListener'", nullptr);
         return 0;
     }
 #endif
@@ -2373,7 +2373,7 @@ int lua_ax_spine_SkeletonAnimation_setStartListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setStartListener'", nullptr);
             return 0;
         }
-        cobj->setStartListener(arg0);
+        obj->setStartListener(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2390,7 +2390,7 @@ int lua_ax_spine_SkeletonAnimation_setStartListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setInterruptListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2402,12 +2402,12 @@ int lua_ax_spine_SkeletonAnimation_setInterruptListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setInterruptListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setInterruptListener'", nullptr);
         return 0;
     }
 #endif
@@ -2427,7 +2427,7 @@ int lua_ax_spine_SkeletonAnimation_setInterruptListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setInterruptListener'", nullptr);
             return 0;
         }
-        cobj->setInterruptListener(arg0);
+        obj->setInterruptListener(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2444,7 +2444,7 @@ int lua_ax_spine_SkeletonAnimation_setInterruptListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setEndListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2456,12 +2456,12 @@ int lua_ax_spine_SkeletonAnimation_setEndListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setEndListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setEndListener'", nullptr);
         return 0;
     }
 #endif
@@ -2481,7 +2481,7 @@ int lua_ax_spine_SkeletonAnimation_setEndListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setEndListener'", nullptr);
             return 0;
         }
-        cobj->setEndListener(arg0);
+        obj->setEndListener(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2498,7 +2498,7 @@ int lua_ax_spine_SkeletonAnimation_setEndListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setDisposeListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2510,12 +2510,12 @@ int lua_ax_spine_SkeletonAnimation_setDisposeListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setDisposeListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setDisposeListener'", nullptr);
         return 0;
     }
 #endif
@@ -2535,7 +2535,7 @@ int lua_ax_spine_SkeletonAnimation_setDisposeListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setDisposeListener'", nullptr);
             return 0;
         }
-        cobj->setDisposeListener(arg0);
+        obj->setDisposeListener(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2552,7 +2552,7 @@ int lua_ax_spine_SkeletonAnimation_setDisposeListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setCompleteListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2564,12 +2564,12 @@ int lua_ax_spine_SkeletonAnimation_setCompleteListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setCompleteListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setCompleteListener'", nullptr);
         return 0;
     }
 #endif
@@ -2589,7 +2589,7 @@ int lua_ax_spine_SkeletonAnimation_setCompleteListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setCompleteListener'", nullptr);
             return 0;
         }
-        cobj->setCompleteListener(arg0);
+        obj->setCompleteListener(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2606,7 +2606,7 @@ int lua_ax_spine_SkeletonAnimation_setCompleteListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2618,12 +2618,12 @@ int lua_ax_spine_SkeletonAnimation_setEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setEventListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setEventListener'", nullptr);
         return 0;
     }
 #endif
@@ -2643,7 +2643,7 @@ int lua_ax_spine_SkeletonAnimation_setEventListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setEventListener'", nullptr);
             return 0;
         }
-        cobj->setEventListener(arg0);
+        obj->setEventListener(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2660,7 +2660,7 @@ int lua_ax_spine_SkeletonAnimation_setEventListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setPreUpdateWorldTransformsListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2672,12 +2672,12 @@ int lua_ax_spine_SkeletonAnimation_setPreUpdateWorldTransformsListener(lua_State
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setPreUpdateWorldTransformsListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setPreUpdateWorldTransformsListener'", nullptr);
         return 0;
     }
 #endif
@@ -2697,7 +2697,7 @@ int lua_ax_spine_SkeletonAnimation_setPreUpdateWorldTransformsListener(lua_State
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setPreUpdateWorldTransformsListener'", nullptr);
             return 0;
         }
-        cobj->setPreUpdateWorldTransformsListener(arg0);
+        obj->setPreUpdateWorldTransformsListener(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2714,7 +2714,7 @@ int lua_ax_spine_SkeletonAnimation_setPreUpdateWorldTransformsListener(lua_State
 int lua_ax_spine_SkeletonAnimation_setPostUpdateWorldTransformsListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2726,12 +2726,12 @@ int lua_ax_spine_SkeletonAnimation_setPostUpdateWorldTransformsListener(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setPostUpdateWorldTransformsListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setPostUpdateWorldTransformsListener'", nullptr);
         return 0;
     }
 #endif
@@ -2751,7 +2751,7 @@ int lua_ax_spine_SkeletonAnimation_setPostUpdateWorldTransformsListener(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setPostUpdateWorldTransformsListener'", nullptr);
             return 0;
         }
-        cobj->setPostUpdateWorldTransformsListener(arg0);
+        obj->setPostUpdateWorldTransformsListener(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2768,7 +2768,7 @@ int lua_ax_spine_SkeletonAnimation_setPostUpdateWorldTransformsListener(lua_Stat
 int lua_ax_spine_SkeletonAnimation_setTrackStartListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2780,12 +2780,12 @@ int lua_ax_spine_SkeletonAnimation_setTrackStartListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setTrackStartListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setTrackStartListener'", nullptr);
         return 0;
     }
 #endif
@@ -2808,7 +2808,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackStartListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setTrackStartListener'", nullptr);
             return 0;
         }
-        cobj->setTrackStartListener(arg0, arg1);
+        obj->setTrackStartListener(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2825,7 +2825,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackStartListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setTrackInterruptListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2837,12 +2837,12 @@ int lua_ax_spine_SkeletonAnimation_setTrackInterruptListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setTrackInterruptListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setTrackInterruptListener'", nullptr);
         return 0;
     }
 #endif
@@ -2865,7 +2865,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackInterruptListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setTrackInterruptListener'", nullptr);
             return 0;
         }
-        cobj->setTrackInterruptListener(arg0, arg1);
+        obj->setTrackInterruptListener(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2882,7 +2882,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackInterruptListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setTrackEndListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2894,12 +2894,12 @@ int lua_ax_spine_SkeletonAnimation_setTrackEndListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setTrackEndListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setTrackEndListener'", nullptr);
         return 0;
     }
 #endif
@@ -2922,7 +2922,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackEndListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setTrackEndListener'", nullptr);
             return 0;
         }
-        cobj->setTrackEndListener(arg0, arg1);
+        obj->setTrackEndListener(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2939,7 +2939,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackEndListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setTrackDisposeListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2951,12 +2951,12 @@ int lua_ax_spine_SkeletonAnimation_setTrackDisposeListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setTrackDisposeListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setTrackDisposeListener'", nullptr);
         return 0;
     }
 #endif
@@ -2979,7 +2979,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackDisposeListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setTrackDisposeListener'", nullptr);
             return 0;
         }
-        cobj->setTrackDisposeListener(arg0, arg1);
+        obj->setTrackDisposeListener(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2996,7 +2996,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackDisposeListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setTrackCompleteListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3008,12 +3008,12 @@ int lua_ax_spine_SkeletonAnimation_setTrackCompleteListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setTrackCompleteListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setTrackCompleteListener'", nullptr);
         return 0;
     }
 #endif
@@ -3036,7 +3036,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackCompleteListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setTrackCompleteListener'", nullptr);
             return 0;
         }
-        cobj->setTrackCompleteListener(arg0, arg1);
+        obj->setTrackCompleteListener(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3053,7 +3053,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackCompleteListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setTrackEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3065,12 +3065,12 @@ int lua_ax_spine_SkeletonAnimation_setTrackEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setTrackEventListener'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setTrackEventListener'", nullptr);
         return 0;
     }
 #endif
@@ -3093,7 +3093,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackEventListener(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setTrackEventListener'", nullptr);
             return 0;
         }
-        cobj->setTrackEventListener(arg0, arg1);
+        obj->setTrackEventListener(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3110,7 +3110,7 @@ int lua_ax_spine_SkeletonAnimation_setTrackEventListener(lua_State* tolua_S)
 int lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible(lua_State* tolua_S)
 {
     int argc = 0;
-    spine::SkeletonAnimation* cobj = nullptr;
+    spine::SkeletonAnimation* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3122,12 +3122,12 @@ int lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"sp.SkeletonAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
+    obj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible'", nullptr);
         return 0;
     }
 #endif
@@ -3143,7 +3143,7 @@ int lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setUpdateOnlyIfVisible'", nullptr);
             return 0;
         }
-        cobj->setUpdateOnlyIfVisible(arg0);
+        obj->setUpdateOnlyIfVisible(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }

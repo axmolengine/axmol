@@ -7,7 +7,7 @@
 int lua_ax_physics3d_Physics3DShape_getShapeType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DShape* cobj = nullptr;
+    ax::Physics3DShape* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19,12 +19,12 @@ int lua_ax_physics3d_Physics3DShape_getShapeType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DShape_getShapeType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DShape_getShapeType'", nullptr);
         return 0;
     }
 #endif
@@ -37,7 +37,7 @@ int lua_ax_physics3d_Physics3DShape_getShapeType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_getShapeType'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getShapeType();
+        int ret = (int)obj->getShapeType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -54,7 +54,7 @@ int lua_ax_physics3d_Physics3DShape_getShapeType(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DShape* cobj = nullptr;
+    ax::Physics3DShape* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -66,12 +66,12 @@ int lua_ax_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DShape_getbtShape'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DShape_getbtShape'", nullptr);
         return 0;
     }
 #endif
@@ -84,7 +84,7 @@ int lua_ax_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_getbtShape'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getbtShape();
+        auto&& ret = obj->getbtShape();
         object_to_luaval<btCollisionShape>(tolua_S, "btCollisionShape",(btCollisionShape*)ret);
         return 1;
     }
@@ -101,7 +101,7 @@ int lua_ax_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DShape* cobj = nullptr;
+    ax::Physics3DShape* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -113,12 +113,12 @@ int lua_ax_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DShape_initBox'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DShape_initBox'", nullptr);
         return 0;
     }
 #endif
@@ -134,7 +134,7 @@ int lua_ax_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initBox'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->initBox(arg0);
+        auto&& ret = obj->initBox(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -151,7 +151,7 @@ int lua_ax_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DShape* cobj = nullptr;
+    ax::Physics3DShape* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -163,12 +163,12 @@ int lua_ax_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DShape_initSphere'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DShape_initSphere'", nullptr);
         return 0;
     }
 #endif
@@ -184,7 +184,7 @@ int lua_ax_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initSphere'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->initSphere(arg0);
+        auto&& ret = obj->initSphere(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -201,7 +201,7 @@ int lua_ax_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DShape* cobj = nullptr;
+    ax::Physics3DShape* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -213,12 +213,12 @@ int lua_ax_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DShape_initCylinder'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DShape_initCylinder'", nullptr);
         return 0;
     }
 #endif
@@ -237,7 +237,7 @@ int lua_ax_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initCylinder'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->initCylinder(arg0, arg1);
+        auto&& ret = obj->initCylinder(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -254,7 +254,7 @@ int lua_ax_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DShape* cobj = nullptr;
+    ax::Physics3DShape* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -266,12 +266,12 @@ int lua_ax_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DShape_initCapsule'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DShape_initCapsule'", nullptr);
         return 0;
     }
 #endif
@@ -290,7 +290,7 @@ int lua_ax_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initCapsule'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->initCapsule(arg0, arg1);
+        auto&& ret = obj->initCapsule(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -493,7 +493,7 @@ int lua_ax_physics3d_Physics3DShape_createConvexHull(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DShape_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DShape* cobj = nullptr;
+    ax::Physics3DShape* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -510,11 +510,11 @@ int lua_ax_physics3d_Physics3DShape_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3DShape();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DShape");
+        obj = new ax::Physics3DShape();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3DShape");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:Physics3DShape",argc, 0);
@@ -561,7 +561,7 @@ int lua_register_ax_physics3d_Physics3DShape(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -573,12 +573,12 @@ int lua_ax_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_getObjType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_getObjType'", nullptr);
         return 0;
     }
 #endif
@@ -591,7 +591,7 @@ int lua_ax_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getObjType'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getObjType();
+        int ret = (int)obj->getObjType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -608,7 +608,7 @@ int lua_ax_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -620,12 +620,12 @@ int lua_ax_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_setUserData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_setUserData'", nullptr);
         return 0;
     }
 #endif
@@ -642,7 +642,7 @@ int lua_ax_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_setUserData'", nullptr);
             return 0;
         }
-        cobj->setUserData(arg0);
+        obj->setUserData(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -659,7 +659,7 @@ int lua_ax_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -671,12 +671,12 @@ int lua_ax_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_getUserData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_getUserData'", nullptr);
         return 0;
     }
 #endif
@@ -689,7 +689,7 @@ int lua_ax_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getUserData'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUserData();
+        auto&& ret = obj->getUserData();
         #pragma warning NO CONVERSION FROM NATIVE FOR void*;
         return 1;
     }
@@ -706,7 +706,7 @@ int lua_ax_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -718,12 +718,12 @@ int lua_ax_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_setPhysicsWorld'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_setPhysicsWorld'", nullptr);
         return 0;
     }
 #endif
@@ -739,7 +739,7 @@ int lua_ax_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_setPhysicsWorld'", nullptr);
             return 0;
         }
-        cobj->setPhysicsWorld(arg0);
+        obj->setPhysicsWorld(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -756,7 +756,7 @@ int lua_ax_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -768,12 +768,12 @@ int lua_ax_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_getPhysicsWorld'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_getPhysicsWorld'", nullptr);
         return 0;
     }
 #endif
@@ -786,7 +786,7 @@ int lua_ax_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getPhysicsWorld'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPhysicsWorld();
+        auto&& ret = obj->getPhysicsWorld();
         object_to_luaval<ax::Physics3DWorld>(tolua_S, "ax.Physics3DWorld",(ax::Physics3DWorld*)ret);
         return 1;
     }
@@ -803,7 +803,7 @@ int lua_ax_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -815,12 +815,12 @@ int lua_ax_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_getWorldTransform'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_getWorldTransform'", nullptr);
         return 0;
     }
 #endif
@@ -833,7 +833,7 @@ int lua_ax_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getWorldTransform'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWorldTransform();
+        auto&& ret = obj->getWorldTransform();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -850,7 +850,7 @@ int lua_ax_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -862,12 +862,12 @@ int lua_ax_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_getCollisionCallback'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_getCollisionCallback'", nullptr);
         return 0;
     }
 #endif
@@ -880,7 +880,7 @@ int lua_ax_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getCollisionCallback'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCollisionCallback();
+        auto&& ret = obj->getCollisionCallback();
         #pragma warning NO CONVERSION FROM NATIVE FOR std::function;
         return 1;
     }
@@ -897,7 +897,7 @@ int lua_ax_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -909,12 +909,12 @@ int lua_ax_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_needCollisionCallback'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_needCollisionCallback'", nullptr);
         return 0;
     }
 #endif
@@ -927,7 +927,7 @@ int lua_ax_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_needCollisionCallback'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->needCollisionCallback();
+        auto&& ret = obj->needCollisionCallback();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -944,7 +944,7 @@ int lua_ax_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -956,12 +956,12 @@ int lua_ax_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_setMask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_setMask'", nullptr);
         return 0;
     }
 #endif
@@ -977,7 +977,7 @@ int lua_ax_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_setMask'", nullptr);
             return 0;
         }
-        cobj->setMask(arg0);
+        obj->setMask(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -994,7 +994,7 @@ int lua_ax_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1006,12 +1006,12 @@ int lua_ax_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DObject_getMask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DObject_getMask'", nullptr);
         return 0;
     }
 #endif
@@ -1024,7 +1024,7 @@ int lua_ax_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getMask'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMask();
+        auto&& ret = obj->getMask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1070,7 +1070,7 @@ int lua_register_ax_physics3d_Physics3DObject(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1082,12 +1082,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getRigidBody'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getRigidBody'", nullptr);
         return 0;
     }
 #endif
@@ -1100,7 +1100,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getRigidBody'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRigidBody();
+        auto&& ret = obj->getRigidBody();
         object_to_luaval<btRigidBody>(tolua_S, "btRigidBody",(btRigidBody*)ret);
         return 1;
     }
@@ -1117,7 +1117,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1129,12 +1129,12 @@ int lua_ax_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyForce'", nullptr);
         return 0;
     }
 #endif
@@ -1153,7 +1153,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_applyForce'", nullptr);
             return 0;
         }
-        cobj->applyForce(arg0, arg1);
+        obj->applyForce(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1170,7 +1170,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1182,12 +1182,12 @@ int lua_ax_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyCentralForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyCentralForce'", nullptr);
         return 0;
     }
 #endif
@@ -1203,7 +1203,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_applyCentralForce'", nullptr);
             return 0;
         }
-        cobj->applyCentralForce(arg0);
+        obj->applyCentralForce(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1220,7 +1220,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1232,12 +1232,12 @@ int lua_ax_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyCentralImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyCentralImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -1253,7 +1253,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_applyCentralImpulse'", nullptr);
             return 0;
         }
-        cobj->applyCentralImpulse(arg0);
+        obj->applyCentralImpulse(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1270,7 +1270,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1282,12 +1282,12 @@ int lua_ax_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyTorque'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyTorque'", nullptr);
         return 0;
     }
 #endif
@@ -1303,7 +1303,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_applyTorque'", nullptr);
             return 0;
         }
-        cobj->applyTorque(arg0);
+        obj->applyTorque(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1320,7 +1320,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1332,12 +1332,12 @@ int lua_ax_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyTorqueImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyTorqueImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -1353,7 +1353,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_applyTorqueImpulse'", nullptr);
             return 0;
         }
-        cobj->applyTorqueImpulse(arg0);
+        obj->applyTorqueImpulse(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1370,7 +1370,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1382,12 +1382,12 @@ int lua_ax_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -1406,7 +1406,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_applyImpulse'", nullptr);
             return 0;
         }
-        cobj->applyImpulse(arg0, arg1);
+        obj->applyImpulse(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1423,7 +1423,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1435,12 +1435,12 @@ int lua_ax_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_applyDamping'", nullptr);
         return 0;
     }
 #endif
@@ -1456,7 +1456,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_applyDamping'", nullptr);
             return 0;
         }
-        cobj->applyDamping(arg0);
+        obj->applyDamping(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1473,7 +1473,7 @@ int lua_ax_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1485,12 +1485,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setLinearVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setLinearVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -1506,7 +1506,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setLinearVelocity'", nullptr);
             return 0;
         }
-        cobj->setLinearVelocity(arg0);
+        obj->setLinearVelocity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1523,7 +1523,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1535,12 +1535,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -1553,7 +1553,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLinearVelocity();
+        auto&& ret = obj->getLinearVelocity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1570,7 +1570,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1582,12 +1582,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setLinearFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setLinearFactor'", nullptr);
         return 0;
     }
 #endif
@@ -1603,7 +1603,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setLinearFactor'", nullptr);
             return 0;
         }
-        cobj->setLinearFactor(arg0);
+        obj->setLinearFactor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1620,7 +1620,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1632,12 +1632,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearFactor'", nullptr);
         return 0;
     }
 #endif
@@ -1650,7 +1650,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearFactor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLinearFactor();
+        auto&& ret = obj->getLinearFactor();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1667,7 +1667,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1676,11 +1676,11 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setAngularFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setAngularFactor'", nullptr);
         return 0;
     }
 #endif
@@ -1691,7 +1691,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setAngularFactor");
 
             if (!ok) { break; }
-            cobj->setAngularFactor(arg0);
+            obj->setAngularFactor(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1703,7 +1703,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
             ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:setAngularFactor");
 
             if (!ok) { break; }
-            cobj->setAngularFactor(arg0);
+            obj->setAngularFactor(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1722,7 +1722,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1734,12 +1734,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularFactor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularFactor'", nullptr);
         return 0;
     }
 #endif
@@ -1752,7 +1752,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularFactor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularFactor();
+        auto&& ret = obj->getAngularFactor();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1769,7 +1769,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1781,12 +1781,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setAngularVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setAngularVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -1802,7 +1802,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setAngularVelocity'", nullptr);
             return 0;
         }
-        cobj->setAngularVelocity(arg0);
+        obj->setAngularVelocity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1819,7 +1819,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1831,12 +1831,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -1849,7 +1849,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularVelocity();
+        auto&& ret = obj->getAngularVelocity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1866,7 +1866,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1878,12 +1878,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setCenterOfMassTransform'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setCenterOfMassTransform'", nullptr);
         return 0;
     }
 #endif
@@ -1899,7 +1899,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setCenterOfMassTransform'", nullptr);
             return 0;
         }
-        cobj->setCenterOfMassTransform(arg0);
+        obj->setCenterOfMassTransform(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1916,7 +1916,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State* tolu
 int lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1928,12 +1928,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform'", nullptr);
         return 0;
     }
 #endif
@@ -1946,7 +1946,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCenterOfMassTransform();
+        auto&& ret = obj->getCenterOfMassTransform();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1963,7 +1963,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State* tolu
 int lua_ax_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1975,12 +1975,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setDamping'", nullptr);
         return 0;
     }
 #endif
@@ -1999,7 +1999,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setDamping'", nullptr);
             return 0;
         }
-        cobj->setDamping(arg0, arg1);
+        obj->setDamping(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2016,7 +2016,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2028,12 +2028,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearDamping'", nullptr);
         return 0;
     }
 #endif
@@ -2046,7 +2046,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearDamping'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLinearDamping();
+        auto&& ret = obj->getLinearDamping();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2063,7 +2063,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2075,12 +2075,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularDamping'", nullptr);
         return 0;
     }
 #endif
@@ -2093,7 +2093,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularDamping'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularDamping();
+        auto&& ret = obj->getAngularDamping();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2110,7 +2110,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2122,12 +2122,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setGravity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setGravity'", nullptr);
         return 0;
     }
 #endif
@@ -2143,7 +2143,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setGravity'", nullptr);
             return 0;
         }
-        cobj->setGravity(arg0);
+        obj->setGravity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2160,7 +2160,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2172,12 +2172,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getGravity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getGravity'", nullptr);
         return 0;
     }
 #endif
@@ -2190,7 +2190,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getGravity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getGravity();
+        auto&& ret = obj->getGravity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2207,7 +2207,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2219,12 +2219,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal'", nullptr);
         return 0;
     }
 #endif
@@ -2240,7 +2240,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal'", nullptr);
             return 0;
         }
-        cobj->setInvInertiaDiagLocal(arg0);
+        obj->setInvInertiaDiagLocal(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2257,7 +2257,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* tolua_
 int lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2269,12 +2269,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal'", nullptr);
         return 0;
     }
 #endif
@@ -2287,7 +2287,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getInvInertiaDiagLocal();
+        auto&& ret = obj->getInvInertiaDiagLocal();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2304,7 +2304,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* tolua_
 int lua_ax_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2316,12 +2316,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setMassProps'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setMassProps'", nullptr);
         return 0;
     }
 #endif
@@ -2340,7 +2340,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setMassProps'", nullptr);
             return 0;
         }
-        cobj->setMassProps(arg0, arg1);
+        obj->setMassProps(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2357,7 +2357,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2369,12 +2369,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getInvMass'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getInvMass'", nullptr);
         return 0;
     }
 #endif
@@ -2387,7 +2387,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getInvMass'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getInvMass();
+        auto&& ret = obj->getInvMass();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2404,7 +2404,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2416,12 +2416,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getTotalForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getTotalForce'", nullptr);
         return 0;
     }
 #endif
@@ -2434,7 +2434,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getTotalForce'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTotalForce();
+        auto&& ret = obj->getTotalForce();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2451,7 +2451,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2463,12 +2463,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getTotalTorque'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getTotalTorque'", nullptr);
         return 0;
     }
 #endif
@@ -2481,7 +2481,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getTotalTorque'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTotalTorque();
+        auto&& ret = obj->getTotalTorque();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2498,7 +2498,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2510,12 +2510,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setRestitution'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setRestitution'", nullptr);
         return 0;
     }
 #endif
@@ -2531,7 +2531,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setRestitution'", nullptr);
             return 0;
         }
-        cobj->setRestitution(arg0);
+        obj->setRestitution(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2548,7 +2548,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2560,12 +2560,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getRestitution'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getRestitution'", nullptr);
         return 0;
     }
 #endif
@@ -2578,7 +2578,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getRestitution'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitution();
+        auto&& ret = obj->getRestitution();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2595,7 +2595,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2607,12 +2607,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setFriction'", nullptr);
         return 0;
     }
 #endif
@@ -2628,7 +2628,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setFriction'", nullptr);
             return 0;
         }
-        cobj->setFriction(arg0);
+        obj->setFriction(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2645,7 +2645,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2657,12 +2657,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getFriction'", nullptr);
         return 0;
     }
 #endif
@@ -2675,7 +2675,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getFriction'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFriction();
+        auto&& ret = obj->getFriction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2692,7 +2692,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2704,12 +2704,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setRollingFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setRollingFriction'", nullptr);
         return 0;
     }
 #endif
@@ -2725,7 +2725,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setRollingFriction'", nullptr);
             return 0;
         }
-        cobj->setRollingFriction(arg0);
+        obj->setRollingFriction(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2742,7 +2742,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2754,12 +2754,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getRollingFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getRollingFriction'", nullptr);
         return 0;
     }
 #endif
@@ -2772,7 +2772,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getRollingFriction'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRollingFriction();
+        auto&& ret = obj->getRollingFriction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2789,7 +2789,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2801,12 +2801,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setHitFraction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setHitFraction'", nullptr);
         return 0;
     }
 #endif
@@ -2822,7 +2822,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setHitFraction'", nullptr);
             return 0;
         }
-        cobj->setHitFraction(arg0);
+        obj->setHitFraction(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2839,7 +2839,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2851,12 +2851,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getHitFraction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getHitFraction'", nullptr);
         return 0;
     }
 #endif
@@ -2869,7 +2869,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getHitFraction'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getHitFraction();
+        auto&& ret = obj->getHitFraction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2886,7 +2886,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2898,12 +2898,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold'", nullptr);
         return 0;
     }
 #endif
@@ -2919,7 +2919,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold'", nullptr);
             return 0;
         }
-        cobj->setCcdMotionThreshold(arg0);
+        obj->setCcdMotionThreshold(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2936,7 +2936,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* tolua_S
 int lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2948,12 +2948,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold'", nullptr);
         return 0;
     }
 #endif
@@ -2966,7 +2966,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCcdMotionThreshold();
+        auto&& ret = obj->getCcdMotionThreshold();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2983,7 +2983,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* tolua_S
 int lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2995,12 +2995,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius'", nullptr);
         return 0;
     }
 #endif
@@ -3016,7 +3016,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius'", nullptr);
             return 0;
         }
-        cobj->setCcdSweptSphereRadius(arg0);
+        obj->setCcdSweptSphereRadius(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3033,7 +3033,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State* tolua
 int lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3045,12 +3045,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius'", nullptr);
         return 0;
     }
 #endif
@@ -3063,7 +3063,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCcdSweptSphereRadius();
+        auto&& ret = obj->getCcdSweptSphereRadius();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3080,7 +3080,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State* tolua
 int lua_ax_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3092,12 +3092,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setKinematic'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setKinematic'", nullptr);
         return 0;
     }
 #endif
@@ -3113,7 +3113,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setKinematic'", nullptr);
             return 0;
         }
-        cobj->setKinematic(arg0);
+        obj->setKinematic(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3130,7 +3130,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3142,12 +3142,12 @@ int lua_ax_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_isKinematic'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_isKinematic'", nullptr);
         return 0;
     }
 #endif
@@ -3160,7 +3160,7 @@ int lua_ax_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_isKinematic'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isKinematic();
+        auto&& ret = obj->isKinematic();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3177,7 +3177,7 @@ int lua_ax_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3189,12 +3189,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraint'", nullptr);
         return 0;
     }
 #endif
@@ -3210,7 +3210,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraint'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getConstraint(arg0);
+        auto&& ret = obj->getConstraint(arg0);
         object_to_luaval<ax::Physics3DConstraint>(tolua_S, "ax.Physics3DConstraint",(ax::Physics3DConstraint*)ret);
         return 1;
     }
@@ -3227,7 +3227,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3239,12 +3239,12 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraintCount'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraintCount'", nullptr);
         return 0;
     }
 #endif
@@ -3257,7 +3257,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraintCount'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getConstraintCount();
+        auto&& ret = obj->getConstraintCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3274,7 +3274,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3286,12 +3286,12 @@ int lua_ax_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_setActive'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_setActive'", nullptr);
         return 0;
     }
 #endif
@@ -3307,7 +3307,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_setActive'", nullptr);
             return 0;
         }
-        cobj->setActive(arg0);
+        obj->setActive(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3324,7 +3324,7 @@ int lua_ax_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3336,12 +3336,12 @@ int lua_ax_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_init'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_init'", nullptr);
         return 0;
     }
 #endif
@@ -3358,7 +3358,7 @@ int lua_ax_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_init'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->init(arg0);
+        auto&& ret = obj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3375,7 +3375,7 @@ int lua_ax_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3387,12 +3387,12 @@ int lua_ax_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_addConstraint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_addConstraint'", nullptr);
         return 0;
     }
 #endif
@@ -3408,7 +3408,7 @@ int lua_ax_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_addConstraint'", nullptr);
             return 0;
         }
-        cobj->addConstraint(arg0);
+        obj->addConstraint(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3425,7 +3425,7 @@ int lua_ax_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3434,11 +3434,11 @@ int lua_ax_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DRigidBody_removeConstraint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DRigidBody_removeConstraint'", nullptr);
         return 0;
     }
 #endif
@@ -3449,7 +3449,7 @@ int lua_ax_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Physics3DRigidBody:removeConstraint");
 
             if (!ok) { break; }
-            cobj->removeConstraint(arg0);
+            obj->removeConstraint(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -3461,7 +3461,7 @@ int lua_ax_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
             ok &= luaval_to_object<ax::Physics3DConstraint>(tolua_S, 2, "ax.Physics3DConstraint",&arg0, "ax.Physics3DRigidBody:removeConstraint");
 
             if (!ok) { break; }
-            cobj->removeConstraint(arg0);
+            obj->removeConstraint(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -3480,7 +3480,7 @@ int lua_ax_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DRigidBody_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DRigidBody* cobj = nullptr;
+    ax::Physics3DRigidBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3497,11 +3497,11 @@ int lua_ax_physics3d_Physics3DRigidBody_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3DRigidBody();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DRigidBody");
+        obj = new ax::Physics3DRigidBody();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3DRigidBody");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:Physics3DRigidBody",argc, 0);
@@ -3586,7 +3586,7 @@ int lua_register_ax_physics3d_Physics3DRigidBody(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DComponent* cobj = nullptr;
+    ax::Physics3DComponent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3598,12 +3598,12 @@ int lua_ax_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DComponent_setPhysics3DObject'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DComponent_setPhysics3DObject'", nullptr);
         return 0;
     }
 #endif
@@ -3619,7 +3619,7 @@ int lua_ax_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_setPhysics3DObject'", nullptr);
             return 0;
         }
-        cobj->setPhysics3DObject(arg0);
+        obj->setPhysics3DObject(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3636,7 +3636,7 @@ int lua_ax_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DComponent* cobj = nullptr;
+    ax::Physics3DComponent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3648,12 +3648,12 @@ int lua_ax_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DComponent_getPhysics3DObject'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DComponent_getPhysics3DObject'", nullptr);
         return 0;
     }
 #endif
@@ -3666,7 +3666,7 @@ int lua_ax_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_getPhysics3DObject'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPhysics3DObject();
+        auto&& ret = obj->getPhysics3DObject();
         object_to_luaval<ax::Physics3DObject>(tolua_S, "ax.Physics3DObject",(ax::Physics3DObject*)ret);
         return 1;
     }
@@ -3683,7 +3683,7 @@ int lua_ax_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DComponent* cobj = nullptr;
+    ax::Physics3DComponent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3695,12 +3695,12 @@ int lua_ax_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DComponent_addToPhysicsWorld'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DComponent_addToPhysicsWorld'", nullptr);
         return 0;
     }
 #endif
@@ -3716,7 +3716,7 @@ int lua_ax_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_addToPhysicsWorld'", nullptr);
             return 0;
         }
-        cobj->addToPhysicsWorld(arg0);
+        obj->addToPhysicsWorld(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3733,7 +3733,7 @@ int lua_ax_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DComponent* cobj = nullptr;
+    ax::Physics3DComponent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3745,12 +3745,12 @@ int lua_ax_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DComponent_setSyncFlag'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DComponent_setSyncFlag'", nullptr);
         return 0;
     }
 #endif
@@ -3766,7 +3766,7 @@ int lua_ax_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_setSyncFlag'", nullptr);
             return 0;
         }
-        cobj->setSyncFlag(arg0);
+        obj->setSyncFlag(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3783,7 +3783,7 @@ int lua_ax_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DComponent* cobj = nullptr;
+    ax::Physics3DComponent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3795,12 +3795,12 @@ int lua_ax_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DComponent_syncNodeToPhysics'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DComponent_syncNodeToPhysics'", nullptr);
         return 0;
     }
 #endif
@@ -3813,7 +3813,7 @@ int lua_ax_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_syncNodeToPhysics'", nullptr);
             return 0;
         }
-        cobj->syncNodeToPhysics();
+        obj->syncNodeToPhysics();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3830,7 +3830,7 @@ int lua_ax_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DComponent_syncPhysicsToNode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DComponent* cobj = nullptr;
+    ax::Physics3DComponent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3842,12 +3842,12 @@ int lua_ax_physics3d_Physics3DComponent_syncPhysicsToNode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DComponent_syncPhysicsToNode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DComponent_syncPhysicsToNode'", nullptr);
         return 0;
     }
 #endif
@@ -3860,7 +3860,7 @@ int lua_ax_physics3d_Physics3DComponent_syncPhysicsToNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_syncPhysicsToNode'", nullptr);
             return 0;
         }
-        cobj->syncPhysicsToNode();
+        obj->syncPhysicsToNode();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3911,7 +3911,7 @@ int lua_ax_physics3d_Physics3DComponent_getPhysics3DComponentName(lua_State* tol
 int lua_ax_physics3d_Physics3DComponent_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DComponent* cobj = nullptr;
+    ax::Physics3DComponent* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3928,11 +3928,11 @@ int lua_ax_physics3d_Physics3DComponent_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3DComponent();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DComponent");
+        obj = new ax::Physics3DComponent();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3DComponent");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:Physics3DComponent",argc, 0);
@@ -3975,7 +3975,7 @@ int lua_register_ax_physics3d_Physics3DComponent(lua_State* tolua_S)
 int lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsMeshRenderer* cobj = nullptr;
+    ax::PhysicsMeshRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3987,12 +3987,12 @@ int lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj'", nullptr);
         return 0;
     }
 #endif
@@ -4005,7 +4005,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPhysicsObj();
+        auto&& ret = obj->getPhysicsObj();
         object_to_luaval<ax::Physics3DObject>(tolua_S, "ax.Physics3DObject",(ax::Physics3DObject*)ret);
         return 1;
     }
@@ -4022,7 +4022,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj(lua_State* tolua_S)
 int lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsMeshRenderer* cobj = nullptr;
+    ax::PhysicsMeshRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4034,12 +4034,12 @@ int lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag'", nullptr);
         return 0;
     }
 #endif
@@ -4055,7 +4055,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag'", nullptr);
             return 0;
         }
-        cobj->setSyncFlag(arg0);
+        obj->setSyncFlag(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4072,7 +4072,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_setSyncFlag(lua_State* tolua_S)
 int lua_ax_physics3d_PhysicsMeshRenderer_syncNodeToPhysics(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsMeshRenderer* cobj = nullptr;
+    ax::PhysicsMeshRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4084,12 +4084,12 @@ int lua_ax_physics3d_PhysicsMeshRenderer_syncNodeToPhysics(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_PhysicsMeshRenderer_syncNodeToPhysics'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_PhysicsMeshRenderer_syncNodeToPhysics'", nullptr);
         return 0;
     }
 #endif
@@ -4102,7 +4102,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_syncNodeToPhysics(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsMeshRenderer_syncNodeToPhysics'", nullptr);
             return 0;
         }
-        cobj->syncNodeToPhysics();
+        obj->syncNodeToPhysics();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4119,7 +4119,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_syncNodeToPhysics(lua_State* tolua_S)
 int lua_ax_physics3d_PhysicsMeshRenderer_syncPhysicsToNode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsMeshRenderer* cobj = nullptr;
+    ax::PhysicsMeshRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4131,12 +4131,12 @@ int lua_ax_physics3d_PhysicsMeshRenderer_syncPhysicsToNode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_PhysicsMeshRenderer_syncPhysicsToNode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_PhysicsMeshRenderer_syncPhysicsToNode'", nullptr);
         return 0;
     }
 #endif
@@ -4149,7 +4149,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_syncPhysicsToNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsMeshRenderer_syncPhysicsToNode'", nullptr);
             return 0;
         }
-        cobj->syncPhysicsToNode();
+        obj->syncPhysicsToNode();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4166,7 +4166,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_syncPhysicsToNode(lua_State* tolua_S)
 int lua_ax_physics3d_PhysicsMeshRenderer_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsMeshRenderer* cobj = nullptr;
+    ax::PhysicsMeshRenderer* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4183,11 +4183,11 @@ int lua_ax_physics3d_PhysicsMeshRenderer_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsMeshRenderer_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::PhysicsMeshRenderer();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.PhysicsMeshRenderer");
+        obj = new ax::PhysicsMeshRenderer();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.PhysicsMeshRenderer");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsMeshRenderer:PhysicsMeshRenderer",argc, 0);
@@ -4227,7 +4227,7 @@ int lua_register_ax_physics3d_PhysicsMeshRenderer(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4239,12 +4239,12 @@ int lua_ax_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_setGravity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_setGravity'", nullptr);
         return 0;
     }
 #endif
@@ -4260,7 +4260,7 @@ int lua_ax_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_setGravity'", nullptr);
             return 0;
         }
-        cobj->setGravity(arg0);
+        obj->setGravity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4277,7 +4277,7 @@ int lua_ax_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4289,12 +4289,12 @@ int lua_ax_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_getGravity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_getGravity'", nullptr);
         return 0;
     }
 #endif
@@ -4307,7 +4307,7 @@ int lua_ax_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_getGravity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getGravity();
+        auto&& ret = obj->getGravity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4324,7 +4324,7 @@ int lua_ax_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4336,12 +4336,12 @@ int lua_ax_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_addPhysics3DObject'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_addPhysics3DObject'", nullptr);
         return 0;
     }
 #endif
@@ -4357,7 +4357,7 @@ int lua_ax_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_addPhysics3DObject'", nullptr);
             return 0;
         }
-        cobj->addPhysics3DObject(arg0);
+        obj->addPhysics3DObject(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4374,7 +4374,7 @@ int lua_ax_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4386,12 +4386,12 @@ int lua_ax_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_removePhysics3DObject'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_removePhysics3DObject'", nullptr);
         return 0;
     }
 #endif
@@ -4407,7 +4407,7 @@ int lua_ax_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_removePhysics3DObject'", nullptr);
             return 0;
         }
-        cobj->removePhysics3DObject(arg0);
+        obj->removePhysics3DObject(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4424,7 +4424,7 @@ int lua_ax_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4436,12 +4436,12 @@ int lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DObjects'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DObjects'", nullptr);
         return 0;
     }
 #endif
@@ -4454,7 +4454,7 @@ int lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DObjects'", nullptr);
             return 0;
         }
-        cobj->removeAllPhysics3DObjects();
+        obj->removeAllPhysics3DObjects();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4471,7 +4471,7 @@ int lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* tolua_S
 int lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4483,12 +4483,12 @@ int lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint'", nullptr);
         return 0;
     }
 #endif
@@ -4504,7 +4504,7 @@ int lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint'", nullptr);
             return 0;
         }
-        cobj->addPhysics3DConstraint(arg0);
+        obj->addPhysics3DConstraint(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4521,7 +4521,7 @@ int lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint'", nullptr);
             return 0;
         }
-        cobj->addPhysics3DConstraint(arg0, arg1);
+        obj->addPhysics3DConstraint(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4538,7 +4538,7 @@ int lua_ax_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4550,12 +4550,12 @@ int lua_ax_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_removePhysics3DConstraint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_removePhysics3DConstraint'", nullptr);
         return 0;
     }
 #endif
@@ -4571,7 +4571,7 @@ int lua_ax_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_removePhysics3DConstraint'", nullptr);
             return 0;
         }
-        cobj->removePhysics3DConstraint(arg0);
+        obj->removePhysics3DConstraint(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4588,7 +4588,7 @@ int lua_ax_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* tolua_S
 int lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4600,12 +4600,12 @@ int lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DConstraints'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DConstraints'", nullptr);
         return 0;
     }
 #endif
@@ -4618,7 +4618,7 @@ int lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DConstraints'", nullptr);
             return 0;
         }
-        cobj->removeAllPhysics3DConstraints();
+        obj->removeAllPhysics3DConstraints();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4635,7 +4635,7 @@ int lua_ax_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_State* tol
 int lua_ax_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4647,12 +4647,12 @@ int lua_ax_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_stepSimulate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_stepSimulate'", nullptr);
         return 0;
     }
 #endif
@@ -4668,7 +4668,7 @@ int lua_ax_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_stepSimulate'", nullptr);
             return 0;
         }
-        cobj->stepSimulate(arg0);
+        obj->stepSimulate(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4685,7 +4685,7 @@ int lua_ax_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4697,12 +4697,12 @@ int lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable'", nullptr);
         return 0;
     }
 #endif
@@ -4718,7 +4718,7 @@ int lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable'", nullptr);
             return 0;
         }
-        cobj->setDebugDrawEnable(arg0);
+        obj->setDebugDrawEnable(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4735,7 +4735,7 @@ int lua_ax_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4747,12 +4747,12 @@ int lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -4765,7 +4765,7 @@ int lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isDebugDrawEnabled();
+        auto&& ret = obj->isDebugDrawEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4782,7 +4782,7 @@ int lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4794,12 +4794,12 @@ int lua_ax_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_debugDraw'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_debugDraw'", nullptr);
         return 0;
     }
 #endif
@@ -4815,7 +4815,7 @@ int lua_ax_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_debugDraw'", nullptr);
             return 0;
         }
-        cobj->debugDraw(arg0);
+        obj->debugDraw(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4832,7 +4832,7 @@ int lua_ax_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4844,12 +4844,12 @@ int lua_ax_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_collisionChecking'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_collisionChecking'", nullptr);
         return 0;
     }
 #endif
@@ -4862,7 +4862,7 @@ int lua_ax_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_collisionChecking'", nullptr);
             return 0;
         }
-        cobj->collisionChecking();
+        obj->collisionChecking();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4879,7 +4879,7 @@ int lua_ax_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4891,12 +4891,12 @@ int lua_ax_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_needCollisionChecking'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_needCollisionChecking'", nullptr);
         return 0;
     }
 #endif
@@ -4909,7 +4909,7 @@ int lua_ax_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_needCollisionChecking'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->needCollisionChecking();
+        auto&& ret = obj->needCollisionChecking();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4926,7 +4926,7 @@ int lua_ax_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4938,12 +4938,12 @@ int lua_ax_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DWorld_setGhostPairCallback'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DWorld_setGhostPairCallback'", nullptr);
         return 0;
     }
 #endif
@@ -4956,7 +4956,7 @@ int lua_ax_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_setGhostPairCallback'", nullptr);
             return 0;
         }
-        cobj->setGhostPairCallback();
+        obj->setGhostPairCallback();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4973,7 +4973,7 @@ int lua_ax_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DWorld_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4990,11 +4990,11 @@ int lua_ax_physics3d_Physics3DWorld_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3DWorld();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DWorld");
+        obj = new ax::Physics3DWorld();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3DWorld");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:Physics3DWorld",argc, 0);
@@ -5045,7 +5045,7 @@ int lua_register_ax_physics3d_Physics3DWorld(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5057,12 +5057,12 @@ int lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -5075,7 +5075,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBreakingImpulse();
+        auto&& ret = obj->getBreakingImpulse();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5092,7 +5092,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5104,12 +5104,12 @@ int lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -5125,7 +5125,7 @@ int lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse'", nullptr);
             return 0;
         }
-        cobj->setBreakingImpulse(arg0);
+        obj->setBreakingImpulse(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5142,7 +5142,7 @@ int lua_ax_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5154,12 +5154,12 @@ int lua_ax_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_isEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_isEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -5172,7 +5172,7 @@ int lua_ax_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_isEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isEnabled();
+        auto&& ret = obj->isEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5189,7 +5189,7 @@ int lua_ax_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5201,12 +5201,12 @@ int lua_ax_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_setEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_setEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -5222,7 +5222,7 @@ int lua_ax_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_setEnabled'", nullptr);
             return 0;
         }
-        cobj->setEnabled(arg0);
+        obj->setEnabled(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5239,7 +5239,7 @@ int lua_ax_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5251,12 +5251,12 @@ int lua_ax_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_getBodyA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_getBodyA'", nullptr);
         return 0;
     }
 #endif
@@ -5269,7 +5269,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getBodyA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBodyA();
+        auto&& ret = obj->getBodyA();
         object_to_luaval<ax::Physics3DRigidBody>(tolua_S, "ax.Physics3DRigidBody",(ax::Physics3DRigidBody*)ret);
         return 1;
     }
@@ -5286,7 +5286,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5298,12 +5298,12 @@ int lua_ax_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_getBodyB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_getBodyB'", nullptr);
         return 0;
     }
 #endif
@@ -5316,7 +5316,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getBodyB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBodyB();
+        auto&& ret = obj->getBodyB();
         object_to_luaval<ax::Physics3DRigidBody>(tolua_S, "ax.Physics3DRigidBody",(ax::Physics3DRigidBody*)ret);
         return 1;
     }
@@ -5333,7 +5333,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5345,12 +5345,12 @@ int lua_ax_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_getConstraintType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_getConstraintType'", nullptr);
         return 0;
     }
 #endif
@@ -5363,7 +5363,7 @@ int lua_ax_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getConstraintType'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getConstraintType();
+        int ret = (int)obj->getConstraintType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5380,7 +5380,7 @@ int lua_ax_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5392,12 +5392,12 @@ int lua_ax_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_setUserData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_setUserData'", nullptr);
         return 0;
     }
 #endif
@@ -5414,7 +5414,7 @@ int lua_ax_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_setUserData'", nullptr);
             return 0;
         }
-        cobj->setUserData(arg0);
+        obj->setUserData(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5431,7 +5431,7 @@ int lua_ax_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5443,12 +5443,12 @@ int lua_ax_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_getUserData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_getUserData'", nullptr);
         return 0;
     }
 #endif
@@ -5461,7 +5461,7 @@ int lua_ax_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getUserData'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUserData();
+        auto&& ret = obj->getUserData();
         #pragma warning NO CONVERSION FROM NATIVE FOR void*;
         return 1;
     }
@@ -5478,7 +5478,7 @@ int lua_ax_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5490,12 +5490,12 @@ int lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations'", nullptr);
         return 0;
     }
 #endif
@@ -5508,7 +5508,7 @@ int lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getOverrideNumSolverIterations();
+        auto&& ret = obj->getOverrideNumSolverIterations();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5525,7 +5525,7 @@ int lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lua_Stat
 int lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5537,12 +5537,12 @@ int lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations'", nullptr);
         return 0;
     }
 #endif
@@ -5558,7 +5558,7 @@ int lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations'", nullptr);
             return 0;
         }
-        cobj->setOverrideNumSolverIterations(arg0);
+        obj->setOverrideNumSolverIterations(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5575,7 +5575,7 @@ int lua_ax_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lua_Stat
 int lua_ax_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConstraint* cobj = nullptr;
+    ax::Physics3DConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5587,12 +5587,12 @@ int lua_ax_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConstraint_getbtContraint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConstraint_getbtContraint'", nullptr);
         return 0;
     }
 #endif
@@ -5605,7 +5605,7 @@ int lua_ax_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getbtContraint'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getbtContraint();
+        auto&& ret = obj->getbtContraint();
         object_to_luaval<btTypedConstraint>(tolua_S, "btTypedConstraint",(btTypedConstraint*)ret);
         return 1;
     }
@@ -5653,7 +5653,7 @@ int lua_register_ax_physics3d_Physics3DConstraint(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DPointToPointConstraint* cobj = nullptr;
+    ax::Physics3DPointToPointConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5665,12 +5665,12 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_State*
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInA'", nullptr);
         return 0;
     }
 #endif
@@ -5686,7 +5686,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInA'", nullptr);
             return 0;
         }
-        cobj->setPivotPointInA(arg0);
+        obj->setPivotPointInA(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5703,7 +5703,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_State*
 int lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DPointToPointConstraint* cobj = nullptr;
+    ax::Physics3DPointToPointConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5715,12 +5715,12 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_State*
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInB'", nullptr);
         return 0;
     }
 #endif
@@ -5736,7 +5736,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInB'", nullptr);
             return 0;
         }
-        cobj->setPivotPointInB(arg0);
+        obj->setPivotPointInB(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5753,7 +5753,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_State*
 int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DPointToPointConstraint* cobj = nullptr;
+    ax::Physics3DPointToPointConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5765,12 +5765,12 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_State*
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA'", nullptr);
         return 0;
     }
 #endif
@@ -5783,7 +5783,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPivotPointInA();
+        auto&& ret = obj->getPivotPointInA();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5800,7 +5800,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_State*
 int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DPointToPointConstraint* cobj = nullptr;
+    ax::Physics3DPointToPointConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5812,12 +5812,12 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_State*
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB'", nullptr);
         return 0;
     }
 #endif
@@ -5830,7 +5830,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPivotPointInB();
+        auto&& ret = obj->getPivotPointInB();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5847,7 +5847,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_State*
 int lua_ax_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DPointToPointConstraint* cobj = nullptr;
+    ax::Physics3DPointToPointConstraint* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5856,11 +5856,11 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_init'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_init'", nullptr);
         return 0;
     }
 #endif
@@ -5883,7 +5883,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
             ok &= luaval_to_vec3(tolua_S, 5, &arg3, "ax.Physics3DPointToPointConstraint:init");
 
             if (!ok) { break; }
-            bool ret = cobj->init(arg0, arg1, arg2, arg3);
+            bool ret = obj->init(arg0, arg1, arg2, arg3);
             tolua_pushboolean(tolua_S,(bool)ret);
             return 1;
         }
@@ -5899,7 +5899,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.Physics3DPointToPointConstraint:init");
 
             if (!ok) { break; }
-            bool ret = cobj->init(arg0, arg1);
+            bool ret = obj->init(arg0, arg1);
             tolua_pushboolean(tolua_S,(bool)ret);
             return 1;
         }
@@ -5976,7 +5976,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_create(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DPointToPointConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DPointToPointConstraint* cobj = nullptr;
+    ax::Physics3DPointToPointConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5993,11 +5993,11 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_constructor(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3DPointToPointConstraint();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DPointToPointConstraint");
+        obj = new ax::Physics3DPointToPointConstraint();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3DPointToPointConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DPointToPointConstraint:Physics3DPointToPointConstraint",argc, 0);
@@ -6039,7 +6039,7 @@ int lua_register_ax_physics3d_Physics3DPointToPointConstraint(lua_State* tolua_S
 int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6051,12 +6051,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA'", nullptr);
         return 0;
     }
 #endif
@@ -6069,7 +6069,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFrameOffsetA();
+        auto&& ret = obj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6086,7 +6086,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* tolua_S
 int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6098,12 +6098,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB'", nullptr);
         return 0;
     }
 #endif
@@ -6116,7 +6116,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFrameOffsetB();
+        auto&& ret = obj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6133,7 +6133,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* tolua_S
 int lua_ax_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6145,12 +6145,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setFrames'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setFrames'", nullptr);
         return 0;
     }
 #endif
@@ -6169,7 +6169,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setFrames'", nullptr);
             return 0;
         }
-        cobj->setFrames(arg0, arg1);
+        obj->setFrames(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6186,7 +6186,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6198,12 +6198,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly'", nullptr);
         return 0;
     }
 #endif
@@ -6219,7 +6219,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly'", nullptr);
             return 0;
         }
-        cobj->setAngularOnly(arg0);
+        obj->setAngularOnly(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6236,7 +6236,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6248,12 +6248,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor'", nullptr);
         return 0;
     }
 #endif
@@ -6275,7 +6275,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor'", nullptr);
             return 0;
         }
-        cobj->enableAngularMotor(arg0, arg1, arg2);
+        obj->enableAngularMotor(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6292,7 +6292,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State* tolu
 int lua_ax_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6304,12 +6304,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_enableMotor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_enableMotor'", nullptr);
         return 0;
     }
 #endif
@@ -6325,7 +6325,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_enableMotor'", nullptr);
             return 0;
         }
-        cobj->enableMotor(arg0);
+        obj->enableMotor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6342,7 +6342,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6354,12 +6354,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -6375,7 +6375,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse'", nullptr);
             return 0;
         }
-        cobj->setMaxMotorImpulse(arg0);
+        obj->setMaxMotorImpulse(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6392,7 +6392,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State* tolu
 int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6404,12 +6404,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
         return 0;
     }
 #endif
@@ -6428,7 +6428,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
             return 0;
         }
-        cobj->setLimit(arg0, arg1);
+        obj->setLimit(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6448,7 +6448,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
             return 0;
         }
-        cobj->setLimit(arg0, arg1, arg2);
+        obj->setLimit(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6471,7 +6471,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
             return 0;
         }
-        cobj->setLimit(arg0, arg1, arg2, arg3);
+        obj->setLimit(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6497,7 +6497,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
             return 0;
         }
-        cobj->setLimit(arg0, arg1, arg2, arg3, arg4);
+        obj->setLimit(arg0, arg1, arg2, arg3, arg4);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6514,7 +6514,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6526,12 +6526,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setAxis'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setAxis'", nullptr);
         return 0;
     }
 #endif
@@ -6547,7 +6547,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setAxis'", nullptr);
             return 0;
         }
-        cobj->setAxis(arg0);
+        obj->setAxis(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6564,7 +6564,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6576,12 +6576,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit'", nullptr);
         return 0;
     }
 #endif
@@ -6594,7 +6594,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLowerLimit();
+        auto&& ret = obj->getLowerLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6611,7 +6611,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6623,12 +6623,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit'", nullptr);
         return 0;
     }
 #endif
@@ -6641,7 +6641,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUpperLimit();
+        auto&& ret = obj->getUpperLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6658,7 +6658,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6667,11 +6667,11 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle'", nullptr);
         return 0;
     }
 #endif
@@ -6686,7 +6686,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S)
             ok &= luaval_to_mat4(tolua_S, 3, &arg1, "ax.Physics3DHingeConstraint:getHingeAngle");
 
             if (!ok) { break; }
-            double ret = cobj->getHingeAngle(arg0, arg1);
+            double ret = obj->getHingeAngle(arg0, arg1);
             tolua_pushnumber(tolua_S,(lua_Number)ret);
             return 1;
         }
@@ -6694,7 +6694,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S)
     ok  = true;
     do {
         if (argc == 0) {
-            double ret = cobj->getHingeAngle();
+            double ret = obj->getHingeAngle();
             tolua_pushnumber(tolua_S,(lua_Number)ret);
             return 1;
         }
@@ -6713,7 +6713,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6725,12 +6725,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getAFrame'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getAFrame'", nullptr);
         return 0;
     }
 #endif
@@ -6743,7 +6743,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getAFrame'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAFrame();
+        auto&& ret = obj->getAFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6760,7 +6760,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6772,12 +6772,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getBFrame'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getBFrame'", nullptr);
         return 0;
     }
 #endif
@@ -6790,7 +6790,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getBFrame'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBFrame();
+        auto&& ret = obj->getBFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6807,7 +6807,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6819,12 +6819,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly'", nullptr);
         return 0;
     }
 #endif
@@ -6837,7 +6837,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularOnly();
+        auto&& ret = obj->getAngularOnly();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -6854,7 +6854,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6866,12 +6866,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor'", nullptr);
         return 0;
     }
 #endif
@@ -6884,7 +6884,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getEnableAngularMotor();
+        auto&& ret = obj->getEnableAngularMotor();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -6901,7 +6901,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_State* t
 int lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6913,12 +6913,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity'", nullptr);
         return 0;
     }
 #endif
@@ -6931,7 +6931,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMotorTargetVelosity();
+        auto&& ret = obj->getMotorTargetVelosity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6948,7 +6948,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_State* 
 int lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6960,12 +6960,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -6978,7 +6978,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxMotorImpulse();
+        auto&& ret = obj->getMaxMotorImpulse();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6995,7 +6995,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State* tolu
 int lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7007,12 +7007,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset'", nullptr);
         return 0;
     }
 #endif
@@ -7025,7 +7025,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUseFrameOffset();
+        auto&& ret = obj->getUseFrameOffset();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7042,7 +7042,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State* tolua
 int lua_ax_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7054,12 +7054,12 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setUseFrameOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DHingeConstraint_setUseFrameOffset'", nullptr);
         return 0;
     }
 #endif
@@ -7075,7 +7075,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_setUseFrameOffset'", nullptr);
             return 0;
         }
-        cobj->setUseFrameOffset(arg0);
+        obj->setUseFrameOffset(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7288,7 +7288,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DHingeConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DHingeConstraint* cobj = nullptr;
+    ax::Physics3DHingeConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7305,11 +7305,11 @@ int lua_ax_physics3d_Physics3DHingeConstraint_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3DHingeConstraint();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DHingeConstraint");
+        obj = new ax::Physics3DHingeConstraint();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3DHingeConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:Physics3DHingeConstraint",argc, 0);
@@ -7366,7 +7366,7 @@ int lua_register_ax_physics3d_Physics3DHingeConstraint(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7378,12 +7378,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA'", nullptr);
         return 0;
     }
 #endif
@@ -7396,7 +7396,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFrameOffsetA();
+        auto&& ret = obj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7413,7 +7413,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* tolua_
 int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7425,12 +7425,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB'", nullptr);
         return 0;
     }
 #endif
@@ -7443,7 +7443,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFrameOffsetB();
+        auto&& ret = obj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7460,7 +7460,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* tolua_
 int lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7472,12 +7472,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit'", nullptr);
         return 0;
     }
 #endif
@@ -7490,7 +7490,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLowerLinLimit();
+        auto&& ret = obj->getLowerLinLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7507,7 +7507,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7519,12 +7519,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit'", nullptr);
         return 0;
     }
 #endif
@@ -7540,7 +7540,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit'", nullptr);
             return 0;
         }
-        cobj->setLowerLinLimit(arg0);
+        obj->setLowerLinLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7557,7 +7557,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7569,12 +7569,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit'", nullptr);
         return 0;
     }
 #endif
@@ -7587,7 +7587,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUpperLinLimit();
+        auto&& ret = obj->getUpperLinLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7604,7 +7604,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7616,12 +7616,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit'", nullptr);
         return 0;
     }
 #endif
@@ -7637,7 +7637,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit'", nullptr);
             return 0;
         }
-        cobj->setUpperLinLimit(arg0);
+        obj->setUpperLinLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7654,7 +7654,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7666,12 +7666,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit'", nullptr);
         return 0;
     }
 #endif
@@ -7684,7 +7684,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLowerAngLimit();
+        auto&& ret = obj->getLowerAngLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7701,7 +7701,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7713,12 +7713,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit'", nullptr);
         return 0;
     }
 #endif
@@ -7734,7 +7734,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit'", nullptr);
             return 0;
         }
-        cobj->setLowerAngLimit(arg0);
+        obj->setLowerAngLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7751,7 +7751,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7763,12 +7763,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit'", nullptr);
         return 0;
     }
 #endif
@@ -7781,7 +7781,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUpperAngLimit();
+        auto&& ret = obj->getUpperAngLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7798,7 +7798,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7810,12 +7810,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit'", nullptr);
         return 0;
     }
 #endif
@@ -7831,7 +7831,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit'", nullptr);
             return 0;
         }
-        cobj->setUpperAngLimit(arg0);
+        obj->setUpperAngLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7848,7 +7848,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7860,12 +7860,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(lua_S
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA'", nullptr);
         return 0;
     }
 #endif
@@ -7878,7 +7878,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(lua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUseLinearReferenceFrameA();
+        auto&& ret = obj->getUseLinearReferenceFrameA();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7895,7 +7895,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(lua_S
 int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7907,12 +7907,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin'", nullptr);
         return 0;
     }
 #endif
@@ -7925,7 +7925,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSoftnessDirLin();
+        auto&& ret = obj->getSoftnessDirLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7942,7 +7942,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7954,12 +7954,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin'", nullptr);
         return 0;
     }
 #endif
@@ -7972,7 +7972,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitutionDirLin();
+        auto&& ret = obj->getRestitutionDirLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7989,7 +7989,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_State* t
 int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8001,12 +8001,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin'", nullptr);
         return 0;
     }
 #endif
@@ -8019,7 +8019,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDampingDirLin();
+        auto&& ret = obj->getDampingDirLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8036,7 +8036,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8048,12 +8048,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng'", nullptr);
         return 0;
     }
 #endif
@@ -8066,7 +8066,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSoftnessDirAng();
+        auto&& ret = obj->getSoftnessDirAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8083,7 +8083,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8095,12 +8095,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng'", nullptr);
         return 0;
     }
 #endif
@@ -8113,7 +8113,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitutionDirAng();
+        auto&& ret = obj->getRestitutionDirAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8130,7 +8130,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_State* t
 int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8142,12 +8142,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng'", nullptr);
         return 0;
     }
 #endif
@@ -8160,7 +8160,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDampingDirAng();
+        auto&& ret = obj->getDampingDirAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8177,7 +8177,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8189,12 +8189,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin'", nullptr);
         return 0;
     }
 #endif
@@ -8207,7 +8207,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSoftnessLimLin();
+        auto&& ret = obj->getSoftnessLimLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8224,7 +8224,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8236,12 +8236,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin'", nullptr);
         return 0;
     }
 #endif
@@ -8254,7 +8254,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitutionLimLin();
+        auto&& ret = obj->getRestitutionLimLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8271,7 +8271,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_State* t
 int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8283,12 +8283,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin'", nullptr);
         return 0;
     }
 #endif
@@ -8301,7 +8301,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDampingLimLin();
+        auto&& ret = obj->getDampingLimLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8318,7 +8318,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8330,12 +8330,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng'", nullptr);
         return 0;
     }
 #endif
@@ -8348,7 +8348,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSoftnessLimAng();
+        auto&& ret = obj->getSoftnessLimAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8365,7 +8365,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8377,12 +8377,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng'", nullptr);
         return 0;
     }
 #endif
@@ -8395,7 +8395,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitutionLimAng();
+        auto&& ret = obj->getRestitutionLimAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8412,7 +8412,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_State* t
 int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8424,12 +8424,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng'", nullptr);
         return 0;
     }
 #endif
@@ -8442,7 +8442,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDampingLimAng();
+        auto&& ret = obj->getDampingLimAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8459,7 +8459,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8471,12 +8471,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin'", nullptr);
         return 0;
     }
 #endif
@@ -8489,7 +8489,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSoftnessOrthoLin();
+        auto&& ret = obj->getSoftnessOrthoLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8506,7 +8506,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_State* to
 int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8518,12 +8518,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_State*
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin'", nullptr);
         return 0;
     }
 #endif
@@ -8536,7 +8536,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitutionOrthoLin();
+        auto&& ret = obj->getRestitutionOrthoLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8553,7 +8553,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_State*
 int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8565,12 +8565,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin'", nullptr);
         return 0;
     }
 #endif
@@ -8583,7 +8583,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDampingOrthoLin();
+        auto&& ret = obj->getDampingOrthoLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8600,7 +8600,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_State* tol
 int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8612,12 +8612,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng'", nullptr);
         return 0;
     }
 #endif
@@ -8630,7 +8630,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSoftnessOrthoAng();
+        auto&& ret = obj->getSoftnessOrthoAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8647,7 +8647,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_State* to
 int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8659,12 +8659,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_State*
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng'", nullptr);
         return 0;
     }
 #endif
@@ -8677,7 +8677,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitutionOrthoAng();
+        auto&& ret = obj->getRestitutionOrthoAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8694,7 +8694,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_State*
 int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8706,12 +8706,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng'", nullptr);
         return 0;
     }
 #endif
@@ -8724,7 +8724,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDampingOrthoAng();
+        auto&& ret = obj->getDampingOrthoAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8741,7 +8741,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_State* tol
 int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8753,12 +8753,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin'", nullptr);
         return 0;
     }
 #endif
@@ -8774,7 +8774,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin'", nullptr);
             return 0;
         }
-        cobj->setSoftnessDirLin(arg0);
+        obj->setSoftnessDirLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8791,7 +8791,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8803,12 +8803,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin'", nullptr);
         return 0;
     }
 #endif
@@ -8824,7 +8824,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin'", nullptr);
             return 0;
         }
-        cobj->setRestitutionDirLin(arg0);
+        obj->setRestitutionDirLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8841,7 +8841,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_State* t
 int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8853,12 +8853,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin'", nullptr);
         return 0;
     }
 #endif
@@ -8874,7 +8874,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin'", nullptr);
             return 0;
         }
-        cobj->setDampingDirLin(arg0);
+        obj->setDampingDirLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8891,7 +8891,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8903,12 +8903,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng'", nullptr);
         return 0;
     }
 #endif
@@ -8924,7 +8924,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng'", nullptr);
             return 0;
         }
-        cobj->setSoftnessDirAng(arg0);
+        obj->setSoftnessDirAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8941,7 +8941,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8953,12 +8953,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng'", nullptr);
         return 0;
     }
 #endif
@@ -8974,7 +8974,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng'", nullptr);
             return 0;
         }
-        cobj->setRestitutionDirAng(arg0);
+        obj->setRestitutionDirAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8991,7 +8991,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_State* t
 int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9003,12 +9003,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng'", nullptr);
         return 0;
     }
 #endif
@@ -9024,7 +9024,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng'", nullptr);
             return 0;
         }
-        cobj->setDampingDirAng(arg0);
+        obj->setDampingDirAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9041,7 +9041,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9053,12 +9053,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin'", nullptr);
         return 0;
     }
 #endif
@@ -9074,7 +9074,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin'", nullptr);
             return 0;
         }
-        cobj->setSoftnessLimLin(arg0);
+        obj->setSoftnessLimLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9091,7 +9091,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9103,12 +9103,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin'", nullptr);
         return 0;
     }
 #endif
@@ -9124,7 +9124,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin'", nullptr);
             return 0;
         }
-        cobj->setRestitutionLimLin(arg0);
+        obj->setRestitutionLimLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9141,7 +9141,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_State* t
 int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9153,12 +9153,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin'", nullptr);
         return 0;
     }
 #endif
@@ -9174,7 +9174,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin'", nullptr);
             return 0;
         }
-        cobj->setDampingLimLin(arg0);
+        obj->setDampingLimLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9191,7 +9191,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9203,12 +9203,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng'", nullptr);
         return 0;
     }
 #endif
@@ -9224,7 +9224,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng'", nullptr);
             return 0;
         }
-        cobj->setSoftnessLimAng(arg0);
+        obj->setSoftnessLimAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9241,7 +9241,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9253,12 +9253,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng'", nullptr);
         return 0;
     }
 #endif
@@ -9274,7 +9274,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng'", nullptr);
             return 0;
         }
-        cobj->setRestitutionLimAng(arg0);
+        obj->setRestitutionLimAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9291,7 +9291,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_State* t
 int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9303,12 +9303,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng'", nullptr);
         return 0;
     }
 #endif
@@ -9324,7 +9324,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng'", nullptr);
             return 0;
         }
-        cobj->setDampingLimAng(arg0);
+        obj->setDampingLimAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9341,7 +9341,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State* tolua
 int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9353,12 +9353,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin'", nullptr);
         return 0;
     }
 #endif
@@ -9374,7 +9374,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin'", nullptr);
             return 0;
         }
-        cobj->setSoftnessOrthoLin(arg0);
+        obj->setSoftnessOrthoLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9391,7 +9391,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_State* to
 int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9403,12 +9403,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_State*
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin'", nullptr);
         return 0;
     }
 #endif
@@ -9424,7 +9424,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin'", nullptr);
             return 0;
         }
-        cobj->setRestitutionOrthoLin(arg0);
+        obj->setRestitutionOrthoLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9441,7 +9441,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_State*
 int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9453,12 +9453,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin'", nullptr);
         return 0;
     }
 #endif
@@ -9474,7 +9474,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin'", nullptr);
             return 0;
         }
-        cobj->setDampingOrthoLin(arg0);
+        obj->setDampingOrthoLin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9491,7 +9491,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_State* tol
 int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9503,12 +9503,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng'", nullptr);
         return 0;
     }
 #endif
@@ -9524,7 +9524,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng'", nullptr);
             return 0;
         }
-        cobj->setSoftnessOrthoAng(arg0);
+        obj->setSoftnessOrthoAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9541,7 +9541,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_State* to
 int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9553,12 +9553,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_State*
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng'", nullptr);
         return 0;
     }
 #endif
@@ -9574,7 +9574,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng'", nullptr);
             return 0;
         }
-        cobj->setRestitutionOrthoAng(arg0);
+        obj->setRestitutionOrthoAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9591,7 +9591,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_State*
 int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9603,12 +9603,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng'", nullptr);
         return 0;
     }
 #endif
@@ -9624,7 +9624,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng'", nullptr);
             return 0;
         }
-        cobj->setDampingOrthoAng(arg0);
+        obj->setDampingOrthoAng(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9641,7 +9641,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_State* tol
 int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9653,12 +9653,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor'", nullptr);
         return 0;
     }
 #endif
@@ -9674,7 +9674,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor'", nullptr);
             return 0;
         }
-        cobj->setPoweredLinMotor(arg0);
+        obj->setPoweredLinMotor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9691,7 +9691,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_State* tol
 int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9703,12 +9703,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor'", nullptr);
         return 0;
     }
 #endif
@@ -9721,7 +9721,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPoweredLinMotor();
+        auto&& ret = obj->getPoweredLinMotor();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -9738,7 +9738,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_State* tol
 int lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9750,12 +9750,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -9771,7 +9771,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(lua_Sta
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity'", nullptr);
             return 0;
         }
-        cobj->setTargetLinMotorVelocity(arg0);
+        obj->setTargetLinMotorVelocity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9788,7 +9788,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(lua_Sta
 int lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9800,12 +9800,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -9818,7 +9818,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(lua_Sta
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTargetLinMotorVelocity();
+        auto&& ret = obj->getTargetLinMotorVelocity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9835,7 +9835,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(lua_Sta
 int lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9847,12 +9847,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce'", nullptr);
         return 0;
     }
 #endif
@@ -9868,7 +9868,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce'", nullptr);
             return 0;
         }
-        cobj->setMaxLinMotorForce(arg0);
+        obj->setMaxLinMotorForce(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9885,7 +9885,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_State* to
 int lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9897,12 +9897,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce'", nullptr);
         return 0;
     }
 #endif
@@ -9915,7 +9915,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxLinMotorForce();
+        auto&& ret = obj->getMaxLinMotorForce();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9932,7 +9932,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_State* to
 int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9944,12 +9944,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor'", nullptr);
         return 0;
     }
 #endif
@@ -9965,7 +9965,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor'", nullptr);
             return 0;
         }
-        cobj->setPoweredAngMotor(arg0);
+        obj->setPoweredAngMotor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9982,7 +9982,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_State* tol
 int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9994,12 +9994,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor'", nullptr);
         return 0;
     }
 #endif
@@ -10012,7 +10012,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPoweredAngMotor();
+        auto&& ret = obj->getPoweredAngMotor();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -10029,7 +10029,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_State* tol
 int lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10041,12 +10041,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -10062,7 +10062,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(lua_Sta
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity'", nullptr);
             return 0;
         }
-        cobj->setTargetAngMotorVelocity(arg0);
+        obj->setTargetAngMotorVelocity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10079,7 +10079,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(lua_Sta
 int lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10091,12 +10091,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -10109,7 +10109,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(lua_Sta
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTargetAngMotorVelocity();
+        auto&& ret = obj->getTargetAngMotorVelocity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10126,7 +10126,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(lua_Sta
 int lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10138,12 +10138,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce'", nullptr);
         return 0;
     }
 #endif
@@ -10159,7 +10159,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce'", nullptr);
             return 0;
         }
-        cobj->setMaxAngMotorForce(arg0);
+        obj->setMaxAngMotorForce(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10176,7 +10176,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_State* to
 int lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10188,12 +10188,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce'", nullptr);
         return 0;
     }
 #endif
@@ -10206,7 +10206,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxAngMotorForce();
+        auto&& ret = obj->getMaxAngMotorForce();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10223,7 +10223,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_State* to
 int lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10235,12 +10235,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos'", nullptr);
         return 0;
     }
 #endif
@@ -10253,7 +10253,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLinearPos();
+        auto&& ret = obj->getLinearPos();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10270,7 +10270,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10282,12 +10282,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos'", nullptr);
         return 0;
     }
 #endif
@@ -10300,7 +10300,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularPos();
+        auto&& ret = obj->getAngularPos();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10317,7 +10317,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10329,12 +10329,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset'", nullptr);
         return 0;
     }
 #endif
@@ -10347,7 +10347,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUseFrameOffset();
+        auto&& ret = obj->getUseFrameOffset();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -10364,7 +10364,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10376,12 +10376,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset'", nullptr);
         return 0;
     }
 #endif
@@ -10397,7 +10397,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset'", nullptr);
             return 0;
         }
-        cobj->setUseFrameOffset(arg0);
+        obj->setUseFrameOffset(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10414,7 +10414,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State* tolu
 int lua_ax_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10426,12 +10426,12 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setFrames'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DSliderConstraint_setFrames'", nullptr);
         return 0;
     }
 #endif
@@ -10450,7 +10450,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_setFrames'", nullptr);
             return 0;
         }
-        cobj->setFrames(arg0, arg1);
+        obj->setFrames(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10511,7 +10511,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_create(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DSliderConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DSliderConstraint* cobj = nullptr;
+    ax::Physics3DSliderConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10528,11 +10528,11 @@ int lua_ax_physics3d_Physics3DSliderConstraint_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3DSliderConstraint();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DSliderConstraint");
+        obj = new ax::Physics3DSliderConstraint();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3DSliderConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:Physics3DSliderConstraint",argc, 0);
@@ -10633,7 +10633,7 @@ int lua_register_ax_physics3d_Physics3DSliderConstraint(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10645,12 +10645,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
         return 0;
     }
 #endif
@@ -10672,7 +10672,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
             return 0;
         }
-        cobj->setLimit(arg0, arg1, arg2);
+        obj->setLimit(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10695,7 +10695,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
             return 0;
         }
-        cobj->setLimit(arg0, arg1, arg2, arg3);
+        obj->setLimit(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10721,7 +10721,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
             return 0;
         }
-        cobj->setLimit(arg0, arg1, arg2, arg3, arg4);
+        obj->setLimit(arg0, arg1, arg2, arg3, arg4);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10750,7 +10750,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
             return 0;
         }
-        cobj->setLimit(arg0, arg1, arg2, arg3, arg4, arg5);
+        obj->setLimit(arg0, arg1, arg2, arg3, arg4, arg5);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10767,7 +10767,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10779,12 +10779,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame'", nullptr);
         return 0;
     }
 #endif
@@ -10797,7 +10797,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAFrame();
+        auto&& ret = obj->getAFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10814,7 +10814,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10826,12 +10826,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame'", nullptr);
         return 0;
     }
 #endif
@@ -10844,7 +10844,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBFrame();
+        auto&& ret = obj->getBFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10861,7 +10861,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10873,12 +10873,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1'", nullptr);
         return 0;
     }
 #endif
@@ -10891,7 +10891,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSwingSpan1();
+        auto&& ret = obj->getSwingSpan1();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10908,7 +10908,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State* tolua
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10920,12 +10920,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2'", nullptr);
         return 0;
     }
 #endif
@@ -10938,7 +10938,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSwingSpan2();
+        auto&& ret = obj->getSwingSpan2();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10955,7 +10955,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State* tolua
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10967,12 +10967,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan'", nullptr);
         return 0;
     }
 #endif
@@ -10985,7 +10985,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTwistSpan();
+        auto&& ret = obj->getTwistSpan();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11002,7 +11002,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* tolua_
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11014,12 +11014,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle'", nullptr);
         return 0;
     }
 #endif
@@ -11032,7 +11032,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTwistAngle();
+        auto&& ret = obj->getTwistAngle();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11049,7 +11049,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State* tolua
 int lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11061,12 +11061,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping'", nullptr);
         return 0;
     }
 #endif
@@ -11082,7 +11082,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping'", nullptr);
             return 0;
         }
-        cobj->setDamping(arg0);
+        obj->setDamping(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11099,7 +11099,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11111,12 +11111,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor'", nullptr);
         return 0;
     }
 #endif
@@ -11132,7 +11132,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor'", nullptr);
             return 0;
         }
-        cobj->enableMotor(arg0);
+        obj->enableMotor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11149,7 +11149,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* tolua_S
 int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11161,12 +11161,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -11182,7 +11182,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse'", nullptr);
             return 0;
         }
-        cobj->setMaxMotorImpulse(arg0);
+        obj->setMaxMotorImpulse(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11199,7 +11199,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_State* 
 int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11211,12 +11211,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(l
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized'", nullptr);
         return 0;
     }
 #endif
@@ -11232,7 +11232,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(l
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized'", nullptr);
             return 0;
         }
-        cobj->setMaxMotorImpulseNormalized(arg0);
+        obj->setMaxMotorImpulseNormalized(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11249,7 +11249,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(l
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11261,12 +11261,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh'", nullptr);
         return 0;
     }
 #endif
@@ -11279,7 +11279,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFixThresh();
+        auto&& ret = obj->getFixThresh();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11296,7 +11296,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* tolua_
 int lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11308,12 +11308,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh'", nullptr);
         return 0;
     }
 #endif
@@ -11329,7 +11329,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh'", nullptr);
             return 0;
         }
-        cobj->setFixThresh(arg0);
+        obj->setFixThresh(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11346,7 +11346,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* tolua_
 int lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11358,12 +11358,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle'", nullptr);
         return 0;
     }
 #endif
@@ -11382,7 +11382,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->GetPointForAngle(arg0, arg1);
+        auto&& ret = obj->GetPointForAngle(arg0, arg1);
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11399,7 +11399,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* to
 int lua_ax_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11411,12 +11411,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setFrames'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setFrames'", nullptr);
         return 0;
     }
 #endif
@@ -11435,7 +11435,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_setFrames'", nullptr);
             return 0;
         }
-        cobj->setFrames(arg0, arg1);
+        obj->setFrames(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11452,7 +11452,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11464,12 +11464,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA'", nullptr);
         return 0;
     }
 #endif
@@ -11482,7 +11482,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFrameOffsetA();
+        auto&& ret = obj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11499,7 +11499,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_State* tol
 int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11511,12 +11511,12 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB'", nullptr);
         return 0;
     }
 #endif
@@ -11529,7 +11529,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFrameOffsetB();
+        auto&& ret = obj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11604,7 +11604,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_create(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3DConeTwistConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3DConeTwistConstraint* cobj = nullptr;
+    ax::Physics3DConeTwistConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11621,11 +11621,11 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_constructor(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3DConeTwistConstraint();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3DConeTwistConstraint");
+        obj = new ax::Physics3DConeTwistConstraint();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3DConeTwistConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:Physics3DConeTwistConstraint",argc, 0);
@@ -11679,7 +11679,7 @@ int lua_register_ax_physics3d_Physics3DConeTwistConstraint(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11691,12 +11691,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setLinearLowerLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setLinearLowerLimit'", nullptr);
         return 0;
     }
 #endif
@@ -11712,7 +11712,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_setLinearLowerLimit'", nullptr);
             return 0;
         }
-        cobj->setLinearLowerLimit(arg0);
+        obj->setLinearLowerLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11729,7 +11729,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State* tolu
 int lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11741,12 +11741,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit'", nullptr);
         return 0;
     }
 #endif
@@ -11759,7 +11759,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLinearLowerLimit();
+        auto&& ret = obj->getLinearLowerLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11776,7 +11776,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State* tolu
 int lua_ax_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11788,12 +11788,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setLinearUpperLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setLinearUpperLimit'", nullptr);
         return 0;
     }
 #endif
@@ -11809,7 +11809,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_setLinearUpperLimit'", nullptr);
             return 0;
         }
-        cobj->setLinearUpperLimit(arg0);
+        obj->setLinearUpperLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11826,7 +11826,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State* tolu
 int lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11838,12 +11838,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit'", nullptr);
         return 0;
     }
 #endif
@@ -11856,7 +11856,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLinearUpperLimit();
+        auto&& ret = obj->getLinearUpperLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11873,7 +11873,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State* tolu
 int lua_ax_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11885,12 +11885,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setAngularLowerLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setAngularLowerLimit'", nullptr);
         return 0;
     }
 #endif
@@ -11906,7 +11906,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_setAngularLowerLimit'", nullptr);
             return 0;
         }
-        cobj->setAngularLowerLimit(arg0);
+        obj->setAngularLowerLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11923,7 +11923,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_State* tol
 int lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11935,12 +11935,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit'", nullptr);
         return 0;
     }
 #endif
@@ -11953,7 +11953,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularLowerLimit();
+        auto&& ret = obj->getAngularLowerLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11970,7 +11970,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_State* tol
 int lua_ax_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11982,12 +11982,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setAngularUpperLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setAngularUpperLimit'", nullptr);
         return 0;
     }
 #endif
@@ -12003,7 +12003,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_setAngularUpperLimit'", nullptr);
             return 0;
         }
-        cobj->setAngularUpperLimit(arg0);
+        obj->setAngularUpperLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -12020,7 +12020,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_State* tol
 int lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12032,12 +12032,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit'", nullptr);
         return 0;
     }
 #endif
@@ -12050,7 +12050,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularUpperLimit();
+        auto&& ret = obj->getAngularUpperLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12067,7 +12067,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_State* tol
 int lua_ax_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12079,12 +12079,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_isLimited'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_isLimited'", nullptr);
         return 0;
     }
 #endif
@@ -12100,7 +12100,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_isLimited'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isLimited(arg0);
+        auto&& ret = obj->isLimited(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12117,7 +12117,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12129,12 +12129,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset'", nullptr);
         return 0;
     }
 #endif
@@ -12147,7 +12147,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUseFrameOffset();
+        auto&& ret = obj->getUseFrameOffset();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12164,7 +12164,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* tolua_
 int lua_ax_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12176,12 +12176,12 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setUseFrameOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics3d_Physics3D6DofConstraint_setUseFrameOffset'", nullptr);
         return 0;
     }
 #endif
@@ -12197,7 +12197,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_setUseFrameOffset'", nullptr);
             return 0;
         }
-        cobj->setUseFrameOffset(arg0);
+        obj->setUseFrameOffset(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -12278,7 +12278,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
 int lua_ax_physics3d_Physics3D6DofConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::Physics3D6DofConstraint* cobj = nullptr;
+    ax::Physics3D6DofConstraint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12295,11 +12295,11 @@ int lua_ax_physics3d_Physics3D6DofConstraint_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::Physics3D6DofConstraint();
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"ax.Physics3D6DofConstraint");
+        obj = new ax::Physics3D6DofConstraint();
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.Physics3D6DofConstraint");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:Physics3D6DofConstraint",argc, 0);

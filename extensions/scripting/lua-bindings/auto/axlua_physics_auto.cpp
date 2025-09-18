@@ -7,7 +7,7 @@
 int lua_ax_physics_PhysicsCollider_getBody(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19,12 +19,12 @@ int lua_ax_physics_PhysicsCollider_getBody(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getBody'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getBody'", nullptr);
         return 0;
     }
 #endif
@@ -37,7 +37,7 @@ int lua_ax_physics_PhysicsCollider_getBody(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getBody'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBody();
+        auto&& ret = obj->getBody();
         object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
@@ -54,7 +54,7 @@ int lua_ax_physics_PhysicsCollider_getBody(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -66,12 +66,12 @@ int lua_ax_physics_PhysicsCollider_getType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getType'", nullptr);
         return 0;
     }
 #endif
@@ -84,7 +84,7 @@ int lua_ax_physics_PhysicsCollider_getType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getType'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getType();
+        int ret = (int)obj->getType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -101,7 +101,7 @@ int lua_ax_physics_PhysicsCollider_getType(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getArea(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -113,12 +113,12 @@ int lua_ax_physics_PhysicsCollider_getArea(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getArea'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getArea'", nullptr);
         return 0;
     }
 #endif
@@ -131,7 +131,7 @@ int lua_ax_physics_PhysicsCollider_getArea(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getArea'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getArea();
+        auto&& ret = obj->getArea();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -148,7 +148,7 @@ int lua_ax_physics_PhysicsCollider_getArea(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setTag(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -160,12 +160,12 @@ int lua_ax_physics_PhysicsCollider_setTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setTag'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setTag'", nullptr);
         return 0;
     }
 #endif
@@ -181,7 +181,7 @@ int lua_ax_physics_PhysicsCollider_setTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setTag'", nullptr);
             return 0;
         }
-        cobj->setTag(arg0);
+        obj->setTag(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -198,7 +198,7 @@ int lua_ax_physics_PhysicsCollider_setTag(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getTag(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -210,12 +210,12 @@ int lua_ax_physics_PhysicsCollider_getTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getTag'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getTag'", nullptr);
         return 0;
     }
 #endif
@@ -228,7 +228,7 @@ int lua_ax_physics_PhysicsCollider_getTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getTag'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTag();
+        auto&& ret = obj->getTag();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -245,7 +245,7 @@ int lua_ax_physics_PhysicsCollider_getTag(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getDensity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -257,12 +257,12 @@ int lua_ax_physics_PhysicsCollider_getDensity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getDensity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getDensity'", nullptr);
         return 0;
     }
 #endif
@@ -275,7 +275,7 @@ int lua_ax_physics_PhysicsCollider_getDensity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getDensity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDensity();
+        auto&& ret = obj->getDensity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -292,7 +292,7 @@ int lua_ax_physics_PhysicsCollider_getDensity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setDensity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -304,12 +304,12 @@ int lua_ax_physics_PhysicsCollider_setDensity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setDensity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setDensity'", nullptr);
         return 0;
     }
 #endif
@@ -325,7 +325,7 @@ int lua_ax_physics_PhysicsCollider_setDensity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setDensity'", nullptr);
             return 0;
         }
-        cobj->setDensity(arg0);
+        obj->setDensity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -342,7 +342,7 @@ int lua_ax_physics_PhysicsCollider_setDensity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setDensity'", nullptr);
             return 0;
         }
-        cobj->setDensity(arg0, arg1);
+        obj->setDensity(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -359,7 +359,7 @@ int lua_ax_physics_PhysicsCollider_setDensity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -371,12 +371,12 @@ int lua_ax_physics_PhysicsCollider_getRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getRestitution'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getRestitution'", nullptr);
         return 0;
     }
 #endif
@@ -389,7 +389,7 @@ int lua_ax_physics_PhysicsCollider_getRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getRestitution'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitution();
+        auto&& ret = obj->getRestitution();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -406,7 +406,7 @@ int lua_ax_physics_PhysicsCollider_getRestitution(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -418,12 +418,12 @@ int lua_ax_physics_PhysicsCollider_setRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setRestitution'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setRestitution'", nullptr);
         return 0;
     }
 #endif
@@ -439,7 +439,7 @@ int lua_ax_physics_PhysicsCollider_setRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setRestitution'", nullptr);
             return 0;
         }
-        cobj->setRestitution(arg0);
+        obj->setRestitution(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -456,7 +456,7 @@ int lua_ax_physics_PhysicsCollider_setRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setRestitution'", nullptr);
             return 0;
         }
-        cobj->setRestitution(arg0, arg1);
+        obj->setRestitution(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -473,7 +473,7 @@ int lua_ax_physics_PhysicsCollider_setRestitution(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -485,12 +485,12 @@ int lua_ax_physics_PhysicsCollider_getFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getFriction'", nullptr);
         return 0;
     }
 #endif
@@ -503,7 +503,7 @@ int lua_ax_physics_PhysicsCollider_getFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getFriction'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFriction();
+        auto&& ret = obj->getFriction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -520,7 +520,7 @@ int lua_ax_physics_PhysicsCollider_getFriction(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -532,12 +532,12 @@ int lua_ax_physics_PhysicsCollider_setFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setFriction'", nullptr);
         return 0;
     }
 #endif
@@ -553,7 +553,7 @@ int lua_ax_physics_PhysicsCollider_setFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setFriction'", nullptr);
             return 0;
         }
-        cobj->setFriction(arg0);
+        obj->setFriction(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -570,7 +570,7 @@ int lua_ax_physics_PhysicsCollider_setFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setFriction'", nullptr);
             return 0;
         }
-        cobj->setFriction(arg0, arg1);
+        obj->setFriction(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -587,7 +587,7 @@ int lua_ax_physics_PhysicsCollider_setFriction(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -599,12 +599,12 @@ int lua_ax_physics_PhysicsCollider_getMaterial(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getMaterial'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getMaterial'", nullptr);
         return 0;
     }
 #endif
@@ -617,7 +617,7 @@ int lua_ax_physics_PhysicsCollider_getMaterial(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getMaterial'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaterial();
+        auto&& ret = obj->getMaterial();
         physics_material_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -634,7 +634,7 @@ int lua_ax_physics_PhysicsCollider_getMaterial(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -646,12 +646,12 @@ int lua_ax_physics_PhysicsCollider_setMaterial(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setMaterial'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setMaterial'", nullptr);
         return 0;
     }
 #endif
@@ -667,7 +667,7 @@ int lua_ax_physics_PhysicsCollider_setMaterial(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setMaterial'", nullptr);
             return 0;
         }
-        cobj->setMaterial(arg0);
+        obj->setMaterial(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -684,7 +684,7 @@ int lua_ax_physics_PhysicsCollider_setMaterial(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_isSensor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -696,12 +696,12 @@ int lua_ax_physics_PhysicsCollider_isSensor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_isSensor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_isSensor'", nullptr);
         return 0;
     }
 #endif
@@ -714,7 +714,7 @@ int lua_ax_physics_PhysicsCollider_isSensor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_isSensor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isSensor();
+        auto&& ret = obj->isSensor();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -731,7 +731,7 @@ int lua_ax_physics_PhysicsCollider_isSensor(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setSensor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -743,12 +743,12 @@ int lua_ax_physics_PhysicsCollider_setSensor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setSensor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setSensor'", nullptr);
         return 0;
     }
 #endif
@@ -764,7 +764,7 @@ int lua_ax_physics_PhysicsCollider_setSensor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setSensor'", nullptr);
             return 0;
         }
-        cobj->setSensor(arg0);
+        obj->setSensor(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -781,7 +781,7 @@ int lua_ax_physics_PhysicsCollider_setSensor(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -793,12 +793,12 @@ int lua_ax_physics_PhysicsCollider_getOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getOffset'", nullptr);
         return 0;
     }
 #endif
@@ -811,7 +811,7 @@ int lua_ax_physics_PhysicsCollider_getOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getOffset'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getOffset();
+        auto&& ret = obj->getOffset();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -828,7 +828,7 @@ int lua_ax_physics_PhysicsCollider_getOffset(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getCenter(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -840,12 +840,12 @@ int lua_ax_physics_PhysicsCollider_getCenter(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getCenter'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getCenter'", nullptr);
         return 0;
     }
 #endif
@@ -858,7 +858,7 @@ int lua_ax_physics_PhysicsCollider_getCenter(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getCenter'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCenter();
+        auto&& ret = obj->getCenter();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -875,7 +875,7 @@ int lua_ax_physics_PhysicsCollider_getCenter(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_containsPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -887,12 +887,12 @@ int lua_ax_physics_PhysicsCollider_containsPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_containsPoint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_containsPoint'", nullptr);
         return 0;
     }
 #endif
@@ -908,7 +908,7 @@ int lua_ax_physics_PhysicsCollider_containsPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_containsPoint'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->containsPoint(arg0);
+        auto&& ret = obj->containsPoint(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -925,7 +925,7 @@ int lua_ax_physics_PhysicsCollider_containsPoint(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setCategoryBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -937,12 +937,12 @@ int lua_ax_physics_PhysicsCollider_setCategoryBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setCategoryBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setCategoryBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -958,7 +958,7 @@ int lua_ax_physics_PhysicsCollider_setCategoryBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setCategoryBitmask'", nullptr);
             return 0;
         }
-        cobj->setCategoryBitmask(arg0);
+        obj->setCategoryBitmask(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -975,7 +975,7 @@ int lua_ax_physics_PhysicsCollider_setCategoryBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getCategoryBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -987,12 +987,12 @@ int lua_ax_physics_PhysicsCollider_getCategoryBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getCategoryBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getCategoryBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -1005,7 +1005,7 @@ int lua_ax_physics_PhysicsCollider_getCategoryBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getCategoryBitmask'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCategoryBitmask();
+        auto&& ret = obj->getCategoryBitmask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1022,7 +1022,7 @@ int lua_ax_physics_PhysicsCollider_getCategoryBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setContactTestBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1034,12 +1034,12 @@ int lua_ax_physics_PhysicsCollider_setContactTestBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setContactTestBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setContactTestBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -1055,7 +1055,7 @@ int lua_ax_physics_PhysicsCollider_setContactTestBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setContactTestBitmask'", nullptr);
             return 0;
         }
-        cobj->setContactTestBitmask(arg0);
+        obj->setContactTestBitmask(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1072,7 +1072,7 @@ int lua_ax_physics_PhysicsCollider_setContactTestBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getContactTestBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1084,12 +1084,12 @@ int lua_ax_physics_PhysicsCollider_getContactTestBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getContactTestBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getContactTestBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -1102,7 +1102,7 @@ int lua_ax_physics_PhysicsCollider_getContactTestBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getContactTestBitmask'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getContactTestBitmask();
+        auto&& ret = obj->getContactTestBitmask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1119,7 +1119,7 @@ int lua_ax_physics_PhysicsCollider_getContactTestBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setCollisionBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1131,12 +1131,12 @@ int lua_ax_physics_PhysicsCollider_setCollisionBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setCollisionBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setCollisionBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -1152,7 +1152,7 @@ int lua_ax_physics_PhysicsCollider_setCollisionBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setCollisionBitmask'", nullptr);
             return 0;
         }
-        cobj->setCollisionBitmask(arg0);
+        obj->setCollisionBitmask(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1169,7 +1169,7 @@ int lua_ax_physics_PhysicsCollider_setCollisionBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getCollisionBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1181,12 +1181,12 @@ int lua_ax_physics_PhysicsCollider_getCollisionBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getCollisionBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getCollisionBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -1199,7 +1199,7 @@ int lua_ax_physics_PhysicsCollider_getCollisionBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getCollisionBitmask'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCollisionBitmask();
+        auto&& ret = obj->getCollisionBitmask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1216,7 +1216,7 @@ int lua_ax_physics_PhysicsCollider_getCollisionBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_setGroup(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1228,12 +1228,12 @@ int lua_ax_physics_PhysicsCollider_setGroup(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_setGroup'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_setGroup'", nullptr);
         return 0;
     }
 #endif
@@ -1249,7 +1249,7 @@ int lua_ax_physics_PhysicsCollider_setGroup(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_setGroup'", nullptr);
             return 0;
         }
-        cobj->setGroup(arg0);
+        obj->setGroup(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1266,7 +1266,7 @@ int lua_ax_physics_PhysicsCollider_setGroup(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_getGroup(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1278,12 +1278,12 @@ int lua_ax_physics_PhysicsCollider_getGroup(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_getGroup'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_getGroup'", nullptr);
         return 0;
     }
 #endif
@@ -1296,7 +1296,7 @@ int lua_ax_physics_PhysicsCollider_getGroup(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_getGroup'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getGroup();
+        auto&& ret = obj->getGroup();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1313,7 +1313,7 @@ int lua_ax_physics_PhysicsCollider_getGroup(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_deatchFromBody(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1325,12 +1325,12 @@ int lua_ax_physics_PhysicsCollider_deatchFromBody(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_deatchFromBody'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_deatchFromBody'", nullptr);
         return 0;
     }
 #endif
@@ -1343,7 +1343,7 @@ int lua_ax_physics_PhysicsCollider_deatchFromBody(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_deatchFromBody'", nullptr);
             return 0;
         }
-        cobj->deatchFromBody();
+        obj->deatchFromBody();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1360,7 +1360,7 @@ int lua_ax_physics_PhysicsCollider_deatchFromBody(lua_State* tolua_S)
 int lua_ax_physics_PhysicsCollider_isDeatched(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsCollider* cobj = nullptr;
+    ax::PhysicsCollider* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1372,12 +1372,12 @@ int lua_ax_physics_PhysicsCollider_isDeatched(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsCollider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsCollider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsCollider_isDeatched'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsCollider_isDeatched'", nullptr);
         return 0;
     }
 #endif
@@ -1390,7 +1390,7 @@ int lua_ax_physics_PhysicsCollider_isDeatched(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsCollider_isDeatched'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isDeatched();
+        auto&& ret = obj->isDeatched();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1549,7 +1549,7 @@ int lua_register_ax_physics_PhysicsCollider(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderCircle_getRadius(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderCircle* cobj = nullptr;
+    ax::PhysicsColliderCircle* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1561,12 +1561,12 @@ int lua_ax_physics_PhysicsColliderCircle_getRadius(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderCircle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderCircle*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderCircle*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderCircle_getRadius'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderCircle_getRadius'", nullptr);
         return 0;
     }
 #endif
@@ -1579,7 +1579,7 @@ int lua_ax_physics_PhysicsColliderCircle_getRadius(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderCircle_getRadius'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRadius();
+        auto&& ret = obj->getRadius();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1728,7 +1728,7 @@ int lua_register_ax_physics_PhysicsColliderCircle(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderPolygon_getPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderPolygon* cobj = nullptr;
+    ax::PhysicsColliderPolygon* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1740,12 +1740,12 @@ int lua_ax_physics_PhysicsColliderPolygon_getPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderPolygon",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderPolygon*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderPolygon*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderPolygon_getPoint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderPolygon_getPoint'", nullptr);
         return 0;
     }
 #endif
@@ -1761,7 +1761,7 @@ int lua_ax_physics_PhysicsColliderPolygon_getPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderPolygon_getPoint'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPoint(arg0);
+        auto&& ret = obj->getPoint(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1778,7 +1778,7 @@ int lua_ax_physics_PhysicsColliderPolygon_getPoint(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderPolygon* cobj = nullptr;
+    ax::PhysicsColliderPolygon* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1790,12 +1790,12 @@ int lua_ax_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderPolygon",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderPolygon*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderPolygon*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderPolygon_getPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderPolygon_getPoints'", nullptr);
         return 0;
     }
 #endif
@@ -1811,7 +1811,7 @@ int lua_ax_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderPolygon_getPoints'", nullptr);
             return 0;
         }
-        cobj->getPoints(arg0);
+        obj->getPoints(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1828,7 +1828,7 @@ int lua_ax_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderPolygon_getPointsCount(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderPolygon* cobj = nullptr;
+    ax::PhysicsColliderPolygon* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1840,12 +1840,12 @@ int lua_ax_physics_PhysicsColliderPolygon_getPointsCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderPolygon",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderPolygon*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderPolygon*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderPolygon_getPointsCount'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderPolygon_getPointsCount'", nullptr);
         return 0;
     }
 #endif
@@ -1858,7 +1858,7 @@ int lua_ax_physics_PhysicsColliderPolygon_getPointsCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderPolygon_getPointsCount'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPointsCount();
+        auto&& ret = obj->getPointsCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2040,7 +2040,7 @@ int lua_register_ax_physics_PhysicsColliderPolygon(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderBox_getSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderBox* cobj = nullptr;
+    ax::PhysicsColliderBox* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2052,12 +2052,12 @@ int lua_ax_physics_PhysicsColliderBox_getSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderBox*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderBox_getSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderBox_getSize'", nullptr);
         return 0;
     }
 #endif
@@ -2070,7 +2070,7 @@ int lua_ax_physics_PhysicsColliderBox_getSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderBox_getSize'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSize();
+        auto&& ret = obj->getSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2203,7 +2203,7 @@ int lua_register_ax_physics_PhysicsColliderBox(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderEdgeSegment_getPointA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderEdgeSegment* cobj = nullptr;
+    ax::PhysicsColliderEdgeSegment* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2215,12 +2215,12 @@ int lua_ax_physics_PhysicsColliderEdgeSegment_getPointA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderEdgeSegment",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderEdgeSegment*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderEdgeSegment*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderEdgeSegment_getPointA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderEdgeSegment_getPointA'", nullptr);
         return 0;
     }
 #endif
@@ -2233,7 +2233,7 @@ int lua_ax_physics_PhysicsColliderEdgeSegment_getPointA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderEdgeSegment_getPointA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPointA();
+        auto&& ret = obj->getPointA();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2250,7 +2250,7 @@ int lua_ax_physics_PhysicsColliderEdgeSegment_getPointA(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderEdgeSegment_getPointB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderEdgeSegment* cobj = nullptr;
+    ax::PhysicsColliderEdgeSegment* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2262,12 +2262,12 @@ int lua_ax_physics_PhysicsColliderEdgeSegment_getPointB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderEdgeSegment",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderEdgeSegment*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderEdgeSegment*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderEdgeSegment_getPointB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderEdgeSegment_getPointB'", nullptr);
         return 0;
     }
 #endif
@@ -2280,7 +2280,7 @@ int lua_ax_physics_PhysicsColliderEdgeSegment_getPointB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderEdgeSegment_getPointB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPointB();
+        auto&& ret = obj->getPointB();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2399,7 +2399,7 @@ int lua_register_ax_physics_PhysicsColliderEdgeSegment(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderEdgePolygon* cobj = nullptr;
+    ax::PhysicsColliderEdgePolygon* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2411,12 +2411,12 @@ int lua_ax_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderEdgePolygon",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderEdgePolygon*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderEdgePolygon*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderEdgePolygon_getPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderEdgePolygon_getPoints'", nullptr);
         return 0;
     }
 #endif
@@ -2432,7 +2432,7 @@ int lua_ax_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderEdgePolygon_getPoints'", nullptr);
             return 0;
         }
-        cobj->getPoints(arg0);
+        obj->getPoints(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2449,7 +2449,7 @@ int lua_ax_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderEdgePolygon_getPointsCount(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderEdgePolygon* cobj = nullptr;
+    ax::PhysicsColliderEdgePolygon* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2461,12 +2461,12 @@ int lua_ax_physics_PhysicsColliderEdgePolygon_getPointsCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderEdgePolygon",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderEdgePolygon*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderEdgePolygon*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderEdgePolygon_getPointsCount'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderEdgePolygon_getPointsCount'", nullptr);
         return 0;
     }
 #endif
@@ -2479,7 +2479,7 @@ int lua_ax_physics_PhysicsColliderEdgePolygon_getPointsCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderEdgePolygon_getPointsCount'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPointsCount();
+        auto&& ret = obj->getPointsCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2713,7 +2713,7 @@ int lua_register_ax_physics_PhysicsColliderEdgeBox(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderEdgeChain* cobj = nullptr;
+    ax::PhysicsColliderEdgeChain* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2725,12 +2725,12 @@ int lua_ax_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderEdgeChain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderEdgeChain*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderEdgeChain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderEdgeChain_getPoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderEdgeChain_getPoints'", nullptr);
         return 0;
     }
 #endif
@@ -2746,7 +2746,7 @@ int lua_ax_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderEdgeChain_getPoints'", nullptr);
             return 0;
         }
-        cobj->getPoints(arg0);
+        obj->getPoints(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2763,7 +2763,7 @@ int lua_ax_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
 int lua_ax_physics_PhysicsColliderEdgeChain_getPointsCount(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsColliderEdgeChain* cobj = nullptr;
+    ax::PhysicsColliderEdgeChain* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2775,12 +2775,12 @@ int lua_ax_physics_PhysicsColliderEdgeChain_getPointsCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsColliderEdgeChain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsColliderEdgeChain*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsColliderEdgeChain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsColliderEdgeChain_getPointsCount'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsColliderEdgeChain_getPointsCount'", nullptr);
         return 0;
     }
 #endif
@@ -2793,7 +2793,7 @@ int lua_ax_physics_PhysicsColliderEdgeChain_getPointsCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsColliderEdgeChain_getPointsCount'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPointsCount();
+        auto&& ret = obj->getPointsCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2912,7 +2912,7 @@ int lua_register_ax_physics_PhysicsColliderEdgeChain(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_addCollider(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2924,12 +2924,12 @@ int lua_ax_physics_PhysicsBody_addCollider(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_addCollider'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_addCollider'", nullptr);
         return 0;
     }
 #endif
@@ -2945,7 +2945,7 @@ int lua_ax_physics_PhysicsBody_addCollider(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_addCollider'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->addCollider(arg0);
+        auto&& ret = obj->addCollider(arg0);
         object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
@@ -2962,7 +2962,7 @@ int lua_ax_physics_PhysicsBody_addCollider(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_addCollider'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->addCollider(arg0, arg1);
+        auto&& ret = obj->addCollider(arg0, arg1);
         object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
@@ -2979,7 +2979,7 @@ int lua_ax_physics_PhysicsBody_addCollider(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2988,11 +2988,11 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_removeCollider'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_removeCollider'", nullptr);
         return 0;
     }
 #endif
@@ -3003,7 +3003,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PhysicsBody:removeCollider");
 
             if (!ok) { break; }
-            cobj->removeCollider(arg0);
+            obj->removeCollider(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -3019,7 +3019,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.PhysicsBody:removeCollider");
 
             if (!ok) { break; }
-            cobj->removeCollider(arg0, arg1);
+            obj->removeCollider(arg0, arg1);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -3031,7 +3031,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
             ok &= luaval_to_object<ax::PhysicsCollider>(tolua_S, 2, "ax.PhysicsCollider",&arg0, "ax.PhysicsBody:removeCollider");
 
             if (!ok) { break; }
-            cobj->removeCollider(arg0);
+            obj->removeCollider(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -3047,7 +3047,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 3, &arg1, "ax.PhysicsBody:removeCollider");
 
             if (!ok) { break; }
-            cobj->removeCollider(arg0, arg1);
+            obj->removeCollider(arg0, arg1);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -3066,7 +3066,7 @@ int lua_ax_physics_PhysicsBody_removeCollider(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_removeAllColliders(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3078,12 +3078,12 @@ int lua_ax_physics_PhysicsBody_removeAllColliders(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_removeAllColliders'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_removeAllColliders'", nullptr);
         return 0;
     }
 #endif
@@ -3096,7 +3096,7 @@ int lua_ax_physics_PhysicsBody_removeAllColliders(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_removeAllColliders'", nullptr);
             return 0;
         }
-        cobj->removeAllColliders();
+        obj->removeAllColliders();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3110,7 +3110,7 @@ int lua_ax_physics_PhysicsBody_removeAllColliders(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_removeAllColliders'", nullptr);
             return 0;
         }
-        cobj->removeAllColliders(arg0);
+        obj->removeAllColliders(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3127,7 +3127,7 @@ int lua_ax_physics_PhysicsBody_removeAllColliders(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getColliders(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3139,12 +3139,12 @@ int lua_ax_physics_PhysicsBody_getColliders(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getColliders'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getColliders'", nullptr);
         return 0;
     }
 #endif
@@ -3157,7 +3157,7 @@ int lua_ax_physics_PhysicsBody_getColliders(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getColliders'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getColliders();
+        auto&& ret = obj->getColliders();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3174,7 +3174,7 @@ int lua_ax_physics_PhysicsBody_getColliders(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getFirstCollider(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3186,12 +3186,12 @@ int lua_ax_physics_PhysicsBody_getFirstCollider(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getFirstCollider'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getFirstCollider'", nullptr);
         return 0;
     }
 #endif
@@ -3204,7 +3204,7 @@ int lua_ax_physics_PhysicsBody_getFirstCollider(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getFirstCollider'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFirstCollider();
+        auto&& ret = obj->getFirstCollider();
         object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
@@ -3221,7 +3221,7 @@ int lua_ax_physics_PhysicsBody_getFirstCollider(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getCollider(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3233,12 +3233,12 @@ int lua_ax_physics_PhysicsBody_getCollider(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getCollider'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getCollider'", nullptr);
         return 0;
     }
 #endif
@@ -3254,7 +3254,7 @@ int lua_ax_physics_PhysicsBody_getCollider(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getCollider'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCollider(arg0);
+        auto&& ret = obj->getCollider(arg0);
         object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
@@ -3271,7 +3271,7 @@ int lua_ax_physics_PhysicsBody_getCollider(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_applyForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3283,12 +3283,12 @@ int lua_ax_physics_PhysicsBody_applyForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_applyForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_applyForce'", nullptr);
         return 0;
     }
 #endif
@@ -3304,7 +3304,7 @@ int lua_ax_physics_PhysicsBody_applyForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_applyForce'", nullptr);
             return 0;
         }
-        cobj->applyForce(arg0);
+        obj->applyForce(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3321,7 +3321,7 @@ int lua_ax_physics_PhysicsBody_applyForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_applyForce'", nullptr);
             return 0;
         }
-        cobj->applyForce(arg0, arg1);
+        obj->applyForce(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3338,7 +3338,7 @@ int lua_ax_physics_PhysicsBody_applyForce(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_resetForces(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3350,12 +3350,12 @@ int lua_ax_physics_PhysicsBody_resetForces(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_resetForces'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_resetForces'", nullptr);
         return 0;
     }
 #endif
@@ -3368,7 +3368,7 @@ int lua_ax_physics_PhysicsBody_resetForces(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_resetForces'", nullptr);
             return 0;
         }
-        cobj->resetForces();
+        obj->resetForces();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3385,7 +3385,7 @@ int lua_ax_physics_PhysicsBody_resetForces(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3397,12 +3397,12 @@ int lua_ax_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_applyImpulse'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_applyImpulse'", nullptr);
         return 0;
     }
 #endif
@@ -3418,7 +3418,7 @@ int lua_ax_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_applyImpulse'", nullptr);
             return 0;
         }
-        cobj->applyImpulse(arg0);
+        obj->applyImpulse(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3435,7 +3435,7 @@ int lua_ax_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_applyImpulse'", nullptr);
             return 0;
         }
-        cobj->applyImpulse(arg0, arg1);
+        obj->applyImpulse(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3452,7 +3452,7 @@ int lua_ax_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_applyTorque(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3464,12 +3464,12 @@ int lua_ax_physics_PhysicsBody_applyTorque(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_applyTorque'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_applyTorque'", nullptr);
         return 0;
     }
 #endif
@@ -3485,7 +3485,7 @@ int lua_ax_physics_PhysicsBody_applyTorque(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_applyTorque'", nullptr);
             return 0;
         }
-        cobj->applyTorque(arg0);
+        obj->applyTorque(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3502,7 +3502,7 @@ int lua_ax_physics_PhysicsBody_applyTorque(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3514,12 +3514,12 @@ int lua_ax_physics_PhysicsBody_setVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -3535,7 +3535,7 @@ int lua_ax_physics_PhysicsBody_setVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setVelocity'", nullptr);
             return 0;
         }
-        cobj->setVelocity(arg0);
+        obj->setVelocity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3552,7 +3552,7 @@ int lua_ax_physics_PhysicsBody_setVelocity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3564,12 +3564,12 @@ int lua_ax_physics_PhysicsBody_getVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -3582,7 +3582,7 @@ int lua_ax_physics_PhysicsBody_getVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getVelocity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVelocity();
+        auto&& ret = obj->getVelocity();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3599,7 +3599,7 @@ int lua_ax_physics_PhysicsBody_getVelocity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setAngularVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3611,12 +3611,12 @@ int lua_ax_physics_PhysicsBody_setAngularVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setAngularVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setAngularVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -3632,7 +3632,7 @@ int lua_ax_physics_PhysicsBody_setAngularVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setAngularVelocity'", nullptr);
             return 0;
         }
-        cobj->setAngularVelocity(arg0);
+        obj->setAngularVelocity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3649,7 +3649,7 @@ int lua_ax_physics_PhysicsBody_setAngularVelocity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3661,12 +3661,12 @@ int lua_ax_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getVelocityAtLocalPoint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getVelocityAtLocalPoint'", nullptr);
         return 0;
     }
 #endif
@@ -3682,7 +3682,7 @@ int lua_ax_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getVelocityAtLocalPoint'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVelocityAtLocalPoint(arg0);
+        auto&& ret = obj->getVelocityAtLocalPoint(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3699,7 +3699,7 @@ int lua_ax_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3711,12 +3711,12 @@ int lua_ax_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getVelocityAtWorldPoint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getVelocityAtWorldPoint'", nullptr);
         return 0;
     }
 #endif
@@ -3732,7 +3732,7 @@ int lua_ax_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getVelocityAtWorldPoint'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVelocityAtWorldPoint(arg0);
+        auto&& ret = obj->getVelocityAtWorldPoint(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3749,7 +3749,7 @@ int lua_ax_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getAngularVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3761,12 +3761,12 @@ int lua_ax_physics_PhysicsBody_getAngularVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getAngularVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getAngularVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -3779,7 +3779,7 @@ int lua_ax_physics_PhysicsBody_getAngularVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getAngularVelocity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularVelocity();
+        auto&& ret = obj->getAngularVelocity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3796,7 +3796,7 @@ int lua_ax_physics_PhysicsBody_getAngularVelocity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setVelocityLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3808,12 +3808,12 @@ int lua_ax_physics_PhysicsBody_setVelocityLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setVelocityLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setVelocityLimit'", nullptr);
         return 0;
     }
 #endif
@@ -3829,7 +3829,7 @@ int lua_ax_physics_PhysicsBody_setVelocityLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setVelocityLimit'", nullptr);
             return 0;
         }
-        cobj->setVelocityLimit(arg0);
+        obj->setVelocityLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3846,7 +3846,7 @@ int lua_ax_physics_PhysicsBody_setVelocityLimit(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getVelocityLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3858,12 +3858,12 @@ int lua_ax_physics_PhysicsBody_getVelocityLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getVelocityLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getVelocityLimit'", nullptr);
         return 0;
     }
 #endif
@@ -3876,7 +3876,7 @@ int lua_ax_physics_PhysicsBody_getVelocityLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getVelocityLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVelocityLimit();
+        auto&& ret = obj->getVelocityLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3893,7 +3893,7 @@ int lua_ax_physics_PhysicsBody_getVelocityLimit(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setAngularVelocityLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3905,12 +3905,12 @@ int lua_ax_physics_PhysicsBody_setAngularVelocityLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setAngularVelocityLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setAngularVelocityLimit'", nullptr);
         return 0;
     }
 #endif
@@ -3926,7 +3926,7 @@ int lua_ax_physics_PhysicsBody_setAngularVelocityLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setAngularVelocityLimit'", nullptr);
             return 0;
         }
-        cobj->setAngularVelocityLimit(arg0);
+        obj->setAngularVelocityLimit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -3943,7 +3943,7 @@ int lua_ax_physics_PhysicsBody_setAngularVelocityLimit(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getAngularVelocityLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3955,12 +3955,12 @@ int lua_ax_physics_PhysicsBody_getAngularVelocityLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getAngularVelocityLimit'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getAngularVelocityLimit'", nullptr);
         return 0;
     }
 #endif
@@ -3973,7 +3973,7 @@ int lua_ax_physics_PhysicsBody_getAngularVelocityLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getAngularVelocityLimit'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularVelocityLimit();
+        auto&& ret = obj->getAngularVelocityLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3990,7 +3990,7 @@ int lua_ax_physics_PhysicsBody_getAngularVelocityLimit(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_removeFromWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4002,12 +4002,12 @@ int lua_ax_physics_PhysicsBody_removeFromWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_removeFromWorld'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_removeFromWorld'", nullptr);
         return 0;
     }
 #endif
@@ -4020,7 +4020,7 @@ int lua_ax_physics_PhysicsBody_removeFromWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_removeFromWorld'", nullptr);
             return 0;
         }
-        cobj->removeFromWorld();
+        obj->removeFromWorld();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4037,7 +4037,7 @@ int lua_ax_physics_PhysicsBody_removeFromWorld(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4049,12 +4049,12 @@ int lua_ax_physics_PhysicsBody_getWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getWorld'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getWorld'", nullptr);
         return 0;
     }
 #endif
@@ -4067,7 +4067,7 @@ int lua_ax_physics_PhysicsBody_getWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getWorld'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWorld();
+        auto&& ret = obj->getWorld();
         object_to_luaval<ax::PhysicsWorld>(tolua_S, "ax.PhysicsWorld",(ax::PhysicsWorld*)ret);
         return 1;
     }
@@ -4084,7 +4084,7 @@ int lua_ax_physics_PhysicsBody_getWorld(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getNode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4096,12 +4096,12 @@ int lua_ax_physics_PhysicsBody_getNode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getNode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getNode'", nullptr);
         return 0;
     }
 #endif
@@ -4114,7 +4114,7 @@ int lua_ax_physics_PhysicsBody_getNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getNode'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getNode();
+        auto&& ret = obj->getNode();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -4131,7 +4131,7 @@ int lua_ax_physics_PhysicsBody_getNode(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setCategoryBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4143,12 +4143,12 @@ int lua_ax_physics_PhysicsBody_setCategoryBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setCategoryBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setCategoryBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -4164,7 +4164,7 @@ int lua_ax_physics_PhysicsBody_setCategoryBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setCategoryBitmask'", nullptr);
             return 0;
         }
-        cobj->setCategoryBitmask(arg0);
+        obj->setCategoryBitmask(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4181,7 +4181,7 @@ int lua_ax_physics_PhysicsBody_setCategoryBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setContactTestBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4193,12 +4193,12 @@ int lua_ax_physics_PhysicsBody_setContactTestBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setContactTestBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setContactTestBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -4214,7 +4214,7 @@ int lua_ax_physics_PhysicsBody_setContactTestBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setContactTestBitmask'", nullptr);
             return 0;
         }
-        cobj->setContactTestBitmask(arg0);
+        obj->setContactTestBitmask(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4231,7 +4231,7 @@ int lua_ax_physics_PhysicsBody_setContactTestBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setCollisionBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4243,12 +4243,12 @@ int lua_ax_physics_PhysicsBody_setCollisionBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setCollisionBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setCollisionBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -4264,7 +4264,7 @@ int lua_ax_physics_PhysicsBody_setCollisionBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setCollisionBitmask'", nullptr);
             return 0;
         }
-        cobj->setCollisionBitmask(arg0);
+        obj->setCollisionBitmask(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4281,7 +4281,7 @@ int lua_ax_physics_PhysicsBody_setCollisionBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getCategoryBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4293,12 +4293,12 @@ int lua_ax_physics_PhysicsBody_getCategoryBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getCategoryBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getCategoryBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -4311,7 +4311,7 @@ int lua_ax_physics_PhysicsBody_getCategoryBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getCategoryBitmask'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCategoryBitmask();
+        auto&& ret = obj->getCategoryBitmask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4328,7 +4328,7 @@ int lua_ax_physics_PhysicsBody_getCategoryBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getContactTestBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4340,12 +4340,12 @@ int lua_ax_physics_PhysicsBody_getContactTestBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getContactTestBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getContactTestBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -4358,7 +4358,7 @@ int lua_ax_physics_PhysicsBody_getContactTestBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getContactTestBitmask'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getContactTestBitmask();
+        auto&& ret = obj->getContactTestBitmask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4375,7 +4375,7 @@ int lua_ax_physics_PhysicsBody_getContactTestBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getCollisionBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4387,12 +4387,12 @@ int lua_ax_physics_PhysicsBody_getCollisionBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getCollisionBitmask'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getCollisionBitmask'", nullptr);
         return 0;
     }
 #endif
@@ -4405,7 +4405,7 @@ int lua_ax_physics_PhysicsBody_getCollisionBitmask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getCollisionBitmask'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getCollisionBitmask();
+        auto&& ret = obj->getCollisionBitmask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4422,7 +4422,7 @@ int lua_ax_physics_PhysicsBody_getCollisionBitmask(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setGroup(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4434,12 +4434,12 @@ int lua_ax_physics_PhysicsBody_setGroup(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setGroup'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setGroup'", nullptr);
         return 0;
     }
 #endif
@@ -4455,7 +4455,7 @@ int lua_ax_physics_PhysicsBody_setGroup(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setGroup'", nullptr);
             return 0;
         }
-        cobj->setGroup(arg0);
+        obj->setGroup(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4472,7 +4472,7 @@ int lua_ax_physics_PhysicsBody_setGroup(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getGroup(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4484,12 +4484,12 @@ int lua_ax_physics_PhysicsBody_getGroup(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getGroup'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getGroup'", nullptr);
         return 0;
     }
 #endif
@@ -4502,7 +4502,7 @@ int lua_ax_physics_PhysicsBody_getGroup(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getGroup'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getGroup();
+        auto&& ret = obj->getGroup();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4519,7 +4519,7 @@ int lua_ax_physics_PhysicsBody_getGroup(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4531,12 +4531,12 @@ int lua_ax_physics_PhysicsBody_getPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getPosition'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getPosition'", nullptr);
         return 0;
     }
 #endif
@@ -4549,7 +4549,7 @@ int lua_ax_physics_PhysicsBody_getPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getPosition'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPosition();
+        auto&& ret = obj->getPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4566,7 +4566,7 @@ int lua_ax_physics_PhysicsBody_getPosition(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getRotation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4578,12 +4578,12 @@ int lua_ax_physics_PhysicsBody_getRotation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getRotation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getRotation'", nullptr);
         return 0;
     }
 #endif
@@ -4596,7 +4596,7 @@ int lua_ax_physics_PhysicsBody_getRotation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getRotation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRotation();
+        auto&& ret = obj->getRotation();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4613,7 +4613,7 @@ int lua_ax_physics_PhysicsBody_getRotation(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setPositionOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4625,12 +4625,12 @@ int lua_ax_physics_PhysicsBody_setPositionOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setPositionOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setPositionOffset'", nullptr);
         return 0;
     }
 #endif
@@ -4646,7 +4646,7 @@ int lua_ax_physics_PhysicsBody_setPositionOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setPositionOffset'", nullptr);
             return 0;
         }
-        cobj->setPositionOffset(arg0);
+        obj->setPositionOffset(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4663,7 +4663,7 @@ int lua_ax_physics_PhysicsBody_setPositionOffset(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getPositionOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4675,12 +4675,12 @@ int lua_ax_physics_PhysicsBody_getPositionOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getPositionOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getPositionOffset'", nullptr);
         return 0;
     }
 #endif
@@ -4693,7 +4693,7 @@ int lua_ax_physics_PhysicsBody_getPositionOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getPositionOffset'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPositionOffset();
+        auto&& ret = obj->getPositionOffset();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4710,7 +4710,7 @@ int lua_ax_physics_PhysicsBody_getPositionOffset(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setRotationOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4722,12 +4722,12 @@ int lua_ax_physics_PhysicsBody_setRotationOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setRotationOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setRotationOffset'", nullptr);
         return 0;
     }
 #endif
@@ -4743,7 +4743,7 @@ int lua_ax_physics_PhysicsBody_setRotationOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setRotationOffset'", nullptr);
             return 0;
         }
-        cobj->setRotationOffset(arg0);
+        obj->setRotationOffset(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4760,7 +4760,7 @@ int lua_ax_physics_PhysicsBody_setRotationOffset(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getRotationOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4772,12 +4772,12 @@ int lua_ax_physics_PhysicsBody_getRotationOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getRotationOffset'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getRotationOffset'", nullptr);
         return 0;
     }
 #endif
@@ -4790,7 +4790,7 @@ int lua_ax_physics_PhysicsBody_getRotationOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getRotationOffset'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRotationOffset();
+        auto&& ret = obj->getRotationOffset();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4807,7 +4807,7 @@ int lua_ax_physics_PhysicsBody_getRotationOffset(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_isDynamic(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4819,12 +4819,12 @@ int lua_ax_physics_PhysicsBody_isDynamic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_isDynamic'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_isDynamic'", nullptr);
         return 0;
     }
 #endif
@@ -4837,7 +4837,7 @@ int lua_ax_physics_PhysicsBody_isDynamic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_isDynamic'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isDynamic();
+        auto&& ret = obj->isDynamic();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4854,7 +4854,7 @@ int lua_ax_physics_PhysicsBody_isDynamic(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setDynamic(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4866,12 +4866,12 @@ int lua_ax_physics_PhysicsBody_setDynamic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setDynamic'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setDynamic'", nullptr);
         return 0;
     }
 #endif
@@ -4887,7 +4887,7 @@ int lua_ax_physics_PhysicsBody_setDynamic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setDynamic'", nullptr);
             return 0;
         }
-        cobj->setDynamic(arg0);
+        obj->setDynamic(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4904,7 +4904,7 @@ int lua_ax_physics_PhysicsBody_setDynamic(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getMass(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4916,12 +4916,12 @@ int lua_ax_physics_PhysicsBody_getMass(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getMass'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getMass'", nullptr);
         return 0;
     }
 #endif
@@ -4934,7 +4934,7 @@ int lua_ax_physics_PhysicsBody_getMass(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getMass'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMass();
+        auto&& ret = obj->getMass();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4951,7 +4951,7 @@ int lua_ax_physics_PhysicsBody_getMass(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getMoment(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4963,12 +4963,12 @@ int lua_ax_physics_PhysicsBody_getMoment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getMoment'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getMoment'", nullptr);
         return 0;
     }
 #endif
@@ -4981,7 +4981,7 @@ int lua_ax_physics_PhysicsBody_getMoment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getMoment'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMoment();
+        auto&& ret = obj->getMoment();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4998,7 +4998,7 @@ int lua_ax_physics_PhysicsBody_getMoment(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getLinearDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5010,12 +5010,12 @@ int lua_ax_physics_PhysicsBody_getLinearDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getLinearDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getLinearDamping'", nullptr);
         return 0;
     }
 #endif
@@ -5028,7 +5028,7 @@ int lua_ax_physics_PhysicsBody_getLinearDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getLinearDamping'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getLinearDamping();
+        auto&& ret = obj->getLinearDamping();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5045,7 +5045,7 @@ int lua_ax_physics_PhysicsBody_getLinearDamping(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setLinearDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5057,12 +5057,12 @@ int lua_ax_physics_PhysicsBody_setLinearDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setLinearDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setLinearDamping'", nullptr);
         return 0;
     }
 #endif
@@ -5078,7 +5078,7 @@ int lua_ax_physics_PhysicsBody_setLinearDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setLinearDamping'", nullptr);
             return 0;
         }
-        cobj->setLinearDamping(arg0);
+        obj->setLinearDamping(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5095,7 +5095,7 @@ int lua_ax_physics_PhysicsBody_setLinearDamping(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getAngularDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5107,12 +5107,12 @@ int lua_ax_physics_PhysicsBody_getAngularDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getAngularDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getAngularDamping'", nullptr);
         return 0;
     }
 #endif
@@ -5125,7 +5125,7 @@ int lua_ax_physics_PhysicsBody_getAngularDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getAngularDamping'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngularDamping();
+        auto&& ret = obj->getAngularDamping();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5142,7 +5142,7 @@ int lua_ax_physics_PhysicsBody_getAngularDamping(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setAngularDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5154,12 +5154,12 @@ int lua_ax_physics_PhysicsBody_setAngularDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setAngularDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setAngularDamping'", nullptr);
         return 0;
     }
 #endif
@@ -5175,7 +5175,7 @@ int lua_ax_physics_PhysicsBody_setAngularDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setAngularDamping'", nullptr);
             return 0;
         }
-        cobj->setAngularDamping(arg0);
+        obj->setAngularDamping(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5192,7 +5192,7 @@ int lua_ax_physics_PhysicsBody_setAngularDamping(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_isResting(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5204,12 +5204,12 @@ int lua_ax_physics_PhysicsBody_isResting(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_isResting'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_isResting'", nullptr);
         return 0;
     }
 #endif
@@ -5222,7 +5222,7 @@ int lua_ax_physics_PhysicsBody_isResting(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_isResting'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isResting();
+        auto&& ret = obj->isResting();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5239,7 +5239,7 @@ int lua_ax_physics_PhysicsBody_isResting(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setResting(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5251,12 +5251,12 @@ int lua_ax_physics_PhysicsBody_setResting(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setResting'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setResting'", nullptr);
         return 0;
     }
 #endif
@@ -5272,7 +5272,7 @@ int lua_ax_physics_PhysicsBody_setResting(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setResting'", nullptr);
             return 0;
         }
-        cobj->setResting(arg0);
+        obj->setResting(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5289,7 +5289,7 @@ int lua_ax_physics_PhysicsBody_setResting(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_isRotationEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5301,12 +5301,12 @@ int lua_ax_physics_PhysicsBody_isRotationEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_isRotationEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_isRotationEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -5319,7 +5319,7 @@ int lua_ax_physics_PhysicsBody_isRotationEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_isRotationEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isRotationEnabled();
+        auto&& ret = obj->isRotationEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5336,7 +5336,7 @@ int lua_ax_physics_PhysicsBody_isRotationEnabled(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setRotationEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5348,12 +5348,12 @@ int lua_ax_physics_PhysicsBody_setRotationEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setRotationEnable'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setRotationEnable'", nullptr);
         return 0;
     }
 #endif
@@ -5369,7 +5369,7 @@ int lua_ax_physics_PhysicsBody_setRotationEnable(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setRotationEnable'", nullptr);
             return 0;
         }
-        cobj->setRotationEnable(arg0);
+        obj->setRotationEnable(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5386,7 +5386,7 @@ int lua_ax_physics_PhysicsBody_setRotationEnable(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_isGravityEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5398,12 +5398,12 @@ int lua_ax_physics_PhysicsBody_isGravityEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_isGravityEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_isGravityEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -5416,7 +5416,7 @@ int lua_ax_physics_PhysicsBody_isGravityEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_isGravityEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isGravityEnabled();
+        auto&& ret = obj->isGravityEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5433,7 +5433,7 @@ int lua_ax_physics_PhysicsBody_isGravityEnabled(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setGravityEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5445,12 +5445,12 @@ int lua_ax_physics_PhysicsBody_setGravityEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setGravityEnable'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setGravityEnable'", nullptr);
         return 0;
     }
 #endif
@@ -5466,7 +5466,7 @@ int lua_ax_physics_PhysicsBody_setGravityEnable(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setGravityEnable'", nullptr);
             return 0;
         }
-        cobj->setGravityEnable(arg0);
+        obj->setGravityEnable(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5483,7 +5483,7 @@ int lua_ax_physics_PhysicsBody_setGravityEnable(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getTag(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5495,12 +5495,12 @@ int lua_ax_physics_PhysicsBody_getTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getTag'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getTag'", nullptr);
         return 0;
     }
 #endif
@@ -5513,7 +5513,7 @@ int lua_ax_physics_PhysicsBody_getTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getTag'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTag();
+        auto&& ret = obj->getTag();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5530,7 +5530,7 @@ int lua_ax_physics_PhysicsBody_getTag(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setTag(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5542,12 +5542,12 @@ int lua_ax_physics_PhysicsBody_setTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setTag'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setTag'", nullptr);
         return 0;
     }
 #endif
@@ -5563,7 +5563,7 @@ int lua_ax_physics_PhysicsBody_setTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setTag'", nullptr);
             return 0;
         }
-        cobj->setTag(arg0);
+        obj->setTag(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5580,7 +5580,7 @@ int lua_ax_physics_PhysicsBody_setTag(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_world2Local(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5592,12 +5592,12 @@ int lua_ax_physics_PhysicsBody_world2Local(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_world2Local'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_world2Local'", nullptr);
         return 0;
     }
 #endif
@@ -5613,7 +5613,7 @@ int lua_ax_physics_PhysicsBody_world2Local(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_world2Local'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->world2Local(arg0);
+        auto&& ret = obj->world2Local(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5630,7 +5630,7 @@ int lua_ax_physics_PhysicsBody_world2Local(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_local2World(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5642,12 +5642,12 @@ int lua_ax_physics_PhysicsBody_local2World(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_local2World'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_local2World'", nullptr);
         return 0;
     }
 #endif
@@ -5663,7 +5663,7 @@ int lua_ax_physics_PhysicsBody_local2World(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_local2World'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->local2World(arg0);
+        auto&& ret = obj->local2World(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5680,7 +5680,7 @@ int lua_ax_physics_PhysicsBody_local2World(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_getB2Body(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5692,12 +5692,12 @@ int lua_ax_physics_PhysicsBody_getB2Body(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_getB2Body'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_getB2Body'", nullptr);
         return 0;
     }
 #endif
@@ -5710,7 +5710,7 @@ int lua_ax_physics_PhysicsBody_getB2Body(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_getB2Body'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getB2Body();
+        auto&& ret = obj->getB2Body();
         #pragma warning NO CONVERSION FROM NATIVE FOR b2BodyId;
         return 1;
     }
@@ -5727,7 +5727,7 @@ int lua_ax_physics_PhysicsBody_getB2Body(lua_State* tolua_S)
 int lua_ax_physics_PhysicsBody_setFixedUpdate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5739,12 +5739,12 @@ int lua_ax_physics_PhysicsBody_setFixedUpdate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsBody_setFixedUpdate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsBody_setFixedUpdate'", nullptr);
         return 0;
     }
 #endif
@@ -5760,7 +5760,7 @@ int lua_ax_physics_PhysicsBody_setFixedUpdate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsBody_setFixedUpdate'", nullptr);
             return 0;
         }
-        cobj->setFixedUpdate(arg0);
+        obj->setFixedUpdate(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6189,7 +6189,7 @@ int lua_register_ax_physics_PhysicsBody(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContact_getShapeA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6201,12 +6201,12 @@ int lua_ax_physics_PhysicsContact_getShapeA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContact_getShapeA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContact_getShapeA'", nullptr);
         return 0;
     }
 #endif
@@ -6219,7 +6219,7 @@ int lua_ax_physics_PhysicsContact_getShapeA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContact_getShapeA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getShapeA();
+        auto&& ret = obj->getShapeA();
         object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
@@ -6236,7 +6236,7 @@ int lua_ax_physics_PhysicsContact_getShapeA(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContact_getShapeB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6248,12 +6248,12 @@ int lua_ax_physics_PhysicsContact_getShapeB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContact_getShapeB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContact_getShapeB'", nullptr);
         return 0;
     }
 #endif
@@ -6266,7 +6266,7 @@ int lua_ax_physics_PhysicsContact_getShapeB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContact_getShapeB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getShapeB();
+        auto&& ret = obj->getShapeB();
         object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
@@ -6283,7 +6283,7 @@ int lua_ax_physics_PhysicsContact_getShapeB(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContact_getContactData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6295,12 +6295,12 @@ int lua_ax_physics_PhysicsContact_getContactData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContact_getContactData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContact_getContactData'", nullptr);
         return 0;
     }
 #endif
@@ -6313,7 +6313,7 @@ int lua_ax_physics_PhysicsContact_getContactData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContact_getContactData'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getContactData();
+        auto&& ret = obj->getContactData();
         physics_contactdata_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6330,7 +6330,7 @@ int lua_ax_physics_PhysicsContact_getContactData(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContact_getPreContactData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6342,12 +6342,12 @@ int lua_ax_physics_PhysicsContact_getPreContactData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContact_getPreContactData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContact_getPreContactData'", nullptr);
         return 0;
     }
 #endif
@@ -6360,7 +6360,7 @@ int lua_ax_physics_PhysicsContact_getPreContactData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContact_getPreContactData'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPreContactData();
+        auto&& ret = obj->getPreContactData();
         physics_contactdata_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6377,7 +6377,7 @@ int lua_ax_physics_PhysicsContact_getPreContactData(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContact_getEventCode(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6389,12 +6389,12 @@ int lua_ax_physics_PhysicsContact_getEventCode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContact_getEventCode'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContact_getEventCode'", nullptr);
         return 0;
     }
 #endif
@@ -6407,7 +6407,7 @@ int lua_ax_physics_PhysicsContact_getEventCode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContact_getEventCode'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getEventCode();
+        int ret = (int)obj->getEventCode();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6448,7 +6448,7 @@ int lua_register_ax_physics_PhysicsContact(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPreSolve_getRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6460,12 +6460,12 @@ int lua_ax_physics_PhysicsContactPreSolve_getRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPreSolve_getRestitution'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPreSolve_getRestitution'", nullptr);
         return 0;
     }
 #endif
@@ -6478,7 +6478,7 @@ int lua_ax_physics_PhysicsContactPreSolve_getRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPreSolve_getRestitution'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitution();
+        auto&& ret = obj->getRestitution();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6495,7 +6495,7 @@ int lua_ax_physics_PhysicsContactPreSolve_getRestitution(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPreSolve_getFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6507,12 +6507,12 @@ int lua_ax_physics_PhysicsContactPreSolve_getFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPreSolve_getFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPreSolve_getFriction'", nullptr);
         return 0;
     }
 #endif
@@ -6525,7 +6525,7 @@ int lua_ax_physics_PhysicsContactPreSolve_getFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPreSolve_getFriction'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFriction();
+        auto&& ret = obj->getFriction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6542,7 +6542,7 @@ int lua_ax_physics_PhysicsContactPreSolve_getFriction(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPreSolve_getSurfaceVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6554,12 +6554,12 @@ int lua_ax_physics_PhysicsContactPreSolve_getSurfaceVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPreSolve_getSurfaceVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPreSolve_getSurfaceVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -6572,7 +6572,7 @@ int lua_ax_physics_PhysicsContactPreSolve_getSurfaceVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPreSolve_getSurfaceVelocity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSurfaceVelocity();
+        auto&& ret = obj->getSurfaceVelocity();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6589,7 +6589,7 @@ int lua_ax_physics_PhysicsContactPreSolve_getSurfaceVelocity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPreSolve_setRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6601,12 +6601,12 @@ int lua_ax_physics_PhysicsContactPreSolve_setRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPreSolve_setRestitution'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPreSolve_setRestitution'", nullptr);
         return 0;
     }
 #endif
@@ -6622,7 +6622,7 @@ int lua_ax_physics_PhysicsContactPreSolve_setRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPreSolve_setRestitution'", nullptr);
             return 0;
         }
-        cobj->setRestitution(arg0);
+        obj->setRestitution(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6639,7 +6639,7 @@ int lua_ax_physics_PhysicsContactPreSolve_setRestitution(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPreSolve_setFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6651,12 +6651,12 @@ int lua_ax_physics_PhysicsContactPreSolve_setFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPreSolve_setFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPreSolve_setFriction'", nullptr);
         return 0;
     }
 #endif
@@ -6672,7 +6672,7 @@ int lua_ax_physics_PhysicsContactPreSolve_setFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPreSolve_setFriction'", nullptr);
             return 0;
         }
-        cobj->setFriction(arg0);
+        obj->setFriction(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6689,7 +6689,7 @@ int lua_ax_physics_PhysicsContactPreSolve_setFriction(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPreSolve_setSurfaceVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6701,12 +6701,12 @@ int lua_ax_physics_PhysicsContactPreSolve_setSurfaceVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPreSolve_setSurfaceVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPreSolve_setSurfaceVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -6722,7 +6722,7 @@ int lua_ax_physics_PhysicsContactPreSolve_setSurfaceVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPreSolve_setSurfaceVelocity'", nullptr);
             return 0;
         }
-        cobj->setSurfaceVelocity(arg0);
+        obj->setSurfaceVelocity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6739,7 +6739,7 @@ int lua_ax_physics_PhysicsContactPreSolve_setSurfaceVelocity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPreSolve_ignore(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6751,12 +6751,12 @@ int lua_ax_physics_PhysicsContactPreSolve_ignore(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPreSolve_ignore'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPreSolve_ignore'", nullptr);
         return 0;
     }
 #endif
@@ -6769,7 +6769,7 @@ int lua_ax_physics_PhysicsContactPreSolve_ignore(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPreSolve_ignore'", nullptr);
             return 0;
         }
-        cobj->ignore();
+        obj->ignore();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6812,7 +6812,7 @@ int lua_register_ax_physics_PhysicsContactPreSolve(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPostSolve_getRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPostSolve* cobj = nullptr;
+    ax::PhysicsContactPostSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6824,12 +6824,12 @@ int lua_ax_physics_PhysicsContactPostSolve_getRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPostSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPostSolve_getRestitution'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPostSolve_getRestitution'", nullptr);
         return 0;
     }
 #endif
@@ -6842,7 +6842,7 @@ int lua_ax_physics_PhysicsContactPostSolve_getRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPostSolve_getRestitution'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestitution();
+        auto&& ret = obj->getRestitution();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6859,7 +6859,7 @@ int lua_ax_physics_PhysicsContactPostSolve_getRestitution(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPostSolve_getFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPostSolve* cobj = nullptr;
+    ax::PhysicsContactPostSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6871,12 +6871,12 @@ int lua_ax_physics_PhysicsContactPostSolve_getFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPostSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPostSolve_getFriction'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPostSolve_getFriction'", nullptr);
         return 0;
     }
 #endif
@@ -6889,7 +6889,7 @@ int lua_ax_physics_PhysicsContactPostSolve_getFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPostSolve_getFriction'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFriction();
+        auto&& ret = obj->getFriction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6906,7 +6906,7 @@ int lua_ax_physics_PhysicsContactPostSolve_getFriction(lua_State* tolua_S)
 int lua_ax_physics_PhysicsContactPostSolve_getSurfaceVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsContactPostSolve* cobj = nullptr;
+    ax::PhysicsContactPostSolve* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6918,12 +6918,12 @@ int lua_ax_physics_PhysicsContactPostSolve_getSurfaceVelocity(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPostSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsContactPostSolve_getSurfaceVelocity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsContactPostSolve_getSurfaceVelocity'", nullptr);
         return 0;
     }
 #endif
@@ -6936,7 +6936,7 @@ int lua_ax_physics_PhysicsContactPostSolve_getSurfaceVelocity(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsContactPostSolve_getSurfaceVelocity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSurfaceVelocity();
+        auto&& ret = obj->getSurfaceVelocity();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7029,7 +7029,7 @@ int lua_register_ax_physics_EventListenerPhysicsContact(lua_State* tolua_S)
 int lua_ax_physics_EventListenerPhysicsContactWithBodies_hitTest(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerPhysicsContactWithBodies* cobj = nullptr;
+    ax::EventListenerPhysicsContactWithBodies* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7041,12 +7041,12 @@ int lua_ax_physics_EventListenerPhysicsContactWithBodies_hitTest(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.EventListenerPhysicsContactWithBodies",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::EventListenerPhysicsContactWithBodies*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::EventListenerPhysicsContactWithBodies*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_EventListenerPhysicsContactWithBodies_hitTest'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_EventListenerPhysicsContactWithBodies_hitTest'", nullptr);
         return 0;
     }
 #endif
@@ -7065,7 +7065,7 @@ int lua_ax_physics_EventListenerPhysicsContactWithBodies_hitTest(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_EventListenerPhysicsContactWithBodies_hitTest'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->hitTest(arg0, arg1);
+        auto&& ret = obj->hitTest(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7141,7 +7141,7 @@ int lua_register_ax_physics_EventListenerPhysicsContactWithBodies(lua_State* tol
 int lua_ax_physics_EventListenerPhysicsContactWithShapes_hitTest(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerPhysicsContactWithShapes* cobj = nullptr;
+    ax::EventListenerPhysicsContactWithShapes* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7153,12 +7153,12 @@ int lua_ax_physics_EventListenerPhysicsContactWithShapes_hitTest(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.EventListenerPhysicsContactWithShapes",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::EventListenerPhysicsContactWithShapes*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::EventListenerPhysicsContactWithShapes*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_EventListenerPhysicsContactWithShapes_hitTest'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_EventListenerPhysicsContactWithShapes_hitTest'", nullptr);
         return 0;
     }
 #endif
@@ -7177,7 +7177,7 @@ int lua_ax_physics_EventListenerPhysicsContactWithShapes_hitTest(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_EventListenerPhysicsContactWithShapes_hitTest'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->hitTest(arg0, arg1);
+        auto&& ret = obj->hitTest(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7253,7 +7253,7 @@ int lua_register_ax_physics_EventListenerPhysicsContactWithShapes(lua_State* tol
 int lua_ax_physics_EventListenerPhysicsContactWithGroup_hitTest(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::EventListenerPhysicsContactWithGroup* cobj = nullptr;
+    ax::EventListenerPhysicsContactWithGroup* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7265,12 +7265,12 @@ int lua_ax_physics_EventListenerPhysicsContactWithGroup_hitTest(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.EventListenerPhysicsContactWithGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::EventListenerPhysicsContactWithGroup*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::EventListenerPhysicsContactWithGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_EventListenerPhysicsContactWithGroup_hitTest'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_EventListenerPhysicsContactWithGroup_hitTest'", nullptr);
         return 0;
     }
 #endif
@@ -7289,7 +7289,7 @@ int lua_ax_physics_EventListenerPhysicsContactWithGroup_hitTest(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_EventListenerPhysicsContactWithGroup_hitTest'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->hitTest(arg0, arg1);
+        auto&& ret = obj->hitTest(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7363,7 +7363,7 @@ int lua_register_ax_physics_EventListenerPhysicsContactWithGroup(lua_State* tolu
 int lua_ax_physics_PhysicsJoint_getBodyA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7375,12 +7375,12 @@ int lua_ax_physics_PhysicsJoint_getBodyA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_getBodyA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_getBodyA'", nullptr);
         return 0;
     }
 #endif
@@ -7393,7 +7393,7 @@ int lua_ax_physics_PhysicsJoint_getBodyA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_getBodyA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBodyA();
+        auto&& ret = obj->getBodyA();
         object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
@@ -7410,7 +7410,7 @@ int lua_ax_physics_PhysicsJoint_getBodyA(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_getBodyB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7422,12 +7422,12 @@ int lua_ax_physics_PhysicsJoint_getBodyB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_getBodyB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_getBodyB'", nullptr);
         return 0;
     }
 #endif
@@ -7440,7 +7440,7 @@ int lua_ax_physics_PhysicsJoint_getBodyB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_getBodyB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBodyB();
+        auto&& ret = obj->getBodyB();
         object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
@@ -7457,7 +7457,7 @@ int lua_ax_physics_PhysicsJoint_getBodyB(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_getWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7469,12 +7469,12 @@ int lua_ax_physics_PhysicsJoint_getWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_getWorld'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_getWorld'", nullptr);
         return 0;
     }
 #endif
@@ -7487,7 +7487,7 @@ int lua_ax_physics_PhysicsJoint_getWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_getWorld'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWorld();
+        auto&& ret = obj->getWorld();
         object_to_luaval<ax::PhysicsWorld>(tolua_S, "ax.PhysicsWorld",(ax::PhysicsWorld*)ret);
         return 1;
     }
@@ -7504,7 +7504,7 @@ int lua_ax_physics_PhysicsJoint_getWorld(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_getTag(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7516,12 +7516,12 @@ int lua_ax_physics_PhysicsJoint_getTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_getTag'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_getTag'", nullptr);
         return 0;
     }
 #endif
@@ -7534,7 +7534,7 @@ int lua_ax_physics_PhysicsJoint_getTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_getTag'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getTag();
+        auto&& ret = obj->getTag();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7551,7 +7551,7 @@ int lua_ax_physics_PhysicsJoint_getTag(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_setTag(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7563,12 +7563,12 @@ int lua_ax_physics_PhysicsJoint_setTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_setTag'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_setTag'", nullptr);
         return 0;
     }
 #endif
@@ -7584,7 +7584,7 @@ int lua_ax_physics_PhysicsJoint_setTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_setTag'", nullptr);
             return 0;
         }
-        cobj->setTag(arg0);
+        obj->setTag(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7601,7 +7601,7 @@ int lua_ax_physics_PhysicsJoint_setTag(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_isEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7613,12 +7613,12 @@ int lua_ax_physics_PhysicsJoint_isEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_isEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_isEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -7631,7 +7631,7 @@ int lua_ax_physics_PhysicsJoint_isEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_isEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isEnabled();
+        auto&& ret = obj->isEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7648,7 +7648,7 @@ int lua_ax_physics_PhysicsJoint_isEnabled(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_setEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7660,12 +7660,12 @@ int lua_ax_physics_PhysicsJoint_setEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_setEnable'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_setEnable'", nullptr);
         return 0;
     }
 #endif
@@ -7681,7 +7681,7 @@ int lua_ax_physics_PhysicsJoint_setEnable(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_setEnable'", nullptr);
             return 0;
         }
-        cobj->setEnable(arg0);
+        obj->setEnable(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7698,7 +7698,7 @@ int lua_ax_physics_PhysicsJoint_setEnable(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_isCollisionEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7710,12 +7710,12 @@ int lua_ax_physics_PhysicsJoint_isCollisionEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_isCollisionEnabled'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_isCollisionEnabled'", nullptr);
         return 0;
     }
 #endif
@@ -7728,7 +7728,7 @@ int lua_ax_physics_PhysicsJoint_isCollisionEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_isCollisionEnabled'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isCollisionEnabled();
+        auto&& ret = obj->isCollisionEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7745,7 +7745,7 @@ int lua_ax_physics_PhysicsJoint_isCollisionEnabled(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_setCollisionEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7757,12 +7757,12 @@ int lua_ax_physics_PhysicsJoint_setCollisionEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_setCollisionEnable'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_setCollisionEnable'", nullptr);
         return 0;
     }
 #endif
@@ -7778,7 +7778,7 @@ int lua_ax_physics_PhysicsJoint_setCollisionEnable(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_setCollisionEnable'", nullptr);
             return 0;
         }
-        cobj->setCollisionEnable(arg0);
+        obj->setCollisionEnable(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7795,7 +7795,7 @@ int lua_ax_physics_PhysicsJoint_setCollisionEnable(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_removeFormWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7807,12 +7807,12 @@ int lua_ax_physics_PhysicsJoint_removeFormWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_removeFormWorld'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_removeFormWorld'", nullptr);
         return 0;
     }
 #endif
@@ -7825,7 +7825,7 @@ int lua_ax_physics_PhysicsJoint_removeFormWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_removeFormWorld'", nullptr);
             return 0;
         }
-        cobj->removeFormWorld();
+        obj->removeFormWorld();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7842,7 +7842,7 @@ int lua_ax_physics_PhysicsJoint_removeFormWorld(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_setMaxForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7854,12 +7854,12 @@ int lua_ax_physics_PhysicsJoint_setMaxForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_setMaxForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_setMaxForce'", nullptr);
         return 0;
     }
 #endif
@@ -7875,7 +7875,7 @@ int lua_ax_physics_PhysicsJoint_setMaxForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_setMaxForce'", nullptr);
             return 0;
         }
-        cobj->setMaxForce(arg0);
+        obj->setMaxForce(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -7892,7 +7892,7 @@ int lua_ax_physics_PhysicsJoint_setMaxForce(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJoint_getMaxForce(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7904,12 +7904,12 @@ int lua_ax_physics_PhysicsJoint_getMaxForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJoint_getMaxForce'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJoint_getMaxForce'", nullptr);
         return 0;
     }
 #endif
@@ -7922,7 +7922,7 @@ int lua_ax_physics_PhysicsJoint_getMaxForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJoint_getMaxForce'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxForce();
+        auto&& ret = obj->getMaxForce();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8030,7 +8030,7 @@ int lua_register_ax_physics_PhysicsJointFixed(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointLimit_getAnchr1(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8042,12 +8042,12 @@ int lua_ax_physics_PhysicsJointLimit_getAnchr1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_getAnchr1'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointLimit_getAnchr1'", nullptr);
         return 0;
     }
 #endif
@@ -8060,7 +8060,7 @@ int lua_ax_physics_PhysicsJointLimit_getAnchr1(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_getAnchr1'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchr1();
+        auto&& ret = obj->getAnchr1();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8077,7 +8077,7 @@ int lua_ax_physics_PhysicsJointLimit_getAnchr1(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointLimit_setAnchr1(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8089,12 +8089,12 @@ int lua_ax_physics_PhysicsJointLimit_setAnchr1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_setAnchr1'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointLimit_setAnchr1'", nullptr);
         return 0;
     }
 #endif
@@ -8110,7 +8110,7 @@ int lua_ax_physics_PhysicsJointLimit_setAnchr1(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_setAnchr1'", nullptr);
             return 0;
         }
-        cobj->setAnchr1(arg0);
+        obj->setAnchr1(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8127,7 +8127,7 @@ int lua_ax_physics_PhysicsJointLimit_setAnchr1(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointLimit_getAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8139,12 +8139,12 @@ int lua_ax_physics_PhysicsJointLimit_getAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_getAnchr2'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointLimit_getAnchr2'", nullptr);
         return 0;
     }
 #endif
@@ -8157,7 +8157,7 @@ int lua_ax_physics_PhysicsJointLimit_getAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_getAnchr2'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchr2();
+        auto&& ret = obj->getAnchr2();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8174,7 +8174,7 @@ int lua_ax_physics_PhysicsJointLimit_getAnchr2(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointLimit_setAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8186,12 +8186,12 @@ int lua_ax_physics_PhysicsJointLimit_setAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_setAnchr2'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointLimit_setAnchr2'", nullptr);
         return 0;
     }
 #endif
@@ -8207,7 +8207,7 @@ int lua_ax_physics_PhysicsJointLimit_setAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_setAnchr2'", nullptr);
             return 0;
         }
-        cobj->setAnchr2(arg0);
+        obj->setAnchr2(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8224,7 +8224,7 @@ int lua_ax_physics_PhysicsJointLimit_setAnchr2(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointLimit_getMin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8236,12 +8236,12 @@ int lua_ax_physics_PhysicsJointLimit_getMin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_getMin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointLimit_getMin'", nullptr);
         return 0;
     }
 #endif
@@ -8254,7 +8254,7 @@ int lua_ax_physics_PhysicsJointLimit_getMin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_getMin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMin();
+        auto&& ret = obj->getMin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8271,7 +8271,7 @@ int lua_ax_physics_PhysicsJointLimit_getMin(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointLimit_setMin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8283,12 +8283,12 @@ int lua_ax_physics_PhysicsJointLimit_setMin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_setMin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointLimit_setMin'", nullptr);
         return 0;
     }
 #endif
@@ -8304,7 +8304,7 @@ int lua_ax_physics_PhysicsJointLimit_setMin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_setMin'", nullptr);
             return 0;
         }
-        cobj->setMin(arg0);
+        obj->setMin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8321,7 +8321,7 @@ int lua_ax_physics_PhysicsJointLimit_setMin(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointLimit_getMax(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8333,12 +8333,12 @@ int lua_ax_physics_PhysicsJointLimit_getMax(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_getMax'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointLimit_getMax'", nullptr);
         return 0;
     }
 #endif
@@ -8351,7 +8351,7 @@ int lua_ax_physics_PhysicsJointLimit_getMax(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_getMax'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMax();
+        auto&& ret = obj->getMax();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8368,7 +8368,7 @@ int lua_ax_physics_PhysicsJointLimit_getMax(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointLimit_setMax(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8380,12 +8380,12 @@ int lua_ax_physics_PhysicsJointLimit_setMax(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointLimit_setMax'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointLimit_setMax'", nullptr);
         return 0;
     }
 #endif
@@ -8401,7 +8401,7 @@ int lua_ax_physics_PhysicsJointLimit_setMax(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointLimit_setMax'", nullptr);
             return 0;
         }
-        cobj->setMax(arg0);
+        obj->setMax(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8597,7 +8597,7 @@ int lua_register_ax_physics_PhysicsJointPin(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointDistance_getDistance(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointDistance* cobj = nullptr;
+    ax::PhysicsJointDistance* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8609,12 +8609,12 @@ int lua_ax_physics_PhysicsJointDistance_getDistance(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointDistance",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointDistance_getDistance'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointDistance_getDistance'", nullptr);
         return 0;
     }
 #endif
@@ -8627,7 +8627,7 @@ int lua_ax_physics_PhysicsJointDistance_getDistance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointDistance_getDistance'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDistance();
+        auto&& ret = obj->getDistance();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8644,7 +8644,7 @@ int lua_ax_physics_PhysicsJointDistance_getDistance(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointDistance_setDistance(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointDistance* cobj = nullptr;
+    ax::PhysicsJointDistance* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8656,12 +8656,12 @@ int lua_ax_physics_PhysicsJointDistance_setDistance(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointDistance",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointDistance_setDistance'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointDistance_setDistance'", nullptr);
         return 0;
     }
 #endif
@@ -8677,7 +8677,7 @@ int lua_ax_physics_PhysicsJointDistance_setDistance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointDistance_setDistance'", nullptr);
             return 0;
         }
-        cobj->setDistance(arg0);
+        obj->setDistance(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8758,7 +8758,7 @@ int lua_register_ax_physics_PhysicsJointDistance(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_getAnchr1(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8770,12 +8770,12 @@ int lua_ax_physics_PhysicsJointSpring_getAnchr1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_getAnchr1'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_getAnchr1'", nullptr);
         return 0;
     }
 #endif
@@ -8788,7 +8788,7 @@ int lua_ax_physics_PhysicsJointSpring_getAnchr1(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_getAnchr1'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchr1();
+        auto&& ret = obj->getAnchr1();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8805,7 +8805,7 @@ int lua_ax_physics_PhysicsJointSpring_getAnchr1(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_setAnchr1(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8817,12 +8817,12 @@ int lua_ax_physics_PhysicsJointSpring_setAnchr1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_setAnchr1'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_setAnchr1'", nullptr);
         return 0;
     }
 #endif
@@ -8838,7 +8838,7 @@ int lua_ax_physics_PhysicsJointSpring_setAnchr1(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_setAnchr1'", nullptr);
             return 0;
         }
-        cobj->setAnchr1(arg0);
+        obj->setAnchr1(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8855,7 +8855,7 @@ int lua_ax_physics_PhysicsJointSpring_setAnchr1(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_getAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8867,12 +8867,12 @@ int lua_ax_physics_PhysicsJointSpring_getAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_getAnchr2'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_getAnchr2'", nullptr);
         return 0;
     }
 #endif
@@ -8885,7 +8885,7 @@ int lua_ax_physics_PhysicsJointSpring_getAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_getAnchr2'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchr2();
+        auto&& ret = obj->getAnchr2();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8902,7 +8902,7 @@ int lua_ax_physics_PhysicsJointSpring_getAnchr2(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_setAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8914,12 +8914,12 @@ int lua_ax_physics_PhysicsJointSpring_setAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_setAnchr2'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_setAnchr2'", nullptr);
         return 0;
     }
 #endif
@@ -8935,7 +8935,7 @@ int lua_ax_physics_PhysicsJointSpring_setAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_setAnchr2'", nullptr);
             return 0;
         }
-        cobj->setAnchr2(arg0);
+        obj->setAnchr2(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -8952,7 +8952,7 @@ int lua_ax_physics_PhysicsJointSpring_setAnchr2(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_getRestLength(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8964,12 +8964,12 @@ int lua_ax_physics_PhysicsJointSpring_getRestLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_getRestLength'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_getRestLength'", nullptr);
         return 0;
     }
 #endif
@@ -8982,7 +8982,7 @@ int lua_ax_physics_PhysicsJointSpring_getRestLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_getRestLength'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestLength();
+        auto&& ret = obj->getRestLength();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8999,7 +8999,7 @@ int lua_ax_physics_PhysicsJointSpring_getRestLength(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_setRestLength(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9011,12 +9011,12 @@ int lua_ax_physics_PhysicsJointSpring_setRestLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_setRestLength'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_setRestLength'", nullptr);
         return 0;
     }
 #endif
@@ -9032,7 +9032,7 @@ int lua_ax_physics_PhysicsJointSpring_setRestLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_setRestLength'", nullptr);
             return 0;
         }
-        cobj->setRestLength(arg0);
+        obj->setRestLength(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9049,7 +9049,7 @@ int lua_ax_physics_PhysicsJointSpring_setRestLength(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_getStiffness(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9061,12 +9061,12 @@ int lua_ax_physics_PhysicsJointSpring_getStiffness(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_getStiffness'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_getStiffness'", nullptr);
         return 0;
     }
 #endif
@@ -9079,7 +9079,7 @@ int lua_ax_physics_PhysicsJointSpring_getStiffness(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_getStiffness'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getStiffness();
+        auto&& ret = obj->getStiffness();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9096,7 +9096,7 @@ int lua_ax_physics_PhysicsJointSpring_getStiffness(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_setStiffness(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9108,12 +9108,12 @@ int lua_ax_physics_PhysicsJointSpring_setStiffness(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_setStiffness'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_setStiffness'", nullptr);
         return 0;
     }
 #endif
@@ -9129,7 +9129,7 @@ int lua_ax_physics_PhysicsJointSpring_setStiffness(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_setStiffness'", nullptr);
             return 0;
         }
-        cobj->setStiffness(arg0);
+        obj->setStiffness(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9146,7 +9146,7 @@ int lua_ax_physics_PhysicsJointSpring_setStiffness(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_getDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9158,12 +9158,12 @@ int lua_ax_physics_PhysicsJointSpring_getDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_getDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_getDamping'", nullptr);
         return 0;
     }
 #endif
@@ -9176,7 +9176,7 @@ int lua_ax_physics_PhysicsJointSpring_getDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_getDamping'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDamping();
+        auto&& ret = obj->getDamping();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9193,7 +9193,7 @@ int lua_ax_physics_PhysicsJointSpring_getDamping(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointSpring_setDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9205,12 +9205,12 @@ int lua_ax_physics_PhysicsJointSpring_setDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointSpring_setDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointSpring_setDamping'", nullptr);
         return 0;
     }
 #endif
@@ -9226,7 +9226,7 @@ int lua_ax_physics_PhysicsJointSpring_setDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointSpring_setDamping'", nullptr);
             return 0;
         }
-        cobj->setDamping(arg0);
+        obj->setDamping(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9319,7 +9319,7 @@ int lua_register_ax_physics_PhysicsJointSpring(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGroove_getGrooveA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9331,12 +9331,12 @@ int lua_ax_physics_PhysicsJointGroove_getGrooveA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGroove_getGrooveA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGroove_getGrooveA'", nullptr);
         return 0;
     }
 #endif
@@ -9349,7 +9349,7 @@ int lua_ax_physics_PhysicsJointGroove_getGrooveA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_getGrooveA'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getGrooveA();
+        auto&& ret = obj->getGrooveA();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9366,7 +9366,7 @@ int lua_ax_physics_PhysicsJointGroove_getGrooveA(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGroove_setGrooveA(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9378,12 +9378,12 @@ int lua_ax_physics_PhysicsJointGroove_setGrooveA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGroove_setGrooveA'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGroove_setGrooveA'", nullptr);
         return 0;
     }
 #endif
@@ -9399,7 +9399,7 @@ int lua_ax_physics_PhysicsJointGroove_setGrooveA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_setGrooveA'", nullptr);
             return 0;
         }
-        cobj->setGrooveA(arg0);
+        obj->setGrooveA(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9416,7 +9416,7 @@ int lua_ax_physics_PhysicsJointGroove_setGrooveA(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGroove_getGrooveB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9428,12 +9428,12 @@ int lua_ax_physics_PhysicsJointGroove_getGrooveB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGroove_getGrooveB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGroove_getGrooveB'", nullptr);
         return 0;
     }
 #endif
@@ -9446,7 +9446,7 @@ int lua_ax_physics_PhysicsJointGroove_getGrooveB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_getGrooveB'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getGrooveB();
+        auto&& ret = obj->getGrooveB();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9463,7 +9463,7 @@ int lua_ax_physics_PhysicsJointGroove_getGrooveB(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGroove_setGrooveB(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9475,12 +9475,12 @@ int lua_ax_physics_PhysicsJointGroove_setGrooveB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGroove_setGrooveB'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGroove_setGrooveB'", nullptr);
         return 0;
     }
 #endif
@@ -9496,7 +9496,7 @@ int lua_ax_physics_PhysicsJointGroove_setGrooveB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_setGrooveB'", nullptr);
             return 0;
         }
-        cobj->setGrooveB(arg0);
+        obj->setGrooveB(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9513,7 +9513,7 @@ int lua_ax_physics_PhysicsJointGroove_setGrooveB(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGroove_getAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9525,12 +9525,12 @@ int lua_ax_physics_PhysicsJointGroove_getAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGroove_getAnchr2'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGroove_getAnchr2'", nullptr);
         return 0;
     }
 #endif
@@ -9543,7 +9543,7 @@ int lua_ax_physics_PhysicsJointGroove_getAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_getAnchr2'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAnchr2();
+        auto&& ret = obj->getAnchr2();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9560,7 +9560,7 @@ int lua_ax_physics_PhysicsJointGroove_getAnchr2(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGroove_setAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9572,12 +9572,12 @@ int lua_ax_physics_PhysicsJointGroove_setAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGroove_setAnchr2'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGroove_setAnchr2'", nullptr);
         return 0;
     }
 #endif
@@ -9593,7 +9593,7 @@ int lua_ax_physics_PhysicsJointGroove_setAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGroove_setAnchr2'", nullptr);
             return 0;
         }
-        cobj->setAnchr2(arg0);
+        obj->setAnchr2(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9680,7 +9680,7 @@ int lua_register_ax_physics_PhysicsJointGroove(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotarySpring_getRestAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9692,12 +9692,12 @@ int lua_ax_physics_PhysicsJointRotarySpring_getRestAngle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotarySpring_getRestAngle'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotarySpring_getRestAngle'", nullptr);
         return 0;
     }
 #endif
@@ -9710,7 +9710,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_getRestAngle(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_getRestAngle'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRestAngle();
+        auto&& ret = obj->getRestAngle();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9727,7 +9727,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_getRestAngle(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotarySpring_setRestAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9739,12 +9739,12 @@ int lua_ax_physics_PhysicsJointRotarySpring_setRestAngle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotarySpring_setRestAngle'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotarySpring_setRestAngle'", nullptr);
         return 0;
     }
 #endif
@@ -9760,7 +9760,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_setRestAngle(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_setRestAngle'", nullptr);
             return 0;
         }
-        cobj->setRestAngle(arg0);
+        obj->setRestAngle(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9777,7 +9777,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_setRestAngle(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotarySpring_getStiffness(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9789,12 +9789,12 @@ int lua_ax_physics_PhysicsJointRotarySpring_getStiffness(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotarySpring_getStiffness'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotarySpring_getStiffness'", nullptr);
         return 0;
     }
 #endif
@@ -9807,7 +9807,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_getStiffness(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_getStiffness'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getStiffness();
+        auto&& ret = obj->getStiffness();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9824,7 +9824,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_getStiffness(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotarySpring_setStiffness(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9836,12 +9836,12 @@ int lua_ax_physics_PhysicsJointRotarySpring_setStiffness(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotarySpring_setStiffness'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotarySpring_setStiffness'", nullptr);
         return 0;
     }
 #endif
@@ -9857,7 +9857,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_setStiffness(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_setStiffness'", nullptr);
             return 0;
         }
-        cobj->setStiffness(arg0);
+        obj->setStiffness(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -9874,7 +9874,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_setStiffness(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotarySpring_getDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9886,12 +9886,12 @@ int lua_ax_physics_PhysicsJointRotarySpring_getDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotarySpring_getDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotarySpring_getDamping'", nullptr);
         return 0;
     }
 #endif
@@ -9904,7 +9904,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_getDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_getDamping'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDamping();
+        auto&& ret = obj->getDamping();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9921,7 +9921,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_getDamping(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotarySpring_setDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9933,12 +9933,12 @@ int lua_ax_physics_PhysicsJointRotarySpring_setDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotarySpring_setDamping'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotarySpring_setDamping'", nullptr);
         return 0;
     }
 #endif
@@ -9954,7 +9954,7 @@ int lua_ax_physics_PhysicsJointRotarySpring_setDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotarySpring_setDamping'", nullptr);
             return 0;
         }
-        cobj->setDamping(arg0);
+        obj->setDamping(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10039,7 +10039,7 @@ int lua_register_ax_physics_PhysicsJointRotarySpring(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotaryLimit_getMin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10051,12 +10051,12 @@ int lua_ax_physics_PhysicsJointRotaryLimit_getMin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_getMin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_getMin'", nullptr);
         return 0;
     }
 #endif
@@ -10069,7 +10069,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_getMin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotaryLimit_getMin'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMin();
+        auto&& ret = obj->getMin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10086,7 +10086,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_getMin(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotaryLimit_setMin(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10098,12 +10098,12 @@ int lua_ax_physics_PhysicsJointRotaryLimit_setMin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_setMin'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_setMin'", nullptr);
         return 0;
     }
 #endif
@@ -10119,7 +10119,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_setMin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotaryLimit_setMin'", nullptr);
             return 0;
         }
-        cobj->setMin(arg0);
+        obj->setMin(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10136,7 +10136,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_setMin(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotaryLimit_getMax(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10148,12 +10148,12 @@ int lua_ax_physics_PhysicsJointRotaryLimit_getMax(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_getMax'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_getMax'", nullptr);
         return 0;
     }
 #endif
@@ -10166,7 +10166,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_getMax(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotaryLimit_getMax'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMax();
+        auto&& ret = obj->getMax();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10183,7 +10183,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_getMax(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRotaryLimit_setMax(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10195,12 +10195,12 @@ int lua_ax_physics_PhysicsJointRotaryLimit_setMax(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_setMax'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRotaryLimit_setMax'", nullptr);
         return 0;
     }
 #endif
@@ -10216,7 +10216,7 @@ int lua_ax_physics_PhysicsJointRotaryLimit_setMax(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRotaryLimit_setMax'", nullptr);
             return 0;
         }
-        cobj->setMax(arg0);
+        obj->setMax(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10315,7 +10315,7 @@ int lua_register_ax_physics_PhysicsJointRotaryLimit(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRatchet_getAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10327,12 +10327,12 @@ int lua_ax_physics_PhysicsJointRatchet_getAngle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRatchet_getAngle'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRatchet_getAngle'", nullptr);
         return 0;
     }
 #endif
@@ -10345,7 +10345,7 @@ int lua_ax_physics_PhysicsJointRatchet_getAngle(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_getAngle'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAngle();
+        auto&& ret = obj->getAngle();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10362,7 +10362,7 @@ int lua_ax_physics_PhysicsJointRatchet_getAngle(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10374,12 +10374,12 @@ int lua_ax_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRatchet_setAngle'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRatchet_setAngle'", nullptr);
         return 0;
     }
 #endif
@@ -10395,7 +10395,7 @@ int lua_ax_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_setAngle'", nullptr);
             return 0;
         }
-        cobj->setAngle(arg0);
+        obj->setAngle(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10412,7 +10412,7 @@ int lua_ax_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRatchet_getPhase(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10424,12 +10424,12 @@ int lua_ax_physics_PhysicsJointRatchet_getPhase(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRatchet_getPhase'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRatchet_getPhase'", nullptr);
         return 0;
     }
 #endif
@@ -10442,7 +10442,7 @@ int lua_ax_physics_PhysicsJointRatchet_getPhase(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_getPhase'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPhase();
+        auto&& ret = obj->getPhase();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10459,7 +10459,7 @@ int lua_ax_physics_PhysicsJointRatchet_getPhase(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRatchet_setPhase(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10471,12 +10471,12 @@ int lua_ax_physics_PhysicsJointRatchet_setPhase(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRatchet_setPhase'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRatchet_setPhase'", nullptr);
         return 0;
     }
 #endif
@@ -10492,7 +10492,7 @@ int lua_ax_physics_PhysicsJointRatchet_setPhase(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_setPhase'", nullptr);
             return 0;
         }
-        cobj->setPhase(arg0);
+        obj->setPhase(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10509,7 +10509,7 @@ int lua_ax_physics_PhysicsJointRatchet_setPhase(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRatchet_getRatchet(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10521,12 +10521,12 @@ int lua_ax_physics_PhysicsJointRatchet_getRatchet(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRatchet_getRatchet'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRatchet_getRatchet'", nullptr);
         return 0;
     }
 #endif
@@ -10539,7 +10539,7 @@ int lua_ax_physics_PhysicsJointRatchet_getRatchet(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_getRatchet'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRatchet();
+        auto&& ret = obj->getRatchet();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10556,7 +10556,7 @@ int lua_ax_physics_PhysicsJointRatchet_getRatchet(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointRatchet_setRatchet(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10568,12 +10568,12 @@ int lua_ax_physics_PhysicsJointRatchet_setRatchet(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointRatchet_setRatchet'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointRatchet_setRatchet'", nullptr);
         return 0;
     }
 #endif
@@ -10589,7 +10589,7 @@ int lua_ax_physics_PhysicsJointRatchet_setRatchet(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointRatchet_setRatchet'", nullptr);
             return 0;
         }
-        cobj->setRatchet(arg0);
+        obj->setRatchet(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10674,7 +10674,7 @@ int lua_register_ax_physics_PhysicsJointRatchet(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGear_getPhase(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10686,12 +10686,12 @@ int lua_ax_physics_PhysicsJointGear_getPhase(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGear_getPhase'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGear_getPhase'", nullptr);
         return 0;
     }
 #endif
@@ -10704,7 +10704,7 @@ int lua_ax_physics_PhysicsJointGear_getPhase(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGear_getPhase'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getPhase();
+        auto&& ret = obj->getPhase();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10721,7 +10721,7 @@ int lua_ax_physics_PhysicsJointGear_getPhase(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGear_setPhase(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10733,12 +10733,12 @@ int lua_ax_physics_PhysicsJointGear_setPhase(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGear_setPhase'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGear_setPhase'", nullptr);
         return 0;
     }
 #endif
@@ -10754,7 +10754,7 @@ int lua_ax_physics_PhysicsJointGear_setPhase(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGear_setPhase'", nullptr);
             return 0;
         }
-        cobj->setPhase(arg0);
+        obj->setPhase(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10771,7 +10771,7 @@ int lua_ax_physics_PhysicsJointGear_setPhase(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGear_getRatio(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10783,12 +10783,12 @@ int lua_ax_physics_PhysicsJointGear_getRatio(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGear_getRatio'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGear_getRatio'", nullptr);
         return 0;
     }
 #endif
@@ -10801,7 +10801,7 @@ int lua_ax_physics_PhysicsJointGear_getRatio(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGear_getRatio'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRatio();
+        auto&& ret = obj->getRatio();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10818,7 +10818,7 @@ int lua_ax_physics_PhysicsJointGear_getRatio(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointGear_setRatio(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10830,12 +10830,12 @@ int lua_ax_physics_PhysicsJointGear_setRatio(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointGear_setRatio'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointGear_setRatio'", nullptr);
         return 0;
     }
 #endif
@@ -10851,7 +10851,7 @@ int lua_ax_physics_PhysicsJointGear_setRatio(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointGear_setRatio'", nullptr);
             return 0;
         }
-        cobj->setRatio(arg0);
+        obj->setRatio(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -10934,7 +10934,7 @@ int lua_register_ax_physics_PhysicsJointGear(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointMotor_getRate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointMotor* cobj = nullptr;
+    ax::PhysicsJointMotor* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10946,12 +10946,12 @@ int lua_ax_physics_PhysicsJointMotor_getRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointMotor",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointMotor_getRate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointMotor_getRate'", nullptr);
         return 0;
     }
 #endif
@@ -10964,7 +10964,7 @@ int lua_ax_physics_PhysicsJointMotor_getRate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointMotor_getRate'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRate();
+        auto&& ret = obj->getRate();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10981,7 +10981,7 @@ int lua_ax_physics_PhysicsJointMotor_getRate(lua_State* tolua_S)
 int lua_ax_physics_PhysicsJointMotor_setRate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsJointMotor* cobj = nullptr;
+    ax::PhysicsJointMotor* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10993,12 +10993,12 @@ int lua_ax_physics_PhysicsJointMotor_setRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointMotor",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsJointMotor_setRate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsJointMotor_setRate'", nullptr);
         return 0;
     }
 #endif
@@ -11014,7 +11014,7 @@ int lua_ax_physics_PhysicsJointMotor_setRate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsJointMotor_setRate'", nullptr);
             return 0;
         }
-        cobj->setRate(arg0);
+        obj->setRate(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11093,7 +11093,7 @@ int lua_register_ax_physics_PhysicsJointMotor(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getB2World(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11105,12 +11105,12 @@ int lua_ax_physics_PhysicsWorld_getB2World(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getB2World'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getB2World'", nullptr);
         return 0;
     }
 #endif
@@ -11123,7 +11123,7 @@ int lua_ax_physics_PhysicsWorld_getB2World(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getB2World'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getB2World();
+        auto&& ret = obj->getB2World();
         #pragma warning NO CONVERSION FROM NATIVE FOR b2WorldId;
         return 1;
     }
@@ -11140,7 +11140,7 @@ int lua_ax_physics_PhysicsWorld_getB2World(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11152,12 +11152,12 @@ int lua_ax_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_addJoint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_addJoint'", nullptr);
         return 0;
     }
 #endif
@@ -11173,7 +11173,7 @@ int lua_ax_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_addJoint'", nullptr);
             return 0;
         }
-        cobj->addJoint(arg0);
+        obj->addJoint(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11190,7 +11190,7 @@ int lua_ax_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11202,12 +11202,12 @@ int lua_ax_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_removeJoint'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_removeJoint'", nullptr);
         return 0;
     }
 #endif
@@ -11223,7 +11223,7 @@ int lua_ax_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeJoint'", nullptr);
             return 0;
         }
-        cobj->removeJoint(arg0);
+        obj->removeJoint(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11240,7 +11240,7 @@ int lua_ax_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeJoint'", nullptr);
             return 0;
         }
-        cobj->removeJoint(arg0, arg1);
+        obj->removeJoint(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11257,7 +11257,7 @@ int lua_ax_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11269,12 +11269,12 @@ int lua_ax_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_removeAllJoints'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_removeAllJoints'", nullptr);
         return 0;
     }
 #endif
@@ -11287,7 +11287,7 @@ int lua_ax_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeAllJoints'", nullptr);
             return 0;
         }
-        cobj->removeAllJoints();
+        obj->removeAllJoints();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11301,7 +11301,7 @@ int lua_ax_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeAllJoints'", nullptr);
             return 0;
         }
-        cobj->removeAllJoints(arg0);
+        obj->removeAllJoints(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11318,7 +11318,7 @@ int lua_ax_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -11327,11 +11327,11 @@ int lua_ax_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_removeBody'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_removeBody'", nullptr);
         return 0;
     }
 #endif
@@ -11342,7 +11342,7 @@ int lua_ax_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
             ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.PhysicsWorld:removeBody");
 
             if (!ok) { break; }
-            cobj->removeBody(arg0);
+            obj->removeBody(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -11354,7 +11354,7 @@ int lua_ax_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
             ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsWorld:removeBody");
 
             if (!ok) { break; }
-            cobj->removeBody(arg0);
+            obj->removeBody(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -11373,7 +11373,7 @@ int lua_ax_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_removeAllBodies(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11385,12 +11385,12 @@ int lua_ax_physics_PhysicsWorld_removeAllBodies(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_removeAllBodies'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_removeAllBodies'", nullptr);
         return 0;
     }
 #endif
@@ -11403,7 +11403,7 @@ int lua_ax_physics_PhysicsWorld_removeAllBodies(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_removeAllBodies'", nullptr);
             return 0;
         }
-        cobj->removeAllBodies();
+        obj->removeAllBodies();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11420,7 +11420,7 @@ int lua_ax_physics_PhysicsWorld_removeAllBodies(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11432,12 +11432,12 @@ int lua_ax_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getShapes'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getShapes'", nullptr);
         return 0;
     }
 #endif
@@ -11453,7 +11453,7 @@ int lua_ax_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getShapes'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getShapes(arg0);
+        auto&& ret = obj->getShapes(arg0);
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11470,7 +11470,7 @@ int lua_ax_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getShape(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11482,12 +11482,12 @@ int lua_ax_physics_PhysicsWorld_getShape(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getShape'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getShape'", nullptr);
         return 0;
     }
 #endif
@@ -11503,7 +11503,7 @@ int lua_ax_physics_PhysicsWorld_getShape(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getShape'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getShape(arg0);
+        auto&& ret = obj->getShape(arg0);
         object_to_luaval<ax::PhysicsCollider>(tolua_S, "ax.PhysicsCollider",(ax::PhysicsCollider*)ret);
         return 1;
     }
@@ -11520,7 +11520,7 @@ int lua_ax_physics_PhysicsWorld_getShape(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11532,12 +11532,12 @@ int lua_ax_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getAllBodies'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getAllBodies'", nullptr);
         return 0;
     }
 #endif
@@ -11550,7 +11550,7 @@ int lua_ax_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getAllBodies'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getAllBodies();
+        auto&& ret = obj->getAllBodies();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11567,7 +11567,7 @@ int lua_ax_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getBody(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11579,12 +11579,12 @@ int lua_ax_physics_PhysicsWorld_getBody(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getBody'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getBody'", nullptr);
         return 0;
     }
 #endif
@@ -11600,7 +11600,7 @@ int lua_ax_physics_PhysicsWorld_getBody(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getBody'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBody(arg0);
+        auto&& ret = obj->getBody(arg0);
         object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
@@ -11617,7 +11617,7 @@ int lua_ax_physics_PhysicsWorld_getBody(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11629,12 +11629,12 @@ int lua_ax_physics_PhysicsWorld_getGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getGravity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getGravity'", nullptr);
         return 0;
     }
 #endif
@@ -11647,7 +11647,7 @@ int lua_ax_physics_PhysicsWorld_getGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getGravity'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getGravity();
+        auto&& ret = obj->getGravity();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11664,7 +11664,7 @@ int lua_ax_physics_PhysicsWorld_getGravity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11676,12 +11676,12 @@ int lua_ax_physics_PhysicsWorld_setGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setGravity'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setGravity'", nullptr);
         return 0;
     }
 #endif
@@ -11697,7 +11697,7 @@ int lua_ax_physics_PhysicsWorld_setGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setGravity'", nullptr);
             return 0;
         }
-        cobj->setGravity(arg0);
+        obj->setGravity(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11714,7 +11714,7 @@ int lua_ax_physics_PhysicsWorld_setGravity(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setSlopBias(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11726,12 +11726,12 @@ int lua_ax_physics_PhysicsWorld_setSlopBias(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setSlopBias'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setSlopBias'", nullptr);
         return 0;
     }
 #endif
@@ -11750,7 +11750,7 @@ int lua_ax_physics_PhysicsWorld_setSlopBias(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setSlopBias'", nullptr);
             return 0;
         }
-        cobj->setSlopBias(arg0, arg1);
+        obj->setSlopBias(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11767,7 +11767,7 @@ int lua_ax_physics_PhysicsWorld_setSlopBias(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setSpeed(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11779,12 +11779,12 @@ int lua_ax_physics_PhysicsWorld_setSpeed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setSpeed'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setSpeed'", nullptr);
         return 0;
     }
 #endif
@@ -11800,7 +11800,7 @@ int lua_ax_physics_PhysicsWorld_setSpeed(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setSpeed'", nullptr);
             return 0;
         }
-        cobj->setSpeed(arg0);
+        obj->setSpeed(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11817,7 +11817,7 @@ int lua_ax_physics_PhysicsWorld_setSpeed(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getSpeed(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11829,12 +11829,12 @@ int lua_ax_physics_PhysicsWorld_getSpeed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getSpeed'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getSpeed'", nullptr);
         return 0;
     }
 #endif
@@ -11847,7 +11847,7 @@ int lua_ax_physics_PhysicsWorld_getSpeed(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getSpeed'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSpeed();
+        auto&& ret = obj->getSpeed();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11864,7 +11864,7 @@ int lua_ax_physics_PhysicsWorld_getSpeed(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setUpdateRate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11876,12 +11876,12 @@ int lua_ax_physics_PhysicsWorld_setUpdateRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setUpdateRate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setUpdateRate'", nullptr);
         return 0;
     }
 #endif
@@ -11897,7 +11897,7 @@ int lua_ax_physics_PhysicsWorld_setUpdateRate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setUpdateRate'", nullptr);
             return 0;
         }
-        cobj->setUpdateRate(arg0);
+        obj->setUpdateRate(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -11914,7 +11914,7 @@ int lua_ax_physics_PhysicsWorld_setUpdateRate(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getUpdateRate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11926,12 +11926,12 @@ int lua_ax_physics_PhysicsWorld_getUpdateRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getUpdateRate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getUpdateRate'", nullptr);
         return 0;
     }
 #endif
@@ -11944,7 +11944,7 @@ int lua_ax_physics_PhysicsWorld_getUpdateRate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getUpdateRate'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUpdateRate();
+        auto&& ret = obj->getUpdateRate();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11961,7 +11961,7 @@ int lua_ax_physics_PhysicsWorld_getUpdateRate(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setSubsteps(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11973,12 +11973,12 @@ int lua_ax_physics_PhysicsWorld_setSubsteps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setSubsteps'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setSubsteps'", nullptr);
         return 0;
     }
 #endif
@@ -11994,7 +11994,7 @@ int lua_ax_physics_PhysicsWorld_setSubsteps(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setSubsteps'", nullptr);
             return 0;
         }
-        cobj->setSubsteps(arg0);
+        obj->setSubsteps(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -12011,7 +12011,7 @@ int lua_ax_physics_PhysicsWorld_setSubsteps(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getSubsteps(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12023,12 +12023,12 @@ int lua_ax_physics_PhysicsWorld_getSubsteps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getSubsteps'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getSubsteps'", nullptr);
         return 0;
     }
 #endif
@@ -12041,7 +12041,7 @@ int lua_ax_physics_PhysicsWorld_getSubsteps(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getSubsteps'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getSubsteps();
+        auto&& ret = obj->getSubsteps();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12058,7 +12058,7 @@ int lua_ax_physics_PhysicsWorld_getSubsteps(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setFixedUpdateRate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12070,12 +12070,12 @@ int lua_ax_physics_PhysicsWorld_setFixedUpdateRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setFixedUpdateRate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setFixedUpdateRate'", nullptr);
         return 0;
     }
 #endif
@@ -12091,7 +12091,7 @@ int lua_ax_physics_PhysicsWorld_setFixedUpdateRate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setFixedUpdateRate'", nullptr);
             return 0;
         }
-        cobj->setFixedUpdateRate(arg0);
+        obj->setFixedUpdateRate(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -12108,7 +12108,7 @@ int lua_ax_physics_PhysicsWorld_setFixedUpdateRate(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_getFixedUpdateRate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12120,12 +12120,12 @@ int lua_ax_physics_PhysicsWorld_getFixedUpdateRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_getFixedUpdateRate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_getFixedUpdateRate'", nullptr);
         return 0;
     }
 #endif
@@ -12138,7 +12138,7 @@ int lua_ax_physics_PhysicsWorld_getFixedUpdateRate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_getFixedUpdateRate'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFixedUpdateRate();
+        auto&& ret = obj->getFixedUpdateRate();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12155,7 +12155,7 @@ int lua_ax_physics_PhysicsWorld_getFixedUpdateRate(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setPreUpdateCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12167,12 +12167,12 @@ int lua_ax_physics_PhysicsWorld_setPreUpdateCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setPreUpdateCallback'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setPreUpdateCallback'", nullptr);
         return 0;
     }
 #endif
@@ -12192,7 +12192,7 @@ int lua_ax_physics_PhysicsWorld_setPreUpdateCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setPreUpdateCallback'", nullptr);
             return 0;
         }
-        cobj->setPreUpdateCallback(arg0);
+        obj->setPreUpdateCallback(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -12209,7 +12209,7 @@ int lua_ax_physics_PhysicsWorld_setPreUpdateCallback(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setPostUpdateCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12221,12 +12221,12 @@ int lua_ax_physics_PhysicsWorld_setPostUpdateCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setPostUpdateCallback'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setPostUpdateCallback'", nullptr);
         return 0;
     }
 #endif
@@ -12246,7 +12246,7 @@ int lua_ax_physics_PhysicsWorld_setPostUpdateCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setPostUpdateCallback'", nullptr);
             return 0;
         }
-        cobj->setPostUpdateCallback(arg0);
+        obj->setPostUpdateCallback(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -12263,7 +12263,7 @@ int lua_ax_physics_PhysicsWorld_setPostUpdateCallback(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_setAutoStep(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12275,12 +12275,12 @@ int lua_ax_physics_PhysicsWorld_setAutoStep(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_setAutoStep'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_setAutoStep'", nullptr);
         return 0;
     }
 #endif
@@ -12296,7 +12296,7 @@ int lua_ax_physics_PhysicsWorld_setAutoStep(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_setAutoStep'", nullptr);
             return 0;
         }
-        cobj->setAutoStep(arg0);
+        obj->setAutoStep(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -12313,7 +12313,7 @@ int lua_ax_physics_PhysicsWorld_setAutoStep(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_isAutoStep(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12325,12 +12325,12 @@ int lua_ax_physics_PhysicsWorld_isAutoStep(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_isAutoStep'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_isAutoStep'", nullptr);
         return 0;
     }
 #endif
@@ -12343,7 +12343,7 @@ int lua_ax_physics_PhysicsWorld_isAutoStep(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_isAutoStep'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isAutoStep();
+        auto&& ret = obj->isAutoStep();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12360,7 +12360,7 @@ int lua_ax_physics_PhysicsWorld_isAutoStep(lua_State* tolua_S)
 int lua_ax_physics_PhysicsWorld_step(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12372,12 +12372,12 @@ int lua_ax_physics_PhysicsWorld_step(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_physics_PhysicsWorld_step'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_physics_PhysicsWorld_step'", nullptr);
         return 0;
     }
 #endif
@@ -12393,7 +12393,7 @@ int lua_ax_physics_PhysicsWorld_step(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics_PhysicsWorld_step'", nullptr);
             return 0;
         }
-        cobj->step(arg0);
+        obj->step(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }

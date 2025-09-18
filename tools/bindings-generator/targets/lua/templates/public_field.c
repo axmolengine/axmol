@@ -1,18 +1,18 @@
 ## ===== member implementation template
 int ${signature_name}_get${name}(lua_State* tolua_S)
 {
-    ${namespaced_class_name}* cobj = nullptr;
+    ${namespaced_class_name}* obj = nullptr;
 \#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S,1,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}",0,&tolua_err)) goto tolua_lerror;
 \#endif
-    
-    cobj = (${namespaced_class_name}*)tolua_tousertype(tolua_S,1,0);
+
+    obj = (${namespaced_class_name}*)tolua_tousertype(tolua_S,1,0);
 
 \#if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function '${signature_name}_get${name}'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function '${signature_name}_get${name}'", nullptr);
         return 0;
     }
 \#endif
@@ -23,7 +23,7 @@ int ${signature_name}_get${name}(lua_State* tolua_S)
                          "ntype": $ntype.get_whole_name($generator)+"*",
                          "level": 2,
                          "scriptname": $generator.scriptname_from_native($ntype.namespaced_name, $ntype.namespace_name),
-                         "in_value":"&cobj->" + $pretty_name,
+                         "in_value":"&obj->" + $pretty_name,
                         })};
     #else
     ${ntype.from_native({"generator": $generator,
@@ -31,7 +31,7 @@ int ${signature_name}_get${name}(lua_State* tolua_S)
                          "ntype": $ntype.get_whole_name($generator),
                          "level": 2,
                          "scriptname": $generator.scriptname_from_native($ntype.namespaced_name, $ntype.namespace_name),
-                         "in_value":"cobj->" + $pretty_name,
+                         "in_value":"obj->" + $pretty_name,
                          })};
     #end if
 
@@ -46,7 +46,7 @@ tolua_lerror:
 int ${signature_name}_set${name}(lua_State* tolua_S)
 {
     int argc = 0;
-    ${namespaced_class_name}* cobj = nullptr;
+    ${namespaced_class_name}* obj = nullptr;
     bool ok  = true;
 
 \#if _AX_DEBUG >= 1
@@ -54,12 +54,12 @@ int ${signature_name}_set${name}(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}",0,&tolua_err)) goto tolua_lerror;
 \#endif
 
-    cobj = (${namespaced_class_name}*)tolua_tousertype(tolua_S,1,0);
+    obj = (${namespaced_class_name}*)tolua_tousertype(tolua_S,1,0);
 
 \#if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function '${signature_name}_set${name}'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function '${signature_name}_set${name}'", nullptr);
         return 0;
     }
 \#endif
@@ -82,9 +82,9 @@ int ${signature_name}_set${name}(lua_State* tolua_S)
                             "arg":$ntype,
                       })};
     #if $ntype.is_object and not $ntype.object_can_convert($generator)
-        cobj->$pretty_name = *arg0;
+        obj->$pretty_name = *arg0;
     #else
-        cobj->$pretty_name = arg0;
+        obj->$pretty_name = arg0;
     #end if
         return 0;
     }

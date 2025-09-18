@@ -2,7 +2,7 @@
 int ${signature_name}(lua_State* tolua_S)
 {
     int argc = 0;
-    ${namespaced_class_name}* cobj = nullptr;
+    ${namespaced_class_name}* obj = nullptr;
     bool ok  = true;
 
 \#if _AX_DEBUG >= 1
@@ -15,12 +15,12 @@ int ${signature_name}(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}",0,&tolua_err)) goto tolua_lerror;
 \#endif
 
-    cobj = (${namespaced_class_name}*)tolua_tousertype(tolua_S,1,0);
+    obj = (${namespaced_class_name}*)tolua_tousertype(tolua_S,1,0);
 
 \#if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function '${signature_name}'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function '${signature_name}'", nullptr);
         return 0;
     }
 \#endif
@@ -68,28 +68,28 @@ int ${signature_name}(lua_State* tolua_S)
         #end if
         #set $arg_list = ", ".join($arg_array)
         #if $is_constructor
-        cobj = new ${namespaced_class_name}($arg_list);
+        obj = new ${namespaced_class_name}($arg_list);
 #if not $generator.script_control_cpp
     #if $is_ref_class
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
     #else
-        tolua_pushusertype(tolua_S,(void*)cobj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
+        tolua_pushusertype(tolua_S,(void*)obj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
     #end if
 #else
-        tolua_pushusertype(tolua_S,(void*)cobj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
+        tolua_pushusertype(tolua_S,(void*)obj,"${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
 #end if
         return 1;
         #else
             #if $ret_type.name != "void"
                 #if $ret_type.is_enum
-        int ret = (int)cobj->${func_name}($arg_list);
+        int ret = (int)obj->${func_name}($arg_list);
                 #else
-        auto&& ret = cobj->${func_name}($arg_list);
+        auto&& ret = obj->${func_name}($arg_list);
                 #end if
         ${ret_type.from_native({"generator": $generator,
                                 "in_value": "ret",
@@ -101,7 +101,7 @@ int ${signature_name}(lua_State* tolua_S)
                                 "scriptname": $generator.scriptname_from_native($ret_type.namespaced_name, $ret_type.namespace_name)})};
         return 1;
                 #else
-        cobj->${func_name}($arg_list);
+        obj->${func_name}($arg_list);
         lua_settop(tolua_S, 1);
         return 1;
                 #end if

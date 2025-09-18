@@ -342,7 +342,7 @@ int lua_register_ax_rhi_TextureCubeFace(lua_State* tolua_S)
 int lua_ax_rhi_Program_getUniformLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -351,11 +351,11 @@ int lua_ax_rhi_Program_getUniformLocation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getUniformLocation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getUniformLocation'", nullptr);
         return 0;
     }
 #endif
@@ -366,7 +366,7 @@ int lua_ax_rhi_Program_getUniformLocation(lua_State* tolua_S)
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Program:getUniformLocation");
 
             if (!ok) { break; }
-            ax::rhi::UniformLocation ret = cobj->getUniformLocation(arg0);
+            ax::rhi::UniformLocation ret = obj->getUniformLocation(arg0);
             uniformLocation_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -378,7 +378,7 @@ int lua_ax_rhi_Program_getUniformLocation(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.Program:getUniformLocation");
 
             if (!ok) { break; }
-            ax::rhi::UniformLocation ret = cobj->getUniformLocation(arg0);
+            ax::rhi::UniformLocation ret = obj->getUniformLocation(arg0);
             uniformLocation_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -397,7 +397,7 @@ int lua_ax_rhi_Program_getUniformLocation(lua_State* tolua_S)
 int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -406,11 +406,11 @@ int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getVertexInputDesc'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getVertexInputDesc'", nullptr);
         return 0;
     }
 #endif
@@ -421,7 +421,7 @@ int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.Program:getVertexInputDesc");
 
             if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret = cobj->getVertexInputDesc(arg0);
+            const ax::rhi::VertexInputDesc* ret = obj->getVertexInputDesc(arg0);
             #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
             return 1;
         }
@@ -433,7 +433,7 @@ int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.Program:getVertexInputDesc");
 
             if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret = cobj->getVertexInputDesc(arg0);
+            const ax::rhi::VertexInputDesc* ret = obj->getVertexInputDesc(arg0);
             #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
             return 1;
         }
@@ -452,7 +452,7 @@ int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
 int lua_ax_rhi_Program_getMaxVertexLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -464,12 +464,12 @@ int lua_ax_rhi_Program_getMaxVertexLocation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getMaxVertexLocation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getMaxVertexLocation'", nullptr);
         return 0;
     }
 #endif
@@ -482,7 +482,7 @@ int lua_ax_rhi_Program_getMaxVertexLocation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getMaxVertexLocation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxVertexLocation();
+        auto&& ret = obj->getMaxVertexLocation();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -499,7 +499,7 @@ int lua_ax_rhi_Program_getMaxVertexLocation(lua_State* tolua_S)
 int lua_ax_rhi_Program_getMaxFragmentLocation(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -511,12 +511,12 @@ int lua_ax_rhi_Program_getMaxFragmentLocation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getMaxFragmentLocation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getMaxFragmentLocation'", nullptr);
         return 0;
     }
 #endif
@@ -529,7 +529,7 @@ int lua_ax_rhi_Program_getMaxFragmentLocation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getMaxFragmentLocation'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxFragmentLocation();
+        auto&& ret = obj->getMaxFragmentLocation();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -546,7 +546,7 @@ int lua_ax_rhi_Program_getMaxFragmentLocation(lua_State* tolua_S)
 int lua_ax_rhi_Program_getVertexShaderSource(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -558,12 +558,12 @@ int lua_ax_rhi_Program_getVertexShaderSource(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getVertexShaderSource'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getVertexShaderSource'", nullptr);
         return 0;
     }
 #endif
@@ -576,7 +576,7 @@ int lua_ax_rhi_Program_getVertexShaderSource(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getVertexShaderSource'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVertexShaderSource();
+        auto&& ret = obj->getVertexShaderSource();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -593,7 +593,7 @@ int lua_ax_rhi_Program_getVertexShaderSource(lua_State* tolua_S)
 int lua_ax_rhi_Program_getFragmentShaderSource(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -605,12 +605,12 @@ int lua_ax_rhi_Program_getFragmentShaderSource(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getFragmentShaderSource'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getFragmentShaderSource'", nullptr);
         return 0;
     }
 #endif
@@ -623,7 +623,7 @@ int lua_ax_rhi_Program_getFragmentShaderSource(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getFragmentShaderSource'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFragmentShaderSource();
+        auto&& ret = obj->getFragmentShaderSource();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -640,7 +640,7 @@ int lua_ax_rhi_Program_getFragmentShaderSource(lua_State* tolua_S)
 int lua_ax_rhi_Program_getProgramType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -652,12 +652,12 @@ int lua_ax_rhi_Program_getProgramType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getProgramType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getProgramType'", nullptr);
         return 0;
     }
 #endif
@@ -670,7 +670,7 @@ int lua_ax_rhi_Program_getProgramType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getProgramType'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getProgramType();
+        auto&& ret = obj->getProgramType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -687,7 +687,7 @@ int lua_ax_rhi_Program_getProgramType(lua_State* tolua_S)
 int lua_ax_rhi_Program_getProgramId(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -699,12 +699,12 @@ int lua_ax_rhi_Program_getProgramId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getProgramId'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getProgramId'", nullptr);
         return 0;
     }
 #endif
@@ -717,7 +717,7 @@ int lua_ax_rhi_Program_getProgramId(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getProgramId'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getProgramId();
+        auto&& ret = obj->getProgramId();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -734,7 +734,7 @@ int lua_ax_rhi_Program_getProgramId(lua_State* tolua_S)
 int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -746,12 +746,12 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getUniformBufferSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getUniformBufferSize'", nullptr);
         return 0;
     }
 #endif
@@ -767,7 +767,7 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getUniformBufferSize'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getUniformBufferSize(arg0);
+        auto&& ret = obj->getUniformBufferSize(arg0);
         #pragma warning NO CONVERSION FROM NATIVE FOR ??;
         return 1;
     }
@@ -784,7 +784,7 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
 int lua_ax_rhi_Program_getVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Program* cobj = nullptr;
+    ax::rhi::Program* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -796,12 +796,12 @@ int lua_ax_rhi_Program_getVertexLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Program_getVertexLayout'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getVertexLayout'", nullptr);
         return 0;
     }
 #endif
@@ -814,7 +814,7 @@ int lua_ax_rhi_Program_getVertexLayout(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getVertexLayout'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVertexLayout();
+        auto&& ret = obj->getVertexLayout();
         object_to_luaval<ax::rhi::VertexLayout>(tolua_S, "axrhi.VertexLayout",(ax::rhi::VertexLayout*)ret);
         return 1;
     }
@@ -860,7 +860,7 @@ int lua_register_ax_rhi_Program(lua_State* tolua_S)
 int lua_ax_rhi_VertexLayout_getDesc(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::VertexLayout* cobj = nullptr;
+    ax::rhi::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -872,12 +872,12 @@ int lua_ax_rhi_VertexLayout_getDesc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.VertexLayout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_VertexLayout_getDesc'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getDesc'", nullptr);
         return 0;
     }
 #endif
@@ -890,7 +890,7 @@ int lua_ax_rhi_VertexLayout_getDesc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getDesc'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDesc();
+        auto&& ret = obj->getDesc();
         #pragma warning NO CONVERSION FROM NATIVE FOR VertexLayoutDesc;
         return 1;
     }
@@ -907,7 +907,7 @@ int lua_ax_rhi_VertexLayout_getDesc(lua_State* tolua_S)
 int lua_ax_rhi_VertexLayout_getStride(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::VertexLayout* cobj = nullptr;
+    ax::rhi::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -919,12 +919,12 @@ int lua_ax_rhi_VertexLayout_getStride(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.VertexLayout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_VertexLayout_getStride'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getStride'", nullptr);
         return 0;
     }
 #endif
@@ -937,7 +937,7 @@ int lua_ax_rhi_VertexLayout_getStride(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getStride'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getStride();
+        auto&& ret = obj->getStride();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -954,7 +954,7 @@ int lua_ax_rhi_VertexLayout_getStride(lua_State* tolua_S)
 int lua_ax_rhi_VertexLayout_getInstanceStride(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::VertexLayout* cobj = nullptr;
+    ax::rhi::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -966,12 +966,12 @@ int lua_ax_rhi_VertexLayout_getInstanceStride(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.VertexLayout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_VertexLayout_getInstanceStride'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getInstanceStride'", nullptr);
         return 0;
     }
 #endif
@@ -984,7 +984,7 @@ int lua_ax_rhi_VertexLayout_getInstanceStride(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getInstanceStride'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getInstanceStride();
+        auto&& ret = obj->getInstanceStride();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1001,7 +1001,7 @@ int lua_ax_rhi_VertexLayout_getInstanceStride(lua_State* tolua_S)
 int lua_ax_rhi_VertexLayout_getHash(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::VertexLayout* cobj = nullptr;
+    ax::rhi::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1013,12 +1013,12 @@ int lua_ax_rhi_VertexLayout_getHash(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.VertexLayout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_VertexLayout_getHash'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getHash'", nullptr);
         return 0;
     }
 #endif
@@ -1031,7 +1031,7 @@ int lua_ax_rhi_VertexLayout_getHash(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getHash'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getHash();
+        auto&& ret = obj->getHash();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1048,7 +1048,7 @@ int lua_ax_rhi_VertexLayout_getHash(lua_State* tolua_S)
 int lua_ax_rhi_VertexLayout_getBuiltinId(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::VertexLayout* cobj = nullptr;
+    ax::rhi::VertexLayout* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1060,12 +1060,12 @@ int lua_ax_rhi_VertexLayout_getBuiltinId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.VertexLayout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_VertexLayout_getBuiltinId'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getBuiltinId'", nullptr);
         return 0;
     }
 #endif
@@ -1078,7 +1078,7 @@ int lua_ax_rhi_VertexLayout_getBuiltinId(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getBuiltinId'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBuiltinId();
+        auto&& ret = obj->getBuiltinId();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1119,7 +1119,7 @@ int lua_register_ax_rhi_VertexLayout(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_clone(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1131,12 +1131,12 @@ int lua_ax_rhi_ProgramState_clone(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_clone'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_clone'", nullptr);
         return 0;
     }
 #endif
@@ -1149,7 +1149,7 @@ int lua_ax_rhi_ProgramState_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_clone'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->clone();
+        auto&& ret = obj->clone();
         object_to_luaval<ax::rhi::ProgramState>(tolua_S, "axrhi.ProgramState",(ax::rhi::ProgramState*)ret);
         return 1;
     }
@@ -1166,7 +1166,7 @@ int lua_ax_rhi_ProgramState_clone(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_getProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1178,12 +1178,12 @@ int lua_ax_rhi_ProgramState_getProgram(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_getProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_getProgram'", nullptr);
         return 0;
     }
 #endif
@@ -1196,7 +1196,7 @@ int lua_ax_rhi_ProgramState_getProgram(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_getProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getProgram();
+        auto&& ret = obj->getProgram();
         object_to_luaval<ax::rhi::Program>(tolua_S, "axrhi.Program",(ax::rhi::Program*)ret);
         return 1;
     }
@@ -1213,7 +1213,7 @@ int lua_ax_rhi_ProgramState_getProgram(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1222,11 +1222,11 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_getVertexInputDesc'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_getVertexInputDesc'", nullptr);
         return 0;
     }
 #endif
@@ -1237,7 +1237,7 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
             ok &= luaval_to_int(tolua_S, 2, &arg0, "axrhi.ProgramState:getVertexInputDesc");
 
             if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret = cobj->getVertexInputDesc(arg0);
+            const ax::rhi::VertexInputDesc* ret = obj->getVertexInputDesc(arg0);
             #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
             return 1;
         }
@@ -1249,7 +1249,7 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axrhi.ProgramState:getVertexInputDesc");
 
             if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret = cobj->getVertexInputDesc(arg0);
+            const ax::rhi::VertexInputDesc* ret = obj->getVertexInputDesc(arg0);
             #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
             return 1;
         }
@@ -1268,7 +1268,7 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1277,11 +1277,11 @@ int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_setTexture'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_setTexture'", nullptr);
         return 0;
     }
 #endif
@@ -1300,7 +1300,7 @@ int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
             ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 4, "axrhi.Texture",&arg2, "axrhi.ProgramState:setTexture");
 
             if (!ok) { break; }
-            cobj->setTexture(arg0, arg1, arg2);
+            obj->setTexture(arg0, arg1, arg2);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1312,7 +1312,7 @@ int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
             ok &= luaval_to_object<ax::rhi::Texture>(tolua_S, 2, "axrhi.Texture",&arg0, "axrhi.ProgramState:setTexture");
 
             if (!ok) { break; }
-            cobj->setTexture(arg0);
+            obj->setTexture(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -1331,7 +1331,7 @@ int lua_ax_rhi_ProgramState_setTexture(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1343,12 +1343,12 @@ int lua_ax_rhi_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_setParameterAutoBinding'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_setParameterAutoBinding'", nullptr);
         return 0;
     }
 #endif
@@ -1367,7 +1367,7 @@ int lua_ax_rhi_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_setParameterAutoBinding'", nullptr);
             return 0;
         }
-        cobj->setParameterAutoBinding(arg0, arg1);
+        obj->setParameterAutoBinding(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1384,7 +1384,7 @@ int lua_ax_rhi_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_getBuiltinVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1396,12 +1396,12 @@ int lua_ax_rhi_ProgramState_getBuiltinVertexLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_getBuiltinVertexLayout'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_getBuiltinVertexLayout'", nullptr);
         return 0;
     }
 #endif
@@ -1414,7 +1414,7 @@ int lua_ax_rhi_ProgramState_getBuiltinVertexLayout(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_getBuiltinVertexLayout'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBuiltinVertexLayout();
+        auto&& ret = obj->getBuiltinVertexLayout();
         object_to_luaval<ax::rhi::VertexLayout>(tolua_S, "axrhi.VertexLayout",(ax::rhi::VertexLayout*)ret);
         return 1;
     }
@@ -1431,7 +1431,7 @@ int lua_ax_rhi_ProgramState_getBuiltinVertexLayout(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_getBatchId(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1443,12 +1443,12 @@ int lua_ax_rhi_ProgramState_getBatchId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_getBatchId'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_getBatchId'", nullptr);
         return 0;
     }
 #endif
@@ -1461,7 +1461,7 @@ int lua_ax_rhi_ProgramState_getBatchId(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_getBatchId'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getBatchId();
+        auto&& ret = obj->getBatchId();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1478,7 +1478,7 @@ int lua_ax_rhi_ProgramState_getBatchId(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_isBatchable(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1490,12 +1490,12 @@ int lua_ax_rhi_ProgramState_isBatchable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_isBatchable'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_isBatchable'", nullptr);
         return 0;
     }
 #endif
@@ -1508,7 +1508,7 @@ int lua_ax_rhi_ProgramState_isBatchable(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_isBatchable'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->isBatchable();
+        auto&& ret = obj->isBatchable();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1525,7 +1525,7 @@ int lua_ax_rhi_ProgramState_isBatchable(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_updateBatchId(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1537,12 +1537,12 @@ int lua_ax_rhi_ProgramState_updateBatchId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_ProgramState_updateBatchId'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_ProgramState_updateBatchId'", nullptr);
         return 0;
     }
 #endif
@@ -1555,7 +1555,7 @@ int lua_ax_rhi_ProgramState_updateBatchId(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_updateBatchId'", nullptr);
             return 0;
         }
-        cobj->updateBatchId();
+        obj->updateBatchId();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1572,7 +1572,7 @@ int lua_ax_rhi_ProgramState_updateBatchId(lua_State* tolua_S)
 int lua_ax_rhi_ProgramState_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::ProgramState* cobj = nullptr;
+    ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1592,11 +1592,11 @@ int lua_ax_rhi_ProgramState_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::rhi::ProgramState(arg0);
-        cobj->autorelease();
-        int ID =  (int)cobj->_ID ;
-        int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)cobj,"axrhi.ProgramState");
+        obj = new ax::rhi::ProgramState(arg0);
+        obj->autorelease();
+        int ID =  (int)obj->_ID ;
+        int* luaID =  &obj->_luaID ;
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"axrhi.ProgramState");
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axrhi.ProgramState:ProgramState",argc, 1);
@@ -1641,7 +1641,7 @@ int lua_register_ax_rhi_ProgramState(lua_State* tolua_S)
 int lua_ax_rhi_Texture_updateSamplerDesc(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1653,12 +1653,12 @@ int lua_ax_rhi_Texture_updateSamplerDesc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_updateSamplerDesc'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateSamplerDesc'", nullptr);
         return 0;
     }
 #endif
@@ -1674,7 +1674,7 @@ int lua_ax_rhi_Texture_updateSamplerDesc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateSamplerDesc'", nullptr);
             return 0;
         }
-        cobj->updateSamplerDesc(arg0);
+        obj->updateSamplerDesc(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1691,7 +1691,7 @@ int lua_ax_rhi_Texture_updateSamplerDesc(lua_State* tolua_S)
 int lua_ax_rhi_Texture_updateTextureDesc(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1703,12 +1703,12 @@ int lua_ax_rhi_Texture_updateTextureDesc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_updateTextureDesc'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateTextureDesc'", nullptr);
         return 0;
     }
 #endif
@@ -1725,7 +1725,7 @@ int lua_ax_rhi_Texture_updateTextureDesc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateTextureDesc'", nullptr);
             return 0;
         }
-        cobj->updateTextureDesc(arg0);
+        obj->updateTextureDesc(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1742,7 +1742,7 @@ int lua_ax_rhi_Texture_updateTextureDesc(lua_State* tolua_S)
 int lua_ax_rhi_Texture_getPixelFormat(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1754,12 +1754,12 @@ int lua_ax_rhi_Texture_getPixelFormat(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_getPixelFormat'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_getPixelFormat'", nullptr);
         return 0;
     }
 #endif
@@ -1772,7 +1772,7 @@ int lua_ax_rhi_Texture_getPixelFormat(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getPixelFormat'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getPixelFormat();
+        int ret = (int)obj->getPixelFormat();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1789,7 +1789,7 @@ int lua_ax_rhi_Texture_getPixelFormat(lua_State* tolua_S)
 int lua_ax_rhi_Texture_getTextureUsage(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1801,12 +1801,12 @@ int lua_ax_rhi_Texture_getTextureUsage(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_getTextureUsage'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_getTextureUsage'", nullptr);
         return 0;
     }
 #endif
@@ -1819,7 +1819,7 @@ int lua_ax_rhi_Texture_getTextureUsage(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getTextureUsage'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getTextureUsage();
+        int ret = (int)obj->getTextureUsage();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1836,7 +1836,7 @@ int lua_ax_rhi_Texture_getTextureUsage(lua_State* tolua_S)
 int lua_ax_rhi_Texture_getTextureType(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1848,12 +1848,12 @@ int lua_ax_rhi_Texture_getTextureType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_getTextureType'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_getTextureType'", nullptr);
         return 0;
     }
 #endif
@@ -1866,7 +1866,7 @@ int lua_ax_rhi_Texture_getTextureType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getTextureType'", nullptr);
             return 0;
         }
-        int ret = (int)cobj->getTextureType();
+        int ret = (int)obj->getTextureType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1883,7 +1883,7 @@ int lua_ax_rhi_Texture_getTextureType(lua_State* tolua_S)
 int lua_ax_rhi_Texture_hasMipmaps(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1895,12 +1895,12 @@ int lua_ax_rhi_Texture_hasMipmaps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_hasMipmaps'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_hasMipmaps'", nullptr);
         return 0;
     }
 #endif
@@ -1913,7 +1913,7 @@ int lua_ax_rhi_Texture_hasMipmaps(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_hasMipmaps'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->hasMipmaps();
+        auto&& ret = obj->hasMipmaps();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1930,7 +1930,7 @@ int lua_ax_rhi_Texture_hasMipmaps(lua_State* tolua_S)
 int lua_ax_rhi_Texture_getWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1942,12 +1942,12 @@ int lua_ax_rhi_Texture_getWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_getWidth'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_getWidth'", nullptr);
         return 0;
     }
 #endif
@@ -1960,7 +1960,7 @@ int lua_ax_rhi_Texture_getWidth(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getWidth'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWidth();
+        auto&& ret = obj->getWidth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1977,7 +1977,7 @@ int lua_ax_rhi_Texture_getWidth(lua_State* tolua_S)
 int lua_ax_rhi_Texture_getHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1989,12 +1989,12 @@ int lua_ax_rhi_Texture_getHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_getHeight'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_getHeight'", nullptr);
         return 0;
     }
 #endif
@@ -2007,7 +2007,7 @@ int lua_ax_rhi_Texture_getHeight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getHeight'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getHeight();
+        auto&& ret = obj->getHeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2024,7 +2024,7 @@ int lua_ax_rhi_Texture_getHeight(lua_State* tolua_S)
 int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2036,12 +2036,12 @@ int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_updateData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateData'", nullptr);
         return 0;
     }
 #endif
@@ -2070,7 +2070,7 @@ int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateData'", nullptr);
             return 0;
         }
-        cobj->updateData(arg0, arg1, arg2, arg3, arg4);
+        obj->updateData(arg0, arg1, arg2, arg3, arg4);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2087,7 +2087,7 @@ int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
 int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2099,12 +2099,12 @@ int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_updateSubData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateSubData'", nullptr);
         return 0;
     }
 #endif
@@ -2139,7 +2139,7 @@ int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateSubData'", nullptr);
             return 0;
         }
-        cobj->updateSubData(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        obj->updateSubData(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2156,7 +2156,7 @@ int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
 int lua_ax_rhi_Texture_updateFaceData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2168,12 +2168,12 @@ int lua_ax_rhi_Texture_updateFaceData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_updateFaceData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateFaceData'", nullptr);
         return 0;
     }
 #endif
@@ -2193,7 +2193,7 @@ int lua_ax_rhi_Texture_updateFaceData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateFaceData'", nullptr);
             return 0;
         }
-        cobj->updateFaceData(arg0, arg1);
+        obj->updateFaceData(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2210,7 +2210,7 @@ int lua_ax_rhi_Texture_updateFaceData(lua_State* tolua_S)
 int lua_ax_rhi_Texture_invalidate(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2222,12 +2222,12 @@ int lua_ax_rhi_Texture_invalidate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_invalidate'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_invalidate'", nullptr);
         return 0;
     }
 #endif
@@ -2240,7 +2240,7 @@ int lua_ax_rhi_Texture_invalidate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_invalidate'", nullptr);
             return 0;
         }
-        cobj->invalidate();
+        obj->invalidate();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2257,7 +2257,7 @@ int lua_ax_rhi_Texture_invalidate(lua_State* tolua_S)
 int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2269,12 +2269,12 @@ int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_shouldGenMipmaps'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_shouldGenMipmaps'", nullptr);
         return 0;
     }
 #endif
@@ -2287,7 +2287,7 @@ int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_shouldGenMipmaps'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->shouldGenMipmaps();
+        auto&& ret = obj->shouldGenMipmaps();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2301,7 +2301,7 @@ int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_shouldGenMipmaps'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->shouldGenMipmaps(arg0);
+        auto&& ret = obj->shouldGenMipmaps(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2318,7 +2318,7 @@ int lua_ax_rhi_Texture_shouldGenMipmaps(lua_State* tolua_S)
 int lua_ax_rhi_Texture_zeroTexData(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::Texture* cobj = nullptr;
+    ax::rhi::Texture* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2330,12 +2330,12 @@ int lua_ax_rhi_Texture_zeroTexData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.Texture",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_Texture_zeroTexData'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_zeroTexData'", nullptr);
         return 0;
     }
 #endif
@@ -2348,7 +2348,7 @@ int lua_ax_rhi_Texture_zeroTexData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_zeroTexData'", nullptr);
             return 0;
         }
-        cobj->zeroTexData();
+        obj->zeroTexData();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2398,7 +2398,7 @@ int lua_register_ax_rhi_Texture(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_createDefaultRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2410,12 +2410,12 @@ int lua_ax_rhi_DriverBase_createDefaultRenderTarget(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_createDefaultRenderTarget'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_createDefaultRenderTarget'", nullptr);
         return 0;
     }
 #endif
@@ -2428,7 +2428,7 @@ int lua_ax_rhi_DriverBase_createDefaultRenderTarget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_createDefaultRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->createDefaultRenderTarget();
+        auto&& ret = obj->createDefaultRenderTarget();
         object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
@@ -2445,7 +2445,7 @@ int lua_ax_rhi_DriverBase_createDefaultRenderTarget(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2457,12 +2457,12 @@ int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_createRenderTarget'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_createRenderTarget'", nullptr);
         return 0;
     }
 #endif
@@ -2475,7 +2475,7 @@ int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_createRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->createRenderTarget();
+        auto&& ret = obj->createRenderTarget();
         object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
@@ -2489,7 +2489,7 @@ int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_createRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->createRenderTarget(arg0);
+        auto&& ret = obj->createRenderTarget(arg0);
         object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
@@ -2506,7 +2506,7 @@ int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_createRenderTarget'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->createRenderTarget(arg0, arg1);
+        auto&& ret = obj->createRenderTarget(arg0, arg1);
         object_to_luaval<ax::rhi::RenderTarget>(tolua_S, "axrhi.RenderTarget",(ax::rhi::RenderTarget*)ret);
         return 1;
     }
@@ -2523,7 +2523,7 @@ int lua_ax_rhi_DriverBase_createRenderTarget(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_createProgram(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2535,12 +2535,12 @@ int lua_ax_rhi_DriverBase_createProgram(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_createProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_createProgram'", nullptr);
         return 0;
     }
 #endif
@@ -2559,7 +2559,7 @@ int lua_ax_rhi_DriverBase_createProgram(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_createProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->createProgram(arg0, arg1);
+        auto&& ret = obj->createProgram(arg0, arg1);
         object_to_luaval<ax::rhi::Program>(tolua_S, "axrhi.Program",(ax::rhi::Program*)ret);
         return 1;
     }
@@ -2576,7 +2576,7 @@ int lua_ax_rhi_DriverBase_createProgram(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_resetState(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2588,12 +2588,12 @@ int lua_ax_rhi_DriverBase_resetState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_resetState'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_resetState'", nullptr);
         return 0;
     }
 #endif
@@ -2606,7 +2606,7 @@ int lua_ax_rhi_DriverBase_resetState(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_resetState'", nullptr);
             return 0;
         }
-        cobj->resetState();
+        obj->resetState();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2623,7 +2623,7 @@ int lua_ax_rhi_DriverBase_resetState(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_getVendor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2635,12 +2635,12 @@ int lua_ax_rhi_DriverBase_getVendor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_getVendor'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_getVendor'", nullptr);
         return 0;
     }
 #endif
@@ -2653,7 +2653,7 @@ int lua_ax_rhi_DriverBase_getVendor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getVendor'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVendor();
+        auto&& ret = obj->getVendor();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -2670,7 +2670,7 @@ int lua_ax_rhi_DriverBase_getVendor(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_getRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2682,12 +2682,12 @@ int lua_ax_rhi_DriverBase_getRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_getRenderer'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_getRenderer'", nullptr);
         return 0;
     }
 #endif
@@ -2700,7 +2700,7 @@ int lua_ax_rhi_DriverBase_getRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getRenderer'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getRenderer();
+        auto&& ret = obj->getRenderer();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -2717,7 +2717,7 @@ int lua_ax_rhi_DriverBase_getRenderer(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_getVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2729,12 +2729,12 @@ int lua_ax_rhi_DriverBase_getVersion(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_getVersion'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_getVersion'", nullptr);
         return 0;
     }
 #endif
@@ -2747,7 +2747,7 @@ int lua_ax_rhi_DriverBase_getVersion(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getVersion'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getVersion();
+        auto&& ret = obj->getVersion();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -2764,7 +2764,7 @@ int lua_ax_rhi_DriverBase_getVersion(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_getShaderVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2776,12 +2776,12 @@ int lua_ax_rhi_DriverBase_getShaderVersion(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_getShaderVersion'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_getShaderVersion'", nullptr);
         return 0;
     }
 #endif
@@ -2794,7 +2794,7 @@ int lua_ax_rhi_DriverBase_getShaderVersion(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getShaderVersion'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getShaderVersion();
+        auto&& ret = obj->getShaderVersion();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -2811,7 +2811,7 @@ int lua_ax_rhi_DriverBase_getShaderVersion(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_hasExtension(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2823,12 +2823,12 @@ int lua_ax_rhi_DriverBase_hasExtension(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_hasExtension'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_hasExtension'", nullptr);
         return 0;
     }
 #endif
@@ -2844,7 +2844,7 @@ int lua_ax_rhi_DriverBase_hasExtension(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_hasExtension'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->hasExtension(arg0);
+        auto&& ret = obj->hasExtension(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2861,7 +2861,7 @@ int lua_ax_rhi_DriverBase_hasExtension(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_dumpExtensions(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2873,12 +2873,12 @@ int lua_ax_rhi_DriverBase_dumpExtensions(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_dumpExtensions'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_dumpExtensions'", nullptr);
         return 0;
     }
 #endif
@@ -2891,7 +2891,7 @@ int lua_ax_rhi_DriverBase_dumpExtensions(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_dumpExtensions'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->dumpExtensions();
+        auto&& ret = obj->dumpExtensions();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -2908,7 +2908,7 @@ int lua_ax_rhi_DriverBase_dumpExtensions(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2920,12 +2920,12 @@ int lua_ax_rhi_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_checkForFeatureSupported'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_checkForFeatureSupported'", nullptr);
         return 0;
     }
 #endif
@@ -2941,7 +2941,7 @@ int lua_ax_rhi_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_checkForFeatureSupported'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->checkForFeatureSupported(arg0);
+        auto&& ret = obj->checkForFeatureSupported(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2958,7 +2958,7 @@ int lua_ax_rhi_DriverBase_checkForFeatureSupported(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_getMaxTextureSize(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2970,12 +2970,12 @@ int lua_ax_rhi_DriverBase_getMaxTextureSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_getMaxTextureSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_getMaxTextureSize'", nullptr);
         return 0;
     }
 #endif
@@ -2988,7 +2988,7 @@ int lua_ax_rhi_DriverBase_getMaxTextureSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getMaxTextureSize'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxTextureSize();
+        auto&& ret = obj->getMaxTextureSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3005,7 +3005,7 @@ int lua_ax_rhi_DriverBase_getMaxTextureSize(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_getMaxAttributes(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3017,12 +3017,12 @@ int lua_ax_rhi_DriverBase_getMaxAttributes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_getMaxAttributes'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_getMaxAttributes'", nullptr);
         return 0;
     }
 #endif
@@ -3035,7 +3035,7 @@ int lua_ax_rhi_DriverBase_getMaxAttributes(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getMaxAttributes'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxAttributes();
+        auto&& ret = obj->getMaxAttributes();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3052,7 +3052,7 @@ int lua_ax_rhi_DriverBase_getMaxAttributes(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3064,12 +3064,12 @@ int lua_ax_rhi_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_getMaxTextureUnits'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_getMaxTextureUnits'", nullptr);
         return 0;
     }
 #endif
@@ -3082,7 +3082,7 @@ int lua_ax_rhi_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getMaxTextureUnits'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxTextureUnits();
+        auto&& ret = obj->getMaxTextureUnits();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3099,7 +3099,7 @@ int lua_ax_rhi_DriverBase_getMaxTextureUnits(lua_State* tolua_S)
 int lua_ax_rhi_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::rhi::DriverBase* cobj = nullptr;
+    ax::rhi::DriverBase* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3111,12 +3111,12 @@ int lua_ax_rhi_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axrhi.DriverBase",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
+    obj = (ax::rhi::DriverBase*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_rhi_DriverBase_getMaxSamplesAllowed'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_DriverBase_getMaxSamplesAllowed'", nullptr);
         return 0;
     }
 #endif
@@ -3129,7 +3129,7 @@ int lua_ax_rhi_DriverBase_getMaxSamplesAllowed(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverBase_getMaxSamplesAllowed'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getMaxSamplesAllowed();
+        auto&& ret = obj->getMaxSamplesAllowed();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }

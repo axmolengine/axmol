@@ -63,8 +63,6 @@ param(
     [switch]$rebuild
 )
 
-$myRoot = $PSScriptRoot
-
 $HOST_WIN = 0 # targets: win,uwp,android
 $HOST_LINUX = 1 # targets: linux,android
 $HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
@@ -379,7 +377,7 @@ function eval($str, $raw = $false) {
 }
 
 function create_symlink($sourcePath, $destPath) {
-    & "$myRoot\fsync.ps1" -s $sourcePath -d $destPath -l $true 2>$null
+    & "$PSScriptRoot\fsync.ps1" -s $sourcePath -d $destPath -l $true 2>$null
     if(!$?) {
         throw "create_symlink $destPath ==> $sourcePath fail"
     }
@@ -474,7 +472,7 @@ $Global:is_clang = $TOOLCHAIN_NAME -eq 'clang'
 $Global:is_msvc = $TOOLCHAIN_NAME -eq 'msvc'
 
 # load toolset manifest
-$manifest_file = Join-Path $myRoot 'manifest.ps1'
+$manifest_file = Join-Path $PSScriptRoot 'manifest.ps1'
 if ($1k.isfile($manifest_file)) {
     . $manifest_file
 }
@@ -514,9 +512,9 @@ else {
 $1k.println("proj_dir=$((Get-Location).Path), install_prefix=$install_prefix")
 
 # 1kdist
-$sentry_file = Join-Path $myRoot '.gitee'
+$sentry_file = Join-Path $PSScriptRoot '.gitee'
 $mirror = if ($1k.isfile($sentry_file)) { 'gitee' } else { 'github' }
-$mirror_conf_file = $1k.realpath("$myRoot/../manifest.json")
+$mirror_conf_file = $1k.realpath("$PSScriptRoot/../manifest.json")
 $mirror_current = $null
 $devtools_url_base = $null
 $1kdist_ver = $null
@@ -1043,7 +1041,7 @@ function setup_ninja() {
 # setup cmake
 function setup_cmake($skipOS = $false) {
     $cmake_prog, $cmake_ver = find_prog -name 'cmake'
-    if ($cmake_prog -and (!$skipOS -or $cmake_prog.Contains($myRoot))) {
+    if ($cmake_prog -and (!$skipOS -or $cmake_prog.Contains($PSScriptRoot))) {
         return $cmake_prog, $cmake_ver
     }
 
@@ -1416,7 +1414,7 @@ function setup_android_sdk() {
                 "android-ndk-${ndk_r23d_rev}-linux-x86_64.zip",
                 "android-ndk-${ndk_r23d_rev}-darwin-x86_64.zip")[$HOST_OS_INT]
             $_target_os = @('win64', 'linux', 'darwin_mac')[$HOST_OS_INT]
-            . (Join-Path $myRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -manifest gcloud -out_var 'artifact_info'
+            . (Join-Path $PSScriptRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -manifest gcloud -out_var 'artifact_info'
             $artifact_url = $artifact_info[0].messageData
             $full_ver = "23.3.${ndk_r23d_rev}"
             $ndk_root = Join-Path $ndk_prefix $full_ver
@@ -1732,7 +1730,7 @@ function preprocess_ios() {
         $arch = 'x86_64'
     }
     if (!$cmake_toolchain_file) {
-        $cmake_toolchain_file = Join-Path $myRoot 'ios.cmake'
+        $cmake_toolchain_file = Join-Path $PSScriptRoot 'ios.cmake'
         $outputOptions += "-DCMAKE_TOOLCHAIN_FILE=$cmake_toolchain_file", "-DARCHS=$arch"
         if ($Global:is_tvos) {
             $outputOptions += '-DPLAT=tvOS'

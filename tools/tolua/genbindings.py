@@ -191,6 +191,16 @@ def main():
     extra_flags += ' -D__builtin_neon_vuzp_f16(...)'
     extra_flags += ' -D__builtin_neon_vzipq_f16(...)'
     extra_flags += ' -D__builtin_neon_vzip_f16(...)'
+    extra_flags += ' -D__builtin_neon_vceqzq_f16(...)=(uint16x8_t{})'
+    extra_flags += ' -D__builtin_neon_vcgez_f16(...)=(uint16x4_t{})'
+    extra_flags += ' -D__builtin_neon_vcgtzq_f16(...)=(uint16x8_t{})'
+    extra_flags += ' -D__builtin_neon_vcgtz_f16(...)=(uint16x4_t{})'
+    extra_flags += ' -D__builtin_neon_vclez_f16(...)=(uint16x4_t{})'
+    extra_flags += ' -D__builtin_neon_vcltzq_f16(...)=(uint16x8_t{})'
+    extra_flags += ' -D__builtin_neon_vceqz_f16(...)=(uint16x4_t{})'
+    extra_flags += ' -D__builtin_neon_vcgezq_f16(...)=(uint16x8_t{})'
+    extra_flags += ' -D__builtin_neon_vclezq_f16(...)=(uint16x8_t{})'
+    extra_flags += ' -D__builtin_neon_vcltz_f16(...)=(uint16x4_t{})'
 
     # save config to file
 

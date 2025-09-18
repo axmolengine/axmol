@@ -7,7 +7,7 @@
 int lua_ax_audioengine_AudioProfile_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    ax::AudioProfile* cobj = nullptr;
+    ax::AudioProfile* obj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24,8 +24,8 @@ int lua_ax_audioengine_AudioProfile_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioProfile_constructor'", nullptr);
             return 0;
         }
-        cobj = new ax::AudioProfile();
-        tolua_pushusertype(tolua_S,(void*)cobj,"ax.AudioProfile");
+        obj = new ax::AudioProfile();
+        tolua_pushusertype(tolua_S,(void*)obj,"ax.AudioProfile");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
     }
