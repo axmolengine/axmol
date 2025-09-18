@@ -95,7 +95,7 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/,
                                   float /*frameZoomFactor*/,
                                   bool /*resizable*/)
 {
-    setRenderSize(rect.size.width, rect.size.height);
+    updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
     return true;
 }
 

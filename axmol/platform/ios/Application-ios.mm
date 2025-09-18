@@ -2,6 +2,7 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -128,7 +129,5 @@ bool Application::openURL(std::string_view url)
     id application = [UIApplication sharedApplication];
     [application openURL:nsUrl options:@{} completionHandler:nil];
 }
-
-void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
 }  // namespace ax

@@ -161,27 +161,13 @@ protected:
     void onGLFWWindowCloseCallback(GLFWwindow* window);
 
 protected:
-    void updateScaledWindowSize(int w, int h);
+    void updateScaledWindowSize(int w, int h, uint8_t updaetFlag);
 
     /* resize platform window when user set zoomFactor, windowSize */
     void applyWindowSize();
 
-    void maybeDispatchResizeEvent(uint8_t updateFlag);
-
     bool _isTouchDevice = false;
     bool _captured;
-
-    enum WindowUpdateFlag : uint8_t
-    {
-        WindowSizeChanged      = 1 << 0,
-        FramebufferSizeChanged = 1 << 1,
-        AllUpdates             = WindowSizeChanged | FramebufferSizeChanged
-    };
-
-    // Flags indicating whether the window or framebuffer size was updated.
-    // On desktop platforms, callback order is: framebufferSize => windowSize.
-    // On WebAssembly, the order is reversed: windowSize => framebufferSize.
-    uint8_t _windowUpdateFlags{0};
 
     RenderScaleMode _renderScaleMode{};
 

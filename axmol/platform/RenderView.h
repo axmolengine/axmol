@@ -112,6 +112,16 @@ class AX_DLL RenderView : public Object
     friend class Director;
 
 public:
+    enum SurfaceUpdateFlag : uint8_t
+    {
+        WindowSizeChanged = 1,       // Indicates that window size has changed
+        RenderSizeChanged = 1 << 1,  // Indicates that render surface size has changed
+        SilentUpdate      = 1 << 2,  // Temporary flag: suppresses event dispatch for this update only.
+                                     // Should be stripped before accumulating into persistent state.
+        AllUpdates         = WindowSizeChanged | RenderSizeChanged,
+        AllUpdatesSilently = AllUpdates | SilentUpdate
+    };
+
     /**
      */
     RenderView();
@@ -254,7 +264,8 @@ public:
      * ratio, two areas of your game view will be cut. [3] SHOW_ALL  Full screen with black border: if the design
      * resolution ratio of width to height is different from the screen resolution ratio, two black borders will be
      * shown.
-     * @remark You shoud only set once
+     * @remark For applications with a static design resolution, this method should typically be called only once during
+     * initialization.
      */
     virtual void setDesignResolutionSize(float width, float height, ResolutionPolicy resolutionPolicy);
 
@@ -456,29 +467,39 @@ public:
     const std::unique_ptr<IVRRenderer>& getVR() const { return _vrRenderer; }
 #endif
 
+    /**
+     * @brief Updates the render surface size (framebuffer/render target) and synchronizes related view parameters.
+     *
+     * This method performs the following actions:
+     * - Sets `_renderSize` to the specified dimensions;
+     * - On mobile platforms (Android/iOS), `_windowSize` is synchronized to match `_renderSize`;
+     * - On desktop platforms, `_windowSize` is only initialized to `_renderSize` if it hasn't been set yet;
+     * - If `_designResolutionSize` is unset (`Vec2::ZERO`), it is initialized to `_renderSize`;
+     * - Calls `updateDesignResolution()` to recalculate `_viewScale` and `_viewportRect` based on the current
+     *   `ResolutionPolicy`, and updates the Director's logical size and projection matrix accordingly.
+     *
+     * @param width      The target width of the render surface. Its meaning depends on `updateFlag`:
+     *                   it may represent the framebuffer width, logical window width, or design resolution width.
+     * @param height     The target height of the render surface. Its meaning depends on `updateFlag`:
+     *                   it may represent the framebuffer height, logical window height, or design resolution height.
+     * @param updateFlag Optional flags to control which parts of the view should be updated.
+     *                   Defaults to `SurfaceUpdateFlag::AllUpdates`.
+     *
+     * @warning This method may initialize `_windowSize` and `_designResolutionSize` on first invocation.
+     * @note No update will occur if the given size is (0, 0).
+     *
+     * @internal This method is intended for internal use by platform-specific window or surface managers.
+     *           It should be called when the native surface size changes (e.g., orientation change, resize event).
+     *
+     * @see updateDesignResolution(), setDesignResolutionSize()
+     */
+    void updateRenderSurface(float width, float height, uint8_t updateFlag);
+
 protected:
     float transformInputX(float x) { return (x - _viewportRect.origin.x) / _viewScale.x; }
     float transformInputY(float y) { return (y - _viewportRect.origin.y) / _viewScale.y; }
 
-    /**
-     * @brief Sets the render size (framebuffer/render target size) and updates the viewport and scaling.
-     *
-     * This method will:
-     * - Overwrite `_renderSize` with the given dimensions;
-     * - If `_windowSize` has not been initialized (equals `Vec2::ZERO`), initialize it to `_renderSize`;
-     * - If `_designResolutionSize` has not been initialized (equals `Vec2::ZERO`), initialize it to `_renderSize`;
-     * - Call `updateDesignResolution()` to compute `_viewScale` and `_viewportRect` based on the current
-     *   `ResolutionPolicy`, and synchronize the Director's logical size and projection.
-     *
-     * @param width  The width of the render size.
-     * @param height The height of the render size.
-     *
-     * @warning This method has side effects: on the first call, it may initialize `_windowSize`
-     *          and `_designResolutionSize`.
-     * @note If the given size is (0,0), no update will be performed.
-     * @see updateDesignResolution(), setDesignResolutionSize()
-     */
-    void setRenderSize(float width, float height);
+    void maybeDispatchResizeEvent(uint8_t updateFlag);
 
     /**
      * @brief Callback invoked after the RenderView size has changed and all related updates are complete.
@@ -488,7 +509,7 @@ protected:
      * It serves as a notification hook for any components that need to respond
      * to the final, settled render size.
      */
-    void onRenderResized();
+    void onSurfaceResized();
 
     void setScissorRect(float x, float y, float w, float h);
     const ScissorRect& getScissorRect() const;
@@ -515,6 +536,13 @@ protected:
 
     Vec2 _viewScale;
     ResolutionPolicy _resolutionPolicy;
+
+    // Flags indicating whether the window or framebuffer size was updated.
+    // On desktop platforms, callback order is: framebufferSize => windowSize.
+    // On WebAssembly, the order is reversed: windowSize => framebufferSize.
+    uint8_t _surfaceUpdateFlags{0};
+
+    bool _isResolutionUpdateLocked{false};
 
 #ifdef AX_ENABLE_VR
     std::unique_ptr<IVRRenderer> _vrRenderer{nullptr};

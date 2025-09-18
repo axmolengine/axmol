@@ -39,8 +39,11 @@ namespace ax
  * @{
  */
 
+class RenderView;
 class AX_DLL ApplicationBase
 {
+    friend class RenderView;
+
 public:
     /** Since WINDOWS and ANDROID are defined as macros, we could not just use these keywords in enumeration(Platform).
      *  Therefore, we use C# code style to define Platform enums to avoid conflicts with the definitions of system
@@ -138,6 +141,20 @@ public:
      * @lua NA
      */
     virtual bool openURL(std::string_view url) = 0;
+
+protected:
+    /**
+     * @brief Called when the application screen size changes.
+     *
+     * Users can override this method to listen for screen size changes,
+     * including device rotation events. It is recommended to update the
+     * designResolutionSize and adjust the layout of objects in the scene
+     * accordingly when this callback is triggered.
+     *
+     * @param newWidth  The new width of the application screen in pixels.
+     * @param newHeight The new height of the application screen in pixels.
+     */
+    virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
 };
 
 using ApplicationProtocol = ApplicationBase;

@@ -1,17 +1,8 @@
 /*
 
-===== IMPORTANT =====
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
-This is sample code demonstrating API, technology or techniques in development.
-Although this sample code has been reviewed for technical accuracy, it is not
-final. Apple is supplying this information to help you plan for the adoption of
-the technologies and programming interfaces described herein. This information
-is subject to change, and software implemented based on this sample code should
-be tested with final operating system software and final documentation. Newer
-versions of this sample code may be provided with future seeds of the API or
-technology. For information about updates to this and other developer
-documentation, view the New & Updated sidebars in subsequent documentation
-seeds.
+ https://axmol.dev/
 
 =====================
 
@@ -291,7 +282,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 - (void)layoutSubviews
 {
-    if (!ax::Director::getInstance()->isValid())
+    auto director = ax::Director::getInstance();
+    if (!director->isValid())
         return;
 
 #if AX_RENDER_API == AX_RENDER_API_MTL
@@ -301,18 +293,15 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #else
     [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     size_ = [renderer_ backingSize];
-    ax::Size size;
-    size.width  = size_.width;
-    size.height = size_.height;
 #endif
 
-    // TODO: resizeSwapchain?
+    auto renderView = director->getRenderView();
+    if (renderView)
+        renderView->updateRenderSurface(size_.width, size_.height, ax::RenderView::AllUpdates);
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
-    {
-        ax::Director::getInstance()->drawScene();
-    }
+        director->drawScene();
 }
 
 - (void)swapBuffers

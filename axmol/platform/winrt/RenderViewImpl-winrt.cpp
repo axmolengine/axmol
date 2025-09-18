@@ -543,9 +543,6 @@ void RenderViewImpl::UpdateForWindowSizeChange(float width, float height)
         m_width  = width;
         m_height = height;
         handleWindowResized();
-
-        setRenderSize(m_width * _renderScale, m_height * _renderScale);
-        onRenderResized();
     }
 }
 
@@ -558,16 +555,15 @@ void RenderViewImpl::SetDPI(float dpi)
         updateRenderScale();
         if (!inital)
         {
-            setRenderSize(m_width * _renderScale, m_height * _renderScale);
+            updateRenderSurface(m_width * _renderScale, m_height * _renderScale, SurfaceUpdateFlag::RenderSizeChanged);
         }
     }
 }
 
 void RenderViewImpl::handleWindowResized()
 {
-    _windowSize.set(m_width, m_height);
-
-    setRenderSize(m_width * _renderScale, m_height * _renderScale);
+    updateRenderSurface(m_width, m_height, SurfaceUpdateFlag::WindowSizeChanged);
+    updateRenderSurface(m_width * _renderScale, m_height * _renderScale, SurfaceUpdateFlag::RenderSizeChanged);
 }
 
 void RenderViewImpl::updateRenderScale()

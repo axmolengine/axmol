@@ -639,11 +639,11 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
-    setRenderSize(fbWidth, fbHeight);
+    updateRenderSurface(fbWidth, fbHeight, SurfaceUpdateFlag::RenderSizeChanged | SurfaceUpdateFlag::SilentUpdate);
 
     int w, h;
     glfwGetWindowSize(_mainWindow, &w, &h);
-    updateScaledWindowSize(w, h);
+    updateScaledWindowSize(w, h, SurfaceUpdateFlag::WindowSizeChanged | SurfaceUpdateFlag::SilentUpdate);
 
 #if AX_RENDER_API == AX_RENDER_API_GL
     glfwMakeContextCurrent(_mainWindow);
@@ -1009,9 +1009,7 @@ void RenderViewImpl::onGLFWFramebufferSizeCallback(GLFWwindow* window, int fbWid
     if (fbWidth == 0 || fbHeight == 0)
         return;
 
-    setRenderSize(fbWidth, fbHeight);
-
-    maybeDispatchResizeEvent(WindowUpdateFlag::FramebufferSizeChanged);
+    updateRenderSurface(fbWidth, fbHeight, SurfaceUpdateFlag::RenderSizeChanged);
 }
 
 void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
@@ -1020,7 +1018,7 @@ void RenderViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int
     if (w == 0 || h == 0)
         return;
 
-    updateScaledWindowSize(w, h);
+    updateScaledWindowSize(w, h, SurfaceUpdateFlag::WindowSizeChanged);
 
     Size size(w, h);
 
@@ -1050,7 +1048,7 @@ void RenderViewImpl::setWindowSize(float width, float height)
     applyWindowSize();
 }
 
-void RenderViewImpl::updateScaledWindowSize(int w, int h)
+void RenderViewImpl::updateScaledWindowSize(int w, int h, uint8_t updateFlag)
 {
     if (w == 0 || h == 0)
         return;
@@ -1075,13 +1073,7 @@ void RenderViewImpl::updateScaledWindowSize(int w, int h)
 
     Vec2 scaledSize{static_cast<float>(std::round(scaledWidth)), static_cast<float>(std::round(scaledHeight))};
     if (!scaledSize.equals(_windowSize))
-    {
-        _windowSize.set(scaledSize.width, scaledSize.height);
-    }
-
-    // fire render resized event on platform that framebuffer & window size callback trigger delayed (x11)
-    // if zoom factor changed, the renderSize also should changed
-    maybeDispatchResizeEvent(WindowUpdateFlag::WindowSizeChanged);
+        updateRenderSurface(scaledSize.width, scaledSize.height, updateFlag);
 }
 
 void RenderViewImpl::applyWindowSize()
@@ -1102,23 +1094,7 @@ void RenderViewImpl::applyWindowSize()
                       static_cast<int>(std::lround(unscaledHeight)));
 
     // process platform that window size callback not trigger(wayland)
-    maybeDispatchResizeEvent(WindowUpdateFlag::WindowSizeChanged);
-}
-
-void RenderViewImpl::maybeDispatchResizeEvent(uint8_t updateFlag)
-{
-    auto flags = _windowUpdateFlags;
-    flags |= updateFlag;
-
-    if (flags != WindowUpdateFlag::AllUpdates)
-    {
-        _windowUpdateFlags = flags;
-    }
-    else
-    {
-        _windowUpdateFlags = 0;
-        onRenderResized();
-    }
+    maybeDispatchResizeEvent(SurfaceUpdateFlag::WindowSizeChanged);
 }
 
 /**

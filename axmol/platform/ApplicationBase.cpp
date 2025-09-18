@@ -36,4 +36,6 @@ ApplicationBase::~ApplicationBase()
     Director::destroyInstance();
 }
 
+void ApplicationBase::applicationScreenSizeChanged(int newWidth, int newHeight) {}
+
 }  // namespace ax
