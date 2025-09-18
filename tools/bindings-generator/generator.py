@@ -349,7 +349,6 @@ AvailabilityKind.AVAILABLE = AvailabilityKind(0)
 AvailabilityKind.DEPRECATED = AvailabilityKind(1)
 AvailabilityKind.NOT_AVAILABLE = AvailabilityKind(2)
 AvailabilityKind.NOT_ACCESSIBLE = AvailabilityKind(3)
-
 def get_availability(cursor):
     """
     Retrieves the availability of the entity pointed at by the cursor.
@@ -359,6 +358,44 @@ def get_availability(cursor):
 
     return AvailabilityKind.from_id(cursor._availability)
 
+tokens_buffer = []
+
+def has_internal_attr(cursor):
+    """Return True if the cursor has a [[internal]]-style attribute."""
+    inside_attr = False
+    bracket_depth = 0
+    global tokens_buffer
+    tokens_buffer.clear()
+
+    for token in cursor.get_tokens():
+        spelling = token.spelling
+
+        # Detect start of attribute
+        if spelling == '[':
+            bracket_depth += 1
+            if bracket_depth == 2:  # saw '[['
+                inside_attr = True
+                tokens_buffer.clear()
+            continue
+
+        # Detect end of attribute
+        if spelling == ']':
+            if inside_attr:
+                bracket_depth -= 1
+                if bracket_depth == 0:
+                    # Join tokens without spaces for matching
+                    joined = ''.join(tokens_buffer)
+                    if joined == 'internal' or joined.endswith('::internal'):
+                        return True
+                    inside_attr = False
+            continue
+
+        # Collect attribute content
+        if inside_attr:
+            if not spelling.isspace():
+                tokens_buffer.append(spelling)
+
+    return False
 
 def native_name_from_type(ntype, underlying=False):
     kind = ntype.kind #get_canonical().kind
@@ -1218,10 +1255,20 @@ class NativeClass(object):
                 self.public_fields.append(NativeField(cursor))
         elif cursor.kind == cindex.CursorKind.CXX_ACCESS_SPEC_DECL:
             self._current_visibility = cursor.access_specifier
-        elif cursor.kind == cindex.CursorKind.CXX_METHOD and get_availability(cursor) != AvailabilityKind.DEPRECATED:
+        elif cursor.kind == cindex.CursorKind.CXX_METHOD:
+            available_kind = get_availability(cursor)
+            m = NativeFunction(cursor)
+            if m.func_name == 'updateRenderSurface':
+                print('hit')
+            if available_kind == AvailabilityKind.DEPRECATED:
+                print(f"Skip deprecated API: {m.func_name}")
+                return False
+            if has_internal_attr(cursor):
+                print(f"Skip internal API: {m.func_name}")
+                return False
             # skip if variadic
             if self._current_visibility == cindex.AccessSpecifier.PUBLIC and not cursor.type.is_function_variadic():
-                m = NativeFunction(cursor)
+                # m = NativeFunction(cursor)
                 registration_name = self.generator.should_rename_function(self.class_name, m.func_name) or m.func_name
                 # bail if the function is not supported (at least one arg not supported)
                 if m.not_supported:
@@ -1613,6 +1660,7 @@ class Generator(object):
     def _parse_headers(self):
         for header in self.headers:
             print("parsing header => %s" % header)
+            # options = cindex.TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD
             tu = self.index.parse(header, self.clang_args)
             if len(tu.diagnostics) > 0:
                 self._pretty_print(tu.diagnostics)

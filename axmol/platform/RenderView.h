@@ -493,7 +493,7 @@ public:
      *
      * @see updateDesignResolution(), setDesignResolutionSize()
      */
-    void updateRenderSurface(float width, float height, uint8_t updateFlag);
+    [[internal]] void updateRenderSurface(float width, float height, uint8_t updateFlag);
 
 protected:
     float transformInputX(float x) { return (x - _viewportRect.origin.x) / _viewScale.x; }
