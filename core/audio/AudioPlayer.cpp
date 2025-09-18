@@ -25,9 +25,9 @@
  ****************************************************************************/
 
 #include "platform/PlatformConfig.h"
+#include "audio/alconstants.h"
 #include "audio/AudioPlayer.h"
-
-#include "AudioEffectsExtensionOpenAL.h"
+#include "audio/AudioEffectsExtensionOpenAL.h"
 #include "audio/AudioCache.h"
 #include "platform/FileUtils.h"
 #include "audio/AudioDecoder.h"
