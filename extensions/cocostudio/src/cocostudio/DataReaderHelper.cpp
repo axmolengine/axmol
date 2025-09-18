@@ -88,6 +88,8 @@ static const char* A_Y = "y";
 
 static const char* A_COCOS2DX_X = "cocos2d_x";
 static const char* A_COCOS2DX_Y = "cocos2d_y";
+static const char* A_AXMOL_X = "cocos2d_x";
+static const char* A_AXMOL_    = "cocos2d_y";
 
 static const char* A_WIDTH   = "width";
 static const char* A_HEIGHT  = "height";
@@ -96,6 +98,8 @@ static const char* A_PIVOT_Y = "pY";
 
 static const char* A_COCOS2D_PIVOT_X = "cocos2d_pX";
 static const char* A_COCOS2D_PIVOT_Y = "cocos2d_pY";
+static const char* A_AXMOL_PIVOT_X = "axmol_pX";
+static const char* A_AXMOL_PIVOT_Y = "axmol_pY";
 
 static const char* A_BLEND_TYPE = "bd";
 static const char* A_BLEND_SRC  = "bd_src";
