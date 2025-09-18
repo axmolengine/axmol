@@ -13,17 +13,27 @@
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   set(WINDOWS TRUE)
-  string(TOLOWER "${CMAKE_GENERATOR_PLATFORM}" _gp_lcase)
 
-  if("${_gp_lcase}" MATCHES "win32")
-    set(WIN32 TRUE)
-    set(ARCH_ALIAS "x86")
-  elseif("${_gp_lcase}" STREQUAL "arm64")
-    set(WIN64 TRUE)
-    set(ARCH_ALIAS "arm64")
+  if(CMAKE_GENERATOR_PLATFORM)
+    string(TOLOWER "${CMAKE_GENERATOR_PLATFORM}" _gp_lcase)
+  elseif(CLANG_TARGET_TRIPLE)
+    set(_gp_lcase ${CLANG_TARGET_TRIPLE})
+  endif()
+
+  if(_gp_lcase)
+    if("${_gp_lcase}" MATCHES "win32" OR "${_gp_lcase}" MATCHES "i686")
+      set(WIN32 TRUE)
+      set(ARCH_ALIAS "x86")
+    elseif("${_gp_lcase}" STREQUAL "arm64" OR "${_gp_lcase}" MATCHES "aarch64")
+      set(WIN64 TRUE)
+      set(ARCH_ALIAS "arm64")
+    else()
+      set(WIN64 TRUE)
+      set(ARCH_ALIAS "x64")
+    endif()
   else()
-    set(WIN64 TRUE)
-    set(ARCH_ALIAS "x64")
+    # https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ARCHITECTURE_ID.html
+    string(TOLOWER "${CMAKE_C_COMPILER_ARCHITECTURE_ID}" ARCH_ALIAS)
   endif()
 
   set(PLATFORM_NAME win32)
@@ -74,6 +84,10 @@ endif()
 
 if(NOT DEFINED WIN32)
   set(WIN32 FALSE)
+endif()
+
+if(NOT DEFINED WASM)
+  set(WASM FALSE)
 endif()
 
 # generators that are capable of organizing into a hierarchy of folders

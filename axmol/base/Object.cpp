@@ -86,10 +86,7 @@ void Object::retain()
 
 void Object::release()
 {
-#if defined(_WIN32) && !defined(NDEBUG)
-    AXASSERT(::_CrtIsValidHeapPointer(this), "object may already deleted");
-#endif
-    AXASSERT(_referenceCount > 0, "reference count should be greater than 0");
+    AXASSERT(static_cast<int>(_referenceCount) > 0, "reference count should be greater than 0");
     --_referenceCount;
 
     if (_referenceCount == 0)

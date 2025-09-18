@@ -7,13 +7,11 @@ define_property(TARGET
   FULL_DOCS "use to save depend libs of axmol lua project"
 )
 
-if(MSVC)
-  cmake_minimum_required(VERSION 3.25...4.1)
+if(WINDOWS)
+  cmake_minimum_required(VERSION 3.27...4.1)
   cmake_policy(SET CMP0141 NEW)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>")
-endif()
 
-if(WINDOWS)
   set(_NUGET_PACKAGE_DIR "${_AX_ROOT}/cache/packages" CACHE INTERNAL "" FORCE)
   file(TO_NATIVE_PATH ${_NUGET_PACKAGE_DIR} _NUGET_PACKAGE_DIR_N)
   set(_NUGET_PACKAGE_DIR_N "${_NUGET_PACKAGE_DIR_N}" CACHE INTERNAL "" FORCE)
@@ -40,25 +38,8 @@ endif()
 
 # config c standard
 if(WINDOWS)
-  message(STATUS "CMAKE_HOST_SYSTEM_VERSION: ${CMAKE_HOST_SYSTEM_VERSION}")
-  message(STATUS "CMAKE_SYSTEM_VERSION: ${CMAKE_SYSTEM_VERSION}")
-  message(STATUS "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION: ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}")
-
-  if(DEFINED CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
-    message(STATUS "CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION: ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION}")
-  endif()
-
-  if(NOT CMAKE_SYSTEM_VERSION)
-    set(CMAKE_SYSTEM_VERSION ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION})
-  endif()
-
-  # Fix win32 llvm-clang
-  if(NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION)
-    set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION ${CMAKE_SYSTEM_VERSION})
-  endif()
-
   # CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION aka selected windows sdk version
-  if(${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION} VERSION_GREATER_EQUAL "10.0.22000.0")
+  if(${WINDOWS_SDK_VERSION} VERSION_GREATER_EQUAL "10.0.22000.0")
     set(CMAKE_C_STANDARD 11)
   else()
     # windows sdk < 10.0.22000.0, The c11 header stdalign.h was missing, so workaroud fallback C standard to 99
@@ -111,34 +92,6 @@ endif()
 # emsdk spec flags, i.e. -sUSE_LIBJPEG -msse2, -mss4.1 ...
 # remark: The feature scan for modules was added in cmake 3.28
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
-
-# check compiler on windows
-if(WINDOWS)
-  # not support other compile tools except MSVC for now
-  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    message(STATUS "Using Windows clang generate axmol project, CLANG_VERSION: ${CLANG_VERSION_STRING}")
-    set(FUZZ_CLANG TRUE) # clang-cl or clang++
-
-    if(NOT MSVC)
-      set(FULL_CLANG TRUE) # clang++
-    else()
-      set(FUZZ_MSVC TRUE) # clang-cl
-    endif()
-  elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
-    # Visual Studio 2017, MSVC_VERSION 1910-1919 (v141 toolset)
-    set(FUZZ_MSVC TRUE)
-    set(FULL_MSVC TRUE)
-
-    if(${MSVC_VERSION} EQUAL 1900 OR ${MSVC_VERSION} GREATER 1900)
-      message(STATUS "Using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION}")
-    else()
-      message(FATAL_ERROR "Using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
-    endif()
-  else()
-    message(FATAL_ERROR "Please using Windows MSVC/LLVM-Clang compile axmol project")
-  endif()
-endif()
 
 if(EMSCRIPTEN_VERSION)
   message(STATUS "Using emsdk generate axmol project, EMSCRIPTEN_VERSION: ${EMSCRIPTEN_VERSION}")

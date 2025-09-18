@@ -6,10 +6,6 @@ if(NOT PWSH_PROG)
   message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
 endif()
 
-if(NOT DEFINED WASM)
-  set(WASM FALSE CACHE BOOL "")
-endif()
-
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
 function(ax_sync_target_res ax_target)
   set(options SYM_LINK)

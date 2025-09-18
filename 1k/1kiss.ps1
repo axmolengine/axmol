@@ -1594,23 +1594,22 @@ function setup_gclient() {
 function preprocess_win() {
     $outputOptions = @()
 
-    if ($options.sdk) {
-        $outputOptions += "-DCMAKE_SYSTEM_VERSION=$($options.sdk)"
-    }
-
+    # Determine arch name
     if ($Global:is_msvc) {
-        # Generate vs2019 on github ci
-        # Determine arch name
         $arch = if ($options.a -eq 'x86') { 'Win32' } else { $options.a }
-
-        # arch
         $vs_ver = [VersionEx]$Global:VS_INST.installationVersion
         if ($vs_ver -ge [VersionEx]'16.0') {
-            $outputOptions += '-A', $arch
             if ($TOOLCHAIN_VER -match '^\d+$') {
                 $outputOptions += "-Tv$TOOLCHAIN_VER"
             } elseif($TOOLCHAIN_VER -match '^\d+\.\d+$') {
                 $outputOptions += '-T', "version=$TOOLCHAIN_VER"
+            }
+            # refer: https://cmake.org/cmake/help/latest/variable/CMAKE_GENERATOR_PLATFORM.html
+            if($options.sdk) {
+                $outputOptions += "-DCMAKE_GENERATOR_PLATFORM=$arch,version=$($options.sdk)"
+            }
+            else {
+                $outputOptions += "-DCMAKE_GENERATOR_PLATFORM=$arch"
             }
         }
         else {
@@ -1624,7 +1623,7 @@ function preprocess_win() {
             if (!$Script:cmake_generator) {
                 throw "Unsupported toolchain: $TOOLCHAIN$TOOLCHAIN_VER"
             }
-            if ($options.a -eq "x64") {
+            if ($arch -eq "x64") {
                 $Script:cmake_generator += ' Win64'
             }
         }
@@ -1642,7 +1641,13 @@ function preprocess_win() {
         }
     }
     elseif ($Global:is_clang) {
+        $outputOptions += "-DTARGET_ARCH=$($options.a)"
+        if ($options.sdk) { # clang: set preferred version, depends on project self
+            $outputOptions += "-DWINDOWS_SDK_VERSION=$($options.sdk)"
+        }
         $outputOptions += '-DCMAKE_C_COMPILER=clang', '-DCMAKE_CXX_COMPILER=clang++'
+        # export compile commands for diag purpose
+        $outputOptions += '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
         $Script:cmake_generator = 'Ninja Multi-Config'
     }
     else {
