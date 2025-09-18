@@ -1876,7 +1876,7 @@ void DrawNodePictureTest::update(float dt)
     do
     {
         Color color =
-            Color(sph_xx[sph_la + 1] / 256, sph_yy[sph_la + 1] / 256, sph_xx[sph_la + 2] / 256, sph_yy[sph_la + 2]);
+            Color(sph_xx[sph_la + 1] / 255, sph_yy[sph_la + 1] / 255, sph_xx[sph_la + 2] / 255, sph_yy[sph_la + 2]);
         Vec2* vertices = new Vec2[(int)(sph_cmb - 3)];
         for (int n = 3; n < sph_cmb; n++)
         {
