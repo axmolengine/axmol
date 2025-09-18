@@ -260,7 +260,7 @@ static void extendEventListenerAssetsManagerEx(lua_State* L)
 int axlua_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
 {
     int argc                   = 0;
-    ax::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* obj = nullptr;
     bool ok                    = true;
 
 #if _AX_DEBUG >= 1
@@ -272,12 +272,12 @@ int axlua_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_extension_ParticleSystem3D_getParticlePool'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_extension_ParticleSystem3D_getParticlePool'", nullptr);
         return 0;
     }
 #endif
@@ -291,7 +291,7 @@ int axlua_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
                         nullptr);
             return 0;
         }
-        const ax::ParticlePool& ret = cobj->getParticlePool();
+        const ax::ParticlePool& ret = obj->getParticlePool();
         tolua_pushusertype(tolua_S, (void*)&ret, "ax.ParticlePool");
         return 1;
     }
@@ -321,7 +321,7 @@ static void extendParticleSystem3D(lua_State* tolua_S)
 int axlua_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
 {
     int argc               = 0;
-    ax::ParticlePool* cobj = nullptr;
+    ax::ParticlePool* obj = nullptr;
     bool ok                = true;
 
 #if _AX_DEBUG >= 1
@@ -333,12 +333,12 @@ int axlua_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (ax::ParticlePool*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::ParticlePool*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_extension_ParticlePool_getActiveDataList'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_extension_ParticlePool_getActiveDataList'", nullptr);
         return 0;
     }
 #endif
@@ -352,7 +352,7 @@ int axlua_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
                         nullptr);
             return 0;
         }
-        const ParticlePool::PoolList& ret = cobj->getActiveDataList();
+        const ParticlePool::PoolList& ret = obj->getActiveDataList();
 
         lua_newtable(tolua_S);
         if (ret.empty())

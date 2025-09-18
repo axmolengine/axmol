@@ -435,7 +435,7 @@ void extendPhysics3DComponent(lua_State* L)
 int axlua_physics3d_Physics3DWorld_rayCast(lua_State* L)
 {
     int argc                 = 0;
-    ax::Physics3DWorld* cobj = nullptr;
+    ax::Physics3DWorld* obj = nullptr;
     bool ok                  = true;
 
 #    if _AX_DEBUG >= 1
@@ -447,12 +447,12 @@ int axlua_physics3d_Physics3DWorld_rayCast(lua_State* L)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::Physics3DWorld*)tolua_tousertype(L, 1, 0);
+    obj = (ax::Physics3DWorld*)tolua_tousertype(L, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(L, "invalid 'cobj' in function 'axlua_physics3d_Physics3DWorld_rayCast'", nullptr);
+        tolua_error(L, "invalid 'obj' in function 'axlua_physics3d_Physics3DWorld_rayCast'", nullptr);
         return 0;
     }
 #    endif
@@ -475,7 +475,7 @@ int axlua_physics3d_Physics3DWorld_rayCast(lua_State* L)
             tolua_error(L, "invalid arguments in function 'axlua_physics3d_Physics3DWorld_rayCast'", nullptr);
             return 0;
         }
-        bool ret = cobj->rayCast(arg0, arg1, &arg2);
+        bool ret = obj->rayCast(arg0, arg1, &arg2);
         tolua_pushboolean(L, (bool)ret);
         Physics3DWorld_HitResult_to_luaval(L, arg2);
         return 2;
@@ -732,7 +732,7 @@ void CollisionPoint_to_luaval(lua_State* L, const ax::Physics3DCollisionInfo::Co
 int axlua_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
 {
     int argc                  = 0;
-    ax::Physics3DObject* cobj = nullptr;
+    ax::Physics3DObject* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -743,12 +743,12 @@ int axlua_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::Physics3DObject*)tolua_tousertype(L, 1, 0);
+    obj = (ax::Physics3DObject*)tolua_tousertype(L, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(L, "invalid 'cobj' in function 'axlua_physics3d_Physics3DObject_setCollisionCallback'", nullptr);
+        tolua_error(L, "invalid 'obj' in function 'axlua_physics3d_Physics3DObject_setCollisionCallback'", nullptr);
         return 0;
     }
 #    endif
@@ -763,7 +763,7 @@ int axlua_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
         }
 #    endif
         LUA_FUNCTION handler = toluafix_ref_function(L, 2, 0);
-        cobj->setCollisionCallback([=](const ax::Physics3DCollisionInfo& ci) {
+        obj->setCollisionCallback([=](const ax::Physics3DCollisionInfo& ci) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
             auto Ls    = stack->getLuaState();
             lua_newtable(Ls);
@@ -808,7 +808,7 @@ int axlua_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
             stack->executeFunctionByHandler(handler, 1);
         });
 
-        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)obj, handler);
         return 0;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n",

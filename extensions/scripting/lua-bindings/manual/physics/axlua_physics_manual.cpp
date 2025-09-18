@@ -47,7 +47,7 @@
 int axlua_physics_PhysicsBody_getJoints(lua_State* tolua_S)
 {
     int argc              = 0;
-    ax::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* obj = nullptr;
     bool ok               = true;
 
 #    if _AX_DEBUG >= 1
@@ -59,12 +59,12 @@ int axlua_physics_PhysicsBody_getJoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsBody*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsBody_getJoints'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsBody_getJoints'", NULL);
         return 0;
     }
 #    endif
@@ -77,7 +77,7 @@ int axlua_physics_PhysicsBody_getJoints(lua_State* tolua_S)
 
             if (!ok)
                 return 0;
-            auto& ret = cobj->getJoints();
+            auto& ret = obj->getJoints();
 
             lua_newtable(tolua_S);
 
@@ -113,7 +113,7 @@ tolua_lerror:
 int axlua_physics_PhysicsWorld_getScene(lua_State* tolua_S)
 {
     int argc               = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -124,12 +124,12 @@ int axlua_physics_PhysicsWorld_getScene(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsWorld_getScene'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsWorld_getScene'", NULL);
         return 0;
     }
 #    endif
@@ -137,7 +137,7 @@ int axlua_physics_PhysicsWorld_getScene(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        ax::Scene& ret = cobj->getScene();
+        ax::Scene& ret = obj->getScene();
         do
         {
             auto className = getLuaTypeName<Object>(&ret, "ax.Scene");
@@ -163,7 +163,7 @@ tolua_lerror:
 int axlua_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
 {
     int argc               = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok                = true;
 
 #    if _AX_DEBUG >= 1
@@ -175,12 +175,12 @@ int axlua_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsWorld_rayCast'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsWorld_rayCast'", NULL);
         return 0;
     }
 #    endif
@@ -210,7 +210,7 @@ int axlua_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
             stack->removeScriptHandler(handler);
             return 0;
         }
-        cobj->rayCast(arg0, arg1, arg2, nullptr);
+        obj->rayCast(arg0, arg1, arg2, nullptr);
         stack->removeScriptHandler(handler);
         lua_settop(tolua_S, 1);
         return 1;
@@ -228,7 +228,7 @@ tolua_lerror:
 int axlua_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
 {
     int argc               = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok                = true;
 
 #    if _AX_DEBUG >= 1
@@ -240,12 +240,12 @@ int axlua_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsWorld_queryRect'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsWorld_queryRect'", NULL);
         return 0;
     }
 #    endif
@@ -273,7 +273,7 @@ int axlua_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
             stack->removeScriptHandler(handler);
             return 0;
         }
-        cobj->queryRect(arg0, arg1, nullptr);
+        obj->queryRect(arg0, arg1, nullptr);
         stack->removeScriptHandler(handler);
         lua_settop(tolua_S, 1);
         return 1;
@@ -292,7 +292,7 @@ tolua_lerror:
 int axlua_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
 {
     int argc               = 0;
-    ax::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* obj = nullptr;
     bool ok                = true;
 
 #    if _AX_DEBUG >= 1
@@ -304,12 +304,12 @@ int axlua_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsWorld_queryPoint'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsWorld_queryPoint'", NULL);
         return 0;
     }
 #    endif
@@ -337,7 +337,7 @@ int axlua_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
             stack->removeScriptHandler(handler);
             return 0;
         }
-        cobj->queryPoint(arg0, arg1, nullptr);
+        obj->queryPoint(arg0, arg1, nullptr);
         stack->removeScriptHandler(handler);
         lua_settop(tolua_S, 1);
         return 1;
@@ -875,7 +875,7 @@ tolua_lerror:
 int axlua_physics_PhysicsColliderBox_getPoints(lua_State* tolua_S)
 {
     int argc                     = 0;
-    ax::PhysicsColliderBox* cobj = nullptr;
+    ax::PhysicsColliderBox* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -886,12 +886,12 @@ int axlua_physics_PhysicsColliderBox_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsColliderBox*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsColliderBox*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsColliderBox_getPoints'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsColliderBox_getPoints'", NULL);
         return 0;
     }
 #    endif
@@ -900,7 +900,7 @@ int axlua_physics_PhysicsColliderBox_getPoints(lua_State* tolua_S)
     if (argc == 0)
     {
         ax::Vec2 arg0[4];
-        cobj->getPoints(arg0);
+        obj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, 4);
         return 1;
     }
@@ -918,7 +918,7 @@ tolua_lerror:
 int axlua_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
 {
     int argc                         = 0;
-    ax::PhysicsColliderPolygon* cobj = nullptr;
+    ax::PhysicsColliderPolygon* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -929,12 +929,12 @@ int axlua_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsColliderPolygon*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsColliderPolygon*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsColliderPolygon_getPoints'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsColliderPolygon_getPoints'", NULL);
         return 0;
     }
 #    endif
@@ -942,9 +942,9 @@ int axlua_physics_PhysicsColliderPolygon_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        int count      = cobj->getPointsCount();
+        int count      = obj->getPointsCount();
         ax::Vec2* arg0 = new ax::Vec2[count];
-        cobj->getPoints(arg0);
+        obj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
         AX_SAFE_DELETE_ARRAY(arg0);
         return 1;
@@ -1119,7 +1119,7 @@ tolua_lerror:
 int axlua_physics_PhysicsColliderEdgeBox_getPoints(lua_State* tolua_S)
 {
     int argc                         = 0;
-    ax::PhysicsColliderEdgeBox* cobj = nullptr;
+    ax::PhysicsColliderEdgeBox* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1130,12 +1130,12 @@ int axlua_physics_PhysicsColliderEdgeBox_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsColliderEdgeBox*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsColliderEdgeBox*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsColliderEdgeBox_getPoints'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsColliderEdgeBox_getPoints'", NULL);
         return 0;
     }
 #    endif
@@ -1143,9 +1143,9 @@ int axlua_physics_PhysicsColliderEdgeBox_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        int count      = cobj->getPointsCount();
+        int count      = obj->getPointsCount();
         ax::Vec2* arg0 = new ax::Vec2[count];
-        cobj->getPoints(arg0);
+        obj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
         AX_SAFE_DELETE_ARRAY(arg0);
         return 1;
@@ -1164,7 +1164,7 @@ tolua_lerror:
 int axlua_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
 {
     int argc                             = 0;
-    ax::PhysicsColliderEdgePolygon* cobj = nullptr;
+    ax::PhysicsColliderEdgePolygon* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1175,12 +1175,12 @@ int axlua_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsColliderEdgePolygon*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsColliderEdgePolygon*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsColliderEdgePolygon_getPoints'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsColliderEdgePolygon_getPoints'", NULL);
         return 0;
     }
 #    endif
@@ -1188,9 +1188,9 @@ int axlua_physics_PhysicsColliderEdgePolygon_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        int count      = cobj->getPointsCount();
+        int count      = obj->getPointsCount();
         ax::Vec2* arg0 = new ax::Vec2[count];
-        cobj->getPoints(arg0);
+        obj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
         AX_SAFE_DELETE_ARRAY(arg0);
         return 1;
@@ -1209,7 +1209,7 @@ tolua_lerror:
 int axlua_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
 {
     int argc                           = 0;
-    ax::PhysicsColliderEdgeChain* cobj = nullptr;
+    ax::PhysicsColliderEdgeChain* obj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1220,12 +1220,12 @@ int axlua_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (ax::PhysicsColliderEdgeChain*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (ax::PhysicsColliderEdgeChain*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_physics_PhysicsColliderEdgeChain_getPoints'", NULL);
+        tolua_error(tolua_S, "invalid 'obj' in function 'axlua_physics_PhysicsColliderEdgeChain_getPoints'", NULL);
         return 0;
     }
 #    endif
@@ -1233,9 +1233,9 @@ int axlua_physics_PhysicsColliderEdgeChain_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        int count      = cobj->getPointsCount();
+        int count      = obj->getPointsCount();
         ax::Vec2* arg0 = new ax::Vec2[count];
-        cobj->getPoints(arg0);
+        obj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
         AX_SAFE_DELETE_ARRAY(arg0);
         return 1;

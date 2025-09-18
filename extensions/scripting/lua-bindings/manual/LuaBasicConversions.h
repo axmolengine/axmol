@@ -509,9 +509,9 @@ bool luaval_to_ccvector(lua_State* L, int lo, ax::Vector<T>* ret, const char* fu
                 continue;
             }
 
-            T cobj = static_cast<T>(tolua_tousertype(L, -1, NULL));
-            if (NULL != cobj)
-                ret->pushBack(cobj);
+            T obj = static_cast<T>(tolua_tousertype(L, -1, NULL));
+            if (NULL != obj)
+                ret->pushBack(obj);
 
             lua_pop(L, 1);
         }
