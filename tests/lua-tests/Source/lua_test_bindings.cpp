@@ -336,9 +336,9 @@ ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
 
 int axlua_DrawNode3D_getBlendFunc(lua_State* L)
 {
-    int argc             = 0;
+    int argc            = 0;
     ax::DrawNode3D* obj = nullptr;
-    bool ok              = true;
+    bool ok             = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -381,9 +381,9 @@ tolua_lerror:
 
 int axlua_DrawNode3D_setBlendFunc(lua_State* L)
 {
-    int argc             = 0;
+    int argc            = 0;
     ax::DrawNode3D* obj = nullptr;
-    bool ok              = true;
+    bool ok             = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -432,9 +432,9 @@ tolua_lerror:
 
 int axlua_DrawNode3D_drawLine(lua_State* L)
 {
-    int argc             = 0;
+    int argc            = 0;
     ax::DrawNode3D* obj = nullptr;
-    bool ok              = true;
+    bool ok             = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -485,9 +485,9 @@ tolua_lerror:
 
 int axlua_DrawNode3D_clear(lua_State* L)
 {
-    int argc             = 0;
+    int argc            = 0;
     ax::DrawNode3D* obj = nullptr;
-    bool ok              = true;
+    bool ok             = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -529,9 +529,9 @@ tolua_lerror:
 
 int axlua_DrawNode3D_drawCube(lua_State* L)
 {
-    int argc             = 0;
+    int argc            = 0;
     ax::DrawNode3D* obj = nullptr;
-    bool ok              = true;
+    bool ok             = true;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
