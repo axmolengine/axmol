@@ -3697,7 +3697,8 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
     int boxSize = 3;
     for (auto&& p : points)
     {
-        drawNodeCP->drawSolidRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color::YELLOW);
+        drawNodeCP->drawSolidRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize),
+                                  Color::YELLOW);
         array->addControlPoint(Vec2(p.x, p.y));
     }
 
