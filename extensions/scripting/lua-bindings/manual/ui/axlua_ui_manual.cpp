@@ -925,7 +925,7 @@ static void extendLayoutParameter(lua_State* L)
     lua_pop(L, 1);
 }
 
-static int tolua_cocos2d_EditBox_registerScriptEditBoxHandler(lua_State* L)
+static int axlua_EditBox_registerScriptEditBoxHandler(lua_State* L)
 {
     if (NULL == L)
         return 0;
@@ -944,7 +944,7 @@ static int tolua_cocos2d_EditBox_registerScriptEditBoxHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(L, "invalid 'self' in function 'tolua_cocos2d_EditBox_registerScriptEditBoxHandler'\n", NULL);
+        tolua_error(L, "invalid 'self' in function 'axlua_EditBox_registerScriptEditBoxHandler'\n", NULL);
         return 0;
     }
 #endif
@@ -970,12 +970,12 @@ static int tolua_cocos2d_EditBox_registerScriptEditBoxHandler(lua_State* L)
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'tolua_cocos2d_EditBox_registerScriptEditBoxHandler'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'axlua_EditBox_registerScriptEditBoxHandler'.", &tolua_err);
     return 0;
 #endif
 }
 
-static int tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler(lua_State* L)
+static int axlua_EditBox_unregisterScriptEditBoxHandler(lua_State* L)
 {
 
     if (NULL == L)
@@ -995,7 +995,7 @@ static int tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(L, "invalid 'self' in function 'tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler'\n", NULL);
+        tolua_error(L, "invalid 'self' in function 'axlua_EditBox_unregisterScriptEditBoxHandler'\n", NULL);
         return 0;
     }
 #endif
@@ -1014,7 +1014,7 @@ static int tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler(lua_State* L)
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'axlua_EditBox_unregisterScriptEditBoxHandler'.", &tolua_err);
     return 0;
 #endif
 }
@@ -1026,10 +1026,10 @@ static void extendEditBox(lua_State* L)
     if (lua_istable(L, -1))
     {
         lua_pushstring(L, "registerScriptEditBoxHandler");
-        lua_pushcfunction(L, tolua_cocos2d_EditBox_registerScriptEditBoxHandler);
+        lua_pushcfunction(L, axlua_EditBox_registerScriptEditBoxHandler);
         lua_rawset(L, -3);
         lua_pushstring(L, "unregisterScriptEditBoxHandler");
-        lua_pushcfunction(L, tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler);
+        lua_pushcfunction(L, axlua_EditBox_unregisterScriptEditBoxHandler);
         lua_rawset(L, -3);
     }
     lua_pop(L, 1);
