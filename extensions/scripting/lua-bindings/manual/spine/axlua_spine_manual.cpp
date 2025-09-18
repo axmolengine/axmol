@@ -37,7 +37,7 @@
 
 using namespace spine;
 
-static int axlua_CCSkeletonAnimation_createWithFile(lua_State* L)
+static int axlua_SkeletonAnimation_createWithFile(lua_State* L)
 {
     if (nullptr == L)
         return 0;
@@ -190,7 +190,7 @@ int executeSpineEvent(LuaSkeletonAnimation* skeletonAnimation,
     return ret;
 }
 
-int tolua_Cocos2d_CCSkeletonAnimation_registerSpineEventHandler00(lua_State* tolua_S)
+int axlua_SkeletonAnimation_registerSpineEventHandler00(lua_State* tolua_S)
 {
 #    ifndef TOLUA_RELEASE
     tolua_Error tolua_err;
@@ -271,7 +271,7 @@ tolua_lerror:
 #    endif
 }
 
-int tolua_Cocos2d_CCSkeletonAnimation_unregisterSpineEventHandler00(lua_State* tolua_S)
+int axlua_SkeletonAnimation_unregisterSpineEventHandler00(lua_State* tolua_S)
 {
 #    ifndef TOLUA_RELEASE
     tolua_Error tolua_err;
@@ -569,16 +569,16 @@ tolua_lerror:
     return 0;
 }
 
-static void extendCCSkeletonAnimation(lua_State* L)
+static void extendSkeletonAnimation(lua_State* L)
 {
     lua_pushstring(L, "sp.SkeletonAnimation");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        tolua_function(L, "create", axlua_CCSkeletonAnimation_createWithFile);
-        tolua_function(L, "registerSpineEventHandler", tolua_Cocos2d_CCSkeletonAnimation_registerSpineEventHandler00);
+        tolua_function(L, "create", axlua_SkeletonAnimation_createWithFile);
+        tolua_function(L, "registerSpineEventHandler", axlua_SkeletonAnimation_registerSpineEventHandler00);
         tolua_function(L, "unregisterSpineEventHandler",
-                       tolua_Cocos2d_CCSkeletonAnimation_unregisterSpineEventHandler00);
+                       axlua_SkeletonAnimation_unregisterSpineEventHandler00);
         tolua_function(L, "addAnimation", axlua_spine_SkeletonAnimation_addAnimation);
         tolua_function(L, "setAnimation", axlua_spine_SkeletonAnimation_setAnimation);
         tolua_function(L, "findBone", axlua_spine_SkeletonAnimation_findBone);
@@ -586,7 +586,7 @@ static void extendCCSkeletonAnimation(lua_State* L)
     }
     lua_pop(L, 1);
 
-    /*Because sp.SkeletonAnimation:create creat a LuaSkeletonAnimation object,so we need use LuaSkeletonAnimation
+    /*Because sp.SkeletonAnimation:create a LuaSkeletonAnimation object, so we need use LuaSkeletonAnimation
      * typename for g_luaType*/
     auto typeName                                    = typeid(LuaSkeletonAnimation).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "sp.SkeletonAnimation";
@@ -598,7 +598,7 @@ int register_all_ax_spine_manual(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    extendCCSkeletonAnimation(L);
+    extendSkeletonAnimation(L);
 
     return 0;
 }
