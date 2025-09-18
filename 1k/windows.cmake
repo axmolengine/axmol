@@ -25,7 +25,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   set(FUZZ_MSVC TRUE)
   set(FULL_MSVC TRUE)
 else()
-  message(FATAL_ERROR "Windows toolchain file only MSVC or LLVM-Clang")
+  message(FATAL_ERROR "Windows toolchain file only support MSVC or Clang")
 endif()
 
 # Determine Windows SDK version
