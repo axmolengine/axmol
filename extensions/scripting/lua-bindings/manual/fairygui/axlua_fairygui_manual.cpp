@@ -144,7 +144,7 @@ tolua_lerror:
 int lua_ax_fairygui_GObject_getData(lua_State* tolua_S)
 {
     int argc                = 0;
-    fairygui::GObject* cobj = nullptr;
+    fairygui::GObject* obj = nullptr;
     bool ok                 = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -153,11 +153,11 @@ int lua_ax_fairygui_GObject_getData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "fgui.GObject", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
-    cobj = (fairygui::GObject*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (fairygui::GObject*)tolua_tousertype(tolua_S, 1, 0);
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_ax_fairygui_GObject_getData'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_fairygui_GObject_getData'", nullptr);
         return 0;
     }
 #    endif
@@ -169,7 +169,7 @@ int lua_ax_fairygui_GObject_getData(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GObject_getData'", nullptr);
             return 0;
         }
-        void* ret = cobj->getData();
+        void* ret = obj->getData();
         object_to_luaval<ax::Object>(tolua_S, /*"cc."*/ "ax.Object", (ax::Object*)ret);
         return 1;
     }
@@ -601,7 +601,7 @@ tolua_lerror:
 int lua_ax_fairygui_EventContext_getDataValue(lua_State* tolua_S)
 {
     int argc                     = 0;
-    fairygui::EventContext* cobj = nullptr;
+    fairygui::EventContext* obj = nullptr;
     bool ok                      = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -610,11 +610,11 @@ int lua_ax_fairygui_EventContext_getDataValue(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "fgui.EventContext", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
-    cobj = (fairygui::EventContext*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (fairygui::EventContext*)tolua_tousertype(tolua_S, 1, 0);
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_ax_fairygui_EventContext_getDataValue'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_fairygui_EventContext_getDataValue'", nullptr);
         return 0;
     }
 #    endif
@@ -626,7 +626,7 @@ int lua_ax_fairygui_EventContext_getDataValue(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_EventContext_getDataValue'", nullptr);
             return 0;
         }
-        const cocos2d::Value& ret = cobj->getDataValue();
+        const cocos2d::Value& ret = obj->getDataValue();
         ccvalue_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -643,7 +643,7 @@ tolua_lerror:
 int lua_ax_fairygui_EventContext_getData(lua_State* tolua_S)
 {
     int argc                     = 0;
-    fairygui::EventContext* cobj = nullptr;
+    fairygui::EventContext* obj = nullptr;
     bool ok                      = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -652,11 +652,11 @@ int lua_ax_fairygui_EventContext_getData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "fgui.EventContext", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
-    cobj = (fairygui::EventContext*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (fairygui::EventContext*)tolua_tousertype(tolua_S, 1, 0);
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_ax_fairygui_EventContext_getData'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_fairygui_EventContext_getData'", nullptr);
         return 0;
     }
 #    endif
@@ -668,7 +668,7 @@ int lua_ax_fairygui_EventContext_getData(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_EventContext_getData'", nullptr);
             return 0;
         }
-        void* ret = cobj->getData();
+        void* ret = obj->getData();
         object_to_luaval<ax::Object>(tolua_S, /*"cc."*/ "ax.Object", (ax::Object*)ret);
         return 1;
     }
@@ -756,7 +756,7 @@ static void extendEventContext(lua_State* L)
 int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
 {
     int argc                   = 0;
-    fairygui::GMovieClip* cobj = nullptr;
+    fairygui::GMovieClip* obj = nullptr;
     bool ok                    = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -765,11 +765,11 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "fgui.GMovieClip", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
-    cobj = (fairygui::GMovieClip*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (fairygui::GMovieClip*)tolua_tousertype(tolua_S, 1, 0);
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
         return 0;
     }
 #    endif
@@ -781,7 +781,7 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
-        cobj->setPlaySettings();
+        obj->setPlaySettings();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -794,7 +794,7 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
-        cobj->setPlaySettings(arg0);
+        obj->setPlaySettings(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -809,7 +809,7 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
-        cobj->setPlaySettings(arg0, arg1);
+        obj->setPlaySettings(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -826,7 +826,7 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
-        cobj->setPlaySettings(arg0, arg1, arg2);
+        obj->setPlaySettings(arg0, arg1, arg2);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -845,7 +845,7 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
-        cobj->setPlaySettings(arg0, arg1, arg2, arg3);
+        obj->setPlaySettings(arg0, arg1, arg2, arg3);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -871,8 +871,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* tolua_S)
             return 0;
         }
         LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 6, 0));
-        cobj->setPlaySettings(arg0, arg1, arg2, arg3, [=](void) { handleFairyguiEventNoParams(handler); });
-        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
+        obj->setPlaySettings(arg0, arg1, arg2, arg3, [=](void) { handleFairyguiEventNoParams(handler); });
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)obj, handler);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -898,7 +898,7 @@ static void extendGMovieClip(lua_State* L)
 int lua_ax_fairygui_GTweener_onUpdate(lua_State* tolua_S)
 {
     int argc                 = 0;
-    fairygui::GTweener* cobj = nullptr;
+    fairygui::GTweener* obj = nullptr;
     bool ok                  = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -907,11 +907,11 @@ int lua_ax_fairygui_GTweener_onUpdate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "fgui.GTweener", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
-    cobj = (fairygui::GTweener*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (fairygui::GTweener*)tolua_tousertype(tolua_S, 1, 0);
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_ax_fairygui_GTweener_onUpdate'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_fairygui_GTweener_onUpdate'", nullptr);
         return 0;
     }
 #    endif
@@ -925,13 +925,13 @@ int lua_ax_fairygui_GTweener_onUpdate(lua_State* tolua_S)
         }
 #    endif
         LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 2, 0));
-        auto&& ret           = cobj->onUpdate([=](fairygui::GTweener* sender) {
+        auto&& ret           = obj->onUpdate([=](fairygui::GTweener* sender) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
             object_to_luaval<fairygui::GTweener>(stack->getLuaState(), "fgui.GTweener", (fairygui::GTweener*)sender);
             stack->executeFunctionByHandler(handler, 1);
             stack->clean();
         });
-        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)obj, handler);
         object_to_luaval<fairygui::GTweener>(tolua_S, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -947,7 +947,7 @@ tolua_lerror:
 int lua_ax_fairygui_GTweener_onStart(lua_State* tolua_S)
 {
     int argc                 = 0;
-    fairygui::GTweener* cobj = nullptr;
+    fairygui::GTweener* obj = nullptr;
     bool ok                  = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -956,11 +956,11 @@ int lua_ax_fairygui_GTweener_onStart(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "fgui.GTweener", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
-    cobj = (fairygui::GTweener*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (fairygui::GTweener*)tolua_tousertype(tolua_S, 1, 0);
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_ax_fairygui_GTweener_onStart'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_fairygui_GTweener_onStart'", nullptr);
         return 0;
     }
 #    endif
@@ -974,13 +974,13 @@ int lua_ax_fairygui_GTweener_onStart(lua_State* tolua_S)
         }
 #    endif
         LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 2, 0));
-        auto&& ret           = cobj->onStart([=](fairygui::GTweener* sender) {
+        auto&& ret           = obj->onStart([=](fairygui::GTweener* sender) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
             object_to_luaval<fairygui::GTweener>(stack->getLuaState(), "fgui.GTweener", (fairygui::GTweener*)sender);
             stack->executeFunctionByHandler(handler, 1);
             stack->clean();
         });
-        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)obj, handler);
         object_to_luaval<fairygui::GTweener>(tolua_S, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -996,7 +996,7 @@ tolua_lerror:
 int lua_ax_fairygui_GTweener_onComplete(lua_State* tolua_S)
 {
     int argc                 = 0;
-    fairygui::GTweener* cobj = nullptr;
+    fairygui::GTweener* obj = nullptr;
     bool ok                  = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1005,11 +1005,11 @@ int lua_ax_fairygui_GTweener_onComplete(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "fgui.GTweener", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
-    cobj = (fairygui::GTweener*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (fairygui::GTweener*)tolua_tousertype(tolua_S, 1, 0);
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_ax_fairygui_GTweener_onComplete'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_fairygui_GTweener_onComplete'", nullptr);
         return 0;
     }
 #    endif
@@ -1023,8 +1023,8 @@ int lua_ax_fairygui_GTweener_onComplete(lua_State* tolua_S)
         }
 #    endif
         LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 2, 0));
-        auto&& ret           = cobj->onComplete([=](void) { handleFairyguiEventNoParams(handler); });
-        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
+        auto&& ret           = obj->onComplete([=](void) { handleFairyguiEventNoParams(handler); });
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)obj, handler);
         object_to_luaval<fairygui::GTweener>(tolua_S, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -1041,7 +1041,7 @@ tolua_lerror:
 int lua_ax_fairygui_GTweener_onComplete1(lua_State* tolua_S)
 {
     int argc                 = 0;
-    fairygui::GTweener* cobj = nullptr;
+    fairygui::GTweener* obj = nullptr;
     bool ok                  = true;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1050,11 +1050,11 @@ int lua_ax_fairygui_GTweener_onComplete1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "fgui.GTweener", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
-    cobj = (fairygui::GTweener*)tolua_tousertype(tolua_S, 1, 0);
+    obj = (fairygui::GTweener*)tolua_tousertype(tolua_S, 1, 0);
 #    if _AX_DEBUG >= 1
-    if (!cobj)
+    if (!obj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_ax_fairygui_GTweener_onComplete1'", nullptr);
+        tolua_error(tolua_S, "invalid 'obj' in function 'lua_ax_fairygui_GTweener_onComplete1'", nullptr);
         return 0;
     }
 #    endif
@@ -1068,13 +1068,13 @@ int lua_ax_fairygui_GTweener_onComplete1(lua_State* tolua_S)
         }
 #    endif
         LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 2, 0));
-        auto&& ret           = cobj->onComplete1([=](fairygui::GTweener* sender) {
+        auto&& ret           = obj->onComplete1([=](fairygui::GTweener* sender) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
             object_to_luaval<fairygui::GTweener>(stack->getLuaState(), "fgui.GTweener", (fairygui::GTweener*)sender);
             stack->executeFunctionByHandler(handler, 1);
             stack->clean();
         });
-        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)obj, handler);
         object_to_luaval<fairygui::GTweener>(tolua_S, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
