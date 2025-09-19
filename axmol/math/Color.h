@@ -178,16 +178,9 @@ struct AX_DLL Color : public Vec4Adapter<Color>
             return Color{r, g, b, static_cast<float>(alpha) / 255.0f};
     }
 
-    template <typename T>
-    static Color random(T alpha = 1.0f)
+    static Color random()
     {
-        static_assert(std::is_floating_point_v<T> || std::is_unsigned_v<T>,
-                      "withAlpha: alpha must be float (0~1) or unsigned integer (0~255)");
-
-        if constexpr (std::is_floating_point_v<T>)
-            return Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), static_cast<float>(alpha));
-        else
-            return Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), static_cast<float>(alpha) / 255.0f);
+        return Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());
     }
 
     bool operator==(const Color32& rhs) const;
