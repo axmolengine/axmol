@@ -2661,7 +2661,7 @@ void DrawNodeMethodsTest::drawAll()
         for (int i = 0; i < 100; i++)
         {
             drawNode->drawLine(Vec2(-size.x / 2, -size.y / 2 + i * 4), Vec2(size.x - 50, -size.y / 2 + i * 4),
-                               Color::random(1.0f)),
+                               Color::random(1.0f),
                                sliderValue[sliderType::Thickness]);
         }
 
