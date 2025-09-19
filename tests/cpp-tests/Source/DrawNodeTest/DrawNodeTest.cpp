@@ -2630,7 +2630,7 @@ void DrawNodeMethodsTest::onEnter()
 
 std::string DrawNodeMethodsTest::title() const
 {
-    return "DrawNode Methods Test";
+    return "DrawNode Stress Tests";
 }
 
 string DrawNodeMethodsTest::subtitle() const
