@@ -190,11 +190,7 @@ if(EMSCRIPTEN)
   # fix build fail on windows host when cmake invoking emscan-deps (raise unknown options)
   list(APPEND _ax_link_opts  "-ljpeg")
 
-  #if (AX_USE_ALSOFT)
-    # may requires execute 'embuilder build sdl2' first
-    # list(APPEND _ax_compile_opts "-sUSE_SDL=2")
-    # list(APPEND _ax_link_opts "-sUSE_SDL=2")
-  #endif()
+  # list(APPEND _ax_link_opts "-sASSERTIONS=1")
 
   set(AX_WASM_THREADS "4" CACHE STRING "Wasm threads count")
   set(_threads_hint "")
@@ -210,12 +206,12 @@ if(EMSCRIPTEN)
 
   message(STATUS "AX_WASM_THREADS=${AX_WASM_THREADS}${_threads_hint}")
 
-  if(AX_WASM_THREADS MATCHES "^([0-9]+)$" OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
+  if((AX_WASM_THREADS MATCHES "^([0-9]+)$" AND AX_WASM_THREADS GREATER 0) OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
     list(APPEND _ax_compile_opts -pthread)
     list(APPEND _ax_link_opts -pthread -sPTHREAD_POOL_SIZE=${AX_WASM_THREADS})
   endif()
 
-  option(AX_WASM_ALLOW_MEMORY_GROWTH "Allow wasm memory growth" OFF)
+  option(AX_WASM_ALLOW_MEMORY_GROWTH "Allow wasm memory growth" ON)
   if(AX_WASM_ALLOW_MEMORY_GROWTH)
     set(AX_WASM_INITIAL_MEMORY "128MB" CACHE STRING "")
     list(APPEND _ax_link_opts -sALLOW_MEMORY_GROWTH=1)
@@ -259,7 +255,6 @@ if(ANDROID)
 endif()
 
 # =========== end fo axmol compile and link flags ===========
-
 
 if(APPLE)
   enable_language(C CXX OBJC OBJCXX)
