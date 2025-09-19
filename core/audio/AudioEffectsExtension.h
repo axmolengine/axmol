@@ -33,10 +33,10 @@
 namespace ax
 {
 
-class EffectsExtensionOpenAL
+class AudioEffectsExtension
 {
 public:
-    static EffectsExtensionOpenAL* getInstance();
+    static AudioEffectsExtension* getInstance();
 
     bool isAvailable() const { return _isAvailable; }
 
@@ -57,7 +57,7 @@ public:
     void deleteFilter(uint32_t filterId);
 
 private:
-    EffectsExtensionOpenAL();
+    AudioEffectsExtension();
 
     bool _isAvailable{};
 };

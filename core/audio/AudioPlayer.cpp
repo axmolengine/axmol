@@ -27,7 +27,7 @@
 #include "platform/PlatformConfig.h"
 #include "audio/alconstants.h"
 #include "audio/AudioPlayer.h"
-#include "audio/AudioEffectsExtensionOpenAL.h"
+#include "audio/AudioEffectsExtension.h"
 #include "audio/AudioCache.h"
 #include "platform/FileUtils.h"
 #include "audio/AudioDecoder.h"
@@ -408,7 +408,7 @@ void AudioPlayer::clearEffects()
     if (_reverbEffect == 0)
         return;
 
-    auto&& efx = EffectsExtensionOpenAL::getInstance();
+    auto&& efx = AudioEffectsExtension::getInstance();
 
     if (!efx->isAvailable())
         return;
@@ -589,7 +589,7 @@ bool AudioPlayer::isFinished() const
 void AudioPlayer::setReverbSettings(const EaxReverbSettings* reverbSettings)
 {
 #if ALC_EXT_EFX == 1
-    auto&& efx = EffectsExtensionOpenAL::getInstance();
+    auto&& efx = AudioEffectsExtension::getInstance();
 
     if (!efx->isAvailable())
         return;

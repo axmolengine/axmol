@@ -12,7 +12,7 @@ set(_AX_AUDIO_HEADER
   audio/AudioCache.h
   audio/AudioEngineImpl.h
   audio/AudioEffects.h
-  audio/AudioEffectsExtensionOpenAL.h
+  audio/AudioEffectsExtension.h
 )
 
 set(_AX_AUDIO_SRC
@@ -24,7 +24,7 @@ set(_AX_AUDIO_SRC
   audio/AudioPlayer.cpp
   audio/AudioCache.cpp
   audio/AudioEngineImpl.cpp
-  audio/AudioEffectsExtensionOpenAL.cpp
+  audio/AudioEffectsExtension.cpp
 )
 
 if(APPLE)
