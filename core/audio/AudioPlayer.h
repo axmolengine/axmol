@@ -92,7 +92,9 @@ protected:
     bool _ready;
     ALuint _alSource;
 
+#if AX_USE_ALSOFT
     ReverbProperties _reverbProperties;
+#endif
 
     // play by circular buffer
     float _currTime;
