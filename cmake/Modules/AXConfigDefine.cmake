@@ -98,34 +98,7 @@ endif()
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 if(EMSCRIPTEN_VERSION)
-  message(STATUS "Using emsdk generate axmol project, EMSCRIPTEN_VERSION: ${EMSCRIPTEN_VERSION}")
-endif()
-
-set(_ax_compile_options)
-
-if(FUZZ_MSVC)
-  list(APPEND _ax_compile_options /GF)
-  set(CMAKE_CXX_FLAGS "/Zc:char8_t- ${CMAKE_CXX_FLAGS}")
-else() # others
-  set(CMAKE_CXX_FLAGS "-fno-char8_t ${CMAKE_CXX_FLAGS}")
-endif()
-
-if(APPLE)
-  add_compile_options("$<$<COMPILE_LANGUAGE:OBJC>:-Werror=objc-method-access>")
-  add_compile_options("$<$<COMPILE_LANGUAGE:OBJCXX>:-Werror=objc-method-access>")
-endif()
-
-set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
-set(CMAKE_PLATFORM_NO_VERSIONED_SONAME TRUE CACHE BOOL "Disable dynamic libraries symblink." FORCE)
-
-if(ANDROID)
-  # Ensure fseeko available on ndk > 23
-  math(EXPR _ARCH_BITS "${CMAKE_SIZEOF_VOID_P} * 8")
-  add_definitions(-D_FILE_OFFSET_BITS=${_ARCH_BITS})
-
-  # set hash style to both for android old device compatible
-  # see also: https://github.com/axmolengine/axmol/discussions/614
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
+  message(STATUS "Using emsdk, version: ${EMSCRIPTEN_VERSION}")
 endif()
 
 # Set macro definitions for special platforms
@@ -189,11 +162,39 @@ function(use_ax_compile_options target)
   endif()
 endfunction()
 
+# ----------- begin of axmol compile and link flags ===========
+set(_ax_compile_opts)  # list: common compile options for all languages
+set(_ax_link_opts)     # list: common link options for all languages
+set(_ax_cxx_flags)     # list: extra compile flags for C++ only
+set(_ax_c_flags)
+
+if(FUZZ_MSVC)
+  list(APPEND _ax_compile_opts /GF)
+  list(APPEND _ax_cxx_flags "/Zc:char8_t-")
+else() # others
+  list(APPEND _ax_cxx_flags "-fno-char8_t")
+  list(APPEND _ax_compile_opts "-Wno-unknown-attributes" "-Wno-deprecated-literal-operator")
+endif()
+
+if(APPLE)
+  list(APPEND _ax_compile_opts
+    "$<$<COMPILE_LANGUAGE:OBJC>:-Werror=objc-method-access>"
+    "$<$<COMPILE_LANGUAGE:OBJCXX>:-Werror=objc-method-access>"
+  )
+endif()
+
 if(EMSCRIPTEN)
-  # Tell emcc build port libjpeg in cache and add link flag manually to
+  # Tell emcc build port libjpeg(not in sysroot)
+  list(APPEND _ax_compile_opts "-sUSE_LIBJPEG=1")
+
   # fix build fail on windows host when cmake invoking emscan-deps (raise unknown options)
-  set(_AX_EM_C_FLAGS "-sUSE_LIBJPEG=1")
-  set(_AX_EM_LD_FLAGS -ljpeg)
+  list(APPEND _ax_link_opts  "-ljpeg")
+
+  #if (AX_USE_ALSOFT)
+    # may requires execute 'embuilder build sdl2' first
+    # list(APPEND _ax_compile_opts "-sUSE_SDL=2")
+    # list(APPEND _ax_link_opts "-sUSE_SDL=2")
+  #endif()
 
   set(AX_WASM_THREADS "4" CACHE STRING "Wasm threads count")
   set(_threads_hint "")
@@ -210,22 +211,55 @@ if(EMSCRIPTEN)
   message(STATUS "AX_WASM_THREADS=${AX_WASM_THREADS}${_threads_hint}")
 
   if(AX_WASM_THREADS MATCHES "^([0-9]+)$" OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
-    list(APPEND _ax_compile_options -pthread)
-    list(APPEND _AX_EM_LD_FLAGS -pthread -sPTHREAD_POOL_SIZE=${AX_WASM_THREADS})
+    list(APPEND _ax_compile_opts -pthread)
+    list(APPEND _ax_link_opts -pthread -sPTHREAD_POOL_SIZE=${AX_WASM_THREADS})
   endif()
 
-  set(AX_WASM_INITIAL_MEMORY "128MB" CACHE STRING "")
-  list(APPEND _AX_EM_LD_FLAGS -sINITIAL_MEMORY=${AX_WASM_INITIAL_MEMORY} -sALLOW_MEMORY_GROWTH=1)
+  option(AX_WASM_ALLOW_MEMORY_GROWTH "Allow wasm memory growth" OFF)
+  if(AX_WASM_ALLOW_MEMORY_GROWTH)
+    set(AX_WASM_INITIAL_MEMORY "128MB" CACHE STRING "")
+    list(APPEND _ax_link_opts -sALLOW_MEMORY_GROWTH=1)
+  else()
+    set(AX_WASM_INITIAL_MEMORY "1024MB" CACHE STRING "")
+  endif()
 
-  # list(APPEND _AX_EM_LD_FLAGS -sALLOW_MEMORY_GROWTH=1)
-
-  # apply emcc c flags & link flags
-  string(APPEND CMAKE_C_FLAGS " ${_AX_EM_C_FLAGS}")
-  add_link_options(${_AX_EM_LD_FLAGS})
+  list(APPEND _ax_link_opts -sINITIAL_MEMORY=${AX_WASM_INITIAL_MEMORY})
 endif()
 
 # apply axmol spec compile options
-add_compile_options(${_ax_compile_options})
+if(_ax_compile_opts)
+  add_compile_options(${_ax_compile_opts})
+endif()
+
+if(_ax_link_opts)
+  add_link_options(${_ax_link_opts})
+endif()
+
+if(_ax_c_flags)
+  string(JOIN " " _ax_c_flags "${_ax_c_flags}")
+  string(APPEND CMAKE_C_FLAGS " ${_ax_c_flags}")
+endif()
+
+if(_ax_cxx_flags)
+  string(JOIN " " _ax_cxx_flags "${_ax_cxx_flags}")
+  string(APPEND CMAKE_CXX_FLAGS " ${_ax_cxx_flags}")
+endif()
+
+set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
+set(CMAKE_PLATFORM_NO_VERSIONED_SONAME TRUE CACHE BOOL "Disable dynamic libraries symblink." FORCE)
+
+if(ANDROID)
+  # Ensure fseeko available on ndk > 23
+  math(EXPR _ARCH_BITS "${CMAKE_SIZEOF_VOID_P} * 8")
+  add_definitions(-D_FILE_OFFSET_BITS=${_ARCH_BITS})
+
+  # set hash style to both for android old device compatible
+  # see also: https://github.com/axmolengine/axmol/discussions/614
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
+endif()
+
+# =========== end fo axmol compile and link flags ===========
+
 
 if(APPLE)
   enable_language(C CXX OBJC OBJCXX)

@@ -34,7 +34,7 @@
 
 #include "axmol/audio/AudioMacros.h"
 #include "axmol/platform/PlatformMacros.h"
-#include "axmol/audio/alconfig.h"
+#include "axmol/audio/oal_port.h"
 #include "axmol/math/Vec3.h"
 
 namespace ax

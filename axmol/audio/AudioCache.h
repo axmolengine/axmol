@@ -33,7 +33,7 @@
 
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/audio/AudioMacros.h"
-#include "axmol/audio/alconfig.h"
+#include "axmol/audio/oal_port.h"
 
 namespace ax
 {

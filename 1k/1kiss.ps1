@@ -1751,7 +1751,7 @@ function preprocess_ios() {
 }
 
 function preprocess_wasm() {
-    return , @()
+    return , @('-DCMAKE_EXPORT_COMPILE_COMMANDS=ON')
 }
 
 function validHostAndToolchain() {
@@ -2121,10 +2121,10 @@ if (!$setupOnly) {
                         &$config_cmd $CONFIG_ALL_OPTIONS -S $dm_dir -B $dm_build_dir | Out-Host ; Remove-Item $dm_build_dir -Recurse -Force
                         $1k.println("Finish dump compiler preprocessors")
                     }
-                    $CONFIG_ALL_OPTIONS += '-B', $BUILD_DIR, "-DCMAKE_INSTALL_PREFIX=$INST_DIR"
+                    $CONFIG_ALL_OPTIONS += '-B', $BUILD_DIR, "-DCMAKE_INSTALL_PREFIX:PATH=$INST_DIR"
                     if ($SOURCE_DIR) { $CONFIG_ALL_OPTIONS += '-S', $SOURCE_DIR }
                     $1k.println("CMake config command: $config_cmd $CONFIG_ALL_OPTIONS")
-                    &$config_cmd $CONFIG_ALL_OPTIONS | Out-Host
+                    &$config_cmd @CONFIG_ALL_OPTIONS | Out-Host
                     Set-Content $tempFile $hashValue -NoNewline
                 }
 

@@ -38,10 +38,6 @@
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/Utils.h"
 
-#if AX_USE_ALSOFT
-#    include "alc/inprogext.h"
-#endif
-
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 #    import <UIKit/UIKit.h>
 #endif

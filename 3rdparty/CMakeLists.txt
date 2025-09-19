@@ -237,8 +237,13 @@ endif()
 
 if(AX_ENABLE_AUDIO)
   # The openal-soft(LGPL 2.1)
-  if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
-    set(alsoft_opts "ALSOFT_DLOPEN OFF" "ALSOFT_UTILS OFF" "ALSOFT_EXAMPLES OFF" "ALSOFT_INSTALL OFF")
+  if(AX_USE_ALSOFT)
+    set(alsoft_opts
+      "ALSOFT_DLOPEN OFF"
+      "ALSOFT_UTILS OFF"
+      "ALSOFT_EXAMPLES OFF"
+      "ALSOFT_INSTALL OFF"
+    )
 
     if(AX_USE_ALSOFT_STATIC)
       list(APPEND alsoft_opts "LIBTYPE STATIC")
@@ -264,6 +269,18 @@ if(AX_ENABLE_AUDIO)
       set(ALSOFT_RTKIT OFF CACHE BOOL "Enable RTKit support" FORCE)
     elseif(WINDOWS)
       list(APPEND alsoft_opts "ALSOFT_BACKEND_WASAPI ON" "ALSOFT_BACKEND_WAVE OFF" "ALSOFT_BACKEND_DSOUND OFF" "ALSOFT_BACKEND_WINMM OFF")
+    elseif(WASM)
+      list(APPEND alsoft_opts "ALSOFT_BACKEND_SDL2 ON" "ALSOFT_REQUIRE_SDL2 ON")
+      find_program(embuilder_script embuilder.bat)
+      message(STATUS "Building wasm sdl2 port ...")
+      execute_process(
+        COMMAND ${embuilder_script} build sdl2
+        WORKING_DIRECTORY ${_AX_ROOT}
+        RESULT_VARIABLE _ret
+        OUTPUT_VARIABLE _out
+        ERROR_VARIABLE  _err
+      )
+      message(STATUS "Build wasm sdl2 port done: ${_ret}")
     endif()
 
     if(WINRT)
@@ -272,7 +289,6 @@ if(AX_ENABLE_AUDIO)
 
     ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS OpenAL;alsoft.common OPTIONS ${alsoft_opts})
 
-    target_include_directories(3rdparty INTERFACE openal)
     target_compile_definitions(3rdparty INTERFACE AX_USE_ALSOFT=1)
     set_target_properties(OpenAL alsoft.common PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
 
@@ -307,7 +323,7 @@ if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
   endif()
   ax_add_3rd(glfw OPTIONS ${_glfw_options})
   set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
- 
+
   if(NOT WINDOWS)
     target_link_libraries(3rdparty INTERFACE pthread)
   endif()

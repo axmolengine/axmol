@@ -119,8 +119,8 @@ macro(ax_depend)
       endif()
     endif()
   elseif(WASM)
-    if(AX_ENABLE_AUDIO)
-      list(APPEND openal) # refer to: https://emscripten.org/docs/porting/Audio.html
+    if(AX_ENABLE_AUDIO AND NOT AX_USE_ALSOFT)
+      list(APPEND PLATFORM_SPECIFIC_LIBS openal) # refer to: https://emscripten.org/docs/porting/Audio.html
     endif()
   endif()
 endmacro()

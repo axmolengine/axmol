@@ -132,10 +132,7 @@ elseif(LINUX)
     platform/linux/Device-linux.cpp
   )
 elseif(EMSCRIPTEN)
-  include_directories(
-    PUBLIC "${_AX_ROOT}/3rdparty/angle/_x/include"
-    PUBLIC "${_AX_ROOT}/axmol"
-  )
+  include_directories("${_AX_ROOT}/3rdparty/angle/_x/include")
   set(_AX_PLATFORM_SPECIFIC_HEADER
     platform/wasm/Application-wasm.h
     platform/wasm/GL-wasm.h

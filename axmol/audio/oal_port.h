@@ -1,6 +1,4 @@
 /****************************************************************************
- Copyright (c) 2014-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -29,22 +27,39 @@
 #    if !defined(AX_USE_ALSOFT)
 #        define AX_USE_ALSOFT 1
 #    endif
+#else
+#    if !defined(AX_USE_ALSOFT)
+#        define AX_USE_ALSOFT 0
+#    endif
 #endif
 
-#if defined(__EMSCRIPTEN__)
-#    import <AL/al.h>
-#    import <AL/alc.h>
-#    define MAX_AUDIOINSTANCES 128
+// Use the OpenAL Soft headers bundled with Axmol instead of system-installed AL/xxx.h.
+// This ensures consistent behavior across platforms and prevents Emscripten from
+// accidentally including system headers.
+// Define AL_STOP_SOURCES_ON_DISCONNECT_SOFT here to avoid pulling in the internal
+// header "alc/inprogext.h".
+#if AX_USE_ALSOFT
+#    define AL_ALEXT_PROTOTYPES 1
+#    include "3rdparty/openal/include/AL/al.h"
+#    include "3rdparty/openal/include/AL/alc.h"
+#    include "3rdparty/openal/include/AL/alext.h"
+
+#    ifndef AL_STOP_SOURCES_ON_DISCONNECT_SOFT
+#        define AL_STOP_SOURCES_ON_DISCONNECT_SOFT 0x19AB
+#    endif
 #else
-#    if !AX_USE_ALSOFT
+#    if defined(__APPLE__)
 #        import <OpenAL/al.h>
 #        import <OpenAL/alc.h>
-#        define MAX_AUDIOINSTANCES 128
-#    else
-#        define AL_ALEXT_PROTOTYPES 1
+#    elif defined(__EMSCRIPTEN__)
 #        include "AL/al.h"
 #        include "AL/alc.h"
 #        include "AL/alext.h"
-#        define MAX_AUDIOINSTANCES 128
+#    else
+#        error "OpenAL Soft is required on non-(Apple/Emscripten) platforms"
 #    endif
+#endif
+
+#ifndef MAX_AUDIOINSTANCES
+#    define MAX_AUDIOINSTANCES 128
 #endif
