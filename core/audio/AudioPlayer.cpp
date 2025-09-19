@@ -589,9 +589,9 @@ bool AudioPlayer::isFinished() const
     }
 }
 
+#if AX_USE_ALSOFT
 void AudioPlayer::setReverbProperties(const ReverbProperties* reverbProperties)
 {
-#if AX_USE_ALSOFT
     auto&& efx = AudioEffectsExtension::getInstance();
 
     if (!efx->isAvailable())
@@ -690,8 +690,8 @@ void AudioPlayer::setReverbProperties(const ReverbProperties* reverbProperties)
         _reverbProperties = {};
         clearEffects();
     }
-#endif
 }
+#endif
 
 bool AudioPlayer::setLoop(bool loop)
 {

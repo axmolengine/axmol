@@ -722,6 +722,7 @@ float AudioEngine::getDistanceScale()
     return AudioPlayerSettings::distanceScale;
 }
 
+#if AX_USE_ALSOFT
 void AudioEngine::setReverbProperties(int audioId, const ReverbProperties* reverbProperties)
 {
     if (!_audioEngineImpl)
@@ -731,4 +732,5 @@ void AudioEngine::setReverbProperties(int audioId, const ReverbProperties* rever
 
     return _audioEngineImpl->setReverbProperties(audioId, reverbProperties);
 }
+#endif
 }

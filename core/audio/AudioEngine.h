@@ -446,6 +446,7 @@ public:
      */
     static float getDistanceScale();
 
+#if AX_USE_ALSOFT
     /**
      * Sets and enables reverb for an audio track.
      *
@@ -453,7 +454,7 @@ public:
      * @param reverbProperties The pointer to reverb effect settings. If this is nullptr, then reverb effect will be disabled.
      */
     static void setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties);
-
+#endif
 
 protected:
     static void addTask(const std::function<void()>& task);
