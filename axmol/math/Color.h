@@ -177,7 +177,7 @@ struct AX_DLL Color : public Vec4Adapter<Color>
         else
             return Color{r, g, b, static_cast<float>(alpha) / 255.0f};
     }
-	
+
     template <typename T>
     static Color random(T alpha = 1.0f)
     {
@@ -187,7 +187,7 @@ struct AX_DLL Color : public Vec4Adapter<Color>
         if constexpr (std::is_floating_point_v<T>)
             return Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), static_cast<float>(alpha));
         else
-            return Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), static_cast<float>(alpha) / 255.0f);  
+            return Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), static_cast<float>(alpha) / 255.0f);
     }
 
     bool operator==(const Color32& rhs) const;
@@ -255,7 +255,6 @@ inline Color32::operator Color() const
 {
     return Color{r / 255.f, g / 255.f, b / 255.f, a / 255.f};
 }
-
 
 NS_AX_MATH_END
 
