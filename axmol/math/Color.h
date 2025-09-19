@@ -178,10 +178,7 @@ struct AX_DLL Color : public Vec4Adapter<Color>
             return Color{r, g, b, static_cast<float>(alpha) / 255.0f};
     }
 
-    static Color random()
-    {
-        return Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());
-    }
+    static Color random() { return Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1()); }
 
     bool operator==(const Color32& rhs) const;
     bool operator!=(const Color32& rhs) const;
