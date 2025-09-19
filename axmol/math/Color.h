@@ -179,7 +179,7 @@ struct AX_DLL Color : public Vec4Adapter<Color>
     }
 	
     template <typename T>
-    Color random(T alpha)
+    static Color random(T alpha = 1.0f)
     {
         static_assert(std::is_floating_point_v<T> || std::is_unsigned_v<T>,
                       "withAlpha: alpha must be float (0~1) or unsigned integer (0~255)");
