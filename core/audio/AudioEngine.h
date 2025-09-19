@@ -446,6 +446,12 @@ public:
      */
     static float getDistanceScale();
 
+    /**
+     * Sets and enables reverb for an audio track.
+     *
+     * @param audioId        An audioID returned by the play2d function.
+     * @param reverbSettings The pointer to reverb effect settings. If this is nullptr, then reverb effect will be disabled.
+     */
     static void setReverbSettings(AUDIO_ID audioId, const ReverbSettings* reverbSettings);
 
 
