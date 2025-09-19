@@ -27,11 +27,14 @@
 #include "platform/PlatformConfig.h"
 #include "audio/alconstants.h"
 #include "audio/AudioPlayer.h"
-#include "audio/AudioEffectsExtension.h"
 #include "audio/AudioCache.h"
 #include "platform/FileUtils.h"
 #include "audio/AudioDecoder.h"
 #include "audio/AudioDecoderManager.h"
+
+#if AX_USE_ALSOFT
+#    include "audio/AudioEffectsExtension.h"
+#endif
 
 #include "yasio/thread_name.hpp"
 
@@ -404,7 +407,7 @@ bool AudioPlayer::play3d()
 
 void AudioPlayer::clearEffects()
 {
-#if ALC_EXT_EFX == 1
+#if AX_USE_ALSOFT
     if (_reverbEffect == 0)
         return;
 
@@ -588,7 +591,7 @@ bool AudioPlayer::isFinished() const
 
 void AudioPlayer::setReverbSettings(const ReverbSettings* reverbSettings)
 {
-#if ALC_EXT_EFX == 1
+#if AX_USE_ALSOFT
     auto&& efx = AudioEffectsExtension::getInstance();
 
     if (!efx->isAvailable())

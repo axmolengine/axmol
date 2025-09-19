@@ -12,7 +12,6 @@ set(_AX_AUDIO_HEADER
   audio/AudioCache.h
   audio/AudioEngineImpl.h
   audio/AudioEffects.h
-  audio/AudioEffectsExtension.h
 )
 
 set(_AX_AUDIO_SRC
@@ -24,8 +23,16 @@ set(_AX_AUDIO_SRC
   audio/AudioPlayer.cpp
   audio/AudioCache.cpp
   audio/AudioEngineImpl.cpp
-  audio/AudioEffectsExtension.cpp
 )
+
+if (AX_USE_ALSOFT)
+  set(_AX_AUDIO_HEADER ${_AX_AUDIO_HEADER}
+    audio/AudioEffectsExtension.h
+  )
+  set(_AX_AUDIO_SRC ${_AX_AUDIO_SRC}
+    audio/AudioEffectsExtension.cpp
+  )
+endif()
 
 if(APPLE)
   set_source_files_properties(audio/AudioEngineImpl.cpp PROPERTIES LANGUAGE OBJCXX)

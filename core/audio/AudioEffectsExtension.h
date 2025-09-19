@@ -25,7 +25,7 @@
 
 #include "alconfig.h"
 
-#if ALC_EXT_EFX == 1
+#if AX_USE_ALSOFT
 
 #   include <cstdint>
 #   include "alconstants.h"

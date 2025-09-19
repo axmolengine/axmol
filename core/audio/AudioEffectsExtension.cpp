@@ -26,7 +26,7 @@
 
 #include "AudioMacros.h"
 
-#if ALC_EXT_EFX == 1
+#if AX_USE_ALSOFT
 namespace ax
 {
 AudioEffectsExtension* AudioEffectsExtension::getInstance()
