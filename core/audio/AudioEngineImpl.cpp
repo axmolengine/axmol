@@ -1079,7 +1079,7 @@ ax::Vec3 AudioEngineImpl::getListenerPosition()
     return pos;
 }
 
-void AudioEngineImpl::setReverbSettings(AUDIO_ID audioId, const ReverbSettings* reverbSettings)
+void AudioEngineImpl::setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
     auto iter = _audioPlayers.find(audioId);
@@ -1089,7 +1089,7 @@ void AudioEngineImpl::setReverbSettings(AUDIO_ID audioId, const ReverbSettings* 
     auto player = iter->second;
     lck.unlock();
 
-    player->setReverbSettings(reverbSettings);
+    player->setReverbProperties(reverbProperties);
 }
 
 bool AudioEngineImpl::isExtensionPresent(const char* extensionId)

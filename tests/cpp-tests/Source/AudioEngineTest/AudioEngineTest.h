@@ -407,8 +407,8 @@ private:
     bool _updateTimeSlider;
     bool _isStopped;
     ax::Label* _playOverLabel;
-    std::map<std::string, ax::ReverbSettings> _reverbSettingsMap;
-    std::map<std::string, ax::ReverbSettings>::const_iterator _currentReverbItr;
+    std::map<std::string, ax::ReverbProperties> _reverbSettingsMap;
+    std::map<std::string, ax::ReverbProperties>::const_iterator _currentReverbItr;
 };
 
 

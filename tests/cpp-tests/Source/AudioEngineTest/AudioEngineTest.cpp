@@ -1521,7 +1521,7 @@ bool AudioReverbTest::init()
         {
             _audioID = AudioEngine::play2d("background.mp3", _loopEnabled, _volume);
 
-            AudioEngine::setReverbSettings(_audioID, &_currentReverbItr->second);
+            AudioEngine::setReverbProperties(_audioID, &_currentReverbItr->second);
             reverbLabel->setString(_currentReverbItr->first);
 
             if (_audioID != AudioEngine::INVALID_AUDIO_ID)
@@ -1600,10 +1600,10 @@ bool AudioReverbTest::init()
     loopItem->setPosition(layerSize.width * 0.5f, layerSize.height * 0.5f);
     addChild(loopItem);
 
-    _reverbSettingsMap["GENERIC"]    = ReverbPresets::GENERIC;
-    _reverbSettingsMap["BATHROOM"]   = ReverbPresets::BATHROOM;
-    _reverbSettingsMap["ARENA"]      = ReverbPresets::ARENA;
-    _reverbSettingsMap["UNDERWATER"] = ReverbPresets::UNDERWATER;
+    _reverbSettingsMap["GENERIC"]    = EFX_REVERB_PRESET_GENERIC;
+    _reverbSettingsMap["BATHROOM"]   = EFX_REVERB_PRESET_BATHROOM;
+    _reverbSettingsMap["ARENA"]      = EFX_REVERB_PRESET_ARENA;
+    _reverbSettingsMap["UNDERWATER"] = EFX_REVERB_PRESET_UNDERWATER;
 
     _currentReverbItr = _reverbSettingsMap.begin();
 
@@ -1611,7 +1611,7 @@ bool AudioReverbTest::init()
         if (_isStopped)
             return;
 
-        AudioEngine::setReverbSettings(_audioID, &_currentReverbItr->second);
+        AudioEngine::setReverbProperties(_audioID, &_currentReverbItr->second);
         reverbLabel->setString(_currentReverbItr->first);
 
         ++_currentReverbItr;
