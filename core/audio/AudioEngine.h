@@ -61,8 +61,6 @@ struct AX_DLL AudioPlayerSettings
     float time = 0.0f; // The initial time offset when play audio
     Vec3 position{}; // position of audio in 3d space relative to listener
     static float distanceScale; // scale used for distance calculations. Must be greater than 0, and defaults to 1.0f.
-    float reverb = 0.0f;
-
 };
 
 /**
