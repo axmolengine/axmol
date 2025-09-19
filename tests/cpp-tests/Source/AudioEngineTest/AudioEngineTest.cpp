@@ -57,8 +57,9 @@ AudioEngineTests::AudioEngineTests()
     ADD_TEST_CASE(AudioIssue18597Test);
     ADD_TEST_CASE(AudioIssue11143Test);
     ADD_TEST_CASE(AudioPanningTest);
+#if AX_USE_ALSOFT
     ADD_TEST_CASE(AudioReverbTest);
-
+#endif
     // FIXME: Please keep AudioSwitchStateTest to the last position since this test case doesn't work well on each
     // platforms.
     ADD_TEST_CASE(AudioSwitchStateTest);
@@ -1490,6 +1491,7 @@ std::string AudioPanningTest::title() const
     return "Audio panning test";
 }
 
+#if AX_USE_ALSOFT
 // AudioReverbTest
 bool AudioReverbTest::init()
 {
@@ -1708,3 +1710,4 @@ std::string AudioReverbTest::title() const
 {
     return "Audio reverb test";
 }
+#endif

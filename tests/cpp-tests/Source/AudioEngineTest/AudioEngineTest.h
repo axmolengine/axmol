@@ -384,6 +384,7 @@ private:
     ax::Label* _playOverLabel;
 };
 
+#    if AX_USE_ALSOFT
 class AudioReverbTest : public AudioEngineTestDemo
 {
 public:
@@ -410,6 +411,6 @@ private:
     std::map<std::string, ax::ReverbProperties> _reverbSettingsMap;
     std::map<std::string, ax::ReverbProperties>::const_iterator _currentReverbItr;
 };
-
+#    endif
 
 #endif /* defined(__NEWAUDIOENGINE_TEST_H_) */
