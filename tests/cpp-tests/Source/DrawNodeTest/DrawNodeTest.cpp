@@ -1888,7 +1888,7 @@ void DrawNodePictureTest::update(float dt)
         drawNode->setRotation(180);
         drawNode->properties.setCenter(vertices[0]);
         drawNode->properties.setRotation(rot);
-        drawNode->drawPolygon(vertices, sph_cmb - 3, Color().random(55.0f), 0.f, Color().random(0.5f), true);
+        drawNode->drawPolygon(vertices, sph_cmb - 3, color, 0.f, Color().random(0.5f), true);
 
         sph_la += sph_cmb;
         sph_cmb = sph_yy[sph_la];
