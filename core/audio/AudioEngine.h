@@ -448,7 +448,7 @@ public:
      */
     static float getDistanceScale();
 
-    static void setReverbSettings(AUDIO_ID audioId, const EaxReverbSettings* reverbSettings);
+    static void setReverbSettings(AUDIO_ID audioId, const ReverbSettings* reverbSettings);
 
 
 protected:

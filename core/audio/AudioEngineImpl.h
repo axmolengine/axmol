@@ -70,7 +70,7 @@ public:
     void setSourcePosition(AUDIO_ID audioId, const ax::Vec3& position);
     void setListenerPosition(const ax::Vec3& position);
     ax::Vec3 getListenerPosition();
-    void setReverbSettings(AUDIO_ID audioId, const EaxReverbSettings* reverbSettings);
+    void setReverbSettings(AUDIO_ID audioId, const ReverbSettings* reverbSettings);
 
     void uncache(std::string_view filePath);
     void uncacheAll();

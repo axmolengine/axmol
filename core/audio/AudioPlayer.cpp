@@ -586,7 +586,7 @@ bool AudioPlayer::isFinished() const
     }
 }
 
-void AudioPlayer::setReverbSettings(const EaxReverbSettings* reverbSettings)
+void AudioPlayer::setReverbSettings(const ReverbSettings* reverbSettings)
 {
 #if ALC_EXT_EFX == 1
     auto&& efx = AudioEffectsExtension::getInstance();

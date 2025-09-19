@@ -62,7 +62,7 @@ public:
 
     bool isFinished() const;
 
-    void setReverbSettings(const EaxReverbSettings* reverbSettings);
+    void setReverbSettings(const ReverbSettings* reverbSettings);
 
 protected:
     void setCache(AudioCache* cache);
@@ -90,7 +90,7 @@ protected:
     bool _ready;
     ALuint _alSource;
 
-    EaxReverbSettings _reverbSettings;
+    ReverbSettings _reverbSettings;
 
     // play by circular buffer
     float _currTime;

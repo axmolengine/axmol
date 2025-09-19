@@ -722,7 +722,7 @@ float AudioEngine::getDistanceScale()
     return AudioPlayerSettings::distanceScale;
 }
 
-void AudioEngine::setReverbSettings(int audioId, const EaxReverbSettings* reverbSettings)
+void AudioEngine::setReverbSettings(int audioId, const ReverbSettings* reverbSettings)
 {
     if (!_audioEngineImpl)
     {

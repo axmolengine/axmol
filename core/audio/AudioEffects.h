@@ -26,7 +26,7 @@
 namespace ax
 {
 
-struct EaxReverbSettings
+struct ReverbSettings
 {
     float Density;
     float Diffusion;
@@ -56,7 +56,7 @@ struct EaxReverbSettings
 namespace ReverbPresets
 {
 // Presets from efx-presets.h
-constexpr EaxReverbSettings GENERIC{.Density             = 1.0000f,
+constexpr ReverbSettings GENERIC{.Density             = 1.0000f,
                                     .Diffusion           = 1.0000f,
                                     .Gain                = 0.3162f,
                                     .GainHF              = 0.8913f,
@@ -80,7 +80,7 @@ constexpr EaxReverbSettings GENERIC{.Density             = 1.0000f,
                                     .RoomRolloffFactor   = 0.0000f,
                                     .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings PADDEDCELL{.Density             = 0.1715f,
+constexpr ReverbSettings PADDEDCELL{.Density             = 0.1715f,
                                        .Diffusion           = 1.0000f,
                                        .Gain                = 0.3162f,
                                        .GainHF              = 0.0010f,
@@ -104,7 +104,7 @@ constexpr EaxReverbSettings PADDEDCELL{.Density             = 0.1715f,
                                        .RoomRolloffFactor   = 0.0000f,
                                        .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ROOM{.Density             = 0.4287f,
+constexpr ReverbSettings ROOM{.Density             = 0.4287f,
                                  .Diffusion           = 1.0000f,
                                  .Gain                = 0.3162f,
                                  .GainHF              = 0.5929f,
@@ -128,7 +128,7 @@ constexpr EaxReverbSettings ROOM{.Density             = 0.4287f,
                                  .RoomRolloffFactor   = 0.0000f,
                                  .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings BATHROOM{.Density             = 0.1715f,
+constexpr ReverbSettings BATHROOM{.Density             = 0.1715f,
                                      .Diffusion           = 1.0000f,
                                      .Gain                = 0.3162f,
                                      .GainHF              = 0.2512f,
@@ -152,7 +152,7 @@ constexpr EaxReverbSettings BATHROOM{.Density             = 0.1715f,
                                      .RoomRolloffFactor   = 0.0000f,
                                      .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings LIVINGROOM{.Density             = 0.9766f,
+constexpr ReverbSettings LIVINGROOM{.Density             = 0.9766f,
                                        .Diffusion           = 1.0000f,
                                        .Gain                = 0.3162f,
                                        .GainHF              = 0.0010f,
@@ -176,7 +176,7 @@ constexpr EaxReverbSettings LIVINGROOM{.Density             = 0.9766f,
                                        .RoomRolloffFactor   = 0.0000f,
                                        .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings STONEROOM{.Density             = 1.0000f,
+constexpr ReverbSettings STONEROOM{.Density             = 1.0000f,
                                       .Diffusion           = 1.0000f,
                                       .Gain                = 0.3162f,
                                       .GainHF              = 0.7079f,
@@ -200,7 +200,7 @@ constexpr EaxReverbSettings STONEROOM{.Density             = 1.0000f,
                                       .RoomRolloffFactor   = 0.0000f,
                                       .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings AUDITORIUM{.Density             = 1.0000f,
+constexpr ReverbSettings AUDITORIUM{.Density             = 1.0000f,
                                        .Diffusion           = 1.0000f,
                                        .Gain                = 0.3162f,
                                        .GainHF              = 0.5781f,
@@ -224,7 +224,7 @@ constexpr EaxReverbSettings AUDITORIUM{.Density             = 1.0000f,
                                        .RoomRolloffFactor   = 0.0000f,
                                        .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CONCERTHALL{.Density             = 1.0000f,
+constexpr ReverbSettings CONCERTHALL{.Density             = 1.0000f,
                                         .Diffusion           = 1.0000f,
                                         .Gain                = 0.3162f,
                                         .GainHF              = 0.5623f,
@@ -248,7 +248,7 @@ constexpr EaxReverbSettings CONCERTHALL{.Density             = 1.0000f,
                                         .RoomRolloffFactor   = 0.0000f,
                                         .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CAVE{.Density             = 1.0000f,
+constexpr ReverbSettings CAVE{.Density             = 1.0000f,
                                  .Diffusion           = 1.0000f,
                                  .Gain                = 0.3162f,
                                  .GainHF              = 1.0000f,
@@ -272,7 +272,7 @@ constexpr EaxReverbSettings CAVE{.Density             = 1.0000f,
                                  .RoomRolloffFactor   = 0.0000f,
                                  .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings ARENA{.Density             = 1.0000f,
+constexpr ReverbSettings ARENA{.Density             = 1.0000f,
                                   .Diffusion           = 1.0000f,
                                   .Gain                = 0.3162f,
                                   .GainHF              = 0.4477f,
@@ -296,7 +296,7 @@ constexpr EaxReverbSettings ARENA{.Density             = 1.0000f,
                                   .RoomRolloffFactor   = 0.0000f,
                                   .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings HANGAR{.Density             = 1.0000f,
+constexpr ReverbSettings HANGAR{.Density             = 1.0000f,
                                    .Diffusion           = 1.0000f,
                                    .Gain                = 0.3162f,
                                    .GainHF              = 0.3162f,
@@ -320,7 +320,7 @@ constexpr EaxReverbSettings HANGAR{.Density             = 1.0000f,
                                    .RoomRolloffFactor   = 0.0000f,
                                    .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CARPETEDHALLWAY{.Density             = 0.4287f,
+constexpr ReverbSettings CARPETEDHALLWAY{.Density             = 0.4287f,
                                             .Diffusion           = 1.0000f,
                                             .Gain                = 0.3162f,
                                             .GainHF              = 0.0100f,
@@ -344,7 +344,7 @@ constexpr EaxReverbSettings CARPETEDHALLWAY{.Density             = 0.4287f,
                                             .RoomRolloffFactor   = 0.0000f,
                                             .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings HALLWAY{.Density             = 0.3645f,
+constexpr ReverbSettings HALLWAY{.Density             = 0.3645f,
                                     .Diffusion           = 1.0000f,
                                     .Gain                = 0.3162f,
                                     .GainHF              = 0.7079f,
@@ -368,7 +368,7 @@ constexpr EaxReverbSettings HALLWAY{.Density             = 0.3645f,
                                     .RoomRolloffFactor   = 0.0000f,
                                     .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings STONECORRIDOR{.Density             = 1.0000f,
+constexpr ReverbSettings STONECORRIDOR{.Density             = 1.0000f,
                                           .Diffusion           = 1.0000f,
                                           .Gain                = 0.3162f,
                                           .GainHF              = 0.7612f,
@@ -392,7 +392,7 @@ constexpr EaxReverbSettings STONECORRIDOR{.Density             = 1.0000f,
                                           .RoomRolloffFactor   = 0.0000f,
                                           .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ALLEY{.Density             = 1.0000f,
+constexpr ReverbSettings ALLEY{.Density             = 1.0000f,
                                   .Diffusion           = 0.3000f,
                                   .Gain                = 0.3162f,
                                   .GainHF              = 0.7328f,
@@ -416,7 +416,7 @@ constexpr EaxReverbSettings ALLEY{.Density             = 1.0000f,
                                   .RoomRolloffFactor   = 0.0000f,
                                   .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FOREST{.Density             = 1.0000f,
+constexpr ReverbSettings FOREST{.Density             = 1.0000f,
                                    .Diffusion           = 0.3000f,
                                    .Gain                = 0.3162f,
                                    .GainHF              = 0.0224f,
@@ -440,7 +440,7 @@ constexpr EaxReverbSettings FOREST{.Density             = 1.0000f,
                                    .RoomRolloffFactor   = 0.0000f,
                                    .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CITY{.Density             = 1.0000f,
+constexpr ReverbSettings CITY{.Density             = 1.0000f,
                                  .Diffusion           = 0.5000f,
                                  .Gain                = 0.3162f,
                                  .GainHF              = 0.3981f,
@@ -464,7 +464,7 @@ constexpr EaxReverbSettings CITY{.Density             = 1.0000f,
                                  .RoomRolloffFactor   = 0.0000f,
                                  .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings MOUNTAINS{.Density             = 1.0000f,
+constexpr ReverbSettings MOUNTAINS{.Density             = 1.0000f,
                                       .Diffusion           = 0.2700f,
                                       .Gain                = 0.3162f,
                                       .GainHF              = 0.0562f,
@@ -488,7 +488,7 @@ constexpr EaxReverbSettings MOUNTAINS{.Density             = 1.0000f,
                                       .RoomRolloffFactor   = 0.0000f,
                                       .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings QUARRY{.Density             = 1.0000f,
+constexpr ReverbSettings QUARRY{.Density             = 1.0000f,
                                    .Diffusion           = 1.0000f,
                                    .Gain                = 0.3162f,
                                    .GainHF              = 0.3162f,
@@ -512,7 +512,7 @@ constexpr EaxReverbSettings QUARRY{.Density             = 1.0000f,
                                    .RoomRolloffFactor   = 0.0000f,
                                    .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings PLAIN{.Density             = 1.0000f,
+constexpr ReverbSettings PLAIN{.Density             = 1.0000f,
                                   .Diffusion           = 0.2100f,
                                   .Gain                = 0.3162f,
                                   .GainHF              = 0.1000f,
@@ -536,7 +536,7 @@ constexpr EaxReverbSettings PLAIN{.Density             = 1.0000f,
                                   .RoomRolloffFactor   = 0.0000f,
                                   .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings PARKINGLOT{.Density             = 1.0000f,
+constexpr ReverbSettings PARKINGLOT{.Density             = 1.0000f,
                                        .Diffusion           = 1.0000f,
                                        .Gain                = 0.3162f,
                                        .GainHF              = 1.0000f,
@@ -560,7 +560,7 @@ constexpr EaxReverbSettings PARKINGLOT{.Density             = 1.0000f,
                                        .RoomRolloffFactor   = 0.0000f,
                                        .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings SEWERPIPE{.Density             = 0.3071f,
+constexpr ReverbSettings SEWERPIPE{.Density             = 0.3071f,
                                       .Diffusion           = 0.8000f,
                                       .Gain                = 0.3162f,
                                       .GainHF              = 0.3162f,
@@ -584,7 +584,7 @@ constexpr EaxReverbSettings SEWERPIPE{.Density             = 0.3071f,
                                       .RoomRolloffFactor   = 0.0000f,
                                       .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings UNDERWATER{.Density             = 0.3645f,
+constexpr ReverbSettings UNDERWATER{.Density             = 0.3645f,
                                        .Diffusion           = 1.0000f,
                                        .Gain                = 0.3162f,
                                        .GainHF              = 0.0100f,
@@ -608,7 +608,7 @@ constexpr EaxReverbSettings UNDERWATER{.Density             = 0.3645f,
                                        .RoomRolloffFactor   = 0.0000f,
                                        .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings DRUGGED{.Density             = 0.4287f,
+constexpr ReverbSettings DRUGGED{.Density             = 0.4287f,
                                     .Diffusion           = 0.5000f,
                                     .Gain                = 0.3162f,
                                     .GainHF              = 1.0000f,
@@ -632,7 +632,7 @@ constexpr EaxReverbSettings DRUGGED{.Density             = 0.4287f,
                                     .RoomRolloffFactor   = 0.0000f,
                                     .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings DIZZY{.Density             = 0.3645f,
+constexpr ReverbSettings DIZZY{.Density             = 0.3645f,
                                   .Diffusion           = 0.6000f,
                                   .Gain                = 0.3162f,
                                   .GainHF              = 0.6310f,
@@ -656,7 +656,7 @@ constexpr EaxReverbSettings DIZZY{.Density             = 0.3645f,
                                   .RoomRolloffFactor   = 0.0000f,
                                   .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings PSYCHOTIC{.Density             = 0.0625f,
+constexpr ReverbSettings PSYCHOTIC{.Density             = 0.0625f,
                                       .Diffusion           = 0.5000f,
                                       .Gain                = 0.3162f,
                                       .GainHF              = 0.8404f,
@@ -682,7 +682,7 @@ constexpr EaxReverbSettings PSYCHOTIC{.Density             = 0.0625f,
 
 /* Castle Presets */
 
-constexpr EaxReverbSettings CASTLE_SMALLROOM{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_SMALLROOM{.Density             = 1.0000f,
                                              .Diffusion           = 0.8900f,
                                              .Gain                = 0.3162f,
                                              .GainHF              = 0.3981f,
@@ -706,7 +706,7 @@ constexpr EaxReverbSettings CASTLE_SMALLROOM{.Density             = 1.0000f,
                                              .RoomRolloffFactor   = 0.0000f,
                                              .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CASTLE_SHORTPASSAGE{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_SHORTPASSAGE{.Density             = 1.0000f,
                                                 .Diffusion           = 0.8900f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.3162f,
@@ -730,7 +730,7 @@ constexpr EaxReverbSettings CASTLE_SHORTPASSAGE{.Density             = 1.0000f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CASTLE_MEDIUMROOM{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_MEDIUMROOM{.Density             = 1.0000f,
                                               .Diffusion           = 0.9300f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.2818f,
@@ -754,7 +754,7 @@ constexpr EaxReverbSettings CASTLE_MEDIUMROOM{.Density             = 1.0000f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CASTLE_LARGEROOM{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_LARGEROOM{.Density             = 1.0000f,
                                              .Diffusion           = 0.8200f,
                                              .Gain                = 0.3162f,
                                              .GainHF              = 0.2818f,
@@ -778,7 +778,7 @@ constexpr EaxReverbSettings CASTLE_LARGEROOM{.Density             = 1.0000f,
                                              .RoomRolloffFactor   = 0.0000f,
                                              .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CASTLE_LONGPASSAGE{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_LONGPASSAGE{.Density             = 1.0000f,
                                                .Diffusion           = 0.8900f,
                                                .Gain                = 0.3162f,
                                                .GainHF              = 0.3981f,
@@ -802,7 +802,7 @@ constexpr EaxReverbSettings CASTLE_LONGPASSAGE{.Density             = 1.0000f,
                                                .RoomRolloffFactor   = 0.0000f,
                                                .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CASTLE_HALL{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_HALL{.Density             = 1.0000f,
                                         .Diffusion           = 0.8100f,
                                         .Gain                = 0.3162f,
                                         .GainHF              = 0.2818f,
@@ -826,7 +826,7 @@ constexpr EaxReverbSettings CASTLE_HALL{.Density             = 1.0000f,
                                         .RoomRolloffFactor   = 0.0000f,
                                         .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CASTLE_CUPBOARD{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_CUPBOARD{.Density             = 1.0000f,
                                             .Diffusion           = 0.8900f,
                                             .Gain                = 0.3162f,
                                             .GainHF              = 0.2818f,
@@ -850,7 +850,7 @@ constexpr EaxReverbSettings CASTLE_CUPBOARD{.Density             = 1.0000f,
                                             .RoomRolloffFactor   = 0.0000f,
                                             .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CASTLE_COURTYARD{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_COURTYARD{.Density             = 1.0000f,
                                              .Diffusion           = 0.4200f,
                                              .Gain                = 0.3162f,
                                              .GainHF              = 0.4467f,
@@ -874,7 +874,7 @@ constexpr EaxReverbSettings CASTLE_COURTYARD{.Density             = 1.0000f,
                                              .RoomRolloffFactor   = 0.0000f,
                                              .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings CASTLE_ALCOVE{.Density             = 1.0000f,
+constexpr ReverbSettings CASTLE_ALCOVE{.Density             = 1.0000f,
                                           .Diffusion           = 0.8900f,
                                           .Gain                = 0.3162f,
                                           .GainHF              = 0.5012f,
@@ -900,7 +900,7 @@ constexpr EaxReverbSettings CASTLE_ALCOVE{.Density             = 1.0000f,
 
 /* Factory Presets */
 
-constexpr EaxReverbSettings FACTORY_SMALLROOM{.Density             = 0.3645f,
+constexpr ReverbSettings FACTORY_SMALLROOM{.Density             = 0.3645f,
                                               .Diffusion           = 0.8200f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.7943f,
@@ -924,7 +924,7 @@ constexpr EaxReverbSettings FACTORY_SMALLROOM{.Density             = 0.3645f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FACTORY_SHORTPASSAGE{.Density             = 0.3645f,
+constexpr ReverbSettings FACTORY_SHORTPASSAGE{.Density             = 0.3645f,
                                                  .Diffusion           = 0.6400f,
                                                  .Gain                = 0.2512f,
                                                  .GainHF              = 0.7943f,
@@ -948,7 +948,7 @@ constexpr EaxReverbSettings FACTORY_SHORTPASSAGE{.Density             = 0.3645f,
                                                  .RoomRolloffFactor   = 0.0000f,
                                                  .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FACTORY_MEDIUMROOM{.Density             = 0.4287f,
+constexpr ReverbSettings FACTORY_MEDIUMROOM{.Density             = 0.4287f,
                                                .Diffusion           = 0.8200f,
                                                .Gain                = 0.2512f,
                                                .GainHF              = 0.7943f,
@@ -972,7 +972,7 @@ constexpr EaxReverbSettings FACTORY_MEDIUMROOM{.Density             = 0.4287f,
                                                .RoomRolloffFactor   = 0.0000f,
                                                .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FACTORY_LARGEROOM{.Density             = 0.4287f,
+constexpr ReverbSettings FACTORY_LARGEROOM{.Density             = 0.4287f,
                                               .Diffusion           = 0.7500f,
                                               .Gain                = 0.2512f,
                                               .GainHF              = 0.7079f,
@@ -996,7 +996,7 @@ constexpr EaxReverbSettings FACTORY_LARGEROOM{.Density             = 0.4287f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FACTORY_LONGPASSAGE{.Density             = 0.3645f,
+constexpr ReverbSettings FACTORY_LONGPASSAGE{.Density             = 0.3645f,
                                                 .Diffusion           = 0.6400f,
                                                 .Gain                = 0.2512f,
                                                 .GainHF              = 0.7943f,
@@ -1020,7 +1020,7 @@ constexpr EaxReverbSettings FACTORY_LONGPASSAGE{.Density             = 0.3645f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FACTORY_HALL{.Density             = 0.4287f,
+constexpr ReverbSettings FACTORY_HALL{.Density             = 0.4287f,
                                          .Diffusion           = 0.7500f,
                                          .Gain                = 0.3162f,
                                          .GainHF              = 0.7079f,
@@ -1044,7 +1044,7 @@ constexpr EaxReverbSettings FACTORY_HALL{.Density             = 0.4287f,
                                          .RoomRolloffFactor   = 0.0000f,
                                          .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FACTORY_CUPBOARD{.Density             = 0.3071f,
+constexpr ReverbSettings FACTORY_CUPBOARD{.Density             = 0.3071f,
                                              .Diffusion           = 0.6300f,
                                              .Gain                = 0.2512f,
                                              .GainHF              = 0.7943f,
@@ -1068,7 +1068,7 @@ constexpr EaxReverbSettings FACTORY_CUPBOARD{.Density             = 0.3071f,
                                              .RoomRolloffFactor   = 0.0000f,
                                              .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FACTORY_COURTYARD{.Density             = 0.3071f,
+constexpr ReverbSettings FACTORY_COURTYARD{.Density             = 0.3071f,
                                               .Diffusion           = 0.5700f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.3162f,
@@ -1092,7 +1092,7 @@ constexpr EaxReverbSettings FACTORY_COURTYARD{.Density             = 0.3071f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings FACTORY_ALCOVE{.Density             = 0.3645f,
+constexpr ReverbSettings FACTORY_ALCOVE{.Density             = 0.3645f,
                                            .Diffusion           = 0.5900f,
                                            .Gain                = 0.2512f,
                                            .GainHF              = 0.7943f,
@@ -1118,7 +1118,7 @@ constexpr EaxReverbSettings FACTORY_ALCOVE{.Density             = 0.3645f,
 
 /* Ice Palace Presets */
 
-constexpr EaxReverbSettings ICEPALACE_SMALLROOM{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_SMALLROOM{.Density             = 1.0000f,
                                                 .Diffusion           = 0.8400f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.5623f,
@@ -1142,7 +1142,7 @@ constexpr EaxReverbSettings ICEPALACE_SMALLROOM{.Density             = 1.0000f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ICEPALACE_SHORTPASSAGE{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_SHORTPASSAGE{.Density             = 1.0000f,
                                                    .Diffusion           = 0.7500f,
                                                    .Gain                = 0.3162f,
                                                    .GainHF              = 0.5623f,
@@ -1166,7 +1166,7 @@ constexpr EaxReverbSettings ICEPALACE_SHORTPASSAGE{.Density             = 1.0000
                                                    .RoomRolloffFactor   = 0.0000f,
                                                    .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ICEPALACE_MEDIUMROOM{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_MEDIUMROOM{.Density             = 1.0000f,
                                                  .Diffusion           = 0.8700f,
                                                  .Gain                = 0.3162f,
                                                  .GainHF              = 0.5623f,
@@ -1190,7 +1190,7 @@ constexpr EaxReverbSettings ICEPALACE_MEDIUMROOM{.Density             = 1.0000f,
                                                  .RoomRolloffFactor   = 0.0000f,
                                                  .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ICEPALACE_LARGEROOM{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_LARGEROOM{.Density             = 1.0000f,
                                                 .Diffusion           = 0.8100f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.5623f,
@@ -1214,7 +1214,7 @@ constexpr EaxReverbSettings ICEPALACE_LARGEROOM{.Density             = 1.0000f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ICEPALACE_LONGPASSAGE{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_LONGPASSAGE{.Density             = 1.0000f,
                                                   .Diffusion           = 0.7700f,
                                                   .Gain                = 0.3162f,
                                                   .GainHF              = 0.5623f,
@@ -1238,7 +1238,7 @@ constexpr EaxReverbSettings ICEPALACE_LONGPASSAGE{.Density             = 1.0000f
                                                   .RoomRolloffFactor   = 0.0000f,
                                                   .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ICEPALACE_HALL{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_HALL{.Density             = 1.0000f,
                                            .Diffusion           = 0.7600f,
                                            .Gain                = 0.3162f,
                                            .GainHF              = 0.4467f,
@@ -1262,7 +1262,7 @@ constexpr EaxReverbSettings ICEPALACE_HALL{.Density             = 1.0000f,
                                            .RoomRolloffFactor   = 0.0000f,
                                            .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ICEPALACE_CUPBOARD{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_CUPBOARD{.Density             = 1.0000f,
                                                .Diffusion           = 0.8300f,
                                                .Gain                = 0.3162f,
                                                .GainHF              = 0.5012f,
@@ -1286,7 +1286,7 @@ constexpr EaxReverbSettings ICEPALACE_CUPBOARD{.Density             = 1.0000f,
                                                .RoomRolloffFactor   = 0.0000f,
                                                .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ICEPALACE_COURTYARD{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_COURTYARD{.Density             = 1.0000f,
                                                 .Diffusion           = 0.5900f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.2818f,
@@ -1310,7 +1310,7 @@ constexpr EaxReverbSettings ICEPALACE_COURTYARD{.Density             = 1.0000f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings ICEPALACE_ALCOVE{.Density             = 1.0000f,
+constexpr ReverbSettings ICEPALACE_ALCOVE{.Density             = 1.0000f,
                                              .Diffusion           = 0.8400f,
                                              .Gain                = 0.3162f,
                                              .GainHF              = 0.5623f,
@@ -1336,7 +1336,7 @@ constexpr EaxReverbSettings ICEPALACE_ALCOVE{.Density             = 1.0000f,
 
 /* Space Station Presets */
 
-constexpr EaxReverbSettings SPACESTATION_SMALLROOM{.Density             = 0.2109f,
+constexpr ReverbSettings SPACESTATION_SMALLROOM{.Density             = 0.2109f,
                                                    .Diffusion           = 0.7000f,
                                                    .Gain                = 0.3162f,
                                                    .GainHF              = 0.7079f,
@@ -1360,7 +1360,7 @@ constexpr EaxReverbSettings SPACESTATION_SMALLROOM{.Density             = 0.2109
                                                    .RoomRolloffFactor   = 0.0000f,
                                                    .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPACESTATION_SHORTPASSAGE{.Density             = 0.2109f,
+constexpr ReverbSettings SPACESTATION_SHORTPASSAGE{.Density             = 0.2109f,
                                                       .Diffusion           = 0.8700f,
                                                       .Gain                = 0.3162f,
                                                       .GainHF              = 0.6310f,
@@ -1384,7 +1384,7 @@ constexpr EaxReverbSettings SPACESTATION_SHORTPASSAGE{.Density             = 0.2
                                                       .RoomRolloffFactor   = 0.0000f,
                                                       .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPACESTATION_MEDIUMROOM{.Density             = 0.2109f,
+constexpr ReverbSettings SPACESTATION_MEDIUMROOM{.Density             = 0.2109f,
                                                     .Diffusion           = 0.7500f,
                                                     .Gain                = 0.3162f,
                                                     .GainHF              = 0.6310f,
@@ -1408,7 +1408,7 @@ constexpr EaxReverbSettings SPACESTATION_MEDIUMROOM{.Density             = 0.210
                                                     .RoomRolloffFactor   = 0.0000f,
                                                     .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPACESTATION_LARGEROOM{.Density             = 0.3645f,
+constexpr ReverbSettings SPACESTATION_LARGEROOM{.Density             = 0.3645f,
                                                    .Diffusion           = 0.8100f,
                                                    .Gain                = 0.3162f,
                                                    .GainHF              = 0.6310f,
@@ -1432,7 +1432,7 @@ constexpr EaxReverbSettings SPACESTATION_LARGEROOM{.Density             = 0.3645
                                                    .RoomRolloffFactor   = 0.0000f,
                                                    .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPACESTATION_LONGPASSAGE{.Density             = 0.4287f,
+constexpr ReverbSettings SPACESTATION_LONGPASSAGE{.Density             = 0.4287f,
                                                      .Diffusion           = 0.8200f,
                                                      .Gain                = 0.3162f,
                                                      .GainHF              = 0.6310f,
@@ -1456,7 +1456,7 @@ constexpr EaxReverbSettings SPACESTATION_LONGPASSAGE{.Density             = 0.42
                                                      .RoomRolloffFactor   = 0.0000f,
                                                      .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPACESTATION_HALL{.Density             = 0.4287f,
+constexpr ReverbSettings SPACESTATION_HALL{.Density             = 0.4287f,
                                               .Diffusion           = 0.8700f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.6310f,
@@ -1480,7 +1480,7 @@ constexpr EaxReverbSettings SPACESTATION_HALL{.Density             = 0.4287f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPACESTATION_CUPBOARD{.Density             = 0.1715f,
+constexpr ReverbSettings SPACESTATION_CUPBOARD{.Density             = 0.1715f,
                                                   .Diffusion           = 0.5600f,
                                                   .Gain                = 0.3162f,
                                                   .GainHF              = 0.7079f,
@@ -1504,7 +1504,7 @@ constexpr EaxReverbSettings SPACESTATION_CUPBOARD{.Density             = 0.1715f
                                                   .RoomRolloffFactor   = 0.0000f,
                                                   .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPACESTATION_ALCOVE{.Density             = 0.2109f,
+constexpr ReverbSettings SPACESTATION_ALCOVE{.Density             = 0.2109f,
                                                 .Diffusion           = 0.7800f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.7079f,
@@ -1530,7 +1530,7 @@ constexpr EaxReverbSettings SPACESTATION_ALCOVE{.Density             = 0.2109f,
 
 /* Wooden Galleon Presets */
 
-constexpr EaxReverbSettings WOODEN_SMALLROOM{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_SMALLROOM{.Density             = 1.0000f,
                                              .Diffusion           = 1.0000f,
                                              .Gain                = 0.3162f,
                                              .GainHF              = 0.1122f,
@@ -1554,7 +1554,7 @@ constexpr EaxReverbSettings WOODEN_SMALLROOM{.Density             = 1.0000f,
                                              .RoomRolloffFactor   = 0.0000f,
                                              .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings WOODEN_SHORTPASSAGE{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_SHORTPASSAGE{.Density             = 1.0000f,
                                                 .Diffusion           = 1.0000f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.1259f,
@@ -1578,7 +1578,7 @@ constexpr EaxReverbSettings WOODEN_SHORTPASSAGE{.Density             = 1.0000f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings WOODEN_MEDIUMROOM{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_MEDIUMROOM{.Density             = 1.0000f,
                                               .Diffusion           = 1.0000f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.1000f,
@@ -1602,7 +1602,7 @@ constexpr EaxReverbSettings WOODEN_MEDIUMROOM{.Density             = 1.0000f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings WOODEN_LARGEROOM{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_LARGEROOM{.Density             = 1.0000f,
                                              .Diffusion           = 1.0000f,
                                              .Gain                = 0.3162f,
                                              .GainHF              = 0.0891f,
@@ -1626,7 +1626,7 @@ constexpr EaxReverbSettings WOODEN_LARGEROOM{.Density             = 1.0000f,
                                              .RoomRolloffFactor   = 0.0000f,
                                              .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings WOODEN_LONGPASSAGE{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_LONGPASSAGE{.Density             = 1.0000f,
                                                .Diffusion           = 1.0000f,
                                                .Gain                = 0.3162f,
                                                .GainHF              = 0.1000f,
@@ -1650,7 +1650,7 @@ constexpr EaxReverbSettings WOODEN_LONGPASSAGE{.Density             = 1.0000f,
                                                .RoomRolloffFactor   = 0.0000f,
                                                .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings WOODEN_HALL{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_HALL{.Density             = 1.0000f,
                                         .Diffusion           = 1.0000f,
                                         .Gain                = 0.3162f,
                                         .GainHF              = 0.0794f,
@@ -1674,7 +1674,7 @@ constexpr EaxReverbSettings WOODEN_HALL{.Density             = 1.0000f,
                                         .RoomRolloffFactor   = 0.0000f,
                                         .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings WOODEN_CUPBOARD{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_CUPBOARD{.Density             = 1.0000f,
                                             .Diffusion           = 1.0000f,
                                             .Gain                = 0.3162f,
                                             .GainHF              = 0.1413f,
@@ -1698,7 +1698,7 @@ constexpr EaxReverbSettings WOODEN_CUPBOARD{.Density             = 1.0000f,
                                             .RoomRolloffFactor   = 0.0000f,
                                             .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings WOODEN_COURTYARD{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_COURTYARD{.Density             = 1.0000f,
                                              .Diffusion           = 0.6500f,
                                              .Gain                = 0.3162f,
                                              .GainHF              = 0.0794f,
@@ -1722,7 +1722,7 @@ constexpr EaxReverbSettings WOODEN_COURTYARD{.Density             = 1.0000f,
                                              .RoomRolloffFactor   = 0.0000f,
                                              .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings WOODEN_ALCOVE{.Density             = 1.0000f,
+constexpr ReverbSettings WOODEN_ALCOVE{.Density             = 1.0000f,
                                           .Diffusion           = 1.0000f,
                                           .Gain                = 0.3162f,
                                           .GainHF              = 0.1259f,
@@ -1748,7 +1748,7 @@ constexpr EaxReverbSettings WOODEN_ALCOVE{.Density             = 1.0000f,
 
 /* Sports Presets */
 
-constexpr EaxReverbSettings SPORT_EMPTYSTADIUM{.Density             = 1.0000f,
+constexpr ReverbSettings SPORT_EMPTYSTADIUM{.Density             = 1.0000f,
                                                .Diffusion           = 1.0000f,
                                                .Gain                = 0.3162f,
                                                .GainHF              = 0.4467f,
@@ -1772,7 +1772,7 @@ constexpr EaxReverbSettings SPORT_EMPTYSTADIUM{.Density             = 1.0000f,
                                                .RoomRolloffFactor   = 0.0000f,
                                                .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPORT_SQUASHCOURT{.Density             = 1.0000f,
+constexpr ReverbSettings SPORT_SQUASHCOURT{.Density             = 1.0000f,
                                               .Diffusion           = 0.7500f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.3162f,
@@ -1796,7 +1796,7 @@ constexpr EaxReverbSettings SPORT_SQUASHCOURT{.Density             = 1.0000f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPORT_SMALLSWIMMINGPOOL{.Density             = 1.0000f,
+constexpr ReverbSettings SPORT_SMALLSWIMMINGPOOL{.Density             = 1.0000f,
                                                     .Diffusion           = 0.7000f,
                                                     .Gain                = 0.3162f,
                                                     .GainHF              = 0.7943f,
@@ -1820,7 +1820,7 @@ constexpr EaxReverbSettings SPORT_SMALLSWIMMINGPOOL{.Density             = 1.000
                                                     .RoomRolloffFactor   = 0.0000f,
                                                     .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings SPORT_LARGESWIMMINGPOOL{.Density             = 1.0000f,
+constexpr ReverbSettings SPORT_LARGESWIMMINGPOOL{.Density             = 1.0000f,
                                                     .Diffusion           = 0.8200f,
                                                     .Gain                = 0.3162f,
                                                     .GainHF              = 0.7943f,
@@ -1844,7 +1844,7 @@ constexpr EaxReverbSettings SPORT_LARGESWIMMINGPOOL{.Density             = 1.000
                                                     .RoomRolloffFactor   = 0.0000f,
                                                     .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings SPORT_GYMNASIUM{.Density             = 1.0000f,
+constexpr ReverbSettings SPORT_GYMNASIUM{.Density             = 1.0000f,
                                             .Diffusion           = 0.8100f,
                                             .Gain                = 0.3162f,
                                             .GainHF              = 0.4467f,
@@ -1868,7 +1868,7 @@ constexpr EaxReverbSettings SPORT_GYMNASIUM{.Density             = 1.0000f,
                                             .RoomRolloffFactor   = 0.0000f,
                                             .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPORT_FULLSTADIUM{.Density             = 1.0000f,
+constexpr ReverbSettings SPORT_FULLSTADIUM{.Density             = 1.0000f,
                                               .Diffusion           = 1.0000f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.0708f,
@@ -1892,7 +1892,7 @@ constexpr EaxReverbSettings SPORT_FULLSTADIUM{.Density             = 1.0000f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SPORT_STADIUMTANNOY{.Density             = 1.0000f,
+constexpr ReverbSettings SPORT_STADIUMTANNOY{.Density             = 1.0000f,
                                                 .Diffusion           = 0.7800f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.5623f,
@@ -1918,7 +1918,7 @@ constexpr EaxReverbSettings SPORT_STADIUMTANNOY{.Density             = 1.0000f,
 
 /* Prefab Presets */
 
-constexpr EaxReverbSettings PREFAB_WORKSHOP{.Density             = 0.4287f,
+constexpr ReverbSettings PREFAB_WORKSHOP{.Density             = 0.4287f,
                                             .Diffusion           = 1.0000f,
                                             .Gain                = 0.3162f,
                                             .GainHF              = 0.1413f,
@@ -1942,7 +1942,7 @@ constexpr EaxReverbSettings PREFAB_WORKSHOP{.Density             = 0.4287f,
                                             .RoomRolloffFactor   = 0.0000f,
                                             .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings PREFAB_SCHOOLROOM{.Density             = 0.4022f,
+constexpr ReverbSettings PREFAB_SCHOOLROOM{.Density             = 0.4022f,
                                               .Diffusion           = 0.6900f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.6310f,
@@ -1966,7 +1966,7 @@ constexpr EaxReverbSettings PREFAB_SCHOOLROOM{.Density             = 0.4022f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings PREFAB_PRACTISEROOM{.Density             = 0.4022f,
+constexpr ReverbSettings PREFAB_PRACTISEROOM{.Density             = 0.4022f,
                                                 .Diffusion           = 0.8700f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.3981f,
@@ -1990,7 +1990,7 @@ constexpr EaxReverbSettings PREFAB_PRACTISEROOM{.Density             = 0.4022f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings PREFAB_OUTHOUSE{.Density             = 1.0000f,
+constexpr ReverbSettings PREFAB_OUTHOUSE{.Density             = 1.0000f,
                                             .Diffusion           = 0.8200f,
                                             .Gain                = 0.3162f,
                                             .GainHF              = 0.1122f,
@@ -2014,7 +2014,7 @@ constexpr EaxReverbSettings PREFAB_OUTHOUSE{.Density             = 1.0000f,
                                             .RoomRolloffFactor   = 0.0000f,
                                             .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings PREFAB_CARAVAN{.Density             = 1.0000f,
+constexpr ReverbSettings PREFAB_CARAVAN{.Density             = 1.0000f,
                                            .Diffusion           = 1.0000f,
                                            .Gain                = 0.3162f,
                                            .GainHF              = 0.0891f,
@@ -2040,7 +2040,7 @@ constexpr EaxReverbSettings PREFAB_CARAVAN{.Density             = 1.0000f,
 
 /* Dome and Pipe Presets */
 
-constexpr EaxReverbSettings DOME_TOMB{.Density             = 1.0000f,
+constexpr ReverbSettings DOME_TOMB{.Density             = 1.0000f,
                                       .Diffusion           = 0.7900f,
                                       .Gain                = 0.3162f,
                                       .GainHF              = 0.3548f,
@@ -2064,7 +2064,7 @@ constexpr EaxReverbSettings DOME_TOMB{.Density             = 1.0000f,
                                       .RoomRolloffFactor   = 0.0000f,
                                       .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings PIPE_SMALL{.Density             = 1.0000f,
+constexpr ReverbSettings PIPE_SMALL{.Density             = 1.0000f,
                                        .Diffusion           = 1.0000f,
                                        .Gain                = 0.3162f,
                                        .GainHF              = 0.3548f,
@@ -2088,7 +2088,7 @@ constexpr EaxReverbSettings PIPE_SMALL{.Density             = 1.0000f,
                                        .RoomRolloffFactor   = 0.0000f,
                                        .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings DOME_SAINTPAULS{.Density             = 1.0000f,
+constexpr ReverbSettings DOME_SAINTPAULS{.Density             = 1.0000f,
                                             .Diffusion           = 0.8700f,
                                             .Gain                = 0.3162f,
                                             .GainHF              = 0.3548f,
@@ -2112,7 +2112,7 @@ constexpr EaxReverbSettings DOME_SAINTPAULS{.Density             = 1.0000f,
                                             .RoomRolloffFactor   = 0.0000f,
                                             .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings PIPE_LONGTHIN{.Density             = 0.2560f,
+constexpr ReverbSettings PIPE_LONGTHIN{.Density             = 0.2560f,
                                           .Diffusion           = 0.9100f,
                                           .Gain                = 0.3162f,
                                           .GainHF              = 0.4467f,
@@ -2136,7 +2136,7 @@ constexpr EaxReverbSettings PIPE_LONGTHIN{.Density             = 0.2560f,
                                           .RoomRolloffFactor   = 0.0000f,
                                           .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings PIPE_LARGE{.Density             = 1.0000f,
+constexpr ReverbSettings PIPE_LARGE{.Density             = 1.0000f,
                                        .Diffusion           = 1.0000f,
                                        .Gain                = 0.3162f,
                                        .GainHF              = 0.3548f,
@@ -2160,7 +2160,7 @@ constexpr EaxReverbSettings PIPE_LARGE{.Density             = 1.0000f,
                                        .RoomRolloffFactor   = 0.0000f,
                                        .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings PIPE_RESONANT{.Density             = 0.1373f,
+constexpr ReverbSettings PIPE_RESONANT{.Density             = 0.1373f,
                                           .Diffusion           = 0.9100f,
                                           .Gain                = 0.3162f,
                                           .GainHF              = 0.4467f,
@@ -2186,7 +2186,7 @@ constexpr EaxReverbSettings PIPE_RESONANT{.Density             = 0.1373f,
 
 /* Outdoors Presets */
 
-constexpr EaxReverbSettings OUTDOORS_BACKYARD{.Density             = 1.0000f,
+constexpr ReverbSettings OUTDOORS_BACKYARD{.Density             = 1.0000f,
                                               .Diffusion           = 0.4500f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.2512f,
@@ -2210,7 +2210,7 @@ constexpr EaxReverbSettings OUTDOORS_BACKYARD{.Density             = 1.0000f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings OUTDOORS_ROLLINGPLAINS{.Density             = 1.0000f,
+constexpr ReverbSettings OUTDOORS_ROLLINGPLAINS{.Density             = 1.0000f,
                                                    .Diffusion           = 0.0000f,
                                                    .Gain                = 0.3162f,
                                                    .GainHF              = 0.0112f,
@@ -2234,7 +2234,7 @@ constexpr EaxReverbSettings OUTDOORS_ROLLINGPLAINS{.Density             = 1.0000
                                                    .RoomRolloffFactor   = 0.0000f,
                                                    .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings OUTDOORS_DEEPCANYON{.Density             = 1.0000f,
+constexpr ReverbSettings OUTDOORS_DEEPCANYON{.Density             = 1.0000f,
                                                 .Diffusion           = 0.7400f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.1778f,
@@ -2258,7 +2258,7 @@ constexpr EaxReverbSettings OUTDOORS_DEEPCANYON{.Density             = 1.0000f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings OUTDOORS_CREEK{.Density             = 1.0000f,
+constexpr ReverbSettings OUTDOORS_CREEK{.Density             = 1.0000f,
                                            .Diffusion           = 0.3500f,
                                            .Gain                = 0.3162f,
                                            .GainHF              = 0.1778f,
@@ -2282,7 +2282,7 @@ constexpr EaxReverbSettings OUTDOORS_CREEK{.Density             = 1.0000f,
                                            .RoomRolloffFactor   = 0.0000f,
                                            .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings OUTDOORS_VALLEY{.Density             = 1.0000f,
+constexpr ReverbSettings OUTDOORS_VALLEY{.Density             = 1.0000f,
                                             .Diffusion           = 0.2800f,
                                             .Gain                = 0.3162f,
                                             .GainHF              = 0.0282f,
@@ -2308,7 +2308,7 @@ constexpr EaxReverbSettings OUTDOORS_VALLEY{.Density             = 1.0000f,
 
 /* Mood Presets */
 
-constexpr EaxReverbSettings MOOD_HEAVEN{.Density             = 1.0000f,
+constexpr ReverbSettings MOOD_HEAVEN{.Density             = 1.0000f,
                                         .Diffusion           = 0.9400f,
                                         .Gain                = 0.3162f,
                                         .GainHF              = 0.7943f,
@@ -2332,7 +2332,7 @@ constexpr EaxReverbSettings MOOD_HEAVEN{.Density             = 1.0000f,
                                         .RoomRolloffFactor   = 0.0000f,
                                         .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings MOOD_HELL{.Density             = 1.0000f,
+constexpr ReverbSettings MOOD_HELL{.Density             = 1.0000f,
                                       .Diffusion           = 0.5700f,
                                       .Gain                = 0.3162f,
                                       .GainHF              = 0.3548f,
@@ -2356,7 +2356,7 @@ constexpr EaxReverbSettings MOOD_HELL{.Density             = 1.0000f,
                                       .RoomRolloffFactor   = 0.0000f,
                                       .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings MOOD_MEMORY{.Density             = 1.0000f,
+constexpr ReverbSettings MOOD_MEMORY{.Density             = 1.0000f,
                                         .Diffusion           = 0.8500f,
                                         .Gain                = 0.3162f,
                                         .GainHF              = 0.6310f,
@@ -2382,7 +2382,7 @@ constexpr EaxReverbSettings MOOD_MEMORY{.Density             = 1.0000f,
 
 /* Driving Presets */
 
-constexpr EaxReverbSettings DRIVING_COMMENTATOR{.Density             = 1.0000f,
+constexpr ReverbSettings DRIVING_COMMENTATOR{.Density             = 1.0000f,
                                                 .Diffusion           = 0.0000f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 0.5623f,
@@ -2406,7 +2406,7 @@ constexpr EaxReverbSettings DRIVING_COMMENTATOR{.Density             = 1.0000f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings DRIVING_PITGARAGE{.Density             = 0.4287f,
+constexpr ReverbSettings DRIVING_PITGARAGE{.Density             = 0.4287f,
                                               .Diffusion           = 0.5900f,
                                               .Gain                = 0.3162f,
                                               .GainHF              = 0.7079f,
@@ -2430,7 +2430,7 @@ constexpr EaxReverbSettings DRIVING_PITGARAGE{.Density             = 0.4287f,
                                               .RoomRolloffFactor   = 0.0000f,
                                               .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings DRIVING_INCAR_RACER{.Density             = 0.0832f,
+constexpr ReverbSettings DRIVING_INCAR_RACER{.Density             = 0.0832f,
                                                 .Diffusion           = 0.8000f,
                                                 .Gain                = 0.3162f,
                                                 .GainHF              = 1.0000f,
@@ -2454,7 +2454,7 @@ constexpr EaxReverbSettings DRIVING_INCAR_RACER{.Density             = 0.0832f,
                                                 .RoomRolloffFactor   = 0.0000f,
                                                 .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings DRIVING_INCAR_SPORTS{.Density             = 0.0832f,
+constexpr ReverbSettings DRIVING_INCAR_SPORTS{.Density             = 0.0832f,
                                                  .Diffusion           = 0.8000f,
                                                  .Gain                = 0.3162f,
                                                  .GainHF              = 0.6310f,
@@ -2478,7 +2478,7 @@ constexpr EaxReverbSettings DRIVING_INCAR_SPORTS{.Density             = 0.0832f,
                                                  .RoomRolloffFactor   = 0.0000f,
                                                  .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings DRIVING_INCAR_LUXURY{.Density             = 0.2560f,
+constexpr ReverbSettings DRIVING_INCAR_LUXURY{.Density             = 0.2560f,
                                                  .Diffusion           = 1.0000f,
                                                  .Gain                = 0.3162f,
                                                  .GainHF              = 0.1000f,
@@ -2502,7 +2502,7 @@ constexpr EaxReverbSettings DRIVING_INCAR_LUXURY{.Density             = 0.2560f,
                                                  .RoomRolloffFactor   = 0.0000f,
                                                  .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings DRIVING_FULLGRANDSTAND{.Density             = 1.0000f,
+constexpr ReverbSettings DRIVING_FULLGRANDSTAND{.Density             = 1.0000f,
                                                    .Diffusion           = 1.0000f,
                                                    .Gain                = 0.3162f,
                                                    .GainHF              = 0.2818f,
@@ -2526,7 +2526,7 @@ constexpr EaxReverbSettings DRIVING_FULLGRANDSTAND{.Density             = 1.0000
                                                    .RoomRolloffFactor   = 0.0000f,
                                                    .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings DRIVING_EMPTYGRANDSTAND{.Density             = 1.0000f,
+constexpr ReverbSettings DRIVING_EMPTYGRANDSTAND{.Density             = 1.0000f,
                                                     .Diffusion           = 1.0000f,
                                                     .Gain                = 0.3162f,
                                                     .GainHF              = 1.0000f,
@@ -2550,7 +2550,7 @@ constexpr EaxReverbSettings DRIVING_EMPTYGRANDSTAND{.Density             = 1.000
                                                     .RoomRolloffFactor   = 0.0000f,
                                                     .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings DRIVING_TUNNEL{.Density             = 1.0000f,
+constexpr ReverbSettings DRIVING_TUNNEL{.Density             = 1.0000f,
                                            .Diffusion           = 0.8100f,
                                            .Gain                = 0.3162f,
                                            .GainHF              = 0.3981f,
@@ -2576,7 +2576,7 @@ constexpr EaxReverbSettings DRIVING_TUNNEL{.Density             = 1.0000f,
 
 /* City Presets */
 
-constexpr EaxReverbSettings CITY_STREETS{.Density             = 1.0000f,
+constexpr ReverbSettings CITY_STREETS{.Density             = 1.0000f,
                                          .Diffusion           = 0.7800f,
                                          .Gain                = 0.3162f,
                                          .GainHF              = 0.7079f,
@@ -2600,7 +2600,7 @@ constexpr EaxReverbSettings CITY_STREETS{.Density             = 1.0000f,
                                          .RoomRolloffFactor   = 0.0000f,
                                          .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CITY_SUBWAY{.Density             = 1.0000f,
+constexpr ReverbSettings CITY_SUBWAY{.Density             = 1.0000f,
                                         .Diffusion           = 0.7400f,
                                         .Gain                = 0.3162f,
                                         .GainHF              = 0.7079f,
@@ -2624,7 +2624,7 @@ constexpr EaxReverbSettings CITY_SUBWAY{.Density             = 1.0000f,
                                         .RoomRolloffFactor   = 0.0000f,
                                         .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CITY_MUSEUM{.Density             = 1.0000f,
+constexpr ReverbSettings CITY_MUSEUM{.Density             = 1.0000f,
                                         .Diffusion           = 0.8200f,
                                         .Gain                = 0.3162f,
                                         .GainHF              = 0.1778f,
@@ -2648,7 +2648,7 @@ constexpr EaxReverbSettings CITY_MUSEUM{.Density             = 1.0000f,
                                         .RoomRolloffFactor   = 0.0000f,
                                         .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings CITY_LIBRARY{.Density             = 1.0000f,
+constexpr ReverbSettings CITY_LIBRARY{.Density             = 1.0000f,
                                          .Diffusion           = 0.8200f,
                                          .Gain                = 0.3162f,
                                          .GainHF              = 0.2818f,
@@ -2672,7 +2672,7 @@ constexpr EaxReverbSettings CITY_LIBRARY{.Density             = 1.0000f,
                                          .RoomRolloffFactor   = 0.0000f,
                                          .DecayHFLimit        = 0x0};
 
-constexpr EaxReverbSettings CITY_UNDERPASS{.Density             = 1.0000f,
+constexpr ReverbSettings CITY_UNDERPASS{.Density             = 1.0000f,
                                            .Diffusion           = 0.8200f,
                                            .Gain                = 0.3162f,
                                            .GainHF              = 0.4467f,
@@ -2696,7 +2696,7 @@ constexpr EaxReverbSettings CITY_UNDERPASS{.Density             = 1.0000f,
                                            .RoomRolloffFactor   = 0.0000f,
                                            .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CITY_ABANDONED{.Density             = 1.0000f,
+constexpr ReverbSettings CITY_ABANDONED{.Density             = 1.0000f,
                                            .Diffusion           = 0.6900f,
                                            .Gain                = 0.3162f,
                                            .GainHF              = 0.7943f,
@@ -2722,7 +2722,7 @@ constexpr EaxReverbSettings CITY_ABANDONED{.Density             = 1.0000f,
 
 /* Misc. Presets */
 
-constexpr EaxReverbSettings DUSTYROOM{.Density             = 0.3645f,
+constexpr ReverbSettings DUSTYROOM{.Density             = 0.3645f,
                                       .Diffusion           = 0.5600f,
                                       .Gain                = 0.3162f,
                                       .GainHF              = 0.7943f,
@@ -2746,7 +2746,7 @@ constexpr EaxReverbSettings DUSTYROOM{.Density             = 0.3645f,
                                       .RoomRolloffFactor   = 0.0000f,
                                       .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings CHAPEL{.Density             = 1.0000f,
+constexpr ReverbSettings CHAPEL{.Density             = 1.0000f,
                                    .Diffusion           = 0.8400f,
                                    .Gain                = 0.3162f,
                                    .GainHF              = 0.5623f,
@@ -2770,7 +2770,7 @@ constexpr EaxReverbSettings CHAPEL{.Density             = 1.0000f,
                                    .RoomRolloffFactor   = 0.0000f,
                                    .DecayHFLimit        = 0x1};
 
-constexpr EaxReverbSettings SMALLWATERROOM{.Density             = 1.0000f,
+constexpr ReverbSettings SMALLWATERROOM{.Density             = 1.0000f,
                                            .Diffusion           = 0.7000f,
                                            .Gain                = 0.3162f,
                                            .GainHF              = 0.4477f,
