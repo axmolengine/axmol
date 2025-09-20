@@ -333,6 +333,15 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     size.height = size_.height;
     // ax::Director::getInstance()->reshapeProjection(size);
 #endif
+    
+    auto renderView = ax::Director::getInstance()->getRenderView();
+    if (renderView)
+    {
+        auto&& designSize = renderView->getDesignResolutionSize();
+        auto resolutionPolicy = renderView->getResolutionPolicy();
+        renderView->setFrameSize(size_.width, size_.height);
+        renderView->setDesignResolutionSize(designSize.width, designSize.height, resolutionPolicy);
+    }
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])

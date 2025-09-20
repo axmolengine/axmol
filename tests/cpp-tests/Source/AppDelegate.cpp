@@ -53,6 +53,8 @@ void AppDelegate::initGfxContextAttrs()
     GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     RenderView::setGfxContextAttrs(gfxContextAttrs);
+    
+    Device::setPreferredOrientation(Device::Orientation::SensorLandscape);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()

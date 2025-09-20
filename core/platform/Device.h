@@ -165,11 +165,81 @@ public:
                                       int& height,
                                       bool& hasPremultipliedAlpha);
 
+#pragma region Orientation control support
+    enum class Orientation
+    {
+        Unknown,
+        Portrait,         // Portrait (upright)
+        ReversePortrait,  // Portrait upside down
+        SensorPortrait,   // Portrait + reverse portrait (auto-rotate with sensor)
+
+        Landscape,         // Landscape (left)
+        ReverseLandscape,  // Landscape (right)
+        SensorLandscape,   // Landscape + reverse landscape (auto-rotate with sensor)
+
+        Sensor,     // All orientations except upside down (auto-rotate with sensor)
+        FullSensor  // All orientations including upside down (auto-rotate with sensor)
+    };
+
+    enum class OrientationMask
+    {
+        Portrait         = 1 << 0,
+        ReversePortrait  = 1 << 1,  // Portrait upside down
+        Landscape        = 1 << 2,  // Landscape (left)
+        ReverseLandscape = 1 << 3,  // Landscape (right)
+        All              = Portrait | ReversePortrait | Landscape | ReverseLandscape
+    };
+
+    /**
+     * @brief Sets the preferred screen orientation for the application.
+     *
+     * This method attempts to switch the screen orientation to the specified value.
+     * If the orientation is supported by the platform (as declared in Info.plist or AndroidManifest),
+     * the system will rotate and lock to that orientation.
+     * Use Orientation::Auto to unlock and allow automatic rotation.
+     *
+     * @param orientation The desired screen orientation. Use Orientation::Auto to reset.
+     */
+    static void setPreferredOrientation(Orientation orientation);
+
+    /**
+     * @brief Gets the currently preferred (locked) screen orientation.
+     *
+     * Returns the orientation that was last set via setPreferredOrientation().
+     * If Orientation::Auto is returned, the application is currently allowing automatic rotation.
+     *
+     * @return The current preferred orientation.
+     */
+    static Orientation getPreferredOrientation();
+
+    /**
+     * @brief Gets the set of orientations supported by the platform.
+     *
+     * This reflects the maximum orientation capabilities declared in Info.plist (iOS)
+     * or AndroidManifest.xml (Android). The application can only rotate within this set.
+     *
+     * @return A bitmask representing supported orientations.
+     */
+    static OrientationMask getSupportedOrientations();
+
+    /**
+     * @brief Gets the current screen orientation as rendered by the system.
+     *
+     * This reflects the actual orientation currently applied to the screen,
+     * which may differ from the preferred orientation if Orientation::Auto is set.
+     *
+     * @return The current screen orientation.
+     */
+    static Orientation getCurrentOrientation();
+#pragma endregion Orientation control support
+
 private:
     AX_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);
 };
 
+AX_ENABLE_BITMASK_OPS(Device::OrientationMask)
+
 // end group
 /// @}
 
-}
+}  // namespace ax

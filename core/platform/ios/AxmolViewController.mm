@@ -1,7 +1,5 @@
 /****************************************************************************
- Copyright (c) 2013      cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -24,9 +22,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "RootViewController.h"
+#import "AxmolViewController.h"
+#import "platform/ios/EARenderView-ios.h"
+#include "platform/Device.h"
+#include "platform/Application.h"
+#include "base/Director.h"
 
-@implementation RootViewController
+using namespace ax;
+
+@implementation AxmolViewController
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform
@@ -39,37 +43,75 @@ customization that is not appropriate for viewDidLoad.
 }
 */
 
-/*
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
+// - (void)loadView
+// {
+// }
 
-/*
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 }
 
-*/
-// Override to allow orientations other than the default portrait orientation.
-// This method is deprecated on ios6
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)viewWillAppear:(BOOL)animated
 {
-    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    [super viewWillAppear:animated];
 }
 
-// For ios6, use supportedInterfaceOrientations & shouldAutorotate instead
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
+
 - (NSUInteger)supportedInterfaceOrientations
 {
-#ifdef __IPHONE_6_0
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-#endif
+    const auto preferred = Device::getPreferredOrientation();
+
+    switch (preferred) {
+        case Device::Orientation::Portrait:
+            return UIInterfaceOrientationMaskPortrait;
+        case Device::Orientation::ReversePortrait:
+            return UIInterfaceOrientationMaskPortraitUpsideDown;
+        case Device::Orientation::Landscape:
+            return UIInterfaceOrientationMaskLandscapeLeft;
+        case Device::Orientation::ReverseLandscape:
+            return UIInterfaceOrientationMaskLandscapeRight;
+        case Device::Orientation::SensorLandscape:
+            return UIInterfaceOrientationMaskLandscape;
+        case Device::Orientation::SensorPortrait:
+            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
+        case Device::Orientation::Sensor:
+            return UIInterfaceOrientationMaskAllButUpsideDown;
+        case Device::Orientation::FullSensor:
+            return UIInterfaceOrientationMaskAll;
+        default:
+            break;
+    }
+    return UIInterfaceOrientationUnknown;
 }
 
 - (BOOL)shouldAutorotate
 {
     return YES;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+
+    auto renderView = ax::Director::getInstance()->getRenderView();
+
+    if (renderView)
+    {
+        EARenderView* eaView = (__bridge EARenderView*)renderView->getEARenderView();
+
+        if (eaView)
+        {
+            CGSize s = CGSizeMake([eaView getWidth], [eaView getHeight]);
+            ax::Application::getInstance()->applicationScreenSizeChanged((int)s.width, (int)s.height);
+        }
+    }
 }
 
 // fix not hide status on ios7
@@ -90,18 +132,6 @@ customization that is not appropriate for viewDidLoad.
     [super didReceiveMemoryWarning];
 
     // Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (void)dealloc
-{
-    [super dealloc];
 }
 
 @end

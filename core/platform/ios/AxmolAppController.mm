@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2010 cocos2d-x.org
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -22,40 +21,49 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#import <UIKit/UIKit.h>
-#import "AppController.h"
-#import "axmol.h"
-#import "platform/ios/EARenderView-ios.h"
-#import "AppDelegate.h"
 
-#import "RootViewController.h"
+#import "AxmolAppController.h"
+#import "AxmolViewController.h"
 
-@implementation AppController
+#include "base/Director.h"
+#include "platform/Application.h"
+#include "platform/ios/RenderViewImpl-ios.h"
+
+using namespace ax;
+
+@implementation AxmolAppController
 
 #pragma mark -
 #pragma mark Application lifecycle
 
 // axmol application instance
-static AppDelegate s_sharedApplication;
+// static AppDelegate s_sharedApplication;
+
+- (UIViewController*)createRootViewController {
+    return [[AxmolViewController alloc] initWithNibName:nil bundle:nil];
+}
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
 
-    ax::Application* app = ax::Application::getInstance();
-    app->initGfxContextAttrs();
-    
+    auto axmolApp = Application::getInstance();
+
+    // Initialize the RenderView attributes
+    axmolApp->initGfxContextAttrs();
+
     // Override point for customization after application launch.
 
     auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");
+    _viewController = [self createRootViewController];
 
-    // Use RootViewController manage EARenderView
-    viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
-    renderView->showWindow(viewController);
+    renderView->showWindow(_viewController);
 
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
-    ax::Director::getInstance()->setRenderView(renderView);
+    Director::getInstance()->setRenderView(renderView);
 
-    app->run();
+    // run the axmol game scene
+    axmolApp->run();
+
     return YES;
 }
 
@@ -67,7 +75,8 @@ static AppDelegate s_sharedApplication;
      it begins the transition to the background state. Use this method to pause ongoing tasks, disable timers, and
      throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
-    ax::Director::getInstance()->pause();
+    // We don't need to call this method any more. It will interrupt user defined game pause&resume logic
+    /* ax::Director::getInstance()->pause(); */
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application
@@ -76,7 +85,8 @@ static AppDelegate s_sharedApplication;
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was
      previously in the background, optionally refresh the user interface.
      */
-    ax::Director::getInstance()->resume();
+    // We don't need to call this method any more. It will interrupt user defined game pause&resume logic
+    /* ax::Director::getInstance()->resume(); */
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application
@@ -115,12 +125,14 @@ static AppDelegate s_sharedApplication;
      Free up as much memory as possible by purging cached data objects that can be recreated (or reloaded from disk)
      later.
      */
-    ax::Director::getInstance()->purgeCachedData();
 }
 
+#if !__has_feature(objc_arc)
 - (void)dealloc
 {
+    [_viewController release];
     [super dealloc];
 }
+#endif
 
 @end

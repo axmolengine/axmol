@@ -31,10 +31,17 @@
 #import "platform/ios/DirectorCaller-ios.h"
 #import "base/Utils.h"
 
+#include "AxmolAppController.h"
+
 namespace ax
 {
 
 Application* Application::sm_pSharedApplication = nullptr;
+
+// Force the Objective‑C runtime to reference AxmolAppController,
+// ensuring the class symbol is linked into the final binary
+// (prevents the linker from stripping it out when inside a static library).
+__attribute__((unused)) static Class kForceLink_AxmolAppController = [AxmolAppController class];
 
 Application::Application()
 {
