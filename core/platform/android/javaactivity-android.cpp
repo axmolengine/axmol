@@ -148,6 +148,15 @@ JNIEXPORT jintArray JNICALL Java_dev_axmol_lib_AxmolActivity_getGLContextAttrs(J
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
 {
+    auto director = ax::Director::getInstance();
+    auto renderView = director->getRenderView();
+    if (renderView)
+    {
+        renderView->setFrameSize(w, h);
+        auto designSize = renderView->getDesignResolutionSize();
+        auto resolutionPolicy = renderView->getResolutionPolicy();
+        renderView->setDesignResolutionSize(designSize.width, designSize.height, resolutionPolicy);
+    }
     ax::Application::getInstance()->applicationScreenSizeChanged(w, h);
 }
 }
