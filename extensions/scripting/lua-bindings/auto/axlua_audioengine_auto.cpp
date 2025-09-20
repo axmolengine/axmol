@@ -1661,6 +1661,45 @@ int lua_ax_audioengine_AudioEngine_getDistanceScale(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_audioengine_AudioEngine_setReverbProperties(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        int arg0;
+        const EFXEAXREVERBPROPERTIES* arg1;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.AudioEngine:setReverbProperties");
+        #pragma warning NO CONVERSION TO NATIVE FOR EFXEAXREVERBPROPERTIES*
+		ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setReverbProperties'", nullptr);
+            return 0;
+        }
+        ax::AudioEngine::setReverbProperties(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:setReverbProperties",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_audioengine_AudioEngine_setReverbProperties'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_audioengine_AudioEngine_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (AudioEngine)");
@@ -1711,6 +1750,7 @@ int lua_register_ax_audioengine_AudioEngine(lua_State* tolua_S)
         tolua_function(tolua_S,"getListenerPosition", lua_ax_audioengine_AudioEngine_getListenerPosition);
         tolua_function(tolua_S,"setDistanceScale", lua_ax_audioengine_AudioEngine_setDistanceScale);
         tolua_function(tolua_S,"getDistanceScale", lua_ax_audioengine_AudioEngine_getDistanceScale);
+        tolua_function(tolua_S,"setReverbProperties", lua_ax_audioengine_AudioEngine_setReverbProperties);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::AudioEngine).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AudioEngine";
