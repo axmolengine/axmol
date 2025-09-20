@@ -70,9 +70,7 @@ public:
     void setSourcePosition(AUDIO_ID audioId, const ax::Vec3& position);
     void setListenerPosition(const ax::Vec3& position);
     ax::Vec3 getListenerPosition();
-#    if AX_USE_ALSOFT
     void setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties);
-#    endif
 
     void uncache(std::string_view filePath);
     void uncacheAll();
