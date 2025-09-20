@@ -23,20 +23,18 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/platform/PlatformConfig.h"
 
 #include "axmol/audio/AudioEngineImpl.h"
 #include "axmol/audio/AudioDecoderManager.h"
-
-#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#    import <AVFoundation/AVFoundation.h>
-#endif
-
 #include "axmol/audio/AudioEngine.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/Utils.h"
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+#    import <AVFoundation/AVFoundation.h>
+#endif
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 #    import <UIKit/UIKit.h>
@@ -1017,7 +1015,7 @@ void AudioEngineImpl::setPan(AUDIO_ID audioId, float value, float distance)
         panAngles[0] = (1.0f - value) * angle;
         panAngles[1] = (1.0f + value) * -angle;
 
-        alSourcefv(player->_alSource, 0x1030, panAngles);  // AL_STEREO_ANGLES = 0x1030
+        alSourcefv(player->_alSource, AL_STEREO_ANGLES, panAngles);
     }
 }
 
@@ -1075,6 +1073,21 @@ ax::Vec3 AudioEngineImpl::getListenerPosition()
 
     return pos;
 }
+
+#if AX_USE_ALSOFT
+void AudioEngineImpl::setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties)
+{
+    std::unique_lock<std::recursive_mutex> lck(_threadMutex);
+    auto iter = _audioPlayers.find(audioId);
+    if (iter == _audioPlayers.end())
+        return;
+
+    auto player = iter->second;
+    lck.unlock();
+
+    player->setReverbProperties(reverbProperties);
+}
+#endif
 
 bool AudioEngineImpl::isExtensionPresent(const char* extensionId)
 {

@@ -384,4 +384,33 @@ private:
     ax::Label* _playOverLabel;
 };
 
+#    if AX_USE_ALSOFT
+class AudioReverbTest : public AudioEngineTestDemo
+{
+public:
+    CREATE_FUNC(AudioReverbTest);
+
+    ~AudioReverbTest() override;
+
+    bool init() override;
+    void update(float dt) override;
+    std::string title() const override;
+
+private:
+    int _audioID;
+    bool _loopEnabled;
+    float _volume;
+    float _duration;
+    float _timeRatio;
+
+    void* _playItem;
+    void* _timeSlider;
+    bool _updateTimeSlider;
+    bool _isStopped;
+    ax::Label* _playOverLabel;
+    std::map<std::string, ax::ReverbProperties> _reverbSettingsMap;
+    std::map<std::string, ax::ReverbProperties>::const_iterator _currentReverbItr;
+};
+#    endif
+
 #endif /* defined(__NEWAUDIOENGINE_TEST_H_) */

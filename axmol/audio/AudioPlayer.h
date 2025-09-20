@@ -33,8 +33,7 @@
 #include <atomic>
 
 #include "axmol/audio/AudioMacros.h"
-#include "axmol/platform/PlatformMacros.h"
-#include "axmol/audio/oal_port.h"
+#include "axmol/audio/AudioEffects.h"
 #include "axmol/math/Vec3.h"
 
 namespace ax
@@ -60,6 +59,10 @@ public:
 
     bool isFinished() const;
 
+#if AX_USE_ALSOFT
+    void setReverbProperties(const ReverbProperties* reverbProperties);
+#endif
+
 protected:
     void setCache(AudioCache* cache);
     void rotateBufferThread(int offsetFrame);
@@ -68,6 +71,7 @@ protected:
 #if defined(__APPLE__)
     void wakeupRotateThread();
 #endif
+    void clearEffects();
 
     AudioCache* _audioCache{nullptr};
 
@@ -97,6 +101,12 @@ protected:
 #if defined(__APPLE__)
     std::atomic_bool _needWakeupRotateThread;
 #endif
+
+#if AX_USE_ALSOFT
+    ReverbProperties _reverbProperties;
+#endif
+    uint32_t _reverbSlot{};
+    uint32_t _reverbEffect{};
 
     std::thread* _rotateBufferThread{nullptr};
     std::condition_variable _sleepCondition;

@@ -57,7 +57,9 @@ AudioEngineTests::AudioEngineTests()
     ADD_TEST_CASE(AudioIssue18597Test);
     ADD_TEST_CASE(AudioIssue11143Test);
     ADD_TEST_CASE(AudioPanningTest);
-
+#if AX_USE_ALSOFT
+    ADD_TEST_CASE(AudioReverbTest);
+#endif
     // FIXME: Please keep AudioSwitchStateTest to the last position since this test case doesn't work well on each
     // platforms.
     ADD_TEST_CASE(AudioSwitchStateTest);
@@ -1481,3 +1483,224 @@ std::string AudioPanningTest::title() const
 {
     return "Audio panning test";
 }
+
+#if AX_USE_ALSOFT
+// AudioReverbTest
+bool AudioReverbTest::init()
+{
+    auto ret          = AudioEngineTestDemo::init();
+    _audioID          = AudioEngine::INVALID_AUDIO_ID;
+    _loopEnabled      = true;
+    _volume           = 1.0f;
+    _duration         = AudioEngine::TIME_UNKNOWN;
+    _timeRatio        = 0.0f;
+    _updateTimeSlider = true;
+    _isStopped        = false;
+
+    std::string fontFilePath = "fonts/arial.ttf";
+
+    auto& layerSize = this->getContentSize();
+
+    _playOverLabel = Label::createWithSystemFont("Play Over", "", 30);
+    _playOverLabel->setPosition(Vec2(layerSize / 2) + Vec2(0, 30));
+    _playOverLabel->setVisible(false);
+    addChild(_playOverLabel, 99999);
+
+    auto reverbLabel = Label::createWithTTF("", fontFilePath, 20);
+    reverbLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    reverbLabel->setPosition(layerSize.width / 2, layerSize.height * 0.60f);
+    addChild(reverbLabel);
+
+    auto playItem = TextButton::create("play", [this, reverbLabel](TextButton* button) {
+        if (_audioID == AudioEngine::INVALID_AUDIO_ID)
+        {
+            _audioID = AudioEngine::play2d("background.mp3", _loopEnabled, _volume);
+
+            AudioEngine::setReverbProperties(_audioID, &_currentReverbItr->second);
+            reverbLabel->setString(_currentReverbItr->first);
+
+            if (_audioID != AudioEngine::INVALID_AUDIO_ID)
+            {
+                _isStopped = false;
+
+                button->setEnabled(false);
+                AudioEngine::setFinishCallback(_audioID, [&](int id, std::string_view filePath) {
+                    AXLOGD("_audioID({}), _isStopped:({}), played over!!!", _audioID, _isStopped);
+
+                    _playOverLabel->setVisible(true);
+
+                    scheduleOnce([&](float dt) { _playOverLabel->setVisible(false); }, 2.0f, "hide_play_over_label");
+
+                    assert(!_isStopped);  // Stop audio should not trigger finished callback
+                    _audioID = AudioEngine::INVALID_AUDIO_ID;
+                    ((TextButton*)_playItem)->setEnabled(true);
+
+                    _timeRatio = 0.0f;
+                    ((SliderEx*)_timeSlider)->setRatio(_timeRatio);
+                });
+            }
+        }
+    });
+    _playItem     = playItem;
+    playItem->setPosition(layerSize.width * 0.3f, layerSize.height * 0.8f);
+    addChild(playItem);
+
+    auto stopItem = TextButton::create("stop", [&](TextButton* button) {
+        if (_audioID != AudioEngine::INVALID_AUDIO_ID)
+        {
+            _isStopped = true;
+            AudioEngine::stop(_audioID);
+
+            _audioID = AudioEngine::INVALID_AUDIO_ID;
+            ((TextButton*)_playItem)->setEnabled(true);
+        }
+    });
+    stopItem->setPosition(layerSize.width * 0.7f, layerSize.height * 0.8f);
+    addChild(stopItem);
+
+    auto pauseItem = TextButton::create("pause", [&](TextButton* button) {
+        if (_audioID != AudioEngine::INVALID_AUDIO_ID)
+        {
+            AudioEngine::pause(_audioID);
+        }
+    });
+    pauseItem->setPosition(layerSize.width * 0.3f, layerSize.height * 0.7f);
+    addChild(pauseItem);
+
+    auto resumeItem = TextButton::create("resume", [&](TextButton* button) {
+        if (_audioID != AudioEngine::INVALID_AUDIO_ID)
+        {
+            AudioEngine::resume(_audioID);
+        }
+    });
+    resumeItem->setPosition(layerSize.width * 0.7f, layerSize.height * 0.7f);
+    addChild(resumeItem);
+
+    auto loopItem = TextButton::create("disable-loop", [&](TextButton* button) {
+        _loopEnabled = !_loopEnabled;
+
+        if (_audioID != AudioEngine::INVALID_AUDIO_ID)
+        {
+            AudioEngine::setLoop(_audioID, _loopEnabled);
+        }
+        if (_loopEnabled)
+        {
+            button->setString("disable-loop");
+        }
+        else
+        {
+            button->setString("enable-loop");
+        }
+    });
+    loopItem->setPosition(layerSize.width * 0.5f, layerSize.height * 0.5f);
+    addChild(loopItem);
+
+    _reverbSettingsMap["GENERIC"]    = EFX_REVERB_PRESET_GENERIC;
+    _reverbSettingsMap["BATHROOM"]   = EFX_REVERB_PRESET_BATHROOM;
+    _reverbSettingsMap["ARENA"]      = EFX_REVERB_PRESET_ARENA;
+    _reverbSettingsMap["UNDERWATER"] = EFX_REVERB_PRESET_UNDERWATER;
+
+    _currentReverbItr = _reverbSettingsMap.begin();
+
+    schedule([this, reverbLabel](float x) {
+        if (_isStopped)
+            return;
+
+        AudioEngine::setReverbProperties(_audioID, &_currentReverbItr->second);
+        reverbLabel->setString(_currentReverbItr->first);
+
+        ++_currentReverbItr;
+        if (_currentReverbItr == _reverbSettingsMap.end())
+        {
+            _currentReverbItr = _reverbSettingsMap.begin();
+        }
+    }, 3, "test_switch_reverb");
+
+    auto volumeSlider = SliderEx::create();
+    volumeSlider->setPercent(100);
+    volumeSlider->addEventListener([&](Object* sender, Slider::EventType event) {
+        SliderEx* slider = dynamic_cast<SliderEx*>(sender);
+        _volume          = slider->getRatio();
+        if (_audioID != AudioEngine::INVALID_AUDIO_ID)
+        {
+            AudioEngine::setVolume(_audioID, _volume);
+        }
+    });
+    volumeSlider->setPosition(Vec2(layerSize.width * 0.5f, layerSize.height * 0.40f));
+    addChild(volumeSlider);
+
+    auto timeSlider = SliderEx::create();
+    timeSlider->addEventListener([&](Object* sender, Slider::EventType event) {
+        SliderEx* slider = dynamic_cast<SliderEx*>(sender);
+        switch (event)
+        {
+        case Slider::EventType::ON_SLIDEBALL_DOWN:
+            _updateTimeSlider = false;
+            break;
+        case Slider::EventType::ON_SLIDEBALL_UP:
+            if (_audioID != AudioEngine::INVALID_AUDIO_ID && _duration != AudioEngine::TIME_UNKNOWN)
+            {
+                float ratio = (float)slider->getPercent() / 100;
+                ratio       = clampf(ratio, 0.0f, 1.0f);
+                AudioEngine::setCurrentTime(_audioID, _duration * ratio);
+            }
+        case Slider::EventType::ON_SLIDEBALL_CANCEL:
+            _updateTimeSlider = true;
+        case Slider::EventType::ON_PERCENTAGE_CHANGED:
+        default:
+            // ignore
+            break;
+        }
+    });
+    timeSlider->setPosition(Vec2(layerSize.width * 0.5f, layerSize.height * 0.30f));
+    addChild(timeSlider);
+    _timeSlider = timeSlider;
+
+    auto& volumeSliderPos = volumeSlider->getPosition();
+    auto& sliderSize      = volumeSlider->getContentSize();
+    auto volumeLabel      = Label::createWithTTF("volume:  ", fontFilePath, 20);
+    volumeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    volumeLabel->setPosition(volumeSliderPos.x - sliderSize.width / 2, volumeSliderPos.y);
+    addChild(volumeLabel);
+
+    auto& timeSliderPos = timeSlider->getPosition();
+    auto timeLabel      = Label::createWithTTF("time:  ", fontFilePath, 20);
+    timeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    timeLabel->setPosition(timeSliderPos.x - sliderSize.width / 2, timeSliderPos.y);
+    addChild(timeLabel);
+
+    this->schedule(AX_CALLBACK_1(AudioReverbTest::update, this), 0.1f, "update_key");
+
+    return ret;
+}
+
+void AudioReverbTest::update(float dt)
+{
+    if (_audioID != AudioEngine::INVALID_AUDIO_ID)
+    {
+        if (_duration == AudioEngine::TIME_UNKNOWN)
+        {
+            _duration = AudioEngine::getDuration(_audioID);
+        }
+        if (_duration != AudioEngine::TIME_UNKNOWN)
+        {
+            auto time  = AudioEngine::getCurrentTime(_audioID);
+            _timeRatio = time / _duration;
+            if (_updateTimeSlider)
+            {
+                ((SliderEx*)_timeSlider)->setRatio(_timeRatio);
+            }
+        }
+    }
+}
+
+AudioReverbTest::~AudioReverbTest()
+{
+    unschedule("test_switch_reverb");
+}
+
+std::string AudioReverbTest::title() const
+{
+    return "Audio reverb test";
+}
+#endif

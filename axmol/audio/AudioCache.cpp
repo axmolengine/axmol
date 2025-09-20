@@ -24,8 +24,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/platform/PlatformConfig.h"
-
 #include "axmol/audio/AudioCache.h"
 #include <thread>
 #include "axmol/base/Director.h"
