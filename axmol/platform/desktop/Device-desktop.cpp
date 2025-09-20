@@ -29,6 +29,9 @@ namespace ax
 {
 int Device::getDisplayRefreshRate()
 {
-    return glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate;
+    auto hz = glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate;
+    if (hz < 20 || hz > 1000)
+        hz = 60;
+    return hz;
 }
 }  // namespace ax

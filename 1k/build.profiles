@@ -88,6 +88,6 @@ guava=33.3.1
 # - since emsdk-4.0.0+ can't be debugging via chrome properly on windows (macos and linux no this issue)
 # - axmol can build with emsdk-3.1.73+
 # - please use emsdk-3.1.73 if you want debug axmol wasm app properly
-emsdk=3.1.73+
+emsdk=3.1.73~4.0.15+
 
 # --- endregion

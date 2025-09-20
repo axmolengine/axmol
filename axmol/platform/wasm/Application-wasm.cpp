@@ -128,23 +128,22 @@ static void renderFrame()
 
 static void updateFrame(void)
 {
-    renderFrame();
-
+    const auto now = yasio::xhighp_clock();
     /*
      * No need to use algorithm in default(60,90,120... FPS) situation,
      * since onDrawFrame() was called by system 60 times per second by default.
      */
     if (s_animationInterval > FPS_CONTROL_THRESHOLD)
     {
-        auto interval = yasio::xhighp_clock() - mLastTickInNanoSeconds;
+        auto interval = now - mLastTickInNanoSeconds;
 
+        // If not enough time has passed since the last frame, skip rendering
         if (interval < s_animationInterval)
-        {
-            std::this_thread::sleep_for(std::chrono::nanoseconds(s_animationInterval - interval));
-        }
-
-        mLastTickInNanoSeconds = yasio::xhighp_clock();
+            return;
     }
+
+    mLastTickInNanoSeconds = now;
+    renderFrame();
 }
 
 static void getCurrentLangISO2(char buf[16])

@@ -185,7 +185,7 @@ endif()
 
 if(EMSCRIPTEN)
   # Tell emcc build port libjpeg(not in sysroot)
-  list(APPEND _ax_compile_opts "-sUSE_LIBJPEG=1")
+  list(APPEND _ax_c_flags "-sUSE_LIBJPEG=1")
 
   # fix build fail on windows host when cmake invoking emscan-deps (raise unknown options)
   list(APPEND _ax_link_opts  "-ljpeg")

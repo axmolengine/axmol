@@ -632,7 +632,7 @@ macro(ax_setup_app_props app_name)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
     target_link_options(${app_name} PRIVATE
       "-sEXPORTED_FUNCTIONS=[${AX_WASM_EXPORTS}]"
-      "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap,HEAPU8]"
+      "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap,HEAPU8,requestFullscreen]"
     )
     set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb --shell-file ${AX_WASM_SHELL_FILE} --use-preload-cache")
 
