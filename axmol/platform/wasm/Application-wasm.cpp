@@ -36,6 +36,7 @@ THE SOFTWARE.
 #    include "axmol/base/Director.h"
 #    include "axmol/base/Utils.h"
 #    include "axmol/platform/FileUtils.h"
+#    include "axmol/platform/Device.h"
 #    include "yasio/utils.hpp"
 #    include <emscripten/emscripten.h>
 
@@ -97,10 +98,56 @@ static int64_t NANOSECONDSPERSECOND      = 1000000000LL;
 static int64_t NANOSECONDSPERMICROSECOND = 1000000LL;
 static int64_t FPS_CONTROL_THRESHOLD     = static_cast<int64_t>(1.0f / 1200.0f * NANOSECONDSPERSECOND);
 
-static int64_t s_animationInterval = static_cast<int64_t>(1 / 60.0 * NANOSECONDSPERSECOND);
-
 static Director* __director;
-static int64_t mLastTickInNanoSeconds = 0;
+
+static int s_targetFPS        = 0;    // 0 = follow browser refresh rate
+static double s_lastFrameTime = 0.0;  // ms
+static double s_accumulator   = 0.0;  // ms
+
+static void renderFrame();
+
+static void updateFrame()
+{
+    double now = emscripten_get_now();  // current time in ms
+
+    // First frame: render immediately
+    if (s_lastFrameTime <= 0.0) [[unlikely]]
+    {
+        renderFrame();
+        s_lastFrameTime = now;
+        return;
+    }
+
+    double delta    = now - s_lastFrameTime;
+    s_lastFrameTime = now;
+
+    // Protect against long suspension (e.g. tab inactive for seconds/minutes)
+    if (delta > 1000.0) [[unlikely]]
+    {
+        s_accumulator = 0.0;
+        renderFrame();
+        return;
+    }
+
+    s_accumulator += delta;
+
+    // If targetFPS is 0, follow browser refresh rate directly
+    if (s_targetFPS <= 0)
+    {
+        renderFrame();
+        return;
+    }
+
+    // Frame skipping logic based on accumulator
+    double targetInterval = 1000.0 / s_targetFPS;
+    if (s_accumulator >= targetInterval)
+    {
+        renderFrame();
+        s_accumulator -= targetInterval;
+        if (s_accumulator < 0.0) [[unlikely]]  // floating-point safety
+            s_accumulator = 0.0;
+    } // else onIdle
+}
 
 static void renderFrame()
 {
@@ -124,26 +171,6 @@ static void renderFrame()
 
         axmol_wasm_app_exit();
     }
-}
-
-static void updateFrame(void)
-{
-    const auto now = yasio::xhighp_clock();
-    /*
-     * No need to use algorithm in default(60,90,120... FPS) situation,
-     * since onDrawFrame() was called by system 60 times per second by default.
-     */
-    if (s_animationInterval > FPS_CONTROL_THRESHOLD)
-    {
-        auto interval = now - mLastTickInNanoSeconds;
-
-        // If not enough time has passed since the last frame, skip rendering
-        if (interval < s_animationInterval)
-            return;
-    }
-
-    mLastTickInNanoSeconds = now;
-    renderFrame();
 }
 
 static void getCurrentLangISO2(char buf[16])
@@ -200,8 +227,7 @@ int Application::run()
     that lines up properly with the browser and monitor.
     */
 #    if AX_WASM_TIMING_USE_TIMEOUT
-    double fps = ceil(1.0 / (static_cast<double>(s_animationInterval) / NANOSECONDSPERSECOND));
-    emscripten_set_main_loop(updateFrame, static_cast<int>(fps), false);
+    emscripten_set_main_loop(updateFrame, s_targetFPS, false);
 #    else
     emscripten_set_main_loop(updateFrame, -1, false);
 #    endif
@@ -211,7 +237,14 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    s_animationInterval = static_cast<int64_t>(interval * NANOSECONDSPERSECOND);
+    if (interval <= 0.0) [[unlikely]]
+    {
+        // 0 or negative means follow browser refresh rate
+        s_targetFPS = 0;
+        return;
+    }
+    const auto desiredFPS = static_cast<int>(std::lround(1 / interval));
+    s_targetFPS           = std::clamp(desiredFPS, Device::MIN_REFRESH_RATE, Device::MAX_REFRESH_RATE);
 }
 
 Application::Platform Application::getTargetPlatform()

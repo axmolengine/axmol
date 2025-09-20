@@ -35,10 +35,10 @@ int Device::getDisplayRefreshRate()
     //   - emsdk 4.x: glfwGetVideoMode() may return 0
     //
     // Apply a safety clamp: if the reported value is out of a reasonable range
-    // (e.g. <20 Hz or >1000 Hz), fall back to 60 Hz as a safe default.
+    // (e.g. <MIN_REFRESH_RATE Hz or >MAX_REFRESH_RATE Hz), fall back to DEFAULT_REFRESH_RATE Hz as a safe default.
     auto hz = glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate;
-    if (hz < 20 || hz > 1000)
-        hz = 60;
+    if (hz < MIN_REFRESH_RATE || hz > MAX_REFRESH_RATE)
+        hz = DEFAULT_REFRESH_RATE;
     return hz;
 }
 }  // namespace ax

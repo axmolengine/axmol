@@ -775,8 +775,8 @@ int Device::getDisplayRefreshRate()
 {
     UIScreen* mainScreen = [UIScreen mainScreen];
     int hz               = static_cast<int>(mainScreen.maximumFramesPerSecond);
-    if (hz < 20 || hz > 1000)
-        hz = 60;
+    if (hz < MIN_REFRESH_RATE || hz > MAX_REFRESH_RATE)
+        hz = DEFAULT_REFRESH_RATE;
     return hz;
 }
 

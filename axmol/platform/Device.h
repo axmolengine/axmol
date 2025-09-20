@@ -78,6 +78,11 @@ public:
         NotificationFeedbackTypeError
     };
 
+    // Reasonable refresh rate range and fallback
+    static constexpr int MIN_REFRESH_RATE = 15;
+    static constexpr int MAX_REFRESH_RATE = 1000;
+    static constexpr int DEFAULT_REFRESH_RATE = 60;
+
     /**
      *  Gets the DPI of device
      *  @return The DPI of device.
