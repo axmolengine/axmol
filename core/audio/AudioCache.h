@@ -35,7 +35,7 @@
 
 #include "platform/PlatformMacros.h"
 #include "audio/AudioMacros.h"
-#include "audio/alconfig.h"
+#include "audio/oal_port.h"
 
 namespace ax
 {

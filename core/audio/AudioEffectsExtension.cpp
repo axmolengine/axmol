@@ -69,19 +69,19 @@ void AudioEffectsExtension::deleteEffect(uint32_t effect)
 
 void AudioEffectsExtension::bindEffectToAuxiliarySlot(uint32_t slot, uint32_t effect)
 {
-    alAuxiliaryEffectSloti(slot, (ALenum)al::efx::Effecti::SlotEffect, effect);
+    alAuxiliaryEffectSloti(slot, AL_EFFECTSLOT_EFFECT, effect);
     CHECK_AL_ERROR_DEBUG();
 }
 
-void AudioEffectsExtension::auxiliaryEffectSlot(uint32_t slot, al::efx::EffectSlotf param, float value)
+void AudioEffectsExtension::auxiliaryEffectSlot(uint32_t slot, int param, float value)
 {
-    alAuxiliaryEffectSlotf(slot, (ALenum)param, value);
+    alAuxiliaryEffectSlotf(slot, param, value);
     CHECK_AL_ERROR_DEBUG();
 }
 
 void AudioEffectsExtension::bindSourceToAuxiliarySlot(uint32_t SourceId, uint32_t slot, uint32_t slotnumber, uint32_t filter)
 {
-    alSource3i(SourceId, (ALenum)al::Sourcei::EfxAuxilarySendFilter, slot, slotnumber, filter);
+    alSource3i(SourceId, AL_AUXILIARY_SEND_FILTER, slot, slotnumber, filter);
 }
 
 void AudioEffectsExtension::setEffectParamFloat(uint32_t effect, int param, float value)
@@ -120,7 +120,7 @@ void AudioEffectsExtension::setFilterParamFloat(uint32_t sourceId, int filterPar
 
 void AudioEffectsExtension::bindFilterToSource(uint32_t sourceId, uint32_t filterId)
 {
-    alSourcei(sourceId, (ALenum)al::Sourcei::EfxDirectFilter, filterId);
+    alSourcei(sourceId, AL_DIRECT_FILTER, filterId);
 }
 
 void AudioEffectsExtension::deleteFilter(uint32_t filterId)

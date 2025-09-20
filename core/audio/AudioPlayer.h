@@ -37,7 +37,7 @@
 #include "AudioEffects.h"
 #include "audio/AudioMacros.h"
 #include "platform/PlatformMacros.h"
-#include "audio/alconfig.h"
+#include "audio/oal_port.h"
 #include "math/Vec3.h"
 
 namespace ax

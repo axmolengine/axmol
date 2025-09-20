@@ -23,12 +23,11 @@
  ****************************************************************************/
 #pragma once
 
-#include "alconfig.h"
+#include "audio/oal_port.h"
 
 #if AX_USE_ALSOFT
 
 #   include <cstdint>
-#   include "alconstants.h"
 
 namespace ax
 {
@@ -45,7 +44,7 @@ public:
     void deleteAuxiliaryEffectSlot(uint32_t slot);
     void deleteEffect(uint32_t effect);
     void bindEffectToAuxiliarySlot(uint32_t slot, uint32_t effect);
-    void auxiliaryEffectSlot(uint32_t slot, al::efx::EffectSlotf param, float value);
+    void auxiliaryEffectSlot(uint32_t slot, int param, float value);
     void bindSourceToAuxiliarySlot(uint32_t SourceId, uint32_t slot, uint32_t slotnumber, uint32_t filter);
     void setEffectParamFloat(uint32_t effect, int param, float value);
     void setEffectParamFloatArray(uint32_t effect, int param, const float* values);

@@ -1,7 +1,6 @@
 # common headers and sources
 set(_AX_AUDIO_HEADER
-  audio/alconfig.h
-  audio/alconstants.h
+  audio/oal_port.h
   audio/AudioEngine.h
   audio/AudioMacros.h
   audio/AudioDecoderManager.h
