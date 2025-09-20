@@ -26,7 +26,6 @@
 #include "audio/oal_port.h"
 
 #if AX_USE_ALSOFT
-#    include "3rdparty/openal/include/AL/efx-presets.h"
 
 namespace ax
 {
