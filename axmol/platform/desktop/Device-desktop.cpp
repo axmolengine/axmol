@@ -29,6 +29,13 @@ namespace ax
 {
 int Device::getDisplayRefreshRate()
 {
+    // Retrieve the display refresh rate from GLFW.
+    // Known behavior when targeting WebAssembly with emsdk:
+    //   - emsdk 3.x: glfwGetVideoMode() returns 60 Hz
+    //   - emsdk 4.x: glfwGetVideoMode() may return 0
+    //
+    // Apply a safety clamp: if the reported value is out of a reasonable range
+    // (e.g. <20 Hz or >1000 Hz), fall back to 60 Hz as a safe default.
     auto hz = glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate;
     if (hz < 20 || hz > 1000)
         hz = 60;
