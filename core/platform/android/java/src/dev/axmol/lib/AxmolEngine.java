@@ -873,8 +873,7 @@ public class AxmolEngine {
                 PackageManager.GET_META_DATA
             );
 
-            int so = info.screenOrientation;
-            switch (so) {
+            switch (info.screenOrientation) {
                 case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
                     sSupportedOrientationMask = ORIENTATION_MASK_PORTRAIT;
                     break;
@@ -896,10 +895,6 @@ public class AxmolEngine {
                 case ActivityInfo.SCREEN_ORIENTATION_SENSOR:
                     sSupportedOrientationMask = ORIENTATION_MASK_PORTRAIT | ORIENTATION_MASK_LANDSCAPE;
                     break;
-                case ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR:
-                    sSupportedOrientationMask = ORIENTATION_MASK_ALL;
-                    break;
-                case ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED:
                 default:
                     sSupportedOrientationMask = ORIENTATION_MASK_ALL;
                     break;
