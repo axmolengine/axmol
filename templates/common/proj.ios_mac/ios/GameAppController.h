@@ -28,7 +28,7 @@
 
 #import "platform/ios/AxmolAppController.h"
 
-@interface GameAppController : NSObject <AxmolAppController> {
+@interface GameAppController : AxmolAppController {
 }
 
 @end

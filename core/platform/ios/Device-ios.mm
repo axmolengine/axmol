@@ -766,6 +766,7 @@ static Device::Orientation _preferredOrientation = Device::Orientation::Sensor;
 
 void Device::setPreferredOrientation(Device::Orientation orientation)
 {
+#if !defined(AX_TARGET_OS_TVOS)
     _preferredOrientation = orientation;
     
     auto renderView = Director::getInstance()->getRenderView();
@@ -798,6 +799,7 @@ void Device::setPreferredOrientation(Device::Orientation orientation)
             }];
         }
     });
+#endif
 }
 
 
@@ -827,6 +829,7 @@ Device::OrientationMask Device::getSupportedOrientations()
 
 Device::Orientation Device::getCurrentOrientation()
 {
+#if !defined(AX_TARGET_OS_TVOS)
     UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
 
     switch (deviceOrientation) {
@@ -836,6 +839,9 @@ Device::Orientation Device::getCurrentOrientation()
         case UIDeviceOrientationLandscapeRight: return Orientation::ReverseLandscape;
         default: return Orientation::Unknown;
     }
+#else
+    return Orientation::Landscape;
+#endif
 }
 
 }
