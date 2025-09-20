@@ -146,7 +146,7 @@ static void updateFrame()
         s_accumulator -= targetInterval;
         if (s_accumulator < 0.0) [[unlikely]]  // floating-point safety
             s_accumulator = 0.0;
-    } // else onIdle
+    }  // else onIdle
 }
 
 static void renderFrame()

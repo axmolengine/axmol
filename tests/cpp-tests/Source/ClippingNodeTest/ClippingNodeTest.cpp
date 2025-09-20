@@ -428,8 +428,8 @@ void HoleDemo::pokeHoleAtPoint(Vec2 point)
 void HoleDemo::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
 {
     Touch* touch = (Touch*)touches[0];
-    Vec2 point   = _outerClipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
-    auto rect    = Rect(0, 0, _outerClipper->getContentSize().width, _outerClipper->getContentSize().height);
+    Vec2 point = _outerClipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
+    auto rect  = Rect(0, 0, _outerClipper->getContentSize().width, _outerClipper->getContentSize().height);
     if (!rect.containsPoint(point))
         return;
     this->pokeHoleAtPoint(point);
