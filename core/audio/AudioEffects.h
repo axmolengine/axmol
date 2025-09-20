@@ -28,12 +28,6 @@
 namespace ax
 {
 
-#if AX_USE_ALSOFT
-
-typedef EFXEAXREVERBPROPERTIES ReverbProperties;
-
-#else
-
 struct ReverbProperties
 {
     float flDensity;
@@ -60,8 +54,6 @@ struct ReverbProperties
     float flRoomRolloffFactor;
     int iDecayHFLimit;
 };
-
-#endif
 
 }  // namespace ax
 
