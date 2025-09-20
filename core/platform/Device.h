@@ -199,6 +199,7 @@ public:
      * Use Orientation::Auto to unlock and allow automatic rotation.
      *
      * @param orientation The desired screen orientation. Use Orientation::Auto to reset.
+     * @since axmol-2.9.0
      */
     static void setPreferredOrientation(Orientation orientation);
 
@@ -209,6 +210,7 @@ public:
      * If Orientation::Auto is returned, the application is currently allowing automatic rotation.
      *
      * @return The current preferred orientation.
+     * @since axmol-2.9.0
      */
     static Orientation getPreferredOrientation();
 
@@ -219,6 +221,7 @@ public:
      * or AndroidManifest.xml (Android). The application can only rotate within this set.
      *
      * @return A bitmask representing supported orientations.
+     * @since axmol-2.9.0
      */
     static OrientationMask getSupportedOrientations();
 
@@ -229,6 +232,7 @@ public:
      * which may differ from the preferred orientation if Orientation::Auto is set.
      *
      * @return The current screen orientation.
+     * @since axmol-2.9.0
      */
     static Orientation getCurrentOrientation();
 #pragma endregion Orientation control support
