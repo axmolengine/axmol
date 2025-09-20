@@ -641,8 +641,8 @@ void AudioPlayer::setReverbProperties(const ReverbProperties* reverbProperties)
                                      _reverbProperties.flModulationDepth);
             efx->setEffectParamFloat(_reverbEffect, AL_EAXREVERB_AIR_ABSORPTION_GAINHF,
                                      _reverbProperties.flAirAbsorptionGainHF);
-            efx->setEffectParamFloat(_reverbEffect, AL_EAXREVERB_HFREFERENCE, _reverbProperties.flLFReference);
-            efx->setEffectParamFloat(_reverbEffect, AL_EAXREVERB_LFREFERENCE, _reverbProperties.flHFReference);
+            efx->setEffectParamFloat(_reverbEffect, AL_EAXREVERB_LFREFERENCE, _reverbProperties.flLFReference);
+            efx->setEffectParamFloat(_reverbEffect, AL_EAXREVERB_HFREFERENCE, _reverbProperties.flHFReference);
             efx->setEffectParamFloat(_reverbEffect, AL_EAXREVERB_ROOM_ROLLOFF_FACTOR,
                                _reverbProperties.flRoomRolloffFactor);
             efx->setEffectParamInt(_reverbEffect, AL_EAXREVERB_DECAY_HFLIMIT, _reverbProperties.iDecayHFLimit);
