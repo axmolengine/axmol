@@ -828,6 +828,7 @@ Device::OrientationMask Device::getSupportedOrientations()
 
 Device::Orientation Device::getCurrentOrientation()
 {
+#if !defined(AX_TARGET_OS_TVOS)
     auto renderView = Director::getInstance()->getRenderView();
     if (!renderView)
         return Orientation::Unknown;
@@ -851,6 +852,9 @@ Device::Orientation Device::getCurrentOrientation()
             return Orientation::ReversePortrait;
         default:;
     }
+#else
+    return Orientation::Unknown;
+#endif
 }
 
 Device::Orientation Device::getPhysicalOrientation()
