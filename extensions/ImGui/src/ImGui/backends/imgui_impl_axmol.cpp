@@ -380,10 +380,8 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewport* viewport)
 {
-#if !defined(__ANDROID__)
+#    if AX_RENDER_API == AX_RENDER_API_GL && defined(GLFW_VERSION_MAJOR)
     glfwMakeContextCurrent(window);
-
-#    if AX_RENDER_API == AX_RENDER_API_GL
     auto state = static_cast<gl::OpenGLState*>(glfwGetWindowUserPointer(window));
     if (!state)
     {
@@ -405,14 +403,13 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewpor
         gl::__state = state;
     }
 #    endif
-#endif
 }
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiViewport* viewport)
 {
+#if AX_RENDER_API == AX_RENDER_API_GL && defined(GLFW_VERSION_MAJOR)
     if (viewport->RendererUserData)
     {
-#if AX_RENDER_API == AX_RENDER_API_GL
         auto prev_context = glfwGetCurrentContext();
         if (prev_context != window)
         {
@@ -425,12 +422,12 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiVie
         }
 
         viewport->RendererUserData = nullptr;
-#endif
-    }
 
+    }
     auto state = static_cast<gl::OpenGLState*>(glfwGetWindowUserPointer(window));
     if (state)
         delete state;
+#endif
 }
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_PostCommand(std::function<void()>&& func)

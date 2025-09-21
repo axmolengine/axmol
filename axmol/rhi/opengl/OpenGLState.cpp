@@ -4,10 +4,7 @@
 namespace ax::rhi::gl
 {
 
-namespace
-{
-std::unique_ptr<OpenGLState> g_defaultOpenGLState;
-}
+static std::unique_ptr<OpenGLState> g_defaultOpenGLState;
 
 AX_DLL OpenGLState* __state{nullptr};
 
