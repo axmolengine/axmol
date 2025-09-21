@@ -90,7 +90,6 @@ void AudioEffectsExtension::bindSourceToAuxiliarySlot(uint32_t SourceId,
 void AudioEffectsExtension::setEffectParamFloat(uint32_t effect, int param, float value)
 {
     alEffectf(effect, param, value);
-
     CHECK_AL_ERROR_DEBUG();
 }
 
