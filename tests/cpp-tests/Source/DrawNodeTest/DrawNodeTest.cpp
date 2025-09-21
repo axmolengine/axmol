@@ -86,7 +86,7 @@ Vec2 vertices24[] = {
 };
 
 // Original https :  // www.purebasic.fr/english/viewtopic.php?t=82915
-float verticesHead[] = {107.f,         9.f,
+float verticesHead[] = { 107.f,         9.f,
                         0.3333333433f, 0.3411764801f,
                         0.3686274588f, 255.f,
                         81.f,          599.f,
@@ -1248,7 +1248,8 @@ float verticesHead[] = {107.f,         9.f,
                         216.f,         579.f,
                         198.f,         599.f,
                         200.f,         599.f,
-                        0.f,           0.f};
+                        0.f,           0.f };
+
 
 float verticesFB[] = {
     0.842f,  1.052f,  0.842f,  1.649f,  5.296f,  1.649f,  5.595f,  1.855f,  5.913f,  2.028f,  6.233f,
@@ -1334,7 +1335,7 @@ float verticesFB[] = {
 
 DrawNodeTests::DrawNodeTests()
 {
-    ADD_TEST_CASE(DrawNodeMethodsTest);
+    ADD_TEST_CASE(DrawNodeCircleTest);
     ADD_TEST_CASE(DrawNodeSpLinesTest);
     ADD_TEST_CASE(DrawNodeSpLinesOpenClosedTest);
     ADD_TEST_CASE(DrawNodeAxmolTest2);
@@ -1354,6 +1355,7 @@ DrawNodeTests::DrawNodeTests()
     ADD_TEST_CASE(DrawNodeThicknessStressTest);
     ADD_TEST_CASE(DrawNodeLineDrawTest);
     ADD_TEST_CASE(DrawNodeIssueTester);
+    ADD_TEST_CASE(DrawNodeMethodsTest);
 }
 
 DrawNodeBaseTest::DrawNodeBaseTest()
@@ -2225,8 +2227,8 @@ void DrawNodeThicknessTest::update(float dt)
         Vec2 star[]   = {
             Vec2(o + w, o - h), Vec2(o + w * 2, o),                  // lower spike
             Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),  // right spike
-            //              {o +w, o+w*2+h}, {o,o+w*2},                 // top spike
-            //              {o -h, o+w}, {o,o},                         // left spike
+            //     {o +w, o+w*2+h}, {o,o+w*2},        // top spike
+            //     {o -h, o+w}, {o,o}, // left spike
         };
 
         drawNode->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color(1.0f, 0.0f, 0.0f, 0.5f), 1,
@@ -3001,9 +3003,9 @@ void DrawNodeMethodsTest::drawAll()
         // for (int i = 5; i > 1; i--)
         //{
         //     drawNode->drawSolidCircle(
-        //         VisibleRect::center(), 3 * i, AX_DEGREES_TO_RADIANS(90), AXRANDOM_0_1() * 20.f + 20.f, 1.0f, 1.0f,
-        //         Color::random().withAlpha(1.0f), sliderValue[sliderType::Thickness],
-        //         Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
+        // VisibleRect::center(), 3 * i, AX_DEGREES_TO_RADIANS(90), AXRANDOM_0_1() * 20.f + 20.f, 1.0f, 1.0f,
+        // Color::random().withAlpha(1.0f), sliderValue[sliderType::Thickness],
+        // Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
         //    drawNode->drawSolidCircle(
         //        VisibleRect::center() + pos, AXRANDOM_0_1() * 200, AX_DEGREES_TO_RADIANS(AXRANDOM_MINUS1_1() * 90),
@@ -3363,8 +3365,8 @@ void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool drawOrder)
         Vec2 star[]   = {
             Vec2(o + w, o - h), Vec2(o + w * 2, o),                  // lower spike
             Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),  // right spike
-            //{o +w, o+w*2+h}, {o,o+w*2},                 // top spike
-            //{o -h, o+w}, {o,o},                         // left spike
+                                                                     //{o +w, o+w*2+h}, {o,o+w*2},        // top spike
+                                                                     //{o -h, o+w}, {o,o}, // left spike
         };
 
         drawNode->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color(1.0f, 0.0f, 0.0f, 0.5f), 1,
@@ -3521,6 +3523,42 @@ string DrawNodeIssueTester::title() const
 string DrawNodeIssueTester::subtitle() const
 {
     return "";
+}
+
+DrawNodeCircleTest::DrawNodeCircleTest()
+{
+    drawNode->properties.setPosition(Vec2(100, 0));
+    for (int i = 3; i <= 8; i++)
+    {
+        drawNode->drawCircle(center, 10 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f, Color::WHITE);
+    }
+    drawNode->drawCircle(center, 90, AX_DEGREES_TO_RADIANS(90), 36, false, 1.0f, 1.0f, Color::WHITE);
+
+    for (size_t i = 0; i < 3; i++)
+    {
+        drawNode->properties.setPosition(Vec2(0, 0));
+        drawNode->drawCircle(Vec2(120, 150), 80 - 19 * i, AX_DEGREES_TO_RADIANS(90), 5, false, 1.0f, 1.0f, Color::BLUE,
+                             3.0f);
+    }
+
+    drawNode->properties.setCenter(Vec2(120, 150));
+    for (int i = 0; i < 5; i++)
+    {
+        drawNode->properties.setRotation(AX_DEGREES_TO_RADIANS(360 / 5 * i));
+        drawNode->drawSolidCircle(Vec2(120, 195), 10, 0, 36, 1.0f, 1.0f, Color::BLUE);
+        drawNode->drawSolidCircle(Vec2(120, 210), 12, 0, 36, 1.0f, 1.0f, Color::BLUE);
+        drawNode->drawSolidCircle(Vec2(120, 230), 16, 0, 36, 1.0f, 1.0f, Color::BLUE);
+    }
+}
+
+std::string DrawNodeCircleTest::title() const
+{
+    return "Circle Test";
+}
+
+std::string DrawNodeCircleTest::subtitle() const
+{
+    return "Axmol, N-Corner, Circle";
 }
 
 DrawNodeSpLinesTest::DrawNodeSpLinesTest()

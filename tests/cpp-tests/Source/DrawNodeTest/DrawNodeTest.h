@@ -431,6 +431,17 @@ public:
     void update(float dt) override;
 };
 
+class DrawNodeCircleTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCircleTest);
+
+    DrawNodeCircleTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
 class DrawNodeSpLinesOpenClosedTest : public DrawNodeBaseTest
 {
 public:
