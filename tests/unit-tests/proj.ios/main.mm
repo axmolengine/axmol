@@ -25,9 +25,11 @@ https://axmol.dev/
 #import <UIKit/UIKit.h>
 #include "AppDelegate.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[])
+{
     AppDelegate app;
-    @autoreleasepool {
+    @autoreleasepool
+    {
         return UIApplicationMain(argc, argv, nil, @"AxmolAppController");
     }
 }

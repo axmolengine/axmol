@@ -68,25 +68,26 @@ customization that is not appropriate for viewDidLoad.
 {
     const auto preferred = Device::getPreferredOrientation();
 
-    switch (preferred) {
-        case Device::Orientation::Portrait:
-            return UIInterfaceOrientationMaskPortrait;
-        case Device::Orientation::ReversePortrait:
-            return UIInterfaceOrientationMaskPortraitUpsideDown;
-        case Device::Orientation::Landscape:
-            return UIInterfaceOrientationMaskLandscapeLeft;
-        case Device::Orientation::ReverseLandscape:
-            return UIInterfaceOrientationMaskLandscapeRight;
-        case Device::Orientation::SensorLandscape:
-            return UIInterfaceOrientationMaskLandscape;
-        case Device::Orientation::SensorPortrait:
-            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
-        case Device::Orientation::Sensor:
-            return UIInterfaceOrientationMaskAllButUpsideDown;
-        case Device::Orientation::FullSensor:
-            return UIInterfaceOrientationMaskAll;
-        default:
-            break;
+    switch (preferred)
+    {
+    case Device::Orientation::Portrait:
+        return UIInterfaceOrientationMaskPortrait;
+    case Device::Orientation::ReversePortrait:
+        return UIInterfaceOrientationMaskPortraitUpsideDown;
+    case Device::Orientation::Landscape:
+        return UIInterfaceOrientationMaskLandscapeLeft;
+    case Device::Orientation::ReverseLandscape:
+        return UIInterfaceOrientationMaskLandscapeRight;
+    case Device::Orientation::SensorLandscape:
+        return UIInterfaceOrientationMaskLandscape;
+    case Device::Orientation::SensorPortrait:
+        return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
+    case Device::Orientation::Sensor:
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    case Device::Orientation::FullSensor:
+        return UIInterfaceOrientationMaskAll;
+    default:
+        break;
     }
     return UIInterfaceOrientationUnknown;
 }
