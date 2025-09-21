@@ -35,7 +35,8 @@ using namespace ax;
 #pragma mark -
 #pragma mark Application lifecycle
 
-- (UIViewController*)createRootViewController {
+- (UIViewController*)createRootViewController
+{
     return [[AxmolViewController alloc] initWithNibName:nil bundle:nil];
 }
 

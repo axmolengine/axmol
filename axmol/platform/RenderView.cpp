@@ -206,7 +206,7 @@ void RenderView::updateRenderSurface(float width, float height, uint8_t updateFl
 
         // Notify the application that the screen size has changed.
         // This gives the user a chance to re-layout scene content or reset designResolutionSize if needed.
-        if(!(updateFlag & SurfaceUpdateFlag::SilentUpdate))
+        if (!(updateFlag & SurfaceUpdateFlag::SilentUpdate))
             ax::Application::getInstance()->applicationScreenSizeChanged(width, height);
 
         // then we update resolution and viewport
