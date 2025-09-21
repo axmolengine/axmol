@@ -219,6 +219,37 @@ int Device::getDisplayRefreshRate()
     return hz;
 }
 
+static Device::Orientation s_preferredOrientation = Device::Orientation::Unknown;
+
+void Device::setPreferredOrientation(Device::Orientation orientation)
+{
+    s_preferredOrientation = orientation;
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "setPreferredOrientation", static_cast<jint>(orientation));
+}
+
+Device::Orientation Device::getPreferredOrientation()
+{
+    return s_preferredOrientation;
+}
+
+Device::OrientationMask Device::getSupportedOrientations()
+{
+    jint mask = JniHelper::callStaticIntMethod(deviceHelperClassName, "getSupportedOrientations");
+    return static_cast<Device::OrientationMask>(mask);
+}
+
+Device::Orientation Device::getCurrentOrientation()
+{
+    jint orientation = JniHelper::callStaticIntMethod(deviceHelperClassName, "getCurrentOrientation");
+    return static_cast<Device::Orientation>(orientation);
+}
+
+Device::Orientation Device::getPhysicalOrientation()
+{
+    jint orientation = JniHelper::callStaticIntMethod(deviceHelperClassName, "getPhysicalOrientation");
+    return static_cast<Device::Orientation>(orientation);
+}
+
 }  // namespace ax
 
 // this method is called by BitmapHelper

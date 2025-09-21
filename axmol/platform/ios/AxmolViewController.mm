@@ -1,7 +1,4 @@
 /****************************************************************************
- Copyright (c) 2013      cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -25,11 +22,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "RootViewController.h"
-#import "axmol/axmol.h"
+#import "axmol/platform/ios/AxmolViewController.h"
 #import "axmol/platform/ios/EARenderView-ios.h"
+#include "axmol/platform/Device.h"
+#include "axmol/platform/Application.h"
+#include "axmol/base/Director.h"
 
-@implementation RootViewController
+using namespace ax;
+
+@implementation AxmolViewController
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform
@@ -63,13 +64,32 @@ customization that is not appropriate for viewDidLoad.
     [super viewDidDisappear:animated];
 }
 
-// For ios6, use supportedInterfaceOrientations & shouldAutorotate instead
-#ifdef __IPHONE_6_0
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    const auto preferred = Device::getPreferredOrientation();
+
+    switch (preferred) {
+        case Device::Orientation::Portrait:
+            return UIInterfaceOrientationMaskPortrait;
+        case Device::Orientation::ReversePortrait:
+            return UIInterfaceOrientationMaskPortraitUpsideDown;
+        case Device::Orientation::Landscape:
+            return UIInterfaceOrientationMaskLandscapeLeft;
+        case Device::Orientation::ReverseLandscape:
+            return UIInterfaceOrientationMaskLandscapeRight;
+        case Device::Orientation::SensorLandscape:
+            return UIInterfaceOrientationMaskLandscape;
+        case Device::Orientation::SensorPortrait:
+            return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
+        case Device::Orientation::Sensor:
+            return UIInterfaceOrientationMaskAllButUpsideDown;
+        case Device::Orientation::FullSensor:
+            return UIInterfaceOrientationMaskAll;
+        default:
+            break;
+    }
+    return UIInterfaceOrientationUnknown;
 }
-#endif
 
 - (BOOL)shouldAutorotate
 {

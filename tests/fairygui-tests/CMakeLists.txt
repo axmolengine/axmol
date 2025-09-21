@@ -109,11 +109,6 @@ elseif(WINDOWS)
     list(APPEND GAME_SOURCE ${common_content_files})
 elseif(APPLE)
     if(IOS)
-        list(APPEND GAME_HEADER
-             proj.ios/AppController.h
-             proj.ios/RootViewController.h
-             )
-
         if (TVOS)
             set(APP_UI_RES
                 proj.ios/LaunchScreenBackground.png
@@ -129,9 +124,7 @@ elseif(APPLE)
         endif()
 
         list(APPEND GAME_SOURCE
-             proj.ios/main.m
-             proj.ios/AppController.mm
-             proj.ios/RootViewController.mm
+             proj.ios/main.mm
              ${APP_UI_RES}
              )
     elseif(MACOSX)

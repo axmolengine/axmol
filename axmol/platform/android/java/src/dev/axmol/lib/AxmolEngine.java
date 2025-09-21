@@ -27,8 +27,13 @@ THE SOFTWARE.
 package dev.axmol.lib;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -52,6 +57,7 @@ import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
@@ -77,6 +83,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 public class AxmolEngine {
@@ -790,5 +798,213 @@ public class AxmolEngine {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // ===== Orientation constants (must match C++ enum values) =====
+    public static final int ORIENTATION_UNKNOWN          = 0;
+    public static final int ORIENTATION_PORTRAIT         = 1; // Portrait (upright)
+    public static final int ORIENTATION_REVERSE_PORTRAIT = 2; // Portrait upside down
+    public static final int ORIENTATION_SENSOR_PORTRAIT  = 3; // Portrait + reverse portrait (auto-rotate)
+
+    public static final int ORIENTATION_LANDSCAPE         = 4; // Landscape (left)
+    public static final int ORIENTATION_REVERSE_LANDSCAPE = 5; // Landscape (right)
+    public static final int ORIENTATION_SENSOR_LANDSCAPE  = 6; // Landscape + reverse landscape (auto-rotate)
+
+    public static final int ORIENTATION_SENSOR     = 7; // All except upside down (auto-rotate)
+    public static final int ORIENTATION_FULL_SENSOR = 8; // All including upside down (auto-rotate)
+
+    // ===== OrientationMask constants (must match C++ enum values) =====
+    public static final int ORIENTATION_MASK_PORTRAIT         = 1;
+    public static final int ORIENTATION_MASK_REVERSE_PORTRAIT = 1 << 1;
+    public static final int ORIENTATION_MASK_LANDSCAPE        = 1 << 2;
+    public static final int ORIENTATION_MASK_REVERSE_LANDSCAPE= 1 << 3;
+    public static final int ORIENTATION_MASK_ALL = ORIENTATION_MASK_PORTRAIT |
+        ORIENTATION_MASK_REVERSE_PORTRAIT |
+        ORIENTATION_MASK_LANDSCAPE |
+        ORIENTATION_MASK_REVERSE_LANDSCAPE;
+
+    // Cached supported orientation mask, -1 means uninitialized
+    private static int sSupportedOrientationMask = -1;
+
+    /**
+     * Sets the preferred screen orientation for the current activity.
+     * @param orientation One of the ORIENTATION_* constants.
+     */
+    @SuppressWarnings("unused")
+    public static void setPreferredOrientation(int orientation) {
+        if (sActivity == null) return;
+
+        int androidOrientation;
+        switch (orientation) {
+            case ORIENTATION_PORTRAIT:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+                break;
+            case ORIENTATION_REVERSE_PORTRAIT:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+                break;
+            case ORIENTATION_SENSOR_PORTRAIT:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
+                break;
+            case ORIENTATION_LANDSCAPE:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+                break;
+            case ORIENTATION_REVERSE_LANDSCAPE:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+                break;
+            case ORIENTATION_SENSOR_LANDSCAPE:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
+                break;
+            case ORIENTATION_SENSOR:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
+                break;
+            case ORIENTATION_FULL_SENSOR:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR;
+                break;
+            default:
+                androidOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+                break;
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                sActivity.setRequestedOrientation(androidOrientation);
+            }
+        });
+    }
+
+    /**
+     * Returns the supported orientation mask for the device.
+     * This example assumes all orientations are supported.
+     * @return Bitmask of ORIENTATION_MASK_* constants.
+     */
+    @SuppressWarnings("unused")
+    public static int getSupportedOrientations() {
+        // Return cached value if already initialized
+        if (sSupportedOrientationMask != -1) {
+            return sSupportedOrientationMask;
+        }
+
+        if (sActivity == null) {
+            sSupportedOrientationMask = ORIENTATION_MASK_ALL; // fallback
+            return sSupportedOrientationMask;
+        }
+
+        try {
+            PackageManager pm = sActivity.getPackageManager();
+            ActivityInfo info = pm.getActivityInfo(
+                sActivity.getComponentName(),
+                PackageManager.GET_META_DATA
+            );
+
+            switch (info.screenOrientation) {
+                case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                    sSupportedOrientationMask = ORIENTATION_MASK_PORTRAIT;
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+                    sSupportedOrientationMask = ORIENTATION_MASK_REVERSE_PORTRAIT;
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT:
+                    sSupportedOrientationMask = ORIENTATION_MASK_PORTRAIT | ORIENTATION_MASK_REVERSE_PORTRAIT;
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+                    sSupportedOrientationMask = ORIENTATION_MASK_LANDSCAPE;
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                    sSupportedOrientationMask = ORIENTATION_MASK_REVERSE_LANDSCAPE;
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:
+                    sSupportedOrientationMask = ORIENTATION_MASK_LANDSCAPE | ORIENTATION_MASK_REVERSE_LANDSCAPE;
+                    break;
+                case ActivityInfo.SCREEN_ORIENTATION_SENSOR:
+                    sSupportedOrientationMask = ORIENTATION_MASK_PORTRAIT | ORIENTATION_MASK_LANDSCAPE;
+                    break;
+                default:
+                    sSupportedOrientationMask = ORIENTATION_MASK_ALL;
+                    break;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            sSupportedOrientationMask = ORIENTATION_MASK_ALL;
+        }
+
+        return sSupportedOrientationMask;
+    }
+
+    /**
+     * Returns the current orientation of the device.
+     * @return One of the ORIENTATION_* constants.
+     */
+    @SuppressWarnings("unused")
+    public static int getCurrentOrientation() {
+        int rotation = sActivity.getWindowManager().getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                return ORIENTATION_PORTRAIT;
+            case Surface.ROTATION_90:
+                return ORIENTATION_LANDSCAPE;
+            case Surface.ROTATION_180:
+                return ORIENTATION_REVERSE_PORTRAIT;
+            case Surface.ROTATION_270:
+                return ORIENTATION_REVERSE_LANDSCAPE;
+            default:
+                return ORIENTATION_UNKNOWN;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static int getPhysicalOrientation() {
+        SensorManager sm = (SensorManager) sActivity.getSystemService(Context.SENSOR_SERVICE);
+        Sensor rotationVector = sm.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        if (rotationVector == null) {
+            return 0;
+        }
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        final int[] result = new int[1];
+        SensorEventListener listener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                float[] rotationMatrix = new float[9];
+                float[] orientationVals = new float[3];
+                SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
+                SensorManager.getOrientation(rotationMatrix, orientationVals);
+
+                float pitch = orientationVals[1];
+                float roll  = orientationVals[2];
+
+                if (Math.abs(roll) > Math.PI/4) {
+                    // landscape
+                    if (roll > 0) {
+                        result[0] = ORIENTATION_LANDSCAPE;
+                    } else {
+                        result[0] = ORIENTATION_REVERSE_LANDSCAPE;
+                    }
+                } else {
+                    // portrait
+                    if (pitch > 0) {
+                        result[0] = ORIENTATION_REVERSE_PORTRAIT;
+                    } else {
+                        result[0] = ORIENTATION_PORTRAIT;
+                    }
+                }
+
+                sm.unregisterListener(this);
+                latch.countDown();
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+        };
+
+        sm.registerListener(listener, rotationVector, SensorManager.SENSOR_DELAY_UI);
+
+        try {
+            latch.await(500, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        return result[0];
     }
 }

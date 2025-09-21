@@ -1,3 +1,86 @@
+# axmol-2.9.0 ?? 2025
+
+## Significant changes relative to 2.8.x:
+
+### 3D Audio & Basic Effects
+
+- Add support for audio panning by @rh101 in [#2719](https://github.com/axmolengine/axmol/pull/2719)
+- Add support for playing audio at any position in 3D space by @rh101 in [#2740](https://github.com/axmolengine/axmol/pull/2740)
+- Initial implementation adding support for audio effects and filters using OpenAL by @rh101 in [#2772](https://github.com/axmolengine/axmol/pull/2772)
+- Fix reverb properties values by @rh101 in [#2779](https://github.com/axmolengine/axmol/pull/2779)
+
+### Other Changes
+
+- Add screen orientation control for mobile devices by @halx99 in [#2784](https://github.com/axmolengine/axmol/pull/2784)
+- Add new API `EventKeyboard::isRepeat` by @halx99 in [#2735](https://github.com/axmolengine/axmol/pull/2735)
+- Add new API `ZipFile::createWithData` and mark `ZipFile::createWithBuffer` as deprecated by @halx99
+- Enhance Base64 decoder to skip whitespace/newlines and prevent premature termination by @halx99
+
+## Bug fixes
+
+- Fix `ui::MediaPlayer` may crash on Apple platforms by @halx99 in [#2704](https://github.com/axmolengine/axmol/pull/2704)
+- Fix occasional missing Android assets in AAB build by @paulocoutinhox in [#2713](https://github.com/axmolengine/axmol/pull/2713)
+- Fix format specifiers in logging calls by @rh101 in [#2749](https://github.com/axmolengine/axmol/pull/2749)
+
+## Improvements
+
+- Destroy `ScriptEngine` instance before `_scheduler` to respect dependency by @halx99
+- Fix SpineTest aim y-axis by @halx99
+- Replace deprecated calls with new API in engine by @halx99
+- Update `controller.cpp`: rename "Audio - NewAudioEngine" to "AudioEngine" by @aismann in [#2731](https://github.com/axmolengine/axmol/pull/2731)
+- Fix addressed several non-critical issues for lua-tests by @halx99
+- Remove non-existent yaml-cpp from template cmake modules by @halx99
+- Remove CI pull-request trigger event: `ready_for_review` by @halx99
+- Update kcp to resolve cmake error by @halx99
+
+## SDK & Tools updates
+
+- webview2: 1.0.3405.78 => 1.0.3485.44
+
+## 3rdparty updates
+
+- curl: 8.15.0 => 8.16.0
+- freetype: 2.13.3 => 2.14.1
+- jpeg-turbo: 3.1.1 => 3.1.2
+- luajit: 2.1-f9140a6 => 2.1-871db2c
+
+## Notes
+
+### Add new API: `ZipFile::createWithData`
+
+**Rationale**  
+The existing API `ZipFile::createWithBuffer` has a design flaw. It accepts a `const char*` buffer without clarifying ownership, which makes the API dependent on the external buffer’s lifetime. This can lead to undefined behavior and hard-to-trace bugs.
+
+**Improvement**  
+The new API `ZipFile::createWithData` takes a `Data` object as its parameter. Since `Data` supports move semantics, ownership and lifetime are explicit. This ensures safer usage, reduces the risk of misuse, and provides more predictable behavior for developers.
+
+---
+
+### Add screen orientation control for mobile devices
+
+**Rationale**  
+Previously, screen orientation could only be configured statically through platform settings  
+(e.g., `info.plist` on iOS or `AndroidManifest.xml` on Android). This limited flexibility,  
+as the rendering orientation could not be changed at runtime once the app was launched.
+
+**Improvement**  
+A new core API `Device::setPreferredOrientation` has been introduced.  
+- When orientation support is already declared in `info.plist` (iOS) or `AndroidManifest.xml` (Android),  
+  this API allows dynamic modification of the rendering orientation at runtime.  
+- Developers can now switch between portrait and landscape modes programmatically,  
+  adapting to gameplay, UI flow, or user preferences.
+
+**Benefit**  
+- Consistent cross-platform orientation handling.  
+- Eliminates the need for platform-specific code to adjust orientation dynamically.  
+- Improves user experience by adapting rendering orientation seamlessly during runtime.
+
+**Developer Note**  
+The engine only performs **basic adaptation** internally.  
+It is still recommended that developers handle their own resolution and layout adjustment strategies  
+inside `AppDelegate::applicationScreenSizeChanged` to ensure proper scaling and UI behavior  
+across different devices and orientations.
+
 # axmol-2.8.1 Sep.5 2025
 
 ## Bug fixes

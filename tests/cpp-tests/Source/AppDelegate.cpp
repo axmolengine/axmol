@@ -66,6 +66,8 @@ void AppDelegate::initGfxContextAttrs()
     gfxContextAttrs.renderScaleMode = RenderScaleMode::Physical;
 #endif
     RenderView::setGfxContextAttrs(gfxContextAttrs);
+    
+    Device::setPreferredOrientation(Device::Orientation::SensorLandscape);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()

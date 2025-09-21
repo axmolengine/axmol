@@ -170,6 +170,105 @@ public:
                                       int& height,
                                       bool& hasPremultipliedAlpha);
 
+#pragma region Orientation control support
+    enum class Orientation
+    {
+        Unknown,
+        Portrait,         // Portrait (upright)
+        ReversePortrait,  // Portrait upside down
+        SensorPortrait,   // Portrait + reverse portrait (auto-rotate with sensor)
+
+        Landscape,         // Landscape (left)
+        ReverseLandscape,  // Landscape (right)
+        SensorLandscape,   // Landscape + reverse landscape (auto-rotate with sensor)
+
+        Sensor,     // All orientations except upside down (auto-rotate with sensor)
+        FullSensor  // All orientations including upside down (auto-rotate with sensor)
+    };
+
+    enum class OrientationMask
+    {
+        Portrait         = 1 << 0,
+        ReversePortrait  = 1 << 1,  // Portrait upside down
+        Landscape        = 1 << 2,  // Landscape (left)
+        ReverseLandscape = 1 << 3,  // Landscape (right)
+        All              = Portrait | ReversePortrait | Landscape | ReverseLandscape
+    };
+
+    /**
+     * @brief Sets the preferred screen orientation for the application.
+     *
+     * This method attempts to switch the screen orientation to the specified value.
+     * If the orientation is supported by the platform (as declared in Info.plist or AndroidManifest),
+     * the system will rotate and lock to that orientation.
+     * Use Orientation::Auto to unlock and allow automatic rotation.
+     *
+     * @param orientation The desired screen orientation. Use Orientation::Auto to reset.
+     * @since axmol-2.9.0
+     */
+    static void setPreferredOrientation(Orientation orientation);
+
+    /**
+     * @brief Gets the currently preferred (locked) screen orientation.
+     *
+     * Returns the orientation that was last set via setPreferredOrientation().
+     * If Orientation::Auto is returned, the application is currently allowing automatic rotation.
+     *
+     * @return The current preferred orientation.
+     * @since axmol-2.9.0
+     */
+    static Orientation getPreferredOrientation();
+
+    /**
+     * @brief Gets the set of orientations supported by the platform.
+     *
+     * This reflects the maximum orientation capabilities declared in Info.plist (iOS)
+     * or AndroidManifest.xml (Android). The application can only rotate within this set.
+     *
+     * @return A bitmask representing supported orientations.
+     * @since axmol-2.9.0
+     */
+    static OrientationMask getSupportedOrientations();
+
+    /**
+     * @brief Gets the current screen orientation as rendered by the system.
+     *
+     * This reflects the actual orientation currently applied to the screen,
+     * which may differ from the preferred orientation if Orientation::Sensor is set.
+     *
+     * @return The current screen orientation.
+     * @since axmol-2.9.0
+     */
+    static Orientation getCurrentOrientation();
+
+    /**
+     * @brief Returns the device's physical orientation (hardware posture).
+     *
+     * Unlike getCurrentOrientation(), which reflects the UI's current interface
+     * orientation, this method reports the device's actual physical posture as
+     * detected by sensors (e.g., accelerometer). It may differ from the UI
+     * orientation when rotation is locked or when the app restricts supported
+     * orientations.
+     *
+     * Platform notes:
+     * - iOS: Maps from UIDeviceOrientation. FaceUp/FaceDown are treated as Unknown.
+     *        You should ensure orientation notifications are active internally
+     *        (beginGeneratingDeviceOrientationNotifications) if needed.
+     * - Android: Maps from display rotation and/or sensor readings to the closest
+     *            Orientation value. Sensor-based "flat" states map to Unknown.
+     *
+     * Typical usage:
+     * - Use getCurrentOrientation() for layout, rendering, and UI decisions.
+     * - Use getPhysicalOrientation() for gameplay/input mechanics that depend on
+     *   how the user is holding the device, independent of UI rotation.
+     *
+     * @return Orientation The device's physical orientation.
+     * @since axmol-2.9.0
+     */
+    static Orientation getPhysicalOrientation();
+
+#pragma endregion Orientation control support
+
     /**
      * @brief Returns the current display refresh rate in Hertz.
      *
@@ -183,6 +282,8 @@ public:
 private:
     AX_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);
 };
+
+AX_ENABLE_BITMASK_OPS(Device::OrientationMask)
 
 // end group
 /// @}

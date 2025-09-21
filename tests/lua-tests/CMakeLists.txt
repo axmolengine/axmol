@@ -115,9 +115,7 @@ elseif(WINDOWS)
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
-             proj.ios_mac/ios/AppController.h
              proj.ios_mac/ios/LuaObjectCBridgeTest.h
-             proj.ios_mac/ios/RootViewController.h
              )
 
         if (TVOS)
@@ -135,10 +133,8 @@ elseif(APPLE)
         endif()
 
         list(APPEND GAME_SOURCE
-             proj.ios_mac/ios/main.m
+             proj.ios_mac/ios/main.mm
              proj.ios_mac/ios/LuaObjectCBridgeTest.mm
-             proj.ios_mac/ios/AppController.mm
-             proj.ios_mac/ios/RootViewController.mm
              ${APP_UI_RES}
              )
     elseif(MACOSX)

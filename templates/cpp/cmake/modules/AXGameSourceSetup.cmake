@@ -31,8 +31,8 @@ elseif(WINDOWS)
 elseif(APPLE)
   if(IOS)
     list(APPEND GAME_HEADER
-      proj.ios_mac/ios/AppController.h
-      proj.ios_mac/ios/RootViewController.h
+      proj.ios_mac/ios/GameAppController.h
+      proj.ios_mac/ios/GameViewController.h
     )
 
     if(TVOS)
@@ -50,9 +50,9 @@ elseif(APPLE)
     endif()
 
     list(APPEND GAME_SOURCE
-      proj.ios_mac/ios/main.m
-      proj.ios_mac/ios/AppController.mm
-      proj.ios_mac/ios/RootViewController.mm
+      proj.ios_mac/ios/main.mm
+      proj.ios_mac/ios/GameAppController.mm
+      proj.ios_mac/ios/GameViewController.mm
       proj.ios_mac/ios/Prefix.pch
       ${APP_UI_RES}
     )

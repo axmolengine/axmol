@@ -1074,7 +1074,6 @@ ax::Vec3 AudioEngineImpl::getListenerPosition()
     return pos;
 }
 
-#if AX_USE_ALSOFT
 void AudioEngineImpl::setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties)
 {
     std::unique_lock<std::recursive_mutex> lck(_threadMutex);
@@ -1087,7 +1086,6 @@ void AudioEngineImpl::setReverbProperties(AUDIO_ID audioId, const ReverbProperti
 
     player->setReverbProperties(reverbProperties);
 }
-#endif
 
 bool AudioEngineImpl::isExtensionPresent(const char* extensionId)
 {

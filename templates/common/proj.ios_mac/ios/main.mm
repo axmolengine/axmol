@@ -1,9 +1,7 @@
 /****************************************************************************
- Copyright (c) 2013      cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
- https://axmol.dev/
+https://axmol.dev/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +21,12 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
 #import <UIKit/UIKit.h>
+#include "AppDelegate.h"
 
-@interface RootViewController : UIViewController {
+int main(int argc, char *argv[]) {
+    AppDelegate app;
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, @"GameAppController");
+    }
 }
-- (BOOL)prefersStatusBarHidden;
-@end

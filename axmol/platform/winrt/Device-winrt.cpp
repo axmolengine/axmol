@@ -579,6 +579,23 @@ int Device::getDisplayRefreshRate()
     return 60;
 }
 
+void Device::setPreferredOrientation(Device::Orientation /*orientation*/) {}
+
+Device::Orientation Device::getPreferredOrientation()
+{
+    return Orientation::Unknown;
+}
+
+Device::OrientationMask Device::getSupportedOrientations()
+{
+    return OrientationMask::All;
+}
+
+Device::Orientation Device::getPhysicalOrientation()
+{
+    return Orientation::Unknown;
+}
+
 }  // namespace ax
 
 #endif  // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)

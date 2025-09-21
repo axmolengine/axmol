@@ -59,9 +59,7 @@ public:
 
     bool isFinished() const;
 
-#if AX_USE_ALSOFT
     void setReverbProperties(const ReverbProperties* reverbProperties);
-#endif
 
 protected:
     void setCache(AudioCache* cache);
