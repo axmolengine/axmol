@@ -789,7 +789,6 @@ void Device::setPreferredOrientation(Device::Orientation orientation)
             dummy.view.backgroundColor = [UIColor clearColor];
             dummy.modalPresentationStyle = UIModalPresentationFullScreen;
 
-            __weak UIViewController *weakVC = vc;
             [vc presentViewController:dummy animated:NO completion:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [dummy dismissViewControllerAnimated:NO completion:^{
