@@ -237,6 +237,11 @@ Device::Orientation Device::getCurrentOrientation()
     return static_cast<Device::Orientation>(orientation);
 }
 
+Device::Orientation Device::getPhysicalOrientation()
+{
+    return Orientation::Unknown;
+}
+
 }
 
 // this method is called by BitmapHelper

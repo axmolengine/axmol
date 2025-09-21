@@ -828,9 +828,36 @@ Device::OrientationMask Device::getSupportedOrientations()
 
 Device::Orientation Device::getCurrentOrientation()
 {
-#if !defined(AX_TARGET_OS_TVOS)
-    UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+    auto renderView = Director::getInstance()->getRenderView();
+    if (!renderView)
+        return Orientation::Unknown;
+    auto window = (__bridge UIWindow*) renderView->getEAWindow();
+    UIInterfaceOrientation uiOrientation;
+    if (@available(iOS 13.0, *)) {
+        uiOrientation = window.windowScene.interfaceOrientation;
+    } else {
+        // Fallback on earlier versions
+        uiOrientation = UIApplication.sharedApplication.statusBarOrientation;
+    }
+    switch(uiOrientation)
+    {
+        case UIInterfaceOrientationPortrait:
+            return Orientation::Portrait;
+        case UIInterfaceOrientationLandscapeLeft:
+            return Orientation::Landscape;
+        case UIInterfaceOrientationLandscapeRight:
+            return Orientation::ReverseLandscape;
+        case UIInterfaceOrientationPortraitUpsideDown:
+            return Orientation::ReversePortrait;
+        default:;
+    }
+}
 
+Device::Orientation Device::getPhysicalOrientation()
+{
+#if !defined(AX_TARGET_TVOS)
+    UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+    
     switch (deviceOrientation) {
         case UIDeviceOrientationPortrait: return Orientation::Portrait;
         case UIDeviceOrientationPortraitUpsideDown: return Orientation::ReversePortrait;
@@ -839,7 +866,7 @@ Device::Orientation Device::getCurrentOrientation()
         default: return Orientation::Unknown;
     }
 #else
-    return Orientation::Landscape;
+    return Orientation::Unknown;
 #endif
 }
 

@@ -575,11 +575,11 @@ void Device::prepareSelectionFeedbackGenerator() {}
 
 void Device::selectionChanged() {}
 
-void Device::setPreferredOrientation(Device::Orientation orientation) {}
+void Device::setPreferredOrientation(Device::Orientation /*orientation*/) {}
 
 Device::Orientation Device::getPreferredOrientation()
 {
-    return Orientation::Landscape;
+    return Orientation::Unknown;
 }
 
 Device::OrientationMask Device::getSupportedOrientations()
@@ -587,9 +587,9 @@ Device::OrientationMask Device::getSupportedOrientations()
     return OrientationMask::All;
 }
 
-Device::Orientation Device::getCurrentOrientation()
+Device::Orientation Device::getPhysicalOrientation()
 {
-    return Orientation::Landscape;
+    return Orientation::Unknown;
 }
 
 }

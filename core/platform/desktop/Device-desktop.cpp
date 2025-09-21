@@ -28,11 +28,11 @@ THE SOFTWARE.
 namespace ax
 {
 
-void Device::setPreferredOrientation(Device::Orientation orientation) {}
+void Device::setPreferredOrientation(Device::Orientation /*orientation*/) {}
 
 Device::Orientation Device::getPreferredOrientation()
 {
-    return Orientation::Landscape;
+    return Orientation::Unknown;
 }
 
 Device::OrientationMask Device::getSupportedOrientations()
@@ -42,7 +42,12 @@ Device::OrientationMask Device::getSupportedOrientations()
 
 Device::Orientation Device::getCurrentOrientation()
 {
-    return Orientation::Landscape;
+    return Orientation::Unknown;
+}
+
+Device::Orientation Device::getPhysicalOrientation()
+{
+    return Orientation::Unknown;
 }
 
 }  // namespace ax

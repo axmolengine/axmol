@@ -229,12 +229,50 @@ public:
      * @brief Gets the current screen orientation as rendered by the system.
      *
      * This reflects the actual orientation currently applied to the screen,
-     * which may differ from the preferred orientation if Orientation::Auto is set.
+     * which may differ from the preferred orientation if Orientation::Sensor is set.
      *
      * @return The current screen orientation.
      * @since axmol-2.9.0
      */
     static Orientation getCurrentOrientation();
+    
+    /**
+     * @brief Returns the device's physical orientation (hardware posture).
+     *
+     * Unlike getCurrentOrientation(), which reflects the UI's current interface
+     * orientation, this method reports the device's actual physical posture as
+     * detected by sensors (e.g., accelerometer). It may differ from the UI
+     * orientation when rotation is locked or when the app restricts supported
+     * orientations.
+     *
+     * Platform notes:
+     * - iOS: Maps from UIDeviceOrientation. FaceUp/FaceDown are treated as Unknown.
+     *        You should ensure orientation notifications are active internally
+     *        (beginGeneratingDeviceOrientationNotifications) if needed.
+     * - Android: Maps from display rotation and/or sensor readings to the closest
+     *            Orientation value. Sensor-based "flat" states map to Unknown.
+     *
+     * Typical usage:
+     * - Use getCurrentOrientation() for layout, rendering, and UI decisions.
+     * - Use getPhysicalOrientation() for gameplay/input mechanics that depend on
+     *   how the user is holding the device, independent of UI rotation.
+     *
+     * Threading:
+     * - Safe to call from any thread. Implementations may internally marshal to
+     *   the main thread when required by the platform.
+     *
+     * Return values:
+     * - Orientation::Portrait
+     * - Orientation::ReversePortrait
+     * - Orientation::Landscape
+     * - Orientation::ReverseLandscape
+     * - Orientation::Unknown (e.g., flat on a table or sensor not ready)
+     *
+     * @return Orientation The device's physical orientation.
+     * @since axmol-2.9.0
+     */
+    static Orientation getPhysicalOrientation();
+    
 #pragma endregion Orientation control support
 
 private:
