@@ -171,12 +171,19 @@ DriverImpl::DriverImpl()
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
 
     // reset gl state
+    // NOT GLES2.0, need generate shared VAO clearly
+    glGenVertexArrays(1, &_sharedVAO);
     resetState();
+    __state->bindVertexArray(_sharedVAO);
 
     CHECK_GL_ERROR_DEBUG();
 }
 
-DriverImpl::~DriverImpl() {}
+DriverImpl::~DriverImpl()
+{
+    if (_sharedVAO)
+        glDeleteVertexArrays(1, &_sharedVAO);
+}
 
 GLint DriverImpl::getDefaultFBO() const
 {

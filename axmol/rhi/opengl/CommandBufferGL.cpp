@@ -169,7 +169,7 @@ void CommandBufferImpl::setCullMode(CullMode mode)
 
 void CommandBufferImpl::setWinding(Winding winding)
 {
-    __state->winding(winding);
+    __state->winding(UtilsGL::toGLFrontFace(winding));
 }
 
 void CommandBufferImpl::setVertexBuffer(Buffer* buffer)

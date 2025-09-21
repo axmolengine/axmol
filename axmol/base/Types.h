@@ -485,42 +485,8 @@ public:
 extern const std::string AX_DLL STD_STRING_EMPTY;
 extern const ssize_t AX_DLL AX_INVALID_INDEX;
 
-struct RectI
-{
-    RectI() { this->x = this->y = this->w = this->h = 0; }
-    int x;
-    int y;
-
-    union
-    {
-        struct
-        {
-            int width;
-            int height;
-        };
-        struct
-        {
-            int w;
-            int h;
-        };
-    };
-
-    inline bool operator==(const RectI& v) const
-    {
-        return this->x == v.x && this->y == v.y && this->width == v.width && this->height == v.height;
-    }
-    inline RectI& set(int x, int y, int w, int h)
-    {
-        this->x      = x;
-        this->y      = y;
-        this->width  = w;
-        this->height = h;
-        return *this;
-    }
-};
-
-using Viewport    = RectI;
-using ScissorRect = RectI;  // both GL & Metal is integer type, GL: int, Metal: NSUInteger
+using Viewport    = rhi::Viewport;
+using ScissorRect = rhi::ScissorRect;  // both GL & Metal is integer type, GL: int, Metal: NSUInteger
 
 using TextureUsage = rhi::TextureUsage;
 using PixelFormat  = rhi::PixelFormat;

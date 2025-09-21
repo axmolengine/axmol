@@ -22,7 +22,9 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_NewFrame();
 IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data);
 IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform();
 
-IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window);
+IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewport* viewport);
+
+IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiViewport* viewport);
 
 IMGUI_IMPL_API void ImGui_ImplAxmol_PostCommand(std::function<void()>&& func);
 

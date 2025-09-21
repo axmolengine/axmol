@@ -626,6 +626,17 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
         return false;
     }
 
+#if AX_RENDER_API == AX_RENDER_API_GL
+    glfwMakeContextCurrent(_mainWindow);
+
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
+    loadGL();
+#    endif
+    // Init driver after load GL
+    axdrv;
+    glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
+#endif
+
     /*
      *  Note that the created window and context may differ from what you requested,
      *  as not all parameters and hints are
@@ -644,11 +655,6 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     int w, h;
     glfwGetWindowSize(_mainWindow, &w, &h);
     updateScaledWindowSize(w, h, SurfaceUpdateFlag::WindowSizeChanged | SurfaceUpdateFlag::SilentUpdate);
-
-#if AX_RENDER_API == AX_RENDER_API_GL
-    glfwMakeContextCurrent(_mainWindow);
-    glfwSetWindowUserPointer(_mainWindow, rhi::gl::__state);
-#endif
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
@@ -689,14 +695,6 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
     glfwSetWindowCloseCallback(_mainWindow, GLFWEventHandler::onGLFWWindowCloseCallback);
-
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
-#    if AX_RENDER_API == AX_RENDER_API_GL
-    loadGL();
-    // Init driver after load GL
-    axdrv;
-#    endif
-#endif
 
 #if AX_RENDER_API == AX_RENDER_API_GL
 #    if !defined(__EMSCRIPTEN__)

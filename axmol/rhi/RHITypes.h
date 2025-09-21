@@ -554,6 +554,43 @@ struct ProgramType
 };
 // clang-format on
 
+struct RectI
+{
+    RectI() { this->x = this->y = this->w = this->h = 0; }
+    int x;
+    int y;
+
+    union
+    {
+        struct
+        {
+            int width;
+            int height;
+        };
+        struct
+        {
+            int w;
+            int h;
+        };
+    };
+
+    inline bool operator==(const RectI& v) const
+    {
+        return this->x == v.x && this->y == v.y && this->width == v.width && this->height == v.height;
+    }
+    inline RectI& set(int x, int y, int w, int h)
+    {
+        this->x      = x;
+        this->y      = y;
+        this->width  = w;
+        this->height = h;
+        return *this;
+    }
+};
+
+using Viewport    = RectI;
+using ScissorRect = RectI;
+
 // d3d RHI spec
 enum class PowerPreference
 {

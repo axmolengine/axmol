@@ -61,6 +61,8 @@ public:
 
     GLint getDefaultFBO() const;
 
+    GLuint getSharedVAO() const { return _sharedVAO; }
+
     /**
      * Create a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
@@ -166,6 +168,7 @@ protected:
     void destroySampler(SamplerHandle&) override;
 
     GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
+    GLuint _sharedVAO = 0;  // The shared VAO for all vertex layouts
 
 private:
     std::set<uint32_t> _glExtensions;

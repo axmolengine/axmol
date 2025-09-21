@@ -2,9 +2,9 @@
 
 #include <optional>
 
-#include "axmol/base/Types.h"
+#include "axmol/rhi/RHITypes.h"
 #include "axmol/platform/GL.h"
-#include "axmol/rhi/opengl/UtilsGL.h"
+#include "axmol/platform/PlatformDefine.h"
 
 #define AX_ENABLE_STATE_GUARD 1
 
@@ -197,9 +197,10 @@ struct AX_DLL OpenGLState
     static void reset();
 
     OpenGLState();
+    ~OpenGLState();
 
     void viewport(const Viewport& v) { try_callf(glViewport, _viewport, v, v.x, v.y, v.width, v.height); }
-    void winding(Winding v) { try_callf(glFrontFace, _winding, v, UtilsGL::toGLFrontFace(v)); }
+    void winding(GLenum v) { try_callf(glFrontFace, _winding, v, v); }
     void enableDepthTest() { try_enable(GL_DEPTH_TEST, _depthTest); }
     void disableDepthTest() { try_disable(GL_DEPTH_TEST, _depthTest); }
     void enableBlend() { try_enable(GL_BLEND, _blend); }
@@ -293,6 +294,14 @@ struct AX_DLL OpenGLState
                 samplerBinding.reset();
         }
     }
+    void invalidateSamplerState()
+    {
+        for (auto& samplerBinding : _samplerBindings)
+        {
+            if (samplerBinding.has_value())
+                samplerBinding.reset();
+        }
+    }
     GLenum bindBuffer(BufferType type, GLuint buffer)
     {
         auto target = BufferTargets[static_cast<int>(type)];
@@ -310,11 +319,20 @@ struct AX_DLL OpenGLState
         try_callxu(glBindBufferBase, GL_UNIFORM_BUFFER, _uniformBufferState, index, handle);
     }
 
+    void bindVertexArray(GLuint handle) { try_call(glBindVertexArray, _vao, handle); }
+
+    void deleteVertexArray(GLuint handle)
+    {
+        glDeleteVertexArrays(1, &handle);
+        if (_vao == handle)
+            _vao.reset();
+    }
+
     // useful for multi GL context before GL context switch, reset VAO state
     // VAO not share between context
     // shareable: texture, uniform buffer
     // not shareable: FBO, VAO(GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER)
-    void resetVAO()
+    void invalidateVertexArrayState()
     {
         _bufferBindings[static_cast<int>(BufferType::ARRAY_BUFFER)].reset();
         _bufferBindings[static_cast<int>(BufferType::ELEMENT_ARRAY_BUFFER)].reset();
@@ -402,7 +420,7 @@ struct AX_DLL OpenGLState
     }
 
 private:
-    GLuint _defaultVAO{0};
+    std::optional<GLuint> _vao;
     uint32_t _attribBits{0};   // vertexAttribArray bitset
     uint32_t _divisorBits{0};  // divisor bitset
     std::optional<GLuint> _bufferBindings[(int)BufferType::COUNT];
@@ -410,7 +428,7 @@ private:
     std::optional<SamplerBindState> _samplerBindings[MAX_TEXTURE_UNITS];
 
     std::optional<Viewport> _viewport;
-    std::optional<Winding> _winding;
+    std::optional<GLenum> _winding;
     std::optional<bool> _depthTest;
     std::optional<bool> _blend;
     std::optional<bool> _scissor;

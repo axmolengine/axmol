@@ -1,4 +1,4 @@
-﻿
+
 //----------------------------------------------------------------------------------
 // Include
 //----------------------------------------------------------------------------------
@@ -37,6 +37,8 @@
 #include "ShaderHeader/sprite_distortion_vs.h"
 #include "ShaderHeader/sprite_lit_vs.h"
 #include "ShaderHeader/sprite_unlit_vs.h"
+
+#include "axmol/rhi/opengl/OpenGLState.h"
 
 #include "GraphicsDevice.h"
 
@@ -601,6 +603,8 @@ bool RendererImplemented::EndRendering()
 			{
 				glBindSampler(i, 0);
 			}
+
+            ax::rhi::gl::__state->invalidateSamplerState();
 		}
 	}
 

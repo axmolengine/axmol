@@ -1251,8 +1251,8 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
     if (bd->ClientApi == GlfwClientApi_OpenGL)
     {
         // axmol spec
-        ImGui_ImplAxmol_PostCommand([vd] {
-            ImGui_ImplAxmol_MakeCurrent(vd->Window);
+        ImGui_ImplAxmol_PostCommand([vd, viewport] {
+            ImGui_ImplAxmol_MakeCurrent(vd->Window, viewport);
             glfwSwapInterval(0);
         });
     }
@@ -1276,11 +1276,8 @@ static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)
                 if (bd->KeyOwnerWindows[i] == vd->Window)
                     ImGui_ImplGlfw_KeyCallback(vd->Window, i, 0, GLFW_RELEASE, 0); // Later params are only used for main viewport, on which this function is never called.
 #if AX_RENDER_API == AX_RENDER_API_GL // axmol spec
-            using namespace ax::rhi;
-            // destroy imgui multi-viewport window gl state
-            auto isolated = (gl::OpenGLState*)glfwGetWindowUserPointer(vd->Window);
-            if (isolated)
-                delete isolated;
+            ImGui_ImplAxmol_OnDestroyWindow(vd->Window, viewport);
+
 #endif
             ImGui_ImplGlfw_ContextMap_Remove(vd->Window);
             glfwDestroyWindow(vd->Window);
@@ -1419,8 +1416,8 @@ static void ImGui_ImplGlfw_RenderWindow(ImGuiViewport* viewport, void*)
     if (bd->ClientApi == GlfwClientApi_OpenGL)
     {
         // axmol spec
-        ImGui_ImplAxmol_PostCommand([vd] {
-            ImGui_ImplAxmol_MakeCurrent(vd->Window);
+        ImGui_ImplAxmol_PostCommand([vd, viewport] {
+            ImGui_ImplAxmol_MakeCurrent(vd->Window, viewport);
         });
     }
 }
@@ -1432,8 +1429,8 @@ static void ImGui_ImplGlfw_SwapBuffers(ImGuiViewport* viewport, void*)
     if (bd->ClientApi == GlfwClientApi_OpenGL)
     {
         // axmol spec
-        ImGui_ImplAxmol_PostCommand([vd]() {
-            ImGui_ImplAxmol_MakeCurrent(vd->Window);
+        ImGui_ImplAxmol_PostCommand([vd, viewport]() {
+            ImGui_ImplAxmol_MakeCurrent(vd->Window, viewport);
             glfwSwapBuffers(vd->Window);
         });
     }
