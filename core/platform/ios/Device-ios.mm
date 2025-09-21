@@ -768,7 +768,7 @@ void Device::setPreferredOrientation(Device::Orientation orientation)
 {
 #if !defined(AX_TARGET_OS_TVOS)
     _preferredOrientation = orientation;
-    
+
     auto renderView = Director::getInstance()->getRenderView();
     if (!renderView)
         return; // will take affect when creating renderView
@@ -777,7 +777,7 @@ void Device::setPreferredOrientation(Device::Orientation orientation)
     dispatch_async(dispatch_get_main_queue(), ^{
         auto mainWindow = (__bridge UIWindow*) renderView->getEAWindow();
         UIViewController* vc = mainWindow.rootViewController;
-        
+
         if (@available(iOS 16.0, *)) {
             // Modern API: mark for update then attempt rotation
             [vc setNeedsUpdateOfSupportedInterfaceOrientations];
@@ -855,9 +855,9 @@ Device::Orientation Device::getCurrentOrientation()
 
 Device::Orientation Device::getPhysicalOrientation()
 {
-#if !defined(AX_TARGET_TVOS)
+#if !defined(AX_TARGET_OS_TVOS)
     UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
-    
+
     switch (deviceOrientation) {
         case UIDeviceOrientationPortrait: return Orientation::Portrait;
         case UIDeviceOrientationPortraitUpsideDown: return Orientation::ReversePortrait;
