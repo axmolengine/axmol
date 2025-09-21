@@ -239,7 +239,8 @@ Device::Orientation Device::getCurrentOrientation()
 
 Device::Orientation Device::getPhysicalOrientation()
 {
-    return Orientation::Unknown;
+    jint orientation = JniHelper::callStaticIntMethod(deviceHelperClassName, "getPhysicalOrientation");
+    return static_cast<Device::Orientation>(orientation);
 }
 
 }

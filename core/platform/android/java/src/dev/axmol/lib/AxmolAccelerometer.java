@@ -82,13 +82,8 @@ public class AxmolAccelerometer implements SensorEventListener {
     }
 
     public void setInterval(float interval) {
-        // Honeycomb version is 11
-        if(android.os.Build.VERSION.SDK_INT < 11) {
-            this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-        } else {
-            //convert seconds to microseconds
-            this.mSensorManager.registerListener(this, this.mAccelerometer, (int)(interval*1000000));
-        }
+        //convert seconds to microseconds
+        this.mSensorManager.registerListener(this, this.mAccelerometer, (int)(interval*1000000));
     }
 
     public void disable() {

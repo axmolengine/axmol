@@ -30,6 +30,10 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -78,6 +82,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 
 public class AxmolEngine {
@@ -926,5 +932,61 @@ public class AxmolEngine {
             default:
                 return ORIENTATION_UNKNOWN;
         }
+    }
+
+    @SuppressWarnings("unused")
+    public static int getPhysicalOrientation() {
+        SensorManager sm = (SensorManager) sActivity.getSystemService(Context.SENSOR_SERVICE);
+        Sensor rotationVector = sm.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        if (rotationVector == null) {
+            return 0;
+        }
+
+        final CountDownLatch latch = new CountDownLatch(1);
+        final int[] result = new int[1];
+        SensorEventListener listener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                float[] rotationMatrix = new float[9];
+                float[] orientationVals = new float[3];
+                SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
+                SensorManager.getOrientation(rotationMatrix, orientationVals);
+
+                float pitch = orientationVals[1];
+                float roll  = orientationVals[2];
+
+                if (Math.abs(roll) > Math.PI/4) {
+                    // landscape
+                    if (roll > 0) {
+                        result[0] = ORIENTATION_LANDSCAPE;
+                    } else {
+                        result[0] = ORIENTATION_REVERSE_LANDSCAPE;
+                    }
+                } else {
+                    // portrait
+                    if (pitch > 0) {
+                        result[0] = ORIENTATION_REVERSE_PORTRAIT;
+                    } else {
+                        result[0] = ORIENTATION_PORTRAIT;
+                    }
+                }
+
+                sm.unregisterListener(this);
+                latch.countDown();
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+        };
+
+        sm.registerListener(listener, rotationVector, SensorManager.SENSOR_DELAY_UI);
+
+        try {
+            latch.await(500, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        return result[0];
     }
 }
