@@ -91254,7 +91254,7 @@ int lua_ax_base_Camera_setDefaultViewport(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        ax::RectI arg0;
+        ax::rhi::RectI arg0;
         #pragma warning NO CONVERSION TO NATIVE FOR RectI
         ok = false;
         if(!ok)
