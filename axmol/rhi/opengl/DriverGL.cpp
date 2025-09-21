@@ -172,7 +172,7 @@ DriverImpl::DriverImpl()
 
     // reset gl state
     resetState();
-    
+
     // NOT GLES2.0, need generate shared VAO clearly
     glGenVertexArrays(1, &_sharedVAO);
     __state->bindVertexArray(_sharedVAO);

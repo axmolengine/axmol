@@ -14,12 +14,8 @@ void OpenGLState::reset()
     __state              = g_defaultOpenGLState.get();
 }
 
-OpenGLState::OpenGLState()
-{
-}
+OpenGLState::OpenGLState() {}
 
-OpenGLState::~OpenGLState()
-{
-}
+OpenGLState::~OpenGLState() {}
 
 }  // namespace ax::rhi::gl
