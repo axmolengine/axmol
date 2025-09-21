@@ -103508,6 +103508,178 @@ int lua_ax_base_Device_selectionChanged(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_base_Device_setPreferredOrientation(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::Device::Orientation arg0;
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Device:setPreferredOrientation");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_setPreferredOrientation'", nullptr);
+            return 0;
+        }
+        ax::Device::setPreferredOrientation(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:setPreferredOrientation",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_setPreferredOrientation'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_getPreferredOrientation(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_getPreferredOrientation'", nullptr);
+            return 0;
+        }
+        int ret = (int)ax::Device::getPreferredOrientation();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:getPreferredOrientation",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_getPreferredOrientation'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_getSupportedOrientations(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_getSupportedOrientations'", nullptr);
+            return 0;
+        }
+        int ret = (int)ax::Device::getSupportedOrientations();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:getSupportedOrientations",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_getSupportedOrientations'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_getCurrentOrientation(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_getCurrentOrientation'", nullptr);
+            return 0;
+        }
+        int ret = (int)ax::Device::getCurrentOrientation();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:getCurrentOrientation",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_getCurrentOrientation'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_getPhysicalOrientation(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_getPhysicalOrientation'", nullptr);
+            return 0;
+        }
+        int ret = (int)ax::Device::getPhysicalOrientation();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:getPhysicalOrientation",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_getPhysicalOrientation'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_base_Device_getDisplayRefreshRate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -103566,6 +103738,11 @@ int lua_register_ax_base_Device(lua_State* tolua_S)
         tolua_function(tolua_S,"notificationOccurred", lua_ax_base_Device_notificationOccurred);
         tolua_function(tolua_S,"prepareSelectionFeedbackGenerator", lua_ax_base_Device_prepareSelectionFeedbackGenerator);
         tolua_function(tolua_S,"selectionChanged", lua_ax_base_Device_selectionChanged);
+        tolua_function(tolua_S,"setPreferredOrientation", lua_ax_base_Device_setPreferredOrientation);
+        tolua_function(tolua_S,"getPreferredOrientation", lua_ax_base_Device_getPreferredOrientation);
+        tolua_function(tolua_S,"getSupportedOrientations", lua_ax_base_Device_getSupportedOrientations);
+        tolua_function(tolua_S,"getCurrentOrientation", lua_ax_base_Device_getCurrentOrientation);
+        tolua_function(tolua_S,"getPhysicalOrientation", lua_ax_base_Device_getPhysicalOrientation);
         tolua_function(tolua_S,"getDisplayRefreshRate", lua_ax_base_Device_getDisplayRefreshRate);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Device).name(); // rtti is literal storage
