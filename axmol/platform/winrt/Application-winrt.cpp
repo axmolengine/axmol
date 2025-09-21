@@ -75,7 +75,7 @@ Application::~Application()
 
 int Application::run()
 {
-    // Initialize instance and cocos2d.
+    // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())
     {
         return 0;

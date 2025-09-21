@@ -207,7 +207,7 @@ Application::~Application()
 int Application::run()
 {
     initGfxContextAttrs();
-    // Initialize instance and cocos2d.
+    // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())
     {
         return 1;
