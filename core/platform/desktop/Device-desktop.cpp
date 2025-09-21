@@ -30,7 +30,10 @@ namespace ax
 
 void Device::setPreferredOrientation(Device::Orientation orientation) {}
 
-Device::Orientation Device::getPreferredOrientation() {}
+Device::Orientation Device::getPreferredOrientation()
+{
+    return Orientation::Landscape;
+}
 
 Device::OrientationMask Device::getSupportedOrientations()
 {
@@ -39,7 +42,7 @@ Device::OrientationMask Device::getSupportedOrientations()
 
 Device::Orientation Device::getCurrentOrientation()
 {
-    return Orientation::Sensor;
+    return Orientation::Landscape;
 }
 
 }  // namespace ax
