@@ -235,7 +235,7 @@ public:
      * @since axmol-2.9.0
      */
     static Orientation getCurrentOrientation();
-    
+
     /**
      * @brief Returns the device's physical orientation (hardware posture).
      *
@@ -257,22 +257,11 @@ public:
      * - Use getPhysicalOrientation() for gameplay/input mechanics that depend on
      *   how the user is holding the device, independent of UI rotation.
      *
-     * Threading:
-     * - Safe to call from any thread. Implementations may internally marshal to
-     *   the main thread when required by the platform.
-     *
-     * Return values:
-     * - Orientation::Portrait
-     * - Orientation::ReversePortrait
-     * - Orientation::Landscape
-     * - Orientation::ReverseLandscape
-     * - Orientation::Unknown (e.g., flat on a table or sensor not ready)
-     *
      * @return Orientation The device's physical orientation.
      * @since axmol-2.9.0
      */
     static Orientation getPhysicalOrientation();
-    
+
 #pragma endregion Orientation control support
 
 private:
