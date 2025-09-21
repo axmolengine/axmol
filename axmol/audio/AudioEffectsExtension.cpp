@@ -91,9 +91,6 @@ void AudioEffectsExtension::setEffectParamFloat(uint32_t effect, int param, floa
 {
     alEffectf(effect, param, value);
 
-    if (alGetError())
-        AXLOGD("hit");
-
     CHECK_AL_ERROR_DEBUG();
 }
 
