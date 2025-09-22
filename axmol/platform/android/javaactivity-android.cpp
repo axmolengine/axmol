@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/platform/android/jni/JniHelper.h"
+#include "axmol/rhi/opengl/DriverGL.h"
 
 #include <android/log.h>
 #include <android/api-level.h>

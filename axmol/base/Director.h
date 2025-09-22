@@ -214,7 +214,7 @@ public:
 
     static void setEngineAttrs(const EngineAttrs& attrs) { _engineAttrs = attrs; }
 
-    static const EngineAttrs& getEngineAttrs() const { return _engineAttrs; }
+    static const EngineAttrs& getEngineAttrs() { return _engineAttrs; }
 
     /*
      * Gets singleton of TextureCache.

@@ -536,9 +536,6 @@ private:
     bool _interactive;
 };
 
-using ResolutionPolicy = ax::ResolutionPolicy;
-using GfxContextAttrs  = ax::GfxContextAttrs;
-
 // end of platform group
 /// @}
 
