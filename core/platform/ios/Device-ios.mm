@@ -930,7 +930,7 @@ Device::Orientation Device::resolveOrientation()
     case Orientation::SensorPortrait:
         resolvedOrientation = tryUse(physical);
         if (resolvedOrientation == Orientation::Unknown)
-            resolvedOrientation = (supported & OrientationMask::Portrait)
+            resolvedOrientation = bool(supported & OrientationMask::Portrait)
                                     ? Orientation::Portrait
                                     : Orientation::ReversePortrait;
         break;
@@ -939,7 +939,7 @@ Device::Orientation Device::resolveOrientation()
     case Orientation::SensorLandscape:
         resolvedOrientation = tryUse(physical);
         if (resolvedOrientation == Orientation::Unknown)
-            resolvedOrientation = (supported & OrientationMask::Landscape)
+            resolvedOrientation = bool(supported & OrientationMask::Landscape)
                                     ? Orientation::Landscape
                                     : Orientation::ReverseLandscape;
         break;
