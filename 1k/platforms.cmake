@@ -95,6 +95,8 @@ if(NOT DEFINED WASM)
   set(WASM FALSE)
 endif()
 
+# compiler id
+
 # generators that are capable of organizing into a hierarchy of folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
