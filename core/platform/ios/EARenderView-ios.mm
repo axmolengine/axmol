@@ -183,6 +183,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 {
     if ((self = [super initWithFrame:frame]))
     {
+        // std::swap(frame.size.width, frame.size.height);
         self.textInputView = [[TextInputView alloc] initWithFrame:frame];
 
         originalRect_                 = self.frame;
@@ -316,9 +317,12 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 {
     if (!ax::Director::getInstance()->isValid())
         return;
+    
+    auto bounds = [self bounds];
+    self.textInputView.bounds = originalRect_ = bounds;
 
 #if defined(AX_USE_METAL)
-    size_ = [self bounds].size;
+    size_ = bounds.size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
     ax::backend::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
@@ -579,53 +583,19 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)dis
 {
-    [UIView beginAnimations:nil context:nullptr];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDuration:duration];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-
-    // NSLog(@"[animation] dis = %f, scale = %f \n", dis, ax::RenderView::getInstance()->getScaleY());
-
-    if (dis < 0.0f)
-        dis = 0.0f;
+    if (dis < 0.0f) dis = 0.0f;
 
     auto renderView = ax::Director::getInstance()->getRenderView();
     dis *= renderView->getScaleY();
-
     dis /= self.contentScaleFactor;
 
-#if defined(AX_TARGET_OS_TVOS)
-    self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y - dis, originalRect_.size.width,
-                            originalRect_.size.height);
-#else
-    switch (getFixedOrientation([[UIApplication sharedApplication] statusBarOrientation]))
-    {
-    case UIInterfaceOrientationPortrait:
-        self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y - dis, originalRect_.size.width,
-                                originalRect_.size.height);
-        break;
+    CGRect newFrame = originalRect_;
+    newFrame.origin.y -= dis;
 
-    case UIInterfaceOrientationPortraitUpsideDown:
-        self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y + dis, originalRect_.size.width,
-                                originalRect_.size.height);
-        break;
-
-    case UIInterfaceOrientationLandscapeLeft:
-        self.frame = CGRectMake(originalRect_.origin.x - dis, originalRect_.origin.y, originalRect_.size.width,
-                                originalRect_.size.height);
-        break;
-
-    case UIInterfaceOrientationLandscapeRight:
-        self.frame = CGRectMake(originalRect_.origin.x + dis, originalRect_.origin.y, originalRect_.size.width,
-                                originalRect_.size.height);
-        break;
-
-    default:
-        break;
-    }
-#endif
-
-    [UIView commitAnimations];
+    [UIView animateWithDuration:duration
+                     animations:^{
+                         self.frame = newFrame;
+                     }];
 }
 
 - (void)doAnimationWhenAnotherEditBeClicked
@@ -680,67 +650,27 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
 {
 #if !defined(AX_TARGET_OS_TVOS)
     NSString* type = notif.name;
-
     NSDictionary* info = [notif userInfo];
-    CGRect begin = [self convertRect:[[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue] fromView:self];
-    CGRect end   = [self convertRect:[[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:self];
+
+    CGRect begin = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect end   = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     double aniDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
-    CGSize viewSize = self.frame.size;
-
-    CGFloat tmp;
-    switch (getFixedOrientation([[UIApplication sharedApplication] statusBarOrientation]))
-    {
-    case UIInterfaceOrientationPortrait:
-        begin.origin.y = viewSize.height - begin.origin.y - begin.size.height;
-        end.origin.y   = viewSize.height - end.origin.y - end.size.height;
-        break;
-
-    case UIInterfaceOrientationPortraitUpsideDown:
-        begin.origin.x = viewSize.width - (begin.origin.x + begin.size.width);
-        end.origin.x   = viewSize.width - (end.origin.x + end.size.width);
-        break;
-
-    case UIInterfaceOrientationLandscapeLeft:
-        std::swap(begin.size.width, begin.size.height);
-        std::swap(end.size.width, end.size.height);
-        std::swap(viewSize.width, viewSize.height);
-
-        tmp            = begin.origin.x;
-        begin.origin.x = begin.origin.y;
-        begin.origin.y = viewSize.height - tmp - begin.size.height;
-        tmp            = end.origin.x;
-        end.origin.x   = end.origin.y;
-        end.origin.y   = viewSize.height - tmp - end.size.height;
-        break;
-
-    case UIInterfaceOrientationLandscapeRight:
-        std::swap(begin.size.width, begin.size.height);
-        std::swap(end.size.width, end.size.height);
-        std::swap(viewSize.width, viewSize.height);
-
-        tmp            = begin.origin.x;
-        begin.origin.x = begin.origin.y;
-        begin.origin.y = tmp;
-        tmp            = end.origin.x;
-        end.origin.x   = end.origin.y;
-        end.origin.y   = tmp;
-        break;
-
-    default:
-        break;
-    }
+    // Convert to current view's coordinate system
+    begin = [self convertRect:begin fromView:nil];
+    end   = [self convertRect:end fromView:nil];
 
     auto renderView  = ax::Director::getInstance()->getRenderView();
     float scaleX = renderView->getScaleX();
     float scaleY = renderView->getScaleY();
 
-    // Convert to pixel coordinate
-    begin = CGRectApplyAffineTransform(
-        begin, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
-    end = CGRectApplyAffineTransform(
-        end, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
+    // Convert to pixel coordinates
+    begin = CGRectApplyAffineTransform(begin,
+        CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
+    end = CGRectApplyAffineTransform(end,
+        CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
 
+    // Adjust for viewport offset if needed
     float offestY = renderView->getViewPortRect().origin.y;
     if (offestY < 0.0f)
     {
@@ -749,12 +679,13 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         end.size.height -= offestY;
     }
 
-    // Convert to design coordinate
+    // Convert to design resolution coordinates
     begin = CGRectApplyAffineTransform(begin,
-                                       CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
-    end   = CGRectApplyAffineTransform(end,
-                                       CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
+        CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
+    end = CGRectApplyAffineTransform(end,
+        CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
 
+    // Fill notification info for Axmol IME dispatcher
     ax::IMEKeyboardNotificationInfo notiInfo;
     notiInfo.begin    = ax::Rect(begin.origin.x, begin.origin.y, begin.size.width, begin.size.height);
     notiInfo.end      = ax::Rect(end.origin.x, end.origin.y, end.size.width, end.size.height);
@@ -764,6 +695,10 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     if (UIKeyboardWillShowNotification == type)
     {
         dispatcher->dispatchKeyboardWillShow(notiInfo);
+
+        // Move the whole render view up by keyboard height
+        CGFloat distance = end.size.height;
+        [self doAnimationWhenKeyboardMoveWithDuration:aniDuration distance:distance];
     }
     else if (UIKeyboardDidShowNotification == type)
     {
@@ -773,6 +708,9 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     else if (UIKeyboardWillHideNotification == type)
     {
         dispatcher->dispatchKeyboardWillHide(notiInfo);
+
+        // Restore to original rect
+        [self doAnimationWhenKeyboardMoveWithDuration:aniDuration distance:0.0f];
     }
     else if (UIKeyboardDidHideNotification == type)
     {
