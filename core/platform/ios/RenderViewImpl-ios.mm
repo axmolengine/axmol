@@ -58,13 +58,18 @@ RenderViewImpl* RenderViewImpl::createWithEARenderView(void* viewHandle)
 static CGSize computeLogicalScreenSize()
 {
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    auto finalOrientation = Device::resolveFinalOrientation();
+    auto resolvedOrientation = Device::resolveFinalOrientation();
 
-    if (finalOrientation == Device::Orientation::Landscape ||
-        finalOrientation == Device::Orientation::ReverseLandscape)
-    {
+    bool isLandscapeSize = screenSize.width > screenSize.height;
+    bool shouldBeLandscape = (resolvedOrientation == Device::Orientation::Landscape ||
+                              resolvedOrientation == Device::Orientation::ReverseLandscape);
+
+    // If orientation and actual size basis mismatch, swap
+    if (shouldBeLandscape && !isLandscapeSize)
         screenSize = CGSizeMake(screenSize.height, screenSize.width);
-    }
+    else if (!shouldBeLandscape && isLandscapeSize)
+        screenSize = CGSizeMake(screenSize.height, screenSize.width);
+
     return screenSize;
 }
 
