@@ -484,11 +484,11 @@ enum class RenderScaleMode
     Physical  // Use logical pixels multiplied by the DPI scale factor
 };
 
-/** @struct EngineAttrs
+/** @struct ContextAttrs
  *
  * The axmol Engine attributes.
  */
-struct EngineAttrs
+struct ContextAttrs
 {
     int redBits{8};
     int greenBits{8};

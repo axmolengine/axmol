@@ -101,12 +101,12 @@ public:
     /** Subclass override the function to set OpenGL context attribution instead of use default value.
      * And now can only set six attributions:redBits,greenBits,blueBits,alphaBits,depthBits,stencilBits.
      * Default value are(5,6,5,0,16,0), usually use as follows:
-     * void AppDelegate::initEngineAttrs(){
-     *     EngineAttrs engineAttrs = {8, 8, 8, 8, 24, 8};
-     *     Director::setEngineAttrs(engineAttrs);
+     * void AppDelegate::initContextAttrs(){
+     *     ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8};
+     *     setContextAttrs(contextAttrs);
      * }
      */
-    virtual void initEngineAttrs() {}
+    virtual void initContextAttrs() {}
 
     /**
     @brief Get current language config.
@@ -142,6 +142,11 @@ public:
      */
     virtual bool openURL(std::string_view url) = 0;
 
+
+    static void setContextAttrs(const ContextAttrs& attrs) { _contextAttrs = attrs; }
+
+    static const ContextAttrs& getContextAttrs() { return _contextAttrs; }
+
 protected:
     /**
      * @brief Called when the application screen size changes.
@@ -155,6 +160,9 @@ protected:
      * @param newHeight The new height of the application screen in pixels.
      */
     virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
+
+
+    static ContextAttrs _contextAttrs;
 };
 
 using ApplicationProtocol = ApplicationBase;

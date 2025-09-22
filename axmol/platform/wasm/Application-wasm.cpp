@@ -206,7 +206,7 @@ Application::~Application()
 
 int Application::run()
 {
-    initEngineAttrs();
+    initContextAttrs();
     // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())
     {

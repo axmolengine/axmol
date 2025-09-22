@@ -573,23 +573,23 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
 
-    auto& engineAttrs = Director::getEngineAttrs();
+    auto& contextAttrs = Application::getContextAttrs();
 
     glfwWindowHint(GLFW_RESIZABLE, resizable ? GL_TRUE : GL_FALSE);
-    glfwWindowHint(GLFW_RED_BITS, engineAttrs.redBits);
-    glfwWindowHint(GLFW_GREEN_BITS, engineAttrs.greenBits);
-    glfwWindowHint(GLFW_BLUE_BITS, engineAttrs.blueBits);
-    glfwWindowHint(GLFW_ALPHA_BITS, engineAttrs.alphaBits);
-    glfwWindowHint(GLFW_DEPTH_BITS, engineAttrs.depthBits);
-    glfwWindowHint(GLFW_STENCIL_BITS, engineAttrs.stencilBits);
+    glfwWindowHint(GLFW_RED_BITS, contextAttrs.redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, contextAttrs.greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, contextAttrs.blueBits);
+    glfwWindowHint(GLFW_ALPHA_BITS, contextAttrs.alphaBits);
+    glfwWindowHint(GLFW_DEPTH_BITS, contextAttrs.depthBits);
+    glfwWindowHint(GLFW_STENCIL_BITS, contextAttrs.stencilBits);
 
-    glfwWindowHint(GLFW_SAMPLES, engineAttrs.multisamplingCount);
+    glfwWindowHint(GLFW_SAMPLES, contextAttrs.multisamplingCount);
 
-    glfwWindowHint(GLFW_VISIBLE, engineAttrs.visible);
-    glfwWindowHint(GLFW_DECORATED, engineAttrs.decorated);
+    glfwWindowHint(GLFW_VISIBLE, contextAttrs.visible);
+    glfwWindowHint(GLFW_DECORATED, contextAttrs.decorated);
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-    glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, engineAttrs.windowParent);
+    glfwWindowHintPointer(GLFW_WIN32_HWND_PARENT, contextAttrs.windowParent);
 #endif
 
 #if AX_RENDER_API != AX_RENDER_API_GL
@@ -599,7 +599,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
     axdrv;
 #endif
 
-    _renderScaleMode = engineAttrs.renderScaleMode;
+    _renderScaleMode = contextAttrs.renderScaleMode;
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || \
     AX_TARGET_PLATFORM == AX_PLATFORM_WASM
     // On Linux X11 platforms, GLFW does not support fractional DPI scaling (e.g., 1.5x).
@@ -698,7 +698,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 
 #if AX_RENDER_API == AX_RENDER_API_GL
 #    if !defined(__EMSCRIPTEN__)
-    glfwSwapInterval(engineAttrs.vsync ? 1 : 0);
+    glfwSwapInterval(contextAttrs.vsync ? 1 : 0);
 #    endif
     // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !AX_GLES_PROFILE
@@ -708,7 +708,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName,
 #        else
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
 #        endif
-    if (engineAttrs.multisamplingCount > 0)
+    if (contextAttrs.multisamplingCount > 0)
         glEnable(GL_MULTISAMPLE);
 #    endif
     CHECK_GL_ERROR_DEBUG();

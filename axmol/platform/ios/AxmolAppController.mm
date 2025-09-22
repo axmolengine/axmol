@@ -46,7 +46,7 @@ using namespace ax;
     auto axmolApp = Application::getInstance();
 
     // Initialize the Axmol Engine attributes
-    axmolApp->initEngineAttrs();
+    axmolApp->initContextAttrs();
 
     // Override point for customization after application launch.
 

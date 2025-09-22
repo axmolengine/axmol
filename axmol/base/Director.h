@@ -175,10 +175,6 @@ public:
      */
     void setRenderView(RenderView* renderView);
 
-    static void setEngineAttrs(const EngineAttrs& attrs) { _engineAttrs = attrs; }
-
-    static const EngineAttrs& getEngineAttrs() { return _engineAttrs; }
-
     /*
      * Gets singleton of TextureCache.
      */
@@ -684,8 +680,6 @@ protected:
     bool _invalid = false;
 
     bool _childrenIndexerEnabled = false;
-
-    static EngineAttrs _engineAttrs;
 
     /* axmol thread id */
     std::thread::id _axmol_thread_id;

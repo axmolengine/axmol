@@ -31,6 +31,9 @@ THE SOFTWARE.
 namespace ax
 {
 
+
+ContextAttrs ApplicationBase::_contextAttrs = ContextAttrs{};
+
 ApplicationBase::~ApplicationBase()
 {
     Director::destroyInstance();

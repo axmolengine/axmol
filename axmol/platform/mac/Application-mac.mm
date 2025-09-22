@@ -55,7 +55,7 @@ Application::~Application()
 
 int Application::run()
 {
-    initEngineAttrs();
+    initContextAttrs();
     if (!applicationDidFinishLaunching())
     {
         return 1;
