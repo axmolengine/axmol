@@ -183,7 +183,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 {
     if ((self = [super initWithFrame:frame]))
     {
-        // std::swap(frame.size.width, frame.size.height);
         self.textInputView = [[TextInputView alloc] initWithFrame:frame];
 
         originalRect_                 = self.frame;
@@ -268,7 +267,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (BOOL)setupSurfaceWithSharegroup:(void*)sharegroup
 {
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
-    
+
     NSString* platformPF = pixelformat_ == (int)ax::PixelFormat::RGB565 ? kEAGLColorFormatRGB565 : kEAGLColorFormatRGBA8;
 
     eaglLayer.opaque = YES;
@@ -317,12 +316,12 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 {
     if (!ax::Director::getInstance()->isValid())
         return;
-    
+
     auto bounds = [self bounds];
-    self.textInputView.bounds = originalRect_ = bounds;
+    self.textInputView.bounds = originalRect_ = [self bounds];
 
 #if defined(AX_USE_METAL)
-    size_ = bounds.size;
+    size_ = originalRect_.size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
     ax::backend::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
@@ -338,7 +337,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     size.height = size_.height;
     // ax::Director::getInstance()->reshapeProjection(size);
 #endif
-    
+
     auto renderView = ax::Director::getInstance()->getRenderView();
     if (renderView)
     {
@@ -347,7 +346,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         renderView->setFrameSize(size_.width, size_.height);
         renderView->setDesignResolutionSize(designSize.width, designSize.height, resolutionPolicy);
     }
-    
+
     ax::Application::getInstance()->applicationScreenSizeChanged(size_.width, size_.height);
 
     // Avoid flicker. Issue #350
