@@ -40,7 +40,7 @@ void AppDelegate::initGfxContextAttrs()
 {
     GfxContextAttrs gfxContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
-    RenderView::setGfxContextAttrs(gfxContextAttrs);
+    setContextAttrs(gfxContextAttrs);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()
