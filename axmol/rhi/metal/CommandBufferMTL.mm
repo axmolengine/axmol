@@ -152,7 +152,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
     _frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_BUFFER);
     auto mtlDevice          = driver->getMTLDevice();
     _mtlCmdQueue            = driver->getMTLCmdQueue();
-    auto& contextAttrs       = Application::getContextAttrs();
+    auto& contextAttrs      = Application::getContextAttrs();
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     CGSize fbSize;
     NSView* contentView = (id)surfaceContext;

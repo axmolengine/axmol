@@ -142,7 +142,6 @@ public:
      */
     virtual bool openURL(std::string_view url) = 0;
 
-
     static void setContextAttrs(const ContextAttrs& attrs) { _contextAttrs = attrs; }
 
     static const ContextAttrs& getContextAttrs() { return _contextAttrs; }
@@ -160,7 +159,6 @@ protected:
      * @param newHeight The new height of the application screen in pixels.
      */
     virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
-
 
     static ContextAttrs _contextAttrs;
 };

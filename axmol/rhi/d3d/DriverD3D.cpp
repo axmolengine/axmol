@@ -263,7 +263,7 @@ L_ReleaseRuntime:
 
 void DriverImpl::initializeAdapter()
 {
-    auto& contextAttrs = Application::getContextAttrs();
+    auto& contextAttrs          = Application::getContextAttrs();
     const auto powerPreferrence = contextAttrs.powerPreference;
 
     if (powerPreferrence == PowerPreference::Auto)
