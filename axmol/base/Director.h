@@ -69,43 +69,6 @@ class TextureCache;
 class Renderer;
 class Camera;
 
-// d3d RHI spec
-enum class PowerPreference
-{
-    Auto,            // Let the system decide
-    LowPower,        // Prefer integrated GPU
-    HighPerformance  // Prefer discrete GPU
-};
-
-enum class RenderScaleMode
-{
-    Default,  // Use the system's default scaling behavior
-    Logical,  // Use logical pixels (do not apply DPI scaling)
-    Physical  // Use logical pixels multiplied by the DPI scale factor
-};
-
-/** @struct EngineAttrs
- *
- * The axmol Engine attributes.
- */
-struct EngineAttrs
-{
-    int redBits{8};
-    int greenBits{8};
-    int blueBits{8};
-    int alphaBits{8};
-    int depthBits{24};
-    int stencilBits{8};
-    int multisamplingCount{0};
-    bool visible{true};
-    bool decorated{true};
-    bool vsync{true};
-    bool debugLayerEnabled{false};
-    void* windowParent{nullptr};  // win32-spec
-    PowerPreference powerPreference{PowerPreference::Auto};
-    RenderScaleMode renderScaleMode{RenderScaleMode::Default};
-};
-
 /**
  @brief Class that creates and handles the main Window and manages how
  and when to execute the Scenes.
