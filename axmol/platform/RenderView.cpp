@@ -98,16 +98,6 @@ static void removeUsedIndexBit(int index)
 
 }  // namespace
 
-void RenderView::setGfxContextAttrs(GfxContextAttrs& gfxContextAttrs)
-{
-    rhi::DriverBase::setContextAttrs(gfxContextAttrs);
-}
-
-GfxContextAttrs& RenderView::getGfxContextAttrs()
-{
-    return rhi::DriverBase::getContextAttrs();
-}
-
 RenderView::RenderView()
     : _windowSize(0, 0)
     , _designResolutionSize(0, 0)

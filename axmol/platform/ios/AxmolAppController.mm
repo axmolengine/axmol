@@ -45,8 +45,8 @@ using namespace ax;
 
     auto axmolApp = Application::getInstance();
 
-    // Initialize the RenderView attributes
-    axmolApp->initGfxContextAttrs();
+    // Initialize the Axmol Engine attributes
+    axmolApp->initEngineAttrs();
 
     // Override point for customization after application launch.
 

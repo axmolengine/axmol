@@ -45,10 +45,6 @@ THE SOFTWARE.
 
 namespace ax
 {
-
-using PowerPreference = rhi::PowerPreference;
-using RenderScaleMode = rhi::RenderScaleMode;
-
 class Scene;
 class Renderer;
 class Director;
@@ -83,8 +79,6 @@ enum class ResolutionPolicy
 
     UNKNOWN,
 };
-
-using GfxContextAttrs = rhi::ContextAttrs;
 
 /**
  * @addtogroup platform
@@ -154,18 +148,6 @@ public:
      * @return In ios and android it will return false,if in windows or Mac it will return true.
      */
     virtual bool windowShouldClose() { return false; };
-
-    /** Static method and member so that we can modify it on all platforms before create graphics context.
-     *
-     * @param gfxContextAttrs The graphics context attrs.
-     */
-    static void setGfxContextAttrs(GfxContextAttrs& gfxContextAttrs);
-
-    /** Return the graphics context attrs.
-     *
-     * @return Return the graphics context attrs.
-     */
-    static GfxContextAttrs& getGfxContextAttrs();
 
     /** Polls the events. */
     virtual void pollEvents();

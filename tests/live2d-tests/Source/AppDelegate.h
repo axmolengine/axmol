@@ -24,28 +24,28 @@ class AppDelegate : private ax::Application
 {
 public:
     AppDelegate();
-    virtual ~AppDelegate();
+    ~AppDelegate() override;
 
-    virtual void initGfxContextAttrs();
+    void initEngineAttrs() override;
 
     /**
     @brief    Implement Director and Scene init code here.
     @return true    Initialize success, app continue.
     @return false   Initialize failed, app terminate.
     */
-    virtual bool applicationDidFinishLaunching();
+    bool applicationDidFinishLaunching() override;
 
     /**
     @brief  Called when the application moves to the background
     @param  the pointer of the application
     */
-    virtual void applicationDidEnterBackground();
+    void applicationDidEnterBackground() override;
 
     /**
     @brief  Called when the application reenters the foreground
     @param  the pointer of the application
     */
-    virtual void applicationWillEnterForeground();
+    void applicationWillEnterForeground() override;
 
 private:
     ax::EventListenerCustom* _recreatedEventlistener;

@@ -29,7 +29,6 @@ THE SOFTWARE.
 #include "axmol/base/EventCustom.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/rhi/DriverBase.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/platform/android/jni/JniHelper.h"
 
@@ -132,12 +131,12 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeOnContextLost(JNIE
 
 JNIEXPORT jintArray JNICALL Java_dev_axmol_lib_AxmolActivity_getGLContextAttrs(JNIEnv* env, jclass)
 {
-    ax::Application::getInstance()->initGfxContextAttrs();
-    const auto& contextAttrs = rhi::DriverBase::getContextAttrs();
+    ax::Application::getInstance()->initEngineAttrs();
+    const auto& engineAttrs = Director::getEngineAttrs();
 
-    int tmp[7] = {contextAttrs.redBits,           contextAttrs.greenBits, contextAttrs.blueBits,
-                  contextAttrs.alphaBits,         contextAttrs.depthBits, contextAttrs.stencilBits,
-                  contextAttrs.multisamplingCount};
+    int tmp[7] = {engineAttrs.redBits,           engineAttrs.greenBits, engineAttrs.blueBits,
+                  engineAttrs.alphaBits,         engineAttrs.depthBits, engineAttrs.stencilBits,
+                  engineAttrs.multisamplingCount};
 
     jintArray glContextAttrsJava = env->NewIntArray(7);
     env->SetIntArrayRegion(glContextAttrsJava, 0, 7, tmp);

@@ -34,6 +34,7 @@
 #include <dxgi1_5.h>
 #include <VersionHelpers.h>
 #include "axmol/base/Logging.h"
+#include "axmol/base/Director.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 #    include <windows.ui.xaml.media.dxinterop.h>
@@ -197,8 +198,8 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
 {
     _driverImpl = driver;
 
-    auto& contextAttrs = driver->getContextAttrs();
-    _renderScaleMode   = contextAttrs.renderScaleMode;
+    auto& engineAttrs = Director::getEngineAttrs();
+    _renderScaleMode   = engineAttrs.renderScaleMode;
 
     auto context         = driver->getContext();
     ID3D11Device* device = driver->getDevice();
@@ -213,7 +214,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
     _swapChainFlags = _allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0;
 
     // control vsync
-    if (contextAttrs.vsync)
+    if (engineAttrs.vsync)
     {
         _syncInterval = 1;
         _presentFlags = 0;

@@ -69,6 +69,43 @@ class TextureCache;
 class Renderer;
 class Camera;
 
+// d3d RHI spec
+enum class PowerPreference
+{
+    Auto,            // Let the system decide
+    LowPower,        // Prefer integrated GPU
+    HighPerformance  // Prefer discrete GPU
+};
+
+enum class RenderScaleMode
+{
+    Default,  // Use the system's default scaling behavior
+    Logical,  // Use logical pixels (do not apply DPI scaling)
+    Physical  // Use logical pixels multiplied by the DPI scale factor
+};
+
+/** @struct EngineAttrs
+ *
+ * The axmol Engine attributes.
+ */
+struct EngineAttrs
+{
+    int redBits{8};
+    int greenBits{8};
+    int blueBits{8};
+    int alphaBits{8};
+    int depthBits{24};
+    int stencilBits{8};
+    int multisamplingCount{0};
+    bool visible{true};
+    bool decorated{true};
+    bool vsync{true};
+    bool debugLayerEnabled{false};
+    void* windowParent{nullptr};  // win32-spec
+    PowerPreference powerPreference{PowerPreference::Auto};
+    RenderScaleMode renderScaleMode{RenderScaleMode::Default};
+};
+
 /**
  @brief Class that creates and handles the main Window and manages how
  and when to execute the Scenes.
@@ -175,28 +212,9 @@ public:
      */
     void setRenderView(RenderView* renderView);
 
-    /**
-     * @brief Enable or disable the graphics API debug layer.
-     *
-     * When enabled, the underlying RHI (e.g. Direct3D, Metal, Vulkan) will
-     * activate its validation/debug layer if supported. This can provide
-     * detailed diagnostic messages, GPU state validation, and error reporting
-     * useful during development.
-     *
-     * @note Must be set before the graphics device is created to take effect.
-     *       Enabling the debug layer may impact performance and should be
-     *       disabled in production builds.
-     *
-     * @param value true to enable the debug layer, false to disable it.
-     */
-    void setDebugLayerEnabled(bool value) { _debugLayerEnabled = value; }
+    static void setEngineAttrs(const EngineAttrs& attrs) { _engineAttrs = attrs; }
 
-    /**
-     * @brief Check whether the graphics API debug layer is enabled.
-     *
-     * @return true if the debug layer is enabled, false otherwise.
-     */
-    bool isDebugLayerEnabled() const { return _debugLayerEnabled; }
+    static const EngineAttrs& getEngineAttrs() const { return _engineAttrs; }
 
     /*
      * Gets singleton of TextureCache.
@@ -704,7 +722,7 @@ protected:
 
     bool _childrenIndexerEnabled = false;
 
-    bool _debugLayerEnabled = false;
+    static EngineAttrs _engineAttrs;
 
     /* axmol thread id */
     std::thread::id _axmol_thread_id;

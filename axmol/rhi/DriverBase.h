@@ -81,9 +81,6 @@ public:
     friend class ShaderCache;
     friend class SamplerCache;
 
-    static void setContextAttrs(const ContextAttrs& attrs);
-    static ContextAttrs& getContextAttrs();
-
     /**
      * Returns a shared instance of the DriverBase.
      */
@@ -222,9 +219,6 @@ protected:
     int _maxTextureSize    = 0;  ///< Maximum texture size.
     int _maxTextureUnits   = 0;  ///< Maximum texture unit.
     int _maxSamplesAllowed = 0;  ///< Maximum sampler count.
-
-    /** The grapihcs(GPU adapter, window, render) context attrs. */
-    static ContextAttrs _contextAttrs;
 
 private:
     static DriverBase* _instance;

@@ -93,6 +93,8 @@ const char* Director::EVENT_AFTER_UPDATE          = "director_after_update";
 const char* Director::EVENT_RESET                 = "director_reset";
 const char* Director::EVENT_BEFORE_DRAW           = "director_before_draw";
 
+EngineAttrs Director::_engineAttrs = EngineAttrs{};
+
 Director* Director::getInstance()
 {
     if (!s_SharedDirector)

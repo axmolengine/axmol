@@ -60,7 +60,7 @@ void AxmolRenderer::Resume()
     auto renderView = static_cast<RenderViewImpl*>(director->getRenderView());
     if (!renderView)
     {
-        appInstance->initGfxContextAttrs();
+        appInstance->initEngineAttrs();
 
         renderView = RenderViewImpl::create("axmol3");
         renderView->setPanel(m_panel);

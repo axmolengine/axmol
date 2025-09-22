@@ -32,18 +32,6 @@ namespace ax::rhi
 
 DriverBase* DriverBase::_instance = nullptr;
 
-ContextAttrs DriverBase::_contextAttrs = ContextAttrs{};
-
-void DriverBase::setContextAttrs(const ContextAttrs& attrs)
-{
-    _contextAttrs = attrs;
-}
-
-ContextAttrs& DriverBase::getContextAttrs()
-{
-    return _contextAttrs;
-}
-
 VertexLayout* DriverBase::createVertexLayout(VertexLayoutDesc&& desc)
 {
     return new VertexLayout(std::forward<VertexLayoutDesc>(desc));

@@ -151,7 +151,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
     _frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_BUFFER);
     auto mtlDevice          = driver->getMTLDevice();
     _mtlCmdQueue            = driver->getMTLCmdQueue();
-    auto& contextAttrs      = driver->getContextAttrs();
+    auto& engineAttrs       = Director::getEngineAttrs();
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     CGSize fbSize;
     NSView* contentView = (id)surfaceContext;
@@ -169,7 +169,7 @@ CommandBufferImpl::CommandBufferImpl(DriverImpl* driver, void* surfaceContext)
     [_mtlLayer setPixelFormat:MTLPixelFormatBGRA8Unorm];
     [_mtlLayer setFramebufferOnly:YES];
     [_mtlLayer setDrawableSize:fbSize];
-    _mtlLayer.displaySyncEnabled = contextAttrs.vsync;
+    _mtlLayer.displaySyncEnabled = engineAttrs.vsync;
     [contentView setLayer:_mtlLayer];
 #else
     UIView* view              = (id)surfaceContext;

@@ -44,21 +44,21 @@ AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate() {}
 
-// if you want a different context, modify the value of gfxContextAttrs
+// if you want a different context, modify the value of engineAttrs
 // it will affect all platforms
-void AppDelegate::initGfxContextAttrs()
+void AppDelegate::initEngineAttrs()
 {
     // set graphics context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D
-    GfxContextAttrs gfxContextAttrs = {.powerPreference = PowerPreference::HighPerformance};
+    GfxContextAttrs engineAttrs = {.powerPreference = PowerPreference::HighPerformance};
 
     // V-Sync is enabled by default since axmol 2.2.
     // Uncomment to disable V-Sync and unlock FPS.
-    // gfxContextAttrs.vsync = false;
+    // engineAttrs.vsync = false;
 
     // uncomment if your app need adapt high DPI scale monitors
-    // gfxContextAttrs.renderScaleMode = RenderScaleMode::Physical;
-    RenderView::setGfxContextAttrs(gfxContextAttrs);
+    // engineAttrs.renderScaleMode = RenderScaleMode::Physical;
+    Director::setEngineAttrs(engineAttrs);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()

@@ -77,7 +77,7 @@ int Application::run()
 
     QueryPerformanceCounter(&nLast);
 
-    initGfxContextAttrs();
+    initEngineAttrs();
 
     // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())

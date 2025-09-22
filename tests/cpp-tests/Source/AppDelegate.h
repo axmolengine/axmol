@@ -41,7 +41,7 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-    void initGfxContextAttrs() override;
+    void initEngineAttrs() override;
 
     /**
     @brief    Implement Director and ax::Scene* init code here.

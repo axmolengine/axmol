@@ -29,7 +29,6 @@
 #include "axmol/platform/ios/EARenderView-ios.h"
 #include "axmol/platform/ios/DirectorCaller-ios.h"
 #include "axmol/platform/ios/RenderViewImpl-ios.h"
-#include "axmol/rhi/DriverBase.h"
 #include "axmol/base/Touch.h"
 #include "axmol/base/Director.h"
 
@@ -81,15 +80,15 @@ RenderViewImpl* RenderViewImpl::createWithFullscreen(std::string_view viewName)
 
 void RenderViewImpl::choosePixelFormats()
 {
-    const auto& contextAttrs = rhi::DriverBase::getContextAttrs();
+    const auto& engineAttrs = Director::getEngineAttrs();
 
-    if (contextAttrs.redBits == 8 && contextAttrs.greenBits == 8 && contextAttrs.blueBits == 8 &&
-        contextAttrs.alphaBits == 8)
+    if (engineAttrs.redBits == 8 && engineAttrs.greenBits == 8 && engineAttrs.blueBits == 8 &&
+        engineAttrs.alphaBits == 8)
     {
         _pixelFormat = PixelFormat::RGBA8;
     }
-    else if (contextAttrs.redBits == 5 && contextAttrs.greenBits == 6 && contextAttrs.blueBits == 5 &&
-             contextAttrs.alphaBits == 0)
+    else if (engineAttrs.redBits == 5 && engineAttrs.greenBits == 6 && engineAttrs.blueBits == 5 &&
+             engineAttrs.alphaBits == 0)
     {
         _pixelFormat = PixelFormat::RGB565;
     }
@@ -98,11 +97,11 @@ void RenderViewImpl::choosePixelFormats()
         AXASSERT(0, "Unsupported render buffer pixel format. Using default");
     }
 
-    if (contextAttrs.depthBits == 24 && contextAttrs.stencilBits == 8)
+    if (engineAttrs.depthBits == 24 && engineAttrs.stencilBits == 8)
     {
         _depthFormat = PixelFormat::D24S8;
     }
-    else if (contextAttrs.depthBits == 0 && contextAttrs.stencilBits == 0)
+    else if (engineAttrs.depthBits == 0 && engineAttrs.stencilBits == 0)
     {
         _depthFormat = PixelFormat::NONE;
     }
@@ -111,7 +110,7 @@ void RenderViewImpl::choosePixelFormats()
         AXASSERT(0, "Unsupported format for depth and stencil buffers. Using default");
     }
 
-    _multisamplingCount = contextAttrs.multisamplingCount;
+    _multisamplingCount = engineAttrs.multisamplingCount;
 }
 
 RenderViewImpl::RenderViewImpl() {}

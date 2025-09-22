@@ -53,7 +53,7 @@ Application::~Application()
 
 int Application::run()
 {
-    initGfxContextAttrs();
+    initEngineAttrs();
     // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())
     {

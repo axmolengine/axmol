@@ -224,7 +224,7 @@ void DriverImpl::initializeDevice()
     constexpr UINT debugFlags   = releaseFlags | D3D11_CREATE_DEVICE_DEBUG;
 
     HRESULT hr              = E_FAIL;
-    const bool isDebugLayer = Director::getInstance()->isDebugLayerEnabled();
+    const bool isDebugLayer = Director::getEngineAttrs().debugLayerEnabled;
 
     if (isDebugLayer) [[unlikely]]
     {
@@ -262,7 +262,8 @@ L_ReleaseRuntime:
 
 void DriverImpl::initializeAdapter()
 {
-    const auto powerPreferrence = _contextAttrs.powerPreference;
+    auto& engineAttrs = Director::getEngineAttrs();
+    const auto powerPreferrence = engineAttrs.powerPreference;
 
     if (powerPreferrence == PowerPreference::Auto)
         return;
