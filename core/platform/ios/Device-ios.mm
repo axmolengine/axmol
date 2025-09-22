@@ -850,11 +850,12 @@ Device::Orientation Device::getCurrentOrientation()
             return Orientation::ReverseLandscape;
         case UIInterfaceOrientationPortraitUpsideDown:
             return Orientation::ReversePortrait;
-        default:;
+        default:
+            break;
     }
-#else
-    return Orientation::Unknown;
 #endif
+    
+    return Orientation::Unknown;
 }
 
 Device::Orientation Device::getPhysicalOrientation()
@@ -867,11 +868,100 @@ Device::Orientation Device::getPhysicalOrientation()
         case UIDeviceOrientationPortraitUpsideDown: return Orientation::ReversePortrait;
         case UIDeviceOrientationLandscapeLeft: return Orientation::Landscape;
         case UIDeviceOrientationLandscapeRight: return Orientation::ReverseLandscape;
-        default: return Orientation::Unknown;
+        default:
+            break;
     }
-#else
-    return Orientation::Unknown;
 #endif
+    
+    return Orientation::Unknown;
+}
+
+// Convert Orientation to OrientationMask
+static Device::OrientationMask toMask(Device::Orientation o)
+{
+    switch (o)
+    {
+    case Device::Orientation::Portrait:         return Device::OrientationMask::Portrait;
+    case Device::Orientation::ReversePortrait:  return Device::OrientationMask::ReversePortrait;
+    case Device::Orientation::Landscape:        return Device::OrientationMask::Landscape;
+    case Device::Orientation::ReverseLandscape: return Device::OrientationMask::ReverseLandscape;
+    default:                            return Device::OrientationMask::All;
+    }
+}
+
+// Pick the first supported orientation from OrientationMask
+static Device::Orientation pickFirstSupported(Device::OrientationMask mask)
+{
+    if ((mask & Device::OrientationMask::Portrait) == Device::OrientationMask::Portrait)
+        return Device::Orientation::Portrait;
+    if ((mask & Device::OrientationMask::Landscape) == Device::OrientationMask::Landscape)
+        return Device::Orientation::Landscape;
+    if ((mask & Device::OrientationMask::ReverseLandscape) == Device::OrientationMask::ReverseLandscape)
+        return Device::Orientation::ReverseLandscape;
+    if ((mask & Device::OrientationMask::ReversePortrait) == Device::OrientationMask::ReversePortrait)
+        return Device::Orientation::ReversePortrait;
+
+    return Device::Orientation::Portrait; // fallback
+}
+
+Device::Orientation Device::resolveOrientation()
+{
+    auto supported = getSupportedOrientations();
+    auto preferred = getPreferredOrientation();
+    auto physical  = getPhysicalOrientation();
+
+    auto tryUse = [&](Orientation o) -> Orientation {
+        return ((supported & toMask(o)) == toMask(o)) ? o : Orientation::Unknown;
+    };
+
+    Orientation resolvedOrientation = Orientation::Unknown;
+
+    switch (preferred)
+    {
+    // Case 1: Preferred is a concrete orientation
+    case Orientation::Portrait:
+    case Orientation::ReversePortrait:
+    case Orientation::Landscape:
+    case Orientation::ReverseLandscape:
+        resolvedOrientation = tryUse(preferred);
+        break;
+
+    // Case 2: SensorPortrait
+    case Orientation::SensorPortrait:
+        resolvedOrientation = tryUse(physical);
+        if (resolvedOrientation == Orientation::Unknown)
+            resolvedOrientation = (supported & OrientationMask::Portrait)
+                                    ? Orientation::Portrait
+                                    : Orientation::ReversePortrait;
+        break;
+
+    // Case 3: SensorLandscape
+    case Orientation::SensorLandscape:
+        resolvedOrientation = tryUse(physical);
+        if (resolvedOrientation == Orientation::Unknown)
+            resolvedOrientation = (supported & OrientationMask::Landscape)
+                                    ? Orientation::Landscape
+                                    : Orientation::ReverseLandscape;
+        break;
+
+    // Case 4: Sensor / FullSensor
+    case Orientation::Sensor:
+    case Orientation::FullSensor:
+        resolvedOrientation = tryUse(physical);
+        if (resolvedOrientation == Orientation::Unknown)
+            resolvedOrientation = pickFirstSupported(supported);
+        break;
+
+    // Default / Unknown
+    default:
+        break;
+    }
+
+    // Final fallback
+    if (resolvedOrientation == Orientation::Unknown)
+        resolvedOrientation = pickFirstSupported(supported);
+
+    return resolvedOrientation;
 }
 
 }

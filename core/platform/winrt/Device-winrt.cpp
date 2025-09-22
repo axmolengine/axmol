@@ -592,6 +592,11 @@ Device::Orientation Device::getPhysicalOrientation()
     return Orientation::Unknown;
 }
 
+Device::Orientation Device::resolveOrientation()
+{
+    return Orientation::Unknown;
+}
+
 }
 
 #endif  // (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)

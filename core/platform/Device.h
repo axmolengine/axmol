@@ -262,6 +262,32 @@ public:
      */
     static Orientation getPhysicalOrientation();
 
+    /**
+     * Resolve the orientation of the application window.
+     *
+     * This method combines three sources of information:
+     *   1. Supported orientations (from getSupportedOrientations)
+     *   2. Preferred orientation (from getPreferredOrientation)
+     *   3. Current physical device orientation (from getPhysicalOrientation)
+     *
+     * Resolution rules:
+     *   - If the preferred orientation is a concrete value (Portrait, Landscape, etc.)
+     *     and is included in the supported mask, it will be used.
+     *   - If the preferred orientation is a sensor-based value (SensorPortrait,
+     *     SensorLandscape, Sensor, FullSensor), the physical orientation is used
+     *     if it is supported; otherwise a fallback orientation is chosen.
+     *   - If no valid orientation can be resolved, the first available orientation
+     *     from the supported mask is used as a fallback.
+     *
+     * The returned Orientation is guaranteed to be compatible with the supported
+     * orientation mask, and can be used by RenderViewImpl-ios to compute the
+     * logical screen size and viewport before app->run().
+     *
+     * @return Orientation  The resolved final orientation for the application.
+     * @since axmol-2.9.0
+     */
+    static Orientation resolveOrientation();
+
 #pragma endregion Orientation control support
 
 private:

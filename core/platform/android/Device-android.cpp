@@ -243,6 +243,11 @@ Device::Orientation Device::getPhysicalOrientation()
     return static_cast<Device::Orientation>(orientation);
 }
 
+Device::Orientation Device::resolveOrientation()
+{
+    return s_preferredOrientation;
+}
+
 }
 
 // this method is called by BitmapHelper
