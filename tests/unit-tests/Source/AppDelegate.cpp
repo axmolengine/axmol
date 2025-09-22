@@ -33,12 +33,12 @@ using namespace ax;
 
 static Vec2 gWindowSize = Vec2(1024, 768);
 
-void AppDelegate::initEngineAttrs()
+void AppDelegate::initContextAttrs()
 {
-    // set graphics context attributes: red,green,blue,alpha,depth,stencil
-    EngineAttrs engineAttrs = {8, 8, 8, 8, 24, 8, 0};
+    // set context attributes: red,green,blue,alpha,depth,stencil
+    ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
-    Director::setEngineAttrs(engineAttrs);
+    setContextAttrs(contextAttrs);
 }
 
 bool AppDelegate::applicationDidFinishLaunching()

@@ -33,7 +33,7 @@ class TestController;
 class AppDelegate : private ax::Application
 {
 public:
-    void initEngineAttrs() override;
+    void initContextAttrs() override;
 
     bool applicationDidFinishLaunching() override;
     void applicationDidEnterBackground() override;

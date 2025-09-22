@@ -98,7 +98,7 @@ public:
      */
     virtual void setAnimationInterval(float interval) = 0;
 
-    /** Subclass override the function to set OpenGL context attribution instead of use default value.
+    /** Subclass override the function to set app context attribution instead of use default value.
      * And now can only set six attributions:redBits,greenBits,blueBits,alphaBits,depthBits,stencilBits.
      * Default value are(5,6,5,0,16,0), usually use as follows:
      * void AppDelegate::initContextAttrs(){

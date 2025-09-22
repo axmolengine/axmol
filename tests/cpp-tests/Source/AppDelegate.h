@@ -41,7 +41,7 @@ public:
     AppDelegate();
     virtual ~AppDelegate();
 
-    void initEngineAttrs() override;
+    void initContextAttrs() override;
 
     /**
     @brief    Implement Director and ax::Scene* init code here.

@@ -47,14 +47,14 @@ AppDelegate::~AppDelegate()
 #endif
 }
 
-// if you want a different context, modify the value of engineAttrs
+// if you want a different context, modify the value of contextAttrs
 // it will affect all platforms
-void AppDelegate::initEngineAttrs()
+void AppDelegate::initContextAttrs()
 {
-    // set graphics context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
-    EngineAttrs engineAttrs = {8, 8, 8, 8, 24, 8, 0};
+    // set context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
+    ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
-    Director::setEngineAttrs(engineAttrs);
+    setContextAttrs(contextAttrs);
 }
 
 // if you want to use the package manager to install more packages,
