@@ -32,6 +32,7 @@
 #include "axmol/rhi/metal/BufferManager.h"
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
+#include "axmol/base/Director.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    import <AppKit/AppKit.h>
