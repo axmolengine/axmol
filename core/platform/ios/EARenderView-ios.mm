@@ -103,6 +103,12 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 @synthesize isKeyboardShown;
 @synthesize originalRect = originalRect_;
 
+static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
+{
+    float flippedY = viewSize.height - rect.origin.y - rect.size.height;
+    return ax::Rect(rect.origin.x, flippedY, rect.size.width, rect.size.height);
+}
+
 + (Class)layerClass
 {
 #if defined(AX_USE_METAL)
@@ -661,12 +667,14 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     auto renderView  = ax::Director::getInstance()->getRenderView();
     float scaleX = renderView->getScaleX();
     float scaleY = renderView->getScaleY();
+    
+    const auto backingScaleFactor = self.contentScaleFactor;
 
     // Convert to pixel coordinates
     begin = CGRectApplyAffineTransform(begin,
-        CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
+        CGAffineTransformScale(CGAffineTransformIdentity, backingScaleFactor, backingScaleFactor));
     end = CGRectApplyAffineTransform(end,
-        CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
+        CGAffineTransformScale(CGAffineTransformIdentity, backingScaleFactor, backingScaleFactor));
 
     // Adjust for viewport offset if needed
     float offestY = renderView->getViewPortRect().origin.y;
@@ -684,19 +692,19 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
 
     // Fill notification info for Axmol IME dispatcher
+    auto winSize = originalRect_.size;
+    CGSize viewSize = CGSizeMake(winSize.width * backingScaleFactor / scaleX,
+                                 winSize.height * backingScaleFactor / scaleY);
+    
     ax::IMEKeyboardNotificationInfo notiInfo;
-    notiInfo.begin    = ax::Rect(begin.origin.x, begin.origin.y, begin.size.width, begin.size.height);
-    notiInfo.end      = ax::Rect(end.origin.x, end.origin.y, end.size.width, end.size.height);
-    notiInfo.duration = (float)aniDuration;
+    notiInfo.begin = convertKeyboardRectToViewport(begin, viewSize);
+    notiInfo.end   = convertKeyboardRectToViewport(end, viewSize);
+    notiInfo.duration = aniDuration;
 
     ax::IMEDispatcher* dispatcher = ax::IMEDispatcher::sharedDispatcher();
     if (UIKeyboardWillShowNotification == type)
     {
         dispatcher->dispatchKeyboardWillShow(notiInfo);
-
-        // Move the whole render view up by keyboard height
-        CGFloat distance = end.size.height;
-        [self doAnimationWhenKeyboardMoveWithDuration:aniDuration distance:distance];
     }
     else if (UIKeyboardDidShowNotification == type)
     {
@@ -706,9 +714,6 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     else if (UIKeyboardWillHideNotification == type)
     {
         dispatcher->dispatchKeyboardWillHide(notiInfo);
-
-        // Restore to original rect
-        [self doAnimationWhenKeyboardMoveWithDuration:aniDuration distance:0.0f];
     }
     else if (UIKeyboardDidHideNotification == type)
     {
