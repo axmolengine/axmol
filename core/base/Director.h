@@ -316,6 +316,15 @@ public:
      */
     void replaceScene(Scene* scene);
 
+    /** Removes the previous scene from the stack if it exists, and returns it
+     * If there are less than 2 scenes in the stack, or if there is a 
+     * scene switch about to occur, then this call would be invalid, and a nullptr
+     * will be returned.
+     *
+     * Returns previous scene or nullptr if invalid
+     */
+    Scene* extractPreviousScene();
+
     /** Ends the execution, releases the running scene.
      * @lua endToLua
      */

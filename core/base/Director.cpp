@@ -966,6 +966,44 @@ void Director::popToSceneStackLevel(int level)
     _sendCleanupToScene = true;
 }
 
+Scene* Director::extractPreviousScene()
+{
+    if (_nextScene)
+    {
+        return nullptr;
+    }
+
+    const auto numScenes = _scenesStack.size();
+
+    if (numScenes < 2)
+    {
+        return nullptr;
+    }
+
+    const auto previousSceneIndex = numScenes - 2;
+
+    auto previousScene = _scenesStack.at(previousSceneIndex);
+    if (previousScene == _runningScene)
+    {
+        return nullptr;
+    }
+
+    previousScene->retain();
+    previousScene->autorelease();
+
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+    auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
+    if (sEngine)
+    {
+        sEngine->releaseScriptObject(this, previousScene);
+    }
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+
+    _scenesStack.erase(previousSceneIndex);
+
+    return previousScene;
+}
+
 void Director::end()
 {
     _cleanupDirectorInNextLoop = true;
