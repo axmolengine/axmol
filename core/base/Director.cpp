@@ -966,7 +966,7 @@ void Director::popToSceneStackLevel(int level)
     _sendCleanupToScene = true;
 }
 
-Scene* Director::extractPreviousScene()
+Scene* Director::popPreviousSceneOut()
 {
     if (_nextScene)
     {

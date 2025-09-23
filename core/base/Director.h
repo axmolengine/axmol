@@ -323,7 +323,7 @@ public:
      *
      * Returns previous scene or nullptr if invalid
      */
-    Scene* extractPreviousScene();
+    Scene* popPreviousSceneOut();
 
     /** Ends the execution, releases the running scene.
      * @lua endToLua
