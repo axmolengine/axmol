@@ -983,11 +983,6 @@ Scene* Director::extractPreviousScene()
     const auto previousSceneIndex = numScenes - 2;
 
     auto previousScene = _scenesStack.at(previousSceneIndex);
-    if (previousScene == _runningScene)
-    {
-        return nullptr;
-    }
-
     previousScene->retain();
     previousScene->autorelease();
 
