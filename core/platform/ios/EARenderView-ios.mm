@@ -317,7 +317,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if (!ax::Director::getInstance()->isValid())
         return;
 
-    auto bounds = [self bounds];
     self.textInputView.bounds = originalRect_ = [self bounds];
 
 #if defined(AX_USE_METAL)
