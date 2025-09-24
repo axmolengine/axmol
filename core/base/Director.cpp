@@ -1165,41 +1165,42 @@ void Director::setNextScene()
 {
     _eventDispatcher->dispatchEvent(_beforeSetNextScene);
 
-    bool runningIsTransition = dynamic_cast<TransitionScene*>(_runningScene) != nullptr;
-    bool newIsTransition     = dynamic_cast<TransitionScene*>(_nextScene) != nullptr;
+    auto outgoingScene = _runningScene;
+    _runningScene      = _nextScene;
+    _nextScene         = nullptr;
 
-    // If it is not a transition, call onExit/cleanup
-    if (!newIsTransition)
+    bool outgoingSceneIsTransition = dynamic_cast<TransitionScene*>(outgoingScene) != nullptr;
+
+    if (outgoingScene)
     {
-        if (_runningScene)
+        bool incomingSceneIsTransition = dynamic_cast<TransitionScene*>(_runningScene) != nullptr;
+
+        // If it is not a transition, call onExit/cleanup
+        if (!incomingSceneIsTransition)
         {
-            _runningScene->onExitTransitionDidStart();
-            _runningScene->onExit();
+            outgoingScene->onExitTransitionDidStart();
+            outgoingScene->onExit();
+
+            // issue #709. the root node (scene) should receive the cleanup message too
+            // otherwise it might be leaked.
+            if (_sendCleanupToScene)
+            {
+                outgoingScene->cleanup();
+            }
         }
 
-        // issue #709. the root node (scene) should receive the cleanup message too
-        // otherwise it might be leaked.
-        if (_sendCleanupToScene && _runningScene)
-        {
-            _runningScene->cleanup();
-        }
+        outgoingScene->release();
     }
 
     if (_runningScene)
     {
-        _runningScene->release();
-    }
-    _runningScene = _nextScene;
-    if (_nextScene)
-    {
-        _nextScene->retain();
-    }
-    _nextScene = nullptr;
+        _runningScene->retain();
 
-    if ((!runningIsTransition) && _runningScene)
-    {
-        _runningScene->onEnter();
-        _runningScene->onEnterTransitionDidFinish();
+        if (!outgoingSceneIsTransition)
+        {
+            _runningScene->onEnter();
+            _runningScene->onEnterTransitionDidFinish();
+        }
     }
 
     _eventDispatcher->dispatchEvent(_afterSetNextScene);
