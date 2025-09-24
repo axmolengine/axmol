@@ -1024,6 +1024,13 @@ void Director::reset()
         }
 #endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         _runningScene->onExit();
+
+        // Ensure incoming scene is correctly deactivated if the
+        // director is reset during a scene transition
+        auto transition = dynamic_cast<TransitionScene*>(_runningScene);
+        if (transition)
+            transition->getInScene()->onExit();
+
         _runningScene->cleanup();
         _runningScene->release();
     }
