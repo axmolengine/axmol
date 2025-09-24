@@ -217,7 +217,7 @@ void SpriteInGroupCommand::draw(Renderer* renderer, const Mat4& transform, uint3
 
 GroupCommandTest::GroupCommandTest()
 {
-    auto sprite  = SpriteInGroupCommand::create("Images/grossini.png");
+    auto sprite     = SpriteInGroupCommand::create("Images/grossini.png");
     Size canvasSize = Director::getInstance()->getCanvasSize();
     sprite->setPosition(canvasSize.width / 2, canvasSize.height / 2);
     addChild(sprite);

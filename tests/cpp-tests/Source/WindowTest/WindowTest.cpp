@@ -122,8 +122,8 @@ void WindowTestResizedAndPositioned::onEnter()
     label1->setPosition(s.width / 3 * 1, s.height / 2);
     addChild(label1);
 
-    label2 = Label::createWithTTF(fmt::format("size : {}, {}", canvasSize.width, canvasSize.height), "fonts/Marker Felt.ttf",
-                                  16.0f);
+    label2 = Label::createWithTTF(fmt::format("size : {}, {}", canvasSize.width, canvasSize.height),
+                                  "fonts/Marker Felt.ttf", 16.0f);
     label2->setPosition(s.width / 3 * 2, s.height / 2);
     addChild(label2);
 

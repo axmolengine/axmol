@@ -424,7 +424,7 @@ void Director::setRenderView(RenderView* renderView)
 
 void Director::setCanvasSize(const Vec2& canvasSize)
 {
-    _canvasSizeInPoints  = canvasSize;
+    _canvasSizeInPoints   = canvasSize;
     _isStatusLabelUpdated = true;
 }
 

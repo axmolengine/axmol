@@ -98,7 +98,7 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
     auto windowSize = renderView->getWindowSize();
 
     auto canvasSize = director->getCanvasSize();
-    auto leftBottom  = _editBox->convertToWorldSpace(Point::ZERO);
+    auto leftBottom = _editBox->convertToWorldSpace(Point::ZERO);
 
     auto contentSize = frame.size;
     auto rightTop    = _editBox->convertToWorldSpace(Point(contentSize.width, contentSize.height));

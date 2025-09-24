@@ -194,7 +194,7 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
     auto winSize    = renderView->getWindowSize();
 
     auto canvasSize = director->getCanvasSize();
-    auto leftBottom  = node->convertToWorldSpace(Point::ZERO);
+    auto leftBottom = node->convertToWorldSpace(Point::ZERO);
 
     auto contentSize = node->getContentSize();
     auto rightTop    = node->convertToWorldSpace(Point(contentSize.width, contentSize.height));

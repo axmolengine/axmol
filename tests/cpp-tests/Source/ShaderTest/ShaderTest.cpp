@@ -189,7 +189,7 @@ void ShaderNode::updateUniforms()
     _locCosTime    = _programState->getUniformLocation("u_CosTime");
     _locScreenSize = _programState->getUniformLocation("u_screenSize");
 
-    const Vec2& canvasSize     = Director::getInstance()->getRenderView()->getWindowSize();
+    const Vec2& canvasSize  = Director::getInstance()->getRenderView()->getWindowSize();
     float renderScale       = Director::getInstance()->getRenderView()->getRenderScale();
     auto screenSizeInPixels = canvasSize * renderScale;
     _programState->setUniform(_locScreenSize, &screenSizeInPixels, sizeof(screenSizeInPixels));

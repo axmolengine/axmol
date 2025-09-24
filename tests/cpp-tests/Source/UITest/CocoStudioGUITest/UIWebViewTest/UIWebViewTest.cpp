@@ -58,7 +58,7 @@ bool WebViewTest::init()
         TextField* urlTextField = TextField::create("Input a URL here", "Arial", 20);
         urlTextField->setPlaceHolderColor(Color32::RED);
         urlTextField->setPosition(Vec2(canvasSize / 2) + Vec2(-80, _webView->getContentSize().height / 2 +
-                                                                    urlTextField->getContentSize().height / 2 + 10));
+                                                                       urlTextField->getContentSize().height / 2 + 10));
         this->addChild(urlTextField);
 
         Text* httpLabel = Text::create("https:// ", "Arial", 20);
@@ -70,7 +70,7 @@ bool WebViewTest::init()
         Button* resetBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         resetBtn->setTitleText("Visit URL");
         resetBtn->setPosition(Vec2(canvasSize / 2) + Vec2(50, _webView->getContentSize().height / 2 +
-                                                               resetBtn->getContentSize().height / 2 + 10));
+                                                                  resetBtn->getContentSize().height / 2 + 10));
         resetBtn->addClickEventListener([this, urlTextField](Object*) {
             if (urlTextField->getString().size() != 0)
             {

@@ -795,7 +795,7 @@ Issue16113Test::Issue16113Test()
     MenuItemFont::setFontSize(16);
     auto item1 = MenuItemFont::create("Save Image", [&](Object* ref) {
         auto canvasSize = Director::getInstance()->getVisibleSize();
-        auto text    = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 40);
+        auto text       = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 40);
         text->setTextColor(Color32::RED);
         auto target = RenderTexture::create(canvasSize.width, canvasSize.height, rhi::PixelFormat::RGBA8);
         target->beginWithClear(0, 0, 0, 0);

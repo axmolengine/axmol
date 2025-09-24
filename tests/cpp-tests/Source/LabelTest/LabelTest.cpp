@@ -1194,7 +1194,7 @@ LabelTTFUnicodeNew::LabelTTFUnicodeNew()
 {
     auto strings        = FileUtils::getInstance()->getValueMapFromFile("strings/LabelFNTUNICODELanguages.xml");
     std::string chinese = strings["chinese1"].asString();
-    auto canvasSize        = Director::getInstance()->getCanvasSize();
+    auto canvasSize     = Director::getInstance()->getCanvasSize();
 
     // Spanish
     auto label1 = Label::createWithTTF("Buen día, ¿cómo te llamas?", "fonts/arial.ttf", 23);
@@ -1228,7 +1228,7 @@ std::string LabelTTFUnicodeNew::subtitle() const
 LabelTTFEmoji::LabelTTFEmoji()
 {
     std::string emojiString = FileUtils::getInstance()->getStringFromFile("fonts/emoji.txt");
-    auto canvasSize            = Director::getInstance()->getCanvasSize();
+    auto canvasSize         = Director::getInstance()->getCanvasSize();
 
     auto label = Label::createWithTTF(emojiString, "fonts/NotoEmoji-Regular.ttf", 23);
     label->setPosition(canvasSize.width / 2, canvasSize.height / 2);
@@ -1502,7 +1502,7 @@ ui::Slider* LabelTTFSDF::initSlider(std::string content,
 void LabelTTFSDF::initToggleCheckboxes()
 {
     float startPosY = 0;
-    Size canvasSize    = Director::getInstance()->getVisibleSize();
+    Size canvasSize = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();
@@ -2368,8 +2368,8 @@ LabelIssue12409Test::LabelIssue12409Test()
     label->setPosition(center.x, center.y);
     addChild(label);
 
-    auto labelSize = label->getContentSize();
-    auto canvasSize   = Director::getInstance()->getCanvasSize();
+    auto labelSize  = label->getContentSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
     Vec2 labelOrigin;
     labelOrigin.x    = canvasSize.width / 2 - (labelSize.width / 2);
     labelOrigin.y    = canvasSize.height / 2 - (labelSize.height / 2);
@@ -3116,7 +3116,7 @@ void LabelToggleTypeTest::initToggleCheckboxes()
 {
     const float BUTTON_WIDTH = 100;
     float startPosX          = 0;
-    Size canvasSize             = Director::getInstance()->getVisibleSize();
+    Size canvasSize          = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();
@@ -3268,7 +3268,7 @@ void LabelSystemFontTest::initToggleCheckboxes()
 {
     const float BUTTON_WIDTH = 100;
     float startPosX          = 0;
-    Size canvasSize             = Director::getInstance()->getVisibleSize();
+    Size canvasSize          = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();
@@ -3825,7 +3825,7 @@ LabelLocalizationTest::LabelLocalizationTest()
 
     const float BUTTON_WIDTH = 100;
     float startPosX          = 0;
-    Size canvasSize             = Director::getInstance()->getVisibleSize();
+    Size canvasSize          = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();

@@ -62,8 +62,8 @@ bool UIFocusTestBase::init()
 
         _dpadMenu = Menu::create();
 
-        auto canvasSize  = Director::getInstance()->getVisibleSize();
-        auto leftItem = MenuItemFont::create("Left", AX_CALLBACK_0(UIFocusTestBase::onLeftKeyPressed, this));
+        auto canvasSize = Director::getInstance()->getVisibleSize();
+        auto leftItem   = MenuItemFont::create("Left", AX_CALLBACK_0(UIFocusTestBase::onLeftKeyPressed, this));
         leftItem->setPosition(Vec2(canvasSize.width - 100, canvasSize.height / 2));
         _dpadMenu->addChild(leftItem);
 

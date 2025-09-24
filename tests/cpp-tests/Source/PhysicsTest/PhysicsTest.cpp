@@ -1516,11 +1516,11 @@ void PhysicsContactTest::resetTest()
     for (int i = 0; i < _yellowBoxNum; ++i)
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
-        Size canvasSize  = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * AXRANDOM_0_1();
-        position.y    = position.y * AXRANDOM_0_1();
-        position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
+        Size canvasSize = VisibleRect::getVisibleRect().size;
+        Vec2 position   = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
+        position.x      = position.x * AXRANDOM_0_1();
+        position.y      = position.y * AXRANDOM_0_1();
+        position        = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
         Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 200, (float)(AXRANDOM_0_1() - 0.5) * 200);
         auto box     = makeBox(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
         auto boxBody = box->getPhysicsBody();
@@ -1535,11 +1535,11 @@ void PhysicsContactTest::resetTest()
     for (int i = 0; i < _blueBoxNum; ++i)
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
-        Size canvasSize  = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * AXRANDOM_0_1();
-        position.y    = position.y * AXRANDOM_0_1();
-        position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
+        Size canvasSize = VisibleRect::getVisibleRect().size;
+        Vec2 position   = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
+        position.x      = position.x * AXRANDOM_0_1();
+        position.y      = position.y * AXRANDOM_0_1();
+        position        = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
         Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 200, (float)(AXRANDOM_0_1() - 0.5) * 200);
         auto box     = makeBox(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
         auto boxBody = box->getPhysicsBody();
@@ -1554,11 +1554,11 @@ void PhysicsContactTest::resetTest()
     for (int i = 0; i < _yellowTriangleNum; ++i)
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
-        Size canvasSize  = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * AXRANDOM_0_1();
-        position.y    = position.y * AXRANDOM_0_1();
-        position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
+        Size canvasSize = VisibleRect::getVisibleRect().size;
+        Vec2 position   = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
+        position.x      = position.x * AXRANDOM_0_1();
+        position.y      = position.y * AXRANDOM_0_1();
+        position        = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
         Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 300, (float)(AXRANDOM_0_1() - 0.5) * 300);
         auto triangle     = makeTriangle(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getPhysicsBody();
@@ -1573,11 +1573,11 @@ void PhysicsContactTest::resetTest()
     for (int i = 0; i < _blueTriangleNum; ++i)
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
-        Size canvasSize  = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * AXRANDOM_0_1();
-        position.y    = position.y * AXRANDOM_0_1();
-        position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
+        Size canvasSize = VisibleRect::getVisibleRect().size;
+        Vec2 position   = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
+        position.x      = position.x * AXRANDOM_0_1();
+        position.y      = position.y * AXRANDOM_0_1();
+        position        = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
         Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 300, (float)(AXRANDOM_0_1() - 0.5) * 300);
         auto triangle     = makeTriangle(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getPhysicsBody();
