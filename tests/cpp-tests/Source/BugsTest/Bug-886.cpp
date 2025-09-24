@@ -35,9 +35,6 @@ bool Bug886Layer::init()
 {
     if (BugsTestBase::init())
     {
-        // ask director the the window size
-        //        auto size = [[Director sharedDirector] winSize];
-
         auto sprite = Sprite::create("Images/bugs/bug886.jpg");
         sprite->setAnchorPoint(Vec2::ZERO);
         sprite->setPosition(Vec2::ZERO);

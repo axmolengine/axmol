@@ -118,7 +118,7 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
     auto layer3D = Layer::create();
     addChild(layer3D, 0);
     _layerBillBoard = layer3D;
-    auto s          = Director::getInstance()->getLogicalSize();
+    auto s          = Director::getInstance()->getCanvasSize();
     if (_camera == nullptr)
     {
         _camera = Camera::createPerspective(60, (float)s.width / s.height, 1, 500);

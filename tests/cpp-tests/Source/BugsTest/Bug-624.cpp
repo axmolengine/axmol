@@ -45,7 +45,7 @@ bool Bug624Layer::init()
 {
     if (BugsTestBase::init())
     {
-        auto size  = Director::getInstance()->getLogicalSize();
+        auto size  = Director::getInstance()->getCanvasSize();
         auto label = Label::createWithTTF("Layer1", "fonts/Marker Felt.ttf", 36.0f);
 
         label->setPosition(size.width / 2, size.height / 2);
@@ -91,7 +91,7 @@ bool Bug624Layer2::init()
 {
     if (BugsTestBase::init())
     {
-        auto size  = Director::getInstance()->getLogicalSize();
+        auto size  = Director::getInstance()->getCanvasSize();
         auto label = Label::createWithTTF("Layer2", "fonts/Marker Felt.ttf", 36.0f);
 
         label->setPosition(size.width / 2, size.height / 2);

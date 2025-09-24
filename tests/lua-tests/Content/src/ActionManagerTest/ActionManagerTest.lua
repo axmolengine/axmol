@@ -67,7 +67,7 @@ local function PauseTest()
 
     local function onNodeEvent(event)
         if event == "enter" then
-            local  s = ax.Director:getInstance():getLogicalSize()
+            local  s = ax.Director:getInstance():getCanvasSize()
             local  l = ax.Label:createWithTTF("After 3 seconds grossini should move", "fonts/Thonburi.ttf", 16)
             ret:addChild(l)
             l:setAnchorPoint(ax.p(0.5, 0.5))
@@ -103,7 +103,7 @@ end
 local function RemoveTest()
     local ret = createTestLayer("Remove Test")
     local  l = ax.Label:createWithTTF("Should not crash", "fonts/Thonburi.ttf", 16)
-    local  s = ax.Director:getInstance():getLogicalSize()
+    local  s = ax.Director:getInstance():getCanvasSize()
     ret:addChild(l)
     l:setAnchorPoint(ax.p(0.5, 0.5))
     l:setPosition( ax.p(s.width / 2, 245))
@@ -149,7 +149,7 @@ local function ResumeTest()
         if event == "enter" then
             local  l = ax.Label:createWithTTF("Grossini only rotate/scale in 3 seconds", "fonts/Thonburi.ttf", 16)
             ret:addChild(l)
-            local  s = ax.Director:getInstance():getLogicalSize()
+            local  s = ax.Director:getInstance():getCanvasSize()
             l:setAnchorPoint(ax.p(0.5, 0.5))
             l:setPosition( s.width / 2, 245)
 

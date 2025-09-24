@@ -142,7 +142,7 @@ void ActionsDemo::onExit()
 
 void ActionsDemo::centerSprites(unsigned int numberOfSprites)
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     if (numberOfSprites == 0)
     {
@@ -172,7 +172,7 @@ void ActionsDemo::centerSprites(unsigned int numberOfSprites)
 
 void ActionsDemo::alignSpritesLeft(unsigned int numberOfSprites)
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     if (numberOfSprites == 1)
     {
@@ -205,7 +205,7 @@ void ActionMove::onEnter()
 
     centerSprites(3);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto actionTo     = MoveTo::create(2, Vec2(s.width - 40, s.height - 40));
     auto actionBy     = MoveBy::create(2, Vec2(80.0f, 80.0f));
@@ -232,7 +232,7 @@ void ActionMove3D::onEnter()
 
     centerSprites(3);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     _tamara->setPosition3D(Vec3(s.width - 40, s.height - 40, 0.0f));
     _kathia->setPosition3D(Vec3(40.0f, 40.0f, 0.0f));
@@ -338,7 +338,7 @@ void ActionRotationalSkewVSStandardSkew::onEnter()
     _grossini->removeFromParentAndCleanup(true);
     _kathia->removeFromParentAndCleanup(true);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     Size boxSize(100.0f, 100.0f);
 
@@ -512,7 +512,7 @@ void ActionBezier::onEnter()
 {
     ActionsDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     //
     // startPosition can be any coordinate, but since the movement
@@ -752,7 +752,7 @@ void ActionSequence2::onEnter()
 
 void ActionSequence2::callback1()
 {
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto label = Label::createWithTTF("callback 1 called", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 4 * 1, s.height / 2);
 
@@ -761,7 +761,7 @@ void ActionSequence2::callback1()
 
 void ActionSequence2::callback2(Node* sender)
 {
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto label = Label::createWithTTF("callback 2 called", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 4 * 2, s.height / 2);
 
@@ -770,7 +770,7 @@ void ActionSequence2::callback2(Node* sender)
 
 void ActionSequence2::callback3(Node* sender, int32_t data)
 {
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto label = Label::createWithTTF("callback 3 called", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 4 * 3, s.height / 2);
 
@@ -895,7 +895,7 @@ void ActionCallFunction::onEnter()
                                     CallFunc::create(
                                         // lambda
                                         [&]() {
-        auto s     = Director::getInstance()->getLogicalSize();
+        auto s     = Director::getInstance()->getCanvasSize();
         auto label = Label::createWithTTF("called:lambda callback", "fonts/Marker Felt.ttf", 16.0f);
         label->setPosition(s.width / 4 * 1, s.height / 2 - 40);
         this->addChild(label);
@@ -917,7 +917,7 @@ void ActionCallFunction::onEnter()
 
 void ActionCallFunction::callback1()
 {
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto label = Label::createWithTTF("callback 1 called", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 4 * 1, s.height / 2);
 
@@ -926,7 +926,7 @@ void ActionCallFunction::callback1()
 
 void ActionCallFunction::callback2(Node* sender)
 {
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto label = Label::createWithTTF("callback 2 called", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 4 * 2, s.height / 2);
 
@@ -937,7 +937,7 @@ void ActionCallFunction::callback2(Node* sender)
 
 void ActionCallFunction::callback3(Node* sender, int32_t data)
 {
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto label = Label::createWithTTF("callback 3 called", "fonts/Marker Felt.ttf", 16.0f);
     label->setPosition(s.width / 4 * 3, s.height / 2);
     addChild(label);
@@ -1239,7 +1239,7 @@ void ActionFollow::onEnter()
     ActionsDemo::onEnter();
 
     centerSprites(1);
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     DrawNode* drawNode = DrawNode::create();
     float x            = s.width * 2 - 100;
@@ -1276,7 +1276,7 @@ void ActionFollowWithOffset::onEnter()
     ActionsDemo::onEnter();
 
     centerSprites(1);
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     DrawNode* drawNode = DrawNode::create();
     float x            = s.width * 2 - 100;
@@ -1377,7 +1377,7 @@ void ActionStacked::onEnter()
     listener->onTouchesEnded = AX_CALLBACK_2(ActionStacked::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     this->addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 
@@ -1461,7 +1461,7 @@ std::string ActionMoveJumpStacked::title() const
 
 void ActionMoveBezierStacked::runActionsInSprite(Sprite* sprite)
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // sprite 1
     BezierConfig bezier;
@@ -1492,7 +1492,7 @@ void ActionCatmullRomStacked::onEnter()
 
     this->centerSprites(2);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     //
     // sprite 1 (By)
@@ -1578,7 +1578,7 @@ void ActionCardinalSplineStacked::onEnter()
 
     this->centerSprites(2);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto array = PointArray::create(20);
 
@@ -1920,7 +1920,7 @@ void ActionCatmullRom::onEnter()
 
     this->centerSprites(2);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     //
     // sprite 1 (By)
@@ -2000,7 +2000,7 @@ void ActionCardinalSpline::onEnter()
 
     this->centerSprites(2);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto array = PointArray::create(20);
 
@@ -2201,7 +2201,7 @@ void ActionFloatTest::onEnter()
 
     centerSprites(3);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // create float action with duration and from to value, using lambda function we can easily animate any property of
     // the Node.
@@ -2427,7 +2427,7 @@ void ActionCoroutineTest::onEnter()
     auto action = ActionCoroutine::create(AX_CALLBACK_0(ActionCoroutineTest::coroutineCallback, this));
     this->runAction(action);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     _label = Label::createWithTTF(fmt::format("frame count : {}", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     _label->setPosition(s.width / 2, s.height / 2 + 100);
     addChild(_label, 1, 1);
@@ -2453,7 +2453,7 @@ std::string ActionCoroutineTest::subtitle() const
 
 Coroutine ActionCoroutineTest::coroutineCallback()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto label1 = Label::createWithTTF(fmt::format("First ({})", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label1->setPosition(s.width / 4 * 1, s.height / 2);

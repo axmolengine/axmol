@@ -64,7 +64,7 @@ void TransitionProgress::onEnter()
 
     // create a transparent color layer
     // in which we are going to add our rendertextures
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
 
     // create the second render texture for outScene
     RenderTexture* texture =
@@ -126,7 +126,7 @@ ProgressTimer* TransitionProgress::progressTimerNodeWithRenderTexture(RenderText
 
 ProgressTimer* TransitionProgressRadialCCW::progressTimerNodeWithRenderTexture(RenderTexture* texture)
 {
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
 
     ProgressTimer* node = ProgressTimer::create(texture->getSprite());
 
@@ -170,7 +170,7 @@ TransitionProgressRadialCW* TransitionProgressRadialCW::create(float t, Scene* s
 
 ProgressTimer* TransitionProgressRadialCW::progressTimerNodeWithRenderTexture(RenderTexture* texture)
 {
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
 
     ProgressTimer* node = ProgressTimer::create(texture->getSprite());
 
@@ -202,7 +202,7 @@ TransitionProgressHorizontal* TransitionProgressHorizontal::create(float t, Scen
 
 ProgressTimer* TransitionProgressHorizontal::progressTimerNodeWithRenderTexture(RenderTexture* texture)
 {
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
 
     ProgressTimer* node = ProgressTimer::create(texture->getSprite());
 
@@ -235,7 +235,7 @@ TransitionProgressVertical* TransitionProgressVertical::create(float t, Scene* s
 
 ProgressTimer* TransitionProgressVertical::progressTimerNodeWithRenderTexture(RenderTexture* texture)
 {
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
 
     ProgressTimer* node = ProgressTimer::create(texture->getSprite());
 
@@ -280,7 +280,7 @@ void TransitionProgressInOut::setupTransition()
 
 ProgressTimer* TransitionProgressInOut::progressTimerNodeWithRenderTexture(RenderTexture* texture)
 {
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
 
     ProgressTimer* node = ProgressTimer::create(texture->getSprite());
 
@@ -313,7 +313,7 @@ TransitionProgressOutIn* TransitionProgressOutIn::create(float t, Scene* scene)
 
 ProgressTimer* TransitionProgressOutIn::progressTimerNodeWithRenderTexture(RenderTexture* texture)
 {
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
 
     ProgressTimer* node = ProgressTimer::create(texture->getSprite());
 

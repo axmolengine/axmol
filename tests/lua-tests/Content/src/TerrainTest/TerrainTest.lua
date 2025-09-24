@@ -214,7 +214,7 @@ function TerrainWalkThru:init()
                 local nearP = ax.vec3(location.x, location.y, 0.0)
                 local farP  = ax.vec3(location.x, location.y, 1.0)
 
-                local size = ax.Director:getInstance():getLogicalSize()
+                local size = ax.Director:getInstance():getCanvasSize()
                 nearP = self._camera:unproject(size, nearP, nearP)
                 farP  = self._camera:unproject(size, farP, farP)
                 local dir = ax.vec3sub(farP, nearP)

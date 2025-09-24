@@ -1082,8 +1082,8 @@ void Console::commandResolution(socket_native_type /*fd*/, std::string_view args
 void Console::commandResolutionSubCommandEmpty(socket_native_type fd, std::string_view /*args*/)
 {
     auto director        = Director::getInstance();
-    Vec2 points          = director->getLogicalSize();
-    Vec2 pixels          = director->getLogicalSizeInPixels();
+    Vec2 points          = director->getCanvasSize();
+    Vec2 pixels          = director->getCanvasSizeInPixels();
     auto renderView      = director->getRenderView();
     Vec2 design          = renderView->getDesignResolutionSize();
     ResolutionPolicy res = renderView->getResolutionPolicy();

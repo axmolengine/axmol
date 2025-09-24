@@ -1,4 +1,4 @@
-local winSize = ax.Director:getInstance():getLogicalSize()
+local canvasSize = ax.Director:getInstance():getCanvasSize()
 local kTagSprite = 1
 local childTag   = 119
 
@@ -16,18 +16,18 @@ local function createLayer()
     layer:addChild(subTitle, 1, 10001)
     subTitle:setPosition( ax.p(VisibleRect:center().x, VisibleRect:top().y - 60) )
 
-    local left  = ax.p(winSize.width / 4, winSize.height / 2)
-    local right = ax.p(winSize.width / 4 * 3, winSize.height / 2)
+    local left  = ax.p(canvasSize.width / 4, canvasSize.height / 2)
+    local right = ax.p(canvasSize.width / 4 * 3, canvasSize.height / 2)
 
     local sp1 = ax.Sprite:create("Images/grossini.png")
     sp1:setPosition(left)
-    local move1 = ax.MoveBy:create(1, ax.p(winSize.width/2, 0))
+    local move1 = ax.MoveBy:create(1, ax.p(canvasSize.width/2, 0))
     local seq1  = ax.RepeatForever:create(ax.Sequence:create(move1, move1:reverse()))
     layer:addChild(sp1)
     sp1:runAction(seq1)
     local sp2 = ax.Sprite:create("Images/grossinis_sister1.png")
     sp2:setPosition(right)
-    local move2 = ax.MoveBy:create(1, ax.p(-winSize.width/2, 0))
+    local move2 = ax.MoveBy:create(1, ax.p(-canvasSize.width/2, 0))
     local seq2  = ax.RepeatForever:create(ax.Sequence:create(move2, move2:reverse()))
     layer:addChild(sp2)
     sp2:runAction(seq2)
@@ -36,7 +36,7 @@ local function createLayer()
         if succeed then
             local sp = ax.Sprite:create(outputFile)
             layer:addChild(sp, 0, childTag)
-            sp:setPosition(winSize.width / 2, winSize.height / 2)
+            sp:setPosition(canvasSize.width / 2, canvasSize.height / 2)
             sp:setScale(0.25)
             fileName = outputFile
         else
@@ -54,12 +54,12 @@ local function createLayer()
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize     = 24
-    local label1 = ax.Label:createWithTTF(ttfConfig, "capture all", ax.TEXT_ALIGNMENT_CENTER, winSize.width)
+    local label1 = ax.Label:createWithTTF(ttfConfig, "capture all", ax.TEXT_ALIGNMENT_CENTER, canvasSize.width)
     local mi1 = ax.MenuItemLabel:create(label1)
     mi1:registerScriptTapHandler(onCaptured)
     local menu = ax.Menu:create(mi1)
     layer:addChild(menu)
-    menu:setPosition(winSize.width / 2, winSize.height / 4)
+    menu:setPosition(canvasSize.width / 2, canvasSize.height / 4)
 
     return layer
 end

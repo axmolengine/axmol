@@ -107,7 +107,7 @@ FlipY3DDemo::FlipY3DDemo()
 
 ax::ActionInterval* Lens3DDemo::createEffect(float t)
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     return Lens3D::create(t, Size(15, 10), Vec2(size.width / 2, size.height / 2), 240);
 }
 
@@ -119,7 +119,7 @@ Lens3DDemo::Lens3DDemo()
 
 ax::ActionInterval* Ripple3DDemo::createEffect(float t)
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     return Ripple3D::create(t, Size(32, 24), Vec2(size.width / 2, size.height / 2), 240, 4, 160);
 }
 
@@ -153,7 +153,7 @@ WavesDemo::WavesDemo()
 
 ax::ActionInterval* TwirlDemo::createEffect(float t)
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     return Twirl::create(t, Size(12, 8), Vec2(size.width / 2, size.height / 2), 1, 2.5f);
 }
 

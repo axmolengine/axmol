@@ -38,7 +38,7 @@ local function VideoPlayerTest()
     videoPlayer:addEventListener(onVideoEventCallback)
     layer:addChild(videoPlayer)
 
-    local screenSize = ax.Director:getInstance():getLogicalSize()
+    local screenSize = ax.Director:getInstance():getCanvasSize()
     local rootSize = widget:getContentSize()
     layer:setPosition(ax.p((screenSize.width - rootSize.width) / 2,(screenSize.height - rootSize.height) / 2))
 

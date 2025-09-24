@@ -64,7 +64,7 @@ WebSocketTest::WebSocketTest()
     , _sendTextTimes(0)
     , _sendBinaryTimes(0)
 {
-    auto winSize = Director::getInstance()->getLogicalSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
 
     const int MARGIN = 40;
     const int SPACE  = 35;
@@ -76,20 +76,20 @@ WebSocketTest::WebSocketTest()
     // Send Text
     auto labelSendText = Label::createWithTTF("Send Text", "fonts/arial.ttf", 20);
     auto itemSendText = MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketTest::onMenuSendTextClicked, this));
-    itemSendText->setPosition(Vec2(winSize.width / 2, winSize.height - MARGIN - SPACE));
+    itemSendText->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - MARGIN - SPACE));
     menuRequest->addChild(itemSendText);
 
     labelSendText = Label::createWithTTF("Send Multiple Text", "fonts/arial.ttf", 20);
     itemSendText =
         MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketTest::onMenuSendMultipleTextClicked, this));
-    itemSendText->setPosition(Vec2(winSize.width / 2, winSize.height - MARGIN - 2 * SPACE));
+    itemSendText->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - MARGIN - 2 * SPACE));
     menuRequest->addChild(itemSendText);
 
     // Send Binary
     auto labelSendBinary = Label::createWithTTF("Send Binary", "fonts/arial.ttf", 20);
     auto itemSendBinary =
         MenuItemLabel::create(labelSendBinary, AX_CALLBACK_1(WebSocketTest::onMenuSendBinaryClicked, this));
-    itemSendBinary->setPosition(Vec2(winSize.width / 2, winSize.height - MARGIN - 3 * SPACE));
+    itemSendBinary->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - MARGIN - 3 * SPACE));
     menuRequest->addChild(itemSendBinary);
 
     // Send Text Status Label
@@ -354,7 +354,7 @@ void WebSocketTest::onMenuSendBinaryClicked(ax::Object* sender)
 
 WebSocketCloseTest::WebSocketCloseTest() : _wsiTest(nullptr)
 {
-    auto winSize = Director::getInstance()->getLogicalSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
 
     _wsiTest = new network::WebSocket();
 
@@ -421,7 +421,7 @@ void WebSocketCloseTest::onError(network::WebSocket* ws, const network::WebSocke
 WebSocketDelayTest::WebSocketDelayTest()
     : _wsiSendText(nullptr), _sendTextStatus(nullptr), _progressStatus(nullptr), _sendTextTimes(0)
 {
-    auto winSize = Director::getInstance()->getLogicalSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
 
     const int MARGIN = 40;
     const int SPACE  = 35;
@@ -436,7 +436,7 @@ WebSocketDelayTest::WebSocketDelayTest()
     auto labelSendText = Label::createWithTTF(cmdLabel, "fonts/arial.ttf", 20);
     auto itemSendText =
         MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketDelayTest::onMenuSendTextClicked, this));
-    itemSendText->setPosition(Vec2(winSize.width / 2, winSize.height - MARGIN - SPACE));
+    itemSendText->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - MARGIN - SPACE));
     menuRequest->addChild(itemSendText);
 
     // Send Text Status Label

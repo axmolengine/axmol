@@ -9,7 +9,7 @@ local LuaBridgeTestsName =
     "LuaTableToObjcDictTest",
 }
 
-local s = ax.Director:getInstance():getLogicalSize()
+local s = ax.Director:getInstance():getCanvasSize()
 
 local function LuaBridgeLayer()
     local layer = ax.Layer:create()

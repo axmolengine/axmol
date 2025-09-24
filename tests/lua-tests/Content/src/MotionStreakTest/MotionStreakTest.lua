@@ -3,7 +3,7 @@ local streak = nil
 local titleLabel = nil
 local subtitleLabel = nil
 
-local s = ax.Director:getInstance():getLogicalSize()
+local s = ax.Director:getInstance():getCanvasSize()
 local scheduler = ax.Director:getInstance():getScheduler()
 
 local firstTick = nil

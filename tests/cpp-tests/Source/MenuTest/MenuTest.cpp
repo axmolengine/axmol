@@ -118,7 +118,7 @@ MenuLayerMainMenu::MenuLayerMainMenu()
     menu->alignItemsVertically();
 
     // elastic effect
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     int i = 0;
     for (const auto& child : menu->getChildren())
@@ -228,7 +228,7 @@ MenuLayer2::MenuLayer2()
 
         auto menu = Menu::create(item1, item2, item3, nullptr);
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         menu->setPosition(Vec2(s.width / 2, s.height / 2));
 
         menu->setTag(kTagMenu);
@@ -347,7 +347,7 @@ MenuLayer3::MenuLayer3()
     auto menu = Menu::create(item1, item2, item3, nullptr);
     menu->setPosition(Vec2(0, 0));
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     item1->setPosition(Vec2(s.width / 2 - 150, s.height / 2));
     item2->setPosition(Vec2(s.width / 2 - 200, s.height / 2));
@@ -437,7 +437,7 @@ MenuLayer4::MenuLayer4()
 
     addChild(menu);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     menu->setPosition(Vec2(s.width / 2, s.height / 2));
 }
 
@@ -465,7 +465,7 @@ BugsTest::BugsTest()
     addChild(menu);
     menu->alignItemsVertically();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     menu->setPosition(Vec2(s.width / 2, s.height / 2));
 }
 
@@ -494,7 +494,7 @@ void BugsTest::backMenuCallback(ax::Object* pSender)
 
 RemoveMenuItemWhenMove::RemoveMenuItemWhenMove()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto label = Label::createWithTTF("click item and move, should not crash", "fonts/arial.ttf", 20);
     label->setPosition(Vec2(s.width / 2, s.height - 30));

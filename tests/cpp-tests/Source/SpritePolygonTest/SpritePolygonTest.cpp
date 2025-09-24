@@ -183,7 +183,7 @@ SpritePolygonTest1::SpritePolygonTest1()
 
 void SpritePolygonTest1::initSprites()
 {
-    auto s        = Director::getInstance()->getLogicalSize();
+    auto s        = Director::getInstance()->getCanvasSize();
     auto offset   = Vec2(0.15 * s.width, 0);
     auto filename = s_pathGrossini;
 
@@ -237,7 +237,7 @@ SpritePolygonTest2::SpritePolygonTest2()
 
 void SpritePolygonTest2::initSprites()
 {
-    auto s        = Director::getInstance()->getLogicalSize();
+    auto s        = Director::getInstance()->getCanvasSize();
     auto offset   = Vec2(0.15 * s.width, 0);
     auto filename = s_pathGrossini;
 
@@ -689,7 +689,7 @@ SpritePolygonTestNoCrash::SpritePolygonTestNoCrash()
 
 void SpritePolygonTestNoCrash::initSprites()
 {
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto pinfo  = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
     auto sprite = Sprite::create(pinfo);
     addChild(sprite);
@@ -716,7 +716,7 @@ SpritePolygonTestTPIsland::SpritePolygonTestTPIsland()
 
 void SpritePolygonTestTPIsland::initSprites()
 {
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFile("Images/test_polygon.plist");
 
@@ -745,7 +745,7 @@ SpritePolygonTestAutoPolyIsland::SpritePolygonTestAutoPolyIsland()
 
 void SpritePolygonTestAutoPolyIsland::initSprites()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto pinfo  = AutoPolygon::generatePolygon("Images/island_polygon.png", Rect::ZERO, 1);
     auto sprite = Sprite::create(pinfo);
@@ -773,7 +773,7 @@ SpritePolygonTestFrameAnim::SpritePolygonTestFrameAnim()
 
 void SpritePolygonTestFrameAnim::initSprites()
 {
-    auto screen = Director::getInstance()->getLogicalSize();
+    auto screen = Director::getInstance()->getCanvasSize();
 
     auto rotate   = RotateBy::create(10, 360);
     auto action   = RepeatForever::create(rotate);
@@ -828,7 +828,7 @@ Issue14017Test::Issue14017Test()
 
 void Issue14017Test::initSprites()
 {
-    auto s            = Director::getInstance()->getLogicalSize();
+    auto s            = Director::getInstance()->getCanvasSize();
     auto offset       = Vec2(0.3 * s.width, 0);
     auto filename     = "Images/bug14017.png";
     auto filename_fix = "Images/bug14017_fix.png";
@@ -895,7 +895,7 @@ void Issue14017Test::initSprites()
 
 SpritePolygonTestPerformance::SpritePolygonTestPerformance()
 {
-    Size s         = Director::getInstance()->getLogicalSize();
+    Size s         = Director::getInstance()->getCanvasSize();
     _spritesAnchor = Node::create();
     _spritesAnchor->setPosition(0, 0);
     addChild(_spritesAnchor);
@@ -913,7 +913,7 @@ SpritePolygonTestPerformance::SpritePolygonTestPerformance()
 void SpritePolygonTestPerformance::createSprite()
 {
     static PolygonInfo pinfo;
-    Size s = Director::getInstance()->getLogicalSize();
+    Size s = Director::getInstance()->getCanvasSize();
 
     if (pinfo.getFilename() == "")
     {

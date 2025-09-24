@@ -1,4 +1,4 @@
-local size = ax.Director:getInstance():getLogicalSize()
+local size = ax.Director:getInstance():getCanvasSize()
 
 local function initWithLayer(layer)
 	grossini = ax.Sprite:create(s_pPathGrossini)
@@ -176,7 +176,7 @@ local function ActionRotationalSkewVSStandardSkew()
     grossini:removeFromParent(true);
     kathia:removeFromParent(true);
 
-    local s = ax.Director:getInstance():getLogicalSize();
+    local s = ax.Director:getInstance():getCanvasSize();
     local boxSize = ax.size(100.0, 100.0);
     local box = ax.LayerColor:create(ax.color32(255,255,0,255));
     box:setAnchorPoint(ax.p(0.5,0.5));
@@ -947,9 +947,9 @@ local function ActionFollow()
     layer:runAction(ax.Follow:create(grossini, ax.rect(0, 0, size.width * 2 - 100, size.height)))
 
     local drawNode = ax.DrawNode:create()
-    local winSize = ax.Director:getInstance():getLogicalSize()
-    local x = winSize.width * 2 - 100
-    local y = winSize.height
+    local canvasSize = ax.Director:getInstance():getCanvasSize()
+    local x = canvasSize.width * 2 - 100
+    local y = canvasSize.height
     local vertices = { ax.p(5, 5), ax.p(x - 5, 5), ax.p(x - 5,y - 5), ax.p(5,y - 5) }
     drawNode:drawPoly(vertices, 4, true, ax.color(0,0,1,1))
     layer:addChild(drawNode)

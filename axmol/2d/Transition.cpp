@@ -313,7 +313,7 @@ TransitionJumpZoom* TransitionJumpZoom::create(float t, Scene* scene)
 void TransitionJumpZoom::onEnter()
 {
     TransitionScene::onEnter();
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
 
     _inScene->setScale(0.5f);
     _inScene->setPosition(s.width, 0);
@@ -380,7 +380,7 @@ ActionInterval* TransitionMoveInL::easeActionWithAction(ActionInterval* action)
 
 void TransitionMoveInL::initScenes()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     _inScene->setPosition(-s.width, 0);
 }
 
@@ -404,7 +404,7 @@ TransitionMoveInR* TransitionMoveInR::create(float t, Scene* scene)
 
 void TransitionMoveInR::initScenes()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     _inScene->setPosition(s.width, 0);
 }
 
@@ -428,7 +428,7 @@ TransitionMoveInT* TransitionMoveInT::create(float t, Scene* scene)
 
 void TransitionMoveInT::initScenes()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     _inScene->setPosition(0, s.height);
 }
 
@@ -452,7 +452,7 @@ TransitionMoveInB* TransitionMoveInB::create(float t, Scene* scene)
 
 void TransitionMoveInB::initScenes()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     _inScene->setPosition(0, -s.height);
 }
 
@@ -496,13 +496,13 @@ void TransitionSlideInL::sceneOrder()
 
 void TransitionSlideInL::initScenes()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     _inScene->setPosition(-(s.width - ADJUST_FACTOR), 0.0f);
 }
 
 ActionInterval* TransitionSlideInL::action()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     return MoveBy::create(_duration, Vec2(s.width - ADJUST_FACTOR, 0.0f));
 }
 
@@ -548,13 +548,13 @@ void TransitionSlideInR::sceneOrder()
 
 void TransitionSlideInR::initScenes()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     _inScene->setPosition(s.width - ADJUST_FACTOR, 0);
 }
 
 ActionInterval* TransitionSlideInR::action()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     return MoveBy::create(_duration, Vec2(-(s.width - ADJUST_FACTOR), 0.0f));
 }
 
@@ -583,13 +583,13 @@ void TransitionSlideInT::sceneOrder()
 
 void TransitionSlideInT::initScenes()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     _inScene->setPosition(0, s.height - ADJUST_FACTOR);
 }
 
 ActionInterval* TransitionSlideInT::action()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     return MoveBy::create(_duration, Vec2(0.0f, -(s.height - ADJUST_FACTOR)));
 }
 
@@ -618,13 +618,13 @@ void TransitionSlideInB::sceneOrder()
 
 void TransitionSlideInB::initScenes()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     _inScene->setPosition(0, -(s.height - ADJUST_FACTOR));
 }
 
 ActionInterval* TransitionSlideInB::action()
 {
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     return MoveBy::create(_duration, Vec2(0.0f, s.height - ADJUST_FACTOR));
 }
 
@@ -1118,7 +1118,7 @@ void TransitionCrossFade::onEnter()
     // create a transparent color layer
     // in which we are going to add our rendertextures
     Color32 color(0, 0, 0, 0);
-    Vec2 size         = _director->getLogicalSize();
+    Vec2 size         = _director->getCanvasSize();
     LayerColor* layer = LayerColor::create(color);
 
     // create the first render texture for inScene
@@ -1222,7 +1222,7 @@ void TransitionTurnOffTiles::onEnter()
     _outSceneProxy->setTarget(_outScene);
     _outSceneProxy->onEnter();
 
-    Vec2 s       = _director->getLogicalSize();
+    Vec2 s       = _director->getCanvasSize();
     float aspect = s.width / s.height;
     int x        = (int)(12 * aspect);
     int y        = 12;
@@ -1392,7 +1392,7 @@ void TransitionFadeTR::onEnter()
     _outSceneProxy->setTarget(_outScene);
     _outSceneProxy->onEnter();
 
-    Vec2 s       = _director->getLogicalSize();
+    Vec2 s       = _director->getCanvasSize();
     float aspect = s.width / s.height;
     int x        = (int)(12 * aspect);
     int y        = 12;

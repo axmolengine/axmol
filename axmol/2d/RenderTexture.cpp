@@ -628,7 +628,7 @@ void RenderTexture::onBegin()
         const Vec2& texSize = _colorTexture->getContentSizeInPixels();
 
         // Calculate the adjustment ratios based on the old and new projections
-        Vec2 size         = _director->getLogicalSizeInPixels();
+        Vec2 size         = _director->getCanvasSizeInPixels();
         float widthRatio  = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;
 
@@ -681,7 +681,7 @@ void RenderTexture::begin()
         const Vec2& texSize = _colorTexture->getContentSizeInPixels();
 
         // Calculate the adjustment ratios based on the old and new projections
-        Vec2 size = _director->getLogicalSizeInPixels();
+        Vec2 size = _director->getCanvasSizeInPixels();
 
         float widthRatio  = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;

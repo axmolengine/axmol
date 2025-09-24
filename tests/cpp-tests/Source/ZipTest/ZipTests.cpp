@@ -154,10 +154,10 @@ void UnZipNormalFile::onEnter()
 {
     TestCase::onEnter();
 
-    const auto winSize = Director::getInstance()->getLogicalSize();
+    const auto canvasSize = Director::getInstance()->getCanvasSize();
 
     Label* label = Label::createWithTTF("unziping file", "fonts/Marker Felt.ttf", 23);
-    label->setPosition(winSize.width / 2, winSize.height / 2);
+    label->setPosition(canvasSize.width / 2, canvasSize.height / 2);
     addChild(label);
 
     unzipTest(label, "zip/10k.txt", "10-nopasswd.zip", "zip/10k-nopass.zip");
@@ -172,10 +172,10 @@ void UnZipWithPassword::onEnter()
 {
     TestCase::onEnter();
 
-    const auto winSize = Director::getInstance()->getLogicalSize();
+    const auto canvasSize = Director::getInstance()->getCanvasSize();
 
     Label* label = Label::createWithTTF("unziping file", "fonts/Marker Felt.ttf", 23);
-    label->setPosition(winSize.width / 2, winSize.height / 2);
+    label->setPosition(canvasSize.width / 2, canvasSize.height / 2);
     addChild(label);
 
     unzipTest(label, "zip/10k.txt", "10.zip", "zip/10k.zip", "123456");

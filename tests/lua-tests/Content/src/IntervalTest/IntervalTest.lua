@@ -12,7 +12,7 @@ local function IntervalLayer()
     local m_time3 = 0
     local m_time4 = 0
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     -- sun
     local  sun = ax.ParticleSun:create()
     sun:setTexture(ax.Director:getInstance():getTextureCache():addImage("Images/fire.png"))

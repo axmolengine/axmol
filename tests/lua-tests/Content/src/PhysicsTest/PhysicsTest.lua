@@ -1,4 +1,4 @@
-local size = ax.Director:getInstance():getLogicalSize()
+local size = ax.Director:getInstance():getCanvasSize()
 local MATERIAL_DEFAULT = ax.PhysicsMaterial(0.1, 0.5, 0.5)
 local curLayer = nil
 local STATIC_COLOR = ax.color(1.0, 0.0, 0.0, 1.0)
@@ -1184,9 +1184,9 @@ local function PhysicsContactTest()
         -- yellow box, will collide with itself and blue box.
         for i = 1, layer.yellowBoxNum do
             local size = ax.size(10 + math.random()*10, 10 + math.random()*10)
-            local winSize = ax.size(VisibleRect:getVisibleRect().width,
+            local canvasSize = ax.size(VisibleRect:getVisibleRect().width,
                                     VisibleRect:getVisibleRect().height)
-            local position = ax.p(winSize.width - size.width, winSize.height - size.height)
+            local position = ax.p(canvasSize.width - size.width, canvasSize.height - size.height)
             position.x = position.x * math.random()
             position.y = position.y * math.random()
             position = ax.p(VisibleRect:leftBottom().x + position.x + size.width/2,
@@ -1204,8 +1204,8 @@ local function PhysicsContactTest()
         -- blue box, will collide with blue box.
         for i = 1, layer.blueBoxNum do
             local size = ax.size(10 + math.random()*10, 10 + math.random()*10)
-            local winSize = ax.size(VisibleRect:getVisibleRect().width, VisibleRect:getVisibleRect().height)
-            local position = ax.p(winSize.width - size.width, winSize.height - size.height)
+            local canvasSize = ax.size(VisibleRect:getVisibleRect().width, VisibleRect:getVisibleRect().height)
+            local position = ax.p(canvasSize.width - size.width, canvasSize.height - size.height)
             position.x = position.x * math.random()
             position.y = position.y * math.random()
             position = ax.p(VisibleRect:leftBottom().x + position.x + size.width/2,
@@ -1223,9 +1223,9 @@ local function PhysicsContactTest()
         -- yellow triangle, will collide with itself and blue box.
         for i = 1, layer.yellowTriangleNum do
             local size = ax.size(10 + math.random()*10, 10 + math.random()*10)
-            local winSize = ax.size(VisibleRect:getVisibleRect().width,
+            local canvasSize = ax.size(VisibleRect:getVisibleRect().width,
                                     VisibleRect:getVisibleRect().height)
-            local position = ax.p(winSize.width - size.width, winSize.height - size.height)
+            local position = ax.p(canvasSize.width - size.width, canvasSize.height - size.height)
             position.x = position.x * math.random()
             position.y = position.y * math.random()
             position = ax.p(VisibleRect:leftBottom().x + position.x + size.width/2,
@@ -1243,9 +1243,9 @@ local function PhysicsContactTest()
         -- blue triangle, will collide with yellow box.
         for i = 1, layer.blueTriangleNum do
             local size = ax.size(10 + math.random()*10, 10 + math.random()*10)
-            local winSize = ax.size(VisibleRect:getVisibleRect().width,
+            local canvasSize = ax.size(VisibleRect:getVisibleRect().width,
                                     VisibleRect:getVisibleRect().height)
-            local position = ax.p(winSize.width - size.width, winSize.height - size.height)
+            local position = ax.p(canvasSize.width - size.width, canvasSize.height - size.height)
             position.x = position.x * math.random()
             position.y = position.y * math.random()
             position = ax.p(VisibleRect:leftBottom().x + position.x + size.width/2,

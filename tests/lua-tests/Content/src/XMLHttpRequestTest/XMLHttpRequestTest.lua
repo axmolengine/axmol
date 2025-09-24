@@ -2,20 +2,20 @@ local json = require 'cjson'
 
 local function XMLHttpRequestLayer()
     local layer = ax.Layer:create()
-    local winSize = ax.Director:getInstance():getLogicalSize()
+    local canvasSize = ax.Director:getInstance():getCanvasSize()
     local margin = 40
     local space  = 35
 
     local function init()
         local label = ax.Label:createWithTTF("XML Http Request Test", s_arialPath, 28)
         label:setAnchorPoint(ax.p(0.5, 0.5))
-        label:setPosition(ax.p(winSize.width / 2, winSize.height - margin))
+        label:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - margin))
         layer:addChild(label, 0)
 
         --Response Code Label
         local labelStatusCode = ax.Label:createWithTTF("HTTP Status:", s_markerFeltFontPath, 20)
         labelStatusCode:setAnchorPoint(ax.p(0.5, 0.5))
-        labelStatusCode:setPosition(ax.p(winSize.width / 2,  winSize.height - margin - 6 * space))
+        labelStatusCode:setPosition(ax.p(canvasSize.width / 2,  canvasSize.height - margin - 6 * space))
         layer:addChild(labelStatusCode)
 
         local menuRequest = ax.Menu:create()
@@ -52,7 +52,7 @@ local function XMLHttpRequestLayer()
         labelGet:setAnchorPoint(ax.p(0.5, 0.5))
         local itemGet  =  ax.MenuItemLabel:create(labelGet)
         itemGet:registerScriptTapHandler(onMenuGetClicked)
-        itemGet:setPosition(ax.p(winSize.width / 2, winSize.height - margin - space))
+        itemGet:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - margin - space))
         menuRequest:addChild(itemGet)
 
         --Post
@@ -83,7 +83,7 @@ local function XMLHttpRequestLayer()
         labelPost:setAnchorPoint(ax.p(0.5, 0.5))
         local itemPost =  ax.MenuItemLabel:create(labelPost)
         itemPost:registerScriptTapHandler(onMenuPostClicked)
-        itemPost:setPosition(ax.p(winSize.width / 2, winSize.height - margin - 2 * space))
+        itemPost:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - margin - 2 * space))
         menuRequest:addChild(itemPost)
 
         --Post Binary
@@ -129,7 +129,7 @@ local function XMLHttpRequestLayer()
         labelPostBinary:setAnchorPoint(ax.p(0.5, 0.5))
         local itemPostBinary = ax.MenuItemLabel:create(labelPostBinary)
         itemPostBinary:registerScriptTapHandler(onMenuPostBinaryClicked)
-        itemPostBinary:setPosition(ax.p(winSize.width / 2, winSize.height - margin - 3 * space))
+        itemPostBinary:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - margin - 3 * space))
         menuRequest:addChild(itemPostBinary)
 
         --Post Json
@@ -173,7 +173,7 @@ local function XMLHttpRequestLayer()
         labelPostJson:setAnchorPoint(ax.p(0.5, 0.5))
         local itemPostJson = ax.MenuItemLabel:create(labelPostJson)
         itemPostJson:registerScriptTapHandler(onMenuPostJsonClicked)
-        itemPostJson:setPosition(ax.p(winSize.width / 2, winSize.height - margin - 4 * space))
+        itemPostJson:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - margin - 4 * space))
         menuRequest:addChild(itemPostJson)
     end
 

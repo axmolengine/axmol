@@ -169,7 +169,7 @@ void TextFieldTTFDefaultTest::onEnter()
     KeyboardNotificationLayer::onEnter();
 
     // add TextFieldTTF
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto pTextField = TextFieldTTF::textFieldWithPlaceHolder("<click here for input>", FONT_NAME, FONT_SIZE);
     addChild(pTextField);
@@ -222,7 +222,7 @@ void TextFieldTTFActionTest::onEnter()
     _action = false;
 
     // add TextFieldTTF
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     _textField = TextFieldTTF::textFieldWithPlaceHolder("<click here for input>", FONT_NAME, FONT_SIZE);
     addChild(_textField);
@@ -295,7 +295,7 @@ bool TextFieldTTFActionTest::onTextFieldInsertText(TextFieldTTF* sender, const c
         endPos.x += sender->getContentSize().width / 2;
     }
     auto inputTextSize = label->getContentSize();
-    Vec2 beginPos(endPos.x, Director::getInstance()->getLogicalSize().height - inputTextSize.height * 2);
+    Vec2 beginPos(endPos.x, Director::getInstance()->getCanvasSize().height - inputTextSize.height * 2);
 
     float duration = 0.5;
     label->setPosition(beginPos);
@@ -321,8 +321,8 @@ bool TextFieldTTFActionTest::onTextFieldDeleteBackward(TextFieldTTF* sender, con
     auto labelSize     = label->getContentSize();
     beginPos.x += (textfieldSize.width - labelSize.width) / 2.0f;
 
-    auto winSize = Director::getInstance()->getLogicalSize();
-    Vec2 endPos(-winSize.width / 4.0f, winSize.height * (0.5 + (float)rand() / (2.0f * RAND_MAX)));
+    auto canvasSize = Director::getInstance()->getCanvasSize();
+    Vec2 endPos(-canvasSize.width / 4.0f, canvasSize.height * (0.5 + (float)rand() / (2.0f * RAND_MAX)));
 
     float duration       = 1;
     float rotateDuration = 0.2f;
@@ -362,7 +362,7 @@ void TextFieldTTFSecureTextEntryTest::onEnter()
     KeyboardNotificationLayer::onEnter();
 
     // add TextFieldTTF
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto pTextField = TextFieldTTF::textFieldWithPlaceHolder("<click here for input>", FONT_NAME, FONT_SIZE);
     addChild(pTextField);
@@ -413,7 +413,7 @@ void TextFieldTTSetCursorFromPoint::onEnter()
     KeyboardNotificationLayer::onEnter();
 
     // add TextFieldTTF
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto pTextField = TextFieldTTF::textFieldWithPlaceHolder("<click here for input>", FONT_NAME, FONT_SIZE);
     addChild(pTextField);

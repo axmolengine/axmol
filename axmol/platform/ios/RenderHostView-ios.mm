@@ -635,9 +635,9 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
                                        CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
 
     // Fill notification info for Axmol IME dispatcher
-    auto winSize = savedBounds_.size;
+    auto boundSize = savedBounds_.size;
     CGSize viewSize =
-        CGSizeMake(winSize.width * backingScaleFactor / scaleX, winSize.height * backingScaleFactor / scaleY);
+        CGSizeMake(boundSize.width * backingScaleFactor / scaleX, boundSize.height * backingScaleFactor / scaleY);
 
     ax::IMEKeyboardNotificationInfo notiInfo;
     notiInfo.begin    = convertKeyboardRectToViewport(begin, viewSize);

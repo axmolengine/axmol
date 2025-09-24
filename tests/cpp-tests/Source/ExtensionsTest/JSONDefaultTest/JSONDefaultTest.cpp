@@ -38,7 +38,7 @@ JSONDefaultTests::JSONDefaultTests()
 
 JSONDefaultTest::JSONDefaultTest()
 {
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto label = Label::createWithTTF("JSONDefault test Log data see console", "fonts/arial.ttf", 22);
     addChild(label, 0);
     label->setPosition(Vec2(s.width / 2, s.height - 50));

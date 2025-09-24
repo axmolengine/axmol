@@ -229,20 +229,14 @@ public:
 
     /** Returns the size of the render view in points.
      */
-    const Vec2& getLogicalSize() const;
+    const Vec2& getCanvasSize() const;
 
     /** Returns the size of the render view in pixels. */
-    Vec2 getLogicalSizeInPixels() const;
-
-    // implicit deprecated APIs
-#ifndef _AX_GEN_SCRIPT_BINDINGS
-    AX_DEPRECATED(3.0) const Vec2& getWinSize() const { return getLogicalSize(); }
-    AX_DEPRECATED(3.0) Vec2 getWinSizeInPixels() const { return getLogicalSizeInPixels(); }
-#endif
+    Vec2 getCanvasSizeInPixels() const;
 
     /**
      * Returns visible size of the render view in points.
-     * The value is equal to `Director::getLogicalSize()` if don't invoke `RenderView::setDesignResolutionSize()`.
+     * The value is equal to `Director::getCanvasSize()` if don't invoke `RenderView::setDesignResolutionSize()`.
      */
     Vec2 getVisibleSize() const;
 
@@ -548,9 +542,9 @@ protected:
     void resizeSwapchain(uint32_t w, uint32_t h);
 
     /**
-     * @brief Internal-only: Sets logical size aka design size, invoked by RenderView
+     * @brief Internal-only: Sets canvas size aka design size, invoked by RenderView
      */
-    void setLogicalSize(const Vec2& logicalSize);
+    void setCanvasSize(const Vec2& canvasSize);
 
 #if defined(AX_PLATFORM_PC)
     void processOperations();
@@ -667,7 +661,7 @@ protected:
     Projection _projection = Projection::DEFAULT;
 
     /* logical size in points */
-    Vec2 _logicalSizeInPoints = Vec2::ZERO;
+    Vec2 _canvasSizeInPoints = Vec2::ZERO;
 
     /* content scale factor */
     float _contentScaleFactor = 1.0f;

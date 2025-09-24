@@ -253,9 +253,9 @@ bool UIS9BatchNodeBasic::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto sprite = Sprite::create("Images/blocks9.png");
 
@@ -277,9 +277,9 @@ bool UIS9FrameNameSpriteSheet::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
@@ -303,9 +303,9 @@ bool UIS9FrameNameSpriteSheetRotated::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
@@ -327,9 +327,9 @@ bool UIS9FrameNameSpriteSheetCropped::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
@@ -353,9 +353,9 @@ bool UIS9FrameNameSpriteSheetCroppedRotated::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
@@ -379,9 +379,9 @@ bool UIS9FrameNameSpriteSheetCroppedSimple::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
@@ -406,9 +406,9 @@ bool UIS9FrameNameSpriteSheetCroppedRotatedSimple::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
@@ -433,9 +433,9 @@ bool UIS9BatchNodeScaledNoInsets::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         // scaled without insets
         auto sprite_scaled = Sprite::create("Images/blocks9.png");
@@ -457,9 +457,9 @@ bool UIS9FrameNameSpriteSheetScaledNoInsets::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
         auto blocks_scaled = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png");
@@ -480,9 +480,9 @@ bool UIS9FrameNameSpriteSheetRotatedScaledNoInsets::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto blocks_scaled = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
 
@@ -501,9 +501,9 @@ bool UIS9BatchNodeScaleWithCapInsets::init()
 {
     if (UIScene::init())
     {
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto sprite_scaled_with_insets = Sprite::create("Images/blocks9.png");
 
@@ -528,9 +528,9 @@ bool UIS9FrameNameSpriteSheetInsets::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto blocks_with_insets =
             ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png", Rect(32, 32, 32, 32));
@@ -549,9 +549,9 @@ bool UIS9FrameNameSpriteSheetInsetsScaled::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto blocks_scaled_with_insets =
             ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png", Rect(32, 32, 32, 32));
@@ -571,9 +571,9 @@ bool UIS9FrameNameSpriteSheetRotatedInsets::init()
     if (UIScene::init())
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto blocks_with_insets =
             ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png", Rect(32, 32, 32, 32));
@@ -592,11 +592,11 @@ bool UIS9_TexturePacker::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
+        auto canvasSize = Director::getInstance()->getCanvasSize();
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_ui_plist);
 
-        float x = winSize.width / 4;
-        float y = 0 + (winSize.height / 2);
+        float x = canvasSize.width / 4;
+        float y = 0 + (canvasSize.height / 2);
 
         auto s = ui::Scale9Sprite::createWithSpriteFrameName("button_normal.png");
 
@@ -606,7 +606,7 @@ bool UIS9_TexturePacker::init()
 
         this->addChild(s);
 
-        x = winSize.width * 3 / 4;
+        x = canvasSize.width * 3 / 4;
 
         auto s2 = ui::Scale9Sprite::createWithSpriteFrameName("button_actived.png");
 
@@ -626,9 +626,9 @@ bool UIS9FrameNameSpriteSheetRotatedInsetsScaled::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto blocks_scaled_with_insets =
             ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9.png", Rect(32, 32, 32, 32));
@@ -649,9 +649,9 @@ bool UIS9FrameNameSpriteSheetRotatedSetCapInsetLater::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto blocks_scaled_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
 
@@ -673,9 +673,9 @@ bool UIS9CascadeOpacityAndColor::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
         auto rgba    = Layer::create();
         rgba->setCascadeColorEnabled(true);
         rgba->setCascadeOpacityEnabled(true);
@@ -705,9 +705,9 @@ bool UIS9ZOrder::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto blocks_scaled_with_insets = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
 
@@ -738,12 +738,12 @@ bool UIS9Flip::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2);
 
         auto statusLabel = Label::createWithSystemFont("Scale9Enabled", "Arial", 10);
-        statusLabel->setPosition(Vec2(x, winSize.height - statusLabel->getContentSize().height - 40));
+        statusLabel->setPosition(Vec2(x, canvasSize.height - statusLabel->getContentSize().height - 40));
         this->addChild(statusLabel);
 
         auto normalSprite = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
@@ -871,9 +871,9 @@ bool UIS9ChangeAnchorPoint::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(s_s9s_blocks9_plist);
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2 + 50);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2 + 50);
 
         auto normalSprite = ui::Scale9Sprite::createWithSpriteFrameName("blocks9ss/blocks9r.png");
         normalSprite->setPosition(Vec2(x, y));
@@ -883,7 +883,7 @@ bool UIS9ChangeAnchorPoint::init()
         this->addChild(normalSprite);
 
         Button* button1 = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        button1->setPosition(Vec2(winSize.width / 2 - 100, winSize.height / 2 - 50));
+        button1->setPosition(Vec2(canvasSize.width / 2 - 100, canvasSize.height / 2 - 50));
         button1->setName("button2");
         button1->setTitleText("Vec(0,0)");
         button1->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
@@ -901,7 +901,7 @@ bool UIS9ChangeAnchorPoint::init()
         this->addChild(button1);
 
         Button* button2 = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        button2->setPosition(Vec2(winSize.width / 2 + 100, winSize.height / 2 - 50));
+        button2->setPosition(Vec2(canvasSize.width / 2 + 100, canvasSize.height / 2 - 50));
         button2->setName("button2");
         button2->setTitleText("Vec(1,1)");
         button2->addTouchEventListener([=](Object*, Widget::TouchEventType type) {
@@ -929,9 +929,9 @@ bool UIS9NinePatchTest::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile("cocosui/android9patch.plist");
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2 + 50);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2 + 50);
 
         auto preferedSize = Size(99, 99);
 
@@ -976,38 +976,38 @@ bool UIS9BatchTest::init()
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Images/blocks9ss.plist");
 
-        auto winSize = Director::getInstance()->getVisibleSize();
+        auto canvasSize = Director::getInstance()->getVisibleSize();
 
         auto label = Label::createWithSystemFont(
             "Click Button to Add Sprite and Slice Sprite\nThe draw call should always be 19 after adding sprites",
             "Arial", 15);
-        label->setPosition(Vec2(winSize.width / 2, winSize.height - 60));
+        label->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 60));
         this->addChild(label);
 
         auto preferedSize                             = Size(150.0f, 99.0f);
         std::vector<std::string> spriteFrameNameArray = {"blocks9ss/blocks9.png", "blocks9ss/blocks9r.png"};
         auto addSpriteButton =
             ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        addSpriteButton->setPosition(Vec2(winSize.width / 2 - 50, winSize.height - 100));
+        addSpriteButton->setPosition(Vec2(canvasSize.width / 2 - 50, canvasSize.height - 100));
         addSpriteButton->setTitleText("Add Normal Sprite");
         std::srand((unsigned)time(nullptr));
-        addSpriteButton->addClickEventListener([this, spriteFrameNameArray, winSize](Object*) {
+        addSpriteButton->addClickEventListener([this, spriteFrameNameArray, canvasSize](Object*) {
             auto spriteFrameName = spriteFrameNameArray[rand() % 2];
             auto sprite          = Sprite::createWithSpriteFrameName(spriteFrameName);
-            sprite->setPosition(Vec2(rand() % (int)winSize.width + 50.0f, winSize.height / 2));
+            sprite->setPosition(Vec2(rand() % (int)canvasSize.width + 50.0f, canvasSize.height / 2));
             this->addChild(sprite);
         });
         this->addChild(addSpriteButton);
 
         auto addSliceSpriteButton =
             ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        addSliceSpriteButton->setPosition(Vec2(winSize.width / 2 + 50, winSize.height - 100));
+        addSliceSpriteButton->setPosition(Vec2(canvasSize.width / 2 + 50, canvasSize.height - 100));
         addSliceSpriteButton->setTitleText("Add Slice Sprite");
-        addSliceSpriteButton->addClickEventListener([this, spriteFrameNameArray, winSize, preferedSize](Object*) {
+        addSliceSpriteButton->addClickEventListener([this, spriteFrameNameArray, canvasSize, preferedSize](Object*) {
             int random           = rand() % 2;
             auto spriteFrameName = spriteFrameNameArray[random];
             auto sprite          = ui::Scale9Sprite::createWithSpriteFrameName(spriteFrameName);
-            sprite->setPosition(Vec2(rand() % (int)winSize.width + 50.0f, winSize.height / 3));
+            sprite->setPosition(Vec2(rand() % (int)canvasSize.width + 50.0f, canvasSize.height / 3));
             if (random == 0)
             {
                 sprite->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
@@ -1031,12 +1031,12 @@ bool UIS9ToggleRenderingTypeTest::init()
     if (UIScene::init())
     {
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2 - 20);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2 - 20);
 
         auto label = Label::createWithSystemFont("Click Button to toggle rendering type", "Arial", 15);
-        label->setPosition(Vec2(winSize.width / 2, winSize.height - 60));
+        label->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 60));
         this->addChild(label);
 
         auto blocks = ui::Scale9Sprite::create("Images/blocks9.png");
@@ -1047,7 +1047,7 @@ bool UIS9ToggleRenderingTypeTest::init()
 
         auto addSliceSpriteButton =
             ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        addSliceSpriteButton->setPosition(Vec2(winSize.width / 2, winSize.height - 100));
+        addSliceSpriteButton->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 100));
         addSliceSpriteButton->setTitleText("Slice Rendering");
         addSliceSpriteButton->addClickEventListener([=](Object*) {
             if (blocks->getRenderingType() == Scale9Sprite::RenderingType::SLICE)
@@ -1074,12 +1074,12 @@ bool UIS9GlobalZOrderTest::init()
     if (UIScene::init())
     {
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2 - 20);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2 - 20);
 
         auto label = Label::createWithSystemFont("The green scale9sprite is in the back.", "Arial", 15);
-        label->setPosition(Vec2(winSize.width / 2, winSize.height - 60));
+        label->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 60));
         this->addChild(label);
 
         auto blocks = ui::Scale9Sprite::create("Images/blocks9.png");
@@ -1107,12 +1107,12 @@ bool UIS9EnableScale9FalseTest::init()
     if (UIScene::init())
     {
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2 + 50;
-        float y      = 0 + (winSize.height / 2 + 10);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2 + 50;
+        float y      = 0 + (canvasSize.height / 2 + 10);
 
         auto label = Label::createWithSystemFont("Only the yellow block intersect with the green one.", "Arial", 15);
-        label->setPosition(Vec2(winSize.width / 2, winSize.height - 60));
+        label->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 60));
         this->addChild(label);
 
         auto blocks = ui::Scale9Sprite::create("Images/blocks9.png");
@@ -1149,12 +1149,12 @@ bool UIS9GrayStateOpacityTest::init()
     if (UIScene::init())
     {
 
-        auto winSize = Director::getInstance()->getLogicalSize();
-        float x      = winSize.width / 2;
-        float y      = 0 + (winSize.height / 2 + 10);
+        auto canvasSize = Director::getInstance()->getCanvasSize();
+        float x      = canvasSize.width / 2;
+        float y      = 0 + (canvasSize.height / 2 + 10);
 
         auto label = Label::createWithSystemFont("Drap slider to change opacity of the scale9Sprite", "Arial", 15);
-        label->setPosition(Vec2(winSize.width / 2, winSize.height - 60));
+        label->setPosition(Vec2(canvasSize.width / 2, canvasSize.height - 60));
         this->addChild(label);
 
         auto blocks = ui::Scale9Sprite::create("Images/blocks9.png");
@@ -1174,7 +1174,7 @@ bool UIS9GrayStateOpacityTest::init()
         slider->setContentSize(Size(300, slider->getContentSize().height * 1.5f));
         slider->setMaxPercent(100);
         slider->setPercent(100 * 100.0f / 255.0);
-        slider->setPosition(Vec2(winSize.width / 2.0f, winSize.height / 2.0f - 100));
+        slider->setPosition(Vec2(canvasSize.width / 2.0f, canvasSize.height / 2.0f - 100));
         slider->addEventListener(AX_CALLBACK_2(UIS9GrayStateOpacityTest::sliderEvent, this));
         _uiLayer->addChild(slider);
 

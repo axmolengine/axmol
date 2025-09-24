@@ -80,7 +80,7 @@ void LayerTestCascadingOpacityA::onEnter()
 {
     LayerTest::onEnter();
 
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto layer1 = Layer::create();
 
     auto sister1 = Sprite::create("Images/grossinis_sister1.png");
@@ -117,7 +117,7 @@ void LayerTestCascadingOpacityB::onEnter()
 {
     LayerTest::onEnter();
 
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto layer1 = LayerColor::create(Color32(192, 0, 0, 255), s.width, s.height / 2);
     layer1->setCascadeColorEnabled(false);
 
@@ -157,7 +157,7 @@ void LayerTestCascadingOpacityC::onEnter()
 {
     LayerTest::onEnter();
 
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto layer1 = LayerColor::create(Color32(192, 0, 0, 255), s.width, s.height / 2);
     layer1->setCascadeColorEnabled(false);
     layer1->setCascadeOpacityEnabled(false);
@@ -197,7 +197,7 @@ void LayerTestCascadingColorA::onEnter()
 {
     LayerTest::onEnter();
 
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto layer1 = Layer::create();
 
     auto sister1 = Sprite::create("Images/grossinis_sister1.png");
@@ -236,7 +236,7 @@ std::string LayerTestCascadingColorA::subtitle() const
 void LayerTestCascadingColorB::onEnter()
 {
     LayerTest::onEnter();
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto layer1 = LayerColor::create(Color32(255, 255, 255, 255), s.width, s.height / 2);
 
     layer1->setPosition(Vec2(0.0f, s.height / 2));
@@ -277,7 +277,7 @@ std::string LayerTestCascadingColorB::subtitle() const
 void LayerTestCascadingColorC::onEnter()
 {
     LayerTest::onEnter();
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto layer1 = LayerColor::create(Color32(255, 255, 255, 255), s.width, s.height / 2);
     layer1->setCascadeColorEnabled(false);
     layer1->setPosition(Vec2(0.0f, s.height / 2));
@@ -327,7 +327,7 @@ void LayerTest1::onEnter()
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s     = Director::getInstance()->getLogicalSize();
+    auto s     = Director::getInstance()->getCanvasSize();
     auto layer = LayerColor::create(Color32(0xFF, 0x00, 0x00, 0x80), 200, 200);
 
     layer->setIgnoreAnchorPointForPosition(false);
@@ -337,7 +337,7 @@ void LayerTest1::onEnter()
 
 void LayerTest1::updateSize(Vec2& touchLocation)
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto newSize = Size(fabs(touchLocation.x - s.width / 2) * 2, fabs(touchLocation.y - s.height / 2) * 2);
 
@@ -377,7 +377,7 @@ void LayerTest2::onEnter()
 {
     LayerTest::onEnter();
 
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto layer1 = LayerColor::create(Color32(255, 255, 0, 80), 100, 300);
     layer1->setPosition(Vec2(s.width / 3, s.height / 2));
     layer1->setIgnoreAnchorPointForPosition(false);
@@ -412,7 +412,7 @@ std::string LayerTest2::subtitle() const
 
 LayerTestBlend::LayerTestBlend()
 {
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto layer1 = LayerColor::create(Color32(255, 255, 255, 80));
 
     auto sister1 = Sprite::create(s_pathSister1);
@@ -478,7 +478,7 @@ LayerGradientTest::LayerGradientTest()
 
     auto menu = Menu::create(item, nullptr);
     addChild(menu);
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     menu->setPosition(Vec2(s.width / 2, 100.0f));
 }
 
@@ -490,7 +490,7 @@ void LayerGradientTest::toggleItem(Object* sender)
 
 void LayerGradientTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto touch = touches[0];
     auto start = touch->getLocation();
@@ -541,7 +541,7 @@ void LayerIgnoreAnchorPointPos::onEnter()
 {
     LayerTest::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto l = LayerColor::create(Color32(255, 0, 0, 255), 150, 150);
 
@@ -590,7 +590,7 @@ std::string LayerIgnoreAnchorPointPos::subtitle() const
 void LayerIgnoreAnchorPointRot::onEnter()
 {
     LayerTest::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto l = LayerColor::create(Color32(255, 0, 0, 255), 200, 200);
 
@@ -638,7 +638,7 @@ void LayerIgnoreAnchorPointScale::onEnter()
 {
     LayerTest::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto l = LayerColor::create(Color32(255, 0, 0, 255), 200, 200);
 

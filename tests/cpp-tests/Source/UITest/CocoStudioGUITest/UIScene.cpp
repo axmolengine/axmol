@@ -46,7 +46,7 @@ bool UIScene::init()
             cocostudio::GUIReader::getInstance()->widgetFromJsonFile("cocosui/UITest/UITest.json"));
         _uiLayer->addChild(_widget);
 
-        Size screenSize = Director::getInstance()->getLogicalSize();
+        Size screenSize = Director::getInstance()->getCanvasSize();
         Size rootSize   = _widget->getContentSize();
         _uiLayer->setPosition(Vec2((screenSize.width - rootSize.width) / 2, (screenSize.height - rootSize.height) / 2));
 

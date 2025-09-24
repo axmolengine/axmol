@@ -95,7 +95,7 @@ function BillBoardTest:init()
     self:addChild(layer3D,0)
     self._layerBillBoard = layer3D
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     if self._camera == nil then
         self._camera = ax.Camera:createPerspective(60, s.width/s.height, 1, 500)
         self._camera:setCameraFlag(ax.CameraFlag.USER1)

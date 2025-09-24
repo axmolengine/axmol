@@ -702,7 +702,7 @@ void Scene3DTestScene::createDetailDlg()
             }
             auto sp = Sprite::create(outputFile);
             _osdScene->addChild(sp, 0, SNAPSHOT_TAG);
-            Size s = Director::getInstance()->getLogicalSize();
+            Size s = Director::getInstance()->getCanvasSize();
             sp->setPosition(s.width / 2, s.height / 2);
             sp->setScale(0.25);
             _snapshotFile = outputFile;
@@ -728,7 +728,7 @@ void Scene3DTestScene::createDetailDlg()
     skeletonNode->setSkin("goblin");
 
     skeletonNode->setScale(0.25);
-    Size windowSize = Director::getInstance()->getLogicalSize();
+    Size windowSize = Director::getInstance()->getCanvasSize();
     skeletonNode->setPosition(Vec2(dlgSize.width / 2, remove->getContentSize().height / 2 + 2 * margin));
     _detailDlg->addChild(skeletonNode);
 }
@@ -888,7 +888,7 @@ void Scene3DTestScene::onTouchEnd(Touch* touch, ax::Event* event)
     {
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
         // convert screen touch location to the world location on near and far plane
-        auto size = Director::getInstance()->getLogicalSize();
+        auto size = Director::getInstance()->getCanvasSize();
         camera->unprojectGL(size, &nearP, &nearP);
         camera->unprojectGL(size, &farP, &farP);
         Vec3 dir = farP - nearP;

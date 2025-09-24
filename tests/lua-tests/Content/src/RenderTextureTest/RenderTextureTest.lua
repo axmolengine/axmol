@@ -7,7 +7,7 @@
 local function RenderTextureSave()
     local ret = createTestLayer("Touch the screen",
                                 "Press 'Save Image' to create an snapshot of the render texture")
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     local target = nil
     local counter = 0
     local brushes = {}

@@ -1,4 +1,4 @@
-local size = ax.Director:getInstance():getLogicalSize()
+local size = ax.Director:getInstance():getCanvasSize()
 local scheduler = ax.Director:getInstance():getScheduler()
 
 local kTagTileMap = 1

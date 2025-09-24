@@ -874,7 +874,7 @@ void DirectorEventTest::onEnter()
 {
     EventDispatcherTestDemo::onEnter();
 
-    Size s = Director::getInstance()->getLogicalSize();
+    Size s = Director::getInstance()->getCanvasSize();
 
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
 
@@ -1191,9 +1191,9 @@ bool StopPropagationTest::isPointInNode(Vec2 pt, Node* node)
 
 bool StopPropagationTest::isPointInTopHalfAreaOfScreen(Vec2 pt)
 {
-    Size winSize = Director::getInstance()->getLogicalSize();
+    Size canvasSize = Director::getInstance()->getCanvasSize();
 
-    if (pt.y >= winSize.height / 2)
+    if (pt.y >= canvasSize.height / 2)
     {
         return true;
     }

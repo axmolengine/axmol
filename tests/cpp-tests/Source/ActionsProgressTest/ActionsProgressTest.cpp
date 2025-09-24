@@ -71,7 +71,7 @@ void SpriteProgressToRadial::onEnter()
 {
     SpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto to1 = Sequence::createWithTwoActions(ProgressTo::create(2, 100), ProgressTo::create(0, 0));
     auto to2 = Sequence::createWithTwoActions(ProgressTo::create(2, 100), ProgressTo::create(0, 0));
@@ -106,7 +106,7 @@ void SpriteProgressToHorizontal::onEnter()
 {
     SpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto to1 = Sequence::createWithTwoActions(ProgressTo::create(2, 100), ProgressTo::create(0, 0));
     auto to2 = Sequence::createWithTwoActions(ProgressTo::create(2, 100), ProgressTo::create(0, 0));
@@ -146,7 +146,7 @@ void SpriteProgressToVertical::onEnter()
 {
     SpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto to1 = Sequence::createWithTwoActions(ProgressTo::create(2, 100), ProgressTo::create(0, 0));
     auto to2 = Sequence::createWithTwoActions(ProgressTo::create(2, 100), ProgressTo::create(0, 0));
@@ -187,7 +187,7 @@ void SpriteProgressToRadialMidpointChanged::onEnter()
 {
     SpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto action = Sequence::createWithTwoActions(ProgressTo::create(2, 100), ProgressTo::create(0, 0));
 
@@ -231,7 +231,7 @@ void SpriteProgressBarVarious::onEnter()
 {
     SpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto to = Sequence::createWithTwoActions(ProgressTo::create(2, 100), ProgressTo::create(0, 0));
 
@@ -281,7 +281,7 @@ void SpriteProgressBarTintAndFade::onEnter()
 {
     SpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto to   = Sequence::createWithTwoActions(ProgressTo::create(6, 100), ProgressTo::create(0, 0));
     auto tint = Sequence::create(TintTo::create(1, 255, 0, 0), TintTo::create(1, 0, 255, 0),
@@ -344,7 +344,7 @@ void SpriteProgressWithSpriteFrame::onEnter()
 {
     SpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto to = Sequence::createWithTwoActions(ProgressTo::create(6, 100), ProgressTo::create(0, 0));
 

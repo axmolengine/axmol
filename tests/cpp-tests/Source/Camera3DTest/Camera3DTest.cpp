@@ -68,7 +68,7 @@ Camera3DTests::Camera3DTests()
 CameraRotationTest::CameraRotationTest()
 {
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     _camControlNode = Node::create();
     _camControlNode->setPositionNormalized(Vec2(0.5f, 0.5f));
@@ -263,7 +263,7 @@ void Camera3DTestDemo::onEnter()
 {
     CameraBaseTest::onEnter();
     _mesh                    = nullptr;
-    auto s                   = Director::getInstance()->getLogicalSize();
+    auto s                   = Director::getInstance()->getCanvasSize();
     auto listener            = EventListenerTouchAllAtOnce::create();
     listener->onTouchesBegan = AX_CALLBACK_2(Camera3DTestDemo::onTouchesBegan, this);
     listener->onTouchesMoved = AX_CALLBACK_2(Camera3DTestDemo::onTouchesMoved, this);
@@ -503,7 +503,7 @@ void Camera3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, ax::Ev
             {
                 Vec3 nearP(location.x, location.y, -1.0f), farP(location.x, location.y, 1.0f);
 
-                auto size = Director::getInstance()->getLogicalSize();
+                auto size = Director::getInstance()->getCanvasSize();
                 nearP     = _camera->unproject(nearP);
                 farP      = _camera->unproject(farP);
                 Vec3 dir(farP - nearP);
@@ -725,7 +725,7 @@ void CameraCullingDemo::onEnter()
 
     schedule(AX_SCHEDULE_SELECTOR(CameraCullingDemo::update), 0.0f);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     /*auto listener = EventListenerTouchAllAtOnce::create();
     listener->onTouchesBegan = AX_CALLBACK_2(Camera3DTestDemo::onTouchesBegan, this);
     listener->onTouchesMoved = AX_CALLBACK_2(Camera3DTestDemo::onTouchesMoved, this);
@@ -832,7 +832,7 @@ void CameraCullingDemo::reachEndCallBack()
 
 void CameraCullingDemo::switchViewCallback(Object* sender)
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     if (_cameraFirst == nullptr)
     {
@@ -933,7 +933,7 @@ void CameraCullingDemo::delMeshCallback(Object* sender)
 void CameraCullingDemo::drawCameraFrustum()
 {
     _drawFrustum->clear();
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     Color color(1.f, 1.f, 0.f, 1);
 
@@ -1009,7 +1009,7 @@ void CameraArcBallDemo::onEnter()
     CameraBaseTest::onEnter();
     _rotationQuat.set(0.0f, 0.0f, 0.0f, 1.0f);
     schedule(AX_SCHEDULE_SELECTOR(CameraArcBallDemo::update), 0.0f);
-    auto s                   = Director::getInstance()->getLogicalSize();
+    auto s                   = Director::getInstance()->getCanvasSize();
     auto listener            = EventListenerTouchAllAtOnce::create();
     listener->onTouchesMoved = AX_CALLBACK_2(CameraArcBallDemo::onTouchsMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
@@ -1224,7 +1224,7 @@ void FogTestDemo::onEnter()
     schedule(AX_SCHEDULE_SELECTOR(FogTestDemo::update), 0.0f);
     Director::getInstance()->setClearColor(Color(0.5, 0.5, 0.5, 1));
 
-    auto s                   = Director::getInstance()->getLogicalSize();
+    auto s                   = Director::getInstance()->getCanvasSize();
     auto listener            = EventListenerTouchAllAtOnce::create();
     listener->onTouchesMoved = AX_CALLBACK_2(FogTestDemo::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
@@ -1416,8 +1416,8 @@ void FogTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* 
 //
 // void CameraFrameBufferTest::onEnter()
 //{
-//     auto sizeInpixels = Director::getInstance()->getLogicalSizeInPixels();
-//     auto size = Director::getInstance()->getLogicalSize();
+//     auto sizeInpixels = Director::getInstance()->getCanvasSizeInPixels();
+//     auto size = Director::getInstance()->getCanvasSize();
 //     auto fboSize = Size(sizeInpixels.width * 1, sizeInpixels.height * 1.5);
 //     auto fbo = experimental::FrameBuffer::create(1, fboSize.width, fboSize.height);
 //
@@ -1483,7 +1483,7 @@ void BackgroundColorBrushTest::onEnter()
 {
     CameraBaseTest::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     {
         // 1st Camera

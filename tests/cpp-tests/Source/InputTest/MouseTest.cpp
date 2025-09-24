@@ -47,7 +47,7 @@ MouseTests::MouseTests()
 //------------------------------------------------------------------
 MouseEventTest::MouseEventTest()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // Create a label to display the mouse action
     _labelAction = Label::createWithTTF("Click mouse button and see this change", "fonts/arial.ttf", 22);

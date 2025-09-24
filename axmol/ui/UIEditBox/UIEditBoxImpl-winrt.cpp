@@ -519,13 +519,13 @@ void UIEditBoxImplWinrt::nativeOpenKeyboard()
     // Position
     auto directorInstance = ax::Director::getInstance();
     auto winSize          = renderView->getWindowSize();
-    auto logicalSize      = directorInstance->getLogicalSize();
+    auto canvasSize      = directorInstance->getCanvasSize();
     auto leftBottom       = _editBox->convertToWorldSpace(ax::Point::ZERO);
     auto rightTop =
         _editBox->convertToWorldSpace(ax::Point(_editBox->getContentSize().width, _editBox->getContentSize().height));
     Windows::Foundation::Rect rect;
-    rect.X      = winSize.width / 2 + (leftBottom.x - logicalSize.width / 2) * renderView->getScaleX();
-    rect.Y      = winSize.height / 2 - (rightTop.y - logicalSize.height / 2) * renderView->getScaleY();
+    rect.X      = winSize.width / 2 + (leftBottom.x - canvasSize.width / 2) * renderView->getScaleX();
+    rect.Y      = winSize.height / 2 - (rightTop.y - canvasSize.height / 2) * renderView->getScaleY();
     rect.Width  = (rightTop.x - leftBottom.x) * renderView->getScaleX();
     rect.Height = (rightTop.y - leftBottom.y) * renderView->getScaleY();
     _system_control->setPosition(rect);

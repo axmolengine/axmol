@@ -179,7 +179,7 @@ end
 
 function Camera3DTestDemo:onEnter()
     self._sprite3D = nil
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     local listener = ax.EventListenerTouchAllAtOnce:create()
 
     listener:registerScriptHandler(function(touches, event)
@@ -491,7 +491,7 @@ function CameraRotationTest:init()
 end
 
 function CameraRotationTest:onEnter()
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     camControlNode = ax.Node:create()
     camControlNode:setNormalizedPosition(ax.p(0.5, 0.5))
@@ -716,7 +716,7 @@ end
 
 function FogTestDemo:createLayer3D()
     -- body
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local layer3D = ax.Layer:create()
     self:addChild(layer3D,0)
@@ -930,7 +930,7 @@ function CameraArcBallDemo:setEventListener()
 end
 
 function CameraArcBallDemo:createLayer3D()
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     ax.MenuItemFont:setFontName("fonts/arial.ttf")
     ax.MenuItemFont:setFontSize(20)

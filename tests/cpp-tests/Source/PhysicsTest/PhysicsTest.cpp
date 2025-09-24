@@ -1516,8 +1516,8 @@ void PhysicsContactTest::resetTest()
     for (int i = 0; i < _yellowBoxNum; ++i)
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
-        Size winSize  = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
+        Size canvasSize  = VisibleRect::getVisibleRect().size;
+        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
         position.x    = position.x * AXRANDOM_0_1();
         position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
@@ -1535,8 +1535,8 @@ void PhysicsContactTest::resetTest()
     for (int i = 0; i < _blueBoxNum; ++i)
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
-        Size winSize  = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
+        Size canvasSize  = VisibleRect::getVisibleRect().size;
+        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
         position.x    = position.x * AXRANDOM_0_1();
         position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
@@ -1554,8 +1554,8 @@ void PhysicsContactTest::resetTest()
     for (int i = 0; i < _yellowTriangleNum; ++i)
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
-        Size winSize  = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
+        Size canvasSize  = VisibleRect::getVisibleRect().size;
+        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
         position.x    = position.x * AXRANDOM_0_1();
         position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
@@ -1573,8 +1573,8 @@ void PhysicsContactTest::resetTest()
     for (int i = 0; i < _blueTriangleNum; ++i)
     {
         Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
-        Size winSize  = VisibleRect::getVisibleRect().size;
-        Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
+        Size canvasSize  = VisibleRect::getVisibleRect().size;
+        Vec2 position = Vec2(canvasSize.width, canvasSize.height) - Vec2(size.width, size.height);
         position.x    = position.x * AXRANDOM_0_1();
         position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);

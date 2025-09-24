@@ -1,4 +1,4 @@
-local size = ax.Director:getInstance():getLogicalSize()
+local size = ax.Director:getInstance():getCanvasSize()
 local kTagTileMap = 1
 local kTagSpriteBatchNode = 1
 local kTagNode = 2
@@ -159,7 +159,7 @@ function SpriteColorOpacity.setLayerSprite(layer)
     local sprite7 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*2, 121*1, 85, 121))
     local sprite8 = ax.Sprite:create("Images/grossini_dance_atlas.png", ax.rect(85*3, 121*1, 85, 121))
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     sprite1:setPosition( ax.p( (s.width/5)*1, (s.height/3)*1) )
     sprite2:setPosition( ax.p( (s.width/5)*2, (s.height/3)*1) )
     sprite3:setPosition( ax.p( (s.width/5)*3, (s.height/3)*1) )
@@ -241,7 +241,7 @@ SpriteFrameTest.m_pSprite2 = nil
 SpriteFrameTest.m_nCounter = 0
 
 function SpriteFrameTest.onEnter()
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     local cache = ax.SpriteFrameCache:getInstance()
 
     cache:addSpriteFrames("animations/grossini.plist")
@@ -366,7 +366,7 @@ local SpriteFrameAliasNameTest = {}
 SpriteFrameAliasNameTest.__index = SpriteFrameAliasNameTest
 
 function SpriteFrameAliasNameTest.onEnter()
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini-aliases.plist", "animations/grossini-aliases.png")
@@ -423,7 +423,7 @@ local SpriteAnchorPoint = {}
 SpriteAnchorPoint.__index = SpriteAnchorPoint
 
 function SpriteAnchorPoint.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local rotate = ax.RotateBy:create(10, 360)
     local action = ax.RepeatForever:create(rotate)
@@ -476,7 +476,7 @@ function SpriteBatchNodeAnchorPoint.initLayer(layer)
     local batch = ax.SpriteBatchNode:create("Images/grossini_dance_atlas.png", 1)
     layer:addChild(batch, 0, kTagSpriteBatchNode)
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local rotate = ax.RotateBy:create(10, 360)
     local action = ax.RepeatForever:create(rotate)
@@ -527,7 +527,7 @@ local SpriteOffsetAnchorRotation = {}
 SpriteOffsetAnchorRotation.__index = SpriteOffsetAnchorRotation
 
 function SpriteOffsetAnchorRotation.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
     cache:addSpriteFrames("animations/grossini_gray.plist", "animations/grossini_gray.png")
@@ -601,7 +601,7 @@ SpriteBatchNodeOffsetAnchorRotation.__index = SpriteBatchNodeOffsetAnchorRotatio
 
 function SpriteBatchNodeOffsetAnchorRotation.initLayer(layer)
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -678,7 +678,7 @@ local SpriteOffsetAnchorScale = {}
 SpriteOffsetAnchorScale.__index = SpriteOffsetAnchorScale
 
 function SpriteOffsetAnchorScale.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -755,7 +755,7 @@ end
 local SpriteBatchNodeOffsetAnchorScale = {}
 
 function SpriteBatchNodeOffsetAnchorScale.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -840,7 +840,7 @@ SpriteOffsetAnchorSkew.__index = SpriteOffsetAnchorSkew
 
 function SpriteOffsetAnchorSkew.initLayer(layer)
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -918,7 +918,7 @@ SpriteOffsetAnchorRotationalSkew.__index = SpriteOffsetAnchorRotationalSkew
 
 function SpriteOffsetAnchorRotationalSkew.initLayer(layer)
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -997,7 +997,7 @@ SpriteBatchNodeOffsetAnchorSkew.__index = SpriteBatchNodeOffsetAnchorSkew
 
 function SpriteBatchNodeOffsetAnchorSkew.initLayer(layer)
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -1079,7 +1079,7 @@ SpriteBatchNodeOffsetAnchorRotationalSkew.__index = SpriteBatchNodeOffsetAnchorR
 
 function SpriteBatchNodeOffsetAnchorRotationalSkew.initLayer(layer)
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -1161,7 +1161,7 @@ end
 local SpriteOffsetAnchorSkewScale = {}
 
 function SpriteOffsetAnchorSkewScale.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -1242,7 +1242,7 @@ end
 local SpriteOffsetAnchorRotationalSkewScale = {}
 
 function SpriteOffsetAnchorRotationalSkewScale.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -1323,7 +1323,7 @@ end
 local SpriteBatchNodeOffsetAnchorSkewScale = {}
 
 function SpriteBatchNodeOffsetAnchorSkewScale.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -1406,7 +1406,7 @@ end
 --
 local SpriteBatchNodeOffsetAnchorRotationalSkewScale = {}
 function SpriteBatchNodeOffsetAnchorRotationalSkewScale.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")
@@ -1488,7 +1488,7 @@ end
 --
 local SpriteOffsetAnchorFlip = {}
 function SpriteOffsetAnchorFlip.initLayer(layer)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
 
     local cache = ax.SpriteFrameCache:getInstance()
     cache:addSpriteFrames("animations/grossini.plist")

@@ -61,7 +61,7 @@ public:
 
     LabelIssue1336()
     {
-        auto size = Director::getInstance()->getLogicalSize();
+        auto size = Director::getInstance()->getCanvasSize();
         TTFConfig config("fonts/arial.ttf");
         config.distanceFieldEnabled = true;
         config.faceSize             = 72;
@@ -240,7 +240,7 @@ LabelFNTSpriteActions::LabelFNTSpriteActions()
 {
     _time = 0;
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto drawNode = DrawNode::create();
     drawNode->drawLine(Vec2(0.0f, s.height / 2), Vec2(s.width, s.height / 2), Color(1.0f, 1.0f, 1.0f, 1.0f));
@@ -313,7 +313,7 @@ LabelFNTPadding::LabelFNTPadding()
     auto label = Label::createWithBMFont("fonts/bitmapFontTest4.fnt", "abcdefg");
     addChild(label);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     label->setPosition(Vec2(s.width / 2, s.height / 2));
 }
@@ -330,7 +330,7 @@ std::string LabelFNTPadding::subtitle() const
 
 LabelFNTOffset::LabelFNTOffset()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     Label* label = nullptr;
     label        = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "FaFeFiFoFu");
@@ -358,21 +358,21 @@ std::string LabelFNTOffset::subtitle() const
 
 LabelFNTColor::LabelFNTColor()
 {
-    auto winSize = Director::getInstance()->getLogicalSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "Blue");
     label->setColor(Color32::BLUE);
     addChild(label);
-    label->setPosition(winSize.width / 2, winSize.height * 0.7f);
+    label->setPosition(canvasSize.width / 2, canvasSize.height * 0.7f);
 
     label = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "Red");
     addChild(label);
-    label->setPosition(winSize.width / 2, winSize.height * 0.5f);
+    label->setPosition(canvasSize.width / 2, canvasSize.height * 0.5f);
     label->setColor(Color32::RED);
 
     label = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "Green");
     addChild(label);
-    label->setPosition(winSize.width / 2, winSize.height * 0.3f);
+    label->setPosition(canvasSize.width / 2, canvasSize.height * 0.3f);
     label->setColor(Color32::GREEN);
     label->setString("Green");
 }
@@ -389,17 +389,17 @@ std::string LabelFNTColor::subtitle() const
 
 LabelFNTOpacity::LabelFNTOpacity()
 {
-    auto winSize = Director::getInstance()->getLogicalSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "Opacity 100");
     label->setOpacity(100);
     addChild(label);
-    label->setPosition(winSize.width / 2, winSize.height * 0.6f);
+    label->setPosition(canvasSize.width / 2, canvasSize.height * 0.6f);
 
     label = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "Opacity 200");
     label->setOpacity(200);
     addChild(label);
-    label->setPosition(winSize.width / 2, winSize.height * 0.4f);
+    label->setPosition(canvasSize.width / 2, canvasSize.height * 0.4f);
 }
 
 std::string LabelFNTOpacity::title() const
@@ -422,7 +422,7 @@ LabelFNTHundredLabels::LabelFNTHundredLabels()
         auto label = Label::createWithBMFont("fonts/bitmapFontTest.fnt", str);
         addChild(label);
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
 
         auto p = Vec2(AXRANDOM_0_1() * s.width, AXRANDOM_0_1() * s.height);
         label->setPosition(p);
@@ -483,7 +483,7 @@ std::string LabelFNTMultiLine::subtitle() const
 
 LabelFNTandTTFEmpty::LabelFNTandTTFEmpty()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // LabelBMFont
     auto label1 = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "", TextHAlignment::CENTER, s.width);
@@ -541,7 +541,7 @@ std::string LabelFNTandTTFEmpty::subtitle() const
 
 LabelFNTRetina::LabelFNTRetina()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // LabelBMFont
     auto label1 = Label::createWithBMFont("fonts/konqa32.fnt", "TESTING RETINA DISPLAY");
@@ -561,7 +561,7 @@ std::string LabelFNTRetina::subtitle() const
 
 LabelFNTGlyphDesigner::LabelFNTGlyphDesigner()
 {
-    auto winSize = Director::getInstance()->getLogicalSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
 
     auto layer = LayerColor::create(Color32(128, 128, 128, 255));
     addChild(layer, -10);
@@ -572,10 +572,10 @@ LabelFNTGlyphDesigner::LabelFNTGlyphDesigner()
     FontAtlasCache::reloadFontAtlasFNT("fonts/futura-48.fnt", ax::Rect::ZERO, false);
     label1->setBMFontFilePath("fonts/futura-48.fnt");
     addChild(label1);
-    label1->setPosition(Vec2(winSize.width / 2, winSize.height * 0.4f));
+    label1->setPosition(Vec2(canvasSize.width / 2, canvasSize.height * 0.4f));
 
     auto label2 = Label::createWithBMFont("fonts/bitmapFontTest2.fnt", "Hello World");
-    label2->setPosition(Vec2(winSize.width / 2, winSize.height * 0.6f));
+    label2->setPosition(Vec2(canvasSize.width / 2, canvasSize.height * 0.6f));
     addChild(label2);
 }
 
@@ -626,7 +626,7 @@ bool LabelFNTMultiLineAlignment::init()
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     // ask director the the window size
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     // create and initialize a Label
     this->_label = Label::createWithBMFont("fonts/markerFelt.fnt", "", TextHAlignment::CENTER, size.width / 1.5);
@@ -812,9 +812,9 @@ void LabelFNTMultiLineAlignment::onTouchesMoved(const std::vector<Touch*>& touch
     auto touch    = touches[0];
     auto location = touch->getLocationInView();
 
-    auto winSize = Director::getInstance()->getLogicalSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
 
-    this->_arrows->setPosition(Vec2(MAX(MIN(location.x, ArrowsMax * winSize.width), ArrowsMin * winSize.width),
+    this->_arrows->setPosition(Vec2(MAX(MIN(location.x, ArrowsMax * canvasSize.width), ArrowsMin * canvasSize.width),
                                     this->_arrows->getPosition().y));
 
     float labelWidth = fabs(this->_arrows->getPosition().x - this->_label->getPosition().x) * 2;
@@ -896,7 +896,7 @@ LabelFNTUNICODELanguages::LabelFNTUNICODELanguages()
     std::string spanish  = strings["spanish"].asString();
     std::string japanese = strings["japanese"].asString();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto label1 = Label::createWithBMFont("fonts/arial-unicode-26.fnt", spanish, TextHAlignment::CENTER, 200);
     addChild(label1);
@@ -927,7 +927,7 @@ std::string LabelFNTUNICODELanguages::subtitle() const
 
 LabelFNTBounds::LabelFNTBounds()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto layer = LayerColor::create(Color32(128, 128, 128, 255));
     addChild(layer, -10);
@@ -940,7 +940,7 @@ LabelFNTBounds::LabelFNTBounds()
 
     auto drawNode  = DrawNode::create();
     auto labelSize = label1->getContentSize();
-    auto origin    = Director::getInstance()->getLogicalSize();
+    auto origin    = Director::getInstance()->getCanvasSize();
 
     origin.width  = origin.width / 2 - (labelSize.width / 2);
     origin.height = origin.height / 2 - (labelSize.height / 2);
@@ -964,7 +964,7 @@ std::string LabelFNTBounds::subtitle() const
 
 LabelFNTMultiFontAtlasNoRotation::LabelFNTMultiFontAtlasNoRotation()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto label1 = Label::createWithBMFont("fonts/helvetica-32.fnt", "This is Helvetica");
     addChild(label1);
@@ -988,7 +988,7 @@ std::string LabelFNTMultiFontAtlasNoRotation::subtitle() const
 
 LabelFNTMultiFontAtlasWithRotation::LabelFNTMultiFontAtlasWithRotation()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto spriteCache = SpriteFrameCache::getInstance();
     spriteCache->addSpriteFramesWithFile("fonts/bmfont-rotated-test.plist");
@@ -1018,7 +1018,7 @@ std::string LabelFNTMultiFontAtlasWithRotation::subtitle() const
 
 LabelTTFLongLineWrapping::LabelTTFLongLineWrapping()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     // Long sentence
     TTFConfig ttfConfig("fonts/arial.ttf", 14);
@@ -1040,7 +1040,7 @@ std::string LabelTTFLongLineWrapping::subtitle() const
 
 LabelTTFColor::LabelTTFColor()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     TTFConfig ttfConfig("fonts/arial.ttf", 18);
     // Green
@@ -1074,11 +1074,11 @@ std::string LabelTTFColor::subtitle() const
 
 LabelTTFDynamicAlignment::LabelTTFDynamicAlignment()
 {
-    auto winSize = Director::getInstance()->getLogicalSize();
+    auto canvasSize = Director::getInstance()->getCanvasSize();
 
     TTFConfig ttfConfig("fonts/arial.ttf", 23);
-    _label = Label::createWithTTF(ttfConfig, LongSentencesExample, TextHAlignment::CENTER, winSize.width);
-    _label->setPosition(winSize.width / 2, winSize.height / 2);
+    _label = Label::createWithTTF(ttfConfig, LongSentencesExample, TextHAlignment::CENTER, canvasSize.width);
+    _label->setPosition(canvasSize.width / 2, canvasSize.height / 2);
     addChild(_label);
 
     auto menu = Menu::create(
@@ -1087,7 +1087,7 @@ LabelTTFDynamicAlignment::LabelTTFDynamicAlignment()
         MenuItemFont::create("Right", AX_CALLBACK_1(LabelTTFDynamicAlignment::setAlignmentRight, this)), nullptr);
 
     menu->alignItemsHorizontallyWithPadding(20);
-    menu->setPosition(winSize.width / 2, winSize.height * 0.25f);
+    menu->setPosition(canvasSize.width / 2, canvasSize.height * 0.25f);
     addChild(menu);
 }
 
@@ -1132,7 +1132,7 @@ std::string LabelTTFDynamicAlignment::subtitle() const
 //
 LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto drawNode = DrawNode::create();
     drawNode->setAnchorPoint(Vec2(0, 0));
@@ -1194,21 +1194,21 @@ LabelTTFUnicodeNew::LabelTTFUnicodeNew()
 {
     auto strings        = FileUtils::getInstance()->getValueMapFromFile("strings/LabelFNTUNICODELanguages.xml");
     std::string chinese = strings["chinese1"].asString();
-    auto winSize        = Director::getInstance()->getLogicalSize();
+    auto canvasSize        = Director::getInstance()->getCanvasSize();
 
     // Spanish
     auto label1 = Label::createWithTTF("Buen día, ¿cómo te llamas?", "fonts/arial.ttf", 23);
-    label1->setPosition(winSize.width / 2, winSize.height * 0.65f);
+    label1->setPosition(canvasSize.width / 2, canvasSize.height * 0.65f);
     addChild(label1);
 
     // German
     auto label2 = Label::createWithTTF("In welcher Straße haben Sie gelebt?", "fonts/arial.ttf", 23);
-    label2->setPosition(winSize.width / 2, winSize.height * 0.5f);
+    label2->setPosition(canvasSize.width / 2, canvasSize.height * 0.5f);
     addChild(label2);
 
     // Chinese
     auto label3 = Label::createWithTTF(chinese, "fonts/HKYuanMini.ttf", 24);
-    label3->setPosition(winSize.width / 2, winSize.height * 0.35f);
+    label3->setPosition(canvasSize.width / 2, canvasSize.height * 0.35f);
     addChild(label3);
 }
 
@@ -1228,11 +1228,11 @@ std::string LabelTTFUnicodeNew::subtitle() const
 LabelTTFEmoji::LabelTTFEmoji()
 {
     std::string emojiString = FileUtils::getInstance()->getStringFromFile("fonts/emoji.txt");
-    auto winSize            = Director::getInstance()->getLogicalSize();
+    auto canvasSize            = Director::getInstance()->getCanvasSize();
 
     auto label = Label::createWithTTF(emojiString, "fonts/NotoEmoji-Regular.ttf", 23);
-    label->setPosition(winSize.width / 2, winSize.height / 2);
-    label->setDimensions(winSize.width, winSize.height);
+    label->setPosition(canvasSize.width / 2, canvasSize.height / 2);
+    label->setDimensions(canvasSize.width, canvasSize.height);
     label->setVerticalAlignment(ax::TextVAlignment::CENTER);
     label->setHorizontalAlignment(ax::TextHAlignment::CENTER);
     addChild(label);
@@ -1256,7 +1256,7 @@ LabelTTFFontsTestNew::LabelTTFFontsTestNew()
     };
 
     int fontCount = sizeof(ttfpaths) / sizeof(ttfpaths[0]);
-    auto size     = Director::getInstance()->getLogicalSize();
+    auto size     = Director::getInstance()->getCanvasSize();
     TTFConfig ttfConfig(ttfpaths[0], 20, GlyphCollection::NEHE);
 
     for (int i = 0; i < fontCount; ++i)
@@ -1287,7 +1287,7 @@ std::string LabelTTFFontsTestNew::subtitle() const
 
 LabelTTFDistanceField::LabelTTFDistanceField()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     TTFConfig ttfConfig("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
 
     auto label1 = Label::createWithTTF(ttfConfig, "Distance Field", TextHAlignment::CENTER, size.width);
@@ -1334,7 +1334,7 @@ std::string LabelTTFDistanceField::subtitle() const
 }
 LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     FontFreeType::setShareDistanceFieldEnabled(false);
     auto button = ax::ui::Button::create();
@@ -1382,7 +1382,7 @@ std::string LabelTitleButtonTTFDistanceField::subtitle() const
 }
 LabelTTFSDF::LabelTTFSDF()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     FontFreeType::setShareDistanceFieldEnabled(false);
     Label* title = Label::createWithTTF("Normal", "fonts/Marker Felt.ttf", 20);
@@ -1502,7 +1502,7 @@ ui::Slider* LabelTTFSDF::initSlider(std::string content,
 void LabelTTFSDF::initToggleCheckboxes()
 {
     float startPosY = 0;
-    Size winSize    = Director::getInstance()->getVisibleSize();
+    Size canvasSize    = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();
@@ -1510,7 +1510,7 @@ void LabelTTFSDF::initToggleCheckboxes()
 
     // Create the radio buttons
     static const int NUMBER_OF_BUTTONS  = 3;
-    startPosY                           = winSize.height * 0.25;
+    startPosY                           = canvasSize.height * 0.25;
     std::vector<std::string> labelTypes = {"Normal", "Glow", "OutLine"};
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
@@ -1518,7 +1518,7 @@ void LabelTTFSDF::initToggleCheckboxes()
 
         RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
         float posY               = startPosY + (radioButton->getContentSize().height + 5) * i;
-        radioButton->setPosition(Vec2(winSize.width * 0.8, posY));
+        radioButton->setPosition(Vec2(canvasSize.width * 0.8, posY));
         radioButton->addEventListener(AX_CALLBACK_2(LabelTTFSDF::onChangedRadioButtonSelect, this));
         radioButton->setTag(i);
         radioButtonGroup->addRadioButton(radioButton);
@@ -1598,7 +1598,7 @@ std::string LabelTTFSDF::subtitle() const
 
 LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
@@ -1655,7 +1655,7 @@ void LabelShadowTest::onEnter()
 {
     AtlasDemoNew::onEnter();
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
@@ -1845,7 +1845,7 @@ std::string LabelCharMapColorTest::subtitle() const
 
 LabelCrashTest::LabelCrashTest()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     TTFConfig ttfConfig("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
 
@@ -1866,7 +1866,7 @@ std::string LabelCrashTest::subtitle() const
 
 LabelTTFOldNew::LabelTTFOldNew()
 {
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     float delta = s.height / 4;
 
     auto label1 = Label::createWithSystemFont("Axmol Label Test", "arial", 24);
@@ -1881,7 +1881,7 @@ LabelTTFOldNew::LabelTTFOldNew()
 
     auto drawNode  = DrawNode::create();
     auto labelSize = label1->getContentSize();
-    auto origin    = Director::getInstance()->getLogicalSize();
+    auto origin    = Director::getInstance()->getCanvasSize();
 
     origin.width  = origin.width / 2 - (labelSize.width / 2);
     origin.height = origin.height / 2 - (labelSize.height / 2);
@@ -1892,7 +1892,7 @@ LabelTTFOldNew::LabelTTFOldNew()
     drawNode->drawPoly(vertices, 4, true, Color(1.0f, 0.0f, 0.0f, 1.0f));
 
     labelSize = label2->getContentSize();
-    origin    = Director::getInstance()->getLogicalSize();
+    origin    = Director::getInstance()->getCanvasSize();
 
     origin.width  = origin.width / 2 - (labelSize.width / 2);
     origin.height = origin.height / 2 - (labelSize.height / 2);
@@ -1917,7 +1917,7 @@ std::string LabelTTFOldNew::subtitle() const
 
 LabelFontNameTest::LabelFontNameTest()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto label1 = Label::create();
     label1->setString("Default Font");
@@ -1942,7 +1942,7 @@ std::string LabelFontNameTest::subtitle() const
 LabelAlignmentTest::LabelAlignmentTest()
 {
     auto blockSize = Size(200, 160);
-    auto s         = Director::getInstance()->getLogicalSize();
+    auto s         = Director::getInstance()->getCanvasSize();
 
     auto pos        = Vec2((s.width - blockSize.width) / 2, (s.height - blockSize.height) / 2);
     auto colorLayer = LayerColor::create(Color32(100, 100, 100, 255), blockSize.width, blockSize.height);
@@ -2018,7 +2018,7 @@ std::string LabelAlignmentTest::subtitle() const
 
 LabelIssue4428Test::LabelIssue4428Test()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "123\n456");
     label->setPosition(Vec2(size.width / 2.0f, size.height / 2.0f));
@@ -2066,7 +2066,7 @@ std::string LabelIssue4999Test::subtitle() const
 
 LabelLineHeightTest::LabelLineHeightTest()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
@@ -2110,7 +2110,7 @@ std::string LabelLineHeightTest::subtitle() const
 
 LabelAdditionalKerningTest::LabelAdditionalKerningTest()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto bg = LayerColor::create(Color32(200, 191, 231, 255));
     this->addChild(bg);
@@ -2190,7 +2190,7 @@ std::string LabelMultilineWithOutline::subtitle() const
 
 LabelIssue9255Test::LabelIssue9255Test()
 {
-    Size s      = Director::getInstance()->getLogicalSize();
+    Size s      = Director::getInstance()->getCanvasSize();
     auto parent = Node::create();
     parent->setPosition(s.width / 2, s.height / 2);
     parent->setVisible(false);
@@ -2257,7 +2257,7 @@ std::string LabelIssue10089Test::subtitle() const
 
 LabelSystemFontColor::LabelSystemFontColor()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto label1 = Label::createWithSystemFont("Color32::Red", "fonts/arial.ttf", 20);
     label1->setPosition(Vec2(size.width / 2, size.height * 0.3f));
@@ -2369,10 +2369,10 @@ LabelIssue12409Test::LabelIssue12409Test()
     addChild(label);
 
     auto labelSize = label->getContentSize();
-    auto winSize   = Director::getInstance()->getLogicalSize();
+    auto canvasSize   = Director::getInstance()->getCanvasSize();
     Vec2 labelOrigin;
-    labelOrigin.x    = winSize.width / 2 - (labelSize.width / 2);
-    labelOrigin.y    = winSize.height / 2 - (labelSize.height / 2);
+    labelOrigin.x    = canvasSize.width / 2 - (labelSize.width / 2);
+    labelOrigin.y    = canvasSize.height / 2 - (labelSize.height / 2);
     Vec2 vertices[4] = {Vec2(labelOrigin.x, labelOrigin.y), Vec2(labelOrigin.x + labelSize.width, labelOrigin.y),
                         Vec2(labelOrigin.x + labelSize.width, labelOrigin.y + labelSize.height),
                         Vec2(labelOrigin.x, labelOrigin.y + labelSize.height)};
@@ -2736,12 +2736,12 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
     slider2Label->setName("percentageLabel");
     slider2->addChild(slider2Label);
 
-    auto winSize = Director::getInstance()->getVisibleSize();
+    auto canvasSize = Director::getInstance()->getVisibleSize();
 
-    slider->addEventListener([this, slider, winSize, slider1Label](Object* /*sender*/, Slider::EventType event) {
+    slider->addEventListener([this, slider, canvasSize, slider1Label](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider->getPercent();
         auto labelSize    = _label->getContentSize();
-        auto drawNodeSize = Size(percent / 100.0 * winSize.width, labelSize.height);
+        auto drawNodeSize = Size(percent / 100.0 * canvasSize.width, labelSize.height);
         if (drawNodeSize.width <= 0)
         {
             drawNodeSize.width = 0.1f;
@@ -2757,10 +2757,10 @@ void LabelLayoutBaseTest::initSliders(const ax::Size& size)
         }, 0.0f, "update_font_size");
     });
 
-    slider2->addEventListener([this, slider2, winSize, slider2Label](Object* /*sender*/, Slider::EventType event) {
+    slider2->addEventListener([this, slider2, canvasSize, slider2Label](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider2->getPercent();
         auto labelSize    = _label->getContentSize();
-        auto drawNodeSize = Size(labelSize.width, percent / 100.0 * winSize.height);
+        auto drawNodeSize = Size(labelSize.width, percent / 100.0 * canvasSize.height);
         if (drawNodeSize.height <= 0)
         {
             drawNodeSize.height = 0.1f;
@@ -2870,7 +2870,7 @@ void LabelLayoutBaseTest::onExit()
 
 void LabelLayoutBaseTest::updateDrawNodeSize(const ax::Size& drawNodeSize)
 {
-    auto origin    = Director::getInstance()->getLogicalSize();
+    auto origin    = Director::getInstance()->getCanvasSize();
     auto labelSize = _label->getContentSize();
 
     origin.width  = origin.width / 2 - (labelSize.width / 2);
@@ -3002,10 +3002,10 @@ LabelResizeTest::LabelResizeTest()
     auto slider2 = (ui::Slider*)this->getChildByTag(2);
     slider2->setVisible(false);
 
-    auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([this, slider1, winSize](Object* /*sender*/, Slider::EventType event) {
+    auto canvasSize = Director::getInstance()->getVisibleSize();
+    slider1->addEventListener([this, slider1, canvasSize](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider1->getPercent();
-        auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
+        auto drawNodeSize = Size(percent / 100.0 * canvasSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
         {
             drawNodeSize.height = 0.1f;
@@ -3019,13 +3019,13 @@ LabelResizeTest::LabelResizeTest()
 
     auto label = Label::createWithSystemFont("Char Line break:", "Arial", 10);
     label->setColor(Color32::WHITE);
-    label->setPosition(Vec2(winSize.width * 0.1f, winSize.height * 0.8f));
+    label->setPosition(Vec2(canvasSize.width * 0.1f, canvasSize.height * 0.8f));
     this->addChild(label);
 
     CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
                                           "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
                                           "cocosui/check_box_active_disable.png");
-    checkBox->setPosition(Vec2(winSize.width * 0.2f, winSize.height * 0.8f));
+    checkBox->setPosition(Vec2(canvasSize.width * 0.2f, canvasSize.height * 0.8f));
     checkBox->setScale(0.5);
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
@@ -3068,10 +3068,10 @@ LabelToggleTypeTest::LabelToggleTypeTest()
     auto slider2 = (ui::Slider*)this->getChildByTag(2);
     slider2->setVisible(false);
 
-    auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([this, slider1, winSize](Object* /*sender*/, Slider::EventType event) {
+    auto canvasSize = Director::getInstance()->getVisibleSize();
+    slider1->addEventListener([this, slider1, canvasSize](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider1->getPercent();
-        auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
+        auto drawNodeSize = Size(percent / 100.0 * canvasSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
         {
             drawNodeSize.height = 0.1f;
@@ -3085,13 +3085,13 @@ LabelToggleTypeTest::LabelToggleTypeTest()
 
     auto label = Label::createWithSystemFont("Char Line break:", "Arial", 10);
     label->setColor(Color32::WHITE);
-    label->setPosition(Vec2(winSize.width * 0.1f, winSize.height * 0.8f));
+    label->setPosition(Vec2(canvasSize.width * 0.1f, canvasSize.height * 0.8f));
     this->addChild(label);
 
     CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
                                           "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
                                           "cocosui/check_box_active_disable.png");
-    checkBox->setPosition(Vec2(winSize.width * 0.2f, winSize.height * 0.8f));
+    checkBox->setPosition(Vec2(canvasSize.width * 0.2f, canvasSize.height * 0.8f));
     checkBox->setScale(0.5);
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
@@ -3116,7 +3116,7 @@ void LabelToggleTypeTest::initToggleCheckboxes()
 {
     const float BUTTON_WIDTH = 100;
     float startPosX          = 0;
-    Size winSize             = Director::getInstance()->getVisibleSize();
+    Size canvasSize             = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();
@@ -3124,7 +3124,7 @@ void LabelToggleTypeTest::initToggleCheckboxes()
 
     // Create the radio buttons
     static const int NUMBER_OF_BUTTONS  = 4;
-    startPosX                           = winSize.width / 2.0f - (NUMBER_OF_BUTTONS - 1) * 0.5 * BUTTON_WIDTH - 30;
+    startPosX                           = canvasSize.width / 2.0f - (NUMBER_OF_BUTTONS - 1) * 0.5 * BUTTON_WIDTH - 30;
     std::vector<std::string> labelTypes = {"Normal", "Clamp", "Shrink", "RESIZE"};
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
@@ -3132,7 +3132,7 @@ void LabelToggleTypeTest::initToggleCheckboxes()
 
         RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
         float posX               = startPosX + BUTTON_WIDTH * i;
-        radioButton->setPosition(Vec2(posX, winSize.height / 2.0f + 70));
+        radioButton->setPosition(Vec2(posX, canvasSize.height / 2.0f + 70));
         radioButton->setScale(1.2f);
         radioButton->addEventListener(AX_CALLBACK_2(LabelToggleTypeTest::onChangedRadioButtonSelect, this));
         radioButton->setTag(i);
@@ -3214,10 +3214,10 @@ LabelSystemFontTest::LabelSystemFontTest()
 
     auto slider1 = (ui::Slider*)this->getChildByTag(1);
 
-    auto winSize = Director::getInstance()->getVisibleSize();
-    slider1->addEventListener([this, slider1, winSize](Object* /*sender*/, Slider::EventType event) {
+    auto canvasSize = Director::getInstance()->getVisibleSize();
+    slider1->addEventListener([this, slider1, canvasSize](Object* /*sender*/, Slider::EventType event) {
         float percent     = slider1->getPercent();
-        auto drawNodeSize = Size(percent / 100.0 * winSize.width, _label->getContentSize().height);
+        auto drawNodeSize = Size(percent / 100.0 * canvasSize.width, _label->getContentSize().height);
         if (drawNodeSize.height <= 0)
         {
             drawNodeSize.height = 0.1f;
@@ -3234,13 +3234,13 @@ LabelSystemFontTest::LabelSystemFontTest()
 
     auto label = Label::createWithSystemFont("char Line break:", "Arial", 10);
     label->setColor(Color32::WHITE);
-    label->setPosition(Vec2(winSize.width * 0.1f, winSize.height * 0.8f));
+    label->setPosition(Vec2(canvasSize.width * 0.1f, canvasSize.height * 0.8f));
     this->addChild(label);
 
     CheckBox* checkBox = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_normal_press.png",
                                           "cocosui/check_box_active.png", "cocosui/check_box_normal_disable.png",
                                           "cocosui/check_box_active_disable.png");
-    checkBox->setPosition(Vec2(winSize.width * 0.2f, winSize.height * 0.8f));
+    checkBox->setPosition(Vec2(canvasSize.width * 0.2f, canvasSize.height * 0.8f));
     checkBox->setScale(0.5);
     checkBox->setSelected(false);
     checkBox->setName("LineBreak");
@@ -3268,7 +3268,7 @@ void LabelSystemFontTest::initToggleCheckboxes()
 {
     const float BUTTON_WIDTH = 100;
     float startPosX          = 0;
-    Size winSize             = Director::getInstance()->getVisibleSize();
+    Size canvasSize             = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();
@@ -3276,7 +3276,7 @@ void LabelSystemFontTest::initToggleCheckboxes()
 
     // Create the radio buttons
     static const int NUMBER_OF_BUTTONS  = 4;
-    startPosX                           = winSize.width / 2.0f - (NUMBER_OF_BUTTONS - 1) * 0.5 * BUTTON_WIDTH - 30;
+    startPosX                           = canvasSize.width / 2.0f - (NUMBER_OF_BUTTONS - 1) * 0.5 * BUTTON_WIDTH - 30;
     std::vector<std::string> labelTypes = {"Normal", "Clamp", "Shrink", "RESIZE"};
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
@@ -3284,7 +3284,7 @@ void LabelSystemFontTest::initToggleCheckboxes()
 
         RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
         float posX               = startPosX + BUTTON_WIDTH * i;
-        radioButton->setPosition(Vec2(posX, winSize.height / 2.0f + 70));
+        radioButton->setPosition(Vec2(posX, canvasSize.height / 2.0f + 70));
         radioButton->setScale(1.2f);
         radioButton->addEventListener(AX_CALLBACK_2(LabelSystemFontTest::onChangedRadioButtonSelect, this));
         radioButton->setTag(i);
@@ -3423,7 +3423,7 @@ std::string LabelRichText::subtitle() const
 
 LabelItalics::LabelItalics()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // LabelBMFont
     auto label1 =
@@ -3457,8 +3457,8 @@ LabelItalics::LabelItalics()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getLogicalSize();
-    menu->setPosition(winSize.width * 0.9, winSize.height * 0.25f);
+    auto canvasSize = Director::getInstance()->getCanvasSize();
+    menu->setPosition(canvasSize.width * 0.9, canvasSize.height * 0.25f);
 }
 
 std::string LabelItalics::title() const
@@ -3475,7 +3475,7 @@ std::string LabelItalics::subtitle() const
 
 LabelBold::LabelBold()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // LabelBMFont
     auto label1 =
@@ -3509,8 +3509,8 @@ LabelBold::LabelBold()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getLogicalSize();
-    menu->setPosition(winSize.width * 0.9, winSize.height * 0.25f);
+    auto canvasSize = Director::getInstance()->getCanvasSize();
+    menu->setPosition(canvasSize.width * 0.9, canvasSize.height * 0.25f);
 }
 
 std::string LabelBold::title() const
@@ -3527,7 +3527,7 @@ std::string LabelBold::subtitle() const
 
 LabelUnderline::LabelUnderline()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // LabelBMFont
     auto label1 =
@@ -3561,8 +3561,8 @@ LabelUnderline::LabelUnderline()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getLogicalSize();
-    menu->setPosition(winSize.width * 0.9, winSize.height * 0.25f);
+    auto canvasSize = Director::getInstance()->getCanvasSize();
+    menu->setPosition(canvasSize.width * 0.9, canvasSize.height * 0.25f);
 }
 
 std::string LabelUnderline::title() const
@@ -3579,7 +3579,7 @@ std::string LabelUnderline::subtitle() const
 
 LabelUnderlineMultiline::LabelUnderlineMultiline()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // bmfont
     _label1a = Label::createWithBMFont("fonts/bitmapFontTest5.fnt", "hello underline\nand multiline",
@@ -3603,8 +3603,8 @@ LabelUnderlineMultiline::LabelUnderlineMultiline()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getLogicalSize();
-    menu->setPosition(winSize.width * 0.9, winSize.height * 0.25f);
+    auto canvasSize = Director::getInstance()->getCanvasSize();
+    menu->setPosition(canvasSize.width * 0.9, canvasSize.height * 0.25f);
 }
 
 std::string LabelUnderlineMultiline::title() const
@@ -3619,7 +3619,7 @@ std::string LabelUnderlineMultiline::subtitle() const
 
 LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     TTFConfig ttfConf("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
 
@@ -3777,7 +3777,7 @@ std::string LabelUnderlineStrikethroughMultiline::subtitle() const
 
 LabelStrikethrough::LabelStrikethrough()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // bmfont
     _label1a = Label::createWithBMFont("fonts/bitmapFontTest4.fnt", "hello strikethrough\nand multiline",
@@ -3801,8 +3801,8 @@ LabelStrikethrough::LabelStrikethrough()
     menuItem->setFontSizeObj(12);
     auto menu = Menu::createWithItem(menuItem);
     addChild(menu);
-    auto winSize = Director::getInstance()->getLogicalSize();
-    menu->setPosition(winSize.width * 0.86, winSize.height * 0.25f);
+    auto canvasSize = Director::getInstance()->getCanvasSize();
+    menu->setPosition(canvasSize.width * 0.86, canvasSize.height * 0.25f);
 }
 
 std::string LabelStrikethrough::title() const
@@ -3825,7 +3825,7 @@ LabelLocalizationTest::LabelLocalizationTest()
 
     const float BUTTON_WIDTH = 100;
     float startPosX          = 0;
-    Size winSize             = Director::getInstance()->getVisibleSize();
+    Size canvasSize             = Director::getInstance()->getVisibleSize();
 
     // Create a radio button group
     auto radioButtonGroup = RadioButtonGroup::create();
@@ -3833,14 +3833,14 @@ LabelLocalizationTest::LabelLocalizationTest()
 
     // Create the radio buttons
     const int NUMBER_OF_BUTTONS         = 3;
-    startPosX                           = winSize.width / 2.0f - (NUMBER_OF_BUTTONS - 1) * 0.5 * BUTTON_WIDTH - 30;
+    startPosX                           = canvasSize.width / 2.0f - (NUMBER_OF_BUTTONS - 1) * 0.5 * BUTTON_WIDTH - 30;
     std::vector<std::string> labelTypes = {"English", "Chinese", "Japanese"};
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
     {
         RadioButton* radioButton = RadioButton::create("cocosui/radio_button_off.png", "cocosui/radio_button_on.png");
         float posX               = startPosX + BUTTON_WIDTH * i;
-        radioButton->setPosition(Vec2(posX, winSize.height / 2.0f + 70));
+        radioButton->setPosition(Vec2(posX, canvasSize.height / 2.0f + 70));
         radioButton->setScale(1.2f);
         radioButton->addEventListener(AX_CALLBACK_2(LabelLocalizationTest::onChangedRadioButtonSelect, this));
         radioButton->setTag(i);
@@ -3854,21 +3854,21 @@ LabelLocalizationTest::LabelLocalizationTest()
 
     _label1 = Label::createWithSystemFont(_localizationJson->getLocalizationString("Text Label"), "Arial", 24);
     addChild(_label1, 0);
-    _label1->setPosition(Vec2(winSize.width / 2, winSize.height * 1 / 3));
+    _label1->setPosition(Vec2(canvasSize.width / 2, canvasSize.height * 1 / 3));
 
     Label* label = Label::createWithSystemFont("From json data :", "Arial", 24);
     label->setAnchorPoint(Vec2(0.0f, 0.5f));
     addChild(label, 0);
-    label->setPosition(Vec2(20.0f, winSize.height * 1 / 3 + 24));
+    label->setPosition(Vec2(20.0f, canvasSize.height * 1 / 3 + 24));
 
     _label2 = Label::createWithSystemFont(_localizationBin->getLocalizationString("Text Label"), "Arial", 24);
     addChild(_label2, 0);
-    _label2->setPosition(Vec2(winSize.width / 2, winSize.height * 1 / 2));
+    _label2->setPosition(Vec2(canvasSize.width / 2, canvasSize.height * 1 / 2));
 
     label = Label::createWithSystemFont("From binary data :", "Arial", 24);
     label->setAnchorPoint(Vec2(0.0f, 0.5f));
     addChild(label, 0);
-    label->setPosition(Vec2(20.0f, winSize.height * 1 / 2 + 24));
+    label->setPosition(Vec2(20.0f, canvasSize.height * 1 / 2 + 24));
 }
 
 std::string LabelLocalizationTest::title() const
@@ -4067,7 +4067,7 @@ std::string LabelIssue16717::subtitle() const
 LabelIssueLineGap::LabelIssueLineGap()
 {
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto label1 = Label::createWithTTF("test \ntest", "fonts/FingerpopGap.ttf", 30);
     label1->setPosition(Vec2(size.width / 3, size.height / 2));
@@ -4123,7 +4123,7 @@ std::string LabelIssue17902::subtitle() const
 //
 LabelIssue20523::LabelIssue20523()
 {
-    auto size           = Director::getInstance()->getLogicalSize();
+    auto size           = Director::getInstance()->getCanvasSize();
     auto _crashingLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 120);
     _crashingLabel->setPosition(Vec2(size.width / 2, size.height / 2));
     _crashingLabel->setColor(ax::Color32(200, 200, 200));

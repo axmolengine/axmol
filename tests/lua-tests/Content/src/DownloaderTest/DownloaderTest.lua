@@ -7,7 +7,7 @@ local notExistURI = "https://www.cocos2d-x.org/attachments/1503/no_exist.txt"
 local writablePath = ax.FileUtils:getInstance():getWritablePath()
 local function DownloaderLayer()
     local layer = ax.Layer:create()
-    local winSize = ax.Director:getInstance():getLogicalSize()
+    local canvasSize = ax.Director:getInstance():getCanvasSize()
     local margin = 40
     local space  = 35
 
@@ -20,13 +20,13 @@ local function DownloaderLayer()
 
         local label = ax.Label:createWithTTF("Downloader Test", s_arialPath, 28)
         label:setAnchorPoint(ax.p(0.5, 0.5))
-        label:setPosition(ax.p(winSize.width / 2, winSize.height - margin))
+        label:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - margin))
         layer:addChild(label, 0)
 
         --Response Code Label
         local labelStatusCode = ax.Label:createWithTTF("status", s_markerFeltFontPath, 20)
         labelStatusCode:setAnchorPoint(ax.p(0.5, 0.5))
-        labelStatusCode:setPosition(ax.p(winSize.width / 2,  winSize.height - margin - 6 * space))
+        labelStatusCode:setPosition(ax.p(canvasSize.width / 2,  canvasSize.height - margin - 6 * space))
         layer:addChild(labelStatusCode)
 
         local menuRequest = ax.Menu:create()
@@ -43,7 +43,7 @@ local function DownloaderLayer()
         labelGet:setAnchorPoint(ax.p(0.5, 0.5))
         local itemGet  =  ax.MenuItemLabel:create(labelGet)
         itemGet:registerScriptTapHandler(onDownloadFileClicked)
-        itemGet:setPosition(ax.p(winSize.width / 2, winSize.height - margin - space))
+        itemGet:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - margin - space))
         menuRequest:addChild(itemGet)
 
         --failure
@@ -56,7 +56,7 @@ local function DownloaderLayer()
         labelPost:setAnchorPoint(ax.p(0.5, 0.5))
         local itemPost =  ax.MenuItemLabel:create(labelPost)
         itemPost:registerScriptTapHandler(onDownloadTxtClicked)
-        itemPost:setPosition(ax.p(winSize.width / 2, winSize.height - margin - 2 * space))
+        itemPost:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - margin - 2 * space))
         menuRequest:addChild(itemPost)
 
         local function onTaskSuccess(task)

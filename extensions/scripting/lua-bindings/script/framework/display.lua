@@ -86,7 +86,7 @@ local function setConstants()
     local sizeInPixels = view:getWindowSize()
     display.sizeInPixels = {width = sizeInPixels.width, height = sizeInPixels.height}
 
-    local viewsize = director:getLogicalSize()
+    local viewsize = director:getCanvasSize()
     display.contentScaleFactor = director:getContentScaleFactor()
     display.size               = {width = viewsize.width, height = viewsize.height}
     display.width              = display.size.width

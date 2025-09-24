@@ -189,9 +189,9 @@ void ShaderNode::updateUniforms()
     _locCosTime    = _programState->getUniformLocation("u_CosTime");
     _locScreenSize = _programState->getUniformLocation("u_screenSize");
 
-    const Vec2& winSize     = Director::getInstance()->getRenderView()->getWindowSize();
+    const Vec2& canvasSize     = Director::getInstance()->getRenderView()->getWindowSize();
     float renderScale       = Director::getInstance()->getRenderView()->getRenderScale();
-    auto screenSizeInPixels = winSize * renderScale;
+    auto screenSizeInPixels = canvasSize * renderScale;
     _programState->setUniform(_locScreenSize, &screenSizeInPixels, sizeof(screenSizeInPixels));
 }
 
@@ -205,7 +205,7 @@ bool ShaderMonjori::init()
     {
         auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Monjori_fs");
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
 
         addChild(sn);
@@ -235,7 +235,7 @@ bool ShaderMandelbrot::init()
     {
         auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Mandelbrot_fs");
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
 
         addChild(sn);
@@ -264,7 +264,7 @@ bool ShaderJulia::init()
     {
         auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Julia_fs");
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
 
         addChild(sn);
@@ -293,7 +293,7 @@ bool ShaderHeart::init()
     {
         auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Heart_fs");
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
 
         addChild(sn);
@@ -323,7 +323,7 @@ bool ShaderFlower::init()
     {
         auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Flower_fs");
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
 
         addChild(sn);
@@ -353,7 +353,7 @@ bool ShaderPlasma::init()
     {
         auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Plasma_fs");
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
 
         addChild(sn);
@@ -477,7 +477,7 @@ std::string ShaderBlur::subtitle() const
 
 void ShaderBlur::createSliderCtls()
 {
-    auto screenSize = Director::getInstance()->getLogicalSize();
+    auto screenSize = Director::getInstance()->getCanvasSize();
 
     {
         ControlSlider* slider = ControlSlider::create("extensions/sliderTrack.png", "extensions/sliderProgress.png",
@@ -524,7 +524,7 @@ bool ShaderBlur::init()
     {
         _blurSprite = SpriteBlur::create("Images/grossini.png");
         auto sprite = Sprite::create("Images/grossini.png");
-        auto s      = Director::getInstance()->getLogicalSize();
+        auto s      = Director::getInstance()->getCanvasSize();
         _blurSprite->setPosition(Vec2(s.width / 3, s.height / 2 + 30.0f));
         sprite->setPosition(Vec2(2 * s.width / 3, s.height / 2 + 30.0f));
 
@@ -577,7 +577,7 @@ bool ShaderRetroEffect::init()
         auto screenSizeInPixels        = windowSize * renderScale;
         p->setUniform(screenSizeLocation, &screenSizeInPixels, sizeof(screenSizeInPixels));
 
-        auto s = director->getLogicalSize();
+        auto s = director->getCanvasSize();
 
         _label = Label::createWithBMFont("fonts/west_england-64.fnt", "RETRO EFFECT");
         _label->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -643,7 +643,7 @@ bool ShaderLensFlare::init()
     {
         auto sn = ShaderNode::shaderNodeWithVertex("", "custom/shadertoy_LensFlare_fs");
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
         sn->setContentSize(Size(s.width / 2, s.height / 2));
         addChild(sn);
@@ -675,7 +675,7 @@ bool ShaderGlow::init()
     {
         auto sn = ShaderNode::shaderNodeWithVertex("", "custom/shadertoy_Glow_fs");
 
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
         sn->setContentSize(Size(s.width / 2, s.height / 2));
         addChild(sn);
@@ -703,7 +703,7 @@ std::string ShaderMultiTexture::subtitle() const
 
 ui::Slider* ShaderMultiTexture::createSliderCtl()
 {
-    auto screenSize = Director::getInstance()->getLogicalSize();
+    auto screenSize = Director::getInstance()->getCanvasSize();
 
     ui::Slider* slider = ui::Slider::create();
     slider->loadBarTexture("cocosui/sliderTrack.png");
@@ -730,7 +730,7 @@ bool ShaderMultiTexture::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
 
         // Left: normal sprite
         auto left = Sprite::create("Images/grossinis_sister1.png");

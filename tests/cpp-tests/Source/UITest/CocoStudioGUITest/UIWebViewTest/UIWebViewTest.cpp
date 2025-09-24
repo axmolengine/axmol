@@ -37,11 +37,11 @@ bool WebViewTest::init()
 {
     if (UIScene::init())
     {
-        Size winSize = Director::getInstance()->getVisibleSize();
+        Size canvasSize = Director::getInstance()->getVisibleSize();
 
         _webView = ax::ui::WebView::create();
-        _webView->setPosition(winSize / 2);
-        _webView->setContentSize(winSize * 0.5);
+        _webView->setPosition(canvasSize / 2);
+        _webView->setContentSize(canvasSize * 0.5);
         _webView->loadURL("https://www.baidu.com");
         _webView->setScalesPageToFit(true);
 
@@ -52,12 +52,12 @@ bool WebViewTest::init()
         this->addChild(_webView);
 
         auto spriteHello = Sprite::create("Hello.png");
-        spriteHello->setPosition(winSize / 2);
+        spriteHello->setPosition(canvasSize / 2);
         this->addChild(spriteHello);
 
         TextField* urlTextField = TextField::create("Input a URL here", "Arial", 20);
         urlTextField->setPlaceHolderColor(Color32::RED);
-        urlTextField->setPosition(Vec2(winSize / 2) + Vec2(-80, _webView->getContentSize().height / 2 +
+        urlTextField->setPosition(Vec2(canvasSize / 2) + Vec2(-80, _webView->getContentSize().height / 2 +
                                                                     urlTextField->getContentSize().height / 2 + 10));
         this->addChild(urlTextField);
 
@@ -69,7 +69,7 @@ bool WebViewTest::init()
 
         Button* resetBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         resetBtn->setTitleText("Visit URL");
-        resetBtn->setPosition(Vec2(winSize / 2) + Vec2(50, _webView->getContentSize().height / 2 +
+        resetBtn->setPosition(Vec2(canvasSize / 2) + Vec2(50, _webView->getContentSize().height / 2 +
                                                                resetBtn->getContentSize().height / 2 + 10));
         resetBtn->addClickEventListener([this, urlTextField](Object*) {
             if (urlTextField->getString().size() != 0)
@@ -82,7 +82,7 @@ bool WebViewTest::init()
         Button* reloadBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         reloadBtn->setTitleText("Reload");
         reloadBtn->setPosition(
-            Vec2(winSize / 2) +
+            Vec2(canvasSize / 2) +
             Vec2(_webView->getContentSize().width / 2 + reloadBtn->getContentSize().width / 2 + 10, 50));
         reloadBtn->addClickEventListener([this, reloadBtn](Object*) { _webView->reload(); });
         this->addChild(reloadBtn);
@@ -90,7 +90,7 @@ bool WebViewTest::init()
         Button* forwardBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         forwardBtn->setTitleText("Forward");
         forwardBtn->setPosition(
-            Vec2(winSize / 2) +
+            Vec2(canvasSize / 2) +
             Vec2(_webView->getContentSize().width / 2 + forwardBtn->getContentSize().width / 2 + 10, 0));
         forwardBtn->addClickEventListener([this](Object*) { _webView->goForward(); });
         this->addChild(forwardBtn);
@@ -98,7 +98,7 @@ bool WebViewTest::init()
         Button* backBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         backBtn->setTitleText("Back");
         backBtn->setPosition(
-            Vec2(winSize / 2) +
+            Vec2(canvasSize / 2) +
             Vec2(_webView->getContentSize().width / 2 + backBtn->getContentSize().width / 2 + 10, -50));
         backBtn->addClickEventListener([this](Object*) { _webView->goBack(); });
         this->addChild(backBtn);
@@ -106,7 +106,7 @@ bool WebViewTest::init()
         Button* loadFileBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         loadFileBtn->setTitleText("Load FILE");
         loadFileBtn->setPosition(
-            Vec2(winSize / 2) -
+            Vec2(canvasSize / 2) -
             Vec2(_webView->getContentSize().width / 2 + loadFileBtn->getContentSize().width / 2 + 10, 50));
         loadFileBtn->addClickEventListener([this](Object*) { _webView->loadFile("Test.html"); });
         this->addChild(loadFileBtn);
@@ -114,7 +114,7 @@ bool WebViewTest::init()
         Button* loadHTMLBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         loadHTMLBtn->setTitleText("Load Data");
         loadHTMLBtn->setPosition(
-            Vec2(winSize / 2) -
+            Vec2(canvasSize / 2) -
             Vec2(_webView->getContentSize().width / 2 + loadHTMLBtn->getContentSize().width / 2 + 10, 0));
         loadHTMLBtn->addClickEventListener([this](Object*) {
             _webView->loadHTMLString("<body style=\"font-size:50px;\">Hello World <img src=\"Icon.png\"/> </body>",
@@ -125,7 +125,7 @@ bool WebViewTest::init()
         Button* evalJsBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         evalJsBtn->setTitleText("Evaluate JS");
         evalJsBtn->setPosition(
-            Vec2(winSize / 2) -
+            Vec2(canvasSize / 2) -
             Vec2(_webView->getContentSize().width / 2 + evalJsBtn->getContentSize().width / 2 + 10, -50));
         evalJsBtn->addClickEventListener([this](Object*) { _webView->evaluateJS("alert(\"hello\")"); });
         evalJsBtn->setName("evalJs");
@@ -134,7 +134,7 @@ bool WebViewTest::init()
         Button* opacityBtn = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         opacityBtn->setTitleText("Opacity 1.f");
         opacityBtn->setPosition(
-            Vec2(winSize / 2) -
+            Vec2(canvasSize / 2) -
             Vec2(_webView->getContentSize().width / 2 + opacityBtn->getContentSize().width / 2 + 10, 100));
         opacityBtn->addClickEventListener([this, opacityBtn](Object*) {
             auto currentOpacity = _webView->getOpacityWebView();
@@ -161,7 +161,7 @@ bool WebViewTest::init()
             Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         transparentBgBtn->setTitleText("Transparent BG");
         transparentBgBtn->setPosition(
-            Vec2(winSize / 2) +
+            Vec2(canvasSize / 2) +
             Vec2(_webView->getContentSize().width / 2 + transparentBgBtn->getContentSize().width / 2 + 10, -100));
         transparentBgBtn->addClickEventListener([this](Object*) { _webView->setBackgroundTransparent(); });
         transparentBgBtn->setName("Transparent");

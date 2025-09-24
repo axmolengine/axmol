@@ -43,7 +43,7 @@ enum
 //------------------------------------------------------------------
 void EaseSpriteDemo::centerSprites(unsigned int numberOfSprites)
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     if (numberOfSprites == 0)
     {
@@ -505,7 +505,7 @@ void SpriteEaseBezier::onEnter()
 {
     EaseSpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     //
     // startPosition can be any coordinate, but since the movement
@@ -898,7 +898,7 @@ void SpeedTest::onEnter()
 {
     EaseSpriteDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // rotate and jump
     auto jump1 = JumpBy::create(4.0f, Vec2(-s.width + 80, 0.0f), 100.0f, 4);

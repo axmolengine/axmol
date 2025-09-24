@@ -113,8 +113,8 @@ bool ParticleFire::initWithTotalParticles(int numberOfParticles)
         _angleVar = 10;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2.0f, 60.0f);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2.0f, 60.0f);
         this->_posVar.set(40.0f, 20.0f);
 
         // life of particles
@@ -213,8 +213,8 @@ bool ParticleFireworks::initWithTotalParticles(int numberOfParticles)
         this->modeA.speedVar = 50.0f;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height / 2);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
 
         // angle
         this->_angle    = 90.0f;
@@ -321,8 +321,8 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
         _angleVar = 360;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height / 2);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -428,8 +428,8 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
         _angleVar = 360;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height / 2);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -537,8 +537,8 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
         _angleVar = 360;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height / 2);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -645,8 +645,8 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
         _angleVar = 360;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height / 2);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -754,8 +754,8 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
         _angleVar = 0;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height / 2);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -862,8 +862,8 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
         _angleVar = 360;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height / 2);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -967,8 +967,8 @@ bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
         _angleVar = 5;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, 0);
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, 0);
         setPosVar(Vec2(20, 0));
 
         // life of particles
@@ -1072,9 +1072,9 @@ bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
         setTangentialAccelVar(1);
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height + 10);
-        setPosVar(Vec2(logicalSize.width / 2, 0.0f));
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height + 10);
+        setPosVar(Vec2(canvasSize.width / 2, 0.0f));
 
         // angle
         _angle    = -90;
@@ -1183,9 +1183,9 @@ bool ParticleRain::initWithTotalParticles(int numberOfParticles)
         _angleVar = 5;
 
         // emitter position
-        Vec2 logicalSize = _director->getLogicalSize();
-        this->setPosition(logicalSize.width / 2, logicalSize.height);
-        setPosVar(Vec2(logicalSize.width / 2, 0.0f));
+        Vec2 canvasSize = _director->getCanvasSize();
+        this->setPosition(canvasSize.width / 2, canvasSize.height);
+        setPosVar(Vec2(canvasSize.width / 2, 0.0f));
 
         // life of particles
         _life    = 4.5f;

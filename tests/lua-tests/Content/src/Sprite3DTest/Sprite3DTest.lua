@@ -1,6 +1,6 @@
 require "axmol.3d.3dConstants"
 
-local size = ax.Director:getInstance():getLogicalSize()
+local size = ax.Director:getInstance():getCanvasSize()
 local scheduler = ax.Director:getInstance():getScheduler()
 local attributeNames =
 {
@@ -344,8 +344,8 @@ function Animate3DTest:addSprite3D()
     local fileName = "MeshRendererTest/tortoise.c3b"
     local sprite = ax.Sprite3D:create(fileName)
     sprite:setScale(0.1)
-    local winSize = ax.Director:getInstance():getLogicalSize()
-    sprite:setPosition(ax.p(winSize.width * 4.0 / 5.0, winSize.height / 2.0))
+    local canvasSize = ax.Director:getInstance():getCanvasSize()
+    sprite:setPosition(ax.p(canvasSize.width * 4.0 / 5.0, canvasSize.height / 2.0))
     self:addChild(sprite)
 
     self._sprite = sprite
@@ -361,13 +361,13 @@ function Animate3DTest:addSprite3D()
         self._state = State.SWIMMING
     end
 
-    self._moveAction = ax.MoveTo:create(4.0, ax.p(winSize.width / 5.0, winSize.height / 2.0))
+    self._moveAction = ax.MoveTo:create(4.0, ax.p(canvasSize.width / 5.0, canvasSize.height / 2.0))
     self._moveAction:retain()
 
     local function reachEndCallBack()
-        local winSize = ax.Director:getInstance():getLogicalSize()
+        local canvasSize = ax.Director:getInstance():getCanvasSize()
         self._sprite:stopActionByTag(100)
-        local inverse = ax.MoveTo:create(4.0, ax.p(winSize.width - self._sprite:getPositionX(), winSize.height / 2.0))
+        local inverse = ax.MoveTo:create(4.0, ax.p(canvasSize.width - self._sprite:getPositionX(), canvasSize.height / 2.0))
         inverse:retain()
         self._moveAction:release()
         self._moveAction = inverse
@@ -718,7 +718,7 @@ function Sprite3DWithOBBPerfromanceTest:ctor()
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     self:initDrawBox()
 
     self:addNewSpriteWithCoords(ax.p(s.width/2, s.height/2))
@@ -800,7 +800,7 @@ end
 
 function Sprite3DWithOBBPerfromanceTest:addOBBWithCount( value )
     for i=1,value do
-        local randompos = ax.p(math.random() * ax.Director:getInstance():getLogicalSize().width, math.random() * ax.Director:getInstance():getLogicalSize().height)
+        local randompos = ax.p(math.random() * ax.Director:getInstance():getCanvasSize().width, math.random() * ax.Director:getInstance():getCanvasSize().height)
         local extents = ax.vec3(10, 10, 10)
         local aabb = ax.AABB:new({x = -10, y = -10, z = -10}, extents)
         local obb = ax.OBB:new(aabb)
@@ -845,7 +845,7 @@ end
 
 function Sprite3DWithOBBPerfromanceTest:calculateRayByLocationInView(ray, location)
     local dir = ax.Director:getInstance()
-    local view = dir:getLogicalSize()
+    local view = dir:getCanvasSize()
     local mat = ax.mat4.new(dir:getMatrix(ax.MATRIX_STACK_TYPE.PROJECTION))
     local src = ax.vec3(location.x, location.y, -1)
     local nearPoint = {}
@@ -867,7 +867,7 @@ function Sprite3DWithOBBPerfromanceTest:addNewSpriteWithCoords(vec2)
     local fileName = "MeshRendererTest/tortoise.c3b"
     local sprite = ax.Sprite3D:create(fileName)
     sprite:setScale(0.1)
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     sprite:setPosition(ax.p(s.width * 4.0 / 5.0, s.height / 2.0))
     self:addChild(sprite)
     self._sprite = sprite
@@ -880,7 +880,7 @@ function Sprite3DWithOBBPerfromanceTest:addNewSpriteWithCoords(vec2)
     self._moveAction = ax.MoveTo:create(4.0, ax.p(s.width / 5.0, s.height / 2.0))
     self._moveAction:retain()
     local function reachEndCallBack()
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
         self._sprite:stopActionByTag(100)
         local inverse = ax.MoveTo:create(4.0, ax.p(s.width - self._sprite:getPositionX(), s.height / 2.0))
         inverse:retain()
@@ -1020,7 +1020,7 @@ function AsyncLoadSprite3DTest:onEnter()
 
         local function callback(sprite, index)
             local node = self:getChildByTag(101)
-            local s = ax.Director:getInstance():getLogicalSize()
+            local s = ax.Director:getInstance():getCanvasSize()
             local width = s.width / (#paths)
             local point = ax.p(width * (0.5 + index), s.height / 2.0)
             sprite:setPosition(point)
@@ -1049,7 +1049,7 @@ function AsyncLoadSprite3DTest:onEnter()
     end
     item1:registerScriptTapHandler(menuCallback_asyncLoadSprite)
 
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     item1:setPosition( s.width * 0.5, s.height * 0.8)
 
     local menu = ax.Menu:create(item1)
@@ -1101,7 +1101,7 @@ function Sprite3DCubeMapTest:subtitle()
 end
 
 function Sprite3DCubeMapTest:onEnter()
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     self:addNewSpriteWithCoords(ax.p(s.width / 2, s.height / 2))
     Helper.initWithLayer(self)
     Helper.titleLabel:setString(self:title())

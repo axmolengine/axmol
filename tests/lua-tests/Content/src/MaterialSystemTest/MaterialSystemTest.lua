@@ -114,7 +114,7 @@ function Material_MultipleSprite3D:onEnter()
 
     local totalNames = #names
 
-    local size = ax.Director:getInstance():getLogicalSize()
+    local size = ax.Director:getInstance():getCanvasSize()
 
     for i = 1 , totalNames do
         local sprite = ax.Sprite3D:create(names[i])

@@ -8,9 +8,9 @@ local player = {
 
         -- set position
         local director = ax.Director:getInstance()
-        local winSize = director:getVisibleSize()
+        local canvasSize = director:getVisibleSize()
         local visibleOrigin = director:getVisibleOrigin()
-        projectile:setPosition(ax.p(visibleOrigin.x + 20, visibleOrigin.y + winSize.height/2))
+        projectile:setPosition(ax.p(visibleOrigin.x + 20, visibleOrigin.y + canvasSize.height/2))
 
         -- run action
         local posX, posY = projectile:getPosition()
@@ -22,7 +22,7 @@ local player = {
         end
 
         local contentSize = projectile:getContentSize()
-        local realX = visibleOrigin.x + winSize.width + contentSize.width/2
+        local realX = visibleOrigin.x + canvasSize.width + contentSize.width/2
         local ratio = offY / offX
         local realY = (realX * ratio) + posY
         local realDest = ax.p(realX, realY)

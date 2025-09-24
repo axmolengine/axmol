@@ -19,7 +19,7 @@ end
 
 local function WebSocketTestLayer()
     local layer   = ax.Layer:create()
-    local winSize = ax.Director:getInstance():getLogicalSize()
+    local canvasSize = ax.Director:getInstance():getCanvasSize()
 
     local MARGIN = 40
     local SPACE  = 35
@@ -35,7 +35,7 @@ local function WebSocketTestLayer()
 
     local label = ax.Label:createWithTTF("WebSocket Test", s_arialPath, 28)
     label:setAnchorPoint(ax.p(0.5, 0.5))
-    label:setPosition(ax.p( winSize.width / 2, winSize.height - MARGIN))
+    label:setPosition(ax.p( canvasSize.width / 2, canvasSize.height - MARGIN))
     layer:addChild(label, 0)
 
     local menuRequest = ax.Menu:create()
@@ -59,7 +59,7 @@ local function WebSocketTestLayer()
     labelSendText:setAnchorPoint(0.5, 0.5)
     local itemSendText  = ax.MenuItemLabel:create(labelSendText)
     itemSendText:registerScriptTapHandler(onMenuSendTextClicked)
-    itemSendText:setPosition(ax.p(winSize.width / 2, winSize.height - MARGIN - SPACE))
+    itemSendText:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - MARGIN - SPACE))
     menuRequest:addChild(itemSendText)
 
     --Send Binary
@@ -78,7 +78,7 @@ local function WebSocketTestLayer()
     labelSendBinary:setAnchorPoint(ax.p(0.5, 0.5))
     local itemSendBinary = ax.MenuItemLabel:create(labelSendBinary)
     itemSendBinary:registerScriptTapHandler(onMenuSendBinaryClicked)
-    itemSendBinary:setPosition(ax.p(winSize.width / 2, winSize.height - MARGIN - 2 * SPACE))
+    itemSendBinary:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - MARGIN - 2 * SPACE))
     menuRequest:addChild(itemSendBinary)
 
     --Send Text Status Label

@@ -221,7 +221,7 @@ void LayoutReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
         bool adaptScrenn = DICTOOL->getBooleanValue_json(options, P_AdaptScreen);
         if (adaptScrenn)
         {
-            Size screenSize = Director::getInstance()->getLogicalSize();
+            Size screenSize = Director::getInstance()->getCanvasSize();
             w               = screenSize.width;
             h               = screenSize.height;
         }

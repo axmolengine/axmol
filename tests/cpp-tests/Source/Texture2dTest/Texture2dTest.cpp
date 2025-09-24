@@ -203,7 +203,7 @@ bool TextureETC1Alpha::init()
     _background->setIgnoreAnchorPointForPosition(false);
     _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
     this->addChild(_background);
 
@@ -284,7 +284,7 @@ bool TextureETC2::init()
     _background->setIgnoreAnchorPointForPosition(false);
     _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
     this->addChild(_background);
 
@@ -294,7 +294,7 @@ bool TextureETC2::init()
 
 void TextureETC2::addNewSpriteWithCoords()
 {
-    auto s       = Director::getInstance()->getLogicalSize();
+    auto s       = Director::getInstance()->getCanvasSize();
     auto sprite4 = Sprite::create("Images/etc2_rgb.pkm");
     sprite4->setPosition(Vec2(s.width * 0.3, s.height * 0.5));
     _background->addChild(sprite4);
@@ -336,7 +336,7 @@ TextureBMP::TextureBMP()
     listener->onTouchesEnded = AX_CALLBACK_2(TextureBMP::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 
@@ -399,7 +399,7 @@ std::string TextureBMP::subtitle() const
 void TextureTGA::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("TileMaps/levelmap.tga");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -421,7 +421,7 @@ void TexturePNG::onEnter()
 {
     TextureDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image.png");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -468,7 +468,7 @@ std::string TexturePNG::subtitle() const
 void TextureJPEG::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image.jpeg");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -489,7 +489,7 @@ std::string TextureJPEG::title() const
 void TextureWEBP::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image.webp");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -513,7 +513,7 @@ std::string TextureWEBP::title() const
 void TextureWEBPNoAlpha::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_no_alpha.webp");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -538,7 +538,7 @@ std::string TextureWEBPNoAlpha::title() const
 void TextureMipMap::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto texture0 = Director::getInstance()->getTextureCache()->addImage("Images/grossini_dance_atlas.png", true);
     Texture2D::TexParams texParams{};
@@ -587,7 +587,7 @@ std::string TextureMipMap::subtitle() const
 void TexturePVRMipMap::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto imgMipMap = Sprite::create("Images/logo-mipmap.pvr");
     if (imgMipMap)
@@ -635,7 +635,7 @@ std::string TexturePVRMipMap::subtitle() const
 void TexturePVRMipMap2::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto imgMipMap = Sprite::create("Images/test_image_rgba4444_mipmap.pvr");
     imgMipMap->setPosition(Vec2(s.width / 2.0f - 100, s.height / 2.0f));
@@ -680,7 +680,7 @@ std::string TexturePVRMipMap2::subtitle() const
 void TexturePVR2BPP::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_pvrtc2bpp.pvr");
 
@@ -707,7 +707,7 @@ std::string TexturePVR2BPP::title() const
 void TexturePVRTest::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image.pvr");
 
@@ -738,7 +738,7 @@ std::string TexturePVRTest::title() const
 void TexturePVR4BPP::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_pvrtc4bpp.pvr");
 
@@ -769,7 +769,7 @@ std::string TexturePVR4BPP::title() const
 void TexturePVRRGBA8888::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgba8888.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -792,7 +792,7 @@ std::string TexturePVRRGBA8888::title() const
 void TexturePVRBGRA8888::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_bgra8888.pvr");
     if (img)
@@ -822,7 +822,7 @@ std::string TexturePVRBGRA8888::title() const
 void TexturePVRRGBA5551::onEnter()
 {
     TextureDemo::onEnter();
-    auto s   = Director::getInstance()->getLogicalSize();
+    auto s   = Director::getInstance()->getCanvasSize();
     auto img = Sprite::create("Images/test_image_rgba5551.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
     addChild(img);
@@ -844,7 +844,7 @@ std::string TexturePVRRGBA5551::title() const
 void TexturePVRRGBA4444::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgba4444.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -867,7 +867,7 @@ std::string TexturePVRRGBA4444::title() const
 void TexturePVRRGBA4444GZ::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     // android can not pack .gz file into apk file
@@ -900,7 +900,7 @@ std::string TexturePVRRGBA4444GZ::subtitle() const
 void TexturePVRRGBA4444CCZ::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgba4444.pvr.ccz");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -928,7 +928,7 @@ std::string TexturePVRRGBA4444CCZ::subtitle() const
 void TexturePVRRGB565::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgb565.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -947,7 +947,7 @@ std::string TexturePVRRGB565::title() const
 void TexturePVRRGB888::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgb888.pvr");
     if (img != nullptr)
@@ -973,7 +973,7 @@ std::string TexturePVRRGB888::title() const
 void TexturePVRA8::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_a8.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -996,7 +996,7 @@ std::string TexturePVRA8::title() const
 void TexturePVRI8::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_i8.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -1019,7 +1019,7 @@ std::string TexturePVRI8::title() const
 void TexturePVRAI88::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_ai88.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -1036,7 +1036,7 @@ std::string TexturePVRAI88::title() const
 void TexturePVR2BPPv3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_pvrtc2bpp_v3.pvr");
 
@@ -1063,7 +1063,7 @@ std::string TexturePVR2BPPv3::subtitle() const
 void TexturePVRII2BPPv3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_pvrtcii2bpp_v3.pvr");
 
@@ -1090,7 +1090,7 @@ std::string TexturePVRII2BPPv3::subtitle() const
 void TexturePVR4BPPv3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_pvrtc4bpp_v3.pvr");
 
@@ -1125,7 +1125,7 @@ std::string TexturePVR4BPPv3::subtitle() const
 void TexturePVRII4BPPv3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_pvrtcii4bpp_v3.pvr");
 
@@ -1156,7 +1156,7 @@ std::string TexturePVRII4BPPv3::subtitle() const
 void TexturePVRRGBA8888v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgba8888_v3.pvr");
 
@@ -1183,7 +1183,7 @@ std::string TexturePVRRGBA8888v3::subtitle() const
 void TexturePVRBGRA8888v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_bgra8888_v3.pvr");
 
@@ -1214,7 +1214,7 @@ std::string TexturePVRBGRA8888v3::subtitle() const
 void TexturePVRRGBA5551v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgba5551_v3.pvr");
 
@@ -1241,7 +1241,7 @@ std::string TexturePVRRGBA5551v3::subtitle() const
 void TexturePVRRGBA4444v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgba4444_v3.pvr");
 
@@ -1268,7 +1268,7 @@ std::string TexturePVRRGBA4444v3::subtitle() const
 void TexturePVRRGB565v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgb565_v3.pvr");
 
@@ -1295,7 +1295,7 @@ std::string TexturePVRRGB565v3::subtitle() const
 void TexturePVRRGB888v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_rgb888_v3.pvr");
 
@@ -1322,7 +1322,7 @@ std::string TexturePVRRGB888v3::subtitle() const
 void TexturePVRA8v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_a8_v3.pvr");
 
@@ -1349,7 +1349,7 @@ std::string TexturePVRA8v3::subtitle() const
 void TexturePVRI8v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_i8_v3.pvr");
 
@@ -1376,7 +1376,7 @@ std::string TexturePVRI8v3::subtitle() const
 void TexturePVRAI88v3::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image_ai88_v3.pvr");
 
@@ -1409,7 +1409,7 @@ std::string TexturePVRAI88v3::subtitle() const
 void TexturePVRBadEncoding::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/test_image-bad_encoding.pvr");
     if (img)
@@ -1437,7 +1437,7 @@ std::string TexturePVRBadEncoding::subtitle() const
 void TexturePVRNonSquare::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/grossini_128x256_mipmap.pvr");
     img->setPosition(Vec2(s.width / 2.0f, s.height / 2.0f));
@@ -1463,7 +1463,7 @@ std::string TexturePVRNonSquare::subtitle() const
 void TexturePVRNPOT4444::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/grossini_pvr_rgba4444.pvr");
     if (img)
@@ -1492,7 +1492,7 @@ std::string TexturePVRNPOT4444::subtitle() const
 void TexturePVRNPOT8888::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto img = Sprite::create("Images/grossini_pvr_rgba8888.pvr");
     if (img)
@@ -1521,7 +1521,7 @@ std::string TexturePVRNPOT8888::subtitle() const
 void TextureAlias::onEnter()
 {
     TextureDemo::onEnter();
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     //
     // Sprite 1: GL_LINEAR
@@ -1583,7 +1583,7 @@ void TexturePixelFormat::onEnter()
     // 4- 16-bit RGB565
     TextureDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto background = LayerColor::create(Color32(128, 128, 128, 255), s.width, s.height);
     addChild(background, -1);
@@ -1722,7 +1722,7 @@ void TextureAsync::onEnter()
 
     _imageOffset = 0;
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto label = Label::createWithTTF("Loading...", "fonts/Marker Felt.ttf", 32);
     label->setPosition(Vec2(size.width / 2, size.height / 2));
@@ -1778,7 +1778,7 @@ void TextureAsync::imageLoaded(Texture2D* texture)
     sprite->setAnchorPoint(Vec2(0, 0));
     addChild(sprite, -1);
 
-    auto size = director->getLogicalSize();
+    auto size = director->getCanvasSize();
     int i     = _imageOffset * 32;
     sprite->setPosition(Vec2(i % (int)size.width, (i / (int)size.width) * 32));
 
@@ -1806,7 +1806,7 @@ void TextureGlClamp::onEnter()
 {
     TextureDemo::onEnter();
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     // The .png image MUST be power of 2 in order to create a continue effect.
     // eg: 32x64, 512x128, 256x1024, 64x64, etc..
@@ -1842,7 +1842,7 @@ void TextureGlRepeat::onEnter()
 {
     TextureDemo::onEnter();
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     // The .png image MUST be power of 2 in order to create a continue effect.
     // eg: 32x64, 512x128, 256x1024, 64x64, etc..
@@ -1929,7 +1929,7 @@ void TextureCache1::onEnter()
 {
     TextureDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     Sprite* sprite;
 
@@ -2016,7 +2016,7 @@ void TextureDrawAtPoint::onDraw(const Mat4& transform, uint32_t flags)
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     _tex1->drawAtPoint(Vec2(s.width / 2 - 50, s.height / 2 - 50), _globalZOrder);
     _Tex2F->drawAtPoint(Vec2(s.width / 2 + 50, s.height / 2 - 50), _globalZOrder);
@@ -2055,7 +2055,7 @@ void TextureDrawInRect::onDraw(const Mat4& transform, uint32_t flags)
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto rect1 = Rect(s.width / 2 - 80, 20, _tex1->getContentSize().width * 0.5f, _tex1->getContentSize().height * 2);
     auto rect2 =
@@ -2117,7 +2117,7 @@ void TextureMemoryAlloc::onEnter()
     menu2->alignItemsHorizontally();
 
     addChild(menu2);
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     menu2->setPosition(Vec2(s.width / 2, s.height / 4));
 }
@@ -2165,7 +2165,7 @@ void TextureMemoryAlloc::updateImage(ax::Object* sender)
 
     _background->setVisible(false);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
 }
 
@@ -2182,7 +2182,7 @@ std::string TextureMemoryAlloc::subtitle() const
 // TexturePVRv3Premult
 TexturePVRv3Premult::TexturePVRv3Premult()
 {
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto background = LayerColor::create(Color32(128, 128, 128, 255), size.width, size.height);
     addChild(background, -1);
@@ -2231,7 +2231,7 @@ TextureS3TCDxt1::TextureS3TCDxt1()
 {
     auto sprite = Sprite::create("Images/test_256x256_s3tc_dxt1_mipmaps.dds");
     // auto sprite = Sprite::create("Images/water_2_dxt1.dds");
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(sprite);
@@ -2250,7 +2250,7 @@ TextureS3TCDxt3::TextureS3TCDxt3()
 {
     auto sprite = Sprite::create("Images/test_256x256_s3tc_dxt3_mipmaps.dds");
     // auto sprite = Sprite::create("Images/water_2_dxt3.dds");
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(sprite);
@@ -2269,7 +2269,7 @@ TextureS3TCDxt5::TextureS3TCDxt5()
 {
     auto sprite = Sprite::create("Images/test_256x256_s3tc_dxt5_mipmaps.dds");
     // auto sprite = Sprite::create("Images/water_2_dxt5.dds");
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(sprite);
@@ -2287,7 +2287,7 @@ std::string TextureS3TCDxt5::subtitle() const
 TextureS3TCWithNoMipmaps::TextureS3TCWithNoMipmaps()
 {
     auto sprite = Sprite::create("Images/test_512x512_s3tc_dxt5_with_no_mipmaps.dds");
-    auto size   = Director::getInstance()->getLogicalSize();
+    auto size   = Director::getInstance()->getCanvasSize();
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(sprite);
@@ -2302,7 +2302,7 @@ TextureATITCRGB::TextureATITCRGB()
 {
     auto sprite = Sprite::create("Images/test_256x256_ATC_RGB_mipmaps.ktx");
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(sprite);
@@ -2320,7 +2320,7 @@ TextureATITCExplicit::TextureATITCExplicit()
 {
     auto sprite = Sprite::create("Images/test_256x256_ATC_RGBA_Explicit_mipmaps.ktx");
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(sprite);
@@ -2338,7 +2338,7 @@ TextureATITCInterpolated::TextureATITCInterpolated()
 {
     auto sprite = Sprite::create("Images/test_256x256_ATC_RGBA_Interpolated_mipmaps.ktx");
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     sprite->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(sprite);
@@ -2367,7 +2367,7 @@ void TextureConvertRGB888::onEnter()
 {
     TextureDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto background = LayerColor::create(Color32(255, 0, 0, 255), s.width, s.height);
     addChild(background, -1);
@@ -2398,7 +2398,7 @@ void TextureConvertRGBA8888::onEnter()
 {
     TextureDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto background = LayerColor::create(Color32(255, 0, 0, 255), s.width, s.height);
     addChild(background, -1);
@@ -2429,7 +2429,7 @@ void TextureConvertL8::onEnter()
 {
     TextureDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto background = LayerColor::create(Color32(255, 0, 0, 255), s.width, s.height);
     addChild(background, -1);
@@ -2460,7 +2460,7 @@ void TextureConvertLA8::onEnter()
 {
     TextureDemo::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto background = LayerColor::create(Color32(255, 0, 0, 255), s.width, s.height);
     addChild(background, -1);

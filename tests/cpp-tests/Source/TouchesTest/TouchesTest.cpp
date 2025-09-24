@@ -148,7 +148,7 @@ char formatBuffer[256] = {
 
 ForceTouchTest::ForceTouchTest()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     _infoLabel =
         Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "Current force value : 0.00, maximum possible force : 0.00");

@@ -1,4 +1,4 @@
-local size = ax.Director:getInstance():getLogicalSize()
+local size = ax.Director:getInstance():getCanvasSize()
 local layer = nil
 local kTagSprite = 1
 

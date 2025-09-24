@@ -225,8 +225,8 @@ bool Follow::initWithTargetAndOffset(Node* followedNode, float xOffset, float yO
     _boundarySet          = !rect.equals(Rect::ZERO);
     _boundaryFullyCovered = false;
 
-    Vec2 logicalSize = Director::getInstance()->getLogicalSize();
-    _fullScreenSize.set(logicalSize.width, logicalSize.height);
+    Vec2 canvasSize = Director::getInstance()->getCanvasSize();
+    _fullScreenSize.set(canvasSize.width, canvasSize.height);
     _halfScreenSize = _fullScreenSize * 0.5f;
     _offsetX        = xOffset;
     _offsetY        = yOffset;

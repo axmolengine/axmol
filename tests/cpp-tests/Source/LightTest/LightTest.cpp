@@ -37,7 +37,7 @@ LightTest::LightTest() : _directionalLight(nullptr), _pointLight(nullptr), _spot
     addLights();
     scheduleUpdate();
 
-    auto s      = Director::getInstance()->getLogicalSize();
+    auto s      = Director::getInstance()->getCanvasSize();
     auto camera = Camera::createPerspective(60, (float)s.width / s.height, 1.0f, 1000.0f);
     camera->setCameraFlag(CameraFlag::USER1);
     camera->setPosition3D(Vec3(0.0f, 100.0f, 100.0f));
@@ -105,7 +105,7 @@ std::string LightTest::title() const
 
 void LightTest::addSprite()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     //{
     //    std::string fileName = "MeshRendererTest/plane.c3b";
@@ -165,7 +165,7 @@ void LightTest::addSprite()
 
 void LightTest::addLights()
 {
-    auto s        = Director::getInstance()->getLogicalSize();
+    auto s        = Director::getInstance()->getCanvasSize();
     _ambientLight = AmbientLight::create(Color32(200, 200, 200));
     _ambientLight->retain();
     _ambientLight->setEnabled(true);

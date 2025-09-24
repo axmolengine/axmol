@@ -9,7 +9,7 @@ local menuItemNames =
     "update",
 }
 
-local winSize = ax.Director:getInstance():getLogicalSize()
+local canvasSize = ax.Director:getInstance():getCanvasSize()
 
 local function updateLayer()
     local layer = ax.Layer:create()
@@ -127,7 +127,7 @@ local function updateLayer()
     for i = 1, #(menuItemNames) do
         local item = ax.MenuItemFont:create(menuItemNames[i])
         item:registerScriptTapHandler(callbackFuncs[i])
-        item:setPosition(winSize.width / 2, winSize.height - i * lineSpace)
+        item:setPosition(canvasSize.width / 2, canvasSize.height - i * lineSpace)
         if not support then
             item:setEnabled(false)
         end

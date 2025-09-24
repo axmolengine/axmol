@@ -196,7 +196,7 @@ void LAppLive2DManager::OnTap(csmFloat32 x, csmFloat32 y)
 void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer) const
 {
     Director* director = Director::getInstance();
-    Size window = director->getLogicalSize();
+    Size window = director->getCanvasSize();
 
     Csm::Rendering::CubismRenderer_Cocos2dx::StartFrame(commandBuffer);
 

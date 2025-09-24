@@ -211,7 +211,7 @@ bool Node::initLayer()
 {
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
-    setContentSize(_director->getLogicalSize());
+    setContentSize(_director->getCanvasSize());
     return true;
 }
 

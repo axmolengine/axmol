@@ -30,7 +30,7 @@ bool Bug1159Layer::init()
 {
     if (BugsTestBase::init())
     {
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
 
         auto background = LayerColor::create(Color32(255, 0, 255, 255));
         addChild(background);

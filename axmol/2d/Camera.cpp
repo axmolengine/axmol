@@ -187,7 +187,7 @@ void Camera::setAdditionalProjection(const Mat4& mat)
 
 void Camera::initDefault()
 {
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
     switch (_director->getProjection())
     {
     case Director::Projection::_2D:
@@ -227,7 +227,7 @@ void Camera::initDefault()
 
 void Camera::updateTransform()
 {
-    auto& size = _director->getLogicalSize();
+    auto& size = _director->getCanvasSize();
     // create default camera
     switch (_director->getProjection())
     {
@@ -290,7 +290,7 @@ Vec2 Camera::project(const Vec3& src) const
 {
     Vec2 screenPos;
 
-    auto worldSize = _director->getLogicalSize();
+    auto worldSize = _director->getCanvasSize();
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
@@ -307,7 +307,7 @@ Vec2 Camera::projectGL(const Vec3& src) const
 {
     Vec2 screenPos;
 
-    auto worldSize = _director->getLogicalSize();
+    auto worldSize = _director->getCanvasSize();
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
@@ -325,14 +325,14 @@ Vec2 Camera::projectGL(const Vec3& src) const
 Vec3 Camera::unproject(const Vec3& src) const
 {
     Vec3 dst;
-    unproject(_director->getLogicalSize(), &src, &dst);
+    unproject(_director->getCanvasSize(), &src, &dst);
     return dst;
 }
 
 Vec3 Camera::unprojectGL(const Vec3& src) const
 {
     Vec3 dst;
-    unprojectGL(_director->getLogicalSize(), &src, &dst);
+    unprojectGL(_director->getCanvasSize(), &src, &dst);
     return dst;
 }
 

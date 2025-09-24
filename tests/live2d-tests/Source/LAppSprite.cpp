@@ -36,15 +36,15 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     // 画面サイズを取得する
     ax::Size visibleSize = ax::Director::getInstance()->getVisibleSize();
-    ax::Size winSize = ax::Director::getInstance()->getLogicalSize();
+    ax::Size canvasSize = ax::Director::getInstance()->getCanvasSize();
 
     // 頂点データ
     float positionVertex[] =
     {
-        visibleSize.width / winSize.width, visibleSize.height / winSize.height,
-       -visibleSize.width / winSize.width, visibleSize.height / winSize.height,
-       -visibleSize.width / winSize.width,-visibleSize.height / winSize.height,
-        visibleSize.width / winSize.width,-visibleSize.height / winSize.height,
+        visibleSize.width / canvasSize.width, visibleSize.height / canvasSize.height,
+       -visibleSize.width / canvasSize.width, visibleSize.height / canvasSize.height,
+       -visibleSize.width / canvasSize.width,-visibleSize.height / canvasSize.height,
+        visibleSize.width / canvasSize.width,-visibleSize.height / canvasSize.height,
     };
 
     short positionIndex[] =

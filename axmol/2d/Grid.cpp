@@ -50,7 +50,7 @@ bool GridBase::initWithSize(const Vec2& gridSize)
 bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
 {
     Director* director = Director::getInstance();
-    Vec2 s             = director->getLogicalSizeInPixels();
+    Vec2 s             = director->getCanvasSizeInPixels();
 
     auto POTWide = utils::nextPOT((unsigned int)s.width);
     auto POTHigh = utils::nextPOT((unsigned int)s.height);
@@ -166,7 +166,7 @@ void GridBase::setTextureFlipped(bool flipped)
 void GridBase::set2DProjection()
 {
     Director* director = Director::getInstance();
-    Vec2 size          = director->getLogicalSizeInPixels();
+    Vec2 size          = director->getCanvasSizeInPixels();
 
     director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 
@@ -195,7 +195,7 @@ void GridBase::beforeDraw()
     auto beforeDrawCommandFunc = [director, renderer, this]() -> void {
         _directorProjection = director->getProjection();
         set2DProjection();
-        Vec2 size = director->getLogicalSizeInPixels();
+        Vec2 size = director->getCanvasSizeInPixels();
         renderer->setViewport(0, 0, (unsigned int)size.width, (unsigned int)size.height);
 
         _oldRenderTarget = renderer->getRenderTarget();

@@ -52,7 +52,7 @@ void MotionStreakTest1::onEnter()
 {
     MotionStreakTest::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // the root object just rotates around
     _root = Sprite::create(s_pathR1);
@@ -109,7 +109,7 @@ void MotionStreakTest2::onEnter()
     listener->onTouchesMoved = AX_CALLBACK_2(MotionStreakTest2::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // create the streak object and add it to the scene
     _streak = MotionStreak::create(3, 3, 64, Color32::WHITE, s_streak);
@@ -146,7 +146,7 @@ void Issue1358::onEnter()
     MotionStreakTest::onEnter();
 
     // ask director the the window size
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     _streak = MotionStreak::create(2.0f, 1.0f, 50.0f, Color32(255, 255, 0), "Images/Icon.png");
     addChild(_streak);
@@ -186,7 +186,7 @@ void Issue12226::onEnter()
     MotionStreakTest::onEnter();
 
     // ask director the the window size
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
 
     auto radius = size.width / 3;
 
@@ -253,7 +253,7 @@ void MotionStreakTest::onEnter()
 {
     TestCase::onEnter();
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     auto itemMode = MenuItemToggle::createWithCallback(AX_CALLBACK_1(MotionStreakTest::modeCallback, this),
                                                        MenuItemFont::create("Use High Quality Mode"),

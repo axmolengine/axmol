@@ -102,7 +102,7 @@ void TransitionPageTurn::onEnter()
     _inSceneProxy->onEnter();
     _outSceneProxy->onEnter();
 
-    Vec2 s = _director->getLogicalSize();
+    Vec2 s = _director->getCanvasSize();
     int x, y;
     if (s.width > s.height)
     {

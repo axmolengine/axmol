@@ -50,7 +50,7 @@ public:
     void updatePosition(const Vec2& touchPoint)
     {
         _drawNode->clear();
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         _drawNode->drawLine(Vec2(0.0f, touchPoint.y), Vec2(s.width, touchPoint.y), _touchColor);
         _drawNode->drawLine(Vec2(touchPoint.x, 0.0f), Vec2(touchPoint.x, s.height), _touchColor);
         _drawNode->drawDot(touchPoint, 3, _touchColor);

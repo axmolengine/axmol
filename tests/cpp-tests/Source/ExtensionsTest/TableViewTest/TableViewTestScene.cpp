@@ -42,11 +42,11 @@ bool TableViewTest::init()
         return false;
     }
 
-    Size winSize = Director::getInstance()->getLogicalSize();
+    Size canvasSize = Director::getInstance()->getCanvasSize();
 
     TableView* tableView = TableView::create(this, Size(250.0f, 60.0f));
     tableView->setDirection(ScrollView::Direction::HORIZONTAL);
-    tableView->setPosition(Vec2(20.0f, winSize.height / 2 - 30));
+    tableView->setPosition(Vec2(20.0f, canvasSize.height / 2 - 30));
     tableView->setDelegate(this);
     this->addChild(tableView);
     tableView->reloadData();
@@ -59,7 +59,7 @@ bool TableViewTest::init()
 
     tableView = TableView::create(this, Size(60.0f, 250.0f));
     tableView->setDirection(ScrollView::Direction::VERTICAL);
-    tableView->setPosition(Vec2(winSize.width - 150, winSize.height / 2 - 120));
+    tableView->setPosition(Vec2(canvasSize.width - 150, canvasSize.height / 2 - 120));
     tableView->setDelegate(this);
     tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
     this->addChild(tableView);

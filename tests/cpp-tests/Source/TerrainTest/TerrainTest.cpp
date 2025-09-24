@@ -180,7 +180,7 @@ void TerrainWalkThru::onTouchesEnd(const std::vector<ax::Touch*>& touches, ax::E
         {
             Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
-            auto size = Director::getInstance()->getLogicalSize();
+            auto size = Director::getInstance()->getCanvasSize();
             _camera->unproject(size, &nearP, &nearP);
             _camera->unproject(size, &farP, &farP);
             Vec3 dir = farP - nearP;

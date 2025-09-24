@@ -52,7 +52,7 @@ function SpineTestLayerNormal:init()
   skeletonNode:addAnimation(0, "jump", false, 3)
   skeletonNode:addAnimation(0, "run", true)
 
-  local windowSize = ax.Director:getInstance():getLogicalSize()
+  local windowSize = ax.Director:getInstance():getCanvasSize()
   skeletonNode:setPosition(ax.p(windowSize.width / 2, 20))
   self:addChild(skeletonNode)
 
@@ -103,7 +103,7 @@ function SpineTestLayerFFD:init()
   skeletonNode:setSkin("goblin")
 
   skeletonNode:setScale(0.5)
-  local windowSize = ax.Director:getInstance():getLogicalSize()
+  local windowSize = ax.Director:getInstance():getCanvasSize()
   skeletonNode:setPosition(ax.p(windowSize.width / 2, 20))
   self:addChild(skeletonNode)
 

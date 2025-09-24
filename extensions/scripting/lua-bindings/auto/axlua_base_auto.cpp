@@ -26205,7 +26205,7 @@ int lua_ax_base_Director_setNotificationNode(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Director_getLogicalSize(lua_State* tolua_S)
+int lua_ax_base_Director_getCanvasSize(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* obj = nullptr;
@@ -26225,7 +26225,7 @@ int lua_ax_base_Director_getLogicalSize(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_getLogicalSize'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_getCanvasSize'", nullptr);
         return 0;
     }
 #endif
@@ -26235,24 +26235,24 @@ int lua_ax_base_Director_getLogicalSize(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getLogicalSize'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getCanvasSize'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getLogicalSize();
+        auto&& ret = obj->getCanvasSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getLogicalSize",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getCanvasSize",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getLogicalSize'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getCanvasSize'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Director_getLogicalSizeInPixels(lua_State* tolua_S)
+int lua_ax_base_Director_getCanvasSizeInPixels(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* obj = nullptr;
@@ -26272,7 +26272,7 @@ int lua_ax_base_Director_getLogicalSizeInPixels(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_getLogicalSizeInPixels'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_getCanvasSizeInPixels'", nullptr);
         return 0;
     }
 #endif
@@ -26282,19 +26282,19 @@ int lua_ax_base_Director_getLogicalSizeInPixels(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getLogicalSizeInPixels'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getCanvasSizeInPixels'", nullptr);
             return 0;
         }
-        auto&& ret = obj->getLogicalSizeInPixels();
+        auto&& ret = obj->getCanvasSizeInPixels();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getLogicalSizeInPixels",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getCanvasSizeInPixels",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getLogicalSizeInPixels'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getCanvasSizeInPixels'.",&tolua_err);
 #endif
 
     return 0;
@@ -28720,8 +28720,8 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"isSendCleanupToScene",lua_ax_base_Director_isSendCleanupToScene);
         tolua_function(tolua_S,"getNotificationNode",lua_ax_base_Director_getNotificationNode);
         tolua_function(tolua_S,"setNotificationNode",lua_ax_base_Director_setNotificationNode);
-        tolua_function(tolua_S,"getLogicalSize",lua_ax_base_Director_getLogicalSize);
-        tolua_function(tolua_S,"getLogicalSizeInPixels",lua_ax_base_Director_getLogicalSizeInPixels);
+        tolua_function(tolua_S,"getCanvasSize",lua_ax_base_Director_getCanvasSize);
+        tolua_function(tolua_S,"getCanvasSizeInPixels",lua_ax_base_Director_getCanvasSizeInPixels);
         tolua_function(tolua_S,"getVisibleSize",lua_ax_base_Director_getVisibleSize);
         tolua_function(tolua_S,"getVisibleOrigin",lua_ax_base_Director_getVisibleOrigin);
         tolua_function(tolua_S,"getSafeAreaRect",lua_ax_base_Director_getSafeAreaRect);

@@ -159,7 +159,7 @@ function CreateTestMenu()
     end
 
     -- add close menu
-    local s = ax.Director:getInstance():getLogicalSize()
+    local s = ax.Director:getInstance():getCanvasSize()
     local CloseItem = ax.MenuItemImage:create(s_pPathClose, s_pPathClose)
     CloseItem:registerScriptTapHandler(closeCallback)
     CloseItem:setAnchorPoint(1, 1)
@@ -221,14 +221,14 @@ function CreateTestMenu()
         local nMoveY = location.y - BeginPos.y
         local curPosx, curPosy = MainMenu:getPosition()
         local nextPosy = curPosy + nMoveY
-        local winSize = ax.Director:getInstance():getLogicalSize()
+        local canvasSize = ax.Director:getInstance():getCanvasSize()
         if nextPosy < 0 then
             MainMenu:setPosition(0, 0)
             return
         end
 
-        if nextPosy > ((TESTS_COUNT + 1) * LINE_SPACE - winSize.height) then
-            MainMenu:setPosition(0, ((TESTS_COUNT + 1) * LINE_SPACE - winSize.height))
+        if nextPosy > ((TESTS_COUNT + 1) * LINE_SPACE - canvasSize.height) then
+            MainMenu:setPosition(0, ((TESTS_COUNT + 1) * LINE_SPACE - canvasSize.height))
             return
         end
 

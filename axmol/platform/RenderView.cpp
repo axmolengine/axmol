@@ -148,7 +148,7 @@ void RenderView::updateDesignResolution()
 
         // reset director's member variables to fit visible rect
         auto director = Director::getInstance();
-        director->setLogicalSize(getDesignResolutionSize());
+        director->setCanvasSize(getDesignResolutionSize());
         director->setProjection(director->getProjection());
     }
 }

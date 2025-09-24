@@ -45,7 +45,7 @@ RenderTextureTests::RenderTextureTests()
  */
 RenderTextureSave::RenderTextureSave()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // create a render texture, this is what we are going to draw into
     _target = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA8);
@@ -150,7 +150,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Object* sender)
 
 void RenderTextureSave::addImage(ax::Object* sender)
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // begin drawing to the render texture
     _target->begin();
@@ -236,7 +236,7 @@ RenderTextureIssue937::RenderTextureIssue937()
     auto background = LayerColor::create(Color32(200, 200, 200, 255));
     addChild(background);
 
-    auto s            = Director::getInstance()->getLogicalSize();
+    auto s            = Director::getInstance()->getCanvasSize();
     auto spr_premulti = Sprite::create("Images/fire.png");
     spr_premulti->setPosition(Vec2(s.width / 2 - 16, s.height / 2 + 16));
 
@@ -253,7 +253,7 @@ RenderTextureIssue937::RenderTextureIssue937()
 
     auto spr_size = spr_premulti->getContentSize();
     rend->setKeepMatrix(true);
-    Size pixelSize = Director::getInstance()->getLogicalSizeInPixels();
+    Size pixelSize = Director::getInstance()->getCanvasSizeInPixels();
     rend->setVirtualViewport(Vec2(s.width / 2 - 32, s.height / 2 - 32), Rect(0, 0, s.width, s.height),
                              Rect(0, 0, pixelSize.width, pixelSize.height));
 
@@ -294,7 +294,7 @@ RenderTextureZbuffer::RenderTextureZbuffer()
     listener->onTouchesEnded = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto size  = Director::getInstance()->getLogicalSize();
+    auto size  = Director::getInstance()->getCanvasSize();
     auto label = Label::createWithTTF("vertexZ = 50", "fonts/Marker Felt.ttf", 64);
     label->setPosition(Vec2(size.width / 2, size.height * 0.25f));
     this->addChild(label);
@@ -433,7 +433,7 @@ RenderTexturePartTest::RenderTexturePartTest()
     auto sprite11    = Sprite::create("Images/grossini.png");
     auto sprite2     = Sprite::create("Images/grossinis_sister1.png");
     auto sprite22    = Sprite::create("Images/grossinis_sister1.png");
-    Size size        = Director::getInstance()->getLogicalSize();
+    Size size        = Director::getInstance()->getCanvasSize();
     Size sprite1Size = sprite1->getContentSize();
     sprite1->setPosition((size.width - sprite1Size.width) / 2 - 20, (size.height - sprite1Size.height) / 2 - 20);
     sprite11->setPosition(size.width / 2 + 20, (size.height - sprite1Size.height) / 2 - 20);
@@ -449,7 +449,7 @@ RenderTexturePartTest::RenderTexturePartTest()
     _rend = RenderTexture::create(200, 200, rhi::PixelFormat::RGBA8);
     _rend->retain();
     _rend->setKeepMatrix(true);
-    Size pixelSize = Director::getInstance()->getLogicalSizeInPixels();
+    Size pixelSize = Director::getInstance()->getCanvasSizeInPixels();
     _rend->setVirtualViewport(Vec2(size.width / 2 - 150, size.height / 2 - 150), Rect(0, 0, size.width, size.height),
                               Rect(0, 0, pixelSize.width, pixelSize.height));
 
@@ -487,7 +487,7 @@ std::string RenderTexturePartTest::subtitle() const
 
 RenderTextureTestDepthStencil::RenderTextureTestDepthStencil()
 {
-    auto s = _director->getLogicalSize();
+    auto s = _director->getCanvasSize();
 
     _renderer = _director->getRenderer();
 
@@ -612,7 +612,7 @@ RenderTextureTargetNode::RenderTextureTargetNode()
     // sprite 2
     sprite2 = Sprite::create("Images/fire_rgba8888.pvr");
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     /* Create the render texture */
     renderTexture = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA4);
@@ -711,7 +711,7 @@ void SpriteRenderTextureBug::SimpleSprite::draw(Renderer* renderer, const Mat4& 
 {
     if (_rt == nullptr)
     {
-        auto s = Director::getInstance()->getLogicalSize();
+        auto s = Director::getInstance()->getCanvasSize();
         _rt    = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA8);
         _rt->retain();
     }
@@ -727,7 +727,7 @@ SpriteRenderTextureBug::SpriteRenderTextureBug()
     listener->onTouchesEnded = AX_CALLBACK_2(SpriteRenderTextureBug::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
     addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 
@@ -789,17 +789,17 @@ std::string SpriteRenderTextureBug::subtitle() const
 //
 Issue16113Test::Issue16113Test()
 {
-    auto s = Director::getInstance()->getLogicalSize();
+    auto s = Director::getInstance()->getCanvasSize();
 
     // Save Image menu
     MenuItemFont::setFontSize(16);
     auto item1 = MenuItemFont::create("Save Image", [&](Object* ref) {
-        auto winSize = Director::getInstance()->getVisibleSize();
+        auto canvasSize = Director::getInstance()->getVisibleSize();
         auto text    = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 40);
         text->setTextColor(Color32::RED);
-        auto target = RenderTexture::create(winSize.width, winSize.height, rhi::PixelFormat::RGBA8);
+        auto target = RenderTexture::create(canvasSize.width, canvasSize.height, rhi::PixelFormat::RGBA8);
         target->beginWithClear(0, 0, 0, 0);
-        text->setPosition(winSize.width / 2, winSize.height / 2);
+        text->setPosition(canvasSize.width / 2, canvasSize.height / 2);
         text->Node::visit();
         target->end();
         auto callback = [this](RenderTexture* rt, std::string_view path) { rt->release(); };

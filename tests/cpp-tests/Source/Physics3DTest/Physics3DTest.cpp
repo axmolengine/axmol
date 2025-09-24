@@ -74,7 +74,7 @@ void Physics3DDemoDisabled::onEnter()
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
     auto label = Label::createWithTTF(ttfConfig, "Should enable AX_ENABLE_3D_PHYSICS\n to run this test case");
 
-    auto size = Director::getInstance()->getLogicalSize();
+    auto size = Director::getInstance()->getCanvasSize();
     label->setPosition(Vec2(size.width / 2, size.height / 2));
 
     addChild(label);
@@ -102,7 +102,7 @@ bool Physics3DTestDemo::init()
         getPhysics3DWorld()->setDebugDrawEnable(false);
 
         physicsScene = this;
-        Size size    = Director::getInstance()->getLogicalSize();
+        Size size    = Director::getInstance()->getCanvasSize();
         _camera      = Camera::createPerspective(30.0f, size.width / size.height, 1.0f, 1000.0f);
         _camera->setPosition3D(Vec3(0.0f, 50.0f, 100.0f));
         _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
@@ -544,7 +544,7 @@ void Physics3DConstraintDemo::onTouchesBegan(const std::vector<ax::Touch*>& touc
         auto location = touch->getLocationInView();
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
-        auto size = Director::getInstance()->getLogicalSize();
+        auto size = Director::getInstance()->getCanvasSize();
         _camera->unproject(size, &nearP, &nearP);
         _camera->unproject(size, &farP, &farP);
 
@@ -577,7 +577,7 @@ void Physics3DConstraintDemo::onTouchesMoved(const std::vector<ax::Touch*>& touc
         auto location = touch->getLocationInView();
         Vec3 nearP(location.x, location.y, 0.0f), farP(location.x, location.y, 1.0f);
 
-        auto size = Director::getInstance()->getLogicalSize();
+        auto size = Director::getInstance()->getCanvasSize();
         _camera->unproject(size, &nearP, &nearP);
         _camera->unproject(size, &farP, &farP);
         auto dir = (farP - nearP).getNormalized();

@@ -2,7 +2,7 @@ local AssetManagerModule = {}
 
 function AssetManagerModule.newScene(backfunc)
 
-    local winSize = ax.Director:getInstance():getLogicalSize()
+    local canvasSize = ax.Director:getInstance():getCanvasSize()
 
     local newScene = ax.Scene:create()
     local layer    = ax.Layer:create()
@@ -28,12 +28,12 @@ function AssetManagerModule.newScene(backfunc)
 
     local helloLabel =  ax.Label:createWithTTF("Hello World", s_arialPath, 38)
     helloLabel:setAnchorPoint(ax.p(0.5, 0.5))
-    helloLabel:setPosition(ax.p(winSize.width / 2, winSize.height - 40))
+    helloLabel:setPosition(ax.p(canvasSize.width / 2, canvasSize.height - 40))
     layer:addChild(helloLabel, 5)
 
     local sprite = ax.Sprite:create("Images/background.png")
     sprite:setAnchorPoint(ax.p(0.5, 0.5))
-    sprite:setPosition(ax.p(winSize.width / 2, winSize.height / 2))
+    sprite:setPosition(ax.p(canvasSize.width / 2, canvasSize.height / 2))
     layer:addChild(sprite, 0)
 
     newScene:addChild(layer)

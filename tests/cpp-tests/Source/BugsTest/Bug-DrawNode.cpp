@@ -37,7 +37,7 @@ bool BugDrawNodeLayer::init()
 {
     if (BugsTestBase::init())
     {
-        auto size       = Director::getInstance()->getLogicalSize();
+        auto size       = Director::getInstance()->getCanvasSize();
         auto testSprite = Sprite::create("Images/close.png");
         BlendFunc blend;
         blend.src = rhi::BlendFactor::ZERO;
