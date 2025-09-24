@@ -211,6 +211,14 @@ void TransitionScene::onExit()
     // only the onEnterTransitionDidFinish
     _inScene->onEnterTransitionDidFinish();
 
+    // Ensure that a valid scene exists, otherwise
+    // the director is being reset, so the transition
+    // is responsible for the cleanup of the _inScene
+    if (!Director::getInstance()->getRunningScene())
+    {
+        _inScene->onExit();
+    }
+
 #if AX_ENABLE_SCRIPT_BINDING
     if (ScriptEngineManager::getInstance()->getScriptEngine())
         ScriptEngineManager::getInstance()->getScriptEngine()->garbageCollect();
