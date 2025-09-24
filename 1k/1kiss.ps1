@@ -63,8 +63,6 @@ param(
     [switch]$rebuild
 )
 
-$myRoot = $PSScriptRoot
-
 $HOST_WIN = 0 # targets: win,uwp,android
 $HOST_LINUX = 1 # targets: linux,android
 $HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
@@ -379,7 +377,7 @@ function eval($str, $raw = $false) {
 }
 
 function create_symlink($sourcePath, $destPath) {
-    & "$myRoot\fsync.ps1" -s $sourcePath -d $destPath -l $true 2>$null
+    & "$PSScriptRoot\fsync.ps1" -s $sourcePath -d $destPath -l $true 2>$null
     if(!$?) {
         throw "create_symlink $destPath ==> $sourcePath fail"
     }
@@ -474,7 +472,7 @@ $Global:is_clang = $TOOLCHAIN_NAME -eq 'clang'
 $Global:is_msvc = $TOOLCHAIN_NAME -eq 'msvc'
 
 # load toolset manifest
-$manifest_file = Join-Path $myRoot 'manifest.ps1'
+$manifest_file = Join-Path $PSScriptRoot 'manifest.ps1'
 if ($1k.isfile($manifest_file)) {
     . $manifest_file
 }
@@ -514,9 +512,9 @@ else {
 $1k.println("proj_dir=$((Get-Location).Path), install_prefix=$install_prefix")
 
 # 1kdist
-$sentry_file = Join-Path $myRoot '.gitee'
+$sentry_file = Join-Path $PSScriptRoot '.gitee'
 $mirror = if ($1k.isfile($sentry_file)) { 'gitee' } else { 'github' }
-$mirror_conf_file = $1k.realpath("$myRoot/../manifest.json")
+$mirror_conf_file = $1k.realpath("$PSScriptRoot/../manifest.json")
 $mirror_current = $null
 $devtools_url_base = $null
 $1kdist_ver = $null
@@ -772,7 +770,7 @@ function download_and_expand($url, $out, $dest) {
         $1k.mkdirs($dest)
         if ($out.EndsWith('.zip')) {
             if ($IsWin) {
-                Expand-Archive -Path $out -DestinationPath $dest
+                Expand-Archive -Path $out -DestinationPath $dest -Force
             }
             else {
                 unzip -d $dest $out | Out-Null
@@ -995,6 +993,11 @@ function setup_axslcc() {
         return $axslcc_prog
     }
 
+    $axslcc_prog = (Join-Path $axslcc_bin "axslcc$EXE_SUFFIX")
+    if($1k.isfile($axslcc_prog)) {
+        $1k.del($axslcc_prog)
+    }
+
     $suffix = @('win64.zip', 'linux.tar.gz', 'osx{0}.tar.gz')[$HOST_OS_INT]
     if ($IsMacOS) {
         if ([System.VersionEx]$axslcc_ver -ge [System.VersionEx]'1.9.4.1') {
@@ -1008,7 +1011,6 @@ function setup_axslcc() {
     $glscc_base_url = $mirror_current.axslcc
     fetch_pkg "$mirror_url_base$glscc_base_url/v$axslcc_ver/axslcc-$axslcc_ver-$suffix" -exrep "axslcc"
 
-    $axslcc_prog = (Join-Path $axslcc_bin "axslcc$EXE_SUFFIX")
     if ($1k.isfile($axslcc_prog)) {
         $1k.println("Using axslcc: $axslcc_prog, version: $axslcc_ver")
     } else {
@@ -1039,7 +1041,7 @@ function setup_ninja() {
 # setup cmake
 function setup_cmake($skipOS = $false) {
     $cmake_prog, $cmake_ver = find_prog -name 'cmake'
-    if ($cmake_prog -and (!$skipOS -or $cmake_prog.Contains($myRoot))) {
+    if ($cmake_prog -and (!$skipOS -or $cmake_prog.Contains($PSScriptRoot))) {
         return $cmake_prog, $cmake_ver
     }
 
@@ -1211,7 +1213,7 @@ function setup_unzip() {
     $unzip_cmd_info = Get-Command 'unzip' -ErrorAction SilentlyContinue
     if (!$unzip_cmd_info) {
         if ($IsLinux) {
-            if ($(which dpkg)) { 
+            if ($(which dpkg)) {
                 sudo apt install unzip
             }
             elseif($(which pacman)) {
@@ -1323,7 +1325,7 @@ function setup_android_sdk() {
             return $null
         }
         $1k.println("Looking require $ndk_ver$IsGraterThan in $sdk_dir")
-        
+
         $ndk_major = ($ndk_ver -replace '[^0-9]', '')
         $ndk_minor_off = "$ndk_major".Length + 1
         $ndk_minor = if ($ndk_minor_off -lt $ndk_ver.Length) { "$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)" } else { '0' }
@@ -1367,7 +1369,7 @@ function setup_android_sdk() {
     }
 
     $ndk_root = &$find_ndk_in $selected_sdk_root
-    
+
     $sdk_comps = @()
 
     ### cmdline-tools ###
@@ -1412,7 +1414,7 @@ function setup_android_sdk() {
                 "android-ndk-${ndk_r23d_rev}-linux-x86_64.zip",
                 "android-ndk-${ndk_r23d_rev}-darwin-x86_64.zip")[$HOST_OS_INT]
             $_target_os = @('win64', 'linux', 'darwin_mac')[$HOST_OS_INT]
-            . (Join-Path $myRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -manifest gcloud -out_var 'artifact_info'
+            . (Join-Path $PSScriptRoot 'resolv-url.ps1') -artifact $_artifact -target $_target_os -build_id $ndk_r23d_rev -manifest gcloud -out_var 'artifact_info'
             $artifact_url = $artifact_info[0].messageData
             $full_ver = "23.3.${ndk_r23d_rev}"
             $ndk_root = Join-Path $ndk_prefix $full_ver
@@ -1592,23 +1594,22 @@ function setup_gclient() {
 function preprocess_win() {
     $outputOptions = @()
 
-    if ($options.sdk) {
-        $outputOptions += "-DCMAKE_SYSTEM_VERSION=$($options.sdk)"
-    }
-
+    # Determine arch name
     if ($Global:is_msvc) {
-        # Generate vs2019 on github ci
-        # Determine arch name
         $arch = if ($options.a -eq 'x86') { 'Win32' } else { $options.a }
-
-        # arch
         $vs_ver = [VersionEx]$Global:VS_INST.installationVersion
         if ($vs_ver -ge [VersionEx]'16.0') {
-            $outputOptions += '-A', $arch
             if ($TOOLCHAIN_VER -match '^\d+$') {
                 $outputOptions += "-Tv$TOOLCHAIN_VER"
             } elseif($TOOLCHAIN_VER -match '^\d+\.\d+$') {
                 $outputOptions += '-T', "version=$TOOLCHAIN_VER"
+            }
+            # refer: https://cmake.org/cmake/help/latest/variable/CMAKE_GENERATOR_PLATFORM.html
+            if($options.sdk) {
+                $outputOptions += "-DCMAKE_GENERATOR_PLATFORM=$arch,version=$($options.sdk)"
+            }
+            else {
+                $outputOptions += "-DCMAKE_GENERATOR_PLATFORM=$arch"
             }
         }
         else {
@@ -1622,7 +1623,7 @@ function preprocess_win() {
             if (!$Script:cmake_generator) {
                 throw "Unsupported toolchain: $TOOLCHAIN$TOOLCHAIN_VER"
             }
-            if ($options.a -eq "x64") {
+            if ($arch -eq "x64") {
                 $Script:cmake_generator += ' Win64'
             }
         }
@@ -1640,7 +1641,13 @@ function preprocess_win() {
         }
     }
     elseif ($Global:is_clang) {
+        $outputOptions += "-DTARGET_ARCH=$($options.a)"
+        if ($options.sdk) { # clang: set preferred version, depends on project self
+            $outputOptions += "-DWINDOWS_SDK_VERSION=$($options.sdk)"
+        }
         $outputOptions += '-DCMAKE_C_COMPILER=clang', '-DCMAKE_CXX_COMPILER=clang++'
+        # export compile commands for diag purpose
+        $outputOptions += '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
         $Script:cmake_generator = 'Ninja Multi-Config'
     }
     else {
@@ -1728,7 +1735,7 @@ function preprocess_ios() {
         $arch = 'x86_64'
     }
     if (!$cmake_toolchain_file) {
-        $cmake_toolchain_file = Join-Path $myRoot 'ios.cmake'
+        $cmake_toolchain_file = Join-Path $PSScriptRoot 'ios.cmake'
         $outputOptions += "-DCMAKE_TOOLCHAIN_FILE=$cmake_toolchain_file", "-DARCHS=$arch"
         if ($Global:is_tvos) {
             $outputOptions += '-DPLAT=tvOS'
@@ -1744,7 +1751,7 @@ function preprocess_ios() {
 }
 
 function preprocess_wasm() {
-    return , @()
+    return , @('-DCMAKE_EXPORT_COMPILE_COMMANDS=ON')
 }
 
 function validHostAndToolchain() {
@@ -1868,6 +1875,15 @@ if (!$setupOnly) {
     $SOURCE_DIR = $null
 
     function resolve_out_dir($prefix) {
+        if ($prefix.EndsWith('/') -or $prefix.EndsWith('\')) {
+          if ($is_host_target) {
+            return $1k.realpath("$prefix$TARGET_CPU/")
+          }
+          else {
+              return $1k.realpath("$prefix${TARGET_OS}_$TARGET_CPU/")
+          }
+        }
+        
         if ($is_host_target) {
             if (!$is_host_cpu) {
                 $out_dir = "${prefix}${TARGET_CPU}"
@@ -2114,10 +2130,10 @@ if (!$setupOnly) {
                         &$config_cmd $CONFIG_ALL_OPTIONS -S $dm_dir -B $dm_build_dir | Out-Host ; Remove-Item $dm_build_dir -Recurse -Force
                         $1k.println("Finish dump compiler preprocessors")
                     }
-                    $CONFIG_ALL_OPTIONS += '-B', $BUILD_DIR, "-DCMAKE_INSTALL_PREFIX=$INST_DIR"
+                    $CONFIG_ALL_OPTIONS += '-B', $BUILD_DIR, "-DCMAKE_INSTALL_PREFIX:PATH=$INST_DIR"
                     if ($SOURCE_DIR) { $CONFIG_ALL_OPTIONS += '-S', $SOURCE_DIR }
                     $1k.println("CMake config command: $config_cmd $CONFIG_ALL_OPTIONS")
-                    &$config_cmd $CONFIG_ALL_OPTIONS | Out-Host
+                    &$config_cmd @CONFIG_ALL_OPTIONS | Out-Host
                     Set-Content $tempFile $hashValue -NoNewline
                 }
 
@@ -2239,7 +2255,6 @@ if (!$setupOnly) {
         Write-Output ("gn_buildargs_overrides=$gn_buildargs_overrides, Count={0}" -f $gn_buildargs_overrides.Count)
 
         $BUILD_DIR = resolve_out_dir 'out/'
-
         if ($rebuild) {
             $1k.rmdirs($BUILD_DIR)
         }
