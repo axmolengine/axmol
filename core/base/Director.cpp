@@ -1015,21 +1015,22 @@ void Director::reset()
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
 #endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
 
-    if (_runningScene)
+    auto currentScene = _runningScene;
+    _runningScene     = nullptr;
+    _nextScene        = nullptr;
+
+    if (currentScene)
     {
 #if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         if (sEngine)
         {
-            sEngine->releaseScriptObject(this, _runningScene);
+            sEngine->releaseScriptObject(this, currentScene);
         }
 #endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
-        _runningScene->onExit();
-        _runningScene->cleanup();
-        _runningScene->release();
+        currentScene->onExit();
+        currentScene->cleanup();
+        currentScene->release();
     }
-
-    _runningScene = nullptr;
-    _nextScene    = nullptr;
 
     if (_eventDispatcher)
         _eventDispatcher->dispatchEvent(_eventResetDirector);
