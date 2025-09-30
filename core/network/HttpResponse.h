@@ -228,7 +228,7 @@ private:
 
     const Uri& getRequestUri() const { return _requestUri; }
 
-    void on_close()
+    void handleConnectionClose()
     {
         if (_finished)
             return;
