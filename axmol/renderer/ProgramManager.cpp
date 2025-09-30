@@ -61,8 +61,10 @@ int ProgramManager::chooseSpriteProgramType(rhi::PixelFormat pixelFormat)
         return rhi::ProgramType::POSITION_TEXTURE_GRAY;
     case PixelFormat::RG8:
         return rhi::ProgramType::POSITION_TEXTURE_GRAY_ALPHA;
-    case PixelFormat::RGBA8:
+    case PixelFormat::RGB8:
         return rhi::ProgramType::POSITION_TEXTURE_COLOR;
+    case PixelFormat::RGBA8:
+        return rhi::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST;
     default:
         AXLOGW("Warning: chooseSpriteProgramType() unhandled pixel format {}", (int)pixelFormat);
         return rhi::ProgramType::POSITION_TEXTURE_COLOR;
