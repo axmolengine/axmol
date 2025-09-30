@@ -259,7 +259,13 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
         if (!responseFinished)
         {
             auto&& pkt = event->packet_view();
-            response->handleInput(pkt.data(), pkt.size());
+            auto err = response->input(pkt.data(), pkt.size());
+            if (err != HPE_OK)
+            {
+                response->updateInternalCode(err);
+                _service->close(event->cindex());
+                break;
+            }
         }
         if (response->isFinished())
         {
@@ -390,7 +396,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
         }
         break;
     case YEK_ON_CLOSE:
-        response->finish();
+        response->on_close();
         handleNetworkEOF(response, channel, event->status());
         break;
     }
@@ -462,8 +468,8 @@ void HttpClient::finishResponse(HttpResponse* response)
 
 void HttpClient::invokeResposneCallbackAndRelease(HttpResponse* response)
 {
-    HttpRequest* request                  = response->getHttpRequest();
-    const ccHttpRequestCallback& callback = request->getCallback();
+    auto request   = response->getHttpRequest();
+    auto& callback = request->getCompleteCallback();
 
     if (callback != nullptr)
         callback(this, response);

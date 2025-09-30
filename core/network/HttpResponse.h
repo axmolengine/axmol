@@ -131,6 +131,8 @@ public:
 
     const std::string& getStatusText() const { return _statusText; }
 
+    uint64_t getContentLength() const { return _context.content_length; }
+
 private:
     void setResponseCode(int value) { _responseCode = value; }
 
@@ -145,13 +147,9 @@ private:
      */
     bool isFinished() const { return _finished; }
 
-    void handleInput(const char* d, size_t n)
+    llhttp_errno_t input(const char* d, size_t n)
     {
-        enum llhttp_errno err = llhttp_execute(&_context, d, n);
-        if (err != HPE_OK)
-        {
-            _finished = true;
-        }
+        return llhttp_execute(&_context, d, n);
     }
 
     bool tryRedirect()
@@ -194,6 +192,7 @@ private:
             /* Resets response status */
             _responseHeaders.clear();
             _finished = false;
+            _contentLength = 0;
             _responseData.clear();
             _currentHeader.clear();
             _statusText.clear();
@@ -216,6 +215,7 @@ private:
             _contextSettings.on_header_field_complete = on_header_field_complete;
             _contextSettings.on_header_value          = on_header_value;
             _contextSettings.on_header_value_complete = on_header_value_complete;
+            _contextSettings.on_headers_complete      = on_headers_complete;
             _contextSettings.on_body                  = on_body;
             _contextSettings.on_status                = on_status;
             _contextSettings.on_message_complete      = on_complete;
@@ -228,10 +228,14 @@ private:
 
     const Uri& getRequestUri() const { return _requestUri; }
 
-    void finish()
+    void on_close()
     {
-        if (!_finished)
+        if (_finished)
+            return;
+        if (llhttp_message_needs_eof(&_context))
             llhttp_finish(&_context);
+        else
+            _internalCode = -1;
     }
 
     static int on_status(llhttp_t* context, const char* at, size_t length)
@@ -264,12 +268,27 @@ private:
     {
         auto thiz = (HttpResponse*)context->data;
         thiz->_responseHeaders.emplace(std::move(thiz->_currentHeader), std::move(thiz->_currentHeaderValue));
+        
+        return 0;
+    }
+    static int on_headers_complete(llhttp_t* context)
+    {
+        auto thiz            = (HttpResponse*)context->data;
+        thiz->_contentLength = context->content_length;
+        auto request         = thiz->getHttpRequest();
+        if (!request->getDataCallback() && thiz->_contentLength > 0)
+            thiz->_responseData.reserve(thiz->_contentLength);
         return 0;
     }
     static int on_body(llhttp_t* context, const char* at, size_t length)
     {
         auto thiz = (HttpResponse*)context->data;
-        thiz->_responseData.insert(thiz->_responseData.end(), at, at + length);
+        auto request = thiz->getHttpRequest();
+        auto dataCallback = request->getDataCallback();
+        if (!dataCallback)
+            thiz->_responseData.insert(thiz->_responseData.end(), at, at + length);
+        else
+            dataCallback(thiz, at, length);
         return 0;
     }
     static int on_complete(llhttp_t* context)
@@ -287,6 +306,7 @@ protected:
 
     Uri _requestUri;
     bool _finished = false;             /// to indicate if the http request is successful simply
+    uint64_t _contentLength{0};
     yasio::sbyte_buffer _responseData;  /// the returned raw data. You can also dump it as a string
     std::string _currentHeader;
     std::string _currentHeaderValue;

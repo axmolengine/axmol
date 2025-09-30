@@ -53,7 +53,9 @@ namespace network
 class HttpClient;
 class HttpResponse;
 
-typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRequestCallback;
+using HttpCompleteCallback  = std::function<void(HttpClient* client, HttpResponse* response)>;
+using HttpDataCallback      = std::function<void(HttpResponse* response, const char* data, size_t data_size)>;
+using ccHttpRequestCallback = HttpCompleteCallback;
 
 /**
  * Defines the object which users must packed for HttpClient::send(HttpRequest*) method.
@@ -205,16 +207,60 @@ public:
      * Set response callback function of HttpRequest object.
      * When response come back, we would call _pCallback to process response data.
      *
-     * @param callback the ccHttpRequestCallback function.
+     * @param callback the HttpCompleteCallback function.
      */
-    void setResponseCallback(const ccHttpRequestCallback& callback) { _pCallback = callback; }
+    void setCompleteCallback(const HttpCompleteCallback& callback) { _pCallback = callback; }
+    AX_DEPRECATED(2.9) void setResponseCallback(const HttpCompleteCallback& callback) { setCompleteCallback(callback); }
 
     /**
-     * Get ccHttpRequestCallback callback function.
+     * Get HttpCompleteCallback callback function.
      *
-     * @return const ccHttpRequestCallback& ccHttpRequestCallback callback function.
+     * @return const HttpCompleteCallback& completeCallback callback function.
      */
-    const ccHttpRequestCallback& getCallback() const { return _pCallback; }
+
+    const HttpCompleteCallback& getCompleteCallback() const { return _pCallback; }
+    AX_DEPRECATED(2.9) const HttpCompleteCallback& getCallback() const { return getCompleteCallback(); }
+
+    /**
+     * @brief Set the data callback for handling received data chunks.
+     *
+     * When a data callback is set, it will be invoked for each chunk of data received
+     * during the HTTP response. This is particularly useful for:
+     * - Large file downloads to process data incrementally
+     * - Streaming data processing
+     * - Memory-constrained environments
+     *
+     * @note If a data callback is set, the default behavior of appending received data
+     *       to HttpResponse::_responseData will be disabled. The response data buffer
+     *       will not accumulate data chunks automatically. You must handle all data
+     *       storage/processing within the callback function.
+     *
+     * @note The callback receives the following parameters:
+     *       - HttpResponse* response: The response object containing request context
+     *       - const char* data: Pointer to the received data chunk
+     *       - size_t data_size: Size of the data chunk in bytes
+     *
+     * @param callback The callback function to handle received data chunks
+     *
+     * @code
+     * // Example: Stream data to file instead of memory
+     * request->setDataCallback([](HttpResponse* response, const char* data, size_t size) {
+     *     // 0 for chunked transfer encoding, unknown size, or no Content-Length header
+     *     auto expectedTotal = response->getContentLength(); 
+     *     // Write directly to file, avoiding memory accumulation
+     *     fwrite(data, 1, size, outputFile);
+     *
+     *     // Update progress
+     *     totalReceived += size;
+     *     updateProgress(totalReceived, expectedTotal);
+     * });
+     * @endcode
+     *
+     * @see HttpDataCallback
+     * @see HttpResponse::_responseData
+     */
+    void setDataCallback(const HttpDataCallback& callback) { _pDataCallback = callback; }
+    const HttpDataCallback& getDataCallback() const { return _pDataCallback; }
 
     /**
      * Set custom-defined headers.
@@ -258,6 +304,7 @@ protected:
     yasio::sbyte_buffer _requestData;   /// used for POST
     std::string _tag;                   /// user defined tag, to identify different requests in response callback
     ccHttpRequestCallback _pCallback;   /// C++11 style callbacks
+    HttpDataCallback _pDataCallback;
     void* _pUserData;                   /// You can add your customed data here
     std::vector<std::string> _headers;  /// custom http headers
     std::vector<std::string> _hosts;
