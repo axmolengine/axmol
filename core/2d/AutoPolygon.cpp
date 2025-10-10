@@ -202,8 +202,6 @@ Vec2 AutoPolygon::findFirstNoneTransparentPixel(const Rect& rect, float threshol
     Vec2 i;
     for (i.y = rect.origin.y; i.y < rect.origin.y + rect.size.height; i.y++)
     {
-        if (found)
-            break;
         for (i.x = rect.origin.x; i.x < rect.origin.x + rect.size.width; i.x++)
         {
             auto alpha = getAlphaByPos(i);
@@ -213,6 +211,8 @@ Vec2 AutoPolygon::findFirstNoneTransparentPixel(const Rect& rect, float threshol
                 break;
             }
         }
+        if (found)
+            break;
     }
     AXASSERT(found, "image is all transparent!");
     return i;
