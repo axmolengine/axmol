@@ -1364,28 +1364,6 @@ void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*sc
             break;
         }
     }
-#if defined(AX_PLATFORM_PC) && !defined(NDEBUG)
-    else
-    {
-        auto director = Director::getInstance();
-        switch (g_keyCodeMap[key])
-        {
-        case EventKeyboard::KeyCode::KEY_SPACE:
-            if (director->isPaused())
-                director->resume();
-            else
-                director->pause();
-            break;
-        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-            director->resume();
-            director->getScheduler()->schedule([director](float) { director->pause(); }, director, 0, 0, 0, false,
-                                               "step");
-            break;
-        default:
-            break;
-        }
-    }
-#endif
 }
 
 void RenderViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCode)
