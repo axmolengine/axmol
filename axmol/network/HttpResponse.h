@@ -147,10 +147,7 @@ private:
      */
     bool isFinished() const { return _finished; }
 
-    llhttp_errno_t input(const char* d, size_t n)
-    {
-        return llhttp_execute(&_context, d, n);
-    }
+    llhttp_errno_t input(const char* d, size_t n) { return llhttp_execute(&_context, d, n); }
 
     bool tryRedirect()
     {
@@ -191,7 +188,7 @@ private:
 
             /* Resets response status */
             _responseHeaders.clear();
-            _finished = false;
+            _finished      = false;
             _contentLength = 0;
             _responseData.clear();
             _currentHeader.clear();
@@ -268,7 +265,7 @@ private:
     {
         auto thiz = (HttpResponse*)context->data;
         thiz->_responseHeaders.emplace(std::move(thiz->_currentHeader), std::move(thiz->_currentHeaderValue));
-        
+
         return 0;
     }
     static int on_headers_complete(llhttp_t* context)
@@ -282,8 +279,8 @@ private:
     }
     static int on_body(llhttp_t* context, const char* at, size_t length)
     {
-        auto thiz = (HttpResponse*)context->data;
-        auto request = thiz->getHttpRequest();
+        auto thiz         = (HttpResponse*)context->data;
+        auto request      = thiz->getHttpRequest();
         auto dataCallback = request->getDataCallback();
         if (!dataCallback)
             thiz->_responseData.insert(thiz->_responseData.end(), at, at + length);
@@ -305,7 +302,7 @@ protected:
     int _redirectCount = 0;
 
     Uri _requestUri;
-    bool _finished = false;             /// to indicate if the http request is successful simply
+    bool _finished = false;  /// to indicate if the http request is successful simply
     uint64_t _contentLength{0};
     yasio::sbyte_buffer _responseData;  /// the returned raw data. You can also dump it as a string
     std::string _currentHeader;

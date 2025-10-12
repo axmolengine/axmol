@@ -258,7 +258,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
         if (!responseFinished)
         {
             auto&& pkt = event->packet_view();
-            auto err = response->input(pkt.data(), pkt.size());
+            auto err   = response->input(pkt.data(), pkt.size());
             if (err != HPE_OK)
             {
                 response->updateInternalCode(err);

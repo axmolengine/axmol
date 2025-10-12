@@ -246,7 +246,7 @@ public:
      * // Example: Stream data to file instead of memory
      * request->setDataCallback([](HttpResponse* response, const char* data, size_t size) {
      *     // 0 for chunked transfer encoding, unknown size, or no Content-Length header
-     *     auto expectedTotal = response->getContentLength(); 
+     *     auto expectedTotal = response->getContentLength();
      *     // Write directly to file, avoiding memory accumulation
      *     fwrite(data, 1, size, outputFile);
      *
@@ -299,11 +299,11 @@ private:
 
 protected:
     // properties
-    Type _requestType;                  /// kHttpRequestGet, kHttpRequestPost or other enums
-    std::string _url;                   /// target url that this request is sent to
-    yasio::sbyte_buffer _requestData;   /// used for POST
-    std::string _tag;                   /// user defined tag, to identify different requests in response callback
-    ccHttpRequestCallback _pCallback;   /// C++11 style callbacks
+    Type _requestType;                 /// kHttpRequestGet, kHttpRequestPost or other enums
+    std::string _url;                  /// target url that this request is sent to
+    yasio::sbyte_buffer _requestData;  /// used for POST
+    std::string _tag;                  /// user defined tag, to identify different requests in response callback
+    ccHttpRequestCallback _pCallback;  /// C++11 style callbacks
     HttpDataCallback _pDataCallback;
     void* _pUserData;                   /// You can add your customed data here
     std::vector<std::string> _headers;  /// custom http headers
