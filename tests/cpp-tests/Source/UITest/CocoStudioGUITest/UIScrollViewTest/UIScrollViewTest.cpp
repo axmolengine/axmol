@@ -905,7 +905,7 @@ bool UIScrollViewTest_Overlap::init()
 
         // Add the alert
         Text* alert = Text::create("ScrollView vertical", "fonts/Marker Felt.ttf", 30);
-        alert->setColor(Color32(159, 168, 176));
+        alert->setColor(Color3B(159, 168, 176));
         alert->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.075f));
         _uiLayer->addChild(alert);
@@ -926,7 +926,7 @@ bool UIScrollViewTest_Overlap::init()
             scrollView->setPosition(scrollView->getPosition() + Vec2(0,50));
             scrollView->setScrollBarWidth(4);
             scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-            scrollView->setScrollBarColor(Color32::WHITE);
+            scrollView->setScrollBarColor(Color3B::WHITE);
             scrollView->setGlobalZOrder(200);
             _uiLayer->addChild(scrollView);
             
@@ -968,7 +968,7 @@ bool UIScrollViewTest_Overlap::init()
             scrollView->setContentSize(Size(280.0f, 150.0f)/2);
             scrollView->setInnerContainerSize(scrollView->getContentSize());
             scrollView->setScrollBarPositionFromCorner(Vec2(4, 4));
-            scrollView->setScrollBarColor(Color32::YELLOW);
+            scrollView->setScrollBarColor(Color3B::YELLOW);
             Size backgroundSize = background->getContentSize();
             scrollView->setPosition((widgetSize - scrollView->getContentSize()) / 2.0f);
             scrollView->setPosition(scrollView->getPosition() - Vec2(0,50));
