@@ -174,4 +174,16 @@ protected:
     ax::ui::ScrollView* _scrollView;
     float _remainingTime;
 };
+class UIScrollViewTest_Overlap : public UIScene
+{
+public:
+    CREATE_FUNC(UIScrollViewTest_Overlap);
+
+    UIScrollViewTest_Overlap();
+    ~UIScrollViewTest_Overlap();
+    virtual bool init() override;
+
+protected:
+    ax::ui::Text* _displayValueLabel;
+};
 #endif /* defined(__TestCpp__UIScrollViewTest__) */
