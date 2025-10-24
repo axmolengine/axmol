@@ -229,8 +229,7 @@ void TextureCache::addImageAsync(std::string_view path,
     ++_outstandingTaskCount;
 
     // generate async struct
-    ImageLoadTask* task  = new ImageLoadTask(fullpath, callback, callbackKey);
-    task->autoGenMipmaps = autoGenMipmaps;
+    ImageLoadTask* task = new ImageLoadTask(fullpath, callback, callbackKey, autoGenMipmaps);
 
     // add load task to queue
     _outstandingTasks.emplace_back(task);
