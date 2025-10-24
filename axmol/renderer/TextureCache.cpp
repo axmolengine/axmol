@@ -92,8 +92,13 @@ std::string TextureCache::getDescription() const
 struct TextureCache::ImageLoadTask
 {
 public:
-    ImageLoadTask(std::string_view fn, const std::function<void(Texture2D*)>& f, std::string_view key)
-        : filename(fn), callback(f), callbackKey(key), pixelFormat(PixelFormat::NONE), loadSuccess(false)
+    ImageLoadTask(std::string_view fn, const std::function<void(Texture2D*)>& f, std::string_view key, bool autoMipmaps)
+        : filename(fn)
+        , callback(f)
+        , callbackKey(key)
+        , pixelFormat(PixelFormat::NONE)
+        , loadSuccess(false)
+        , autoGenMipmaps(autoMipmaps)
     {}
 
     std::string filename;
