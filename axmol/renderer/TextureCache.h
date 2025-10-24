@@ -112,11 +112,12 @@ public:
      @param callback A callback function would be invoked after the image is loaded.
      @since v0.8
     */
-    virtual void addImageAsync(std::string_view filepath, const std::function<void(Texture2D*)>& callback);
+    virtual void addImageAsync(std::string_view filepath, const std::function<void(Texture2D*)>& callback, bool autoGenMipmaps = false);
 
     void addImageAsync(std::string_view path,
                        const std::function<void(Texture2D*)>& callback,
-                       std::string_view callbackKey);
+                       std::string_view callbackKey,
+                       bool autoGenMipmaps = false);
 
     /** Unbind a specified bound image asynchronous callback.
      * In the case an object who was bound to an image asynchronous callback was destroyed before the callback is
@@ -227,13 +228,15 @@ public:
     static std::string checkETC1AlphaFile(std::string_view path);
 
 protected:
-    struct AsyncStruct;
+    struct ImageLoadTask;
 
     std::thread* _loadingThread;
 
-    std::deque<AsyncStruct*> _asyncStructQueue;
-    std::deque<AsyncStruct*> _requestQueue;
-    std::deque<AsyncStruct*> _responseQueue;
+    // Queue of tasks that have been requested but not yet completed.
+    // Maintained only on the main thread (never accessed from worker threads).
+    std::deque<ImageLoadTask*> _outstandingTasks;
+    std::deque<ImageLoadTask*> _requestQueue;
+    std::deque<ImageLoadTask*> _responseQueue;
 
     std::mutex _requestMutex;
     std::mutex _responseMutex;
@@ -242,7 +245,7 @@ protected:
 
     bool _needQuit;
 
-    int _asyncRefCount;
+    int _outstandingTaskCount;
 
     axstd::string_map<Texture2D*> _textures;
 

@@ -72,7 +72,7 @@ std::string TextureCache::checkETC1AlphaFile(std::string_view path)
     return FileUtils::getInstance()->isFileExist(ret) ? ret : std::string{};
 }
 
-TextureCache::TextureCache() : _loadingThread(nullptr), _needQuit(false), _asyncRefCount(0) {}
+TextureCache::TextureCache() : _loadingThread(nullptr), _needQuit(false), _outstandingTaskCount(0) {}
 
 TextureCache::~TextureCache()
 {
@@ -89,10 +89,10 @@ std::string TextureCache::getDescription() const
     return fmt::format("<TextureCache | Number of textures = {}>", static_cast<int>(_textures.size()));
 }
 
-struct TextureCache::AsyncStruct
+struct TextureCache::ImageLoadTask
 {
 public:
-    AsyncStruct(std::string_view fn, const std::function<void(Texture2D*)>& f, std::string_view key)
+    ImageLoadTask(std::string_view fn, const std::function<void(Texture2D*)>& f, std::string_view key)
         : filename(fn), callback(f), callbackKey(key), pixelFormat(PixelFormat::NONE), loadSuccess(false)
     {}
 
@@ -103,6 +103,7 @@ public:
     Image imageAlpha;
     rhi::PixelFormat pixelFormat;
     bool loadSuccess;
+    bool autoGenMipmaps;
 };
 
 /**
@@ -137,9 +138,11 @@ public:
  Call unbindImageAsync(path) to prevent the call to the callback when the
  texture is loaded.
  */
-void TextureCache::addImageAsync(std::string_view path, const std::function<void(Texture2D*)>& callback)
+void TextureCache::addImageAsync(std::string_view path,
+                                 const std::function<void(Texture2D*)>& callback,
+                                 bool autoGenMipmaps)
 {
-    addImageAsync(path, callback, path);
+    addImageAsync(path, callback, path, autoGenMipmaps);
 }
 
 /**
@@ -178,7 +181,7 @@ void TextureCache::addImageAsync(std::string_view path, const std::function<void
  */
 void TextureCache::addImageAsync(std::string_view path,
                                  const std::function<void(Texture2D*)>& callback,
-                                 std::string_view callbackKey)
+                                 std::string_view callbackKey, bool autoGenMipmaps)
 {
     Texture2D* texture = nullptr;
 
@@ -211,47 +214,48 @@ void TextureCache::addImageAsync(std::string_view path,
         _loadingThread = new std::thread(&TextureCache::loadImage, this);
     }
 
-    if (0 == _asyncRefCount)
+    if (0 == _outstandingTaskCount)
     {
         Director::getInstance()->getScheduler()->schedule(AX_SCHEDULE_SELECTOR(TextureCache::addImageAsyncCallBack),
                                                           this, 0, false);
     }
 
-    ++_asyncRefCount;
+    ++_outstandingTaskCount;
 
     // generate async struct
-    AsyncStruct* data = new AsyncStruct(fullpath, callback, callbackKey);
+    ImageLoadTask* task  = new ImageLoadTask(fullpath, callback, callbackKey);
+    task->autoGenMipmaps = autoGenMipmaps;
 
-    // add async struct into queue
-    _asyncStructQueue.emplace_back(data);
+    // add load task to queue
+    _outstandingTasks.emplace_back(task);
     std::unique_lock<std::mutex> ul(_requestMutex);
-    _requestQueue.emplace_back(data);
+    _requestQueue.emplace_back(task);
     _sleepCondition.notify_one();
 }
 
 void TextureCache::unbindImageAsync(std::string_view callbackKey)
 {
-    if (_asyncStructQueue.empty())
+    if (_outstandingTasks.empty())
     {
         return;
     }
 
-    for (auto&& asyncStruct : _asyncStructQueue)
+    for (auto&& task : _outstandingTasks)
     {
-        if (asyncStruct->callbackKey == callbackKey)
+        if (task->callbackKey == callbackKey)
         {
-            asyncStruct->callback = nullptr;
+            task->callback = nullptr;
         }
     }
 }
 
 void TextureCache::unbindAllImageAsync()
 {
-    if (_asyncStructQueue.empty())
+    if (_outstandingTasks.empty())
     {
         return;
     }
-    for (auto&& asyncStruct : _asyncStructQueue)
+    for (auto&& asyncStruct : _outstandingTasks)
     {
         asyncStruct->callback = nullptr;
     }
@@ -259,22 +263,22 @@ void TextureCache::unbindAllImageAsync()
 
 void TextureCache::loadImage()
 {
-    AsyncStruct* asyncStruct = nullptr;
+    ImageLoadTask* task = nullptr;
     while (!_needQuit)
     {
         std::unique_lock<std::mutex> ul(_requestMutex);
         // pop an AsyncStruct from request queue
         if (_requestQueue.empty())
         {
-            asyncStruct = nullptr;
+            task = nullptr;
         }
         else
         {
-            asyncStruct = _requestQueue.front();
+            task = _requestQueue.front();
             _requestQueue.pop_front();
         }
 
-        if (nullptr == asyncStruct)
+        if (nullptr == task)
         {
             if (_needQuit)
             {
@@ -286,19 +290,19 @@ void TextureCache::loadImage()
         ul.unlock();
 
         // load image
-        asyncStruct->loadSuccess = asyncStruct->image.initWithImageFileThreadSafe(asyncStruct->filename);
+        task->loadSuccess = task->image.initWithImageFileThreadSafe(task->filename);
 
         // ETC1 ALPHA supports.
-        if (asyncStruct->loadSuccess && asyncStruct->image.getFileType() == Image::Format::ETC1 &&
+        if (task->loadSuccess && task->image.getFileType() == Image::Format::ETC1 &&
             !s_etc1AlphaFileSuffix.empty())
         {  // check whether alpha texture exists & load it
-            auto alphaFile = asyncStruct->filename + s_etc1AlphaFileSuffix;
+            auto alphaFile = task->filename + s_etc1AlphaFileSuffix;
             if (FileUtils::getInstance()->isFileExist(alphaFile))
-                asyncStruct->imageAlpha.initWithImageFileThreadSafe(alphaFile);
+                task->imageAlpha.initWithImageFileThreadSafe(alphaFile);
         }
         // push the asyncStruct to response queue
         _responseMutex.lock();
-        _responseQueue.emplace_back(asyncStruct);
+        _responseQueue.emplace_back(task);
         _responseMutex.unlock();
     }
 }
@@ -306,33 +310,33 @@ void TextureCache::loadImage()
 void TextureCache::addImageAsyncCallBack(float /*dt*/)
 {
     Texture2D* texture       = nullptr;
-    AsyncStruct* asyncStruct = nullptr;
+    ImageLoadTask* task = nullptr;
     while (true)
     {
-        // pop an AsyncStruct from response queue
+        // pop an task from response queue
         _responseMutex.lock();
         if (_responseQueue.empty())
         {
-            asyncStruct = nullptr;
+            task = nullptr;
         }
         else
         {
-            asyncStruct = _responseQueue.front();
+            task = _responseQueue.front();
             _responseQueue.pop_front();
 
-            // the asyncStruct's sequence order in _asyncStructQueue must equal to the order in _responseQueue
-            AX_ASSERT(asyncStruct == _asyncStructQueue.front());
-            _asyncStructQueue.pop_front();
+            // the task's sequence order in _pendingQueue must equal to the order in _responseQueue
+            AX_ASSERT(task == _outstandingTasks.front());
+            _outstandingTasks.pop_front();
         }
         _responseMutex.unlock();
 
-        if (nullptr == asyncStruct)
+        if (nullptr == task)
         {
             break;
         }
 
         // check the image has been convert to texture or not
-        auto it = _textures.find(asyncStruct->filename);
+        auto it = _textures.find(task->filename);
         if (it != _textures.end())
         {
             texture = it->second;
@@ -340,22 +344,22 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
         else
         {
             // convert image to texture
-            if (asyncStruct->loadSuccess)
+            if (task->loadSuccess)
             {
-                Image* image = &(asyncStruct->image);
+                Image* image = &(task->image);
                 // generate texture in render thread
                 texture = new Texture2D();
 
-                if (asyncStruct->imageAlpha.getFileType() != Image::Format::ETC1)
+                if (task->imageAlpha.getFileType() != Image::Format::ETC1)
                 {
-                    texture->initWithImage(image, asyncStruct->pixelFormat);
+                    texture->initWithImage(image, task->pixelFormat);
                 }
                 else
                 {
                     TextureSliceData subDatas[] = {
                         TextureSliceData{image->getData(), static_cast<uint16_t>(image->getDataSize()), 0, 0},
-                        TextureSliceData{asyncStruct->imageAlpha.getData(),
-                                         static_cast<uint16_t>(asyncStruct->imageAlpha.getDataSize()), 1, 0}};
+                        TextureSliceData{task->imageAlpha.getData(),
+                                         static_cast<uint16_t>(task->imageAlpha.getDataSize()), 1, 0}};
                     texture->initWithSpec(rhi::TextureDesc{.width       = static_cast<uint16_t>(image->getWidth()),
                                                            .height      = static_cast<uint16_t>(image->getHeight()),
                                                            .arraySize   = 2,
@@ -364,10 +368,10 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
                 }
 
                 // parse 9-patch info
-                this->parseNinePatchImage(image, texture, asyncStruct->filename);
+                this->parseNinePatchImage(image, texture, task->filename);
 
                 // cache the texture. retain it, since it is added in the map
-                _textures.emplace(asyncStruct->filename, texture);
+                _textures.emplace(task->filename, texture);
                 texture->retain();
 
                 texture->autorelease();
@@ -379,22 +383,22 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
             else
             {
                 texture = nullptr;
-                AXLOGW("axmol: failed to call TextureCache::addImageAsync({})", asyncStruct->filename);
+                AXLOGW("axmol: failed to call TextureCache::addImageAsync({})", task->filename);
             }
         }
 
         // call callback function
-        if (asyncStruct->callback)
+        if (task->callback)
         {
-            (asyncStruct->callback)(texture);
+            (task->callback)(texture);
         }
 
         // release the asyncStruct
-        delete asyncStruct;
-        --_asyncRefCount;
+        delete task;
+        --_outstandingTaskCount;
     }
 
-    if (0 == _asyncRefCount)
+    if (0 == _outstandingTaskCount)
     {
         Director::getInstance()->getScheduler()->unschedule(AX_SCHEDULE_SELECTOR(TextureCache::addImageAsyncCallBack),
                                                             this);
