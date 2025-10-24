@@ -237,7 +237,14 @@ protected:
     // Queue of tasks that have been requested but not yet completed.
     // Maintained only on the main thread (never accessed from worker threads).
     std::deque<ImageLoadTask*> _outstandingTasks;
+
+    // Queue of tasks waiting to be processed by the worker thread.
+    // Shared between main thread (producer) and worker thread (consumer).
     std::deque<ImageLoadTask*> _requestQueue;
+
+    // Queue of tasks that have been processed by the worker thread
+    // and are waiting for the main thread to handle callbacks/results.
+    // Shared between worker thread (producer) and main thread (consumer).
     std::deque<ImageLoadTask*> _responseQueue;
 
     std::mutex _requestMutex;
