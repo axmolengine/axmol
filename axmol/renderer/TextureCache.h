@@ -112,7 +112,9 @@ public:
      @param callback A callback function would be invoked after the image is loaded.
      @since v0.8
     */
-    virtual void addImageAsync(std::string_view filepath, const std::function<void(Texture2D*)>& callback, bool autoGenMipmaps = false);
+    virtual void addImageAsync(std::string_view filepath,
+                               const std::function<void(Texture2D*)>& callback,
+                               bool autoGenMipmaps = false);
 
     void addImageAsync(std::string_view path,
                        const std::function<void(Texture2D*)>& callback,

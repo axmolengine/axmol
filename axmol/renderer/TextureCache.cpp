@@ -181,7 +181,8 @@ void TextureCache::addImageAsync(std::string_view path,
  */
 void TextureCache::addImageAsync(std::string_view path,
                                  const std::function<void(Texture2D*)>& callback,
-                                 std::string_view callbackKey, bool autoGenMipmaps)
+                                 std::string_view callbackKey,
+                                 bool autoGenMipmaps)
 {
     Texture2D* texture = nullptr;
 
@@ -293,8 +294,7 @@ void TextureCache::loadImage()
         task->loadSuccess = task->image.initWithImageFileThreadSafe(task->filename);
 
         // ETC1 ALPHA supports.
-        if (task->loadSuccess && task->image.getFileType() == Image::Format::ETC1 &&
-            !s_etc1AlphaFileSuffix.empty())
+        if (task->loadSuccess && task->image.getFileType() == Image::Format::ETC1 && !s_etc1AlphaFileSuffix.empty())
         {  // check whether alpha texture exists & load it
             auto alphaFile = task->filename + s_etc1AlphaFileSuffix;
             if (FileUtils::getInstance()->isFileExist(alphaFile))
@@ -309,7 +309,7 @@ void TextureCache::loadImage()
 
 void TextureCache::addImageAsyncCallBack(float /*dt*/)
 {
-    Texture2D* texture       = nullptr;
+    Texture2D* texture  = nullptr;
     ImageLoadTask* task = nullptr;
     while (true)
     {
