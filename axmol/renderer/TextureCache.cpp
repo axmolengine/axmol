@@ -377,7 +377,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
                 texture->autorelease();
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
                 // cache the texture file name
-                VolatileTextureMgr::addImageTexture(texture, asyncStruct->filename);
+                VolatileTextureMgr::addImageTexture(texture, task->filename);
 #endif
             }
             else
@@ -393,7 +393,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
             (task->callback)(texture);
         }
 
-        // release the asyncStruct
+        // release the task
         delete task;
         --_outstandingTaskCount;
     }
