@@ -40,41 +40,41 @@ static const PixelFormatDesc s_pixelFormatDescriptors[] = {
     //  |   |  |   |  |  +---------------------------- min blocks y
     //  |   |  |   |  |  |   +------------------------ alpha
     //  |   |  |   |  |  |   |        +--------------- name
-    {4, 4, 4, 8, 2, 2, false, "PVRTC4"},     // PVRTC4
-    {4, 4, 4, 8, 2, 2, true, "PVRTC4A"},     // PVRTC4A
-    {2, 8, 4, 8, 2, 2, false, "PVRTC2"},     // PVRTC2
-    {2, 8, 4, 8, 2, 2, true, "PVRTC2A"},     // PVTC2A
-    {4, 4, 4, 8, 1, 1, false, "ETC1"},       // ETC1
-    {4, 4, 4, 8, 1, 1, false, "ETC2"},       // ETC2
-    {8, 4, 4, 16, 1, 1, true, "ETC2A"},      // ETC2A
-    {4, 4, 4, 8, 1, 1, true, "BC1"},         // S3TC_DXT1
-    {8, 4, 4, 16, 1, 1, true, "BC2"},        // S3TC_DXT3
-    {8, 4, 4, 16, 1, 1, true, "BC3"},        // S3TC_DXT5
-    {4, 4, 4, 8, 1, 1, false, "ATC"},        // ATC_RGB
-    {8, 4, 4, 16, 1, 1, true, "ATCE"},       // ATC_EXPLICIT_ALPHA
-    {8, 4, 4, 16, 1, 1, true, "ATCI"},       // ATC_INTERPOLATED_ALPHA
-    {8,  4,  4, 16, 1, 1, true, "ASTC4x4"},  // ASTC4x4
-    {7,  5,  4, 16, 1, 1, true, "ASTC5x4"},  // ASTC5x4
-    {6,  5,  5, 16, 1, 1, true, "ASTC5x5"},  // ASTC5x5
-    {5,  6,  5, 16, 1, 1, true, "ASTC6x5"},  // ASTC6x5
-    {4,  6,  6, 16, 1, 1, true, "ASTC6x6"},  // ASTC6x6
-    {4,  8,  5, 16, 1, 1, true, "ASTC8x5"},  // ASTC8x5
-    {3,  8,  6, 16, 1, 1, true, "ASTC8x6"},  // ASTC8x6
-    {2,  8,  8, 16, 1, 1, true, "ASTC8x8"},  // ASTC8x8
-    {3, 10,  5, 16, 1, 1, true, "ASTC10x5"}, // ASTC10x5
-    {3, 10,  6, 16, 1, 1, true, "ASTC10x6"}, // ASTC10x6
-    {2, 10,  8, 16, 1, 1, true, "ASTC10x8"}, // ASTC10x8
-    {2, 10, 10, 16, 1, 1, true, "ASTC10x10"},// ASTC10x10
-    {2, 12, 10, 16, 1, 1, true, "ASTC12x10"},// ASTC12x10
-    {1, 12, 12, 16, 1, 1, true, "ASTC12x12"},// ASTC12x12
-    {32, 1, 1, 4, 1, 1, true, "RGBA8"},      // RGBA8
-    {32, 1, 1, 4, 1, 1, true, "BGRA8"},      // BGRA8
-    {24, 1, 1, 3, 1, 1, false, "RGB8"},      // RGB8
-    {16, 1, 1, 2, 1, 1, false, "R5G6B5"},    // R5G6B5
-    {16, 1, 1, 2, 1, 1, true, "RGBA4"},      // RGBA4
-    {16, 1, 1, 2, 1, 1, true, "RGB5A1"},     // RGB5A1
-    {8, 1, 1, 1, 1, 1, true, "R8"},          // R8
-    {16, 1, 1, 2, 1, 1, true, "RG8"},        // RG8
+    {4, 4, 4, 8, 2, 2, false, "PVRTC4"},       // PVRTC4
+    {4, 4, 4, 8, 2, 2, true, "PVRTC4A"},       // PVRTC4A
+    {2, 8, 4, 8, 2, 2, false, "PVRTC2"},       // PVRTC2
+    {2, 8, 4, 8, 2, 2, true, "PVRTC2A"},       // PVTC2A
+    {4, 4, 4, 8, 1, 1, false, "ETC1"},         // ETC1
+    {4, 4, 4, 8, 1, 1, false, "ETC2"},         // ETC2
+    {8, 4, 4, 16, 1, 1, true, "ETC2A"},        // ETC2A
+    {4, 4, 4, 8, 1, 1, true, "BC1"},           // S3TC_DXT1
+    {8, 4, 4, 16, 1, 1, true, "BC2"},          // S3TC_DXT3
+    {8, 4, 4, 16, 1, 1, true, "BC3"},          // S3TC_DXT5
+    {4, 4, 4, 8, 1, 1, false, "ATC"},          // ATC_RGB
+    {8, 4, 4, 16, 1, 1, true, "ATCE"},         // ATC_EXPLICIT_ALPHA
+    {8, 4, 4, 16, 1, 1, true, "ATCI"},         // ATC_INTERPOLATED_ALPHA
+    {8, 4, 4, 16, 1, 1, true, "ASTC4x4"},      // ASTC4x4
+    {7, 5, 4, 16, 1, 1, true, "ASTC5x4"},      // ASTC5x4
+    {6, 5, 5, 16, 1, 1, true, "ASTC5x5"},      // ASTC5x5
+    {5, 6, 5, 16, 1, 1, true, "ASTC6x5"},      // ASTC6x5
+    {4, 6, 6, 16, 1, 1, true, "ASTC6x6"},      // ASTC6x6
+    {4, 8, 5, 16, 1, 1, true, "ASTC8x5"},      // ASTC8x5
+    {3, 8, 6, 16, 1, 1, true, "ASTC8x6"},      // ASTC8x6
+    {2, 8, 8, 16, 1, 1, true, "ASTC8x8"},      // ASTC8x8
+    {3, 10, 5, 16, 1, 1, true, "ASTC10x5"},    // ASTC10x5
+    {3, 10, 6, 16, 1, 1, true, "ASTC10x6"},    // ASTC10x6
+    {2, 10, 8, 16, 1, 1, true, "ASTC10x8"},    // ASTC10x8
+    {2, 10, 10, 16, 1, 1, true, "ASTC10x10"},  // ASTC10x10
+    {2, 12, 10, 16, 1, 1, true, "ASTC12x10"},  // ASTC12x10
+    {1, 12, 12, 16, 1, 1, true, "ASTC12x12"},  // ASTC12x12
+    {32, 1, 1, 4, 1, 1, true, "RGBA8"},        // RGBA8
+    {32, 1, 1, 4, 1, 1, true, "BGRA8"},        // BGRA8
+    {24, 1, 1, 3, 1, 1, false, "RGB8"},        // RGB8
+    {16, 1, 1, 2, 1, 1, false, "R5G6B5"},      // R5G6B5
+    {16, 1, 1, 2, 1, 1, true, "RGBA4"},        // RGBA4
+    {16, 1, 1, 2, 1, 1, true, "RGB5A1"},       // RGB5A1
+    {8, 1, 1, 1, 1, 1, true, "R8"},            // R8
+    {16, 1, 1, 2, 1, 1, true, "RG8"},          // RG8
     //{8, 1, 1, 1, 1, 1, true, "A8"},          // A8
     //{8, 1, 1, 1, 1, 1, false, "L8"},         // L8
     //{16, 1, 1, 2, 1, 1, true, "LA8"},        // LA8

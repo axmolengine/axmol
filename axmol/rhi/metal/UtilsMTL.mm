@@ -78,20 +78,20 @@ static GPUTextureFormatInfo s_textureFormats[] = {
 
 /* astc */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-    {MTLPixelFormatASTC_4x4_LDR,   MTLPixelFormatASTC_4x4_sRGB},     // ASTC4x4
-    {MTLPixelFormatASTC_5x4_LDR,   MTLPixelFormatASTC_5x4_sRGB},     // ASTC5x4
-    {MTLPixelFormatASTC_5x5_LDR,   MTLPixelFormatASTC_5x5_sRGB},     // ASTC5x5
-    {MTLPixelFormatASTC_6x5_LDR,   MTLPixelFormatASTC_6x5_sRGB},     // ASTC6x5
-    {MTLPixelFormatASTC_6x6_LDR,   MTLPixelFormatASTC_6x6_sRGB},     // ASTC6x6
-    {MTLPixelFormatASTC_8x5_LDR,   MTLPixelFormatASTC_8x5_sRGB},     // ASTC8x5
-    {MTLPixelFormatASTC_8x6_LDR,   MTLPixelFormatASTC_8x6_sRGB},     // ASTC8x6
-    {MTLPixelFormatASTC_8x8_LDR,   MTLPixelFormatASTC_8x8_sRGB},     // ASTC8x8
-    {MTLPixelFormatASTC_10x5_LDR,  MTLPixelFormatASTC_10x5_sRGB},    // ASTC10x5
-    {MTLPixelFormatASTC_10x6_LDR,  MTLPixelFormatASTC_10x6_sRGB},    // ASTC10x6
-    {MTLPixelFormatASTC_10x8_LDR,  MTLPixelFormatASTC_10x8_sRGB},    // ASTC10x8
-    {MTLPixelFormatASTC_10x10_LDR, MTLPixelFormatASTC_10x10_sRGB},   // ASTC10x10
-    {MTLPixelFormatASTC_12x10_LDR, MTLPixelFormatASTC_12x10_sRGB},   // ASTC12x10
-    {MTLPixelFormatASTC_12x12_LDR, MTLPixelFormatASTC_12x12_sRGB},   // ASTC12x12
+    {MTLPixelFormatASTC_4x4_LDR, MTLPixelFormatASTC_4x4_sRGB},      // ASTC4x4
+    {MTLPixelFormatASTC_5x4_LDR, MTLPixelFormatASTC_5x4_sRGB},      // ASTC5x4
+    {MTLPixelFormatASTC_5x5_LDR, MTLPixelFormatASTC_5x5_sRGB},      // ASTC5x5
+    {MTLPixelFormatASTC_6x5_LDR, MTLPixelFormatASTC_6x5_sRGB},      // ASTC6x5
+    {MTLPixelFormatASTC_6x6_LDR, MTLPixelFormatASTC_6x6_sRGB},      // ASTC6x6
+    {MTLPixelFormatASTC_8x5_LDR, MTLPixelFormatASTC_8x5_sRGB},      // ASTC8x5
+    {MTLPixelFormatASTC_8x6_LDR, MTLPixelFormatASTC_8x6_sRGB},      // ASTC8x6
+    {MTLPixelFormatASTC_8x8_LDR, MTLPixelFormatASTC_8x8_sRGB},      // ASTC8x8
+    {MTLPixelFormatASTC_10x5_LDR, MTLPixelFormatASTC_10x5_sRGB},    // ASTC10x5
+    {MTLPixelFormatASTC_10x6_LDR, MTLPixelFormatASTC_10x6_sRGB},    // ASTC10x6
+    {MTLPixelFormatASTC_10x8_LDR, MTLPixelFormatASTC_10x8_sRGB},    // ASTC10x8
+    {MTLPixelFormatASTC_10x10_LDR, MTLPixelFormatASTC_10x10_sRGB},  // ASTC10x10
+    {MTLPixelFormatASTC_12x10_LDR, MTLPixelFormatASTC_12x10_sRGB},  // ASTC12x10
+    {MTLPixelFormatASTC_12x12_LDR, MTLPixelFormatASTC_12x12_sRGB},  // ASTC12x12
 #else
     {MTLPixelFormatInvalid, MTLPixelFormatInvalid},  // ASTC4x4
     {MTLPixelFormatInvalid, MTLPixelFormatInvalid},  // ASTC5x4
@@ -108,7 +108,6 @@ static GPUTextureFormatInfo s_textureFormats[] = {
     {MTLPixelFormatInvalid, MTLPixelFormatInvalid},  // ASTC12x10
     {MTLPixelFormatInvalid, MTLPixelFormatInvalid},  // ASTC12x12
 #endif
-
 
     /* normal */
     {MTLPixelFormatRGBA8Unorm, MTLPixelFormatRGBA8Unorm_sRGB},    // RGBA8
