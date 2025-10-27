@@ -425,6 +425,12 @@ Mat4 FastTMXLayer::tileToNodeTransform()
 
 void FastTMXLayer::updatePrimitives()
 {
+    
+    for (auto& e : _customCommands)
+    {
+        e.second->setIndexDrawInfo(0, 0);
+    }
+    
     auto blendfunc =
         _texture->hasPremultipliedAlpha() ? BlendFunc::ALPHA_PREMULTIPLIED : BlendFunc::ALPHA_NON_PREMULTIPLIED;
     for (const auto& iter : _indicesVertexZNumber)
