@@ -436,7 +436,7 @@ public:
      * Enable outline effect to Label.
      * @warning Limiting use to only when the Label created with true type font or system font.
      */
-    virtual void enableOutline(const Color4B& outlineColor, int outlineSize = -1);
+    virtual void enableOutline(const Color4B& outlineColor, float outlineSize = -1);
 
     /**
      * Enable glow effect to Label.
@@ -944,6 +944,7 @@ protected:
     backend::UniformLocation _textColorLocation;
     backend::UniformLocation _effectColorLocation;
     backend::UniformLocation _effectTypeLocation;
+    backend::UniformLocation _spreadLocation;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Label);

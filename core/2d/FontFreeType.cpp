@@ -157,7 +157,7 @@ bool FontFreeType::initFreeType()
         if (FT_Init_FreeType(&_FTlibrary))
             return false;
 
-        const FT_Int spread = DistanceMapSpread;
+        const FT_Int spread = DistanceMapSpread * AX_CONTENT_SCALE_FACTOR();
         FT_Property_Set(_FTlibrary, "sdf", "spread", &spread);
         FT_Property_Set(_FTlibrary, "bsdf", "spread", &spread);
 

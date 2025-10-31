@@ -776,6 +776,7 @@ void Label::updateUniformLocations()
     _textColorLocation   = _programState->getUniformLocation(backend::Uniform::TEXT_COLOR);
     _effectColorLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_COLOR);
     _effectTypeLocation  = _programState->getUniformLocation(backend::Uniform::EFFECT_TYPE);
+    _spreadLocation      = _programState->getUniformLocation("u_spread");
 }
 
 bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
@@ -1414,7 +1415,7 @@ void Label::enableGlow(const Color4B& glowColor)
     }
 }
 
-void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 */)
+void Label::enableOutline(const Color4B& outlineColor, float outlineSize /* = -1 */)
 {
     AXASSERT(_currentLabelType == LabelType::STRING_TEXTURE || _currentLabelType == LabelType::TTF,
              "Only supported system font and TTF!");
@@ -1431,7 +1432,7 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
             if (outlineSize > 0 && _fontConfig.outlineSize != outlineSize)
             {
                 
-                _fontConfig.outlineSize = outlineSize;
+                _fontConfig.outlineSize = static_cast<int>(outlineSize);
                 setTTFConfig(_fontConfig);
             }
             if (_useDistanceField && outlineSize > 0)
@@ -1965,10 +1966,30 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             }
 
             if (_useDistanceField)
-            {  // distance outline
-                effectColor.w = _outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize;
-                batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &effectColor,
-                                                                                   sizeof(Vec4));
+            {  // distance field
+                // outline
+                {
+                    effectType    = 1;
+                    effectColor.w = (_outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize) *
+                                    _director->getContentScaleFactor();
+                    auto& outlinePS = batch.outLineCommand.getPipelineDescriptor().programState;
+                    updateBuffer(textureAtlas, batch.outLineCommand);
+                    outlinePS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
+                    outlinePS->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    float distanceFieldSpread = FontFreeType::DistanceMapSpread * _director->getContentScaleFactor();
+                    outlinePS->setUniform(_spreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
+                    batch.outLineCommand.init(_globalZOrder);
+                    renderer->addCommand(&batch.outLineCommand);
+                }
+
+                // draw text
+                {
+                    effectType   = 0;
+                    auto* textPS = batch.textCommand.getPipelineDescriptor().programState;
+
+                    textPS->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
+                    textPS->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                }
             }
             else
             {
@@ -1976,9 +1997,9 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 {
                     effectType = 1;
                     updateBuffer(textureAtlas, batch.outLineCommand);
-                    auto* programStateOutline = batch.outLineCommand.getPipelineDescriptor().programState;
-                    programStateOutline->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                    programStateOutline->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    auto* outlinePS = batch.outLineCommand.getPipelineDescriptor().programState;
+                    outlinePS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
+                    outlinePS->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
                     batch.outLineCommand.init(_globalZOrder);
                     renderer->addCommand(&batch.outLineCommand);
                 }
@@ -1986,10 +2007,10 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 // draw text
                 {
                     effectType             = 0;
-                    auto* programStateText = batch.textCommand.getPipelineDescriptor().programState;
+                    auto* textPS = batch.textCommand.getPipelineDescriptor().programState;
 
-                    programStateText->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
-                    programStateText->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    textPS->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
+                    textPS->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
                 }
             }
         }
