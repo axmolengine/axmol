@@ -47,8 +47,9 @@ enum Uniform : uint32_t
     TEXTURE2,
     TEXTURE3,
     TEXT_COLOR,
-    EFFECT_TYPE,
+    TEXT_PASS,
     EFFECT_COLOR,
+    DISTANCE_SPREAD,
     UNIFORM_MAX  // Maximum uniforms
 };
 

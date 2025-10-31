@@ -12,8 +12,8 @@ layout(binding = 0) uniform sampler2D u_tex0;
 layout(std140) uniform fs_ub {
     vec4 u_textColor;
     vec4 u_effectColor;
-    int u_effectType; // 0: text, 1: outline, 2: shadow
-    float u_spread; // default: 6.0
+    int u_textPass; // 0: text, 1: outline, 2: shadow
+    float u_distanceSpread; // default: 6.0
 };
 
 layout(location = SV_Target0) out vec4 FragColor;
@@ -23,15 +23,15 @@ void main()
     float dist = texture(u_tex0, v_texCoord).x;
     float smoothing = fwidth(dist);
 
-    if (u_effectType == 2) {
-        // Shadow pass: pure color fill
+    if (u_textPass == 0) {
+        // Text pass: draw solid text core
         float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
-        FragColor = v_color * vec4(u_effectColor.rgb, u_effectColor.a * alpha);
+        FragColor = v_color * vec4(u_textColor.rgb, u_textColor.a * alpha);
     }
-    else if (u_effectType == 1) {
+    else if (u_textPass == 1) {
         // Outline pass: only draw outer ring, exclude text core
-        float outlineSize = clamp(u_effectColor.w * outlineScale, 0.0, u_spread * 0.5);
-        float thickness   = outlineSize / (2.0 * u_spread);
+        float outlineSize = clamp(u_effectColor.w * outlineScale, 0.0, u_distanceSpread * 0.5);
+        float thickness   = outlineSize / (2.0 * u_distanceSpread);
         float pivot       = 0.5 - thickness;
 
         float textAlpha    = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
@@ -41,8 +41,8 @@ void main()
         FragColor = v_color * vec4(u_effectColor.rgb, u_effectColor.a * alpha);
     }
     else {
-        // Text pass: draw solid text core
+        // Shadow pass: pure color fill
         float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
-        FragColor = v_color * vec4(u_textColor.rgb, u_textColor.a * alpha);
+        FragColor = v_color * vec4(u_effectColor.rgb, u_effectColor.a * alpha);
     }
 }

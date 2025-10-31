@@ -775,8 +775,8 @@ void Label::updateUniformLocations()
     _textureLocation     = _programState->getUniformLocation(backend::Uniform::TEXTURE);
     _textColorLocation   = _programState->getUniformLocation(backend::Uniform::TEXT_COLOR);
     _effectColorLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_COLOR);
-    _effectTypeLocation  = _programState->getUniformLocation(backend::Uniform::EFFECT_TYPE);
-    _spreadLocation      = _programState->getUniformLocation("u_spread");
+    _textPassLocation    = _programState->getUniformLocation(backend::Uniform::TEXT_PASS);
+    _distanceSpreadLocation = _programState->getUniformLocation(backend::Uniform::DISTANCE_SPREAD);
 }
 
 bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
@@ -1951,66 +1951,66 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
         case LabelEffect::OUTLINE:
         {
-            int effectType = 0;
+            int textPass = 0;
             Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
             // draw shadow
             if (_shadowEnabled)
             {
-                effectType               = 2;
+                textPass                 = 2;
                 Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
                 programStateShadow->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
-                programStateShadow->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                programStateShadow->setUniform(_textPassLocation, &textPass, sizeof(textPass));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
 
             if (_useDistanceField)
             {  // distance field
-                // outline
+                // outline pass
                 {
-                    effectType    = 1;
+                    textPass      = 1;
                     effectColor.w = (_outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize) *
                                     _director->getContentScaleFactor();
                     auto& outlinePS = batch.outLineCommand.getPipelineDescriptor().programState;
                     updateBuffer(textureAtlas, batch.outLineCommand);
                     outlinePS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                    outlinePS->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    outlinePS->setUniform(_textPassLocation, &textPass, sizeof(textPass));
                     float distanceFieldSpread = FontFreeType::DistanceMapSpread * _director->getContentScaleFactor();
-                    outlinePS->setUniform(_spreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
+                    outlinePS->setUniform(_distanceSpreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
                     batch.outLineCommand.init(_globalZOrder);
                     renderer->addCommand(&batch.outLineCommand);
                 }
 
-                // draw text
+                // text pass
                 {
-                    effectType   = 0;
+                    textPass     = 0;
                     auto* textPS = batch.textCommand.getPipelineDescriptor().programState;
 
                     textPS->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
-                    textPS->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    textPS->setUniform(_textPassLocation, &textPass, sizeof(textPass));
                 }
             }
             else
             {
-                // draw outline
+                // outline pass
                 {
-                    effectType = 1;
+                    textPass = 1;
                     updateBuffer(textureAtlas, batch.outLineCommand);
                     auto* outlinePS = batch.outLineCommand.getPipelineDescriptor().programState;
                     outlinePS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                    outlinePS->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    outlinePS->setUniform(_textPassLocation, &textPass, sizeof(textPass));
                     batch.outLineCommand.init(_globalZOrder);
                     renderer->addCommand(&batch.outLineCommand);
                 }
 
-                // draw text
+                // text pass
                 {
-                    effectType             = 0;
+                    textPass     = 0;
                     auto* textPS = batch.textCommand.getPipelineDescriptor().programState;
 
                     textPS->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
-                    textPS->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    textPS->setUniform(_textPassLocation, &textPass, sizeof(textPass));
                 }
             }
         }

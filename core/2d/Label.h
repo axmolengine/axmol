@@ -943,8 +943,8 @@ protected:
     backend::UniformLocation _textureLocation;
     backend::UniformLocation _textColorLocation;
     backend::UniformLocation _effectColorLocation;
-    backend::UniformLocation _effectTypeLocation;
-    backend::UniformLocation _spreadLocation;
+    backend::UniformLocation _textPassLocation;
+    backend::UniformLocation _distanceSpreadLocation;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Label);
