@@ -2,6 +2,9 @@
 precision highp float;
 #include "base.glsl"
 
+// Empirical correction factor to visually match SDF outline thickness
+// with non‑SDF (bitmap/vector) text rendering. Adjusting this value
+// makes the two rendering methods look nearly identical in outline weight.
 const float outlineScale = 0.75;
 
 layout(location = COLOR0) in vec4 v_color;
