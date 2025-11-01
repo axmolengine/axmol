@@ -15,7 +15,7 @@ layout(binding = 0) uniform sampler2D u_tex0;
 layout(std140) uniform fs_ub {
     vec4 u_textColor;
     vec4 u_effectColor;
-    int u_textPass; // 0: text, 1: outline, 2: shadow
+    int u_labelPass; // 0: text, 1: outline, 2: shadow
     float u_distanceSpread; // default: 6.0
 };
 
@@ -26,12 +26,12 @@ void main()
     float dist = texture(u_tex0, v_texCoord).x;
     float smoothing = fwidth(dist);
 
-    if (u_textPass == 0) {
+    if (u_labelPass == 0) {
         // Text pass: draw solid text core
         float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
         FragColor = v_color * vec4(u_textColor.rgb, u_textColor.a * alpha);
     }
-    else if (u_textPass == 1) {
+    else if (u_labelPass == 1) {
         // Outline pass: only draw outer ring, exclude text core
         float outlineSize = clamp(u_effectColor.w * outlineScale, 0.0, u_distanceSpread * 0.5);
         float thickness   = outlineSize / (2.0 * u_distanceSpread);

@@ -258,7 +258,7 @@ void ProgramGL::setBuiltinLocations()
     _builtinUniformLocation[Uniform::EFFECT_COLOR] = getUniformLocation(UNIFORM_NAME_EFFECT_COLOR);
 
     /// u_textPass
-    _builtinUniformLocation[Uniform::TEXT_PASS] = getUniformLocation(UNIFORM_NAME_TEXT_PASS);
+    _builtinUniformLocation[Uniform::LABEL_PASS] = getUniformLocation(UNIFORM_NAME_LABEL_PASS);
 
     /// u_distanceSpread
     _builtinUniformLocation[Uniform::DISTANCE_SPREAD] = getUniformLocation(UNIFORM_NAME_DISTANCE_SPREAD);

@@ -943,7 +943,7 @@ protected:
     backend::UniformLocation _textureLocation;
     backend::UniformLocation _textColorLocation;
     backend::UniformLocation _effectColorLocation;
-    backend::UniformLocation _textPassLocation;
+    backend::UniformLocation _passLocation;
     backend::UniformLocation _distanceSpreadLocation;
 
 private:
