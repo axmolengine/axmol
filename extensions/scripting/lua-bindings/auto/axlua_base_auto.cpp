@@ -54822,11 +54822,11 @@ int lua_ax_base_Label_enableOutline(lua_State* tolua_S)
     if (argc == 2)
     {
         ax::Color32 arg0;
-        int arg1;
+        double arg1;
 
         ok &=luaval_to_color32(tolua_S, 2, &arg0, "ax.Label:enableOutline");
 
-        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.Label:enableOutline");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Label:enableOutline");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_enableOutline'", nullptr);
