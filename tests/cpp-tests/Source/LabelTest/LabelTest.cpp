@@ -1511,7 +1511,7 @@ void LabelTTFSDF::initToggleCheckboxes()
     // Create the radio buttons
     static const int NUMBER_OF_BUTTONS  = 3;
     startPosY                           = winSize.height * 0.25;
-    std::vector<std::string> labelTypes = {"Normal", "Glow", "OutLine"};
+    std::vector<std::string> labelTypes = {"Normal", "Glow", "Outline"};
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
     {
@@ -1552,7 +1552,7 @@ void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButt
         break;
     case 1:
         _labelNormal->enableGlow(Color4B::RED);
-        _labelSDF->enableGlow(Color4B::RED);
+        _labelSDF->enableGlow(Color4B::RED, 4);
         break;
     case 2:
         _labelSDF->enableOutline(Color4B::GREEN, 1);

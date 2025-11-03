@@ -10,6 +10,7 @@ layout(binding = 0) uniform sampler2D u_tex0;
 layout(std140) uniform fs_ub {
     vec4 u_effectColor;
     vec4 u_textColor;
+    // float u_thickness;   // effect thickness in pixels
     int u_labelPass; // 0: text, 1: outline, 2: shadow
 };
 

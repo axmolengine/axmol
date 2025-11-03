@@ -48,6 +48,7 @@ enum Uniform : uint32_t
     TEXTURE3,
     TEXT_COLOR,
     EFFECT_COLOR,
+    EFFECT_WIDTH,
     LABEL_PASS,
     DISTANCE_SPREAD,
     UNIFORM_MAX  // Maximum uniforms
