@@ -305,12 +305,12 @@ function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if(MSVC)
       add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
+        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}plainlua$<$<CONFIG:Debug>:${CMAKE_DEBUG_POSTFIX}>.dll"
         $<TARGET_FILE_DIR:${APP_NAME}>)
     else()
       add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/$<CONFIG>/plainlua.dll"
+        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/$<CONFIG>/plainlua$<$<CONFIG:Debug>:${CMAKE_DEBUG_POSTFIX}>.dll"
         $<TARGET_FILE_DIR:${APP_NAME}>)
     endif()
   endif()

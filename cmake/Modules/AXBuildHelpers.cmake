@@ -265,7 +265,7 @@ function(ax_sync_target_dlls ax_target)
     if(MSVC)
       add_custom_command(TARGET ${ax_target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
+        "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua$<$<CONFIG:Debug>:${CMAKE_DEBUG_POSTFIX}>.dll"
         $<TARGET_FILE_DIR:${ax_target}>)
     endif()
   endif()
