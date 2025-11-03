@@ -257,8 +257,11 @@ void ProgramGL::setBuiltinLocations()
     /// u_effectColor
     _builtinUniformLocation[Uniform::EFFECT_COLOR] = getUniformLocation(UNIFORM_NAME_EFFECT_COLOR);
 
-    /// u_effectType
-    _builtinUniformLocation[Uniform::EFFECT_TYPE] = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
+    /// u_textPass
+    _builtinUniformLocation[Uniform::LABEL_PASS] = getUniformLocation(UNIFORM_NAME_LABEL_PASS);
+
+    /// u_distanceSpread
+    _builtinUniformLocation[Uniform::DISTANCE_SPREAD] = getUniformLocation(UNIFORM_NAME_DISTANCE_SPREAD);
 }
 
 const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() const
@@ -455,38 +458,6 @@ int ProgramGL::getAttributeLocation(Attribute name) const
 int ProgramGL::getAttributeLocation(std::string_view name) const
 {
     return glGetAttribLocation(_program, name.data());
-}
-
-inline std::string_view mapLocationEnumToUBO(backend::Uniform name)
-{
-    switch (name)
-    {
-    case Uniform::MVP_MATRIX:
-        return UNIFORM_NAME_MVP_MATRIX;
-        break;
-    case Uniform::TEXTURE:
-        return UNIFORM_NAME_TEXTURE;
-        break;
-    case Uniform::TEXTURE1:
-        return UNIFORM_NAME_TEXTURE1;
-        break;
-    case Uniform::TEXTURE2:
-        return UNIFORM_NAME_TEXTURE2;
-        break;
-    case Uniform::TEXTURE3:
-        return UNIFORM_NAME_TEXTURE3;
-        break;
-    case Uniform::TEXT_COLOR:
-        return UNIFORM_NAME_TEXT_COLOR;
-        break;
-    case Uniform::EFFECT_COLOR:
-        return UNIFORM_NAME_EFFECT_COLOR;
-        break;
-    case Uniform::EFFECT_TYPE:
-        return UNIFORM_NAME_EFFECT_TYPE;
-        break;
-    }
-    return ""sv;
 }
 
 UniformLocation ProgramGL::getUniformLocation(backend::Uniform name) const

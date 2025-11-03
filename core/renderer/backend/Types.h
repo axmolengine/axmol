@@ -113,7 +113,8 @@ static constexpr auto UNIFORM_NAME_TEXTURE2     = "u_tex2"sv;
 static constexpr auto UNIFORM_NAME_TEXTURE3     = "u_tex3"sv;
 static constexpr auto UNIFORM_NAME_TEXT_COLOR   = "u_textColor"sv;
 static constexpr auto UNIFORM_NAME_EFFECT_COLOR = "u_effectColor"sv;
-static constexpr auto UNIFORM_NAME_EFFECT_TYPE  = "u_effectType"sv;
+static constexpr auto UNIFORM_NAME_LABEL_PASS   = "u_labelPass"sv;
+static constexpr auto UNIFORM_NAME_DISTANCE_SPREAD  = "u_distanceSpread"sv;
 
 /// built-in attribute name
 static constexpr auto ATTRIBUTE_NAME_POSITION  = "a_position"sv;

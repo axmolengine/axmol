@@ -10,7 +10,7 @@ layout(binding = 0) uniform sampler2D u_tex0;
 layout(std140) uniform fs_ub {
     vec4 u_effectColor;
     vec4 u_textColor;
-    int u_effectType;
+    int u_labelPass; // 0: text, 1: outline, 2: shadow
 };
 
 layout(location = SV_Target0) out vec4 FragColor;
@@ -32,11 +32,11 @@ void main()
     // outlineAlpha == (0, 1) means the edge of outline
     float outlineAlpha = texColor.x;
 
-    if (u_effectType == 0) // draw text
+    if (u_labelPass == 0) // draw text
     {
         FragColor = v_color * vec4(u_textColor.rgb, u_textColor.a * fontAlpha);
     }
-    else if (u_effectType == 1) // draw outline
+    else if (u_labelPass == 1) // draw outline
     {
         // multipy (1.0 - fontAlpha) to make the inner edge of outline smoother and make the text itself transparent.
         FragColor = v_color * vec4(u_effectColor.rgb, u_effectColor.a * outlineAlpha * (1.0 - fontAlpha));

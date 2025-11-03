@@ -1,3 +1,36 @@
+# axmol-2.9.1 Nov.2 2025
+
+## Significant changes relative to 2.9.0:
+
+- Improve SDF text outline rendering by @halx99 in [#2843](https://github.com/axmolengine/axmol/pull/2843)
+
+## Bug fixes
+
+- Fix SDF text rendering issue when both outline and shadow are enabled by @halx99, see issue: [#2844](https://github.com/axmolengine/axmol/issues/2844)
+- Fix memory leak in extension::GUI ScrollView by @j-jorge in [#2821](https://github.com/axmolengine/axmol/pull/2821)
+- Fix FairyGUI Ellipse/Circle "Line Size" issue by @aismann in [#2825](https://github.com/axmolengine/axmol/pull/2825)
+- Fix: `ui::Text` `Overflow::SHRINK` does not restore the original font size when text is shortened by @tkzcfc in [#2831](https://github.com/axmolengine/axmol/pull/2831)
+- Fix: `FastTMXLayer::reset` draw counts when layer becomes empty by @lucycycy in [#2839](https://github.com/axmolengine/axmol/pull/2839)
+
+## Improvements
+
+- Improve AutoPolygon::findFirstNoneTransparentPixel() by @aismann in [#2810](https://github.com/axmolengine/axmol/pull/2810)
+- Add new test scroll view v2 by @NgVThangBz in [#2820](https://github.com/axmolengine/axmol/pull/2820)
+- Add PVRv3 ASTC support and improve PVR format detection by @lucycycy in [#2832](https://github.com/axmolengine/axmol/pull/2832)
+- Sync pixel format enums in Constants.lua by @halx99
+- Improve distance field outline shader by @halx99
+
+## SDK & Tools updates
+
+- gradle: 9.1.0 => 9.2.0
+- webview2: 1.0.3485.44 => 1.0.3537.50
+
+## 3rdparty updates
+
+- oboe: 1.9.3 => 1.10.0
+- openssl: 3.0.17 => 3.0.18
+- rapidjson: 1.1.0-815e6e7 => 1.1.0-24b5e7a
+
 # axmol-2.9.0 Oct.5 2025
 
 ## Significant changes relative to 2.8.x:

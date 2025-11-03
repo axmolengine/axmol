@@ -307,8 +307,11 @@ void ShaderModuleMTL::setBuiltinLocations()
     /// u_effectColor
     _builtinUniforms[Uniform::EFFECT_COLOR] = getUniformInfo(UNIFORM_NAME_EFFECT_COLOR);
 
-    /// u_effectType
-    _builtinUniforms[Uniform::EFFECT_TYPE] = getUniformInfo(UNIFORM_NAME_EFFECT_TYPE);
+    /// u_textPass
+    _builtinUniforms[Uniform::LABEL_PASS] = getUniformInfo(UNIFORM_NAME_LABEL_PASS);
+
+    /// u_distanceSpread
+    _builtinUniforms[Uniform::DISTANCE_SPREAD] = getUniformInfo(UNIFORM_NAME_DISTANCE_SPREAD);
 }
 
 int ShaderModuleMTL::getAttributeLocation(Attribute name) const

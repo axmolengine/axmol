@@ -159,7 +159,7 @@
 
 ## oboe (Android only)
 - [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
-- Version: 1.9.3
+- Version: 1.10.0
 - License: Apache-2.0
 
 ## ogg
@@ -185,7 +185,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.17
+- Version: 3.0.18
 - License: Apache-2.0
 
 ## png
@@ -207,7 +207,7 @@
 
 ## rapidjson
 - [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
-- Version: 1.1.0-815e6e7 (until Sep 24, 2024)
+- Version: 1.1.0-24b5e7a (until Feb 5, 2025)
 - License: MIT
 
 ## recast
