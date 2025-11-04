@@ -442,7 +442,7 @@ public:
      * Enable glow effect to Label.
      * @warning Limiting use to only when the Label created with true type font.
      */
-    virtual void enableGlow(const Color4B& glowColor, float glowSize = -1);
+    virtual void enableGlow(const Color4B& glowColor, float glowRadius = -1);
 
     /**
      * Enable italics rendering
@@ -503,7 +503,7 @@ public:
      */
     float getOutlineSize() const { return _outlineSize; }
 
-    float getGlowSize() const { return _glowSize;  }
+    float getGlowRadius() const { return _glowRadius; }
 
     /**
      * Return current effect type.
@@ -859,7 +859,7 @@ protected:
     LabelType _currentLabelType;
     int _numberOfLines;
     float _outlineSize;
-    float _glowSize;
+    float _glowRadius;
     float _systemFontSize;
 
     int _lengthOfString;

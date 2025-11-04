@@ -604,7 +604,7 @@ void Label::reset()
     TTFConfig temp;
     _fontConfig  = temp;
     _outlineSize = 0.f;
-    _glowSize    = 0.f;
+    _glowRadius  = 0.f;
 
     _bmFontPath      = "";
     _bmSubTextureKey = "";
@@ -1386,14 +1386,14 @@ void Label::scaleFontSize(float fontSize)
     }
 }
 
-void Label::enableGlow(const Color4B& glowColor, float glowSize)
+void Label::enableGlow(const Color4B& glowColor, float glowRadius)
 {
-    if (glowSize <= 0)
-        glowSize = FontFreeType::DistanceMapSpread / 2.0f;
+    if (glowRadius <= 0)
+        glowRadius = FontFreeType::DistanceMapSpread / 2.0f;
 
-    if (_currentLabelType == LabelType::TTF && glowSize > 0)
+    if (_currentLabelType == LabelType::TTF && (glowRadius > 0 || _currLabelEffect == LabelEffect::GLOW))
     {
-        _glowSize = glowSize;
+        _glowRadius = glowRadius;
 
         auto config                 = _fontConfig;
         int mods                    = 0;
@@ -2050,13 +2050,13 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             // glow pass
             {
                 pass = 1;
-                const float glowWidth = _glowSize * _director->getContentScaleFactor();
+                const float glowRadius           = _glowRadius * _director->getContentScaleFactor();
                 const float distanceFieldSpread = FontFreeType::DistanceMapSpread * _director->getContentScaleFactor();
                 Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
                 updateBuffer(textureAtlas, batch.effectCommand);
                 auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
                 effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                effectPS->setUniform(_effectWidthLocation, &glowWidth, sizeof(float));
+                effectPS->setUniform(_effectWidthLocation, &glowRadius, sizeof(float));
                 effectPS->setUniform(_distanceSpreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
                 effectPS->setUniform(_passLocation, &pass, sizeof(pass));
                 batch.effectCommand.init(_globalZOrder);
