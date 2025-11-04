@@ -56,7 +56,7 @@ typedef struct _ttfConfig
     GlyphCollection glyphs;
     float fontSize; // The desired render font size
     int faceSize; // The original face size of font, used when distanceFieldEnabled == true
-    int outlineSize;
+    int outlineSize;  // The Outline width used in non‑SDF rendering; ignored when distance field is enabled
 
     bool distanceFieldEnabled;
     bool italics;
@@ -442,7 +442,7 @@ public:
      * Enable glow effect to Label.
      * @warning Limiting use to only when the Label created with true type font.
      */
-    virtual void enableGlow(const Color4B& glowColor);
+    virtual void enableGlow(const Color4B& glowColor, float glowRadius = -1);
 
     /**
      * Enable italics rendering
@@ -502,6 +502,8 @@ public:
      * Return the outline effect size value.
      */
     float getOutlineSize() const { return _outlineSize; }
+
+    float getGlowRadius() const { return _glowRadius; }
 
     /**
      * Return current effect type.
@@ -759,7 +761,7 @@ protected:
         std::array<CustomCommand*, 3> getCommandArray();
 
         CustomCommand textCommand;
-        CustomCommand outLineCommand;
+        CustomCommand effectCommand; // effect: outline or glow 
         CustomCommand shadowCommand;
     };
 
@@ -857,6 +859,7 @@ protected:
     LabelType _currentLabelType;
     int _numberOfLines;
     float _outlineSize;
+    float _glowRadius;
     float _systemFontSize;
 
     int _lengthOfString;
@@ -943,6 +946,7 @@ protected:
     backend::UniformLocation _textureLocation;
     backend::UniformLocation _textColorLocation;
     backend::UniformLocation _effectColorLocation;
+    backend::UniformLocation _effectWidthLocation;
     backend::UniformLocation _passLocation;
     backend::UniformLocation _distanceSpreadLocation;
 

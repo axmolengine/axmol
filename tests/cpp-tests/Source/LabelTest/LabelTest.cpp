@@ -1470,9 +1470,21 @@ LabelTTFSDF::LabelTTFSDF()
         _labelSDF->enableOutline(Color4B::GREEN, size);
         _labelNormal->enableOutline(Color4B::GREEN, size);
     });
-    initToggleCheckboxes();
     _sliderOutline->setEnabled(false);
     _sliderOutline->setOpacity(100);
+
+    _sliderGlow = initSlider("Glow", Vec2(size.width * 0.5, size.height * 0.35),
+                                [=, this](Object* obj, ui::Slider::EventType type) {
+        Slider* slider = (Slider*)obj;
+        float size     = 1 + slider->getPercent() / 10;
+        if (!slider->isEnabled())
+            return;
+        _labelSDF->enableGlow(Color4B::RED, size);
+        _labelNormal->enableGlow(Color4B::RED, size);
+    });
+    _sliderGlow->setEnabled(false);
+    _sliderGlow->setOpacity(100);
+    initToggleCheckboxes();
 }
 ui::Slider* LabelTTFSDF::initSlider(std::string content,
                                     Vec2 pos,
@@ -1511,7 +1523,7 @@ void LabelTTFSDF::initToggleCheckboxes()
     // Create the radio buttons
     static const int NUMBER_OF_BUTTONS  = 3;
     startPosY                           = winSize.height * 0.25;
-    std::vector<std::string> labelTypes = {"Normal", "Glow", "OutLine"};
+    std::vector<std::string> labelTypes = {"Normal", "Glow", "Outline"};
 
     for (int i = 0; i < NUMBER_OF_BUTTONS; ++i)
     {
@@ -1546,13 +1558,20 @@ void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButt
     _sliderOutline->setEnabled(false);
     _sliderOutline->setOpacity(100);
     _sliderOutline->setPercent(0);
+
+    _sliderGlow->setEnabled(false);
+    _sliderGlow->setOpacity(100);
+    _sliderGlow->setPercent(0);
     switch (radioButton->getTag())
     {
     case 0:
+        
         break;
     case 1:
-        _labelNormal->enableGlow(Color4B::RED);
-        _labelSDF->enableGlow(Color4B::RED);
+        _labelNormal->enableGlow(Color4B::RED, 1);
+        _labelSDF->enableGlow(Color4B::RED, 1);
+        _sliderGlow->setEnabled(true);
+        _sliderGlow->setOpacity(255);
         break;
     case 2:
         _labelSDF->enableOutline(Color4B::GREEN, 1);

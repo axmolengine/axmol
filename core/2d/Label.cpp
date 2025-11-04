@@ -202,15 +202,15 @@ Label::BatchCommand::BatchCommand()
     textCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
     shadowCommand.setDrawType(CustomCommand::DrawType::ELEMENT);
     shadowCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
-    outLineCommand.setDrawType(CustomCommand::DrawType::ELEMENT);
-    outLineCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
+    effectCommand.setDrawType(CustomCommand::DrawType::ELEMENT);
+    effectCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
 }
 
 Label::BatchCommand::~BatchCommand()
 {
     AX_SAFE_RELEASE(textCommand.getPipelineDescriptor().programState);
     AX_SAFE_RELEASE(shadowCommand.getPipelineDescriptor().programState);
-    AX_SAFE_RELEASE(outLineCommand.getPipelineDescriptor().programState);
+    AX_SAFE_RELEASE(effectCommand.getPipelineDescriptor().programState);
 }
 
 void Label::BatchCommand::setProgramState(backend::ProgramState* programState)
@@ -225,14 +225,14 @@ void Label::BatchCommand::setProgramState(backend::ProgramState* programState)
     AX_SAFE_RELEASE(programStateShadow);
     programStateShadow = programState->clone();
 
-    auto& programStateOutline = outLineCommand.getPipelineDescriptor().programState;
+    auto& programStateOutline = effectCommand.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE(programStateOutline);
     programStateOutline = programState->clone();
 }
 
 std::array<CustomCommand*, 3> Label::BatchCommand::getCommandArray()
 {
-    return std::array<CustomCommand*, 3>{&textCommand, &shadowCommand, &outLineCommand};
+    return std::array<CustomCommand*, 3>{&textCommand, &shadowCommand, &effectCommand};
 }
 
 Label* Label::create()
@@ -604,6 +604,7 @@ void Label::reset()
     TTFConfig temp;
     _fontConfig  = temp;
     _outlineSize = 0.f;
+    _glowRadius  = 0.f;
 
     _bmFontPath      = "";
     _bmSubTextureKey = "";
@@ -775,6 +776,7 @@ void Label::updateUniformLocations()
     _textureLocation     = _programState->getUniformLocation(backend::Uniform::TEXTURE);
     _textColorLocation   = _programState->getUniformLocation(backend::Uniform::TEXT_COLOR);
     _effectColorLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_COLOR);
+    _effectWidthLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_WIDTH);
     _passLocation        = _programState->getUniformLocation(backend::Uniform::LABEL_PASS);
     _distanceSpreadLocation = _programState->getUniformLocation(backend::Uniform::DISTANCE_SPREAD);
 }
@@ -1286,6 +1288,7 @@ bool Label::setTTFConfigInternal(const TTFConfig& ttfConfig)
     unsigned int mods = 0;
     mods |= (ttfConfig.fontSize != _fontConfig.fontSize);
     mods |= (ttfConfig.outlineSize != _fontConfig.outlineSize);
+    mods |= (ttfConfig.distanceFieldEnabled != _fontConfig.distanceFieldEnabled);
     _fontConfig = ttfConfig;
     return updateTTFConfigInternal(mods);
 }
@@ -1383,17 +1386,17 @@ void Label::scaleFontSize(float fontSize)
     }
 }
 
-void Label::enableGlow(const Color4B& glowColor)
+void Label::enableGlow(const Color4B& glowColor, float glowRadius)
 {
-    if (_currentLabelType == LabelType::TTF)
+    if (glowRadius <= 0)
+        glowRadius = FontFreeType::DistanceMapSpread / 2.0f;
+
+    if (_currentLabelType == LabelType::TTF && (glowRadius > 0 || _currLabelEffect == LabelEffect::GLOW))
     {
+        _glowRadius = glowRadius;
+
         auto config                 = _fontConfig;
         int mods                    = 0;
-        if (config.outlineSize > 0)
-        {
-            config.outlineSize = 0;
-            ++mods;
-        }
         // Note: axmol only support Glow effect in SDF rendering mode
         if (!_fontConfig.distanceFieldEnabled)
         {
@@ -1958,9 +1961,9 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             {
                 pass                 = 2;
                 Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
-                auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
-                programStateShadow->setUniform(_passLocation, &pass, sizeof(pass));
+                auto shadowPS = batch.shadowCommand.getPipelineDescriptor().programState;
+                shadowPS->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
+                shadowPS->setUniform(_passLocation, &pass, sizeof(pass));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
@@ -1970,22 +1973,23 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 // outline pass
                 {
                     pass      = 1;
-                    effectColor.w = (_outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize) *
-                                    _director->getContentScaleFactor();
-                    auto& outlinePS = batch.outLineCommand.getPipelineDescriptor().programState;
-                    updateBuffer(textureAtlas, batch.outLineCommand);
-                    outlinePS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                    outlinePS->setUniform(_passLocation, &pass, sizeof(pass));
+                    float outlineWidth = (_outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize) *
+                                         _director->getContentScaleFactor();
                     float distanceFieldSpread = FontFreeType::DistanceMapSpread * _director->getContentScaleFactor();
-                    outlinePS->setUniform(_distanceSpreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
-                    batch.outLineCommand.init(_globalZOrder);
-                    renderer->addCommand(&batch.outLineCommand);
+                    auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
+                    updateBuffer(textureAtlas, batch.effectCommand);
+                    effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
+                    effectPS->setUniform(_effectWidthLocation, &outlineWidth, sizeof(float));
+                    effectPS->setUniform(_distanceSpreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
+                    effectPS->setUniform(_passLocation, &pass, sizeof(pass));
+                    batch.effectCommand.init(_globalZOrder);
+                    renderer->addCommand(&batch.effectCommand);
                 }
 
                 // text pass
                 {
                     pass     = 0;
-                    auto* textPS = batch.textCommand.getPipelineDescriptor().programState;
+                    auto textPS = batch.textCommand.getPipelineDescriptor().programState;
 
                     textPS->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
                     textPS->setUniform(_passLocation, &pass, sizeof(pass));
@@ -1996,12 +2000,12 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 // outline pass
                 {
                     pass = 1;
-                    updateBuffer(textureAtlas, batch.outLineCommand);
-                    auto* outlinePS = batch.outLineCommand.getPipelineDescriptor().programState;
-                    outlinePS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                    outlinePS->setUniform(_passLocation, &pass, sizeof(pass));
-                    batch.outLineCommand.init(_globalZOrder);
-                    renderer->addCommand(&batch.outLineCommand);
+                    updateBuffer(textureAtlas, batch.effectCommand);
+                    auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
+                    effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
+                    effectPS->setUniform(_passLocation, &pass, sizeof(pass));
+                    batch.effectCommand.init(_globalZOrder);
+                    renderer->addCommand(&batch.effectCommand);
                 }
 
                 // text pass
@@ -2020,8 +2024,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             if (_shadowEnabled)
             {
                 Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
-                auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
+                auto shadowPS = batch.shadowCommand.getPipelineDescriptor().programState;
+                shadowPS->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
@@ -2029,20 +2033,42 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         break;
         case LabelEffect::GLOW:
         {
-            // draw shadow
+            int pass = 0;
+            // shadow pass
             if (_shadowEnabled)
             {
+                pass                     = 2;
                 Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
-                auto* programStateShadow = batch.shadowCommand.getPipelineDescriptor().programState;
-                programStateShadow->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
-                programStateShadow->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
+                auto shadowPS           = batch.shadowCommand.getPipelineDescriptor().programState;
+                shadowPS->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
+                shadowPS->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
+                shadowPS->setUniform(_passLocation, &pass, sizeof(pass));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
 
+            // glow pass
+            {
+                pass = 1;
+                const float glowRadius           = _glowRadius * _director->getContentScaleFactor();
+                const float distanceFieldSpread = FontFreeType::DistanceMapSpread * _director->getContentScaleFactor();
+                Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
+                updateBuffer(textureAtlas, batch.effectCommand);
+                auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
+                effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
+                effectPS->setUniform(_effectWidthLocation, &glowRadius, sizeof(float));
+                effectPS->setUniform(_distanceSpreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
+                effectPS->setUniform(_passLocation, &pass, sizeof(pass));
+                batch.effectCommand.init(_globalZOrder);
+                renderer->addCommand(&batch.effectCommand);
+            }
+
+            // text pass
+            pass = 0;
             Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
-            batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &effectColor,
-                                                                               sizeof(Vec4));
+            auto textPS = batch.textCommand.getPipelineDescriptor().programState;
+            textPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
+            textPS->setUniform(_passLocation, &pass, sizeof(pass));
         }
         break;
         default:
@@ -2151,7 +2177,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
                 }
                 batch.textCommand.getPipelineDescriptor().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
                                                                                    sizeof(matrixMVP.m));
-                batch.outLineCommand.getPipelineDescriptor().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
+                batch.effectCommand.getPipelineDescriptor().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
                                                                                       sizeof(matrixMVP.m));
                 updateEffectUniforms(batch, textureAtlas, renderer, transform);
             }

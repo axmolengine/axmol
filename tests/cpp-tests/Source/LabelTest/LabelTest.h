@@ -374,7 +374,8 @@ public:
     virtual std::string subtitle() const override;
     ax::Label* _labelNormal;
     ax::Label* _labelSDF;
-    ax::ui::Slider *_sliderOutline;
+    ax::ui::Slider* _sliderOutline;
+    ax::ui::Slider* _sliderGlow;
     void initToggleLabel(std::string content, ax::Vec2 pos, std::function<void(Object*, ax::ui::CheckBox::EventType)> callback);
     ax::ui::Slider* initSlider(std::string content,ax::Vec2 pos,std::function<void(Object*, ax::ui::Slider::EventType)> callback);
     void initToggleCheckboxes();
