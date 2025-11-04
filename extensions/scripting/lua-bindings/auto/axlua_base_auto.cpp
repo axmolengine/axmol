@@ -55223,6 +55223,23 @@ int lua_ax_base_Label_enableGlow(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
+    if (argc == 2) 
+    {
+        ax::Color4B arg0;
+        double arg1;
+
+        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "ax.Label:enableGlow");
+
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Label:enableGlow");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_enableGlow'", nullptr);
+            return 0;
+        }
+        cobj->enableGlow(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Label:enableGlow",argc, 1);
     return 0;
 
@@ -55703,6 +55720,53 @@ int lua_ax_base_Label_getOutlineSize(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Label_getOutlineSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Label_getGlowRadius(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Label* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Label",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Label*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Label_getGlowRadius'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Label_getGlowRadius'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getGlowRadius();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Label:getGlowRadius",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Label_getGlowRadius'.",&tolua_err);
 #endif
 
     return 0;
@@ -58287,6 +58351,7 @@ int lua_register_ax_base_Label(lua_State* tolua_S)
         tolua_function(tolua_S,"getShadowBlurRadius",lua_ax_base_Label_getShadowBlurRadius);
         tolua_function(tolua_S,"getShadowColor",lua_ax_base_Label_getShadowColor);
         tolua_function(tolua_S,"getOutlineSize",lua_ax_base_Label_getOutlineSize);
+        tolua_function(tolua_S,"getGlowRadius",lua_ax_base_Label_getGlowRadius);
         tolua_function(tolua_S,"getLabelEffectType",lua_ax_base_Label_getLabelEffectType);
         tolua_function(tolua_S,"getEffectColor",lua_ax_base_Label_getEffectColor);
         tolua_function(tolua_S,"setAlignment",lua_ax_base_Label_setAlignment);
