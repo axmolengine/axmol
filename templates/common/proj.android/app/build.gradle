@@ -116,6 +116,7 @@ android.applicationVariants.configureEach { variant ->
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':libaxmol')
+	implementation 'androidx.appcompat:appcompat:1.7.1'
 }
 
 project.afterEvaluate {
