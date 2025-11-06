@@ -1336,7 +1336,7 @@ LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
 {
     auto size = Director::getInstance()->getWinSize();
 
-    FontFreeType::setShareDistanceFieldEnabled(false);
+    FontFreeType::setGlobalSDFEnabled(false);
     auto button = ax::ui::Button::create();
     button->setTitleText("Should be the same size");
     button->setTitleFontName("fonts/Marker Felt.ttf");
@@ -1344,7 +1344,7 @@ LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
     this->addChild(button);
     button->setPosition(Vec2(size.width / 2, size.height * 0.7f));
 
-    FontFreeType::setShareDistanceFieldEnabled(true);
+    FontFreeType::setGlobalSDFEnabled(true);
     button = ax::ui::Button::create();
     button->setTitleText("Should be the same size");
     button->setTitleFontName("fonts/Marker Felt.ttf");
@@ -1352,7 +1352,7 @@ LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
     this->addChild(button);
     button->setPosition(Vec2(size.width / 2, size.height * 0.55f));
 
-    FontFreeType::setShareDistanceFieldEnabled(false);
+    FontFreeType::setGlobalSDFEnabled(false);
     button = ax::ui::Button::create();
     button->setTitleText("Should be the same size");
     button->setTitleColor(Color3B::RED);
@@ -1361,7 +1361,7 @@ LabelTitleButtonTTFDistanceField::LabelTitleButtonTTFDistanceField()
     this->addChild(button);
     button->setPosition(Vec2(size.width / 2, size.height * 0.4f));
 
-    FontFreeType::setShareDistanceFieldEnabled(true);
+    FontFreeType::setGlobalSDFEnabled(true);
     button = ax::ui::Button::create();
     button->setTitleText("Should be the same size");
     button->setTitleColor(Color3B::RED);
@@ -1384,7 +1384,7 @@ LabelTTFSDF::LabelTTFSDF()
 {
     auto size = Director::getInstance()->getWinSize();
 
-    FontFreeType::setShareDistanceFieldEnabled(false);
+    FontFreeType::setGlobalSDFEnabled(false);
     Label* title = Label::createWithTTF("Normal", "fonts/Marker Felt.ttf", 20);
     this->addChild(title);
     title->setPosition(Vec2(size.width * 3 / 4, size.height * 0.75));
@@ -1392,7 +1392,7 @@ LabelTTFSDF::LabelTTFSDF()
     this->addChild(_labelNormal);
     _labelNormal->setPosition(Vec2(size.width * 3 / 4, size.height * 0.65));
 
-    FontFreeType::setShareDistanceFieldEnabled(true);
+    FontFreeType::setGlobalSDFEnabled(true);
     title = Label::createWithTTF("SDF", "fonts/Marker Felt.ttf", 20);
     this->addChild(title);
     title->setPosition(Vec2(size.width / 4, size.height * 0.75));

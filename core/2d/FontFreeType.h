@@ -70,12 +70,15 @@ public:
     static void setMissingGlyphCharacter(char32_t charCode) { _mssingGlyphCharacter = charCode; };
 
     /**
-     * @brief Whether enable SDF font rendering globally, by default: disabled, since axmol-2.1.0
+     * @brief Whether enable SDF text rendering globally, by default: disabled, since axmol-2.1.0
      *
      * @param enabled
      */
-    static void setShareDistanceFieldEnabled(bool enabled) { _shareDistanceFieldEnabled = enabled; }
-    static bool isShareDistanceFieldEnabled() { return _shareDistanceFieldEnabled; }
+    static void setGlobalSDFEnabled(bool enabled) { _globalSDFEnabled = enabled; }
+    static bool isGlobalSDFEnabled() { return _globalSDFEnabled; }
+
+    AX_DEPRECATED(2.9.2) static void setShareDistanceFieldEnabled(bool enabled) { setGlobalSDFEnabled(enabled); }
+    AX_DEPRECATED(2.9.2) static bool isShareDistanceFieldEnabled() { return isGlobalSDFEnabled(); }
 
     /**
      * @brief TrueType fonts with native bytecode hinting * *
@@ -149,7 +152,7 @@ private:
     static bool _FTInitialized;
     static bool _streamParsingEnabled;
     static bool _doNativeBytecodeHinting;
-    static bool _shareDistanceFieldEnabled;
+    static bool _globalSDFEnabled;
     static char32_t _mssingGlyphCharacter;
 
     static bool initFreeType();
