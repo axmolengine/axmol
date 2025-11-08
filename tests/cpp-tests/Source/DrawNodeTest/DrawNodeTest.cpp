@@ -1879,9 +1879,6 @@ void DrawNodeMorphTest_Polygon::update(float dt)
         drawNodeArray[n]->properties.setScale(Vec2(0.5f, 0.5f));
         drawNodeArray[n]->drawPoly(verticesObjMorph[n], segments, true, color[n], sliderValue[sliderType::Thickness]);
     }
-    drawNodeArray[0]->setScale(0.3);
-    drawNodeArray[0]->drawPoly(horse, sizeof(horse) / sizeof(horse[0]), true, Color4F::GREEN);
-    drawNodeArray[0]->drawPoly(spider, sizeof(spider) / sizeof(spider[0]), true, Color4F::RED);
 }
 
 void DrawNodeMorphTest_Polygon::onEnter()
