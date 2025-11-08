@@ -1404,7 +1404,6 @@ DrawNodeTests::DrawNodeTests()
     ADD_TEST_CASE(DrawNodeSolidCircleTest);
     ADD_TEST_CASE(DrawNodePolygonTest);
 
-    ADD_TEST_CASE(DrawNodeMethodsTest);
     ADD_TEST_CASE(DrawNodeSpLinesTest);
     ADD_TEST_CASE(DrawNodeSpLinesOpenClosedTest);
     ADD_TEST_CASE(DrawNodeAxmolTest2);
@@ -1423,7 +1422,9 @@ DrawNodeTests::DrawNodeTests()
     ADD_TEST_CASE(DrawNodeThicknessTest);
     ADD_TEST_CASE(DrawNodeThicknessStressTest);
     ADD_TEST_CASE(DrawNodeLineDrawTest);
+    ADD_TEST_CASE(DrawNodeMethodsTest);
     ADD_TEST_CASE(DrawNodePlayground);
+
 }
 
 DrawNodeBaseTest::DrawNodeBaseTest()
@@ -1461,15 +1462,16 @@ DrawNodeBaseTest::DrawNodeBaseTest()
         drawNode->properties.setTransform(true);
         addChild(drawNode);
     }
-    //menuItemDrawOrder->setFontSize(10);
-    //menuItemTransform->setFontSize(10);
-    //menuItemDrawOrder = MenuItemFont::create("drawOrder: false", AX_CALLBACK_1(DrawNodeBaseTest::setDrawOrder, this));
-    //menuItemTransform = MenuItemFont::create("transform: true", AX_CALLBACK_1(DrawNodeBaseTest::setTransform, this));
+    // menuItemDrawOrder->setFontSize(10);
+    // menuItemTransform->setFontSize(10);
+    // menuItemDrawOrder = MenuItemFont::create("drawOrder: false", AX_CALLBACK_1(DrawNodeBaseTest::setDrawOrder,
+    // this)); menuItemTransform = MenuItemFont::create("transform: true", AX_CALLBACK_1(DrawNodeBaseTest::setTransform,
+    // this));
 
-    //auto menu = Menu::create(menuItemDrawOrder, menuItemTransform, nullptr);
-    //menu->alignItemsVerticallyWithPadding(4);
-    //menu->setPosition(Vec2(size.x - 50, size.y / 2 - 20));
-    //addChild(menu, 1000);
+    // auto menu = Menu::create(menuItemDrawOrder, menuItemTransform, nullptr);
+    // menu->alignItemsVerticallyWithPadding(4);
+    // menu->setPosition(Vec2(size.x - 50, size.y / 2 - 20));
+    // addChild(menu, 1000);
 }
 
 void DrawNodeBaseTest::generateDataPoints()
@@ -2706,7 +2708,7 @@ void DrawNodeMethodsTest::onEnter()
 
 std::string DrawNodeMethodsTest::title() const
 {
-    return "DrawNode Methods Test";
+    return "DrawNode Stress Tests";
 }
 
 string DrawNodeMethodsTest::subtitle() const
@@ -3543,7 +3545,7 @@ DrawNodePolygonTest::DrawNodePolygonTest()
     drawNode->properties.setPosition(Vec2(1100, 160));
     drawNode->drawPoly(spider, sizeof(spider) / sizeof(spider[0]), true, Color4F::RED);
     drawNode->properties.setScale({0.7f, 0.7f});
-    drawNode->properties.setPosition(Vec2(950,  400));
+    drawNode->properties.setPosition(Vec2(950, 400));
     drawNode->drawPoly(spider, sizeof(spider) / sizeof(spider[0]), true, Color4F::RED);
 }
 
@@ -3564,7 +3566,7 @@ DrawNodeCircleTest::DrawNodeCircleTest()
     {
         drawNode->drawCircle(center, 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f, Color4F::WHITE);
     }
-    drawNode->drawCircle(center, 130, AX_DEGREES_TO_RADIANS(90), 36, false, 1.0f, 1.0f, Color4F::MAGENTA);
+    drawNode->drawCircle(center, 130, AX_DEGREES_TO_RADIANS(90), 48, false, 1.0f, 1.0f, Color4F::MAGENTA);
 
     drawNode->properties.setPosition(Vec2(-10, 10));
     for (size_t i = 0; i < 3; i++)
@@ -3590,43 +3592,29 @@ std::string DrawNodeCircleTest::title() const
 
 std::string DrawNodeCircleTest::subtitle() const
 {
-    return "Axmol,  '3...20', '36'-Corner";
+    return "Axmol,  '3...20', '48'-Corner";
 }
 
 DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
 {
-    drawNode->properties.setPosition(Vec2(100, -10));
-    for (int i = 3; i <= 24; i++)
+    float radius = 40;
+    for (int i = 0; i < 10000; i++)
     {
-        drawNode->drawCircle(center, 5 * i, AX_DEGREES_TO_RADIANS(90), i, false, 1.0f, 1.0f, Color4F::WHITE);
-    }
-    drawNode->drawCircle(center, 130, AX_DEGREES_TO_RADIANS(90), 36, false, 1.0f, 1.0f, Color4F::MAGENTA);
-
-    drawNode->properties.setPosition(Vec2(-10, 10));
-    for (size_t i = 0; i < 3; i++)
-    {
-        drawNode->drawCircle(Vec2(120, 150), 85 - 18.8 * i, AX_DEGREES_TO_RADIANS(90), 5, false, 1.0f, 1.0f,
-                             Color4F::BLUE, 3.0f);
-    }
-
-    drawNode->properties.setCenter(Vec2(120, 150));
-    for (int i = 0; i < 5; i++)
-    {
-        drawNode->properties.setRotation(AX_DEGREES_TO_RADIANS(360 / 5 * i));
-        drawNode->drawSolidCircle(Vec2(120, 197), 10, 0, 36, 1.0f, 1.0f, Color4F::BLUE);
-        drawNode->drawSolidCircle(Vec2(120, 215), 12, 0, 36, 1.0f, 1.0f, Color4F::BLUE);
-        drawNode->drawSolidCircle(Vec2(120, 235), 16, 0, 36, 1.0f, 1.0f, Color4F::BLUE);
+        Vec2 pos = VisibleRect::center() +
+                   Vec2((VisibleRect::center().x-50) * AXRANDOM_MINUS1_1(), (VisibleRect::center().y -50) * AXRANDOM_MINUS1_1());
+        drawNode->drawSolidCircle(pos, radius, 0, 36,
+                                  Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1() + 0.1f));
     }
 }
 
 std::string DrawNodeSolidCircleTest::title() const
 {
-    return "SolidCircle Test";
+    return "SolidCircle Stress Test";
 }
 
 std::string DrawNodeSolidCircleTest::subtitle() const
 {
-    return "DrawNode v2.0 vs v3.0";
+    return "10000 Circles";
 }
 
 DrawNodePlayground::DrawNodePlayground()
@@ -3820,6 +3808,22 @@ DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
         pts2->insertControlPoint(Vec2(0, 0), i);
     }
 
+    auto closeLabel = Label::createWithTTF("Closed Spline GREEN", "fonts/Marker Felt.ttf", 14);
+    closeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    closeLabel->setPosition(Vec2(10, 200));
+    closeLabel->setTextColor(Color4B::GREEN);
+    this->addChild(closeLabel, 1);
+    auto openLabel = Label::createWithTTF("Open Spline RED", "fonts/Marker Felt.ttf", 14);
+    openLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    openLabel->setPosition(Vec2(10, 220));
+    openLabel->setTextColor(Color4B::RED);
+    this->addChild(openLabel, 1);
+    auto cpLabel = Label::createWithTTF("Control Point YELLOW", "fonts/Marker Felt.ttf", 14);
+    cpLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    cpLabel->setPosition(Vec2(10, 240));
+    cpLabel->setTextColor(Color4B::YELLOW);
+    this->addChild(cpLabel, 1);
+
     DrawNodeBaseTest::generateDataPoints();
     scheduleUpdate();
 }
@@ -3863,13 +3867,13 @@ void DrawNodeSpLinesOpenClosedTest::update(float dt)
     int boxSize = 3;
     for (auto&& p : points)
     {
-
-        drawNodeCP->drawRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize), Color4F::BLUE);
+        drawNodeCP->drawSolidRect(Vec2(p.x - boxSize, p.y - boxSize), Vec2(p.x + boxSize, p.y + boxSize),
+                                  Color4F::YELLOW);
         array->addControlPoint(Vec2(p.x, p.y));
     }
 
-    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color4F::GREEN, 1.0f, true);
-    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color4F::RED, 1.0f, false);
+    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color4F::GREEN, 4.0f, true);
+    drawNode->drawCardinalSpline(array, 0.0f, static_cast<int>(points.size() * 20), Color4F::RED, 4.0f, false);
 }
 
 #if defined(AX_PLATFORM_PC)
