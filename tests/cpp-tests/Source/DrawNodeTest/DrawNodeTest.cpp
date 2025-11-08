@@ -1462,16 +1462,6 @@ DrawNodeBaseTest::DrawNodeBaseTest()
         drawNode->properties.setTransform(true);
         addChild(drawNode);
     }
-    // menuItemDrawOrder->setFontSize(10);
-    // menuItemTransform->setFontSize(10);
-    // menuItemDrawOrder = MenuItemFont::create("drawOrder: false", AX_CALLBACK_1(DrawNodeBaseTest::setDrawOrder,
-    // this)); menuItemTransform = MenuItemFont::create("transform: true", AX_CALLBACK_1(DrawNodeBaseTest::setTransform,
-    // this));
-
-    // auto menu = Menu::create(menuItemDrawOrder, menuItemTransform, nullptr);
-    // menu->alignItemsVerticallyWithPadding(4);
-    // menu->setPosition(Vec2(size.x - 50, size.y / 2 - 20));
-    // addChild(menu, 1000);
 }
 
 void DrawNodeBaseTest::generateDataPoints()
