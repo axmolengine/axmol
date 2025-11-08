@@ -378,12 +378,12 @@ private:
     int selectedRadioButton;
 };
 
-class DrawNodeIssueTester : public DrawNodeBaseTest
+class DrawNodePlayground : public DrawNodeBaseTest
 {
 public:
-    CREATE_FUNC(DrawNodeIssueTester);
+    CREATE_FUNC(DrawNodePlayground);
 
-    DrawNodeIssueTester();
+    DrawNodePlayground();
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -436,6 +436,39 @@ public:
     virtual std::string subtitle() const override;
 
     void update(float dt) override;
+};
+
+class DrawNodeCircleTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCircleTest);
+
+    DrawNodeCircleTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class DrawNodeSolidCircleTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeSolidCircleTest);
+
+    DrawNodeSolidCircleTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class DrawNodePolygonTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodePolygonTest);
+
+    DrawNodePolygonTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
 };
 
 class DrawNodeSpLinesOpenClosedTest : public DrawNodeBaseTest
