@@ -68,7 +68,7 @@ typedef struct _ttfConfig
                float size                             = AX_DEFAULT_FONT_LABEL_SIZE,
                const GlyphCollection& glyphCollection = GlyphCollection::DYNAMIC,
                const char* customGlyphCollection      = nullptr, /* nullable */
-               bool useDistanceField                  = FontFreeType::isShareDistanceFieldEnabled(),
+               bool useDistanceField                  = FontFreeType::isGlobalSDFEnabled(),
                int outline                            = 0,
                bool useItalics                        = false,
                bool useBold                           = false,
@@ -948,7 +948,6 @@ protected:
     backend::UniformLocation _effectColorLocation;
     backend::UniformLocation _effectWidthLocation;
     backend::UniformLocation _passLocation;
-    backend::UniformLocation _distanceSpreadLocation;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Label);

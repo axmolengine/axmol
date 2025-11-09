@@ -48,7 +48,7 @@ FT_Library FontFreeType::_FTlibrary;
 bool FontFreeType::_FTInitialized             = false;
 bool FontFreeType::_streamParsingEnabled      = true;
 bool FontFreeType::_doNativeBytecodeHinting   = true;
-bool FontFreeType::_shareDistanceFieldEnabled = false;
+bool FontFreeType::_globalSDFEnabled          = false;
 const int FontFreeType::DistanceMapSpread     = 6;
 
 // By default, will render square when character glyph missing in current font

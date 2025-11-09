@@ -778,7 +778,6 @@ void Label::updateUniformLocations()
     _effectColorLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_COLOR);
     _effectWidthLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_WIDTH);
     _passLocation        = _programState->getUniformLocation(backend::Uniform::LABEL_PASS);
-    _distanceSpreadLocation = _programState->getUniformLocation(backend::Uniform::DISTANCE_SPREAD);
 }
 
 bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
@@ -1973,14 +1972,13 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 // outline pass
                 {
                     pass      = 1;
-                    float outlineWidth = (_outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize) *
-                                         _director->getContentScaleFactor();
-                    float distanceFieldSpread = FontFreeType::DistanceMapSpread * _director->getContentScaleFactor();
+
+                    const float effectWidth =
+                        (_outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize) / FontFreeType::DistanceMapSpread;
                     auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
                     updateBuffer(textureAtlas, batch.effectCommand);
                     effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                    effectPS->setUniform(_effectWidthLocation, &outlineWidth, sizeof(float));
-                    effectPS->setUniform(_distanceSpreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
+                    effectPS->setUniform(_effectWidthLocation, &effectWidth, sizeof(float));
                     effectPS->setUniform(_passLocation, &pass, sizeof(pass));
                     batch.effectCommand.init(_globalZOrder);
                     renderer->addCommand(&batch.effectCommand);
@@ -2050,14 +2048,12 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             // glow pass
             {
                 pass = 1;
-                const float glowRadius           = _glowRadius * _director->getContentScaleFactor();
-                const float distanceFieldSpread = FontFreeType::DistanceMapSpread * _director->getContentScaleFactor();
+                const float effectWidth = _glowRadius / FontFreeType::DistanceMapSpread;
                 Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
                 updateBuffer(textureAtlas, batch.effectCommand);
                 auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
                 effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                effectPS->setUniform(_effectWidthLocation, &glowRadius, sizeof(float));
-                effectPS->setUniform(_distanceSpreadLocation, &distanceFieldSpread, sizeof(distanceFieldSpread));
+                effectPS->setUniform(_effectWidthLocation, &effectWidth, sizeof(float));
                 effectPS->setUniform(_passLocation, &pass, sizeof(pass));
                 batch.effectCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.effectCommand);
