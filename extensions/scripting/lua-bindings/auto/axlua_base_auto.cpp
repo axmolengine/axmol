@@ -35627,62 +35627,6 @@ int lua_ax_base_EventMouse_getScrollY(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_EventMouse_setMouseInfo(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::EventMouse* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.EventMouse",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::EventMouse*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventMouse_setMouseInfo'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 3)
-    {
-        double arg0;
-        double arg1;
-        ax::EventMouse::MouseButton arg2;
-
-        ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.EventMouse:setMouseInfo");
-
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.EventMouse:setMouseInfo");
-
-        ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.EventMouse:setMouseInfo");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_setMouseInfo'", nullptr);
-            return 0;
-        }
-        obj->setMouseInfo(arg0, arg1, arg2);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:setMouseInfo",argc, 3);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventMouse_setMouseInfo'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_EventMouse_setMouseButton(lua_State* tolua_S)
 {
     int argc = 0;
@@ -36122,24 +36066,21 @@ int lua_ax_base_EventMouse_constructor(lua_State* tolua_S)
 
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 0)
     {
-        ax::EventMouse::MouseEventType arg0;
-
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.EventMouse:EventMouse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventMouse_constructor'", nullptr);
             return 0;
         }
-        obj = new ax::EventMouse(arg0);
+        obj = new ax::EventMouse();
         obj->autorelease();
         int ID =  (int)obj->_ID ;
         int* luaID =  &obj->_luaID ;
         toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventMouse");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:EventMouse",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventMouse:EventMouse",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -36166,7 +36107,6 @@ int lua_register_ax_base_EventMouse(lua_State* tolua_S)
         tolua_function(tolua_S,"setScrollData",lua_ax_base_EventMouse_setScrollData);
         tolua_function(tolua_S,"getScrollX",lua_ax_base_EventMouse_getScrollX);
         tolua_function(tolua_S,"getScrollY",lua_ax_base_EventMouse_getScrollY);
-        tolua_function(tolua_S,"setMouseInfo",lua_ax_base_EventMouse_setMouseInfo);
         tolua_function(tolua_S,"setMouseButton",lua_ax_base_EventMouse_setMouseButton);
         tolua_function(tolua_S,"getMouseButton",lua_ax_base_EventMouse_getMouseButton);
         tolua_function(tolua_S,"getLocation",lua_ax_base_EventMouse_getLocation);

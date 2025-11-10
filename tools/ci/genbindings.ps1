@@ -16,7 +16,14 @@ if (($stage -band 1)) {
     $pip_cmd = @('pip3', 'pip')[$IsWin]
     $python_cmd = @('python3', 'python')[$IsWin]
 
-    &$pip_cmd install PyYAML Cheetah3
+    if($IsLinux -and $LinuxDistro -eq 'Debian') 
+    {
+        sudo apt install python3-yaml python3-cheetah
+    }
+    else 
+    {
+        &$pip_cmd install PyYAML Cheetah3
+    }
 
     echo "after setup py_ver: $(&$python_cmd -V), PATH=$env:PATH"
 

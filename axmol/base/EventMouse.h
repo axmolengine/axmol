@@ -106,7 +106,7 @@ public:
      * @param x The x coordinate of cursor position.
      * @param y The y coordinate of cursor position.
      */
-    void setMouseInfo(float x, float y, MouseButton button, MouseEventType type)
+    [[internal]] void setMouseInfo(float x, float y, MouseButton button, MouseEventType type)
     {
         _prevPoint      = _point;
         _point.x        = x;
