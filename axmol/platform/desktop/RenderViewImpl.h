@@ -196,6 +196,8 @@ protected:
     axstd::pod_vector<float> _touchesY;
 #endif
 
+    float _previousMouseX;
+    float _previousMouseY;
     float _mouseX;
     float _mouseY;
 
