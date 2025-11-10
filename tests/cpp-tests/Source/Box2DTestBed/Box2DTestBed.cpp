@@ -75,9 +75,9 @@ static void SortTests()
 Box2DTestBedTests::Box2DTestBedTests()
 {
     // TODO: determine properly view size
-    g_camera.m_width  = 1920;
-    g_camera.m_height = 1080;
-    g_camera.m_zoom   = 150;
+    g_camera.m_width  = g_resourceSize.width;
+    g_camera.m_height = g_resourceSize.height;
+    g_camera.m_zoom   = 80;
     g_camera.m_center = b2Vec2_zero;
 
     ImGuiPresenter::getInstance()->setViewResolution(g_camera.m_width, g_camera.m_height);
