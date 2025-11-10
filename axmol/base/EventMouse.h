@@ -72,7 +72,7 @@ public:
      *
      * @param mouseEventCode A given mouse event type.
      */
-    EventMouse(MouseEventType mouseEventCode);
+    EventMouse();
 
     /** Get mouse event type.
      *
@@ -106,12 +106,13 @@ public:
      * @param x The x coordinate of cursor position.
      * @param y The y coordinate of cursor position.
      */
-    void setMouseInfo(float x, float y, MouseButton button)
+    void setMouseInfo(float x, float y, MouseButton button, MouseEventType type)
     {
-        _prevPoint   = _point;
-        _point.x     = x;
-        _point.y     = y;
-        _mouseButton = button;
+        _prevPoint      = _point;
+        _point.x        = x;
+        _point.y        = y;
+        _mouseButton    = button;
+        _mouseEventType = type;
         if (!_startPointCaptured)
         {
             _startPoint         = _point;
@@ -177,7 +178,7 @@ public:
     Vec2 getStartLocationInView() const;
 
 private:
-    MouseEventType _mouseEventType;
+    MouseEventType _mouseEventType{MouseEventType::MOUSE_NONE};
     MouseButton _mouseButton;
     float _scrollX;
     float _scrollY;

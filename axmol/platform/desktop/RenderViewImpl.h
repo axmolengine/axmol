@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "axmol/base/Object.h"
 #include "axmol/platform/Common.h"
 #include "axmol/platform/RenderView.h"
+#include "axmol/base/EventMouse.h"
 #include "GLFW/glfw3.h"
 #if defined(__EMSCRIPTEN__)
 #    include "axmol/tlx/pod_vector.hpp"
@@ -196,10 +197,9 @@ protected:
     axstd::pod_vector<float> _touchesY;
 #endif
 
-    float _previousMouseX;
-    float _previousMouseY;
-    float _mouseX;
-    float _mouseY;
+    float _mouseX{0.0f};
+    float _mouseY{0.0f};
+    EventMouse _currentMouseEvent{};
 
 public:
     // View will trigger an event when window is resized, gains or loses focus
