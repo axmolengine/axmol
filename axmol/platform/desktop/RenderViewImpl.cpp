@@ -1182,8 +1182,8 @@ void RenderViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int
         }
     }
 
-    float cursorX = transformInputX(_mouseX);
-    float cursorY = transformInputY(_mouseY);
+    float cursorX     = transformInputX(_mouseX);
+    float cursorY     = transformInputY(_mouseY);
     float prevCursorX = transformInputX(_previousMouseX);
     float prevCursorY = transformInputY(_previousMouseY);
 
@@ -1220,12 +1220,12 @@ void RenderViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, doubl
         }
     }
 
-    float cursorX = transformInputX(_mouseX);
-    float cursorY = transformInputY(_mouseY);
+    float cursorX     = transformInputX(_mouseX);
+    float cursorY     = transformInputY(_mouseY);
     float prevCursorX = transformInputX(_previousMouseX);
     float prevCursorY = transformInputY(_previousMouseY);
-    _previousMouseX = _mouseX;
-    _previousMouseY = _mouseY;
+    _previousMouseX   = _mouseX;
+    _previousMouseY   = _mouseY;
 
     EventMouse event(EventMouse::MouseEventType::MOUSE_MOVE);
     // Set current button

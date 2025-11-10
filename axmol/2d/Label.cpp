@@ -742,12 +742,12 @@ void Label::updateBatchCommand(Label::BatchCommand& batch)
 
 void Label::updateUniformLocations()
 {
-    _mvpMatrixLocation      = _programState->getUniformLocation(rhi::Uniform::MVP_MATRIX);
-    _textureLocation        = _programState->getUniformLocation(rhi::Uniform::TEXTURE);
-    _textColorLocation      = _programState->getUniformLocation(rhi::Uniform::TEXT_COLOR);
-    _effectColorLocation    = _programState->getUniformLocation(rhi::Uniform::EFFECT_COLOR);
-    _effectWidthLocation    = _programState->getUniformLocation(rhi::Uniform::EFFECT_WIDTH);
-    _passLocation           = _programState->getUniformLocation(rhi::Uniform::LABEL_PASS);
+    _mvpMatrixLocation   = _programState->getUniformLocation(rhi::Uniform::MVP_MATRIX);
+    _textureLocation     = _programState->getUniformLocation(rhi::Uniform::TEXTURE);
+    _textColorLocation   = _programState->getUniformLocation(rhi::Uniform::TEXT_COLOR);
+    _effectColorLocation = _programState->getUniformLocation(rhi::Uniform::EFFECT_COLOR);
+    _effectWidthLocation = _programState->getUniformLocation(rhi::Uniform::EFFECT_WIDTH);
+    _passLocation        = _programState->getUniformLocation(rhi::Uniform::LABEL_PASS);
 }
 
 bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
@@ -1926,7 +1926,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             {  // distance field
                 // outline pass
                 {
-                    pass      = 1;
+                    pass = 1;
 
                     const float effectWidth =
                         (_outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize) / FontFreeType::DistanceMapSpread;
@@ -2000,7 +2000,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
 
             // glow pass
             {
-                pass = 1;
+                pass                    = 1;
                 const float effectWidth = _glowRadius / FontFreeType::DistanceMapSpread;
                 updateBuffer(textureAtlas, batch.effectCommand);
                 auto effectPS = batch.effectCommand.unsafePS();

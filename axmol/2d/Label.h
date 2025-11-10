@@ -54,9 +54,9 @@ typedef struct _ttfConfig
     std::string customGlyphs;
 
     GlyphCollection glyphs;
-    float fontSize;  // The desired render font size
-    int faceSize;    // The original face size of font, used when distanceFieldEnabled == true
-    int outlineSize; // The Outline width used in non‑SDF rendering; ignored when distance field is enabled
+    float fontSize;   // The desired render font size
+    int faceSize;     // The original face size of font, used when distanceFieldEnabled == true
+    int outlineSize;  // The Outline width used in non‑SDF rendering; ignored when distance field is enabled
 
     bool distanceFieldEnabled;
     bool italics;
@@ -736,7 +736,7 @@ protected:
         std::array<CustomCommand*, 3> getCommandArray();
 
         CustomCommand textCommand;
-        CustomCommand effectCommand; // effect: outline or glow 
+        CustomCommand effectCommand;  // effect: outline or glow
         CustomCommand shadowCommand;
     };
 

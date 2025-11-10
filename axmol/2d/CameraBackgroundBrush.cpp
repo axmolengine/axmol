@@ -210,9 +210,7 @@ void CameraBackgroundDepthBrush::onAfterDraw()
 
 CameraBackgroundColorBrush::CameraBackgroundColorBrush() : _color(0.f, 0.f, 0.f, 0.f) {}
 
-CameraBackgroundColorBrush::~CameraBackgroundColorBrush()
-{
-}
+CameraBackgroundColorBrush::~CameraBackgroundColorBrush() {}
 
 bool CameraBackgroundColorBrush::init()
 {

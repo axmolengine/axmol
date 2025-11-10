@@ -1474,7 +1474,7 @@ LabelTTFSDF::LabelTTFSDF()
     _sliderOutline->setOpacity(100);
 
     _sliderGlow = initSlider("Glow", Vec2(size.width * 0.5, size.height * 0.35),
-                                [=, this](Object* obj, ui::Slider::EventType type) {
+                             [=, this](Object* obj, ui::Slider::EventType type) {
         Slider* slider = (Slider*)obj;
         float size     = 1 + slider->getPercent() / 10.0f;
         if (!slider->isEnabled())
@@ -1565,7 +1565,7 @@ void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButt
     switch (radioButton->getTag())
     {
     case 0:
-        
+
         break;
     case 1:
         _labelNormal->enableGlow(Color32::RED, 1);
