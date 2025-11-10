@@ -173,6 +173,8 @@ private:
     winrt::event_token m_eventToken;
     Windows::Foundation::Point m_lastPoint{};
 
+    EventMouse _currentMouseEvent;
+
     float _renderScale{1.0f};
 
     float m_width;

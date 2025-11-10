@@ -26,14 +26,6 @@
 
 using namespace ax;
 
-template <typename T>
-std::string tostr(const T& t)
-{
-    std::ostringstream os;
-    os << t;
-    return os.str();
-}
-
 MouseTests::MouseTests()
 {
     ADD_TEST_CASE(MouseEventTest);
@@ -76,9 +68,8 @@ MouseEventTest::~MouseEventTest()
 bool MouseEventTest::onMouseDown(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
-    std::string str = "Mouse Down detected, Key: ";
-    str += tostr(static_cast<int>(e->getMouseButton()));
-    _labelAction->setString(str.c_str());
+    std::string str = fmt::format("Mouse Down detected, Key: {}", static_cast<int>(e->getMouseButton()));
+    _labelAction->setString(str);
 
     return true;
 }
@@ -86,9 +77,8 @@ bool MouseEventTest::onMouseDown(Event* event)
 bool MouseEventTest::onMouseUp(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
-    std::string str = "Mouse Up detected, Key: ";
-    str += tostr(static_cast<int>(e->getMouseButton()));
-    _labelAction->setString(str.c_str());
+    std::string str = fmt::format("Mouse Up detected, Key: {}", static_cast<int>(e->getMouseButton()));
+    _labelAction->setString(str);
 
     return true;
 }
@@ -97,7 +87,8 @@ bool MouseEventTest::onMouseMove(Event* event)
 {
     EventMouse* e   = (EventMouse*)event;
     auto loc        = e->getLocation();
-    std::string str = fmt::format("MousePosition:({},{})", loc.x, loc.y);
+    auto delta      = e->getDelta();
+    std::string str = fmt::format("MousePosition:({},{})\nMouseDelta:({},{})", loc.x, loc.y, delta.x, delta.y);
     _labelPosition->setString(str);
 
     return true;

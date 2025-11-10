@@ -422,13 +422,10 @@ void ax::RenderViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs cons
     float y = transformInputY(pt.y);
     if (_lastMouseButtonPressed != EventMouse::MouseButton::BUTTON_UNSET)
     {
-        EventMouse event;
-
-        event.setMouseInfo(x, y, _lastMouseButtonPressed, EventMouse::MouseEventType::MOUSE_UP);
-        Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+        _currentMouseEvent.setMouseInfo(x, y, _lastMouseButtonPressed, EventMouse::MouseEventType::MOUSE_UP);
+        Director::getInstance()->getEventDispatcher()->dispatchEvent(&_currentMouseEvent);
     }
 
-    EventMouse event;
     // Set current button
     if (args.CurrentPoint().Properties().IsLeftButtonPressed())
     {
@@ -442,8 +439,8 @@ void ax::RenderViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs cons
     {
         _lastMouseButtonPressed = EventMouse::MouseButton::BUTTON_MIDDLE;
     }
-    event.setMouseInfo(x, y, _lastMouseButtonPressed, EventMouse::MouseEventType::MOUSE_DOWN);
-    Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    _currentMouseEvent.setMouseInfo(x, y, _lastMouseButtonPressed, EventMouse::MouseEventType::MOUSE_DOWN);
+    Director::getInstance()->getEventDispatcher()->dispatchEvent(&_currentMouseEvent);
 }
 
 void ax::RenderViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs const& args)
@@ -457,11 +454,9 @@ void ax::RenderViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs const&
         handleTouchesMove(1, &id, &pt.x, &pt.y);
     }
 
-    EventMouse event;
-
-    event.setMouseInfo(transformInputX(pt.x), transformInputY(pt.y), checkMouseButton(args),
-                       EventMouse::MouseEventType::MOUSE_MOVE);
-    Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    _currentMouseEvent.setMouseInfo(transformInputX(pt.x), transformInputY(pt.y), checkMouseButton(args),
+                                    EventMouse::MouseEventType::MOUSE_MOVE);
+    Director::getInstance()->getEventDispatcher()->dispatchEvent(&_currentMouseEvent);
 }
 
 void ax::RenderViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs const& args)
@@ -475,11 +470,9 @@ void ax::RenderViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs con
         handleTouchesEnd(1, &id, &pt.x, &pt.y);
     }
 
-    EventMouse event;
-
-    event.setMouseInfo(transformInputX(pt.x), transformInputY(pt.y), _lastMouseButtonPressed,
-                       EventMouse::MouseEventType::MOUSE_UP);
-    Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    _currentMouseEvent.setMouseInfo(transformInputX(pt.x), transformInputY(pt.y), _lastMouseButtonPressed,
+                                    EventMouse::MouseEventType::MOUSE_UP);
+    Director::getInstance()->getEventDispatcher()->dispatchEvent(&_currentMouseEvent);
 
     _lastMouseButtonPressed = EventMouse::MouseButton::BUTTON_UNSET;
 }
@@ -487,20 +480,20 @@ void ax::RenderViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs con
 void ax::RenderViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 pt = GetPoint(args);
-    EventMouse event;
+
     // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
     float delta = static_cast<float>(args.CurrentPoint().Properties().MouseWheelDelta());
     if (args.CurrentPoint().Properties().IsHorizontalMouseWheel())
     {
-        event.setScrollData(delta / WHEEL_DELTA, 0.0f);
+        _currentMouseEvent.setScrollData(delta / WHEEL_DELTA, 0.0f);
     }
     else
     {
-        event.setScrollData(0.0f, -delta / WHEEL_DELTA);
+        _currentMouseEvent.setScrollData(0.0f, -delta / WHEEL_DELTA);
     }
-    event.setMouseInfo(transformInputX(pt.x), transformInputY(pt.y), checkMouseButton(args),
-                       EventMouse::MouseEventType::MOUSE_SCROLL);
-    Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    _currentMouseEvent.setMouseInfo(transformInputX(pt.x), transformInputY(pt.y), checkMouseButton(args),
+                                    EventMouse::MouseEventType::MOUSE_SCROLL);
+    Director::getInstance()->getEventDispatcher()->dispatchEvent(&_currentMouseEvent);
 }
 
 RenderViewImpl* RenderViewImpl::sharedRenderView()
